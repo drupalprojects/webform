@@ -594,7 +594,8 @@ function _webform_process_submit(&$node, &$errors) {
   
   // Check to see if the user has right to use the webform
   if ( !user_access('use all webforms') ){
-    if( !(is_array($node->roles) && in_array($user->rid, $node->roles)) ) {
+    if( !(is_array($node->roles) && 
+          array_intersect($node->roles, array_keys($user->roles)) ) ) {
       $message = t("You are not allowed to submit data using this form.");
       drupal_set_message($message, 'error');
       return false;
