@@ -196,11 +196,16 @@ function webform_load($node) {
 }
 
 function webform_settings(){
+  $output .= form_select(t("Allow cross site posting"), "webform_allow_cross_site_posting",
+                         variable_get("webform_allow_cross_site_posting", 0),
+                         array(0 => 'OFF', 1 => 'ON'),
+                         t("Allow postings to webforms not originating from the domain specified by the config file."));
   $output .= form_select(t("Webforms Debug"), "webform_debug",
-			 variable_get("webform_debug", 0),
-			 array(0 => "FALSE", 1 => "TRUE"),
-			 html_br().t("DEBUG for the webform module") . html_br() .
-			 t("Set to true to send debug information in the email and to print debug info on submision. Set this option to <b>FALSE</b> if you don't really know you need to enable it."));
+                         variable_get("webform_debug", 0),
+                         array(0 => "OFF", 1 => "Log submissions", 2 => "Full debug"),
+                         html_br().t("DEBUG for the webform module") . html_br() .
+                         t("Set to true to send debug information in the email and to print debug info on submision. Set this option to <b>FALSE</b> if you don't really know you need to enable it."));
+
   return $output;
 } // End webform_settings
 
@@ -380,7 +385,7 @@ function _webform_process_submit(&$node, &$errors) {
   global $user, $base_url;
   
   // Check referer to deny posting from of sites.
-  if ( variable_get('webform_allow_cross_site_posting', 'OFF') == 'OFF') {
+  if ( variable_get('webform_allow_cross_site_posting', 0) == 0) {
     $referer = parse_url( urldecode($_SERVER['HTTP_REFERER']));
     $base = parse_url( urldecode($base_url.'/'));
     
@@ -388,7 +393,9 @@ function _webform_process_submit(&$node, &$errors) {
          || $referer['host'] != $base['host']
 	 ) {
       // The submission didn't originate from our own domain, return false
-      return false;    
+      watchdog('error', t('Trying to post to webform from external domain.'), 
+               '<a href="'.$_SERVER['HTTP_REFERER'].'">'.t('Visit referer').'</a>');
+      return false;
     }
   }
   
@@ -424,8 +431,11 @@ function _webform_process_submit(&$node, &$errors) {
   }
   
   $node->body = $confirm.
-    (variable_get('webform_debug', 0)?"<pre>$message</pre>":'');
-  $node->title = t('Thanks for your submission');
+    (variable_get('webform_debug', 0)==2?"<pre>$message</pre>":'');
+  if (variable_get('webform_debug', 0) >= 1) {
+    watchdog('special', t('Submission posted to ')."'$node->title'.<br />\n<pre>$message</pre>",
+             l(t('view node'),'node/view/'.$node->nid));
+  }
   return true;
 }
 
@@ -529,7 +539,7 @@ function _webform_create_mailmessage($reply) {
     }
   }
   
-  if (variable_get('webform_debug', 0)) {
+  if (variable_get('webform_debug', 0) == 2) {
     $message .= "\r\n";
     $message .= "DEBUG INFO\r\n";
     $message .= "==========\r\n";
