@@ -328,7 +328,7 @@ function webform_form(&$node, &$error) {
   $component_types = array('textfield' => t('textfield'),
                            'textarea' => t('textarea'),
                            'select' => t('select'),
-                           'lable' => t('lable'),
+                           'lable' => t('label'),
                            'hidden' => t('hidden'),
                            'email' => t('e-mail address'));
   
@@ -484,7 +484,7 @@ function _webform_editfield() {
   $form .= form_hidden('webform_edited_type', $currfield['type']);
   $form .= form_hidden('webform_edited_key', $currfield['key']);
   $form .= form_textfield(t("Name"), "webform_edited_name", $currfield['name'], 60,
-			    127, t('Name of the field. This is used as a descriptive lable and as the key when saving data in the database.').($error['webform_edited_name'] ? $error['webform_edited_name'] : ''));
+			    127, t('Name of the field. This is used as a descriptive label and as the key when saving data in the database.').($error['webform_edited_name'] ? $error['webform_edited_name'] : ''));
   $form .= form_textfield(t("Description"), "webform_edited_extra][description", $currfield['extra']['description'], 
                           60, 127, 
                           t('A short description of the field used as help for the user when he/she uses the form.').'<br />'.
