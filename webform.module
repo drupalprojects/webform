@@ -190,7 +190,7 @@ function webform_load($node) {
   $result = db_query('SELECT cid, name, type, value, extra, mandatory, weight '.
                      ' FROM {webform_component} '.
                      ' WHERE nid = %d '.
-                     ' ORDER BY weight', $node->nid);
+                     ' ORDER BY weight, name', $node->nid);
   while($c = db_fetch_array($result)) {
     $page->webformcomponents_name[$c['cid']] = $c['name'];
     $page->webformcomponents_type[$c['cid']] = $c['type'];
@@ -354,6 +354,7 @@ function webform_form(&$node, &$error) {
   
   // List all form components.
   if( is_array($node->webformcomponents_name) && !empty($node->webformcomponents_name)) {
+    $nocomponents = count($node->webformcomponents_name);
     foreach($node->webformcomponents_name as $key => $name) {
       $other = form_hidden("webformcomponents_type][".$key.']', $node->webformcomponents_type[$key]).
         form_hidden("webformcomponents_extra][".$key, $node->webformcomponents_extra[$key]);
@@ -366,8 +367,10 @@ function webform_form(&$node, &$error) {
                                           $node->webformcomponents_value[$key], 20, 255),
                       form_checkbox('', "webformcomponents_mandatory][".$key, 
                                     '1', ($node->webformcomponents_mandatory[$key]?1:0)),                      
-                      form_weight('', "webformcomponents_weight][".$key,
-                                  ($node->webformcomponents_weight[$key]?$node->webformcomponents_weight[$key]:0)).
+                      form_weight('', 
+                                  "webformcomponents_weight][".$key,
+                                  ($node->webformcomponents_weight[$key]?$node->webformcomponents_weight[$key]:0),
+                                  (($nocomponents>10)?$nocomponents:10)).
                       $other);
     }
 
@@ -376,7 +379,8 @@ function webform_form(&$node, &$error) {
                                        t('To delete a component, check its "selected" box and press "Delete selected".'),
                                        t('Use "value" to enter a default value.'),
                                        t('Check "mandatory" box if the field should be mandatory.'),
-                                       t('Remember to set weight on the components or they will be added to the form in a random order.')
+                                       t('Remember to set weight on the components or they will be added to the form in a random order.'),
+                                       t('The components are sorted first by weight and then by name.')
                                        )
                                  );
     $output .= form_item(t('Form components'), $help_text);
