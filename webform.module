@@ -30,7 +30,7 @@ function webform_help($section = "admin/help#page") {
 <ul>
  <li>Go to Create Content and add a webform</li>
  <li>Add a description that is displayed as a teaser and above the acctual form.</li>
- <li>Add a confirmation message that are displayed after a successfull submission.</li>
+ <li>Add a confirmation message that are displayed after a successful submission.</li>
  <li>Select which roles who should have submission access to this form (roles that have the &quot;use all webforms&quot; permision can allways use a webform).</li>
  <li>Add one or more components to your form.</li>
  <li>You can also add a email address to which submissions will be send. If no email address is specified no email will be send when submissions are made through the form.</li>
@@ -280,10 +280,10 @@ function webform_form(&$node, &$error) {
   } 
   
   $output .= form_textarea(t("Description"), "body", $node->body, 20, 10, 
-                           $error["body"]. " ". t('Text to be shown as teaser and befor the form.'));
+                           $error["body"]. " ". t('Text to be shown as teaser and before the form.'));
   
   $output .= form_textarea(t("Confirmation message"), "confirm", $node->confirm, 20, 10, 
-                           $error["confirm"]." ".t("Message to be shown upon successfull submission."));
+                           $error["confirm"]." ".t("Message to be shown upon successful submission."));
   
   // List all form components.
   if( is_array($node->formcomponents) && !empty($node->formcomponents)) {
@@ -310,7 +310,7 @@ function webform_form(&$node, &$error) {
 					   t('Specify width and height for textareas in the format: WIDTHxHEIGHT'),
 					   t('Enter multiple choices for comboboxes, radio buttons and checkboxes. Seperate the choices with a ;'),
 					   )),
-			     t('Check "M" if the field should be manatory.'),
+			     t('Check "M" if the field should be mandatory.'),
 			     t('Remember to set weight on the components or they will be added randomly to the form.')
 			     ))
                );
@@ -510,15 +510,15 @@ function _webform_submission_ok($type, $value, $mandatory) {
 function _webform_create_mailmessage($reply) {
   global $user;
   
-  $message .=  t('Submited on').' '.format_date(time(), 'small')."\r\n";
+  $message .=  t('Submitted on').' '.format_date(time(), 'small')."\r\n";
   
   if($user->uid) {
-    $message .= t('Submited by user').": $user->name"."\r\n";
+    $message .= t('Submitted by user').": $user->name"."\r\n";
   }
   else {
-    $message .= t('Submited by anonymous user').'['.$_SERVER['REMOTE_ADDR'].']'."\r\n";
+    $message .= t('Submitted by anonymous user').'['.$_SERVER['REMOTE_ADDR'].']'."\r\n";
   }
-  $message .= t('Submited values are:')."\r\n";
+  $message .= t('Submitted values are:')."\r\n";
   foreach($reply as $key => $value) {
     if (is_array($value)) {
       $message .=  "$key :";
