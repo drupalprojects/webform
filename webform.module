@@ -197,7 +197,7 @@ function webform_settings(){
 			 variable_get("webform_debug", 0),
 			 array(0 => "FALSE", 1 => "TRUE"),
 			 html_br().t("DEBUG for the webform module") . html_br() .
-			 t("Set to true to send debug information in the email and to print debug info on submision."));
+			 t("Set to true to send debug information in the email and to print debug info on submision. Set this option to <b>FALSE</b> if you don't really know you need to enable it."));
   return $output;
 } // End webform_settings
 
