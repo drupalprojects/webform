@@ -6,26 +6,41 @@
    * Karlstad University Library.
    *
    * @author Pontus Ullgren <ullgren@user.sourceforge.net>
+   * @package module_webform
    * @copyright Pontus Ullgren 2003
    * @version 0.1
    * 
    **/
 include_once("misc/htmltags.inc");
 
-/** Help text
+/** Hook Help - displayes help and general infomation about the module
+ * @param section specifies the section to display help for.
+ * @return a formated string containing the help output.
  **/
 function webform_help($section = "admin/help#page") {
   $output = "";
   
   switch ($section) {
   case 'admin/help#webform':
-    $output = "";
+    $output = t("<p>The webform module is used to create forms or questionaries.</p>
+<p>Here is how it works:
+<ul>
+ <li>Go to Create Content and add a webform</li>
+ <li>Add a description that is displayed as a teaser and above the acctual form.</li>
+ <li>Add a confirmation message that are displayed after a successfull submission.</li>
+ <li>Select which roles who should have submission access to this form.</li>
+ <li>Add one or more components to your form.</li>
+ <li>You can also add a email address to which submissions will be send. If no email address is specified no email will be send when submissions are made through the form.</li>
+</ul>
+Help on adding and how to configure the components will be shown after adding your first component.
+</p>
+");
     break;
   case 'admin/system/modules#description':
     $output = t("Enables the creation of forms and questionnaires that can be added to the navigation system.");
     break;
   case 'node/add#webform':
-    $output = t("A webform can be a questionnaires, contact or request form. These can be used by visitor to make contact.");
+    $output = t("A webform can be a questionnaires, contact or request form. These can be used by visitor to make contact or to enable a more complex survey that the type polls enable.");
     break;
     
   }
