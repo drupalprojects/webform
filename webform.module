@@ -787,7 +787,8 @@ function _webform_save_submission($node, $reply) {
       $value = serialize($value);
     }
     
-    $values[] = sprintf("(%d, %d, '%s', '%s')", $node->nid, $sid, $key, $value);
+    $values[] = sprintf("(%d, %d, '%s', '%s')", 
+        $node->nid, $sid, check_query($key), check_query($value));
   }
   db_query("INSERT INTO {webform_submited_data} (nid, sid, name, data) ".
            "VALUES ".implode(', ', $values));
