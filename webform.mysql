@@ -1,6 +1,6 @@
 CREATE TABLE webform 
   ( nid int(10) unsigned not null,
-    confirm varchar(255), 
+    confirm text, 
     email varchar(50),
     primary key(nid));
 
