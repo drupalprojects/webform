@@ -360,7 +360,7 @@ function webform_form(&$node, &$error) {
 
       $rows[] = array(
                       form_radio('', 'webform_checked_component', $key),
-                      form_textfield('', "webformcomponents_name][".$key, $name, 20, 50),
+                      form_textfield('', "webformcomponents_name][".$key, $name, 20, 127),
                       $node->webformcomponents_type[$key],
                       form_textfield('', "webformcomponents_value][".$key, 
                                           $node->webformcomponents_value[$key], 20, 255),
