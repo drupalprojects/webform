@@ -436,9 +436,6 @@ function _webform_create_widget($name, $type, $value, $extra, $err = '') {
   switch($type) {
   case 'textarea':
     $items = explode('x', $extra);
-    // TODO: Make textarea
-    //    return html_form_textfield('', $name, $value, 20, 125).
-    //      ($err?html_br().$err:'');
     $string = "<textarea name=\"$name\"".
       (empty($items[0])?"":" cols=\"$items[0]\" ").
       (empty($items[1])?"":" rows=\"$items[1]\" ").
@@ -493,7 +490,7 @@ function _webform_create_widget($name, $type, $value, $extra, $err = '') {
     if ($extra && is_numeric($extra)) {
       $maxsize = $extra;
     }
-    return html_form_textfield('', $name, $value, 50, $maxsize).
+    return html_form_textfield('', $name, $value, ($maxsize>50?50:$maxsize), $maxsize).
       ($err?html_br().$err:'');
     break;
   }
