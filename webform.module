@@ -21,6 +21,9 @@ function webform_help($section = "admin/help#page") {
   $output = "";
   
   switch ($section) {
+  case 'admin/system/modules/webfrom':
+    $output = t("Webforms are forms and qustionaries that can be added as nodes. To add one select <strong>create content</strong>");
+    break;
   case 'admin/help#webform':
     $output = t("<p>The webform module is used to create forms or questionaries.</p>
 <p>Here is how it works:
@@ -28,7 +31,7 @@ function webform_help($section = "admin/help#page") {
  <li>Go to Create Content and add a webform</li>
  <li>Add a description that is displayed as a teaser and above the acctual form.</li>
  <li>Add a confirmation message that are displayed after a successfull submission.</li>
- <li>Select which roles who should have submission access to this form.</li>
+ <li>Select which roles who should have submission access to this form (roles that have the &quot;use all webforms&quot; permision can allways use a webform).</li>
  <li>Add one or more components to your form.</li>
  <li>You can also add a email address to which submissions will be send. If no email address is specified no email will be send when submissions are made through the form.</li>
 </ul>
@@ -473,12 +476,11 @@ function _webform_create_widget($name, $type, $value, $extra, $err = '') {
       ($err?html_br().$err:'');
     break;
   case 'combobox':
-    $items = explode(';', $value);
-    $first = $items[0];
+    $items = explode(';', $extra);
     foreach ($items as $it) {
       $options[$it] = $it;
     }
-    $output .= html_form_select($name, $first, $options);
+    $output .= html_form_select($name, $value, $options);
     return $output.
       ($err?html_br().$err:'');
     break;
