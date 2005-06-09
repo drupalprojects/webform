@@ -277,7 +277,10 @@ function webform_validate(&$node) {
   
   if( isset($_POST['webform_edit_done']) ) {
     $old_edit = unserialize($_POST['old_edit']);
-    $edit = array_merge($_POST['edit'], $old_edit);
+    $new_edit = $_POST['edit'];
+    if ( !is_array($new_edit) ) $new_edit =array();
+
+    $edit = array_merge($new_edit, $old_edit);
     // If we are adding a new componenet or removing a old one 
     // we have to do what the framework would do for us so we don't loose 
     // information.
