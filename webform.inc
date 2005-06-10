@@ -112,7 +112,7 @@ function _webform_results_download($nid) {
   $file_name = _webform_records_string($title_string,$nid,'file'); // This will default to printing the output which saves stack space
 
   drupal_set_header("Content-type: text/plain; charset=utf-8");
-  drupal_set_header("Content-Disposition: attachment; filename=" . str_replace(' ', '_', $title_string) . ".csv");
+  drupal_set_header("Content-Disposition: attachment; filename=" . preg_replace('/\.$/', '', str_replace(' ', '_', $title_string)) . ".csv");
 
   @readfile($file_name);  // The @ makes it silent
   @unlink($file_name);  // Clean up, the @ makes it silent
