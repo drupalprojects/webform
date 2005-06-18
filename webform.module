@@ -1,3 +1,4 @@
+
 <?php
 // $Id$
 
@@ -253,12 +254,6 @@ function webform_settings(){
   $output .= form_checkbox(t("Show main webform menu"), "webform_show_main_menu",1,
                          variable_get("webform_show_main_menu", true),
                          t('Select the visibility of the main webform item on the main menu'));
-/*
-  $output .= form_checkbox(t("Show node analysis menu"), "webform_show_node_analysis_menu",1,
-                         variable_get("webform_show_node_analysis_menu", true),
-                         t('Select the visibility of the webform node analysis menu'));
-*/
-
   return $output;
 } // end function webform_settings
 
@@ -331,7 +326,7 @@ function webform_menu() {
   $items = array();
   
   $items[] = array('path' => 'node/add/webform', 'title' => t('webform'),
-                   'access' => user_access('maintain webforms'));
+                   'access' => user_access('create webforms'));
   
   $items[] = array('path' => 'webform/done', 'title' => t('webform'),
                    'callback' => '_webform_thanks',
@@ -353,17 +348,6 @@ function webform_menu() {
                      'type' => MENU_NORMAL_ITEM,
                      'access' => user_access('maintain webforms'));
   }
-  /*
-   $items[] = array('path' => 'webform/table', 'title' => t('table'),
-                    'callback' => 'webform_reporttable',
-                    'type' => MENU_CALLBACK,
-                    'access' => user_access('maintain webforms'));
-  
-   $items[] = array('path' => 'webform/analysis', 'title' => t('analysis'),
-                    'callback' => 'webform_reportanalysis',
-                    'type' => MENU_CALLBACK,
-                    'access' => user_access('maintain webforms'));   
-  */
 
   if (arg(0) == 'node' && is_numeric(arg(1))) {
     $node = node_load(array('nid' => arg(1)));
@@ -371,7 +355,7 @@ function webform_menu() {
 
 
       $items[] = array('path' => 'node/' . $node->nid . '/results', 'title' => t('results'),
-                             'callback' => 'webform_results', 'access' => user_access('view webforms'),
+                             'callback' => 'webform_results', 'access' => user_access('maintain webforms'),
                              'type' => MENU_LOCAL_TASK, 'weight' => 3);
 
       $items[] = array('path' => 'node/' . $node->nid . '/results/clear', 'title' => t('clear'),
@@ -762,16 +746,16 @@ function _webform_editfield() {
 
 function _webform_process_submit(&$node, &$errors) {
   global $user, $base_url;
-  include_once "webform.inc";
+  include_once("webform.inc");
   
   // Check referer to deny posting from of sites.
   if ( variable_get('webform_allow_cross_site_posting', 0) == 1) {
     $referer = parse_url( urldecode($_SERVER['HTTP_REFERER']));
     $base = parse_url( urldecode($base_url.'/'));
-    
+
     if ( $referer['scheme'] != $base['scheme']
          || $referer['host'] != $base['host']
-	 ) {
+         ) {
       // The submission didn't originate from our own domain, return false
       watchdog('webform', t('Trying to post to webform from external domain.'),
                WATCHDOG_WARNING,
@@ -780,7 +764,7 @@ function _webform_process_submit(&$node, &$errors) {
       return false;    
     }
   }
-  
+
   // Check to see if the user has right to use the webform
   if ( !user_access('use all webforms') ){
     if( !(is_array($node->roles) && 
@@ -791,8 +775,6 @@ function _webform_process_submit(&$node, &$errors) {
     }
   }
   // Handle posting to the form and output status.
-  //$confirmation = $node->confirm;   // What is this doing? Slated for removal.
-  
   $reply = $_POST['edit']['submitted'];
   _webform_save_submission($node, $reply);
   $message = _webform_create_mailmessage($reply);
@@ -800,57 +782,48 @@ function _webform_process_submit(&$node, &$errors) {
   if (isset($node->email)) {
     $node->email = strip_tags($node->email);
     if (!empty($node->email)) {
-
-			// Build arrays of possible return email addresses and email subject lines from elements on the form
-			// This is a duplicate of the code that creates the arrays for selection.
-
-			// Set the default or 'Automatic' values
-
-			$email_from_string = "From: "._webform_encodeHeader( variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}"))."\r\n";
-			$email_subject_string = _webform_encodeHeader( t('Form submission from: ').' '.$node->title );
-
-		  if( is_array($node->webformcomponents_name) && !empty($node->webformcomponents_name)) {
-		    foreach($node->webformcomponents_name as $key => $name) {
-		    	$type = $node->webformcomponents_type[$key];
-		    	//$value = $node->webformcomponents_value[$key];
-					if( $type == 'email' || $type == 'hidden' ){
-						if($name == $node->email_from){
-							$email_from_string = "From: "._webform_encodeHeader(strip_tags("$reply[$name]"))."\r\n";
-						}
-					}
-
-					if( $type == 'textfield' || $type == 'hidden' ){
-						if($name == $node->email_subject){
-							$email_subject_string = _webform_encodeHeader(strip_tags("$reply[$name]"));
-						}
-					}
-				}
-			}
-
-			$headers = $email_from_string;
+      // Build arrays of possible return email addresses and email subject lines from elements on the form
+      // This is a duplicate of the code that creates the arrays for selection.
+      $email_from_string = "From: ". mime_header_encode(variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}"))."\r\n";
+      $email_subject_string = t('Form submission from: ').' '.$node->title;
+      
+      if( is_array($node->webformcomponents_name) && !empty($node->webformcomponents_name)) {
+        foreach($node->webformcomponents_name as $key => $name) {
+          $type = $node->webformcomponents_type[$key];
+          //$value = $node->webformcomponents_value[$key];
+          if( $type == 'email' || $type == 'hidden' ){
+            if($name == $node->email_from){
+              $email_from_string = "From: ".mime_header_encode(strip_tags("$reply[$name]"))."\r\n";
+            }
+          }
+          
+          if( $type == 'textfield' || $type == 'hidden' ){
+            if($name == $node->email_subject){
+              $email_subject_string = strip_tags("$reply[$name]");
+            }
+          }
+        }
+      }
+      
+      $headers = $email_from_string;
       $headers .= "Date: ".date("r")."\r\n".
-        "MIME-Version: 1.0\r\n".
-	"Content-Type: text/plain; charset=UTF-8\r\n".
-	"Content-Disposition: inline\r\n".
-	"Content-Transfer-Encoding: quoted-printable\r\n".
-	"X-Mailer: Drupal Webform (PHP/" . phpversion().")";
-
-      mail($node->email, $email_subject_string, $message, _webform_encodeHeader($headers));
+        "X-Mailer: Drupal Webform (PHP/" . phpversion().")";
+      
+      user_mail($node->email, $email_subject_string, $message, $headers);
     }
   }
-
+  
   if (variable_get('webform_debug', 0) >= 2) {
     drupal_set_message("<pre>$message</pre>");
   }
-
+  
   if (variable_get('webform_debug', 0) >= 1) {
     watchdog('webform', 
              t('Submission posted to ')."'$node->title'.<br />\n".nl2br(htmlentities($message)),
              WATCHDOG_NOTICE);
-
+    
     //TODO: Add reference back to submitted webform
   }
-
   return true;
 }
 
@@ -1058,7 +1031,7 @@ function _webform_create_mailmessage($reply) {
     $message .= print_r($_POST, true);
   }
 
-  return _webform_qp_enc($message, 79);
+  return $message;
 }
 
 function _webform_save_submission($node, $reply) {
