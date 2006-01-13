@@ -1,12 +1,11 @@
-# Danish translation of webform-inc.pot and webform-module.pot
-# Copyright 2005 Morten Wulff <wulff@psyke.org>
-# $Id$
+# Danish translation of Drupal (webform.module)
+# Copyright 2005 Morten Wulff <wulff@tem.dtu.dk>
 msgid ""
 msgstr ""
-"Project-Id-Version: Danish Translation 4.6.0\n"
+"Project-Id-Version: Danish Translation of Drupal (webform.module) $Id$\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2005-05-16 12:13+0100\n"
-"Last-Translator: Morten Wulff <wulff@psyke.org>\n"
+"Last-Translator: Morten Wulff <wulff@tem.dtu.dk>\n"
 "Language-Team: Danish <danish@psyke.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
