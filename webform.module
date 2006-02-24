@@ -328,6 +328,7 @@ function webform_menu() {
                    'access' => user_access('create webforms'));
   
   $items[] = array('path' => 'webform/done', 'title' => t('webform'),
+                   'callback arguments' => array(),
                    'callback' => '_webform_thanks',
                    'type' => MENU_CALLBACK,
                    'access' => true);
@@ -335,6 +336,7 @@ function webform_menu() {
   // Upgrade page for the webform
   $items[] = array('path' => 'webform/upgrade', 'title' => t('Webform upgrade page'),
                    'callback' => '_webform_update',
+                   'callback arguments' => array(),
                    'type' => MENU_CALLBACK, 
                    'access' => ($user->uid == 1)); // Access only for the "admin" user.
   
@@ -344,6 +346,7 @@ function webform_menu() {
   if(variable_get("webform_show_main_menu",true)) {
     $items[] = array('path' => 'webform', 'title' => t('webform'),
                      'callback' => 'webform_page',
+                     'callback arguments' => array(),
                      'type' => MENU_NORMAL_ITEM,
                      'access' => user_access('maintain webforms'));
   }
@@ -354,28 +357,34 @@ function webform_menu() {
 
 
       $items[] = array('path' => 'node/' . $node->nid . '/results', 'title' => t('results'),
-                             'callback' => 'webform_results', 'access' => user_access('maintain webforms'),
+                             'callback' => 'webform_results',
+                             'callback arguments' => array(), 
+                             'access' => user_access('maintain webforms'),
                              'type' => MENU_LOCAL_TASK, 'weight' => 3);
 
       $items[] = array('path' => 'node/' . $node->nid . '/results/clear', 'title' => t('clear'),
-                             'callback' => 'webform_results',
+                             'callback' => 'webform_results', 'callback arguments' => array(),
                              'type' => MENU_CALLBACK,
                              'access' => ($user->uid == 1)); // Access only for the "admin" user.
 
       $items[] = array('path' => 'node/'.$node->nid.'/results/submissions', 'title' => t('submissions'),
-                             'callback' => 'webform_results', 'access' => user_access('maintain webforms'),
+                             'callback' => 'webform_results', 'callback arguments' => array(), 
+                             'access' => user_access('maintain webforms'),
                              'type' => MENU_DEFAULT_LOCAL_TASK, 'weight' => 4);
 
       $items[] = array('path' => 'node/'.$node->nid.'/results/analysis', 'title' => t('analysis'),
-                             'callback' => 'webform_results', 'access' => user_access('maintain webforms'),
+                             'callback' => 'webform_results', 'callback arguments' => array(),
+                             'access' => user_access('maintain webforms'),
                              'type' => MENU_LOCAL_TASK, 'weight' => 5);
 
       $items[] = array('path' => 'node/'.$node->nid.'/results/table', 'title' => t('table'),
-                             'callback' => 'webform_results', 'access' => user_access('maintain webforms'),
+                             'callback' => 'webform_results', 'callback arguments' => array(), 
+                             'access' => user_access('maintain webforms'),
                              'type' => MENU_LOCAL_TASK, 'weight' => 6);
 
       $items[] = array('path' => 'node/'.$node->nid.'/results/download', 'title' => t('download'),
-                             'callback' => 'webform_results', 'access' => user_access('maintain webforms'),
+                             'callback' => 'webform_results', 'callback arguments' => array(),
+                             'access' => user_access('maintain webforms'),
                              'type' => MENU_LOCAL_TASK, 'weight' => 7);
     }
   }
