@@ -307,7 +307,7 @@ function webform_validate(&$node) {
   if (isset($node->confirmation)) {
     if (!$node->confirmation) {
       form_set_error('confirmation', t('You have to specify a confirmation message.'));
-      return $false;
+      return false;
     }
   }
   
@@ -784,7 +784,6 @@ function _webform_process_submit(&$node, &$errors) {
   }
   // Handle posting to the form and output status.
   $reply = $_POST['edit']['submitted'];
-  _webform_save_submission($node, $reply);
   $message = _webform_create_mailmessage($reply);
   
   if (isset($node->email)) {
@@ -824,23 +823,28 @@ function _webform_process_submit(&$node, &$errors) {
           || preg_match('/b*cc\s*:/i', $message)
           || preg_match('/b*cc\s*:/i', $headers)
           ) {
+        drupal_set_message(t('The string \'BCC:\' is banned.'), 'error');
         return FALSE;
       }
       
       // check if they are spamming using a content-type hack
-      if (preg_match('/content\-type/i', $mail->mail)
+      if (preg_match('/content\-type/i', $node->mail)
           || preg_match('/content\-type/i', $email_subject_string)
           || preg_match('/content\-type/i', $message)
           || preg_match('/content\-type/i', $headers)
           ) {
+        drupal_set_message(t('The string \'content-type\' is banned.'), 'error');
         return FALSE;
       }
       // END - SPAM FILTER
       
       user_mail($node->email, $email_subject_string, $message, $headers);
     }
-  }
+  } // END if (isset($node->email))
   
+  // All fine so far save submission to database.
+   _webform_save_submission($node, $reply);
+   
   if (variable_get('webform_debug', 0) >= 2) {
     drupal_set_message("<pre>$message</pre>");
   }
@@ -976,6 +980,11 @@ function _webform_submission_ok($name, $type, $value, $mandatory) {
   if($mandatory && !strlen(trim($value))) {
     form_set_error('submitted]['.$name, t('You have not completed the form. %s is a mandatory field.', array('%s' => $name)));
     return 1;
+  }
+  if ( $type == 'email' 
+  	&& !eregi('^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+[\.[a-zA-Z.]{2,5}]*$', $value) ) {
+  		form_set_error('submitted]['.$name, t('You have to provide a valid email address. %s is invalid.', array('%s' => $name)));
+      return 1;
   }
   return 0;
 }
