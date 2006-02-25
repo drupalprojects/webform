@@ -982,7 +982,7 @@ function _webform_submission_ok($name, $type, $value, $mandatory) {
     return 1;
   }
   if ( $type == 'email' 
-  	&& !eregi('^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+[\.[a-zA-Z.]{2,5}]*$', $value) ) {
+  	&& !eregi('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,5})$', $value) ) {
   		form_set_error('submitted]['.$name, t('You have to provide a valid email address. %s is invalid.', array('%s' => $name)));
       return 1;
   }
