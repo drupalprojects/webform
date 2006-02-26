@@ -791,7 +791,7 @@ function _webform_process_submit(&$node, &$errors) {
     if (!empty($node->email)) {
       // Build arrays of possible return email addresses and email subject lines from elements on the form
       // This is a duplicate of the code that creates the arrays for selection.
-      $email_from_string = "From: ". mime_header_encode(variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}"))."\r\n";
+      $email_from_string = "From: ". mime_header_encode(variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}"))."\n";
       $email_subject_string = t('Form submission from: ').' '.$node->title;
       
       if( is_array($node->webformcomponents_name) && !empty($node->webformcomponents_name)) {
@@ -800,7 +800,7 @@ function _webform_process_submit(&$node, &$errors) {
           //$value = $node->webformcomponents_value[$key];
           if( $type == 'email' || $type == 'hidden' ){
             if($name == $node->email_from){
-              $email_from_string = "From: ".mime_header_encode(strip_tags("$reply[$name]"))."\r\n";
+              $email_from_string = "From: ".mime_header_encode(strip_tags("$reply[$name]"));
             }
           }
           
@@ -812,9 +812,9 @@ function _webform_process_submit(&$node, &$errors) {
         }
       }
       
-      $headers = $email_from_string;
-      $headers .= "Date: ".date("r")."\r\n".
-        "X-Mailer: Drupal Webform (PHP/" . phpversion().")";
+      $headers .= "Date: ".date("r")."\n";
+      $headers .= "X-Mailer: Drupal Webform (PHP/" . phpversion().")\n";
+      $headers .= $email_from_string."\n";
 
       // START - SPAM FILTER
       // check if they are spamming using a bcc hack
@@ -924,7 +924,7 @@ function _webform_create_widget($name, $type, $mandatory, $value, $extra, $err =
 
     return form_textarea($name, $componentname, $value, $extra['cols'], $extra['rows'], 
                          _webform_filtervalues($extra['description']), $extra['attributes'], $mandatory);
-    break;
+    //break;
   case 'select':
     $items = explode("\n", _webform_filtervalues($extra['items']));
     foreach($items as $k => $v) {
@@ -954,7 +954,7 @@ function _webform_create_widget($name, $type, $mandatory, $value, $extra, $err =
                            _webform_filtervalues($extra['description']), $mandatory, NULL);
       }
     }
-    break;
+    //break;
   case 'label':
     return form_item($name, NULL, _webform_filtervalues($extra['description']));
   case 'hidden':
@@ -971,7 +971,7 @@ function _webform_create_widget($name, $type, $mandatory, $value, $extra, $err =
     return form_textfield($name, $componentname, $value, ($extra['width']?$extra['width']:50),
                           $maxsize, _webform_filtervalues($extra['description']), 
                           $extra['attributes'], ($mandatory==1?TRUE:FALSE));
-    break;
+    //break;
   }
 }
 
@@ -982,7 +982,7 @@ function _webform_submission_ok($name, $type, $value, $mandatory) {
     return 1;
   }
   if ( $type == 'email' 
-  	&& !eregi('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,5})$', $value) ) {
+  	&& ! valid_email_address($value) ) {
   		form_set_error('submitted]['.$name, t('You have to provide a valid email address. %s is invalid.', array('%s' => $name)));
       return 1;
   }
