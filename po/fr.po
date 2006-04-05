@@ -1,0 +1,671 @@
+# #-#-#-#-#  fr1.po (webform VERSION)  #-#-#-#-#
+# LANGUAGE translation of Drupal (webform.module)
+# Copyright 2006 NAME <fred@fredshome.org>
+# Generated from file: webform.module,v 1.47 2005/04/03 19:49:13 ullgren
+# , fuzzy
+# NAME <fred@fredshome.org>, 2006.
+# 
+# 
+# #-#-#-#-#  fr2.po (PROJECT VERSION)  #-#-#-#-#
+# LANGUAGE translation of Drupal (webform.inc)
+# Copyright 2006 NAME <fred@fredshome.org>
+# Generated from file: webform.inc,v 1.16 2005/04/03 19:49:13 ullgren
+# , fuzzy
+# 
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"#-#-#-#-#  fr1.po (webform VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: webform VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-03 21:51+0200\n"
+"PO-Revision-Date: 2006-04-03 21:15-0400\n"
+"Last-Translator: Fred Albrecht <fred@fredshome.org>\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"#-#-#-#-#  fr2.po (webform VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: webform VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-04-03 21:51+0200\n"
+"PO-Revision-Date: 2006-04-03 20:47-0400\n"
+"Last-Translator: Fred Albrecht <fred@fredshome.org>\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
+
+#: webform.module:26
+msgid ""
+"Webforms are forms and questionnaires. To add one select <strong>create "
+"content -&gt; webform</strong>. Below you can set different security and "
+"debug options."
+msgstr "Les webforms sont des formulaires et des questionnaires. Pour en ajouter un sélectionner <strong>Créer un contenu &gt; webform</strong>. Vous pouvez définir diverses options de sécurité et de débogage ci-dessous."
+
+#: webform.module:29
+msgid ""
+"<p>This module lets you create forms or questionnaires and define there "
+"content. Submissions from these forms are stored in the database and "
+"optionaly also send by e-mail to a predefined address.</p>\n"
+"<p>Here is how to create one:\n"
+"<ul>\n"
+"\n"
+" <li>Go to Create Content and add a webform</li>\n"
+" <li>Add a description that is displayed as a teaser and above the actual "
+"form.</li>\n"
+" <li>Add a confirmation message or redirect node that is to be displayed "
+"after a successful submission.</li>\n"
+" <li>Select which roles who should have submission access to this form "
+"(roles that have the &quot;use all webforms&quot; permision can allways use "
+"a webform).</li>\n"
+" <li>Add one or more components to your form.</li>\n"
+" <li>Optionaly add a email address to which submissions will be send. If no "
+"email address is specified no email will be send when submissions are made "
+"through the form.</li>\n"
+" <li>Optionally select an email component that will be used to populate the "
+"return email address on any sent email.</ul>\n"
+" <li>Optionally select a textfield component that will be used to populate "
+"the subject email field on any sent email.</ul>\n"
+"</ul>\n"
+"Help on adding and how to configure the components will be shown after "
+"adding your first component.\n"
+"</p>\n"
+"<p>On user submissions the form content is stored in the database table "
+"<i>webform_submitted_data</i> as key-value pairs. Apart from the form fields "
+"the following &quot;special&quot; fields are added:\n"
+"<ul>\n"
+"  <li> __userid : UID of the submiting user.</li>\n"
+"  <li> __timestamp : UNIX timestamp for when the submission occured.</li>\n"
+"  <li> __remotehost : IP or name of the remote host from which the "
+"submission came.</li>\n"
+"  <li> __useragent : What user agent (browser) the user used upon submitting "
+"the data.</li>\n"
+"</ul>\n"
+msgstr ""
+"<p>Ce module permet de créer des formulaires ou des questionnaires et de définir leur contenu. Les données soumises à ces formulaires sont stockées dans la base de données et peuvent optionnellement être envoyées par courriel à une adresse prédéfinie.</p>\n"
+"      <p>Voici comment en créer un&nbsp;:\n"
+"      <ul>\n"
+"      <li>Dans Créer un contenu, ajoutez un webform.</li>\n"
+"      <li>Entrez une description qui sera affichée comme résumé et au-dessus du formulaire.</li>\n"
+"      <li>Entrez un message de confirmation ou une redirection vers un n&oelig;ud qui sera affiché après une soumission réussie.</li>\n"
+"      <li>Sélectionnez les rôles qui auront l'autorisation de soumettre des données à votre formulaire (les rôles qui ont la permission &quot;utiliser tous les webform&quot; peuvent toujours utiliser un webform).</li>\n"
+"      <li>Ajoutez les composants de votre webform.</li>\n"
+"      <li>Facultativement, ajoutez une adresse de courriel à laquelle les soumissions seront envoyées. Si aucune adresse n'est spécifiée, aucun courriel ne sera émis lorsqu'un formulaire sera soumis.</li>\n"
+"      <li>Facultativement, sélectionnez un champ texte pour la valeur du champ sujet des courriels envoyés.</li>\n"
+"      </ul>\n"
+"      De l'aide sur la manière d'ajouter et de configurer les composants du formulaire sera affichée après avoir ajouté le premier de ceux-ci.</p>\n"
+"      <p>Lors de la soumission d'un formulaire, les données saisies sont stockées dans la base de données, dans la table <i>webform_submitted_data</i> sous forme de paires clef/valeur. En plus des valeurs des champs du formulaire, les champs &quot;spéciaux&quot; suivants sont également stockés&nbsp;:\n"
+"      <ul>\n"
+"      <li>__userid&nbsp;: UID de l'utilisateur qui a rempli le formulaire.</li>\n"
+"      <li>__timestamp&nbsp;: horodatage de la soumission au format Unix.</li>\n"
+"      <li>__remotehost&nbsp;: adresse IP ou nom de la machine depuis laquelle le formulaire a été soumis.</li>\n"
+"      <li>__useragent&nbsp;: identification du client web utilisé pour la soumission du formulaire.</li>\n"
+"      </ul>"
+
+#: webform.module:54
+msgid "Enables the creation of forms and questionnaires."
+msgstr "Permet de créer des formulaires et des questionnaires"
+
+#: webform.module:57
+msgid ""
+"A webform can be a questionnaires, contact or request forms. It can be used "
+"to let visitors make contact, register for a event or to enable a complex "
+"survey."
+msgstr "Un webform peut être un questionnaire, un formulaire de contact ou de demande. Il peut être utilisé pour que les visiteurs prennent contact, s'inscrivent à un événement ou prennent part à un sondage complexe."
+
+#: webform.module:60
+msgid "Available variables are: %username, %useremail, %site, %date."
+msgstr ""
+"Les variables disponibles sont&nbsp;: %username, %usermail, %site, %date"
+
+#: webform.module:61
+msgid ""
+"You can also use %server[key] to add any of the special PHP <a href=\"http://"
+"www.php.net/reserved.variables#reserved.variables.server\">$_SERVER</a> "
+"variables and %get[key] to create prefilled forms from from the <a href="
+"\"http://www.php.net/reserved.variables#reserved.variables.get\">URL</a>."
+msgstr "Vous pouvez également utiliser %server[key] pour ajouter n'importe laquelle des variables spéciales PHP <a href=\"http://www.php.net/reserved.variables#reserved.variables.server\">$_SERVER</a> pour créer des formulaires pré-remplis depuis <a href=\"http://www.php.net/reserved.variables#reserved.variables.get\">URL</a>."
+
+#: webform.module:63
+msgid ""
+"If you are using the profiles module, you can also access all profile data "
+"using the syntax %profile[form_name]. If you for example have a profile "
+"value named profile_city, add the varible %profile[profile_city]."
+msgstr "Si vous utilisez le module profiles, vous pouvez également accéder aux données de tous les profils en utilisant la syntaxe %profile[nom_formulaire]. Par exemple, si vous avez un nom de profil comme profil_ville, ajoutez la variable %profile[profil_ville]."
+
+#: webform.module:237
+msgid "Update from version %a to version %b"
+msgstr "Mettre à jour de la version %a à la version %b"
+
+#: webform.module:242
+msgid "Allow cross site posting"
+msgstr "Autoriser l'écriture trans-site (cross-site posting)"
+
+#: webform.module:244
+msgid "Yes"
+msgstr "Oui"
+
+#: webform.module:244
+msgid "No"
+msgstr "Non"
+
+#: webform.module:245
+msgid ""
+"Allow postings to your webforms that do not originate from your site's domain."
+msgstr ""
+"Autoriser les soumissions à vos formulaires n'émanant pas du domaine de "
+"votre site."
+
+#: webform.module:247
+msgid "Webforms Debug"
+msgstr "Débogage des webform"
+
+#: webform.module:250
+msgid "DEBUG for the webform module"
+msgstr "Débogage pour le module webform."
+
+#: webform.module:251
+msgid ""
+"Set this option to \"Log submissions\" to log all submissions in the "
+"watchdog. Set it to \"Full debug\" to print debug info on submission. You "
+"probably want to leave this option on \"OFF\"."
+msgstr "Réglez cette option sur &quot;Log submissions&quot; pour conserver une trace de toutes les soumissions dans les journaux de Drupal (watchdog). Réglez-la sur &quot;Full debug&quot; pour afficher des informations de debogage lors de la soumission. Vous préférerez probablement laisser cette option sur &quot;OFF&quot;."
+
+#: webform.module:253
+msgid "Show main webform menu"
+msgstr "Afficher le menu principal de webform"
+
+#: webform.module:255
+msgid "Select the visibility of the main webform item on the main menu"
+msgstr "Visibilité de l'élément webform dans le menu principal."
+
+#: webform.module:291
+msgid ""
+"The form component has been changed. Remember to press Submit on the bottom "
+"of this form to save your changes."
+msgstr "Le composant du formulaire a été modifié. N'oubliez pas d'utiliser le bouton Soumettre au bas de ce formulaire pour sauvegarder vos modifications."
+
+#: webform.module:296
+msgid ""
+"The form component has been deleted. Remember to press Submit on the bottom "
+"of this form to save your changes."
+msgstr ""
+"Le composant du formulaire a été supprimé. N'oubliez pas d'utiliser le "
+"bouton Soumettre au bas du formulaire pour enregistrer vos modifications."
+
+#: webform.module:302
+msgid "You have to specify a form description."
+msgstr "Vous devez saisir la description de votre formulaire."
+
+#: webform.module:310
+msgid "You have to specify a confirmation message."
+msgstr "Vous devez saisir un message de confirmation."
+
+#: webform.module:337
+msgid "Webform upgrade page"
+msgstr "Page de mise à jour de webform"
+
+#: webform.module:368
+msgid "results"
+msgstr "résultats"
+
+#: webform.module:405
+msgid "go to form"
+msgstr "aller au formulaire"
+
+#: webform.module:405
+msgid "View this form."
+msgstr "Afficher ce formulaire."
+
+#: webform.module:408
+msgid "Go back to the form"
+msgstr "Revenir au formulaire"
+
+#: webform.module:418
+msgid "textfield"
+msgstr "champ texte"
+
+#: webform.module:419
+msgid "textarea"
+msgstr "zone de texte"
+
+#: webform.module:420
+msgid "select"
+msgstr "sélection"
+
+#: webform.module:421
+msgid "label"
+msgstr "étiquette"
+
+#: webform.module:422
+msgid "hidden"
+msgstr "caché"
+
+#: webform.module:423
+msgid "e-mail address"
+msgstr "adresse de courriel"
+
+#: webform.module:435
+msgid "Use access"
+msgstr "Accès d'utilisation"
+
+#: webform.module:435
+msgid "Roles that should be able to submit data using this form."
+msgstr "Rôles ayant l'autorisation de soumettre des données via ce formulaire."
+
+#: webform.module:441;650
+msgid "Description"
+msgstr "Description"
+
+#: webform.module:442
+msgid "Text to be shown as teaser and before the form."
+msgstr "Texte à afficher comme résumé et avant le formulaire."
+
+#: webform.module:445
+msgid "Confirmation message or redirect URL"
+msgstr "Message de confirmation ou URL de redirection."
+
+#: webform.module:447
+msgid ""
+"Message to be shown upon successful submission or an absolute path to a "
+"redirect page (must start with http://)"
+msgstr ""
+"Message à afficher lors de la soumission réussie du formulaire ou chemin "
+"absolu d'une page de redirection (doit commencer par http://)."
+
+#: webform.module:473
+msgid ""
+"To edit a component, check its \"selected\" box and press \"Edit selected\"."
+msgstr ""
+"Pour éditer un élément, cochez sa case de sélection et cliquez sur &quot;"
+"Éditer sélectionnés&quot;."
+
+#: webform.module:474
+msgid ""
+"To delete a component, check its \"selected\" box and press \"Delete selected"
+"\"."
+msgstr "Pour supprimer un élément, cochez sa case de sélection et cliquez sur &quot;Supprimer sélectionnés&quot;."
+
+#: webform.module:475
+msgid "Use \"value\" to enter a default value."
+msgstr "Utilisez &quot;valeur&quot; pour entrer une valeur par défaut."
+
+#: webform.module:476
+msgid "Check \"mandatory\" box if the field should be mandatory."
+msgstr ""
+"Cochez la case &quot;Obligatoire&quot; si ce champ doit obligatoirement être "
+"rempli."
+
+#: webform.module:477
+msgid ""
+"Remember to set weight on the components or they will be added to the form "
+"in a random order."
+msgstr "N'oubliez pas de spécifier le poids des divers éléments, sinon ils seront insérés dans le formulaire dans un ordre aléatoire."
+
+#: webform.module:478
+msgid "The components are sorted first by weight and then by name."
+msgstr "Les éléments sont triés par poids, puis par nom."
+
+#: webform.module:481
+msgid "Form components"
+msgstr "Éléments du formulaire"
+
+#: webform.module:483
+msgid "Select"
+msgstr "Sélectionner"
+
+#: webform.module:484;648
+msgid "Name"
+msgstr "Nom"
+
+#: webform.module:485
+msgid "Type"
+msgstr "Type"
+
+#: webform.module:486
+msgid "Value"
+msgstr "Valeur"
+
+#: webform.module:487
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+#: webform.module:488
+msgid "Weight"
+msgstr "Poids"
+
+#: webform.module:492
+msgid "Edit selected"
+msgstr "Éditer la sélection"
+
+#: webform.module:493
+msgid "Delete selected"
+msgstr "Supprimer la sélection"
+
+#: webform.module:497
+msgid "Add a new component"
+msgstr "Ajouter un nouvel élément"
+
+#: webform.module:498
+msgid "Select a component type to add."
+msgstr "Choisir un type d'élément à ajouter"
+
+#: webform.module:499;628
+msgid "Add"
+msgstr "Ajouter"
+
+#: webform.module:501
+msgid "E-mail to address"
+msgstr "Adresse de destination"
+
+#: webform.module:503
+msgid ""
+"Form submissions will be e-mailed to this address. Leave blank for none."
+msgstr ""
+"Les soumissions seront envoyées à cette adresse. Laissez le champ vide pour "
+"ne pas envoyer de courriel."
+
+#: webform.module:522
+msgid "E-mail from address"
+msgstr "Adresse d'origine des courriels (champ From)."
+
+#: webform.module:523
+msgid ""
+"Form e-mails will have this return address. Choose Automatic for the default"
+msgstr ""
+"Les courriels auront cette adresse de retour. Choisissez Automatique pour la "
+"valeur par défaut."
+
+#: webform.module:525
+msgid "E-mail subject"
+msgstr "Sujet du courriel"
+
+#: webform.module:526
+msgid ""
+"Form e-mails will have this subject line. Choose Automatic for the default"
+msgstr "Les courriels du formulaire auront ce sujet. Choisissez Automatique pour la valeur par défaut."
+
+#: webform.module:551
+msgid "Unauthorized webform access attempt"
+msgstr "Tentative d'accès non autorisé à un webform"
+
+#: webform.module:586
+msgid "Preview"
+msgstr "Aperçu"
+
+#: webform.module:589
+msgid "Submit"
+msgstr "Soumettre"
+
+#: webform.module:621
+msgid "Page called out of order"
+msgstr "Page affichée hors de séquence"
+
+#: webform.module:649
+msgid ""
+"Name of the field. This is used as a descriptive label and as the key when "
+"saving data in the database."
+msgstr ""
+"Nom du champ. Ce nom est utilisé comme description et comme clef pour sauver "
+"les données dans la base de données."
+
+#: webform.module:652
+msgid ""
+"A short description of the field used as help for the user when he/she uses "
+"the form."
+msgstr "Une courte description du champ, utilisée pour aider l'utilisateur à remplir le formulaire."
+
+#: webform.module:659;666;678;685;706
+msgid "Default value"
+msgstr "Valeur par défaut"
+
+#: webform.module:659
+msgid ""
+"The default value of a email field is always the users email address if he/"
+"she is logged in."
+msgstr ""
+"La valeur par défaut du champ courriel est toujours l'adresse de "
+"l'utilisateur lorsqu'il est connecté via son compte."
+
+#: webform.module:660;672;691
+msgid "Width"
+msgstr "Largeur"
+
+#: webform.module:662;674
+msgid "Width of the textfield."
+msgstr "Longueur du champ de texte."
+
+#: webform.module:668
+msgid "The default value of the field."
+msgstr "La valeur par défaut du champ."
+
+#: webform.module:680
+msgid "The value of the field."
+msgstr "La valeur du champ."
+
+#: webform.module:687
+msgid "The default value of the area."
+msgstr "La valeur par défaut de la zone."
+
+#: webform.module:693
+msgid "Width of the textarea."
+msgstr "Largeur de la zone de texte."
+
+#: webform.module:695
+msgid "Height"
+msgstr "Hauteur"
+
+#: webform.module:697
+msgid "Height of the textarea."
+msgstr "Hauteur de la zone de texte."
+
+#: webform.module:701
+msgid "Options"
+msgstr "Options"
+
+#: webform.module:703
+msgid "Enter one option per line."
+msgstr "Saisissez une option par ligne."
+
+#: webform.module:708
+msgid "The preselected value."
+msgstr "La valeur présélectionnée."
+
+#: webform.module:711
+msgid "Multiple"
+msgstr "Multiple"
+
+#: webform.module:713
+msgid ""
+"Check this option if the user should be allowed to choose multiple values."
+msgstr "Cochez cette option si l'utilisateur peut choisir plusieurs valeurs."
+
+#: webform.module:714
+msgid "Listbox"
+msgstr "Liste déroulante"
+
+#: webform.module:716
+msgid ""
+"Check this option if you want the select component to be of listbox type "
+"instead of radiobuttons or checkboxes."
+msgstr "Cochez cette option si vous voulez que l'élément soit présenté comme une liste déroulante plutôt qu'une suite de boutons radio ou des cases à cocher."
+
+#: webform.module:747
+msgid "Done"
+msgstr "Terminé"
+
+#: webform.module:748
+msgid ""
+"<br>Warning: This button will accept your changes as sub-part of the edit.  "
+"You will still have to select <b>'submit'</b> on the next screen to make "
+"your changes permanent."
+msgstr ""
+"<br />Attention&nbsp;: Ce bouton va enregistrer vos modifications de manière "
+"temporaire. Vous devrez encore sélectionner <b>Soumettre</b> sur l'écran "
+"suivant pour rendre vos modifications permanentes."
+
+#: webform.module:766
+msgid "Trying to post to webform from external domain."
+msgstr "Tentative d'utilisation d'un webform depuis un domaine externe."
+
+#: webform.module:768
+msgid "Visit referer"
+msgstr "Afficher le référant"
+
+#: webform.module:769
+msgid "You are not allowed to post to this form from an external domain."
+msgstr ""
+"Vous n'êtes pas autorisé à utiliser ce formulaire depuis un domaine externe."
+
+#: webform.module:778
+msgid "You are not allowed to submit data using this form."
+msgstr "Vous n'êtes pas autorisé à saisir des données dans ce formulaire."
+
+#: webform.module:800
+msgid "Form submission from: "
+msgstr "Formulaire soumis par :"
+
+#: webform.module:838
+msgid "Submission posted to "
+msgstr "Formulaire soumis à "
+
+#: webform.module:966
+msgid "You have not completed the form. %s is a mandatory field."
+msgstr "Vous n'avez pas complété le formulaire. %s est un champ obligatoire."
+
+#: webform.module:1018
+msgid "Submitted on"
+msgstr "Soumis le"
+
+#: webform.module:1022
+msgid "Submitted by user"
+msgstr "Soumis par "
+
+#: webform.module:1025
+msgid "Submitted by anonymous user"
+msgstr "Soumis par un visiteur"
+
+#: webform.module:1027
+msgid "Submitted values are:"
+msgstr "Les données saisies sont :"
+
+#: webform.module:1261
+msgid "Go back"
+msgstr "Retour"
+
+#: webform.module:72
+msgid "maintain webforms"
+msgstr "entretien des webforms"
+
+#: webform.module:72
+msgid "create webforms"
+msgstr "créer des webforms"
+
+#: webform.module:72
+msgid "use all webforms"
+msgstr "utiliser tous les webforms"
+
+#: webform.inc:11
+msgid "Title"
+msgstr "Titre"
+
+#: webform.inc:12;321;390
+msgid "View"
+msgstr "Voir"
+
+#: webform.inc:14
+msgid "Operations"
+msgstr "Opérations"
+
+#: webform.inc:51
+msgid "Do you really want to delete all submissions for this form?"
+msgstr "Voulez-vous vraiment supprimer toutes les soumissions pour ce formulaire ?"
+
+#: webform.inc:52
+msgid ""
+"Do you really want to delete <strong>all</strong> submissions for this form?"
+msgstr "Voulez-vous vraiment supprimer <strong>toutes</strong> les soumissions pour ce formulaire ?"
+
+#: webform.inc:52;72
+msgid "This action cannot be undone."
+msgstr "Cette action ne pourra pas être annulée."
+
+#: webform.inc:71;72
+msgid "Do you really want to delete this form submission?"
+msgstr "Voulez-vous vraiment supprimer cette soumission du formulaire ?"
+
+#: webform.inc:149
+msgid "#"
+msgstr "#"
+
+#: webform.inc:286
+msgid "Date"
+msgstr "Date"
+
+#: webform.inc:286
+msgid "User"
+msgstr "Utilisateur"
+
+#: webform.inc:286
+msgid "Action"
+msgstr "Action"
+
+#: webform.inc:322;391
+msgid "Delete"
+msgstr "Supprimer"
+
+#: webform.inc:502
+msgid "Unique Users Only"
+msgstr "Utilisateurs uniques seulement"
+
+#: webform.inc:502
+msgid "Unique IPs Only"
+msgstr "Adresses IP uniques seulement"
+
+#: webform.inc:503
+msgid "Analog Bar"
+msgstr "Barre analogique"
+
+#: webform.inc:503
+msgid "Percentage"
+msgstr "Pourcentage"
+
+#: webform.inc:503
+msgid "Tallies"
+msgstr "Comptes"
+
+#: webform.inc:503
+msgid "Covariance Matrix"
+msgstr "Matrice de covariance"
+
+#: webform.inc:605
+msgid "Q"
+msgstr "Q"
+
+#: webform.inc:605
+msgid "choice"
+msgstr "choix"
+
+#: webform.inc:605
+msgid "responses"
+msgstr "réponses"
+
+#: webform.inc:661
+msgid "Left Blank"
+msgstr "Laissé vide"
+
+#: webform.inc:661
+msgid "Default"
+msgstr "Par défaut"
+
+#: webform.inc:661
+msgid "User entered value"
+msgstr "Valeur saisie par l'utilisateur"
+
+#: webform.inc:661
+msgid "Average submission length in words (ex blanks)"
+msgstr "Taille moyenne, en mots, des données saisies (hors blancs)"
