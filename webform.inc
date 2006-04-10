@@ -49,7 +49,7 @@ function _webform_results_clear($nid) {
   }
   else {
     $content = theme('confirm', t('Do you really want to delete all submissions for this form?'), 'webform',
-                     t('Do you really want to delete <strong>all</strong> submissions for this form?'). '<br>'.t('This action cannot be undone.'), 
+                     t('Do you really want to delete <strong>all</strong> submissions for this form?'). '<br />'.t('This action cannot be undone.'), 
                      'yes', 'no', NULL);
     return $content;
   }
@@ -69,7 +69,7 @@ function _webform_submission_delete($nid, $sid) {
   }
   else {
     $content = theme('confirm', t('Do you really want to delete this form submission?'), 'node/'.$nid.'/results', 
-                     t('Do you really want to delete this form submission?').'<br>'.t('This action cannot be undone.'), 
+                     t('Do you really want to delete this form submission?').'<br />'.t('This action cannot be undone.'), 
                      'yes', 'no', NULL);
     return $content;
   }
@@ -576,7 +576,7 @@ function _webform_results_analysis($nid) {
   $content .= "<p>There are $valid_records records selected with the current filter.<p>";
   
   $content .= form($post_content, 'post');
-  $content .= "<br>"; // Some themes jam the form button too close to the next element and it looks ugly.
+  $content .= "<br />"; // Some themes jam the form button too close to the next element and it looks ugly.
   
   unset($uniqueid_query,$uniqueip_query);	
   
@@ -869,13 +869,13 @@ function _webform_results_analysis($nid) {
   }
 
   // Display the Results Table
-  $box_content = "<br>";
+  $box_content = "<br />";
   $box_content .= theme('table', $header, $rows);
   
   // Add legend elements below the table
-  $box_content .= "<p><br>";
+  $box_content .= "<p><br />";
   $box_content .= $view_settings['options']['default_identifier'];
-  $box_content .= " = Default Value <br>";
+  $box_content .= " = Default Value <br />";
   
   $content .= theme_box("Results Table", $box_content);
   
@@ -883,7 +883,7 @@ function _webform_results_analysis($nid) {
   
   if(in_array('c',$views_switches)){
     
-    $box_content = "<br>";	// The covariance matrix is themed as a box
+    $box_content = "<br />";	// The covariance matrix is themed as a box
     
     $cm_rows = array();
     $cm_header = array();

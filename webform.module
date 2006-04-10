@@ -540,12 +540,12 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
 
   if($sid_to_display){
     if(user_access('maintain webforms')){
-      $output .= '<H2 class="warning">Submission #' . $sid_to_display . '</H2><br>';
+      $output .= '<H2 class="warning">Submission #' . $sid_to_display . '</H2><br />';
       // TODO: Expand the information block
       //$submitting_user = user_load(array('uid' => 2));
-      //$output .= 'User: ' . $submitting_user->name . ' from IP' . $_GET['ipaddr'] . '<br>';
-      //$output .= 'Date: ' . $_GET['dated'] . '<br>';
-      //$output .= 'Read Only<br>';
+      //$output .= 'User: ' . $submitting_user->name . ' from IP' . $_GET['ipaddr'] . '<br />';
+      //$output .= 'Date: ' . $_GET['dated'] . '<br />';
+      //$output .= 'Read Only<br />';
     }else
     {
       $sid_to_display = 0;  // This user is not allowed to access a submitted node. Deny the attempt without alert.
@@ -747,7 +747,7 @@ function _webform_editfield() {
   }
   
   $form .= form_button(t('Done'),  'webform_edit_done');
-  $form .= t("<br>Warning: This button will accept your changes as sub-part of the edit.  You will still have to select <b>'submit'</b> on the next screen to make your changes permanent.");
+  $form .= '<br />' . t("Warning: This button will accept your changes as sub-part of the edit.  You will still have to select <b>'submit'</b> on the next screen to make your changes permanent.");
 
   print theme('page', form($form));
 }
