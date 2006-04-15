@@ -53,8 +53,7 @@
       ) TYPE=MyISAM"
     );
     
-    db_query("INSERT INTO variable VALUES ('webform_version', 'a:2:{s:4:\"text\";s:5:\"4.7.0\";s:5:\"build\";i:470;}')");
-    
+  variable_set('webform_version',array('text'=>'4.7.1', 'build' => '471'));
 
   $success = TRUE;
 
