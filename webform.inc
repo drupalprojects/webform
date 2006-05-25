@@ -43,8 +43,7 @@ function _webform_page() {
  * @param      integer ID of node for which to clear submissions
  */
 function _webform_results_clear($nid) {
-  if ($_POST['edit']['confirm']) {
-    
+  if ($_POST['op'] == t('Clear')) {
     $query = 'DELETE FROM {webform_submitted_data} WHERE nid = %d';
     $res = db_query($query, $nid);
     $query = 'DELETE FROM {webform_submissions} WHERE nid = %d';
@@ -55,12 +54,20 @@ function _webform_results_clear($nid) {
 
     watchdog('webform','webform "' . $title . '" entries cleared.', WATCHDOG_NOTICE);
     drupal_goto('webform');
-  }
-  else {
-    $content = theme('confirm', t('Do you really want to delete all submissions for this form?'), 'webform',
-                     t('Do you really want to delete <strong>all</strong> submissions for this form?'). '<br>'.t('This action cannot be undone.'), 
-                     'yes', 'no', NULL);
-    return $content;
+  } else {
+    $form['delete'] = array (
+      '#type' => 'submit',
+      '#value' => t('Clear'),
+    );
+    $form['cancel'] = array (
+      '#type' => 'markup',
+      '#value' => '<a href="'.url('node/'.$nid.'/results').'">'.t("Cancel").'</a>',
+    );
+
+    drupal_set_title(t("Clear Form Submissions"));
+    $output = t("Are you sure you want to delete all submissions for this form?")." ".t('This action cannot be undone.');
+    $output .= drupal_get_form('clear_results',$form);
+    return $output;
   }
 } // end function _webform_results_clear
 
@@ -93,7 +100,7 @@ function _webform_submission_delete($nid, $sid) {
     $node = node_load($nid);
     drupal_set_title(t("Are you sure you want to delete this submission?"));
     $output .= t('This action cannot be undone');
-    $output = drupal_get_form('delete_submission',$form);
+    $output .= drupal_get_form('delete_submission',$form);
     return $output;
   }
 } // end function _webform_submission_delete
@@ -105,8 +112,8 @@ function _webform_fetch_submission($sid) {
   $submission = array();
 
   $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data ' .
-           'FROM webform_submitted_data as sd ' .
-           'LEFT JOIN webform_submissions as s on (sd.sid = s.sid) '.
+           'FROM {webform_submitted_data} as sd ' .
+           'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '.
            'WHERE sd.sid = %d';
 
   $res = db_query($query, $sid);
@@ -129,39 +136,40 @@ function _webform_fetch_submission($sid) {
 function theme_webform_create_mailmessage($reply) {
   global $user;
   
-  $message .=  t('Submitted on').' '.format_date(time(), 'small')."\r\n";
+  $message .=  t('Submitted on').' '.format_date(time(), 'small')."\n";
   $ip_address = $_SERVER['REMOTE_ADDR'];
   
   if($user->uid) {
-    $message .= t('Submitted by user').": $user->name [$ip_address]\r\n";
+    $message .= t('Submitted by user').": $user->name [$ip_address]\n";
   }
   else {
-    $message .= t('Submitted by anonymous user').": [$ip_address]\r\n";
+    $message .= t('Submitted by anonymous user').": [$ip_address]\n";
   }
-  $message .= "\r\n\r\n".t('Submitted values are:')."\r\n\r\n";
+  $message .= "\n\n".t('Submitted values are:')."\n\n";
   foreach($reply as $key => $value) {
     if (is_array($value)) {
       $message .=  "$key :";
       foreach($value as $k => $v) {
         if (!empty($v)) {
-          $message .= "\r\n\t\t$k : $v";
+					// Note that newlines cannot be preceeded by spaces to display properly in some clients
+          $message .= "\n\t\t$k :".(empty($v) ? "\n" : " $v\n");
         }
       }
-      $message .= "\r\n";
-    }
-    else {
-      $message .=  "$key : $value\r\n";
+      $message .= "\n";
+    } else {
+			// Note that newlines cannot be preceeded by spaces to display properly in some clients
+      $message .=  "$key :".(empty($value) ? "\n" : " $value\n");
     }
   }
   
   if (variable_get('webform_debug', 0) == 2) {
-    $message .= "\r\n";
-    $message .= "DEBUG INFO\r\n";
-    $message .= "==========\r\n";
-    $message .= "\$_SERVER is\r\n";
+    $message .= "\n";
+    $message .= "DEBUG INFO\n";
+    $message .= "==========\n";
+    $message .= "\$_SERVER is\n";
     $message .= print_r($_SERVER, true);
-    $message .= "\r\n";
-    $message .= "\$_POST is\r\n";
+    $message .= "\n";
+    $message .= "\$_POST is\n";
     $message .= print_r($_POST, true);
   }
 
@@ -169,17 +177,14 @@ function theme_webform_create_mailmessage($reply) {
 }
 
 
-function _webform_mail($to, $from, $subject, $message) {
-  $headers = $from;
-    
-  // START - SPAM FILTER
+function _webform_submission_spam_check($to, $headers, $subject, $message) {
   // check if they are spamming using a bcc hack
   if (preg_match('/b*cc\s*:/i', $to)
       || preg_match('/b*cc\s*:/i', $subject)
       || preg_match('/b*cc\s*:/i', $message)
       || preg_match('/b*cc\s*:/i', $headers)
     ) {
-    return FALSE;
+    return true; // Possible spam attempt
   }
 
   // check if they are spamming using a bcc hack
@@ -188,14 +193,68 @@ function _webform_mail($to, $from, $subject, $message) {
       || preg_match('/content\-type/i', $message)
       || preg_match('/content\-type/i', $headers)
     ) {
-    return FALSE;
+    return true; // Possible spam attempt
   }
-  // END - SPAM FILTER
+  
+  return false; // Not spam
+}
 
-  $headers .= "Date: ".date("r")."\r\n".
-    "X-Mailer: Drupal Webform (PHP/" . phpversion().")";
 
-  return user_mail($to, $subject, $message, $headers);
-} // end function _webform_mail
+function _webform_submission_limit_check($node, $form_values) {
+  global $user;
+  
+  // check if submission limiting is enabled
+  if ($node->submit_limit == '-1') {
+    return false; // No check enabled
+  }
+  
+  // Retrieve submission data for this IP address or username from the database
+  $query = "SELECT submitted, user, remote_addr " .
+           "FROM {webform_submissions} " .
+           "WHERE (user = '%s' OR remote_addr = '%s') AND submitted > %d AND nid = %d";
+  
+  // Fetch all the entries from the database within the submit interval with this username and IP
+  $result = db_query($query, $user->name, $_SERVER['REMOTE_ADDR'],time() - $node->submit_interval, $node->nid);
+  $numSubmissionsDatabase = db_num_rows($result);
+  
+  // Double check the submission history from the users machine using cookies
+  if (variable_get("webform_use_cookies",0)) {
+    $cookieName = 'webform-'.$node->nid;
+    
+    if (isset($_COOKIE[$cookieName]) && is_array($_COOKIE[$cookieName])) {
+      foreach ($_COOKIE[$cookieName] as $key => $timestamp) {
+        if ($timestamp <= time() - $node->submit_interval) {
+          // Remove the cookie if past the required time interval
+          setcookie($cookieName."[".$key."]", "", 0);
+        }
+      }
+      // Count the number of submissions recorded in cookies
+      $numSubmissionsCookie = count($_COOKIE[$cookieName]);
+    } else {
+      $numSubmissionsCookie = 0;
+    }
+  }
+  
+  if ($numSubmissionsDatabase >= $node->submit_limit || $numSubmissionsCookie >= $node->submit_limit) {
+    // Limit exceeded
+    return $numSubmissionsDatabase; 
+  } else {
+    // Increment a cookie for triple recording of the submission
+    if (variable_get("webform_use_cookies",0)) {
+      $attemptedKey = 0;
+      if ($numSubmissionsCookie > 0) {
+        while (array_key_exists($attemptedKey,$_COOKIE[$cookieName])) {
+          $attemptedKey++;
+        }
+      }
+      // Set a cookie including the server's submission time
+      // The cookie expires in the length of the interval plus a day to compensate for different timezones
+      setcookie($cookieName."[".$attemptedKey."]", time(), time()+$node->submit_interval+86400);
+    }
+    
+    // Limit not exceeded
+    return false;
+  }
+}
 
 ?>
