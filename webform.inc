@@ -164,10 +164,10 @@ function _webform_results_table($nid) {
           $cell[] = format_date($field->data, 'small');
         }
         else if ( unserialize($field->data) ) {
-          $cell[] = theme('item_list', unserialize($field->data));
+          $cell[] = theme('item_list', check_plain(unserialize($field->data)));
         }
         else {
-          $cell[] = $field->data;
+          $cell[] = check_plain($field->data);
         }
         $previous = $field->sid;
       }
