@@ -1,4 +1,5 @@
 <?php
+// $Id$
 /** 
  * function webform_edit_select
  * Create a set of form items to be displayed on the form for editing this component.
@@ -8,41 +9,41 @@
  * @returns An array of form items to be displayed on the edit component page
  **/
 function _webform_edit_select ($currfield) {
-    $editFields = array();
-    $editFields['extra']['items'] = array (
-      '#type' => 'textarea',
-      '#title' => t("Options"),
-      '#default_value' => $currfield['extra']['items'],
-      '#description' => t('A list of selectable options. One option per line.').'<br />'.webform_help('webform/helptext#variables'),
-      '#cols' => 60,
-      '#rows' => 5,
-      '#weight' => -2,
-      '#required' => TRUE,
-    );
-    $editFields['value'] = array (
-      '#type' => 'textfield',
-      '#title' => t("Default value"),
-      '#default_value' => $currfield['default'],
-      '#description' => t('The default value of the field.').'<br />'.webform_help('webform/helptext#variables'),
-      '#size' => 60,
-      '#maxlength' => 127,
-      '#weight' => 0,
-    );
-    $editFields['extra']['multiple'] = array (
-      '#type' => 'checkbox',
-      '#title' => t("Multiple"),
-      '#return_value' => 'Y',
-      '#default_value' => ($currfield['extra']['multiple']=='Y'?TRUE:FALSE),
-      '#description' => t('Check this option if the user should be allowed to choose multiple values.'),
-    );
-    $editFields['extra']['aslist'] = array (
-      '#type' => 'checkbox',
-      '#title' => t("Listbox"),
-      '#return_value' => 'Y',
-      '#default_value' => ($currfield['extra']['aslist']=='Y'?TRUE:FALSE),
-      '#description' => t('Check this option if you want the select component to be of listbox type instead of radiobuttons or checkboxes.'),
-    );
-    return $editFields;
+  $editFields = array();
+  $editFields['extra']['items'] = array (
+    '#type' => 'textarea',
+    '#title' => t("Options"),
+    '#default_value' => $currfield['extra']['items'],
+    '#description' => t('A list of selectable options. One option per line.').'<br />'.webform_help('webform/helptext#variables'),
+    '#cols' => 60,
+    '#rows' => 5,
+    '#weight' => -2,
+    '#required' => TRUE,
+  );
+  $editFields['value'] = array (
+    '#type' => 'textfield',
+    '#title' => t("Default value"),
+    '#default_value' => $currfield['default'],
+    '#description' => t('The default value of the field.').'<br />'.webform_help('webform/helptext#variables'),
+    '#size' => 60,
+    '#maxlength' => 127,
+    '#weight' => 0,
+  );
+  $editFields['extra']['multiple'] = array (
+    '#type' => 'checkbox',
+    '#title' => t("Multiple"),
+    '#return_value' => 'Y',
+    '#default_value' => ($currfield['extra']['multiple']=='Y'?TRUE:FALSE),
+    '#description' => t('Check this option if the user should be allowed to choose multiple values.'),
+  );
+  $editFields['extra']['aslist'] = array (
+    '#type' => 'checkbox',
+    '#title' => t("Listbox"),
+    '#return_value' => 'Y',
+    '#default_value' => ($currfield['extra']['aslist']=='Y'?TRUE:FALSE),
+    '#description' => t('Check this option if you want the select component to be of listbox type instead of radiobuttons or checkboxes.'),
+  );
+  return $editFields;
 }
 
 /** 
@@ -52,45 +53,47 @@ function _webform_edit_select ($currfield) {
  * @returns An array of a form item to be displayed on the client-side webform
  **/
 function _webform_render_select ($component) {
-	$formItem = array (
+  $formItem = array (
     '#title'         => $component['name'],
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
-	);
-	
-	// Convert the user-entered list into an array
-	$value = _webform_filtervalues($component['value']);
-	$items = explode("\n", _webform_filtervalues($component['extra']['items']));
-	$options = array();
-	foreach($items as $k => $v) {
-		$v = trim($v);
-		if ( strlen($v) )
-			$options[$v] = $v;
-	}
-	// Set the component options
-	$formItem['#options'] = $options;
-	
-	if ( $component['extra']['aslist'] == 'Y' ) {
-		// Set display as a select list:
-		$formItem['#default_value'] = array($value);
-		$formItem['#type'] = 'select';
-		if ( $component['extra']['multiple'] == 'Y' ) {
-			$formItem['#multiple'] = TRUE;
-		}
-	} else {
-		if ( $component['extra']['multiple'] == 'Y' ) {
-			// Set display as a checkbox set
-			$formItem['#default_value'] = array($value);
-			$formItem['#type'] = 'checkboxes';
-			
-		} else {
-			// Set display as a radio set
-			$formItem['#default_value'] = $value;
-			$formItem['#type'] = 'radios';
-		}
-	}
-	return $formItem;
+  );
+  
+  // Convert the user-entered list into an array
+  $value = _webform_filtervalues($component['value']);
+  $items = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $options = array();
+  foreach($items as $k => $v) {
+    $v = trim($v);
+    if ( strlen($v) )
+      $options[$v] = $v;
+  }
+  // Set the component options
+  $formItem['#options'] = $options;
+  
+  if ( $component['extra']['aslist'] == 'Y' ) {
+    // Set display as a select list:
+    $formItem['#default_value'] = array($value);
+    $formItem['#type'] = 'select';
+    if ( $component['extra']['multiple'] == 'Y' ) {
+      $formItem['#multiple'] = TRUE;
+    }
+  }
+  else {
+    if ( $component['extra']['multiple'] == 'Y' ) {
+      // Set display as a checkbox set
+      $formItem['#default_value'] = array($value);
+      $formItem['#type'] = 'checkboxes';
+      
+    }
+    else {
+      // Set display as a radio set
+      $formItem['#default_value'] = $value;
+      $formItem['#type'] = 'radios';
+    }
+  }
+  return $formItem;
 }
 
 
@@ -103,10 +106,11 @@ function _webform_render_select ($component) {
  **/
 function _webform_submission_display_select ($data,$component) {
   $formItem = _webform_render_select($component);
-	if ($component['extra']['multiple'] == 'Y') {
-		// Set the value as an array
-		$formItem['#default_value'] = $data['value'];
-	} else {
+  if ($component['extra']['multiple'] == 'Y') {
+    // Set the value as an array
+    $formItem['#default_value'] = $data['value'];
+  }
+  else {
     // Set the value as a single string
     foreach ($data['value'] as $value) {
       if ($value !== '0') {
@@ -114,9 +118,22 @@ function _webform_submission_display_select ($data,$component) {
         break;
       }
     }
-	}
+  }
   $formItem['#attributes'] = array("disabled" => "disabled");
   return $formItem;
+}
+
+/** 
+ * function _webform_help_select
+ * Module specific instance of hook_help
+ **/
+function _webform_help_select($section) {
+  switch ($section) {
+    case 'admin/settings/webform#select_description':
+      $output = t("Allows creation of checkboxes, radio buttons, or select menus.");
+      break;
+  }
+  return $output;
 }
 
 /** 
@@ -151,11 +168,12 @@ function _webform_table_data_select ($data) {
   if (is_array($data['value'])) {
     foreach ($data['value'] as $value) {
       if ($value !== '0') {
-        $output .= check_plain($value)."<br />";
+        $output .= $value."<br />";
       }
     }
-  } else {
-    $output = check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
+  }
+  else {
+    $output = empty($data['value']['0']) ? "" : $data['value']['0'];
   }
   return $output;
 }
@@ -194,7 +212,8 @@ function _webform_csv_data_select ($data,$component) {
     $item = trim($item);
     if (in_array($item,(array)$data['value']) === true) {
       $output .= ',Yes';
-    } else {
+    }
+    else {
       $output .= ',No';
     }
   }
@@ -202,4 +221,3 @@ function _webform_csv_data_select ($data,$component) {
   $output = substr($output,1);
   return $output;
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+// $Id$
 /** 
  * function webform_edit_email
  * Create a set of form items to be displayed on the form for editing this component.
@@ -34,15 +35,15 @@ function _webform_edit_email ($currfield) {
  * @returns An array of a form item to be displayed on the client-side webform
  **/
 function _webform_render_email ($component) {
-	global $user;
-	$formItem = array (
+  global $user;
+  $formItem = array (
     '#type'          => 'textfield',
     '#title'         => $component['name'],
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
-	);
-	
+  );
+  
     // Fill in the user's email address if available
     if($user->uid && $user->mail && empty($value)) {
       $formItem['#default_value'] = $user->mail;
@@ -53,9 +54,9 @@ function _webform_render_email ($component) {
       $formItem['#size'] = $component['extra']['width'];
     }
     // Add the email filter validation function
-    $formItem['#validate'] = array('webform_validate_email' => array());
+    $formItem['#validate'] = array('_webform_validate_email' => array());
     
-	return $formItem;
+  return $formItem;
 }
 
 /** 
@@ -84,6 +85,19 @@ function _webform_submission_display_email ($data,$component) {
   $formItem['#default_value'] = $data['value']['0'];
   $formItem['#attributes']    = array("disabled" => "disabled");
   return $formItem;
+}
+
+/** 
+ * function _webform_help_email
+ * Module specific instance of hook_help
+ **/
+function _webform_help_email($section) {
+  switch ($section) {
+    case 'admin/settings/webform#email_description':
+      $output = t("A textfield that automatically fills in logged-in users e-mail.");
+      break;
+  }
+  return $output;
 }
 
 /** 
@@ -124,7 +138,7 @@ function _webform_analysis_rows_email ($component) {
  * @returns Textual output formatted for human reading.
  **/
 function _webform_table_data_email ($data) {
-  return check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
+  return empty($data['value']['0']) ? "" : $data['value']['0'];
 }
 
 
@@ -151,4 +165,3 @@ function _webform_csv_headers_email ($component) {
 function _webform_csv_data_email ($data) {
   return empty($data['value']['0']) ? "" : $data['value']['0'];
 }
-?>
