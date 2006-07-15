@@ -103,7 +103,7 @@ function _webform_render_time ($component) {
     $formItem['#title'] .= '<span class="form-required" title="'.t("This field is required.").'">*</span>';
   }
   $formItem['#weight'] = $component['weight'];
-  $formItem['#description'] = $component['extra']['description'];
+  $formItem['#description'] = _webform_filtervalues($component['extra']['description']);
   $formItem['#prefix'] = '<div class="container-inline">';
   $formItem['#suffix'] = '</div>';
   $formItem['hour'] = array(
@@ -235,9 +235,9 @@ function _webform_table_data_time ($data,$component) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0) {
     $timestamp = strtotime($data['value']['0'].":".$data['value']['1'].$data['value']['2']);
     if ($component['extra']['hourformat'] == '24-hour') {
-      return date("H:i",$timestamp);
+      return check_plain(date("H:i",$timestamp));
     } else {
-      return date("g:i a",$timestamp);
+      return check_plain(date("g:i a",$timestamp));
     }
   } else {
     return "";

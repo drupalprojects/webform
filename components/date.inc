@@ -80,7 +80,7 @@ function _webform_render_date ($component) {
   $formItem['#type'] = 'fieldset';
   $formItem['#title'] = $component['name'];
   $formItem['#weight'] = $component['weight'];
-  $formItem['#description'] = $component['extra']['description'];
+  $formItem['#description'] = _webform_filtervalues($component['extra']['description']);
   $formItem['#prefix'] = '<div class="container-inline">';
   $formItem['#suffix'] = '</div>';
   if ($component['mandatory']) {
@@ -234,7 +234,7 @@ function _webform_analysis_rows_date ($component) {
  **/
 function _webform_table_data_date ($data) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0 && strlen($data['value']['2']) > 0) {
-    return $data['value']['0']."/".$data['value']['1']."/".$data['value']['2'];
+    return check_plain($data['value']['0']."/".$data['value']['1']."/".$data['value']['2']);
   }
   else {
     return "";
