@@ -979,11 +979,16 @@ function _webform_submission_ok($name, $type, $value, $mandatory) {
   // Check if it is mandatory and if so that it exists and have a value
   if($mandatory) {
   	$is_error = false;
-  	if($type == 'select' && 
-        (!is_array($value) || !count($value))) {
-  	  $is_error = true;
-  	}
-  	elseif(!strlen(trim($value))) {
+  	if ($type == 'select' && !is_array($value)) {
+      if (!strlen(trim($value))) {
+        $is_error = true;
+      }
+      elseif ($value == '0') {
+        $is_error = true;
+      }
+    }
+    
+    elseif(!strlen(trim($value))) {
   	  $is_error = true;
   	}
   	if($is_error) {
