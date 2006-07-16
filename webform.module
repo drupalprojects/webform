@@ -456,7 +456,7 @@ function webform_form(&$node, &$error) {
                       form_textfield('', "webformcomponents_name][".$key, $name, 20, 127),
                       $node->webformcomponents_type[$key],
                       form_textfield('', "webformcomponents_value][".$key, 
-                                          $node->webformcomponents_value[$key], 20, 255),
+                                          $node->webformcomponents_value[$key], 20, 1024),
                       form_checkbox('', "webformcomponents_mandatory][".$key, 
                                     '1', ($node->webformcomponents_mandatory[$key]?1:0)),                      
                       form_weight('', 
