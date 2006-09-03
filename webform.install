@@ -1,8 +1,8 @@
 <?php
-  // $Id$
+// $Id$
 
-  function webform_install() {
-    drupal_set_message('Installing webform');
+function webform_install() {
+  drupal_set_message('Installing webform');
 
   switch ($GLOBALS['db_type']) {
     case 'mysqli':
@@ -23,9 +23,10 @@
       db_query("CREATE TABLE if not exists {webform_component} (
         nid int(10) unsigned NOT NULL default '0',
         cid int(10) unsigned NOT NULL default '0',
+        pid int(10) unsigned NOT NULL default '0',
         name varchar(128) default NULL,
         type varchar(16) default NULL,
-        value varchar(128) default NULL,
+        value text default NULL,
         extra text,
         mandatory int(2) unsigned default NULL,
         weight int(2) default NULL,
@@ -71,9 +72,10 @@
       db_query("CREATE TABLE {webform_component} (
           nid integer NOT NULL default '0',
           cid integer NOT NULL default '0',
+          pid integer NOT NULL default '0',
           name varchar(128) NOT NULL default '',
           type varchar(16) NOT NULL default '',
-          value varchar(128) NOT NULL default '',
+          value text NOT NULL default '',
           extra text NOT NULL default '',
           mandatory smallint NOT NULL default '0',
           weight smallint NOT NULL default '0',
@@ -102,14 +104,15 @@
       );
     break;
   }
-    
+  
   variable_set('webform_version',array('text'=>'4.7.1', 'build' => '471'));
 
   $success = TRUE;
 
   if ($success) {
     drupal_set_message(t('Webform module installed module tables successfully.'));
-  } else {
+  }
+  else {
     drupal_set_message(t('The installation of webform module was unsuccessful.'), 'error');
   }
 }
@@ -226,7 +229,7 @@ function webform_update_5() {
     case 'mysqli':
     case 'mysql':
       db_query('LOCK TABLES {sequences} WRITE');
-      $ret[] = update_sql("UPDATE {sequences} SET name = '%s' WHERE name = '%s'", db_prefix_tables('{webform_submissions}_sid'), db_prefix_tables('{webform_submissions}_id'));
+      $ret[] = update_sql(sprintf("UPDATE {sequences} SET name = '%s' WHERE name = '%s'", db_prefix_tables('{webform_submissions}_sid'), db_prefix_tables('{webform_submissions}_id')));
       db_query('UNLOCK TABLES'); 
       break;
   }
@@ -234,6 +237,43 @@ function webform_update_5() {
   return $ret;
 }
 
+/*
+ * Add a parent ID to all components, allowing nested fieldsets
+ */
+function webform_update_6() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD pid integer NOT NULL DEFAULT '0' AFTER cid");
+      break;
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD pid int(10) NOT NULL DEFAULT 0 AFTER cid");
+      break;
+  }
+  
+  return $ret;
+}
+
+/*
+ * Allow much larger default values for components
+ */
+function webform_update_7() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      db_change_column($ret, 'webform_component', 'value', 'value', 'TEXT', array('not null' => FALSE, 'default' => "NULL"));
+      break;
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE value value TEXT NULL DEFAULT NULL");
+      break;
+  }
+  
+  return $ret;
+}
 
 /**
  * Makes updates to the database structure (Pre-4.7 versions of Drupal).
@@ -285,15 +325,15 @@ function _webform_legacy_update($installed_version, $current_version) {
       // No more lazy update ...
       // Check if the lazy update has already been performed
       $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_subject'");  		
-			if (db_num_rows($result) == 0) {  
-				// The email_subject column is needed
-      	$ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_subject varchar(255)");
-			}
-      $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_from'");			
-			if (db_num_rows($result) == 0) {  
-				// The email_subject column is needed
-      	$ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_from varchar(255)");
-			}
+      if (db_num_rows($result) == 0) {  
+        // The email_subject column is needed
+        $ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_subject varchar(255)");
+      }
+      $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_from'");      
+      if (db_num_rows($result) == 0) {  
+        // The email_subject column is needed
+        $ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_from varchar(255)");
+      }
     }
         
     // Set the $current_version
@@ -301,4 +341,3 @@ function _webform_legacy_update($installed_version, $current_version) {
     
     return $ret;
 }
-?>

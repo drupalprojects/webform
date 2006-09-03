@@ -16,23 +16,26 @@ function _webform_page() {
   $header = array(
                   t('Title'), 
                   array('data' => t('View'),
-                        'colspan' => '3'),
+                        'colspan' => '4'),
                   array('data' => t('Operations'),
-                        'colspan' => '3')
+                        'colspan' => '2')
                   );
 
   $result = db_query("SELECT nid, title FROM {node} WHERE type='webform'");
    
   while ($node = db_fetch_object($result)) {
-    $rows[] = array($node->title,
+    $rows[] = array(l($node->title,'node/' . $node->nid),
                     l(t('submissions'),'node/' . $node->nid . '/results'),
                     l(t('analysis'),'node/' . $node->nid . '/results/analysis'),
                     l(t('table'),'node/' . $node->nid . '/results/table'),
                     l(t('download'),'node/' . $node->nid . '/results/download'),
-                    //l(t('edit'), 'node/'.$node->nid.'/edit'),
+                    l(t('edit'), 'node/'.$node->nid.'/edit'),
                     l(t('clear'), 'node/' . $node->nid . '/results/clear'));
 
   }
+  
+  if (user_perm)
+  
   $content = theme('table', $header, $rows);
   drupal_set_title($node->title);
   return $content;
@@ -106,6 +109,32 @@ function _webform_submission_delete($nid, $sid) {
   }
 } // end function _webform_submission_delete
 
+/**
+ * Return all the submissions for a particular node
+ */
+function _webform_fetch_submissions($nid) {
+  
+  $query = 'SELECT s.sid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data ' .
+           'FROM {webform_submissions} as s ' .
+           'LEFT JOIN {webform_submitted_data} as sd on (sd.sid = s.sid) '.
+           'WHERE sd.nid = %d';
+    
+  $res = db_query($query, $nid);
+  $submissions = array();
+  
+  // Outer loop: iterate for each submission
+  while ($row = db_fetch_object($res)) {
+    if ($row->sid != $previous) {
+      $submissions[$row->sid]['submitted'] = $row->submitted;
+      $submissions[$row->sid]['remote_addr'] = $row->remote_addr;
+    }
+    $submissions[$row->sid]['data'][$row->cid]['value'][$row->no] = $row->data;
+    $previous = $row->sid;
+  }
+ 
+  return $submissions;
+} // end function _webform_fetch_submissions
+
 /* This function is used to fetch a specified submission.
  */
 function _webform_fetch_submission($sid) {
@@ -134,9 +163,8 @@ function _webform_fetch_submission($sid) {
   return $submission;
 } // end function _webform_fetch_submission
 
-function theme_webform_create_mailmessage($reply) {
-  global $user;
-  
+function theme_webform_create_mailmessage($form_values, $node, $sid) {
+  global $user, $baseurl;
   $message .=  t('Submitted on').' '.format_date(time(), 'small')."\n";
   $ip_address = $_SERVER['REMOTE_ADDR'];
   
@@ -146,28 +174,50 @@ function theme_webform_create_mailmessage($reply) {
   else {
     $message .= t('Submitted by anonymous user').": [$ip_address]\n";
   }
-  $message .= "\n\n".t('Submitted values are:')."\n\n";
-  foreach($reply as $key => $value) {
-    if (is_array($value)) {
-      $message .=  "$key :";
-      foreach($value as $k => $v) {
-        if (!empty($v)) {
-          // Note that newlines cannot be preceeded by spaces to display properly in some clients
-          $message .= "\n\t\t$k :".(empty($v) ? "\n" : " $v\n");
-        }
-      }
+
+  $message .= "\n";
+  function _webform_submission_format ($key, $value, $node, $indent = "") {
+    // First check for component-level themes
+    $themedOutput = theme("webform_mail_".$node->webformcomponents[$key]['type'],$value,$node->webformcomponents[$key]);
+    if ($themedOutput) {
+      // Indent the output and add to message
+      $message .= $indent;
+      $themedOutput = rtrim($themedOutput,"\n");
+      $message .= str_replace("\n","\n".$indent,$themedOutput);
       $message .= "\n";
     }
-    else {
+    // Generic output for single values
+    elseif (!is_array($value)) {
       // Note that newlines cannot be preceeded by spaces to display properly in some clients
-      $message .=  "$key :".(empty($value) ? "\n" : " $value\n");
+      if ($node->webformcomponents[$key]['name']) {
+        $message .=  $indent.$node->webformcomponents[$key]['name'].":".(empty($value) ? "\n" : " $value\n");
+      }
     }
+    // Else use a generic output for arrays
+    else {
+      $message .=  $node->webformcomponents[$key]['name'].":\n";
+      foreach ($value as $k => $v) {
+        $message .= _webform_submission_format($k, $v, $node, $indent."   ");
+      }
+    }
+    return ($message);
   }
+  $message .= t('Submitted values are:');
+  $message .= _webform_submission_format("",$form_values['submitted_tree'], $node);
+  
+  $message .= "\n\n";
+  $message .= t("The results of this submission may be viewed at:\n");
+  $message .= "http://".$_SERVER['HTTP_HOST'].$baseurl.url('node/'.$node->nid)."?sid=".$sid;
+  
   
   if (variable_get('webform_debug', 0) == 2) {
     $message .= "\n";
     $message .= "DEBUG INFO\n";
     $message .= "==========\n";
+    $message .= "\$form_values are\n";
+    $message .= print_r($form_values, true);
+    $message .= "\$node is\n";
+    $message .= print_r($node, true);
     $message .= "\$_SERVER is\n";
     $message .= print_r($_SERVER, true);
     $message .= "\n";

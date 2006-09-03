@@ -54,10 +54,12 @@ function _webform_edit_select ($currfield) {
  **/
 function _webform_render_select ($component) {
   $formItem = array (
-    '#title'         => $component['name'],
+    '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
+	'#prefix'        => '<div class="webform-component-'.$component['type'].'" id="webform-component-'._webform_safe_name($component['name']).'">',
+	'#suffix'        => '</div>',
   );
   
   // Convert the user-entered list into an array
@@ -66,8 +68,9 @@ function _webform_render_select ($component) {
   $options = array();
   foreach($items as $k => $v) {
     $v = trim($v);
-    if ( strlen($v) )
-      $options[$v] = $v;
+    if (strlen($v)) {
+      $options[_webform_safe_name($v)] = htmlspecialchars($v, ENT_QUOTES);
+    }
   }
   // Set the component options
   $formItem['#options'] = $options;
@@ -108,6 +111,9 @@ function _webform_submission_display_select ($data,$component) {
   $formItem = _webform_render_select($component);
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array
+    foreach ($data['value'] as $key => $value) {
+      $data['value'][$key] = _webform_safe_name($value);
+    }
     $formItem['#default_value'] = $data['value'];
   }
   else {
@@ -121,6 +127,67 @@ function _webform_submission_display_select ($data,$component) {
   }
   $formItem['#attributes'] = array("disabled" => "disabled");
   return $formItem;
+}
+
+
+/** 
+ * function webform_submit_select
+ * Translates the submitted 'safe' form values back into their un-edited original form
+ * @param $data The POST data associated with the component
+ * @param $component An array of information describing the component, directly correlating to the webform_component database schema
+ * @returns Nothing
+ **/
+function _webform_submit_select (&$data,$component) {
+  $items = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $options = array();
+  foreach($items as $k => $v) {
+    $v = trim($v);
+    if (strlen($v)) {
+      $options[_webform_safe_name($v)] = $v;
+    }
+  }
+  if (is_array($data)) {
+    foreach ($data as $key => $value) {
+      if ($value) {
+        $data[$key] = $options[$key];
+      }
+    }
+  } elseif (!empty($data)) {
+    $data = $options[$data];
+  }
+}
+
+/**
+ * theme_webform_mail_select
+ * Format the output of emailed data for this component
+ *
+ * @param mixed $data A string or array of the submitted data
+ * @param array $component An array of information describing the component, directly correlating to the webform_component database schema
+ * @returns string Textual output to be included in the email
+ */
+function theme_webform_mail_select ($data, $component) {
+  // Convert submitted 'safe' values to un-edited, original form
+  $items = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $options = array();
+  foreach($items as $k => $v) {
+    $v = trim($v);
+    if (strlen($v)) {
+      $options[_webform_safe_name($v)] = $v;
+    }
+  }
+  
+  // Generate the output
+  if ($component['extra']['multiple']) {
+    $output = $component['name'].":\n";
+    foreach ($data as $value) {
+      if ($value) {
+        $output .= "    • ".$options[$value]."\n";
+      }
+    }
+  } else {
+    $output = $component['name'].": ".$data."\n";
+  }
+  return $output;
 }
 
 /** 
@@ -147,7 +214,7 @@ function _webform_analysis_rows_select ($component) {
       ' FROM {webform_submitted_data} '.
       ' WHERE nid = %d '.
       ' AND cid = %d '.
-      ' AND data != \'0\' '.
+      " AND data != '0' AND data != '' ".
       ' GROUP BY data ';
     $result = db_query($query, $component['nid'], $component['cid']);
     $rows = array();
@@ -188,15 +255,20 @@ function _webform_table_data_select ($data) {
 function _webform_csv_headers_select ($component) {
   $header = array();
   $header[0] = '';
-  $header[1] = $component['name'];
   
-  $items = split("\n", $component['extra']['items']);
-  foreach ($items as $item) {
-    $item = trim($item);
-    $header[2] .= ",".$item;
+  if ($component['extra']['multiple']) {
+    $header[1] = $component['name'];
+    $items = split("\n", $component['extra']['items']);
+    foreach ($items as $item) {
+      $item = trim($item);
+      $header[2] .= "\,".$item;
+    }
+    // Remove the preceding extra comma
+    $header[2] = substr($header[2],2);
   }
-  // Remove the preceding extra comma
-  $header[2] = substr($header[2],1);
+  else {
+    $header[2] = $component['name'];
+  }
   return $header;
 }
 
@@ -207,17 +279,22 @@ function _webform_csv_headers_select ($component) {
  * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
  **/
 function _webform_csv_data_select ($data,$component) {
-  $items = split("\n", $component['extra']['items']);
-  foreach($items as $item) {
-    $item = trim($item);
-    if (in_array($item,(array)$data['value']) === true) {
-      $output .= ',Yes';
+  if ($component['extra']['multiple']) {
+    $items = split("\n", $component['extra']['items']);
+    foreach($items as $item) {
+      $item = trim($item);
+      if (in_array($item,(array)$data['value']) === true) {
+        $output .= '\,Yes';
+      }
+      else {
+        $output .= '\,No';
+      }
     }
-    else {
-      $output .= ',No';
-    }
+    // Remove the preceding extra comma
+	 $output = substr($output,2);
   }
-  // Remove the preceding extra comma
-  $output = substr($output,1);
+  else {
+    $output = $data['value'][0];
+  }
   return $output;
 }

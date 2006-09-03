@@ -48,12 +48,14 @@ function _webform_edit_textfield ($currfield) {
 function _webform_render_textfield ($component) {
   $formItem = array (
     '#type'          => $component['type'],
-    '#title'         => $component['name'],
+    '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
     '#default_value' => _webform_filtervalues($component['value']),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
+	'#prefix'        => '<div class="webform-component-'.$component['type'].'" id="webform-component-'._webform_safe_name($component['name']).'">',
+	'#suffix'        => '</div>',
   );
   // Change the 'width' option to the correct 'size' option
   if ($component['extra']['width'] > 0) {
@@ -117,7 +119,7 @@ function _webform_analysis_rows_textfield ($component) {
   $rows[0] = array( t('Left Blank'), ($submissions - $nonblanks));
   $rows[1] = array( t('User entered value'), $nonblanks);
   $rows[2] = array( t('Average submission length in words (ex blanks)'), 
-                    ($nonblanks!=0?($wordcount/$nonblanks):'0'));
+                    ($nonblanks !=0 ? number_format($wordcount/$nonblanks,2) : '0'));
   return $rows;
 }
 

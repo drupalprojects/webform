@@ -17,6 +17,14 @@ function _webform_edit_email ($currfield) {
                   t('The default value of a email field is always the users email address if he/she is logged in.').
                   '</div>',
     );
+    $editFields['extra']['carboncopy'] = array (
+      '#type' => 'checkbox',
+      '#title' => t("CC submission to this email"),
+      '#return_value' => 'Y',
+      '#default_value' => ($currfield['extra']['carboncopy']=='Y'?TRUE:FALSE),
+      '#description' => t('Check this option if the email specified in this component should get a CC submission.'). ' '.
+                        t('Note that this opens the risk that the form can be used to send emails to any address and might be missused as a spam gateway.'),
+    );
     $editFields['extra']['width'] = array (
       '#type' => 'textfield',
       '#title' => t("Width"),
@@ -38,10 +46,13 @@ function _webform_render_email ($component) {
   global $user;
   $formItem = array (
     '#type'          => 'textfield',
-    '#title'         => $component['name'],
+    '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#prefix'        => '<div class="webform-component-'.$component['type'].'" id="webform-component-'._webform_safe_name($component['name']).'">',
+    '#suffix'        => '</div>',
+    '#validate'      => array('_webform_validate_email' => array()),
   );
   
     // Fill in the user's email address if available
@@ -53,8 +64,6 @@ function _webform_render_email ($component) {
     if ($component['extra']['width'] > 0) {
       $formItem['#size'] = $component['extra']['width'];
     }
-    // Add the email filter validation function
-    $formItem['#validate'] = array('_webform_validate_email' => array());
     
   return $formItem;
 }
@@ -66,11 +75,10 @@ function _webform_render_email ($component) {
  * @returns True if successful, calls a form_set_error on the field if the email is not valid.
  **/
 function _webform_validate_email ($formelement) {
-  if (!valid_email_address($formelement['#value'])) {
+  if (!empty($formelement['#value']) && !valid_email_address($formelement['#value'])) {
     $elementName = substr($formelement['#name'],(strrpos($formelement['#name'],'[')+1),-1);
     form_set_error($formelement['#name'],t("Please enter a valid email address"));
-  } 
-  return true;
+  }
 }
 
 /** 
@@ -80,7 +88,7 @@ function _webform_validate_email ($formelement) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_email ($data,$component) {
+function _webform_submission_display_email ($data, $component) {
   $formItem = _webform_render_email($component);
   $formItem['#default_value'] = $data['value']['0'];
   $formItem['#attributes']    = array("disabled" => "disabled");
@@ -127,7 +135,7 @@ function _webform_analysis_rows_email ($component) {
   $rows[0] = array( t('Left Blank'), ($submissions - $nonblanks));
   $rows[1] = array( t('User entered value'), $nonblanks);
   $rows[2] = array( t('Average submission length in words (ex blanks)'), 
-                    ($nonblanks!=0?($wordcount/$nonblanks):'0'));
+                    ($nonblanks !=0 ? number_format($wordcount/$nonblanks,2) : '0'));
   return $rows;
 }
 
