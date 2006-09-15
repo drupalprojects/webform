@@ -24,9 +24,9 @@ function _webform_edit_select ($currfield) {
     '#type' => 'textfield',
     '#title' => t("Default value"),
     '#default_value' => $currfield['default'],
-    '#description' => t('The default value of the field.').'<br />'.webform_help('webform/helptext#variables'),
+    '#description' => t('The default value of the field. For multiple selects use commas to separate multiple defaults.').'<br />'.webform_help('webform/helptext#variables'),
     '#size' => 60,
-    '#maxlength' => 127,
+    '#maxlength' => 256,
     '#weight' => 0,
   );
   $editFields['extra']['multiple'] = array (
@@ -76,8 +76,14 @@ function _webform_render_select ($component) {
   $formItem['#options'] = $options;
   
   if ( $component['extra']['aslist'] == 'Y' ) {
+    if(strpos($value, ',')) {
+      $value = explode(',', $value);
+    }
+    else {
+      $value = array($value);
+    }
     // Set display as a select list:
-    $formItem['#default_value'] = array($value);
+    $formItem['#default_value'] = $value;
     $formItem['#type'] = 'select';
     if ( $component['extra']['multiple'] == 'Y' ) {
       $formItem['#multiple'] = TRUE;
@@ -85,8 +91,14 @@ function _webform_render_select ($component) {
   }
   else {
     if ( $component['extra']['multiple'] == 'Y' ) {
+      if(strpos($value, ',')) {
+        $value = explode(',', $value);
+      }
+      else {
+        $value = array($value);
+      }
       // Set display as a checkbox set
-      $formItem['#default_value'] = array($value);
+      $formItem['#default_value'] = $value;
       $formItem['#type'] = 'checkboxes';
       
     }
@@ -282,7 +294,7 @@ function _webform_csv_data_select ($data,$component) {
   if ($component['extra']['multiple']) {
     $items = split("\n", $component['extra']['items']);
     foreach($items as $item) {
-      $item = trim($item);
+      $item = _webform_safe_name(trim($item));
       if (in_array($item,(array)$data['value']) === true) {
         $output .= '\,Yes';
       }
