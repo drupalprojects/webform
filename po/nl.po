@@ -1,0 +1,696 @@
+# translation of nl.po to DUTCH
+# Hendrik Eeckhaut <Hendrik.Eeckhaut@UGent.be>, 2006.
+# modem <michiel.verschueren@ugent.be>
+msgid ""
+msgstr ""
+"Project-Id-Version: nl\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2006-09-25 22:12+0200\n"
+"Last-Translator: Hendrik Eeckhaut <Hendrik.Eeckhaut@UGent.be>\n"
+"Language-Team: DUTCH <nl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: webform.inc:11
+msgid "Title"
+msgstr "Titel"
+
+#: webform.inc:12;321;390
+msgid "View"
+msgstr "Weergeven"
+
+#: webform.inc:14
+msgid "Operations"
+msgstr "Operaties"
+
+#: webform.inc:51
+msgid "Do you really want to delete all submissions for this form?"
+msgstr "Wil u alle inzendingen voor dit formulier verwijderen?"
+
+#: webform.inc:52
+msgid "Do you really want to delete <strong>all</strong> submissions for this form?"
+msgstr "Wil u<strong>alle</strong> inzendingen voor dit formulier verwijderen?"
+
+#: webform.inc:52;72
+msgid "This action cannot be undone."
+msgstr "Deze actie kan niet ongedaan gemaakt worden."
+
+#: webform.inc:71;72
+msgid "Do you really want to delete this form submission?"
+msgstr "Wilt u echt deze inzending verwijderen?"
+
+#: webform.inc:149
+msgid "#"
+msgstr "#"
+
+#: webform.inc:286
+msgid "Date"
+msgstr "Datum"
+
+#: webform.inc:286
+msgid "User"
+msgstr "Gebruiker"
+
+#: webform.inc:286
+msgid "Action"
+msgstr "Actie"
+
+#: webform.inc:322;391
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: webform.inc:502
+msgid "Unique Users Only"
+msgstr "Enkel Unieke Gebruikers"
+
+#: webform.inc:502
+msgid "Unique IPs Only"
+msgstr "Enkel Unieke IP's"
+
+#: webform.inc:503
+msgid "Analog Bar"
+msgstr "Analoge Balk"
+
+#: webform.inc:503
+msgid "Percentage"
+msgstr "Percentage"
+
+#: webform.inc:503
+#, fuzzy
+msgid "Tallies"
+msgstr "Kerfstokken"
+
+#: webform.inc:503
+msgid "Covariance Matrix"
+msgstr "Covariantiematrix"
+
+#: webform.inc:605
+msgid "Q"
+msgstr "Q"
+
+#: webform.inc:605
+msgid "choice"
+msgstr "keuze"
+
+#: webform.inc:605
+msgid "responses"
+msgstr "antwoorden"
+
+#: webform.inc:661
+msgid "Left Blank"
+msgstr "Leeg gelaten"
+
+#: webform.inc:661
+msgid "Default"
+msgstr "Standaard"
+
+#: webform.inc:661
+msgid "User entered value"
+msgstr "Door een gebruiker ingegeven waarde"
+
+#: webform.inc:661
+msgid "Average submission length in words (ex blanks)"
+msgstr "Gemiddelde lengte van de inzendingen in woorden (uitgesloten leeg gelaten)"
+
+#: webform.module:26
+msgid ""
+"Webforms are forms and questionnaires. To add one select <strong>create "
+"content -&gt; webform</strong>. Below you can set different security and "
+"debug options."
+msgstr ""
+"Webformulieren zijn formulieren en enquêtes. Om er een toe te voegen, "
+"selecteer <strong>inhoud aanmaken -&gt; webformulier</strong>. Hieronder kan "
+"je verschillende opties instellen voor de veiligheid en voor het debuggen."
+
+#: webform.module:29
+msgid ""
+"<p>This module lets you create forms or questionnaires and define there "
+"content. Submissions from these forms are stored in the database and "
+"optionaly also send by e-mail to a predefined address.</p>\n"
+"<p>Here is how to create one:\n"
+"<ul>\n"
+"\n"
+" <li>Go to Create Content and add a webform</li>\n"
+" <li>Add a description that is displayed as a teaser and above the actual "
+"form.</li>\n"
+" <li>Add a confirmation message or redirect node that is to be displayed "
+"after a successful submission.</li>\n"
+" <li>Select which roles who should have submission access to this form "
+"(roles that have the &quot;use all webforms&quot; permision can allways use "
+"a webform).</li>\n"
+" <li>Add one or more components to your form.</li>\n"
+" <li>Optionaly add a email address to which submissions will be send. If no "
+"email address is specified no email will be send when submissions are made "
+"through the form.</li>\n"
+" <li>Optionally select an email component that will be used to populate the "
+"return email address on any sent email.</ul>\n"
+" <li>Optionally select a textfield component that will be used to populate "
+"the subject email field on any sent email.</ul>\n"
+"</ul>\n"
+"Help on adding and how to configure the components will be shown after "
+"adding your first component.\n"
+"</p>\n"
+"<p>On user submissions the form content is stored in the database table "
+"<i>webform_submitted_data</i> as key-value pairs. Apart from the form fields "
+"the following &quot;special&quot; fields are added:\n"
+"<ul>\n"
+"  <li> __userid : UID of the submiting user.</li>\n"
+"  <li> __timestamp : UNIX timestamp for when the submission occured.</li>\n"
+"  <li> __remotehost : IP or name of the remote host from which the "
+"submission came.</li>\n"
+"  <li> __useragent : What user agent (browser) the user used upon submitting "
+"the data.</li>\n"
+"</ul>\n"
+msgstr ""
+"<p>Deze module laat je toe om formulieren of enquêtes aan te maken en hun "
+"inhoud te definiëren. Inzendingen van deze formulieren worden opgeslagen in "
+"een databank en, indien gewenst, ook naar een opgegeven e-mailadres gestuurd."
+"</p>\n"
+"<p>Hoe een webformulier aanmaken:\n"
+"<ul>\n"
+"\n"
+" <li>Ga naar Inhoud Aanmaken en voeg een webformulier toe.</li>\n"
+" <li>Voeg een beschrijving toe die getoond wordt als teaser en boven het "
+"eigenlijke formulier.</li>\n"
+" <li>Voeg een bericht ter bevestiging of een herverwijzing toe die getoond "
+"wordt na een geslaagde inzending.</li>\n"
+" <li>Bepaal welke rollen toegang moeten hebben tot dit formulier (rollen die "
+"de &quot;gebruik alle webformulieren&quot; toelating hebben kunnen altijd "
+"een webformulier gebruiken).</li>\n"
+" <li>Voeg een of meerdere componenten toe aan je formulier.</li>\n"
+" <li>Eventueel een e-mailadres waar inzendingen naartoe moeten gezonden "
+"worden. Indien geen e-mailadres wordt opgegeven, worden er geen e-mails "
+"verzonden wanneer iemand het formulier indient.</li>\n"
+" <li>Selecteer eventueel een e-mailcomponent die gebruikt zal worden voor "
+"het terugkeeradres in eender welke verzonden e-mail.</ul>\n"
+" <li>Selecteer eventueel een tekstveld-component die gebruikt zal worden "
+"voor het onderwerp van eender welke verzonden e-mail.</ul>\n"
+"</ul>\n"
+"Hulp over het toevoegen en configureren van componenten zal getoond worden "
+"wanneer je je eerste component hebt toegevoegd.\n"
+"</p>\n"
+"<p>Wanneer een gebruiker een formulier indient, wordt de inhoud ervan "
+"opgeslagen in de tabel <i>webform_submitted_data</i> in de databank, als "
+"sleutel-waarde koppels. Naast de velden van het formulier worden de volgende "
+"&quot;speciale&quot; velden toegevoegd:\n"
+"<ul>\n"
+"  <li> __userid : UID van de indienende gebruiker.</li>\n"
+"  <li> __timestamp : UNIX timestamp voor wanneer de inzending is gebeurd.</"
+"li>\n"
+"  <li> __remotehost : IP of naam van de host waarvan de inzending komt.</"
+"li>\n"
+"  <li> __useragent : Welke user agent (browser) de gebruiker gebruikte bij "
+"het inzenden.</li>\n"
+"</ul>\n"
+
+#: webform.module:54
+msgid "Enables the creation of forms and questionnaires."
+msgstr "Schakelt het aanmaken van formulieren en enquêtes in."
+
+#: webform.module:57
+msgid ""
+"A webform can be a questionnaires, contact or request forms. It can be used "
+"to let visitors make contact, register for a event or to enable a complex "
+"survey."
+msgstr ""
+"Een webformulier kan een enquête-, contact- of verzoekformulier zijn. Het "
+"kan gebruikt worden om gebruikers contact te laten maken, in te schrijven "
+"voor een evenement of om een uitgebreide inspectie mogelijk te maken."
+
+#: webform.module:60
+msgid "Available variables are: %username, %useremail, %site, %date."
+msgstr "Beschikbare veranderlijken: %username, %useremail, %site, %date."
+
+#: webform.module:61
+msgid ""
+"You can also use %server[key] to add any of the special PHP <a href=\"http://"
+"www.php.net/reserved.variables#reserved.variables.server\">$_SERVER</a> "
+"variables and %get[key] to create prefilled forms from from the <a href="
+"\"http://www.php.net/reserved.variables#reserved.variables.get\">URL</a>."
+msgstr ""
+"Je kan ook %server[key] gebruiken om een van de speciale PHP <a href="
+"\"http://www.php.net/reserved.variables#reserved.variables.server\">"
+"$_SERVER</a> variabelen toe te voegen, en %get[key] om op voorhand ingevulde "
+"formulieren aan te maken van de <a href=\"http://www.php.net/reserved."
+"variables#reserved.variables.get\">URL</a>."
+
+#: webform.module:63
+msgid ""
+"If you are using the profiles module, you can also access all profile data "
+"using the syntax %profile[form_name]. If you for example have a profile "
+"value named profile_city, add the varible %profile[profile_city]."
+msgstr ""
+"Als je de profielen module gebruikt, kan je ook alle profielgegevens "
+"opvragen met behulp van volgende syntax: %profile[form_name]. Als je "
+"bijvoorbeeld een profielwaarde profile_city hebt, voeg de variabele %profile"
+"[profile_city] toe."
+
+#: webform.module:237
+msgid "Update from version %a to version %b"
+msgstr "Update van versie %a naar versie %b"
+
+#: webform.module:242
+msgid "Allow cross site posting"
+msgstr "Inzendingen van op andere sites toestaan."
+
+#: webform.module:244
+msgid "Yes"
+msgstr "Ja"
+
+#: webform.module:244
+msgid "No"
+msgstr "Nee"
+
+#: webform.module:245
+msgid ""
+"Allow postings to your webforms that do not originating from your sites "
+"domain."
+msgstr ""
+"Inzendingen op je webformulieren toestaan die niet van het domein van jouw "
+"website komen."
+
+#: webform.module:247
+msgid "Webforms Debug"
+msgstr "Webformulieren Debug"
+
+#: webform.module:250
+msgid "DEBUG for the webform module"
+msgstr "DEBUG voor de webform-module"
+
+#: webform.module:251
+msgid ""
+"Set this option to \"Log submissions\" to log all submissions in the "
+"watchdog. Set it to \"Full debug\" to print debug info on submission. You "
+"probably want to leave this option on \"OFF\"."
+msgstr ""
+"Zet deze optie op \"Inzendingen loggen\" om alle inzendingen te loggen in de "
+"waakhond. Zet ze op \"Volledig debuggen\" om debug-informatie op de "
+"inzending af te drukken. Je wil deze optie waarschijnlijk op \"UIT\" laten."
+
+#: webform.module:253
+msgid "Show main webform menu"
+msgstr "Toon het webform-menu"
+
+#: webform.module:255
+msgid "Select the visibility of the main webform item on the main menu"
+msgstr "Bepaal de zichtbaarheid van het webformulier-item in het hoofdmenu"
+
+#: webform.module:291
+msgid ""
+"The form component has been changed. Remember to press Submit on the bottom "
+"of this form to save your changes."
+msgstr ""
+"De component van het formulier is gewijzigd. Vergeet niet om op Indienen "
+"onderaan deze pagina te drukken om je wijzigingen op te slaan."
+
+#: webform.module:296
+msgid ""
+"The form component has been deleted. Remember to press Submit on the bottom "
+"of this form to save your changes."
+msgstr ""
+"De component van het formulier is verwijderd. Vergeet niet om op Indienen "
+"onderaan deze pagina te drukken om je wijzigingen op te slaan."
+
+#: webform.module:302
+msgid "You have to specify a form description."
+msgstr "Je moet een beschrijving van het formulier opgeven."
+
+#: webform.module:310
+msgid "You have to specify a confirmation message."
+msgstr "Je moet een bevestigingsbericht opgeven."
+
+#: webform.module:337
+msgid "Webform upgrade page"
+msgstr "Webform upgrade-pagina"
+
+#: webform.module:368
+msgid "results"
+msgstr "resultaten"
+
+#: webform.module:405
+msgid "go to form"
+msgstr "ga naar formulier"
+
+#: webform.module:405
+msgid "View this form."
+msgstr "Dit formulier bekijken."
+
+#: webform.module:408
+msgid "Go back to the form"
+msgstr "Terugkeren naar het formulier"
+
+#: webform.module:418
+msgid "textfield"
+msgstr "tekstveld"
+
+#: webform.module:419
+msgid "textarea"
+msgstr "textarea"
+
+#: webform.module:420
+msgid "select"
+msgstr "selecteren"
+
+#: webform.module:421
+msgid "label"
+msgstr "label"
+
+#: webform.module:422
+msgid "hidden"
+msgstr "verborgen"
+
+#: webform.module:423
+msgid "e-mail address"
+msgstr "e-mailadres"
+
+#: webform.module:435
+#, fuzzy
+msgid "Use access"
+msgstr "Gebruik toegang"
+
+#: webform.module:435
+msgid "Roles that should be able to submit data using this form."
+msgstr ""
+"Rollen die de mogelijkheid moeten hebben om gegevens in te geven met dit "
+"formulier."
+
+#: webform.module:441;650
+msgid "Description"
+msgstr "Beschrijving"
+
+#: webform.module:442
+msgid "Text to be shown as teaser and before the form."
+msgstr "Tekst die getoond moet worden als teaser en voor het formulier."
+
+#: webform.module:445
+msgid "Confirmation message or redirect URL"
+msgstr "Bericht ter bevestiging of URL voor herverwijzing"
+
+#: webform.module:447
+msgid ""
+"Message to be shown upon successful submission or an absolute path to a "
+"redirect page (must start with http://)"
+msgstr ""
+"Bericht dat getoond worden wanneer het formulier met succes is ingediend, of "
+"een absoluut pad naar een herverwijzingspagina (moet beginnen met http://)"
+
+#: webform.module:473
+msgid "To edit a component, check its \"selected\" box and press \"Edit selected\"."
+msgstr ""
+"Om een component te bewerken, vink het \"selected\" keuzevak aan en druk op "
+"\"Geselecteerde bewerken\"."
+
+#: webform.module:474
+msgid ""
+"To delete a component, check its \"selected\" box and press \"Delete selected"
+"\"."
+msgstr ""
+"Om een component te verwijderen, vink het \"selected\" keuzevak aan en druk "
+"op \"Geselecteerde verwijderen\"."
+
+#: webform.module:475
+msgid "Use \"value\" to enter a default value."
+msgstr "Gebruik \"waarde\" om een beginwaarde aan te geven."
+
+#: webform.module:476
+msgid "Check \"mandatory\" box if the field should be mandatory."
+msgstr "Vink \"verplicht\" aan als het veld verplicht moet ingevuld worden."
+
+#: webform.module:477
+msgid ""
+"Remember to set weight on the components or they will be added to the form "
+"in a random order."
+msgstr ""
+"Vergeet niet om de componenten een gewicht te geven, of ze zullen toegevoegd "
+"worden aan het formulier in een willekeurige volgorde."
+
+#: webform.module:478
+msgid "The components are sorted first by weight and then by name."
+msgstr "De componenten worden eerst op gewicht en vervolgens op naam gesorteerd."
+
+#: webform.module:481
+msgid "Form components"
+msgstr "Formuliercomponenten"
+
+#: webform.module:483
+msgid "Select"
+msgstr "Selecteren"
+
+#: webform.module:484;648
+msgid "Name"
+msgstr "Naam"
+
+#: webform.module:485
+msgid "Type"
+msgstr "Type"
+
+#: webform.module:486
+msgid "Value"
+msgstr "Waarde"
+
+#: webform.module:487
+msgid "Mandatory"
+msgstr "Verplicht"
+
+#: webform.module:488
+msgid "Weight"
+msgstr "Gewicht"
+
+#: webform.module:492
+msgid "Edit selected"
+msgstr "Geselecteerde bewerken"
+
+#: webform.module:493
+msgid "Delete selected"
+msgstr "Geselecteerde verwijderen"
+
+#: webform.module:497
+msgid "Add a new component"
+msgstr "Een nieuwe component toevoegen"
+
+#: webform.module:498
+msgid "Select a component type to add."
+msgstr "Selecteer het type component om toe te voegen."
+
+#: webform.module:499;628
+msgid "Add"
+msgstr "Toevoegen"
+
+#: webform.module:501
+msgid "E-mail to address"
+msgstr "E-mailadres bestemming"
+
+#: webform.module:503
+msgid "Form submissions will be e-mailed to this address. Leave blank for none."
+msgstr ""
+"Ingediende formulieren zullen verstuurd worden naar dit e-mailadres. Leeg "
+"laten voor geen adres."
+
+#: webform.module:522
+msgid "E-mail from address"
+msgstr "E-mailadres bron"
+
+#: webform.module:523
+msgid "Form e-mails will have this return address. Choose Automatic for the default"
+msgstr ""
+"E-mails voor het formulier zullen dit terugkeeradres hebben. Kies "
+"Automatisch voor de standaardwaarde"
+
+#: webform.module:525
+msgid "E-mail subject"
+msgstr "Onderwerp van de e-mail"
+
+#: webform.module:526
+msgid "Form e-mails will have this subject line. Choose Automatic for the default"
+msgstr ""
+"E-mails voor het formulier zullen dit onderwerp hebben. Kies Automatisch "
+"voor de standaardwaarde"
+
+#: webform.module:551
+msgid "Unauthorized webform access attempt"
+msgstr "Niet-gemachtigde toegangspoging tot een webformulier"
+
+#: webform.module:586
+msgid "Preview"
+msgstr "Voorbeeldweergave"
+
+#: webform.module:589
+msgid "Submit"
+msgstr "Indienen"
+
+#: webform.module:621
+#, fuzzy
+msgid "Page called out of order"
+msgstr "Pagina called out of order"
+
+#: webform.module:649
+msgid ""
+"Name of the field. This is used as a descriptive label and as the key when "
+"saving data in the database."
+msgstr ""
+"Naam van het veld. Dit wordt gebruikt als een beschrijvend label en als de "
+"key wanneer data worden opgeslagen in de databank."
+
+#: webform.module:652
+msgid ""
+"A short description of the field used as help for the user when he/she uses "
+"the form."
+msgstr ""
+"Een korte beschrijving van het veld, gebruikt als hulp voor de gebruiker "
+"wanneer hij/zij het formulier gebruikt."
+
+#: webform.module:659;666;678;685;706
+msgid "Default value"
+msgstr "Beginwaarde"
+
+#: webform.module:659
+msgid ""
+"The default value of a email field is always the users email address if he/"
+"she is logged in."
+msgstr ""
+"De beginwaarde van een e-mailveld is steeds het e-mailadres van de gebruiker "
+"als hij/zij ingelogd is."
+
+#: webform.module:660;672;691
+msgid "Width"
+msgstr "Breedte"
+
+#: webform.module:662;674
+msgid "Width of the textfield."
+msgstr "Breedte van het tekstveld."
+
+#: webform.module:668
+msgid "The default value of the field."
+msgstr "De beginwaarde van het veld."
+
+#: webform.module:680
+msgid "The value of the field."
+msgstr "De waarde van het veld."
+
+#: webform.module:687
+msgid "The default value of the area."
+msgstr "De beginwaarde voor de area."
+
+#: webform.module:693
+msgid "Width of the textarea."
+msgstr "Breedte van de textarea."
+
+#: webform.module:695
+msgid "Height"
+msgstr "Hoogte"
+
+#: webform.module:697
+msgid "Height of the textarea."
+msgstr "Hoogte van de textarea."
+
+#: webform.module:701
+msgid "Options"
+msgstr "Opties"
+
+#: webform.module:703
+msgid "Enter one option per line."
+msgstr "Vul één optie in per regel."
+
+#: webform.module:708
+msgid "The preselected value."
+msgstr "De voorgeselecteerde waarde."
+
+#: webform.module:711
+msgid "Multiple"
+msgstr "Meerdere"
+
+#: webform.module:713
+msgid "Check this option if the user should be allowed to choose multiple values."
+msgstr "Vink deze optie aan als de gebruiker meerdere waarden moet kunnen kiezen."
+
+#: webform.module:714
+msgid "Listbox"
+msgstr "Listbox"
+
+#: webform.module:716
+msgid ""
+"Check this option if you want the select component to be of listbox type "
+"instead of radiobuttons or checkboxes."
+msgstr ""
+"Vink deze optie aan als je wil dat de geselecteerde component van het type "
+"listbox is in plaats van radio-knoppen of keuzevakken."
+
+#: webform.module:747
+msgid "Done"
+msgstr "Klaar"
+
+#: webform.module:748
+msgid ""
+"<br>Warning: This button will accept your changes as sub-part of the edit.  "
+"You will still have to select <b>'submit'</b> on the next screen to make "
+"your changes permanent."
+msgstr ""
+"<br>Waarschuwing: Deze knop beschouwd je wijziging als een onderdeel van de "
+"bewerking. Je moet nog <b>'indienen'</b> selecteren op de volgende pagina om "
+"je wijzigingen permanent te maken."
+
+#: webform.module:766
+msgid "Trying to post to webform from external domain."
+msgstr "Poging om vanuit een extern domein naar het webformulier te posten."
+
+#: webform.module:768
+msgid "Visit referer"
+msgstr "Verwijzer bezoeken"
+
+#: webform.module:769
+msgid "You are not allowed to post to this form from an external domain."
+msgstr ""
+"Je hebt geen toelating om gegevens vanuit een extern domein op dit formulier "
+"te posten."
+
+#: webform.module:778
+msgid "You are not allowed to submit data using this form."
+msgstr "Je hebt geen toelating om gegevens in te dienen met dit formulier."
+
+#: webform.module:800
+msgid "Form submission from: "
+msgstr "Formulier ingediend van:"
+
+#: webform.module:838
+msgid "Submission posted to "
+msgstr "Indiening verzonden naar"
+
+#: webform.module:966
+msgid "You have not completed the form. %s is a mandatory field."
+msgstr "Je heb het formulier niet volledig ingevuld. %s is een verplicht veld."
+
+#: webform.module:1018
+msgid "Submitted on"
+msgstr "Ingediend op"
+
+#: webform.module:1022
+msgid "Submitted by user"
+msgstr "Ingediend door gebruiker"
+
+#: webform.module:1025
+msgid "Submitted by anonymous user"
+msgstr "Ingediend door gast"
+
+#: webform.module:1027
+msgid "Submitted values are:"
+msgstr "Ingediende waarden:"
+
+#: webform.module:1261
+msgid "Go back"
+msgstr "Terugkeren"
+
+#: webform.module:72
+msgid "maintain webforms"
+msgstr "webformulieren onderhouden"
+
+#: webform.module:72
+msgid "create webforms"
+msgstr "webformulieren aanmaken"
+
+#: webform.module:72
+msgid "use all webforms"
+msgstr "alle webformulieren gebruiken"
+
