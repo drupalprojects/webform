@@ -485,7 +485,7 @@ function webform_form(&$node, &$param) {
   $form['webform']['confirmation'] = array(
     '#type' => 'textarea',
     '#title' => t("Confirmation message or redirect URL"),
-    '#description' => t("Message to be shown upon successful submission or an absolute path to a redirect page (must start with http://)"),
+    '#description' => t("Message to be shown upon successful submission or a path to a redirect page. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>"),
     '#default_value' => $node->confirmation,
     '#cols' => 40,
     '#rows' => 10,
@@ -1216,7 +1216,12 @@ function webform_client_form_submit($form_id, $form_values) {
   if (valid_url(trim($node->confirmation), true)) {
     header("Location: ".trim($node->confirmation));
     exit();
-  } else {
+  }
+  elseif (preg_match('/^internal:/', $node->confirmation)) {
+    $path = preg_replace('/^internal:/', '', $node->confirmation);
+    drupal_goto($path);
+  }
+  else {
     drupal_goto('node/'.$node->nid.'/done');
   }
 } // end webform_client_form_submit
