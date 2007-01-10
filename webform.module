@@ -1159,7 +1159,7 @@ function webform_client_form_submit($form_id, $form_values) {
       
       // Default values:
       $headers = array();
-      $email_from_string = "From: ".mime_header_encode(variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}"))."\n";
+      $email_from_string = variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}");
       $email_subject_string = t('Form submission from: ').' '.$node->title;
 
       // Search for user set FROM and SUBJECT fields
@@ -1194,6 +1194,10 @@ function webform_client_form_submit($form_id, $form_values) {
       $headers['X-Mailer'] = 'Drupal Webform (PHP/' . phpversion() . ')';
     
       // Mail the webform results
+      dsm($email_subject_string);
+      dsm($message);
+      dsm($email_from_string);
+      dsm($headers);
       drupal_mail('webform-submission', $node->email, $email_subject_string, $message, $email_from_string, $headers);
       
       // Debugging output
