@@ -248,7 +248,7 @@ function _webform_submission_spam_check($to, $subject, $message, $from, $headers
 
 
 function _webform_submission_limit_check($node, $form_values) {
-  global $user;
+  global $user, $db_type;
 
   // check if submission limiting is enabled
   if ($node->submit_limit == '-1') {
@@ -260,6 +260,11 @@ function _webform_submission_limit_check($node, $form_values) {
            "FROM {webform_submissions} " .
            "WHERE (( %d = 0 AND remote_addr = '%s') OR user = '%s' )" .
            "AND submitted > %d AND nid = %d";
+  
+  // Change reserved user column to "user" for pgsql
+  if ($db_type == 'pgsql') {
+    $query = str_replace('user', '"user"', $query);
+  }
   
   // Fetch all the entries from the database within the submit interval with this username and IP
   $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->name, time() - $node->submit_interval, $node->nid);
