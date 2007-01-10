@@ -9,6 +9,7 @@
  **/
 function _webform_edit_file ($currfield) {
     $editFields = array();
+    $editFields['#theme'] = 'webform_edit_file';
     $editFields['extra']['filtering'] = array (
       '#type' => 'fieldset',
       '#collapsible' => true,
@@ -99,15 +100,15 @@ function theme_webform_edit_file ($form) {
   // Format the components into a table
   $perRow = 4;
   $rows = array();
-  foreach (element_children($form['field']['extra']['filtering']['types']) as $key =>$filtergroup) {
+  foreach (element_children($form['extra']['filtering']['types']) as $key =>$filtergroup) {
     $row = array();
     $firstRow = count($rows);
-    if ($form['field']['extra']['filtering']['types'][$filtergroup]['#type'] == 'checkboxes') {
+    if ($form['extra']['filtering']['types'][$filtergroup]['#type'] == 'checkboxes') {
       // Add the title
-      $row[] = $form['field']['extra']['filtering']['types'][$filtergroup]['#title'];
+      $row[] = $form['extra']['filtering']['types'][$filtergroup]['#title'];
       $row[] = "&nbsp;";
       // Convert the checkboxes into individual form-items
-      $checkboxes = expand_checkboxes($form['field']['extra']['filtering']['types'][$filtergroup]);
+      $checkboxes = expand_checkboxes($form['extra']['filtering']['types'][$filtergroup]);
       // Render the checkboxes in two rows
       $checkcount = 0;
       $jsboxes = "";
@@ -137,24 +138,24 @@ function theme_webform_edit_file ($form) {
       $rows[] = array ('data' => $row);
       $selectLink = ' <a href="javascript:check_category_boxes(\''.$filtergroup.'\','.$jsboxes.')">(select)</a>';
       $rows[$firstRow]['data'][1] = array('data' => $selectLink, 'width' => 40);
-      unset($form['field']['extra']['filtering']['types'][$filtergroup]);
+      unset($form['extra']['filtering']['types'][$filtergroup]);
     } elseif ($filtergroup != 'size') {
       // Add other fields to the table (ie. additional extensions)
-      $row[] = $form['field']['extra']['filtering']['types'][$filtergroup]['#title'];
-      unset($form['field']['extra']['filtering']['types'][$filtergroup]['#title']);
+      $row[] = $form['extra']['filtering']['types'][$filtergroup]['#title'];
+      unset($form['extra']['filtering']['types'][$filtergroup]['#title']);
       $row[] = array (
-        'data' => drupal_render($form['field']['extra']['filtering']['types'][$filtergroup]),
+        'data' => drupal_render($form['extra']['filtering']['types'][$filtergroup]),
         'colspan' => $perRow+1,
       );
-      unset($form['field']['extra']['filtering']['types'][$filtergroup]);
+      unset($form['extra']['filtering']['types'][$filtergroup]);
       $rows[] = array ('data' => $row);
     }
   }
   $header = array(array('data' => t('Category'), 'colspan' => '2'), array('data' => t('Types'), 'colspan' => $perRow));
-  //unset($form['field']['extra']['filtering']['types']);
+  //unset($form['extra']['filtering']['types']);
   
   // Create the table inside the form
-  $form['field']['extra']['filtering']['types']['table'] = array (
+  $form['extra']['filtering']['types']['table'] = array (
     '#value' => theme('table', $header, $rows)
   );
   
