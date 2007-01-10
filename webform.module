@@ -1194,10 +1194,6 @@ function webform_client_form_submit($form_id, $form_values) {
       $headers['X-Mailer'] = 'Drupal Webform (PHP/' . phpversion() . ')';
     
       // Mail the webform results
-      dsm($email_subject_string);
-      dsm($message);
-      dsm($email_from_string);
-      dsm($headers);
       drupal_mail('webform-submission', $node->email, $email_subject_string, $message, $email_from_string, $headers);
       
       // Debugging output
