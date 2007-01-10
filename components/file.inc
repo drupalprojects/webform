@@ -212,7 +212,7 @@ function _webform_validate_file ($formelement,$cid,$fieldname,$filters) {
   }
   $extras = str_replace(" ","",$filters['addextensions']);
   if (!empty($extras)) {
-    $extensions = array_merge($extensions,explode(",","",$extras));
+    $extensions = array_merge($extensions,explode(",", $extras));
   }
   
   // Build a human readable list of extensions:
