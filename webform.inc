@@ -199,7 +199,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
     else {
       $message .=  $node->webformcomponents[$key]['name'].":\n";
       foreach ($value as $k => $v) {
-        $message .= _webform_submission_format($k, $v, $node, $indent."* ");
+        $message .= _webform_submission_format($k, $v, $node, $indent."  ");
       }
     }
     return ($message);
