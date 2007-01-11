@@ -675,8 +675,8 @@ msgid "Submitted by anonymous user"
 msgstr "Ingediend door gast"
 
 #: webform.module:1027
-msgid "Submitted values are:"
-msgstr "Ingediende waarden:"
+msgid "Submitted values are"
+msgstr "Ingediende waarden"
 
 #: webform.module:1261
 msgid "Go back"
