@@ -908,6 +908,7 @@ function webform_edit_field_form(&$node) {
   // Add the fields specific to this component type:  
   _webform_load_components(); // Load all component types
   $editFunction = "_webform_edit_".$currfield['type'];
+  $additionalFormElements = array();
   if (function_exists($editFunction)) {
     $additionalFormElements = $editFunction($currfield); // Call the component render function
   }
@@ -954,7 +955,7 @@ function webform_edit_field_form(&$node) {
 function webform_view(&$node, $teaser = 0, $page = 0) {
   // If a teaser, do not display the form
   if ($teaser) {
-    $node->content['teaser'] = $node->teaser;
+    $node->content['teaser'] = array('#value' => check_markup($node->teaser, $node->format, FALSE));
     return $node;
   }
   
@@ -986,7 +987,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     $output = preg_replace('/<\/?form[^>]*>/','',$output);
   }
   
-  $node->content['body'] = array('#value' => $node->body);
+  $node->content['body'] = array('#value' => check_markup($node->body, $node->format, FALSE));
   $node->content['webform'] = array('#value' => $output, '#weight' => 10);
   
   return $node;
@@ -1085,7 +1086,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
   
   if (is_array($component['children'])) {
     foreach ($component['children'] as $scid => $subcomponent) {
-      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$cid], $form);
+      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$cid], $form, $submission);
     }
   }
 }
