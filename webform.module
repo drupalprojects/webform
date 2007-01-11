@@ -896,6 +896,7 @@ function webform_edit_field_form (&$node) {
   // Add the fields specific to this component type:  
   _webform_load_components(); // Load all component types
   $editFunction = "_webform_edit_".$currfield['type'];
+  $additionalFormElements = array();
   if (function_exists($editFunction)) {
     $additionalFormElements = $editFunction($currfield); // Call the component render function
   }
@@ -949,6 +950,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   _webform_load_components(); // Load all the components
   
   global $user, $sid_to_display, $submission, $preview;
+  
   $sid_to_display = check_plain($_GET['sid']); // Will be NULL if no sid
   $submission = array();
   $preview = false;
