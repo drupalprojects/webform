@@ -404,7 +404,7 @@ msgid "Submitted by anonymous user"
 msgstr ""
 
 #: webform.module:1027
-msgid "Submitted values are:"
+msgid "Submitted values are"
 msgstr ""
 
 #: webform.module:1261

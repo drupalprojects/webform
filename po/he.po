@@ -404,8 +404,8 @@ msgid "Submitted by anonymous user"
 msgstr "הוגש על ידי גולש שטרם נרשם"
 
 #: webform.module:1027
-msgid "Submitted values are:"
-msgstr "הערכים שהוגשו הם:"
+msgid "Submitted values are"
+msgstr "הערכים שהוגשו הם"
 
 #: webform.module:1261
 msgid "Go back"

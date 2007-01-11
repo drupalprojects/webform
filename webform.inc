@@ -182,19 +182,21 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
     elseif (!is_array($value)) {
       // Note that newlines cannot be preceeded by spaces to display properly in some clients
       if ($node->webformcomponents[$key]['name']) {
-        $message .=  $indent.$node->webformcomponents[$key]['name'].":".(empty($value) ? "\n" : " $value\n");
+        // if text is more than 60 characters, put it on a new line with space after
+        $long = (strlen($indent . $node->webformcomponents[$key]['name'] . $value)) > 60;
+        $message .= $indent.$node->webformcomponents[$key]['name'].":".(empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
       }
     }
     // Else use a generic output for arrays
     else {
       $message .=  $node->webformcomponents[$key]['name'].":\n";
       foreach ($value as $k => $v) {
-        $message .= _webform_submission_format($k, $v, $node, $indent."   ");
+        $message .= _webform_submission_format($k, $v, $node, $indent."* ");
       }
     }
     return ($message);
   }
-  $message .= t('Submitted values are:');
+  $message .= t('Submitted values are');
   $message .= _webform_submission_format("",$form_values['submitted_tree'], $node);
   
   $message .= "\n\n";
