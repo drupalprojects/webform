@@ -1205,10 +1205,10 @@ function webform_client_submit($form_id, $form_values) {
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
-    drupal_goto($path);
+    drupal_goto($path, 'sid=' . $sid);
   }
   else {
-    drupal_goto('node/'.$node->nid.'/done');
+    drupal_goto('node/'.$node->nid.'/done', 'sid=' . $sid);
   }
 } // end webform_client_submit
 
