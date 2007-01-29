@@ -1216,13 +1216,15 @@ function webform_client_submit($form_id, $form_values) {
  * Flattens a submitted form back into a single array representation (rather than nested fields)
  */
 function _webform_client_submit_flatten($node, $fieldset, &$form) {
-  foreach ($fieldset as $key => $value) {
-    if (is_array($value) && $node->webformcomponents[$key]['type'] == 'fieldset') {
-      _webform_client_submit_flatten($node, $value,$form);
-      $form[$key] = ""; // Set the fieldset value to a blank
-      unset($fieldset[$key]);
-    } else {
-      $form[$key] = $value;
+  if (is_array($fieldset)) {
+    foreach ($fieldset as $key => $value) {
+      if (is_array($value) && $node->webformcomponents[$key]['type'] == 'fieldset') {
+        _webform_client_submit_flatten($node, $value,$form);
+        $form[$key] = ""; // Set the fieldset value to a blank
+        unset($fieldset[$key]);
+      } else {
+        $form[$key] = $value;
+      }
     }
   }
 }
