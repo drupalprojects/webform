@@ -74,7 +74,7 @@ function _webform_render_date ($component) {
   if (strlen($component['value']) > 0) {
     $year = gmdate('Y', $timestamp);
     $month = gmdate('n', $timestamp);
-    $day = gmdate('d',$timestamp);
+    $day = gmdate('j',$timestamp);
   }
   
   $formItem['#type'] = 'fieldset';
