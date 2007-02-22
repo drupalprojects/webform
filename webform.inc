@@ -52,7 +52,7 @@ function _webform_results_clear($nid) {
   $form['nid'] = array('#type' => 'value', '#value' => $nid);
   $question = t("Are you sure you want to delete all submissions for this form?");
   
-  return confirm_form($form, $question, drupal_get_destination(), NULL, t('Clear'), t('Cancel'));
+  return confirm_form($form, $question, 'node/'.$nid.'/results', NULL, t('Clear'), t('Cancel'));
 } // end function _webform_results_clear
 
 function _webform_results_clear_submit($form_id, $form_values) {
@@ -74,32 +74,26 @@ function _webform_results_clear_submit($form_id, $form_values) {
  * @param  integer  ID of submission to be deleted (from webform_submitted_data)
  */
 function _webform_submission_delete($nid, $sid) {
-  if ($_POST['op']['Delete']) {
-    $query = 'DELETE FROM {webform_submitted_data} WHERE nid = %d AND sid = %d';
-    $res = db_query($query, $nid, $sid);
-    $query = 'DELETE FROM {webform_submissions} WHERE nid = %d AND sid = %d';
-    $res = db_query($query, $nid, $sid);
+  drupal_set_title(t("Delete Form Submission"));
 
-    drupal_set_message(t("Submission deleted"));
-    drupal_goto('node/'.$nid.'/results');
-  }
-  else {
-    $form['delete'] = array (
-      '#type' => 'submit',
-      '#value' => 'Delete',
-    );
-    $form['cancel'] = array (
-      '#type' => 'markup',
-      '#value' => '<a href="'.url('node/'.$nid.'/results').'">'.t("Cancel").'</a>',
-    );
-    
-    $node = node_load($nid);
-    drupal_set_title(t("Are you sure you want to delete this submission?"));
-    $output .= t('This action cannot be undone');
-    $output .= drupal_get_form('delete_submission',$form);
-    return $output;
-  }
+  $form = array();
+  $form['nid'] = array('#type' => 'value', '#value' => $nid);
+  $form['sid'] = array('#type' => 'value', '#value' => $sid);
+  $question = t("Are you sure you want to delete this submission?");
+
+  return confirm_form($form, $question, 'node/'.$nid.'/results', NULL, t('Delete'), t('Cancel'));
 } // end function _webform_submission_delete
+
+function _webform_submission_delete_submit($form_id, $form_values) {
+  $nid = $form_values['nid'];
+  $sid = $form_values['sid'];
+
+  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d AND sid = %d', $nid, $sid);
+  db_query('DELETE FROM {webform_submissions} WHERE nid = %d AND sid = %d', $nid, $sid);
+
+  drupal_set_message(t("Submission deleted"));
+  drupal_goto('node/'.$nid.'/results');
+} // end function _webform_submission_delete_submit
 
 /**
  * Return all the submissions for a particular node

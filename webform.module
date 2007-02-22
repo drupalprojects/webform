@@ -1383,7 +1383,7 @@ function webform_results() {
         break;
       case 'delete' :
         $sid= arg(4);
-        $content= _webform_submission_delete($nid, $sid);
+        $content= drupal_get_form('_webform_submission_delete', $nid, $sid);
         break;
       case 'table' :
         $content= _webform_results_table($nid);
