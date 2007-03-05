@@ -1188,7 +1188,7 @@ function webform_client_form_submit($form_id, $form_values) {
             }
           }
           if ($type == 'email' && $component['extra']['carboncopy'] == 'Y' ) {
-            $headers['CC'] = $form_values['submitted'][$cid]."\n";
+            $headers['Cc'] = $form_values['submitted'][$cid];
           }
         }
       }
