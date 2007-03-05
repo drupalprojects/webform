@@ -28,6 +28,15 @@ function _webform_edit_textfield ($currfield) {
     '#maxlength' => 10,
     '#weight' => 0,
   );
+  $editFields['extra']['maxlength'] = array (
+    '#type' => 'textfield',
+    '#title' => t("Maxlength"),
+    '#default_value' => $currfield['extra']['maxlength'],
+    '#description' => t('Maxlength of the textfield.'),
+    '#size' => 5,
+    '#maxlength' => 10,
+    '#weight' => 0,
+  );
   $editFields['extra']['attributes']['disabled'] = array (
     '#type' => 'checkbox',
     '#title' => t("Disabled"),
@@ -60,6 +69,9 @@ function _webform_render_textfield ($component) {
   // Change the 'width' option to the correct 'size' option
   if ($component['extra']['width'] > 0) {
     $formItem['#size'] = $component['extra']['width'];
+  }
+  if ($component['extra']['maxlength'] > 0) {
+    $formItem['#maxlength'] = $component['extra']['maxlength'];
   }
   
   return $formItem;
