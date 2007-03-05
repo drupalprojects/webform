@@ -194,13 +194,13 @@ function _webform_render_file ($component) {
 }
 
 function _webform_required_file ($formelement,$cid,$fieldname,$required = false) {
-  if (empty($_FILES['edit']['name'][$cid]) && $required) {
+  if (empty($_FILES['files']['name'][$cid]) && $required) {
     form_set_error($fieldname,t('%fieldname field is required.',array('%fieldname' => htmlspecialchars($fieldname, ENT_QUOTES))));
   }
 }
 
 function _webform_validate_file ($formelement,$cid,$fieldname,$filters) {
-  if (empty($_FILES['edit']['name'][$cid])) {
+  if (empty($_FILES['files']['name'][$cid])) {
     return;
   }
   
@@ -225,15 +225,15 @@ function _webform_validate_file ($formelement,$cid,$fieldname,$filters) {
     $extensionList = $extensions[0];
   }
 
-  $dot = strrpos($_FILES['edit']['name'][$cid],'.');
-  $extension = strtolower(substr($_FILES['edit']['name'][$cid],$dot+1));
+  $dot = strrpos($_FILES['files']['name'][$cid],'.');
+  $extension = strtolower(substr($_FILES['files']['name'][$cid],$dot+1));
   if (!in_array($extension,$extensions)) {
     form_set_error($cid,t("Files with the '%ext' extension are not allowed, please upload a file with a %exts extension.",array('%ext'=>$extension,'%exts'=>$extensionList)));
   }
   
   // Now let's check the file size (limit is set in KB)
-  if ($_FILES['edit']['size'][$cid] > $filters['size']*1024) {
-    form_set_error($cid,t("The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller.",array('%filename'=>$_FILES['edit']['name'][$cid],'%filesize'=>(int)($_FILES['edit']['size'][$cid]/1024),'%maxsize'=>$filters['size'])));
+  if ($_FILES['files']['size'][$cid] > $filters['size']*1024) {
+    form_set_error($cid,t("The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller.",array('%filename'=>$_FILES['files']['name'][$cid],'%filesize'=>(int)($_FILES['files']['size'][$cid]/1024),'%maxsize'=>$filters['size'])));
   }
 }
 
