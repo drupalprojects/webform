@@ -1175,7 +1175,7 @@ function webform_client_form_submit($form_id, $form_values) {
       
       // Default values:
       $headers = array();
-      $email_from_string = variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}");
+      $email_from_string = variable_get('site_mail', ini_get('sendmail_from'));
       $email_subject_string = t('Form submission from: ').' '.$node->title;
 
       // Search for user set FROM and SUBJECT fields
