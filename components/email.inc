@@ -53,7 +53,7 @@ function _webform_render_email ($component) {
     '#description'   => _webform_filtervalues($component['extra']['description']),
     '#prefix'        => '<div class="webform-component-'.$component['type'].'" id="webform-component-'._webform_safe_name($component['name']).'">',
     '#suffix'        => '</div>',
-    '#validate'      => array('_webform_validate_email' => array($component['cid'])),
+    '#validate'      => array('_webform_validate_email' => array('submitted][' . $component['cid'])),
   );
   
   // Fill in the user's email address if available
@@ -77,7 +77,7 @@ function _webform_render_email ($component) {
  **/
 function _webform_validate_email ($formelement, $name) {
   if (!empty($formelement['#value']) && !valid_email_address($formelement['#value'])) {
-    form_set_error($name,t("'%value' is not a valid email address",array('%value' => $formelement['#value'])));
+    form_set_error($name, t("'%value' is not a valid email address",array('%value' => $formelement['#value'])));
   }
 }
 
