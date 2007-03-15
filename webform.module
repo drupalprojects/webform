@@ -100,7 +100,7 @@ function webform_insert($node) {
   }
   
   // Insert the Webform
-  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from, $node->email_subject, $node->additional_validate, $node->additional_submit);
+  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
   
   // Re-add existing components from the POST array
   if (isset($_POST['edit']['webformcomponents'])) {
@@ -180,6 +180,34 @@ function webform_settings() {
     );
   }
   
+  $form['email'] = array (
+    '#type' => 'fieldset',
+    '#title' => t('Default E-mail Values'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+
+  $form['email']['webform_default_from_email']  = array(
+    '#type' => 'textfield',
+    '#title' => t("From e-mail address"),
+    '#default_value' => variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))),
+    '#description' => t('Default sender address. This may be the E-mail address of the maintainer of your forms. This is also used for Reply-To, Return-Path and Errors-To.')
+  );
+
+  $form['email']['webform_default_from_name']  = array(
+    '#type' => 'textfield',
+    '#title' => t("From Name"),
+    '#default_value' => variable_get('webform_default_from_name', variable_get('site_name', '')),
+    '#description' => t('Default sender name which is displayed together with the E-mail address.')
+  );
+
+  $form['email']['webform_default_subject']  = array(
+    '#type' => 'textfield',
+    '#title' => t("Default Subject"),
+    '#default_value' => variable_get('webform_default_subject', t('Form submission from: ')),
+    '#description' => t('Default Subject. If not other stated in the form configuration this is appended to your form title. If you have e.g. defined "Your " (note the space) as a default subject and a form titled with "Order" the e-mail subject will be "Your Order".')
+  );
+
   $form['advanced'] = array (
     '#type' => 'fieldset',
     '#title' => t('Advanced Options'),
@@ -536,7 +564,7 @@ function webform_form (&$node, &$param) {
   
   /* End Components Form */
   
-  /* Start Email Settings Form */
+  /* Start E-mail Settings Form */
   $form['mailsettings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Mail Settings'),
@@ -553,27 +581,38 @@ function webform_form (&$node, &$param) {
   );
   
   // Build arrays of possible return email addresses and email subject lines from elements on the form
-  $possible_email_from = array ('Default' => t('Default'));
-  $possible_email_subject = array ('Default' => t('Default'));
+  $possible_email_from_name = array('Default' => variable_get('webform_default_from_name', variable_get('site_name', '')) . ' [' . t('Default') .']');
+  $possible_email_from_address = array('Default' => variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))) . ' [' . t('Default') .']');
+  $possible_email_subject = array('Default' => variable_get('webform_default_subject', t('Form submission from: ') . t('$title')) . ' [' . t('Default') .']');
   
   if (is_array($node->webformcomponents) && !empty ($node->webformcomponents)) {
     foreach ($node->webformcomponents as $cid => $component) {
       $type = $component['type'];
       if ($type == 'email' || $type == 'hidden') {
-        $possible_email_from[$component['name']] = $component['name'];
+        $possible_email_from_address[$component['name']] = $component['name'];
       }
       if ($type == 'textfield' || $type == 'hidden') {
+        $possible_email_from_name[$component['name']] = $component['name'];
         $possible_email_subject[$component['name']] = $component['name'];
       }
     }
   }
   
-  $form['mailsettings']['email_from'] = array(
+  $form['mailsettings']['email_from_name'] = array(
+    '#type' => 'select',
+    '#title' => t('E-mail from name'),
+    '#default_value' => $node->email_from_name,
+    '#options' => $possible_email_from_name,
+    '#description' => t('After adding components to this form, any textfield or hidden form element may be selected as the sender\'s name for e-mails.'),
+    '#weight' => 6,
+    '#DANGEROUS_SKIP_CHECK' => TRUE,
+  );
+  $form['mailsettings']['email_from_address'] = array(
     '#type' => 'select',
     '#title' => t('E-mail from address'),
-    '#default_value' => $node->email_from,
-    '#options' => $possible_email_from,
-    '#description' => t('After adding components to this form, any email or hidden form element may be selected as the sender for e-mails.'),
+    '#default_value' => $node->email_from_address,
+    '#options' => $possible_email_from_address,
+    '#description' => t('After adding components to this form, any e-mail or hidden form element may be selected as the sender\'s address for e-mails.'),
     '#weight' => 7,
     '#DANGEROUS_SKIP_CHECK' => TRUE,
   );
@@ -583,7 +622,7 @@ function webform_form (&$node, &$param) {
     '#default_value' => $node->email_subject,
     '#options' => $possible_email_subject,
     '#description' => t('After adding components to this form, any textfield or hidden form element may be selected as the subject line for e-mails.'),
-    '#weight' => 7,
+    '#weight' => 8,
     '#DANGEROUS_SKIP_CHECK' => TRUE,
   );
   
@@ -1009,9 +1048,13 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
         '#type'      => 'hidden',
         '#value'     => $node->email_subject,
       );
-      $form['details']['email_from'] = array (
+      $form['details']['email_from_name'] = array (
         '#type'      => 'hidden',
-        '#value'     => $node->email_from,
+        '#value'     => $node->email_from_name,
+      );
+      $form['details']['email_from_address'] = array (
+        '#type'      => 'hidden',
+        '#value'     => $node->email_from_address,
       );
       $form['details']['nid'] = array (
         '#type'      => 'value',
@@ -1151,8 +1194,9 @@ function webform_client_submit($form_id, $form_values) {
       // Build arrays of possible return email addresses and email subject lines from elements on the form
       
       // Default values:
-      $email_from_string= "From: ".mime_header_encode(variable_get('site_mail', ini_get('sendmail_from')))."\n";
-      $email_subject_string= t('Form submission from: ').' '.$node->title;
+      $email_from_name = variable_get('webform_default_from_name', variable_get('site_name', ''));
+      $email_from_address = variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from')));
+      $email_subject_string = t('Form submission from: ').' '.$node->title;
 
       // Search for user set FROM and SUBJECT fields
       if (is_array($node->webformcomponents) && !empty ($node->webformcomponents)) {
@@ -1160,14 +1204,17 @@ function webform_client_submit($form_id, $form_values) {
           $type= $component['type'];
           // Find and set a custom FROM: field
           if ($type == 'email' || $type == 'hidden') {
-            if ($component['name'] == $node->email_from) {
-              $email_from_string= "From: ".mime_header_encode(strip_tags($form_values['submitted'][$cid]))."\n";
+            if ($component['name'] == $node->email_from_address) {
+              $email_from_address = strip_tags($form_values['submitted'][$cid]);
             }
           }
           // Find and set a custom SUBJECT: field
           if ($type == 'textfield' || $type == 'hidden') {
+            if ($component['name'] == $node->email_from_name) {
+              $email_from_name = strip_tags($form_values['submitted'][$cid]);
+            }
             if ($component['name'] == $node->email_subject) {
-              $email_subject_string= strip_tags($form_values['submitted'][$cid]);
+              $email_subject_string = strip_tags($form_values['submitted'][$cid]);
             }
           }
           if ($type == 'email' && $component['extra']['carboncopy'] == 'Y' ) {
@@ -1176,8 +1223,11 @@ function webform_client_submit($form_id, $form_values) {
         }
       }
       
+      // Assemble the FROM string
+      $email_from_string = "From: ".mime_header_encode($email_from_name . ' <' . $email_from_address . '>') . "\n";
+      
       // Verify that this submission is not attempting to send any spam hacks
-      if (_webform_submission_spam_check ($node->email, $email_from_string, $email_subject_string, $message)) {
+      if (_webform_submission_spam_check($node->email, $email_from_string, $email_subject_string, $message)) {
         watchdog('webform', t('Possible spam attempt from ').$_SERVER['REMOTE_ADDR']."<br />\n".nl2br(htmlentities($message)), WATCHDOG_WARNING);
         drupal_set_message(t("Illegal information. Data not submitted."), 'error');
         return false;
@@ -1191,7 +1241,7 @@ function webform_client_submit($form_id, $form_values) {
       
       // Debugging output
       if (variable_get('webform_debug',0) >= 2) {
-        drupal_set_message("E-mail Headers: <pre>".$headers."</pre>E-mail Body: <pre>".$message."</pre>");
+        drupal_set_message("E-mail Headers: <pre>".htmlentities($headers)."</pre>E-mail Body: <pre>".$message."</pre>");
       }
     }
   }
