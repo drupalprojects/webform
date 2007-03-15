@@ -14,7 +14,8 @@ function webform_install() {
         submit_limit int(2)  not null default '-1',
         submit_interval int(10) not null default '157784630',
         email varchar(255) default NULL,
-        email_from varchar(255) default NULL,
+        email_from_name varchar(255) default NULL,
+        email_from_address varchar(255) default NULL,
         email_subject varchar(255) default NULL,
         additional_validate text default NULL,
         additional_submit text default NULL,
@@ -65,7 +66,8 @@ function webform_install() {
         submit_limit smallint NOT NULL default '-1',
         submit_interval integer NOT NULL default '157784630',
         email varchar(255) NOT NULL default '',
-        email_from varchar(255) NOT NULL default '',
+        email_from_name varchar(255) NOT NULL default '',
+        email_from_address varchar(255) NOT NULL default '',
         email_subject varchar(255) NOT NULL default '',
         additional_validate text default NULL,
         additional_submit text default NULL,
@@ -296,10 +298,26 @@ function webform_update_8() {
 }
 
 /**
- * Remove webform version variable, now obsolete with schema and version numbers
+ * Remove webform version variable, now obsolete with schema and version numbers.
+ * Split columns for email_from into email_from_address and email_from_name
  */
 function webform_update_9() {
   variable_del('webform_version');
+  
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      db_change_column($ret, 'webform', 'email_from', 'email_from_address', 'varchar(255)', array('not null' => FALSE, 'default' => "NULL"));
+      break;
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE webform CHANGE email_from email_from_address varchar(255) NULL DEFAULT NULL");
+      break;
+  }
+  $ret[] = update_sql("ALTER TABLE webform ADD email_from_name varchar(255) NULL DEFAULT NULL AFTER email");
+  
+  return $ret;
 }
 
 /**
