@@ -964,6 +964,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   $sid_to_display = check_plain($_GET['sid']); // Will be NULL if no sid
   $submission = array();
   $preview = false;
+  $node->webformcomponents = _webform_components_decode($node->webformcomponents);
   
   if ($_POST['op'] == t('Preview')) {
     webform_prepare($node);
@@ -1147,6 +1148,12 @@ function webform_client_form_submit($form_id, $form_values) {
       $submitFunction($form_values['submitted'][$cid], $component); // Call the component process submission function
     }
   }
+
+  // Perform additional submit processing
+  if (trim($node->additional_submit)) {
+    // We use eval here (rather than drupal_eval) because the user needs access to local variables
+    eval("?>".$node->additional_submit);
+  }
   
   // Save the submission to the database
   $sid = _webform_save_submission($node, $form_values['submitted']);
@@ -1214,11 +1221,6 @@ function webform_client_form_submit($form_id, $form_values) {
    
   if (variable_get('webform_debug', 0) >= 1) {
     watchdog('webform', t('Submission posted to ')."'$node->title' ".l(t('Results'),'node/'.$node->nid,NULL,'sid='.$sid)."<br />\n".nl2br(htmlentities($message)), WATCHDOG_NOTICE);
-  }
-
-  if (trim($node->additional_submit)) {
-    // We use eval here (rather than drupal_eval) because the user needs access to local variables
-    eval("?>".$node->additional_submit);
   }
   
   // Check confirmation field to see if redirect should be to another node or a message
