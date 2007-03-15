@@ -312,10 +312,10 @@ function webform_update_9() {
       break;
     case 'mysqli':
     case 'mysql':
-      $ret[] = update_sql("ALTER TABLE webform CHANGE email_from email_from_address varchar(255) NULL DEFAULT NULL");
+      $ret[] = update_sql("ALTER TABLE {webform} CHANGE email_from email_from_address varchar(255) NULL DEFAULT NULL");
       break;
   }
-  $ret[] = update_sql("ALTER TABLE webform ADD email_from_name varchar(255) NULL DEFAULT NULL AFTER email");
+  $ret[] = update_sql("ALTER TABLE {webform} ADD email_from_name varchar(255) NULL DEFAULT NULL AFTER email");
   
   return $ret;
 }
