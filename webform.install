@@ -174,8 +174,6 @@ function webform_update_1() {
                       " PRIMARY KEY  (nid, sid) ".
                       ")" );
   
-  variable_set('webform_version',array('text'=>'4.7.1', 'build' => '471'));
-  
   return $ret;
 }
 
@@ -298,6 +296,13 @@ function webform_update_8() {
 }
 
 /**
+ * Remove webform version variable, now obsolete with schema and version numbers
+ */
+function webform_update_9() {
+  variable_del('webform_version');
+}
+
+/**
  * Makes updates to the database structure (Pre-4.7 versions of Drupal).
  **/
 function _webform_legacy_update($installed_version, $current_version) {
@@ -346,7 +351,7 @@ function _webform_legacy_update($installed_version, $current_version) {
       //$ret[] = array(1 => "<strong>Build 4.6.3</strong><br />\n", 2 => "");
       // No more lazy update ...
       // Check if the lazy update has already been performed
-      $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_subject'");  		
+      $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_subject'");      
       if (db_num_rows($result) == 0) {  
         // The email_subject column is needed
         $ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_subject varchar(255)");
@@ -362,4 +367,66 @@ function _webform_legacy_update($installed_version, $current_version) {
     variable_set("webform_version", $current_version);
     
     return $ret;
+}
+      
+/**
+ * Implmentation of hook_uninstall
+ */
+function webform_uninstall() {
+  watchdog("webform","Removing webform module.");
+
+  // Unset webform variables
+  variable_del("webform_use_cookies");
+  variable_del("webform_debug");
+  variable_del('webform_enable_fieldset');
+  if (!isset($componentList)) {
+    $componentList = array();
+    $path = drupal_get_path('module', 'webform')."/components";
+    $files = file_scan_directory($path, '^.*\.inc$');
+    foreach ($files as $filename => $file) {
+      variable_del('webform_enable_'.$file->name,1);
+    }
+  }
+
+  // Delete uploaded files
+  $filepath = file_create_path('webform');
+  _webform_recursive_delete($filepath);
+  
+  // Drop tables
+  db_query("DROP TABLE IF EXISTS {webform}");
+  db_query("DROP TABLE IF EXISTS {webform_component}");
+  db_query("DROP TABLE IF EXISTS {webform_submissions}");
+  db_query("DROP TABLE IF EXISTS {webform_submitted_data}");
+
+  // Clear the cache tables
+  cache_clear_all(null, 'cache');
+  cache_clear_all(null, 'cache_filter');
+  cache_clear_all(null, 'cache_menu');
+  cache_clear_all(null, 'cache_page');
+  
+  watchdog("Webform","Webform module removed.");
+}
+
+/**
+ * Recursively delete all files and folders in the specified filepath, then 
+ * delete the containing folder.
+ *
+ * Note that this only deletes visible files with write permission
+ *
+ * @param string $path
+ *   A filepath relative to file_directory_path
+ */
+function _webform_recursive_delete($path) {
+  if ($path) {
+    $listing = $path . "/*";
+    foreach(glob($listing) as $file) {
+      if(is_file($file) === true) {
+        @unlink($file);
+      }
+      elseif(is_dir($file) === true) {
+        _webform_recursive_delete($file);
+      }
+    }
+    @rmdir($path);
+  }
 }
