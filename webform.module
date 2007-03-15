@@ -1151,7 +1151,7 @@ function webform_client_submit($form_id, $form_values) {
       // Build arrays of possible return email addresses and email subject lines from elements on the form
       
       // Default values:
-      $email_from_string= "From: ".mime_header_encode(variable_get('site_mail', "webmail@{$_SERVER['SERVER_NAME']}"))."\n";
+      $email_from_string= "From: ".mime_header_encode(variable_get('site_mail', ini_get('sendmail_from')))."\n";
       $email_subject_string= t('Form submission from: ').' '.$node->title;
 
       // Search for user set FROM and SUBJECT fields
