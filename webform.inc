@@ -24,17 +24,15 @@ function _webform_page() {
   $result = db_query("SELECT nid, title FROM {node} WHERE type='webform'");
    
   while ($node = db_fetch_object($result)) {
-    $rows[] = array(l($node->title,'node/' . $node->nid),
-                    l(t('submissions'),'node/' . $node->nid . '/results'),
-                    l(t('analysis'),'node/' . $node->nid . '/results/analysis'),
-                    l(t('table'),'node/' . $node->nid . '/results/table'),
-                    l(t('download'),'node/' . $node->nid . '/results/download'),
+    $rows[] = array(l($node->title, 'node/' . $node->nid),
+                    l(t('submissions'), 'node/' . $node->nid . '/results'),
+                    l(t('analysis'), 'node/' . $node->nid . '/results/analysis'),
+                    l(t('table'), 'node/' . $node->nid . '/results/table'),
+                    l(t('download'), 'node/' . $node->nid . '/results/download'),
                     l(t('edit'), 'node/'.$node->nid.'/edit'),
                     l(t('clear'), 'node/' . $node->nid . '/results/clear'));
 
   }
-  
-  if (user_perm)
   
   $content = theme('table', $header, $rows);
   drupal_set_title($node->title);
@@ -100,13 +98,14 @@ function _webform_submission_delete_submit($form_id, $form_values) {
  */
 function _webform_fetch_submissions($nid) {
   
-  $query = 'SELECT s.sid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data ' .
-           'FROM {webform_submissions} as s ' .
-           'LEFT JOIN {webform_submitted_data} as sd on (sd.sid = s.sid) '.
+  $query = 'SELECT s.sid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data '. 
+           'FROM {webform_submissions} as s '. 
+           'LEFT JOIN {webform_submitted_data} as sd on (sd.sid = s.sid) '. 
            'WHERE sd.nid = %d';
     
   $res = db_query($query, $nid);
   $submissions = array();
+  $previous = array();
   
   // Outer loop: iterate for each submission
   while ($row = db_fetch_object($res)) {
@@ -127,20 +126,20 @@ function _webform_fetch_submission($sid) {
   
   $submission = array();
 
-  $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data ' .
-           'FROM {webform_submitted_data} as sd ' .
-           'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '.
+  $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data '. 
+           'FROM {webform_submitted_data} as sd '. 
+           'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '. 
            'WHERE sd.sid = %d';
 
   $res = db_query($query, $sid);
   $recs = db_num_rows($res);
-  if($recs >= 1) {
+  if ($recs >= 1) {
     $row = db_fetch_array($res);
     $submission['nid'] = $row['nid'];
     $submission['sid'] = $row['sid'];
     $submission['submitted'] = $row['submitted'];
 
-    while($row) {
+    while ($row) {
       $submission['data'][$row['cid']]['value'][$row['no']] = $row['data'];
       $row = db_fetch_array($res);
     }
@@ -151,25 +150,25 @@ function _webform_fetch_submission($sid) {
 
 function theme_webform_create_mailmessage($form_values, $node, $sid) {
   global $user, $baseurl;
-  $message .=  t('Submitted on').' '.format_date(time(), 'small')."\n";
+  $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
   $ip_address = $_SERVER['REMOTE_ADDR'];
   
-  if($user->uid) {
-    $message .= t('Submitted by user').": $user->name [$ip_address]\n";
+  if ($user->uid) {
+    $message .= t('Submitted by user') .": $user->name [$ip_address]\n";
   }
   else {
-    $message .= t('Submitted by anonymous user').": [$ip_address]\n";
+    $message .= t('Submitted by anonymous user') .": [$ip_address]\n";
   }
 
   $message .= "\n";
-  function _webform_submission_format ($key, $value, $node, $indent = "") {
+  function _webform_submission_format($key, $value, $node, $indent = "") {
     // First check for component-level themes
-    $themedOutput = theme("webform_mail_".$node->webformcomponents[$key]['type'],$value,$node->webformcomponents[$key]);
-    if ($themedOutput) {
+    $themed_output = theme("webform_mail_". $node->webformcomponents[$key]['type'], $value, $node->webformcomponents[$key]);
+    if ($themed_output) {
       // Indent the output and add to message
       $message .= $indent;
-      $themedOutput = rtrim($themedOutput,"\n");
-      $message .= str_replace("\n","\n".$indent,$themedOutput);
+      $themed_output = rtrim($themed_output, "\n");
+      $message .= str_replace("\n", "\n". $indent, $themed_output);
       $message .= "\n";
     }
     // Generic output for single values
@@ -178,24 +177,24 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
       if ($node->webformcomponents[$key]['name']) {
         // if text is more than 60 characters, put it on a new line with space after
         $long = (strlen($indent . $node->webformcomponents[$key]['name'] . $value)) > 60;
-        $message .= $indent.$node->webformcomponents[$key]['name'].":".(empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
+        $message .= $indent.$node->webformcomponents[$key]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
       }
     }
     // Else use a generic output for arrays
     else {
-      $message .=  $node->webformcomponents[$key]['name'].":\n";
+      $message .=  $node->webformcomponents[$key]['name'] .":\n";
       foreach ($value as $k => $v) {
-        $message .= _webform_submission_format($k, $v, $node, $indent."  ");
+        $message .= _webform_submission_format($k, $v, $node, $indent ."  ");
       }
     }
     return ($message);
   }
   $message .= t('Submitted values are');
-  $message .= _webform_submission_format("",$form_values['submitted_tree'], $node);
+  $message .= _webform_submission_format("", $form_values['submitted_tree'], $node);
   
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
-  $message .= "http://".$_SERVER['HTTP_HOST'].$baseurl.url('node/'.$node->nid,"sid=".$sid);
+  $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'.$node->nid, "sid=". $sid);
   
   
   if (variable_get('webform_debug', 0) == 2) {
@@ -252,9 +251,9 @@ function _webform_submission_limit_check($node, $form_values) {
   }
   
   // Retrieve submission data for this IP address or username from the database
-  $query = "SELECT submitted, user, remote_addr " .
-           "FROM {webform_submissions} " .
-           "WHERE (( %d = 0 AND remote_addr = '%s') OR user = '%s' )" .
+  $query = "SELECT submitted, user, remote_addr ". 
+           "FROM {webform_submissions} ". 
+           "WHERE (( %d = 0 AND remote_addr = '%s') OR user = '%s' )". 
            "AND submitted > %d AND nid = %d";
   
   // Change reserved user column to "user" for pgsql
@@ -264,43 +263,43 @@ function _webform_submission_limit_check($node, $form_values) {
   
   // Fetch all the entries from the database within the submit interval with this username and IP
   $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->name, time() - $node->submit_interval, $node->nid);
-  $numSubmissionsDatabase = db_num_rows($result);
+  $num_submissions_database = db_num_rows($result);
   
   // Double check the submission history from the users machine using cookies
-  if (variable_get("webform_use_cookies",0)) {
-    $cookieName = 'webform-'.$node->nid;
+  if (variable_get("webform_use_cookies", 0)) {
+    $cookie_name = 'webform-'.$node->nid;
     
-    if (isset($_COOKIE[$cookieName]) && is_array($_COOKIE[$cookieName])) {
-      foreach ($_COOKIE[$cookieName] as $key => $timestamp) {
+    if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
+      foreach ($_COOKIE[$cookie_name] as $key => $timestamp) {
         if ($timestamp <= time() - $node->submit_interval) {
           // Remove the cookie if past the required time interval
-          setcookie($cookieName."[".$key."]", "", 0);
+          setcookie($cookie_name ."[". $key ."]", "", 0);
         }
       }
       // Count the number of submissions recorded in cookies
-      $numSubmissionsCookie = count($_COOKIE[$cookieName]);
+      $num_submissions_cookie = count($_COOKIE[$cookie_name]);
     }
     else {
-      $numSubmissionsCookie = 0;
+      $num_submissions_cookie = 0;
     }
   }
   
-  if ($numSubmissionsDatabase >= $node->submit_limit || $numSubmissionsCookie >= $node->submit_limit) {
+  if ($num_submissions_database >= $node->submit_limit || $num_submissions_cookie >= $node->submit_limit) {
     // Limit exceeded
-    return $numSubmissionsDatabase; 
+    return $num_submissions_database; 
   }
   else {
     // Increment a cookie for triple recording of the submission
-    if (variable_get("webform_use_cookies",0)) {
-      $attemptedKey = 0;
-      if ($numSubmissionsCookie > 0) {
-        while (array_key_exists($attemptedKey,$_COOKIE[$cookieName])) {
-          $attemptedKey++;
+    if (variable_get("webform_use_cookies", 0)) {
+      $attempted_key = 0;
+      if ($num_submissions_cookie > 0) {
+        while (array_key_exists($attempted_key, $_COOKIE[$cookie_name])) {
+          $attempted_key++;
         }
       }
       // Set a cookie including the server's submission time
       // The cookie expires in the length of the interval plus a day to compensate for different timezones
-      setcookie($cookieName."[".$attemptedKey."]", time(), time()+$node->submit_interval+86400);
+      setcookie($cookie_name ."[". $attempted_key ."]", time(), time() + $node->submit_interval + 86400);
     }
     
     // Limit not exceeded
