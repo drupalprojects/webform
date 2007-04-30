@@ -64,7 +64,7 @@ function _webform_render_select($component) {
   
   // Convert the user-entered options list into an array
   $value = _webform_filtervalues($component['value']);
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], FALSE));
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...'));
