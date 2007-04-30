@@ -187,8 +187,16 @@ function webform_update_1() {
 function webform_update_2() {
   
   $ret = array();
-  
-  $ret[] = update_sql("ALTER TABLE {webform} ADD redirect_post int(1) UNSIGNED NOT NULL DEFAULT '0' AFTER confirmation");
+
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform} ADD redirect_post int(1) UNSIGNED NOT NULL DEFAULT '0'");
+      break;
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform} ADD redirect_post int(1) UNSIGNED NOT NULL DEFAULT '0' AFTER confirmation");
+      break;
+  }
   
   return $ret;
 }
@@ -251,7 +259,7 @@ function webform_update_6() {
   
   switch ($GLOBALS['db_type']) {
     case 'pgsql':
-      $ret[] = update_sql("ALTER TABLE {webform_component} ADD pid integer NOT NULL DEFAULT '0' AFTER cid");
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD pid integer NOT NULL DEFAULT '0'");
       break;
     case 'mysqli':
     case 'mysql':
@@ -289,6 +297,9 @@ function webform_update_8() {
   
   switch ($GLOBALS['db_type']) {
     case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform} ADD additional_validate text DEFAULT NULL");
+      $ret[] = update_sql("ALTER TABLE {webform} ADD additional_submit text DEFAULT NULL");
+      break;
     case 'mysqli':
     case 'mysql':
       $ret[] = update_sql("ALTER TABLE {webform} ADD additional_validate text DEFAULT NULL AFTER email_subject");
@@ -311,13 +322,14 @@ function webform_update_9() {
   switch ($GLOBALS['db_type']) {
     case 'pgsql':
       db_change_column($ret, 'webform', 'email_from', 'email_from_address', 'varchar(255)', array('not null' => FALSE, 'default' => "NULL"));
+      $ret[] = update_sql("ALTER TABLE {webform} ADD email_from_name varchar(255) NULL DEFAULT NULL");
       break;
     case 'mysqli':
     case 'mysql':
       $ret[] = update_sql("ALTER TABLE {webform} CHANGE email_from email_from_address varchar(255) NULL DEFAULT NULL");
+      $ret[] = update_sql("ALTER TABLE {webform} ADD email_from_name varchar(255) NULL DEFAULT NULL AFTER email");
       break;
   }
-  $ret[] = update_sql("ALTER TABLE {webform} ADD email_from_name varchar(255) NULL DEFAULT NULL AFTER email");
   
   return $ret;
 }
@@ -328,7 +340,16 @@ function webform_update_9() {
 function webform_update_10() {
   $ret = array();
 
-  $ret[] = update_sql("ALTER TABLE {webform_component} ADD form_key varchar(128) NULL DEFAULT NULL AFTER pid");
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD form_key varchar(128) NULL DEFAULT NULL");
+      break;
+    
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD form_key varchar(128) NULL DEFAULT NULL AFTER pid");
+      break;
+  }
 
   return $ret;
 }
