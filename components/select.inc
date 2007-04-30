@@ -8,13 +8,13 @@
  * are not necessary to specify here (although they may be overridden if desired).
  * @returns An array of form items to be displayed on the edit component page
  **/
-function _webform_edit_select ($currfield) {
+function _webform_edit_select($currfield) {
   $editFields = array();
   $editFields['extra']['items'] = array (
     '#type' => 'textarea',
     '#title' => t("Options"),
     '#default_value' => $currfield['extra']['items'],
-    '#description' => t('A list of selectable options. One option per line.').'<br />'.webform_help('webform/helptext#variables'),
+    '#description' => t('A list of selectable options. One option per line. Key-value pairs may be entered seperated by pipes. i.e. safe_key|Some readable option').'<br />'.webform_help('webform/helptext#variables'),
     '#cols' => 60,
     '#rows' => 5,
     '#weight' => -2,
@@ -52,7 +52,7 @@ function _webform_edit_select ($currfield) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of a form item to be displayed on the client-side webform
  **/
-function _webform_render_select ($component) {
+function _webform_render_select($component) {
   $formItem = array (
     '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
     '#required'      => $component['mandatory'],
@@ -64,19 +64,25 @@ function _webform_render_select ($component) {
   
   // Convert the user-entered options list into an array
   $value = _webform_filtervalues($component['value']);
-  $items = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
+
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...'));
   }
   else {
     $options = array();
   }
-  foreach($items as $k => $v) {
-    $v = trim($v);
-    if (strlen($v)) {
-      $options[_webform_safe_name($v)] = $v;
+
+  foreach ($rows as $row) {
+    $row = trim($row);
+    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+      $options[$matches[1]] = $matches[2];
     }
+    else {
+      $options[_webform_safe_name($row)] = $row;
+    } 
   }
+
   // Set the component options
   $formItem['#options'] = $options;
   
@@ -126,7 +132,7 @@ function _webform_render_select ($component) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_select ($data,$component) {
+function _webform_submission_display_select($data,$component) {
   $formItem = _webform_render_select($component);
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array
@@ -156,7 +162,7 @@ function _webform_submission_display_select ($data,$component) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Nothing
  **/
-function _webform_submit_select (&$data,$component) {
+function _webform_submit_select(&$data,$component) {
   $items = explode("\n", _webform_filtervalues($component['extra']['items']));
   $options = array();
   foreach($items as $k => $v) {
@@ -184,7 +190,7 @@ function _webform_submit_select (&$data,$component) {
  * @param array $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns string Textual output to be included in the email
  */
-function theme_webform_mail_select ($data, $component) {
+function theme_webform_mail_select($data, $component) {
   // Convert submitted 'safe' values to un-edited, original form
   $items = explode("\n", _webform_filtervalues($component['extra']['items']));
   $options = array();
@@ -228,7 +234,7 @@ function _webform_help_select($section) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of data rows, each containing a statistic for this component's submissions.
  **/
-function _webform_analysis_rows_select ($component) {
+function _webform_analysis_rows_select($component) {
     $query = 'SELECT data, count(data) as datacount '.
       ' FROM {webform_submitted_data} '.
       ' WHERE nid = %d '.
@@ -249,7 +255,7 @@ function _webform_analysis_rows_select ($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_table_data_select ($data) {
+function _webform_table_data_select($data) {
   // Set the value as a single string
   if (is_array($data['value'])) {
     foreach ($data['value'] as $value) {
@@ -271,7 +277,7 @@ function _webform_table_data_select ($data) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
  **/
-function _webform_csv_headers_select ($component) {
+function _webform_csv_headers_select($component) {
   $header = array();
   $header[0] = '';
   
@@ -297,7 +303,7 @@ function _webform_csv_headers_select ($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
  **/
-function _webform_csv_data_select ($data,$component) {
+function _webform_csv_data_select($data,$component) {
   if ($component['extra']['multiple']) {
     $items = split("\n", $component['extra']['items']);
     foreach($items as $item) {
