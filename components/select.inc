@@ -132,7 +132,7 @@ function _webform_render_select($component) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_select($data,$component) {
+function _webform_submission_display_select($data, $component) {
   $formItem = _webform_render_select($component);
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array
@@ -162,22 +162,28 @@ function _webform_submission_display_select($data,$component) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Nothing
  **/
-function _webform_submit_select(&$data,$component) {
-  $items = explode("\n", _webform_filtervalues($component['extra']['items']));
-  $options = array();
-  foreach($items as $k => $v) {
-    $v = trim($v);
-    if (strlen($v)) {
-      $options[_webform_safe_name($v)] = $v;
+function _webform_submit_select(&$data, $component) {
+  $value = _webform_filtervalues($component['value']);
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
+
+  foreach ($rows as $row) {
+    $row = trim($row);
+    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+      $options[$matches[1]] = $matches[1];
     }
+    else {
+      $options[_webform_safe_name($row)] = _webform_safe_name($row);
+    } 
   }
+
   if (is_array($data)) {
     foreach ($data as $key => $value) {
       if ($value) {
         $data[$key] = $options[$key];
       }
     }
-  } elseif (!empty($data)) {
+  }
+  elseif (!empty($data)) {
     $data = $options[$data];
   }
 }
@@ -192,13 +198,17 @@ function _webform_submit_select(&$data,$component) {
  */
 function theme_webform_mail_select($data, $component) {
   // Convert submitted 'safe' values to un-edited, original form
-  $items = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
   $options = array();
-  foreach($items as $k => $v) {
-    $v = trim($v);
-    if (strlen($v)) {
-      $options[_webform_safe_name($v)] = $v;
+  
+  foreach ($rows as $row) {
+    $row = trim($row);
+    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+      $options[$matches[1]] = $matches[2];
     }
+    else {
+      $options[_webform_safe_name($row)] = $row;
+    } 
   }
   
   // Generate the output
@@ -206,11 +216,12 @@ function theme_webform_mail_select($data, $component) {
     $output = $component['name'].":\n";
     foreach ($data as $value) {
       if ($value) {
-        $output .= "    • ".$options[$value]."\n";
+        $output .= "    • ". $options[$value] ."\n";
       }
     }
-  } else {
-    $output = $component['name'].": ".$options[_webform_safe_name($data)]."\n";
+  }
+  else {
+    $output = $component['name']. ": ". $options[$data] ."\n";
   }
   return $output;
 }
@@ -235,18 +246,38 @@ function _webform_help_select($section) {
  * @returns An array of data rows, each containing a statistic for this component's submissions.
  **/
 function _webform_analysis_rows_select($component) {
-    $query = 'SELECT data, count(data) as datacount '.
-      ' FROM {webform_submitted_data} '.
-      ' WHERE nid = %d '.
-      ' AND cid = %d '.
-      " AND data != '0' AND data != '' ".
-      ' GROUP BY data ';
-    $result = db_query($query, $component['nid'], $component['cid']);
-    $rows = array();
-    while ($data = db_fetch_array($result)) {
-      $rows[] = array($data['data'], $data['datacount']);
+  $component['extra'] = unserialize($component['extra']);
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $options = array();
+  
+  foreach ($rows as $row) {
+    $row = trim($row);
+    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+      $options[$matches[1]] = $matches[2];
     }
-    return $rows;
+    else {
+      $options[_webform_safe_name($row)] = $row;
+    } 
+  }
+
+  $query = 'SELECT data, count(data) as datacount '.
+    ' FROM {webform_submitted_data} '.
+    ' WHERE nid = %d '.
+    ' AND cid = %d '.
+    " AND data != '0' AND data != '' ".
+    ' GROUP BY data ';
+  $result = db_query($query, $component['nid'], $component['cid']);
+  $rows = array();
+  while ($data = db_fetch_array($result)) {
+    if ($options[$data['data']]) {
+      $display_option = $options[$data['data']];
+    }
+    else {
+      $display_option = $data['data'];
+    }
+    $rows[] = array($display_option, $data['datacount']);
+  }
+  return $rows;
 }
 
 /** 
@@ -303,12 +334,24 @@ function _webform_csv_headers_select($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
  **/
-function _webform_csv_data_select($data,$component) {
+function _webform_csv_data_select($data, $component) {
+  $value = _webform_filtervalues($component['value']);
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
+  $options = array();
+  
+  foreach ($rows as $row) {
+    $row = trim($row);
+    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+      $options[$matches[1]] = $matches[2];
+    }
+    else {
+      $options[_webform_safe_name($row)] = $row;
+    } 
+  }
+  
   if ($component['extra']['multiple']) {
-    $items = split("\n", $component['extra']['items']);
-    foreach($items as $item) {
-      $item = trim($item);
-      if (in_array($item,(array)$data['value']) === true) {
+    foreach($options as $key => $item) {
+      if (in_array($key, (array)$data['value']) === true) {
         $output .= '\,Yes';
       }
       else {
