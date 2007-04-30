@@ -161,37 +161,28 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
   }
 
   $message .= "\n";
-  function _webform_submission_format($key, $value, $node, $indent = "") {
-    // First check for component-level themes
-    $themed_output = theme("webform_mail_". $node->webformcomponents[$key]['type'], $value, $node->webformcomponents[$key]);
+
+  $message .= t('Submitted values are');
+  $message .= "\n\n";
+
+  foreach ($form_values['submitted'] as $cid => $value) {
+    $themed_output = theme("webform_mail_". $node->webformcomponents[$cid]['type'], $value, $node->webformcomponents[$cid]);
     if ($themed_output) {
-      // Indent the output and add to message
-      $message .= $indent;
       $themed_output = rtrim($themed_output, "\n");
-      $message .= str_replace("\n", "\n". $indent, $themed_output);
+      $message .= $themed_output;
       $message .= "\n";
     }
     // Generic output for single values
     elseif (!is_array($value)) {
       // Note that newlines cannot be preceeded by spaces to display properly in some clients
-      if ($node->webformcomponents[$key]['name']) {
+      if ($node->webformcomponents[$cid]['name']) {
         // if text is more than 60 characters, put it on a new line with space after
-        $long = (strlen($indent . $node->webformcomponents[$key]['name'] . $value)) > 60;
-        $message .= $indent.$node->webformcomponents[$key]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
+        $long = (strlen($node->webformcomponents[$cid]['name'] . $value)) > 60;
+        $message .= $node->webformcomponents[$cid]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
       }
     }
-    // Else use a generic output for arrays
-    else {
-      $message .=  $node->webformcomponents[$key]['name'] .":\n";
-      foreach ($value as $k => $v) {
-        $message .= _webform_submission_format($k, $v, $node, $indent ."  ");
-      }
-    }
-    return ($message);
   }
-  $message .= t('Submitted values are');
-  $message .= _webform_submission_format("", $form_values['submitted_tree'], $node);
-  
+
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
   $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'.$node->nid, "sid=". $sid);

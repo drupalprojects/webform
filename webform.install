@@ -27,6 +27,7 @@ function webform_install() {
         nid int(10) unsigned NOT NULL default '0',
         cid int(10) unsigned NOT NULL default '0',
         pid int(10) unsigned NOT NULL default '0',
+        form_key varchar(128) default NULL,
         name varchar(128) default NULL,
         type varchar(16) default NULL,
         value text default NULL,
@@ -79,6 +80,7 @@ function webform_install() {
         nid integer NOT NULL default '0',
         cid integer NOT NULL default '0',
         pid integer NOT NULL default '0',
+        form_key varchar(128) default NULL,
         name varchar(128) NOT NULL default '',
         type varchar(16) NOT NULL default '',
         value text NOT NULL default '',
@@ -317,6 +319,17 @@ function webform_update_9() {
   }
   $ret[] = update_sql("ALTER TABLE {webform} ADD email_from_name varchar(255) NULL DEFAULT NULL AFTER email");
   
+  return $ret;
+}
+
+/**
+ * Add the form_key column to the webform_component table.
+ */
+function webform_update_10() {
+  $ret = array();
+
+  $ret[] = update_sql("ALTER TABLE {webform_component} ADD form_key varchar(128) NULL DEFAULT NULL AFTER pid");
+
   return $ret;
 }
 

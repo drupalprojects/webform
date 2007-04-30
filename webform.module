@@ -102,20 +102,20 @@ function webform_insert($node) {
     $node->submit_interval = '157784630'; // 5 years, close enough to 'ever'
   }
   
-  // Insert the Webform
-  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
-  
   // Re-add existing components from the POST array
   if (isset($_POST['webformcomponents'])) {
     unset($node->webformcomponents);
     $node->webformcomponents = _webform_components_decode($_POST['webformcomponents']);
   }
+  
+  // Insert the Webform
+  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
 
   // Insert the components into the database
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
     foreach ($node->webformcomponents as $cid => $component) {   
-      db_query("INSERT INTO {webform_component} (nid, cid, pid, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', %d, %d)",
-        $node->nid, $cid, $component['parent'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), ($component['mandatory'] ? 1 : 0), $component['weight']
+      db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)",
+        $node->nid, $cid, $component['parent'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), ($component['mandatory'] ? 1 : 0), $component['weight']
       );
     }
   }
@@ -141,6 +141,7 @@ function webform_load($node) {
   $result= db_query('SELECT * FROM {webform_component} WHERE nid = %d ORDER BY weight, name', $node->nid);
   while ($c= db_fetch_array($result)) {
     $page->webformcomponents[$c['cid']]['cid']= $c['cid'];
+    $page->webformcomponents[$c['cid']]['form_key']= $c['form_key'] ? $c['form_key'] : $c['cid'];
     $page->webformcomponents[$c['cid']]['name']= $c['name'];
     $page->webformcomponents[$c['cid']]['type']= $c['type'];
     $page->webformcomponents[$c['cid']]['value']= $c['value'];
@@ -382,26 +383,35 @@ function webform_prepare(&$node) {
         unset($_POST['node']['webformcomponents']);
       }
       
-      // Add the component changes/additions to the node components
-      $cid = $_POST['field']['key'];
-      if (isset($_POST['field']) && is_array($_POST['field'])) {
-        unset($node->webformcomponents[$cid]);
-        foreach ($_POST['field'] as $key => $value) {
-          $node->webformcomponents[$cid][$key] = $value;
-        }
-        unset($_POST['field']);
-      }
-  
       // Add saved values of the node
       $old_edit = (array)$node;
       $new_edit = (array)$_POST['node'];
       
       $edit = array_merge($old_edit, $new_edit);
       $node = (object)$edit;
+          
+      // Validate the field form
+      $result = webform_edit_field_form_validate($_POST['field']);
+      if (!$result) {
+        $node->webformcomponents[$node->selected_component] = $_POST['field'];
+        $_POST = $_POST['node'];
+        $_POST['op'] = $op = t('Edit Selected');
+        $output = drupal_get_form('webform_edit_field_form', $node);
+        print theme('page', $output);
+        exit();
+      }
+      else {
+        // Add the component changes/additions to the node components
+        $cid = $_POST['field']['key'];
+        if (isset($_POST['field']) && is_array($_POST['field'])) {
+          unset($node->webformcomponents[$cid]);
+          foreach ($_POST['field'] as $key => $value) {
+            $node->webformcomponents[$cid][$key] = $value;
+          }
+          unset($_POST['field']);
+        }
+      }
       
-      // Restore the node form's saved POST values
-      //$_POST = $_POST['node'];
-
       // Display editted message
       drupal_set_message(t('The form component has been changed. Remember to press Submit on the bottom of this form to save your changes.'));
       break;
@@ -438,15 +448,16 @@ function webform_validate(&$node) {
       if (empty($errors)) {
         $output = drupal_get_form('webform_edit_field_form', $node);
         print theme('page', $output);
-        exit(0);
+        exit();
       }
       break;
+
     case t('Edit Selected'):
       $errors = form_get_errors();
       if (empty($errors)) {
         $output = drupal_get_form('webform_edit_field_form', $node);
         print theme('page', $output);
-        exit(0);
+        exit();
       }
       break;
     case t('Delete Selected'):
@@ -835,6 +846,7 @@ function webform_edit_field_form(&$node) {
     // We are editing a existing field.
     // Fetch all filed data into the $currfield object.
     $currfield['key'] = $cid;
+    $currfield['form_key'] = $component['form_key'] ? $component['form_key'] : $cid;
     $currfield['type'] = $component['type'];
     $currfield['name'] = $component['name'];
     $currfield['default'] = $component['value'];
@@ -884,11 +896,19 @@ function webform_edit_field_form(&$node) {
     '#type' => 'hidden',
     '#value' => $currfield['key'],
   );
+  $form['field']['form_key'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $currfield['form_key'],
+    '#title' => t('Field Key'),
+    '#description' => t('Enter a machine readable key for this form element. May contain only alphanumeric characters and underscores.'),
+    '#required' => TRUE,
+    '#weight' => -2,
+  );
   $form['field']['name'] = array(
     '#type' => 'textfield',
     '#default_value' => $currfield['name'],
-    '#title' => t("Name"),
-    '#description' => t('Name of the field. This is used as a descriptive label and as the key when saving data in the database.'),
+    '#title' => t("Label"),
+    '#description' => t('This is used as a descriptive label when displaying this form element.'),
     '#required' => TRUE,
     '#weight' => -1,
   );
@@ -981,6 +1001,17 @@ function webform_edit_field_form(&$node) {
   _webform_edit_field_form_hiddens($form, 'node', $_POST);
 
   return $form;
+}
+
+/**
+ * Field name validation for the webform unique key. Must be alphanumeric.
+ */
+function webform_edit_field_form_validate($form_values) {
+  if (!preg_match('!^[a-z0-9_]+$!', $form_values['form_key'])) {
+    form_set_error('key', t('The field name %field_name is invalid.', array('%field_name' => $form_values['form_key'])));
+    return false;
+  }
+  return true;
 }
 
 function webform_view(&$node, $teaser = 0, $page = 0) {
@@ -1109,14 +1140,14 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
     // previously submitted in the submission numbered $sid_to_display
     $display_function = "_webform_submission_display_". $component['type'];
     if (function_exists($display_function)) {
-      $parent_fieldset[$cid] = $display_function($submission['data'][$cid], $component);
+      $parent_fieldset[$component['form_key']] = $display_function($submission['data'][$cid], $component);
     }
   }
   else {
     // Add this user-defined field to the form (with all the values that are always available)      
     $render_function = "_webform_render_". $component['type'];
     if (function_exists($render_function)) {
-      $parent_fieldset[$cid] = $render_function($component); // Call the component render function
+      $parent_fieldset[$component['form_key']] = $render_function($component); // Call the component render function
     }
     else {
       drupal_set_message(t("The webform component") ." '". $component['type'] ."' ". t("is not able to be displayed"));
@@ -1138,7 +1169,7 @@ function webform_client_form_validate($form_id, $form_values) {
   // Flatten trees within the submission
   $form_values['submitted_tree'] = $form_values['submitted'];
   _webform_client_form_submit_flatten($node, $form_values['submitted'], $form_values['submitted']);
-  
+
   // Verify that this submission is within the submission limits on this form
   if ($violation_count = _webform_submission_limit_check ($node, $form_values)) {
     // If the webform is being swamped by repeated entries, limit the messages in watchdog
@@ -1288,14 +1319,16 @@ function webform_client_form_submit($form_id, $form_values) {
  */
 function _webform_client_form_submit_flatten($node, $fieldset, &$form) {
   if (is_array($fieldset)) {
-    foreach ($fieldset as $key => $value) {
-      if (is_array($value) && $node->webformcomponents[$key]['type'] == 'fieldset') {
+    foreach ($fieldset as $form_key => $value) {
+      $cid = webform_get_cid($node, $form_key);
+      if (is_array($value) && $node->webformcomponents[$cid]['type'] == 'fieldset') {
         _webform_client_form_submit_flatten($node, $value, $form);
-        $form[$key] = ""; // Set the fieldset value to a blank
-        unset($fieldset[$key]);
+        $form[$cid] = ""; // Set the fieldset value to a blank
+        unset($fieldset[$form_key]);
       }
       else {
-        $form[$key] = $value;
+        $form[$cid] = $value;
+        unset($form[$form_key]);
       }
     }
   }
@@ -1390,10 +1423,10 @@ function _webform_save_submission($node, $submitted) {
 
   foreach ($submitted as $cid => $value) {
     if (is_array($value)) {
-      $key = 0;
+      $delta = 0;
       foreach ($value as $k => $v) {
-        db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) "."VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, $key, $v);
-        $key++;
+        db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) "."VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, $delta, $v);
+        $delta++;
       }
     }
     else {
@@ -1450,6 +1483,14 @@ function webform_results() {
     }
 
     return $content;
+  }
+}
+
+function webform_get_cid($node, $form_key) {
+  foreach ($node->webformcomponents as $cid => $component) {
+    if ($component['form_key'] == $form_key) {
+      return $cid;
+    }
   }
 }
 
