@@ -1165,7 +1165,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
   
   if (is_array($component['children'])) {
     foreach ($component['children'] as $scid => $subcomponent) {
-      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$cid], $form, $submission);
+      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$component['form_key']], $form, $submission);
     }
   }
 }
