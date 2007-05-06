@@ -350,9 +350,9 @@ function webform_prepare(&$node) {
       if (is_array($node->webformcomponents)) {
         $new_parent = $node->webformcomponents[$delete_cid]['parent'];
         // Fix-up any children of the deleted component
-        foreach ($node->webformcomponents as $cid => &$component) {
+        foreach ($node->webformcomponents as $cid => $component) {
           if ($component['parent'] == $delete_cid) {
-            $component['parent'] = $new_parent;
+            $node->webformcomponents[$cid]['parent'] = $new_parent;
           }
         }
         unset($node->webformcomponents[$delete_cid]);
