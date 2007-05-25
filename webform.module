@@ -1023,6 +1023,20 @@ function webform_edit_field_form_validate($form_values) {
   return true;
 }
 
+/**
+ * Implementation of hook_forms(). All webform_client_form forms share the same form handler
+ */
+function webform_forms() {
+  global $webform_form_list;
+
+  if (is_array($webform_form_list)) {
+    foreach ($webform_form_list as $form_id) {
+      $forms['webform_client_form_'. $form_id]['callback'] = 'webform_client_form';
+    }
+  }
+  return $forms;
+}
+
 function webform_view(&$node, $teaser = 0, $page = 0) {
   // If a teaser, do not display the form
   if ($teaser) {
@@ -1053,7 +1067,9 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     }
   }
   
-  $output = drupal_get_form('webform_client_form', $node, $submission);
+  global $webform_form_list;
+  $webform_form_list[] = $node->nid;
+  $output = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission);
 
   // Remove the surrounding <form> tag if this is a preview
   if ($preview) {
@@ -1071,7 +1087,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
  * submission, pass in the $submission variable with the contents of the
  * submission to be displayed.
  */
-function webform_client_form(&$node, $submission = array()) {
+function webform_client_form(&$node, $submission = array(), $form_values = NULL) {
   global $user;
   
   _webform_load_components(); // Load all the components
@@ -1092,6 +1108,7 @@ function webform_client_form(&$node, $submission = array()) {
   $form['#theme'] = 'webform_form_'.$node->nid;
   // Set the encoding type (necessary for file uploads)
   $form['#attributes']['enctype'] = 'multipart/form-data';
+  $form['#base'] = 'webform_client_form';
   
   if (is_array($node->webformcomponents) && !empty ($node->webformcomponents)) {
     // Prepare a new form array
