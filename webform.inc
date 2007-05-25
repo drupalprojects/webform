@@ -122,16 +122,16 @@ function _webform_fetch_submissions($nid) {
 
 /* This function is used to fetch a specified submission.
  */
-function _webform_fetch_submission($sid) {
+function _webform_fetch_submission($sid, $nid) {
   
   $submission = array();
 
   $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data '. 
            'FROM {webform_submitted_data} as sd '. 
            'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '. 
-           'WHERE sd.sid = %d';
+           'WHERE sd.sid = %d AND s.nid = %d';
 
-  $res = db_query($query, $sid);
+  $res = db_query($query, $sid, $nid);
   $recs = db_num_rows($res);
   if ($recs >= 1) {
     $row = db_fetch_array($res);

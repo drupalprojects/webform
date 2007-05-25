@@ -1059,7 +1059,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     if (user_access('access webform results')) {
       drupal_set_title('Submission #'.$sid_to_display);
       $node->body = "";
-      $submission = _webform_fetch_submission($sid_to_display);
+      $submission = _webform_fetch_submission($sid_to_display, $node->nid);
     }
     else {
       $sid_to_display = NULL; // This user is not allowed to access a submitted node. Deny the attempt without alert.
