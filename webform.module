@@ -878,6 +878,7 @@ function webform_edit_field_form(&$node) {
     }
     // We are editing a new node
     $currfield['key'] = time();
+    $currfield['form_key'] = $currfield['key'];
     $currfield['type'] = $_POST['webform_newfield_type'];
     $currfield['name'] = $currfield['type'] ."_". $currfield['key'];
     drupal_set_title("Add new component (". $currfield['type'] .")");
@@ -959,7 +960,7 @@ function webform_edit_field_form(&$node) {
   
   $form['field']['weight'] = array(
     '#type' => 'weight',
-    '#delta' => (count($_POST['webformcomponents'])>10?count($_POST['webformcomponents']):10),
+    '#delta' => count($_POST['webformcomponents']) > 10 ? count($_POST['webformcomponents']) : 10,
     '#title' => t("Weight"),
     '#default_value' => $currfield['weight'],
     '#description' => t('Optional. In the menu, the heavier items will sink and the lighter items will be positioned nearer the top.'),
