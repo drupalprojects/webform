@@ -580,6 +580,7 @@ function webform_form(&$node, &$param) {
   }
 
   $component_types =  _webform_load_components();
+  natcasesort($component_types);
   $form['components']['webform_newfield_type'] = array(
     '#type' => 'select',
     '#title' => t('Add a new component'),
