@@ -119,6 +119,8 @@ function webform_insert($node) {
       );
     }
   }
+
+  drupal_goto('node/'. $node->nid);
 }
 
 function webform_update($node) {  
@@ -871,7 +873,7 @@ function webform_edit_field_form(&$node) {
     $component_types =  _webform_load_components();
     $new_component_type = $_POST['webform_newfield_type'];
     if (empty($new_component_type) || !key_exists($new_component_type, $component_types)) {
-      drupal_set_message(t('Unknown component type \''. $new_component_type .'\''), 'error');
+      drupal_set_message(t('Unknown component type %component', array('%component' => $new_component_type)), 'error');
       drupal_set_title("Webform Error");
       print theme('page', "");
       return;
@@ -975,7 +977,7 @@ function webform_edit_field_form(&$node) {
     $additional_form_elements = $edit_function($currfield); // Call the component render function
   }
   else {
-    drupal_set_message(t("The webform component") ." '". $currfield['type'] ."' ". t(" does not have an edit function defined"));
+    drupal_set_message(t("The webform component of type @type does not have an edit function defined.", array('@type' => $currfield['type'])));
   }
 
   // Merge the additional fields with the current fields:
@@ -1178,7 +1180,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
       $parent_fieldset[$component['form_key']] = $render_function($component); // Call the component render function
     }
     else {
-      drupal_set_message(t("The webform component") ." '". $component['type'] ."' ". t("is not able to be displayed"));
+      drupal_set_message(t("The webform component @type is not able to be displayed", array('@type' => $component['type'])));
     }
   }
   
@@ -1351,12 +1353,13 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form) {
       $cid = webform_get_cid($node, $form_key);
       if (is_array($value) && $node->webformcomponents[$cid]['type'] == 'fieldset') {
         _webform_client_form_submit_flatten($node, $value, $form);
-        $form[$cid] = ""; // Set the fieldset value to a blank
-        unset($fieldset[$form_key]);
+        unset($form[$form_key]);
+        unset($form[$cid]);
       }
       else {
-        $form[$cid] = $value;
+        // the order here is significant!
         unset($form[$form_key]);
+        $form[$cid] = $value;
       }
     }
   }
