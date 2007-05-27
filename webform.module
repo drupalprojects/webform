@@ -784,7 +784,7 @@ function theme_webform_node_form($form) {
   $rows = array();
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
     $component_tree = array();
-    _webform_components_tree_build($node->webformcomponents, $component_tree);
+    _webform_components_tree_build($node->webformcomponents, $component_tree, 0, $page_count);
     $component_tree = _webform_components_tree_sort($component_tree);
     // Build the table rows
     function _webform_add_rows($cid, $component, $level, &$form, &$rows) { 
@@ -1117,10 +1117,70 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
     
     // Put the components into a tree structure
     $component_tree = array();
-    _webform_components_tree_build($node->webformcomponents, $component_tree);
+    $page_count = 1;
+    _webform_components_tree_build($node->webformcomponents, $component_tree, 0, $page_count);
+
+    if (!$preview && empty($submission)) {
+      if($page_count > 1) {
+        $next_page = t('Next Page >');
+        $prev_page = t('< Previous Page');
+        if (isset($form_values)) {
+          $page_num = $form_values['details']['page_num'];
+          if ($form_values['op'] == $prev_page && $page_num > 1) {
+            $page_num--;
+          }
+          else if ($form_values['op'] == $next_page && $page_num < $page_count) {
+            $page_num++;
+          }
+        }
+        else {
+          $page_num = 1;
+        }
+  
+        $form['#multistep'] = TRUE;
+        $form['#redirect'] = FALSE;
+  
+        $form['details']['page_num'] = array(
+          '#type'      => 'hidden',
+          '#value'     => $page_num,
+        );
+        // Add the submit button(s)
+        if ($page_num > 1) {
+          $form['submitbutton_prev'] = array(
+            '#type' => 'submit',
+            '#value' => $prev_page,
+            '#weight' => 1000,
+          );
+        }
+        if ($page_num == $page_count) {
+          $form['submitbutton'] = array(
+            '#type' => 'submit',
+            '#value' => t('Submit'),
+            '#weight' => 1001,
+          );
+        }
+        else if ($page_num < $page_count) {
+          $form['submitbutton_next'] = array(
+            '#type' => 'submit',
+            '#value' => $next_page,
+            '#weight' => 1001,
+          );
+        }
+      }
+      else {
+        $page_num = 1;
+        // Add the submit button
+        $form['submitbutton'] = array(
+          '#type' => 'submit',
+          '#value' => t('Submit'),
+          '#weight' => 1000,
+        );
+      }
+    }
+
     // Recursively add components to the form
     foreach ($component_tree['children'] as $cid => $component) {
-      _webform_client_form_add_component($cid, $component, $form['submitted'], $form, $submission);
+      _webform_client_form_add_component($cid, $component, $form['submitted'], $form, $submission, $page_num);
     }
     // Do not display the submit button if this is a preview or submission view
     if (!$preview && empty($submission)) {
@@ -1142,20 +1202,13 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
         '#type'      => 'value',
         '#value'     => $node->nid,
       );
-      
-      // Add the submit button
-      $form['submitbutton'] = array(
-        '#type' => 'submit',
-        '#value' => t('Submit'),
-        '#weight' => 1000,
-      );
     }
   }
   
   return $form;
 }
 
-function _webform_client_form_add_component($cid, $component, &$parent_fieldset, &$form, $submission) {
+function _webform_client_form_add_component($cid, $component, &$parent_fieldset, &$form, $submission, $page_num) {
   // Load with submission information if necessary
   if (!empty($submission)) {
     // This component is display only, with the value set according information
@@ -1165,7 +1218,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
       $parent_fieldset[$component['form_key']] = $display_function($submission['data'][$cid], $component);
     }
   }
-  else {
+  else if ($component['page_num'] == $page_num) {
     // Add this user-defined field to the form (with all the values that are always available)      
     $render_function = "_webform_render_". $component['type'];
     if (function_exists($render_function)) {
@@ -1178,7 +1231,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
   
   if (is_array($component['children'])) {
     foreach ($component['children'] as $scid => $subcomponent) {
-      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$component['form_key']], $form, $submission);
+      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$component['form_key']], $form, $submission, $page_num);
     }
   }
 }
@@ -1227,11 +1280,38 @@ function webform_client_form_submit($form_id, $form_values) {
   global $user, $base_url;
   include_once (drupal_get_path('module', 'webform')."/webform.inc");
   $node = node_load(array('nid'=>$form_values['details']['nid']));
+  $session_key = 'webform_form_'.$node->nid;
+
+  if ($form_values['op'] != t('Submit')) {
+    // This is a multi-page form that is not yet complete.
+    // Copy values stored during previous steps into $_POST because they are needed in form_builder() to repopulate the form.
+    if (is_array($_SESSION[$session_key])) {
+      foreach ($_SESSION[$session_key] as $key => $val) {
+        $_POST['submitted'][$key] = $val;
+      }
+    }
+
+    // Store values from an intermediate stage of a multistep form in $_SESSION
+    if (is_array($form_values['submitted'])) {
+      foreach ($form_values['submitted'] as $key => $val) {
+        $_SESSION[$session_key][$key] = $val;
+      }
+    }
+    return;
+  }
+
+  $form_values['submitted_tree'] = $form_values['submitted'];
+  if (is_array($_SESSION[$session_key])) {
+    // Merge any submission data stored in $_SESSION for multistep forms
+    foreach ($_SESSION[$session_key] as $key => $val) {
+      $form_values['submitted'][$key] = $val;
+    }
+    unset($_SESSION[$session_key]);
+  }
 
   // Flatten trees within the submission
-  $form_values['submitted_tree'] = $form_values['submitted'];
   _webform_client_form_submit_flatten($node, $form_values['submitted'], $form_values['submitted']);
-  
+
   // Process post-submission data if necessary in the components
   _webform_load_components();
   foreach ($node->webformcomponents as $cid => $component) {
@@ -1542,11 +1622,15 @@ function _webform_components_decode($components) {
 /**
  * Convert an array of components into a tree
  */
-function _webform_components_tree_build($src, &$tree, $parent = 0) {
+function _webform_components_tree_build($src, &$tree, $parent, &$page_count) {
   foreach ($src as $cid => $component) {
     if ($component['parent'] == $parent) {
-      _webform_components_tree_build($src, $component, $cid);
+      _webform_components_tree_build($src, $component, $cid, $page_count);
       $tree['children'][$cid] = $component;
+      $tree['children'][$cid]['page_num'] = $page_count;
+      if ($component['type'] == 'pagebreak') {
+        $page_count++;
+      }
     }
   }
   return $tree;
