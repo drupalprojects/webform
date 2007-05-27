@@ -77,68 +77,75 @@ function _webform_render_date ($component) {
     $day = gmdate('j',$timestamp);
   }
   
-  $formItem['#type'] = 'fieldset';
-  $formItem['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
-  $formItem['#weight'] = $component['weight'];
-  $formItem['#description'] = _webform_filtervalues($component['extra']['description']);
-  $formItem['#prefix'] = '<div class="webform-component-'.$component['type'].' container-inline" id="webform-component-'._webform_safe_name($component['name']).'">';
-  $formItem['#suffix'] = '</div>';
+  $form_item['#type'] = 'fieldset';
+  $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
+  $form_item['#weight'] = $component['weight'];
+  $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
+  $form_item['#prefix'] = '<div class="webform-component-'.$component['type'].' container-inline" id="webform-component-'._webform_safe_name($component['name']).'">';
+  $form_item['#suffix'] = '</div>';
   if ($component['mandatory']) {
-    $formItem['#title'] .= '<span class="form-required" title="'.t("This field is required.").'">*</span>';
+    $form_item['#title'] .= '<span class="form-required" title="'.t("This field is required.").'">*</span>';
   }
   
-  $formItem['month'] = array(
+  $form_item['month'] = array(
     '#type' => 'select',
     '#default_value' => $month,
     '#options' => $months,
-    '#validate' => array ('webform_validate_date' => array ('month',$component['name'],$component['mandatory']) ),
+    '#validate' => array('webform_validate_date' => array('month', $component['name'], $component['form_key'], $component['mandatory'])),
     );
-  $formItem['day'] = array(
+  $form_item['day'] = array(
     '#type' => 'select',
     '#default_value' => $day,
     '#options' => $days,
-    '#validate' => array ('webform_validate_date' => array ('day',$component['name'],$component['mandatory']) ),
+    '#validate' => array('webform_validate_date' => array('day', $component['name'], $component['form_key'], $component['mandatory'])),
     );
-  $formItem['year'] = array(
+  $form_item['year'] = array(
     '#type' => 'textfield',
     '#default_value' => $year,
     '#maxlength' => 4,
     '#size' => 4,
-    '#validate' => array ('webform_validate_date' => array ('year',$component['name'],$component['mandatory']) ),
+    '#validate' => array('webform_validate_date' => array('year', $component['name'], $component['form_key'], $component['mandatory'])),
     );
     
-  return $formItem;
+  return $form_item;
 }
 
-function webform_validate_date ($field,$fieldName,$componentName,$mandatory) {
-  static $completeDate;
-  switch ($fieldName) {
+function webform_validate_date($field, $field_name, $component_name, $component_key, $mandatory) {
+  static $complete_date;
+
+  switch ($field_name) {
     case 'month':
-    $completeDate['month'] = $field['#value'];
+      $complete_date['month'] = $field['#value'];
+      break;
     case 'day':
-    $completeDate['day'] = $field['#value'];
+      $complete_date['day'] = $field['#value'];
+      break;
     case 'year':
-    $completeDate['year'] = $field['#value'];
+      $complete_date['year'] = $field['#value'];
+      break;
   }
   
   // Check if the user filled the required fields
   if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error ($fieldName,$componentName." ".htmlspecialchars($fieldName)." ".t(" field required"));
+    form_set_error(t("@type %name field required", array('@type' => $component_name, '%name' => $field_name)));
     return false;
   }
   
   // Check for a valid date
-  if ( (isset($completeDate['month']) &&
-        isset($completeDate['day']) &&
-        isset($completeDate['year'])) &&
-       ($completeDate['month'] !== "" ||
-        $completeDate['day']   !== "" ||
-        $completeDate['year']  !== "")
-     ){ 
-    if (!checkdate((int)$completeDate['month'],(int)$completeDate['day'],(int)$completeDate['year'])) {
-      form_set_error ($componentName,t("Entered %name is not a valid date",array('%name' => $componentName)));
+  if ( (isset($complete_date['month']) &&
+        isset($complete_date['day']) &&
+        isset($complete_date['year'])) &&
+       ($complete_date['month'] !== "" ||
+        $complete_date['day']   !== "" ||
+        $complete_date['year']  !== "")
+     ) { 
+    if (!checkdate((int)$complete_date['month'], (int)$complete_date['day'], (int)$complete_date['year'])) {
+      form_set_error($component_key .']['. $field_name, t("Entered %name is not a valid date.", array('%name' => $component_name)));
+      $complete_date = array();
       return false;
     }
+
+    $complete_date = array();
   }
 }
 
@@ -149,15 +156,15 @@ function webform_validate_date ($field,$fieldName,$componentName,$mandatory) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_date ($data,$component) {
-  $formItem = _webform_render_date($component);
-  $formItem['month']['#default_value'] = $data['value']['0'];
-  $formItem['day']['#default_value']   = $data['value']['1'];
-  $formItem['year']['#default_value']  = $data['value']['2'];
-  $formItem['month']['#attributes']    = array("disabled" => "disabled");
-  $formItem['day']['#attributes']      = array("disabled" => "disabled");
-  $formItem['year']['#attributes']     = array("disabled" => "disabled");
-  return $formItem;
+function _webform_submission_display_date ($data, $component) {
+  $form_item = _webform_render_date($component);
+  $form_item['month']['#default_value'] = $data['value']['0'];
+  $form_item['day']['#default_value']   = $data['value']['1'];
+  $form_item['year']['#default_value']  = $data['value']['2'];
+  $form_item['month']['#attributes']    = array("disabled" => "disabled");
+  $form_item['day']['#attributes']      = array("disabled" => "disabled");
+  $form_item['year']['#attributes']     = array("disabled" => "disabled");
+  return $form_item;
 }
 
 /**
@@ -206,7 +213,7 @@ function _webform_analysis_rows_date ($component) {
   $result = db_query($query, $component['nid'], $component['cid']);
   // build an array of timestamps from entered values
   $timestamps = array();
-  $submissions++;
+  $submissions = 1;
   while ($row = db_fetch_array($result)) {
     if ($row['no'] == '0') {
       $submissions++;
