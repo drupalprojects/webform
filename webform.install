@@ -44,7 +44,8 @@ function webform_install() {
         submitted int(11) NOT NULL default '0',
         user varchar(128),
         remote_addr varchar(128),
-        PRIMARY KEY  (nid,sid)
+        PRIMARY KEY  (nid,sid),
+        KEY sid (sid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
@@ -54,7 +55,8 @@ function webform_install() {
         cid int(10) unsigned NOT NULL default '0',
         no int(10) unsigned NOT NULL default '0',
         data longtext,
-        PRIMARY KEY  (nid,sid,cid,no)
+        PRIMARY KEY  (nid,sid,cid,no),
+        KEY sid (sid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
       break;
@@ -97,7 +99,8 @@ function webform_install() {
         submitted integer NOT NULL default '0',
         \"user\" varchar(128),
         remote_addr varchar(128) NOT NULL default '',
-        PRIMARY KEY (nid,sid)
+        PRIMARY KEY (nid,sid),
+        KEY sid (sid)
         )"
       );
     
@@ -107,7 +110,8 @@ function webform_install() {
         cid integer NOT NULL default '0',
         no integer NOT NULL default '0',
         data text NOT NULL default '',
-        PRIMARY KEY (nid,sid,cid,no)
+        PRIMARY KEY (nid,sid,cid,no),
+        KEY sid (sid)
         )"
       );
     break;
@@ -351,6 +355,24 @@ function webform_update_10() {
       break;
   }
 
+  return $ret;
+}
+
+/**
+ * Add unique indexes on Submission IDs for faster joins.
+ */
+function webform_update_11() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD INDEX sid (sid)");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} ADD INDEX sid (sid)");
+      break;
+  }
+  
   return $ret;
 }
 
