@@ -8,23 +8,23 @@
  * are not necessary to specify here (although they may be overridden if desired).
  * @returns An array of form items to be displayed on the edit component page
  **/
-function _webform_edit_markup ($currfield) {
-  $editFields = array();
-  $editFields['mandatory'] = array(); // Do not render the mandatory checkbox
-  $editFields['value'] = array(
+function _webform_edit_markup($currfield) {
+  $edit_fields = array();
+  $edit_fields['mandatory'] = array(); // Do not render the mandatory checkbox
+  $edit_fields['value'] = array(
     '#type' => 'textarea',
     '#title' => t("Value"),
     '#default_value' => $currfield['default'],
-    '#description' => t('Markup allows you to enter custom HTML or PHP logic into your form.').'<br />'.webform_help('webform/helptext#variables'),
+    '#description' => t('Markup allows you to enter custom HTML or PHP logic into your form.') .'<br />'. webform_help('webform/helptext#variables'),
     '#weight' => -1,
   );
   // Add the filter form
-  $editFields['extra']['filter'] = filter_form($currfield['extra']['format'], 0, array('field','extra','format'));
+  $edit_fields['extra']['filter'] = filter_form($currfield['extra']['format'], 0, array('field', 'extra', 'format'));
 
   // No description for markup
-  $editFields['extra']['description'] = array ();
+  $edit_fields['extra']['description'] = array();
 
-  return $editFields;
+  return $edit_fields;
 }
 
 /** 
@@ -33,22 +33,23 @@ function _webform_edit_markup ($currfield) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of a form item to be displayed on the client-side webform
  **/
-function _webform_render_markup ($component) {
+function _webform_render_markup($component) {
   // We don't want users to be able to execute filters outside of their permissions on preview
   if ($_POST['op'] == t('Preview')) {
-    $checkFilter = true;
-  } else {
-    $checkFilter = false;
+    $check_filter = true;
+  }
+  else {
+    $check_filter = false;
   }
   
-  $formItem = array (
-    '#type'          => 'markup',
-    '#weight'        => $component['weight'],
-    '#value'         => _webform_filtervalues(check_markup($component['value'],$component['extra']['format'], $checkFilter), FALSE),
-	'#prefix'        => '<div class="webform-component-'.$component['type'].'" id="webform-component-'._webform_safe_name($component['name']).'">',
-	'#suffix'        => '</div>',
+  $form_item = array(
+    '#type'   => 'markup',
+    '#weight' => $component['weight'],
+    '#value'  => _webform_filtervalues(check_markup($component['value'], $component['extra']['format'], $check_filter), FALSE),
+    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">',
+    '#suffix' => '</div>',
   );
-  return $formItem;
+  return $form_item;
 }
 
 /** 
@@ -58,9 +59,9 @@ function _webform_render_markup ($component) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_markup ($data,$component) {
-  $formItem = _webform_render_markup($component);
-  return $formItem;
+function _webform_submission_display_markup($data, $component) {
+  $form_item = _webform_render_markup($component);
+  return $form_item;
 }
 
 /** 

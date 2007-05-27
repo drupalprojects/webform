@@ -8,27 +8,27 @@
  * are not necessary to specify here (although they may be overridden if desired).
  * @returns An array of form items to be displayed on the edit component page
  **/
-function _webform_edit_time ($currfield) {
-  $editFields = array();
-  $editFields['value'] = array (
+function _webform_edit_time($currfield) {
+  $edit_fields = array();
+  $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
     '#default_value' => $currfield['default'],
-    '#description' => t('The default value of the field.').'<br />'.t('Accepts a time in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as now, +2 hours, and 10:30pm are all valid.'),
+    '#description' => t('The default value of the field.') .'<br />'. t('Accepts a time in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as now, +2 hours, and 10:30pm are all valid.'),
     '#size' => 60,
     '#maxlength' => 127,
     '#weight' => 0,
-    '#validate' => array ('webform_validate_time_string' => array ()),
+    '#validate' => array('webform_validate_time_string' => array()),
   );
-  $editFields['extra']['timezone'] = array (
+  $edit_fields['extra']['timezone'] = array(
     '#type' => 'radios',
     '#title' => t("Timezone"),
     '#default_value' => empty($currfield['extra']['timezone']) ? "site" : $currfield['extra']['timezone'],
-    '#description' => t('Adjust the time according to a specific timezone. Website timezone is defined in the <a href="%settings">Site Settings</a> and is the default.',array('%settings' => url('admin/settings'))),
+    '#description' => t('Adjust the time according to a specific timezone. Website timezone is defined in the <a href="%settings">Site Settings</a> and is the default.', array('%settings' => url('admin/settings'))),
     '#options' => array('site' => 'Website Timezone', 'user' => 'User Timezone', 'gmt' => 'GMT'),
     '#weight' => 0,
   );
-$editFields['extra']['check_daylight_savings'] = array (
+$edit_fields['extra']['check_daylight_savings'] = array(
   '#type' => 'checkbox',
   '#title' => t("Observe Daylight Savings"),
   '#default_value' => $currfield['extra']['check_daylight_savings'],
@@ -36,7 +36,7 @@ $editFields['extra']['check_daylight_savings'] = array (
   '#description' => t('Automatically adjust the time during daylight savings.'),
   '#weight' => 1,
 );
-  $editFields['extra']['hourformat'] = array (
+  $edit_fields['extra']['hourformat'] = array(
     '#type' => 'radios',
     '#title' => t("Time Format"),
     '#default_value' => isset($currfield['extra']['hourformat']) ? $currfield['extra']['hourformat'] : '12-hour',
@@ -44,7 +44,7 @@ $editFields['extra']['check_daylight_savings'] = array (
     '#options' => array('12-hour' => '12-hour (am/pm)', '24-hour' => '24-hour'),
     '#weight' => 2,
   );
-  return $editFields;
+  return $edit_fields;
 }
 
 /** 
@@ -53,7 +53,7 @@ $editFields['extra']['check_daylight_savings'] = array (
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of a form item to be displayed on the client-side webform
  **/
-function _webform_render_time ($component) {
+function _webform_render_time($component) {
   
   // Calculate the timestamp in GMT
   $timestamp = strtotime($component['value']);
@@ -61,12 +61,14 @@ function _webform_render_time ($component) {
     // Use the users timezone
     global $user;
     $timestamp += (int)$user->timezone;
-  } elseif ($component['extra']['timezone'] == "gmt") {
+  }
+  elseif ($component['extra']['timezone'] == "gmt") {
     // Use GMT
     $timestamp += 0;
-  } else {
+  }
+  else {
     // Use the Drupal site time
-    $timestamp += (int)variable_get('date_default_timezone',0);
+    $timestamp += (int)variable_get('date_default_timezone', 0);
   }
 
   // Check for daylight savings time
@@ -78,7 +80,8 @@ function _webform_render_time ($component) {
     $first_hour = 1;
     $last_hour = 12;
     $hour_format = 'g';
-  } else {
+  }
+  else {
     $first_hour = 0;
     $last_hour = 23;
     $hour_format = 'G';
@@ -96,43 +99,43 @@ function _webform_render_time ($component) {
     $am_pm = gmdate('a', $timestamp);
   }
 
-  $formItem['#type'] = 'fieldset';
-  $formItem['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
+  $form_item['#type'] = 'fieldset';
+  $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
   if ($component['mandatory']) {
-    $formItem['#title'] .= '<span class="form-required" title="'.t("This field is required.").'">*</span>';
+    $form_item['#title'] .= '<span class="form-required" title="'. t("This field is required.") .'">*</span>';
   }
-  $formItem['#weight'] = $component['weight'];
-  $formItem['#description'] = _webform_filtervalues($component['extra']['description']);
-  $formItem['#prefix'] = '<div class="webform-component-'.$component['type'].' container-inline" id="webform-component-'._webform_safe_name($component['name']).'">';
-  $formItem['#suffix'] = '</div>';
-  $formItem['hour'] = array(
+  $form_item['#weight'] = $component['weight'];
+  $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
+  $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. _webform_safe_name($component['name']) .'">';
+  $form_item['#suffix'] = '</div>';
+  $form_item['hour'] = array(
     '#prefix' => '',
     '#type' => 'select',
     '#default_value' => $hour,
     '#options' => $hours,
-    '#validate' => array ('webform_validate_time' => array ('hour',$component['name'],$component['mandatory']) ),
+    '#validate' => array('webform_validate_time' => array('hour', $component['name'], $component['mandatory'])),
     );
-  $formItem['minute'] = array(
+  $form_item['minute'] = array(
     '#prefix' => ':',
     '#type' => 'select',
     '#default_value' => $minute,
     '#options' => $minutes,
-    '#validate' => array ('webform_validate_time' => array ('minute',$component['name'],$component['mandatory']) ),
+    '#validate' => array('webform_validate_time' => array('minute', $component['name'], $component['mandatory'])),
     );
   if ($component['extra']['hourformat'] == '12-hour') {
-    $formItem['ampm'] = array(
+    $form_item['ampm'] = array(
       '#type' => 'radios',
       '#default_value' => $am_pm,
       '#options' => $am_pms,
       );
   }
   
-  return $formItem;
+  return $form_item;
 }
 
-function webform_validate_time ($field,$fieldName,$componentName,$mandatory) {
+function webform_validate_time($field, $field_name, $component_name, $mandatory) {
   if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error ($fieldName,$componentName." ".$fieldName." ".t(" field is required"));
+    form_set_error($field_name, $component_name ." ". $field_name ." ". t(" field is required"));
     return false;
   }
 }
@@ -144,22 +147,23 @@ function webform_validate_time ($field,$fieldName,$componentName,$mandatory) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_time ($data,$component) {
-  $formItem = _webform_render_time($component);
-  $formItem['minute']['#default_value']   = $data['value']['1'];
-  $formItem['minute']['#attributes']      = array("disabled" => "disabled");
-  $formItem['hour']['#attributes']        = array("disabled" => "disabled");
-  $formItem['ampm']['#attributes']        = array("disabled" => "disabled");
+function _webform_submission_display_time($data, $component) {
+  $form_item = _webform_render_time($component);
+  $form_item['minute']['#default_value']   = $data['value']['1'];
+  $form_item['minute']['#attributes']      = array("disabled" => "disabled");
+  $form_item['hour']['#attributes']        = array("disabled" => "disabled");
+  $form_item['ampm']['#attributes']        = array("disabled" => "disabled");
   
   // Match the hourly data to the hour format
-  $timestamp = strtotime($data['value']['0'].":".$data['value']['1'].$data['value']['2']);
+  $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
   if ($component['extra']['hourformat'] == "24-hour") {
-    $formItem['hour']['#default_value']     = date("H",$timestamp);
-  } else {
-    $formItem['hour']['#default_value']     = date("g",$timestamp);
-    $formItem['ampm']['#default_value']     = $data['value']['2'];
+    $form_item['hour']['#default_value'] = date("H", $timestamp);
   }
-  return $formItem;
+  else {
+    $form_item['hour']['#default_value'] = date("g", $timestamp);
+    $form_item['ampm']['#default_value'] = $data['value']['2'];
+  }
+  return $form_item;
 }
 
 /**
@@ -170,14 +174,14 @@ function _webform_submission_display_time ($data,$component) {
  * @param array $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns string Textual output to be included in the email
  */
-function theme_webform_mail_time ($data, $component) {
-  $output = $component['name'].":";
+function theme_webform_mail_time($data, $component) {
+  $output = $component['name'] .":";
   if ($data['hour'] && $data['minute']) {
     if ($component['extra']['hourformat'] == "24-hour") {
-      $output .= " ".$data['hour'].":".$data['minute'];
+      $output .= " ". $data['hour'] .":". $data['minute'];
     }
     else {
-      $output .= " ".$data['hour'].":".$data['minute']." ".$data['ampm'];
+      $output .= " ". $data['hour'] .":". $data['minute'] ." ". $data['ampm'];
     }
   }
   return $output;
@@ -202,7 +206,7 @@ function _webform_help_time($section) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of data rows, each containing a statistic for this component's submissions.
  **/
-function _webform_analysis_rows_time ($component) {  
+function _webform_analysis_rows_time($component) {  
   $query = 'SELECT no,data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
@@ -212,7 +216,7 @@ function _webform_analysis_rows_time ($component) {
   $result = db_query($query, $component['nid'], $component['cid']);
   // build an array of timestamps from entered values
   $timestamps = array();
-  $submissions++;
+  $submissions = 1;
   while ($row = db_fetch_array($result)) {
     if ($row['no'] == '0') {
       $submissions++;
@@ -225,11 +229,12 @@ function _webform_analysis_rows_time ($component) {
               $ampm = $row['data'];
               // Build the full timestamp
               if (strlen($hour) > 0 && strlen($minute) > 0 ) {
-                $timestamps[] = strtotime($hour.":".$minute.$ampm);
+                $timestamps[] = strtotime($hour .":". $minute .' '. $ampm);
               }
-            } else {
+            }
+            else {
               // Build military time
-              $timestamps[] = strtotime($hour.":".$minute);
+              $timestamps[] = strtotime($hour .":". $minute);
             }
           }
         }
@@ -240,8 +245,8 @@ function _webform_analysis_rows_time ($component) {
   // Display stats
   // TODO: display date statistics in javascript tabs
   $nonblanks = count($timestamps);
-  $rows[0] = array( t('Left Blank'), ($submissions - $nonblanks));
-  $rows[1] = array( t('User entered value'), $nonblanks);
+  $rows[0] = array(t('Left Blank'), ($submissions - $nonblanks));
+  $rows[1] = array(t('User entered value'), $nonblanks);
   return $rows;
 }
 
@@ -251,15 +256,17 @@ function _webform_analysis_rows_time ($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_table_data_time ($data,$component) {
+function _webform_table_data_time($data, $component) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0) {
-    $timestamp = strtotime($data['value']['0'].":".$data['value']['1'].$data['value']['2']);
+    $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
     if ($component['extra']['hourformat'] == '24-hour') {
-      return check_plain(date("H:i",$timestamp));
-    } else {
-      return check_plain(date("g:i a",$timestamp));
+      return check_plain(date("H:i", $timestamp));
     }
-  } else {
+    else {
+      return check_plain(date("g:i a", $timestamp));
+    }
+  }
+  else {
     return "";
   }
 }
@@ -271,7 +278,7 @@ function _webform_table_data_time ($data,$component) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
  **/
-function _webform_csv_headers_time ($component) {
+function _webform_csv_headers_time($component) {
   $header = array();
   $header[0] = '';
   $header[1] = '';
@@ -285,15 +292,17 @@ function _webform_csv_headers_time ($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
  **/
-function _webform_csv_data_time ($data) {
+function _webform_csv_data_time($data, $component) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0) {
-    $timestamp = strtotime($data['value']['0'].":".$data['value']['1'].$data['value']['2']);
+    $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
     if ($component['extra']['hourformat'] == '24-hour') {
-      return date("H:i",$timestamp);
-    } else {
-      return date("g:i a",$timestamp);
+      return date("H:i", $timestamp);
     }
-  } else {
+    else {
+      return date("g:i a", $timestamp);
+    }
+  }
+  else {
     return "";
   }
 }

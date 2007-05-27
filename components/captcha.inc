@@ -10,16 +10,16 @@
  **/
 function _webform_edit_captcha ($currfield) {
   if (!module_exist("captcha")) {
-    drupal_set_message(t("Using captcha components in webform requires the <a href='http://drupal.org/project/captcha'>Captcha</a> and <a href='http://drupal.org/node/52349'>Textimage</a> modules."),"error");
+    drupal_set_message(t("Using captcha components in webform requires the <a href='http://drupal.org/project/captcha'>Captcha</a> and <a href='http://drupal.org/node/52349'>Textimage</a> modules."), "error");
   }
   
-  $editFields = array();
-  $editFields['value'] = array ();
-  $editFields['mandatory'] = array (
+  $edit_fields = array();
+  $edit_fields['value'] = array();
+  $edit_fields['mandatory'] = array(
     '#type' => 'hidden',
     '#value' => 1,
   );
-  $editFields['mandatory-display'] = array (
+  $edit_fields['mandatory-display'] = array(
     '#type' => 'checkbox',
     '#title' => t("Mandatory"),
     '#default_value' => TRUE,
@@ -27,7 +27,7 @@ function _webform_edit_captcha ($currfield) {
     '#description' => t('Captchas are always mandatory'),
     '#weight' => 2,
   );
-  return $editFields;
+  return $edit_fields;
 }
 
 /** 
@@ -39,7 +39,7 @@ function _webform_edit_captcha ($currfield) {
 function _webform_render_captcha ($component) {
   if (module_exist("captcha")) {
     // Create a dummy form to pass to the captcha function
-    $dummyForm = array();
+    $dummy_form = array();
     // Pass the form to the captcha rendering function
     $captcha_type = variable_get("captcha_type", 'captcha');
     
@@ -54,32 +54,32 @@ function _webform_render_captcha ($component) {
       return array(); // Do not render the captcha at all
     } else {
       if (module_hook($captcha_type, 'captchachallenge')) {
-        call_user_func_array($captcha_type.'_captchachallenge', array(&$dummyForm, &$_SESSION['captcha']));   
+        call_user_func_array($captcha_type.'_captchachallenge', array(&$dummy_form, &$_SESSION['captcha']));   
       }
     }
     // Set a custom validation function (defined below)
-    $dummyForm['captcha_response']['#validate'] = array ("_webform_validate_captcha" => array());
+    $dummy_form['captcha_response']['#validate'] = array("_webform_validate_captcha" => array());
     // Extract the created captcha into formItem to be returned to webform
-    $formItem = $dummyForm['captcha_response'];
-    $formItem['#weight'] = $component['weight']; 
+    $form_item = $dummy_form['captcha_response'];
+    $form_item['#weight'] = $component['weight']; 
     
     // Override the default title if not the default math question (which is used as the title)
     if ($captcha_type != 'captcha') {
-      $formItem['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
+      $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
     }
     // Override the default captcha description if the user has defined something different
     if (strlen(trim($component['extra']['description'])) > 0) {
-      $formItem['#description'] = _webform_filtervalues($component['extra']['description']);
+      $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
     }
     
     // Wrap in a div
-    $formItem['#prefix'] = '<div class="webform-component-'.$component['type'].'" id="webform-component-'._webform_safe_name($component['name']).'">'.$formItem['#prefix'];
-    $formItem['#suffix'] .= "</div>";
+    $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">'. $form_item['#prefix'];
+    $form_item['#suffix'] .= "</div>";
   }
   else {
-    drupal_set_message(t("Unable to render captcha field because the captcha module is not available."),"error");
+    drupal_set_message(t("Unable to render captcha field because the captcha module is not available."), "error");
   }
-  return $formItem;
+  return $form_item;
 }
 /**
  * Helper function for rendering the captcha. The standard captcha module always places
@@ -87,17 +87,17 @@ function _webform_render_captcha ($component) {
  * fieldset in webform, we need to do a recursive check for the field, see if was answered
  * correctly and return the result.
  *
- * @param string $captchaFieldName
+ * @param string $captcha_field_name
  * @param array $fieldset
  * @return boolean 
  */
-function _webform_render_captcha_check($captchaFieldName,$fieldset) {
+function _webform_render_captcha_check($captcha_field_name, $fieldset) {
   foreach ($fieldset as $key => $value) {
-    if ($key == $captchaFieldName) {
+    if ($key == $captcha_field_name) {
       return _webform_validate_captcha($value);
     }
     if (is_array($value)) {
-      _webform_render_captcha_check($captchaFieldName,$value);
+      _webform_render_captcha_check($captcha_field_name, $value);
     }
   }
   return true; // No captcha at all in the array
@@ -118,7 +118,7 @@ function _webform_validate_captcha($captcha_response) {
   $trigger = NULL;
 
   if (module_hook($captcha_type, 'captchavalidate')) {
-    call_user_func_array($captcha_type.'_captchavalidate', array(&$captcha_response, &$_SESSION['captcha_correct']));
+    call_user_func_array($captcha_type .'_captchavalidate', array(&$captcha_response, &$_SESSION['captcha_correct']));
   }
   
   return $_SESSION['captcha_correct'];
@@ -140,7 +140,7 @@ function _webform_help_captcha($section) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_captcha ($component, $data) {
-  $formItem = array();
-  return $formItem;
+function _webform_submission_display_captcha($component, $data) {
+  $form_item = array();
+  return $form_item;
 }
