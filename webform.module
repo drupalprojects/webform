@@ -784,6 +784,7 @@ function theme_webform_node_form($form) {
   $rows = array();
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
     $component_tree = array();
+    $page_count = 1;
     _webform_components_tree_build($node->webformcomponents, $component_tree, 0, $page_count);
     $component_tree = _webform_components_tree_sort($component_tree);
     // Build the table rows
