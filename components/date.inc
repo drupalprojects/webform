@@ -8,26 +8,26 @@
  * are not necessary to specify here (although they may be overridden if desired).
  * @returns An array of form items to be displayed on the edit component page
  **/
-function _webform_edit_date ($currfield) {
-  $editFields = array();
-  $editFields['value'] = array (
+function _webform_edit_date($currfield) {
+  $edit_fields = array();
+  $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
     '#default_value' => $currfield['default'],
-    '#description' => t('The default value of the field.').'<br />'.t('Accepts any date in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
+    '#description' => t('The default value of the field.') .'<br />'. t('Accepts any date in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
     '#size' => 60,
     '#maxlength' => 127,
     '#weight' => 0,
   );
-  $editFields['extra']['timezone'] = array (
+  $edit_fields['extra']['timezone'] = array(
     '#type' => 'radios',
     '#title' => t("Timezone"),
     '#default_value' => empty($currfield['extra']['timezone']) ? "site" : $currfield['extra']['timezone'],
-    '#description' => t('Adjust the date according to a specific timezone. Website timezone is defined in the <a href="%settings">Site Settings</a> and is the default.',array('%settings' => url('admin/settings'))),
+    '#description' => t('Adjust the date according to a specific timezone. Website timezone is defined in the <a href="%settings">Site Settings</a> and is the default.', array('%settings' => url('admin/settings'))),
     '#options' => array('site' => 'Website Timezone', 'user' => 'User Timezone', 'gmt' => 'GMT'),
     '#weight' => 0,
   );
-  $editFields['extra']['check_daylight_savings'] = array (
+  $edit_fields['extra']['check_daylight_savings'] = array(
     '#type' => 'checkbox',
     '#title' => t("Observe Daylight Savings"),
     '#default_value' => $currfield['extra']['check_daylight_savings'],
@@ -36,7 +36,7 @@ function _webform_edit_date ($currfield) {
     '#weight' => 1,
   );
 
-  return $editFields;
+  return $edit_fields;
 }
 
 /** 
@@ -45,7 +45,7 @@ function _webform_edit_date ($currfield) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of a form item to be displayed on the client-side webform
  **/
-function _webform_render_date ($component) {
+function _webform_render_date($component) {
   // Calculate the timestamp in GMT
   $timestamp = strtotime($component['value']);
   
@@ -53,13 +53,14 @@ function _webform_render_date ($component) {
     // Use the users timezone
     global $user;
     $timestamp += (int)$user->timezone;
-  } elseif ($component['extra']['timezone'] == "gmt") {
+  }
+  elseif ($component['extra']['timezone'] == "gmt") {
     // Use GMT
     $timestamp += 0;
   }
   else {
     // Use the Drupal site time
-    $timestamp += variable_get('date_default_timezone',0);
+    $timestamp += variable_get('date_default_timezone', 0);
   }
   
   // Check for daylight savings time
@@ -74,17 +75,17 @@ function _webform_render_date ($component) {
   if (strlen($component['value']) > 0) {
     $year = gmdate('Y', $timestamp);
     $month = gmdate('n', $timestamp);
-    $day = gmdate('j',$timestamp);
+    $day = gmdate('j', $timestamp);
   }
   
   $form_item['#type'] = 'fieldset';
   $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
   $form_item['#weight'] = $component['weight'];
   $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
-  $form_item['#prefix'] = '<div class="webform-component-'.$component['type'].' container-inline" id="webform-component-'._webform_safe_name($component['name']).'">';
+  $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. _webform_safe_name($component['name']) .'">';
   $form_item['#suffix'] = '</div>';
   if ($component['mandatory']) {
-    $form_item['#title'] .= '<span class="form-required" title="'.t("This field is required.").'">*</span>';
+    $form_item['#title'] .= '<span class="form-required" title="'. t("This field is required.") .'">*</span>';
   }
   
   $form_item['month'] = array(
@@ -156,7 +157,7 @@ function webform_validate_date($field, $field_name, $component_name, $component_
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_submission_display_date ($data, $component) {
+function _webform_submission_display_date($data, $component) {
   $form_item = _webform_render_date($component);
   $form_item['month']['#default_value'] = $data['value']['0'];
   $form_item['day']['#default_value']   = $data['value']['1'];
@@ -175,11 +176,11 @@ function _webform_submission_display_date ($data, $component) {
  * @param array $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns string Textual output to be included in the email
  */
-function theme_webform_mail_date ($data, $component) {
-  $output = $component['name'].":";
+function theme_webform_mail_date($data, $component) {
+  $output = $component['name'] .":";
   if ($data['month'] && $data['day']) {
-    $timestamp = strtotime($data['month']."/".$data['day']."/".$data['year']);
-    $output .= " ".format_date($timestamp, "custom", 'F j, Y');
+    $timestamp = strtotime($data['month'] ."/". $data['day'] ."/". $data['year']);
+    $output .= " ". format_date($timestamp, "custom", 'F j, Y');
   }
   return $output;
 }
@@ -203,7 +204,7 @@ function _webform_help_date($section) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of data rows, each containing a statistic for this component's submissions.
  **/
-function _webform_analysis_rows_date ($component) {  
+function _webform_analysis_rows_date($component) {  
   $query = 'SELECT no,data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
@@ -226,11 +227,11 @@ function _webform_analysis_rows_date ($component) {
               $year = $row['data'];
               // Build the full timestamp
               if (strlen($month) > 0  && strlen($day) > 0  && strlen($year) > 0 ) {
-                $timestamp = strtotime($month."/".$day."/".$year);
+                $timestamp = strtotime($month ."/". $day ."/". $year);
                 // Add usefull information about this date into an array
                 $timestamps[$timestamp] = array(
-                  date("l",$timestamp), // Day of the week (Monday, Tuesday, etc.)
-                  date("F",$timestamp), // Full Month name (January, February, etc.)
+                  date("l", $timestamp), // Day of the week (Monday, Tuesday, etc.)
+                  date("F", $timestamp), // Full Month name (January, February, etc.)
                   $year, // Year
                   $day,  // Day of the month (1,2,...,31)
                 );
@@ -256,9 +257,9 @@ function _webform_analysis_rows_date ($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_table_data_date ($data) {
+function _webform_table_data_date($data) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0 && strlen($data['value']['2']) > 0) {
-    return check_plain($data['value']['0']."/".$data['value']['1']."/".$data['value']['2']);
+    return check_plain($data['value']['0'] ."/". $data['value']['1'] ."/". $data['value']['2']);
   }
   else {
     return "";
@@ -272,7 +273,7 @@ function _webform_table_data_date ($data) {
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
  * @returns An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
  **/
-function _webform_csv_headers_date ($component) {
+function _webform_csv_headers_date($component) {
   $header = array();
   $header[0] = '';
   $header[1] = '';
@@ -286,9 +287,9 @@ function _webform_csv_headers_date ($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
  **/
-function _webform_csv_data_date ($data) {
+function _webform_csv_data_date($data) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0 && strlen($data['value']['2']) > 0) {
-    return $data['value']['0']."/".$data['value']['1']."/".$data['value']['2'];
+    return $data['value']['0'] ."/". $data['value']['1'] ."/". $data['value']['2'];
   }
   else {
     return "";

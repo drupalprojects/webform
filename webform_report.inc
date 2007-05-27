@@ -150,16 +150,16 @@ function _webform_results_download($nid) {
       if (function_exists($csv_header_function)) {
         // Let each component determine its headers
         $component_header = $csv_header_function($component);
-        $header[0] .= ',"'. str_replace(array('"', '\,'),array('""', '","'), $component_header[0]) .'"';
-        $header[1] .= ',"'. str_replace(array('"', '\,'),array('""', '","'), $component_header[1]) .'"';
-        $header[2] .= ',"'. str_replace(array('"', '\,'),array('""', '","'), $component_header[2]) .'"';
+        $header[0] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[0]) .'"';
+        $header[1] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[1]) .'"';
+        $header[2] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[2]) .'"';
         
       }
     }
   }
   
   // Write header information
-  $file_record = $header[0] ."\n". $header[1] ."\n". $header[2] . "\n";
+  $file_record = $header[0] ."\n". $header[1] ."\n". $header[2] ."\n";
   @fwrite($handle, $file_record);
 
   // Get all the submissions for the node
@@ -173,7 +173,7 @@ function _webform_results_download($nid) {
       $csv_data_function   = "_webform_csv_data_". $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data
-        $row .= ',"'.str_replace(array('"', '\,'), array('""', '","'), $csv_data_function($submission['data'][$cid], $component)).'"';
+        $row .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $csv_data_function($submission['data'][$cid], $component)) .'"';
       }
     }
     // Write data from submissions

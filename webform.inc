@@ -24,13 +24,13 @@ function _webform_page() {
   $result = db_query("SELECT nid, title FROM {node} WHERE type='webform'");
    
   while ($node = db_fetch_object($result)) {
-    $rows[] = array(l($node->title, 'node/' . $node->nid),
-                    l(t('submissions'), 'node/' . $node->nid . '/results'),
-                    l(t('analysis'), 'node/' . $node->nid . '/results/analysis'),
-                    l(t('table'), 'node/' . $node->nid . '/results/table'),
-                    l(t('download'), 'node/' . $node->nid . '/results/download'),
-                    l(t('edit'), 'node/'.$node->nid.'/edit'),
-                    l(t('clear'), 'node/' . $node->nid . '/results/clear'));
+    $rows[] = array(l($node->title, 'node/'. $node->nid),
+                    l(t('submissions'), 'node/'. $node->nid .'/results'),
+                    l(t('analysis'), 'node/'. $node->nid .'/results/analysis'),
+                    l(t('table'), 'node/'. $node->nid .'/results/table'),
+                    l(t('download'), 'node/'. $node->nid .'/results/download'),
+                    l(t('edit'), 'node/'. $node->nid .'/edit'),
+                    l(t('clear'), 'node/'. $node->nid .'/results/clear'));
 
   }
   
@@ -50,7 +50,7 @@ function _webform_results_clear($nid) {
   $form['nid'] = array('#type' => 'value', '#value' => $nid);
   $question = t("Are you sure you want to delete all submissions for this form?");
   
-  return confirm_form($form, $question, 'node/'.$nid.'/results', NULL, t('Clear'), t('Cancel'));
+  return confirm_form($form, $question, 'node/'. $nid .'/results', NULL, t('Clear'), t('Cancel'));
 } // end function _webform_results_clear
 
 function _webform_results_clear_submit($form_id, $form_values) {
@@ -79,7 +79,7 @@ function _webform_submission_delete($nid, $sid) {
   $form['sid'] = array('#type' => 'value', '#value' => $sid);
   $question = t("Are you sure you want to delete this submission?");
 
-  return confirm_form($form, $question, 'node/'.$nid.'/results', NULL, t('Delete'), t('Cancel'));
+  return confirm_form($form, $question, 'node/'. $nid .'/results', NULL, t('Delete'), t('Cancel'));
 } // end function _webform_submission_delete
 
 function _webform_submission_delete_submit($form_id, $form_values) {
@@ -90,7 +90,7 @@ function _webform_submission_delete_submit($form_id, $form_values) {
   db_query('DELETE FROM {webform_submissions} WHERE nid = %d AND sid = %d', $nid, $sid);
 
   drupal_set_message(t("Submission deleted"));
-  drupal_goto('node/'.$nid.'/results');
+  drupal_goto('node/'. $nid .'/results');
 } // end function _webform_submission_delete_submit
 
 /**
@@ -185,7 +185,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
 
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
-  $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'.$node->nid, "sid=". $sid);
+  $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'. $node->nid, "sid=". $sid);
   
   
   if (variable_get('webform_debug', 0) == 2) {
@@ -258,7 +258,7 @@ function _webform_submission_limit_check($node, $form_values) {
   
   // Double check the submission history from the users machine using cookies
   if (variable_get("webform_use_cookies", 0)) {
-    $cookie_name = 'webform-'.$node->nid;
+    $cookie_name = 'webform-'. $node->nid;
     
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
       foreach ($_COOKIE[$cookie_name] as $key => $timestamp) {

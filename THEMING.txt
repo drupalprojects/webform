@@ -81,16 +81,16 @@ function phptemplate_webform_form_nodeIdHere ($form) {
   example putting a field labeled "Email" inside of another fieldset.
   
 <?php
-	// Create a new fieldset within the main fieldset
-	// Note: All fields MUST stay within the 'submitted' fieldset
-	$form['submitted']['newfieldset'] = array (
-			'#type' => 'fieldset'
-	);
-	
-	// Move the form field labeled "Email" to the new fieldset
-	$form['submitted']['newfieldset']['Email'] = $form['submitted']['Email'];
-	unset($form['submitted']['Email']);
-	echo drupal_render($form)
+  // Create a new fieldset within the main fieldset
+  // Note: All fields MUST stay within the 'submitted' fieldset
+  $form['submitted']['newfieldset'] = array (
+      '#type' => 'fieldset'
+  );
+  
+  // Move the form field labeled "Email" to the new fieldset
+  $form['submitted']['newfieldset']['Email'] = $form['submitted']['Email'];
+  unset($form['submitted']['Email']);
+  echo drupal_render($form)
    
 ?>
 
