@@ -851,7 +851,7 @@ function webform_edit_field_form(&$node) {
       print theme('page', "");
       return;
     }
-    // We are editing a new node
+    // We are editing a new field.
     $currfield['key'] = time();
     $currfield['type'] = $_POST['edit']['webform_newfield_type'];
     $currfield['name'] = $currfield['type'] ."_". $currfield['key'];
