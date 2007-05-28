@@ -335,6 +335,67 @@ function webform_update_9() {
 }
 
 /**
+ * Add the form_key column to the webform_component table.
+ */
+function webform_update_10() {
+  $ret = array();
+
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD form_key varchar(128) NULL DEFAULT NULL");
+      break;
+    
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD form_key varchar(128) NULL DEFAULT NULL AFTER pid");
+      break;
+  }
+
+  return $ret;
+}
+
+/**
+ * Add unique indexes on Submission IDs for faster joins.
+ */
+function webform_update_11() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD INDEX sid (sid)");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} ADD INDEX sid (sid)");
+      break;
+  }
+  
+  return $ret;
+}
+
+/**
+ * Change 'user' column to 'uid' in webform_submissions table.
+ */
+function webform_update_12() {
+  $ret = array();
+  
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD uid int(10) NOT NULL DEFAULT 0 AFTER sid");
+      $ret[] = update_sql("UPDATE {webform_submissions} ws set uid = (SELECT uid FROM {users} u WHERE u.name = ws.user)");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} DROP user");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD uid integer NOT NULL DEFAULT 0");
+      $ret[] = update_sql("UPDATE {webform_submissions} ws set uid = (SELECT uid FROM {users} u WHERE u.name = ws.user)");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} DROP user");
+      break;
+  }
+  
+  return $ret;
+}
+
+/**
  * Makes updates to the database structure (Pre-4.7 versions of Drupal).
  **/
 function _webform_legacy_update($installed_version, $current_version) {
