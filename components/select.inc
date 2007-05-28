@@ -63,7 +63,7 @@ function _webform_render_select($component) {
   );
   
   // Convert the user-entered options list into an array
-  $value = _webform_filtervalues($component['value']);
+  $default_value = _webform_filtervalues($component['value']);
   $rows = explode("\n", _webform_filtervalues($component['extra']['items'], FALSE));
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
@@ -86,21 +86,24 @@ function _webform_render_select($component) {
   // Set the component options
   $form_item['#options'] = $options;
   
-  // Convert default value to a list if necessary
-  if ($component['extra']['multiple'] == 'Y') {
-    if (strpos($value, ',')) {
-      $varray = explode(',', $value);
-      foreach ($varray as $key => $v) {
-        $varray[$key] = _webform_safe_name($v);
+  // Set the default value
+  if ($default_value) {
+    // Convert default value to a list if necessary
+    if ($component['extra']['multiple'] == 'Y') {
+      if (strpos($default_value, ',')) {
+        $varray = explode(',', $default_value);
+        foreach ($varray as $key => $v) {
+          $varray[$key] = _webform_safe_name($v);
+        }
+        $form_item['#default_value'] = $varray;
       }
-      $form_item['#default_value'] = $varray;
+      else {
+        $form_item['#default_value'] = _webform_safe_name($default_value);
+      }
     }
     else {
-      $form_item['#default_value'] = _webform_safe_name($value);
+      $form_item['#default_value'] = _webform_safe_name($default_value);
     }
-  }
-  else {
-    $form_item['#default_value'] = _webform_safe_name($value);
   }
   
   if ($component['extra']['aslist'] == 'Y') {
