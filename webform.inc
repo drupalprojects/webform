@@ -95,14 +95,24 @@ function _webform_submission_delete_submit($form_id, $form_values) {
 
 /**
  * Return all the submissions for a particular node
+ * @param $nid
+ *   The node ID for which submissions are being fetched.
+ * @param $header
+ *   If the results of this fetch will be used in a sortable table, pass the
+ *   array header of the table.
  */
-function _webform_fetch_submissions($nid) {
+function _webform_fetch_submissions($nid, $header = NULL) {
   
-  $query = 'SELECT s.sid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data '. 
-           'FROM {webform_submissions} as s '. 
-           'LEFT JOIN {webform_submitted_data} as sd on (sd.sid = s.sid) '. 
+  $query = 'SELECT s.sid, s.uid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '. 
+           'FROM {webform_submissions} s '. 
+           'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid '.
+           'LEFT JOIN {users} u ON u.uid = s.uid '.
            'WHERE sd.nid = %d';
-    
+  
+  if (is_array($header)) {
+    $query .= tablesort_sql($header);
+  }
+
   $res = db_query($query, $nid);
   $submissions = array();
   $previous = array();
@@ -110,10 +120,14 @@ function _webform_fetch_submissions($nid) {
   // Outer loop: iterate for each submission
   while ($row = db_fetch_object($res)) {
     if ($row->sid != $previous) {
-      $submissions[$row->sid]['submitted'] = $row->submitted;
-      $submissions[$row->sid]['remote_addr'] = $row->remote_addr;
+      $submissions[$row->sid]->sid = $row->sid;
+      $submissions[$row->sid]->submitted = $row->submitted;
+      $submissions[$row->sid]->remote_addr = $row->remote_addr;
+      $submissions[$row->sid]->uid = $row->uid;
+      $submissions[$row->sid]->name = $row->name;
+      $submissions[$row->sid]->status = $row->status;
     }
-    $submissions[$row->sid]['data'][$row->cid]['value'][$row->no] = $row->data;
+    $submissions[$row->sid]->data[$row->cid]['value'][$row->no] = $row->data;
     $previous = $row->sid;
   }
  

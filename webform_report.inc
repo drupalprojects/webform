@@ -9,37 +9,56 @@
  * @copyright Pontus Ullgren 2004
  **/
 
-/** function _webform_results_submissions() is a database accessor function designed to return lists
- *  of submissions for a given form.
+/**
+ * Database accessor function which to returns lists of submissions for a given
+ * form.
  * @param  integer $nid the node id of the webform
  */
 function _webform_results_submissions($nid) {
-  // Get all the submitted values for the node
-  $query = 'SELECT ws.sid as sid, ws.submitted as submitted '.
-    ' FROM '.
-    ' {webform_submissions} ws '.
-    ' WHERE ws.nid = %d '.
-    ' ORDER BY ws.sid ';
+  $header = theme('webform_results_submissions_header', $nid);
+  $submissions = _webform_fetch_submissions($nid, $header);  
+  return theme('webform_results_submissions', $nid, $submissions);
+}
 
-  $res = db_query($query, $nid);
+/**
+ * Theme the header of the submissions table. This is done in it's own function
+ * so that webform can retrieve the header and use it for sorting the results.
+ */
+function theme_webform_results_submissions_header($nid) {
+  return array(
+    array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
+    array('data' => t('Submitted'), 'field' => 'submitted'),
+    array('data' => t('User'), 'field' => 'name'),
+    array('data' => t('IP Address'), 'field' => 'remote_addr'),
+    array('data' => t('Operations'), 'colspan' => user_access('clear webform results') ? '3' : '2'),
+  );
+}
+
+/**
+ * Theme the submissions tab of the webform results page.
+ * @param $nid
+ *   The nid of the node whose results are being displayed.
+ * @param $submissions
+ *   An array of all submissions for this webform.
+ */
+function theme_webform_results_submissions($nid, $submissions) {
   
-  $header[] = t('#');
-  $header[] = t('Submitted');
-  if (user_access('clear webform results')) {
-    $header[] = array('data' => t('Operations'), 'colspan' => '3');
-  }
-  else {
-    $header[] = array('data' => t('Operations'), 'colspan' => '2');
-  }
-
-  while ($field = db_fetch_object($res)) {
-    $row = array();
-    $row[] = $field->sid;
-    $row[] = format_date($field->submitted, 'small');
-    $row[] = l(t('View'), "node/$nid", NULL, "sid=". $field->sid, NULL, FALSE);
+  // This header has to be generated seperately so we can add the SQL necessary
+  // to sort the results.
+  $header = theme('webform_results_submissions_header', $nid);
+  
+  $rows = array();
+  foreach ($submissions as $sid => $submission) {
+    $row = array(
+      $sid,
+      format_date($submission->submitted, 'small'),
+      theme('username', $submission),
+      $submission->remote_addr,
+      l(t('View'), "node/$nid", NULL, "sid=". $submission->sid, NULL, FALSE),
+    );
     
     if (user_access('clear webform results')) {
-      $row[] = l(t('Delete'), "node/$nid/results/delete/". $field->sid, NULL, NULL, NULL, FALSE);
+      $row[] = l(t('Delete'), "node/$nid/results/delete/". $submission->sid, NULL, NULL, NULL, FALSE);
     }
     $rows[] = $row;
   }
@@ -47,23 +66,15 @@ function _webform_results_submissions($nid) {
   return theme('table', $header, $rows);
 }
 
-/* This function creates a table for all ..
- * @param  integer  $nid the node ID of the node to show results for.
+/**
+ * This function creates a table for all submissions.
+ *   @param integer $nid The node ID of the node to show results for.
  */
 function _webform_results_table($nid) {
   include_once(drupal_get_path('module', 'webform') ."/webform.inc");
   // Load Components
   _webform_load_components();
 
-  $header = array();
-  $rows = array();
-  $cell = array();
-
-  $header[] = t('#');
-  $header[] = t('Time');
-  $header[] = t('IP Address');
-
-  
   // Get all the component cid and names for the node
   $query = 'SELECT cid, name, type, extra FROM {webform_component} WHERE nid = %d ORDER BY weight, name';
   $res = db_query($query, $nid);
@@ -72,12 +83,46 @@ function _webform_results_table($nid) {
   }
 
   // Get all the submissions for the node
-  $submissions = _webform_fetch_submissions($nid);
+  $header = theme('webform_results_table_header', $nid);
+  $submissions = _webform_fetch_submissions($nid, $header);
+  
+  return theme('webform_results_table', $nid, $components, $submissions);
+} // end function _webform_results_table($nid)
+
+
+function theme_webform_results_table_header($nid) {
+  return array(
+    array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
+    array('data' => t('Submitted'), 'field' => 'submitted'),
+    array('data' => t('User'), 'field' => 'name'),
+    array('data' => t('IP Address'), 'field' => 'remote_addr'),
+  );
+}
+
+/**
+ * Theme the results table displaying all the submissions for a particular node.
+ * @param $nid
+ *   The nid of the node whose results are being displayed.
+ * @param $components
+ *   An associative array of the components for this webform.
+ * @param $submissions
+ *   An array of all submissions for this webform.
+ */
+function theme_webform_results_table($nid, $components, $submissions) {
+  $header = array();
+  $rows = array();
+  $cell = array();
+
+  // This header has to be generated seperately so we can add the SQL necessary
+  // to sort the results.
+  $header = theme('webform_results_table_header', $nid);
+
   // Generate a row for each submission
   foreach ($submissions as $sid => $submission) {
     $cell[] = l($sid, 'node/'. $nid, NULL, "sid=". $sid);
-    $cell[] = format_date($submission['submitted'], "small");
-    $cell[] = $submission['remote_addr'];
+    $cell[] = format_date($submission->submitted, "small");
+    $cell[] = theme('username', $submission);
+    $cell[] = $submission->remote_addr;
     $component_headers = array();
 
     // Generate a cell for each component
@@ -85,10 +130,10 @@ function _webform_results_table($nid) {
       $component['extra'] = unserialize($component['extra']);
       $table_function = "_webform_table_data_". $component['type'];
       if (function_exists($table_function)) {
-        $submission_output = $table_function($submission['data'][$component['cid']], $component);
+        $submission_output = $table_function($submission->data[$component['cid']], $component);
         if ($submission_output !== NULL) {
           $component_headers[] = $component['name'];
-          $cell[]   = $submission_output;
+          $cell[] = $submission_output;
         }
       }
     }
@@ -101,7 +146,7 @@ function _webform_results_table($nid) {
   }
 
   return theme('table', $header, $rows);
-} // end function _webform_results_table($nid)
+}
 
 function _webform_results_download($nid) {
   include_once(drupal_get_path('module', 'webform') ."/webform.inc");
@@ -139,9 +184,9 @@ function _webform_results_download($nid) {
 
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors
-  $header[0] .= $node->title .",,";
-  $header[1] .= "Submission Details,,";
-  $header[2] .= "Serial,Time,SID";
+  $header[0] .= $node->title .",,,,";
+  $header[1] .= "Submission Details,,,,";
+  $header[2] .= "Serial,SID,Time,UID,Username";
   // Compile header information
   _webform_load_components(); // Load all components
   if (is_array($node->webformcomponents)) {
@@ -153,7 +198,6 @@ function _webform_results_download($nid) {
         $header[0] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[0]) .'"';
         $header[1] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[1]) .'"';
         $header[2] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[2]) .'"';
-        
       }
     }
   }
@@ -168,12 +212,12 @@ function _webform_results_download($nid) {
   // Generate a row for each submission
   $rowcount = 0;
   foreach ($submissions as $sid => $submission) {
-    $row = ++$rowcount .",\"". format_date($submission['submitted'], 'small') ."\",". $sid;
+    $row = ++$rowcount .",". $sid .",\"". format_date($submission->submitted, 'small') ."\",". $submission->uid .",\"". $submission->name ."\"";
     foreach ($node->webformcomponents as $cid => $component) {      
       $csv_data_function   = "_webform_csv_data_". $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data
-        $row .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $csv_data_function($submission['data'][$cid], $component)) .'"';
+        $row .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $csv_data_function($submission->data[$cid], $component)) .'"';
       }
     }
     // Write data from submissions
