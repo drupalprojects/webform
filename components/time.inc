@@ -54,28 +54,29 @@ $edit_fields['extra']['check_daylight_savings'] = array(
  * @returns An array of a form item to be displayed on the client-side webform
  **/
 function _webform_render_time($component) {
+  if (strlen($component['value']) > 0) {
+    // Calculate the timestamp in GMT
+    $timestamp = strtotime($component['value']);
+    if ($component['extra']['timezone'] == "user") {
+      // Use the users timezone
+      global $user;
+      $timestamp += (int)$user->timezone;
+    }
+    elseif ($component['extra']['timezone'] == "gmt") {
+      // Use GMT
+      $timestamp += 0;
+    }
+    else {
+      // Use the Drupal site time
+      $timestamp += (int)variable_get('date_default_timezone', 0);
+    }
   
-  // Calculate the timestamp in GMT
-  $timestamp = strtotime($component['value']);
-  if ($component['extra']['timezone'] == "user") {
-    // Use the users timezone
-    global $user;
-    $timestamp += (int)$user->timezone;
-  }
-  elseif ($component['extra']['timezone'] == "gmt") {
-    // Use GMT
-    $timestamp += 0;
-  }
-  else {
-    // Use the Drupal site time
-    $timestamp += (int)variable_get('date_default_timezone', 0);
+    // Check for daylight savings time
+    if ($component['extra']['check_daylight_savings'] && date("I")) {
+      $timestamp += 3600;
+    }
   }
 
-  // Check for daylight savings time
-  if ($component['extra']['check_daylight_savings'] && date("I")) {
-    $timestamp += 3600;
-  }
-  
   if ($component['extra']['hourformat'] == '12-hour') {
     $first_hour = 1;
     $last_hour = 12;
@@ -87,17 +88,18 @@ function _webform_render_time($component) {
     $hour_format = 'G';
   }
 
+  if (strlen($component['value']) > 0) {
+    $hour = gmdate($hour_format, $timestamp);
+    $minute = gmdate('i', $timestamp);
+    $am_pm = gmdate('a', $timestamp);
+  }
+
   // Generate the choices for drop-down selects
   $hours[""] = t("hour");
   $minutes[""] = t("minute");
   for ($i = $first_hour; $i <= $last_hour; $i++) $hours[$i] = $i;
   for ($i = 0; $i <= 59; $i++) $minutes[$i < 10 ? "0$i" : $i] = $i < 10 ? "0$i" : $i;
   $am_pms = array('am' => t('am'), 'pm' => t('pm'));
-  if (strlen($component['value']) > 0) {
-    $hour = gmdate($hour_format, $timestamp);
-    $minute = gmdate('i', $timestamp);
-    $am_pm = gmdate('a', $timestamp);
-  }
 
   $form_item['#type'] = 'fieldset';
   $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);

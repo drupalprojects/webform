@@ -46,37 +46,37 @@ function _webform_edit_date($currfield) {
  * @returns An array of a form item to be displayed on the client-side webform
  **/
 function _webform_render_date($component) {
-  // Calculate the timestamp in GMT
-  $timestamp = strtotime($component['value']);
-  
-  if ($component['extra']['timezone'] == "user") {
-    // Use the users timezone
-    global $user;
-    $timestamp += (int)$user->timezone;
-  }
-  elseif ($component['extra']['timezone'] == "gmt") {
-    // Use GMT
-    $timestamp += 0;
-  }
-  else {
-    // Use the Drupal site time
-    $timestamp += variable_get('date_default_timezone', 0);
-  }
-  
-  // Check for daylight savings time
-  if ($component['extra']['check_daylight_savings'] && date("I")) {
-    $timestamp += 3600;
+  if (strlen($component['value']) > 0) {
+    // Calculate the timestamp in GMT
+    $timestamp = strtotime($component['value']);
+    
+    if ($component['extra']['timezone'] == "user") {
+      // Use the users timezone
+      global $user;
+      $timestamp += (int)$user->timezone;
+    }
+    elseif ($component['extra']['timezone'] == "gmt") {
+      // Use GMT
+      $timestamp += 0;
+    }
+    else {
+      // Use the Drupal site time
+      $timestamp += variable_get('date_default_timezone', 0);
+    }
+    
+    // Check for daylight savings time
+    if ($component['extra']['check_daylight_savings'] && date("I")) {
+      $timestamp += 3600;
+    }
+    
+    $year = gmdate('Y', $timestamp);
+    $month = gmdate('n', $timestamp);
+    $day = gmdate('j', $timestamp);
   }
   
   $months = array("" => t("month"), 1 => t('January'), t('February'), t('March'), t('April'), t('May'), t('June'), t('July'), t('August'), t('September'), t('October'), t('November'), t('December'));
   $days = array("" => t("day"));
   for ($i = 1; $i <= 31; $i++) $days[$i] = $i;
-
-  if (strlen($component['value']) > 0) {
-    $year = gmdate('Y', $timestamp);
-    $month = gmdate('n', $timestamp);
-    $day = gmdate('j', $timestamp);
-  }
   
   $form_item['#type'] = 'fieldset';
   $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
