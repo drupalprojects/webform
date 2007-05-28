@@ -1520,9 +1520,7 @@ function _webform_save_submission($node, $submitted) {
 
   $sid = db_next_id('{webform_submissions}_sid');
   
-  // 'user' is a reserved keyword in Postgres
-  $user_col = $GLOBALS['db_type'] == 'pgsql' ? '"user"' : 'user';
-  db_query("INSERT INTO {webform_submissions} (nid, sid, submitted, $user_col, remote_addr) "." VALUES (%d, %d, %d, '%s', '%s')", $node->nid, $sid, time(), $user->name, $_SERVER['REMOTE_ADDR']);
+  db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) "." VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $_SERVER['REMOTE_ADDR']);
 
   foreach ($submitted as $cid => $value) {
     if (is_array($value)) {
