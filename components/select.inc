@@ -136,14 +136,14 @@ function _webform_submission_display_select($data, $component) {
   $form_item = _webform_render_select($component);
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array
-    foreach ($data['value'] as $key => $value) {
+    foreach ((array)$data['value'] as $key => $value) {
       $data['value'][$key] = _webform_safe_name($value);
     }
     $form_item['#default_value'] = $data['value'];
   }
   else {
     // Set the value as a single string
-    foreach ($data['value'] as $value) {
+    foreach ((array)$data['value'] as $value) {
       if ($value !== '0') {
         $form_item['#default_value'] = _webform_safe_name($value);
         break;
