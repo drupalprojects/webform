@@ -499,7 +499,7 @@ function webform_form(&$node, &$param) {
     '#title' => t('Webform Settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-    '#weight' => -2);
+    '#weight' => -4);
   
   $form['webform']['title'] = array(
     '#type' => 'textfield',
@@ -539,7 +539,7 @@ function webform_form(&$node, &$param) {
     '#title' => t('Components'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-    '#weight' => -1);
+    '#weight' => -3);
   
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
     $options = array();
@@ -597,7 +597,7 @@ function webform_form(&$node, &$param) {
     '#title' => t('Mail Settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
-    '#weight' => 0,
+    '#weight' => -2,
   );
   
   $form['mailsettings']['email'] = array(
@@ -661,7 +661,7 @@ function webform_form(&$node, &$param) {
     '#title' => t('Advanced Settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#weight' => 1);
+    '#weight' => -1);
   
   
   $form['advanced']['submitlimit'] = array(
