@@ -394,8 +394,9 @@ function webform_prepare(&$node) {
       $node = (object)$edit;
           
       // Validate the field form
-      $result = webform_edit_field_form_validate($_POST['field']);
-      if (!$result) {
+      webform_edit_field_form_validate($_POST['field']);
+      $errors = form_get_errors();
+      if (!empty($errors)) {
         $node->webformcomponents[$node->selected_component] = $_POST['field'];
         $_POST = $_POST['node'];
         $_POST['op'] = $op = t('Edit Selected');
@@ -906,7 +907,7 @@ function webform_edit_field_form(&$node) {
     '#type' => 'textfield',
     '#default_value' => $currfield['form_key'],
     '#title' => t('Field Key'),
-    '#description' => t('Enter a machine readable key for this form element. May contain only alphanumeric characters and underscores.'),
+    '#description' => t('Enter a machine readable key for this form element. May contain only alphanumeric characters and underscores. This key will be used as the name attribute of the form element.'),
     '#required' => TRUE,
     '#weight' => -2,
   );
@@ -1013,10 +1014,15 @@ function webform_edit_field_form(&$node) {
  */
 function webform_edit_field_form_validate($form_values) {
   if (!preg_match('!^[a-z0-9_]+$!', $form_values['form_key'])) {
-    form_set_error('key', t('The field name %field_name is invalid.', array('%field_name' => $form_values['form_key'])));
-    return false;
+    form_set_error('field][form_key', t('The field name %field_name is invalid.', array('%field_name' => $form_values['form_key'])));
   }
-  return true;
+
+  // Let the field do any additional validation.
+  _webform_load_components($form_values['type']);
+  $validate_function = '_webform_validate_'. $form_values['type'];
+  if (function_exists($validate_function)) {
+    $validate_function($form_values);
+  }
 }
 
 /**
@@ -1648,7 +1654,7 @@ function _webform_components_sort($a, $b) {
 /**
  * Sort each level of a component tree by weight and name
  */
-function _webform_components_tree_sort ($tree) {
+function _webform_components_tree_sort($tree) {
   if (is_array($tree['children'])) {
     uasort($tree['children'], "_webform_components_sort");
     foreach ($tree['children'] as $cid => $component) {
@@ -1659,7 +1665,7 @@ function _webform_components_tree_sort ($tree) {
   return $tree;
 }
 
-function _webform_load_components ($return_all = false) {
+function _webform_load_components($return_all = false) {
   static $component_list;
   
   if (!isset($component_list)) {

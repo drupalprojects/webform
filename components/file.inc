@@ -190,7 +190,7 @@ function _webform_render_file($component) {
                         '_webform_validate_file' => array($component['cid'], $component['name'], $component['extra']['filtering']),
                         '_webform_required_file' => array($component['cid'], $component['name'], $component['mandatory']), // Custom required routine
                       ),
-  '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">',
+  '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
   '#suffix'        => '</div>',
   );
   

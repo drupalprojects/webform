@@ -75,7 +75,7 @@ function _webform_render_captcha($component) {
     }
     
     // Wrap in a div
-    $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">'. $form_item['#prefix'];
+    $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">'. $form_item['#prefix'];
     $form_item['#suffix'] .= "</div>";
   }
   else {

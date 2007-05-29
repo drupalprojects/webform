@@ -51,7 +51,7 @@ function _webform_render_email($component) {
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
-    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">',
+    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
     '#validate'      => array('_webform_validate_email' => array('submitted]['. $component['cid'])),
   );

@@ -46,7 +46,7 @@ function _webform_render_markup($component) {
     '#type'   => 'markup',
     '#weight' => $component['weight'],
     '#value'  => _webform_filtervalues(check_markup($component['value'], $component['extra']['format'], $check_filter), FALSE),
-    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">',
+    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix' => '</div>',
   );
   return $form_item;

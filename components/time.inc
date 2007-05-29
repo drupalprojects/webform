@@ -108,7 +108,7 @@ function _webform_render_time($component) {
   }
   $form_item['#weight'] = $component['weight'];
   $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
-  $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. _webform_safe_name($component['name']) .'">';
+  $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. $component['form_key'] .'">';
   $form_item['#suffix'] = '</div>';
   $form_item['hour'] = array(
     '#prefix' => '',

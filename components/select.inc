@@ -46,6 +46,20 @@ function _webform_edit_select($currfield) {
   return $edit_fields;
 }
 
+function _webform_validate_select($form_values) {
+  $rows = explode("\n", _webform_filtervalues($form_values['extra']['items'], FALSE));
+  foreach ($rows as $row) {
+    $row = trim($row);
+    if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
+      if (preg_match('/ |"/', $matches[1])) {
+        form_set_error('field][extra][items', t('The options for this select contain illegal characters (quotes or spaces). Specify your options as <em>safe_value_no_spaces</em>|<em>The Real Value</em>.'));
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 /** 
  * function webform_render_select
  * Build a form item array containing all the properties of this component
@@ -58,7 +72,7 @@ function _webform_render_select($component) {
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
-    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">',
+    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
   
@@ -75,7 +89,7 @@ function _webform_render_select($component) {
 
   foreach ($rows as $row) {
     $row = trim($row);
-    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
       $options[$matches[1]] = $matches[2];
     }
     else {
@@ -93,16 +107,16 @@ function _webform_render_select($component) {
       if (strpos($default_value, ',')) {
         $varray = explode(',', $default_value);
         foreach ($varray as $key => $v) {
-          $varray[$key] = _webform_safe_name($v);
+          $varray[$key] = $v;
         }
         $form_item['#default_value'] = $varray;
       }
       else {
-        $form_item['#default_value'] = _webform_safe_name($default_value);
+        $form_item['#default_value'] = $default_value;
       }
     }
     else {
-      $form_item['#default_value'] = _webform_safe_name($default_value);
+      $form_item['#default_value'] = $default_value;
     }
   }
   
@@ -140,7 +154,7 @@ function _webform_submission_display_select($data, $component) {
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array
     foreach ((array)$data['value'] as $key => $value) {
-      $data['value'][$key] = _webform_safe_name($value);
+      $data['value'][$key] = $value;
     }
     $form_item['#default_value'] = $data['value'];
   }
@@ -148,7 +162,7 @@ function _webform_submission_display_select($data, $component) {
     // Set the value as a single string
     foreach ((array)$data['value'] as $value) {
       if ($value !== '0') {
-        $form_item['#default_value'] = _webform_safe_name($value);
+        $form_item['#default_value'] = $value;
         break;
       }
     }
@@ -171,11 +185,11 @@ function _webform_submit_select(&$data, $component) {
 
   foreach ($rows as $row) {
     $row = trim($row);
-    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
       $options[$matches[1]] = $matches[1];
     }
     else {
-      $options[_webform_safe_name($row)] = _webform_safe_name($row);
+      $options[_webform_safe_name($row)] = $row;
     } 
   }
 
@@ -206,20 +220,24 @@ function theme_webform_mail_select($data, $component) {
   
   foreach ($rows as $row) {
     $row = trim($row);
-    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
       $options[$matches[1]] = $matches[2];
     }
     else {
       $options[_webform_safe_name($row)] = $row;
-    } 
+    }
   }
-  
   // Generate the output
   if ($component['extra']['multiple']) {
     $output = $component['name'] .":\n";
     foreach ($data as $value) {
       if ($value) {
-        $output .= "    • ". $options[$value] ."\n";
+        if ($options[$value]) {
+          $output .= "    • ". $options[$value] ."\n";
+        }
+        else {
+          $output .= "    • ". $options[_webform_safe_name($value)] ."\n";
+        }
       }
     }
   }
@@ -255,7 +273,7 @@ function _webform_analysis_rows_select($component) {
   
   foreach ($rows as $row) {
     $row = trim($row);
-    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
       $options[$matches[1]] = $matches[2];
     }
     else {
@@ -319,7 +337,6 @@ function _webform_csv_headers_select($component) {
     $header[1] = $component['name'];
     $items = split("\n", $component['extra']['items']);
     foreach ($items as $item) {
-      $item = _webform_safe_name($item);
       $header[2] .= "\,". $item;
     }
     // Remove the preceding extra comma
@@ -344,7 +361,7 @@ function _webform_csv_data_select($data, $component) {
   
   foreach ($rows as $row) {
     $row = trim($row);
-    if (preg_match('/^([a-z0-9_]+)\|(.*)$/', $row, $matches)) {
+    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
       $options[$matches[1]] = $matches[2];
     }
     else {

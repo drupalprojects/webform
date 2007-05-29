@@ -63,7 +63,7 @@ function _webform_render_textarea($component) {
     '#rows'          => $component['extra']['rows'],
     '#cols'          => $component['extra']['cols'],
     '#attributes'    => $component['extra']['attributes'],
-    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. _webform_safe_name($component['name']) .'">',
+    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
   if ($component['extra']['rows'] > 0) {
