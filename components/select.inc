@@ -46,7 +46,7 @@ function _webform_edit_select($currfield) {
   return $edit_fields;
 }
 
-function _webform_validate_select($form_values) {
+function _webform_edit_validate_select($form_values) {
   $rows = explode("\n", _webform_filtervalues($form_values['extra']['items'], FALSE));
   foreach ($rows as $row) {
     $row = trim($row);

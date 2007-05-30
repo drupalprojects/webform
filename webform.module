@@ -1019,7 +1019,7 @@ function webform_edit_field_form_validate($form_values) {
 
   // Let the field do any additional validation.
   _webform_load_components($form_values['type']);
-  $validate_function = '_webform_validate_'. $form_values['type'];
+  $validate_function = '_webform_edit_validate_'. $form_values['type'];
   if (function_exists($validate_function)) {
     $validate_function($form_values);
   }
