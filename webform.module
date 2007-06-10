@@ -107,7 +107,7 @@ function webform_insert($node) {
   }
   
   // Insert the Webform
-  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
+  db_query("INSERT INTO {webform} (nid, confirmation, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
 
   // Insert the components into the database
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
@@ -117,8 +117,6 @@ function webform_insert($node) {
       );
     }
   }
-
-  drupal_goto('node/'. $node->nid);
 }
 
 function webform_update($node) {  
@@ -493,8 +491,7 @@ function webform_validate(&$node) {
  * Creates the standard form for editing or creating a webform.
  **/
 function webform_form(&$node, &$param) {
-/* Start Edit Form */
-
+  /* Start Edit Form */
   $form['webform'] = array(
     '#type' => 'fieldset',
     '#title' => t('Webform Settings'),
@@ -531,7 +528,6 @@ function webform_form(&$node, &$param) {
   );
   
   $form['webform']['format'] = filter_form($node->format);
- 
   /* End Edit Form */
   
   /* Start Components Form */
@@ -589,7 +585,6 @@ function webform_form(&$node, &$param) {
     '#value' => t('Add'),
     '#weight' => 4,
   );
-  
   /* End Components Form */
   
   /* Start E-mail Settings Form */
@@ -696,24 +691,26 @@ function webform_form(&$node, &$param) {
     '#size' => 2,
     '#suffix' => ' '. t('submission(s)') .' ',
     '#default_value' => ($node->submit_limit > 0 ? $node->submit_limit : ""),
-    '#attributes' => array('style' => 'width: 2em; display: inline;',
-                            'onchange' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;",
-                            'onclick' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;"
-                           ),
+    '#attributes' => array(
+      'style' => 'width: 2em; display: inline;',
+      'onchange' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;",
+      'onclick' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;"
+    ),
   );
   
   $form['advanced']['submitlimit']['submit_interval'] = array(
     '#type' => 'select',
     '#options' => array(
-                   '157784630' => t('ever'), // 5 years
-                   '1600'   => t('every hour'),
-                   '86400'  => t('every day'),
-                   '604800' => t('every week'),
-                 ),
+      '157784630' => t('ever'), // 5 years
+      '1600' => t('every hour'),
+      '86400' => t('every day'),
+      '604800' => t('every week'),
+    ),
     '#default_value' => $node->submit_interval,
-    '#attributes' => array('onchange' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;",
-                            'onclick' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;"
-                           ),
+    '#attributes' => array(
+      'onchange' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;",
+      'onclick' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;"
+    ),
   );
   
   if (user_access('use PHP for additional processing')) {
@@ -746,13 +743,6 @@ function webform_form(&$node, &$param) {
       '#value' => $node->additional_submit,
     );
   }
-  $form['advanced']['redirect_post'] = array(
-    '#type' => 'checkbox',
-    '#title' => t("Redirect POST Values"),
-    '#description' => t("Forward the contents of the POST array to the redirect URL. Use this option for custom processing of the form information. No processing will be done by webform. The confirmation option above MUST be a full redirect URL for this option to have an effect."),
-    '#default_value' => $node->redirect_post,
-  );
-  
   /* End Advanced Settings Form */
   
   // Add hidden form elements containing the contents of the components
@@ -774,6 +764,7 @@ function webform_form(&$node, &$param) {
   // Create our forms and display the output:
   return $form;
 }
+
 /**
  * Theme the node form. Use a standard Drupal table to organize the components fieldset
  *
@@ -1102,10 +1093,6 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
     profile_load_profile($user);
   }
   
-  if ($node->redirect_post && valid_url(trim($node->confirmation), true)) {
-    $form['#action'] = trim($node->confirmation);
-  }
-  
   // Add a theme function for this form
   $form['#theme'] = 'webform_form_'. $node->nid;
   // Set the encoding type (necessary for file uploads)
@@ -1410,15 +1397,14 @@ function webform_client_form_submit($form_id, $form_values) {
   
   // Check confirmation field to see if redirect should be to another node or a message
   if (valid_url(trim($node->confirmation), true)) {
-    header("Location: ".trim($node->confirmation));
-    exit();
+    return trim($node->confirmation);
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
-    drupal_goto($path, 'sid=' . $sid);
+    return array($path, 'sid=' . $sid);
   }
   else {
-    drupal_goto('node/'.$node->nid.'/done', 'sid=' . $sid);
+    return array('node/'.$node->nid.'/done', 'sid=' . $sid);
   }
 } // end webform_client_form_submit
 

@@ -10,7 +10,6 @@ function webform_install() {
       db_query("CREATE TABLE if not exists {webform} (
         nid int(10) unsigned NOT NULL default '0',
         confirmation text,
-        redirect_post int(1) unsigned not null default '0',
         submit_limit int(2)  not null default '-1',
         submit_interval int(10) not null default '157784630',
         email varchar(255) default NULL,
@@ -65,7 +64,6 @@ function webform_install() {
       db_query("CREATE TABLE {webform} (
         nid integer NOT NULL default '0',
         confirmation text NOT NULL default '',
-        redirect_post smallint NOT NULL default '0',
         submit_limit smallint NOT NULL default '-1',
         submit_interval integer NOT NULL default '157784630',
         email varchar(255) NOT NULL default '',
@@ -399,6 +397,17 @@ function webform_update_12() {
   return $ret;
 }
 
+/**
+ * Removing the redirect POST database column. Processing is now done by webform
+ * and passed to the final URL, even if it is a full URL address. This makes
+ * all webforms have the redirect POST option, but the normal webform processing
+ * is still done. See http://drupal.org/node/149044.
+ */
+function webform_update_13() {
+  $ret = array();
+  $ret[] = update_sql("AlTER TABLE {webform} DROP redirect_post");
+  return $ret;
+}
 /**
  * Makes updates to the database structure (Pre-4.7 versions of Drupal).
  **/
