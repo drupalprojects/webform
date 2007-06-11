@@ -107,7 +107,7 @@ function webform_insert($node) {
   }
   
   // Insert the Webform
-  db_query("INSERT INTO {webform} (nid, confirmation, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
+  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
 
   // Insert the components into the database
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
@@ -743,6 +743,13 @@ function webform_form(&$node, &$param) {
       '#value' => $node->additional_submit,
     );
   }
+  $form['advanced']['redirect_post'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Redirect POST Values"),
+    '#description' => t("Forward the contents of the POST array to the redirect URL. Use this option for custom processing of the form information. No processing will be done by webform. The confirmation option above MUST be a full redirect URL for this option to have an effect."),
+    '#default_value' => $node->redirect_post,
+  );
+  
   /* End Advanced Settings Form */
   
   // Add hidden form elements containing the contents of the components
@@ -1091,6 +1098,10 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
   
   if (module_exists('profile')) {
     profile_load_profile($user);
+  }
+  
+  if ($node->redirect_post && valid_url(trim($node->confirmation), true)) {
+    $form['#action'] = trim($node->confirmation);
   }
   
   // Add a theme function for this form
