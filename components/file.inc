@@ -268,6 +268,21 @@ function _webform_submit_file(&$data, $component) {
   }
 }
 
+
+/**
+ * theme_webform_mail_file
+ * Format the output of emailed data for this component
+ *
+ * @param mixed $data A string or array of the submitted data
+ * @param array $component An array of information describing the component, directly correlating to the webform_component database schema
+ * @returns string Textual output to be included in the email
+ */
+function theme_webform_mail_file($data, $component) {
+  $file = unserialize($data);
+  $output = $component['name'] .": ". $file['filename'] ."\n";
+  return $output;
+}
+
 /** 
  * function _webform_submission_display_file
  * Display the result of a file submission. The output of this function will be displayed under the "results" tab then "submissions"
