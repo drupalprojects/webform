@@ -604,9 +604,9 @@ function webform_form(&$node, &$param) {
   );
   
   // Build arrays of possible return email addresses and email subject lines from elements on the form
-  $possible_email_from_name = array('Default' => variable_get('webform_default_from_name', variable_get('site_name', '')) .' ['. t('Default') .']');
-  $possible_email_from_address = array('Default' => variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))) .' ['. t('Default') .']');
-  $possible_email_subject = array('Default' => variable_get('webform_default_subject', t('Form submission from: ') . t('$title')) .' ['. t('Default') .']');
+  $possible_email_from_name = array('default' => variable_get('webform_default_from_name', variable_get('site_name', '')) .' ['. t('Default') .']', 'none' => '['. t('None') .']');
+  $possible_email_from_address = array('default' => variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))) .' ['. t('Default') .']', 'none' => '['. t('None') .']');
+  $possible_email_subject = array('default' => variable_get('webform_default_subject', t('Form submission from: ') . t('$title')) .' ['. t('Default') .']', 'none' => '['. t('None') .']');
   
   if (is_array($node->webformcomponents) && !empty ($node->webformcomponents)) {
     foreach ($node->webformcomponents as $cid => $component) {
@@ -1344,6 +1344,17 @@ function webform_client_form_submit($form_id, $form_values) {
       $email_subject_string = variable_get('webform_default_subject', t('Form submission from: ')) . ' ' . $node->title;
       $headers = array();
 
+      // Check for empty values
+      if (strcmp('none', $node->email_from_name)) {
+        $email_from_name = '';
+      }
+      if (strcmp('none', $node->email_from_address)) {
+        $email_from_address = '';
+      }
+      if (strcmp('none', $node->email_subject)) {
+        $email_subject_string = '';
+      }
+
       // Search for user set FROM and SUBJECT fields
       if (is_array($node->webformcomponents) && !empty ($node->webformcomponents)) {
         foreach ($node->webformcomponents as $cid => $component) {
@@ -1370,7 +1381,12 @@ function webform_client_form_submit($form_id, $form_values) {
       }
       
       // Assemble the FROM string
-      $email_from_string = $email_from_name . ' <' . $email_from_address . '>';
+      if (strlen($email_from_name) > 0) {
+        $email_from_string = $email_from_name . ' <' . $email_from_address . '>';
+      }
+      else {
+        $email_from_string = $email_from_address;
+      }
 
       // Verify that this submission is not attempting to send any spam hacks
       if (_webform_submission_spam_check($node->email, $email_subject_string, $message, $email_from_string, $headers)) {
@@ -1386,13 +1402,13 @@ function webform_client_form_submit($form_id, $form_values) {
       
       // Debugging output
       if (variable_get('webform_debug', 0) >= 2) {
-        drupal_set_message("E-mail Headers: <pre>".print_r($headers, true)."</pre>To: " . $node->email . "<br />From: " . htmlentities($email_from_string) . "<br />Subject: " . $email_subject_string . "<br />E-mail Body: <pre>".$message."</pre>");
+        drupal_set_message("E-mail Headers: <pre>". print_r($headers, true) ."</pre>To: " . $node->email . "<br />From: " . htmlentities($email_from_string) . "<br />Subject: " . $email_subject_string . "<br />E-mail Body: <pre>".$message."</pre>");
       }
     }
   }
    
   if (variable_get('webform_debug', 0) >= 1) {
-    watchdog('webform', t('Submission posted to ')."'$node->title' ".l(t('Results'), 'node/'.$node->nid, NULL, 'sid='.$sid)."<br />\n".nl2br(htmlentities($message)), WATCHDOG_NOTICE);
+    watchdog('webform', t('Submission posted to %title', array('%title' => $node->title)) . l(t('Results'), 'node/'.$node->nid, NULL, 'sid='.$sid)."<br />\n".nl2br(htmlentities($message)), WATCHDOG_NOTICE);
   }
   
   // Check confirmation field to see if redirect should be to another node or a message
