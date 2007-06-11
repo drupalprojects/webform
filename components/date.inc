@@ -180,7 +180,7 @@ function theme_webform_mail_date($data, $component) {
   $output = $component['name'] .":";
   if ($data['month'] && $data['day']) {
     $timestamp = strtotime($data['month'] ."/". $data['day'] ."/". $data['year']);
-    $output .= " ". format_date($timestamp, "custom", 'F j, Y');
+    $output .= " ". format_date($timestamp, "custom", 'F j, Y', 0);
   }
   return $output;
 }
