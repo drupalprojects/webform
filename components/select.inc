@@ -107,16 +107,30 @@ function _webform_render_select($component) {
       if (strpos($default_value, ',')) {
         $varray = explode(',', $default_value);
         foreach ($varray as $key => $v) {
-          $varray[$key] = $v;
+          if (array_key_exists(_webform_safe_name($v), $options)) {
+            $form_item['#default_value'][] = _webform_safe_name($v);
+          }
+          else {
+            $form_item['#default_value'][] = $v;
+          }
         }
-        $form_item['#default_value'] = $varray;
+      }
+      else {
+        if (array_key_exists(_webform_safe_name($default_value), $options)) {
+          $form_item['#default_value'] = _webform_safe_name($default_value);
+        }
+        else {
+          $form_item['#default_value'] = $default_value;
+        }
+      }
+    }
+    else {
+      if (array_key_exists(_webform_safe_name($default_value), $options)) {
+        $form_item['#default_value'] = _webform_safe_name($default_value);
       }
       else {
         $form_item['#default_value'] = $default_value;
       }
-    }
-    else {
-      $form_item['#default_value'] = $default_value;
     }
   }
   
@@ -154,15 +168,24 @@ function _webform_submission_display_select($data, $component) {
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array
     foreach ((array)$data['value'] as $key => $value) {
-      $data['value'][$key] = $value;
+      if (array_key_exists(_webform_safe_name($value), $form_item['#options'])) {
+        $form_item['#default_value'][] = _webform_safe_name($value);
+      }
+      else {
+        $form_item['#default_value'][] = $value;
+      }
     }
-    $form_item['#default_value'] = $data['value'];
   }
   else {
     // Set the value as a single string
     foreach ((array)$data['value'] as $value) {
       if ($value !== '0') {
-        $form_item['#default_value'] = $value;
+        if (array_key_exists(_webform_safe_name($value), $form_item['#options'])) {
+          $form_item['#default_value'] = _webform_safe_name($value);
+        }
+        else {
+          $form_item['#default_value'] = $value;
+        }
         break;
       }
     }
@@ -242,7 +265,7 @@ function theme_webform_mail_select($data, $component) {
     }
   }
   else {
-    $output = $component['name'] .": ". $options[$data] ."\n";
+    $output = $component['name'] .": ". $data ."\n";
   }
   return $output;
 }
