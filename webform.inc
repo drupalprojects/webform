@@ -134,7 +134,8 @@ function _webform_fetch_submissions($nid, $header = NULL) {
   return $submissions;
 } // end function _webform_fetch_submissions
 
-/* This function is used to fetch a specified submission.
+/** 
+ * This function is used to fetch a specified submission.
  */
 function _webform_fetch_submission($sid, $nid) {
   
@@ -162,6 +163,76 @@ function _webform_fetch_submission($sid, $nid) {
   return $submission;
 } // end function _webform_fetch_submission
 
+
+function theme_webform_create_mailmessage($form_values, $node, $sid) {
+  global $user, $baseurl;
+  $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
+  $ip_address = $_SERVER['REMOTE_ADDR'];
+  
+  if ($user->uid) {
+    $message .= t('Submitted by user') .": $user->name [$ip_address]\n";
+  }
+  else {
+    $message .= t('Submitted by anonymous user') .": [$ip_address]\n";
+  }
+
+  $message .= "\n";
+  $message .= t('Submitted values are');
+  $message .= theme('webform_mail_fields', '', $form_values['submitted_tree'], $node);
+  
+  $message .= "\n\n";
+  $message .= t("The results of this submission may be viewed at:\n");
+  $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'.$node->nid, "sid=". $sid);
+  
+  
+  if (variable_get('webform_debug', 0) == 2) {
+    $message .= "\n";
+    $message .= "DEBUG INFO\n";
+    $message .= "==========\n";
+    $message .= "\$form_values are\n";
+    $message .= print_r($form_values, true);
+    $message .= "\$node is\n";
+    $message .= print_r($node, true);
+    $message .= "\$_SERVER is\n";
+    $message .= print_r($_SERVER, true);
+    $message .= "\n";
+    $message .= "\$_POST is\n";
+    $message .= print_r($_POST, true);
+  }
+
+  return $message;
+}
+
+function theme_webform_mail_fields($key, $value, $node, $indent = "") {
+  // First check for component-level themes.
+  $themed_output = theme("webform_mail_". $node->webformcomponents[$key]['type'], $value, $node->webformcomponents[$key]);
+  if ($themed_output) {
+    // Indent the output and add to message.
+    $message .= $indent;
+    $themed_output = rtrim($themed_output, "\n");
+    $message .= str_replace("\n", "\n". $indent, $themed_output);
+    $message .= "\n";
+  }
+  // Generic output for single values.
+  elseif (!is_array($value)) {
+    // Note that newlines cannot be preceeded by spaces to display properly in some clients.
+    if ($node->webformcomponents[$key]['name']) {
+      // If text is more than 60 characters, put it on a new line with space after.
+      $long = (strlen($indent . $node->webformcomponents[$key]['name'] . $value)) > 60;
+      $message .= $indent . $node->webformcomponents[$key]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
+    }
+  }
+  // Else use a generic output for arrays.
+  else {
+    $message .= $indent . $node->webformcomponents[$key]['name'] .":\n";
+    foreach ($value as $k => $v) {
+      $message .= theme('webform_mail_fields', $k, $v, $node, $indent ."  ");
+    }
+  }
+  return ($message);
+}
+
+/*
 function theme_webform_create_mailmessage($form_values, $node, $sid) {
   global $user, $baseurl;
   $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
@@ -219,7 +290,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
 
   return $message;
 }
-
+*/
 
 function _webform_submission_spam_check($to, $subject, $message, $from, $headers = array()) {
   $headers = implode('\n', $headers);
