@@ -14,24 +14,23 @@
  */
 function _webform_page() {
   $header = array(
-                  t('Title'), 
-                  array('data' => t('View'),
-                        'colspan' => '4'),
-                  array('data' => t('Operations'),
-                        'colspan' => '2')
-                  );
+    t('Title'), 
+    array('data' => t('View'), 'colspan' => '4'),
+    array('data' => t('Operations'), 'colspan' => '2')
+  );
 
   $result = db_query("SELECT nid, title FROM {node} WHERE type='webform'");
    
   while ($node = db_fetch_object($result)) {
-    $rows[] = array(l($node->title, 'node/'. $node->nid),
-                    l(t('submissions'), 'node/'. $node->nid .'/results'),
-                    l(t('analysis'), 'node/'. $node->nid .'/results/analysis'),
-                    l(t('table'), 'node/'. $node->nid .'/results/table'),
-                    l(t('download'), 'node/'. $node->nid .'/results/download'),
-                    l(t('edit'), 'node/'. $node->nid .'/edit'),
-                    l(t('clear'), 'node/'. $node->nid .'/results/clear'));
-
+    $rows[] = array(
+      l($node->title, 'node/'. $node->nid),
+      l(t('submissions'), 'node/'. $node->nid .'/results'),
+      l(t('analysis'), 'node/'. $node->nid .'/results/analysis'),
+      l(t('table'), 'node/'. $node->nid .'/results/table'),
+      l(t('download'), 'node/'. $node->nid .'/results/download'),
+      l(t('edit'), 'node/'. $node->nid .'/edit'),
+      l(t('clear'), 'node/'. $node->nid .'/results/clear'),
+    );
   }
   
   $content = theme('table', $header, $rows);
@@ -39,9 +38,10 @@ function _webform_page() {
   return $content;
 } // end function _webform_page
 
-/*
- * Delete all submission for a form
- * @param      integer ID of node for which to clear submissions
+/**
+ * Delete all submission for a form.
+ * @param $nid
+ *   ID  of node for which to clear submissions.
  */
 function _webform_results_clear($nid) {
   drupal_set_title(t("Clear Form Submissions"));
@@ -66,10 +66,12 @@ function _webform_results_clear_submit($form_id, $form_values) {
   drupal_goto('admin/content/webform'); 
 }
 
-/*
+/**
  * Delete one form submission
- * @param  integer  ID of node for which this webform was submitted
- * @param  integer  ID of submission to be deleted (from webform_submitted_data)
+ * @param $nid
+ *   ID of node for which this webform was submitted
+ * @param $sid
+ *   ID  of submission to be deleted (from webform_submitted_data)
  */
 function _webform_submission_delete($nid, $sid) {
   drupal_set_title(t("Delete Form Submission"));
@@ -232,91 +234,15 @@ function theme_webform_mail_fields($key, $value, $node, $indent = "") {
   return ($message);
 }
 
-/*
-function theme_webform_create_mailmessage($form_values, $node, $sid) {
-  global $user, $baseurl;
-  $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
-  $ip_address = $_SERVER['REMOTE_ADDR'];
-  
-  if ($user->uid) {
-    $message .= t('Submitted by user') .": $user->name [$ip_address]\n";
-  }
-  else {
-    $message .= t('Submitted by anonymous user') .": [$ip_address]\n";
-  }
-
-  $message .= "\n";
-
-  $message .= t('Submitted values are');
-  $message .= "\n\n";
-
-  foreach ($form_values['submitted'] as $cid => $value) {
-    $themed_output = theme("webform_mail_". $node->webformcomponents[$cid]['type'], $value, $node->webformcomponents[$cid]);
-    if ($themed_output) {
-      $themed_output = rtrim($themed_output, "\n");
-      $message .= $themed_output;
-      $message .= "\n";
-    }
-    // Generic output for single values
-    elseif (!is_array($value)) {
-      // Note that newlines cannot be preceeded by spaces to display properly in some clients
-      if ($node->webformcomponents[$cid]['name']) {
-        // if text is more than 60 characters, put it on a new line with space after
-        $long = (strlen($node->webformcomponents[$cid]['name'] . $value)) > 60;
-        $message .= $node->webformcomponents[$cid]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
-      }
-    }
-  }
-
-  $message .= "\n\n";
-  $message .= t("The results of this submission may be viewed at:\n");
-  $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'. $node->nid, "sid=". $sid);
-  
-  
-  if (variable_get('webform_debug', 0) == 2) {
-    $message .= "\n";
-    $message .= "DEBUG INFO\n";
-    $message .= "==========\n";
-    $message .= "\$form_values are\n";
-    $message .= print_r($form_values, true);
-    $message .= "\$node is\n";
-    $message .= print_r($node, true);
-    $message .= "\$_SERVER is\n";
-    $message .= print_r($_SERVER, true);
-    $message .= "\n";
-    $message .= "\$_POST is\n";
-    $message .= print_r($_POST, true);
-  }
-
-  return $message;
-}
-*/
 
 function _webform_submission_spam_check($to, $subject, $message, $from, $headers = array()) {
   $headers = implode('\n', $headers);
-  // check if they are spamming using a bcc hack
-  if (preg_match('/b*cc\s*:/i', $to)
-      || preg_match('/b*cc\s*:/i', $subject)
-      || preg_match('/b*cc\s*:/i', $message)
-      || preg_match('/b*cc\s*:/i', $from)
-      || preg_match('/b*cc\s*:/i', $headers)
-    ) {
+  // Check if they are attempting to spam using a bcc or content type hack
+  if (preg_match('/(b?cc\s?:)|(content\-type:)/i', $to ."\n". $subject ."\n". $from ."\n". $headers)) {
     return true; // Possible spam attempt
-  }
-
-  // check if they are spamming using a bcc hack
-  if (preg_match('/content\-type/i', $to)
-      || preg_match('/content\-type/i', $subject)
-      || preg_match('/content\-type/i', $message)
-      || preg_match('/content\-type/i', $from)
-      || preg_match('/content\-type/i', $headers)
-    ) {
-    return true; // Possible spam attempt
-  }
-  
+  }  
   return false; // Not spam
 }
-
 
 function _webform_submission_limit_check($node, $form_values) {
   global $user, $db_type;
