@@ -220,7 +220,7 @@ function webform_admin_settings() {
     '#type' => 'select',
     '#title' => t("Webforms Debug"),
     '#default_value' => variable_get("webform_debug", 0), 
-    '#options' => array(0 => "OFF", 1 => "Log submissions", 2 => "Full debug"), 
+    '#options' => array(0 => t("OFF"), 1 => t("Log submissions"), 2 => t("Full debug")), 
     '#description' => t('Set this option to "Log submissions" to log all submissions in the watchdog. Set it to "Full debug" to print debug info on submission. You probably want to leave this option on "OFF".')
   );
   return system_settings_form($form);
@@ -671,7 +671,7 @@ function webform_form(&$node, &$param) {
     '#name' => 'enforce_limit', // Override the naming scheme to force these radios into the same group
     '#type' => 'radio',
     '#return_value' => 'no',
-    '#title' => 'Unlimited',
+    '#title' => t('Unlimited'),
     '#default_value' => ($node->submit_limit > 0 ? false : 'no'),
     '#parents' => array('advanced', 'submitlimit'), // If we don't specify the parent, the forms API will think this is an illegal posting
   );
@@ -816,7 +816,7 @@ function theme_webform_node_form($form) {
     }
   }
   else {
-    $rows[] = array(NULL, array('data' => "No Components, add a component below.", 'colspan' => 5));
+    $rows[] = array(NULL, array('data' => t("No Components, add a component below."), 'colspan' => 5));
   }
 
   $headers = array(
@@ -875,7 +875,7 @@ function webform_edit_field_form(&$node) {
     $currfield['form_key'] = $currfield['key'];
     $currfield['type'] = $_POST['webform_newfield_type'];
     $currfield['name'] = $currfield['type'] ."_". $currfield['key'];
-    drupal_set_title("Add new component (". $currfield['type'] .")");
+    drupal_set_title(t("Add new %type component", array('%type' => $currfield['type'])));
   }
   
   // Construct the form:
@@ -935,7 +935,7 @@ function webform_edit_field_form(&$node) {
   );
   
   if (variable_get('webform_enable_fieldset', true) && is_array($node->webformcomponents)) {
-    $options = array('0' => 'Root');
+    $options = array('0' => t('Root'));
     foreach ($node->webformcomponents as $thiscid => $value) {
       if ($value['type'] == 'fieldset' && $thiscid != $cid) {
         $options[$thiscid] = htmlspecialchars($value['name'], ENT_QUOTES);

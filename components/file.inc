@@ -15,7 +15,7 @@ function _webform_edit_file($currfield) {
       '#type' => 'fieldset',
       '#collapsible' => true,
       '#collapsed' => false,
-      '#title' => 'Upload Filtering',
+      '#title' => t('Upload Filtering'),
       '#description' => t('Select the types of uploads you would like to allow.'),
     );
     $edit_fields['extra']['filtering']['types']['webimages'] = array(
