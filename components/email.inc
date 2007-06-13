@@ -10,13 +10,20 @@
  **/
 function _webform_edit_email($currfield) {
   $edit_fields = array();
+  $edit_fields['extra']['width'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Width"),
+    '#default_value' => $currfield['extra']['width'],
+    '#description' => t('Width of the textfield.'),
+    '#size' => 5,
+    '#maxlength' => 10,
+  );
   $edit_fields['value'] = array(
     '#type' => 'checkbox',
     '#title' => t("User email as default"),
     '#default_value' => $currfield['default'],
     '#return_value' => 'user email',
     '#description' => t('Set the default value of this field to the user email, if he/she is logged in.'),
-    '#weight' => 0,
   );
   $edit_fields['extra']['carboncopy'] = array(
     '#type' => 'checkbox',
@@ -26,13 +33,13 @@ function _webform_edit_email($currfield) {
     '#description' => t('Check this option if the email specified in this component should get a CC submission.') .' '.
                       t('Note that this opens the risk that the form can be used to send emails to any address and might be missused as a spam gateway.'),
   );
-  $edit_fields['extra']['width'] = array(
-    '#type' => 'textfield',
-    '#title' => t("Width"),
-    '#default_value' => $currfield['extra']['width'],
-    '#description' => t('Width of the textfield.'),
-    '#size' => 5,
-    '#maxlength' => 10,
+  $edit_fields['extra']['attributes']['disabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Disabled"),
+    '#return_value' => 'disabled',
+    '#description' => t('Make this field non-editable. Useful for setting an unchangeable default value.'),
+    '#weight' => 3,
+    '#default_value' => $currfield['extra']['attributes']['disabled'],
   );
   return $edit_fields;
 }
@@ -51,6 +58,7 @@ function _webform_render_email($component) {
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#attributes'    => $component['extra']['attributes'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
     '#validate'      => array('_webform_validate_email' => array('submitted]['. $component['cid'])),
