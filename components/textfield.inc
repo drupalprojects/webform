@@ -87,7 +87,7 @@ function _webform_render_textfield($component) {
 function _webform_submission_display_textfield($data, $component) {
   $form_item = _webform_render_textfield($component);
   $form_item['#default_value'] = $data['value']['0'];
-  $form_item['#attributes']    = array("disabled" => "disabled");
+  $form_item['#disabled'] = TRUE;
   return $form_item;
 }
 
