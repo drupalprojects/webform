@@ -11,7 +11,6 @@
  * @author Nathan Haug <nate at lullabot dot com>
  * @package module_webform
  * @copyright Pontus Ullgren 2003-2005
- * 
  **/
 
 /** 
@@ -1498,8 +1497,14 @@ function _webform_filtervalues($string, $strict = TRUE) {
 
   if (module_exists('profile')) {
     foreach ($user as $k => $v) {
+      // Special case for dates
       $find[]= "%profile[$k]";
-      $replace[]= $v;
+      if (is_array($v) && $v['year']) {
+        $replace[] = format_date(strtotime($v['month'] .'/'. $v['day'] .'/'. $v['year']), 'custom', 'F j, Y', '0');
+      }
+      else {
+        $replace[] = $v;
+      }
     }
   }
   foreach ($_SERVER as $k => $v) {
@@ -1507,12 +1512,12 @@ function _webform_filtervalues($string, $strict = TRUE) {
     $replace[]= $v;
   }
   foreach ($_GET as $k => $v) {
-    $find[]= "%get[$k]";
-    $replace[]= $v;
+    $find[] = "%get[$k]";
+    $replace[] = $v;
   }
   foreach ($_POST as $k => $v) {
-    $find[]= "%post[$k]";
-    $replace[]= $v;
+    $find[] = "%post[$k]";
+    $replace[] = $v;
   }
   $string= str_replace($find, $replace, $string);
 

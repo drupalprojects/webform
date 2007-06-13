@@ -14,7 +14,7 @@ function _webform_edit_date($currfield) {
     '#type' => 'textfield',
     '#title' => t("Default value"),
     '#default_value' => $currfield['default'],
-    '#description' => t('The default value of the field.') .'<br />'. t('Accepts any date in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
+    '#description' => t('The default value of the field.') .'<br />'. t('Accepts any date in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.') .'<br />'. webform_help('webform/helptext#variables'),
     '#size' => 60,
     '#maxlength' => 127,
     '#weight' => 0,
@@ -48,7 +48,7 @@ function _webform_edit_date($currfield) {
 function _webform_render_date($component) {
   if (strlen($component['value']) > 0) {
     // Calculate the timestamp in GMT
-    $timestamp = strtotime($component['value']);
+    $timestamp = strtotime(_webform_filtervalues($component['value']));
     
     if ($component['extra']['timezone'] == "user") {
       // Use the users timezone
@@ -73,17 +73,18 @@ function _webform_render_date($component) {
     $month = gmdate('n', $timestamp);
     $day = gmdate('j', $timestamp);
   }
-  
   $months = array("" => t("month"), 1 => t('January'), t('February'), t('March'), t('April'), t('May'), t('June'), t('July'), t('August'), t('September'), t('October'), t('November'), t('December'));
   $days = array("" => t("day"));
   for ($i = 1; $i <= 31; $i++) $days[$i] = $i;
   
-  $form_item['#type'] = 'fieldset';
-  $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
-  $form_item['#weight'] = $component['weight'];
-  $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
-  $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. $component['form_key'] .'">';
-  $form_item['#suffix'] = '</div>';
+  $form_item = array(
+    '#type' => 'fieldset',
+    '#title' => htmlspecialchars($component['name'], ENT_QUOTES),
+    '#weight' => $component['weight'],
+    '#description' => _webform_filtervalues($component['extra']['description']),
+    '#prefix' => '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. $component['form_key'] .'">',
+    '#suffix' => '</div>',
+  );
   if ($component['mandatory']) {
     $form_item['#title'] .= '<span class="form-required" title="'. t("This field is required.") .'">*</span>';
   }
