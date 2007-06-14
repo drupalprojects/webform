@@ -1,12 +1,12 @@
 <?php
 // $Id$
 /** 
- * function webform_edit_file
+ * @function webform_edit_file
  * Create a set of form items to be displayed on the form for editing this component.
  * Use care naming the form items, as this correlates directly to the database schema.
  * The component "Name" and "Description" fields are added to every component type and
  * are not necessary to specify here (although they may be overridden if desired).
- * @returns An array of form items to be displayed on the edit component page
+ * @return An array of form items to be displayed on the edit component page
  **/
 function _webform_edit_file($currfield) {
     $edit_fields = array();
@@ -175,7 +175,7 @@ function theme_webform_edit_file($form) {
  * function webform_render_file
  * Build a form item array containing all the properties of this component
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of a form item to be displayed on the client-side webform
+ * @return An array of a form item to be displayed on the client-side webform
  **/
 function _webform_render_file($component) {
   $form_item = array(
@@ -247,7 +247,7 @@ function _webform_validate_file($formelement, $cid, $fieldname, $filters) {
  * Perform additional server-side processing on the submitted data, such as managing an uploaded file
  * @param $data The POST data associated with the component
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns Nothing
+ * @return Nothing
  **/
 function _webform_submit_file(&$data, $component) {
   if ($file = file_check_upload($component['cid'])) {
@@ -288,7 +288,7 @@ function theme_webform_mail_file($data, $component) {
  * Display the result of a file submission. The output of this function will be displayed under the "results" tab then "submissions"
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns Textual output formatted for human reading.
+ * @return Textual output formatted for human reading.
  **/
 function _webform_submission_display_file($data, $component) {
   $filedata = unserialize($data['value'][0]);
@@ -296,7 +296,12 @@ function _webform_submission_display_file($data, $component) {
   $form_item['#type'] = 'textfield';
   $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   if ($filedata['filename']) {
-    $form_item['#suffix'] = ' <a href="'. base_path() . $filedata['filepath'] .'">Download '. $filedata['filename'] .'</a><br /><br />';
+    if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PRIVATE) {
+      $form_item['#suffix'] = ' <a href="'. url('system/files/'. $filedata['filepath'], NULL, NULL, TRUE) .'">Download '. $filedata['filename'] .'</a><br /><br />';
+    }
+    else {
+      $form_item['#suffix'] = ' <a href="'. base_path() . $filedata['filepath'] .'">Download '. $filedata['filename'] .'</a><br /><br />';
+    }
   }
   $form_item['#attributes'] = array("disabled" => "disabled");
   return $form_item;
@@ -306,7 +311,7 @@ function _webform_submission_display_file($data, $component) {
  * function _webform_analysis_view_file
  * Calculate and returns statistics about results for this component from all submission to this webform. The output of this function will be displayed under the "results" tab then "analysis"
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of data rows, each containing a statistic for this component's submissions.
+ * @return An array of data rows, each containing a statistic for this component's submissions.
  **/
 function _webform_analysis_rows_file($component) {  
   $query = 'SELECT data '.
@@ -337,7 +342,7 @@ function _webform_analysis_rows_file($component) {
  * function _webform_table_data_file
  * Return the result of this component's submission for display in a table. The output of this function will be displayed under the "results" tab then "table"
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @returns Textual output formatted for human reading.
+ * @return Textual output formatted for human reading.
  **/
 function _webform_table_data_file($data) {
   $filedata = unserialize($data['value']['0']);
@@ -359,7 +364,7 @@ function _webform_table_data_file($data) {
  * function _webform_csv_headers_file
  * Return the header information for this component to be displayed in a comma seperated value file. The output of this function will be displayed under the "results" tab then "download"
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
+ * @return An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
  **/
 function _webform_csv_headers_file($component) {
   $header = array();
@@ -373,7 +378,7 @@ function _webform_csv_headers_file($component) {
  * function _webform_csv_data_file
  * Return the result of a file submission. The output of this function will be displayed under the "results" tab then "submissions"
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
+ * @return Textual output formatted for CSV, not including either prefixed or trailing commas
  **/
 function _webform_csv_data_file($data) {
   $filedata = unserialize($data['value']['0']);

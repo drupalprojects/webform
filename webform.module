@@ -1023,7 +1023,8 @@ function webform_edit_field_form_validate($form_values) {
 }
 
 /**
- * Implementation of hook_forms(). All webform_client_form forms share the same form handler
+ * Implementation of hook_forms().
+ * All webform_client_form forms share the same form handler
  */
 function webform_forms() {
   global $_webform_form_list;
@@ -1034,6 +1035,17 @@ function webform_forms() {
     }
   }
   return $forms;
+}
+
+/**
+ * Implementation of hook_file_download().
+ * Only allow users with view webform submissions to download files.
+ */
+function webform_file_download($file) {
+  if (strpos($file, variable_get('file_directory_path', 'files') .'/webform/') === 0 && user_access('access webform results')) {
+    $info = image_get_info(file_create_path($file));
+    return array('Content-type: '. $info['mime_type']);
+  }
 }
 
 function webform_view(&$node, $teaser = 0, $page = 0) {
