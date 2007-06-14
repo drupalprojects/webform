@@ -19,18 +19,22 @@ function _webform_page() {
     array('data' => t('Operations'), 'colspan' => '2')
   );
 
-  $result = db_query("SELECT nid, title FROM {node} WHERE type='webform'");
+  $result = db_query("SELECT nid, uid, title FROM {node} WHERE type='webform'");
    
   while ($node = db_fetch_object($result)) {
-    $rows[] = array(
-      l($node->title, 'node/'. $node->nid),
-      l(t('submissions'), 'node/'. $node->nid .'/results'),
-      l(t('analysis'), 'node/'. $node->nid .'/results/analysis'),
-      l(t('table'), 'node/'. $node->nid .'/results/table'),
-      l(t('download'), 'node/'. $node->nid .'/results/download'),
-      l(t('edit'), 'node/'. $node->nid .'/edit'),
-      l(t('clear'), 'node/'. $node->nid .'/results/clear'),
-    );
+   $row = array(l($node->title, 'node/'. $node->nid));
+   if (user_access('access webform results')) {
+     $row[] = l(t('Submissions'),'node/'. $node->nid .'/results');
+     $row[] = l(t('Analysis'),'node/'. $node->nid .'/results/analysis');
+     $row[] = l(t('Table'),'node/'. $node->nid .'/results/table');
+     $row[] = l(t('Download'),'node/'. $node->nid .'/results/download');
+   }
+   else {
+     $row = array_merge($row, array('','','',''));
+   }
+   $row[] = node_access('update', $node) ? l(t('Edit'), 'node/'. $node->nid .'/edit') : '';
+   $row[] = user_access('clear webform results') ? l(t('Clear'), 'node/'. $node->nid .'/results/clear') : '';
+   $rows[] = $row;
   }
   
   $content = theme('table', $header, $rows);
