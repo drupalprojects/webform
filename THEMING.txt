@@ -78,20 +78,19 @@ function phptemplate_webform_form_nodeIdHere ($form) {
   with the node ID of the webform.
   
 - Open up your new file and customize the webform however you like. Here's an
-  example putting a field labeled "Email" inside of another fieldset.
+  example putting a field with the "email" key inside of another fieldset.
   
 <?php
   // Create a new fieldset within the main fieldset
   // Note: All fields MUST stay within the 'submitted' fieldset
-  $form['submitted']['newfieldset'] = array (
-      '#type' => 'fieldset'
+  $form['submitted']['newfieldset'] = array(
+    '#type' => 'fieldset'
   );
   
-  // Move the form field labeled "Email" to the new fieldset
-  $form['submitted']['newfieldset']['Email'] = $form['submitted']['Email'];
-  unset($form['submitted']['Email']);
-  echo drupal_render($form)
-   
+  // Move the form field labeled "email" to the new fieldset
+  $form['submitted']['newfieldset']['email'] = $form['submitted']['email'];
+  unset($form['submitted']['email']);
+  pring drupal_render($form);
 ?>
 
 - All webform forms have 2 main fieldsets: "submitted", and "details". Although
