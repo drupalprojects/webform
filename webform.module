@@ -1153,8 +1153,10 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
         }
   
         $form['#multistep'] = TRUE;
-        $form['#redirect'] = FALSE;
-  
+        if ($_POST['op'] != t('Submit')) {
+          $form['#redirect'] = FALSE;
+        }
+
         $form['details']['page_num'] = array(
           '#type'      => 'hidden',
           '#value'     => $page_num,
@@ -1435,15 +1437,16 @@ function webform_client_form_submit($form_id, $form_values) {
   
   // Check confirmation field to see if redirect should be to another node or a message
   if (valid_url(trim($node->confirmation), true)) {
-    return trim($node->confirmation);
+    $redirect = trim($node->confirmation);
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
-    return array($path, 'sid=' . $sid);
+    $redirect = array($path, 'sid=' . $sid);
   }
   else {
-    return array('node/'.$node->nid.'/done', 'sid=' . $sid);
+    $redirect = array('node/'.$node->nid.'/done', 'sid=' . $sid);
   }
+  return $redirect;
 } // end webform_client_form_submit
 
 /**
