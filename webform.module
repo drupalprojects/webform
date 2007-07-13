@@ -1088,7 +1088,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   }
   
   $node->content['body'] = array('#value' => check_markup($node->body, $node->format, FALSE));
-  $node->content['webform'] = array('#value' => $output, '#weight' => 10);
+  $node->content['webform'] = array('#value' => $output, '#weight' => 1);
   
   return $node;
 } // end webform_view
