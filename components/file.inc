@@ -293,7 +293,6 @@ function theme_webform_mail_file($data, $component) {
 function _webform_submission_display_file($data, $component) {
   $filedata = unserialize($data['value'][0]);
   $form_item = _webform_render_file($component);
-  dsm($form_item);
   $form_item['#type'] = 'textfield';
   $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   if ($filedata['filename']) {
