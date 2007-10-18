@@ -1369,13 +1369,13 @@ function webform_client_form_submit($form_id, $form_values) {
       $headers = array();
 
       // Check for empty values
-      if (strcmp('none', $node->email_from_name)) {
+      if ($node->email_from_name == 'none') {
         $email_from_name = '';
       }
-      if (strcmp('none', $node->email_from_address)) {
+      if ($node->email_from_address == 'none') {
         $email_from_address = '';
       }
-      if (strcmp('none', $node->email_subject)) {
+      if ($node->email_subject == 'none') {
         $email_subject_string = '';
       }
 
