@@ -1133,6 +1133,7 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
     // Put the components into a tree structure
     $component_tree = array();
     $page_count = 1;
+    $page_num = 1;
     _webform_components_tree_build($node->webformcomponents, $component_tree, 0, $page_count);
 
     if (!$preview && empty($submission)) {
