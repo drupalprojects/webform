@@ -361,9 +361,13 @@ function _webform_csv_headers_select($component) {
     $items = split("\n", $component['extra']['items']);
     foreach ($items as $item) {
       $header[2] .= "\,". $item;
+      // empty column per sub-field in main header
+      $header[1] .= "\,";
     }
     // Remove the preceding extra comma
     $header[2] = substr($header[2], 2);
+    // Remove the trailing column
+    $header[1] = substr($header[1], 0, -2);
   }
   else {
     $header[2] = $component['name'];
