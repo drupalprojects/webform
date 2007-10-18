@@ -293,14 +293,15 @@ function theme_webform_mail_file($data, $component) {
 function _webform_submission_display_file($data, $component) {
   $filedata = unserialize($data['value'][0]);
   $form_item = _webform_render_file($component);
+  dsm($form_item);
   $form_item['#type'] = 'textfield';
   $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   if ($filedata['filename']) {
     if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PRIVATE) {
-      $form_item['#suffix'] = ' <a href="'. url('system/files/'. $filedata['filepath'], NULL, NULL, TRUE) .'">Download '. $filedata['filename'] .'</a><br /><br />';
+      $form_item['#suffix'] = ' <a href="'. url('system/files/'. $filedata['filepath'], NULL, NULL, TRUE) .'">Download '. $filedata['filename'] .'</a></div>';
     }
     else {
-      $form_item['#suffix'] = ' <a href="'. base_path() . $filedata['filepath'] .'">Download '. $filedata['filename'] .'</a><br /><br />';
+      $form_item['#suffix'] = ' <a href="'. base_path() . $filedata['filepath'] .'">Download '. $filedata['filename'] .'</a></div>';
     }
   }
   $form_item['#attributes'] = array("disabled" => "disabled");
