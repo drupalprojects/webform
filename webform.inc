@@ -232,7 +232,13 @@ function theme_webform_mail_fields($key, $value, $node, $indent = "") {
   else {
     $message .= $indent . $node->webformcomponents[$key]['name'] .":\n";
     foreach ($value as $k => $v) {
-      $message .= theme('webform_mail_fields', $k, $v, $node, $indent ."  ");
+      foreach($node->webformcomponents as $local_key => $local_value) {
+        if ($local_value['form_key'] == $k) {
+          $form_key = $local_key;
+          break;
+        }
+      }
+      $message .= theme('webform_mail_fields', $form_key, $v, $node, $indent ."  ");
     }
   }
   return ($message);
