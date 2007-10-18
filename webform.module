@@ -589,11 +589,11 @@ function webform_form(&$node, &$param) {
     foreach ($node->webformcomponents as $cid => $component) {
       $type = $component['type'];
       if (in_array($type, array('textfield', 'hidden', 'select'))) {
-        $possible_email_from_address[$component['name']] = $component['name'];
-      }
-      if (in_array($type, array('email', 'hidden', 'select'))) {
         $possible_email_from_name[$component['name']] = $component['name'];
         $possible_email_subject[$component['name']] = $component['name'];
+      }
+      if (in_array($type, array('email', 'hidden', 'select'))) {
+        $possible_email_from_address[$component['name']] = $component['name'];
       }
     }
   }
