@@ -161,7 +161,7 @@ function webform_admin_settings() {
   );
   
   // Add each component to the form:
-  $component_types = _webform_load_components(true);
+  $component_types = _webform_load_components(TRUE);
   foreach ($component_types as $component_name => $component_trans_name) {
     $form['components']['webform_enable_'. $component_name] = array(
       '#title' => $component_trans_name,
@@ -569,7 +569,7 @@ function webform_form(&$node, &$param) {
     );
   }
 
-  $component_types =  _webform_load_components();
+  $component_types = _webform_load_components();
   natcasesort($component_types);
   $form['components']['webform_newfield_type'] = array(
     '#type' => 'select',
@@ -1699,19 +1699,28 @@ function _webform_components_tree_sort($tree) {
   return $tree;
 }
 
-function _webform_load_components($return_all = false) {
-  static $component_list;
-  
-  if (!isset($component_list)) {
+function _webform_load_components($return_all = FALSE, $reset = FALSE) {
+  static $component_list, $enabled_list;
+
+  if (!isset($component_list) || $reset) {
     $component_list = array();
+    $enabled_list = array();
     $path = drupal_get_path('module', 'webform')."/components";
     $files = file_scan_directory($path, '^.*\.inc$');
     foreach ($files as $filename => $file) {
-      if ($return_all || variable_get('webform_enable_'.$file->name, 1)) {
+      $enabled = variable_get('webform_enable_'.$file->name, 1);
+      if ($return_all || $enabled) {
         include_once($filename);
         $component_list[$file->name] = t($file->name);
       }
+      if ($enabled) {
+        $enabled_list[$file->name] = t($file->name);
+      }
     }
   }
-  return $component_list;
+  // Ensure only wanted components are returned, even all are loaded.
+  if (!$return_all) {
+    $return_list = array_intersect_assoc($component_list, $enabled_list);
+  }
+  return $return_list;
 }
