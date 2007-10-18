@@ -51,12 +51,14 @@ function webform_help($section= "admin/help#webform") {
       }
       break;
   }
-  // Call help hooks in plugins:
-  $components = _webform_load_components();
-  foreach ($components as $component) {
-    $help_function = "_webform_help_". $component;
-    if (function_exists($help_function)) {
-      $output .= $help_function($section);
+  if (strstr($section, 'admin/settings/webform#')) {
+    // Call help hooks in plugins:
+    $components = _webform_load_components(TRUE);
+    foreach ($components as $component) {
+      $help_function = "_webform_help_". $component;
+      if (function_exists($help_function)) {
+        $output .= $help_function($section);
+      }
     }
   }
   return $output;
@@ -1722,9 +1724,7 @@ function _webform_load_components($return_all = FALSE, $reset = FALSE) {
       }
     }
   }
+
   // Ensure only wanted components are returned, even all are loaded.
-  if (!$return_all) {
-    $return_list = array_intersect_assoc($component_list, $enabled_list);
-  }
-  return $return_list;
+  return $return_all ? $component_list : array_intersect_assoc($component_list, $enabled_list);
 }
