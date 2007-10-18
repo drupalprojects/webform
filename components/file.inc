@@ -369,7 +369,8 @@ function _webform_table_data_file($data) {
 function _webform_csv_headers_file($component) {
   $header = array();
   $header[0] = '';
-  $header[1] = $component['name'];
+  // Two columns in header.
+  $header[1] = $component['name'] .'\,';
   $header[2] = 'Name\,Filesize (KB)';
   return $header;
 }
