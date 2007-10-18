@@ -1111,7 +1111,7 @@ function webform_client_form(&$node, $submission = array(), $form_values = NULL)
     profile_load_profile($user);
   }
   
-  if ($node->redirect_post && valid_url(trim($node->confirmation), true)) {
+  if ($node->redirect_post && (valid_url(trim($node->confirmation), true) || preg_match('/^internal:/', $node->confirmation))) {
     $form['#action'] = trim($node->confirmation);
   }
   
@@ -1439,6 +1439,10 @@ function webform_client_form_submit($form_id, $form_values) {
   // Check confirmation field to see if redirect should be to another node or a message
   if (valid_url(trim($node->confirmation), true)) {
     $redirect = trim($node->confirmation);
+  }
+  elseif (preg_match('/^internal:/', $node->confirmation) && $node->redirect_post) {
+    $path = preg_replace('/^internal:/', $base_url.'/', $node->confirmation);
+    $redirect = trim($path);
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
