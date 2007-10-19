@@ -382,6 +382,7 @@ function webform_prepare(&$node) {
       // Overwrite the database components with any saved in the POST array
       if (isset($_POST['node']['webformcomponents'])) {
         $node->webformcomponents = _webform_components_decode($_POST['node']['webformcomponents']);
+        $post_components = $_POST['node']['webformcomponents'];
         unset($_POST['node']['webformcomponents']);
       }
       
@@ -393,12 +394,13 @@ function webform_prepare(&$node) {
       $node = (object)$edit;
           
       // Validate the field form
-      webform_edit_field_form_validate($_POST['field']);
+      webform_edit_field_form_validate($_POST['field'], $node);
       $errors = form_get_errors();
       if (!empty($errors)) {
         $node->webformcomponents[$node->selected_component] = $_POST['field'];
         $_POST = $_POST['node'];
-        $_POST['op'] = $op = t('Edit Selected');
+        $_POST['webformcomponents'] = $post_components;
+        $_POST['op'] = t('Edit Selected');
         $output = drupal_get_form('webform_edit_field_form', $node);
         print theme('page', $output);
         exit();
@@ -906,7 +908,7 @@ function webform_edit_field_form(&$node) {
     '#type' => 'textfield',
     '#default_value' => $currfield['form_key'],
     '#title' => t('Field Key'),
-    '#description' => t('Enter a machine readable key for this form element. May contain only alphanumeric characters and underscores. This key will be used as the name attribute of the form element.'),
+    '#description' => t('Enter a machine readable key for this form element. May contain only lowercase alphanumeric characters and underscores. This key will be used as the name attribute of the form element.'),
     '#required' => TRUE,
     '#weight' => -2,
   );
@@ -1011,9 +1013,15 @@ function webform_edit_field_form(&$node) {
 /**
  * Field name validation for the webform unique key. Must be alphanumeric.
  */
-function webform_edit_field_form_validate($form_values) {
+function webform_edit_field_form_validate($form_values, $node) {
   if (!preg_match('!^[a-z0-9_]+$!', $form_values['form_key'])) {
-    form_set_error('field][form_key', t('The field name %field_name is invalid.', array('%field_name' => $form_values['form_key'])));
+    form_set_error('field][form_key', t('The field key %field_key is invalid. Please include only lowercase alphanumeric charaters and underscores.', array('%field_key' => $form_values['form_key'])));
+  }
+
+  foreach ($node->webformcomponents as $cid => $component) {
+    if (($component['cid'] != $form_values['key']) && (strcasecmp($component['form_key'], $form_values['form_key']) == 0) && ($component['parent'] == $form_values['parent'])) {
+      form_set_error('field][form_key', t('The field key %field_key is already in use by the field labeled %existing_field. Please use a unique key.', array('%field_key' => $form_values['form_key'], '%existing_field' => $component['name'])));
+    }
   }
 
   // Let the field do any additional validation.
