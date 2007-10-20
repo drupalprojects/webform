@@ -1,13 +1,14 @@
 <?php
 // $Id$
-/** 
- * function webform_edit_fieldset
- * Create a set of form items to be displayed on the form for editing this component.
- * Use care naming the form items, as this correlates directly to the database schema.
- * The component "Name" and "Description" fields are added to every component type and
- * are not necessary to specify here (although they may be overridden if desired).
- * @returns An array of form items to be displayed on the edit component page
- **/
+/**
+ * Create a set of form items to be displayed on the form for editing this
+ * component. Use care naming the form items, as this correlates directly to the
+ * database schema. The component "Name" and "Description" fields are added to
+ * every component type and are not necessary to specify here (although they may
+ * be overridden if desired).
+ * @return
+ *   An array of form items to be displayed on the edit component page.
+ */
 function _webform_edit_fieldset($currfield) {
   $edit_fields = array();
   $edit_fields['extra']['collapsible'] = array(
@@ -28,12 +29,14 @@ function _webform_edit_fieldset($currfield) {
   return $edit_fields;
 }
 
-/** 
- * function webform_render_fieldset
- * Build a form item array containing all the properties of this component
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of a form item to be displayed on the client-side webform
- **/
+/**
+ * Build a form item array containing all the properties of this component.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   An array of a form item to be displayed on the client-side webform.
+ */
 function _webform_render_fieldset($component) {
   $form_item = array(
     '#type'          => $component['type'],
@@ -44,30 +47,34 @@ function _webform_render_fieldset($component) {
     '#collapsed'     => $component['extra']['collapsed'],
     '#attributes'    => array("class" => "webform-component-". $component['type'], "id" => "webform-component-". $component['form_key']),
   );
-  // Change the 'width' option to the correct 'size' option
+  // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
     $form_item['#size'] = $component['extra']['width'];
   }
-  
+
   return $form_item;
 }
 
-/** 
- * function _webform_submission_display_fieldset
- * Display the result of a fieldset submission. The output of this function will be displayed under the "results" tab then "submissions"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns Textual output formatted for human reading.
- **/
+/**
+ * Display the result of a fieldset submission. The output of this function will
+ * be displayed under the "results" tab then "submissions".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   Textual output formatted for human reading.
+ */
 function _webform_submission_display_fieldset($data, $component) {
   $form_item = _webform_render_fieldset($component);
   return $form_item;
 }
 
-/** 
- * function _webform_help_fieldset
- * Module specific instance of hook_help
- **/
+/**
+ * Module specific instance of hook_help().
+ */
 function _webform_help_fieldset($section) {
   switch ($section) {
     case 'admin/settings/webform#fieldset_description':

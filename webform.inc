@@ -1,26 +1,26 @@
 <?php
 // $Id$
 
-/** 
+/**
  * This file includes helper functions for webform.module
  *
  *
  * @author Pontus Ullgren <ullgren@user.sourceforge.net>
  * @package module_webform
  * @copyright Pontus Ullgren 2004
- **/
+ */
 
 /* Creates a list of all webforms avaliable on this site.
  */
 function _webform_page() {
   $header = array(
-    t('Title'), 
+    t('Title'),
     array('data' => t('View'), 'colspan' => '4'),
     array('data' => t('Operations'), 'colspan' => '2')
   );
 
   $result = db_query("SELECT nid, uid, title FROM {node} WHERE type='webform'");
-   
+
   while ($node = db_fetch_object($result)) {
    $row = array(l($node->title, 'node/'. $node->nid));
    if (user_access('access webform results')) {
@@ -36,26 +36,26 @@ function _webform_page() {
    $row[] = user_access('clear webform results') ? l(t('Clear'), 'node/'. $node->nid .'/results/clear') : '';
    $rows[] = $row;
   }
-  
+
   $content = theme('table', $header, $rows);
   drupal_set_title($node->title);
   return $content;
-} // end function _webform_page
+}
 
 /**
  * Delete all submission for a form.
  * @param $nid
- *   ID  of node for which to clear submissions.
+ *   ID of node for which to clear submissions.
  */
 function _webform_results_clear($nid) {
   drupal_set_title(t("Clear Form Submissions"));
-  
+
   $form = array();
   $form['nid'] = array('#type' => 'value', '#value' => $nid);
   $question = t("Are you sure you want to delete all submissions for this form?");
-  
+
   return confirm_form($form, $question, 'node/'. $nid .'/results', NULL, t('Clear'), t('Cancel'));
-} // end function _webform_results_clear
+}
 
 function _webform_results_clear_submit($form_id, $form_values) {
   db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d', $form_values['nid']);
@@ -67,15 +67,15 @@ function _webform_results_clear_submit($form_id, $form_values) {
   $message = t('Webform %title entries cleared.', array('%title' => $title));
   drupal_set_message($message);
   watchdog('webform', $message, WATCHDOG_NOTICE);
-  drupal_goto('admin/content/webform'); 
+  drupal_goto('admin/content/webform');
 }
 
 /**
- * Delete one form submission
+ * Delete one form submission.
  * @param $nid
- *   ID of node for which this webform was submitted
+ *   ID of node for which this webform was submitted.
  * @param $sid
- *   ID  of submission to be deleted (from webform_submitted_data)
+ *   ID of submission to be deleted (from webform_submitted_data).
  */
 function _webform_submission_delete($nid, $sid) {
   drupal_set_title(t("Delete Form Submission"));
@@ -86,7 +86,7 @@ function _webform_submission_delete($nid, $sid) {
   $question = t("Are you sure you want to delete this submission?");
 
   return confirm_form($form, $question, 'node/'. $nid .'/results', NULL, t('Delete'), t('Cancel'));
-} // end function _webform_submission_delete
+}
 
 function _webform_submission_delete_submit($form_id, $form_values) {
   $nid = $form_values['nid'];
@@ -97,10 +97,10 @@ function _webform_submission_delete_submit($form_id, $form_values) {
 
   drupal_set_message(t("Submission deleted"));
   drupal_goto('node/'. $nid .'/results');
-} // end function _webform_submission_delete_submit
+}
 
 /**
- * Return all the submissions for a particular node
+ * Return all the submissions for a particular node.
  * @param $nid
  *   The node ID for which submissions are being fetched.
  * @param $header
@@ -108,13 +108,13 @@ function _webform_submission_delete_submit($form_id, $form_values) {
  *   array header of the table.
  */
 function _webform_fetch_submissions($nid, $header = NULL) {
-  
-  $query = 'SELECT s.sid, s.uid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '. 
-           'FROM {webform_submissions} s '. 
+
+  $query = 'SELECT s.sid, s.uid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '.
+           'FROM {webform_submissions} s '.
            'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid '.
            'LEFT JOIN {users} u ON u.uid = s.uid '.
            'WHERE sd.nid = %d';
-  
+
   if (is_array($header)) {
     $query .= tablesort_sql($header);
   }
@@ -122,8 +122,8 @@ function _webform_fetch_submissions($nid, $header = NULL) {
   $res = db_query($query, $nid);
   $submissions = array();
   $previous = array();
-  
-  // Outer loop: iterate for each submission
+
+  // Outer loop: iterate for each submission.
   while ($row = db_fetch_object($res)) {
     if ($row->sid != $previous) {
       $submissions[$row->sid]->sid = $row->sid;
@@ -136,20 +136,20 @@ function _webform_fetch_submissions($nid, $header = NULL) {
     $submissions[$row->sid]->data[$row->cid]['value'][$row->no] = $row->data;
     $previous = $row->sid;
   }
- 
-  return $submissions;
-} // end function _webform_fetch_submissions
 
-/** 
+  return $submissions;
+}
+
+/**
  * This function is used to fetch a specified submission.
  */
 function _webform_fetch_submission($sid, $nid) {
-  
+
   $submission = array();
 
-  $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data '. 
-           'FROM {webform_submitted_data} as sd '. 
-           'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '. 
+  $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data '.
+           'FROM {webform_submitted_data} as sd '.
+           'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '.
            'WHERE sd.sid = %d AND s.nid = %d';
 
   $res = db_query($query, $sid, $nid);
@@ -164,17 +164,17 @@ function _webform_fetch_submission($sid, $nid) {
       $submission['data'][$row['cid']]['value'][$row['no']] = $row['data'];
       $row = db_fetch_array($res);
     }
-    
+
   }
   return $submission;
-} // end function _webform_fetch_submission
+}
 
 
 function theme_webform_create_mailmessage($form_values, $node, $sid) {
   global $user, $baseurl;
   $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
   $ip_address = $_SERVER['REMOTE_ADDR'];
-  
+
   if ($user->uid) {
     $message .= t('Submitted by user') .": $user->name [$ip_address]\n";
   }
@@ -185,12 +185,12 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
   $message .= "\n";
   $message .= t('Submitted values are');
   $message .= theme('webform_mail_fields', '', $form_values['submitted_tree'], $node);
-  
+
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
   $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'.$node->nid, "sid=". $sid);
-  
-  
+
+
   if (variable_get('webform_debug', 0) == 2) {
     $message .= "\n";
     $message .= "DEBUG INFO\n";
@@ -247,56 +247,56 @@ function theme_webform_mail_fields($key, $value, $node, $indent = "") {
 
 function _webform_submission_spam_check($to, $subject, $message, $from, $headers = array()) {
   $headers = implode('\n', $headers);
-  // Check if they are attempting to spam using a bcc or content type hack
+  // Check if they are attempting to spam using a bcc or content type hack.
   if (preg_match('/(b?cc\s?:)|(content\-type:)/i', $to ."\n". $subject ."\n". $from ."\n". $headers)) {
-    return true; // Possible spam attempt
-  }  
-  return false; // Not spam
+    return true; // Possible spam attempt.
+  }
+  return false; // Not spam.
 }
 
 function _webform_submission_limit_check($node, $form_values) {
   global $user, $db_type;
 
-  // check if submission limiting is enabled
+  // check if submission limiting is enabled.
   if ($node->submit_limit == '-1') {
-    return false; // No check enabled
+    return false; // No check enabled.
   }
-  
-  // Retrieve submission data for this IP address or username from the database
-  $query = "SELECT submitted, uid, remote_addr ". 
-           "FROM {webform_submissions} ". 
-           "WHERE (( 0 = %d AND remote_addr = '%s') OR uid = %d )". 
+
+  // Retrieve submission data for this IP address or username from the database.
+  $query = "SELECT submitted, uid, remote_addr ".
+           "FROM {webform_submissions} ".
+           "WHERE (( 0 = %d AND remote_addr = '%s') OR uid = %d )".
            "AND submitted > %d AND nid = %d";
-  
-  // Fetch all the entries from the database within the submit interval with this username and IP
+
+  // Fetch all the entries from the database within the submit interval with this username and IP.
   $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, time() - $node->submit_interval, $node->nid);
   $num_submissions_database = db_num_rows($result);
-  
-  // Double check the submission history from the users machine using cookies
+
+  // Double check the submission history from the users machine using cookies.
   if (variable_get("webform_use_cookies", 0)) {
     $cookie_name = 'webform-'. $node->nid;
-    
+
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
       foreach ($_COOKIE[$cookie_name] as $key => $timestamp) {
         if ($timestamp <= time() - $node->submit_interval) {
-          // Remove the cookie if past the required time interval
+          // Remove the cookie if past the required time interval.
           setcookie($cookie_name ."[". $key ."]", "", 0);
         }
       }
-      // Count the number of submissions recorded in cookies
+      // Count the number of submissions recorded in cookies.
       $num_submissions_cookie = count($_COOKIE[$cookie_name]);
     }
     else {
       $num_submissions_cookie = 0;
     }
   }
-  
+
   if ($num_submissions_database >= $node->submit_limit || $num_submissions_cookie >= $node->submit_limit) {
-    // Limit exceeded
-    return $num_submissions_database; 
+    // Limit exceeded.
+    return $num_submissions_database;
   }
   else {
-    // Increment a cookie for triple recording of the submission
+    // Increment a cookie for triple recording of the submission.
     if (variable_get("webform_use_cookies", 0)) {
       $attempted_key = 0;
       if ($num_submissions_cookie > 0) {
@@ -304,12 +304,12 @@ function _webform_submission_limit_check($node, $form_values) {
           $attempted_key++;
         }
       }
-      // Set a cookie including the server's submission time
-      // The cookie expires in the length of the interval plus a day to compensate for different timezones
+      // Set a cookie including the server's submission time.
+      // The cookie expires in the length of the interval plus a day to compensate for different timezones.
       setcookie($cookie_name ."[". $attempted_key ."]", time(), time() + $node->submit_interval + 86400);
     }
-    
-    // Limit not exceeded
+
+    // Limit not exceeded.
     return false;
   }
 }

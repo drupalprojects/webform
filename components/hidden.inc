@@ -1,13 +1,14 @@
 <?php
 // $Id$
-/** 
- * function webform_edit_hidden
- * Create a set of form items to be displayed on the form for editing this component.
- * Use care naming the form items, as this correlates directly to the database schema.
- * The component "Name" and "Description" fields are added to every component type and
- * are not necessary to specify here (although they may be overridden if desired).
- * @returns An array of form items to be displayed on the edit component page
- **/
+/**
+ * Create a set of form items to be displayed on the form for editing this
+ * component. Use care naming the form items, as this correlates directly to the
+ * database schema. The component "Name" and "Description" fields are added to
+ * every component type and are not necessary to specify here (although they may
+ * be overridden if desired).
+ * @return
+ *   An array of form items to be displayed on the edit component page.
+ */
 function _webform_edit_hidden($currfield) {
   $edit_fields = array();
   $edit_fields['value'] = array(
@@ -23,33 +24,40 @@ function _webform_edit_hidden($currfield) {
     '#type' => 'hidden',
     '#value' => 1,
   );
-  $edit_fields['extra']['description'] = array(); // Hide the description box
+  $edit_fields['extra']['description'] = array(); // Hide the description box.
   return $edit_fields;
 }
 
-/** 
- * function webform_render_hidden
- * Build a form item array containing all the properties of this component
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of a form item to be displayed on the client-side webform
- **/
+/**
+ * Build a form item array containing all the properties of this component.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   An array of a form item to be displayed on the client-side webform.
+ */
 function _webform_render_hidden($component) {
   $form_item = array(
     '#type'          => 'hidden',
     '#value'          => _webform_filtervalues($component['value']),
     '#weight'        => $component['weight'],
   );
-  
+
   return $form_item;
 }
 
-/** 
- * function _webform_submission_data_hidden
- * Display the result of a textfield submission. The output of this function will be displayed under the "results" tab then "submissions"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns Textual output formatted for human reading.
- **/
+/**
+ * Display the result of a textfield submission. The output of this function
+ * will be displayed under the "results" tab then "submissions".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   Textual output formatted for human reading.
+ */
 function _webform_submission_display_hidden($data, $component) {
   $form_item = _webform_render_hidden($component);
   $form_item['#value']         = $data['value']['0'];
@@ -59,10 +67,9 @@ function _webform_submission_display_hidden($data, $component) {
   return $form_item;
 }
 
-/** 
- * function _webform_help_hidden
+/**
  * Module specific instance of hook_help
- **/
+ */
 function _webform_help_hidden($section) {
   switch ($section) {
     case 'admin/settings/webform#hidden_description':
@@ -72,13 +79,18 @@ function _webform_help_hidden($section) {
   return $output;
 }
 
-/** 
- * function _webform_analysis_view_hidden
- * Calculate and returns statistics about results for this component from all submission to this webform. The output of this function will be displayed under the "results" tab then "analysis"
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of data rows, each containing a statistic for this component's submissions.
- **/
-function _webform_analysis_rows_hidden($component) {  
+/**
+ * Calculate and returns statistics about results for this component from all
+ * submission to this webform. The output of this function will be displayed
+ * under the "results" tab then "analysis".
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema
+ * @return
+ *   An array of data rows, each containing a statistic for this component's
+ *   submissions.
+ */
+function _webform_analysis_rows_hidden($component) {
   $query = 'SELECT data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
@@ -95,31 +107,39 @@ function _webform_analysis_rows_hidden($component) {
     }
     $submissions++;
   }
-  
+
   $rows[0] = array( t('Empty'), ($submissions - $nonblanks));
   $rows[1] = array( t('Non-empty'), $nonblanks);
-  $rows[2] = array( t('Average submission length in words (ex blanks)'), 
+  $rows[2] = array( t('Average submission length in words (ex blanks)'),
                     ($nonblanks !=0 ? number_format($wordcount/$nonblanks, 2) : '0'));
   return $rows;
 }
 
-/** 
- * function _webform_table_data_hidden
- * Return the result of this component's submission for display in a table. The output of this function will be displayed under the "results" tab then "table"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @returns Textual output formatted for human reading.
- **/
+/**
+ * Return the result of this component's submission for display in a table. The
+ * output of this function will be displayed under the "results" tab then "table".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema
+ * @return
+ *   Textual output formatted for human reading.
+ */
 function _webform_table_data_hidden($data) {
   return check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
 }
 
 
-/** 
- * function _webform_csv_headers_hidden
- * Return the header information for this component to be displayed in a comma seperated value file. The output of this function will be displayed under the "results" tab then "download"
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
- **/
+/**
+ * Return the header information for this component to be displayed in a comma
+ * seperated value file. The output of this function will be displayed under the
+ * "results" tab then "download".
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   An array of data to be displayed in the first three rows of a CSV file, not
+ *   including either prefixed or trailing commas.
+ */
 function _webform_csv_headers_hidden($component) {
   $header = array();
   $header[0] = '';
@@ -128,12 +148,16 @@ function _webform_csv_headers_hidden($component) {
   return $header;
 }
 
-/** 
- * function _webform_csv_data_hidden
- * Return the result of a textfield submission. The output of this function will be displayed under the "results" tab then "submissions"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
- **/
+/**
+ * Return the result of a textfield submission. The output of this function will
+ * be displayed under the "results" tab then "submissions".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @return
+ *   Textual output formatted for CSV, not including either prefixed or trailing
+ *   commas.
+ */
 function _webform_csv_data_hidden($data) {
   return empty($data['value']['0']) ? "" : $data['value']['0'];
 }

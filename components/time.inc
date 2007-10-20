@@ -1,13 +1,12 @@
 <?php
 // $Id$
-/** 
- * function webform_edit_time
+/**
  * Create a set of form items to be displayed on the form for editing this component.
  * Use care naming the form items, as this correlates directly to the database schema.
  * The component "Name" and "Description" fields are added to every component type and
  * are not necessary to specify here (although they may be overridden if desired).
- * @returns An array of form items to be displayed on the edit component page
- **/
+ * @return An array of form items to be displayed on the edit component page
+ */
 function _webform_edit_time($currfield) {
   $edit_fields = array();
   $edit_fields['value'] = array(
@@ -47,31 +46,30 @@ $edit_fields['extra']['check_daylight_savings'] = array(
   return $edit_fields;
 }
 
-/** 
- * function webform_render_time
+/**
  * Build a form item array containing all the properties of this component
  * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of a form item to be displayed on the client-side webform
- **/
+ * @return An array of a form item to be displayed on the client-side webform
+ */
 function _webform_render_time($component) {
   if (strlen($component['value']) > 0) {
-    // Calculate the timestamp in GMT
+    // Calculate the timestamp in GMT.
     $timestamp = strtotime($component['value']);
     if ($component['extra']['timezone'] == "user") {
-      // Use the users timezone
+      // Use the users timezone.
       global $user;
       $timestamp += (int)$user->timezone;
     }
     elseif ($component['extra']['timezone'] == "gmt") {
-      // Use GMT
+      // Use GMT.
       $timestamp += 0;
     }
     else {
-      // Use the Drupal site time
+      // Use the Drupal site time.
       $timestamp += (int)variable_get('date_default_timezone', 0);
     }
-  
-    // Check for daylight savings time
+
+    // Check for daylight savings time.
     if ($component['extra']['check_daylight_savings'] && date("I")) {
       $timestamp += 3600;
     }
@@ -94,7 +92,7 @@ function _webform_render_time($component) {
     $am_pm = gmdate('a', $timestamp);
   }
 
-  // Generate the choices for drop-down selects
+  // Generate the choices for drop-down selects.
   $hours[""] = t("hour");
   $minutes[""] = t("minute");
   for ($i = $first_hour; $i <= $last_hour; $i++) $hours[$i] = $i;
@@ -131,7 +129,7 @@ function _webform_render_time($component) {
       '#options' => $am_pms,
       );
   }
-  
+
   return $form_item;
 }
 
@@ -142,21 +140,26 @@ function webform_validate_time($field, $field_name, $component_name, $mandatory)
   }
 }
 
-/** 
- * function _webform_submission_data_time
- * Display the result of a textfield submission. The output of this function will be displayed under the "results" tab then "submissions"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns Textual output formatted for human reading.
- **/
+/**
+ * Display the result of a textfield submission. The output of this function
+ * will be displayed under the "results" tab then "submissions".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   Textual output formatted for human reading.
+ */
 function _webform_submission_display_time($data, $component) {
   $form_item = _webform_render_time($component);
   $form_item['minute']['#default_value']   = $data['value']['1'];
   $form_item['minute']['#attributes']      = array("disabled" => "disabled");
   $form_item['hour']['#attributes']        = array("disabled" => "disabled");
   $form_item['ampm']['#attributes']        = array("disabled" => "disabled");
-  
-  // Match the hourly data to the hour format
+
+  // Match the hourly data to the hour format.
   $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
   if ($component['extra']['hourformat'] == "24-hour") {
     $form_item['hour']['#default_value'] = date("H", $timestamp);
@@ -169,12 +172,15 @@ function _webform_submission_display_time($data, $component) {
 }
 
 /**
- * theme_webform_mail_time
  * Format the output of emailed data for this component
  *
- * @param mixed $data A string or array of the submitted data
- * @param array $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns string Textual output to be included in the email
+ * @param $data
+ *   A string or array of the submitted data
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   Textual output to be included in the email.
  */
 function theme_webform_mail_time($data, $component) {
   $output = $component['name'] .":";
@@ -189,10 +195,9 @@ function theme_webform_mail_time($data, $component) {
   return $output;
 }
 
-/** 
- * function _webform_help_time
+/**
  * Module specific instance of hook_help
- **/
+ */
 function _webform_help_time($section) {
   switch ($section) {
     case 'admin/settings/webform#time_description':
@@ -202,13 +207,18 @@ function _webform_help_time($section) {
   return $output;
 }
 
-/** 
- * function _webform_analysis_view_time
- * Calculate and returns statistics about results for this component from all submission to this webform. The output of this function will be displayed under the "results" tab then "analysis"
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of data rows, each containing a statistic for this component's submissions.
- **/
-function _webform_analysis_rows_time($component) {  
+/**
+ * Calculate and returns statistics about results for this component from all
+ * submission to this webform. The output of this function will be displayed
+ * under the "results" tab then "analysis".
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   An array of data rows, each containing a statistic for this component's
+ *   submissions.
+ */
+function _webform_analysis_rows_time($component) {
   $query = 'SELECT no,data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
@@ -216,7 +226,7 @@ function _webform_analysis_rows_time($component) {
     ' ORDER BY sid,no ASC ';
 
   $result = db_query($query, $component['nid'], $component['cid']);
-  // build an array of timestamps from entered values
+  // build an array of timestamps from entered values.
   $timestamps = array();
   $submissions = 1;
   while ($row = db_fetch_array($result)) {
@@ -229,35 +239,38 @@ function _webform_analysis_rows_time($component) {
           if ($row = db_fetch_array($result)) {
             if ($row['no'] == '2') {
               $ampm = $row['data'];
-              // Build the full timestamp
+              // Build the full timestamp.
               if (strlen($hour) > 0 && strlen($minute) > 0 ) {
                 $timestamps[] = strtotime($hour .":". $minute .' '. $ampm);
               }
             }
             else {
-              // Build military time
+              // Build military time.
               $timestamps[] = strtotime($hour .":". $minute);
             }
           }
         }
       }
-    }    
+    }
   }
-  
-  // Display stats
-  // TODO: display date statistics in javascript tabs
+
+  // Display stats.
+  // TODO: display date statistics in javascript tabs.
   $nonblanks = count($timestamps);
   $rows[0] = array(t('Left Blank'), ($submissions - $nonblanks));
   $rows[1] = array(t('User entered value'), $nonblanks);
   return $rows;
 }
 
-/** 
- * function _webform_table_data_time
- * Return the result of this component's submission for display in a table. The output of this function will be displayed under the "results" tab then "table"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @returns Textual output formatted for human reading.
- **/
+/**
+ * Return the result of this component's submission for display in a table. The
+ * output of this function will be displayed under the "results" tab then "table".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @return
+ *   Textual output formatted for human reading.
+ */
 function _webform_table_data_time($data, $component) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0) {
     $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
@@ -274,12 +287,17 @@ function _webform_table_data_time($data, $component) {
 }
 
 
-/** 
- * function _webform_csv_headers_time
- * Return the header information for this component to be displayed in a comma seperated value file. The output of this function will be displayed under the "results" tab then "download"
- * @param $component An array of information describing the component, directly correlating to the webform_component database schema
- * @returns An array of data to be displayed in the first three rows of a CSV file, not including either prefixed or trailing commas
- **/
+/**
+ * Return the header information for this component to be displayed in a comma
+ * seperated value file. The output of this function will be displayed under the
+ * "results" tab then "download".
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   An array of data to be displayed in the first three rows of a CSV file, not
+ *   including either prefixed or trailing commas.
+ */
 function _webform_csv_headers_time($component) {
   $header = array();
   $header[0] = '';
@@ -288,12 +306,16 @@ function _webform_csv_headers_time($component) {
   return $header;
 }
 
-/** 
- * function _webform_csv_data_time
- * Return the result of a textfield submission. The output of this function will be displayed under the "results" tab then "submissions"
- * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
- * @returns Textual output formatted for CSV, not including either prefixed or trailing commas
- **/
+/**
+ * Return the result of a textfield submission. The output of this function will
+ * be displayed under the "results" tab then "submissions".
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @return
+ *   Textual output formatted for CSV, not including either prefixed or trailing
+ *   commas.
+ */
 function _webform_csv_data_time($data, $component) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0) {
     $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);

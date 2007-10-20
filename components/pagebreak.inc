@@ -1,13 +1,14 @@
 <?php
 // $Id$
-/** 
- * function _webform_edit_pagebreak
- * Create a set of form items to be displayed on the form for editing this component.
- * Use care naming the form items, as this correlates directly to the database schema.
- * The component "Name" and "Description" fields are added to every component type and
- * are not necessary to specify here (although they may be overridden if desired).
- * @returns An array of form items to be displayed on the edit component page
- **/
+/**
+ * Create a set of form items to be displayed on the form for editing this
+ * component. Use care naming the form items, as this correlates directly to the
+ * database schema. The component "Name" and "Description" fields are added to
+ * every component type and are not necessary to specify here (although they may
+ * be overridden if desired).
+ * @return
+ *   An array of form items to be displayed on the edit component page.
+ */
 function _webform_edit_pagebreak($currfield) {
   $form = array();
   # no description
@@ -28,10 +29,9 @@ function _webform_edit_pagebreak($currfield) {
   return $form;
 }
 
-/** 
- * function _webform_help_textfield
+/**
  * Module specific instance of hook_help
- **/
+ */
 function _webform_help_pagebreak($section) {
   switch ($section) {
     case 'admin/settings/webform#pagebreak_description':
