@@ -1437,7 +1437,7 @@ function webform_client_form_submit($form_id, $form_values) {
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
-    $redirect = array($path, 'sid=' . $sid);
+    $redirect = array(trim($path), 'sid=' . $sid);
   }
   else {
     $redirect = array('node/'.$node->nid.'/done', 'sid=' . $sid);
