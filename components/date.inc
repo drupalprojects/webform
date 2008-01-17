@@ -137,13 +137,13 @@ function webform_validate_date($field, $field_name, $component_name, $component_
   }
 
   // Check for a valid date.
-  if ( (isset($complete_date['month']) &&
+  if ((isset($complete_date['month']) &&
         isset($complete_date['day']) &&
         isset($complete_date['year'])) &&
-       ($complete_date['month'] !== "" ||
+      ($complete_date['month'] !== "" ||
         $complete_date['day']   !== "" ||
         $complete_date['year']  !== "")
-     ) {
+    ) {
     if (!checkdate((int)$complete_date['month'], (int)$complete_date['day'], (int)$complete_date['year'])) {
       form_set_error($component_key .']['. $field_name, t("Entered %name is not a valid date.", array('%name' => $component_name)));
       $complete_date = array();

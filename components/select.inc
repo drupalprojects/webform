@@ -437,7 +437,7 @@ function _webform_csv_data_select($data, $component) {
       }
     }
     // Remove the preceding extra comma.
-   $output = substr($output, 2);
+    $output = substr($output, 2);
   }
   else {
     $output = $data['value'][0];

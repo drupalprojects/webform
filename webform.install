@@ -162,13 +162,11 @@ function webform_update_1() {
     $data = unserialize($row->data);
     if ( is_array($data) ) {
       foreach ($data as $k => $v) {
-        db_query("INSERT INTO {webform_tmp} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')",
-                 $row->nid, $row->sid, $row->cid, $k, $v);
+        db_query("INSERT INTO {webform_tmp} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $row->nid, $row->sid, $row->cid, $k, $v);
       }
     }
     else {
-      db_query("INSERT INTO {webform_tmp} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')",
-               $row->nid, $row->sid, $row->cid, 0, $row->data);
+      db_query("INSERT INTO {webform_tmp} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $row->nid, $row->sid, $row->cid, 0, $row->data);
     }
   }
 
