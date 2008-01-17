@@ -3,13 +3,13 @@
 
 /**
  * This module provides a simple way to create forms and questionnaires.
- * The development of this module was sponsered by ÅF Industri AB, Open
- * Source City and Karlstad University Library.
- *
+ * 
+ * The initial development of this module was sponsered by √ÖF Industri AB, Open
+ * Source City and Karlstad University Library. Continued development sponsored
+ * by Lullabot.
+ * 
+ * @author Nathan Haug <nate@lullabot.com>
  * @author Pontus Ullgren <ullgren@user.sourceforge.net>
- * @author Nathan Haug <nate at lullabot dot com>
- * @package module_webform
- * @copyright Pontus Ullgren 2003-2005
  */
 
 /**
@@ -1282,15 +1282,15 @@ function webform_client_form_validate($form_id, $form_values) {
 
   if (trim($node->additional_validate)) {
     // We use eval here (rather than drupal_eval) because the user needs access to local variables.
-    eval("?>".$node->additional_validate);
+    eval("?>". $node->additional_validate);
   }
 }
 
 function webform_client_form_submit($form_id, $form_values) {
   global $user, $base_url;
-  include_once (drupal_get_path('module', 'webform')."/webform.inc");
-  $node = node_load(array('nid'=>$form_values['details']['nid']));
-  $session_key = 'webform_form_'.$node->nid;
+  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
+  $node = node_load(array('nid' => $form_values['details']['nid']));
+  $session_key = 'webform_form_'. $node->nid;
 
   if ($form_values['op'] != t('Submit')) {
     // This is a multi-page form that is not yet complete.
@@ -1325,7 +1325,7 @@ function webform_client_form_submit($form_id, $form_values) {
   // Process post-submission data if necessary in the components.
   _webform_load_components();
   foreach ($node->webformcomponents as $cid => $component) {
-    $submit_function = "_webform_submit_".$component['type'];
+    $submit_function = "_webform_submit_". $component['type'];
     if (function_exists($submit_function)) {
       $submit_function($form_values['submitted'][$cid], $component); // Call the component process submission function.
     }
@@ -1334,7 +1334,7 @@ function webform_client_form_submit($form_id, $form_values) {
   // Perform additional submit processing.
   if (trim($node->additional_submit)) {
     // We use eval here (rather than drupal_eval) because the user needs access to local variables.
-    eval("?>".$node->additional_submit);
+    eval("?>". $node->additional_submit);
   }
 
   // Save the submission to the database.
@@ -1357,7 +1357,7 @@ function webform_client_form_submit($form_id, $form_values) {
       // Default values:
       $email_from_name = variable_get('webform_default_from_name', variable_get('site_name', ''));
       $email_from_address = variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from')));
-      $email_subject_string = variable_get('webform_default_subject', t('Form submission from: ')) . ' ' . $node->title;
+      $email_subject_string = variable_get('webform_default_subject', t('Form submission from: '))  .' '. $node->title;
       $headers = array();
 
       // Check for empty values.
@@ -1398,7 +1398,7 @@ function webform_client_form_submit($form_id, $form_values) {
 
       // Assemble the FROM string.
       if (strlen($email_from_name) > 0) {
-        $email_from_string = $email_from_name . ' <' . $email_from_address . '>';
+        $email_from_string = $email_from_name .' <'. $email_from_address .'>';
       }
       else {
         $email_from_string = $email_from_address;
@@ -1406,25 +1406,25 @@ function webform_client_form_submit($form_id, $form_values) {
 
       // Verify that this submission is not attempting to send any spam hacks.
       if (_webform_submission_spam_check($node->email, $email_subject_string, $message, $email_from_string, $headers)) {
-        watchdog('webform', t('Possible spam attempt from ').$_SERVER['REMOTE_ADDR']."<br />\n".nl2br(htmlentities($message)), WATCHDOG_WARNING);
+        watchdog('webform', t('Possible spam attempt from ') . $_SERVER['REMOTE_ADDR'] ."<br />\n". nl2br(htmlentities($message)), WATCHDOG_WARNING);
         drupal_set_message(t("Illegal information. Data not submitted."), 'error');
         return false;
       }
       // Additional headers.
-      $headers['X-Mailer'] = 'Drupal Webform (PHP/' . phpversion() . ')';
+      $headers['X-Mailer'] = 'Drupal Webform (PHP/'. phpversion() .')';
 
       // Mail the webform results.
       drupal_mail('webform-submission', $node->email, $email_subject_string, $message, $email_from_string, $headers);
 
       // Debugging output.
       if (variable_get('webform_debug', 0) >= 2) {
-        drupal_set_message("E-mail Headers: <pre>". print_r($headers, true) ."</pre>To: " . $node->email . "<br />From: " . htmlentities($email_from_string) . "<br />Subject: " . $email_subject_string . "<br />E-mail Body: <pre>".$message."</pre>");
+        drupal_set_message("E-mail Headers: <pre>". print_r($headers, true) ."</pre>To: ". $node->email ."<br />From: ". htmlentities($email_from_string) ."<br />Subject: ". $email_subject_string ."<br />E-mail Body: <pre>". $message ."</pre>");
       }
     }
   }
 
   if (variable_get('webform_debug', 0) >= 1) {
-    watchdog('webform', t('Submission posted to %title', array('%title' => $node->title)) . l(t('Results'), 'node/'.$node->nid, NULL, 'sid='.$sid)."<br />\n".nl2br(htmlentities($message)), WATCHDOG_NOTICE);
+    watchdog('webform', t('Submission posted to %title', array('%title' => $node->title)) . l(t('Results'), 'node/'. $node->nid, NULL, 'sid='. $sid) ."<br />\n". nl2br(htmlentities($message)), WATCHDOG_NOTICE);
   }
 
   // Check confirmation field to see if redirect should be to another node or a message.
@@ -1432,15 +1432,15 @@ function webform_client_form_submit($form_id, $form_values) {
     $redirect = trim($node->confirmation);
   }
   elseif (preg_match('/^internal:/', $node->confirmation) && $node->redirect_post) {
-    $path = preg_replace('/^internal:/', $base_url.'/', $node->confirmation);
+    $path = preg_replace('/^internal:/', $base_url .'/', $node->confirmation);
     $redirect = trim($path);
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
-    $redirect = array(trim($path), 'sid=' . $sid);
+    $redirect = array(trim($path), 'sid='. $sid);
   }
   else {
-    $redirect = array('node/'.$node->nid.'/done', 'sid=' . $sid);
+    $redirect = array('node/'. $node->nid .'/done', 'sid='. $sid);
   }
   return $redirect;
 }
@@ -1480,7 +1480,7 @@ function _webform_confirmation($nid) {
     }
   }
   else {
-    drupal_set_message(t("No node with the id '%nid' could be found", array('%nid'=>$nid)));
+    drupal_set_message(t("No node with the id '%nid' could be found", array('%nid' => $nid)));
     drupal_not_found();
   }
 }
@@ -1491,7 +1491,7 @@ function _webform_confirmation($nid) {
 function theme_webform_confirmation($node) {
   $node->body = check_markup($node->confirmation, $node->format, FALSE);
   $node->links['webform_back'] = array(
-    'href' => 'node/'.$node->nid,
+    'href' => 'node/'. $node->nid,
     'title' => t('Go back to the form'),
   );
   return theme('node', $node, FALSE, TRUE);
@@ -1574,7 +1574,7 @@ function _webform_save_submission($node, $submitted) {
 }
 
 function webform_page() {
-  include_once (drupal_get_path('module', 'webform')."/webform.inc");
+  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
   return _webform_page();
 }
 
@@ -1584,8 +1584,8 @@ function webform_page() {
  * internal content.
  */
 function webform_results() {
-  include_once (drupal_get_path('module', 'webform')."/webform.inc");
-  include_once (drupal_get_path('module', 'webform')."/webform_report.inc");
+  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
+  include_once(drupal_get_path('module', 'webform') ."/webform_report.inc");
 
   $nid= arg(1);
   $node= node_load(array('nid' => $nid));
@@ -1711,10 +1711,10 @@ function _webform_load_components($return_all = FALSE, $reset = FALSE) {
   if (!isset($component_list) || $reset) {
     $component_list = array();
     $enabled_list = array();
-    $path = drupal_get_path('module', 'webform')."/components";
+    $path = drupal_get_path('module', 'webform') ."/components";
     $files = file_scan_directory($path, '^.*\.inc$');
     foreach ($files as $filename => $file) {
-      $enabled = variable_get('webform_enable_'.$file->name, 1);
+      $enabled = variable_get('webform_enable_'. $file->name, 1);
       if ($return_all || $enabled) {
         include_once($filename);
         $component_list[$file->name] = t($file->name);

@@ -117,7 +117,7 @@ function webform_install() {
       break;
   }
 
-  variable_set('webform_version',array('text'=>'4.7.1', 'build' => '471'));
+  variable_set('webform_version', array('text' => '4.7.1', 'build' => '471'));
 
   $success = TRUE;
 
@@ -138,10 +138,10 @@ function webform_update_1() {
   $ret = array();
 
   // Update pre-4.7 tables to the 463 build schema.
-  $installed_version = variable_get("webform_version",0);
-  $current_version = array('text'=>'4.6.3', 'build' => '463');
+  $installed_version = variable_get("webform_version", 0);
+  $current_version = array('text' => '4.6.3', 'build' => '463');
   if ($installed_version > 0) {
-    $ret = _webform_legacy_update($installed_version,$current_version);
+    $ret = _webform_legacy_update($installed_version, $current_version);
   }
 
   // Start the normal update.
@@ -161,7 +161,7 @@ function webform_update_1() {
   while ($row = db_fetch_object($result)) {
     $data = unserialize($row->data);
     if ( is_array($data) ) {
-      foreach($data as $k => $v) {
+      foreach ($data as $k => $v) {
         db_query("INSERT INTO {webform_tmp} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')",
                  $row->nid, $row->sid, $row->cid, $k, $v);
       }
@@ -229,9 +229,9 @@ function webform_update_4() {
   // Split 'maintain webforms' permissions into both 'edit webforms' and 'access webform results'.
   $result = db_query("SELECT rid,perm FROM {permission}");
   while ($row = db_fetch_object($result)) {
-    if (strpos($row->perm,"maintain webforms") !== false) {
-      $updatedPerm = str_replace("maintain webforms", "edit webforms, access webform results", $row->perm);
-      db_query("UPDATE {permission} SET perm='%s' WHERE rid = %d", $updatedPerm, $row->rid);
+    if (strpos($row->perm, "maintain webforms") !== false) {
+      $updated_perm = str_replace("maintain webforms", "edit webforms, access webform results", $row->perm);
+      db_query("UPDATE {permission} SET perm='%s' WHERE rid = %d", $updated_perm, $row->rid);
     }
   }
   return $ret;
@@ -473,18 +473,18 @@ function _webform_legacy_update($installed_version, $current_version) {
  * Implmentation of hook_uninstall
  */
 function webform_uninstall() {
-  watchdog("webform","Removing webform module.");
+  watchdog("webform", "Removing webform module.");
 
   // Unset webform variables.
   variable_del("webform_use_cookies");
   variable_del("webform_debug");
   variable_del('webform_enable_fieldset');
-  if (!isset($componentList)) {
-    $componentList = array();
-    $path = drupal_get_path('module', 'webform')."/components";
+  if (!isset($component_list)) {
+    $component_list = array();
+    $path = drupal_get_path('module', 'webform') ."/components";
     $files = file_scan_directory($path, '^.*\.inc$');
     foreach ($files as $filename => $file) {
-      variable_del('webform_enable_'.$file->name,1);
+      variable_del('webform_enable_'. $file->name, 1);
     }
   }
 
@@ -504,7 +504,7 @@ function webform_uninstall() {
   cache_clear_all(null, 'cache_menu');
   cache_clear_all(null, 'cache_page');
 
-  watchdog("Webform","Webform module removed.");
+  watchdog("Webform", "Webform module removed.");
 }
 
 /**
@@ -518,12 +518,12 @@ function webform_uninstall() {
  */
 function _webform_recursive_delete($path) {
   if ($path) {
-    $listing = $path . "/*";
-    foreach(glob($listing) as $file) {
-      if(is_file($file) === true) {
+    $listing = $path ."/*";
+    foreach (glob($listing) as $file) {
+      if (is_file($file) === true) {
         @unlink($file);
       }
-      elseif(is_dir($file) === true) {
+      elseif (is_dir($file) === true) {
         _webform_recursive_delete($file);
       }
     }
