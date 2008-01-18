@@ -241,7 +241,7 @@ function _webform_results_analysis($nid) {
   $query = 'SELECT nid, cid, name, type, value, extra '.
     ' FROM {webform_component} '.
     ' WHERE nid = %d '.
-    ' ORDER BY weight, name';
+    ' ORDER BY pid, weight, name';
 
   $components = db_query($query, $nid);
 
