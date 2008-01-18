@@ -781,9 +781,10 @@ function theme_webform_node_form($form) {
     function _webform_add_rows($cid, $component, $level, &$form, &$rows) {
       // Create presentable values.
       if (strlen($component['value']) > 30) {
-        $component['value'] = htmlspecialchars(substr($component['value'], 0, 30), ENT_QUOTES);
+        $component['value'] = substr($component['value'], 0, 30);
         $component['value'] .= "...";
       }
+      $component['value'] = check_plain($component['value']);
 
       // Add padding to the radio label.
       $form['components']['selected_component'][$cid]['#title'] = '<span style="padding-left: '. ($level * 15) .'px; padding-right: 20px;">'. $form['components']['selected_component'][$cid]['#title'] .'</span>';
