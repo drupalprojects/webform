@@ -10,18 +10,20 @@
  *   An array of form items to be displayed on the edit component page.
  */
 function _webform_edit_pagebreak($currfield) {
+  drupal_set_message(t('Use caution when combining the pagebreak and file components. File components will not be submitted unless they are after the last pagebreak in the form.'), 'warning');
+
   $form = array();
-  # no description
+  // No description.
   $form['extra']['description'] = array(
       '#type' => 'hidden',
       '#value' => '',
   );
-  # force the parent to always be root
+  // Force the parent to always be root.
   $form['parent'] = array(
       '#type' => 'hidden',
       '#value' => '0',
   );
-  # never mandatory
+  // Never mandatory.
   $form['mandatory'] = array(
       '#type' => 'hidden',
       '#value' => '',
