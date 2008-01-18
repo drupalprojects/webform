@@ -67,7 +67,7 @@ function _webform_render_fieldset($component) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_fieldset($data, $component) {
+function _webform_submission_display_fieldset($data, $component, $enabled = false) {
   $form_item = _webform_render_fieldset($component);
   return $form_item;
 }

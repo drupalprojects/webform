@@ -58,12 +58,12 @@ function _webform_render_hidden($component) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_hidden($data, $component) {
+function _webform_submission_display_hidden($data, $component, $enabled = false) {
   $form_item = _webform_render_hidden($component);
   $form_item['#value']         = $data['value']['0'];
   $form_item['#type']          = 'textfield';
   $form_item['#title']         = htmlspecialchars($component['name'], ENT_QUOTES) ." (hidden)";
-  $form_item['#attributes']    = array("disabled" => "disabled");
+  $form_item['#disabled']      = !$enabled;
   return $form_item;
 }
 

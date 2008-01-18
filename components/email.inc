@@ -107,10 +107,10 @@ function _webform_validate_email($formelement, $name) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_email($data, $component) {
+function _webform_submission_display_email($data, $component, $enabled = false) {
   $form_item = _webform_render_email($component);
   $form_item['#default_value'] = $data['value']['0'];
-  $form_item['#attributes']    = array("disabled" => "disabled");
+  $form_item['#disabled'] = !$enabled;
   return $form_item;
 }
 

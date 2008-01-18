@@ -150,7 +150,7 @@ function _webform_help_captcha($section) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_captcha($component, $data) {
+function _webform_submission_display_captcha($component, $data, $enabled = false) {
   $form_item = array();
   return $form_item;
 }

@@ -304,7 +304,7 @@ function theme_webform_mail_file($data, $component) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_file($data, $component) {
+function _webform_submission_display_file($data, $component, $enabled = false) {
   $filedata = unserialize($data['value'][0]);
   $form_item = _webform_render_file($component);
   $form_item['#type'] = 'textfield';
@@ -317,7 +317,7 @@ function _webform_submission_display_file($data, $component) {
       $form_item['#suffix'] = ' <a href="'. base_path() . $filedata['filepath'] .'">Download '. $filedata['filename'] .'</a></div>';
     }
   }
-  $form_item['#attributes'] = array("disabled" => "disabled");
+  $form_item['#disabled'] = !$enabled;
   return $form_item;
 }
 

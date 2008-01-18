@@ -152,12 +152,12 @@ function webform_validate_time($field, $field_name, $component_name, $mandatory)
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_time($data, $component) {
+function _webform_submission_display_time($data, $component, $enabled = false) {
   $form_item = _webform_render_time($component);
-  $form_item['minute']['#default_value']   = $data['value']['1'];
-  $form_item['minute']['#attributes']      = array("disabled" => "disabled");
-  $form_item['hour']['#attributes']        = array("disabled" => "disabled");
-  $form_item['ampm']['#attributes']        = array("disabled" => "disabled");
+  $form_item['minute']['#default_value'] = $data['value']['1'];
+  $form_item['minute']['#disabled'] = !$enabled;
+  $form_item['hour']['#disabled'] = !$enabled;
+  $form_item['ampm']['#disabled'] = !$enabled;
 
   // Match the hourly data to the hour format.
   $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);

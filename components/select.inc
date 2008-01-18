@@ -171,7 +171,7 @@ function _webform_render_select($component) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_select($data, $component) {
+function _webform_submission_display_select($data, $component, $enabled = false) {
   $form_item = _webform_render_select($component);
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array.
@@ -198,7 +198,7 @@ function _webform_submission_display_select($data, $component) {
       }
     }
   }
-  $form_item['#attributes'] = array("disabled" => "disabled");
+  $form_item['#disabled'] = !$enabled;
   return $form_item;
 }
 

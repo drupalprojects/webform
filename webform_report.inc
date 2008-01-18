@@ -41,7 +41,7 @@ function theme_webform_results_submissions_header($nid) {
  *   An array of all submissions for this webform.
  */
 function theme_webform_results_submissions($nid, $submissions) {
-
+  global $user;
   // This header has to be generated seperately so we can add the SQL necessary
   // to sort the results.
   $header = theme('webform_results_submissions_header', $nid);
@@ -55,7 +55,11 @@ function theme_webform_results_submissions($nid, $submissions) {
       $submission->remote_addr,
       l(t('View'), "node/$nid", NULL, "sid=". $submission->sid, NULL, FALSE),
     );
-
+    if ((user_access("edit own webform submissions") && ($user->uid == $submission->uid)) || user_access("edit webform submissions")) {
+	  $row[] = l(t('Edit'),"node/$nid/results/edit/".$submission->sid, NULL, NULL, NULL, FALSE);
+	} else {
+	  $row[] = t('Edit');
+	}
     if (user_access('clear webform results')) {
       $row[] = l(t('Delete'), "node/$nid/results/delete/". $submission->sid, NULL, NULL, NULL, FALSE);
     }

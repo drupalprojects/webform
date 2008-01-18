@@ -91,10 +91,10 @@ function _webform_render_textarea($component) {
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_textarea($data, $component) {
+function _webform_submission_display_textarea($data, $component, $enabled = false) {
   $form_item = _webform_render_textarea($component);
   $form_item['#default_value'] = $data['value']['0'];
-  $form_item['#attributes']    = array("disabled" => "disabled");
+  $form_item['#disabled'] = !$enabled;
   return $form_item;
 }
 

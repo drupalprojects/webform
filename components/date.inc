@@ -167,14 +167,14 @@ function webform_validate_date($field, $field_name, $component_name, $component_
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_date($data, $component) {
+function _webform_submission_display_date($data, $component, $enabled = false) {
   $form_item = _webform_render_date($component);
   $form_item['month']['#default_value'] = $data['value']['0'];
   $form_item['day']['#default_value']   = $data['value']['1'];
   $form_item['year']['#default_value']  = $data['value']['2'];
-  $form_item['month']['#attributes']    = array("disabled" => "disabled");
-  $form_item['day']['#attributes']      = array("disabled" => "disabled");
-  $form_item['year']['#attributes']     = array("disabled" => "disabled");
+  $form_item['month']['#disabled']      = !$enabled;
+  $form_item['day']['#disabled']        = !$enabled;
+  $form_item['year']['#disabled']       = !$enabled;
   return $form_item;
 }
 
