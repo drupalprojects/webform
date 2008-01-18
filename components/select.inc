@@ -271,10 +271,10 @@ function theme_webform_mail_select($data, $component) {
     foreach ($data as $value) {
       if ($value) {
         if ($options[$value]) {
-          $output .= "    • ". $options[$value] ."\n";
+          $output .= "    - ". $options[$value] ."\n";
         }
         else {
-          $output .= "    • ". $options[_webform_safe_name($value)] ."\n";
+          $output .= "    - ". $options[_webform_safe_name($value)] ."\n";
         }
       }
     }
