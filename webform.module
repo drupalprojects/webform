@@ -436,6 +436,7 @@ function webform_prepare(&$node) {
 function webform_validate(&$node) {
   $op = $_POST['op'];
   $node->webformcomponents = _webform_components_decode($_POST['webformcomponents']);
+  $node->selected_component = $_POST['selected_component'];
 
   switch ($op) {
     // Intercept these buttons and redirect:
