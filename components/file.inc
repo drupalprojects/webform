@@ -187,26 +187,26 @@ function _webform_render_file($component) {
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
-  '#tree'          => false, // file_check_upload assumes a flat $_FILES structure.
-  '#validate'      => array(
-                        '_webform_validate_file' => array($component['cid'], $component['name'], $component['extra']['filtering']),
-                        '_webform_required_file' => array($component['cid'], $component['name'], $component['mandatory']), // Custom required routine.
-                      ),
-  '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
-  '#suffix'        => '</div>',
+    '#tree'          => false, // file_check_upload assumes a flat $_FILES structure.
+    '#validate'      => array(
+      '_webform_validate_file' => array($component['form_key'], $component['name'], $component['extra']['filtering']),
+      '_webform_required_file' => array($component['form_key'], $component['name'], $component['mandatory']), // Custom required routine.
+    ),
+    '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
+    '#suffix'        => '</div>',
   );
 
   return $form_item;
 }
 
-function _webform_required_file($formelement, $cid, $fieldname, $required = false) {
-  if (empty($_FILES['files']['name'][$cid]) && $required) {
+function _webform_required_file($formelement, $form_key, $fieldname, $required = false) {
+  if (empty($_FILES['files']['name'][$form_key]) && $required) {
     form_set_error($fieldname, t('%fieldname field is required.', array('%fieldname' => $fieldname)));
   }
 }
 
-function _webform_validate_file($formelement, $cid, $fieldname, $filters) {
-  if (empty($_FILES['files']['name'][$cid])) {
+function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
+  if (empty($_FILES['files']['name'][$form_key])) {
     return;
   }
 
@@ -232,15 +232,15 @@ function _webform_validate_file($formelement, $cid, $fieldname, $filters) {
     $extension_list = $extensions[0];
   }
 
-  $dot = strrpos($_FILES['files']['name'][$cid], '.');
-  $extension = strtolower(substr($_FILES['files']['name'][$cid], $dot+1));
+  $dot = strrpos($_FILES['files']['name'][$form_key], '.');
+  $extension = strtolower(substr($_FILES['files']['name'][$form_key], $dot+1));
   if (!in_array($extension, $extensions)) {
-    form_set_error($cid, t("Files with the '%ext' extension are not allowed, please upload a file with a %exts extension.", array('%ext' => $extension, '%exts' => $extension_list)));
+    form_set_error($form_key, t("Files with the '%ext' extension are not allowed, please upload a file with a %exts extension.", array('%ext' => $extension, '%exts' => $extension_list)));
   }
 
   // Now let's check the file size (limit is set in KB).
-  if ($_FILES['files']['size'][$cid] > $filters['size']*1024) {
-    form_set_error($cid, t("The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller.", array('%filename' => $_FILES['files']['name'][$cid], '%filesize' => (int)($_FILES['files']['size'][$cid]/1024), '%maxsize' => $filters['size'])));
+  if ($_FILES['files']['size'][$form_key] > $filters['size']*1024) {
+    form_set_error($form_key, t("The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller.", array('%filename' => $_FILES['files']['name'][$form_key], '%filesize' => (int)($_FILES['files']['size'][$form_key]/1024), '%maxsize' => $filters['size'])));
   }
 }
 
@@ -256,10 +256,10 @@ function _webform_validate_file($formelement, $cid, $fieldname, $filters) {
  *   Nothing.
  */
 function _webform_submit_file(&$data, $component) {
-  if ($file = file_check_upload($component['cid'])) {
+  if ($file = file_check_upload($component['form_key'])) {
     $upload_dir = variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation'];
     if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
-      $file_saved = file_save_upload($component['cid'], variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation']);
+      $file_saved = file_save_upload($component['form_key'], variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation']);
       if (!$file_saved) {
         drupal_set_message(t("The uploaded file %filename was unable to be saved. The destination directory may not be writable.", array('%filename' => $data)), "error");
         $data = serialize(array('error' => 'Error while uploading file'));
