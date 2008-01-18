@@ -42,7 +42,7 @@ function webform_help($section= "admin/help#webform") {
       break;
     case 'webform/helptext#variables' :
       $output = t('Available variables are: %username, %useremail, %site, %date.');
-      $output .= ' '. t('You can also use %server[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.server">$_SERVER</a> variables and %get[key] to create prefilled forms from the <a href="http://www.php.net/reserved.variables#reserved.variables.get">URL</a> (e.g. %server[HTTP_USER_AGENT] or %get[id]).');
+      $output .= ' '. t('You can also use %server[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.server">$_SERVER</a> variables, %session[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.session">$_SESSION</a> variables and %get[key] to create prefilled forms from from the <a href="http://www.php.net/reserved.variables#reserved.variables.get">URL</a>. %cookie, %request and %post also work with their respective PHP variables. For example %server[HTTP_USER_AGENT], %session[id], or %get[q].');
       if (module_exists('profile')) {
         $output .= ' '. t('If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the varible %profile[profile_city].');
       }
@@ -1513,44 +1513,43 @@ function theme_webform_confirmation($node) {
 function _webform_filtervalues($string, $strict = TRUE) {
   global $user;
 
-  $find= array('%username', '%useremail', '%site', '%date');
-  $replace= array($user->name, $user->mail, variable_get('site_name', 'drupal'), format_date(time(), 'large'));
+  // Setup default token replacements.
+  $find = array('%username', '%useremail', '%site', '%date');
+  $replace = array($user->name, $user->mail, variable_get('site_name', 'drupal'), format_date(time(), 'large'));
 
-  if (module_exists('profile')) {
-    foreach ($user as $k => $v) {
-      // Special case for dates.
-      $find[]= "%profile[$k]";
-      if (is_array($v) && $v['year']) {
-        $replace[] = format_date(strtotime($v['month'] .'/'. $v['day'] .'/'. $v['year']), 'custom', 'F j, Y', '0');
-      }
-      else {
-        $replace[] = $v;
+  // Provide 
+  $tokens = array(
+    '%server' => $_SERVER,
+    '%session' => $_SESSION,
+    '%cookie' => $_COOKIE,
+    '%get' => $_GET,
+    '%post' => $_POST,
+    '%request' => $_REQUEST,
+    '%profile' => $user,
+  );
+
+  foreach ($tokens as $token => $variable) {
+    if (strpos($string, $token) !== FALSE) {
+      foreach ($variable as $key => $value) {
+        $find[] = $token .'['. $key .']';
+
+        // This special case for profile module dates.
+        if (is_array($value) && $value['year']) {
+          $replace[] = format_date(strtotime($value['month'] .'/'. $value['day'] .'/'. $value['year']), 'custom', 'F j, Y', '0');
+        }
+        else {
+          $replace[] = $value;
+        }
       }
     }
   }
-  foreach ($_SERVER as $k => $v) {
-    $find[]= "%server[$k]";
-    $replace[]= $v;
-  }
-  foreach ($_GET as $k => $v) {
-    $find[] = "%get[$k]";
-    $replace[] = $v;
-  }
-  foreach ($_POST as $k => $v) {
-    $find[] = "%post[$k]";
-    $replace[] = $v;
-  }
-  $string= str_replace($find, $replace, $string);
 
-  if (module_exists('profile')) {
-    // Clean up any unused %profile stuff.
-    $string= preg_replace('/\%profile\[\w+\]/', '', $string);
+  $string = str_replace($find, $replace, $string);
+
+  // Clean up any unused tokens.
+  foreach (array_keys($tokens) as $token) {
+    $string = preg_replace('/\\'. $token .'\[\w+\]/', '', $string);
   }
-  // Clean up any unused %post and %get stuff.
-  $string= preg_replace('/\%get\[\w+\]/', '', $string);
-  $string= preg_replace('/\%post\[\w+\]/', '', $string);
-  // Clean up any unused %system stuff.
-  $string= preg_replace('/\%server\[\w+\]/', '', $string);
 
   if ($strict) {
     return filter_xss($string);
