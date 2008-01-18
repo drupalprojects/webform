@@ -1517,7 +1517,7 @@ function _webform_filtervalues($string, $strict = TRUE) {
   $find = array('%username', '%useremail', '%site', '%date');
   $replace = array($user->name, $user->mail, variable_get('site_name', 'drupal'), format_date(time(), 'large'));
 
-  // Provide 
+  // Provide a list of candidates for token replacement.
   $tokens = array(
     '%server' => $_SERVER,
     '%session' => $_SESSION,
@@ -1534,7 +1534,7 @@ function _webform_filtervalues($string, $strict = TRUE) {
         $find[] = $token .'['. $key .']';
 
         // This special case for profile module dates.
-        if (is_array($value) && $value['year']) {
+        if ($token == '%profile' && is_array($value) && $value['year']) {
           $replace[] = format_date(strtotime($value['month'] .'/'. $value['day'] .'/'. $value['year']), 'custom', 'F j, Y', '0');
         }
         else {
