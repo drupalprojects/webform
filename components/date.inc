@@ -132,7 +132,7 @@ function webform_validate_date($field, $field_name, $component_name, $component_
 
   // Check if the user filled the required fields.
   if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error(t("@type %name field required", array('@type' => $component_name, '%name' => $field_name)));
+    form_set_error($component_key, t("@type %name field required", array('@type' => $component_name, '%name' => $field_name)));
     return false;
   }
 
