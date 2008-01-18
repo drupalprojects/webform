@@ -429,7 +429,7 @@ function _webform_csv_data_select($data, $component) {
 
   if ($component['extra']['multiple']) {
     foreach ($options as $key => $item) {
-      if (in_array($key, (array)$data['value']) === true) {
+      if (in_array($item, (array)$data['value']) === true) {
         $output .= '\,Yes';
       }
       else {
