@@ -685,8 +685,8 @@ function webform_form(&$node, &$param) {
     '#default_value' => ($node->submit_limit > 0 ? $node->submit_limit : ""),
     '#attributes' => array(
       'style' => 'width: 2em; display: inline;',
-      'onchange' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;",
-      'onclick' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;"
+      'onchange' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;",
+      'onclick' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;"
     ),
   );
   $form['advanced']['submitlimit']['submit_interval'] = array(
@@ -699,8 +699,8 @@ function webform_form(&$node, &$param) {
     ),
     '#default_value' => $node->submit_interval,
     '#attributes' => array(
-      'onchange' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;",
-      'onclick' => "javascript: document.getElementsByName('edit[enforce_limit]').item(1).checked = true;"
+      'onchange' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;",
+      'onclick' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;"
     ),
   );
 
@@ -862,10 +862,19 @@ function webform_edit_field_form(&$node) {
       return;
     }
     // We are editing a new field.
+    $type = $_POST['webform_newfield_type'];
     $currfield['cid'] = time();
-    $currfield['form_key'] = $currfield['cid'];
-    $currfield['type'] = $_POST['webform_newfield_type'];
-    $currfield['name'] = $currfield['type'] ."_". $currfield['cid'];
+    $currfield['type'] = $type;
+
+    // Generate a resonable key and name.
+    $delta = 0;
+    foreach ((array)$node->webformcomponents as $field) {
+      if ($field['type'] == $type) {
+        $delta++;
+      }
+    }
+    $currfield['form_key'] = $type . ($delta ? '_'. $delta : '');
+    $currfield['name'] = drupal_ucfirst($type) . ($delta ? ' '. $delta : '');
     drupal_set_title(t("Add new %type component", array('%type' => $currfield['type'])));
   }
 
