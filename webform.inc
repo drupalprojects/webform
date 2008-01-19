@@ -171,7 +171,7 @@ function _webform_fetch_submission($sid, $nid) {
 
 
 function theme_webform_create_mailmessage($form_values, $node, $sid) {
-  global $user, $baseurl;
+  global $user;
   $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
   $ip_address = $_SERVER['REMOTE_ADDR'];
 
@@ -188,7 +188,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
 
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
-  $message .= "http://". $_SERVER['HTTP_HOST'] . $baseurl . url('node/'.$node->nid, "sid=". $sid);
+  $message .= url('node/'.$node->nid, "sid=". $sid, NULL, TRUE);
 
 
   if (variable_get('webform_debug', 0) == 2) {
