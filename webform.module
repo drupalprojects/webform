@@ -1440,7 +1440,7 @@ function webform_client_form_submit($form_id, $form_values) {
 
       // Assemble the FROM string.
       if (strlen($email_from_name) > 0) {
-        $email_from_string = $email_from_name .' <'. $email_from_address .'>';
+        $email_from_string = mime_header_encode($email_from_name) .' <'. $email_from_address .'>';
       }
       else {
         $email_from_string = $email_from_address;
