@@ -14,12 +14,12 @@ assumes use of the phptemplate engine.
 - Open your template.php file located in your theme's directory.
 - Add the following lines of php code:
 
-function phptemplate_webform_create_mailmessage_nodeIdHere ($formData, $node) {
-  return _phptemplate_callback('webform_create_mailmessage_nodeIdHere', array('formData' => $formData, 'node' => $node)));
+function phptemplate_webform_create_mailmessage_[node id here] ($form_data, $node) {
+  return _phptemplate_callback('webform_create_mailmessage_[node id here]', array('form_data' => $form_data, 'node' => $node));
 }
 
 - Create a new file in your theme's directory named
-  "webform_create_mailmessage_nodeIdHere.tpl.php", once again replacing nodeIdHere
+  "webform_create_mailmessage_[node id here].tpl.php", once again replacing [node id here]
   with the node ID of the webform.
   
 - Open up your new file and customize the webform email. Here's a simple template
@@ -67,14 +67,14 @@ of the phptemplate engine.
 - Open your template.php file located in your theme's directory.
 - Add the following lines of php code:
 
-function phptemplate_webform_form_nodeIdHere ($form) {
-  return _phptemplate_callback('webform_form_nodeIdHere', array('form' => $form));
+function phptemplate_webform_form_[node id here] ($form) {
+  return _phptemplate_callback('webform_form_[node id here]', array('form' => $form));
 }
 
-- Replace "nodeIdHere" with the node ID of the form.
+- Replace "[node id here]" with the node ID of the form.
 
 - Create a new file in your theme's directory named
-  "webform_form_nodeIdHere.tpl.php", once again replacing nodeIdHere
+  "webform_form_[node id here].tpl.php", once again replacing [node id here]
   with the node ID of the webform.
   
 - Open up your new file and customize the webform however you like. Here's an
