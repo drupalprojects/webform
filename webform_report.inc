@@ -188,8 +188,8 @@ function _webform_results_download($nid) {
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors.
   $header[0] .= $node->title .",,,,";
-  $header[1] .= "Submission Details,,,,";
-  $header[2] .= "Serial,SID,Time,UID,Username";
+  $header[1] .= "Submission Details,,,,,";
+  $header[2] .= "Serial,SID,Time,IP Address,UID,Username";
   // Compile header information.
   _webform_load_components(); // Load all components.
   if (is_array($node->webformcomponents)) {
@@ -215,7 +215,7 @@ function _webform_results_download($nid) {
   // Generate a row for each submission.
   $rowcount = 0;
   foreach ($submissions as $sid => $submission) {
-    $row = ++$rowcount .",". $sid .",\"". format_date($submission->submitted, 'small') ."\",". $submission->uid .",\"". $submission->name ."\"";
+    $row = ++$rowcount .",". $sid .",\"". format_date($submission->submitted, 'small') ."\",\"". $submission->remote_addr ."\",". $submission->uid .",\"". $submission->name ."\"";
     foreach ($node->webformcomponents as $cid => $component) {
       $csv_data_function   = "_webform_csv_data_". $component['type'];
       if (function_exists($csv_data_function)) {
