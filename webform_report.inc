@@ -80,7 +80,7 @@ function _webform_results_table($nid) {
   _webform_load_components();
 
   // Get all the component cid and names for the node.
-  $query = 'SELECT cid, name, type, extra FROM {webform_component} WHERE nid = %d ORDER BY weight, name';
+  $query = 'SELECT cid, name, type, extra FROM {webform_component} WHERE nid = %d ORDER BY pid, weight, name';
   $res = db_query($query, $nid);
   while ($component = db_fetch_array($res)) {
     $components[] = $component;
