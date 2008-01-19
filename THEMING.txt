@@ -33,28 +33,28 @@ function phptemplate_webform_create_mailmessage_[node id here] ($form_data, $nod
   
   From the IP address <?php echo $_SERVER['REMOTE_ADDR']; ?>
   
-  The user's favorite color is <?php echo $formData['submitted']['Favorite Color'] ?>
+  The user's favorite color is <?php echo $form_data['submitted_tree']['favorite_color'] ?>
   
   The user's problem is below:
-  <?php echo $formData['submitted']['Problem'] ?>
+  <?php echo $form_data['submitted_tree']['problem'] ?>
   
   <?php /* End sample create_mailmessage file */ ?>
 
 - To get a better idea of what variables are available to you, you can include
   the print_r function in your email. Simply include the line:
   
-  <?php print_r($formData) ?>
+  <?php print_r($form_data) ?>
   
   to get a listing of all the available fields you can use in your mail.
   
 - An Important Note for Webform Themers: When webforms added support for fieldsets
   (i.e. nested fields), it became necessary to increase the complexity of themed
-  emails. Previously, the $formData variable only sent the values of the form in
-  a flat array. Now, $formData contains several arrays of information:
+  emails. Previously, the $form_data variable only sent the values of the form in
+  a flat array. Now, $form_data contains several arrays of information:
   
-  $formData['submitted'] => An array of fields and their submitted values (identical to the previous value of $formData)
-  $formData['submitted_tree'] => An array of fields and their values structured in a recursive array
-  $formData['components'] => An array of component_ids and their field names
+  $form_data['submitted'] => An array of fields and their submitted values (identical to the previous value of $form_data)
+  $form_data['submitted_tree'] => An array of fields and their values structured in a recursive array
+  $form_data['components'] => An array of component_ids and their field names
   
 
 Theme an entire webform
