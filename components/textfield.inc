@@ -190,5 +190,5 @@ function _webform_csv_headers_textfield($component) {
  *   commas.
  */
 function _webform_csv_data_textfield($data) {
-  return empty($data['value']['0']) ? "" : $data['value']['0'];
+  return !isset($data['value']['0']) ? "" : $data['value']['0'];
 }
