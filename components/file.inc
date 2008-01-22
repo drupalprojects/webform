@@ -288,7 +288,7 @@ function _webform_submit_file(&$data, $component) {
  */
 function theme_webform_mail_file($data, $component) {
   $file = unserialize($data);
-  $output = $component['name'] .": ". file_create_url($file['filepath']) ."\n";
+  $output = $component['name'] .": ". (!empty($file['filepath']) ? file_create_url($file['filepath']) : '') ."\n";
   return $output;
 }
 
