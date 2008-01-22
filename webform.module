@@ -380,7 +380,7 @@ function webform_prepare(&$node) {
         $node->webformcomponents = _webform_components_decode($_POST['webformcomponents']);
       }
       // Delete an existing component.
-      $delete_cid = $_POST['selected_component'];
+      $delete_cid = $_POST['components']['selected_component'];
       if (is_array($node->webformcomponents)) {
         $new_parent = $node->webformcomponents[$delete_cid]['parent'];
         // Fix-up any children of the deleted component.
@@ -444,7 +444,16 @@ function webform_prepare(&$node) {
 function webform_validate(&$node) {
   $op = $_POST['op'];
   $node->webformcomponents = _webform_components_decode($_POST['webformcomponents']);
-  $node->selected_component = $_POST['selected_component'];
+  $node->selected_component = $_POST['components']['selected_component'];
+
+  // Update the component weight and mandatory status.
+  if ($op !== t('Done')) {
+    foreach ($node->webformcomponents as $cid => $component) {
+      $post_component = $_POST['components'][$cid];
+      $node->webformcomponents[$cid]['weight'] = $post_component['weight'];
+      $node->webformcomponents[$cid]['mandatory'] = isset($post_component['mandatory']) ? 1 : 0;
+    }
+  }
 
   switch ($op) {
     // Intercept these buttons and redirect:
@@ -469,7 +478,7 @@ function webform_validate(&$node) {
       // We have to throw a form error for Drupal to stop form processing.
       // The 'selected_component' field item is a radio button, which shouldn't
       // show a red border of any sort when an error is flagged on it.
-      if ($_POST['selected_component']) {
+      if ($_POST['components']['selected_component']) {
         form_set_error('selected_component', t("Field deleted, form must be submitted to save changes"));
       }
       else {
@@ -540,6 +549,7 @@ function webform_form(&$node, &$param) {
     '#title' => t('Components'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
+    '#tree' => TRUE,
     '#weight' => -3
   );
 
@@ -547,6 +557,18 @@ function webform_form(&$node, &$param) {
     $options = array();
     foreach ($node->webformcomponents as $cid => $component) {
       $options[$cid] = check_plain($component['name']);
+      $form['components'][$cid]['weight'] = array(
+        '#type' => 'weight',
+        '#delta' => count($node->webformcomponents) > 10 ? count($node->webformcomponents) : 10,
+        '#title' => t("Weight"),
+        '#default_value' => $component['weight'],
+      );
+      $form['components'][$cid]['mandatory'] = array(
+        '#type' => 'checkbox',
+        '#delta' => $component['mandatory'],
+        '#title' => t("Mandatory"),
+        '#default_value' => $component['mandatory'],
+      );
     }
 
     if ($node->selected_component > 0) {
@@ -798,13 +820,17 @@ function theme_webform_node_form($form) {
       // Add padding to the radio label.
       $form['components']['selected_component'][$cid]['#title'] = '<span style="padding-left: '. ($level * 15) .'px; padding-right: 20px;">'. $form['components']['selected_component'][$cid]['#title'] .'</span>';
 
+      // Remove individual titles from the mandatory and weight fields.
+      unset($form['components'][$cid]['mandatory']['#title']);
+      unset($form['components'][$cid]['weight']['#title']);
+
       // Add each component to a table row.
       $rows[] = array(
         drupal_render($form['components']['selected_component'][$cid]),
         $component['type'],
         ($component['value'] == "") ? "-" : $component['value'],
-        ($component['mandatory'] == 1) ? "Y" : "N" ,
-        $component['weight'],
+        drupal_render($form['components'][$cid]['mandatory']),
+        drupal_render($form['components'][$cid]['weight']),
       );
       if (is_array($component['children'])) {
         foreach ($component['children'] as $cid => $component) {
@@ -864,7 +890,7 @@ function webform_edit_field_form(&$node) {
   else {
     // Check to make sure a valid component type was selected.
     $component_types =  _webform_load_components();
-    $new_component_type = $_POST['webform_newfield_type'];
+    $new_component_type = $_POST['components']['webform_newfield_type'];
     if (empty($new_component_type) || !key_exists($new_component_type, $component_types)) {
       drupal_set_message(t('Unknown component type %component', array('%component' => $new_component_type)), 'error');
       drupal_set_title("Webform Error");
@@ -872,7 +898,7 @@ function webform_edit_field_form(&$node) {
       return;
     }
     // We are editing a new field.
-    $type = $_POST['webform_newfield_type'];
+    $type = $_POST['components']['webform_newfield_type'];
     $currfield['cid'] = time();
     $currfield['type'] = $type;
 
