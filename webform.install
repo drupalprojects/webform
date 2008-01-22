@@ -95,7 +95,7 @@ function webform_install() {
 
       db_query("CREATE TABLE {webform_submissions} (
         nid integer NOT NULL default '0',
-        sid serial,
+        sid serial UNIQUE,
         uid integer NOT NULL default '0',
         submitted integer NOT NULL default '0',
         remote_addr varchar(128) NOT NULL default '',
@@ -106,7 +106,7 @@ function webform_install() {
 
       db_query("CREATE TABLE {webform_submitted_data} (
         nid integer NOT NULL default '0',
-        sid integer NOT NULL default '0',
+        sid integer NOT NULL UNIQUE default '0',
         cid integer NOT NULL default '0',
         no integer NOT NULL default '0',
         data text NOT NULL default '',
