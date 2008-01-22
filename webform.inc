@@ -147,7 +147,7 @@ function _webform_fetch_submission($sid, $nid) {
 
   $submission = array();
 
-  $query = 'SELECT sd.nid, sd.sid, s.submitted, sd.cid, sd.no, sd.data '.
+  $query = 'SELECT sd.nid, sd.sid, s.uid, s.submitted, sd.cid, sd.no, sd.data '.
            'FROM {webform_submitted_data} as sd '.
            'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '.
            'WHERE sd.sid = %d AND s.nid = %d';
@@ -158,6 +158,7 @@ function _webform_fetch_submission($sid, $nid) {
     $row = db_fetch_array($res);
     $submission['nid'] = $row['nid'];
     $submission['sid'] = $row['sid'];
+    $submission['uid'] = $row['uid'];
     $submission['submitted'] = $row['submitted'];
 
     while ($row) {
