@@ -81,16 +81,14 @@ function _webform_render_date($component) {
   for ($i = 1; $i <= 31; $i++) $days[$i] = $i;
 
   $form_item = array(
-    '#type' => 'fieldset',
-    '#title' => htmlspecialchars($component['name'], ENT_QUOTES),
+    '#title' => $component['name'],
     '#weight' => $component['weight'],
+    '#theme' => 'webform_date',
     '#description' => _webform_filtervalues($component['extra']['description']),
-    '#prefix' => '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. $component['form_key'] .'">',
+    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix' => '</div>',
+    '#required' => $component['mandatory'],
   );
-  if ($component['mandatory']) {
-    $form_item['#title'] .= '<span class="form-required" title="'. t("This field is required.") .'">*</span>';
-  }
 
   $form_item['month'] = array(
     '#type' => 'select',
@@ -323,4 +321,29 @@ function _webform_csv_data_date($data) {
   else {
     return "";
   }
+}
+
+/**
+ * Theme a webform date element.
+ */
+function theme_webform_date($element) {
+  $element['#type'] = 'element';
+
+  // Determine the order of day, month, year in the site's chosen date format.
+  $format = variable_get('date_format_short', 'm/d/Y - H:i');
+  $sort = array();
+  $sort['day'] = max(strpos($format, 'd'), strpos($format, 'j'));
+  $sort['month'] = max(strpos($format, 'm'), strpos($format, 'M'));
+  $sort['year'] = strpos($format, 'Y');
+  asort($sort);
+  $order = array_keys($sort);
+
+  // Output multi-selector for date.
+  $element['#children'] = '';
+  foreach ($order as $type) {
+    $element['#children'] .= drupal_render($element[$type]);
+  }
+  $element['#children'] = '<div class="container-inline">'. $element['#children'] .'</div>';
+
+  return theme('form_element', $element, $element['#children']);
 }
