@@ -153,7 +153,7 @@ function webform_load($node) {
   while ($c= db_fetch_array($result)) {
     $page->webformcomponents[$c['cid']]['cid']= $c['cid'];
     $page->webformcomponents[$c['cid']]['form_key']= $c['form_key'] ? $c['form_key'] : $c['cid'];
-    $page->webformcomponents[$c['cid']]['name']= $c['name'];
+    $page->webformcomponents[$c['cid']]['name']= t($c['name']);
     $page->webformcomponents[$c['cid']]['type']= $c['type'];
     $page->webformcomponents[$c['cid']]['value']= $c['value'];
     $page->webformcomponents[$c['cid']]['extra']= unserialize($c['extra']);
