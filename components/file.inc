@@ -18,7 +18,6 @@ function _webform_edit_file($currfield) {
       '#title' => t('Upload Filtering'),
       '#description' => t('Select the types of uploads you would like to allow.'),
     );
-    dsm($currfield);
     $edit_fields['extra']['filtering']['types']['webimages'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Web Images'),
@@ -211,6 +210,7 @@ function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
   }
 
   // Build a list of extensions.
+  $extensions = array();
   if (is_array($filters['types'])) {
     foreach ($filters['types'] as $filtertype) {
       foreach ($filtertype as $extension) {
