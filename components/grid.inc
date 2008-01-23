@@ -287,13 +287,13 @@ function _webform_analysis_rows_grid($component) {
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for human reading.
  **/
-function _webform_table_data_grid($data,$component) {
-  $questions = explode("\n",$component['extra']['questions']);
+function _webform_table_data_grid($data, $component) {
+  $questions = explode("\n", $component['extra']['questions']);
   // Set the value as a single string
   if (is_array($data['value'])) {
     foreach ($data['value'] as $item => $value) {
       if ($value !== '0') {
-        $output .= check_plain(trim($questions[$item])) . ': ' . check_plain($value) ."<br />";
+        $output .= check_plain(trim($questions[$item])) .': '. check_plain($value) ."<br />";
       }
     }
   }
@@ -368,7 +368,7 @@ function theme_webform_grid(&$grid_element) {
   $rows = array();
   $header = array('');
   $first = TRUE;
-  foreach(element_children($grid_element) as $key) {
+  foreach (element_children($grid_element) as $key) {
     $question_element = $grid_element[$key];
 
     // Set the header for the table.

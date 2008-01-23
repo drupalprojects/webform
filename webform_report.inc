@@ -56,10 +56,11 @@ function theme_webform_results_submissions($nid, $submissions) {
       l(t('View'), "node/$nid/results/view/". $submission->sid, NULL, NULL, NULL, FALSE),
     );
     if ((user_access("edit own webform submissions") && ($user->uid == $submission->uid)) || user_access("edit webform submissions")) {
-	  $row[] = l(t('Edit'),"node/$nid/results/edit/". $submission->sid, NULL, NULL, NULL, FALSE);
-	} else {
-	  $row[] = t('Edit');
-	}
+      $row[] = l(t('Edit'), "node/$nid/results/edit/". $submission->sid, NULL, NULL, NULL, FALSE);
+    }
+    else {
+      $row[] = t('Edit');
+    }
     if (user_access('clear webform results')) {
       $row[] = l(t('Delete'), "node/$nid/results/delete/". $submission->sid, NULL, NULL, NULL, FALSE);
     }

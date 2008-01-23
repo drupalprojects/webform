@@ -269,7 +269,7 @@ function webform_menu($may_cache) {
   $items = array();
   if ($may_cache) {
     // Submissions listing.
-    $items[]= array(
+    $items[] = array(
       'path' => 'admin/content/webform',
       'title' => t('Webforms'),
       'callback' => 'webform_page',
@@ -279,7 +279,7 @@ function webform_menu($may_cache) {
     );
 
     // Admin Settings.
-    $items[]= array(
+    $items[] = array(
       'path' => 'admin/settings/webform',
       'title' => t('Webform'),
       'callback' => 'drupal_get_form',
@@ -295,53 +295,83 @@ function webform_menu($may_cache) {
   if (arg(0) == 'node' && is_numeric(arg(1))) {
     $node = node_load(arg(1));
     if ($node->nid && $node->type == 'webform') {
-      $items[] = array('path' => 'node/'. $node->nid .'/done', 'title' => t('webform'),
-                       'callback' => '_webform_confirmation', 'callback arguments' => array(arg(1)),
-                       'access' => true,
-                       'type' => MENU_CALLBACK);
-      $items[] = array('path' => 'node/'. $node->nid .'/results', 'title' => t('Results'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('access webform results'),
-                       'type' => MENU_LOCAL_TASK, 'weight' => 2);
-      $items[] = array('path' => 'node/'. $node->nid .'/results/submissions', 'title' => t('Submissions'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('access webform results'),
-                       'weight' => 4,
-                       'type' => MENU_DEFAULT_LOCAL_TASK);
-      $items[] = array('path' => 'node/'. $node->nid .'/results/analysis', 'title' => t('Analysis'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('access webform results'),
-                       'weight' => 5,
-                       'type' => MENU_LOCAL_TASK);
-      $items[]= array('path' => 'node/'. $node->nid .'/results/table', 'title' => t('Table'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('access webform results'),
-                       'weight' => 6,
-                       'type' => MENU_LOCAL_TASK);
-      $items[] = array('path' => 'node/'. $node->nid .'/results/download', 'title' => t('Download'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('access webform results'),
-                       'weight' => 7,
-                       'type' => MENU_LOCAL_TASK);
-      $items[] = array('path' => 'node/'. $node->nid .'/results/clear', 'title' => t('Clear'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('clear webform results'),
-                       'weight' => 8,
-                       'type' => MENU_LOCAL_TASK);
-      $items[]= array('path' => 'node/'. $node->nid .'/results/delete', 'title' => t('Webform'),
-                       'callback' => 'webform_results',
-                       'access' => user_access('clear webform results'),
-                       'type' => MENU_CALLBACK);
-      $items[]= array('path' => 'node/'. $node->nid .'/results/view', 'title' => t('View'),
-                       'callback' => 'webform_results',
-                       // Access checking is done in the function called by the webform_results function.
-                       'access' => true,
-                       'type' => MENU_CALLBACK);  
-      $items[]= array('path' => 'node/'. $node->nid .'/results/edit', 'title' => t('Edit'),
-                       'callback' => 'webform_results',
-                       // Access checking is done in the function called by the webform_results function.
-                       'access' => true,
-                       'type' => MENU_CALLBACK);                       
+      $items[] = array(
+        'path' => 'node/'. $node->nid .'/done',
+        'title' => t('webform'),
+        'callback' => '_webform_confirmation',
+        'callback arguments' => array(arg(1)),
+        'access' => true,
+        'type' => MENU_CALLBACK,
+      );
+      $items[] = array(
+        'path' => 'node/'. $node->nid .'/results',
+        'title' => t('Results'),
+        'callback' => 'webform_results',
+        'access' => user_access('access webform results'),
+        'weight' => 2,
+        'type' => MENU_LOCAL_TASK,
+      );
+      $items[] = array(
+        'path' => 'node/'. $node->nid .'/results/submissions',
+        'title' => t('Submissions'),
+        'callback' => 'webform_results',
+        'access' => user_access('access webform results'),
+        'weight' => 4,
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+      );
+      $items[] = array(
+        'path' => 'node/'. $node->nid .'/results/analysis',
+        'title' => t('Analysis'),
+        'callback' => 'webform_results',
+        'access' => user_access('access webform results'),
+        'weight' => 5,
+        'type' => MENU_LOCAL_TASK,
+      );
+      $items[]= array(
+        'path' => 'node/'. $node->nid .'/results/table',
+        'title' => t('Table'),
+        'callback' => 'webform_results',
+        'access' => user_access('access webform results'),
+        'weight' => 6,
+        'type' => MENU_LOCAL_TASK,
+      );
+      $items[] = array(
+        'path' => 'node/'. $node->nid .'/results/download',
+        'title' => t('Download'),
+        'callback' => 'webform_results',
+        'access' => user_access('access webform results'),
+        'weight' => 7,
+        'type' => MENU_LOCAL_TASK,
+      );
+      $items[] = array(
+        'path' => 'node/'. $node->nid .'/results/clear',
+        'title' => t('Clear'),
+        'callback' => 'webform_results',
+        'access' => user_access('clear webform results'),
+        'weight' => 8,
+        'type' => MENU_LOCAL_TASK,
+      );
+      $items[]= array(
+        'path' => 'node/'. $node->nid .'/results/delete',
+        'title' => t('Webform'),
+        'callback' => 'webform_results',
+        'access' => user_access('clear webform results'),
+        'type' => MENU_CALLBACK,
+      );
+      $items[]= array(
+        'path' => 'node/'. $node->nid .'/results/view',
+        'title' => t('View'),
+        'callback' => 'webform_results',
+        'access' => true, // Access checked in webform_submission_view().
+        'type' => MENU_CALLBACK,
+      );  
+      $items[]= array(
+        'path' => 'node/'. $node->nid .'/results/edit',
+        'title' => t('Edit'),
+        'callback' => 'webform_results',
+        'access' => true, // Access checked in webform_submission_edit().
+        'type' => MENU_CALLBACK,
+      );                       
     }
   }
 
@@ -1461,7 +1491,8 @@ function webform_client_form_submit($form_id, $form_values) {
   if (!$form_values['details']['sid']) {
     // No sid was found thus insert it in the datatabase.
     $sid = _webform_save_submission($node, $form_values['submitted']);
-  } else {
+  }
+  else {
     // Sid was found thus update the existing sid in the datatbase.
     $sid = _webform_update_submission($node, $form_values['details']['sid'], $form_values['submitted']);
   }
@@ -1621,7 +1652,7 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form) {
  * Prints the confirmation message after a successful submission.
  */
 function _webform_confirmation($nid) {
-  if ($node = node_load(array('nid' => $nid))) {
+  if ($node = node_load($nid)) {
     if (node_access('view', $node)) {
       drupal_set_title($node->title);
       return theme('webform_confirmation', $node);
@@ -1738,13 +1769,12 @@ function webform_results() {
   include_once(drupal_get_path('module', 'webform') ."/webform_report.inc");
 
   $nid = arg(1);
-  $node = node_load(array('nid' => $nid));
+  $node = node_load($nid);
 
   $title = $node->title;
   drupal_set_title($title);
 
   if (arg(2) == 'results') {
-
     switch (arg(3)) {
       case 'analysis':
         $content = _webform_results_analysis($nid);
@@ -1914,19 +1944,19 @@ function _webform_load_components($return_all = FALSE, $reset = FALSE) {
 
 // Display the webform for editing existing submission data.
 function webform_submission_edit(&$node, $sid) {
-  include_once(drupal_get_path('module', 'webform'). "/webform.inc");
+  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
 
   $node->webformcomponents = _webform_components_decode($node->webformcomponents);
   $submission = _webform_fetch_submission($sid, $node->nid);
   if ($sid && is_numeric($sid)) {
     if (user_access("edit webform submissions") || (user_access("edit own webform submissions") && ($user->uid == $submission['uid']))) {
-      drupal_set_title('Submission #'.$sid);
+      drupal_set_title('Submission #'. $sid);
       $node->body = "";
 
-      return drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, true);
-    } else {
-      $sid = NULL; // This user is not allowed to access a submitted node. Deny the attempt without alert.
-      watchdog('webform', t('Unauthorized webform access attempt', array ('%name' => "<em>$user->name</em>")), WATCHDOG_WARNING); // and log the attempt
+      return drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, TRUE);
+    }
+    else {
+      watchdog('webform', t('Unauthorized webform access attempt by %name.', array('%name' => $user->name)), WATCHDOG_WARNING); // and log the attempt
       return drupal_access_denied();
     }
   }
@@ -1935,19 +1965,19 @@ function webform_submission_edit(&$node, $sid) {
 // Display the webform for editing existing submission data.
 function webform_submission_view(&$node, $sid) {
   global $user;
-  include_once(drupal_get_path('module', 'webform'). "/webform.inc");
+  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
 
   $node->webformcomponents = _webform_components_decode($node->webformcomponents);
   $submission = _webform_fetch_submission($sid, $node->nid);
   if ($sid && is_numeric($sid)) {
     if (user_access("edit webform submissions") || (user_access("edit own webform submissions") && ($user->uid == $submission['uid']))) {
-      drupal_set_title('Submission #'.$sid);
+      drupal_set_title('Submission #'. $sid);
       $node->body = "";
 
       return drupal_get_form('webform_client_form_'. $node->nid, $node, $submission);
-    } else {
-      $sid = NULL; // This user is not allowed to access a submitted node. Deny the attempt without alert.
-      watchdog('webform', t('Unauthorized webform access attempt', array ('%name' => "<em>$user->name</em>")), WATCHDOG_WARNING); // and log the attempt
+    }
+    else {
+      watchdog('webform', t('Unauthorized webform access attempt by %name.', array('%name' => $user->name)), WATCHDOG_WARNING); // and log the attempt
       return drupal_access_denied();
     }
   }
