@@ -99,15 +99,16 @@ function _webform_render_time($component) {
   for ($i = 0; $i <= 59; $i++) $minutes[$i < 10 ? "0$i" : $i] = $i < 10 ? "0$i" : $i;
   $am_pms = array('am' => t('am'), 'pm' => t('pm'));
 
-  $form_item['#type'] = 'fieldset';
-  $form_item['#title'] = htmlspecialchars($component['name'], ENT_QUOTES);
-  if ($component['mandatory']) {
-    $form_item['#title'] .= '<span class="form-required" title="'. t("This field is required.") .'">*</span>';
-  }
-  $form_item['#weight'] = $component['weight'];
-  $form_item['#description'] = _webform_filtervalues($component['extra']['description']);
-  $form_item['#prefix'] = '<div class="webform-component-'. $component['type'] .' container-inline" id="webform-component-'. $component['form_key'] .'">';
-  $form_item['#suffix'] = '</div>';
+  $form_item = array(
+    '#title' => $component['name'],
+    '#required' => $component['mandatory'],
+    '#weight' => $component['weight'],
+    '#description' => _webform_filtervalues($component['extra']['description']),
+    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
+    '#suffix' => '</div>',
+    '#theme' => 'webform_time',
+  );
+
   $form_item['hour'] = array(
     '#prefix' => '',
     '#type' => 'select',
@@ -329,4 +330,14 @@ function _webform_csv_data_time($data, $component) {
   else {
     return "";
   }
+}
+
+/**
+ * Theme a webform time element.
+ */
+function theme_webform_time($element) {
+  $element['#type'] = 'element';
+  $element['#children'] = '<div class="container-inline">'. drupal_render($element['hour']) . drupal_render($element['minute']) . drupal_render($element['ampm']) .'</div>';
+
+  return theme('form_element', $element, $element['#children']);
 }
