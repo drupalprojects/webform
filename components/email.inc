@@ -30,7 +30,7 @@ function _webform_edit_email($currfield) {
     '#type' => 'checkbox',
     '#title' => t("CC submission to this email"),
     '#return_value' => 'Y',
-    '#default_value' => ($currfield['extra']['carboncopy']=='Y'?TRUE:FALSE),
+    '#default_value' => ($currfield['extra']['carboncopy'] == 'Y' ? TRUE : FALSE),
     '#description' => t('Check this option if the email specified in this component should get a CC submission.') .' '.
                       t('Note that this opens the risk that the form can be used to send emails to any address and might be missused as a spam gateway.'),
   );

@@ -16,7 +16,7 @@
  * Implemenation of hook_help().
  */
 function webform_help($section= "admin/help#webform") {
-  $output= "";
+  $output =  "";
   switch ($section) {
     case 'admin/settings/webform' :
       $output = t("Webforms are forms and questionnaires. To add one select <strong>create content -&gt; webform</strong>. Below you can set different security and debug options.");
@@ -327,7 +327,7 @@ function webform_menu($may_cache) {
         'weight' => 5,
         'type' => MENU_LOCAL_TASK,
       );
-      $items[]= array(
+      $items[] = array(
         'path' => 'node/'. $node->nid .'/results/table',
         'title' => t('Table'),
         'callback' => 'webform_results',
@@ -351,21 +351,21 @@ function webform_menu($may_cache) {
         'weight' => 8,
         'type' => MENU_LOCAL_TASK,
       );
-      $items[]= array(
+      $items[] = array(
         'path' => 'node/'. $node->nid .'/results/delete',
         'title' => t('Webform'),
         'callback' => 'webform_results',
         'access' => user_access('clear webform results'),
         'type' => MENU_CALLBACK,
       );
-      $items[]= array(
+      $items[] = array(
         'path' => 'node/'. $node->nid .'/results/view',
         'title' => t('View'),
         'callback' => 'webform_results',
         'access' => true, // Access checked in webform_submission_view().
         'type' => MENU_CALLBACK,
       );  
-      $items[]= array(
+      $items[] = array(
         'path' => 'node/'. $node->nid .'/results/edit',
         'title' => t('Edit'),
         'callback' => 'webform_results',
@@ -382,7 +382,7 @@ function webform_menu($may_cache) {
  * Implementation of hook_link().
  * Always add a "view form" link.
  */
-function webform_link($type, $node= 0, $main= 0) {
+function webform_link($type, $node = 0, $main = 0) {
   if ($node->type == 'webform') {
     if ($main == 1) {
       $links['webform_goto'] = array(
@@ -1802,7 +1802,7 @@ function webform_results() {
         break;
       case 'submissions':
       default :
-        $content= _webform_results_submissions($nid);
+        $content = _webform_results_submissions($nid);
         break;
     }
 

@@ -34,14 +34,14 @@ function _webform_edit_select($currfield) {
     '#type' => 'checkbox',
     '#title' => t("Multiple"),
     '#return_value' => 'Y',
-    '#default_value' => ($currfield['extra']['multiple']=='Y'?TRUE:FALSE),
+    '#default_value' => ($currfield['extra']['multiple'] == 'Y' ? TRUE : FALSE),
     '#description' => t('Check this option if the user should be allowed to choose multiple values.'),
   );
   $edit_fields['extra']['aslist'] = array(
     '#type' => 'checkbox',
     '#title' => t("Listbox"),
     '#return_value' => 'Y',
-    '#default_value' => ($currfield['extra']['aslist']=='Y'?TRUE:FALSE),
+    '#default_value' => ($currfield['extra']['aslist'] == 'Y' ? TRUE : FALSE),
     '#description' => t('Check this option if you want the select component to be of listbox type instead of radiobuttons or checkboxes.'),
   );
   return $edit_fields;

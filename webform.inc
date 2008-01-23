@@ -19,7 +19,7 @@ function _webform_page() {
     array('data' => t('Operations'), 'colspan' => '2')
   );
 
-  $result = db_query("SELECT nid, uid, title FROM {node} WHERE type='webform'");
+  $result = db_query("SELECT nid, uid, title FROM {node} WHERE type = 'webform'");
 
   while ($node = db_fetch_object($result)) {
    $row = array(l($node->title, 'node/'. $node->nid));
