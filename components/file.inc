@@ -18,11 +18,12 @@ function _webform_edit_file($currfield) {
       '#title' => t('Upload Filtering'),
       '#description' => t('Select the types of uploads you would like to allow.'),
     );
+    dsm($currfield);
     $edit_fields['extra']['filtering']['types']['webimages'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Web Images'),
       '#options' => drupal_map_assoc(array('gif', 'jpg', 'png')),
-      '#default_value' => isset($currfield['extra']['filtering']['types']) ? $currfield['extra']['filtering']['types']['webimages'] : array('jpg', 'gif', 'png'),
+      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['webimages'] : array('jpg', 'gif', 'png'),
     );
     $edit_fields['extra']['filtering']['types']['desktopimages'] = array(
       '#type' => 'checkboxes',
@@ -33,7 +34,7 @@ function _webform_edit_file($currfield) {
     $edit_fields['extra']['filtering']['types']['documents'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Documents'),
-      '#options' => drupal_map_assoc(array('doc', 'html', 'odf', 'pdf', 'ppt', 'xls', 'xml')),
+      '#options' => drupal_map_assoc(array('txt', 'rtf', 'html', 'odf', 'pdf', 'doc', 'ppt', 'xls', 'xml')),
       '#default_value' => $currfield['extra']['filtering']['types']['documents'],
     );
     $edit_fields['extra']['filtering']['types']['media'] = array(
@@ -99,7 +100,7 @@ function theme_webform_edit_file($form) {
   drupal_set_html_head($javascript);
 
   // Format the components into a table.
-  $per_row = 4;
+  $per_row = 5;
   $rows = array();
   foreach (element_children($form['extra']['filtering']['types']) as $key => $filtergroup) {
     $row = array();
@@ -120,7 +121,7 @@ function theme_webform_edit_file($form) {
           if ($checkcount <= $per_row) {
             $row[] = array('data' => drupal_render($checkbox));
           }
-          elseif ($checkcount == $per_row+1) {
+          elseif ($checkcount == $per_row + 1) {
             $rows[] = array('data' => $row, 'style' => 'border-bottom: none;');
             $row = array(array('data' => '&nbsp;'), array('data' => '&nbsp;'));
             $row[] = array('data' => drupal_render($checkbox));
@@ -131,10 +132,10 @@ function theme_webform_edit_file($form) {
         }
       }
       // Pretty up the table a little bit.
-      $current_cell   = $checkcount % $per_row;
-      if ($current_cell   > 0) {
+      $current_cell = $checkcount % $per_row;
+      if ($current_cell > 0) {
         $colspan = $per_row - $current_cell   + 1;
-        $row[$current_cell  +1]['colspan'] = $colspan;
+        $row[$current_cell + 1]['colspan'] = $colspan;
       }
       // Add the javascript links.
       $jsboxes = substr($jsboxes, 0, strlen($jsboxes) - 1);
@@ -149,14 +150,13 @@ function theme_webform_edit_file($form) {
       unset($form['extra']['filtering']['types'][$filtergroup]['#title']);
       $row[] = array(
         'data' => drupal_render($form['extra']['filtering']['types'][$filtergroup]),
-        'colspan' => $per_row+1,
+        'colspan' => $per_row + 1,
       );
       unset($form['extra']['filtering']['types'][$filtergroup]);
       $rows[] = array('data' => $row);
     }
   }
   $header = array(array('data' => t('Category'), 'colspan' => '2'), array('data' => t('Types'), 'colspan' => $per_row));
-  //unset($form['extra']['filtering']['types']);
 
   // Create the table inside the form.
   $form['extra']['filtering']['types']['table'] = array(
@@ -182,7 +182,7 @@ function theme_webform_edit_file($form) {
 function _webform_render_file($component) {
   $form_item = array(
     '#type'          => $component['type'],
-    '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
+    '#title'         => $component['name'],
     //'#required'      => $component['mandatory'], // Drupal core bug with required file uploads
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
@@ -211,9 +211,11 @@ function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
   }
 
   // Build a list of extensions.
-  foreach ($filters['types'] as $filtertype) {
-    foreach ($filtertype as $extension) {
-      $extensions[] = $extension;
+  if (is_array($filters['types'])) {
+    foreach ($filters['types'] as $filtertype) {
+      foreach ($filtertype as $extension) {
+        $extensions[] = $extension;
+      }
     }
   }
   $extras = str_replace(" ", "", $filters['addextensions']);
@@ -223,7 +225,7 @@ function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
 
   // Build a human readable list of extensions:
   if (count($extensions) > 1) {
-    for ($n=0; $n < count($extensions) - 1; $n++) {
+    for ($n = 0; $n < count($extensions) - 1; $n++) {
       $extension_list .= $extensions[$n] .", ";
     }
     $extension_list .= "or ". $extensions[count($extensions)-1];
