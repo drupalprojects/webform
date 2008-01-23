@@ -53,10 +53,10 @@ function theme_webform_results_submissions($nid, $submissions) {
       format_date($submission->submitted, 'small'),
       theme('username', $submission),
       $submission->remote_addr,
-      l(t('View'), "node/$nid", NULL, "sid=". $submission->sid, NULL, FALSE),
+      l(t('View'), "node/$nid/results/view/". $submission->sid, NULL, NULL, NULL, FALSE),
     );
     if ((user_access("edit own webform submissions") && ($user->uid == $submission->uid)) || user_access("edit webform submissions")) {
-	  $row[] = l(t('Edit'),"node/$nid/results/edit/".$submission->sid, NULL, NULL, NULL, FALSE);
+	  $row[] = l(t('Edit'),"node/$nid/results/edit/". $submission->sid, NULL, NULL, NULL, FALSE);
 	} else {
 	  $row[] = t('Edit');
 	}
@@ -80,17 +80,13 @@ function _webform_results_table($nid) {
   _webform_load_components();
 
   // Get all the component cid and names for the node.
-  $query = 'SELECT cid, name, type, extra FROM {webform_component} WHERE nid = %d ORDER BY pid, weight, name';
-  $res = db_query($query, $nid);
-  while ($component = db_fetch_array($res)) {
-    $components[] = $component;
-  }
+  $node = node_load($nid);
 
   // Get all the submissions for the node.
   $header = theme('webform_results_table_header', $nid);
   $submissions = _webform_fetch_submissions($nid, $header);
 
-  return theme('webform_results_table', $nid, $components, $submissions);
+  return theme('webform_results_table', $nid, $node->ewbformcomponents, $submissions);
 }
 
 function theme_webform_results_table_header($nid) {
@@ -116,6 +112,8 @@ function theme_webform_results_table($nid, $components, $submissions) {
   $rows = array();
   $cell = array();
 
+  $node = node_load($nid);
+
   // This header has to be generated seperately so we can add the SQL necessary.
   // to sort the results.
   $header = theme('webform_results_table_header', $nid);
@@ -129,8 +127,7 @@ function theme_webform_results_table($nid, $components, $submissions) {
     $component_headers = array();
 
     // Generate a cell for each component.
-    foreach ($components as $component) {
-      $component['extra'] = unserialize($component['extra']);
+    foreach ($node->webformcomponents as $component) {
       $table_function = "_webform_table_data_". $component['type'];
       if (function_exists($table_function)) {
         $submission_output = $table_function($submission->data[$component['cid']], $component);
@@ -183,7 +180,7 @@ function _webform_results_download($nid) {
  *   ...............................................................................................................
  *   27 Feb 2005       ,1035,56 ,212   ,Yes       ,No      ,No      ,..,No      ,Yes       ,No      ,Yes     ,..,Yes     ,How is this?
  */
-  $node = node_load(array('nid' => $nid));
+  $node = node_load($nid);
 
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors.
@@ -192,16 +189,14 @@ function _webform_results_download($nid) {
   $header[2] .= "Serial,SID,Time,IP Address,UID,Username";
   // Compile header information.
   _webform_load_components(); // Load all components.
-  if (is_array($node->webformcomponents)) {
-    foreach ($node->webformcomponents as $cid => $component) {
-      $csv_header_function   = "_webform_csv_headers_". $component['type'];
-      if (function_exists($csv_header_function)) {
-        // Let each component determine its headers.
-        $component_header = $csv_header_function($component);
-        $header[0] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[0]) .'"';
-        $header[1] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[1]) .'"';
-        $header[2] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[2]) .'"';
-      }
+  foreach ($node->webformcomponents as $cid => $component) {
+    $csv_header_function   = "_webform_csv_headers_". $component['type'];
+    if (function_exists($csv_header_function)) {
+      // Let each component determine its headers.
+      $component_header = $csv_header_function($component);
+      $header[0] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[0]) .'"';
+      $header[1] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[1]) .'"';
+      $header[2] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[2]) .'"';
     }
   }
 
@@ -241,16 +236,9 @@ function _webform_results_download($nid) {
  * @return to stdio a themeatic HTML rendering of the page.
  */
 function _webform_results_analysis($nid) {
-
-  $query = 'SELECT nid, cid, name, type, value, extra '.
-    ' FROM {webform_component} '.
-    ' WHERE nid = %d '.
-    ' ORDER BY pid, weight, name';
-
-  $components = db_query($query, $nid);
-
   $rows = array();
   $question_number = 0;
+  $node = node_load($nid);
 
   $headers = array(
     t('Q'),
@@ -258,7 +246,7 @@ function _webform_results_analysis($nid) {
   );
 
   _webform_load_components(); // Load all component types.
-  while ($component = db_fetch_array($components)) {
+  foreach ($node->webformcomponents as $component) {
     $question_number++;
 
     // Do component specific call.

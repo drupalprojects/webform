@@ -109,7 +109,7 @@ function _webform_submission_delete_submit($form_id, $form_values) {
  */
 function _webform_fetch_submissions($nid, $header = NULL) {
 
-  $query = 'SELECT s.sid, s.uid, s.submitted, s.remote_addr, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '.
+  $query = 'SELECT s.*, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '.
            'FROM {webform_submissions} s '.
            'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid '.
            'LEFT JOIN {users} u ON u.uid = s.uid '.
@@ -147,7 +147,7 @@ function _webform_fetch_submission($sid, $nid) {
 
   $submission = array();
 
-  $query = 'SELECT sd.nid, sd.sid, s.uid, s.submitted, sd.cid, sd.no, sd.data '.
+  $query = 'SELECT s.*, sd.cid, sd.no, sd.data '.
            'FROM {webform_submitted_data} as sd '.
            'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '.
            'WHERE sd.sid = %d AND s.nid = %d';
@@ -159,6 +159,7 @@ function _webform_fetch_submission($sid, $nid) {
     $submission['nid'] = $row['nid'];
     $submission['sid'] = $row['sid'];
     $submission['uid'] = $row['uid'];
+    $submission['remote_addr'] = $row['remote_addr'];
     $submission['submitted'] = $row['submitted'];
 
     while ($row) {

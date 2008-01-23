@@ -2,12 +2,12 @@
 // $Id$
 
 function webform_install() {
-  drupal_set_message('Installing webform');
+  $success = TRUE;
 
   switch ($GLOBALS['db_type']) {
     case 'mysqli':
     case 'mysql':
-      db_query("CREATE TABLE if not exists {webform} (
+      $success = $success && db_query("CREATE TABLE if not exists {webform} (
         nid int(10) unsigned NOT NULL default '0',
         confirmation text,
         redirect_post int(1) unsigned not null default '0',
@@ -23,7 +23,7 @@ function webform_install() {
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
-      db_query("CREATE TABLE if not exists {webform_component} (
+      $success = $success && db_query("CREATE TABLE if not exists {webform_component} (
         nid int(10) unsigned NOT NULL default '0',
         cid int(10) unsigned NOT NULL default '0',
         pid int(10) unsigned NOT NULL default '0',
@@ -38,7 +38,7 @@ function webform_install() {
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
-      db_query("CREATE TABLE if not exists {webform_submissions} (
+      $success = $success && db_query("CREATE TABLE if not exists {webform_submissions} (
         nid int(10) unsigned NOT NULL default '0',
         sid int(10) unsigned NOT NULL default '0',
         uid int(10) unsigned NOT NULL default '0',
@@ -49,7 +49,7 @@ function webform_install() {
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
-      db_query("CREATE TABLE if not exists {webform_submitted_data} (
+      $success = $success && db_query("CREATE TABLE if not exists {webform_submitted_data} (
         nid int(10) unsigned NOT NULL default '0',
         sid int(10) unsigned NOT NULL default '0',
         cid int(10) unsigned NOT NULL default '0',
@@ -62,7 +62,7 @@ function webform_install() {
       break;
 
   case 'pgsql':
-      db_query("CREATE TABLE {webform} (
+      $success = $success && db_query("CREATE TABLE {webform} (
         nid integer NOT NULL default '0',
         confirmation text NOT NULL default '',
         redirect_post smallint NOT NULL default '0',
@@ -78,7 +78,7 @@ function webform_install() {
         )"
       );
 
-      db_query("CREATE TABLE {webform_component} (
+      $success = $success && db_query("CREATE TABLE {webform_component} (
         nid integer NOT NULL default '0',
         cid integer NOT NULL default '0',
         pid integer NOT NULL default '0',
@@ -93,7 +93,7 @@ function webform_install() {
         )"
       );
 
-      db_query("CREATE TABLE {webform_submissions} (
+      $success = $success && db_query("CREATE TABLE {webform_submissions} (
         nid integer NOT NULL default '0',
         sid serial UNIQUE,
         uid integer NOT NULL default '0',
@@ -102,9 +102,9 @@ function webform_install() {
         PRIMARY KEY (nid,sid)
         )"
       );
-      db_query("CREATE INDEX {webform_submissions}_sid_idx ON {webform_submissions}(sid)");
+      $success = $success && db_query("CREATE INDEX {webform_submissions}_sid_idx ON {webform_submissions}(sid)");
 
-      db_query("CREATE TABLE {webform_submitted_data} (
+      $success = $success && db_query("CREATE TABLE {webform_submitted_data} (
         nid integer NOT NULL default '0',
         sid integer NOT NULL UNIQUE default '0',
         cid integer NOT NULL default '0',
@@ -113,13 +113,9 @@ function webform_install() {
         PRIMARY KEY (nid,sid,cid,no)
         )"
       );
-      db_query("CREATE INDEX {webform_submitted_data}_sid_idx ON {webform_submitted_data}(sid)");
+      $success = $success && db_query("CREATE INDEX {webform_submitted_data}_sid_idx ON {webform_submitted_data}(sid)");
       break;
   }
-
-  variable_set('webform_version', array('text' => '4.7.1', 'build' => '471'));
-
-  $success = TRUE;
 
   if ($success) {
     drupal_set_message(t('Webform module installed module tables successfully.'));
@@ -474,9 +470,13 @@ function webform_uninstall() {
   watchdog("webform", "Removing webform module.");
 
   // Unset webform variables.
-  variable_del("webform_use_cookies");
-  variable_del("webform_debug");
+  variable_del('webform_use_cookies');
+  variable_del('webform_debug');
   variable_del('webform_enable_fieldset');
+  variable_del('webform_default_from_email');
+  variable_del('webform_default_from_name');
+  variable_del('webform_default_subject');
+
   if (!isset($component_list)) {
     $component_list = array();
     $path = drupal_get_path('module', 'webform') ."/components";

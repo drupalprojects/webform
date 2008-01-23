@@ -226,8 +226,6 @@ function _webform_help_grid($section) {
  *   submissions.
  **/
 function _webform_analysis_rows_grid($component) {
-  $component['extra'] = unserialize($component['extra']);
-
   // Generate the list of options.
   $rows = explode("\n", _webform_filtervalues($component['extra']['options']));
   $options = array();

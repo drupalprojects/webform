@@ -309,7 +309,6 @@ function _webform_help_select($section) {
  *   submissions.
  */
 function _webform_analysis_rows_select($component) {
-  $component['extra'] = unserialize($component['extra']);
   $rows = explode("\n", _webform_filtervalues($component['extra']['items']));
   $options = array();
 
