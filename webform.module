@@ -62,7 +62,7 @@ function webform_help($section= "admin/help#webform") {
 }
 
 function webform_perm() {
-  return array("create webforms", "edit own webforms", "edit webforms", "access webform results", "clear webform results", "edit own webform submissions", "edit webform submissions", "use PHP for additional processing");
+  return array("create webforms", "edit own webforms", "edit webforms", "access webform results", "clear webform results", "access own webform submissions", "edit own webform submissions", "edit webform submissions", "use PHP for additional processing");
 }
 
 /**
@@ -1134,6 +1134,8 @@ function webform_file_download($file) {
 }
 
 function webform_view(&$node, $teaser = 0, $page = 0) {
+  global $user;
+
   // If a teaser, do not display the form.
   if ($teaser) {
     $node->content['teaser'] = array('#value' => check_markup($node->teaser, $node->format, FALSE));
@@ -1142,27 +1144,28 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
 
   include_once(drupal_get_path('module', 'webform') ."/webform.inc");
 
-  $sid_to_display = check_plain($_GET['sid']); // Will be NULL if no sid.
+  $sid_to_display = isset($_GET['sid']) ? $_GET['sid'] : NULL;
   $submission = array();
-  $preview = false;
+  $enabled = FALSE;
+  $preview = FALSE;
 
   if ($_POST['op'] == t('Preview')) {
     webform_prepare($node);
   }
 
-  if ($sid_to_display && is_numeric($sid_to_display)) {
-    if (user_access('access webform results')) {
-      drupal_set_title('Submission #'. $sid_to_display);
-      $node->body = "";
-      $submission = _webform_fetch_submission($sid_to_display, $node->nid);
+  if (isset($sid_to_display) && is_numeric($sid_to_display)) {
+    $submission = _webform_fetch_submission($sid_to_display, $node->nid);
+    $enabled = isset($_GET['op']) && $_GET['op'] == 'edit' && ((user_access('edit own webform submissions') && $submission['uid'] == $user->uid) || user_access('edit webform submissions'));
+    if (!$enabled && (!user_access('access webform results') && !(user_access('access own webform submissions') && $submission['uid'] == $user->uid))) {
+      $submission = array();
     }
     else {
-      $sid_to_display = NULL; // This user is not allowed to access a submitted node. Deny the attempt without alert.
-      watchdog('webform', t('Unauthorized webform access attempt by %name.', array('%name' => $user->name)), WATCHDOG_WARNING);
+      drupal_set_title('Submission #'. $sid_to_display);
+      $node->body = "";
     }
   }
 
-  $output = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, false);
+  $output = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, $enabled);
 
   // Remove the surrounding <form> tag if this is a preview.
   if ($preview) {
