@@ -143,6 +143,7 @@ function webform_delete(&$node) {
  */
 function webform_load($node) {
   $additions = db_fetch_object(db_query("SELECT * FROM {webform} WHERE nid = %d", $node->nid));
+  $additions->webformcomponents = array();
   $result = db_query('SELECT * FROM {webform_component} WHERE nid = %d ORDER BY weight, name', $node->nid);
   while ($c = db_fetch_array($result)) {
     $additions->webformcomponents[$c['cid']]['cid'] = $c['cid'];
@@ -157,10 +158,12 @@ function webform_load($node) {
   }
 
   // Organize the components into a fieldset-based order.
-  $component_tree = array();
-  $page_count = 1;
-  _webform_components_tree_build($additions->webformcomponents, $component_tree, 0, $page_count);
-  $additions->webformcomponents = _webform_components_tree_flatten($component_tree['children']);
+  if (!empty($additions->webformcomponents)) {
+    $component_tree = array();
+    $page_count = 1;
+    _webform_components_tree_build($additions->webformcomponents, $component_tree, 0, $page_count);
+    $additions->webformcomponents = _webform_components_tree_flatten($component_tree['children']);
+  }
   return $additions;
 }
 
