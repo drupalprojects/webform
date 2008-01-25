@@ -619,6 +619,7 @@ function webform_form(&$node, &$param) {
         '#delta' => $component['mandatory'],
         '#title' => t("Mandatory"),
         '#default_value' => $component['mandatory'],
+        '#access' => !in_array($component['type'], array('markup', 'fieldset', 'pagebreak')),
       );
     }
 
