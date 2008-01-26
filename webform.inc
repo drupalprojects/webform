@@ -4,13 +4,13 @@
 /**
  * This file includes helper functions for webform.module
  *
- *
+ * @author Nathan Haug <nate@lullabot.com>
  * @author Pontus Ullgren <ullgren@user.sourceforge.net>
- * @package module_webform
  * @copyright Pontus Ullgren 2004
  */
 
-/* Creates a list of all webforms avaliable on this site.
+/**
+ * Generate a list of all webforms avaliable on this site.
  */
 function _webform_page() {
   $header = array(
@@ -44,6 +44,7 @@ function _webform_page() {
 
 /**
  * Delete all submission for a form.
+ * 
  * @param $nid
  *   ID of node for which to clear submissions.
  */
@@ -72,6 +73,7 @@ function _webform_results_clear_submit($form_id, $form_values) {
 
 /**
  * Delete one form submission.
+ * 
  * @param $nid
  *   ID of node for which this webform was submitted.
  * @param $sid
@@ -101,6 +103,7 @@ function _webform_submission_delete_submit($form_id, $form_values) {
 
 /**
  * Return all the submissions for a particular node.
+ * 
  * @param $nid
  *   The node ID for which submissions are being fetched.
  * @param $header
@@ -141,7 +144,7 @@ function _webform_fetch_submissions($nid, $header = NULL) {
 }
 
 /**
- * This function is used to fetch a specified submission.
+ * Fetch a specified submission for a webform node.
  */
 function _webform_fetch_submission($sid, $nid) {
 
@@ -171,9 +174,25 @@ function _webform_fetch_submission($sid, $nid) {
   return $submission;
 }
 
-
+/**
+ * Theme the contents of emails sent by webform.
+ * 
+ * @param $form_values
+ *   An array of all form values submitted by the user. The array contains three
+ *   keys containing the following:
+ *   - submitted: All the submitted values in a single array keyed by webform
+ *     component IDs. Useful for simply looping over the values.
+ *   - submitted_tree: All the submitted values in a tree-structure array, keyed
+ *     by the Form Key values defined by the user.
+ * @param $node
+ *   The complete node object for the webform.
+ * @param $sid
+ *   The submission ID of the new submission.
+ */
 function theme_webform_create_mailmessage($form_values, $node, $sid) {
   global $user;
+
+  $message = '';
   $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
   $ip_address = $_SERVER['REMOTE_ADDR'];
 
@@ -191,22 +210,6 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
   $message .= url('node/'.$node->nid, "sid=". $sid, NULL, TRUE);
-
-
-  if (variable_get('webform_debug', 0) == 2) {
-    $message .= "\n";
-    $message .= "DEBUG INFO\n";
-    $message .= "==========\n";
-    $message .= "\$form_values are\n";
-    $message .= print_r($form_values, true);
-    $message .= "\$node is\n";
-    $message .= print_r($node, true);
-    $message .= "\$_SERVER is\n";
-    $message .= print_r($_SERVER, true);
-    $message .= "\n";
-    $message .= "\$_POST is\n";
-    $message .= print_r($_POST, true);
-  }
 
   return $message;
 }

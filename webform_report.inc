@@ -1,17 +1,19 @@
 <?php
 // $Id$
+
 /**
  * This file includes helper functions for creating reports for webform.module
- *
+ * 
+ * @author Nathan Haug <nate@lullabot.com>
  * @author Pontus Ullgren <ullgren@user.sourceforge.net>
- * @package module_webform
  * @copyright Pontus Ullgren 2004
  */
 
 /**
- * Database accessor function which to returns lists of submissions for a given
- * form.
- * @param  integer $nid the node id of the webform
+ * Retrieve lists of submissions for a given webform.
+ * 
+ * @param $nid
+ *   The node id of the webform
  */
 function _webform_results_submissions($nid) {
   $header = theme('webform_results_submissions_header', $nid);
@@ -20,8 +22,10 @@ function _webform_results_submissions($nid) {
 }
 
 /**
- * Theme the header of the submissions table. This is done in it's own function
- * so that webform can retrieve the header and use it for sorting the results.
+ * Theme the header of the submissions table.
+ * 
+ * This is done in it's own function so that webform can retrieve the header and
+ * use it for sorting the results.
  */
 function theme_webform_results_submissions_header($nid) {
   return array(
@@ -35,6 +39,7 @@ function theme_webform_results_submissions_header($nid) {
 
 /**
  * Theme the submissions tab of the webform results page.
+ * 
  * @param $nid
  *   The nid of the node whose results are being displayed.
  * @param $submissions
@@ -71,7 +76,8 @@ function theme_webform_results_submissions($nid, $submissions) {
 }
 
 /**
- * This function creates a table for all submissions.
+ * Create a table containing all submitted values for a webform node.
+ * 
  * @param $nid
  *   The node ID of the node to show results for.
  */
@@ -101,6 +107,7 @@ function theme_webform_results_table_header($nid) {
 
 /**
  * Theme the results table displaying all the submissions for a particular node.
+ * 
  * @param $nid
  *   The nid of the node whose results are being displayed.
  * @param $components
@@ -149,10 +156,10 @@ function theme_webform_results_table($nid, $components, $submissions) {
   return theme('table', $header, $rows);
 }
 
-function _webform_results_download($nid) {
-  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
 
-/*
+/**
+ * Generate a Excel-readable CSV file containing all submissions for a webform.
+ * 
  * The CSV requires that the data be presented in a flat file.  In order
  * to maximize useability to the Excel community and minimize subsequent
  * stats or spreadsheet programming this program extracts data from the
@@ -166,21 +173,25 @@ function _webform_results_download($nid) {
  *   Heading line 2: gives column headings
  *   Data line 1 .....
  *   Data line 2 .....
- *
+ * 
  * An example of this format is given below.  Note the columns have had spaces
  * added so the columns line up.  This is not the case with actual file where
  * a column may be null.  Note also, that multiple choice questions as produced
  * by checkboxes or radio buttons have been presented as "yes" or "no" and the
  * actual choice text is retained only in the header line 2.
  * Data from text boxes and input fields are written out in the body of the table.
- *
+ * 
  *   Submission Details,    ,   ,      ,Question 1,        ,        ,..,        ,Question 2,        ,        ,..,        ,Question n
  *   timestamp         ,time,SID,userid,Choice 1  ,Choice 2,Choice 3,..,Choice n,Choice 1  ,Choice 2,Choice 3,..,Choice n,Comment
  *   21 Feb 2005       ,1835,23 ,34    ,Yes       ,No      ,No      ,..,No      ,Yes       ,Yes     ,Yes     ,..,Yes     ,My comment
  *   23 Feb 2005       ,1125,24 ,89    ,Yes       ,Yes     ,No      ,..,No      ,Yes       ,Yes     ,Yes     ,..,Yes     ,Hello
  *   ...............................................................................................................
  *   27 Feb 2005       ,1035,56 ,212   ,Yes       ,No      ,No      ,..,No      ,Yes       ,No      ,Yes     ,..,Yes     ,How is this?
+ * 
  */
+function _webform_results_download($nid) {
+  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
+
   $node = node_load($nid);
 
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
@@ -233,8 +244,8 @@ function _webform_results_download($nid) {
   exit(0);
 }
 
-/* _webform_results_analysis - Provides simple analysis of a series of webform submission.
- * @return to stdio a themeatic HTML rendering of the page.
+/**
+ * Provides a simple analysis of all submissions to a webform.
  */
 function _webform_results_analysis($nid) {
   $rows = array();
