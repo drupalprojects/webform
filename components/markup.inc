@@ -15,7 +15,7 @@ function _webform_edit_markup($currfield) {
   $edit_fields['value'] = array(
     '#type' => 'textarea',
     '#title' => t("Value"),
-    '#default_value' => $currfield['default'],
+    '#default_value' => $currfield['value'],
     '#description' => t('Markup allows you to enter custom HTML or PHP logic into your form.') .'<br />'. webform_help('webform/helptext#variables'),
     '#weight' => -1,
   );

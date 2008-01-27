@@ -14,7 +14,7 @@ function _webform_edit_date($currfield) {
   $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
-    '#default_value' => $currfield['default'],
+    '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') .'<br />'. t('Accepts any date in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.') .'<br />'. webform_help('webform/helptext#variables'),
     '#size' => 60,
     '#maxlength' => 127,
@@ -95,20 +95,20 @@ function _webform_render_date($component) {
     '#default_value' => $month,
     '#options' => $months,
     '#validate' => array('webform_validate_date' => array('month', $component['name'], $component['form_key'], $component['cid'], $component['mandatory'])),
-    );
+  );
   $form_item['day'] = array(
     '#type' => 'select',
     '#default_value' => $day,
     '#options' => $days,
     '#validate' => array('webform_validate_date' => array('day', $component['name'], $component['form_key'], $component['cid'], $component['mandatory'])),
-    );
+  );
   $form_item['year'] = array(
     '#type' => 'textfield',
     '#default_value' => $year,
     '#maxlength' => 4,
     '#size' => 4,
     '#validate' => array('webform_validate_date' => array('year', $component['name'], $component['form_key'], $component['cid'], $component['mandatory'])),
-    );
+  );
 
   return $form_item;
 }
@@ -130,7 +130,7 @@ function webform_validate_date($field, $field_name, $component_name, $form_key, 
 
   // Check if the user filled the required fields.
   if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error($form_key, t("@type %name field required", array('@type' => $component_name, '%name' => $field_name)));
+    form_set_error($form_key, t("%field field is required.", array('%field' => $component_name)));
     $complete_dates[$cid] = array();
     return false;
   }

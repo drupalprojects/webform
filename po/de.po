@@ -114,8 +114,8 @@ msgid "Submitted values are"
 msgstr "Eingabeergebnisse sind"
 
 #: webform.inc:201
-msgid "The results of this submission may be viewed at:\n"
-msgstr "Das Ergebnis der Eingabe kann angesehen werden unter:\n"
+msgid "The results of this submission may be viewed at:"
+msgstr "Das Ergebnis der Eingabe kann angesehen werden unter:"
 
 #: webform.inc:65
 #: webform.module:286
@@ -470,12 +470,12 @@ msgid "every week"
 msgstr "jede Woche"
 
 #: webform.module:720
-msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
-msgstr "Geben Sie hier den PHP Code ein, um eine zusätzliche Überprüfung für diese Formular zu ermöglichen. Füge das &lt;?php ?&gt; Tag ein. $form_id und $form_values sind gültige Variablen für PHP. Wenn die Überprüfung fehlschlagen soll, muss die Funktion form_set_error benutzen werden, um das Speichern des Formulars zu verhindern. Der Aufbau der Syntax sollte so sein, wie es in dem <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a> benutzt wurde."
+msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgstr "Geben Sie hier den PHP Code ein, um eine zusätzliche Überprüfung für diese Formular zu ermöglichen. Füge das &lt;?php ?&gt; Tag ein. $form_id und $form_values sind gültige Variablen für PHP. Wenn die Überprüfung fehlschlagen soll, muss die Funktion form_set_error benutzen werden, um das Speichern des Formulars zu verhindern. Der Aufbau der Syntax sollte so sein, wie es in dem <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a> benutzt wurde."
 
 #: webform.module:729
-msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
-msgstr "Geben Sie hier den PHP Code ein, um eine zusätzliche Verarbeitung des Formulars vorzunehmen (nach der Überprüfung). Füge das &lt;?php ?&gt; Tag ein. $form_id und $form_values sind gültige Variablen und der Aufbau der Syntax sollte so sein, wie es in dem <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a> benutzt wurde."
+msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgstr "Geben Sie hier den PHP Code ein, um eine zusätzliche Verarbeitung des Formulars vorzunehmen (nach der Überprüfung). Füge das &lt;?php ?&gt; Tag ein. $form_id und $form_values sind gültige Variablen und der Aufbau der Syntax sollte so sein, wie es in dem <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a> benutzt wurde."
 
 #: webform.module:748
 msgid "Redirect POST Values"
@@ -589,8 +589,8 @@ msgid "You have submitted the maximum number of entries. Check submission guidel
 msgstr "Sie haben die Höchstzahl der Eintragungen eingereicht. Schauen Sie in die Dokumentation."
 
 #: webform.module:1404
-msgid "Possible spam attempt from "
-msgstr "Möglicher Spam-Versuch von"
+msgid "Possible spam attempt from @remote_addr"
+msgstr "Möglicher Spam-Versuch von @remote_addr"
 
 #: webform.module:1405
 msgid "Illegal information. Data not submitted."
@@ -914,8 +914,8 @@ msgid "Types"
 msgstr "Typen"
 
 #: components/file.inc:202
-msgid "%fieldname field is required."
-msgstr "Die Eingabe von %fieldname wird benötigt."
+msgid "%field field is required."
+msgstr "Die Eingabe von %field wird benötigt."
 
 #: components/file.inc:236
 msgid "Files with the '%ext' extension are not allowed, please upload a file with a %exts extension."

@@ -1,9 +1,15 @@
 /* $Id$ */
 
 .webform-submission-navigation {
-  margin-top: -1.5em;
   text-align: right;
 }
 .webform-submission-next {
   margin-left: 20px;
+}
+.webform-indentation {
+  width: 20px;
+  float: left;
+}
+.webform-default-value {
+  color: #999;
 }

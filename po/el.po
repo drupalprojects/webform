@@ -104,8 +104,8 @@ msgid "Submitted values are"
 msgstr "Οι υποβληθέντες τιμές είναι"
 
 #: webform.inc:186
-msgid "The results of this submission may be viewed at:\n"
-msgstr "Τα αποτελέσματα αυτής της υποβολής μπορούν να εμφανιστούν στη:\n"
+msgid "The results of this submission may be viewed at:"
+msgstr "Τα αποτελέσματα αυτής της υποβολής μπορούν να εμφανιστούν στη:"
 
 #: webform.inc:65 webform.module:285;318;132;1065;1256;1265;1403;1421;0
 #: webform.install:473
@@ -601,7 +601,7 @@ msgid ""
 "&lt;?php ?&gt; tags. $form_id and $form_values are available variables. If "
 "validation fails, use the form_set_error function to prevent the form from "
 "being submitted. Use the same syntax as a _validate function used in the <a "
-"href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html"
+"href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html"
 "\">Forms API</a>."
 msgstr ""
 "Εισάγετε κώδικα PHP για την πρόσθετη επαλήθευση της φόρμας. Συμπεριλάβετε "
@@ -609,7 +609,7 @@ msgstr ""
 "μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτητη "
 "form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την "
 "ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _validate του <a href="
-"\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms "
+"\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms "
 "API</a>."
 
 #: webform.module:728
@@ -617,7 +617,7 @@ msgid ""
 "Enter PHP code to preform additional processing for this form (after the "
 "validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are "
 "available variables, use the same syntax as a _submit function used in the "
-"<a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html"
+"<a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html"
 "\">Forms API</a>."
 msgstr ""
 "Εισάγετε κώδικα PHP για πρόσθετη προεπεξεργασία της φόρμας (μετά την "
@@ -792,8 +792,8 @@ msgid ""
 msgstr "Έχετε υποβάλλει το μέγιστο αριθμό εγγραφών. Δείτε τις οδηγίες υποβολής."
 
 #: webform.module:1403
-msgid "Possible spam attempt from "
-msgstr "Ενδεχόμενη προσπάθεια αποστολής ανεπιθύμητων μηνυμάτων από το "
+msgid "Possible spam attempt from @remote_addr"
+msgstr "Ενδεχόμενη προσπάθεια αποστολής ανεπιθύμητων μηνυμάτων από το @remote_addr"
 
 #: webform.module:1404
 msgid "Illegal information. Data not submitted."
@@ -1174,8 +1174,8 @@ msgid "Types"
 msgstr "Τύποι"
 
 #: components/file.inc:202
-msgid "%fieldname field is required."
-msgstr "Το πεδίο %fieldname είναι απαραίτητο."
+msgid "%field field is required."
+msgstr "Το πεδίο %field είναι απαραίτητο."
 
 #: components/file.inc:236
 msgid ""

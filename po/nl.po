@@ -144,8 +144,8 @@ msgstr "Ingezonden waarden zijn"
 
 #: webform.inc:190
 #, fuzzy
-msgid "The results of this submission may be viewed at:\n"
-msgstr "Het resultaat van deze inzending kan worden bekeken op:\n"
+msgid "The results of this submission may be viewed at:"
+msgstr "Het resultaat van deze inzending kan worden bekeken op:"
 
 #: webform.inc:69
 #: webform.module:296;142;1071;1263;1272;1409;1427;0
@@ -561,12 +561,12 @@ msgid "every week"
 msgstr "per week"
 
 #: webform.module:711
-msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
-msgstr "Voer PHP-code in om extra validatie aan dit formulier toe te voegen. Maak gebruik van de <?php ?> tags. $form_id en $form_values zijn beschikbare variabelen. Gebruik, als de validatie mislukt, de functie form_set_error om te voorkomen dat het formulier wordt verstuurd. Gebruik dezelfde syntax als de _validate functie gebruikt in de <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgstr "Voer PHP-code in om extra validatie aan dit formulier toe te voegen. Maak gebruik van de <?php ?> tags. $form_id en $form_values zijn beschikbare variabelen. Gebruik, als de validatie mislukt, de functie form_set_error om te voorkomen dat het formulier wordt verstuurd. Gebruik dezelfde syntax als de _validate functie gebruikt in de <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 
 #: webform.module:720
-msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
-msgstr "Voer PHP-code in om extra verwerkingsstappen aan dit formulier toe te voegen (na de validatie). Maak gebruik van de <?php ?> tags. $form_id en $form_values zijn beschikbare variabelen. Gebruik dezelfde syntax als de _submit-functie gebruikt in de <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgstr "Voer PHP-code in om extra verwerkingsstappen aan dit formulier toe te voegen (na de validatie). Maak gebruik van de <?php ?> tags. $form_id en $form_values zijn beschikbare variabelen. Gebruik dezelfde syntax als de _submit-functie gebruikt in de <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 
 #: webform.module:739
 #, fuzzy
@@ -717,8 +717,8 @@ msgstr "U heeft het maximum aantal inzendingen bereikt. Controleer de richtlijne
 
 #: webform.module:1409
 #, fuzzy
-msgid "Possible spam attempt from "
-msgstr "Mogelijke spampoging van"
+msgid "Possible spam attempt from @remote_addr"
+msgstr "Mogelijke spampoging van @remote_addr"
 
 #: webform.module:1410
 #, fuzzy
@@ -1120,8 +1120,8 @@ msgstr "Typen"
 
 #: components/file.inc:204
 #, fuzzy
-msgid "%fieldname field is required."
-msgstr "Het veld %fieldname is verplicht."
+msgid "%field field is required."
+msgstr "Het veld %field is verplicht."
 
 #: components/file.inc:238
 #, fuzzy

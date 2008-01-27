@@ -89,9 +89,9 @@ function theme_webform_edit_file($form) {
   $javascript = '
     <script type="text/javascript">
       function check_category_boxes () {
-        var checkValue = !document.getElementById("edit-field-extra-filtering-types-"+arguments[0]+"-"+arguments[1]).checked;
+        var checkValue = !document.getElementById("edit-extra-filtering-types-"+arguments[0]+"-"+arguments[1]).checked;
         for(var i=1; i < arguments.length; i++) {
-          document.getElementById("edit-field-extra-filtering-types-"+arguments[0]+"-"+arguments[i]).checked = checkValue;
+          document.getElementById("edit-extra-filtering-types-"+arguments[0]+"-"+arguments[i]).checked = checkValue;
         }
       }
   </script>
@@ -200,7 +200,7 @@ function _webform_render_file($component) {
 
 function _webform_required_file($formelement, $form_key, $fieldname, $required = false) {
   if (empty($_FILES['files']['name'][$form_key]) && $required) {
-    form_set_error($fieldname, t('%fieldname field is required.', array('%fieldname' => $fieldname)));
+    form_set_error($fieldname, t('%field field is required.', array('%field' => $fieldname)));
   }
 }
 

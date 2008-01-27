@@ -25,8 +25,8 @@ function webform_install() {
 
       $success = $success && db_query("CREATE TABLE if not exists {webform_component} (
         nid int(10) unsigned NOT NULL default '0',
-        cid int(10) unsigned NOT NULL default '0',
-        pid int(10) unsigned NOT NULL default '0',
+        cid smallint unsigned NOT NULL default '0',
+        pid smallint unsigned NOT NULL default '0',
         form_key varchar(128) default NULL,
         name varchar(128) default NULL,
         type varchar(16) default NULL,
@@ -52,7 +52,7 @@ function webform_install() {
       $success = $success && db_query("CREATE TABLE if not exists {webform_submitted_data} (
         nid int(10) unsigned NOT NULL default '0',
         sid int(10) unsigned NOT NULL default '0',
-        cid int(10) unsigned NOT NULL default '0',
+        cid smallint unsigned NOT NULL default '0',
         no int(10) unsigned NOT NULL default '0',
         data longtext,
         PRIMARY KEY  (nid,sid,cid,no),
@@ -80,8 +80,8 @@ function webform_install() {
 
       $success = $success && db_query("CREATE TABLE {webform_component} (
         nid integer NOT NULL default '0',
-        cid integer NOT NULL default '0',
-        pid integer NOT NULL default '0',
+        cid smallint NOT NULL default '0',
+        pid smallint NOT NULL default '0',
         form_key varchar(128) default NULL,
         name varchar(128) NOT NULL default '',
         type varchar(16) NOT NULL default '',
@@ -117,6 +117,8 @@ function webform_install() {
       break;
   }
 
+  $success = $success && db_query("UPDATE {system} SET weight = -1 WHERE name='webform' AND type='module'");
+
   if ($success) {
     drupal_set_message(t('Webform module installed module tables successfully.'));
   }
@@ -125,20 +127,13 @@ function webform_install() {
   }
 }
 
-/*
+/**
  * Schema changes include component id's (cid) keys in the webform_component
- * and webform_submitted_data tables
+ * and webform_submitted_data tables.
  */
 function webform_update_1() {
 
   $ret = array();
-
-  // Update pre-4.7 tables to the 463 build schema.
-  $installed_version = variable_get("webform_version", 0);
-  $current_version = array('text' => '4.6.3', 'build' => '463');
-  if ($installed_version > 0) {
-    $ret = _webform_legacy_update($installed_version, $current_version);
-  }
 
   // Start the normal update.
   $ret[] = update_sql("CREATE TABLE {webform_tmp} ( ".
@@ -179,8 +174,8 @@ function webform_update_1() {
   return $ret;
 }
 
-/*
- * Schema changes 2: Added redirect_post column in webform table
+/**
+ * Schema changes 2: Added redirect_post column in webform table.
  */
 function webform_update_2() {
 
@@ -200,14 +195,14 @@ function webform_update_2() {
 }
 
 
-/*
+/**
  * Schema change 3: Update to UTF8
  */
 function webform_update_3() {
   return _system_update_utf8(array('webform', 'webform_component', 'webform_role_node', 'webform_submissions', 'webform_submitted_data'));
 }
 
-/*
+/**
  * Schema change 4: Remove the webform_role_node table, node access can be handled by other modules made for this purpose.
  * Add additional columns to webform_submissions for recording of repeated submissions (IP Address, Browser, etc).
  * Add additional columns to webform for setting submission limitations
@@ -231,8 +226,8 @@ function webform_update_4() {
   return $ret;
 }
 
-/*
- * Update MySQL sequence name to be cross-database compatible
+/**
+ * Update MySQL sequence name to be cross-database compatible.
  */
 function webform_update_5() {
   $ret = array();
@@ -249,8 +244,8 @@ function webform_update_5() {
   return $ret;
 }
 
-/*
- * Add a parent ID to all components, allowing nested fieldsets
+/**
+ * Add a parent ID to all components, allowing nested fieldsets.
  */
 function webform_update_6() {
   $ret = array();
@@ -268,8 +263,8 @@ function webform_update_6() {
   return $ret;
 }
 
-/*
- * Allow much larger default values for components
+/**
+ * Allow much larger default values for components.
  */
 function webform_update_7() {
   $ret = array();
@@ -287,8 +282,8 @@ function webform_update_7() {
   return $ret;
 }
 
-/*
- * Add additional validate and submit processing columns
+/**
+ * Add additional validate and submit processing columns.
  */
 function webform_update_8() {
   $ret = array();
@@ -397,70 +392,44 @@ function webform_update_12() {
 }
 
 /**
- * Makes updates to the database structure (Pre-4.7 versions of Drupal).
+ * Update to the 2.x version of webform.
  */
-function _webform_legacy_update($installed_version, $current_version) {
-    $ret = array();
-    // Check to see if we should do a update.
+function webform_update_13() {
+  $ret = array();
 
-    // Upgrading from original version
-    if ( $installed_version['build'] <= 1 ) {
-      $ret[] = array(1 => "<strong>Build 1</strong><br />\n", 2 => "");
-      // Add the table webform_submitted_data.
-      $ret[] = update_sql("CREATE TABLE {webform_submited_data} ".
-                          "( nid int(10) unsigned not null, ".
-                          "sid int(10) unsigned not null, ".
-                          "name varchar(255) not null, ".
-                          "data blob, ".
-                          "PRIMARY KEY(nid, sid, name))");
+  // Set the webform weight to -1. This is needed to have webform's hook_menu()
+  // take precedence over node_menu().
+  $ret = update_sql('UPDATE {system} SET weight = -1 WHERE type = "module" and name = "webform"');
 
-      // Converting data from old submission table.
-      //$ret[] = _webform_convert_old_submissions();
+  // Convert timestamp-based cids to small integers starting at 1 for each node.
+  $result = db_query('SELECT nid, cid FROM {webform_component} ORDER BY nid ASC, cid ASC');
+  $nid = 0;
+  while ($component = db_fetch_array($result)) {
+    if ($component['nid'] != $nid) {
+      $nid = $component['nid'];
+      $cid = 1;
     }
-    if ( $installed_version['build'] <= 1 ) {
-      //$ret[] = array(1 => "<strong>Build 4.5.0</strong><br />\n", 2 => "");
-      // Change webform_component.extra from varchar(128) -> text.
-      $ret[] = update_sql("ALTER TABLE {webform_component} MODIFY extra TEXT");
-      // Change webform_submited_data.data blob -> longtext.
-      $ret[] = update_sql("ALTER TABLE {webform_submited_data} MODIFY data LONGTEXT");
-    }
-    if ( $installed_version['build'] < 460 ) {
-     // $ret[] = array(1 => "<strong>Build 4.6.0</strong><br />\n", 2 => "");
-      // Update webform_submited_data to webform_submitted_data.
-      $ret[] = update_sql("ALTER TABLE {webform_submited_data} RENAME TO {webform_submitted_data}");
-    }
-    if ( $installed_version['build'] < 461 ) {
-      //$ret[] = array(1 => "<strong>Build 4.6.1</strong><br />\n", 2 => "");
-      // Update webform.email varchar(50) -> varchar(255).
-      $ret[] = update_sql(" ALTER TABLE {webform} MODIFY email varchar(255)");
-      // Update from lable to label in webform_component.
-      $ret[] = update_sql(" UPDATE {webform_component} SET type = 'label' WHERE type = 'lable'");
-    }
-    if ( $installed_version['build'] < 462 ) {
-      //$ret[] = array(1 => "<strong>Build 4.6.2</strong><br />\n", 2 => "");
-      // Update webform.confirm varchar(255) -> text and change name to "confirmation".
-      $ret[] = update_sql(" ALTER TABLE {webform} CHANGE confirm confirmation text");
-    }
-    if ( $installed_version['build'] < 463 ) {
-      //$ret[] = array(1 => "<strong>Build 4.6.3</strong><br />\n", 2 => "");
-      // No more lazy update ...
-      // Check if the lazy update has already been performed.
-      $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_subject'");
-      if (db_num_rows($result) == 0) {
-        // The email_subject column is needed.
-        $ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_subject varchar(255)");
-      }
-      $result = db_query("SHOW COLUMNS FROM {webform} LIKE 'email_from'");
-      if (db_num_rows($result) == 0) {
-        // The email_subject column is needed.
-        $ret[] = update_sql("ALTER TABLE {webform} ADD COLUMN email_from varchar(255)");
-      }
-    }
+    $ret[] = update_sql('UPDATE {webform_component} SET cid = '. $cid .' WHERE nid = '. $nid .' AND cid = '. $component['cid']);
+    $ret[] = update_sql('UPDATE {webform_component} SET pid = '. $cid .' WHERE nid = '. $nid .' AND pid = '. $component['cid']);
+    $ret[] = update_sql('UPDATE {webform_submitted_data} SET cid = '. $cid .' WHERE nid = '. $nid .' AND cid = '. $component['cid']);
+    $cid++;
+  }
 
-    // Set the $current_version.
-    variable_set("webform_version", $current_version);
-
-    return $ret;
+  // Convert the cid and pid columns to smallints for efficiency.
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE cid cid smallint unsigned NOT NULL default '0'");
+      $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE pid pid smallint unsigned NOT NULL default '0' ");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} CHANGE cid cid smallint unsigned NOT NULL default '0' ");
+      break;
+    case 'pgsql':
+      db_change_column($ret, 'webform_component', 'cid', 'cid', 'smallint', array('not null' => TRUE, 'default' => '0'));
+      db_change_column($ret, 'webform_component', 'pid', 'pid', 'smallint', array('not null' => TRUE, 'default' => '0'));
+      db_change_column($ret, 'webform_submitted_data', 'cid', 'cid', 'smallint', array('not null' => TRUE, 'default' => '0'));
+      break;
+  }
+  return $ret;
 }
 
 /**

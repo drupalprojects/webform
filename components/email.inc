@@ -22,7 +22,7 @@ function _webform_edit_email($currfield) {
   $edit_fields['value'] = array(
     '#type' => 'checkbox',
     '#title' => t("User email as default"),
-    '#default_value' => $currfield['default'],
+    '#default_value' => $currfield['value'],
     '#return_value' => 'user email',
     '#description' => t('Set the default value of this field to the user email, if he/she is logged in.'),
   );

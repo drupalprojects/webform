@@ -24,7 +24,7 @@ function _webform_edit_select($currfield) {
   $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
-    '#default_value' => $currfield['default'],
+    '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field. For multiple selects use commas to separate multiple defaults.') .'<br />'. webform_help('webform/helptext#variables'),
     '#size' => 60,
     '#maxlength' => 256,

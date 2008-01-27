@@ -113,8 +113,8 @@ msgid "Submitted values are"
 msgstr "A beküldött értékek"
 
 #: webform.inc:190
-msgid "The results of this submission may be viewed at:\n"
-msgstr "A űrlapra beküldött eredmények megtekinthetőek itt:\n"
+msgid "The results of this submission may be viewed at:"
+msgstr "A űrlapra beküldött eredmények megtekinthetőek itt:"
 
 #: webform.inc:69 webform.module:296;142;1071;1263;1272;1409;1427;0
 #: webform.install:476
@@ -526,7 +526,7 @@ msgid ""
 "&lt;?php ?&gt; tags. $form_id and $form_values are available variables. If "
 "validation fails, use the form_set_error function to prevent the form from "
 "being submitted. Use the same syntax as a _validate function used in the <a "
-"href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html"
+"href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html"
 "\">Forms API</a>."
 msgstr ""
 
@@ -535,7 +535,7 @@ msgid ""
 "Enter PHP code to preform additional processing for this form (after the "
 "validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are "
 "available variables, use the same syntax as a _submit function used in the "
-"<a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html"
+"<a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html"
 "\">Forms API</a>."
 msgstr ""
 
@@ -688,8 +688,8 @@ msgid ""
 msgstr ""
 
 #: webform.module:1409
-msgid "Possible spam attempt from "
-msgstr "Lehetséges kéretlen reklám (spam) próbálkozás innen:"
+msgid "Possible spam attempt from @remote_addr"
+msgstr "Lehetséges kéretlen reklám (spam) próbálkozás innen: @remote_addr"
 
 #: webform.module:1410
 msgid "Illegal information. Data not submitted."
@@ -1034,7 +1034,7 @@ msgid "Types"
 msgstr "Típusok"
 
 #: components/file.inc:204
-msgid "%fieldname field is required."
+msgid "%field field is required."
 msgstr ""
 
 #: components/file.inc:238

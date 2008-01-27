@@ -14,7 +14,7 @@ function _webform_edit_textfield($currfield) {
   $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
-    '#default_value' => $currfield['default'],
+    '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') .'<br />'. webform_help('webform/helptext#variables'),
     '#size' => 60,
     '#maxlength' => 127,

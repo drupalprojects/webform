@@ -12,7 +12,7 @@ function _webform_edit_time($currfield) {
   $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
-    '#default_value' => $currfield['default'],
+    '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') .'<br />'. t('Accepts a time in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as now, +2 hours, and 10:30pm are all valid.'),
     '#size' => 60,
     '#maxlength' => 127,
@@ -114,29 +114,33 @@ function _webform_render_time($component) {
     '#type' => 'select',
     '#default_value' => $hour,
     '#options' => $hours,
-    '#validate' => array('webform_validate_time' => array('hour', $component['name'], $component['mandatory'])),
-    );
+    '#validate' => array('webform_validate_time' => array('hour', $component['name'], $component['mandatory'], $component['form_key'], $component['cid'], $component['mandatory'])),
+  );
   $form_item['minute'] = array(
     '#prefix' => ':',
     '#type' => 'select',
     '#default_value' => $minute,
     '#options' => $minutes,
-    '#validate' => array('webform_validate_time' => array('minute', $component['name'], $component['mandatory'])),
-    );
+    '#validate' => array('webform_validate_time' => array('minute', $component['name'], $component['mandatory'], $component['form_key'], $component['cid'], $component['mandatory'])),
+  );
   if ($component['extra']['hourformat'] == '12-hour') {
     $form_item['ampm'] = array(
       '#type' => 'radios',
       '#default_value' => $am_pm,
       '#options' => $am_pms,
-      );
+    );
   }
 
   return $form_item;
 }
 
-function webform_validate_time($field, $field_name, $component_name, $mandatory) {
+function webform_validate_time($field, $field_name, $component_name, $form_key, $cid, $mandatory) {
+  static $complete_times = array();
+
+  // Check if the user filled the required fields.
   if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error($field_name, $component_name ." ". $field_name ." ". t(" field is required"));
+    form_set_error($form_key, t("%field field is required.", array('%field' => $component_name)));
+    $complete_times[$cid] = array();
     return false;
   }
 }

@@ -111,8 +111,8 @@ msgid "Submitted values are"
 msgstr "Ответы: "
 
 #: webform.inc:197
-msgid "The results of this submission may be viewed at:\n"
-msgstr "Ответы могут быть просмотрены тут:\n"
+msgid "The results of this submission may be viewed at:"
+msgstr "Ответы могут быть просмотрены тут:"
 
 #: webform.inc:67
 #: webform.module:274
@@ -398,14 +398,14 @@ msgstr "каждый день"
 msgid "every week"
 msgstr "каждая неделя"
 
-# Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>
+# Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>
 #: webform.module:677
-msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Использовать php для дополнительной обработки.  Включите  &lt;?php ?&gt; в код. Доступные операторы: $form_id и $form_values"
 
-# Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>.
+# Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>.
 #: webform.module:686
-msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Использовать php для дополнительной обработки.  Включите  &lt;?php ?&gt; в код. Доступные операторы: $form_id и $form_values"
 
 #: webform.module:705
@@ -501,8 +501,8 @@ msgid "Form submission from: "
 msgstr "Результат заполнения от:"
 
 #: webform.module:1199
-msgid "Possible spam attempt from "
-msgstr "Кажется, попытка заспамить (ответить неразрешенное количество раз) опросник от: "
+msgid "Possible spam attempt from @remote_addr"
+msgstr "Кажется, попытка заспамить (ответить неразрешенное количество раз) опросник от: @remote_addr"
 
 #: webform.module:1200
 msgid "Illegal information. Data not submitted."
@@ -806,8 +806,8 @@ msgid "Types"
 msgstr "Типы"
 
 #: components/file.inc:198
-msgid "%fieldname field is required."
-msgstr "Необходимо указать %fieldname."
+msgid "%field field is required."
+msgstr "Необходимо указать %field."
 
 #: components/file.inc:231
 msgid "Files with the '%ext' extension are not allowed, please upload a file with a %exts extension."

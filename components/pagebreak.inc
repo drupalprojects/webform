@@ -19,7 +19,7 @@ function _webform_edit_pagebreak($currfield) {
       '#value' => '',
   );
   // Force the parent to always be root.
-  $form['parent'] = array(
+  $form['pid'] = array(
       '#type' => 'hidden',
       '#value' => '0',
   );
