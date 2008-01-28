@@ -3,7 +3,7 @@ Overview
 Webform supports theming similar to the Flexinode or Views modules. Any webform
 may be themed on the server side, though doing so may require a reasonable
 amount of knowledge about the Drupal Forms API. More information about the Forms
-API may be found at http://drupaldocs.org/api/head/file/contributions/docs/developer/topics/forms_api_reference.html
+API may be found at http://api.drupal.org/api/file/developer/topics/forms_api.html
 
 Theme submission emails
 -----------------------
@@ -14,12 +14,12 @@ assumes use of the phptemplate engine.
 - Open your template.php file located in your theme's directory.
 - Add the following lines of php code:
 
-function phptemplate_webform_create_mailmessage_[node id here] ($form_data, $node) {
-  return _phptemplate_callback('webform_create_mailmessage_[node id here]', array('form_data' => $form_data, 'node' => $node));
+function phptemplate_webform_create_mailmessage_[node id here]($form_data, $node, $sid) {
+  return _phptemplate_callback('webform-mail-[node id here]', array('form_data' => $form_data, 'node' => $node, 'sid' => $sid));
 }
 
 - Create a new file in your theme's directory named
-  "webform_create_mailmessage_[node id here].tpl.php", once again replacing [node id here]
+  "webform-mail-[node id here].tpl.php", once again replacing [node id here]
   with the node ID of the webform.
   
 - Open up your new file and customize the webform email. Here's a simple template
@@ -47,18 +47,61 @@ function phptemplate_webform_create_mailmessage_[node id here] ($form_data, $nod
   
   to get a listing of all the available fields you can use in your mail.
   
-- An Important Note for Webform Themers: When webforms added support for fieldsets
+- An Important Note for Webform Themers: When webform added support for fieldsets
   (i.e. nested fields), it became necessary to increase the complexity of themed
   emails. Previously, the $form_data variable only sent the values of the form in
-  a flat array. Now, $form_data contains several arrays of information:
+  a flat array. Now, $form_data contains two arrays of information:
   
   $form_data['submitted'] => An array of fields and their submitted values (identical to the previous value of $form_data)
   $form_data['submitted_tree'] => An array of fields and their values structured in a recursive array
-  $form_data['components'] => An array of component_ids and their field names
-  
 
-Theme an entire webform
------------------------
+Theme the confirmation page
+---------------------------
+
+After a user submits a webform, they are directed to a page that contains the
+confirmation message set in the webform node settings (assuming the form doesn't
+direct to a complete URL). These instructions let you customize the format of
+the confirmation page of a single node or all webforms on your site.
+
+- Open your template.php file located in your theme's directory.
+- Add the following lines of php code:
+
+function phptemplate_webform_confirmation_[node id here]($node, $sid) {
+  return _phptemplate_callback('webform-confirmation-[node id here]', array('node' => $node, 'sid' => $sid));
+}
+
+- Create a new file in your theme's directory named
+  "webform-confirmation-[node id here].tpl.php", once again replacing [node id here]
+  with the node ID of the webform.
+  
+- Open the new file and change it's contents to the your liking. Here's an
+  example that inserts some additional HTML around the confirmation message and
+  gives links to edit the submission.
+  
+  <?php /* Begin sample webform confirmation page */ ?>
+  
+  <div class="confirmation-message">
+    <?php print check_markup($node->confirmation, $node->format, FALSE); ?>
+  </div>
+  
+  <ul>
+    <li><a href="<?php print url('node/'. $node->nid, 'sid='. $sid)">View your submission</a></li>
+    <li><a href="<?php print url('node/'. $node->nid, 'sid='. $sid .'&op=edit')">Edit your submission</a></li>
+  </ul>
+  
+  <?php /* End sample webform confirmation page */ ?>
+
+- You can make this apply to all webforms by using this function in template.php
+
+function phptemplate_webform_confirmation($node, $sid) {
+  return _phptemplate_callback('webform-confirmation', array('node' => $node, 'sid' => $sid));
+}
+
+- Note that the [node id here] has simply been removed to make it work with all
+  webform nodes.
+
+Theme display of an entire webform
+----------------------------------
 
 Theming a webform can be useful for rearranging elements or customizing the
 appearance of multiple components at once. This tutorial assumes usage
@@ -74,7 +117,7 @@ function phptemplate_webform_form_[node id here] ($form) {
 - Replace "[node id here]" with the node ID of the form.
 
 - Create a new file in your theme's directory named
-  "webform_form_[node id here].tpl.php", once again replacing [node id here]
+  "webform-form-[node id here].tpl.php", once again replacing [node id here]
   with the node ID of the webform.
   
 - Open up your new file and customize the webform however you like. Here's an
@@ -84,13 +127,13 @@ function phptemplate_webform_form_[node id here] ($form) {
   // Create a new fieldset within the main fieldset
   // Note: All fields MUST stay within the 'submitted' fieldset
   $form['submitted']['newfieldset'] = array(
-    '#type' => 'fieldset'
+    '#type' => 'fieldset',
   );
   
   // Move the form field labeled "email" to the new fieldset
   $form['submitted']['newfieldset']['email'] = $form['submitted']['email'];
   unset($form['submitted']['email']);
-  pring drupal_render($form);
+  print drupal_render($form);
 ?>
 
 - All webform forms have 2 main fieldsets: "submitted", and "details". Although

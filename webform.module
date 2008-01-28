@@ -1235,7 +1235,11 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parents 
  */
 function _webform_confirmation($node) {
   drupal_set_title($node->title);
-  return theme('webform_confirmation', $node);
+  $output = theme('webform_confirmation_'. $node->nid, $node, $_GET['sid']);
+  if (empty($output)) {
+    $output = theme('webform_confirmation', $node, $_GET['sid']);
+  }
+  return $output;
 }
 
 /**
@@ -1244,7 +1248,7 @@ function _webform_confirmation($node) {
  * @param $node
  *   The webform node that has just been submitted.
  */
-function theme_webform_confirmation($node) {
+function theme_webform_confirmation($node, $sid) {
   $node->body = check_markup($node->confirmation, $node->format, FALSE);
   $node->links['webform_back'] = array(
     'href' => 'node/'. $node->nid,
