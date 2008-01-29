@@ -178,8 +178,6 @@ function theme_webform_results_table($node, $components, $submissions) {
  * 
  */
 function webform_results_download($node) {
-  include_once(drupal_get_path('module', 'webform') ."/webform.inc");
-
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors.
   $header[0] .= $node->title .",,,,";
