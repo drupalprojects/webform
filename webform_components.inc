@@ -317,6 +317,10 @@ function webform_component_edit_form_validate($form_id, $form_values) {
 }
 
 function webform_component_edit_form_submit($form_id, $form_values) {
+  if (isset($form_values['extra']['attributes']['disabled']) && empty($form_values['extra']['attributes']['disabled'])) {
+    unset($form_values['extra']['attributes']['disabled']);
+  }
+
   if (!empty($form_values['cid'])) {
     drupal_set_message(t('Component %name updated.', array('%name' => $form_values['name'])));
     webform_component_update($form_values);
