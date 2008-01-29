@@ -317,8 +317,22 @@ function webform_component_edit_form_validate($form_id, $form_values) {
 }
 
 function webform_component_edit_form_submit($form_id, $form_values) {
-  if (isset($form_values['extra']['attributes']['disabled']) && empty($form_values['extra']['attributes']['disabled'])) {
-    unset($form_values['extra']['attributes']['disabled']);
+  // Remove empty extra values.
+  if (is_array($form_values['extra'])) {
+    foreach($form_values['extra'] as $key => $value) {
+      if (empty($value)) {
+        unset($form_values['extra'][$key]);
+      }
+    }
+  }
+
+  // Remove empty attribute values.
+  if (is_array($form_values['extra']['attributes'])) {
+    foreach($form_values['extra']['attributes'] as $key => $value) {
+      if (empty($value)) {
+        unset($form_values['extra']['attributes'][$key]);
+      }
+    }
   }
 
   if (!empty($form_values['cid'])) {
