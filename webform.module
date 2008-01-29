@@ -349,15 +349,16 @@ function webform_load($node) {
   $additions->webformcomponents = array();
   $result = db_query('SELECT * FROM {webform_component} WHERE nid = %d ORDER BY weight, name', $node->nid);
   while ($c = db_fetch_array($result)) {
-    $additions->webformcomponents[$c['cid']]['cid'] = $c['cid'];
-    $additions->webformcomponents[$c['cid']]['form_key'] = $c['form_key'] ? $c['form_key'] : $c['cid'];
-    $additions->webformcomponents[$c['cid']]['name'] = t($c['name']);
-    $additions->webformcomponents[$c['cid']]['type'] = $c['type'];
-    $additions->webformcomponents[$c['cid']]['value'] = $c['value'];
-    $additions->webformcomponents[$c['cid']]['extra'] = unserialize($c['extra']);
-    $additions->webformcomponents[$c['cid']]['mandatory'] = $c['mandatory'];
-    $additions->webformcomponents[$c['cid']]['pid'] = $c['pid'];
-    $additions->webformcomponents[$c['cid']]['weight'] = $c['weight'];
+    $component =& $additions->webformcomponents[$c['cid']];
+    $component['cid'] = $c['cid'];
+    $component['form_key'] = $c['form_key'] ? $c['form_key'] : $c['cid'];
+    $component['name'] = t($c['name']);
+    $component['type'] = $c['type'];
+    $component['value'] = $c['value'];
+    $component['extra'] = unserialize($c['extra']);
+    $component['mandatory'] = $c['mandatory'];
+    $component['pid'] = $c['pid'];
+    $component['weight'] = $c['weight'];
   }
 
   // Organize the components into a fieldset-based order.
