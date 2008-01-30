@@ -594,6 +594,43 @@ function webform_form(&$node, &$param) {
 }
 
 /**
+ * Implementation of hook_form_alter().
+ */
+function webform_form_alter($form_id, &$form) {
+  if ($form_id == 'webform_node_form' && empty($form['nid']['#value'])) {
+  	$form['#submit']['webform_form_submit'] = array();
+    // Force webforms to be unpublished initially.
+    if (user_access('administer nodes')) {
+      $form['options']['status']['#default_value'] = FALSE;
+    }
+    else {
+      $form['status']['#value'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Submit handler for the webform node form. 
+ * 
+ * Redirect the user to the components form on new node inserts.
+ */
+function webform_form_submit($form_id, $form_values) {
+  // There should be a more effective way to find the new node ID.
+  $nid = db_result(db_query('SELECT nid FROM {node} WHERE type = "webform" ORDER BY nid DESC LIMIT 1'));
+  $type = $form_values['type'];
+
+  // Remove the the submitted message added by node module.
+  unset($_SESSION['messages']['status']);
+
+  drupal_set_message(t('The new @type %title has been created. Add new fields to your webform with the form below.', array('@type' => $type, '%title' => $form_values['title'])));
+
+  if (!$form_values['status']) {
+    drupal_set_message(t('This @type is currently unpublished. After finishing your changes to the @type, use the <em>Publish</em> button below.', array('@type' => $type)));
+  }
+  return 'node/'. $nid .'/edit/components';
+}
+
+/**
  * Implementation of hook_view().
  */
 function webform_view(&$node, $teaser = 0, $page = 0) {

@@ -71,7 +71,13 @@ function webform_components_form($node) {
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Submit'),
-    '#weight' => 2,
+    '#weight' => 45,
+  );
+
+  $form['publish'] = array(
+    '#type' => 'submit',
+    '#value' => t('Publish'),
+    '#weight' => 50,
   );
 
   return $form;
@@ -176,6 +182,13 @@ function webform_components_form_submit($form_id, $form_values) {
       $component['nid'] = $node->nid;
       webform_component_update($component);
     }
+  }
+
+  if ($_POST['op'] == t('Publish')) {
+  	$node->status = 1;
+    node_save($node);
+    drupal_set_message('Your %type has been published.', array('%type' => node_get_types('name', $node->type)));
+    return 'node/'. $node->nid;
   }
 
   // Initiate a new form element if a name has been specified.
