@@ -386,6 +386,12 @@ function _webform_csv_headers_select($component) {
     $header[1] = $component['name'];
     $items = split("\n", $component['extra']['items']);
     foreach ($items as $item) {
+
+    $item = trim($item);
+    if (preg_match('/^([^"|]+)\|(.*)$/', $item, $matches)) {
+      $item = $matches[1];
+    }
+
       $header[2] .= "\,". $item;
       // empty column per sub-field in main header.
       $header[1] .= "\,";
