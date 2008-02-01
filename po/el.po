@@ -1059,7 +1059,7 @@ msgstr ""
 "θέσει τιμές που δεν μπορούν να αλλάξουν."
 
 #: components/email.inc:88
-msgid "'%value' is not a valid email address"
+msgid "%value is not a valid email address."
 msgstr "Το '%value' δεν είναι έγκυρη διεύθυνση e-mail."
 
 #: components/email.inc:113

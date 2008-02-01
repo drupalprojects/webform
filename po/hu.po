@@ -935,7 +935,7 @@ msgid ""
 msgstr ""
 
 #: components/email.inc:94
-msgid "'%value' is not a valid email address"
+msgid "%value is not a valid email address."
 msgstr "Érvénytelen email cím: %value"
 
 #: components/email.inc:123

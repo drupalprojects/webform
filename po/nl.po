@@ -1008,7 +1008,7 @@ msgstr "Veld niet-aanpasbaar maken. Geschikt voor het instellen van een vaste st
 
 #: components/email.inc:94
 #, fuzzy
-msgid "'%value' is not a valid email address"
+msgid "%value is not a valid email address."
 msgstr "'%value' is geen geldig e-mailadres"
 
 #: components/email.inc:123

@@ -24,7 +24,7 @@ function _webform_edit_textarea($currfield) {
     '#type' => 'textfield',
     '#title' => t("Width"),
     '#default_value' => $currfield['extra']['cols'],
-    '#description' => t('Width of the textfield.'),
+    '#description' => t('Width of the textfield.') .' '. t('Leaving blank will use the default size.'),
     '#size' => 5,
     '#maxlength' => 10,
   );
@@ -32,17 +32,17 @@ function _webform_edit_textarea($currfield) {
     '#type' => 'textfield',
     '#title' => t("Height"),
     '#default_value' => $currfield['extra']['rows'],
-    '#description' => t('Height of the textfield.'),
+    '#description' => t('Height of the textfield.') .' '. t('Leaving blank will use the default size.'),
     '#size' => 5,
     '#maxlength' => 10,
   );
-  $edit_fields['extra']['attributes']['disabled'] = array(
+  $edit_fields['extra']['disabled'] = array(
     '#type' => 'checkbox',
     '#title' => t("Disabled"),
-    '#return_value' => 'disabled',
+    '#return_value' => 1,
     '#description' => t('Make this field non-editable. Useful for setting an unchangeable default value.'),
     '#weight' => 3,
-    '#default_value' => $currfield['extra']['attributes']['disabled'],
+    '#default_value' => $currfield['extra']['disabled'],
   );
   return $edit_fields;
 }
@@ -58,7 +58,7 @@ function _webform_edit_textarea($currfield) {
 function _webform_render_textarea($component) {
   $form_item = array(
     '#type'          => "textarea",
-    '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
+    '#title'         => $component['name'],
     '#default_value' => _webform_filtervalues($component['value']),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
@@ -66,6 +66,7 @@ function _webform_render_textarea($component) {
     '#rows'          => $component['extra']['rows'],
     '#cols'          => $component['extra']['cols'],
     '#attributes'    => $component['extra']['attributes'],
+    '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );

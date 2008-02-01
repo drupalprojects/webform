@@ -14,8 +14,8 @@ assumes use of the phptemplate engine.
 - Open your template.php file located in your theme's directory.
 - Add the following lines of php code:
 
-function phptemplate_webform_create_mailmessage_[node id here]($form_data, $node, $sid) {
-  return _phptemplate_callback('webform-mail-[node id here]', array('form_data' => $form_data, 'node' => $node, 'sid' => $sid));
+function phptemplate_webform_create_mailmessage_[node id here]($form_data, $node, $sid, $cid) {
+  return _phptemplate_callback('webform-mail-[node id here]', array('form_data' => $form_data, 'node' => $node, 'sid' => $sid, 'cid' => $cid));
 }
 
 - Create a new file in your theme's directory named

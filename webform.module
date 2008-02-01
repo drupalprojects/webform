@@ -301,13 +301,7 @@ function webform_file_download($file) {
  * Implemenation of hook_insert().
  */
 function webform_insert($node) {
-  global $user;
-
-  // Correctly set the submission limits.
-  if ($_POST['enforce_limit'] === 'no') {
-    $node->submit_limit = '-1';
-    $node->submit_interval = '157784630'; // 5 years, close enough to 'ever'.
-  }
+  include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
 
   // Insert the Webform.
   db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
@@ -347,6 +341,7 @@ function webform_delete(&$node) {
 function webform_load($node) {
   $additions = db_fetch_object(db_query("SELECT * FROM {webform} WHERE nid = %d", $node->nid));
   $additions->webformcomponents = array();
+  $additions->additional_emails = array();
   $result = db_query('SELECT * FROM {webform_component} WHERE nid = %d ORDER BY weight, name', $node->nid);
   while ($c = db_fetch_array($result)) {
     $component =& $additions->webformcomponents[$c['cid']];
@@ -360,6 +355,9 @@ function webform_load($node) {
     $component['mandatory'] = $c['mandatory'];
     $component['pid'] = $c['pid'];
     $component['weight'] = $c['weight'];
+    if ($component['extra']['email']) {
+    	$additions->additional_emails[$c['cid']] = $c['cid'];
+    }
   }
 
   // Organize the components into a fieldset-based order.
@@ -435,121 +433,125 @@ function webform_form(&$node, &$param) {
   /* End Edit Form */
 
   /* Start E-mail Settings Form */
-  $form['mailsettings'] = array(
+  $form['mail_settings'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Mail Settings'),
+    '#title' => t('Webform mail settings'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#weight' => -2,
+    '#theme' => 'webform_mail_settings_form'
   );
 
-  $form['mailsettings']['email'] = array(
+  $form['mail_settings']['email'] = array(
     '#type' => 'textfield',
     '#title' => t("E-mail to address"),
     '#default_value' => $node->email,
-    '#description' => t('Form submissions will be e-mailed to this address. Leave blank for none.'),
+    '#description' => t('Form submissions will be e-mailed to this address. Leave blank for none. Multiple e-mail addresses may be separated by commas.'),
   );
 
-  // Build arrays of possible return email addresses and email subject lines from elements on the form.
-  $possible_email_from_name = array('default' => variable_get('webform_default_from_name', variable_get('site_name', '')) .' ['. t('Default') .']', 'none' => '['. t('None') .']');
-  $possible_email_from_address = array('default' => variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))) .' ['. t('Default') .']', 'none' => '['. t('None') .']');
-  $possible_email_subject = array('default' => variable_get('webform_default_subject', t('Form submission from: ') . t('$title')) .' ['. t('Default') .']', 'none' => '['. t('None') .']');
+  $form['mail_settings']['email_components'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#theme' => 'webform_mail_components_form',
+    '#title' => t('Conditional e-mail recipients'),
+    '#description' => t('The settings below allow you to send e-mails to multiple recipients based off the value of a component. For example, checking the <em>CC</em> option for a select field would CC the sent e-mails to any options the user selected from the list.'),
+    '#node' => $node,
+  );
 
-  if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
-    foreach ($node->webformcomponents as $cid => $component) {
-      $type = $component['type'];
-      if (in_array($type, array('textfield', 'hidden', 'select'))) {
-        $possible_email_from_name[$component['name']] = $component['name'];
-        $possible_email_subject[$component['name']] = $component['name'];
-      }
-      if (in_array($type, array('email', 'hidden', 'select'))) {
-        $possible_email_from_address[$component['name']] = $component['name'];
-      }
-    }
+  $options = _webform_component_options($node->webformcomponents, 'email');
+  $default_value = array();
+  foreach ($node->webformcomponents as $cid => $component) {
+  	if ($component['extra']['email']) {
+  		$default_value[] = $cid;
+  	}
   }
+  $form['mail_settings']['email_components']['email_components'] = array(
+    '#type' => 'checkboxes',
+    '#options' => $options,
+    '#default_value' => $default_value,
+  );
 
-  $form['mailsettings']['email_from_name'] = array(
-    '#type' => 'select',
-    '#title' => t('E-mail from name'),
-    '#default_value' => $node->email_from_name,
-    '#options' => $possible_email_from_name,
-    '#description' => t('After adding components to this form, any textfield or hidden form element may be selected as the sender\'s name for e-mails.'),
-    '#weight' => 6,
-  );
-  $form['mailsettings']['email_from_address'] = array(
-    '#type' => 'select',
-    '#title' => t('E-mail from address'),
-    '#default_value' => $node->email_from_address,
-    '#options' => $possible_email_from_address,
-    '#description' => t('After adding components to this form, any e-mail or hidden form element may be selected as the sender\'s address for e-mails.'),
-    '#weight' => 7,
-  );
-  $form['mailsettings']['email_subject'] = array(
-    '#type' => 'select',
-    '#title' => t('E-mail subject'),
-    '#default_value' => $node->email_subject,
-    '#options' => $possible_email_subject,
-    '#description' => t('After adding components to this form, any textfield or hidden form element may be selected as the subject line for e-mails.'),
-    '#weight' => 8,
-  );
+  foreach (array('from_name', 'from_address', 'subject') as $field) {
+    switch ($field) {
+    	case 'from_name':
+        $default_value = webform_variable_get('webform_default_from_name');
+        $title = t('E-mail from name');
+        $description = t('After adding components to this form any email, select, or hidden form element may be selected as the sender\'s name for e-mails.');
+        break;
+      case 'from_address':
+        $default_value = webform_variable_get('webform_default_from_address');
+        $title = t('E-mail from address');
+        $description = t('After adding components to this form any textfield, select, or hidden form element may be selected as the sender\'s e-mail address.');
+        break;
+      case 'subject':
+        $default_value = webform_variable_get('webform_default_subject');
+        $title = t('E-mail subject');
+        $description = t('After adding components to this form any textfield, select, or hidden form element may be selected as the subject for e-mails.');
+        break;
+    }
+
+    $form['mail_settings']['email_'. $field .'_option'] = array(
+      '#title' => $title,
+      '#type' => 'radios',
+      '#default_value' => is_numeric($node->{'email_'. $field}) ? 'component' : ((empty($default_value) || $node->{'email_'. $field} != 'default') ? 'custom' : 'default'),
+      '#description' => $description,
+    );
+    if (!empty($default_value)) {
+      $form['mail_settings']['email_'. $field .'_option']['#options']['default'] = $default_value;
+    }
+    $form['mail_settings']['email_'. $field .'_option']['#options']['custom'] = 'custom';
+    $form['mail_settings']['email_'. $field .'_option']['#options']['component'] = 'component';
+
+    $form['mail_settings']['email_'. $field .'_custom'] = array(
+      '#type' => 'textfield',
+      '#size' => 40,
+      '#default_value' => (!is_numeric($node->{'email_'. $field}) && $node->{'email_'. $field} != 'default') ? $node->{'email_'. $field} : NULL,
+    );
+    $options = _webform_component_options($node->webformcomponents, $field == 'from_address' ? 'email' : 'string');
+    $form['mail_settings']['email_'. $field .'_component'] = array(
+      '#type' => 'select',
+      '#default_value' =>  is_numeric($node->{'email_'. $field}) ? $node->{'email_'. $field} : NULL,
+      '#options' => empty($options) ? array('' => 'No available components') : $options,
+      '#disabled' => empty($options) ? TRUE : FALSE,
+      '#weight' => 6,
+    );
+  }
   /* End mail settings form */
 
   /* Start advanced settings form */
   $form['advanced'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Advanced Settings'),
+    '#title' => t('Webform advanced settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     '#weight' => -1
   );
-  $form['advanced']['submitlimit'] = array(
+  $form['advanced']['submit_limit'] = array(
     '#type' => 'fieldset',
     '#title' => t('Limit the number of submission a user may send within a specified time period.'),
-    '#prefix' => '<div class="container-inline">',
-    '#suffix' => '</div>',
+    '#theme' => 'webform_advanced_submit_limit_form',
   );
-  $form['advanced']['submitlimit']['unlimited'] = array(
-    '#name' => 'enforce_limit', // Override the naming scheme to force these radios into the same group.
-    '#type' => 'radio',
-    '#return_value' => 'no',
-    '#title' => t('Unlimited'),
-    '#default_value' => ($node->submit_limit > 0 ? false : 'no'),
-    '#parents' => array('advanced', 'submitlimit'), // If we don't specify the parent, the forms API will think this is an illegal posting.
+  $form['advanced']['submit_limit']['enforce_limit'] = array(
+    '#type' => 'radios',
+    '#options' => array('no' => t('Unlimited'), 'yes' => 'Limit to !count submission(s) !timespan'),
+    '#default_value' => $node->submit_limit == -1 ? 'yes' : 'no',
   );
-  $form['advanced']['submitlimit']['limited'] = array(
-    '#name' => 'enforce_limit', // Override the naming scheme to force these radios into the same group.
-    '#type' => 'radio',
-    '#return_value' => 'yes',
-    '#prefix' => '<br />',
-    '#suffix' => t('Limit to '),
-    '#default_value' => ($node->submit_limit > 0 ? 'yes' : false),
-    '#parents' => array('advanced', 'submitlimit'), // If we don't specify the parent, the forms API will think this is an illegal posting.
-  );
-  $form['advanced']['submitlimit']['submit_limit'] = array(
+  $form['advanced']['submit_limit']['submit_limit'] = array(
     '#type' => 'textfield',
     '#maxlength' => 2,
     '#size' => 2,
-    '#suffix' => ' '. t('submission(s)') .' ',
-    '#default_value' => ($node->submit_limit > 0 ? $node->submit_limit : ""),
-    '#attributes' => array(
-      'style' => 'width: 2em; display: inline;',
-      'onchange' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;",
-      'onclick' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;"
-    ),
+    '#default_value' => $node->submit_limit != -1 ? $node->submit_limit : "",
   );
-  $form['advanced']['submitlimit']['submit_interval'] = array(
+  $form['advanced']['submit_limit']['submit_interval'] = array(
     '#type' => 'select',
     '#options' => array(
-      '157784630' => t('ever'), // 5 years.
+      '-1' => t('ever'),
       '1600' => t('every hour'),
       '86400' => t('every day'),
       '604800' => t('every week'),
     ),
     '#default_value' => $node->submit_interval,
-    '#attributes' => array(
-      'onchange' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;",
-      'onclick' => "javascript: document.getElementsByName('enforce_limit').item(1).checked = true;"
-    ),
   );
 
   if (user_access('use PHP for additional processing')) {
@@ -594,6 +596,114 @@ function webform_form(&$node, &$param) {
 }
 
 /**
+ * Theme the component options for sending emails.
+ */
+function theme_webform_mail_components_form($form) {
+  drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css');
+  $node = $form['#node'];
+	$header = array(
+    array('data' => t('To'), 'class' => 'webform-checkbox'),
+    t('Name'),
+    t('Type'),
+  );
+  $rows = array();
+  foreach (element_children($form['email_components']) as $cid) {
+    $title = $form['email_components'][$cid]['#title'];
+    unset($form['email_components'][$cid]['#title']);
+  	$rows[] = array(
+      array('data' => drupal_render($form['email_components'][$cid]), 'class' => 'webform-checkbox'),
+      $title,
+      $node->webformcomponents[$cid]['type'],
+    );
+  }
+  if (empty($rows)) {
+  	$rows[] = array(array('colspan' => 5, 'data' => t('No components yet in this webform.')));
+  }
+
+  $form['#children'] = theme('table', $header, $rows);
+  return drupal_render($form);
+}
+
+/**
+ * Theme the Webform mail settings section of the node form.
+ */
+function theme_webform_mail_settings_form($form) {
+  drupal_add_js(drupal_get_path('module', 'webform') .'/webform.js');
+
+  // Loop through fields, rendering them into radio button options.
+  foreach (array('from_name', 'from_address', 'subject') as $field) {
+  	foreach (array('custom' => t('Custom'), 'component' => t('Component')) as $option => $title) {
+      $form['email_'. $field .'_'. $option]['#attributes']['class'] = 'webform-set-active';
+  		$form['email_'. $field .'_option'][$option]['#title'] = $title .': '. drupal_render($form['email_'. $field .'_'. $option]);
+  	}
+    // For spacing consitency, every option is wrapped in container-inline.
+    foreach (element_children($form['email_'. $field .'_option']) as $option) {
+      $form['email_'. $field .'_option'][$option]['#prefix'] = '<div class="container-inline">';
+      $form['email_'. $field .'_option'][$option]['#suffix'] = '</div>';
+    }
+    // Wrap the default option in a placeholder tag..
+    if (isset($form['email_'. $field .'_option']['#options']['default'])) {
+    	$form['email_'. $field .'_option']['default']['#title'] = t('Default') .': '. theme('placeholder', $form['email_'. $field .'_option']['default']['#title']);
+    }
+  }
+
+  return drupal_render($form);
+}
+
+/**
+ * Theme the submit limit fieldset on the webform node form.
+ */
+function theme_webform_advanced_submit_limit_form($form) {
+  $form['submit_limit']['#attributes']['class'] = 'webform-set-active';
+  $form['submit_interval']['#attributes']['class'] = 'webform-set-active';
+  $replacements = array(
+    '!count' => drupal_render($form['submit_limit']),
+    '!timespan' => drupal_render($form['submit_interval']),
+  );
+  $form['enforce_limit']['no']['#prefix'] = '<div class="container-inline">';
+  $form['enforce_limit']['no']['#suffix'] = '</div>';
+  $form['enforce_limit']['yes']['#prefix'] = '<div class="container-inline">';
+  $form['enforce_limit']['yes']['#suffix'] = '</div>';
+  $form['enforce_limit']['yes']['#title'] = t('Limit to !count submission(s) !timespan', $replacements);
+  return drupal_render($form);
+}
+
+
+/**
+ * Implementation of hook_submit().
+ */
+function webform_submit(&$node) {
+  // Add the conditional e-mail recipients to components.
+  if ($node->nid) {
+    $original_node = node_load($node->nid);
+
+    foreach ($original_node->webformcomponents as $cid => $component) {
+      if (!isset($node->webformcomponents[$cid])) {
+      	$node->webformcomponents[$cid] = $component;
+      }
+      if ($node->email_components[$cid]) {
+        $node->webformcomponents[$cid]['extra']['email'] = 1;
+      }
+    }
+  }
+  unset($node->email_components);
+
+  // Merge the e-mail name, address, and subject options into single values.
+  foreach (array('from_name', 'from_address', 'subject') as $field) {
+  	$option = $node->{'email_'. $field .'_option'};
+    if ($option == 'default') {
+      $node->{'email_'. $field} = 'default';
+    }
+    else {
+      $node->{'email_'. $field} = $node->{'email_'. $field .'_'. $option};
+    }
+    unset($node->{'email_'. $field .'_option'});
+    unset($node->{'email_'. $field .'_component'});
+    unset($node->{'email_'. $field .'_custom'});
+  }
+}
+
+/**
  * Implementation of hook_form_alter().
  */
 function webform_form_alter($form_id, &$form) {
@@ -612,20 +722,20 @@ function webform_form_alter($form_id, &$form) {
 /**
  * Submit handler for the webform node form. 
  * 
- * Redirect the user to the components form on new node inserts.
+ * Redirect the user to the components form on new node inserts. Note that this
+ * fires after the hook_submit() function above.
  */
 function webform_form_submit($form_id, $form_values) {
   // There should be a more effective way to find the new node ID.
   $nid = db_result(db_query('SELECT nid FROM {node} WHERE type = "webform" ORDER BY nid DESC LIMIT 1'));
-  $type = $form_values['type'];
 
   // Remove the the submitted message added by node module.
   unset($_SESSION['messages']['status']);
 
-  drupal_set_message(t('The new @type %title has been created. Add new fields to your webform with the form below.', array('@type' => $type, '%title' => $form_values['title'])));
+  drupal_set_message(t('The new webform %title has been created. Add new fields to your webform with the form below.', array('%title' => $form_values['title'])));
 
   if (!$form_values['status']) {
-    drupal_set_message(t('This @type is currently unpublished. After finishing your changes to the @type, use the <em>Publish</em> button below.', array('@type' => $type)));
+    drupal_set_message(t('This webform is currently unpublished. After finishing your changes to the webform, use the <em>Publish</em> button below.'));
   }
   return 'node/'. $nid .'/edit/components';
 }
@@ -710,10 +820,10 @@ function webform_admin_settings() {
     '#collapsed' => FALSE,
   );
 
-  $form['email']['webform_default_from_email']  = array(
+  $form['email']['webform_default_from_address']  = array(
     '#type' => 'textfield',
     '#title' => t("From e-mail address"),
-    '#default_value' => variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))),
+    '#default_value' => variable_get('webform_default_from_address', variable_get('site_mail', ini_get('sendmail_from'))),
     '#description' => t('Default sender address. This may be the E-mail address of the maintainer of your forms. This is also used for Reply-To, Return-Path and Errors-To.'),
   );
 
@@ -727,7 +837,7 @@ function webform_admin_settings() {
   $form['email']['webform_default_subject']  = array(
     '#type' => 'textfield',
     '#title' => t("Default Subject"),
-    '#default_value' => variable_get('webform_default_subject', t('Form submission from: ')),
+    '#default_value' => variable_get('webform_default_subject', t('Form submission from: [title]')),
     '#description' => t('Default Subject. If not other stated in the form configuration this is appended to your form title. If you have e.g. defined "Your " (note the space) as a default subject and a form titled with "Order" the e-mail subject will be "Your Order".'),
   );
 
@@ -1091,6 +1201,21 @@ function webform_client_form_submit($form_id, $form_values) {
   $form_values['submitted_tree'] = $form_values['submitted'];
   _webform_client_form_submit_flatten($node, $form_values['submitted'], $form_values['submitted']);
 
+  // Convert additional email addresses into actual values.
+  foreach ($node->additional_emails as $cid => $value) {
+    if (is_array($form_values['submitted'][$cid])) {
+    	foreach ($form_values['submitted'][$cid] as $submitted_value) {
+    		$node->additional_emails[$cid][] = $submitted_value;
+    	}
+    }
+    else {
+      $node->additional_emails[$cid] = $form_values['submitted'][$cid];
+    }
+  }
+
+  // Create a headers array that the user can modify in the additional submit code.
+  $email_headers = array();
+
   // Perform additional submit processing.
   if (trim($node->additional_submit)) {
     // We use eval here (rather than drupal_eval) because the user needs access to local variables.
@@ -1108,94 +1233,82 @@ function webform_client_form_submit($form_id, $form_values) {
   }
 
   // Check if this form is sending an email.
-  if (isset($node->email) && !$form_values['details']['sid']) {
-    $node->email = strip_tags($node->email);
-    if (!empty($node->email)) {
+  if ((!empty($node->email) || !empty($node->additional_emails)) && !$form_values['details']['sid']) {
 
-      // Create a themed message for mailing.
-      // Check for a node-specific message:
-      $message = theme("webform_create_mailmessage_$node->nid", $form_values, $node, $sid);
-      if (!$message) {
+    // Set values for the name, address, and subject for the email.
+    $email_from_name = $node->email_from_name;
+    $email_from_address = $node->email_from_address;
+    $email_subject = $node->email_subject;
+    foreach (array('from_name', 'from_address', 'subject') as $field) {
+      if ($node->{'email_'. $field} == 'default') {
+        ${'email_'. $field} = webform_variable_get('webform_default_'. $field);
+      }
+      elseif (is_numeric($node->{'email_'. $field})) {
+        ${'email_'. $field} = _webform_filtervalues($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
+      }
+    }
+
+    // Create a themed message for mailing.
+    // Check for a node-specific message:
+    $emails = $node->additional_emails;
+    if ($node->email) {
+      $emails['default'] = $node->email;
+    }
+    $messages = array();
+    foreach ($node->additional_emails as $cid => $email) {
+      $messages[$cid] = theme("webform_create_mailmessage_$node->nid", $form_values, $node, $sid, $cid);
+      if (empty($messages[$cid])) {
         // Otherwise use the generic form:
-        $message = theme("webform_create_mailmessage", $form_values, $node, $sid);
+        $messages[$cid] = theme("webform_create_mailmessage", $form_values, $node, $sid, $cid);
       }
+    }
 
-      // Build arrays of possible return email addresses and email subject lines from elements on the form.
-      // Default values:
-      $email_from_name = variable_get('webform_default_from_name', variable_get('site_name', ''));
-      $email_from_address = variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from')));
-      $email_subject_string = variable_get('webform_default_subject', t('Form submission from: '))  .' '. $node->title;
-      $headers = array();
+    // Assemble the FROM string.
+    if (strlen($email_from_name) > 0) {
+      $email_from_string = '"'. mime_header_encode($email_from_name) .'" <'. $email_from_address .'>';
+    }
+    else {
+      $email_from_string = $email_from_address;
+    }
 
-      // Check for empty values.
-      if ($node->email_from_name == 'none') {
-        $email_from_name = '';
-      }
-      if ($node->email_from_address == 'none') {
-        $email_from_address = '';
-      }
-      if ($node->email_subject == 'none') {
-        $email_subject_string = '';
-      }
+    // Verify that this submission is not attempting to send any spam hacks.
+    if (_webform_submission_spam_check($node->email, $email_subject, $email_from_string, $email_headers)) {
+      watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $_SERVER['REMOTE_ADDR'])) ."<br />\n". nl2br(htmlentities($messages['default'])), WATCHDOG_WARNING);
+      drupal_set_message(t("Illegal information. Data not submitted."), 'error');
+      return false;
+    }
 
-      // Search for user set FROM and SUBJECT fields.
-      if (is_array($node->webformcomponents) && !empty ($node->webformcomponents)) {
-        foreach ($node->webformcomponents as $cid => $component) {
-          $type = $component['type'];
-          // Find and set a custom FROM: field.
-          if ($type == 'email' || $type == 'hidden' || $type == 'select') {
-            if ($component['name'] == $node->email_from_address) {
-              $email_from_address = check_plain($form_values['submitted'][$cid]);
-            }
-          }
-          // Find and set a custom SUBJECT: field.
-          if ($type == 'textfield' || $type == 'hidden' || $type == 'select') {
-            if ($component['name'] == $node->email_from_name) {
-              $email_from_name = check_plain($form_values['submitted'][$cid]);
-            }
-            if ($component['name'] == $node->email_subject) {
-              $email_subject_string = check_plain($form_values['submitted'][$cid]);
-            }
-          }
-          if ($type == 'email' && $component['extra']['carboncopy'] == 'Y' ) {
-            $headers['Cc'] = check_plain($form_values['submitted'][$cid]);
-          }
-        }
-      }
+    // Additional headers.
+    $email_headers['X-Mailer'] = 'Drupal Webform (PHP/'. phpversion() .')';
 
-      // Assemble the FROM string.
-      if (strlen($email_from_name) > 0) {
-        $email_from_string = mime_header_encode($email_from_name) .' <'. $email_from_address .'>';
+    // Mail the webform results.
+    foreach ($emails as $cid => $address) {
+      // In the case of checkboxes or multiple select, multiple emails may need
+      // to be sent out.
+      if (is_array($address)) {
+      	foreach ($address as $single_address) {
+      		drupal_mail('webform-submission', $single_address, $email_subject, $messages[$cid], $email_from_string, $email_headers);
+      	}
       }
       else {
-        $email_from_string = $email_from_address;
+        drupal_mail('webform-submission', $address, $email_subject, $messages[$cid], $email_from_string, $email_headers);
       }
+    }
 
-      // Verify that this submission is not attempting to send any spam hacks.
-      if (_webform_submission_spam_check($node->email, $email_subject_string, $message, $email_from_string, $headers)) {
-        watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $_SERVER['REMOTE_ADDR'])) ."<br />\n". nl2br(htmlentities($message)), WATCHDOG_WARNING);
-        drupal_set_message(t("Illegal information. Data not submitted."), 'error');
-        return false;
-      }
-      // Additional headers.
-      $headers['X-Mailer'] = 'Drupal Webform (PHP/'. phpversion() .')';
-
-      // Mail the webform results.
-      drupal_mail('webform-submission', $node->email, $email_subject_string, $message, $email_from_string, $headers);
-
-      // Debugging output.
-      if (variable_get('webform_debug', 0) >= 2) {
-        drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($headers, true)) ."</pre>To: ". $node->email ."<br />From: ". htmlentities($email_from_string) ."<br />Subject: ". $email_subject_string ."<br />E-mail Body: <pre>". $message ."</pre>");
-      }
+    // Debugging output for email.
+    if (variable_get('webform_debug', 0) >= 2) {
+      drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($email_headers, true)) ."</pre>To: ". $node->email ."<br />From: ". htmlentities($email_from_string) ."<br />Subject: ". $email_subject ."<br />E-mail Body: <pre>". $messages['default'] ."</pre>");
     }
   }
 
+  // More debugging output.
   if (variable_get('webform_debug', 0) >= 2) {
     drupal_set_message('$form_values are: <pre>'. htmlentities(print_r($form_values, true)) .'</pre>');
     drupal_set_message('$_SERVER is: <pre>'. htmlentities(print_r($_SERVER, true)) .'</pre>');
     drupal_set_message('$_POST is: <pre>'. htmlentities(print_r($_POST, true)) .'</pre>');
   }
 
+  // Log to watchdog if normal debug is on.
   if (variable_get('webform_debug', 0) >= 1) {
     watchdog('webform', t('Submission posted to %title', array('%title' => $node->title)) . l(t('Results'), 'node/'. $node->nid, NULL, 'sid='. $sid) ."<br />\n<pre>". htmlentities(print_r($form_values, TRUE)) ."</pre>", WATCHDOG_NOTICE);
   }
@@ -1311,8 +1424,13 @@ function theme_webform_confirmation($node, $sid) {
  *   The complete node object for the webform.
  * @param $sid
  *   The submission ID of the new submission.
+ * @param $cid
+ *   If you desire to make different emails depending on the recipient, you can
+ *   check this component ID to output different content. This will be the ID
+ *   of the component that is a conditional e-mail recipient. For the normal
+ *   emails, it will have the value of 'default'. 
  */
-function theme_webform_create_mailmessage($form_values, $node, $sid) {
+function theme_webform_create_mailmessage($form_values, $node, $sid, $cid) {
   global $user;
 
   $message = '';
@@ -1391,12 +1509,26 @@ function theme_webform_mail_fields($key, $value, $node, $indent = "") {
 /**
  * Filters all special tokens provided by webform, such as %post and %profile.
  */
-function _webform_filtervalues($string, $strict = TRUE) {
+function _webform_filtervalues($string, $node = NULL, $submission = NULL, $strict = TRUE) {
   global $user;
 
   // Setup default token replacements.
   $find = array('%username', '%useremail', '%site', '%date');
   $replace = array($user->name, $user->mail, variable_get('site_name', 'drupal'), format_date(time(), 'large'));
+
+  // Node replacements.
+  if (isset($node)) {
+    $find += array('%title');
+    $replace += array($node->title);
+  }
+
+  // Submission replacements.
+  if (isset($submission)) {
+  	foreach ($submission as $cid => $value) {
+  		$find[] = '%cid['. $cid .']';
+      $replace[] = $value;
+  	}
+  }
 
   // Provide a list of candidates for token replacement.
   $tokens = array(
@@ -1565,6 +1697,24 @@ function webform_get_cid($node, $form_key, $original_parents) {
   return FALSE;
 }
 
+/**
+ * Retreive a Drupal variable with the appropriate default value.
+ */
+function webform_variable_get($variable) {
+	switch ($variable) {
+    case 'webform_default_from_name':
+      $result = variable_get('webform_default_from_name', variable_get('site_name', ''));
+      break;
+    case 'webform_default_from_address':
+      $result = variable_get('webform_default_from_address', variable_get('site_mail', ini_get('sendmail_from')));
+      break;
+    case 'webform_default_subject':
+      $result = variable_get('webform_default_subject', t('Form submission from: [title]'));
+      break;
+  }
+  return $result;
+}
+
 function _webform_safe_name($name) {
   $new = str_replace(
     array(' ','€','ƒ','Š','Ž','š','ž','Ÿ','¢','¥','µ','À','Á','Â','Ã','Ä','Å','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ñ','Ò','Ó','Ô','Õ','Ö','Ø','Ù','Ú','Û','Ü','Ý','à','á','â','ã','ä','å','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ý','ÿ','Œ', 'œ', 'Æ', 'Ð', 'Þ', 'ß', 'æ', 'ð', 'þ'),
@@ -1573,6 +1723,27 @@ function _webform_safe_name($name) {
   $new = drupal_strtolower($new);
   $new = preg_replace('/[^a-z0-9_]/', '', $new);
   return $new;
+}
+
+/**
+ * Given a set of components, determine which one are appropriate for a
+ * particular use, such as an email address or subject.
+ * 
+ * @param $components
+ *   An array of components.
+ * @param $type
+ *   Either 'email' or 'string' (for use as subject or from value).
+ * 
+ */
+function _webform_component_options($components, $type) {
+	$acceptable_types = $type == 'email' ? array('email', 'select', 'hidden') : array('textfield', 'select', 'hidden');
+  $options = array();
+  foreach ((array)$components as $cid => $component) {
+		if (in_array($component['type'], $acceptable_types)) {
+			$options[$cid] = $component['name'];
+		}
+	}
+  return $options;
 }
 
 /**

@@ -715,7 +715,7 @@ msgid "Width of the textfield."
 msgstr "Ширина текстового поля"
 
 #: components/email.inc:80
-msgid "'%value' is not a valid email address"
+msgid "%value is not a valid email address."
 msgstr "Введён неверный адрес:  '%value'. Исправьте адрес email. "
 
 #: components/email.inc:105

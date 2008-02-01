@@ -806,7 +806,7 @@ msgid "Make this field non-editable. Useful for setting an unchangeable default 
 msgstr ""
 
 #: components/email.inc:94
-msgid "'%value' is not a valid email address"
+msgid "%value is not a valid email address."
 msgstr ""
 
 #: components/email.inc:123

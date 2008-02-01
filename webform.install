@@ -433,6 +433,50 @@ function webform_update_13() {
 }
 
 /**
+ * Variable name changes.
+ */
+function webform_update_14() {
+  $ret = array();
+  variable_set('webform_default_from_address', variable_get('webform_default_from_email', variable_get('site_mail', ini_get('sendmail_from'))));
+  variable_del('webform_default_from_email');
+
+  if ('Form submission from: ' == variable_get('webform_default_subject', 'Form submission from: ')) {
+  	variable_set('webform_default_subject', 'Form submission from: %title');
+  }
+  return $ret;
+}
+
+/**
+ * Convert 'CC' option in extra column to simply 'email'.
+ * Set email value to '%useremail' instead of 'user email'.
+ * Change the 'disabled' option from an attributes option to an individual option.
+ */
+function webform_update_15() {
+	$ret = array();
+  $result = db_query('SELECT nid, cid, extra, value FROM {webform_component} WHERE type = "email"');
+  while($row = db_fetch_array($result)) {
+  	$extra = unserialize($row['extra']);
+    if ($extra['carboncopy']) {
+      $extra['email'] = 1;
+      unset($extra['carboncopy']);
+    }
+    $value = $row['value'] == 'user email' ? '%useremail' : '';
+    db_query('UPDATE {webform_component} SET extra = "%s", value = "%s" WHERE nid = %d and cid = %d', serialize($extra), $value, $row['nid'], $row['cid']);
+  }
+
+  $result = db_query('SELECT nid, cid, extra FROM {webform_component} WHERE type IN ("email", "textfield", "textarea")');
+  while($row = db_fetch_array($result)) {
+    $extra = unserialize($row['extra']);
+    if ($extra['attributes']['disabled']) {
+      $extra['disabled'] = 1;
+      unset($extra['attributes']['disabled']);
+      db_query('UPDATE {webform_component} SET extra = "%s" WHERE nid = %d and cid = %d', serialize($extra), $row['nid'], $row['cid']);
+    }
+  }
+  return $ret;
+}
+
+/**
  * Implmentation of hook_uninstall
  */
 function webform_uninstall() {
@@ -442,7 +486,7 @@ function webform_uninstall() {
   variable_del('webform_use_cookies');
   variable_del('webform_debug');
   variable_del('webform_enable_fieldset');
-  variable_del('webform_default_from_email');
+  variable_del('webform_default_from_address');
   variable_del('webform_default_from_name');
   variable_del('webform_default_subject');
 

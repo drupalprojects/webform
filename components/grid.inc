@@ -46,7 +46,7 @@ function _webform_edit_grid($currfield) {
 }
 
 function _webform_edit_validate_grid($form_values) {
-  $rows = explode("\n", _webform_filtervalues($form_values['extra']['options'], FALSE));
+  $rows = explode("\n", _webform_filtervalues($form_values['extra']['options'], NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -56,7 +56,7 @@ function _webform_edit_validate_grid($form_values) {
       }
     }
   }
-  $rows = explode("\n", _webform_filtervalues($form_values['extra']['questions'], FALSE));
+  $rows = explode("\n", _webform_filtervalues($form_values['extra']['questions'], NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -78,8 +78,8 @@ function _webform_render_grid($component, $random = true) {
     '#description'   => _webform_filtervalues($component['extra']['description']),
   );
 
-  $questions = explode("\n", _webform_filtervalues($component['extra']['questions'], FALSE));
-  $rows = explode("\n", _webform_filtervalues($component['extra']['options'], FALSE));
+  $questions = explode("\n", _webform_filtervalues($component['extra']['questions'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filtervalues($component['extra']['options'], NULL, NULL, FALSE));
 
   if ($component['extra']['optrand'] && $random) {
     shuffle($rows);

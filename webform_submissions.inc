@@ -222,7 +222,7 @@ function webform_get_submission($nid, $sid, $reset = FALSE) {
 }
 
 
-function _webform_submission_spam_check($to, $subject, $message, $from, $headers = array()) {
+function _webform_submission_spam_check($to, $subject, $from, $headers = array()) {
   $headers = implode('\n', $headers);
   // Check if they are attempting to spam using a bcc or content type hack.
   if (preg_match('/(b?cc\s?:)|(content\-type:)/i', $to ."\n". $subject ."\n". $from ."\n". $headers)) {

@@ -823,7 +823,7 @@ msgid "Width of the textfield."
 msgstr "Breite des Textfeldes."
 
 #: components/email.inc:80
-msgid "'%value' is not a valid email address"
+msgid "%value is not a valid email address."
 msgstr "'%value' ist keine gültige Email-Adresse"
 
 #: components/email.inc:105

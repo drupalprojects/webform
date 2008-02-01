@@ -48,7 +48,7 @@ function _webform_edit_select($currfield) {
 }
 
 function _webform_edit_validate_select($form_values) {
-  $rows = explode("\n", _webform_filtervalues($form_values['extra']['items'], FALSE));
+  $rows = explode("\n", _webform_filtervalues($form_values['extra']['items'], NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -71,7 +71,7 @@ function _webform_edit_validate_select($form_values) {
  */
 function _webform_render_select($component) {
   $form_item = array(
-    '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
+    '#title'         => $component['name'],
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filtervalues($component['extra']['description']),
@@ -81,7 +81,7 @@ function _webform_render_select($component) {
 
   // Convert the user-entered options list into an array.
   $default_value = _webform_filtervalues($component['value']);
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], FALSE));
+  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], NULL, NULL, FALSE));
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...'));

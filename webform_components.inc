@@ -78,6 +78,7 @@ function webform_components_form($node) {
     '#type' => 'submit',
     '#value' => t('Publish'),
     '#weight' => 50,
+    '#access' => !$node->status,
   );
 
   return $form;
