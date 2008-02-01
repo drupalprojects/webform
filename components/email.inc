@@ -88,7 +88,7 @@ function _webform_render_email($component) {
     '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
-    '#validate'      => array('_webform_validate_email' => array('submitted]['. $component['cid'])),
+    '#validate'      => array('_webform_validate_email' => array($component)),
   );
 
   // Change the 'width' option to the correct 'size' option.
@@ -108,9 +108,9 @@ function _webform_render_email($component) {
  * @return
  *   True if successful, calls a form_set_error if the email is not valid.
  */
-function _webform_validate_email($formelement, $name) {
-  if (!empty($formelement['#value']) && !valid_email_address($formelement['#value'])) {
-    form_set_error($name, t("%value is not a valid email address.", array('%value' => $formelement['#value'])));
+function _webform_validate_email($form_element, $component) {
+  if (!empty($form_element['#value']) && !valid_email_address($form_element['#value'])) {
+    form_set_error($component['form_key'], t("%value is not a valid email address.", array('%value' => $form_element['#value'])));
   }
 }
 

@@ -67,9 +67,10 @@ function _webform_render_hidden($component) {
  */
 function _webform_submission_display_hidden($data, $component, $enabled = false) {
   $form_item = _webform_render_hidden($component);
-  $form_item['#value']         = $data['value']['0'];
+  unset($form_item['#value']);
+  $form_item['#default_value'] = $data['value']['0'];
   $form_item['#type']          = 'textfield';
-  $form_item['#title']         = htmlspecialchars($component['name'], ENT_QUOTES) ." (hidden)";
+  $form_item['#title']         = t('@name (hidden)', array('@name' => $component['name']));
   $form_item['#disabled']      = !$enabled;
   return $form_item;
 }
