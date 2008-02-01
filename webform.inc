@@ -205,7 +205,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid) {
 
   $message .= "\n";
   $message .= t('Submitted values are');
-  $message .= theme('webform_mail_fields', '', $form_values['submitted_tree'], $node);
+  $message .= theme('webform_mail_fields', 0, $form_values['submitted_tree'], $node);
 
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:\n");
@@ -238,7 +238,7 @@ function theme_webform_mail_fields($key, $value, $node, $indent = "") {
     $message .= $indent . $node->webformcomponents[$key]['name'] .":\n";
     foreach ($value as $k => $v) {
       foreach($node->webformcomponents as $local_key => $local_value) {
-        if ($local_value['form_key'] == $k) {
+        if ($local_value['form_key'] == $k && $local_value['parent'] == $key) {
           $form_key = $local_key;
           break;
         }
