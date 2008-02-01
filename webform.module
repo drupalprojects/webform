@@ -1204,6 +1204,7 @@ function webform_client_form_submit($form_id, $form_values) {
   // Convert additional email addresses into actual values.
   foreach ($node->additional_emails as $cid => $value) {
     if (is_array($form_values['submitted'][$cid])) {
+      $node->additional_emails[$cid] = array();
     	foreach ($form_values['submitted'][$cid] as $submitted_value) {
     		$node->additional_emails[$cid][] = $submitted_value;
     	}
@@ -1214,7 +1215,7 @@ function webform_client_form_submit($form_id, $form_values) {
   }
 
   // Create a headers array that the user can modify in the additional submit code.
-  $email_headers = array();
+  $email_headers = array('X-Mailer' => 'Drupal Webform (PHP/'. phpversion() .')');
 
   // Perform additional submit processing.
   if (trim($node->additional_submit)) {
@@ -1255,7 +1256,7 @@ function webform_client_form_submit($form_id, $form_values) {
       $emails['default'] = $node->email;
     }
     $messages = array();
-    foreach ($node->additional_emails as $cid => $email) {
+    foreach ($emails as $cid => $email) {
       $messages[$cid] = theme("webform_create_mailmessage_$node->nid", $form_values, $node, $sid, $cid);
       if (empty($messages[$cid])) {
         // Otherwise use the generic form:
@@ -1277,9 +1278,6 @@ function webform_client_form_submit($form_id, $form_values) {
       drupal_set_message(t("Illegal information. Data not submitted."), 'error');
       return false;
     }
-
-    // Additional headers.
-    $email_headers['X-Mailer'] = 'Drupal Webform (PHP/'. phpversion() .')';
 
     // Mail the webform results.
     foreach ($emails as $cid => $address) {
@@ -1446,7 +1444,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid, $cid) {
 
   $message .= "\n";
   $message .= t('Submitted values are');
-  $message .= theme('webform_mail_fields', '', $form_values['submitted_tree'], $node);
+  $message .= theme('webform_mail_fields', 0, $form_values['submitted_tree'], $node);
 
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:") ."\n";
@@ -1462,7 +1460,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid, $cid) {
  * components in the webform. It is called intialy by
  * theme_webform_create_mailmessage().
  * 
- * @param $key
+ * @param $cid
  *   The parent component ID we're currently printing.
  * @param $value
  *   The value of the component to be printed. May be an array of other components.
@@ -1471,9 +1469,9 @@ function theme_webform_create_mailmessage($form_values, $node, $sid, $cid) {
  * @param $indent
  *   The current amount of indentation being applied to printed components.
  */
-function theme_webform_mail_fields($key, $value, $node, $indent = "") {
+function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
   // First check for component-level themes.
-  $themed_output = theme("webform_mail_". $node->webformcomponents[$key]['type'], $value, $node->webformcomponents[$key]);
+  $themed_output = theme("webform_mail_". $node->webformcomponents[$cid]['type'], $value, $node->webformcomponents[$cid]);
   if ($themed_output) {
     // Indent the output and add to message.
     $message .= $indent;
@@ -1484,18 +1482,18 @@ function theme_webform_mail_fields($key, $value, $node, $indent = "") {
   // Generic output for single values.
   elseif (!is_array($value)) {
     // Note that newlines cannot be preceeded by spaces to display properly in some clients.
-    if ($node->webformcomponents[$key]['name']) {
+    if ($node->webformcomponents[$cid]['name']) {
       // If text is more than 60 characters, put it on a new line with space after.
-      $long = (strlen($indent . $node->webformcomponents[$key]['name'] . $value)) > 60;
-      $message .= $indent . $node->webformcomponents[$key]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
+      $long = (strlen($indent . $node->webformcomponents[$cid]['name'] . $value)) > 60;
+      $message .= $indent . $node->webformcomponents[$cid]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
     }
   }
   // Else use a generic output for arrays.
   else {
-    $message .= $indent . $node->webformcomponents[$key]['name'] .":\n";
+    $message .= $indent . $node->webformcomponents[$cid]['name'] .":\n";
     foreach ($value as $k => $v) {
       foreach($node->webformcomponents as $local_key => $local_value) {
-        if ($local_value['form_key'] == $k) {
+        if ($local_value['form_key'] == $k && $local_value['pid'] == $cid) {
           $form_key = $local_key;
           break;
         }
