@@ -67,8 +67,11 @@ function _webform_render_hidden($component) {
  */
 function _webform_submission_display_hidden($data, $component, $enabled = false) {
   $form_item = _webform_render_hidden($component);
-  unset($form_item['#value']);
-  $form_item['#default_value'] = $data['value']['0'];
+  // Only allow administrators that can edit all submissions to edit hidden fields.
+  if (user_access('edit webform submissions')) {
+    unset($form_item['#value']);
+    $form_item['#default_value'] = $data['value']['0'];
+  }
   $form_item['#type']          = 'textfield';
   $form_item['#title']         = t('@name (hidden)', array('@name' => $component['name']));
   $form_item['#disabled']      = !$enabled;
