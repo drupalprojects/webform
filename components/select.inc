@@ -233,6 +233,9 @@ function _webform_submit_select(&$data, $component) {
       if ($value) {
         $data[$key] = $options[$key];
       }
+      else {
+        $data[$key] = NULL;
+      }
     }
   }
   elseif (!empty($data)) {
