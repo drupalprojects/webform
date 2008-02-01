@@ -100,7 +100,8 @@ function _webform_render_select($component) {
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[2];
+      $safekey = html_entity_decode($matches[1]);
+      $options[$safekey] = $matches[2];
     }
     else {
       $options[_webform_safe_name($row)] = $row;
@@ -228,7 +229,8 @@ function _webform_submit_select(&$data, $component) {
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[1];
+      $safekey = $matches[1];
+      $options[$safekey] = $safekey;
     }
     else {
       $options[_webform_safe_name($row)] = $row;
