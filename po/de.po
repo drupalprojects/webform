@@ -442,7 +442,7 @@ msgid "Advanced Settings"
 msgstr "Erweiterte Einstellungen"
 
 #: webform.module:665
-msgid "Limit the number of submission a user may send within a specified time period."
+msgid "Limit the number of submissions a user may send within a specified time period"
 msgstr "Sie haben die Brenzung für Eingaben innerhalb einer Zeitperiode erreicht."
 
 #: webform.module:684

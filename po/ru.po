@@ -371,7 +371,7 @@ msgid "Advanced Settings"
 msgstr "Расширенные настройки"
 
 #: webform.module:624
-msgid "Limit the number of submission a user may send within a specified time period."
+msgid "Limit the number of submissions a user may send within a specified time period"
 msgstr "Ограничить количество заполнений опросника, которые может сделать отвечающий в единицу времени."
 
 #: webform.module:643

@@ -10,9 +10,10 @@ function webform_install() {
       $success = $success && db_query("CREATE TABLE if not exists {webform} (
         nid int(10) unsigned NOT NULL default '0',
         confirmation text,
-        redirect_post int(1) unsigned not null default '0',
-        submit_limit int(2)  not null default '-1',
-        submit_interval int(10) not null default '157784630',
+        teaser tinyint not null default '0',
+        submit_text varchar(255) default NULL,
+        submit_limit tinyint  not null default '-1',
+        submit_interval int not null default '-1',
         email varchar(255) default NULL,
         email_from_name varchar(255) default NULL,
         email_from_address varchar(255) default NULL,
@@ -32,9 +33,9 @@ function webform_install() {
         type varchar(16) default NULL,
         value text default NULL,
         extra text,
-        mandatory int(2) unsigned default NULL,
-        weight int(2) default NULL,
-        PRIMARY KEY  (nid,cid)
+        mandatory tinyint NOT NULL default '0',
+        weight smallint NOT NULL default '0',
+        PRIMARY KEY  (nid, cid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
@@ -53,7 +54,7 @@ function webform_install() {
         nid int(10) unsigned NOT NULL default '0',
         sid int(10) unsigned NOT NULL default '0',
         cid smallint unsigned NOT NULL default '0',
-        no int(10) unsigned NOT NULL default '0',
+        no tinyint unsigned NOT NULL default '0',
         data longtext,
         PRIMARY KEY  (nid,sid,cid,no),
         KEY sid (sid)
@@ -65,9 +66,10 @@ function webform_install() {
       $success = $success && db_query("CREATE TABLE {webform} (
         nid integer NOT NULL default '0',
         confirmation text NOT NULL default '',
-        redirect_post smallint NOT NULL default '0',
+        teaser smallint NOT NULL default '0',
+        submit_text varchar(255) default NULL,
         submit_limit smallint NOT NULL default '-1',
-        submit_interval integer NOT NULL default '157784630',
+        submit_interval integer NOT NULL default '-1',
         email varchar(255) NOT NULL default '',
         email_from_name varchar(255) NOT NULL default '',
         email_from_address varchar(255) NOT NULL default '',
@@ -473,6 +475,30 @@ function webform_update_15() {
       db_query('UPDATE {webform_component} SET extra = "%s" WHERE nid = %d and cid = %d', serialize($extra), $row['nid'], $row['cid']);
     }
   }
+  return $ret;
+}
+
+/**
+ * Add the submit button text and teaser columns. Remove redirect_post.
+ */
+function webform_update_16() {
+  $ret = array();
+
+  switch ($GLOBALS['db_type']) {
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform} DROP redirect_post");
+      $ret[] = update_sql("ALTER TABLE {webform} ADD teaser tinyint NOT NULL DEFAULT 0");
+      $ret[] = update_sql("ALTER TABLE {webform} ADD submit_text varchar(255) NULL DEFAULT NULL");
+      break;
+
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform} DROP redirect_post");
+      $ret[] = update_sql("ALTER TABLE {webform} ADD teaser tinyint NOT NULL DEFAULT 0 AFTER confirmation");
+      $ret[] = update_sql("ALTER TABLE {webform} ADD submit_text varchar(255) NULL DEFAULT NULL AFTER teaser");
+      break;
+  }
+
   return $ret;
 }
 

@@ -304,7 +304,7 @@ function webform_insert($node) {
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
 
   // Insert the Webform.
-  db_query("INSERT INTO {webform} (nid, confirmation, redirect_post, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->redirect_post, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
+  db_query("INSERT INTO {webform} (nid, confirmation, teaser, submit_text, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->confirmation, $node->teaser, $node->submit_text, $node->submit_limit, $node->submit_interval, $node->email, $node->email_from_name, $node->email_from_address, $node->email_subject, $node->additional_validate, $node->additional_submit);
 
   // Insert the components into the database.
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
@@ -374,9 +374,9 @@ function webform_load($node) {
  * Implementation of hook_link().
  * Always add a "view form" link.
  */
-function webform_link($type, $node = 0, $main = 0) {
+function webform_link($type, $node = NULL, $teaser = FALSE) {
   if ($node->type == 'webform') {
-    if ($main == 1) {
+    if ($teaser && !$node->teaser) {
       $links['webform_goto'] = array(
         'title' => t('Go to form'),
         'href' => "node/$node->nid",
@@ -461,10 +461,12 @@ function webform_form(&$node, &$param) {
 
   $options = _webform_component_options($node->webformcomponents, 'email');
   $default_value = array();
-  foreach ($node->webformcomponents as $cid => $component) {
-  	if ($component['extra']['email']) {
-  		$default_value[] = $cid;
-  	}
+  if (is_array($node->webformcomponents)) {
+    foreach ($node->webformcomponents as $cid => $component) {
+      if ($component['extra']['email']) {
+        $default_value[] = $cid;
+      }
+    }
   }
   $form['mail_settings']['email_components']['email_components'] = array(
     '#type' => 'checkboxes',
@@ -527,9 +529,15 @@ function webform_form(&$node, &$param) {
     '#collapsed' => TRUE,
     '#weight' => -1
   );
+  $form['advanced']['teaser'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show complete form in teaser'),
+    '#default_value' => $node->teaser,
+    '#description' => t('Display the entire form in the teaser display of this node.'),
+  );
   $form['advanced']['submit_limit'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Limit the number of submission a user may send within a specified time period.'),
+    '#title' => t('Limit the number of submissions a user may send within a specified time period'),
     '#theme' => 'webform_advanced_submit_limit_form',
   );
   $form['advanced']['submit_limit']['enforce_limit'] = array(
@@ -552,6 +560,12 @@ function webform_form(&$node, &$param) {
       '604800' => t('every week'),
     ),
     '#default_value' => $node->submit_interval,
+  );
+  $form['advanced']['submit_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Submit button text'),
+    '#default_value' => $node->submit_text,
+    '#description' => t('By default the submit button on this form will have the label <em>Submit</em>. Enter a new title here to override the default.'),
   );
 
   if (user_access('use PHP for additional processing')) {
@@ -584,12 +598,6 @@ function webform_form(&$node, &$param) {
       '#value' => $node->additional_submit,
     );
   }
-  $form['advanced']['redirect_post'] = array(
-    '#type' => 'checkbox',
-    '#title' => t("Redirect POST Values"),
-    '#description' => t("Forward the contents of the POST array to the redirect URL. Use this option for custom processing of the form information. No processing will be done by webform. The confirmation option above MUST be a full redirect URL for this option to have an effect."),
-    '#default_value' => $node->redirect_post,
-  );
   /* End Advanced Settings Form */
 
   return $form;
@@ -747,7 +755,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   global $user;
 
   // If a teaser, do not display the form.
-  if ($teaser) {
+  if ($teaser && !$node->teaser) {
     $node->content['teaser'] = array('#value' => check_markup($node->teaser, $node->format, FALSE));
     return $node;
   }
@@ -917,10 +925,6 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
     profile_load_profile($user);
   }
 
-  if ($node->redirect_post && (valid_url(trim($node->confirmation), true) || preg_match('/^internal:/', $node->confirmation))) {
-    $form['#action'] = trim($node->confirmation);
-  }
-
   // Set a header for navigating results.
   if ($submission && user_access('access webform results')) {
     // Add CSS to display submission info. Don't preprocess because this CSS file is used rarely.
@@ -1002,7 +1006,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
         }
 
         $form['#multistep'] = TRUE;
-        if ($_POST['op'] != t('Submit')) {
+        if ($_POST['op'] != !empty($node->submit_text) ? $node->submit_text : t('Submit')) {
           $form['#redirect'] = FALSE;
         }
 
@@ -1021,7 +1025,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
         if ($page_num == $page_count) {
           $form['submitbutton'] = array(
             '#type' => 'submit',
-            '#value' => t('Submit'),
+            '#value' => !empty($node->submit_text) ? $node->submit_text : t('Submit'),
             '#weight' => 1001,
           );
         }
@@ -1038,7 +1042,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
         // Add the submit button.
         $form['submitbutton'] = array(
           '#type' => 'submit',
-          '#value' => t('Submit'),
+          '#value' => !empty($node->submit_text) ? $node->submit_text : t('Submit'),
           '#weight' => 1000,
         );
       }
@@ -1168,7 +1172,7 @@ function webform_client_form_submit($form_id, $form_values) {
   $node = node_load(array('nid' => $form_values['details']['nid']));
   $session_key = 'webform_form_'. $node->nid;
 
-  if ($form_values['op'] != t('Submit')) {
+  if ($form_values['op'] != !empty($node->submit_text) ? $node->submit_text : t('Submit')) {
     // This is a multi-page form that is not yet complete.
     // Copy values stored during previous steps into $_POST because they are needed in form_builder() to repopulate the form.
     if (is_array($_SESSION[$session_key])) {
@@ -1313,10 +1317,6 @@ function webform_client_form_submit($form_id, $form_values) {
   // Check confirmation field to see if redirect should be to another node or a message.
   if (valid_url(trim($node->confirmation), true)) {
     $redirect = trim($node->confirmation);
-  }
-  elseif (preg_match('/^internal:/', $node->confirmation) && $node->redirect_post) {
-    $path = preg_replace('/^internal:/', $base_url .'/', $node->confirmation);
-    $redirect = trim($path);
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
     $path = preg_replace('/^internal:/', '', $node->confirmation);
