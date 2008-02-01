@@ -1630,8 +1630,7 @@ function webform_components($node, $cid = NULL, $op = 'edit') {
     }
     elseif (isset($node->webformcomponents[$cid]) && $op == 'clone') {
       $component = $node->webformcomponents[$cid];
-      unset($component['cid']); // Removing the CID creates a new component on submit.
-      return drupal_get_form('webform_component_edit_form', $node, $component);
+      return drupal_get_form('webform_component_edit_form', $node, $component, $component['cid']);
     }
     elseif (isset($node->webformcomponents[$cid])) {
       return drupal_get_form('webform_component_edit_form', $node, $node->webformcomponents[$cid]);

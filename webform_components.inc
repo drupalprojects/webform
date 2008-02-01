@@ -202,7 +202,7 @@ function webform_components_form_submit($form_id, $form_values) {
   }
 }
 
-function webform_component_edit_form(&$node, $component) {
+function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   drupal_set_title("Edit component: ". $component['name'] ." (". $component['type'] .")");
 
   // Print the correct field type specification.
@@ -221,6 +221,10 @@ function webform_component_edit_form(&$node, $component) {
   $form['cid'] = array(
     '#type' => 'value',
     '#value' => $component['cid'],
+  );
+  $form['clone'] = array(
+    '#type' => 'value',
+    '#value' => $clone,
   );
   $form['name'] = array(
     '#type' => 'textfield',
@@ -331,6 +335,8 @@ function webform_component_edit_form_validate($form_id, $form_values) {
 }
 
 function webform_component_edit_form_submit($form_id, $form_values) {
+  $node = node_load($form_values['nid']);
+
   // Remove empty extra values.
   if (is_array($form_values['extra'])) {
     foreach($form_values['extra'] as $key => $value) {
@@ -349,7 +355,11 @@ function webform_component_edit_form_submit($form_id, $form_values) {
     }
   }
 
-  if (!empty($form_values['cid'])) {
+  if (isset($form_values['clone'])) {
+  	drupal_set_message(t('Component %name cloned.', array('%name' => $form_values['name'])));
+    webform_component_clone($node, $form_values);
+  }
+  elseif (!empty($form_values['cid'])) {
     drupal_set_message(t('Component %name updated.', array('%name' => $form_values['name'])));
     webform_component_update($form_values);
   }
@@ -430,3 +440,21 @@ function webform_component_delete($nid, $cid) {
   }
 }
 
+/**
+ * Recursively insert components into the database.
+ * @param $node
+ *   The node object containing the current webform.
+ * @param $component
+ *   A full component containing fields from the component form.
+ */
+function webform_component_clone(&$node, $component) {
+  $new_cid = webform_component_insert($component);
+  if ($component['type'] == 'fieldset') {
+    foreach ($node->webformcomponents as $cid => $child_component) {
+      if ($child_component['pid'] == $component['cid']) {
+        $child_component['pid'] = $new_cid;
+        webform_component_clone($node, $child_component);
+      }
+    }
+  }
+}
