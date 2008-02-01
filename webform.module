@@ -1196,7 +1196,6 @@ function webform_client_form_submit($form_id, $form_values) {
 
   // Perform post processing by components.
   _webform_client_form_submit_process($node, $form_values['submitted']);
-
   // Flatten trees within the submission.
   $form_values['submitted_tree'] = $form_values['submitted'];
   _webform_client_form_submit_flatten($node, $form_values['submitted'], $form_values['submitted']);
@@ -1359,15 +1358,13 @@ function _webform_client_form_submit_process($node, &$form_values, $parents = ar
 /**
  * Flattens a submitted form back into a single array representation (rather than nested fields)
  */
-function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parents = array(0)) {
+function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parent = 0) {
   if (is_array($fieldset)) {
     foreach ($fieldset as $form_key => $value) {
-      $cid = webform_get_cid($node, $form_key, $parents);
+      $cid = webform_get_cid($node, $form_key, $parent);
 
       if (is_array($value) && $node->webformcomponents[$cid]['type'] == 'fieldset') {
-        array_unshift($parents, $cid);
-        _webform_client_form_submit_flatten($node, $value, $form, $parents);
-        array_shift($parents);
+        _webform_client_form_submit_flatten($node, $value, $form, $cid);
         unset($form[$form_key]);
         unset($form[$cid]);
       }
@@ -1670,28 +1667,15 @@ function webform_results($node, $op = 'submissions') {
  *   A fully loaded node object.
  * @param $form_key
  *   The form key for which we're finding a cid.
- * @param $original_parents
- *   An array of form keys that parent $form_key.
- * 
+ * @param $parent
+ *   The cid of the parent component.
  */
-function webform_get_cid($node, $form_key, $original_parents) {
+function webform_get_cid(&$node, $form_key, $pid) {
   foreach ($node->webformcomponents as $cid => $component) {
-    $parents = $original_parents;
-    $pid = array_shift($parents);
-
-    if ($component['form_key'] == $form_key) {
-      if (empty($pid) && $component['pid'] == 0) {
-        return $cid;
-      }
-      elseif (!empty($pid) && $pid != $cid) {
-        $parent = $node->webformcomponents[$pid];
-        if ($pid == webform_get_cid($node, $parent['form_key'], $parents)) {
-          return $cid;
-        }
-      }
+    if ($component['form_key'] == $form_key && $component['pid'] == $pid) {
+      return $cid;
     }
   }
-  return FALSE;
 }
 
 /**
