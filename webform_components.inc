@@ -188,7 +188,7 @@ function webform_components_form_submit($form_id, $form_values) {
   if ($_POST['op'] == t('Publish')) {
   	$node->status = 1;
     node_save($node);
-    drupal_set_message('Your %type has been published.', array('%type' => node_get_types('name', $node->type)));
+    drupal_set_message(t('Your webform has been published.'));
     return 'node/'. $node->nid;
   }
 
