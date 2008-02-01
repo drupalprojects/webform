@@ -120,10 +120,10 @@ function _webform_render_select($component) {
       }
       else {
         if (array_key_exists(_webform_safe_name($default_value), $options)) {
-          $form_item['#default_value'] = _webform_safe_name($default_value);
+          $form_item['#default_value'] = array(_webform_safe_name($default_value));
         }
         else {
-          $form_item['#default_value'] = $default_value;
+          $form_item['#default_value'] = array($default_value);
         }
       }
     }
