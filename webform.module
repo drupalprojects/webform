@@ -416,7 +416,6 @@ function webform_form(&$node, &$param) {
     '#default_value' => $node->body,
     '#cols' => 40,
     '#rows' => 10,
-    '#required' => TRUE,
   );
 
   $form['webform']['confirmation'] = array(
@@ -426,7 +425,6 @@ function webform_form(&$node, &$param) {
     '#default_value' => $node->confirmation,
     '#cols' => 40,
     '#rows' => 10,
-    '#required' => TRUE,
   );
 
   $form['webform']['format'] = filter_form($node->format);
@@ -1396,6 +1394,12 @@ function _webform_confirmation($node) {
  *   The webform node that has just been submitted.
  */
 function theme_webform_confirmation($node, $sid) {
+
+  if (empty($node->confirmation)) {
+    drupal_set_message(t('Thank you, your submission has been received.'));
+    drupal_goto('node/'. $node->nid);
+  }
+
   $node->body = check_markup($node->confirmation, $node->format, FALSE);
   $node->links['webform_back'] = array(
     'href' => 'node/'. $node->nid,
