@@ -100,14 +100,14 @@ function webform_results_clear($nid) {
  * @param $nid
  *   ID of node for which to clear submissions.
  */
-function webform_results_clear_form($nid) {
+function webform_results_clear_form($node) {
   drupal_set_title(t("Clear Form Submissions"));
 
   $form = array();
-  $form['nid'] = array('#type' => 'value', '#value' => $nid);
+  $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
   $question = t("Are you sure you want to delete all submissions for this form?");
 
-  return confirm_form($form, $question, 'node/'. $nid .'/results', NULL, t('Clear'), t('Cancel'));
+  return confirm_form($form, $question, 'node/'. $node->nid .'/results', NULL, t('Clear'), t('Cancel'));
 }
 
 function webform_results_clear_form_submit($form_id, $form_values) {

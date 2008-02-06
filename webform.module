@@ -1657,7 +1657,7 @@ function webform_results($node, $op = 'submissions') {
     case 'analysis':
       return webform_results_analysis($node);
     case 'clear' :
-      return drupal_get_form('webform_results_clear', $node);
+      return drupal_get_form('webform_results_clear_form', $node);
     case 'table':
       return webform_results_table($node);
     case 'download' :
