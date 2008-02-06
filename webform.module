@@ -200,7 +200,7 @@ function webform_menu($may_cache) {
           'path' => 'node/'. $nid .'/submission/'. $sid,
           'title' => t('Webform submission'),
           'callback' => 'drupal_get_form',
-          'callback arguments' => array('webform_client_form_'. $node->nid, $node, $submission),
+          'callback arguments' => array('webform_client_form_'. $node->nid, $node, $submission, FALSE, FALSE),
           'access' => webform_submission_access($node, $submission, 'view'),
           'type' => MENU_CALLBACK,
         );
@@ -208,7 +208,7 @@ function webform_menu($may_cache) {
           'path' => 'node/'. $nid .'/submission/'. $sid .'/view',
           'title' => t('View'),
           'callback' => 'drupal_get_form',
-          'callback arguments' => array('webform_client_form_'. $node->nid, $node, $submission),
+          'callback arguments' => array('webform_client_form_'. $node->nid, $node, $submission, FALSE, FALSE),
           'access' => webform_submission_access($node, $submission, 'view'),
           'weight' => 0,
           'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -217,7 +217,7 @@ function webform_menu($may_cache) {
           'path' => 'node/'. $nid .'/submission/'. $sid .'/edit',
           'title' => t('Edit'),
           'callback' => 'drupal_get_form',
-          'callback arguments' => array('webform_client_form_'. $node->nid, $node, $submission, TRUE),
+          'callback arguments' => array('webform_client_form_'. $node->nid, $node, $submission, TRUE, FALSE),
           'access' => webform_submission_access($node, $submission, 'edit'),
           'weight' => 1,
           'type' => MENU_LOCAL_TASK,
@@ -416,6 +416,7 @@ function webform_form(&$node, &$param) {
     '#default_value' => $node->body,
     '#cols' => 40,
     '#rows' => 10,
+    '#required' => TRUE,
   );
 
   $form['webform']['confirmation'] = array(
@@ -425,6 +426,7 @@ function webform_form(&$node, &$param) {
     '#default_value' => $node->confirmation,
     '#cols' => 40,
     '#rows' => 10,
+    '#required' => TRUE,
   );
 
   $form['webform']['format'] = filter_form($node->format);
@@ -902,16 +904,17 @@ function theme_webform_admin_settings($form) {
  * @param $node
  *   The current webform node.
  * @param $submission
- *   Optional. An array of values for the form if we're displaying a result.
+ *   An array of values for the form if we're displaying a result.
  * @param $enabled
- *   Optional. If displaying a result, specify if form elements are enabled for
+ *   If displaying a result, specify if form elements are enabled for
  *   editing.
  * @param $form_values
  *   The current form values of a submission, used in multipage webforms.
+ *   Note: The position of this parameter depends on all other parameters being
+ *   specified when using drupal_get_form(). 
  */
-function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $preview = FALSE, $form_values = NULL) {
+function webform_client_form(&$node, $submission, $enabled, $preview, $form_values = NULL) {
   global $user;
-
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
   webform_load_components();
 
@@ -931,15 +934,19 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
     $previous = db_result(db_query('SELECT MAX(sid) FROM {webform_submissions} WHERE nid = %d AND sid < %d', array($node->nid, $submission['sid'])));
     $next = db_result(db_query('SELECT MIN(sid) FROM {webform_submissions} WHERE nid = %d AND sid > %d', array($node->nid, $submission['sid'])));
 
+    $form['submission'] = array(
+      '#type' => 'value',
+      '#value' => $submission,
+    );
     $form['navigation'] = array(
       '#prefix' => '<div class="webform-submission-navigation">',
       '#suffix' => '</div>',
     );
     $form['navigation']['previous'] = array(
-      '#value' => $previous ? l(t('Previous submission'), 'node/'. $node->nid .'/submission/'. $previous . ($enabled ? '/edit' : '') , array('class' => 'webform-submission-previous')) : '<span class="webform-submission-previous">'. t('Previous submission') .'</span>',
+      '#value' => $previous ? l(t('Previous submission'), 'node/'. $node->nid .'/submission/'. $previous . ($enabled ? '/edit' : '') , array('class' => 'webform-submission-previous'), ($enabled ? 'destination=node/'. $node->nid .'/submission/'. $previous .'/edit' : NULL)) : '<span class="webform-submission-previous">'. t('Previous submission') .'</span>',
     );
     $form['navigation']['next'] = array(
-      '#value' => $next ? l(t('Next submission'), 'node/'. $node->nid .'/submission/'. $next . ($enabled ? '/edit' : ''), array('class' => 'webform-submission-next')) : '<span class="webform-submission-next">'. t('Next submission') .'</span>',
+      '#value' => $next ? l(t('Next submission'), 'node/'. $node->nid .'/submission/'. $next . ($enabled ? '/edit' : ''), array('class' => 'webform-submission-next'), ($enabled ? 'destination=node/'. $node->nid .'/submission/'. $next .'/edit' : NULL)) : '<span class="webform-submission-next">'. t('Next submission') .'</span>',
     );
 
     $form['submission_info'] = array(
@@ -967,6 +974,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
 
   // Add a theme function for this form.
   $form['#theme'] = 'webform_form_'. $node->nid;
+
   // Set the encoding type (necessary for file uploads).
   $form['#attributes']['enctype'] = 'multipart/form-data';
   $form['#base'] = 'webform_client_form';
@@ -1004,7 +1012,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
         }
 
         $form['#multistep'] = TRUE;
-        if ($_POST['op'] != !empty($node->submit_text) ? $node->submit_text : t('Submit')) {
+        if ($_POST['op'] != (empty($node->submit_text) ? t('Submit') : $node->submit_text)) {
           $form['#redirect'] = FALSE;
         }
 
@@ -1023,7 +1031,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
         if ($page_num == $page_count) {
           $form['submitbutton'] = array(
             '#type' => 'submit',
-            '#value' => !empty($node->submit_text) ? $node->submit_text : t('Submit'),
+            '#value' => empty($node->submit_text) ? t('Submit') : $node->submit_text,
             '#weight' => 1001,
           );
         }
@@ -1040,7 +1048,7 @@ function webform_client_form(&$node, $submission = array(), $enabled = FALSE, $p
         // Add the submit button.
         $form['submitbutton'] = array(
           '#type' => 'submit',
-          '#value' => !empty($node->submit_text) ? $node->submit_text : t('Submit'),
+          '#value' => empty($node->submit_text) ? t('Submit') : $node->submit_text,
           '#weight' => 1000,
         );
       }
@@ -1170,7 +1178,7 @@ function webform_client_form_submit($form_id, $form_values) {
   $node = node_load(array('nid' => $form_values['details']['nid']));
   $session_key = 'webform_form_'. $node->nid;
 
-  if ($form_values['op'] != !empty($node->submit_text) ? $node->submit_text : t('Submit')) {
+  if ($form_values['op'] != (empty($node->submit_text) ? t('Submit') : $node->submit_text)) {
     // This is a multi-page form that is not yet complete.
     // Copy values stored during previous steps into $_POST because they are needed in form_builder() to repopulate the form.
     if (is_array($_SESSION[$session_key])) {
@@ -1313,7 +1321,10 @@ function webform_client_form_submit($form_id, $form_values) {
   }
 
   // Check confirmation field to see if redirect should be to another node or a message.
-  if (valid_url(trim($node->confirmation), true)) {
+  if ($form_values['submission']) {
+    $redirect = NULL;
+  }
+  elseif (valid_url(trim($node->confirmation), true)) {
     $redirect = trim($node->confirmation);
   }
   elseif (preg_match('/^internal:/', $node->confirmation)) {
@@ -1394,12 +1405,6 @@ function _webform_confirmation($node) {
  *   The webform node that has just been submitted.
  */
 function theme_webform_confirmation($node, $sid) {
-
-  if (empty($node->confirmation)) {
-    drupal_set_message(t('Thank you, your submission has been received.'));
-    drupal_goto('node/'. $node->nid);
-  }
-
   $node->body = check_markup($node->confirmation, $node->format, FALSE);
   $node->links['webform_back'] = array(
     'href' => 'node/'. $node->nid,
