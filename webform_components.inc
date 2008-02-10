@@ -317,7 +317,7 @@ function webform_component_edit_form_validate($form_id, $form_values) {
   $node = node_load($form_values['nid']);
 
   if (!preg_match('!^[a-z0-9_]+$!', $form_values['form_key'])) {
-    form_set_error('form_key', t('The field key %field_key is invalid. Please include only lowercase alphanumeric charaters and underscores.', array('%field_key' => $form_values['form_key'])));
+    form_set_error('form_key', t('The field key %field_key is invalid. Please include only lowercase alphanumeric characters and underscores.', array('%field_key' => $form_values['form_key'])));
   }
 
   foreach ($node->webform['components'] as $cid => $component) {
