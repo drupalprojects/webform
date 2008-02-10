@@ -416,7 +416,6 @@ function webform_form(&$node, &$param) {
     '#default_value' => $node->body,
     '#cols' => 40,
     '#rows' => 10,
-    '#required' => TRUE,
   );
 
   $form['webform']['confirmation'] = array(
@@ -426,7 +425,6 @@ function webform_form(&$node, &$param) {
     '#default_value' => $node->confirmation,
     '#cols' => 40,
     '#rows' => 10,
-    '#required' => TRUE,
   );
 
   $form['webform']['format'] = filter_form($node->format);
@@ -455,7 +453,7 @@ function webform_form(&$node, &$param) {
     '#collapsed' => TRUE,
     '#theme' => 'webform_mail_components_form',
     '#title' => t('Conditional e-mail recipients'),
-    '#description' => t('The settings below allow you to send e-mails to multiple recipients based off the value of a component. For example, checking the <em>CC</em> option for a select field would CC the sent e-mails to any options the user selected from the list.'),
+    '#description' => t('The settings below allow you to send e-mails to multiple recipients based off the value of a component.'),
     '#node' => $node,
   );
 
@@ -496,7 +494,7 @@ function webform_form(&$node, &$param) {
     $form['mail_settings']['email_'. $field .'_option'] = array(
       '#title' => $title,
       '#type' => 'radios',
-      '#default_value' => is_numeric($node->{'email_'. $field}) ? 'component' : ((empty($default_value) || $node->{'email_'. $field} != 'default') ? 'custom' : 'default'),
+      '#default_value' => is_numeric($node->{'email_'. $field}) ? 'component' : ((empty($default_value) || ($node->{'email_'. $field} != 'default' && isset($node->{'email_'. $field}))) ? 'custom' : 'default'),
       '#description' => $description,
     );
     if (!empty($default_value)) {
@@ -543,7 +541,7 @@ function webform_form(&$node, &$param) {
   $form['advanced']['submit_limit']['enforce_limit'] = array(
     '#type' => 'radios',
     '#options' => array('no' => t('Unlimited'), 'yes' => 'Limit to !count submission(s) !timespan'),
-    '#default_value' => $node->submit_limit == -1 ? 'yes' : 'no',
+    '#default_value' => $node->submit_limit == -1 ? 'no' : 'yes',
   );
   $form['advanced']['submit_limit']['submit_limit'] = array(
     '#type' => 'textfield',
@@ -604,7 +602,7 @@ function webform_form(&$node, &$param) {
 }
 
 /**
- * Theme the component options for sending emails.
+ * Theme the component options for sending e-mails.
  */
 function theme_webform_mail_components_form($form) {
   drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css');
@@ -709,6 +707,13 @@ function webform_submit(&$node) {
     unset($node->{'email_'. $field .'_component'});
     unset($node->{'email_'. $field .'_custom'});
   }
+
+  // Set the submit limit to -1 if set to unlimited.
+  if ($node->enforce_limit == 'no') {
+    $node->submit_limit = -1;
+    $node->submit_interval = -1;
+  }
+  unset($node->enforce_limit);
 }
 
 /**
@@ -979,6 +984,10 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
   $form['#attributes']['enctype'] = 'multipart/form-data';
   $form['#base'] = 'webform_client_form';
 
+  // Set the form action to the node ID in case this is being displayed on the
+  // teaser, subsequent pages should be on the node page directly.
+  $form['#action'] = url('node/'. $node->nid);
+
   if (is_array($node->webformcomponents) && !empty($node->webformcomponents)) {
     // Prepare a new form array.
     $form['submitted'] = array(
@@ -1180,11 +1189,20 @@ function webform_client_form_submit($form_id, $form_values) {
 
   if ($form_values['op'] != (empty($node->submit_text) ? t('Submit') : $node->submit_text)) {
     // This is a multi-page form that is not yet complete.
+    // Save the order of the current post into a copied array.
+    $original_post = is_array($_POST['submitted']) ? $_POST['submitted'] : array();
+    $_POST['submitted'] = array();
+    
     // Copy values stored during previous steps into $_POST because they are needed in form_builder() to repopulate the form.
     if (is_array($_SESSION[$session_key])) {
       foreach ($_SESSION[$session_key] as $key => $val) {
         $_POST['submitted'][$key] = $val;
       }
+    }
+
+    // Restore the newly added values either in the previous position.
+    foreach ($original_post as $key => $val) {
+    	$_POST['submitted'][$key] = $val;
     }
 
     // Store values from an intermediate stage of a multistep form in $_SESSION.
@@ -1198,8 +1216,14 @@ function webform_client_form_submit($form_id, $form_values) {
 
   if (is_array($_SESSION[$session_key])) {
     // Merge any submission data stored in $_SESSION for multistep forms.
+    $original_values = is_array($form_values['submitted']) ? $form_values['submitted'] : array();
+    $form_values['submitted'] = array();
+
     foreach ($_SESSION[$session_key] as $key => $val) {
       $form_values['submitted'][$key] = $val;
+    }
+    foreach ($original_values as $key => $val) {
+    	$form_values['submitted'][$key] = $val;
     }
     unset($_SESSION[$session_key]);
   }
@@ -1215,16 +1239,18 @@ function webform_client_form_submit($form_id, $form_values) {
     if (is_array($form_values['submitted'][$cid])) {
       $node->additional_emails[$cid] = array();
     	foreach ($form_values['submitted'][$cid] as $submitted_value) {
-    		$node->additional_emails[$cid][] = $submitted_value;
+        if ($submitted_value) {
+          $node->additional_emails[$cid][] = $submitted_value;
+        }
     	}
     }
     else {
       $node->additional_emails[$cid] = $form_values['submitted'][$cid];
     }
+    if (empty($node->additional_emails[$cid])) {
+      unset($node->additional_emails[$cid]);
+    }
   }
-
-  // Create a headers array that the user can modify in the additional submit code.
-  $email_headers = array('X-Mailer' => 'Drupal Webform (PHP/'. phpversion() .')');
 
   // Perform additional submit processing.
   if (trim($node->additional_submit)) {
@@ -1265,24 +1291,47 @@ function webform_client_form_submit($form_id, $form_values) {
       $emails['default'] = $node->email;
     }
     $messages = array();
+    $headers = array();
+    $froms = array();
+    $subjects = array();
     foreach ($emails as $cid => $email) {
-      $messages[$cid] = theme("webform_create_mailmessage_$node->nid", $form_values, $node, $sid, $cid);
+      $messages[$cid] = theme("webform_mail_message_$node->nid", $form_values, $node, $sid, $cid);
+      $headers[$cid] = theme("webform_mail_headers_$node->nid", $form_values, $node, $sid, $cid);
+      // Otherwise use the generic message or headers:
       if (empty($messages[$cid])) {
-        // Otherwise use the generic form:
-        $messages[$cid] = theme("webform_create_mailmessage", $form_values, $node, $sid, $cid);
+        $messages[$cid] = theme("webform_mail_message", $form_values, $node, $sid, $cid);
+      }
+      if (empty($headers[$cid])) {
+        $headers[$cid] = theme("webform_mail_headers", $form_values, $node, $sid, $cid);
+      }
+
+      // Assemble the FROM string.
+      if (isset($headers['From'])) {
+      	$froms[$cid] = $headers['From'];
+      }
+      elseif (strlen($email_from_name) > 0) {
+        $froms[$cid] = '"'. mime_header_encode($email_from_name) .'" <'. $email_from_address .'>';
+      }
+      else {
+        $froms[$cid] = $email_from_address;
+      }
+
+      // Update the subject if set in the themed headers.
+      if (isset($headers['Subject'])) {
+      	$subjects[$cid] = $headers['Subject'];
+      }
+      else {
+      	$subjects[$cid] = $email_subject;
+      }
+
+      // Update the to e-mail if set in the themed headers.
+      if (isset($headers['To'])) {
+        $emails[$cid] = $headers['To'];
       }
     }
 
-    // Assemble the FROM string.
-    if (strlen($email_from_name) > 0) {
-      $email_from_string = '"'. mime_header_encode($email_from_name) .'" <'. $email_from_address .'>';
-    }
-    else {
-      $email_from_string = $email_from_address;
-    }
-
     // Verify that this submission is not attempting to send any spam hacks.
-    if (_webform_submission_spam_check($node->email, $email_subject, $email_from_string, $email_headers)) {
+    if (_webform_submission_spam_check($emails['default'], $subjects['default'], $froms['default'], $headers['default'])) {
       watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $_SERVER['REMOTE_ADDR'])) ."<br />\n". nl2br(htmlentities($messages['default'])), WATCHDOG_WARNING);
       drupal_set_message(t("Illegal information. Data not submitted."), 'error');
       return false;
@@ -1290,21 +1339,26 @@ function webform_client_form_submit($form_id, $form_values) {
 
     // Mail the webform results.
     foreach ($emails as $cid => $address) {
-      // In the case of checkboxes or multiple select, multiple emails may need
+      // In the case of checkboxes or multiple select, multiple e-mails may need
       // to be sent out.
       if (is_array($address)) {
       	foreach ($address as $single_address) {
-      		drupal_mail('webform-submission', $single_address, $email_subject, $messages[$cid], $email_from_string, $email_headers);
+      		drupal_mail('webform-submission', $single_address, $email_subject, $messages[$cid], $froms[$cid], $headers[$cid]);
+
+          // Debugging output for email.
+          if (variable_get('webform_debug', 0) >= 2) {
+            drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($headers[$cid], true)) ."</pre>To: ". $single_address ."<br />From: ". htmlentities($froms[$cid]) ."<br />Subject: ". $subjects[$cid] ."<br />E-mail Body: <pre>". $messages[$cid] ."</pre>");
+          }
       	}
       }
       else {
-        drupal_mail('webform-submission', $address, $email_subject, $messages[$cid], $email_from_string, $email_headers);
-      }
-    }
+        drupal_mail('webform-submission', $address, $email_subject, $messages[$cid], $froms[$cid], $headers[$cid]);
 
-    // Debugging output for email.
-    if (variable_get('webform_debug', 0) >= 2) {
-      drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($email_headers, true)) ."</pre>To: ". $node->email ."<br />From: ". htmlentities($email_from_string) ."<br />Subject: ". $email_subject ."<br />E-mail Body: <pre>". $messages['default'] ."</pre>");
+        // Debugging output for email.
+        if (variable_get('webform_debug', 0) >= 2) {
+          drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($headers[$cid], true)) ."</pre>To: ". $address ."<br />From: ". htmlentities($froms[$cid]) ."<br />Subject: ". $email_subject ."<br />E-mail Body: <pre>". $messages[$cid] ."</pre>");
+        }
+      }
     }
   }
 
@@ -1405,6 +1459,12 @@ function _webform_confirmation($node) {
  *   The webform node that has just been submitted.
  */
 function theme_webform_confirmation($node, $sid) {
+
+  if (empty($node->confirmation)) {
+    drupal_set_message(t('Thank you, your submission has been received.'));
+    drupal_goto('node/'. $node->nid);
+  }
+
   $node->body = check_markup($node->confirmation, $node->format, FALSE);
   $node->links['webform_back'] = array(
     'href' => 'node/'. $node->nid,
@@ -1413,9 +1473,8 @@ function theme_webform_confirmation($node, $sid) {
   return theme('node', $node, FALSE, TRUE);
 }
 
-
 /**
- * Theme the contents of emails sent by webform.
+ * Theme the contents of e-mails sent by webform.
  * 
  * @param $form_values
  *   An array of all form values submitted by the user. The array contains three
@@ -1429,12 +1488,12 @@ function theme_webform_confirmation($node, $sid) {
  * @param $sid
  *   The submission ID of the new submission.
  * @param $cid
- *   If you desire to make different emails depending on the recipient, you can
+ *   If you desire to make different e-mails depending on the recipient, you can
  *   check this component ID to output different content. This will be the ID
  *   of the component that is a conditional e-mail recipient. For the normal
- *   emails, it will have the value of 'default'. 
+ *   e-mails, it will have the value of 'default'. 
  */
-function theme_webform_create_mailmessage($form_values, $node, $sid, $cid) {
+function theme_webform_mail_message($form_values, $node, $sid, $cid) {
   global $user;
 
   $message = '';
@@ -1460,7 +1519,7 @@ function theme_webform_create_mailmessage($form_values, $node, $sid, $cid) {
 }
 
 /**
- * Theme the fields portion of the emails sent by webform.
+ * Theme the fields portion of the e-mails sent by webform.
  * 
  * This function calls itself recursively to maintain the tree structure of
  * components in the webform. It is called intialy by
@@ -1508,6 +1567,37 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
     }
   }
   return ($message);
+}
+
+/**
+ * Theme the headers when sending an email from webform.
+ * 
+ * @param $form_values
+ *   An array of all form values submitted by the user. The array contains three
+ *   keys containing the following:
+ *   - submitted: All the submitted values in a single array keyed by webform
+ *     component IDs. Useful for simply looping over the values.
+ *   - submitted_tree: All the submitted values in a tree-structure array, keyed
+ *     by the Form Key values defined by the user.
+ * @param $node
+ *   The complete node object for the webform.
+ * @param $sid
+ *   The submission ID of the new submission.
+ * @param $cid
+ *   If you desire to make different e-mail headers depending on the recipient,
+ *   you can check this component ID to output different content. This will be
+ *   the ID of the component that is a conditional e-mail recipient. For the
+ *   normal e-mails, it will have the value of 'default'.
+ * @return
+ *   An array of headers to be used when sending a webform email. If headers
+ *   for "From", "To", or "Subject" are set, they will take precendence over
+ *   the values set in the webform configuration.
+ */
+function theme_webform_mail_headers($form_values, $node, $sid, $cid) {
+  $headers = array(
+    'X-Mailer' => 'Drupal Webform (PHP/'. phpversion() .')',
+  );
+  return $headers;
 }
 
 /**

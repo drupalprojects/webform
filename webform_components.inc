@@ -321,7 +321,7 @@ function webform_component_edit_form_validate($form_id, $form_values) {
   }
 
   foreach ($node->webformcomponents as $cid => $component) {
-    if (($component['cid'] != $form_values['cid']) && (strcasecmp($component['form_key'], $form_values['form_key']) == 0) && ($component['pid'] == $form_values['pid'])) {
+    if (($component['cid'] != $form_values['cid'] || $form_values['clone']) && ($component['pid'] == $form_values['pid']) && (strcasecmp($component['form_key'], $form_values['form_key']) == 0)) {
       form_set_error('form_key', t('The field key %field_key is already in use by the field labeled %existing_field. Please use a unique key.', array('%field_key' => $form_values['form_key'], '%existing_field' => $component['name'])));
     }
   }

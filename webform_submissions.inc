@@ -223,7 +223,7 @@ function webform_get_submission($nid, $sid, $reset = FALSE) {
 
 
 function _webform_submission_spam_check($to, $subject, $from, $headers = array()) {
-  $headers = implode('\n', $headers);
+  $headers = implode('\n', (array)$headers);
   // Check if they are attempting to spam using a bcc or content type hack.
   if (preg_match('/(b?cc\s?:)|(content\-type:)/i', $to ."\n". $subject ."\n". $from ."\n". $headers)) {
     return true; // Possible spam attempt.
@@ -234,7 +234,7 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
 function _webform_submission_limit_check($node, $form_values) {
   global $user, $db_type;
 
-  // check if submission limiting is enabled.
+  // Check if submission limiting is enabled.
   if ($node->submit_limit == '-1') {
     return false; // No check enabled.
   }

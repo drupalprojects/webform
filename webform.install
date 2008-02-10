@@ -401,7 +401,7 @@ function webform_update_13() {
 
   // Set the webform weight to -1. This is needed to have webform's hook_menu()
   // take precedence over node_menu().
-  $ret = update_sql('UPDATE {system} SET weight = -1 WHERE type = "module" and name = "webform"');
+  $ret[] = update_sql('UPDATE {system} SET weight = -1 WHERE type = "module" and name = "webform"');
 
   // Convert timestamp-based cids to small integers starting at 1 for each node.
   $result = db_query('SELECT nid, cid FROM {webform_component} ORDER BY nid ASC, cid ASC');
@@ -499,6 +499,15 @@ function webform_update_16() {
       break;
   }
 
+  return $ret;
+}
+
+/**
+ * Set the submit interval to a real "unlimited" value instead of 5 years.
+ */
+function webform_update_17() {
+	$ret = array();
+  $ret[] = update_sql("UPDATE {webform} SET submit_interval == -1 WHERE submit_interval == 157784630");
   return $ret;
 }
 

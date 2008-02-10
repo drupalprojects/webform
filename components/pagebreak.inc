@@ -43,6 +43,12 @@ function _webform_help_pagebreak($section) {
   return $output;
 }
 
-function _webform_render_pagebreak($currfield) {
-  return '';
+function _webform_render_pagebreak($component) {
+  $form = array();
+  // Render page breaks as hidden elements so that they can 
+  $form[$component['form_key']] = array(
+    '#type' => 'hidden',
+    '#weight' => 1000,
+    '#value' => $component['name'],
+  );
 }
