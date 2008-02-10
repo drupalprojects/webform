@@ -45,10 +45,27 @@ function _webform_help_pagebreak($section) {
 
 function _webform_render_pagebreak($component) {
   $form = array();
-  // Render page breaks as hidden elements so that they can 
-  $form[$component['form_key']] = array(
+  // Render page breaks as hidden elements so that they can be displayed in
+  // emails as separators.
+  $form = array(
     '#type' => 'hidden',
-    '#weight' => 1000,
     '#value' => $component['name'],
+    '#weight' => $component['weight'],
   );
+  return $form;
+}
+
+/**
+ * Format the output of e-mailed data for this component.
+ *
+ * @param $data
+ *   A string or array of the submitted data.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   Textual output to be included in the email.
+ */
+function theme_webform_mail_pagebreak($data, $component) {
+  return "\n-- ". $component['name'] ." --\n";
 }
