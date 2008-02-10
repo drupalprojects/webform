@@ -507,7 +507,7 @@ function webform_update_16() {
  */
 function webform_update_17() {
 	$ret = array();
-  $ret[] = update_sql("UPDATE {webform} SET submit_interval == -1 WHERE submit_interval == 157784630");
+  $ret[] = update_sql("UPDATE {webform} SET submit_interval = -1 WHERE submit_interval = 157784630");
   return $ret;
 }
 
