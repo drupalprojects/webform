@@ -81,7 +81,7 @@ function phptemplate_webform_confirmation_[node id here]($node, $sid) {
   <?php /* Begin sample webform confirmation page */ ?>
   
   <div class="confirmation-message">
-    <?php print check_markup($node->confirmation, $node->format, FALSE); ?>
+    <?php print check_markup($node->webform['confirmation'], $node->format, FALSE); ?>
   </div>
   
   <ul>

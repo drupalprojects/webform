@@ -23,7 +23,7 @@ function webform_components_form($node) {
   );
 
   $options = array();
-  foreach ($node->webformcomponents as $cid => $component) {
+  foreach ($node->webform['components'] as $cid => $component) {
     $options[$cid] = check_plain($component['name']);
     $form['components'][$cid]['pid'] = array(
       '#type' => 'hidden',
@@ -31,7 +31,7 @@ function webform_components_form($node) {
     );
     $form['components'][$cid]['weight'] = array(
       '#type' => 'weight',
-      '#delta' => count($node->webformcomponents) > 10 ? count($node->webformcomponents) : 10,
+      '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
       '#title' => t("Weight"),
       '#default_value' => $component['weight'],
     );
@@ -65,7 +65,7 @@ function webform_components_form($node) {
   );
   $form['add']['weight'] = array(
     '#type' => 'weight',
-    '#delta' => count($node->webformcomponents) > 10 ? count($node->webformcomponents) : 10,
+    '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
   );
 
   $form['submit'] = array(
@@ -101,10 +101,10 @@ function theme_webform_components_form($form) {
 
   $headers = array(t('Name'), t('Type'), t('Value'), t('Mandatory'), t('Weight'), array('data' => t('Operations'), 'colspan' => 3));
   $rows = array();
-  if (!empty($node->webformcomponents)) {
+  if (!empty($node->webform['components'])) {
     $component_tree = array();
     $page_count = 1;
-    _webform_components_tree_build($node->webformcomponents, $component_tree, 0, $page_count);
+    _webform_components_tree_build($node->webform['components'], $component_tree, 0, $page_count);
     $component_tree = _webform_components_tree_sort($component_tree);
     // Build the table rows.
     function _webform_components_form_rows($node, $cid, $component, $level, &$form, &$rows) {
@@ -176,7 +176,7 @@ function webform_components_form_submit($form_id, $form_values) {
   $node = node_load($form_values['nid']);
 
   // Update all mandatory and weight values.
-  foreach ($node->webformcomponents as $cid => $component) {
+  foreach ($node->webform['components'] as $cid => $component) {
     if ($component['weight'] != $form_values['components'][$cid]['weight'] || $component['mandatory'] != $form_values['components'][$cid]['mandatory']) {
       $component['weight'] = $form_values['components'][$cid]['weight'];
       $component['mandatory'] = $form_values['components'][$cid]['mandatory'];
@@ -258,9 +258,9 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     '#weight' => 2,
   );
 
-  if (variable_get('webform_enable_fieldset', true) && is_array($node->webformcomponents)) {
+  if (variable_get('webform_enable_fieldset', true) && is_array($node->webform['components'])) {
     $options = array('0' => t('Root'));
-    foreach ($node->webformcomponents as $thiscid => $value) {
+    foreach ($node->webform['components'] as $thiscid => $value) {
       if ($value['type'] == 'fieldset' && $thiscid != $component['cid']) {
         $options[$thiscid] = $value['name'];
       }
@@ -277,7 +277,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
 
   $form['weight'] = array(
     '#type' => 'weight',
-    '#delta' => count($node->webformcomponents) > 10 ? count($node->webformcomponents) : 10,
+    '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
     '#title' => t("Weight"),
     '#default_value' => $component['weight'],
     '#description' => t('Optional. In the menu, the heavier items will sink and the lighter items will be positioned nearer the top.'),
@@ -320,7 +320,7 @@ function webform_component_edit_form_validate($form_id, $form_values) {
     form_set_error('form_key', t('The field key %field_key is invalid. Please include only lowercase alphanumeric charaters and underscores.', array('%field_key' => $form_values['form_key'])));
   }
 
-  foreach ($node->webformcomponents as $cid => $component) {
+  foreach ($node->webform['components'] as $cid => $component) {
     if (($component['cid'] != $form_values['cid'] || $form_values['clone']) && ($component['pid'] == $form_values['pid']) && (strcasecmp($component['form_key'], $form_values['form_key']) == 0)) {
       form_set_error('form_key', t('The field key %field_key is already in use by the field labeled %existing_field. Please use a unique key.', array('%field_key' => $form_values['form_key'], '%existing_field' => $component['name'])));
     }
@@ -383,16 +383,16 @@ function webform_component_delete_form($node, $cid) {
   );
   $form['name'] = array(
     '#type' => 'value',
-    '#value' => $node->webformcomponents[$cid]['name'],
+    '#value' => $node->webform['components'][$cid]['name'],
   );
 
-  if ($node->webformcomponents[$cid]['type'] == 'fieldset') {
-    $question = t('Delete the %name fieldset?', array('%name' => $node->webformcomponents[$cid]['name']));
-    $description = t('This will immediately delete the %name fieldset and all children elements within %name from the %webform webform. This cannot be undone.', array('%name' => $node->webformcomponents[$cid]['name'], '%webform' => $node->title));
+  if ($node->webform['components'][$cid]['type'] == 'fieldset') {
+    $question = t('Delete the %name fieldset?', array('%name' => $node->webform['components'][$cid]['name']));
+    $description = t('This will immediately delete the %name fieldset and all children elements within %name from the %webform webform. This cannot be undone.', array('%name' => $node->webform['components'][$cid]['name'], '%webform' => $node->title));
   }
   else {
-    $question = t('Delete the %name component?', array('%name' => $node->webformcomponents[$cid]['name']));
-    $description = t('This will immediately delete the %name component from the %webform webform. This cannot be undone.', array('%name' => $node->webformcomponents[$cid]['name'], '%webform' => $node->title));
+    $question = t('Delete the %name component?', array('%name' => $node->webform['components'][$cid]['name']));
+    $description = t('This will immediately delete the %name component from the %webform webform. This cannot be undone.', array('%name' => $node->webform['components'][$cid]['name'], '%webform' => $node->title));
   }
 
   return confirm_form($form, $question, 'node/'. $node->nid .'/components', $description, t('Delete'));
@@ -450,7 +450,7 @@ function webform_component_delete($nid, $cid) {
 function webform_component_clone(&$node, $component) {
   $new_cid = webform_component_insert($component);
   if ($component['type'] == 'fieldset') {
-    foreach ($node->webformcomponents as $cid => $child_component) {
+    foreach ($node->webform['components'] as $cid => $child_component) {
       if ($child_component['pid'] == $component['cid']) {
         $child_component['pid'] = $new_cid;
         webform_component_clone($node, $child_component);

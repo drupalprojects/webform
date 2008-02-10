@@ -235,7 +235,7 @@ function _webform_submission_limit_check($node, $form_values) {
   global $user, $db_type;
 
   // Check if submission limiting is enabled.
-  if ($node->submit_limit == '-1') {
+  if ($node->webform['submit_limit'] == '-1') {
     return false; // No check enabled.
   }
 
@@ -246,7 +246,7 @@ function _webform_submission_limit_check($node, $form_values) {
            "AND submitted > %d AND nid = %d";
 
   // Fetch all the entries from the database within the submit interval with this username and IP.
-  $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, time() - $node->submit_interval, $node->nid);
+  $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, time() - $node->webform['submit_interval'], $node->nid);
   $num_submissions_database = db_num_rows($result);
 
   // Double check the submission history from the users machine using cookies.
@@ -255,7 +255,7 @@ function _webform_submission_limit_check($node, $form_values) {
 
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
       foreach ($_COOKIE[$cookie_name] as $key => $timestamp) {
-        if ($timestamp <= time() - $node->submit_interval) {
+        if ($timestamp <= time() - $node->webform['submit_interval']) {
           // Remove the cookie if past the required time interval.
           setcookie($cookie_name ."[". $key ."]", "", 0);
         }
@@ -268,7 +268,7 @@ function _webform_submission_limit_check($node, $form_values) {
     }
   }
 
-  if ($num_submissions_database >= $node->submit_limit || $num_submissions_cookie >= $node->submit_limit) {
+  if ($num_submissions_database >= $node->webform['submit_limit'] || $num_submissions_cookie >= $node->webform['submit_limit']) {
     // Limit exceeded.
     return $num_submissions_database;
   }
@@ -283,7 +283,7 @@ function _webform_submission_limit_check($node, $form_values) {
       }
       // Set a cookie including the server's submission time.
       // The cookie expires in the length of the interval plus a day to compensate for different timezones.
-      setcookie($cookie_name ."[". $attempted_key ."]", time(), time() + $node->submit_interval + 86400);
+      setcookie($cookie_name ."[". $attempted_key ."]", time(), time() + $node->webform['submit_interval'] + 86400);
     }
 
     // Limit not exceeded.

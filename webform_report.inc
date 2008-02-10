@@ -83,7 +83,7 @@ function webform_results_table($node) {
   $header = theme('webform_results_table_header', $node);
   $submissions = webform_get_submissions($node->nid, $header);
 
-  return theme('webform_results_table', $node, $node->webformcomponents, $submissions);
+  return theme('webform_results_table', $node, $node->webform['components'], $submissions);
 }
 
 function theme_webform_results_table_header($node) {
@@ -123,7 +123,7 @@ function theme_webform_results_table($node, $components, $submissions) {
     $component_headers = array();
 
     // Generate a cell for each component.
-    foreach ($node->webformcomponents as $component) {
+    foreach ($node->webform['components'] as $component) {
       $table_function = "_webform_table_data_". $component['type'];
       if (function_exists($table_function)) {
         $submission_output = $table_function($submission->data[$component['cid']], $component);
@@ -185,7 +185,7 @@ function webform_results_download($node) {
   $header[2] .= "Serial,SID,Time,IP Address,UID,Username";
   // Compile header information.
   webform_load_components(); // Load all components.
-  foreach ($node->webformcomponents as $cid => $component) {
+  foreach ($node->webform['components'] as $cid => $component) {
     $csv_header_function   = "_webform_csv_headers_". $component['type'];
     if (function_exists($csv_header_function)) {
       // Let each component determine its headers.
@@ -207,7 +207,7 @@ function webform_results_download($node) {
   $rowcount = 0;
   foreach ($submissions as $sid => $submission) {
     $row = ++$rowcount .",". $sid .",\"". format_date($submission->submitted, 'small') ."\",\"". $submission->remote_addr ."\",". $submission->uid .",\"". $submission->name ."\"";
-    foreach ($node->webformcomponents as $cid => $component) {
+    foreach ($node->webform['components'] as $cid => $component) {
       $csv_data_function   = "_webform_csv_data_". $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
@@ -241,7 +241,7 @@ function webform_results_analysis($node) {
   );
 
   webform_load_components(); // Load all component types.
-  foreach ($node->webformcomponents as $component) {
+  foreach ($node->webform['components'] as $component) {
     $question_number++;
 
     // Do component specific call.
