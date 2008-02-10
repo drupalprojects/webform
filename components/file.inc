@@ -312,12 +312,7 @@ function _webform_submission_display_file($data, $component, $enabled = false) {
   $form_item['#type'] = 'textfield';
   $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   if ($filedata['filename']) {
-    if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PRIVATE) {
-      $form_item['#suffix'] = ' <a href="'. url('system/files/'. $filedata['filepath'], NULL, NULL, TRUE) .'">Download '. $filedata['filename'] .'</a></div>';
-    }
-    else {
-      $form_item['#suffix'] = ' <a href="'. base_path() . $filedata['filepath'] .'">Download '. $filedata['filename'] .'</a></div>';
-    }
+    $form_item['#suffix'] = ' <a href="'. file_create_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a></div>';
   }
   $form_item['#disabled'] = !$enabled;
   return $form_item;
