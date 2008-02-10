@@ -422,8 +422,8 @@ function webform_update_13() {
     case 'mysqli':
     case 'mysql':
       $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE cid cid smallint unsigned NOT NULL default '0'");
-      $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE pid pid smallint unsigned NOT NULL default '0' ");
-      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} CHANGE cid cid smallint unsigned NOT NULL default '0' ");
+      $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE pid pid smallint unsigned NOT NULL default '0'");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} CHANGE cid cid smallint unsigned NOT NULL default '0'");
       break;
     case 'pgsql':
       db_change_column($ret, 'webform_component', 'cid', 'cid', 'smallint', array('not null' => TRUE, 'default' => '0'));

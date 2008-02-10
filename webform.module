@@ -1209,7 +1209,7 @@ function webform_client_form_submit($form_id, $form_values) {
     // Save the order of the current post into a copied array.
     $original_post = is_array($_POST['submitted']) ? $_POST['submitted'] : array();
     $_POST['submitted'] = array();
-    
+
     // Copy values stored during previous steps into $_POST because they are needed in form_builder() to repopulate the form.
     if (is_array($_SESSION[$session_key])) {
       foreach ($_SESSION[$session_key] as $key => $val) {
