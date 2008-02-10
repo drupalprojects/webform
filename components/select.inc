@@ -271,19 +271,24 @@ function theme_webform_mail_select($data, $component) {
   // Generate the output.
   if ($component['extra']['multiple']) {
     $output = $component['name'] .":\n";
-    foreach ($data as $value) {
+    foreach ((array)$data as $value) {
       if ($value) {
         if ($options[$value]) {
           $output .= "    - ". $options[$value] ."\n";
         }
-        else {
+        elseif($options[_webform_safe_name($value)]) {
           $output .= "    - ". $options[_webform_safe_name($value)] ."\n";
         }
       }
     }
   }
   else {
-    $output = $component['name'] .": ". $options[_webform_safe_name($data)] ."\n";
+    if ($options[$data]) {
+      $output = $component['name'] .": ". $options[$data] ."\n";
+    }
+    elseif($options[_webform_safe_name($data)]) {
+      $output = $component['name'] .": ". $options[_webform_safe_name($data)] ."\n";
+    }
   }
   return $output;
 }
