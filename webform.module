@@ -266,6 +266,7 @@ function webform_load($node) {
   $result = db_query('SELECT * FROM {webform_component} WHERE nid = %d ORDER BY weight, name', $node->nid);
   while ($c = db_fetch_array($result)) {
     $additions->webformcomponents[$c['cid']]['cid'] = $c['cid'];
+    $additions->webformcomponents[$c['cid']]['nid'] = $c['nid'];
     $additions->webformcomponents[$c['cid']]['form_key'] = $c['form_key'] ? $c['form_key'] : $c['cid'];
     $additions->webformcomponents[$c['cid']]['name'] = t($c['name']);
     $additions->webformcomponents[$c['cid']]['type'] = $c['type'];
