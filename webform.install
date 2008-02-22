@@ -519,6 +519,28 @@ function webform_update_17() {
 }
 
 /**
+ * Convert E-mail from name, address, and subject to integer values.
+ */
+function webform_update_18() {
+  $ret = array();
+  $result = db_query('SELECT * FROM {webform}');
+  while ($webform = db_fetch_object($result)) {
+    foreach (array('email_from_name', 'email_from_address', 'email_subject') as $key) {
+      if ($webform->{$key} == 'Automatic' || $webform->{$key} == 'Default') {
+        $ret[] = update_sql('UPDATE {webform} SET '. $key .' = "default" WHERE nid = '. $webform->nid);
+      }
+      elseif (!is_numeric($webform->{$key})) {
+        $cid = db_result(db_query('SELECT cid FROM {webform_component} WHERE name = "%s" AND nid = %d', $webform->{$key}, $webform->nid));
+        if ($cid) {
+          $ret[] = update_sql('UPDATE {webform} SET '. $key .' = "'. $cid .'" WHERE nid = '. $webform->nid);
+        }
+      }
+    }
+  }
+  return $ret;
+}
+
+/**
  * Implmentation of hook_uninstall
  */
 function webform_uninstall() {
