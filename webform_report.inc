@@ -116,7 +116,7 @@ function theme_webform_results_table($node, $components, $submissions) {
 
   // Generate a row for each submission.
   foreach ($submissions as $sid => $submission) {
-    $cell[] = l($sid, 'node/'. $node->nid, NULL, "sid=". $sid);
+    $cell[] = l($sid, 'node/'. $node->nid .'/submission/'. $sid);
     $cell[] = format_date($submission->submitted, "small");
     $cell[] = theme('username', $submission);
     $cell[] = $submission->remote_addr;
