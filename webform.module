@@ -2016,7 +2016,7 @@ function webform_submission_view(&$node, $sid) {
   $node->webformcomponents = _webform_components_decode($node->webformcomponents);
   $submission = _webform_fetch_submission($sid, $node->nid);
   if ($sid && is_numeric($sid)) {
-    if (user_access("edit webform submissions") || (user_access("edit own webform submissions") && ($user->uid == $submission['uid']))) {
+    if (user_access("access webform results") || (user_access("access own webform submissions") && ($user->uid == $submission['uid']))) {
       drupal_set_title('Submission #'. $sid);
       $node->body = "";
 
