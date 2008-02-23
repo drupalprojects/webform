@@ -540,6 +540,44 @@ function webform_update_18() {
   return $ret;
 }
 
+
+/**
+ * Upgrade hook to remove the captcha component.
+ */
+function webform_update_19() {
+  $ret = array();
+  variable_del('webform_enable_captcha');
+
+  // Check for the new version of captcha module.
+  if ($GLOBALS['db_type'] == 'pgsql') {
+    $captcha_exists = db_result(db_query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE 'captcha_points'"));
+  }
+  else {
+    $captcha_exists = db_result(db_query('SHOW TABLES LIKE "captcha_points"'));
+  }
+
+  if (module_exists('image_captcha')) {
+    $captcha_module = 'image_captcha';
+    $captcha_type = 'Image';
+  }
+  else {
+    $captcha_module = 'captcha';
+    $captcha_type = 'Math';
+  }
+
+  $result = db_query('SELECT nid, cid FROM {webform_component} WHERE type = "captcha"');
+  while ($component = db_fetch_object($result)) {
+    $ret[] = update_sql('DELETE FROM {webform_component} WHERE cid = '. $component->cid .' AND nid = '. $component->nid);
+    if ($captcha_exists) {
+      $added = db_result(db_query('SELECT form_id FROM {captcha_points} WHERE form_id = "webform_client_form_'. $component->nid .'"'));
+      if (!$added) {
+        $ret[] = update_sql('INSERT INTO {captcha_points} (form_id, module, type) VALUES ("webform_client_form_'. $component->nid .'", "'. $captcha_module .'", "'. $captcha_type .'")');
+      }
+    }
+  }
+  return $ret;
+}
+
 /**
  * Implmentation of hook_uninstall
  */
