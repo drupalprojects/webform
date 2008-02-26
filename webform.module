@@ -226,7 +226,7 @@ function webform_menu($may_cache) {
           'path' => 'node/'. $nid .'/submission/'. $sid .'/delete',
           'title' => t('Delete'),
           'callback' => 'drupal_get_form',
-          'callback arguments' => array('webform_submission_delete_form', $node->nid, $submission['sid']),
+          'callback arguments' => array('webform_submission_delete_form', $node, $submission),
           'access' => webform_submission_access($node, $submission, 'delete'),
           'weight' => 2,
           'type' => MENU_LOCAL_TASK,
@@ -812,7 +812,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     $output = preg_replace('/<\/?form[^>]*>/', '', $output);
   }
 
-  $node->content['body'] = array('#value' => check_markup($node->body, $node->format, FALSE));
+  $node = node_prepare($node, $teaser);
   $node->content['webform'] = array('#value' => $output, '#weight' => 1);
 
   return $node;

@@ -124,12 +124,15 @@ function webform_results_clear_form_submit($form_id, $form_values) {
 /**
  * Confirm form to delete a single form submission.
  * 
- * @param $nid
- *   ID of node for which this webform was submitted.
- * @param $sid
- *   ID of submission to be deleted (from webform_submitted_data).
+ * @param $node
+ *   The node for which this webform was submitted.
+ * @param $submission
+ *   The submission to be deleted (from webform_submitted_data).
  */
-function webform_submission_delete_form($nid, $sid) {
+function webform_submission_delete_form($node, $submission) {
+  $nid = $node->nid;
+  $sid = $submission['sid'];
+
   drupal_set_title(t("Delete Form Submission"));
 
   $form = array();

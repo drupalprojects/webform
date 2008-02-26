@@ -1,6 +1,9 @@
 <?php
 // $Id$
 
+/**
+ * Implementation of hook_install().
+ */
 function webform_install() {
   $success = TRUE;
 
@@ -127,6 +130,37 @@ function webform_install() {
   else {
     drupal_set_message(t('The installation of webform module was unsuccessful.'), 'error');
   }
+}
+
+
+/**
+ * Implmentation of hook_uninstall().
+ */
+function webform_uninstall() {
+  // Unset webform variables.
+  variable_del('webform_use_cookies');
+  variable_del('webform_debug');
+  variable_del('webform_enable_fieldset');
+  variable_del('webform_default_from_address');
+  variable_del('webform_default_from_name');
+  variable_del('webform_default_subject');
+
+  $component_list = array();
+  $path = drupal_get_path('module', 'webform') ."/components";
+  $files = file_scan_directory($path, '^.*\.inc$');
+  foreach ($files as $filename => $file) {
+    variable_del('webform_enable_'. $file->name, 1);
+  }
+
+  // Delete uploaded files.
+  $filepath = file_create_path('webform');
+  _webform_recursive_delete($filepath);
+
+  // Drop tables.
+  db_query("DROP TABLE IF EXISTS {webform}");
+  db_query("DROP TABLE IF EXISTS {webform_component}");
+  db_query("DROP TABLE IF EXISTS {webform_submissions}");
+  db_query("DROP TABLE IF EXISTS {webform_submitted_data}");
 }
 
 /**
@@ -576,48 +610,6 @@ function webform_update_19() {
     }
   }
   return $ret;
-}
-
-/**
- * Implmentation of hook_uninstall
- */
-function webform_uninstall() {
-  watchdog("webform", "Removing webform module.");
-
-  // Unset webform variables.
-  variable_del('webform_use_cookies');
-  variable_del('webform_debug');
-  variable_del('webform_enable_fieldset');
-  variable_del('webform_default_from_address');
-  variable_del('webform_default_from_name');
-  variable_del('webform_default_subject');
-
-  if (!isset($component_list)) {
-    $component_list = array();
-    $path = drupal_get_path('module', 'webform') ."/components";
-    $files = file_scan_directory($path, '^.*\.inc$');
-    foreach ($files as $filename => $file) {
-      variable_del('webform_enable_'. $file->name, 1);
-    }
-  }
-
-  // Delete uploaded files.
-  $filepath = file_create_path('webform');
-  _webform_recursive_delete($filepath);
-
-  // Drop tables.
-  db_query("DROP TABLE IF EXISTS {webform}");
-  db_query("DROP TABLE IF EXISTS {webform_component}");
-  db_query("DROP TABLE IF EXISTS {webform_submissions}");
-  db_query("DROP TABLE IF EXISTS {webform_submitted_data}");
-
-  // Clear the cache tables.
-  cache_clear_all(null, 'cache');
-  cache_clear_all(null, 'cache_filter');
-  cache_clear_all(null, 'cache_menu');
-  cache_clear_all(null, 'cache_page');
-
-  watchdog("Webform", "Webform module removed.");
 }
 
 /**
