@@ -25,7 +25,7 @@ function phptemplate_webform_mail_message_[node id here]($form_values, $node, $s
 - Open up your new file and customize the webform email. Here's a simple template
   to get you started:
   
-  <?php /* Begin sample create_mailmessage file */ ?>
+  <?php /* Begin sample webform mail message file */ ?>
   
   Company X Official Website Submission
   
@@ -38,7 +38,7 @@ function phptemplate_webform_mail_message_[node id here]($form_values, $node, $s
   The user's problem is below:
   <?php echo $form_values['submitted_tree']['problem'] ?>
   
-  <?php /* End sample create_mailmessage file */ ?>
+  <?php /* End sample webform mail message file */ ?>
 
 - To get a better idea of what variables are available to you, you can include
   the print_r function in your email. Simply include the line:
