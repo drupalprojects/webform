@@ -137,7 +137,7 @@ function theme_webform_components_form($form) {
         l(t('Clone'), 'node/'. $node->nid .'/edit/components/'. $cid .'/clone'),
         l(t('Delete'), 'node/'. $node->nid .'/edit/components/'. $cid .'/delete'),
       );
-      if (is_array($component['children'])) {
+      if (isset($component['children']) && is_array($component['children'])) {
         foreach ($component['children'] as $cid => $component) {
           _webform_components_form_rows($node, $cid, $component, $level + 1, $form, $rows);
         }
@@ -220,7 +220,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   );
   $form['cid'] = array(
     '#type' => 'value',
-    '#value' => $component['cid'],
+    '#value' => isset($component['cid']) ? $component['cid'] : NULL,
   );
   $form['clone'] = array(
     '#type' => 'value',
@@ -244,7 +244,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   );
   $form['extra']['description'] = array(
     '#type' => 'textfield',
-    '#default_value' => $component['extra']['description'],
+    '#default_value' => isset($component['extra']['description']) ? $component['extra']['description'] : '',
     '#title' => t("Description"),
     '#maxlength' => '512',
     '#description' => t('A short description of the field used as help for the user when he/she uses the form.') .'<br />'. webform_help('webform/helptext#variables'),

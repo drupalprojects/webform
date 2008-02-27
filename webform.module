@@ -308,7 +308,7 @@ function webform_insert($node) {
   db_query("INSERT INTO {webform} (nid, confirmation, teaser, submit_text, submit_limit, submit_interval, email, email_from_name, email_from_address, email_subject, additional_validate, additional_submit) VALUES (%d, '%s', %d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s')", $node->nid, $node->webform['confirmation'], $node->webform['teaser'], $node->webform['submit_text'], $node->webform['submit_limit'], $node->webform['submit_interval'], $node->webform['email'], $node->webform['email_from_name'], $node->webform['email_from_address'], $node->webform['email_subject'], $node->webform['additional_validate'], $node->webform['additional_submit']);
 
   // Insert the components into the database.
-  if (is_array($node->webform['components']) && !empty($node->webform['components'])) {
+  if (isset($node->webform['components']) && !empty($node->webform['components'])) {
     foreach ($node->webform['components'] as $cid => $component) {
       db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)",
         $node->nid, $cid, $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), ($component['mandatory'] ? 1 : 0), $component['weight']
@@ -341,7 +341,26 @@ function webform_delete(&$node) {
  */
 function webform_load($node) {
   $additions = new stdClass();
-  $additions->webform = db_fetch_array(db_query("SELECT * FROM {webform} WHERE nid = %d", $node->nid));
+
+  if ($webform = db_fetch_array(db_query("SELECT * FROM {webform} WHERE nid = %d", $node->nid))) {
+    $additions->webform = $webform;
+  }
+  else {
+    $additions->webform = array(
+      'confirmation' => '',
+      'teaser' => 0,
+      'submit_text' => '',
+      'submit_limit' => '',
+      'submit_interval' => '',
+      'email' => '',
+      'email_from_name' => '',
+      'email_from_address' => '',
+      'email_subject' => '',
+      'additional_validate' => '',
+      'additional_submit' => '',
+    );
+  }
+
   $additions->webform['components'] = array();
   $additions->webform['additional_emails'] = array();
   $result = db_query('SELECT * FROM {webform_component} WHERE nid = %d ORDER BY weight, name', $node->nid);
@@ -357,7 +376,7 @@ function webform_load($node) {
     $component['mandatory'] = $c['mandatory'];
     $component['pid'] = $c['pid'];
     $component['weight'] = $c['weight'];
-    if ($component['extra']['email']) {
+    if (isset($component['extra']['email']) && $component['extra']['email']) {
       $additions->webform['additional_emails'][$c['cid']] = $c['cid'];
     }
   }
@@ -377,6 +396,7 @@ function webform_load($node) {
  * Always add a "view form" link.
  */
 function webform_link($type, $node = NULL, $teaser = FALSE) {
+  $links = array();
   if ($node->type == 'webform') {
     if ($teaser && !$node->webform['teaser']) {
       $links['webform_goto'] = array(
@@ -398,6 +418,14 @@ function webform_form(&$node, &$param) {
     '#type' => 'markup',
     '#tree' => TRUE,
   );
+
+  // Set node defaults if empty.
+  if (!isset($node->nid)) {
+    $node->nid = 0;
+    $additions = webform_load($node);
+    $node->webform = $additions->webform;
+    $node->nid = NULL;
+  }
 
   /* Start Edit Form */
   $form['webform']['settings'] = array(
@@ -472,7 +500,7 @@ function webform_form(&$node, &$param) {
   $default_value = array();
   if (is_array($node->webform['components'])) {
     foreach ($node->webform['components'] as $cid => $component) {
-      if ($component['extra']['email']) {
+      if (isset($component['extra']['email']) && $component['extra']['email']) {
         $default_value[] = $cid;
       }
     }
@@ -703,7 +731,7 @@ function webform_submit(&$node) {
       if (!isset($node->webform['components'][$cid])) {
         $node->webform['components'][$cid] = $component;
       }
-      if ($node->webform['email_components'][$cid]) {
+      if (isset($node->webform['email_components'][$cid]) && $node->webform['email_components'][$cid]) {
         $node->webform['components'][$cid]['extra']['email'] = 1;
       }
     }
@@ -939,7 +967,7 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
   webform_load_components();
 
-  if ($submission['sid']) {
+  if (isset($submission['sid'])) {
     drupal_set_title('Submission #'. $submission['sid']);
   }
 
@@ -1002,7 +1030,9 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
 
   // Set the form action to the node ID in case this is being displayed on the
   // teaser, subsequent pages should be on the node page directly.
-  $form['#action'] = url('node/'. $node->nid);
+  if (arg(2) != 'submission') {
+    $form['#action'] = url('node/'. $node->nid);
+  }
 
   if (is_array($node->webform['components']) && !empty($node->webform['components'])) {
     // Prepare a new form array.
@@ -1145,7 +1175,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
       }
     }
   }
-  if (is_array($component['children'])) {
+  if (isset($component['children']) && is_array($component['children'])) {
     $microweight = 0.001;
     foreach ($component['children'] as $scid => $subcomponent) {
       _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$component['form_key']], $form, $submission, $page_num, $enabled);
@@ -1900,7 +1930,7 @@ function _webform_components_sort($a, $b) {
  * Sort each level of a component tree by weight and name
  */
 function _webform_components_tree_sort($tree) {
-  if (is_array($tree['children'])) {
+  if (isset($tree['children']) && is_array($tree['children'])) {
     uasort($tree['children'], "_webform_components_sort");
     foreach ($tree['children'] as $cid => $component) {
       $return[$cid] = _webform_components_tree_sort($component);
