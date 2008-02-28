@@ -43,13 +43,13 @@ function webform_install() {
       );
 
       $success = $success && db_query("CREATE TABLE if not exists {webform_submissions} (
-        nid int(10) unsigned NOT NULL default '0',
         sid int(10) unsigned NOT NULL default '0',
+        nid int(10) unsigned NOT NULL default '0',
         uid int(10) unsigned NOT NULL default '0',
         submitted int(11) NOT NULL default '0',
         remote_addr varchar(128),
-        PRIMARY KEY  (nid,sid),
-        KEY sid (sid)
+        PRIMARY KEY (sid),
+        UNIQUE KEY sid_nid (sid, nid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
@@ -59,8 +59,9 @@ function webform_install() {
         cid smallint unsigned NOT NULL default '0',
         no tinyint unsigned NOT NULL default '0',
         data longtext,
-        PRIMARY KEY  (nid,sid,cid,no),
-        KEY sid (sid)
+        PRIMARY KEY  (sid, cid, no),
+        INDEX nid (nid),
+        INDEX sid_nid (sid, nid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
       break;
@@ -94,31 +95,32 @@ function webform_install() {
         extra text NOT NULL default '',
         mandatory smallint NOT NULL default '0',
         weight smallint NOT NULL default '0',
-        PRIMARY KEY (nid,cid)
+        PRIMARY KEY (nid, cid)
         )"
       );
 
       $success = $success && db_query("CREATE TABLE {webform_submissions} (
-        nid integer NOT NULL default '0',
         sid serial UNIQUE,
+        nid integer NOT NULL default '0',
         uid integer NOT NULL default '0',
         submitted integer NOT NULL default '0',
         remote_addr varchar(128) NOT NULL default '',
-        PRIMARY KEY (nid,sid)
+        PRIMARY KEY (sid)
         )"
       );
-      $success = $success && db_query("CREATE INDEX {webform_submissions}_sid_idx ON {webform_submissions}(sid)");
+      $success = $success && db_query("CREATE UNIQUE INDEX {webform_submissions}_sid_nid_key ON {webform_submissions} (sid, nid)");
 
       $success = $success && db_query("CREATE TABLE {webform_submitted_data} (
         nid integer NOT NULL default '0',
-        sid integer NOT NULL UNIQUE default '0',
-        cid integer NOT NULL default '0',
-        no integer NOT NULL default '0',
+        sid integer NOT NULL default '0',
+        cid smallint NOT NULL default '0',
+        no smallint NOT NULL default '0',
         data text NOT NULL default '',
-        PRIMARY KEY (nid,sid,cid,no)
+        PRIMARY KEY  (sid, cid, no)
         )"
       );
-      $success = $success && db_query("CREATE INDEX {webform_submitted_data}_sid_idx ON {webform_submitted_data}(sid)");
+      $success = $success && db_query("CREATE INDEX {webform_submitted_data}_nid_idx ON {webform_submitted_data} (sid)");
+      $success = $success && db_query("CREATE INDEX {webform_submitted_data}_sid_nid_idx ON {webform_submitted_data} (sid, nid)");
       break;
   }
 
@@ -608,6 +610,45 @@ function webform_update_19() {
         $ret[] = update_sql('INSERT INTO {captcha_points} (form_id, module, type) VALUES ("webform_client_form_'. $component->nid .'", "'. $captcha_module .'", "'. $captcha_type .'")');
       }
     }
+  }
+  return $ret;
+}
+
+/**
+ * Set new primary keys for the submissions table.
+ */
+function webform_update_20() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      // Update the webform_submissions table with sid primary key instead of nid, sid.
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} DROP INDEX sid");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} DROP PRIMARY KEY");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD UNIQUE INDEX sid_nid (sid, nid)");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD PRIMARY KEY (sid)");
+
+      // Update webform_submitted_data table removing nid from the primary key.
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} DROP PRIMARY KEY");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} DROP INDEX sid");
+      // While we've got these keys removed, decrease the size of the 'no' column.
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} CHANGE no no tinyint NOT NULL DEFAULT 0");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} ADD PRIMARY KEY (sid, cid, no)");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} ADD INDEX nid (nid)");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} ADD INDEX sid_nid (sid, nid)");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} DROP CONSTRAINT {webform_submissions}_sid_idx");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD PRIMARY KEY (sid)");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD CONSTRAINT {webform_submissions}_sid_nid_key UNIQUE (sid, nid)");
+
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} DROP PRIMARY KEY");
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} DROP CONSTRAINT {webform_submitted_data}_sid_idx");
+      db_change_column($ret, 'webform_submitted_data', 'no', 'no', 'smallint', array('not null' => TRUE, 'default' => '0'));
+      $ret[] = update_sql("ALTER TABLE {webform_submitted_data} ADD PRIMARY KEY (sid, cid, no)");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD INDEX {webform_submissions}_nid_idx (nid)");
+      $ret[] = update_sql("ALTER TABLE {webform_submissions} ADD INDEX {webform_submissions}_sid_nid_idx (sid, nid)");
+      break;
   }
   return $ret;
 }
