@@ -106,7 +106,7 @@ function webform_install() {
 
       $success = $success && db_query("CREATE TABLE {webform_submitted_data} (
         nid integer NOT NULL default '0',
-        sid integer NOT NULL UNIQUE default '0',
+        sid integer NOT NULL default '0',
         cid integer NOT NULL default '0',
         no integer NOT NULL default '0',
         data text NOT NULL default '',
