@@ -249,7 +249,7 @@ function _webform_submission_limit_check($node, $form_values) {
            "AND submitted > %d AND nid = %d";
 
   // Fetch all the entries from the database within the submit interval with this username and IP.
-  $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, time() - $node->webform['submit_interval'], $node->nid);
+  $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, ($node->webform['submit_interval'] != -1) ? (time() - $node->webform['submit_interval']) : $node->webform['submit_interval'], $node->nid);
   $num_submissions_database = db_num_rows($result);
 
   // Double check the submission history from the users machine using cookies.
