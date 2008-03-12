@@ -111,7 +111,7 @@ function webform_menu($may_cache) {
         'title' => $node->title, // Set the title for the node menu item.
         'callback' => 'node_page_view',
         'callback arguments' => array($node),
-        'access' => TRUE,
+        'access' => node_access('view', $node),
         'type' => MENU_CALLBACK,
       );
       $items[] = array(
