@@ -411,7 +411,9 @@ function webform_component_edit_form_submit($form_id, $form_values) {
   return 'node/'. $form_values['nid'] .'/edit/components';
 }
 
-function webform_component_delete_form($node, $cid) {
+function webform_component_delete_form($node, $component) {
+  $cid = $component['cid'];
+
   $form = array();
   $form['nid'] = array(
     '#type' => 'value',

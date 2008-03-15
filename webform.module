@@ -1767,15 +1767,14 @@ function webform_components($node, $cid = NULL, $op = 'edit') {
 
   if (isset($node->webform['components'][$cid]) || $cid == 'new') {
     if ($op == 'delete') {
-      return drupal_get_form('webform_component_delete_form', $node, $cid);
+      return drupal_get_form('webform_component_delete_form', $node, $node->webform['components'][$cid]);
     }
     elseif ($cid == 'new' && in_array($op, array_keys($components))) {
       $component = array('type' => $op, 'name' => $_GET['name'], 'mandatory' => $_GET['mandatory'], 'pid' => $_GET['pid'], 'weight' => $_GET['weight']);
       return drupal_get_form('webform_component_edit_form', $node, $component);
     }
     elseif (isset($node->webform['components'][$cid]) && $op == 'clone') {
-      $component = $node->webform['components'][$cid];
-      return drupal_get_form('webform_component_edit_form', $node, $component, $component['cid']);
+      return drupal_get_form('webform_component_edit_form', $node, $node->webform['components'][$cid], TRUE);
     }
     elseif (isset($node->webform['components'][$cid])) {
       return drupal_get_form('webform_component_edit_form', $node, $node->webform['components'][$cid]);
