@@ -959,7 +959,6 @@ function webform_mail($key, &$message, $params) {
   $message['headers'] = $params['headers'];
   $message['subject'] = $params['subject'];
   $message['body'] = $params['message'];
-  dsm($message);
 }
 
 /**
