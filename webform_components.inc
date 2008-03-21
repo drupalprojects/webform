@@ -373,7 +373,7 @@ function webform_component_edit_form_validate($form, &$form_state) {
   webform_load_components($form_state['values']['type']);
   $validate_function = '_webform_edit_validate_'. $form_state['values']['type'];
   if (function_exists($validate_function)) {
-    $validate_function($form, &$form_state);
+    $validate_function($form, $form_state);
   }
 }
 
