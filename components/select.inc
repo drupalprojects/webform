@@ -49,7 +49,8 @@ function _webform_edit_select($currfield) {
     '#title' => t("E-mail a submission copy"),
     '#return_value' => 1,
     '#default_value' => $currfield['extra']['email'],
-    '#description' => t('Check this option if this component contains an e-mail address that should get a copy of the submission. Emails are sent individually so other emails will not be shown to the recipient.'),
+    '#description' => t('Check this option if this component contains an e-mail address that should get a copy of the submission. Emails are sent individually so other emails will not be shown to the recipient.') ." ".
+                      t('To use the option with a select component, you must use key-value pairs seperated by pipes. i.e. user@example.com|Sample user.'),
   );
   return $edit_fields;
 }
