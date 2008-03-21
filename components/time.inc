@@ -17,7 +17,7 @@ function _webform_edit_time($currfield) {
     '#size' => 60,
     '#maxlength' => 127,
     '#weight' => 0,
-    '#validate' => array('webform_validate_time_string' => array()),
+    '#element_validate' => array('webform_validate_time_string'),
   );
   $edit_fields['extra']['timezone'] = array(
     '#type' => 'radios',
@@ -107,6 +107,8 @@ function _webform_render_time($component) {
     '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix' => '</div>',
     '#theme' => 'webform_time',
+    '#element_validate' => array('webform_validate_time'),
+    '#webform_component' => $component,
   );
 
   $form_item['hour'] = array(
@@ -114,14 +116,12 @@ function _webform_render_time($component) {
     '#type' => 'select',
     '#default_value' => $hour,
     '#options' => $hours,
-    '#validate' => array('webform_validate_time' => array('hour', $component['name'], $component['mandatory'], $component['form_key'], $component['cid'], $component['mandatory'])),
   );
   $form_item['minute'] = array(
     '#prefix' => ':',
     '#type' => 'select',
     '#default_value' => $minute,
     '#options' => $minutes,
-    '#validate' => array('webform_validate_time' => array('minute', $component['name'], $component['mandatory'], $component['form_key'], $component['cid'], $component['mandatory'])),
   );
   if ($component['extra']['hourformat'] == '12-hour') {
     $form_item['ampm'] = array(
@@ -134,14 +134,24 @@ function _webform_render_time($component) {
   return $form_item;
 }
 
-function webform_validate_time($field, $field_name, $component_name, $form_key, $cid, $mandatory) {
-  static $complete_times = array();
+function webform_validate_time($form_item, $form_state) {
+  $form_key = $form_item['#webform_component']['form_key'];
+  $name = $form_item['#webform_component']['name'];
 
   // Check if the user filled the required fields.
-  if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error($form_key, t("%field field is required.", array('%field' => $component_name)));
-    $complete_times[$cid] = array();
-    return false;
+  foreach ($form_item['#webform_component'] == '12-hour' ? array('hour', 'minute', 'ampm') : array('hour', 'minute') as $field_type) {
+    if (!is_numeric($form_item[$field_type]['#value']) && $form_item['#required']) {
+      form_set_error($form_key, t("%field field is required.", array('%field' => $name)));
+      return;
+    }
+  }
+
+  // Check for a valid time.
+  if ($form_item['hour']['#value'] !== "" || $form_item['minute']['#value'] !== "" || (isset($form_item['ampm']) && $form_item['ampm']['#value'] !== "")) {
+    if (!is_numeric($form_item['hour']['#value']) || !is_numeric($form_item['minute']['#value']) || (isset($form_item['ampm']) && $form_item['ampm']['#value'] === "")) {
+      form_set_error($form_key, t("Entered %name is not a valid time.", array('%name' => $name)));
+      return;
+    }
   }
 }
 

@@ -88,68 +88,52 @@ function _webform_render_date($component) {
     '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix' => '</div>',
     '#required' => $component['mandatory'],
+    '#element_validate' => array('webform_validate_date'),
+    '#webform_component' => $component,
   );
 
   $form_item['month'] = array(
     '#type' => 'select',
     '#default_value' => $month,
     '#options' => $months,
-    '#validate' => array('webform_validate_date' => array('month', $component['name'], $component['form_key'], $component['cid'], $component['mandatory'])),
   );
   $form_item['day'] = array(
     '#type' => 'select',
     '#default_value' => $day,
     '#options' => $days,
-    '#validate' => array('webform_validate_date' => array('day', $component['name'], $component['form_key'], $component['cid'], $component['mandatory'])),
   );
   $form_item['year'] = array(
     '#type' => 'textfield',
     '#default_value' => $year,
     '#maxlength' => 4,
     '#size' => 4,
-    '#validate' => array('webform_validate_date' => array('year', $component['name'], $component['form_key'], $component['cid'], $component['mandatory'])),
   );
 
   return $form_item;
 }
 
-function webform_validate_date($field, $field_name, $component_name, $form_key, $cid, $mandatory) {
-  static $complete_dates = array();
-
-  switch ($field_name) {
-    case 'month':
-      $complete_dates[$cid]['month'] = $field['#value'];
-      break;
-    case 'day':
-      $complete_dates[$cid]['day'] = $field['#value'];
-      break;
-    case 'year':
-      $complete_dates[$cid]['year'] = $field['#value'];
-      break;
-  }
+/**
+ * Note that this is not a real FAPI validation function (which no longer
+ * supports per-field validation). Instead it is a validation function called
+ * manually by webform.module.
+ */
+function webform_validate_date($form_item, $form_state) {
+  $form_key = $form_item['#webform_component']['form_key'];
+  $name = $form_item['#webform_component']['name'];
 
   // Check if the user filled the required fields.
-  if (!is_numeric($field['#value']) && $mandatory) {
-    form_set_error($form_key, t("%field field is required.", array('%field' => $component_name)));
-    $complete_dates[$cid] = array();
-    return false;
-  }
-
-  // Check for a valid date.
-  if ((isset($complete_dates[$cid]['month']) &&
-        isset($complete_dates[$cid]['day']) &&
-        isset($complete_dates[$cid]['year'])) &&
-      ($complete_dates[$cid]['month'] !== "" ||
-        $complete_dates[$cid]['day']   !== "" ||
-        $complete_dates[$cid]['year']  !== "")
-    ) {
-    if (!checkdate((int)$complete_dates[$cid]['month'], (int)$complete_dates[$cid]['day'], (int)$complete_dates[$cid]['year'])) {
-      form_set_error($form_key .']['. $field_name, t("Entered %name is not a valid date.", array('%name' => $component_name)));
-      $complete_dates[$cid] = array();
-      return false;
+  foreach (array('day', 'month', 'year') as $field_type) {
+    if (!is_numeric($form_item[$field_type]['#value']) && $form_item['#required']) {
+      form_set_error($form_key, t("%field field is required.", array('%field' => $name)));
+      return;
     }
-
-    $complete_dates[$cid] = array();
+  }
+  // Check for a valid date.
+  if ($form_item['month']['#value'] !== "" || $form_item['day']['#value'] !== "" || $form_item['year']['#value'] !== "") {
+    if (!checkdate((int)$form_item['month']['#value'], (int)$form_item['day']['#value'], (int)$form_item['year']['#value'])) {
+      form_set_error($form_key, t("Entered %name is not a valid date.", array('%name' => $name)));
+      return;
+    }
   }
 }
 

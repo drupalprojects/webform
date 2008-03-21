@@ -28,25 +28,25 @@ function _webform_edit_file($currfield) {
       '#type' => 'checkboxes',
       '#title' => t('Desktop Images'),
       '#options' => drupal_map_assoc(array('bmp', 'eps', 'tif', 'pict', 'psd')),
-      '#default_value' => $currfield['extra']['filtering']['types']['desktopimages'],
+      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['desktopimages'] : array(),
     );
     $edit_fields['extra']['filtering']['types']['documents'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Documents'),
       '#options' => drupal_map_assoc(array('txt', 'rtf', 'html', 'odf', 'pdf', 'doc', 'ppt', 'xls', 'xml')),
-      '#default_value' => $currfield['extra']['filtering']['types']['documents'],
+      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['documents'] : array(),
     );
     $edit_fields['extra']['filtering']['types']['media'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Media'),
       '#options' => drupal_map_assoc(array('avi', 'mov', 'mp3', 'ogg', 'wav')),
-      '#default_value' => $currfield['extra']['filtering']['types']['media'],
+      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['media'] : array(),
     );
     $edit_fields['extra']['filtering']['types']['archives'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Archives'),
       '#options' => drupal_map_assoc(array('bz2', 'dmg', 'gz', 'jar', 'rar', 'sit', 'tar', 'zip')),
-      '#default_value' => $currfield['extra']['filtering']['types']['archives'],
+      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['archives'] : array(),
     );
     $edit_fields['extra']['filtering']['addextensions'] = array(
       '#type' => 'textfield',
@@ -72,7 +72,7 @@ function _webform_edit_file($currfield) {
       '#default_value' => $currfield['extra']['savelocation'],
       '#description' => "<div style='display: block'>". t('Webform uploads are always saved in the site files directory. You may optionally specify a subfolder to store your files.') ."</div>",
       '#weight' => 3,
-      '#validate' => array('_webform_edit_file_check_directory'), // TODO: Get this validation working.
+      '#element_validate' => array('_webform_edit_file_check_directory', '_webform_edit_file_validate'),
       '#after_build' => array('_webform_edit_file_check_directory'),
     );
     return $edit_fields;
@@ -80,7 +80,10 @@ function _webform_edit_file($currfield) {
 
 function _webform_edit_file_check_directory($form_element) {
   $destination_dir = variable_get('file_directory_path', 'files') ."/webform/". $form_element['#value'];
-  file_check_directory($destination_dir, FILE_CREATE_DIRECTORY, 'savelocation');
+  $success = file_check_directory($destination_dir, FILE_CREATE_DIRECTORY);
+  if (!$success) {
+    form_set_error('savelocation', t('The save directory %directory could not be created. Check that the webform files directory is writtable.', array('%directory' => $destination_dir)));
+  }
   return $form_element;
 }
 
@@ -187,38 +190,44 @@ function _webform_render_file($component) {
     '#description'   => _webform_filtervalues($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#tree'          => false, // file_check_upload assumes a flat $_FILES structure.
-    '#validate'      => array(
-      '_webform_validate_file' => array($component['form_key'], $component['name'], $component['extra']['filtering']),
-      '_webform_required_file' => array($component['form_key'], $component['name'], $component['mandatory']), // Custom required routine.
-    ),
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
+    '#element_validate'      => array('_webform_validate_file', '_webform_required_file'), // Custom required routine.
+    '#webform_component' => $component,
   );
 
   return $form_item;
 }
 
-function _webform_required_file($formelement, $form_key, $fieldname, $required = false) {
-  if (empty($_FILES['files']['name'][$form_key]) && $required) {
-    form_set_error($fieldname, t('%field field is required.', array('%field' => $fieldname)));
+function _webform_required_file($form_element, $form_state) {
+  $component = $form_element['#webform_component'];
+  $form_key = $component['form_key'];
+
+  if (empty($_FILES['files']['name'][$form_key]) && $component['mandatory']) {
+    form_set_error($form_key, t('%field field is required.', array('%field' => $component['name'])));
   }
 }
 
-function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
+function _webform_validate_file($form_element, $form_state) {
+  $component = $form_element['#webform_component'];
+  $form_key = $component['form_key'];
+
   if (empty($_FILES['files']['name'][$form_key])) {
     return;
   }
 
   // Build a list of extensions.
   $extensions = array();
-  if (is_array($filters['types'])) {
-    foreach ($filters['types'] as $filtertype) {
+  if (is_array($component['extra']['filtering']['types'])) {
+    foreach ($component['extra']['filtering']['types'] as $filtertype) {
       foreach ($filtertype as $extension) {
-        $extensions[] = $extension;
+        if ($extension) {
+          $extensions[] = $extension;
+        }
       }
     }
   }
-  $extras = str_replace(" ", "", $filters['addextensions']);
+  $extras = str_replace(" ", "", $component['extra']['filtering']['addextensions']);
   if (!empty($extras)) {
     $extensions = array_merge($extensions, explode(",", $extras));
   }
@@ -241,8 +250,8 @@ function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
   }
 
   // Now let's check the file size (limit is set in KB).
-  if ($_FILES['files']['size'][$form_key] > $filters['size']*1024) {
-    form_set_error($form_key, t("The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller.", array('%filename' => $_FILES['files']['name'][$form_key], '%filesize' => (int)($_FILES['files']['size'][$form_key]/1024), '%maxsize' => $filters['size'])));
+  if ($_FILES['files']['size'][$form_key] > $component['extra']['filtering']['size'] * 1024) {
+    form_set_error($form_key, t("The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller.", array('%filename' => $_FILES['files']['name'][$form_key], '%filesize' => (int)($_FILES['files']['size'][$form_key]/1024), '%maxsize' => $component['extra']['filtering']['size'])));
   }
 }
 

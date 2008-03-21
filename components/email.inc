@@ -11,7 +11,7 @@
  */
 function _webform_edit_email($currfield) {
   $edit_fields = array(
-    '#validate' => array('_webform_edit_email_validate' => array()),
+    '#validate' => array('_webform_edit_email_validate'),
   );
   $edit_fields['value'] = array(
     '#type' => 'textfield',
@@ -63,7 +63,7 @@ function _webform_edit_email($currfield) {
  */
 function _webform_edit_email_validate($form, &$form_state) {
   if ($form_state['values']['user_email']) {
-    $form_state['values']['user_email'] = '%useremail';
+    $form_state['values']['value'] = '%useremail';
   }
 }
 
@@ -88,7 +88,8 @@ function _webform_render_email($component) {
     '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
-    '#validate'      => array('_webform_validate_email' => array($component)),
+    '#element_validate'  => array('_webform_validate_email'),
+    '#webform_component' => $component,
   );
 
   // Change the 'width' option to the correct 'size' option.
@@ -102,13 +103,15 @@ function _webform_render_email($component) {
 /**
  * A Drupal Forms API Validation function. Validates the entered values from
  * email components on the client-side form.
- * @param $formelement
- *   An array of information describing the component, directly correlating to
- *   the webform_component database schema.
+ * @param $form_element
+ *   The e-mail form element.
+ * @param $form_state
+ *   The full form state for the webform.
  * @return
- *   True if successful, calls a form_set_error if the email is not valid.
+ *   None. Calls a form_set_error if the e-mail is not valid.
  */
-function _webform_validate_email($form_element, $component) {
+function _webform_validate_email($form_element, $form_state) {
+  $component = $form_element['#webform_component'];
   if (!empty($form_element['#value']) && !valid_email_address($form_element['#value'])) {
     form_set_error($component['form_key'], t("%value is not a valid email address.", array('%value' => $form_element['#value'])));
   }
