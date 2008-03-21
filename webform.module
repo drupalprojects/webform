@@ -1452,14 +1452,12 @@ function webform_client_form_submit($form_id, $form_values) {
 /**
  * Post processes the submission tree with any updates from components.
  */
-function _webform_client_form_submit_process($node, &$form_values, $parents = array(0)) {
+function _webform_client_form_submit_process($node, &$form_values, $parent = 0) {
   if (is_array($form_values)) {
     foreach ($form_values as $form_key => $value) {
-      $cid = webform_get_cid($node, $form_key, $parents);
+      $cid = webform_get_cid($node, $form_key, $parent);
       if (is_array($value) && $node->webform['components'][$cid]['type'] == 'fieldset') {
-        array_unshift($parents, $cid);
-        _webform_client_form_submit_process($node, $form_values[$form_key], $parents);
-        array_shift($parents);
+        _webform_client_form_submit_process($node, $form_values[$form_key], $cid);
       }
     }
   }
@@ -1467,7 +1465,7 @@ function _webform_client_form_submit_process($node, &$form_values, $parents = ar
   // We loop through components rather than the actual submission, because
   // some components (file) do not get things submitted in the $form_values.
   foreach ($node->webform['components'] as $cid => $component) {
-    if ($component['pid'] == $parents[0]) {
+    if ($component['pid'] == $parent) {
       $submit_function = "_webform_submit_". $component['type'];
       if (function_exists($submit_function)) {
         $submit_function($form_values[$component['form_key']], $component); // Call the component process submission function.
