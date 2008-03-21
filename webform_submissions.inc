@@ -24,10 +24,6 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 }
 
 function webform_submission_update($node, $sid, $submitted) {
-  global $user;
-  // Update submission by first deleting and then inserting it to the database.
-  db_query("DELETE FROM {webform_submissions} WHERE sid = %d", $sid);
-  db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) "." VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $_SERVER['REMOTE_ADDR']);
   // Update the submission data by first removing all this submissions data.
   db_query("DELETE FROM {webform_submitted_data} WHERE sid = %d", $sid);
   // Then re-ad it to the database.
