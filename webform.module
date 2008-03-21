@@ -530,12 +530,18 @@ function webform_form(&$node, &$param) {
   );
 
   // Set node defaults if empty.
-  if (!isset($node->nid)) {
+  if (!isset($node->nid) && !isset($node->webform)) {
     $node->nid = 0;
     $additions = webform_load($node);
     $node->webform = $additions->webform;
     $node->nid = NULL;
   }
+
+  /* Save Components in a value (helps with clone.module) */
+  $form['webform']['components'] = array(
+    '#type' => 'value',
+    '#value' => $node->webform['components'],
+  );
 
   /* Start Edit Form */
   $form['webform']['settings'] = array(
