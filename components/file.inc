@@ -267,7 +267,6 @@ function _webform_validate_file($form_element, $form_state) {
  *   Nothing.
  */
 function _webform_submit_file(&$data, $component) {
-  $component['form_key'];
   $upload_dir = variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation'];
   if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
     $file_saved = file_save_upload($component['form_key'], array(), $upload_dir);
