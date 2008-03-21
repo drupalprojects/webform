@@ -72,7 +72,7 @@ function _webform_edit_file($currfield) {
       '#default_value' => $currfield['extra']['savelocation'],
       '#description' => "<div style='display: block'>". t('Webform uploads are always saved in the site files directory. You may optionally specify a subfolder to store your files.') ."</div>",
       '#weight' => 3,
-      '#validate' => array('_webform_edit_file_check_directory'), // TODO: Get this validation working.
+      '#validate' => array('_webform_edit_file_check_directory' => array()),
       '#after_build' => array('_webform_edit_file_check_directory'),
     );
     return $edit_fields;
@@ -80,7 +80,10 @@ function _webform_edit_file($currfield) {
 
 function _webform_edit_file_check_directory($form_element) {
   $destination_dir = variable_get('file_directory_path', 'files') ."/webform/". $form_element['#value'];
-  file_check_directory($destination_dir, FILE_CREATE_DIRECTORY, 'savelocation');
+  $success = file_check_directory($destination_dir, FILE_CREATE_DIRECTORY);
+  if (!$success) {
+    form_set_error('savelocation', t('The save directory %directory could not be created. Check that the webform files directory is writtable.', array('%directory' => $destination_dir)));
+  }
   return $form_element;
 }
 
@@ -214,7 +217,9 @@ function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
   if (is_array($filters['types'])) {
     foreach ($filters['types'] as $filtertype) {
       foreach ($filtertype as $extension) {
-        $extensions[] = $extension;
+        if ($extension) {
+          $extensions[] = $extension;
+        }
       }
     }
   }
