@@ -1354,6 +1354,8 @@ function webform_client_form_validate($form, $form_state) {
   }
 
   if (trim($node->webform['additional_validate'])) {
+    // Support for Drupal 5 validation code.
+    $form_values =& $form_state['values'];
     // We use eval here (rather than drupal_eval) because the user needs access to local variables.
     eval("?>". $node->webform['additional_validate']);
   }
@@ -1438,6 +1440,8 @@ function webform_client_form_submit($form, &$form_state) {
 
   // Perform additional submit processing.
   if (trim($node->webform['additional_submit'])) {
+    // Support for Drupal 5 validation code.
+    $form_values =& $form_state['values'];
     // We use eval here (rather than drupal_eval) because the user needs access to local variables.
     eval("?>". $node->webform['additional_submit']);
   }
