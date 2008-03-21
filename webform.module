@@ -152,6 +152,7 @@ function webform_menu() {
   $items['node/%webform_menu/webform-results/submissions'] = array(
     'title' => 'Submissions',
     'page callback' => 'webform_results_submissions',
+    'file' => 'webform_report.inc',
     'page arguments' => array(1),
     'weight' => 4,
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -159,6 +160,7 @@ function webform_menu() {
   $items['node/%webform_menu/webform-results/analysis'] = array(
     'title' => 'Analysis',
     'page callback' => 'webform_results_analysis',
+    'file' => 'webform_report.inc',
     'page arguments' => array(1),
     'weight' => 5,
     'type' => MENU_LOCAL_TASK,
@@ -167,6 +169,7 @@ function webform_menu() {
     'title' => 'Table',
     'page callback' => 'webform_results_table',
     'page arguments' => array(1),
+    'file' => 'webform_report.inc',
     'weight' => 6,
     'type' => MENU_LOCAL_TASK,
   );
@@ -174,6 +177,7 @@ function webform_menu() {
     'title' => 'Download',
     'page callback' => 'webform_results_download',
     'page arguments' => array(1),
+    'file' => 'webform_report.inc',
     'weight' => 7,
     'type' => MENU_LOCAL_TASK,
   );
@@ -183,6 +187,7 @@ function webform_menu() {
     'page arguments' => array('webform_results_clear_form', 1),
     'access callback' => 'user_access',
     'access arguments' => array('clear webform results'),
+    'file' => 'webform_report.inc',
     'weight' => 8,
     'type' => MENU_LOCAL_TASK,
   );
