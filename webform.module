@@ -731,8 +731,8 @@ function webform_submit(&$node) {
       if (!isset($node->webform['components'][$cid])) {
         $node->webform['components'][$cid] = $component;
       }
-      if (isset($node->webform['email_components'][$cid]) && $node->webform['email_components'][$cid]) {
-        $node->webform['components'][$cid]['extra']['email'] = 1;
+      if (isset($node->webform['email_components'][$cid])) {
+        $node->webform['components'][$cid]['extra']['email'] = $node->webform['email_components'][$cid];
       }
     }
   }
