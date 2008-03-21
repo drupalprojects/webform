@@ -110,12 +110,14 @@ function webform_results_clear_form_submit($form, $form_state) {
 /**
  * Confirm form to delete a single form submission.
  * 
+ * @param $form_state
+ *   The current form state.
  * @param $node
  *   The node for which this webform was submitted.
  * @param $submission
  *   The submission to be deleted (from webform_submitted_data).
  */
-function webform_submission_delete_form($node, $submission) {
+function webform_submission_delete_form($form_state, $node, $submission) {
   $nid = $node->nid;
   $sid = $submission['sid'];
 
