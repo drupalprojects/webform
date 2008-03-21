@@ -272,7 +272,7 @@ function _webform_analysis_rows_grid($component) {
   foreach ($questions as $qkey => $question) {
     $row = array($question);
     foreach ($options as $okey => $option) {
-      $row[] = !empty($counts[$qkey][$option]) ? $counts[$qkey][$option] : 0;
+      $row[] = !empty($counts[$qkey][$okey]) ? $counts[$qkey][$okey] : 0;
     }
     $rows[] = $row;
   }
