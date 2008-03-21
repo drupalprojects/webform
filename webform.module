@@ -214,7 +214,7 @@ function webform_menu() {
   );
   $items['node/%webform_menu/submission/%webform_menu_submission/delete'] = array(
     'title' => 'Delete',
-    'page callback' => 'webform_client_form_load',
+    'page callback' => 'drupal_get_form',
     'page arguments' => array('webform_submission_delete_form', 1, 3),
     'access arguments' => array(1, 3, 'delete'),
     'weight' => 2,
@@ -1339,6 +1339,7 @@ function webform_client_form_validate($form, $form_state) {
       }
     }
     form_set_error('', t("You have submitted the maximum number of entries. Check submission guidelines."));
+    return;
   }
 
   if (trim($node->webform['additional_validate'])) {
