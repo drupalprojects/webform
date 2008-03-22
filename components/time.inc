@@ -165,13 +165,15 @@ function _webform_submission_display_time($data, $component, $enabled = false) {
   $form_item['ampm']['#disabled'] = !$enabled;
 
   // Match the hourly data to the hour format.
-  $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
-  if ($component['extra']['hourformat'] == "24-hour") {
-    $form_item['hour']['#default_value'] = date("H", $timestamp);
-  }
-  else {
-    $form_item['hour']['#default_value'] = date("g", $timestamp);
-    $form_item['ampm']['#default_value'] = $data['value']['2'];
+  if ($data['value']['1']) {
+    $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
+    if ($component['extra']['hourformat'] == "24-hour") {
+      $form_item['hour']['#default_value'] = date("H", $timestamp);
+    }
+    else {
+      $form_item['hour']['#default_value'] = date("g", $timestamp);
+      $form_item['ampm']['#default_value'] = $data['value']['2'];
+    }
   }
   return $form_item;
 }
