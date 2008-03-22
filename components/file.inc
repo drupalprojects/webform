@@ -204,7 +204,13 @@ function _webform_required_file($formelement, $form_key, $fieldname, $required =
   }
 }
 
-function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
+function _webform_validate_file($form_element, $form_key, $fieldname, $filters) {
+
+  // Set the current file as the default.
+  if (isset($form_element['#webform_current_file'])) {
+    form_set_value(array('#parents' => $form_element['#parents']), serialize($form_element['#webform_current_file']));
+  }
+
   if (empty($_FILES['files']['name'][$form_key])) {
     return;
   }
@@ -258,20 +264,27 @@ function _webform_validate_file($formelement, $form_key, $fieldname, $filters) {
  *   Nothing.
  */
 function _webform_submit_file(&$data, $component) {
+
+  // Hack to get the form value for this file component (not necessary in D6).
+  global $form_values;
+  $data = $form_values[$component['form_key']];
+  $current_file = unserialize($data);
+
   if ($file = file_check_upload($component['form_key'])) {
     $upload_dir = variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation'];
+
     if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
-      $file_saved = file_save_upload($component['form_key'], variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation']);
+      $file_saved = file_save_upload($component['form_key'], $upload_dir);
       if (!$file_saved) {
-        drupal_set_message(t("The uploaded file %filename was unable to be saved. The destination directory may not be writable.", array('%filename' => $data)), "error");
-        $data = serialize(array('error' => 'Error while uploading file'));
+        drupal_set_message(t("The uploaded file %filename was unable to be saved. The destination directory may not be writable.", array('%filename' => $file_saved['filename'])), "error");
       }
       else {
         $data = serialize((array)$file_saved);
+        file_delete($current_file['filepath']);
       }
     }
     else {
-      drupal_set_message(t("The uploaded file %filename was unable to be saved. The destination directory does not exist.", array('%filename' => $data), "error"));
+      drupal_set_message(t("The uploaded file was unable to be saved. The destination directory does not exist.", "error"));
     }
   }
 }
@@ -309,12 +322,19 @@ function theme_webform_mail_file($data, $component) {
 function _webform_submission_display_file($data, $component, $enabled = false) {
   $filedata = unserialize($data['value'][0]);
   $form_item = _webform_render_file($component);
-  $form_item['#type'] = 'textfield';
-  $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
-  if ($filedata['filename']) {
-    $form_item['#suffix'] = ' <a href="'. file_create_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a></div>';
+  if (!$enabled) {
+    $form_item['#type'] = 'textfield';
+    $form_item['#tree'] = TRUE;
+    $form_item['#disabled'] = TRUE;
+    $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   }
-  $form_item['#disabled'] = !$enabled;
+  if ($filedata['filename']) {
+    $form_item['#suffix'] = ' <a href="'. file_create_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a></div>' . $form_item['#suffix'];
+    if ($enabled) {
+      $form_item['#description'] = t('Uploading a new file will replace the current file.');
+      $form_item['#webform_current_file'] = $filedata;
+    }
+  }
   return $form_item;
 }
 
