@@ -458,7 +458,7 @@ function webform_component_delete_form_submit($form, &$form_state) {
 function webform_component_insert($component) {
   db_lock_table('webform_component');
   $component['cid'] = db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
-  db_query('INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, "%s", "%s", "%s", "%s", "%s", %d, %d)', $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight']);
+  db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight']);
   db_unlock_tables('webform_component');
   return $component['cid'];
 }
@@ -471,7 +471,7 @@ function webform_component_insert($component) {
  *   component form. Additional properties are stored in the extra array.
  */
 function webform_component_update($component) {
-  return db_query('UPDATE {webform_component} SET pid = %d, form_key = "%s", name = "%s", type = "%s", value = "%s", extra = "%s", mandatory = %d, weight = %d WHERE nid = %d AND cid = %d', $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['nid'], $component['cid']);
+  return db_query("UPDATE {webform_component} SET pid = %d, form_key = '%s', name = '%s', type = '%s', value = '%s', extra = '%s', mandatory = %d, weight = %d WHERE nid = %d AND cid = %d", $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['nid'], $component['cid']);
 }
 
 function webform_component_delete($nid, $cid) {
