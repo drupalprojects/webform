@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "POT-Creation-Date: 2008-03-29 22:02+0200\n"
-"PO-Revision-Date: 2008-03-29 23:21+0200\n"
+"PO-Revision-Date: 2008-03-30 01:11+0200\n"
 "Last-Translator: Vasileios Lourdas <vasilis@lourdas.name>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -472,11 +472,11 @@ msgstr "Εξ' ορισμού, το πλήκτρο υποβολής της φόρ
 
 #: webform.module:623
 msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
-msgstr "Εισάγετε κώδικα PHP για την πρόσθετη επαλήθευση της φόρμας. Συμπεριλάβετε τις σημάνσεις &lt;?php ?&gt;. Τα $form_id και $form_values είναι διαθέσιμες μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτητη form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _validate του <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgstr "Εισάγετε κώδικα PHP για την πρόσθετη επαλήθευση της φόρμας. Συμπεριλάβετε τις σημάνσεις &lt;?php ?&gt;. Τα $form_id και $form_values είναι διαθέσιμες μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτηση form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _validate του <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 
 #: webform.module:632
 msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
-msgstr "Εισάγετε κώδικα PHP για πρόσθετη προεπεξεργασία της φόρμας (μετά την επαλήθευση). Συμπεριλάβετε τις σημάνσεις &lt;?php ?&gt;. Τα $form_id και $form_values είναι διαθέσιμες μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτητη form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _submit του <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
+msgstr "Εισάγετε κώδικα PHP για πρόσθετη προεπεξεργασία της φόρμας (μετά την επαλήθευση). Συμπεριλάβετε τις σημάνσεις &lt;?php ?&gt;. Τα $form_id και $form_values είναι διαθέσιμες μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτηση form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _submit του <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
 
 #: webform.module:661
 msgid "To"
