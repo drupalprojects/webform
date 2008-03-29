@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "POT-Creation-Date: 2008-03-29 22:02+0200\n"
-"PO-Revision-Date: 2008-03-29 23:07+0200\n"
+"PO-Revision-Date: 2008-03-29 23:21+0200\n"
 "Last-Translator: Vasileios Lourdas <vasilis@lourdas.name>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -910,11 +910,11 @@ msgstr "Οι ομάδες πεδίων επιτρέπουν την οργάνω�
 
 #: components/file.inc:18
 msgid "Upload Filtering"
-msgstr "Φιλτράρισμα αρχείων που αποστέλλονται"
+msgstr "Φιλτράρισμα αρχείων που υποβάλλονται"
 
 #: components/file.inc:19
 msgid "Select the types of uploads you would like to allow."
-msgstr "Επιλέξτε τον τύπο των αρχείων αποστολής που επιθυμείτε να επιτρέψετε."
+msgstr "Επιλέξτε τον τύπο των αρχείων υποβολής που επιθυμείτε να επιτρέψετε."
 
 #: components/file.inc:23
 msgid "Web Images"
@@ -942,23 +942,23 @@ msgstr "Πρόσθετες επεκτάσεις"
 
 #: components/file.inc:55
 msgid "Enter a list of additional file extensions for this upload field, seperated by commas.<br /> Entered extensions will be appended to checked items above."
-msgstr "Εισάγετε μια λίστα πρόσθετων επεκτάσεων αρχείων για το πεδίο αυτό αποστολής αρχείων, χωρισμένες με κόμμα.<br /> Οι επεκτάσεις που θα εισάγετε θα προστεθούν στα παραπάνω επιλεγμένα στοιχεία."
+msgstr "Εισάγετε μια λίστα πρόσθετων επεκτάσεων αρχείων για το πεδίο αυτό υποβολής αρχείων, χωρισμένες με κόμμα.<br /> Οι επεκτάσεις που θα εισάγετε θα προστεθούν στα παραπάνω επιλεγμένα στοιχεία."
 
 #: components/file.inc:62
 msgid "Max Upload Size"
-msgstr "Μέγιστο μέγεθος αρχείου αποστολής"
+msgstr "Μέγιστο μέγεθος αρχείου υποβολής"
 
 #: components/file.inc:64
 msgid "Enter the max file size a user may upload (in KB)."
-msgstr "Εισάγετε το μέγιστο μέγεθος αρχείου που μπορεί να αποστείλει ένας χρήστης (σε KB)."
+msgstr "Εισάγετε το μέγιστο μέγεθος αρχείου που μπορεί να υποβάλλει ένας χρήστης (σε KB)."
 
 #: components/file.inc:71
 msgid "Upload Directory"
-msgstr "Κατάλογος αποστολής αρχείων"
+msgstr "Κατάλογος υποβολής αρχείων"
 
 #: components/file.inc:73
 msgid "Webform uploads are always saved in the site files directory. You may optionally specify a subfolder to store your files."
-msgstr "Οι αποστολές αρχείων από τα webform αποθηκεύονται πάντα στον κατάλογο files του ιστοτόπου. Μπορείτε προαιρετικά να ορίσετε υποκατάλογο για την αποθήκευση των αρχείων σας."
+msgstr "Οι υποβολές αρχείων από τα webform αποθηκεύονται πάντα στον κατάλογο files του ιστοτόπου. Μπορείτε προαιρετικά να ορίσετε υποκατάλογο για την αποθήκευση των αρχείων σας."
 
 #: components/file.inc:85
 msgid "The save directory %directory could not be created. Check that the webform files directory is writtable."
@@ -978,11 +978,11 @@ msgstr "Αρχεία με την κατάληξη %ext δεν επιτρέπον
 
 #: components/file.inc:256
 msgid "The file '%filename' is too large (%filesize KB). Please upload a file %maxsize KB or smaller."
-msgstr "Το αρχείο %filename είναι πολύ μεγάλο (%filesize KB). Ανεβάστε ένα αρχείο μεγέθους %maxsize KB ή μικρότερο."
+msgstr "Το αρχείο %filename είναι πολύ μεγάλο (%filesize KB). Υποβάλλετε ένα αρχείο μεγέθους %maxsize KB ή μικρότερο."
 
 #: components/file.inc:284
 msgid "The uploaded file %filename was unable to be saved. The destination directory may not be writable."
-msgstr "Δεν ήταν δυνατή η αποθήκευση του αποσταλθέντος αρχείου %filename. Ο κατάλογος προορισμού ενδέχεται να μην είναι εγγράψιμος."
+msgstr "Δεν ήταν δυνατή η αποθήκευση του υποβληθέντος αρχείου %filename. Ο κατάλογος προορισμού ενδέχεται να μην είναι εγγράψιμος."
 
 #: components/file.inc:292
 msgid "The uploaded file was unable to be saved. The destination directory does not exist."
@@ -994,7 +994,7 @@ msgstr "Η υποβολή νέου αρχείου θα προκαλέσει τη
 
 #: components/file.inc:352
 msgid "Allow users to submit files of the configured types."
-msgstr "Να επιτρέπεται στους χρήστες να υποβάλλουν αρχεία των ρυθμισμένων τύπων."
+msgstr "Να επιτρέπεται στους χρήστες να υποβάλλουν αρχεία των τύπων που έχουν οριστεί."
 
 #: components/file.inc:389
 msgid "User uploaded file"
