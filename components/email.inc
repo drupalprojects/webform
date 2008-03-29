@@ -139,7 +139,7 @@ function _webform_submission_display_email($data, $component, $enabled = false) 
 function _webform_help_email($section) {
   switch ($section) {
     case 'admin/settings/webform#email_description':
-      $output = t("A textfield that automatically fills in logged-in users e-mail.");
+      $output = t("A textfield that automatically fills in a logged-in user's e-mail.");
       break;
   }
   return $output;
