@@ -662,7 +662,7 @@ function webform_form(&$node, &$param) {
   $form['components']['webform_newfield_type'] = array(
     '#type' => 'select',
     '#title' => t('Add a new component'),
-    '#default_value' => $node->webform_newfield_type,
+    '#default_value' => $node->components['webform_newfield_type'],
     '#options' => $component_types,
     '#description' => t('Each component adds a new field to the form. Any number components (even of the same type) may be added to the form. Select a component type to add above.'),
     '#weight' => 3,
