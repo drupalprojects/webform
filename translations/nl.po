@@ -561,11 +561,11 @@ msgid "every week"
 msgstr "per week"
 
 #: webform.module:711
-msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to perform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Voer PHP-code in om extra validatie aan dit formulier toe te voegen. Maak gebruik van de <?php ?> tags. $form_id en $form_values zijn beschikbare variabelen. Gebruik, als de validatie mislukt, de functie form_set_error om te voorkomen dat het formulier wordt verstuurd. Gebruik dezelfde syntax als de _validate functie gebruikt in de <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 
 #: webform.module:720
-msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to perform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Voer PHP-code in om extra verwerkingsstappen aan dit formulier toe te voegen (na de validatie). Maak gebruik van de <?php ?> tags. $form_id en $form_values zijn beschikbare variabelen. Gebruik dezelfde syntax als de _submit-functie gebruikt in de <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 
 #: webform.module:739

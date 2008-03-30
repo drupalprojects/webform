@@ -470,11 +470,11 @@ msgid "every week"
 msgstr "jede Woche"
 
 #: webform.module:720
-msgid "Enter PHP code to preform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to perform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Geben Sie hier den PHP Code ein, um eine zusätzliche Überprüfung für diese Formular zu ermöglichen. Füge das &lt;?php ?&gt; Tag ein. $form_id und $form_values sind gültige Variablen für PHP. Wenn die Überprüfung fehlschlagen soll, muss die Funktion form_set_error benutzen werden, um das Speichern des Formulars zu verhindern. Der Aufbau der Syntax sollte so sein, wie es in dem <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a> benutzt wurde."
 
 #: webform.module:729
-msgid "Enter PHP code to preform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
+msgid "Enter PHP code to perform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Geben Sie hier den PHP Code ein, um eine zusätzliche Verarbeitung des Formulars vorzunehmen (nach der Überprüfung). Füge das &lt;?php ?&gt; Tag ein. $form_id und $form_values sind gültige Variablen und der Aufbau der Syntax sollte so sein, wie es in dem <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a> benutzt wurde."
 
 #: webform.module:748
