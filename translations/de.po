@@ -94,8 +94,8 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: webform.inc:92
-msgid "Submission deleted"
-msgstr "Eingabe löschen"
+msgid "Submission deleted."
+msgstr "Eingabe löschen."
 
 #: webform.inc:167
 msgid "Submitted on"

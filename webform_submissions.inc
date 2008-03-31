@@ -92,7 +92,7 @@ function webform_results_clear_form($node) {
   return confirm_form($form, $question, 'node/'. $node->nid .'/webform-results', NULL, t('Clear'), t('Cancel'));
 }
 
-function webform_results_clear_form_submit($form, $form_state) {
+function webform_results_clear_form_submit($form, &$form_state) {
   webform_results_clear($form_state['values']['nid']);
   $node = node_load(array('nid' => $form_state['values']['nid']));
   $title = $node->title;
@@ -100,7 +100,7 @@ function webform_results_clear_form_submit($form, $form_state) {
   $message = t('Webform %title entries cleared.', array('%title' => $title));
   drupal_set_message($message);
   watchdog('webform', $message, WATCHDOG_NOTICE);
-  drupal_goto('admin/content/webform');
+  $form_state['redirect'] = 'admin/content/webform';
 }
 
 /**
@@ -127,10 +127,11 @@ function webform_submission_delete_form($form_state, $node, $submission) {
   return confirm_form($form, $question, 'node/'. $nid .'/webform-results', NULL, t('Delete'), t('Cancel'));
 }
 
-function webform_submission_delete_form_submit($form, $form_state) {
+function webform_submission_delete_form_submit($form, &$form_state) {
   webform_submission_delete($form_state['values']['nid'], $form_state['values']['sid']);
-  drupal_set_message(t("Submission deleted"));
-  drupal_goto('node/'. $form_state['values']['nid'] .'/webform-results');
+  drupal_set_message(t("Submission deleted."));
+
+  $form_state['redirect'] = 'node/'. $form_state['values']['nid'] .'/webform-results';
 }
 
 /**
@@ -139,21 +140,29 @@ function webform_submission_delete_form_submit($form, $form_state) {
  * @param $nid
  *   The node ID for which submissions are being fetched.
  * @param $header
- *   If the results of this fetch will be used in a sortable table, pass the
- *   array header of the table.
+ *   If the results of this fetch will be used in a sortable
+ *   table, pass the array header of the table.
+ * @param $uid
+ *   Optional; the user ID to filter the submissions by.
+ * @return $submissions
+ *   An array of submissions matching your filters.
  */
-function webform_get_submissions($nid, $header = NULL) {
+function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
   $query = 'SELECT s.*, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '.
            'FROM {webform_submissions} s '.
            'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid '.
            'LEFT JOIN {users} u ON u.uid = s.uid '.
            'WHERE sd.nid = %d';
 
+  if ($uid) {
+    $query .= ' AND u.uid = %d';
+  }
+
   if (is_array($header)) {
     $query .= tablesort_sql($header);
   }
 
-  $res = db_query($query, $nid);
+  $res = db_query($query, $nid, $uid);
   $submissions = array();
   $previous = array();
 

@@ -248,7 +248,7 @@ msgid "Are you sure you want to delete this submission?"
 msgstr ""
 
 #: webform_submissions.inc:132
-msgid "Submission deleted"
+msgid "Submission deleted."
 msgstr ""
 
 #: webform_submissions.inc:102 webform.module:446;1335;1344;1523;1562;0

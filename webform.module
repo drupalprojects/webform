@@ -193,6 +193,15 @@ function webform_menu() {
   );
 
   // Node submissions.
+  $items['node/%webform_menu/submissions'] = array(
+    'title' => 'Submissions',
+    'page callback' => 'webform_results_submissions',
+    'page arguments' => array(1, TRUE),
+    'access callback' => 'webform_submission_access',
+    'access arguments' => array(1, NULL, 'list'),
+    'file' => 'webform_report.inc',
+    'type' => MENU_CALLBACK,
+  );
   $items['node/%webform_menu/submission/%webform_menu_submission'] = array(
     'title' => 'Webform submission',
     'page callback' => 'webform_client_form_load',
@@ -278,7 +287,9 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
       return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission['uid']));
     case 'delete':
       return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission['uid'])) || user_access('clear webform results');
-  }  
+    case 'list':
+      return user_access('access webform results') || user_access('access webform submissions') || (user_access('access own webform submissions')  && $user->uid);
+  }
 }
 
 /**
@@ -447,7 +458,7 @@ function webform_delete(&$node) {
 }
 
 /**
- * Implemenation of hook_load().
+ * Implementation of hook_load().
  */
 function webform_load($node) {
   $additions = new stdClass();
@@ -959,6 +970,13 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
 
   $node = node_prepare($node, $teaser);
   $node->content['webform'] = array('#value' => $output, '#weight' => 1);
+
+  if (user_access('access own webform submissions') && !(user_access('access webform results') || user_access('access webform submissions')) && $user->uid) {
+    $previous_submissions = db_result(db_query("SELECT count(*) FROM {webform_submissions} WHERE nid = %d AND uid = %d", $node->nid, $user->uid));
+    if ($previous_submissions) {
+      drupal_set_message(t('You have already submitted this form. <a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions'))));
+    }
+  }
 
   return $node;
 }

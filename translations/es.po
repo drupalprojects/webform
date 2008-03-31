@@ -99,8 +99,8 @@ msgid "Delete"
 msgstr "Borrar"
 
 #: webform.inc:98
-msgid "Submission deleted"
-msgstr "Respuesta borrada"
+msgid "Submission deleted."
+msgstr "Respuesta borrada."
 
 #: webform.inc:175
 msgid "Submitted on"
