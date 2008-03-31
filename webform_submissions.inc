@@ -26,8 +26,13 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 function webform_submission_update($node, $sid, $submitted) {
   // Update the submission data by first removing all this submissions data.
   db_query("DELETE FROM {webform_submitted_data} WHERE sid = %d", $sid);
-  // Then re-ad it to the database.
+  // Then re-add it to the database.
   foreach ($submitted as $cid => $value) {
+    // Don't save pagebreaks as submitted data.
+    if ($node->webform['components'][$cid]['type'] == 'pagebreak') {
+      continue;
+    }
+
     if (is_array($value)) {
       $delta = 0;
       foreach ($value as $k => $v) {
@@ -51,6 +56,11 @@ function webform_submission_insert($node, $submitted) {
   db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) "." VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $_SERVER['REMOTE_ADDR']);
 
   foreach ($submitted as $cid => $value) {
+    // Don't save pagebreaks as submitted data.
+    if ($node->webform['components'][$cid]['type'] == 'pagebreak') {
+      continue;
+    }
+
     if (is_array($value)) {
       $delta = 0;
       foreach ($value as $k => $v) {
