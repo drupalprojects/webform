@@ -12,9 +12,17 @@
 /**
  * Retrieve lists of submissions for a given webform.
  */
-function webform_results_submissions($node) {
+function webform_results_submissions($node, $user_filter) {
+  global $user;
+
   $header = theme('webform_results_submissions_header', $node);
-  $submissions = webform_get_submissions($node->nid, $header);
+  if ($user_filter) {
+    drupal_set_title(t('Submissions for %user', array('%user' => $user->name)));
+    $submissions = webform_get_submissions($node->nid, $header, $user->uid);
+  }
+  else {
+    $submissions = webform_get_submissions($node->nid, $header);
+  }
   return theme('webform_results_submissions', $node, $submissions);
 }
 
@@ -25,13 +33,17 @@ function webform_results_submissions($node) {
  * use it for sorting the results.
  */
 function theme_webform_results_submissions_header($node) {
-  return array(
+  $columns = array(
     array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
     array('data' => t('Submitted'), 'field' => 'submitted'),
-    array('data' => t('User'), 'field' => 'name'),
-    array('data' => t('IP Address'), 'field' => 'remote_addr'),
-    array('data' => t('Operations'), 'colspan' => user_access('clear webform results') ? '3' : '2'),
   );
+  if (user_access("access webform results")) {
+    $columns[] = array('data' => t('User'), 'field' => 'name');
+    $columns[] = array('data' => t('IP Address'), 'field' => 'remote_addr');
+  }
+  $columns[] = array('data' => t('Operations'), 'colspan' => 3);
+
+  return $columns;
 }
 
 /**
@@ -53,23 +65,31 @@ function theme_webform_results_submissions($node, $submissions) {
     $row = array(
       $sid,
       format_date($submission->submitted, 'small'),
-      theme('username', $submission),
-      $submission->remote_addr,
-      l(t('View'), "node/$node->nid/submission/$sid"),
     );
+    if (user_access('access webform results')) {
+      $row[] = theme('username', $submission);
+      $row[] = $submission->remote_addr;
+    }
+    $row[] = l(t('View'), "node/$node->nid/submission/$sid");
     if ((user_access("edit own webform submissions") && ($user->uid == $submission->uid)) || user_access("edit webform submissions")) {
       $row[] = l(t('Edit'), "node/$node->nid/submission/$sid/edit");
+      $row[] = l(t('Delete'), "node/$node->nid/submission/$sid/delete", NULL, drupal_get_destination());
     }
     else {
-      $row[] = t('Edit');
-    }
-    if (user_access('clear webform results')) {
-      $row[] = l(t('Delete'), "node/$node->nid/submission/$sid/delete");
+      $row[count($row) - 1] = array('data' => $row[count($row) - 1], 'colspan' => 3);
     }
     $rows[] = $row;
   }
 
-  return theme('table', $header, $rows);
+  if (count($rows) == 0) {
+    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 5));
+  }
+
+  $output = theme('table', $header, $rows);
+  if (arg(2) == 'submissions') {
+    $output .= theme('links', array('webform' => array('title' => t('Go back to the form'), 'href' => 'node/'. $node->nid)));
+  }
+  return $output;
 }
 
 /**

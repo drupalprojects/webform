@@ -231,7 +231,7 @@ msgid "Are you sure you want to delete this submission?"
 msgstr "Θέλετε σίγουρα να διαγράψετε την υποβολή για αυτή τη φόρμα;"
 
 #: webform_submissions.inc:144
-msgid "Submission deleted"
+msgid "Submission deleted."
 msgstr "Η υποβολή διαγράφηκε"
 
 #: webform_submissions.inc:116 webform.module:336;1209;1218;1393;1432;0

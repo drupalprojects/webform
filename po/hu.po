@@ -93,7 +93,7 @@ msgid "Delete"
 msgstr "Törlés"
 
 #: webform.inc:98
-msgid "Submission deleted"
+msgid "Submission deleted."
 msgstr "Eredmény törölve"
 
 #: webform.inc:175

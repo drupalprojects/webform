@@ -119,7 +119,7 @@ msgstr "Verwijderen"
 
 #: webform.inc:98
 #, fuzzy
-msgid "Submission deleted"
+msgid "Submission deleted."
 msgstr "Inzending verwijderd"
 
 #: webform.inc:175

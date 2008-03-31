@@ -192,6 +192,15 @@ function webform_menu($may_cache) {
         'weight' => 8,
         'type' => MENU_LOCAL_TASK,
       );
+      $items[] = array(
+        'path' => 'node/'. $nid .'/submissions',
+        'title' => t('Submissions'),
+        'callback' => 'webform_results',
+        'callback arguments' => array($node, 'user_submissions'),
+        'access' => user_access('access webform results') || user_access('access webform submissions') || (user_access('access own webform submissions')  && $user->uid),
+        'weight' => 2,
+        'type' => MENU_CALLBACK,
+      );
       if (isset($sid)) {
         include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
         $submission = webform_get_submission($node->nid, $sid);
@@ -337,7 +346,7 @@ function webform_delete(&$node) {
 }
 
 /**
- * Implemenation of hook_load().
+ * Implementation of hook_load().
  */
 function webform_load($node) {
   $additions = new stdClass();
@@ -848,6 +857,13 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
 
   $node = node_prepare($node, $teaser);
   $node->content['webform'] = array('#value' => $output, '#weight' => 1);
+
+  if (user_access('access own webform submissions') && !(user_access('access webform results') || user_access('access webform submissions')) && $user->uid) {
+    $previous_submissions = db_result(db_query("SELECT count(*) FROM {webform_submissions} WHERE nid = %d AND uid = %d", $node->nid, $user->uid));
+    if ($previous_submissions) {
+      drupal_set_message(t('You have already submitted this form. <a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions'))));
+    }
+  }
 
   return $node;
 }
@@ -1807,6 +1823,8 @@ function webform_results($node, $op = 'submissions') {
       return webform_results_table($node);
     case 'download' :
       return webform_results_download($node);
+    case 'user_submissions':
+      return webform_results_submissions($node, TRUE);
     case 'submissions':
     default :
       return webform_results_submissions($node);

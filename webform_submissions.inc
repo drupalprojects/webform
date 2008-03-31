@@ -114,7 +114,7 @@ function webform_results_clear_form_submit($form_id, $form_values) {
   $message = t('Webform %title entries cleared.', array('%title' => $title));
   drupal_set_message($message);
   watchdog('webform', $message, WATCHDOG_NOTICE);
-  drupal_goto('admin/content/webform');
+  return 'admin/content/webform';
 }
 
 /**
@@ -141,8 +141,8 @@ function webform_submission_delete_form($node, $submission) {
 
 function webform_submission_delete_form_submit($form_id, $form_values) {
   webform_submission_delete($form_values['nid'], $form_values['sid']);
-  drupal_set_message(t("Submission deleted"));
-  drupal_goto('node/'. $form_values['nid'] .'/results');
+  drupal_set_message(t("Submission deleted."));
+  return 'node/'. $form_values['nid'] .'/results';
 }
 
 /**
@@ -151,21 +151,29 @@ function webform_submission_delete_form_submit($form_id, $form_values) {
  * @param $nid
  *   The node ID for which submissions are being fetched.
  * @param $header
- *   If the results of this fetch will be used in a sortable table, pass the
- *   array header of the table.
+ *   If the results of this fetch will be used in a sortable
+ *   table, pass the array header of the table.
+ * @param $uid
+ *   Optional; the user ID to filter the submissions by.
+ * @return $submissions
+ *   An array of submissions matching your filters.
  */
-function webform_get_submissions($nid, $header = NULL) {
+function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
   $query = 'SELECT s.*, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '.
            'FROM {webform_submissions} s '.
            'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid '.
            'LEFT JOIN {users} u ON u.uid = s.uid '.
            'WHERE sd.nid = %d';
 
+  if ($uid) {
+    $query .= ' AND u.uid = %d';
+  }
+
   if (is_array($header)) {
     $query .= tablesort_sql($header);
   }
 
-  $res = db_query($query, $nid);
+  $res = db_query($query, $nid, $uid);
   $submissions = array();
   $previous = array();
 
