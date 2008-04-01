@@ -134,7 +134,7 @@ function webform_submission_delete_form($form_state, $node, $submission) {
   $form['sid'] = array('#type' => 'value', '#value' => $sid);
   $question = t("Are you sure you want to delete this submission?");
 
-  return confirm_form($form, $question, 'node/'. $nid .'/webform-results', NULL, t('Delete'), t('Cancel'));
+  return confirm_form($form, $question, isset($_GET['destination']) ? $_GET['destination'] : 'node/'. $nid .'/webform-results', NULL, t('Delete'), t('Cancel'));
 }
 
 function webform_submission_delete_form_submit($form, &$form_state) {
