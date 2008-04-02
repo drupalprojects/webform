@@ -32,7 +32,7 @@ function webform_install() {
         cid smallint unsigned NOT NULL default '0',
         pid smallint unsigned NOT NULL default '0',
         form_key varchar(128) default NULL,
-        name varchar(128) default NULL,
+        name varchar(255) default NULL,
         type varchar(16) default NULL,
         value text default NULL,
         extra text,
@@ -89,7 +89,7 @@ function webform_install() {
         cid smallint NOT NULL default '0',
         pid smallint NOT NULL default '0',
         form_key varchar(128) default NULL,
-        name varchar(128) NOT NULL default '',
+        name varchar(255) NOT NULL default '',
         type varchar(16) NOT NULL default '',
         value text NOT NULL default '',
         extra text NOT NULL default '',
@@ -649,6 +649,23 @@ function webform_update_20() {
       $ret[] = update_sql("CREATE INDEX {webform_submitted_data}_sid_nid_idx ON {webform_submitted_data} (sid, nid)");
 
       $ret[] = update_sql("ALTER TABLE {webform_component} ADD PRIMARY KEY (nid, cid)");
+      break;
+  }
+  return $ret;
+}
+
+/**
+ * Increase the size of the component instance name.
+ */
+function webform_update_5200() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} CHANGE name name varchar(255) DEFAULT NULL");
+      break;
+    case 'pgsql':
+      db_change_column($ret, 'webform_component', 'name', 'name', 'varchar(255)', array('not null' => TRUE, 'default' => "NULL"));
       break;
   }
   return $ret;
