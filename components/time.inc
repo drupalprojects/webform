@@ -103,7 +103,7 @@ function _webform_render_time($component) {
     '#title' => $component['name'],
     '#required' => $component['mandatory'],
     '#weight' => $component['weight'],
-    '#description' => _webform_filtervalues($component['extra']['description']),
+    '#description' => _webform_filter_descriptions($component['extra']['description']),
     '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix' => '</div>',
     '#theme' => 'webform_time',

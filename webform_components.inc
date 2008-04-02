@@ -286,10 +286,9 @@ function webform_component_edit_form($form_state, &$node, $component, $clone = F
     '#weight' => -1,
   );
   $form['extra']['description'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#default_value' => isset($component['extra']['description']) ? $component['extra']['description'] : '',
     '#title' => t("Description"),
-    '#maxlength' => '512',
     '#description' => t('A short description of the field used as help for the user when he/she uses the form.') .'<br />'. webform_help('webform/helptext#variables'),
     '#weight' => -1,
   );

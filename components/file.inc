@@ -187,7 +187,7 @@ function _webform_render_file($component) {
     '#title'         => $component['name'],
     //'#required'      => $component['mandatory'], // Drupal core bug with required file uploads
     '#weight'        => $component['weight'],
-    '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#tree'          => false, // file_check_upload assumes a flat $_FILES structure.
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',

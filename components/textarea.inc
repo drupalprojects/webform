@@ -59,10 +59,10 @@ function _webform_render_textarea($component) {
   $form_item = array(
     '#type'          => "textarea",
     '#title'         => $component['name'],
-    '#default_value' => _webform_filtervalues($component['value']),
+    '#default_value' => _webform_filter_values($component['value']),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
-    '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#rows'          => $component['extra']['rows'],
     '#cols'          => $component['extra']['cols'],
     '#attributes'    => $component['extra']['attributes'],

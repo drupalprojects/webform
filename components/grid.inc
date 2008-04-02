@@ -46,7 +46,7 @@ function _webform_edit_grid($currfield) {
 }
 
 function _webform_edit_validate_grid($form_values) {
-  $rows = explode("\n", _webform_filtervalues($form_values['extra']['options'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values($form_values['extra']['options'], NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -56,7 +56,7 @@ function _webform_edit_validate_grid($form_values) {
       }
     }
   }
-  $rows = explode("\n", _webform_filtervalues($form_values['extra']['questions'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values($form_values['extra']['questions'], NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -75,11 +75,11 @@ function _webform_render_grid($component, $random = true) {
     '#required' => $component['mandatory'],
     '#weight' => $component['weight'],
     '#theme' => 'webform_grid',
-    '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#description'   => _webform_filter_descriptions($component['extra']['description']),
   );
 
-  $questions = explode("\n", _webform_filtervalues($component['extra']['questions'], NULL, NULL, FALSE));
-  $rows = explode("\n", _webform_filtervalues($component['extra']['options'], NULL, NULL, FALSE));
+  $questions = explode("\n", _webform_filter_values($component['extra']['questions'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values($component['extra']['options'], NULL, NULL, FALSE));
 
   if ($component['extra']['optrand'] && $random) {
     shuffle($rows);
@@ -158,8 +158,8 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
  *   Nothing
  **/
 function _webform_submit_grid(&$data, $component) {
-  $value = _webform_filtervalues($component['value']);
-  $rows = explode("\n", _webform_filtervalues($component['extra']['options']));
+  $value = _webform_filter_values($component['value']);
+  $rows = explode("\n", _webform_filter_values($component['extra']['options']));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
@@ -192,7 +192,7 @@ function _webform_submit_grid(&$data, $component) {
  *   Textual output to be included in the email.
  */
 function theme_webform_mail_grid($data, $component) {
-  $questions = explode("\n", _webform_filtervalues($component['extra']['questions']));
+  $questions = explode("\n", _webform_filter_values($component['extra']['questions']));
   $output = $component['name'] .":\n";
   foreach ($questions as $key => $question) {
     $output .= '    - '. trim($question) .': '. $data[_webform_safe_name($question)] ."\n";
@@ -241,7 +241,7 @@ function _webform_theme_grid() {
  **/
 function _webform_analysis_rows_grid($component) {
   // Generate the list of options.
-  $rows = explode("\n", _webform_filtervalues($component['extra']['options']));
+  $rows = explode("\n", _webform_filter_values($component['extra']['options']));
   $options = array();
   foreach ($rows as $row) {
     $row = trim($row);
@@ -254,7 +254,7 @@ function _webform_analysis_rows_grid($component) {
   }
 
   // Generate the list of questions.
-  $rows = explode("\n", _webform_filtervalues($component['extra']['questions']));
+  $rows = explode("\n", _webform_filter_values($component['extra']['questions']));
   $questions = array();
   $cid = 0;
   foreach ($rows as $row) {
@@ -358,7 +358,7 @@ function _webform_csv_headers_grid($component) {
  *   commas.
  **/
 function _webform_csv_data_grid($data, $component) {
-  $rows = explode("\n", _webform_filtervalues($component['extra']['questions']));
+  $rows = explode("\n", _webform_filter_values($component['extra']['questions']));
   $questions = array();
   $cid = 0;
   foreach ($rows as $row) {

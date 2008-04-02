@@ -80,10 +80,10 @@ function _webform_render_email($component) {
   $form_item = array(
     '#type'          => 'textfield',
     '#title'         => $component['name'],
-    '#default_value' => _webform_filtervalues($component['value']),
+    '#default_value' => _webform_filter_values($component['value']),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
-    '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
