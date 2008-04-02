@@ -276,6 +276,7 @@ function webform_component_edit_form($form_state, &$node, $component, $clone = F
     '#description' => t('This is used as a descriptive label when displaying this form element.'),
     '#required' => TRUE,
     '#weight' => -2,
+    '#maxlength' => 255,
   );
   $form['form_key'] = array(
     '#type' => 'textfield',
