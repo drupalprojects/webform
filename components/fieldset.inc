@@ -42,7 +42,7 @@ function _webform_render_fieldset($component) {
     '#type'          => $component['type'],
     '#title'         => htmlspecialchars($component['name'], ENT_QUOTES),
     '#weight'        => $component['weight'],
-    '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#collapsible'   => $component['extra']['collapsible'],
     '#collapsed'     => $component['extra']['collapsed'],
     '#attributes'    => array("class" => "webform-component-". $component['type'], "id" => "webform-component-". $component['form_key']),

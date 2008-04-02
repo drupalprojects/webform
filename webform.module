@@ -1354,7 +1354,7 @@ function webform_client_form_submit($form_id, $form_values) {
         ${'email_'. $field} = webform_variable_get('webform_default_'. $field);
       }
       elseif (is_numeric($node->webform['email_'. $field])) {
-        ${'email_'. $field} = _webform_filtervalues($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
+        ${'email_'. $field} = _webform_filter_values($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
       }
     }
 
@@ -1675,7 +1675,7 @@ function theme_webform_mail_headers($form_values, $node, $sid, $cid) {
 /**
  * Filters all special tokens provided by webform, such as %post and %profile.
  */
-function _webform_filtervalues($string, $node = NULL, $submission = NULL, $strict = TRUE) {
+function _webform_filter_values($string, $node = NULL, $submission = NULL, $strict = TRUE) {
   global $user;
 
   // Setup default token replacements.
@@ -1736,6 +1736,13 @@ function _webform_filtervalues($string, $node = NULL, $submission = NULL, $stric
   else {
     return $string;
   }
+}
+
+/**
+ * Filters all special tokens provided by webform, and allows basic layout in descriptions.
+ */
+function _webform_filter_descriptions($string, $node = NULL, $submission = NULL, $strict = TRUE) {
+  return check_markup(_webform_filter_values($string, $node = NULL, $submission = NULL, $strict = TRUE));
 }
 
 /**

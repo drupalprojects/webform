@@ -56,7 +56,7 @@ function _webform_edit_select($currfield) {
 }
 
 function _webform_edit_validate_select($form_values) {
-  $rows = explode("\n", _webform_filtervalues($form_values['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values($form_values['extra']['items'], NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -82,14 +82,14 @@ function _webform_render_select($component) {
     '#title'         => $component['name'],
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
-    '#description'   => _webform_filtervalues($component['extra']['description']),
+    '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
 
   // Convert the user-entered options list into an array.
-  $default_value = _webform_filtervalues($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], NULL, NULL, FALSE));
+  $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
+  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...'));
@@ -223,8 +223,8 @@ function _webform_submission_display_select($data, $component, $enabled = false)
  *   Nothing.
  */
 function _webform_submit_select(&$data, $component) {
-  $value = _webform_filtervalues($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], NULL, NULL, FALSE));
+  $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
+  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
 
   foreach ($rows as $row) {
     $row = trim($row);
@@ -265,7 +265,7 @@ function _webform_submit_select(&$data, $component) {
  */
 function theme_webform_mail_select($data, $component) {
   // Convert submitted 'safe' values to un-edited, original form.
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
   $options = array();
 
   foreach ($rows as $row) {
@@ -326,7 +326,7 @@ function _webform_help_select($section) {
  *   submissions.
  */
 function _webform_analysis_rows_select($component) {
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
   $options = array();
 
   foreach ($rows as $row) {
@@ -435,8 +435,8 @@ function _webform_csv_headers_select($component) {
  *   commas.
  */
 function _webform_csv_data_select($data, $component) {
-  $value = _webform_filtervalues($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filtervalues($component['extra']['items'], NULL, NULL, FALSE));
+  $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
+  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
   $options = array();
 
   foreach ($rows as $row) {

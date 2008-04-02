@@ -51,7 +51,7 @@ function _webform_edit_date($currfield) {
 function _webform_render_date($component) {
   if (strlen($component['value']) > 0) {
     // Calculate the timestamp in GMT.
-    $timestamp = strtotime(_webform_filtervalues($component['value']));
+    $timestamp = strtotime(_webform_filter_values($component['value']));
 
     if ($component['extra']['timezone'] == "user") {
       // Use the users timezone.
@@ -84,7 +84,7 @@ function _webform_render_date($component) {
     '#title' => $component['name'],
     '#weight' => $component['weight'],
     '#theme' => 'webform_date',
-    '#description' => _webform_filtervalues($component['extra']['description']),
+    '#description' => _webform_filter_descriptions($component['extra']['description']),
     '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix' => '</div>',
     '#required' => $component['mandatory'],
