@@ -1,6 +1,10 @@
 <?php
 // $Id$
 
+// Get the current schema so that updates that have already run for 5 don't get
+// run a second time when upgrading to 6.
+define('WEBFORM_VERSION', db_result(db_query("SELECT schema_version FROM {system} WHERE type = 'module' && name = 'webform'")));
+
 /**
  * Implementation of hook_schema().
  */
@@ -120,7 +124,7 @@ function webform_schema() {
       'name' => array(
         'description' => t('The label for this component.'),
         'type' => 'varchar',
-        'length' => 128,
+        'length' => 255,
         'default' => NULL,
       ),
       'type' => array(
@@ -784,6 +788,18 @@ function webform_update_6001() {
   // Alter to a primary key and add the unique key back.
   db_change_field($ret, 'webform_submissions', 'sid', 'sid', array('type' => 'serial', 'not null' => TRUE), array('primary key' => array('sid')));
   db_add_unique_key($ret, 'webform_submissions', 'sid_nid', array('sid', 'nid'));
+  return $ret;
+}
+
+/**
+ * Increase the size of the component instance name.
+ */
+function webform_update_6200() {
+  $ret = array();
+  // This update will already be run as webform_update_5200 on Drupal 5.
+  if (WEBFORM_VERSION > 6000) {
+    db_change_field($ret, 'webform_component', 'name', 'name', array('type' => 'varchar', 'length' => 255, 'default' => "NULL"));
+  }
   return $ret;
 }
 
