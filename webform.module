@@ -1249,7 +1249,7 @@ function webform_client_form_validate($form_id, $form_values) {
   }
 }
 
-function webform_client_form_submit($form_id, $form_values) {
+function webform_client_form_submit($form_id, &$form_values) {
   global $user, $base_url;
   include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
 
@@ -1335,15 +1335,19 @@ function webform_client_form_submit($form_id, $form_values) {
   // Save the submission to the database.
   if (!$form_values['details']['sid']) {
     // No sid was found thus insert it in the datatabase.
-    $sid = webform_submission_insert($node, $form_values['submitted']);
+    $form_values['details']['sid'] = webform_submission_insert($node, $form_values['submitted']);
+    $form_values['details']['is_new'] = TRUE;
   }
   else {
     // Sid was found thus update the existing sid in the datatbase.
-    $sid = webform_submission_update($node, $form_values['details']['sid'], $form_values['submitted']);
+    webform_submission_update($node, $form_values['details']['sid'], $form_values['submitted']);
+    $form_values['details']['is_new'] = FALSE;
   }
 
+  $sid = $form_values['details']['sid'];
+
   // Check if this form is sending an email.
-  if ((!empty($node->webform['email']) || !empty($node->webform['additional_emails'])) && !$form_values['details']['sid']) {
+  if ((!empty($node->webform['email']) || !empty($node->webform['additional_emails'])) && $form_values['details']['is_new']) {
 
     // Set values for the name, address, and subject for the email.
     $email_from_name = $node->webform['email_from_name'];
