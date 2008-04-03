@@ -843,7 +843,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
       $submission = array();
     }
     else {
-      drupal_set_title('Submission #'. $sid_to_display);
+      drupal_set_title(t('Submission #@sid', array('@sid' => $sid_to_display)));
       $node->body = "";
     }
   }
@@ -990,7 +990,7 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
   webform_load_components();
 
   if (isset($submission['sid'])) {
-    drupal_set_title('Submission #'. $submission['sid']);
+    drupal_set_title(t('Submission #@sid', array('@sid' => $submission['sid'])));
   }
 
   if (module_exists('profile')) {
@@ -1520,7 +1520,7 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parent =
  * Prints the confirmation message after a successful submission.
  */
 function _webform_confirmation($node) {
-  drupal_set_title($node->title);
+  drupal_set_title(check_plain($node->title));
   $output = theme('webform_confirmation_'. $node->nid, $node, $_GET['sid']);
   if (empty($output)) {
     $output = theme('webform_confirmation', $node, $_GET['sid']);
@@ -1786,7 +1786,7 @@ function theme_webform_admin_content($nodes) {
     );
   }
 
-  drupal_set_title($node->title);
+  drupal_set_title(check_plain($node->title));
   return theme('table', $header, $rows);
 }
 
@@ -1823,7 +1823,7 @@ function webform_results($node, $op = 'submissions') {
   include_once(drupal_get_path('module', 'webform') ."/webform_report.inc");
   include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
 
-  drupal_set_title($node->title);
+  drupal_set_title(check_plain($node->title));
 
   switch ($op) {
     case 'analysis':

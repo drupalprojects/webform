@@ -243,7 +243,7 @@ function webform_components_form_submit($form_id, $form_values) {
 }
 
 function webform_component_edit_form(&$node, $component, $clone = FALSE) {
-  drupal_set_title("Edit component: ". $component['name'] ." (". $component['type'] .")");
+  drupal_set_title(t("Edit component: @name (@type)", array('@name' => $component['name'], '@type' => $component['type'])));
 
   // Print the correct field type specification.
   // We always need: name and description.
