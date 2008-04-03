@@ -1993,7 +1993,7 @@ function webform_submission_edit(&$node, $sid) {
   $submission = _webform_fetch_submission($sid, $node->nid);
   if ($sid && is_numeric($sid)) {
     if (user_access("edit webform submissions") || (user_access("edit own webform submissions") && ($user->uid == $submission['uid']))) {
-      drupal_set_title('Submission #'. $sid);
+      drupal_set_title(t('Submission #@sid', array('@sid' => $sid)));
       $node->body = "";
 
       return drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, TRUE);
@@ -2016,7 +2016,7 @@ function webform_submission_view(&$node, $sid) {
   $submission = _webform_fetch_submission($sid, $node->nid);
   if ($sid && is_numeric($sid)) {
     if (user_access("access webform results") || (user_access("access own webform submissions") && ($user->uid == $submission['uid']))) {
-      drupal_set_title('Submission #'. $sid);
+      drupal_set_title(t('Submission #@sid', array('@sid' => $sid)));
       $node->body = "";
 
       return drupal_get_form('webform_client_form_'. $node->nid, $node, $submission);
