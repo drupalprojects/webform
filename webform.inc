@@ -38,7 +38,7 @@ function _webform_page() {
   }
 
   $content = theme('table', $header, $rows);
-  drupal_set_title($node->title);
+  drupal_set_title(check_plain($node->title));
   return $content;
 }
 

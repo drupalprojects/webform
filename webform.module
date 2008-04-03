@@ -943,7 +943,7 @@ function webform_edit_field_form(&$node) {
     $currfield['weight'] = $component['weight'];
     $currfield['mandatory'] = $component['mandatory'];
     $currfield['extra'] = $component['extra'];
-    drupal_set_title("Edit component: ". $currfield['name'] ." (". $currfield['type'] .")");
+    drupal_set_title(t("Edit component: @name (@type)", array('@name' => $currfield['name'], '@type' => $currfield['type'])));
   }
   else {
     // Check to make sure a valid component type was selected.
@@ -1174,7 +1174,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
       $submission = array();
     }
     else {
-      drupal_set_title('Submission #'. $sid_to_display);
+      drupal_set_title(t('Submission #@sid', array('@sid' => $sid_to_display)));
       $node->body = "";
     }
   }
@@ -1678,7 +1678,7 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parent =
 function _webform_confirmation($nid) {
   if ($node = node_load($nid)) {
     if (node_access('view', $node)) {
-      drupal_set_title($node->title);
+      drupal_set_title(check_plain($node->title));
       return theme('webform_confirmation', $node);
     }
     else {
@@ -1799,8 +1799,7 @@ function webform_results() {
   $nid = arg(1);
   $node = node_load($nid);
 
-  $title = $node->title;
-  drupal_set_title($title);
+  drupal_set_title(check_plain($node->title));
 
   if (arg(2) == 'results') {
     switch (arg(3)) {
