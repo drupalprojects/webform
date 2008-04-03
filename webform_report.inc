@@ -12,7 +12,7 @@
 /**
  * Retrieve lists of submissions for a given webform.
  */
-function webform_results_submissions($node, $user_filter) {
+function webform_results_submissions($node, $user_filter = FALSE) {
   global $user;
 
   $header = theme('webform_results_submissions_header', $node);
