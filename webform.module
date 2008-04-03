@@ -1586,6 +1586,7 @@ function webform_client_form_submit($form, &$form_state) {
 
   // Check confirmation field to see if redirect should be to another node or a message.
   if (isset($form_state['values']['submission'])) {
+    drupal_set_message(t('Submission updated.'));
     $redirect = NULL;
   }
   elseif (valid_url(trim($node->webform['confirmation']), true)) {
