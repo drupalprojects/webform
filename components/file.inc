@@ -334,7 +334,7 @@ function _webform_submission_display_file($data, $component, $enabled = false) {
     $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   }
   if ($filedata['filename']) {
-    $form_item['#suffix'] = ' <a href="'. file_create_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a></div>' . $form_item['#suffix'];
+    $form_item['#suffix'] = ' <a href="'. file_create_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a>' . $form_item['#suffix'];
     if ($enabled) {
       $form_item['#description'] = t('Uploading a new file will replace the current file.');
       $form_item['#webform_current_file'] = $filedata;
