@@ -127,14 +127,20 @@ function webform_menu() {
   // Node component forms.
   $items['node/%webform_menu/edit/components/%webform_menu_component'] = array(
     'page arguments' => array('webform_component_edit_form', 1, 4),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
   );
   $items['node/%webform_menu/edit/components/%webform_menu_component/clone'] = array(
     'page arguments' => array('webform_component_edit_form', 1, 4, TRUE),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
   );
   $items['node/%webform_menu/edit/components/%webform_menu_component/delete'] = array(
     'page arguments' => array('webform_component_delete_form', 1, 4),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
   );
 
@@ -152,16 +158,20 @@ function webform_menu() {
   $items['node/%webform_menu/webform-results/submissions'] = array(
     'title' => 'Submissions',
     'page callback' => 'webform_results_submissions',
-    'file' => 'webform_report.inc',
     'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('access webform results'),
+    'file' => 'webform_report.inc',
     'weight' => 4,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['node/%webform_menu/webform-results/analysis'] = array(
     'title' => 'Analysis',
     'page callback' => 'webform_results_analysis',
-    'file' => 'webform_report.inc',
     'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('access webform results'),
+    'file' => 'webform_report.inc',
     'weight' => 5,
     'type' => MENU_LOCAL_TASK,
   );
@@ -169,6 +179,8 @@ function webform_menu() {
     'title' => 'Table',
     'page callback' => 'webform_results_table',
     'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 6,
     'type' => MENU_LOCAL_TASK,
@@ -177,6 +189,8 @@ function webform_menu() {
     'title' => 'Download',
     'page callback' => 'webform_results_download',
     'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 7,
     'type' => MENU_LOCAL_TASK,
