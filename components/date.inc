@@ -175,7 +175,10 @@ function theme_webform_mail_date($data, $component) {
   $output = $component['name'] .":";
   if ($data['month'] && $data['day']) {
     $timestamp = strtotime($data['month'] ."/". $data['day'] ."/". $data['year']);
-    $output .= " ". format_date($timestamp, "custom", 'F j, Y', 0);
+    /* allow for PHP timezone offset */
+    $tz_offset = strtotime(date("M d Y H:i:s")) - strtotime(gmdate("M d Y H:i:s"));
+    $timestamp += $tz_offset;
+    $output .= " ". format_date($timestamp, "custom", 'F j, Y', NULL);
   }
   return $output;
 }
