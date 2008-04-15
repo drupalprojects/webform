@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
-"POT-Creation-Date: 2008-03-29 22:02+0200\n"
-"PO-Revision-Date: 2008-03-30 01:11+0200\n"
+"POT-Creation-Date: 2008-04-15 18:21+0300\n"
+"PO-Revision-Date: 2008-04-15 18:23+0300\n"
 "Last-Translator: Vasileios Lourdas <vasilis@lourdas.name>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "Υποχρεωτικό"
 msgid "Add"
 msgstr "Προσθήκη"
 
-#: webform_components.inc:89;346 webform.module:1076;1095;1112;1244
+#: webform_components.inc:89;346 webform.module:1092;1111;1128;1260
 msgid "Submit"
 msgstr "Υποβολή"
 
@@ -37,11 +37,11 @@ msgstr "Υποβολή"
 msgid "Publish"
 msgstr "Δημοσίευση"
 
-#: webform_components.inc:118 webform.module:662;943
+#: webform_components.inc:118 webform.module:671;959
 msgid "Name"
 msgstr "Όνομα"
 
-#: webform_components.inc:118 webform.module:663
+#: webform_components.inc:118 webform.module:672
 msgid "Type"
 msgstr "Τύπος"
 
@@ -49,7 +49,7 @@ msgstr "Τύπος"
 msgid "Value"
 msgstr "Τιμή"
 
-#: webform_components.inc:118 webform_report.inc:33 webform.module:1746
+#: webform_components.inc:118 webform_report.inc:44 webform.module:1773
 msgid "Operations"
 msgstr "Λειτουργίες"
 
@@ -61,7 +61,7 @@ msgstr "Όνομα νέου συστατικού"
 msgid "Edit this component"
 msgstr "Επεξεργασία του συστατικού"
 
-#: webform_components.inc:176 webform_report.inc:61;64 webform.module:218;1757
+#: webform_components.inc:176 webform_report.inc:75 webform.module:227;1784
 msgid "Edit"
 msgstr "Επεξεργασία"
 
@@ -69,8 +69,8 @@ msgstr "Επεξεργασία"
 msgid "Clone"
 msgstr "Αντιγραφή"
 
-#: webform_components.inc:178;440 webform_report.inc:67
-#: webform_submissions.inc:139 webform.module:227
+#: webform_components.inc:178;440 webform_report.inc:76
+#: webform_submissions.inc:149 webform.module:236
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -86,6 +86,10 @@ msgstr "Το webform έχει δημοσιευθεί."
 msgid "The component positions and mandatory values have been updated."
 msgstr "Οι θέσεις των συστατικών και οι υποχρεωτικές τιμές αποθηκεύτηκαν."
 
+#: webform_components.inc:246
+msgid "Edit component: @name (@type)"
+msgstr "Επεξεργασία συστατικού: @name (@type)"
+
 #: webform_components.inc:272
 msgid "Label"
 msgstr "Ετικέτα"
@@ -94,15 +98,15 @@ msgstr "Ετικέτα"
 msgid "This is used as a descriptive label when displaying this form element."
 msgstr "Θα χρησιμοποιηθεί ως μια περιγραφική ετικέτα και ως κλειδί κατά την αποθήκευση των δεδομένων στη βάση."
 
-#: webform_components.inc:280
+#: webform_components.inc:281
 msgid "Field Key"
 msgstr "Κλειδί πεδίου"
 
-#: webform_components.inc:281
+#: webform_components.inc:282
 msgid "Enter a machine readable key for this form element. May contain only lowercase alphanumeric characters and underscores. This key will be used as the name attribute of the form element."
 msgstr "Εισάγετε ένα κλειδί σε αναγνώσιμη από τη μηχανή μορφή για αυτό το στοιχείο της φόρμας. Μπορεί να περιέχει μόνο πεζούς αλφαριθμητικούς χαρακτήρες και το χαρακτήρα _ (underscore). Το κλειδί αυτό θα χρησιμοποιηθεί ως η ιδιότητα όνομα του στοιχείου της φόρμας."
 
-#: webform_components.inc:288 webform.module:457;943
+#: webform_components.inc:289 webform.module:466;959
 msgid "Description"
 msgstr "Περιγραφή"
 
@@ -174,67 +178,79 @@ msgstr "Θα γίνει άμεση διαγραφή του συστατικού 
 msgid "Component %name deleted."
 msgstr "Το συστατικό %name διαγράφηκε."
 
-#: webform_report.inc:29;91
+#: webform_report.inc:20
+msgid "Submissions for %user"
+msgstr "Υποβολές του χρήστη %user"
+
+#: webform_report.inc:37;111
 msgid "#"
 msgstr "#"
 
-#: webform_report.inc:30;92
+#: webform_report.inc:38;112
 msgid "Submitted"
 msgstr "Υποβλήθηκε"
 
-#: webform_report.inc:31;93
+#: webform_report.inc:41;113
 msgid "User"
 msgstr "Χρήστης"
 
-#: webform_report.inc:32;94
+#: webform_report.inc:42;114
 msgid "IP Address"
 msgstr "Διεύθυνση IP"
 
-#: webform_report.inc:58 webform.module:209;1745
+#: webform_report.inc:73 webform.module:218;1772
 msgid "View"
 msgstr "Εμφάνιση"
 
-#: webform_report.inc:239
+#: webform_report.inc:85
+msgid "There are no submissions for this form. <a href=\"!url\">View this form</a>."
+msgstr "Δεν υπάρχουν υποβολές για αυτή τη φόρμα. <a href=\"!url\">Δείτε τη φόρμα</a>."
+
+#: webform_report.inc:90 webform.module:1547
+msgid "Go back to the form"
+msgstr "Μετάβαση πίσω στη φόρμα"
+
+#: webform_report.inc:259
 msgid "Q"
 msgstr "Q"
 
-#: webform_report.inc:240
+#: webform_report.inc:260
 msgid "responses"
 msgstr "αποκρίσεις"
 
-#: webform_submissions.inc:100
+#: webform_submissions.inc:110
 msgid "Clear Form Submissions"
 msgstr "Διαγραφή όλων των υποβολών της φόρμας"
 
-#: webform_submissions.inc:104
+#: webform_submissions.inc:114
 msgid "Are you sure you want to delete all submissions for this form?"
 msgstr "Θέλετε σίγουρα να διαγράψετε όλες τις υποβολές για αυτή τη φόρμα;"
 
-#: webform_submissions.inc:106 webform.module:188;1758
+#: webform_submissions.inc:116 webform.module:188;1785
 msgid "Clear"
 msgstr "Διαγραφή"
 
-#: webform_submissions.inc:106;139
+#: webform_submissions.inc:116;149
 msgid "Cancel"
 msgstr "Άκυρο"
 
-#: webform_submissions.inc:114
+#: webform_submissions.inc:124
 msgid "Webform %title entries cleared."
 msgstr "Οι εγγραφές του webform %title διαγράφηκαν."
 
-#: webform_submissions.inc:132
+#: webform_submissions.inc:142
 msgid "Delete Form Submission"
 msgstr "Διαγραφή υποβολής φόρμας"
 
-#: webform_submissions.inc:137
+#: webform_submissions.inc:147
 msgid "Are you sure you want to delete this submission?"
 msgstr "Θέλετε σίγουρα να διαγράψετε την υποβολή για αυτή τη φόρμα;"
 
-#: webform_submissions.inc:144
+#: webform_submissions.inc:154
 msgid "Submission deleted."
 msgstr "Η υποβολή διαγράφηκε"
 
-#: webform_submissions.inc:116 webform.module:336;1209;1218;1393;1432;0
+#: webform_submissions.inc:126 webform.module:345;1225;1234;1412;1451;0
 msgid "webform"
 msgstr "webform"
 
@@ -306,7 +322,7 @@ msgstr "Webforms"
 msgid "View and edit all the available webforms on your site."
 msgstr "Εμφάνιση και τροποποίηση όλων των διαθέσιμων webform στον ιστοτόπο σας."
 
-#: webform.module:93;254 webform.info:0
+#: webform.module:93;263 webform.info:0
 msgid "Webform"
 msgstr "Webform"
 
@@ -326,387 +342,395 @@ msgstr "Ρύθμιση"
 msgid "Form components"
 msgstr "Συστατικά φόρμας"
 
-#: webform.module:143;1432
+#: webform.module:143;1451
 msgid "Results"
 msgstr "Αποτελέσματα"
 
-#: webform.module:152;1753
+#: webform.module:152;197;1780
 msgid "Submissions"
 msgstr "Υποβολές"
 
-#: webform.module:161;1754
+#: webform.module:161;1781
 msgid "Analysis"
 msgstr "Ανάλυση"
 
-#: webform.module:170;1755
+#: webform.module:170;1782
 msgid "Table"
 msgstr "Πίνακας"
 
-#: webform.module:179;1756
+#: webform.module:179;1783
 msgid "Download"
 msgstr "Λήψη"
 
-#: webform.module:201
+#: webform.module:210
 msgid "Webform submission"
 msgstr "Υποβολή webform"
 
-#: webform.module:256
+#: webform.module:265
 msgid "Create a new form or questionnaire accessible to users. Submission results and statistics are recorded and accessible to privileged users."
 msgstr "Δημιουργία μιας νέας φόρμας ή ερωτηματολογίου προσπελάσιμη από τους χρήστες. Τα αποτελέσματα των υποβολών και τα στατιστικά καταγράφονται και είναι προσπελάσιμα από τους προνομιούχους χρήστες."
 
-#: webform.module:403
+#: webform.module:412
 msgid "Go to form"
 msgstr "Μετάβαση στη φόρμα"
 
-#: webform.module:405
+#: webform.module:414
 msgid "View this form."
 msgstr "Εμφάνιση αυτής της φόρμας."
 
-#: webform.module:439
+#: webform.module:448
 msgid "Webform Settings"
 msgstr "Ρυθμίσεις webform"
 
-#: webform.module:448;1744
+#: webform.module:457;1771
 msgid "Title"
 msgstr "Τίτλος"
 
-#: webform.module:458
+#: webform.module:467
 msgid "Text to be shown as teaser and before the form."
 msgstr "Κείμενο που θα εμφανίζεται πριν τη φόρμα και ως περίληψη."
 
-#: webform.module:467
+#: webform.module:476
 msgid "Confirmation message or redirect URL"
 msgstr "Μήνυμα επιβεβαίωσης ή διεύθυνση URL για ανακατεύθυνση"
 
-#: webform.module:468
+#: webform.module:477
 msgid "Message to be shown upon successful submission or a path to a redirect page. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>"
 msgstr "Μήνυμα που θα εμφανίζεται μετά την επιτυχή υποβολή ή μια διαδρομή προς μια σελίδα ανακατεύθυνσης. Οι σελίδες ανακατεύθυνσης πρέπει να αρχίζουν με το <em>http://</em> για εξωτερικούς ιστοτόπους ή με το <em>internal:</em> για μια εσωτερική διαδρομή, πχ. <em>http://www.example.com</em> ή <em>internal:node/10</em>"
 
-#: webform.module:480
+#: webform.module:489
 msgid "Webform mail settings"
 msgstr "Ρυθμίσεις e-mail webform"
 
-#: webform.module:490
+#: webform.module:499
 msgid "E-mail to address"
 msgstr "Διεύθυνση του παραλήπτη του e-mail"
 
-#: webform.module:492
+#: webform.module:501
 msgid "Form submissions will be e-mailed to this address. Leave blank for none. Multiple e-mail addresses may be separated by commas."
 msgstr "Οι υποβολές των φορμών θα αποστέλλονται με e-mail σε αυτή τη διεύθυνση. Αφήστε την κενή για μη αποστολή. Πολλαπλές διευθύνσεις e-mail χωρίζονται με το κόμμα."
 
-#: webform.module:500
+#: webform.module:509
 msgid "Conditional e-mail recipients"
 msgstr "Υπό συνθήκη παραλήπτες e-mail"
 
-#: webform.module:501
+#: webform.module:510
 msgid "The settings below allow you to send e-mails to multiple recipients based off the value of a component."
 msgstr "Οι παρακάτω ρυθμίσεις επιτρέπουν την αποστολή e-mail σε πολλαπλούς παραλήπτες βάσει μιας τιμής ενός συστατικού."
 
-#: webform.module:525
+#: webform.module:534
 msgid "E-mail from name"
 msgstr "Το όνομα του αποστολέα του e-mail"
 
-#: webform.module:526
+#: webform.module:535
 msgid "After adding components to this form any email, select, or hidden form element may be selected as the sender's name for e-mails."
 msgstr "Μετά την προσθήκη συστατικών στη φόρμα, οποιοδήποτε πεδίο e-mail, αναδυόμενης λίστας ή κρυφό στοιχείο της φόρμας μπορεί να επιλεγεί ως το όνομα του αποστολέα για τα e-mail."
 
-#: webform.module:530
+#: webform.module:539
 msgid "E-mail from address"
 msgstr "Διεύθυνση αποστολέα του e-mail"
 
-#: webform.module:531
+#: webform.module:540
 msgid "After adding components to this form any textfield, select, or hidden form element may be selected as the sender's e-mail address."
 msgstr "Μετά την προσθήκη συστατικών στη φόρμα, οποιοδήποτε πεδίο κειμένου, αναδυόμενης λίστας ή κρυφό στοιχείο της φόρμας μπορεί να επιλεγεί ως η διεύθυνση e-mail του αποστολέα."
 
-#: webform.module:535
+#: webform.module:544
 msgid "E-mail subject"
 msgstr "Θέμα του e-mail"
 
-#: webform.module:536
+#: webform.module:545
 msgid "After adding components to this form any textfield, select, or hidden form element may be selected as the subject for e-mails."
 msgstr "Μετά την προσθήκη συστατικών στη φόρμα, οποιοδήποτε πεδίο κειμένου, αναδυόμενης λίστας ή κρυφό στοιχείο της φόρμας μπορεί να επιλεγεί ως το θέμα για τα e-mail."
 
-#: webform.module:571
+#: webform.module:580
 msgid "Webform advanced settings"
 msgstr "Προχωρημένες ρυθμίσεις webform"
 
-#: webform.module:579
+#: webform.module:588
 msgid "Show complete form in teaser"
 msgstr "Εμφάνιση ολόκληρης φόρμας στη σύνοψη"
 
-#: webform.module:581
+#: webform.module:590
 msgid "Display the entire form in the teaser display of this node."
 msgstr "Εμφάνιση ολόκληρης της φόρμας κατά την εμφάνιση της σύνοψης του κόμβου."
 
-#: webform.module:585
+#: webform.module:594
 msgid "Limit the number of submissions a user may send within a specified time period"
 msgstr "Περιορισμός του αριθμού των υποβολών ενός χρήστη μέσα σε συγκεκριμένο χρονικό διάστημα"
 
-#: webform.module:590
+#: webform.module:599
 msgid "Unlimited"
 msgstr "Απεριόριστες"
 
-#: webform.module:604
+#: webform.module:613
 msgid "ever"
 msgstr "για πάντα"
 
-#: webform.module:605
+#: webform.module:614
 msgid "every hour"
 msgstr "κάθε ώρα"
 
-#: webform.module:606
+#: webform.module:615
 msgid "every day"
 msgstr "κάθε ημέρα"
 
-#: webform.module:607
+#: webform.module:616
 msgid "every week"
 msgstr "κάθε εβδομάδα"
 
-#: webform.module:614
+#: webform.module:623
 msgid "Submit button text"
 msgstr "Κείμενο πλήκτρου υποβολής"
 
-#: webform.module:616
+#: webform.module:625
 msgid "By default the submit button on this form will have the label <em>Submit</em>. Enter a new title here to override the default."
 msgstr "Εξ' ορισμού, το πλήκτρο υποβολής της φόρμας θα έχει ετικέτα <em>Submit</em>. Εισάγετε εδώ ένα νέο τίτλο για να παρακάμψετε τον προεπιλεγμένο."
 
-#: webform.module:623
+#: webform.module:632
 msgid "Enter PHP code to perform additional validation for this form. Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Εισάγετε κώδικα PHP για την πρόσθετη επαλήθευση της φόρμας. Συμπεριλάβετε τις σημάνσεις &lt;?php ?&gt;. Τα $form_id και $form_values είναι διαθέσιμες μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτηση form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _validate του <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 
-#: webform.module:632
+#: webform.module:641
 msgid "Enter PHP code to perform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form_id and $form_values are available variables, use the same syntax as a _submit function used in the <a href=\"http://api.drupal.org/api/file/developer/topics/forms_api.html\">Forms API</a>."
 msgstr "Εισάγετε κώδικα PHP για πρόσθετη προεπεξεργασία της φόρμας (μετά την επαλήθευση). Συμπεριλάβετε τις σημάνσεις &lt;?php ?&gt;. Τα $form_id και $form_values είναι διαθέσιμες μεταβλητές. Αν η επαλήθευση αποτύχει, χρησιμοποιήστε τη συνάρτηση form_set_error για να αποτρέψετε την υποβολή της φόρμας. Χρησιμοποιήστε την ίδια σύνταξη που χρησιμοποιούν και συναρτήσεις τύπου _submit του <a href=\"http://api.drupal.org/api/4.7/file/developer/topics/forms_api.html\">Forms API</a>."
 
-#: webform.module:661
+#: webform.module:670
 msgid "To"
 msgstr "Προς"
 
-#: webform.module:676
+#: webform.module:685
 msgid "No components yet in this webform."
 msgstr "Δεν υπάρχουν ακόμη συστατικά σε αυτό το webform."
 
-#: webform.module:691
+#: webform.module:700
 msgid "Custom"
 msgstr "Προσαρμοσμένο"
 
-#: webform.module:691
+#: webform.module:700
 msgid "Component"
 msgstr "Συστατικό"
 
-#: webform.module:702
+#: webform.module:711
 msgid "Default"
 msgstr "Προεπιλεγμένο"
 
-#: webform.module:723
+#: webform.module:732
 msgid "Limit to !count submission(s) !timespan"
 msgstr "Περιορισμός σε !count υποβολές στο !timespan"
 
-#: webform.module:798
+#: webform.module:807
 msgid "The new webform %title has been created. Add new fields to your webform with the form below."
 msgstr "Το νέο webform με τίτλο %title δημιουργήθηκε. Προσθέστε νέα πεδία στο webform χρησιμοποιώντας τη φόρμα παρακάτω."
 
-#: webform.module:801
+#: webform.module:810
 msgid "This webform is currently unpublished. After finishing your changes to the webform, use the <em>Publish</em> button below."
 msgstr "Το webform αυτή τη στιγμή δεν είναι δημοσιευμένο. Αφού ολοκληρώσετε τις αλλαγές σας, χρησιμοποιήστε το πλήκτρο <em>Δημοσίευση</em> παρακάτω."
 
-#: webform.module:823 components/markup.inc:41
+#: webform.module:832 components/markup.inc:41
 msgid "Preview"
 msgstr "Δοκιμή εμφάνισης"
 
-#: webform.module:861
+#: webform.module:846;993
+msgid "Submission #@sid"
+msgstr "Υποβολή #@sid"
+
+#: webform.module:864
+msgid "You have already submitted this form. <a href=\"!url\">View your previous submissions</a>."
+msgstr "Έχει ήδη υποβάλλει αυτή τη φόρμα. <a href=\"!url\">Δείτε τις προηγούμενες υποβολές σας</a>."
+
+#: webform.module:877
 msgid "Available components"
 msgstr "Διαθέσιμα συστατικά"
 
-#: webform.module:864
+#: webform.module:880
 msgid "These are the available field types for your installation of Webform. You may disable any of these components by unchecking its corresponding box. Only checked components will be available in existing or new webforms."
 msgstr "Παρακάτω είναι μια λίστα διαθέσιμων τύπων πεδίων για την εγκατάσταση του webform. Είναι δυνατή η απενεργοποίηση οποιουδήποτε από τα συστατικά αυτά με καθαρισμό του αντίστοιχου πεδίου επιλογής. Μόνο επιλεγμένα πεδία θα είναι διαθέσιμα σε υπάρχοντα ή νέα webform."
 
-#: webform.module:881
+#: webform.module:897
 msgid "Default e-mail values"
 msgstr "Προεπιλεγμένες τιμές e-mail"
 
-#: webform.module:888
+#: webform.module:904
 msgid "From address"
 msgstr "Διεύθυνση του αποστολέα"
 
-#: webform.module:890
+#: webform.module:906
 msgid "The default sender address for emailed webform results; often the e-mail address of the maintainer of your forms."
 msgstr "Η προεπιλεγμένη διεύθυνση αποστολέα για τα αποτελέσματα του webform μέσω e-mail· συχνά η διεύθυνση e-mail του υπεύθυνου που συντηρεί τις φόρμες."
 
-#: webform.module:895
+#: webform.module:911
 msgid "From name"
 msgstr "Όνομα αποστολέα"
 
-#: webform.module:897
+#: webform.module:913
 msgid "The default sender name which is used along with the default from address."
 msgstr "Το προεπιλεγμένο όνομα αποστολέα που θα χρησιμοποιείται μαζί με την προεπιλεγμένη διεύθυνση αποστολέα."
 
-#: webform.module:902
+#: webform.module:918
 msgid "Default subject"
 msgstr "Προεπιλεγμένο θέμα"
 
-#: webform.module:903;1847
+#: webform.module:919;1876
 msgid "Form submission from: [title]"
 msgstr "Υποβολή φόρμας από: [title]"
 
-#: webform.module:904
+#: webform.module:920
 msgid "The default subject line of any e-mailed results."
 msgstr "Η προεπιλεγμένη γραμμή θέματος για τα αποτελέσματα μέσω e-mail."
 
-#: webform.module:909
+#: webform.module:925
 msgid "Advanced options"
 msgstr "Επιλογές για προχωρημένους"
 
-#: webform.module:917
+#: webform.module:933
 msgid "Allow cookies for tracking submissions"
 msgstr "Να επιτρέπονται τα cookies για την παρακολούθηση των υποβολών"
 
-#: webform.module:919
+#: webform.module:935
 msgid "<a href=\"http://www.wikipedia.org/wiki/HTTP_cookie\">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. This feature is not needed for limiting submissions per user, though it can increase accuracy in some situations. Besides cookies, Webform also uses IP addresses and site usernames to prevent repeated submissions."
 msgstr "Τα <a href=\"http://www.wikipedia.org/wiki/HTTP_cookie\">Cookies</a> μπορούν να χρησιμοποιηθούν για να βοηθούν στο να αποτρέπουν τον ίδιο χρήστη να υποβάλλει συνέχεια το webform. Το χαρακτηριστικό αυτό δεν είναι απαραίτητο για τον περιορισμό των υποβολών ανά χρήστη, παρόλο που μπορεί να αυξήσει την ακρίβεια σε ορισμένες περιπτώσεις. Εκτός από τα cookies, τα webform χρησιμοποιούν και τις διευθύνσεις IP και τα ονόματα χρηστών του ιστοτόπου για την αποτροπή επαναλαμβανόμενων υποβολών."
 
-#: webform.module:924
+#: webform.module:940
 msgid "Webforms debug"
 msgstr "Αποσφαλμάτωση των webform"
 
-#: webform.module:926
+#: webform.module:942
 msgid "Off"
 msgstr "Κλειστό"
 
-#: webform.module:926
+#: webform.module:942
 msgid "Log submissions"
 msgstr "Καταγραφή όλων των υποβολών"
 
-#: webform.module:926
+#: webform.module:942
 msgid "Full debug"
 msgstr "Πλήρης αποσφαλμάτωση"
 
-#: webform.module:927
+#: webform.module:943
 msgid "Set to \"Log submissions\" to log all submissions in the watchdog. Set to \"Full debug\" to print debug info on submission."
 msgstr "Επιλέξτε την επιλογή \"Καταγραφή όλων των υποβολών\" για την καταγραφή όλων των υποβολών στο watchdog. Επιλέξτε το \"Πλήρης αποσφαλμάτωση\" για την εκτύπωση πληροφοριών αποσφαλμάτωσης κατά την υποβολή."
 
-#: webform.module:943
+#: webform.module:959
 msgid "Enabled"
 msgstr "Ενεργοποιημένο"
 
-#: webform.module:1001;1001
+#: webform.module:1017;1017
 msgid "Previous submission"
 msgstr "Προηγούμενη υποβολή"
 
-#: webform.module:1004;1004
+#: webform.module:1020;1020
 msgid "Next submission"
 msgstr "Επόμενη υποβολή"
 
-#: webform.module:1008
+#: webform.module:1024
 msgid "Submission Information"
 msgstr "Πληροφορίες υποβολής"
 
-#: webform.module:1017
+#: webform.module:1033
 msgid "Form: !form"
 msgstr "Φόρμα: !form"
 
-#: webform.module:1020
+#: webform.module:1036
 msgid "Submitted by !name"
 msgstr "Υποβλήθηκε από τον !name"
 
-#: webform.module:1060
+#: webform.module:1076
 msgid "Next Page >"
 msgstr "Επόμενη σελίδα >"
 
-#: webform.module:1061
+#: webform.module:1077
 msgid "< Previous Page"
 msgstr "< Προηγούμενη σελίδα"
 
-#: webform.module:1180
+#: webform.module:1196
 msgid "The webform component @type is not able to be displayed"
 msgstr "Το συστατικό webform @type δεν μπορεί να εμφανιστεί"
 
-#: webform.module:1209
+#: webform.module:1225
 msgid "The authenticated user <a href=\"%user_url\">%username</a> attempted to submit more entries than allowed on the <a href=\"%webform_url\">%webform_title</a> webform"
 msgstr "Ο πιστοποιημένος χρήστης <a href=\"%user_url\">%username</a> προσπάθησε να υποβάλλει περισσότερες εγγραφές από αυτές που επιτρέπει το webform <a href=\"%webform_url\">%webform_title</a>"
 
-#: webform.module:1218
+#: webform.module:1234
 msgid "An anonymous user with IP address %ip attempted to submit more entries than allowed on the <a href=\"%webform_url\">%webform_title</a> webform"
 msgstr "Ένας ανώνυμος χρήστης με διεύθυνση IP %ip προσπάθησε να υποβάλλει περισσότερες εγγραφές από αυτές που επιτρέπει το webform <a href=\"%webform_url\">%webform_title</a>"
 
-#: webform.module:1226
+#: webform.module:1242
 msgid "You have submitted the maximum number of entries. Check submission guidelines."
 msgstr "Έχετε υποβάλλει το μέγιστο αριθμό εγγραφών. Δείτε τις οδηγίες υποβολής."
 
-#: webform.module:1393
+#: webform.module:1412
 msgid "Possible spam attempt from @remote_addr"
 msgstr "Ενδεχόμενη προσπάθεια αποστολής ανεπιθύμητων μηνυμάτων από το @remote_addr"
 
-#: webform.module:1394
+#: webform.module:1413
 msgid "Illegal information. Data not submitted."
 msgstr "Μη έγκυρες πληροφορίες. Τα δεδομένα δεν υποβλήθηκαν."
 
-#: webform.module:1432
+#: webform.module:1451
 msgid "Submission posted to %title"
 msgstr "Η υποβολή απεστάλλη στο %title"
 
-#: webform.module:1520
+#: webform.module:1456
+msgid "Submission updated."
+msgstr "Η υποβολή ενημερώθηκε."
+
+#: webform.module:1540
 msgid "Thank you, your submission has been received."
 msgstr "Σας ευχαριστούμε, έγινε λήψη της υποβολής σας."
 
-#: webform.module:1527
-msgid "Go back to the form"
-msgstr "Μετάβαση πίσω στη φόρμα"
-
-#: webform.module:1556
+#: webform.module:1576
 msgid "Submitted on"
 msgstr "Υποβλήθηκε στις"
 
-#: webform.module:1560
+#: webform.module:1580
 msgid "Submitted by user"
 msgstr "Υποβλήθηκε από το χρήστη"
 
-#: webform.module:1563
+#: webform.module:1583
 msgid "Submitted by anonymous user"
 msgstr "Υποβλήθηκε από ανώνυμο χρήστη"
 
-#: webform.module:1567
+#: webform.module:1587
 msgid "Submitted values are"
 msgstr "Οι υποβληθέντες τιμές είναι"
 
-#: webform.module:1571
+#: webform.module:1591
 msgid "The results of this submission may be viewed at:"
 msgstr "Τα αποτελέσματα αυτής της υποβολής μπορούν να εμφανιστούν στη:"
 
-#: webform.module:245
+#: webform.module:254
 msgid "create webforms"
 msgstr "δημιουργία webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "edit own webforms"
 msgstr "τροποποίηση των δικών τους webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "edit webforms"
 msgstr "τροποποίηση των webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "access webform results"
 msgstr "προσπέλαση των αποτελεσμάτων των webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "clear webform results"
 msgstr "διαγραφή των αποτελεσμάτων των webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "access own webform submissions"
 msgstr "προσπέλαση των δικών τους υποβολών webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "edit own webform submissions"
 msgstr "τροποποίηση των δικών τους υποβολών webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "edit webform submissions"
 msgstr "τροποποίηση των υποβολών webform"
 
-#: webform.module:245
+#: webform.module:254
 msgid "use PHP for additional processing"
 msgstr "χρησιμοποίηση της PHP για πρόσθετη επεξεργασία"
 
@@ -818,17 +842,17 @@ msgstr "Το πεδίο %field είναι απαραίτητο."
 msgid "Entered %name is not a valid date."
 msgstr "Το %name δεν είναι έγκυρη ημερομηνία."
 
-#: components/date.inc:205
+#: components/date.inc:208
 msgid "Presents month, day, and year fields."
 msgstr "Παρουσιάζει τα πεδία του μήνα, της ημέρας και του έτους."
 
-#: components/date.inc:264 components/email.inc:177 components/file.inc:388
+#: components/date.inc:267 components/email.inc:177 components/file.inc:388
 #: components/textarea.inc:143 components/textfield.inc:144
 #: components/time.inc:267
 msgid "Left Blank"
 msgstr "Έμεινε κενό"
 
-#: components/date.inc:265 components/email.inc:178
+#: components/date.inc:268 components/email.inc:178
 #: components/textarea.inc:144 components/textfield.inc:145
 #: components/time.inc:268
 msgid "User entered value"
