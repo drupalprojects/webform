@@ -3,7 +3,7 @@
 
 // Get the current schema so that updates that have already run for 5 don't get
 // run a second time when upgrading to 6.
-define('WEBFORM_VERSION', db_result(db_query("SELECT schema_version FROM {system} WHERE type = 'module' && name = 'webform'")));
+define('WEBFORM_VERSION', db_result(db_query("SELECT schema_version FROM {system} WHERE type = 'module' AND name = 'webform'")));
 
 /**
  * Implementation of hook_schema().
