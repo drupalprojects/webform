@@ -606,7 +606,7 @@ function webform_update_19() {
     if ($captcha_exists) {
       $added = db_result(db_query("SELECT form_id FROM {captcha_points} WHERE form_id = 'webform_client_form_". $component->nid ."'"));
       if (!$added) {
-        $ret[] = update_sql("INSERT INTO {captcha_points} (form_id, module, type) VALUES ('webform_client_form_". $component->nid .'", "'. $captcha_module ."', '". $captcha_type ."')");
+        $ret[] = update_sql("INSERT INTO {captcha_points} (form_id, module, type) VALUES ('webform_client_form_". $component->nid ."', '". $captcha_module ."', '". $captcha_type ."')");
       }
     }
   }
