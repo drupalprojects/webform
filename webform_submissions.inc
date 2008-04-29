@@ -92,7 +92,7 @@ function webform_results_clear($nid) {
  * @param $nid
  *   ID of node for which to clear submissions.
  */
-function webform_results_clear_form($node) {
+function webform_results_clear_form($form_state, $node) {
   drupal_set_title(t("Clear Form Submissions"));
 
   $form = array();
