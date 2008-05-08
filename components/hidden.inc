@@ -46,7 +46,7 @@ function _webform_edit_hidden($currfield) {
 function _webform_render_hidden($component) {
   $form_item = array(
     '#type'          => 'hidden',
-    '#value'          => _webform_filter_values($component['value']),
+    '#default_value' => _webform_filter_values($component['value']),
     '#weight'        => $component['weight'],
   );
 
