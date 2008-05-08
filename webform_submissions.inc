@@ -90,44 +90,6 @@ function webform_submission_delete($nid, $sid) {
 }
 
 /**
- * Delete all submissions for a node.
- * 
- * @param $nid
- *   The node id whose submissions will be deleted.
- */
-function webform_results_clear($nid) {
-  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d', $nid);
-  db_query('DELETE FROM {webform_submissions} WHERE nid = %d', $nid);
-}
-
-/**
- * Confirmation form to delete all submissions for a node.
- * 
- * @param $nid
- *   ID of node for which to clear submissions.
- */
-function webform_results_clear_form($node) {
-  drupal_set_title(t("Clear Form Submissions"));
-
-  $form = array();
-  $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
-  $question = t("Are you sure you want to delete all submissions for this form?");
-
-  return confirm_form($form, $question, 'node/'. $node->nid .'/results', NULL, t('Clear'), t('Cancel'));
-}
-
-function webform_results_clear_form_submit($form_id, $form_values) {
-  webform_results_clear($form_values['nid']);
-  $node = node_load(array('nid' => $form_values['nid']));
-  $title = $node->title;
-
-  $message = t('Webform %title entries cleared.', array('%title' => $title));
-  drupal_set_message($message);
-  watchdog('webform', $message, WATCHDOG_NOTICE);
-  return 'admin/content/webform';
-}
-
-/**
  * Confirm form to delete a single form submission.
  * 
  * @param $node
