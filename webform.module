@@ -127,7 +127,7 @@ function webform_menu() {
   // Node component forms.
   $items['node/%webform_menu/edit/components/%webform_menu_component'] = array(
     'load arguments' => array(1, 5),
-    'page arguments' => array('webform_component_edit_form', 1, 4),
+    'page arguments' => array('webform_component_edit_form', 1, 4, FALSE),
     'access callback' => 'node_access',
     'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
