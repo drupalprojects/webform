@@ -440,7 +440,7 @@ function webform_component_delete_form($form_state, $node, $component) {
     $description = t('This will immediately delete the %name component from the %webform webform. This cannot be undone.', array('%name' => $node->webform['components'][$cid]['name'], '%webform' => $node->title));
   }
 
-  return confirm_form($form, $question, 'node/'. $node->nid .'/components', $description, t('Delete'));
+  return confirm_form($form, $question, 'node/'. $node->nid .'/edit/components', $description, t('Delete'));
 }
 
 function webform_component_delete_form_submit($form, &$form_state) {
