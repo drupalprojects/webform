@@ -59,7 +59,7 @@ function webform_components_form($form_state, $node) {
     '#type' => 'select',
     '#options' => $component_types,
     '#weight' => 3,
-    '#default_value' => isset($node->webform['components'][$_GET['cid']]) ? $node->webform['components'][$_GET['cid']]['type'] : NULL,
+    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['type'] : NULL,
   );
   $form['add']['mandatory'] = array(
     '#type' => 'checkbox',
@@ -70,12 +70,12 @@ function webform_components_form($form_state, $node) {
   );
   $form['add']['pid'] = array(
     '#type' => 'hidden',
-    '#default_value' => isset($node->webform['components'][$_GET['cid']]) ? $node->webform['components'][$_GET['cid']]['pid'] : 0,
+    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['pid'] : 0,
   );
   $form['add']['weight'] = array(
     '#type' => 'weight',
     '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
-    '#default_value' => isset($node->webform['components'][$_GET['cid']]) ? $node->webform['components'][$_GET['cid']]['weight'] + 1 : NULL,
+    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['weight'] + 1 : NULL,
   );
 
   $form['add']['add'] = array(
@@ -189,7 +189,7 @@ function theme_webform_components_form($form) {
       }
 
       // Add the add form if this was the last edited component.
-      if ($component['cid'] == $_GET['cid'] && $add_form) { 
+      if (isset($_GET['cid']) && $component['cid'] == $_GET['cid'] && $add_form) { 
         $add_form['data'][0] = $indents . $add_form['data'][0];
         $rows[] = $add_form;
         $add_form = FALSE;
@@ -228,7 +228,7 @@ function webform_components_form_submit($form, &$form_state) {
     }
   }
 
-  if ($_POST['op'] == t('Publish')) {
+  if (isset($_POST['op']) && $_POST['op'] == t('Publish')) {
     $node->status = 1;
     node_save($node);
     drupal_set_message(t('Your webform has been published.'));
@@ -246,7 +246,7 @@ function webform_components_form_submit($form, &$form_state) {
 }
 
 function webform_component_edit_form($form_state, &$node, $component, $clone = FALSE) {
-  drupal_set_title(t("Edit component: @name (@type)", array('@name' => $component['name'], '@type' => $component['type'])));
+  drupal_set_title(t("Edit component: @name (@type)", array('@name' => $component['name'], '@type' => t($component['type']))));
 
   // Print the correct field type specification.
   // We always need: name and description.
