@@ -969,7 +969,7 @@ function webform_edit_field_form(&$node) {
     }
     $currfield['form_key'] = $type . ($delta ? '_'. $delta : '');
     $currfield['name'] = drupal_ucfirst($type) . ($delta ? ' '. $delta : '');
-    drupal_set_title(t("Add new %type component", array('%type' => $currfield['type'])));
+    drupal_set_title(t("Add new %type component", array('%type' => t($currfield['type']))));
   }
 
   $form = array();
