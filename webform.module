@@ -55,8 +55,8 @@ function webform_help($section = "admin/help#webform", $arg = NULL) {
   if (strstr($section, 'admin/settings/webform#')) {
     // Call help hooks in plugins:
     $components = webform_load_components(TRUE);
-    foreach ($components as $component) {
-      $help_function = "_webform_help_". $component;
+    foreach ($components as $key => $component) {
+      $help_function = "_webform_help_". $key;
       if (function_exists($help_function)) {
         $output .= $help_function($section);
       }
@@ -376,8 +376,8 @@ function webform_theme() {
   );
   // Theme functions in all components.
   $components = webform_load_components(TRUE);
-  foreach ($components as $component) {
-    $theme_hook = "_webform_theme_". $component;
+  foreach ($components as $key => $component) {
+    $theme_hook = "_webform_theme_". $key;
     if (function_exists($theme_hook)) {
       $theme = array_merge($theme, $theme_hook());
     }
@@ -1028,13 +1028,13 @@ function webform_admin_settings() {
 
   // Add each component to the form:
   $component_types = webform_load_components(TRUE);
-  foreach ($component_types as $component_name => $component_trans_name) {
-    $form['components']['webform_enable_'. $component_name] = array(
-      '#title' => $component_trans_name,
-      '#description' => module_invoke('webform', 'help', 'admin/settings/webform#'. $component_name .'_description'),
+  foreach ($component_types as $key => $component) {
+    $form['components']['webform_enable_'. $key] = array(
+      '#title' => $component,
+      '#description' => module_invoke('webform', 'help', 'admin/settings/webform#'. $key .'_description'),
       '#type' => 'checkbox',
       '#checked_value' => 1,
-      '#default_value' => variable_get('webform_enable_'. $component_name, 1),
+      '#default_value' => variable_get('webform_enable_'. $key, 1),
     );
   }
 
