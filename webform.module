@@ -1228,7 +1228,8 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
       if ($page_count > 1) {
         $next_page = t('Next Page >');
         $prev_page = t('< Previous Page');
-        if (!empty($form_state['values'])) {
+        if (!empty($form_state['post'])) {
+          $form_state['values'] = $form_state['post'];
           $page_num = $form_state['values']['details']['page_num'];
           if ($form_state['values']['op'] == $prev_page && $page_num > 1) {
             $page_num--;
@@ -1314,7 +1315,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
           '#type'      => 'hidden',
           '#value'     => $submission['sid'],
         );
-      }      
+      }
     }
   }
 
@@ -1437,6 +1438,7 @@ function webform_client_form_submit($form, &$form_state) {
         $_SESSION[$session_key][$key] = $val;
       }
     }
+
     return;
   }
 
