@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
-"POT-Creation-Date: 2008-04-15 18:21+0300\n"
+"POT-Creation-Date: 2008-05-11 11:20+0300\n"
 "PO-Revision-Date: 2008-04-15 18:23+0300\n"
 "Last-Translator: Vasileios Lourdas <vasilis@lourdas.name>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -70,7 +70,7 @@ msgid "Clone"
 msgstr "Αντιγραφή"
 
 #: webform_components.inc:178;440 webform_report.inc:76
-#: webform_submissions.inc:149 webform.module:236
+#: webform_submissions.inc:111 webform.module:236
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -210,49 +210,49 @@ msgstr "Δεν υπάρχουν υποβολές για αυτή τη φόρμα
 msgid "Go back to the form"
 msgstr "Μετάβαση πίσω στη φόρμα"
 
-#: webform_report.inc:259
-msgid "Q"
-msgstr "Q"
-
-#: webform_report.inc:260
-msgid "responses"
-msgstr "αποκρίσεις"
-
-#: webform_submissions.inc:110
+#: webform_report.inc:185
 msgid "Clear Form Submissions"
 msgstr "Διαγραφή όλων των υποβολών της φόρμας"
 
-#: webform_submissions.inc:114
+#: webform_report.inc:189
 msgid "Are you sure you want to delete all submissions for this form?"
 msgstr "Θέλετε σίγουρα να διαγράψετε όλες τις υποβολές για αυτή τη φόρμα;"
 
-#: webform_submissions.inc:116 webform.module:188;1785
+#: webform_report.inc:191 webform.module:188;1785
 msgid "Clear"
 msgstr "Διαγραφή"
 
-#: webform_submissions.inc:116;149
+#: webform_report.inc:191 webform_submissions.inc:111
 msgid "Cancel"
 msgstr "Άκυρο"
 
-#: webform_submissions.inc:124
+#: webform_report.inc:199
 msgid "Webform %title entries cleared."
 msgstr "Οι εγγραφές του webform %title διαγράφηκαν."
 
-#: webform_submissions.inc:142
+#: webform_report.inc:296
+msgid "Q"
+msgstr "Q"
+
+#: webform_report.inc:297
+msgid "responses"
+msgstr "αποκρίσεις"
+
+#: webform_report.inc:201 webform.module:345;1225;1234;1412;1451;0
+msgid "webform"
+msgstr "webform"
+
+#: webform_submissions.inc:104
 msgid "Delete Form Submission"
 msgstr "Διαγραφή υποβολής φόρμας"
 
-#: webform_submissions.inc:147
+#: webform_submissions.inc:109
 msgid "Are you sure you want to delete this submission?"
 msgstr "Θέλετε σίγουρα να διαγράψετε την υποβολή για αυτή τη φόρμα;"
 
-#: webform_submissions.inc:154
+#: webform_submissions.inc:116
 msgid "Submission deleted."
 msgstr "Η υποβολή διαγράφηκε"
-
-#: webform_submissions.inc:126 webform.module:345;1225;1234;1412;1451;0
-msgid "webform"
-msgstr "webform"
 
 #: webform.module:22
 msgid "Webforms are forms and questionnaires. To add one, select <a href=\"!url\">Create content -&gt; Webform</a>."
@@ -1072,7 +1072,7 @@ msgstr "Οι ερωτήσεις για το πλέγμα περιέχουν ακ
 msgid "Allows creation of grid questions, denoted by radio buttons."
 msgstr "Επιτρέπει τη δημιουργία πλέγματος ερωτήσεων, με χρησιμοποίηση ραδιοπλήκτρων."
 
-#: components/hidden.inc:76
+#: components/hidden.inc:75
 msgid "@name (hidden)"
 msgstr "@name (κρυφό)"
 
@@ -1203,4 +1203,3 @@ msgstr "μμ"
 #: components/time.inc:211
 msgid "Presents the user with hour and minute fields. Optional am/pm fields."
 msgstr "Παρουσιάζει στο χρήστη πεδία για την ώρα και τα λεπτά. Προαιρετικά πεδίο για πμ/μμ."
-
