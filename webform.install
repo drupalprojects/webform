@@ -150,6 +150,13 @@ function webform_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'mandatory' => array(
+        'description' => t('Boolean flag for if submitted values for this component will be included in sent e-mails.'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'weight' => array(
         'description' => t('Determines the position of this component in the form.'),
         'type' => 'int',
@@ -803,6 +810,18 @@ function webform_update_6200() {
   return $ret;
 }
 
+/**
+ * Add a column for email to the webform_component table.
+ */
+function webform_update_6201() {
+  $ret = array();
+  // This update will already be run as webform_update_5201 on Drupal 5.
+  if (WEBFORM_VERSION > 6000) {
+    $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int(1) UNSIGNED NOT NULL DEFAULT '0'");
+    $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
+  }
+  return $ret;
+}
 
 /**
  * Recursively delete all files and folders in the specified filepath, then

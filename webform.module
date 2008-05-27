@@ -291,7 +291,7 @@ function webform_menu_submission_load($sid, $nid) {
 function webform_menu_component_load($cid, $nid, $type) {
   if ($cid == 'new') {
     $components = webform_load_components();
-    $component = in_array($type, array_keys($components)) ? array('type' => $type, 'name' => $_GET['name'], 'mandatory' => $_GET['mandatory'], 'pid' => $_GET['pid'], 'weight' => $_GET['weight']) : FALSE;
+    $component = in_array($type, array_keys($components)) ? array('type' => $type, 'name' => $_GET['name'], 'mandatory' => $_GET['mandatory'], 'email' => $_GET['email'], 'pid' => $_GET['pid'], 'weight' => $_GET['weight']) : FALSE;
   }
   else {
     $node = node_load($nid);
@@ -455,9 +455,7 @@ function webform_insert($node) {
   // Insert the components into the database.
   if (isset($node->webform['components']) && !empty($node->webform['components'])) {
     foreach ($node->webform['components'] as $cid => $component) {
-      db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)",
-        $node->nid, $cid, $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), ($component['mandatory'] ? 1 : 0), $component['weight']
-      );
+      webform_component_insert($component);
     }
   }
 }
@@ -519,6 +517,7 @@ function webform_load($node) {
     $component['value'] = $c['value'];
     $component['extra'] = unserialize($c['extra']);
     $component['mandatory'] = $c['mandatory'];
+    $component['email'] = $c['email'];
     $component['pid'] = $c['pid'];
     $component['weight'] = $c['weight'];
     if (isset($component['extra']['email']) && $component['extra']['email']) {
@@ -1757,7 +1756,7 @@ function theme_webform_mail_message($form_values, $node, $sid, $cid) {
  * Theme the fields portion of the e-mails sent by webform.
  * 
  * This function calls itself recursively to maintain the tree structure of
- * components in the webform. It is called intialy by
+ * components in the webform. It is called intially by
  * theme_webform_create_mailmessage().
  * 
  * @param $cid
@@ -1770,8 +1769,16 @@ function theme_webform_mail_message($form_values, $node, $sid, $cid) {
  *   The current amount of indentation being applied to printed components.
  */
 function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
+  $component = $node->webform['components'][$cid];
+
+  // Check if this component needs to be included in the email at all.
+  if ($cid && !$component['email'] && !in_array($component['type'], array('markup', 'fieldset', 'pagebreak'))) {
+    return '';
+  }
+
   // First check for component-level themes.
-  $themed_output = theme("webform_mail_". $node->webform['components'][$cid]['type'], $value, $node->webform['components'][$cid]);
+  $themed_output = theme("webform_mail_". $component['type'], $value, $component);
+
   if ($themed_output) {
     // Indent the output and add to message.
     $message .= $indent;
@@ -1782,15 +1789,15 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
   // Generic output for single values.
   elseif (!is_array($value)) {
     // Note that newlines cannot be preceeded by spaces to display properly in some clients.
-    if ($node->webform['components'][$cid]['name']) {
+    if ($component['name']) {
       // If text is more than 60 characters, put it on a new line with space after.
-      $long = (strlen($indent . $node->webform['components'][$cid]['name'] . $value)) > 60;
-      $message .= $indent . $node->webform['components'][$cid]['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
+      $long = (strlen($indent . $component['name'] . $value)) > 60;
+      $message .= $indent . $component['name'] .":". (empty($value) ? "\n" : ($long ? "\n$value\n\n" : " $value\n"));
     }
   }
   // Else use a generic output for arrays.
   else {
-    $message .= $indent . $node->webform['components'][$cid]['name'] .":\n";
+    $message .= $indent . $component['name'] .":\n";
     foreach ($value as $k => $v) {
       foreach ($node->webform['components'] as $local_key => $local_value) {
         if ($local_value['form_key'] == $k && $local_value['pid'] == $cid) {
@@ -1801,6 +1808,7 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
       $message .= theme('webform_mail_fields', $form_key, $v, $node, $indent ."  ");
     }
   }
+
   return ($message);
 }
 
