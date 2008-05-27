@@ -41,16 +41,21 @@ function webform_components_form($node) {
     );
     $form['components'][$cid]['mandatory'] = array(
       '#type' => 'checkbox',
-      '#delta' => $component['mandatory'],
       '#title' => t("Mandatory"),
       '#default_value' => $component['mandatory'],
+      '#access' => !in_array($component['type'], array('markup', 'fieldset', 'pagebreak')),
+    );
+    $form['components'][$cid]['email'] = array(
+      '#type' => 'checkbox',
+      '#title' => t("E-mail"),
+      '#default_value' => $component['email'],
       '#access' => !in_array($component['type'], array('markup', 'fieldset', 'pagebreak')),
     );
   }
 
   $form['add']['name'] = array(
     '#type' => 'textfield',
-    '#size' => 30,
+    '#size' => 24,
   );
 
   $component_types = webform_load_components();
@@ -63,6 +68,10 @@ function webform_components_form($node) {
   );
   $form['add']['mandatory'] = array(
     '#type' => 'checkbox',
+  );
+  $form['add']['email'] = array(
+    '#type' => 'checkbox',
+    '#default_value' => 1,
   );
   $form['add']['cid'] = array(
     '#type' => 'hidden',
@@ -115,7 +124,7 @@ function theme_webform_components_form($form) {
 
   $node = $form['#node'];
 
-  $headers = array(t('Name'), t('Type'), t('Value'), t('Mandatory'), t('Weight'), array('data' => t('Operations'), 'colspan' => 3));
+  $headers = array(t('Name'), t('Type'), t('Value'), t('Mandatory'), t('E-mail'), t('Weight'), array('data' => t('Operations'), 'colspan' => 3));
   $rows = array();
 
   // Add a row containing form elements for a new item.
@@ -130,6 +139,7 @@ function theme_webform_components_form($form) {
     drupal_render($form['add']['type']),
     '',
     drupal_render($form['add']['mandatory']),
+    drupal_render($form['add']['email']),
     drupal_render($form['add']['cid']) . drupal_render($form['add']['pid']) . drupal_render($form['add']['weight']),
     array('colspan' => 3, 'data' => drupal_render($form['add']['add'])),
   );
@@ -154,6 +164,7 @@ function theme_webform_components_form($form) {
       unset($form['components'][$cid]['mandatory']['#title']);
       unset($form['components'][$cid]['pid']['#title']);
       unset($form['components'][$cid]['weight']['#title']);
+      unset($form['components'][$cid]['email']['#title']);
 
       // Add special classes for weight and parent fields.
       $form['components'][$cid]['cid']['#attributes']['class'] = 'webform-cid';
@@ -172,6 +183,7 @@ function theme_webform_components_form($form) {
         $component['type'],
         ($component['value'] == "") ? "-" : $component['value'],
         drupal_render($form['components'][$cid]['mandatory']),
+        drupal_render($form['components'][$cid]['email']),
         drupal_render($form['components'][$cid]['cid']) . drupal_render($form['components'][$cid]['pid']) . drupal_render($form['components'][$cid]['weight']),
         l(t('Edit'), 'node/'. $node->nid .'/edit/components/'. $cid),
         l(t('Clone'), 'node/'. $node->nid .'/edit/components/'. $cid .'/clone'),
@@ -216,9 +228,10 @@ function webform_components_form_submit($form_id, $form_values) {
 
   // Update all mandatory and weight values.
   foreach ($node->webform['components'] as $cid => $component) {
-    if ($component['weight'] != $form_values['components'][$cid]['weight'] || $component['mandatory'] != $form_values['components'][$cid]['mandatory']) {
+    if ($component['weight'] != $form_values['components'][$cid]['weight'] || $component['mandatory'] != $form_values['components'][$cid]['mandatory'] ||  $component['email'] != $form_values['components'][$cid]['email']) {
       $component['weight'] = $form_values['components'][$cid]['weight'];
       $component['mandatory'] = $form_values['components'][$cid]['mandatory'];
+      $component['email'] = $form_values['components'][$cid]['email'];
       $component['pid'] = $form_values['components'][$cid]['pid'];
       $component['nid'] = $node->nid;
       webform_component_update($component);
@@ -235,7 +248,7 @@ function webform_components_form_submit($form_id, $form_values) {
   // Initiate a new form element if a name has been specified.
   if (strlen(trim($form_values['add']['name'])) > 0) {
     $component = $form_values['add'];
-    return array('node/'. $node->nid .'/edit/components/new/'. $component['type'], 'name='. urlencode($component['name']) .'&mandatory='. $component['mandatory'] .'&pid='. $component['pid'] .'&weight='. $component['weight']);
+    return array('node/'. $node->nid .'/edit/components/new/'. $component['type'], 'name='. urlencode($component['name']) .'&mandatory='. $component['mandatory'] .'&email='. $component['email'] .'&pid='. $component['pid'] .'&weight='. $component['weight']);
   }
   else {
     drupal_set_message(t('The component positions and mandatory values have been updated.'));
@@ -295,6 +308,13 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     '#title' => t("Mandatory"),
     '#default_value' => ($component['mandatory'] == '1' ? TRUE : FALSE),
     '#description' => t('Check this option if the user must enter a value.'),
+    '#weight' => 2,
+  );
+  $form['email'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Include in e-mails"),
+    '#default_value' => ($component['email'] == '1' ? TRUE : FALSE),
+    '#description' => t('If checked, submitted values from this component will be included in e-mails.'),
     '#weight' => 2,
   );
 
@@ -454,8 +474,8 @@ function webform_component_delete_form_submit($form_id, $form_values) {
  */
 function webform_component_insert($component) {
   db_lock_table('webform_component');
-  $component['cid'] = db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
-  db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight']);
+  $component['cid'] = isset($component['cid']) ? $component['cid'] : db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
+  db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight, email) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['email']);
   db_unlock_tables('webform_component');
   return $component['cid'];
 }
@@ -468,7 +488,7 @@ function webform_component_insert($component) {
  *   component form. Additional properties are stored in the extra array.
  */
 function webform_component_update($component) {
-  return db_query("UPDATE {webform_component} SET pid = %d, form_key = '%s', name = '%s', type = '%s', value = '%s', extra = '%s', mandatory = %d, weight = %d WHERE nid = %d AND cid = %d", $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['nid'], $component['cid']);
+  return db_query("UPDATE {webform_component} SET pid = %d, form_key = '%s', name = '%s', type = '%s', value = '%s', extra = '%s', mandatory = %d, weight = %d, email = %d WHERE nid = %d AND cid = %d", $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['email'], $component['nid'], $component['cid']);
 }
 
 function webform_component_delete($nid, $cid) {

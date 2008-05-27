@@ -38,6 +38,7 @@ function webform_install() {
         extra text,
         mandatory tinyint NOT NULL default '0',
         weight smallint NOT NULL default '0',
+        email tinyint NOT NULL default '0',
         PRIMARY KEY  (nid, cid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
@@ -95,6 +96,7 @@ function webform_install() {
         extra text NOT NULL default '',
         mandatory smallint NOT NULL default '0',
         weight smallint NOT NULL default '0',
+        email smallint NOT NULL default '0',
         PRIMARY KEY (nid, cid)
         )"
       );
@@ -668,6 +670,16 @@ function webform_update_5200() {
       db_change_column($ret, 'webform_component', 'name', 'name', 'varchar(255)', array('not null' => TRUE, 'default' => "NULL"));
       break;
   }
+  return $ret;
+}
+
+/**
+ * Add a column for email to the webform_component table.
+ */
+function webform_update_5201() {
+  $ret = array();
+  $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int(1) UNSIGNED NOT NULL DEFAULT '0'");
+  $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
   return $ret;
 }
 
