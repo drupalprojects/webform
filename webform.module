@@ -964,6 +964,8 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   $submission = array();
   $enabled = FALSE;
   $preview = FALSE;
+  $message_type = 'status';
+  $submission_allowed = TRUE;
 
   if ($node->build_mode == NODE_BUILD_PREVIEW) {
     $preview = true;
@@ -984,21 +986,54 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     }
   }
 
-  $output = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, $enabled, $preview);
-
-  // Remove the surrounding <form> tag if this is a preview.
-  if ($preview) {
-    $output = preg_replace('/<\/?form[^>]*>/', '', $output);
+  // Check if the user can add another submission.
+  if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
+    include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+    if ($limit_exceeded = _webform_submission_limit_check($node)) {
+      if ($node->webform['submit_interval'] == -1 && $node->webform['submit_limit'] > 1) {
+        $message = t("You have submitted this form the maximum number of times (@count).", array('@count' => $node->webform['submit_limit']));
+      }
+      elseif ($node->webform['submit_interval'] == -1 && $node->webform['submit_limit'] == 1) {
+        $message = t("You have already submitted this form.");
+      }
+      else {
+        $message = t("You may not submit another entry at this time.");
+      }
+      $message_type = 'error';
+      $submission_allowed = FALSE; // Checked below before rendering of form.
+    }
   }
 
-  $node = node_prepare($node, $teaser);
-  $node->content['webform'] = array('#value' => $output, '#weight' => 1);
+  // Show the form, but only if the user can submit another right now.
+  if ($submission_allowed) {
+    $output = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, $enabled, $preview);
 
-  if (user_access('access own webform submissions') && !(user_access('access webform results') || user_access('access webform submissions')) && $user->uid) {
+    // Remove the surrounding <form> tag if this is a preview.
+    if ($preview) {
+      $output = preg_replace('/<\/?form[^>]*>/', '', $output);
+    }
+  }
+
+  // Add the output to the node.
+  $node = node_prepare($node, $teaser);
+  if (isset($output)) {
+    $node->content['webform'] = array('#value' => $output, '#weight' => 1);
+  }
+
+  if ($user->uid && (user_access('access own webform submissions') || user_access('access webform results') || user_access('access webform submissions'))) {
     $previous_submissions = db_result(db_query("SELECT count(*) FROM {webform_submissions} WHERE nid = %d AND uid = %d", $node->nid, $user->uid));
     if ($previous_submissions) {
-      drupal_set_message(t('You have already submitted this form. <a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions'))));
+      if (empty($message)) {
+        $message = t('You have already submitted this form.') .' '. t('<a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions')));
+      }
+      else {
+        $message .= ' '. t('<a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions')));
+      }
     }
+  }
+
+  if (isset($message)) {
+    drupal_set_message($message, $message_type);
   }
 
   return $node;
@@ -1361,39 +1396,12 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
 
 function webform_client_form_validate($form, $form_state) {
   global $user;
-  include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
 
   $node = node_load($form_state['values']['details']['nid']);
 
   // Flatten trees within the submission.
   $form_state['values']['submitted_tree'] = $form_state['values']['submitted'];
   _webform_client_form_submit_flatten($node, $form_state['values']['submitted'], $form_state['values']['submitted']);
-
-  // Verify that this submission is within the submission limits on this form.
-  if ($violation_count = _webform_submission_limit_check($node, $form_state['values']) && !$form_state['values']['details']['sid']) {
-    // If the webform is being swamped by repeated entries, limit the messages in watchdog.
-    if ($violation_count < 21) {
-      if ($user->uid > 0) {
-        watchdog('webform', 'The authenticated user <a href="%user_url">%username</a> attempted to submit more entries than allowed on the <a href="%webform_url">%webform_title</a> webform',
-                              array(
-                                '%user_url' => url('user/'. $user->uid),
-                                '%username' => $user->name,
-                                '%webform_url' => url('node/'. $node->nid),
-                                '%webform_title' => $node->title,
-                              ), WATCHDOG_WARNING);
-      }
-      else {
-        watchdog('webform', 'An anonymous user with IP address %ip attempted to submit more entries than allowed on the <a href="%webform_url">%webform_title</a> webform',
-                              array(
-                                '%ip' => ip_address(),
-                                '%webform_url' => url('node/'. $node->nid),
-                                '%webform_title' => $node->title,
-                              ), WATCHDOG_WARNING);
-      }
-    }
-    form_set_error('', t("You have submitted the maximum number of entries. Check submission guidelines."));
-    return;
-  }
 
   if (trim($node->webform['additional_validate'])) {
     // Support for Drupal 5 validation code.
