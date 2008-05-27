@@ -63,19 +63,13 @@ function _webform_render_textarea($component) {
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
-    '#rows'          => $component['extra']['rows'],
-    '#cols'          => $component['extra']['cols'],
+    '#rows'          => $component['extra']['rows'] > 0 ? $component['extra']['rows'] : NULL,
+    '#cols'          => $component['extra']['cols'] > 0 ? $component['extra']['cols'] : NULL,
     '#attributes'    => $component['extra']['attributes'],
     '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
-  if ($component['extra']['rows'] > 0) {
-    $form_item['#rows'] = $component['extra']['rows'];
-  }
-  if ($component['extra']['cols'] > 0) {
-    $form_item['#cols'] = $component['extra']['cols'];
-  }
 
   return $form_item;
 }
