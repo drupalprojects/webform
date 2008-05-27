@@ -13,7 +13,7 @@
  */
 
 /**
- * Implemenation of hook_help().
+ * Implementation of hook_help().
  */
 function webform_help($section = "admin/help#webform") {
   $output =  "";
@@ -268,7 +268,7 @@ function webform_node_info() {
 }
 
 /**
- * Implemenation of hook_access().
+ * Implementation of hook_access().
  */
 function webform_access($op, $node) {
   global $user;
@@ -308,7 +308,7 @@ function webform_file_download($file) {
 }
 
 /**
- * Implemenation of hook_insert().
+ * Implementation of hook_insert().
  */
 function webform_insert($node) {
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
@@ -325,7 +325,7 @@ function webform_insert($node) {
 }
 
 /**
- * Implemenation of hook_update().
+ * Implementation of hook_update().
  */
 function webform_update($node) {
   // Update the webform by deleting existing data and replacing with the new.
@@ -335,7 +335,7 @@ function webform_update($node) {
 }
 
 /**
- * Implemenation of hook_delete().
+ * Implementation of hook_delete().
  */
 function webform_delete(&$node) {
   db_query("DELETE FROM {webform} WHERE nid = %d", $node->nid);
