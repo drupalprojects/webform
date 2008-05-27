@@ -210,12 +210,22 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
   return false; // Not spam.
 }
 
-function _webform_submission_limit_check($node, $form_values) {
+/**
+ * Check if the current user has exceeded the limit on this form.
+ *
+ * @param $node
+ *   The webform node to be checked.
+ * @return
+ *   Boolean FALSE if the user is allowed to submit. If they have exceeded the
+ *   allowed count, return the number of submissions they've sent within the
+ *   submit_interval.
+ */
+function _webform_submission_limit_check($node) {
   global $user, $db_type;
 
   // Check if submission limiting is enabled.
   if ($node->webform['submit_limit'] == '-1') {
-    return false; // No check enabled.
+    return FALSE; // No check enabled.
   }
 
   // Retrieve submission data for this IP address or username from the database.
@@ -266,6 +276,6 @@ function _webform_submission_limit_check($node, $form_values) {
     }
 
     // Limit not exceeded.
-    return false;
+    return FALSE;
   }
 }
