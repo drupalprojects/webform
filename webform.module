@@ -322,6 +322,11 @@ function webform_insert($node) {
       webform_component_insert($component);
     }
   }
+
+  // Set the per-role submission access control.
+  foreach (array_filter($node->webform['roles']) as $rid) {
+    db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, %d)", $node->nid, $rid);
+  }
 }
 
 /**
@@ -331,6 +336,7 @@ function webform_update($node) {
   // Update the webform by deleting existing data and replacing with the new.
   db_query("DELETE FROM {webform} WHERE nid = %d", $node->nid);
   db_query("DELETE FROM {webform_component} WHERE nid = %d", $node->nid);
+  db_query('DELETE FROM {webform_roles} WHERE nid = %d', $node->nid);
   webform_insert($node);
 }
 
@@ -340,6 +346,7 @@ function webform_update($node) {
 function webform_delete(&$node) {
   db_query("DELETE FROM {webform} WHERE nid = %d", $node->nid);
   db_query("DELETE FROM {webform_component} WHERE nid = %d", $node->nid);
+  db_query('DELETE FROM {webform_roles} WHERE nid = %d', $node->nid);
   watchdog('webform', 'webform "'. $node->title .'" deleted', WATCHDOG_NOTICE);
 }
 
@@ -351,6 +358,12 @@ function webform_load($node) {
 
   if ($webform = db_fetch_array(db_query("SELECT * FROM {webform} WHERE nid = %d", $node->nid))) {
     $additions->webform = $webform;
+
+    $additions->webform['roles'] = array();
+    $result = db_query("SELECT rid FROM {webform_roles} WHERE nid = %d", $node->nid);
+    while ($role = db_fetch_object($result)) {
+      $additions->webform['roles'][] = $role->rid;
+    }
   }
   else {
     $additions->webform = array(
@@ -365,6 +378,7 @@ function webform_load($node) {
       'email_subject' => 'default',
       'additional_validate' => '',
       'additional_submit' => '',
+      'roles' => array(1, 2),
     );
   }
 
@@ -481,6 +495,26 @@ function webform_form(&$node, &$param) {
 
   $form['webform']['settings']['format'] = filter_form($node->format);
   /* End Edit Form */
+
+  /* Start per-role submission control */
+  $form['webform']['role_control'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Webform access control'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#weight' => -3,
+    '#parents' => array('webform'),
+    '#description' => t('These permissions affect which roles can submit this webform. It does not prevent access to the webform page. If needing to prevent access to the webform page entirely, use a content access module such as <a href="http://drupal.org/project/taxonomy_access">Taxonomy Access</a> or <a href="http://drupal.org/project/node_privacy_byrole">Node Privacy by Role</a>.'),
+  );
+  $user_roles = user_roles();
+  $form['webform']['role_control']['roles'] = array(
+    '#default_value' => $node->webform['roles'],
+    '#options' => $user_roles,
+    '#type' => 'checkboxes',
+    '#title' => t('Roles that can submit this webform'),
+    '#description' => t('Uncheck all roles to prevent new submissions. The %authenticated role applies to any user signed into the site, regardless of other assigned roles.', array('%authenticated' => $user_roles[2])),
+  );
+  /* End per-role submission control */
 
   /* Start E-mail Settings Form */
   $form['webform']['mail_settings'] = array(
@@ -791,7 +825,7 @@ function webform_form_alter($form_id, &$form) {
 }
 
 /**
- * Submit handler for the webform node form. 
+ * Submit handler for the webform node form.
  * 
  * Redirect the user to the components form on new node inserts. Note that this
  * fires after the hook_submit() function above.
@@ -800,7 +834,7 @@ function webform_form_submit($form_id, $form_values) {
   // There should be a more effective way to find the new node ID.
   $nid = db_result(db_query_range("SELECT nid FROM {node} WHERE type = 'webform' ORDER BY nid DESC", 0, 1));
 
-  // Remove the the submitted message added by node module.
+  // Remove the submitted message added by node module.
   unset($_SESSION['messages']['status']);
 
   drupal_set_message(t('The new webform %title has been created. Add new fields to your webform with the form below.', array('%title' => $form_values['title'])));
@@ -825,15 +859,23 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
 
   $sid_to_display = isset($_GET['sid']) ? $_GET['sid'] : NULL;
   $submission = array();
-  $enabled = FALSE;
+  $enabled = TRUE;
   $preview = FALSE;
-  $message_type = 'status';
-  $submission_allowed = TRUE;
+  $logging_in = FALSE;
+  $limit_exceeded = FALSE;
 
-  if ($_POST['op'] == t('Preview')) {
+  if (isset($_POST['op']) && $_POST['op'] == t('Preview')) {
     $preview = true;
     $additions = webform_load($node);
     $node->webform['components'] = $additions->webform['components'];
+  }
+
+
+  // When logging in using a form on the same page as a webform node, surpress
+  // output messages so that they don't show up after the user has logged in.
+  // See http://drupal.org/node/239343.
+  if (isset($_POST['op']) && isset($_POST['name']) && isset($_POST['pass'])) {
+    $logging_in = TRUE;
   }
 
   if (isset($sid_to_display) && is_numeric($sid_to_display)) {
@@ -849,32 +891,40 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     }
   }
 
+  // Check if the user's role can submit this webform.
+  $allowed_roles = array();
+  foreach ($node->webform['roles'] as $rid) {
+    $allowed_roles[$rid] = $user->roles[$rid] ? TRUE : FALSE;
+  }
+  if (array_search(TRUE, $allowed_roles) === FALSE) {
+    $enabled = FALSE;
+  }
+
   // Check if the user can add another submission.
   if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
     include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
     if ($limit_exceeded = _webform_submission_limit_check($node)) {
-      if ($node->webform['submit_interval'] == -1 && $node->webform['submit_limit'] > 1) {
-        $message = t("You have submitted this form the maximum number of times (@count).", array('@count' => $node->webform['submit_limit']));
-      }
-      elseif ($node->webform['submit_interval'] == -1 && $node->webform['submit_limit'] == 1) {
-        $message = t("You have already submitted this form.");
-      }
-      else {
-        $message = t("You may not submit another entry at this time.");
-      }
-      $message_type = 'error';
-      $submission_allowed = FALSE; // Checked below before rendering of form.
+      $enabled = FALSE;
     }
   }
 
-  // Show the form, but only if the user can submit another right now.
-  if ($submission_allowed) {
-    $output = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, $enabled, $preview);
+  // Get a count of previous submissions by this user.
+  if ($user->uid && (user_access('access own webform submissions') || user_access('access webform results') || user_access('access webform submissions'))) {
+    $submission_count = db_result(db_query("SELECT count(*) FROM {webform_submissions} WHERE nid = %d AND uid = %d", $node->nid, $user->uid));
+  }
 
-    // Remove the surrounding <form> tag if this is a preview.
-    if ($preview) {
-      $output = preg_replace('/<\/?form[^>]*>/', '', $output);
-    }
+  // Render the form and generate the output.
+  $form = drupal_get_form('webform_client_form_'. $node->nid, $node, $submission, $enabled, $preview);
+  $output = theme('webform_view', $node, $teaser, $page, $form, $enabled);
+
+  // Remove the surrounding <form> tag if this is a preview.
+  if ($preview) {
+    $output = preg_replace('/<\/?form[^>]*>/', '', $output);
+  }
+
+  // Print out messages for the webform.
+  if (!$preview && !$logging_in) {
+    theme('webform_view_messages', $node, $teaser, $page, $submission_count, $limit_exceeded, $allowed_roles);
   }
 
   // Add the output to the node.
@@ -883,23 +933,93 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     $node->content['webform'] = array('#value' => $output, '#weight' => 1);
   }
 
-  if ($user->uid && (user_access('access own webform submissions') || user_access('access webform results') || user_access('access webform submissions'))) {
-    $previous_submissions = db_result(db_query("SELECT count(*) FROM {webform_submissions} WHERE nid = %d AND uid = %d", $node->nid, $user->uid));
-    if ($previous_submissions) {
-      if (empty($message)) {
-        $message = t('You have already submitted this form.') .' '. t('<a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions')));
-      }
-      else {
-        $message .= ' '. t('<a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions')));
-      }
+  return $node;
+}
+
+/**
+ * Output the Webform into the node content.
+ *
+ * @param $node
+ *   The webform node object.
+ * @param $teaser
+ *   If this webform is being displayed as the teaser view of the node.
+ * @param $page
+ *   If this webform node is being viewed as the main content of the page.
+ * @param $form
+ *   The rendered form.
+ * @param $enabled
+ *   If the form allowed to be completed by the current user.
+ */
+function theme_webform_view($node, $teaser, $page, $form, $enabled) {
+  // Only show the form if this user is allowed access.
+  if ($enabled) {
+    return $form;
+  }
+}
+
+/**
+ * Display a message to a user if they are not allowed to fill out a form.
+ *
+ * @param $node
+ *   The webform node object.
+ * @param $teaser
+ *   If this webform is being displayed as the teaser view of the node.
+ * @param $page
+ *   If this webform node is being viewed as the main content of the page.
+ * @param $submission_count
+ *   The number of submissions this user has already submitted. Not calculated
+ *   for anonymous users.
+ * @param $limit_exceeded
+ *   Boolean value if the submission limit for this user has been exceeded.
+ * @param $allowed_roles
+ *   A list of user roles that are allowed to submit this webform.
+ */
+function theme_webform_view_messages($node, $teaser, $page, $submission_count, $limit_exceeded, $allowed_roles) {
+  $type = 'notice';
+
+  // If not allowed to submit the form, give an explaination.
+  if (array_search(TRUE, $allowed_roles) === FALSE) {
+    if (empty($allowed_roles)) {
+      // No roles are allowed to submit the form.
+      $message = t('Submissions for this form are closed.');
+    }
+    elseif (isset($allowed_roles[2])) {
+      // The "authenticated user" role is allowed to submit and the user is currently logged-out.
+      $message = t('You must <a href="!login">login</a> or <a href="!register">register</a> to view this form.', array('!login' => 'user/login', '!register' => 'user/register'));
+    }
+    else {
+      // The user must be some other role to submit.
+      $message = t('You do not have permission to view this form.');
     }
   }
 
-  if (isset($message)) {
-    drupal_set_message($message, $message_type);
+  // If the user has exceeded the limit of submissions, explain the limit.
+  if ($limit_exceeded) {
+    if ($node->webform['submit_interval'] == -1 && $node->webform['submit_limit'] > 1) {
+      $message = t("You have submitted this form the maximum number of times (@count).", array('@count' => $node->webform['submit_limit']));
+    }
+    elseif ($node->webform['submit_interval'] == -1 && $node->webform['submit_limit'] == 1) {
+      $message = t("You have already submitted this form.");
+    }
+    else {
+      $message = t("You may not submit another entry at this time.");
+    }
+    $type = 'error';
   }
 
-  return $node;
+  // If the user has submitted before, give them a link to their submissions.
+  if ($submission_count > 0) {
+    if (empty($message)) {
+      $message = t('You have already submitted this form.') .' '. t('<a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions')));
+    }
+    else {
+      $message .= ' '. t('<a href="!url">View your previous submissions</a>.', array('!url' => url('node/'. $node->nid .'/submissions')));
+    }
+  }
+
+  if ($page) {
+    drupal_set_message($message, $type);
+  }
 }
 
 /**
@@ -1105,7 +1225,7 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
     $page_num = 1;
     _webform_components_tree_build($node->webform['components'], $component_tree, 0, $page_count);
 
-    if ((!$preview && empty($submission)) || ($enabled)) {
+    if ((!$preview && $enabled)) {
       if ($page_count > 1) {
         $next_page = t('Next Page >');
         $prev_page = t('< Previous Page');
@@ -1173,7 +1293,7 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
       $microweight += 0.001;
     }
     // Do not display the submit button if this is a preview or submission view.
-    if ((!$preview && empty($submission)) || ($enabled)) {
+    if ((!$preview && $enabled)) {
       // Additional hidden elements.
       $form['details']['email_subject'] = array(
         '#type'      => 'hidden',
@@ -1205,12 +1325,12 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
 
 function _webform_client_form_add_component($cid, $component, &$parent_fieldset, &$form, $submission, $page_num, $enabled = false) {
   // Load with submission information if necessary.
-  if (!empty($submission) && !$enabled) {
+  if (!$enabled) {
     // This component is display only, with the value set according information
     // previously submitted in the submission numbered $sid_to_display.
     $display_function = "_webform_submission_display_". $component['type'];
     if (function_exists($display_function)) {
-      $parent_fieldset[$component['form_key']] = $display_function($submission['data'][$cid], $component, $enabled);
+      $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission['data'][$cid], $component, $enabled);
     }
   }
   else if ($component['page_num'] == $page_num) {

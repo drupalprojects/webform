@@ -43,6 +43,13 @@ function webform_install() {
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
 
+      $success = $success && db_query("CREATE TABLE if not exists {webform_roles} (
+        nid int(10) unsigned NOT NULL default '0',
+        rid int(10) unsigned NOT NULL default '0',
+        PRIMARY KEY (nid, rid)
+        ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
+      );
+
       $success = $success && db_query("CREATE TABLE if not exists {webform_submissions} (
         sid int(10) unsigned NOT NULL default '0',
         nid int(10) unsigned NOT NULL default '0',
@@ -98,6 +105,13 @@ function webform_install() {
         weight smallint NOT NULL default '0',
         email smallint NOT NULL default '0',
         PRIMARY KEY (nid, cid)
+        )"
+      );
+
+      $success = $success && db_query("CREATE TABLE {webform_roles} (
+        nid integer NOT NULL default '0',
+        rid integer NOT NULL default '0',
+        PRIMARY KEY (nid, rid)
         )"
       );
 
@@ -163,6 +177,7 @@ function webform_uninstall() {
   // Drop tables.
   db_query("DROP TABLE IF EXISTS {webform}");
   db_query("DROP TABLE IF EXISTS {webform_component}");
+  db_query("DROP TABLE IF EXISTS {webform_roles}");
   db_query("DROP TABLE IF EXISTS {webform_submissions}");
   db_query("DROP TABLE IF EXISTS {webform_submitted_data}");
 }
@@ -680,6 +695,41 @@ function webform_update_5201() {
   $ret = array();
   $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int(1) UNSIGNED NOT NULL DEFAULT '0'");
   $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
+  return $ret;
+}
+
+/**
+ * Per-webform submission access control based on roles.
+ */
+function webform_update_5202() {
+  $ret = array();
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("CREATE TABLE {webform_roles} (
+        nid int(10) unsigned NOT NULL default '0',
+        rid int(10) unsigned NOT NULL default '0',
+        PRIMARY KEY (nid, rid)
+        ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
+      );
+      break;
+
+    case 'pgsql':
+      $ret[] = update_sql("CREATE TABLE {webform_roles} (
+        nid integer NOT NULL default '0',
+        rid integer NOT NULL default '0',
+        PRIMARY KEY (nid, rid)
+        )"
+      );
+      break;
+  }
+
+  $result = db_query("SELECT nid FROM {node} WHERE type = 'webform'");
+  while ($node = db_fetch_object($result)) {
+    db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 1)", $node->nid);
+    db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 2)", $node->nid);
+  }
+
   return $ret;
 }
 
