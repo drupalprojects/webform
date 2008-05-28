@@ -1481,7 +1481,7 @@ function webform_client_form_submit($form_id, &$form_values) {
     $email_subject = $node->webform['email_subject'];
     foreach (array('from_name', 'from_address', 'subject') as $field) {
       if ($node->webform['email_'. $field] == 'default') {
-        ${'email_'. $field} = webform_variable_get('webform_default_'. $field);
+        ${'email_'. $field} = _webform_filter_values(webform_variable_get('webform_default_'. $field), $node, $form_values['submitted']);
       }
       elseif (is_numeric($node->webform['email_'. $field])) {
         ${'email_'. $field} = _webform_filter_values($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
@@ -1824,8 +1824,8 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
 
   // Node replacements.
   if (isset($node)) {
-    $find += array('%title');
-    $replace += array($node->title);
+    $find[] = '%title';
+    $replace[] = $node->title;
   }
 
   // Submission replacements.
