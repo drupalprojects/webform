@@ -168,6 +168,27 @@ function webform_schema() {
     'primary key' => array('nid', 'cid'),
   );
 
+  $schema['webform_roles'] = array(
+    'description' => t('Holds access information regarding which roles are allowed to submit which webform nodes. Does not prevent access to the webform node entirely, use the {node_access} table for that purpose.'),
+    'fields' => array(
+      'nid' => array(
+        'description' => t('The node identifier of a webform.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'rid' => array(
+        'description' => t('The role identifier.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid', 'rid'),
+  );
+
   $schema['webform_submissions'] = array(
     'description' => t('Holds general information about submissions outside of field values.'),
     'fields' => array(
@@ -817,9 +838,48 @@ function webform_update_6201() {
   $ret = array();
   // This update will already be run as webform_update_5201 on Drupal 5.
   if (WEBFORM_VERSION > 6000) {
-    $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int(1) UNSIGNED NOT NULL DEFAULT '0'");
+    db_add_field($ret, 'webform_component', 'email', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
     $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
   }
+  return $ret;
+}
+
+/**
+ * Per-webform submission access control based on roles.
+ */
+function webform_update_6202() {
+  $ret = array();
+
+  // This update will already be run as webform_update_5202 on Drupal 5.
+  if (WEBFORM_VERSION > 6000) {
+    db_create_table($ret, 'webform_roles', array(
+      'description' => t('Holds access information regarding which roles are allowed to submit which webform nodes. Does not prevent access to the webform node entirely, use the {node_access} table for that purpose.'),
+      'fields' => array(
+        'nid' => array(
+          'description' => t('The node identifier of a webform.'),
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ),
+        'rid' => array(
+          'description' => t('The role identifier.'),
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ),
+      ),
+      'primary key' => array('nid', 'rid'),
+    ));
+
+    $result = db_query("SELECT nid FROM {node} WHERE type = 'webform'");
+    while ($node = db_fetch_object($result)) {
+      db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 1)", $node->nid);
+      db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 2)", $node->nid);
+    }
+  }
+
   return $ret;
 }
 
