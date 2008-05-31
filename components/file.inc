@@ -333,7 +333,7 @@ function _webform_submit_file(&$data, $component) {
  */
 function theme_webform_mail_file($data, $component) {
   $file = unserialize($data);
-  $output = $component['name'] .": ". (!empty($file['filepath']) ? file_create_url($file['filepath']) : '') ."\n";
+  $output = $component['name'] .": ". (!empty($file['filepath']) ? webform_file_url($file['filepath']) : '') ."\n";
   return $output;
 }
 
@@ -359,7 +359,7 @@ function _webform_submission_display_file($data, $component, $enabled = false) {
     $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   }
   if ($filedata['filename']) {
-    $form_item['#suffix'] = ' <a href="'. file_create_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a>' . $form_item['#suffix'];
+    $form_item['#suffix'] = ' <a href="'. webform_file_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a>' . $form_item['#suffix'];
     if ($enabled) {
       $form_item['#description'] = t('Uploading a new file will replace the current file.');
       $form_item['#webform_current_file'] = $filedata;
@@ -490,3 +490,13 @@ function _webform_csv_data_file($data) {
   return empty($filedata['filename']) ? '\,' : $filedata['filename'] .'\,'. (int)($filedata['filesize']/1024);
 }
 
+/**
+ * Helper function to create proper URLs for uploaded file.
+ */
+function webform_file_url($filepath) {
+  if (!empty($filepath)) {
+    $info = pathinfo($filepath);
+    $file_url = file_create_url($info['dirname'] .'/'. rawurlencode($info['basename']));
+  }
+  return isset($file_url) ? $file_url : '';
+}
