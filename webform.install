@@ -734,6 +734,53 @@ function webform_update_5202() {
 }
 
 /**
+ * Cleanup filtering values used by the file component.
+ *
+ * Previously, file extensions were saved by category, exactly as the FormAPI
+ * returned to the submit handler. All extensions are now stored in a single
+ * array, including only valid extensions.
+ */
+function webform_update_5203() {
+  $ret = array();
+
+  $result = db_query("SELECT nid, cid, extra FROM {webform_component} WHERE type = 'file'");
+  while ($component = db_fetch_object($result)) {
+    $extra = unserialize($component->extra);
+    $extensions = array();
+
+    // Sanity check, set some defaults if no filtering is in place.
+    if (!isset($extra['filtering']['types'])) {
+      $extra['filtering']['types'] = array(
+        'webimages' => drupal_map_assoc(array('png', 'gif', 'jpg')),
+      );
+    }
+
+    // Defined types.
+    foreach ($extra['filtering']['types'] as $category => $category_extensions) {
+      foreach ((array)$category_extensions as $extension) {
+        if (!is_numeric($extension)) {
+          $extensions[] = $extension;
+        }
+      }
+    }
+
+    // Additional types.
+    $additional_extensions = explode(',', $extra['filtering']['addextensions']);
+    foreach ($additional_extensions as $extension) {
+      $clean_extension = strtolower(trim($extension));
+      if (!empty($clean_extension) && !in_array($clean_extension, $extensions)) {
+        $extensions[] = $clean_extension;
+      }
+    }
+
+    $extra['filtering']['types'] = $extensions;
+    db_query("UPDATE {webform_component} SET extra = '%s' WHERE nid = %d AND cid = %d", serialize($extra), $component->nid, $component->cid);
+  }
+
+  return $ret;
+}
+
+/**
  * Recursively delete all files and folders in the specified filepath, then
  * delete the containing folder.
  *
