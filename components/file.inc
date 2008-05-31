@@ -17,37 +17,52 @@ function _webform_edit_file($currfield) {
       '#collapsed' => false,
       '#title' => t('Upload Filtering'),
       '#description' => t('Select the types of uploads you would like to allow.'),
+      '#element_validate' => array('_webform_edit_file_filtering_validate'),
     );
+
+    // Find the list of all currently valid extensions.
+    $current_types = isset($currfield['extra']['filtering']['types']) ? $currfield['extra']['filtering']['types'] : array();
+
+    $types = array('gif', 'jpg', 'png');
     $edit_fields['extra']['filtering']['types']['webimages'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Web Images'),
-      '#options' => drupal_map_assoc(array('gif', 'jpg', 'png')),
-      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['webimages'] : array('jpg', 'gif', 'png'),
+      '#options' => drupal_map_assoc($types),
+      '#default_value' => isset($currfield['extra']['filtering']) ? array_intersect($current_types, $types) : $types,
     );
+
+    $types = array('bmp', 'eps', 'tif', 'pict', 'psd');
     $edit_fields['extra']['filtering']['types']['desktopimages'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Desktop Images'),
-      '#options' => drupal_map_assoc(array('bmp', 'eps', 'tif', 'pict', 'psd')),
-      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['desktopimages'] : array(),
+      '#options' => drupal_map_assoc($types),
+      '#default_value' => array_intersect($current_types, $types),
     );
+
+    $types = array('txt', 'rtf', 'html', 'odf', 'pdf', 'doc', 'ppt', 'xls', 'xml');
     $edit_fields['extra']['filtering']['types']['documents'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Documents'),
-      '#options' => drupal_map_assoc(array('txt', 'rtf', 'html', 'odf', 'pdf', 'doc', 'ppt', 'xls', 'xml')),
-      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['documents'] : array(),
+      '#options' => drupal_map_assoc($types),
+      '#default_value' => array_intersect($current_types, $types),
     );
+
+    $types = array('avi', 'mov', 'mp3', 'ogg', 'wav');
     $edit_fields['extra']['filtering']['types']['media'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Media'),
-      '#options' => drupal_map_assoc(array('avi', 'mov', 'mp3', 'ogg', 'wav')),
-      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['media'] : array(),
+      '#options' => drupal_map_assoc($types),
+      '#default_value' => array_intersect($current_types, $types),
     );
+
+    $types = array('bz2', 'dmg', 'gz', 'jar', 'rar', 'sit', 'tar', 'zip');
     $edit_fields['extra']['filtering']['types']['archives'] = array(
       '#type' => 'checkboxes',
       '#title' => t('Archives'),
-      '#options' => drupal_map_assoc(array('bz2', 'dmg', 'gz', 'jar', 'rar', 'sit', 'tar', 'zip')),
-      '#default_value' => isset($currfield['extra']['filtering']) ? $currfield['extra']['filtering']['types']['archives'] : array(),
+      '#options' => drupal_map_assoc($types),
+      '#default_value' => array_intersect($current_types, $types),
     );
+
     $edit_fields['extra']['filtering']['addextensions'] = array(
       '#type' => 'textfield',
       '#title' => t("Additional Extensions"),
@@ -57,6 +72,7 @@ function _webform_edit_file($currfield) {
       '#weight' => 3,
       '#default_value' => $currfield['extra']['filtering']['addextensions'],
     );
+
     $edit_fields['extra']['filtering']['size'] = array(
       '#type' => 'textfield',
       '#title' => t("Max Upload Size"),
@@ -85,6 +101,33 @@ function _webform_edit_file_check_directory($form_element) {
     form_set_error('savelocation', t('The save directory %directory could not be created. Check that the webform files directory is writtable.', array('%directory' => $destination_dir)));
   }
   return $form_element;
+}
+
+/**
+ * Change the submitted values of the component so that all filtering extensions
+ * are saved as a single array.
+ */
+function _webform_edit_file_filtering_validate($form_element, &$form_state) {
+  // Predefined types.
+  $extensions = array();
+  foreach (element_children($form_element['types']) as $category) {
+    foreach ($form_element['types'][$category]['#value'] as $extension => $enabled) {
+      if ($enabled) {
+        $extensions[] = $extension;
+      }
+    }
+  }
+
+  // Additional types.
+  $additional_extensions = explode(',', $form_element['addextensions']['#value']);
+  foreach ($additional_extensions as $extension) {
+    $clean_extension = strtolower(trim($extension));
+    if (!empty($clean_extension) && !in_array($clean_extension, $extensions)) {
+      $extensions[] = $clean_extension;
+    }
+  }
+
+  form_set_value($form_element['types'], $extensions, $form_state);
 }
 
 function theme_webform_edit_file($form) {
@@ -221,23 +264,8 @@ function _webform_validate_file($form_element, &$form_state) {
     return;
   }
 
-  // Build a list of extensions.
-  $extensions = array();
-  if (is_array($component['extra']['filtering']['types'])) {
-    foreach ($component['extra']['filtering']['types'] as $filtertype) {
-      foreach ($filtertype as $extension) {
-        if ($extension) {
-          $extensions[] = $extension;
-        }
-      }
-    }
-  }
-  $extras = str_replace(" ", "", $component['extra']['filtering']['addextensions']);
-  if (!empty($extras)) {
-    $extensions = array_merge($extensions, explode(",", $extras));
-  }
-
   // Build a human readable list of extensions:
+  $extensions = $component['extra']['filtering']['types'];
   if (count($extensions) > 1) {
     for ($n = 0; $n < count($extensions) - 1; $n++) {
       $extension_list .= $extensions[$n] .", ";
