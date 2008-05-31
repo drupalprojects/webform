@@ -203,9 +203,7 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
  * @param $node
  *   The webform node to be checked.
  * @return
- *   Boolean FALSE if the user is allowed to submit. If they have exceeded the
- *   allowed count, return the number of submissions they've sent within the
- *   submit_interval.
+ *   Boolean TRUE if the user has exceeded their limit. FALSE otherwise.
  */
 function _webform_submission_limit_check($node) {
   global $user, $db_type;
@@ -245,7 +243,7 @@ function _webform_submission_limit_check($node) {
 
   if ($num_submissions_database >= $node->webform['submit_limit'] || $num_submissions_cookie >= $node->webform['submit_limit']) {
     // Limit exceeded.
-    return $num_submissions_database;
+    return TRUE;
   }
   else {
     // Increment a cookie for triple recording of the submission.
