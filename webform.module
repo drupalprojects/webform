@@ -1880,7 +1880,7 @@ function theme_webform_mail_message($form_values, $node, $sid, $cid) {
 
   $message .= "\n\n";
   $message .= t("The results of this submission may be viewed at:") ."\n";
-  $message .= url('node/'. $node->nid, array('query' => "sid=". $sid, 'html' => TRUE));
+  $message .= url('node/'. $node->nid, array('query' => "sid=". $sid, 'absolute' => TRUE));
 
   return $message;
 }
