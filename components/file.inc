@@ -91,6 +91,15 @@ function _webform_edit_file($currfield) {
       '#validate' => array('_webform_edit_file_check_directory' => array()),
       '#after_build' => array('_webform_edit_file_check_directory'),
     );
+    $edit_fields['extra']['width'] = array(
+      '#type' => 'textfield',
+      '#title' => t("Width"),
+      '#default_value' => $currfield['extra']['width'],
+      '#description' => t('Width of the file field.') .' '. t('Leaving blank will use the default size.'),
+      '#size' => 5,
+      '#maxlength' => 10,
+      '#weight' => 4,
+    );
     return $edit_fields;
 }
 
@@ -240,6 +249,10 @@ function _webform_render_file($component) {
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
+  // Change the 'width' option to the correct 'size' option.
+  if ($component['extra']['width'] > 0) {
+    $form_item['#size'] = $component['extra']['width'];
+  }
 
   return $form_item;
 }
@@ -477,7 +490,6 @@ function _webform_csv_data_file($data) {
   $filedata = unserialize($data['value']['0']);
   return empty($filedata['filename']) ? '\,' : $filedata['filename'] .'\,'. (int)($filedata['filesize']/1024);
 }
-
 /**
  * Helper function to create proper URLs for uploaded files.
  */
