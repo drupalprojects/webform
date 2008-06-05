@@ -78,6 +78,7 @@ function _webform_edit_validate_select($form_values) {
  *   An array of a form item to be displayed on the client-side webform.
  */
 function _webform_render_select($component) {
+
   $form_item = array(
     '#title'         => $component['name'],
     '#required'      => $component['mandatory'],
@@ -156,7 +157,8 @@ function _webform_render_select($component) {
     if ($component['extra']['multiple'] == 'Y') {
       // Set display as a checkbox set.
       $form_item['#type'] = 'checkboxes';
-
+      // Drupal 5 hack to correct default values.
+      $form_item['#process'] = array('webform_expand_checkboxes' => array());
     }
     else {
       // Set display as a radio set.
@@ -166,6 +168,23 @@ function _webform_render_select($component) {
   return $form_item;
 }
 
+/**
+ * Drupal 5 hack that properly sets checkbox values in multistep forms. The
+ * checkboxes element get the proper values set by FAPI, but individual
+ * checkboxes are always set to 0 in a multistep form.
+ */
+function webform_expand_checkboxes($element) {
+  $element = expand_checkboxes($element);
+  foreach (element_children($element) as $key) {
+    if (empty($element['#value'][$key])) {
+      $element[$key]['#value'] = 0;
+    }
+    else {
+      $element[$key]['#value'] = 1;
+    }
+  }
+  return $element;
+}
 
 /**
  * Display the result of a textfield submission. The output of this function
