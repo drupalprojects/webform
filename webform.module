@@ -1333,9 +1333,9 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
       $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission['data'][$cid], $component, $enabled);
     }
   }
-  else if ($component['page_num'] == $page_num) {
+  elseif ($component['page_num'] == $page_num) {
     // Add this user-defined field to the form (with all the values that are always available).
-    if ($enabled) {
+    if (isset($submission['data'])) {
       $display_function = "_webform_submission_display_". $component['type'];
       if (function_exists($display_function)) {
         $parent_fieldset[$component['form_key']] = $display_function($submission['data'][$cid], $component, $enabled);
