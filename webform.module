@@ -1387,9 +1387,10 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
       if ($page_count > 1) {
         $next_page = t('Next Page >');
         $prev_page = t('< Previous Page');
-        if (!empty($form_state['post'])) {
-          $form_state['values'] = $form_state['post'];
-          $page_num = $form_state['values']['details']['page_num'];
+
+        // Check if we're in a multipage form and determine the page number.
+        if (!empty($form_state['storage']['submitted'])) {
+          $page_num = $form_state['storage']['details']['page_num'];
           if ($form_state['values']['op'] == $prev_page && $page_num > 1) {
             $page_num--;
           }
@@ -1401,14 +1402,11 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
           $page_num = 1;
         }
 
-        if ($form_state['form_values']['op'] != (empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'])) {
-          $form['#redirect'] = FALSE;
-        }
-
         $form['details']['page_num'] = array(
           '#type'      => 'hidden',
           '#value'     => $page_num,
         );
+
         // Add the submit button(s).
         if ($page_num > 1) {
           $form['submitbutton_prev'] = array(
@@ -1446,7 +1444,8 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
     // Recursively add components to the form. Microweights keep thins in webform order.
     $microweight = 0.001;
     foreach ($component_tree['children'] as $cid => $component) {
-      _webform_client_form_add_component($cid, $component, $form['submitted'], $form, $submission, $page_num, $enabled);
+      $component_value = isset($form_state['values']['submitted'][$component['form_key']]) ? $form_state['values']['submitted'][$component['form_key']] : NULL;
+      _webform_client_form_add_component($cid, $component, $component_value, $form['submitted'], $form, $submission, $page_num, $enabled);
       $form['submitted'][$component['form_key']]['#weight'] += $microweight;
       $microweight += 0.001;
     }
@@ -1481,7 +1480,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
   return $form;
 }
 
-function _webform_client_form_add_component($cid, $component, &$parent_fieldset, &$form, $submission, $page_num, $enabled = false) {
+function _webform_client_form_add_component($cid, $component, $component_value, &$parent_fieldset, &$form, $submission, $page_num, $enabled = false) {
   // Load with submission information if necessary.
   if (!$enabled) {
     // This component is display only, with the value set according information
@@ -1491,9 +1490,9 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
       $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission['data'][$cid], $component, $enabled);
     }
   }
-  else if ($component['page_num'] == $page_num) {
+  elseif ($component['page_num'] == $page_num) {
     // Add this user-defined field to the form (with all the values that are always available).
-    if ($enabled) {
+    if (isset($submission['data'])) {
       $display_function = "_webform_submission_display_". $component['type'];
       if (function_exists($display_function)) {
         $parent_fieldset[$component['form_key']] = $display_function($submission['data'][$cid], $component, $enabled);
@@ -1503,6 +1502,18 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
       $render_function = "_webform_render_". $component['type'];
       if (function_exists($render_function)) {
         $parent_fieldset[$component['form_key']] = $render_function($component); // Call the component render function.
+
+        // Set a value if one already exists in the form state.
+        if (isset($component_value)) {
+          if (is_array($component_value)) {
+            foreach ($component_value as $key => $value) {
+              $parent_fieldset[$component['form_key']][$key]['#default_value'] = $value;
+            }
+          }
+          else {
+            $parent_fieldset[$component['form_key']]['#default_value'] = $component_value;
+          }
+        }
       }
       else {
         drupal_set_message(t("The webform component @type is not able to be displayed", array('@type' => $component['type'])));
@@ -1512,7 +1523,8 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
   if (isset($component['children']) && is_array($component['children'])) {
     $microweight = 0.001;
     foreach ($component['children'] as $scid => $subcomponent) {
-      _webform_client_form_add_component($scid, $subcomponent, $parent_fieldset[$component['form_key']], $form, $submission, $page_num, $enabled);
+      $subcomponent_value = isset($component_value[$subcomponent['form_key']]) ? $component_value[$subcomponent['form_key']] : NULL;
+      _webform_client_form_add_component($scid, $subcomponent, $subcomponent_value, $parent_fieldset[$component['form_key']], $form, $submission, $page_num, $enabled);
       $parent_fieldset[$component['form_key']][$subcomponent['form_key']]['#weight'] += $microweight;
       $microweight += 0.001;
     }
@@ -1541,53 +1553,47 @@ function webform_client_form_submit($form, &$form_state) {
   include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
 
   $node = node_load(array('nid' => $form_state['values']['details']['nid']));
-  $session_key = 'webform_form_'. $node->nid;
 
   // Check for a multi-page form that is not yet complete.
-  if ($form_state['values']['op'] != (empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'])) {
-    // This is a multi-page form that is not yet complete.
-    // Save the order of the current post into a copied array.
-    $original_post = is_array($_POST['submitted']) ? $_POST['submitted'] : array();
-    $_POST['submitted'] = array();
-
-    // Copy values stored during previous steps into $_POST because they are needed in form_builder() to repopulate the form.
-    if (is_array($_SESSION[$session_key])) {
-      foreach ($_SESSION[$session_key] as $key => $val) {
-        $_POST['submitted'][$key] = $val;
-      }
-    }
-
-    // Restore the newly added values either in the previous position.
-    foreach ($original_post as $key => $val) {
-      $_POST['submitted'][$key] = $val;
-    }
-    // Remove the variable so it doesn't show up in the additional processing.
-    unset($original_post);
-
-    // Store values from an intermediate stage of a multistep form in $_SESSION.
+  $submit_op = empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'];
+  if ($form_state['values']['op'] != $submit_op) {
+    // Store values from the current page in the form state storage.
     if (is_array($form_state['values']['submitted'])) {
       foreach ($form_state['values']['submitted'] as $key => $val) {
-        $_SESSION[$session_key][$key] = $val;
+        $form_state['storage']['submitted'][$key] = $val;
       }
     }
 
+    // Update form state values with those from storage.
+    if (is_array($form_state['storage']['submitted'])) {
+      foreach ($form_state['storage']['submitted'] as $key => $val) {
+        $form_state['values']['submitted'][$key] = $val;
+      }
+    }
+
+    // Rebuild the form, allowing the rebuild to determine the next page.
+    $form_state['storage']['details']['page_num'] = $form_state['values']['details']['page_num'];
+    $form_state['rebuild'] = TRUE;
     return;
   }
 
-  if (isset($_SESSION[$session_key])) {
-    // Merge any submission data stored in $_SESSION for multistep forms.
+  if (isset($form_state['storage']['submitted'])) {
+    // Merge any stored submission data for multistep forms.
     $original_values = is_array($form_state['values']['submitted']) ? $form_state['values']['submitted'] : array();
-    $form_state['values']['submitted'] = array();
 
-    foreach ($_SESSION[$session_key] as $key => $val) {
+    foreach ($form_state['storage']['submitted'] as $key => $val) {
       $form_state['values']['submitted'][$key] = $val;
     }
     foreach ($original_values as $key => $val) {
       $form_state['values']['submitted'][$key] = $val;
     }
+
+    // Remove the form state storage now that we're done with the pages.
+    unset($form_state['rebuild']);
+    unset($form_state['storage']);
+
     // Remove the variable so it doesn't show up in the additional processing.
     unset($original_values);
-    unset($_SESSION[$session_key]);
   }
 
   // Perform post processing by components.
