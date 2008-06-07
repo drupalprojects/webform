@@ -64,7 +64,7 @@ function webform_components_form($node) {
     '#type' => 'select',
     '#options' => $component_types,
     '#weight' => 3,
-    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['type'] : NULL,
+    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['type'] : 'textfield',
   );
   $form['add']['mandatory'] = array(
     '#type' => 'checkbox',
