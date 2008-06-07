@@ -24,9 +24,9 @@ function _webform_edit_date($currfield) {
     '#type' => 'radios',
     '#title' => t("Timezone"),
     '#default_value' => empty($currfield['extra']['timezone']) ? "site" : $currfield['extra']['timezone'],
-    '#description' => t('Adjust the date according to a specific timezone. Website timezone is defined in the <a href="%settings">Site Settings</a> and is the default.', array('%settings' => url('admin/settings'))),
+    '#description' => t('Adjust the date according to a specific timezone. Website timezone is defined in the <a href="!settings">Site Settings</a> and is the default.', array('!settings' => url('admin/settings/date-time'))),
     '#options' => array('site' => 'Website Timezone', 'user' => 'User Timezone', 'gmt' => 'GMT'),
-    '#weight' => 0,
+    '#weight' => 1,
   );
   $edit_fields['extra']['check_daylight_savings'] = array(
     '#type' => 'checkbox',
@@ -34,7 +34,33 @@ function _webform_edit_date($currfield) {
     '#default_value' => $currfield['extra']['check_daylight_savings'],
     '#checked_value' => 1,
     '#description' => t('Automatically adjust the time during daylight savings.'),
-    '#weight' => 1,
+    '#weight' => 2,
+  );
+
+  $edit_fields['extra']['year_start'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Start year'),
+    '#default_value' => empty($currfield['extra']['year_start']) ? '1900' : $currfield['extra']['year_start'],
+    '#description' => t('The first year that is allowed to be entered.'),
+    '#size' => 10,
+    '#maxlength' => 4,
+    '#weight' => 3,
+  );
+  $edit_fields['extra']['year_end'] = array(
+    '#type' => 'textfield',
+    '#title' => t('End year'),
+    '#default_value' => empty($currfield['extra']['year_end']) ? '2050' : $currfield['extra']['year_end'],
+    '#description' => t('The last year that is allowed to be entered.'),
+    '#size' => 10,
+    '#maxlength' => 4,
+    '#weight' => 4,
+  );
+  $edit_fields['extra']['year_textfield'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Use a textfield for year"),
+    '#default_value' => $currfield['extra']['year_textfield'],
+    '#description' => t('If checked, the generated date field will use a textfield for the year. Otherwise it will use a select list.'),
+    '#weight' => 5,
   );
 
   return $edit_fields;
@@ -49,6 +75,31 @@ function _webform_edit_date($currfield) {
  *   An array of a form item to be displayed on the client-side webform.
  */
 function _webform_render_date($component) {
+  $form_item = array(
+    '#title' => $component['name'],
+    '#weight' => $component['weight'],
+    '#type' => 'date',
+    '#description' => _webform_filter_descriptions($component['extra']['description']),
+    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
+    '#suffix' => '</div>',
+    '#required' => $component['mandatory'],
+    '#webform_component' => $component,
+    '#process' => array('webform_expand_date'),
+  );
+  return $form_item;
+}
+
+function webform_expand_date($element) {
+  // Let Drupal do it's normal expansion.
+  $element = expand_date($element);
+  $component = $element['#webform_component'];
+
+  $default_values = array(
+    'day' => '',
+    'month' => '',
+    'year' => '',
+  );
+
   if (strlen($component['value']) > 0) {
     // Calculate the timestamp in GMT.
     $timestamp = strtotime(_webform_filter_values($component['value']));
@@ -72,66 +123,62 @@ function _webform_render_date($component) {
       $timestamp += 3600;
     }
 
-    $year = gmdate('Y', $timestamp);
-    $month = gmdate('n', $timestamp);
-    $day = gmdate('j', $timestamp);
+    $default_values = array(
+      'day' => gmdate('j', $timestamp),
+      'month' => gmdate('n', $timestamp),
+      'year' => gmdate('Y', $timestamp),
+    );
   }
-  $months = array("" => t("month"), 1 => t('January'), t('February'), t('March'), t('April'), t('May'), t('June'), t('July'), t('August'), t('September'), t('October'), t('November'), t('December'));
-  $days = array("" => t("day"));
-  for ($i = 1; $i <= 31; $i++) $days[$i] = $i;
 
-  $form_item = array(
-    '#title' => $component['name'],
-    '#weight' => $component['weight'],
-    '#theme' => 'webform_date',
-    '#description' => _webform_filter_descriptions($component['extra']['description']),
-    '#prefix' => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
-    '#suffix' => '</div>',
-    '#required' => $component['mandatory'],
-    '#element_validate' => array('webform_validate_date'),
-    '#webform_component' => $component,
-  );
+  // Set default values based on the component.
+  foreach ($default_values as $type => $value) {
+    unset($element[$type]['#value']);
+    $element[$type]['#default_value'] = isset($element['#default_value']) ? $element['#default_value'][$type] : $value;
+    $element[$type]['#options'] = array('' => t(ucfirst($type))) + $element[$type]['#options'];
+  }
 
-  $form_item['month'] = array(
-    '#type' => 'select',
-    '#default_value' => $month,
-    '#options' => $months,
-  );
-  $form_item['day'] = array(
-    '#type' => 'select',
-    '#default_value' => $day,
-    '#options' => $days,
-  );
-  $form_item['year'] = array(
-    '#type' => 'textfield',
-    '#default_value' => $year,
-    '#maxlength' => 4,
-    '#size' => 4,
-  );
+  // Tweak the year field.
+  if ($component['extra']['year_textfield']) {
+    $element['year']['#type'] = 'textfield';
+    $element['year']['#size'] = 5;
+    $element['year']['#maxlength'] = 4;
+    unset($element['year']['#options']);
+  }
+  elseif (is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
+    $element['year']['#options'] = array('' => t('Year')) + drupal_map_assoc(range($component['extra']['year_start'], $component['extra']['year_end']));
+  }
 
-  return $form_item;
+  $element['#element_validate'] = array('webform_validate_date');
+
+  return $element;
 }
 
 /**
- * Note that this is not a real FAPI validation function (which no longer
- * supports per-field validation). Instead it is a validation function called
- * manually by webform.module.
+ * Element validation for Webform date fields.
  */
 function webform_validate_date($form_item, $form_state) {
-  $form_key = $form_item['#webform_component']['form_key'];
-  $name = $form_item['#webform_component']['name'];
+  $component = $form_item['#webform_component'];
+  $form_key = $component['form_key'];
+  $name = $component['name'];
 
   // Check if the user filled the required fields.
   foreach (array('day', 'month', 'year') as $field_type) {
     if (!is_numeric($form_item[$field_type]['#value']) && $form_item['#required']) {
-      form_set_error($form_key, t("%field field is required.", array('%field' => $name)));
+      form_set_error($form_key, t("!name field is required.", array('!name' => $name)));
       return;
     }
   }
   // Check for a valid date.
   if ($form_item['month']['#value'] !== "" || $form_item['day']['#value'] !== "" || $form_item['year']['#value'] !== "") {
     if (!checkdate((int)$form_item['month']['#value'], (int)$form_item['day']['#value'], (int)$form_item['year']['#value'])) {
-      form_set_error($form_key, t("Entered %name is not a valid date.", array('%name' => $name)));
+      form_set_error($form_key, t("Entered !name is not a valid date.", array('!name' => $name)));
+      return;
+    }
+  }
+  // Check the date is between allowed years.
+  if (is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
+    if ($form_item['year']['#value'] < $component['extra']['year_start'] || $form_item['year']['#value'] > $component['extra']['year_end']) {
+      form_set_error($form_key .'][year', t('The entered date needs to be between the years @start and @end.', array('@start' => $component['extra']['year_start'], '@end' => $component['extra']['year_end'])));
       return;
     }
   }
@@ -151,12 +198,12 @@ function webform_validate_date($form_item, $form_state) {
  */
 function _webform_submission_display_date($data, $component, $enabled = false) {
   $form_item = _webform_render_date($component);
-  $form_item['month']['#default_value'] = $data['value']['0'];
-  $form_item['day']['#default_value']   = $data['value']['1'];
-  $form_item['year']['#default_value']  = $data['value']['2'];
-  $form_item['month']['#disabled']      = !$enabled;
-  $form_item['day']['#disabled']        = !$enabled;
-  $form_item['year']['#disabled']       = !$enabled;
+  $form_item['#default_value'] = array(
+    'month' => $data['value']['0'],
+    'day'   => $data['value']['1'],
+    'year'  => $data['value']['2'],
+  );
+  $form_item['#disabled'] = !$enabled;
   return $form_item;
 }
 
@@ -175,11 +222,10 @@ function theme_webform_mail_date($data, $component) {
   $output = $component['name'] .":";
   if ($data['month'] && $data['day']) {
     $timestamp = strtotime($data['month'] ."/". $data['day'] ."/". $data['year']);
-    /* allow for PHP timezone offset */
-    $tz_offset = strtotime(date("M d Y H:i:s")) - strtotime(gmdate("M d Y H:i:s"));
-    $timestamp += $tz_offset;
-    $output .= " ". format_date($timestamp, "custom", 'F j, Y', NULL);
+    $format = webform_date_format('medium');
+    $output .= ' '. date($format, $timestamp);
   }
+
   return $output;
 }
 
@@ -317,7 +363,9 @@ function _webform_csv_headers_date($component) {
  */
 function _webform_csv_data_date($data) {
   if (strlen($data['value']['0']) > 0 && strlen($data['value']['1']) > 0 && strlen($data['value']['2']) > 0) {
-    return $data['value']['0'] ."/". $data['value']['1'] ."/". $data['value']['2'];
+    $timestamp = strtotime($data['value']['0'] ."/". $data['value']['1'] ."/". $data['value']['2']);
+    $format = webform_date_format('short');
+    return date($format, $timestamp);
   }
   else {
     return "";
@@ -325,26 +373,16 @@ function _webform_csv_data_date($data) {
 }
 
 /**
- * Theme a webform date element.
+ * Get a date format according to the site settings.
+ *
+ * @param $size
+ *   A choice of 'short', 'medium', or 'long' date formats.
  */
-function theme_webform_date($element) {
-  $element['#type'] = 'element';
-
-  // Determine the order of day, month, year in the site's chosen date format.
-  $format = variable_get('date_format_short', 'm/d/Y - H:i');
-  $sort = array();
-  $sort['day'] = max(strpos($format, 'd'), strpos($format, 'j'));
-  $sort['month'] = max(strpos($format, 'm'), strpos($format, 'M'));
-  $sort['year'] = strpos($format, 'Y');
-  asort($sort);
-  $order = array_keys($sort);
-
-  // Output multi-selector for date.
-  $element['#children'] = '';
-  foreach ($order as $type) {
-    $element['#children'] .= drupal_render($element[$type]);
-  }
-  $element['#children'] = '<div class="container-inline">'. $element['#children'] .'</div>';
-
-  return theme('form_element', $element, $element['#children']);
+function webform_date_format($size = 'medium') {
+    // Format date according to site's given format.
+    $format = variable_get('date_format_'. $size, 'D, m/d/Y - H:i');
+    $time = 'aABgGhHisueIOPTZ';
+    $day_of_week = 'Dlw';
+    $special = ',-: ';
+    return trim($format, $time . $day_of_week . $special);
 }
