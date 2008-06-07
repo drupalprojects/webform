@@ -238,11 +238,25 @@ function webform_results_clear_form_submit($form, &$form_state) {
  * 
  */
 function webform_results_download($node) {
+  $delim = variable_get('webform_csv_delimiter', ',');
+  // Convert tabs.
+  if ($delim == '\t') {
+    $delim = "\t";
+    $extension = 'tsv';
+    $content_type = 'text/tab-separated-values';
+  }
+  else {
+    $extension = 'csv';
+    $content_type = 'text/csv';
+  }
+
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors.
-  $header[0] .= $node->title .",,,,";
-  $header[1] .= "Submission Details,,,,,";
-  $header[2] .= "Serial,SID,Time,IP Address,UID,Username";
+
+  $header[0] .= $node->title . str_repeat($delim, 4);
+  $header[1] .= t("Submission Details") . str_repeat($delim, 5);
+  $header[2] .= implode($delim, array(t('Serial'), t('SID'), t('Time'), t('IP Address'), t('UID'), t('Username')));
+
   // Compile header information.
   webform_load_components(); // Load all components.
   foreach ($node->webform['components'] as $cid => $component) {
@@ -250,9 +264,9 @@ function webform_results_download($node) {
     if (function_exists($csv_header_function)) {
       // Let each component determine its headers.
       $component_header = $csv_header_function($component);
-      $header[0] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[0]) .'"';
-      $header[1] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[1]) .'"';
-      $header[2] .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $component_header[2]) .'"';
+      $header[0] .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $component_header[0]) .'"';
+      $header[1] .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $component_header[1]) .'"';
+      $header[2] .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $component_header[2]) .'"';
     }
   }
 
@@ -266,12 +280,12 @@ function webform_results_download($node) {
   // Generate a row for each submission.
   $rowcount = 0;
   foreach ($submissions as $sid => $submission) {
-    $row = ++$rowcount .",". $sid .",\"". format_date($submission->submitted, 'small') ."\",\"". $submission->remote_addr ."\",". $submission->uid .",\"". $submission->name ."\"";
+    $row = ++$rowcount . $delim . $sid . $delim .'"'. format_date($submission->submitted, 'small') .'"'. $delim .'"'. $submission->remote_addr .'"'. $delim . $submission->uid . $delim.'"'. $submission->name .'"';
     foreach ($node->webform['components'] as $cid => $component) {
       $csv_data_function   = "_webform_csv_data_". $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
-        $row .= ',"'. str_replace(array('"', '\,'), array('""', '","'), $csv_data_function($submission->data[$cid], $component)) .'"';
+        $row .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $csv_data_function($submission->data[$cid], $component)) .'"';
       }
     }
     // Write data from submissions.
@@ -280,8 +294,8 @@ function webform_results_download($node) {
   // Close the file.
   @fclose($handle);
 
-  drupal_set_header("Content-type: text/csv; charset=utf-8");
-  drupal_set_header("Content-Disposition: attachment; filename=". preg_replace('/\.$/', '', str_replace(' ', '_', $node->title)) .".csv");
+  drupal_set_header("Content-type: $content_type; charset=utf-8");
+  drupal_set_header("Content-Disposition: attachment; filename=". preg_replace('/\.$/', '', str_replace(' ', '_', $node->title)) .".". $extension);
 
   @readfile($file_name);  // The @ makes it silent.
   @unlink($file_name);  // Clean up, the @ makes it silent.

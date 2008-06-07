@@ -299,6 +299,7 @@ function webform_uninstall() {
   variable_del('webform_default_from_address');
   variable_del('webform_default_from_name');
   variable_del('webform_default_subject');
+  variable_del('webform_csv_delimiter');
 
   $component_list = array();
   $path = drupal_get_path('module', 'webform') ."/components";
