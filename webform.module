@@ -802,7 +802,7 @@ function webform_form(&$node, &$param) {
   if (user_access('use PHP for additional processing')) {
     $form['webform']['advanced']['additional_validate'] = array(
       '#type' => 'textarea',
-      '#title' => 'Additional Validation',
+      '#title' => t('Additional Validation'),
       '#description' => t('Enter PHP code to perform additional validation for this form. Include the &lt;?php ?&gt; tags. $form and $form_state are available variables. If validation fails, use the form_set_error function to prevent the form from being submitted. Use the same syntax as a _validate function used in the <a href="http://api.drupal.org/api/file/developer/topics/forms_api.html">Forms API</a>.'),
       '#default_value' => $node->webform['additional_validate'],
       '#cols' => 40,
@@ -811,7 +811,7 @@ function webform_form(&$node, &$param) {
 
     $form['webform']['advanced']['additional_submit'] = array(
       '#type' => 'textarea',
-      '#title' => 'Additional Processing',
+      '#title' => t('Additional Processing'),
       '#description' => t('Enter PHP code to perform additional processing for this form (after the validation). Include the &lt;?php ?&gt; tags. $form and $form_state are available variables, use the same syntax as a _submit function used in the <a href="http://api.drupal.org/api/file/developer/topics/forms_api.html">Forms API</a>.'),
       '#default_value' => $node->webform['additional_submit'],
       '#cols' => 40,
@@ -907,6 +907,26 @@ function theme_webform_advanced_submit_limit_form($form) {
   return drupal_render($form);
 }
 
+/**
+ * Implementation of hook_validate().
+ */
+function webform_validate(&$node) {
+  // Ensure the entered e-mail addresses are valid.
+  if (!empty($node->webform['email'])) {
+    $emails = explode(',', $node->webform['email']);
+    foreach ($emails as $email) {
+      if (!valid_email_address(trim($email))) {
+        form_set_error('webform][email', t('The entered email address %address is not a valid address.', array('%address' => $email)));
+        break;
+      }
+    }
+  }
+  if ($node->webform['email_from_address_option'] == 'custom') {
+    if (!valid_email_address($node->webform['email_from_address_custom'])) {
+      form_set_error('webform][email_from_address_custom', t('The entered email address %address is not a valid address.', array('%address' => $node->webform['email_from_address_custom'])));
+    }
+  }
+}
 
 /**
  * Implementation of hook_submit().
