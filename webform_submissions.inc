@@ -15,11 +15,11 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 
   switch ($op) {
     case 'view':
-      return user_access('access webform results') || (user_access('access own webform submissions') && ($account->uid == $submission['uid']));
+      return user_access('access webform results') || (user_access('access own webform submissions') && ($account->uid == $submission->uid));
     case 'edit':
-      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission['uid']));
+      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission->uid));
     case 'delete':
-      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission['uid'])) || user_access('clear webform results');
+      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission->uid)) || user_access('clear webform results');
   }  
 }
 
@@ -84,9 +84,18 @@ function webform_submission_insert($node, $submitted) {
  * @param $sid
  *   ID of submission to be deleted (from webform_submitted_data).
  */
-function webform_submission_delete($nid, $sid) {
-  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d AND sid = %d', $nid, $sid);
-  db_query('DELETE FROM {webform_submissions} WHERE nid = %d AND sid = %d', $nid, $sid);
+function webform_submission_delete($node, $submission) {
+  // Iterate through all components and let each do cleanup if necessary.
+  webform_load_components();
+  foreach ($node->webform['components'] as $cid => $component) {
+    $delete_function = '_webform_delete_'. $component['type'];
+    if (function_exists($delete_function) && isset($submission->data[$cid])) {
+      $delete_function($submission->data[$cid], $component);
+    }
+  }
+
+  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d AND sid = %d', $node->nid, $submission->sid);
+  db_query('DELETE FROM {webform_submissions} WHERE nid = %d AND sid = %d', $node->nid, $submission->sid);
 }
 
 /**
@@ -98,21 +107,18 @@ function webform_submission_delete($nid, $sid) {
  *   The submission to be deleted (from webform_submitted_data).
  */
 function webform_submission_delete_form($node, $submission) {
-  $nid = $node->nid;
-  $sid = $submission['sid'];
-
   drupal_set_title(t("Delete Form Submission"));
 
   $form = array();
-  $form['nid'] = array('#type' => 'value', '#value' => $nid);
-  $form['sid'] = array('#type' => 'value', '#value' => $sid);
+  $form['node'] = array('#type' => 'value', '#value' => $node);
+  $form['submission'] = array('#type' => 'value', '#value' => $submission);
   $question = t("Are you sure you want to delete this submission?");
 
-  return confirm_form($form, $question, isset($_GET['destination']) ? $_GET['destination'] : 'node/'. $nid .'/results', NULL, t('Delete'), t('Cancel'));
+  return confirm_form($form, $question, isset($_GET['destination']) ? $_GET['destination'] : 'node/'. $node->nid .'/results', NULL, t('Delete'), t('Cancel'));
 }
 
 function webform_submission_delete_form_submit($form_id, $form_values) {
-  webform_submission_delete($form_values['nid'], $form_values['sid']);
+  webform_submission_delete($form_values['node'], $form_values['submission']);
   drupal_set_message(t("Submission deleted."));
   return 'node/'. $form_values['nid'] .'/results';
 }
@@ -152,6 +158,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
   // Outer loop: iterate for each submission.
   while ($row = db_fetch_object($res)) {
     if ($row->sid != $previous) {
+      $submissions[$row->sid] = new stdClass();
       $submissions[$row->sid]->sid = $row->sid;
       $submissions[$row->sid]->submitted = $row->submitted;
       $submissions[$row->sid]->remote_addr = $row->remote_addr;
@@ -173,28 +180,26 @@ function webform_get_submission($nid, $sid, $reset = FALSE) {
   static $submissions = array();
 
   if (!isset($submissions[$nid][$sid]) || $reset) {
-    $submission = array();
     $query = 'SELECT s.*, sd.cid, sd.no, sd.data '.
              'FROM {webform_submitted_data} as sd '.
              'LEFT JOIN {webform_submissions} as s on (sd.sid = s.sid) '.
              'WHERE sd.sid = %d AND s.nid = %d';
-  
+
     $result = db_query($query, $sid, $nid);
-    $count = db_num_rows($result);
-    if ($count >= 1) {
-      $row = db_fetch_array($result);
-      $submission['nid'] = $row['nid'];
-      $submission['sid'] = $row['sid'];
-      $submission['uid'] = $row['uid'];
-      $submission['remote_addr'] = $row['remote_addr'];
-      $submission['submitted'] = $row['submitted'];
-  
+    if ($row = db_fetch_object($result)) {
+      $submission = new stdClass;
+      $submission->nid = $row->nid;
+      $submission->sid = $row->sid;
+      $submission->uid = $row->uid;
+      $submission->remote_addr = $row->remote_addr;
+      $submission->submitted = $row->submitted;
+
       while ($row) {
-        $submission['data'][$row['cid']]['value'][$row['no']] = $row['data'];
-        $row = db_fetch_array($result);
+        $submission->data[$row->cid]['value'][$row->no] = $row->data;
+        $row = db_fetch_object($result);
       }
     }
-    $submissions[$nid][$sid] = $submission;
+    $submissions[$nid][$sid] = isset($submission) ? $submission : NULL;
   }
 
   return $submissions[$nid][$sid];

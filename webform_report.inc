@@ -171,8 +171,11 @@ function theme_webform_results_table($node, $components, $submissions) {
  *   The node id whose submissions will be deleted.
  */
 function webform_results_clear($nid) {
-  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d', $nid);
-  db_query('DELETE FROM {webform_submissions} WHERE nid = %d', $nid);
+  $node = node_load($nid);
+  $submissions = webform_get_submissions($nid);
+  foreach ($submissions as $submission) {
+    webform_submission_delete($node, $submission);
+  }
 }
 
 /**
