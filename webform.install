@@ -596,6 +596,10 @@ function webform_update_13() {
   $ret[] = update_sql("DELETE FROM {webform_component} WHERE nid NOT IN (SELECT nid FROM {node} WHERE type = 'webform')");
   $ret[] = update_sql("DELETE FROM {webform_submissions} WHERE nid NOT IN (SELECT nid FROM {node} WHERE type = 'webform')");
   $ret[] = update_sql("DELETE FROM {webform_submitted_data} WHERE nid NOT IN (SELECT nid FROM {node} WHERE type = 'webform')");
+  $result = db_query("SELECT nid FROM {webform}");
+  while ($row = db_fetch_object($result)) {
+    db_query("DELETE FROM {webform_submitted_data} WHERE nid = %d AND cid NOT IN (SELECT cid FROM {webform_component} c WHERE c.nid = %d)", $row->nid, $row->nid);
+  }
 
   // Convert timestamp-based cids to small integers starting at 1 for each node.
   $result = db_query("SELECT nid, cid FROM {webform_component} ORDER BY nid ASC, cid ASC");
