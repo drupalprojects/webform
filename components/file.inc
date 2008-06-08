@@ -332,7 +332,6 @@ function _webform_submit_file(&$data, $component) {
   }
 }
 
-
 /**
  * Format the output of emailed data for this component
  *
@@ -379,6 +378,24 @@ function _webform_submission_display_file($data, $component, $enabled = false) {
     }
   }
   return $form_item;
+}
+
+/**
+ * Delete operation for file components or submissions.
+ *
+ * @param $data
+ *   An array of information containing the submission result, directly
+ *   correlating to the webform_submitted_data database schema.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ */
+function _webform_delete_file($data, $component) {
+  // Delete an individual submission file.
+  $filedata = unserialize($data['value']['0']);
+  if (isset($filedata['filepath']) && is_file($filedata['filepath'])) {
+    unlink($filedata['filepath']);
+  }
 }
 
 /**

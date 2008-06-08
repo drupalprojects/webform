@@ -306,11 +306,11 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 
   switch ($op) {
     case 'view':
-      return user_access('access webform results') || (user_access('access own webform submissions') && ($account->uid == $submission['uid']));
+      return user_access('access webform results') || (user_access('access own webform submissions') && ($account->uid == $submission->uid));
     case 'edit':
-      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission['uid']));
+      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission->uid));
     case 'delete':
-      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission['uid'])) || user_access('clear webform results');
+      return user_access('edit webform submissions') || (user_access('edit own webform submissions') && ($account->uid == $submission->uid)) || user_access('clear webform results');
     case 'list':
       return user_access('access webform results') || user_access('access webform submissions') || (user_access('access own webform submissions')  && $user->uid);
   }
@@ -486,10 +486,18 @@ function webform_update($node) {
  * Implementation of hook_delete().
  */
 function webform_delete(&$node) {
+  // Allow components clean up extra data, such as uploaded files.
+  module_load_include('inc', 'webform', 'webform_components');
+  foreach ($node->webform['components'] as $cid => $component) {
+    webform_component_delete($node->nid, $cid);
+  }
+
+  // Remove any trace of webform data from the database.
   db_query("DELETE FROM {webform} WHERE nid = %d", $node->nid);
   db_query("DELETE FROM {webform_component} WHERE nid = %d", $node->nid);
   db_query('DELETE FROM {webform_roles} WHERE nid = %d', $node->nid);
-  watchdog('webform', 'webform "'. $node->title .'" deleted', WATCHDOG_NOTICE);
+  db_query('DELETE FROM {webform_submissions} WHERE nid = %d', $node->nid);
+  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d', $node->nid);
 }
 
 /**
@@ -1042,8 +1050,8 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   if (isset($sid_to_display) && is_numeric($sid_to_display)) {
     include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
     $submission = webform_get_submission($node->nid, $sid_to_display);
-    $enabled = isset($_GET['op']) && $_GET['op'] == 'edit' && ((user_access('edit own webform submissions') && $submission['uid'] == $user->uid) || user_access('edit webform submissions'));
-    if (!$enabled && (!user_access('access webform results') && !(user_access('access own webform submissions') && $submission['uid'] == $user->uid))) {
+    $enabled = isset($_GET['op']) && $_GET['op'] == 'edit' && ((user_access('edit own webform submissions') && $submission->uid == $user->uid) || user_access('edit webform submissions'));
+    if (!$enabled && (!user_access('access webform results') && !(user_access('access own webform submissions') && $submission->uid == $user->uid))) {
       $submission = array();
     }
     else {
@@ -1334,8 +1342,8 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
   webform_load_components();
 
-  if (isset($submission['sid'])) {
-    drupal_set_title(t('Submission #@sid', array('@sid' => $submission['sid'])));
+  if (isset($submission->sid)) {
+    drupal_set_title(t('Submission #@sid', array('@sid' => $submission->sid)));
   }
 
   if (module_exists('profile')) {
@@ -1347,8 +1355,8 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
     // Add CSS to display submission info. Don't preprocess because this CSS file is used rarely.
     drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css', 'module', 'all', FALSE);
 
-    $previous = db_result(db_query('SELECT MAX(sid) FROM {webform_submissions} WHERE nid = %d AND sid < %d', array($node->nid, $submission['sid'])));
-    $next = db_result(db_query('SELECT MIN(sid) FROM {webform_submissions} WHERE nid = %d AND sid > %d', array($node->nid, $submission['sid'])));
+    $previous = db_result(db_query('SELECT MAX(sid) FROM {webform_submissions} WHERE nid = %d AND sid < %d', array($node->nid, $submission->sid)));
+    $next = db_result(db_query('SELECT MIN(sid) FROM {webform_submissions} WHERE nid = %d AND sid > %d', array($node->nid, $submission->sid)));
 
     $form['submission'] = array(
       '#type' => 'value',
@@ -1370,7 +1378,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
       '#type' => 'fieldset',
       '#collapsible' => FALSE,
     );
-    $account = user_load(array('uid' => $submission['uid']));
+    $account = user_load(array('uid' => $submission->uid));
     $form['submission_info']['user_picture'] = array(
       '#value' => theme('user_picture', $account),
     );
@@ -1381,10 +1389,10 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
       '#value' => '<div>'. t('Submitted by !name', array('!name' => theme('username', $account))) .'</div>',
     );
     $form['submission_info']['time'] = array(
-      '#value' => '<div>'. format_date($submission['submitted'], 'large') .'</div>',
+      '#value' => '<div>'. format_date($submission->submitted, 'large') .'</div>',
     );
     $form['submission_info']['ip_address'] = array(
-      '#value' => '<div>'. $submission['remote_addr'] .'</div>',
+      '#value' => '<div>'. $submission->remote_addr .'</div>',
     );
   }
 
@@ -1503,10 +1511,10 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
         '#type'      => 'value',
         '#value'     => $node->nid,
       );
-      if (array_key_exists('sid', $submission)) {
+      if (isset($submission->sid)) {
         $form['details']['sid'] = array(
           '#type'      => 'hidden',
-          '#value'     => $submission['sid'],
+          '#value'     => $submission->sid,
         );
       }
     }
@@ -1522,15 +1530,15 @@ function _webform_client_form_add_component($cid, $component, $component_value, 
     // previously submitted in the submission numbered $sid_to_display.
     $display_function = "_webform_submission_display_". $component['type'];
     if (function_exists($display_function)) {
-      $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission['data'][$cid], $component, $enabled);
+      $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission->data[$cid], $component, $enabled);
     }
   }
   elseif ($component['page_num'] == $page_num) {
     // Add this user-defined field to the form (with all the values that are always available).
-    if (isset($submission['data'])) {
+    if (isset($submission->data)) {
       $display_function = "_webform_submission_display_". $component['type'];
       if (function_exists($display_function)) {
-        $parent_fieldset[$component['form_key']] = $display_function($submission['data'][$cid], $component, $enabled);
+        $parent_fieldset[$component['form_key']] = $display_function($submission->data[$cid], $component, $enabled);
       }
     }
     else {

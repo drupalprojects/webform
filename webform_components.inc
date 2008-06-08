@@ -438,17 +438,13 @@ function webform_component_delete_form($form_state, $node, $component) {
   $cid = $component['cid'];
 
   $form = array();
-  $form['nid'] = array(
+  $form['node'] = array(
     '#type' => 'value',
-    '#value' => $node->nid,
+    '#value' => $node,
   );
-  $form['cid'] = array(
+  $form['component'] = array(
     '#type' => 'value',
-    '#value' => $cid,
-  );
-  $form['name'] = array(
-    '#type' => 'value',
-    '#value' => $node->webform['components'][$cid]['name'],
+    '#value' => $component,
   );
 
   if ($node->webform['components'][$cid]['type'] == 'fieldset') {
@@ -464,9 +460,9 @@ function webform_component_delete_form($form_state, $node, $component) {
 }
 
 function webform_component_delete_form_submit($form, &$form_state) {
-  drupal_set_message(t('Component %name deleted.', array('%name' => $form_state['values']['name'])));
-  webform_component_delete($form_state['values']['nid'], $form_state['values']['cid']);
-  $form_state['redirect'] = 'node/'. $form_state['values']['nid'] .'/edit/components';
+  drupal_set_message(t('Component %name deleted.', array('%name' => $form_state['values']['component']['name'])));
+  webform_component_delete($form_state['values']['node'], $form_state['values']['component']);
+  $form_state['redirect'] = 'node/'. $form_state['values']['node']->nid .'/edit/components';
 }
 
 /**
@@ -494,14 +490,28 @@ function webform_component_update($component) {
   return db_query("UPDATE {webform_component} SET pid = %d, form_key = '%s', name = '%s', type = '%s', value = '%s', extra = '%s', mandatory = %d, weight = %d, email = %d WHERE nid = %d AND cid = %d", $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['email'], $component['nid'], $component['cid']);
 }
 
-function webform_component_delete($nid, $cid) {
-  db_query('DELETE FROM {webform_component} WHERE nid = %d AND cid = %d', $nid, $cid);
-  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d AND cid = %d', $nid, $cid);
+function webform_component_delete($node, $component) {
+  // Check if a delete function is available for this component. If so,
+  // load all submissions and allow the component to delete each one.
+  $delete_function = '_webform_delete_'. $component['type'];
+  if (function_exists($delete_function)) {
+    $submissions = webform_get_submissions($node->nid);
+    foreach ($submissions as $submission) {
+      if (isset($submission->data[$component['cid']])) {
+        $delete_function($submission->data[$component['cid']], $component);
+      }
+    }
+  }
+
+  // Remove database entries.
+  db_query('DELETE FROM {webform_component} WHERE nid = %d AND cid = %d', $node->nid, $component['cid']);
+  db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d AND cid = %d', $node->nid, $component['cid']);
 
   // Delete all elements under this element.
-  $result = db_query('SELECT cid FROM {webform_component} WHERE nid = %d AND pid = %d', $nid, $cid);
-  while ($row = db_fetch_array($result)) {
-    webform_component_delete($nid, $row['cid']);
+  $result = db_query('SELECT cid FROM {webform_component} WHERE nid = %d AND pid = %d', $node->nid, $component['cid']);
+  while ($row = db_fetch_object($result)) {
+    $component = $node->webform['components'][$row->cid];
+    webform_component_delete($node, $component);
   }
 }
 
