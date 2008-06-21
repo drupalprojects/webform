@@ -220,7 +220,7 @@ function theme_webform_edit_file($form) {
   $output = drupal_render($form);
 
   // Prefix the upload location field with the default path for webform.
-  $output = str_replace("Upload Directory: </label>", "Upload Directory: </label>". variable_get('file_directory_path', 'files') ."/webform/", $output);
+  $output = str_replace("Upload Directory: </label>", "Upload Directory: </label>". file_directory_path() ."/webform/", $output);
 
   return $output;
 }
