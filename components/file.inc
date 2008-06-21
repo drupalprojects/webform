@@ -220,7 +220,7 @@ function theme_webform_edit_file($form) {
   $output = drupal_render($form);
 
   // Prefix the upload location field with the default path for webform.
-  $output = str_replace("Upload Directory: </label>", "Upload Directory: </label>". variable_get('file_directory_path', 'files') ."/webform/", $output);
+  $output = str_replace("Upload Directory: </label>", "Upload Directory: </label>". file_directory_path() ."/webform/", $output);
 
   return $output;
 }
@@ -316,7 +316,7 @@ function _webform_submit_file(&$data, $component) {
   $current_file = unserialize($data);
 
   if ($file = file_check_upload($component['form_key'])) {
-    $upload_dir = variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation'];
+    $upload_dir = file_directory_path() ."/webform/". $component['extra']['savelocation'];
 
     if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
       $file_saved = file_save_upload($component['form_key'], $upload_dir);
