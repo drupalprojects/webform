@@ -56,7 +56,7 @@ function _webform_edit_select($currfield) {
 }
 
 function _webform_edit_validate_select($form_values) {
-  $rows = explode("\n", _webform_filter_values($form_values['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values(trim($form_values['extra']['items']), NULL, NULL, FALSE));
   foreach ($rows as $row) {
     $row = trim($row);
     if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
@@ -90,7 +90,7 @@ function _webform_render_select($component) {
 
   // Convert the user-entered options list into an array.
   $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...'));
@@ -105,7 +105,7 @@ function _webform_render_select($component) {
       $options[$matches[1]] = $matches[2];
     }
     else {
-      $options[_webform_safe_name($row)] = $row;
+      $options[$row] = $row;
     }
   }
 
@@ -116,33 +116,13 @@ function _webform_render_select($component) {
   if ($default_value) {
     // Convert default value to a list if necessary.
     if ($component['extra']['multiple'] == 'Y') {
-      if (strpos($default_value, ',')) {
-        $varray = explode(',', $default_value);
-        foreach ($varray as $key => $v) {
-          if (array_key_exists(_webform_safe_name($v), $options)) {
-            $form_item['#default_value'][] = _webform_safe_name($v);
-          }
-          else {
-            $form_item['#default_value'][] = $v;
-          }
-        }
-      }
-      else {
-        if (array_key_exists(_webform_safe_name($default_value), $options)) {
-          $form_item['#default_value'] = array(_webform_safe_name($default_value));
-        }
-        else {
-          $form_item['#default_value'] = array($default_value);
-        }
+      $varray = array_filter(explode(',', $default_value));
+      foreach ($varray as $key => $v) {
+        $form_item['#default_value'][] = $v;
       }
     }
     else {
-      if (array_key_exists(_webform_safe_name($default_value), $options)) {
-        $form_item['#default_value'] = _webform_safe_name($default_value);
-      }
-      else {
-        $form_item['#default_value'] = $default_value;
-      }
+      $form_item['#default_value'] = $default_value;
     }
   }
 
@@ -203,26 +183,13 @@ function _webform_submission_display_select($data, $component, $enabled = false)
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array.
     foreach ((array)$data['value'] as $key => $value) {
-      if (array_key_exists(_webform_safe_name($value), $form_item['#options'])) {
-        $form_item['#default_value'][] = _webform_safe_name($value);
-      }
-      else {
-        $form_item['#default_value'][] = $value;
-      }
+      $form_item['#default_value'][] = $value;
     }
   }
   else {
     // Set the value as a single string.
     foreach ((array)$data['value'] as $value) {
-      if ($value !== '0') {
-        if (array_key_exists(_webform_safe_name($value), $form_item['#options'])) {
-          $form_item['#default_value'] = _webform_safe_name($value);
-        }
-        else {
-          $form_item['#default_value'] = $value;
-        }
-        break;
-      }
+      $form_item['#default_value'] = $value;
     }
   }
   $form_item['#disabled'] = !$enabled;
@@ -243,7 +210,7 @@ function _webform_submission_display_select($data, $component, $enabled = false)
  */
 function _webform_submit_select(&$data, $component) {
   $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
 
   foreach ($rows as $row) {
     $row = trim($row);
@@ -252,7 +219,7 @@ function _webform_submit_select(&$data, $component) {
       $options[$safekey] = $safekey;
     }
     else {
-      $options[_webform_safe_name($row)] = $row;
+      $options[$row] = $row;
     }
   }
 
@@ -284,7 +251,7 @@ function _webform_submit_select(&$data, $component) {
  */
 function theme_webform_mail_select($data, $component) {
   // Convert submitted 'safe' values to un-edited, original form.
-  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
   $options = array();
 
   foreach ($rows as $row) {
@@ -293,7 +260,7 @@ function theme_webform_mail_select($data, $component) {
       $options[$matches[1]] = $matches[2];
     }
     else {
-      $options[_webform_safe_name($row)] = $row;
+      $options[$row] = $row;
     }
   }
   // Generate the output.
@@ -304,18 +271,12 @@ function theme_webform_mail_select($data, $component) {
         if ($options[$value]) {
           $output .= "    - ". $options[$value] ."\n";
         }
-        elseif ($options[_webform_safe_name($value)]) {
-          $output .= "    - ". $options[_webform_safe_name($value)] ."\n";
-        }
       }
     }
   }
   else {
     if ($options[$data]) {
       $output = $component['name'] .": ". $options[$data] ."\n";
-    }
-    elseif ($options[_webform_safe_name($data)]) {
-      $output = $component['name'] .": ". $options[_webform_safe_name($data)] ."\n";
     }
   }
   return $output;
@@ -345,7 +306,7 @@ function _webform_help_select($section) {
  *   submissions.
  */
 function _webform_analysis_rows_select($component) {
-  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
   $options = array();
 
   foreach ($rows as $row) {
@@ -354,7 +315,7 @@ function _webform_analysis_rows_select($component) {
       $options[$matches[1]] = $matches[2];
     }
     else {
-      $options[_webform_safe_name($row)] = $row;
+      $options[$row] = $row;
     }
   }
 
@@ -455,7 +416,7 @@ function _webform_csv_headers_select($component) {
  */
 function _webform_csv_data_select($data, $component) {
   $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filter_values($component['extra']['items'], NULL, NULL, FALSE));
+  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
   $options = array();
 
   foreach ($rows as $row) {
@@ -464,7 +425,7 @@ function _webform_csv_data_select($data, $component) {
       $options[$matches[1]] = $matches[2];
     }
     else {
-      $options[_webform_safe_name($row)] = $row;
+      $options[$row] = $row;
     }
   }
 
