@@ -419,6 +419,7 @@ function webform_component_edit_form_submit($form, &$form_state) {
   }
 
   if ($form_state['values']['clone']) {
+    unset($form_state['values']['cid']);
     drupal_set_message(t('Component %name cloned.', array('%name' => $form_state['values']['name'])));
     webform_component_clone($node, $form_state['values']);
   }
