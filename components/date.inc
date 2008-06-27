@@ -85,6 +85,7 @@ function _webform_render_date($component) {
     '#required' => $component['mandatory'],
     '#webform_component' => $component,
     '#process' => array('webform_expand_date'),
+    '#element_validate' => array('webform_validate_date'),
   );
   return $form_item;
 }
@@ -141,6 +142,9 @@ function webform_expand_date($element) {
   // Let Drupal do it's normal expansion.
   $element = expand_date($element);
 
+  // Don't use Drupal's validation though.
+  $element['#element_validate'] = array('webform_validate_date');
+
   // Set default values.
   foreach ($default_values as $type => $value) {
     unset($element[$type]['#value']);
@@ -158,8 +162,6 @@ function webform_expand_date($element) {
   elseif (is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
     $element['year']['#options'] = array('' => t('Year')) + drupal_map_assoc(range($component['extra']['year_start'], $component['extra']['year_end']));
   }
-
-  $element['#element_validate'] = array('webform_validate_date');
 
   return $element;
 }
