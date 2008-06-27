@@ -1182,16 +1182,11 @@ function theme_webform_admin_settings($form) {
  *   specified when using drupal_get_form(). 
  */
 function webform_client_form(&$node, $submission, $enabled, $preview, $form_values = NULL) {
-  global $user;
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
   webform_load_components();
 
   if (isset($submission->sid)) {
     drupal_set_title(t('Submission #@sid', array('@sid' => $submission->sid)));
-  }
-
-  if (module_exists('profile')) {
-    profile_load_profile($user);
   }
 
   // Set a header for navigating results.
@@ -1405,8 +1400,6 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
 }
 
 function webform_client_form_validate($form_id, $form_values) {
-  global $user;
-
   $node = node_load(array('nid' => $form_values['details']['nid']));
 
   // Flatten trees within the submission.
@@ -1887,8 +1880,12 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
     '%get' => $_GET,
     '%post' => $_POST,
     '%request' => $_REQUEST,
-    '%profile' => $user,
   );
+
+  if ($user->uid && module_exists('profile')) {
+    profile_load_profile($user);
+    $tokens['%profile'] = $user;
+  }
 
   foreach ($tokens as $token => $variable) {
     if (strpos($string, $token) !== FALSE) {
