@@ -90,17 +90,18 @@ function _webform_render_date($component) {
 }
 
 function webform_expand_date($element) {
-  // Let Drupal do it's normal expansion.
-  $element = expand_date($element);
   $component = $element['#webform_component'];
 
-  $default_values = array(
-    'day' => '',
-    'month' => '',
-    'year' => '',
-  );
-
-  if (strlen($component['value']) > 0) {
+  // Set defaults according to existing #default_value (set by Form API)
+  if (isset($element['month']['#default_value']) || isset($element['day']['#default_value']) || isset($element['year']['#default_value'])) {
+    $default_values = array(
+      'month' => $element['month']['#default_value'],
+      'day' => $element['day']['#default_value'],
+      'year' => $element['year']['#default_value'],
+    );
+  }
+  // Or, if none, use set the defaults of the component.
+  elseif (strlen($component['value']) > 0) {
     // Calculate the timestamp in GMT.
     $timestamp = strtotime(_webform_filter_values($component['value']));
 
@@ -129,11 +130,21 @@ function webform_expand_date($element) {
       'year' => gmdate('Y', $timestamp),
     );
   }
+  else {
+    $default_values = array(
+      'day' => NULL,
+      'month' => NULL,
+      'year' => NULL,
+    );
+  }
 
-  // Set default values based on the component.
+  // Let Drupal do it's normal expansion.
+  $element = expand_date($element);
+
+  // Set default values.
   foreach ($default_values as $type => $value) {
     unset($element[$type]['#value']);
-    $element[$type]['#default_value'] = isset($element['#default_value']) ? $element['#default_value'][$type] : $value;
+    $element[$type]['#default_value'] = isset($default_values[$type]) ? $default_values[$type] : NULL;
     $element[$type]['#options'] = array('' => t(ucfirst($type))) + $element[$type]['#options'];
   }
 
@@ -176,7 +187,7 @@ function webform_validate_date($form_item, $form_state) {
     }
   }
   // Check the date is between allowed years.
-  if (is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
+  if ($form_item['year']['#value'] !== "" && is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
     if ($form_item['year']['#value'] < $component['extra']['year_start'] || $form_item['year']['#value'] > $component['extra']['year_end']) {
       form_set_error($form_key .'][year', t('The entered date needs to be between the years @start and @end.', array('@start' => $component['extra']['year_start'], '@end' => $component['extra']['year_end'])));
       return;
@@ -198,11 +209,10 @@ function webform_validate_date($form_item, $form_state) {
  */
 function _webform_submission_display_date($data, $component, $enabled = false) {
   $form_item = _webform_render_date($component);
-  $form_item['#default_value'] = array(
-    'month' => $data['value']['0'],
-    'day'   => $data['value']['1'],
-    'year'  => $data['value']['2'],
-  );
+  $form_item['month']['#default_value'] = $data['value']['0'];
+  $form_item['day']['#default_value'] = $data['value']['1'];
+  $form_item['year']['#default_value'] = $data['value']['2'];
+
   $form_item['#disabled'] = !$enabled;
   return $form_item;
 }
