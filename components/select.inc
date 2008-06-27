@@ -115,7 +115,8 @@ function _webform_render_select($component) {
     if ($component['extra']['multiple'] == 'Y') {
       // Set display as a checkbox set.
       $form_item['#type'] = 'checkboxes';
-
+      // Drupal 6 hack to properly render on multipage forms.
+      $form_item['#process'] = array('webform_expand_checkboxes');
     }
     else {
       // Set display as a radio set.
@@ -125,6 +126,20 @@ function _webform_render_select($component) {
   return $form_item;
 }
 
+/**
+ * Drupal 6 hack that properly *renders* checkboxes in multistep forms. This is
+ * different than the value hack needed in Drupal 5, which is no longer needed.
+ */
+function webform_expand_checkboxes($element) {
+  // Elements that have a value set are already in the form structure, causing
+  // them not to be written when the expand_checkboxes function is called.
+  foreach ($element['#default_value'] as $key) {
+    unset($element[$key]);
+  }
+
+  $element = expand_checkboxes($element);
+  return $element;
+}
 
 /**
  * Display the result of a textfield submission. The output of this function
