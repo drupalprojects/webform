@@ -2134,7 +2134,6 @@ function theme_webform_admin_content($nodes) {
     );
   }
 
-  drupal_set_title(check_plain($node->title));
   return theme('table', $header, $rows);
 }
 
