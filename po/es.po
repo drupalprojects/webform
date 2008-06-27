@@ -344,7 +344,7 @@ msgstr "Mensaje de confirmación o redirección URL"
 
 #: webform.module:518
 msgid "Message to be shown upon successful submission or a path to a redirect page. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>"
-msgstr "Mensaje para ser mostrado al recibir una respuesta, o ruta a una página. Las rutas de páginas deben empezar con <em>http://</em> para sitios externos o <em>internal:</em> para una ruta interna. Ejemplo <em>http://www.ejemplo.com</em> o <em>internal:node/10"
+msgstr "Mensaje para ser mostrado al recibir una respuesta, o ruta a una página. Las rutas de páginas deben empezar con <em>http://</em> para sitios externos o <em>internal:</em> para una ruta interna. Ejemplo <em>http://www.ejemplo.com</em> o <em>internal:node/10</em>"
 
 #: webform.module:531
 msgid "Components"
