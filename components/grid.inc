@@ -46,26 +46,7 @@ function _webform_edit_grid($currfield) {
 }
 
 function _webform_edit_validate_grid($form_values) {
-  $rows = explode("\n", _webform_filter_values($form_values['extra']['options'], NULL, NULL, FALSE));
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
-      if (preg_match('/ |"/', $matches[1])) {
-        form_set_error('field][extra][options', t('The options for this grid contain illegal characters (quotes or spaces). Specify your options as <em>safe_value_no_spaces</em>|<em>The Real Value</em>.'));
-        return FALSE;
-      }
-    }
-  }
-  $rows = explode("\n", _webform_filter_values($form_values['extra']['questions'], NULL, NULL, FALSE));
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
-      if (preg_match('/ |"/', $matches[1])) {
-        form_set_error('field][extra][questions', t('The questions for this grid contain illegal characters (quotes or spaces).'));
-        return FALSE;
-      }
-    }
-  }
+  // Currently no validation for selects.
   return true;
 }
 
@@ -78,30 +59,18 @@ function _webform_render_grid($component, $random = true) {
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
   );
 
-  $questions = explode("\n", _webform_filter_values($component['extra']['questions'], NULL, NULL, FALSE));
-  $rows = explode("\n", _webform_filter_values($component['extra']['options'], NULL, NULL, FALSE));
+  $questions = _webform_grid_options($component['extra']['questions']);
+  $options = _webform_grid_options($component['extra']['options']);
 
   if ($component['extra']['optrand'] && $random) {
-    shuffle($rows);
+    shuffle($options);
   }
-  foreach ($rows as $row) {
-    if ($row != '') {
-      $row = trim($row);
-      if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-        $options[$matches[1]] = $matches[2];
-      }
-      else {
-        $options[_webform_safe_name($row)] = $row;
-      } 
-    }
-  }
-  $cid = 0;
   if ($component['extra']['qrand'] && $random) {
     shuffle($questions);
   }
   foreach ($questions as $question) {
     if ($question != '') {
-      $form_item[_webform_safe_name($question)] = array(
+      $form_item[$question] = array(
         '#title'         => $question,
         '#required'      => $component['mandatory'],
         '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
@@ -131,15 +100,7 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_grid($component, FALSE);
   $cid = 0;
   foreach (element_children($form_item) as $key) {
-    $value = $data['value'][$cid++];
-    if ($value !== '0') {     
-      if (array_key_exists(_webform_safe_name($value), $form_item[$key]['#options'])) {
-        $form_item[$key]['#default_value'] = _webform_safe_name($value);
-      }
-      else {
-        $form_item[$key]['#default_value'] = $value;
-      }
-    }
+    $form_item[$key]['#default_value'] = $data['value'][$cid++];
     $form_item[$key]['#disabled'] = !$enabled;
   }
   return $form_item;
@@ -158,17 +119,7 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
  *   Nothing
  **/
 function _webform_submit_grid(&$data, $component) {
-  $value = _webform_filter_values($component['value']);
-  $rows = explode("\n", _webform_filter_values($component['extra']['options']));
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[1];
-    }
-    else {
-      $options[_webform_safe_name($row)] = $row;
-    } 
-  }
+  $options = _webform_grid_options($component['extra']['options']);
   if (is_array($data)) {
     foreach ($data as $key => $value) {
       if ($value) {
@@ -192,10 +143,10 @@ function _webform_submit_grid(&$data, $component) {
  *   Textual output to be included in the email.
  */
 function theme_webform_mail_grid($data, $component) {
-  $questions = explode("\n", _webform_filter_values($component['extra']['questions']));
+  $questions = _webform_grid_options($component['extra']['questions']);
   $output = $component['name'] .":\n";
   foreach ($questions as $key => $question) {
-    $output .= '    - '. trim($question) .': '. $data[_webform_safe_name($question)] ."\n";
+    $output .= '    - '. $question .': '. $data[$question] ."\n";
   }
   return $output;
 }
@@ -226,32 +177,9 @@ function _webform_help_grid($section) {
  *   submissions.
  **/
 function _webform_analysis_rows_grid($component) {
-  // Generate the list of options.
-  $rows = explode("\n", _webform_filter_values($component['extra']['options']));
-  $options = array();
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[2];
-    }
-    else {
-      $options[$row] = $row;
-    } 
-  }
-
-  // Generate the list of questions.
-  $rows = explode("\n", _webform_filter_values($component['extra']['questions']));
-  $questions = array();
-  $cid = 0;
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $questions[$matches[1]] = $matches[2];
-    }
-    else {
-      $questions[$cid++] = $row;
-    } 
-  }
+  // Generate the list of options and questions.
+  $options = _webform_grid_options($component['extra']['options']);
+  $questions = array_values(_webform_grid_options($component['extra']['questions']));
 
   // Generate a lookup table of results.
   $query = 'SELECT no, data, count(data) as datacount '.
@@ -288,12 +216,12 @@ function _webform_analysis_rows_grid($component) {
  * @returns Textual output formatted for human reading.
  **/
 function _webform_table_data_grid($data, $component) {
-  $questions = explode("\n", $component['extra']['questions']);
-  // Set the value as a single string
+  $questions = array_values(_webform_grid_options($component['extra']['questions']));
+  // Set the value as a single string.
   if (is_array($data['value'])) {
     foreach ($data['value'] as $item => $value) {
       if ($value !== '0') {
-        $output .= check_plain(trim($questions[$item])) .': '. check_plain($value) ."<br />";
+        $output .= $questions[$item] .': '. check_plain($value) ."<br />";
       }
     }
   }
@@ -319,7 +247,7 @@ function _webform_csv_headers_grid($component) {
   $header = array();
   $header[0] = '';
   $header[1] = $component['name'];
-  $items = split("\n", $component['extra']['questions']);
+  $items = _webform_grid_options($component['extra']['questions']);
   foreach ($items as $item) {
     $header[2] .= "\,". $item;
     // Empty column per sub-field in main header.
@@ -344,22 +272,11 @@ function _webform_csv_headers_grid($component) {
  *   commas.
  **/
 function _webform_csv_data_grid($data, $component) {
-  $rows = explode("\n", _webform_filter_values($component['extra']['questions']));
-  $questions = array();
-  $cid = 0;
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $questions[$matches[1]] = $matches[2];
-    }
-    else {
-      $questions[$cid++] = $row;
-    } 
-  }
+  $questions = array_values(_webform_grid_options($component['extra']['questions']));
   foreach ($questions as $item => $question) {
     $output .= "\," . $data['value'][$item];
   }
-  // Remove the preceding extra comma
+  // Remove the preceding extra comma.
   $output = substr($output, 2);
   return $output;
 }
@@ -392,4 +309,23 @@ function theme_webform_grid(&$grid_element) {
   }
 
   return theme('form_element', $grid_element, theme('table', $header, $rows));
+}
+
+/**
+ * Utility function to split user-entered values from new-line seperated
+ * text into an array of options.
+ */
+function _webform_grid_options($text) {
+  $options = array();
+  $rows = array_filter(explode("\n", _webform_filter_values(trim($text))));
+  foreach ($rows as $option) {
+    $option = trim($option);
+    if (preg_match('/^([^|]+)\|(.*)$/', $option, $matches)) {
+      $options[$matches[1]] = $matches[2];
+    }
+    else {
+      $options[$option] = $option;
+    }
+  }
+  return $options;
 }
