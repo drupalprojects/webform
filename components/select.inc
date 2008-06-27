@@ -56,16 +56,8 @@ function _webform_edit_select($currfield) {
 }
 
 function _webform_edit_validate_select($form_values) {
-  $rows = explode("\n", _webform_filter_values(trim($form_values['extra']['items']), NULL, NULL, FALSE));
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
-      if (preg_match('/ |"/', $matches[1])) {
-        form_set_error('field][extra][items', t('The options for this select contain illegal characters (quotes or spaces). Specify your options as <em>safe_value_no_spaces</em>|<em>The Real Value</em>.'));
-        return false;
-      }
-    }
-  }
+  // Currently no validation for selects.
+  // TODO: Validate e-mail addresses when used as keys?
   return true;
 }
 
