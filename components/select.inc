@@ -70,7 +70,6 @@ function _webform_edit_validate_select($form_values) {
  *   An array of a form item to be displayed on the client-side webform.
  */
 function _webform_render_select($component) {
-
   $form_item = array(
     '#title'         => $component['name'],
     '#required'      => $component['mandatory'],
@@ -82,13 +81,10 @@ function _webform_render_select($component) {
 
   // Convert the user-entered options list into an array.
   $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = _webform_select_options($component['extra']['items']);
+  $options = _webform_select_options($component['extra']['items']);
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
-    $options = array('' => t('select...'));
-  }
-  else {
-    $options = array();
+    $options = array('' => t('select...')) + $options;
   }
 
   // Set the component options.
@@ -180,8 +176,8 @@ function _webform_submission_display_select($data, $component, $enabled = false)
 
 
 /**
- * Translates the submitted 'safe' form values back into their un-edited original
- * form.
+ * Convert FAPI 0/1 values into something saveable.
+ *
  * @param $data
  *   The POST data associated with the component.
  * @param $component
@@ -202,9 +198,6 @@ function _webform_submit_select(&$data, $component) {
         $data[$key] = NULL;
       }
     }
-  }
-  elseif (!empty($data)) {
-    $data = $options[$data];
   }
 }
 
@@ -331,15 +324,9 @@ function _webform_csv_headers_select($component) {
   if ($component['extra']['multiple']) {
     $header[1] = $component['name'];
     $items = _webform_select_options($component['extra']['items']);
-    foreach ($items as $item) {
-
-    $item = trim($item);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $item, $matches)) {
-      $item = $matches[1];
-    }
-
-      $header[2] .= "\,". $item;
-      // empty column per sub-field in main header.
+    foreach ($items as $key => $item) {
+      $header[2] .= "\,". $key;
+      // Empty column per sub-field in main header.
       $header[1] .= "\,";
     }
     // Remove the preceding extra comma.
@@ -369,7 +356,7 @@ function _webform_csv_data_select($data, $component) {
 
   if ($component['extra']['multiple']) {
     foreach ($options as $key => $item) {
-      if (in_array($item, (array)$data['value']) === true || in_array($key, (array)$data['value']) === true) {
+      if (in_array($key, (array)$data['value']) === TRUE) {
         $output .= '\,Yes';
       }
       else {
