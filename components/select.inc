@@ -133,8 +133,10 @@ function _webform_render_select($component) {
 function webform_expand_checkboxes($element) {
   // Elements that have a value set are already in the form structure, causing
   // them not to be written when the expand_checkboxes function is called.
-  foreach ($element['#default_value'] as $key) {
-    unset($element[$key]);
+  if (isset($element['#default_value'])) {
+    foreach ($element['#default_value'] as $key) {
+      unset($element[$key]);
+    }
   }
 
   $element = expand_checkboxes($element);
