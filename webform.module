@@ -1553,8 +1553,8 @@ function webform_client_form_submit($form_id, &$form_values) {
       }
 
       // Assemble the FROM string.
-      if (isset($headers['From'])) {
-        $froms[$cid] = $headers['From'];
+      if (isset($headers[$cid]['From'])) {
+        $froms[$cid] = $headers[$cid]['From'];
       }
       elseif (strlen($email_from_name) > 0) {
         $froms[$cid] = '"'. mime_header_encode($email_from_name) .'" <'. $email_from_address .'>';
@@ -1564,16 +1564,16 @@ function webform_client_form_submit($form_id, &$form_values) {
       }
 
       // Update the subject if set in the themed headers.
-      if (isset($headers['Subject'])) {
-        $subjects[$cid] = $headers['Subject'];
+      if (isset($headers[$cid]['Subject'])) {
+        $subjects[$cid] = $headers[$cid]['Subject'];
       }
       else {
         $subjects[$cid] = $email_subject;
       }
 
       // Update the to e-mail if set in the themed headers.
-      if (isset($headers['To'])) {
-        $emails[$cid] = $headers['To'];
+      if (isset($headers[$cid]['To'])) {
+        $emails[$cid] = $headers[$cid]['To'];
       }
     }
 
@@ -1590,7 +1590,7 @@ function webform_client_form_submit($form_id, &$form_values) {
       // to be sent out.
       if (is_array($address)) {
         foreach ($address as $single_address) {
-          drupal_mail('webform-submission', $single_address, $email_subject, $messages[$cid], $froms[$cid], $headers[$cid]);
+          drupal_mail('webform-submission', $single_address, $subjects[$cid], $messages[$cid], $froms[$cid], $headers[$cid]);
 
           // Debugging output for email.
           if (variable_get('webform_debug', 0) >= 2) {
@@ -1599,11 +1599,11 @@ function webform_client_form_submit($form_id, &$form_values) {
         }
       }
       else {
-        drupal_mail('webform-submission', $address, $email_subject, $messages[$cid], $froms[$cid], $headers[$cid]);
+        drupal_mail('webform-submission', $address, $subjects[$cid], $messages[$cid], $froms[$cid], $headers[$cid]);
 
         // Debugging output for email.
         if (variable_get('webform_debug', 0) >= 2) {
-          drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($headers[$cid], true)) ."</pre>To: ". $address ."<br />From: ". htmlentities($froms[$cid]) ."<br />Subject: ". $email_subject ."<br />E-mail Body: <pre>". $messages[$cid] ."</pre>");
+          drupal_set_message("E-mail Headers: <pre>". htmlentities(print_r($headers[$cid], true)) ."</pre>To: ". $address ."<br />From: ". htmlentities($froms[$cid]) ."<br />Subject: ". $subjects[$cid] ."<br />E-mail Body: <pre>". $messages[$cid] ."</pre>");
         }
       }
     }
