@@ -1433,7 +1433,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
 
         // Check if we're in a multipage form and determine the page number.
         if (!empty($form_state['storage']['submitted'])) {
-          $page_num = $form_state['storage']['details']['page_num'];
+          $page_num = $form_state['values']['details']['page_num'];
           if ($form_state['values']['op'] == $prev_page && $page_num > 1) {
             $page_num--;
           }
@@ -1615,7 +1615,6 @@ function webform_client_form_submit($form, &$form_state) {
     }
 
     // Rebuild the form, allowing the rebuild to determine the next page.
-    $form_state['storage']['details']['page_num'] = $form_state['values']['details']['page_num'];
     $form_state['rebuild'] = TRUE;
     return;
   }
