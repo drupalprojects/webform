@@ -56,16 +56,8 @@ function _webform_edit_select($currfield) {
 }
 
 function _webform_edit_validate_select($form_values) {
-  $rows = explode("\n", _webform_filter_values(trim($form_values['extra']['items']), NULL, NULL, FALSE));
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^(.+)?\|(.*)$/', $row, $matches)) {
-      if (preg_match('/ |"/', $matches[1])) {
-        form_set_error('field][extra][items', t('The options for this select contain illegal characters (quotes or spaces). Specify your options as <em>safe_value_no_spaces</em>|<em>The Real Value</em>.'));
-        return false;
-      }
-    }
-  }
+  // Currently no validation for selects.
+  // TODO: Validate e-mail addresses when used as keys?
   return true;
 }
 
@@ -90,23 +82,13 @@ function _webform_render_select($component) {
 
   // Convert the user-entered options list into an array.
   $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
+  $rows = _webform_select_options($component['extra']['items']);
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...'));
   }
   else {
     $options = array();
-  }
-
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[2];
-    }
-    else {
-      $options[$row] = $row;
-    }
   }
 
   // Set the component options.
@@ -209,19 +191,7 @@ function _webform_submission_display_select($data, $component, $enabled = false)
  *   Nothing.
  */
 function _webform_submit_select(&$data, $component) {
-  $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
-
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $safekey = $matches[1];
-      $options[$safekey] = $safekey;
-    }
-    else {
-      $options[$row] = $row;
-    }
-  }
+  $options = _webform_select_options($component['extra']['items']);
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
@@ -251,18 +221,8 @@ function _webform_submit_select(&$data, $component) {
  */
 function theme_webform_mail_select($data, $component) {
   // Convert submitted 'safe' values to un-edited, original form.
-  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
-  $options = array();
+  $options = _webform_select_options($component['extra']['items']);
 
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[2];
-    }
-    else {
-      $options[$row] = $row;
-    }
-  }
   // Generate the output.
   if ($component['extra']['multiple']) {
     $output = $component['name'] .":\n";
@@ -306,18 +266,7 @@ function _webform_help_select($section) {
  *   submissions.
  */
 function _webform_analysis_rows_select($component) {
-  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
-  $options = array();
-
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[2];
-    }
-    else {
-      $options[$row] = $row;
-    }
-  }
+  $options = _webform_select_options($component['extra']['items']);
 
   $query = 'SELECT data, count(data) as datacount '.
     ' FROM {webform_submitted_data} '.
@@ -381,7 +330,7 @@ function _webform_csv_headers_select($component) {
 
   if ($component['extra']['multiple']) {
     $header[1] = $component['name'];
-    $items = split("\n", $component['extra']['items']);
+    $items = _webform_select_options($component['extra']['items']);
     foreach ($items as $item) {
 
     $item = trim($item);
@@ -416,18 +365,7 @@ function _webform_csv_headers_select($component) {
  */
 function _webform_csv_data_select($data, $component) {
   $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $rows = explode("\n", _webform_filter_values(trim($component['extra']['items']), NULL, NULL, FALSE));
-  $options = array();
-
-  foreach ($rows as $row) {
-    $row = trim($row);
-    if (preg_match('/^([^"|]+)\|(.*)$/', $row, $matches)) {
-      $options[$matches[1]] = $matches[2];
-    }
-    else {
-      $options[$row] = $row;
-    }
-  }
+  $options = _webform_select_options($component['extra']['items']);
 
   if ($component['extra']['multiple']) {
     foreach ($options as $key => $item) {
@@ -445,4 +383,23 @@ function _webform_csv_data_select($data, $component) {
     $output = $data['value'][0];
   }
   return $output;
+}
+
+/**
+ * Utility function to split user-entered values from new-line seperated
+ * text into an array of options.
+ */
+function _webform_select_options($text) {
+  $options = array();
+  $rows = array_filter(explode("\n", _webform_filter_values(trim($text))));
+  foreach ($rows as $option) {
+    $option = trim($option);
+    if (preg_match('/^([^|]+)\|(.*)$/', $option, $matches)) {
+      $options[$matches[1]] = $matches[2];
+    }
+    else {
+      $options[$option] = $option;
+    }
+  }
+  return $options;
 }
