@@ -1291,21 +1291,21 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
         );
         // Add the submit button(s).
         if ($page_num > 1) {
-          $form['submitbutton_prev'] = array(
+          $form['previous'] = array(
             '#type' => 'submit',
             '#value' => $prev_page,
             '#weight' => 1000,
           );
         }
         if ($page_num == $page_count) {
-          $form['submitbutton'] = array(
+          $form['submit'] = array(
             '#type' => 'submit',
             '#value' => empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'],
             '#weight' => 1001,
           );
         }
         else if ($page_num < $page_count) {
-          $form['submitbutton_next'] = array(
+          $form['next'] = array(
             '#type' => 'submit',
             '#value' => $next_page,
             '#weight' => 1001,
@@ -1315,7 +1315,7 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
       else {
         $page_num = 1;
         // Add the submit button.
-        $form['submitbutton'] = array(
+        $form['submit'] = array(
           '#type' => 'submit',
           '#value' => empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'],
           '#weight' => 1000,
@@ -1747,7 +1747,7 @@ function theme_webform_mail_message($form_values, $node, $sid, $cid) {
   }
 
   $message .= "\n";
-  $message .= t('Submitted values are');
+  $message .= t('Submitted values are:') ."\n\n";
   $message .= theme('webform_mail_fields', 0, $form_values['submitted_tree'], $node);
 
   $message .= "\n\n";
@@ -1802,7 +1802,9 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
   }
   // Else use a generic output for arrays.
   else {
-    $message .= $indent . $component['name'] .":\n";
+    if ($cid != 0) {
+      $message .= $indent . $component['name'] .":\n";
+    }
     foreach ($value as $k => $v) {
       foreach ($node->webform['components'] as $local_key => $local_value) {
         if ($local_value['form_key'] == $k && $local_value['pid'] == $cid) {
