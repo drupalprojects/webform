@@ -38,6 +38,24 @@ function _webform_edit_textfield($currfield) {
     '#maxlength' => 10,
     '#weight' => 0,
   );
+  $edit_fields['extra']['field_prefix'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Label placed to the left of the textfield"),
+    '#default_value' => $currfield['extra']['field_prefix'],
+    '#description' => t('Examples: $, #, -.'),
+    '#size' => 20,
+    '#maxlength' => 127,
+    '#weight' => 1.1,
+  );
+  $edit_fields['extra']['field_suffix'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Label placed to the right of the textfield"),
+    '#default_value' => $currfield['extra']['field_suffix'],
+    '#description' => t('Examples: lb, kg, %.'),
+    '#size' => 20,
+    '#maxlength' => 127,
+    '#weight' => 1.2,
+  );
   $edit_fields['extra']['disabled'] = array(
     '#type' => 'checkbox',
     '#title' => t("Disabled"),
@@ -64,6 +82,8 @@ function _webform_render_textfield($component) {
     '#default_value' => _webform_filter_values($component['value']),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
+    '#field_prefix'  => $component['extra']['field_prefix'],
+    '#field_suffix'  => $component['extra']['field_suffix'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#disabled'      => $component['extra']['disabled'],
@@ -98,6 +118,34 @@ function _webform_submission_display_textfield($data, $component, $enabled = fal
   $form_item['#default_value'] = $data['value']['0'];
   $form_item['#disabled'] = !$enabled;
   return $form_item;
+}
+
+/**
+ * Format the output of emailed data for this component
+ *
+ * @param $data
+ *   A string or array of the submitted data
+ * @param $component
+ *   An array of information describing the component,
+ *   directly correlating to the webform_component database schema.
+ *
+ * @return string
+ *   Textual output to be included in the email.
+ */
+function theme_webform_mail_textfield($data, $component) {
+  $value = $data == '' ? '' : ' '. $component['extra']['field_prefix'] . $data . $component['extra']['field_suffix'];
+  return $component['name'] .":". $value;
+}
+
+/**
+ * Module specific instance of hook_theme().
+ */
+function _webform_theme_textfield() {
+  return array(
+    'webform_mail_textfield' => array(
+      'arguments' => array('data' => NULL, 'component' => NULL),
+    ),
+  );
 }
 
 /**
