@@ -335,6 +335,10 @@ function webform_theme() {
     'webform_view_messages' => array(
       'arguments' => array('node' => NULL, 'teaser' => NULL, 'page' => NULL, 'submission_count' => NULL, 'limit_exceeded' => NULL, 'allowed_roles' => NULL),
     ),
+    'webform_form' => array(
+      'arguments' => array('form' => NULL),
+      'template' => 'webform-form',
+    ),
     'webform_mail_components_form' => array(
       'arguments' => array('form' => NULL),
     ),
@@ -349,9 +353,11 @@ function webform_theme() {
     ),
     'webform_confirmation' => array(
       'arguments' => array('node' => NULL, 'sid' => NULL),
+      'template' => 'webform-confirmation',
     ),
     'webform_mail_message' => array(
       'arguments' => array('form_values' => NULL, 'node' => NULL, 'sid' => NULL, 'cid' => NULL),
+      'template' => 'webform-mail',
     ),
     'webform_mail_fields' => array(
       'arguments' => array('cid' => NULL, 'value' => NULL, 'node' => NULL, 'indent' => NULL),
@@ -1392,7 +1398,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
   }
 
   // Add a theme function for this form.
-  $form['#theme'] = 'webform_form_'. $node->nid;
+  $form['#theme'] = 'webform_form';
 
   // Set the encoding type (necessary for file uploads).
   $form['#attributes']['enctype'] = 'multipart/form-data';
@@ -1447,21 +1453,21 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
 
         // Add the submit button(s).
         if ($page_num > 1) {
-          $form['submitbutton_prev'] = array(
+          $form['previous'] = array(
             '#type' => 'submit',
             '#value' => $prev_page,
             '#weight' => 1000,
           );
         }
         if ($page_num == $page_count) {
-          $form['submitbutton'] = array(
+          $form['submit'] = array(
             '#type' => 'submit',
             '#value' => empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'],
             '#weight' => 1001,
           );
         }
         else if ($page_num < $page_count) {
-          $form['submitbutton_next'] = array(
+          $form['next'] = array(
             '#type' => 'submit',
             '#value' => $next_page,
             '#weight' => 1001,
@@ -1471,7 +1477,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
       else {
         $page_num = 1;
         // Add the submit button.
-        $form['submitbutton'] = array(
+        $form['submit'] = array(
           '#type' => 'submit',
           '#value' => empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'],
           '#weight' => 1000,
@@ -1853,7 +1859,6 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parent =
  */
 function _webform_confirmation($node) {
   drupal_set_title(check_plain($node->title));
-  $output = theme('webform_confirmation_'. $node->nid, $node, $_GET['sid']);
   if (empty($output)) {
     $output = theme('webform_confirmation', $node, $_GET['sid']);
   }
@@ -1861,73 +1866,39 @@ function _webform_confirmation($node) {
 }
 
 /**
- * Themable function for webform submission confirmation.
- * 
- * @param $node
- *   The webform node that has just been submitted.
+ * Prepare for theming of the webform form.
  */
-function theme_webform_confirmation($node, $sid) {
-
-  if (empty($node->webform['confirmation'])) {
-    drupal_set_message(t('Thank you, your submission has been received.'));
-    drupal_goto('node/'. $node->nid);
-  }
-
-  $node->body = check_markup($node->webform['confirmation'], $node->format, FALSE);
-  $node->links['webform_back'] = array(
-    'href' => 'node/'. $node->nid,
-    'title' => t('Go back to the form'),
-  );
-  return theme('node', $node, FALSE, TRUE);
+function webform_preprocess_webform_form(&$vars) {
+  $vars['nid'] = $vars['form']['details']['nid']['#value'];
+  $vars['template_files'][] = 'webform-form-'. $vars['nid'];
 }
 
 /**
- * Theme the contents of e-mails sent by webform.
- * 
- * @param $form_values
- *   An array of all form values submitted by the user. The array contains three
- *   keys containing the following:
- *   - submitted: All the submitted values in a single array keyed by webform
- *     component IDs. Useful for simply looping over the values.
- *   - submitted_tree: All the submitted values in a tree-structure array, keyed
- *     by the Form Key values defined by the user.
- * @param $node
- *   The complete node object for the webform.
- * @param $sid
- *   The submission ID of the new submission.
- * @param $cid
- *   If you desire to make different e-mails depending on the recipient, you can
- *   check this component ID to output different content. This will be the ID
- *   of the component that is a conditional e-mail recipient. For the normal
- *   e-mails, it will have the value of 'default'. 
+ * Prepare for theming of the webform submission confirmation.
  */
-function theme_webform_mail_message($form_values, $node, $sid, $cid) {
+function webform_preprocess_webform_confirmation(&$vars) {
+  if (empty($vars['node']->webform['confirmation'])) {
+    drupal_set_message(t('Thank you, your submission has been received.'));
+    drupal_goto('node/'. $vars['node']->nid);
+  }
+
+  $vars['confirmation_message'] = check_markup($vars['node']->webform['confirmation'], $vars['node']->format, FALSE);
+  $vars['template_files'][] = 'webform-confirmation-'. $vars['node']->nid;
+}
+
+/**
+ * Prepare to theme the contents of e-mails sent by webform.
+ */
+function webform_preprocess_webform_mail_message(&$vars) {
   global $user;
 
-  $message = '';
-  $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
-  $ip_address = ip_address();
-
-  if ($user->uid) {
-    $message .= t('Submitted by user') .": $user->name [$ip_address]\n";
-  }
-  else {
-    $message .= t('Submitted by anonymous user') .": [$ip_address]\n";
-  }
-
-  $message .= "\n";
-  $message .= t('Submitted values are');
-  $message .= theme('webform_mail_fields', 0, $form_values['submitted_tree'], $node);
-
-  $message .= "\n\n";
-  $message .= t("The results of this submission may be viewed at:") ."\n";
-  $message .= url('node/'. $node->nid, array('query' => "sid=". $sid, 'absolute' => TRUE));
-
-  return $message;
+  $vars['user'] = $user;
+  $vars['ip_address'] = ip_address();
+  $vars['template_files'][] = 'webform-mail-'. $vars['node']->nid;
 }
 
 /**
- * Theme the fields portion of the e-mails sent by webform.
+ * Prepare to theme the fields portion of the e-mails sent by webform.
  * 
  * This function calls itself recursively to maintain the tree structure of
  * components in the webform. It is called intially by
@@ -1971,7 +1942,9 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
   }
   // Else use a generic output for arrays.
   else {
-    $message .= $indent . $component['name'] .":\n";
+    if ($cid != 0) {
+      $message .= $indent . $component['name'] .":\n";
+    }
     foreach ($value as $k => $v) {
       foreach ($node->webform['components'] as $local_key => $local_value) {
         if ($local_value['form_key'] == $k && $local_value['pid'] == $cid) {
