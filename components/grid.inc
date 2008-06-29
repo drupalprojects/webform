@@ -146,7 +146,7 @@ function theme_webform_mail_grid($data, $component) {
   $questions = _webform_grid_options($component['extra']['questions']);
   $output = $component['name'] .":\n";
   foreach ($questions as $key => $question) {
-    $output .= '    - '. $question .': '. $data[$question] ."\n";
+    $output .= '  - '. $question .':'. ($data[$question] == '' ? '' : ' '. $data[$question]) ."\n";
   }
   return $output;
 }
