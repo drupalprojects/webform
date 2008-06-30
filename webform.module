@@ -1874,6 +1874,11 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
     }
   }
 
+  // Load the user profile.
+  if ($user->uid && module_exists('profile')) {
+    profile_load_profile($user);
+  }
+
   // Provide a list of candidates for token replacement.
   $tokens = array(
     '%server' => $_SERVER,
@@ -1882,12 +1887,8 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
     '%get' => $_GET,
     '%post' => $_POST,
     '%request' => $_REQUEST,
+    '%profile' => $user,
   );
-
-  if ($user->uid && module_exists('profile')) {
-    profile_load_profile($user);
-    $tokens['%profile'] = $user;
-  }
 
   foreach ($tokens as $token => $variable) {
     if (strpos($string, $token) !== FALSE) {
@@ -1899,7 +1900,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
           $replace[] = format_date(strtotime($value['month'] .'/'. $value['day'] .'/'. $value['year']), 'custom', 'F j, Y', '0');
         }
         else {
-          $replace[] = $value;
+          $replace[] = (string)$value;
         }
       }
     }
