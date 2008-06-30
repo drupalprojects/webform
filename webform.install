@@ -37,8 +37,8 @@ function webform_install() {
         value text default NULL,
         extra text,
         mandatory tinyint NOT NULL default '0',
-        weight smallint NOT NULL default '0',
         email tinyint NOT NULL default '0',
+        weight smallint NOT NULL default '0',
         PRIMARY KEY  (nid, cid)
         ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
       );
@@ -102,8 +102,8 @@ function webform_install() {
         value text NOT NULL default '',
         extra text NOT NULL default '',
         mandatory smallint NOT NULL default '0',
-        weight smallint NOT NULL default '0',
         email smallint NOT NULL default '0',
+        weight smallint NOT NULL default '0',
         PRIMARY KEY (nid, cid)
         )"
       );
