@@ -150,7 +150,7 @@ function webform_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'mandatory' => array(
+      'email' => array(
         'description' => t('Boolean flag for if submitted values for this component will be included in sent e-mails.'),
         'type' => 'int',
         'size' => 'tiny',
