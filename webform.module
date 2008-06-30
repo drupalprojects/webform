@@ -345,7 +345,7 @@ function webform_update($node) {
  */
 function webform_delete(&$node) {
   // Allow components clean up extra data, such as uploaded files.
-  module_load_include('inc', 'webform', 'webform_components');
+  include_once(drupal_get_path('module', 'webform') ."/webform_components.inc");
   foreach ($node->webform['components'] as $cid => $component) {
     webform_component_delete($node->nid, $cid);
   }
