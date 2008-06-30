@@ -493,6 +493,7 @@ function webform_component_delete($node, $component) {
   // load all submissions and allow the component to delete each one.
   $delete_function = '_webform_delete_'. $component['type'];
   if (function_exists($delete_function)) {
+    include_once(drupal_get_path('module', 'webform') .'/webform_submissions.inc');
     $submissions = webform_get_submissions($node->nid);
     foreach ($submissions as $submission) {
       if (isset($submission->data[$component['cid']])) {
