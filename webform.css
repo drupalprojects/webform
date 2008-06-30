@@ -14,8 +14,8 @@
   color: #999;
 }
 tr.webform-add-form .tabledrag-changed {
-	display: none;
+  display: none;
 }
 #webform-components tr.webform-add-form {
-	background-color: inherit;
+  background-color: inherit;
 }
