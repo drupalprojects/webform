@@ -722,7 +722,7 @@ function theme_webform_mail_components_form($form) {
     );
   }
   if (empty($rows)) {
-    $rows[] = array(array('colspan' => 5, 'data' => t('No components yet in this webform.')));
+    $rows[] = array(array('colspan' => 6, 'data' => t('No components yet in this webform.')));
   }
 
   $form['#children'] = theme('table', $header, $rows);
