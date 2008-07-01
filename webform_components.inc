@@ -212,7 +212,7 @@ function theme_webform_components_form($form) {
     }
   }
   else {
-    $rows[] = array(array('data' => t("No Components, add a component below."), 'colspan' => 8));
+    $rows[] = array(array('data' => t("No Components, add a component below."), 'colspan' => 9));
   }
 
   // Append the add form if not already printed.

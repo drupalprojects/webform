@@ -85,7 +85,7 @@ function theme_webform_results_submissions($node, $submissions) {
   }
 
   if (count($rows) == 0) {
-    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 5));
+    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 7));
   }
 
   $output = theme('table', $header, $rows);
@@ -162,6 +162,10 @@ function theme_webform_results_table($node, $components, $submissions) {
   }
   if (!empty($component_headers)) {
     $header = array_merge($header, $component_headers);
+  }
+
+  if (count($rows) == 0) {
+    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 4));
   }
 
   return theme('table', $header, $rows);
@@ -332,5 +336,10 @@ function webform_results_analysis($node) {
       }
     }
   }
+
+  if (count($rows) == 0) {
+    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 20));
+  }
+
   return theme('table', $headers, $rows);
 }
