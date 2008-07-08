@@ -260,15 +260,6 @@ function _webform_render_file($component) {
   return $form_item;
 }
 
-function _webform_required_file($form_element, $form_state) {
-  $component = $form_element['#webform_component'];
-  $form_key = $component['form_key'];
-
-  if (empty($_FILES['files']['name'][$form_key]) && $component['mandatory']) {
-    form_set_error($form_key, t('%field field is required.', array('%field' => $component['name'])));
-  }
-}
-
 function _webform_validate_file($form_element, &$form_state) {
   $component = $form_element['#webform_component'];
   $form_key = $component['form_key'];
