@@ -240,14 +240,16 @@ function _webform_render_file($component) {
   $form_item = array(
     '#type'          => $component['type'],
     '#title'         => $component['name'],
-    //'#required'      => $component['mandatory'], // Drupal core bug with required file uploads
+    '#required'      => $component['mandatory'], // Drupal core bug with required file uploads
     '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#tree'          => false, // file_check_upload assumes a flat $_FILES structure.
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
-    '#element_validate'      => array('_webform_validate_file', '_webform_required_file'), // Custom required routine.
+    '#element_validate'      => array(
+      '_webform_validate_file',
+    ),
     '#webform_component' => $component,
   );
   // Change the 'width' option to the correct 'size' option.
