@@ -240,7 +240,7 @@ function _webform_render_file($component) {
   $form_item = array(
     '#type'          => $component['type'],
     '#title'         => $component['name'],
-    '#required'      => $component['mandatory'], // Drupal core bug with required file uploads
+    '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
