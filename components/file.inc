@@ -259,12 +259,6 @@ function _webform_render_file($component) {
   return $form_item;
 }
 
-function _webform_required_file($form_element, $form_key, $fieldname, $required = false) {
-  if (empty($_FILES['files']['name'][$form_key]) && $required) {
-    form_set_error($fieldname, t('%field field is required.', array('%field' => $fieldname)));
-  }
-}
-
 function _webform_validate_file($form_element, $form_key, $fieldname, $filters) {
   // Set the current file as the default.
   if (isset($form_element['#webform_current_file'])) {
