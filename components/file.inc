@@ -240,7 +240,7 @@ function _webform_render_file($component) {
   $form_item = array(
     '#type'          => $component['type'],
     '#title'         => $component['name'],
-    '#required'      => $component['mandatory'],
+    //'#required'      => $component['mandatory'], // Drupal core bug with required file uploads.
     '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
@@ -249,6 +249,7 @@ function _webform_render_file($component) {
     '#suffix'        => '</div>',
     '#element_validate'      => array(
       '_webform_validate_file',
+      '_webform_required_file',  // Custom required routine.
     ),
     '#webform_component' => $component,
   );
@@ -258,6 +259,15 @@ function _webform_render_file($component) {
   }
 
   return $form_item;
+}
+
+function _webform_required_file($form_element, $form_state) {
+  $component = $form_element['#webform_component'];
+  $form_key = $component['form_key'];
+
+  if (empty($_FILES['files']['name'][$form_key]) && $component['mandatory']) {
+    form_set_error($form_key, t('%field field is required.', array('%field' => $component['name'])));
+  }
 }
 
 function _webform_validate_file($form_element, &$form_state) {
