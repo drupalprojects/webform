@@ -292,6 +292,10 @@ function _webform_validate_file($form_element, &$form_state) {
     $extension_list = $extensions[0];
   }
 
+  if (in_array('jpg', $extensions)) {
+    $extensions[] = 'jpeg';
+  }
+
   $dot = strrpos($_FILES['files']['name'][$form_key], '.');
   $extension = strtolower(substr($_FILES['files']['name'][$form_key], $dot+1));
   if (!in_array($extension, $extensions)) {
