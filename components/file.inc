@@ -324,7 +324,7 @@ function _webform_validate_file($form_element, &$form_state) {
  */
 function _webform_submit_file(&$data, $component) {
   $current_file = unserialize($data);
-  $upload_dir = variable_get('file_directory_path', 'files') ."/webform/". $component['extra']['savelocation'];
+  $upload_dir = file_directory_path() ."/webform/". $component['extra']['savelocation'];
   if (!empty($_FILES['files']['name'][$component['form_key']])) {
     if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
       $file_saved = file_save_upload($component['form_key'], array(), $upload_dir);
@@ -332,6 +332,7 @@ function _webform_submit_file(&$data, $component) {
         drupal_set_message(t("The uploaded file %filename was unable to be saved. The destination directory may not be writable.", array('%filename' => $file_saved['filename'])), "error");
       }
       else {
+        file_set_status($file_saved, FILE_STATUS_PERMANENT);
         $data = serialize((array)$file_saved);
         file_delete($current_file['filepath']);
       }
@@ -405,6 +406,7 @@ function _webform_delete_file($data, $component) {
   $filedata = unserialize($data['value']['0']);
   if (isset($filedata['filepath']) && is_file($filedata['filepath'])) {
     unlink($filedata['filepath']);
+    db_query("DELETE FROM {files} WHERE filepath = '%s'", $filedata['filepath']);
   }
 }
 
