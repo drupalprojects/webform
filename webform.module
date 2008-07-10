@@ -280,7 +280,7 @@ function webform_menu_load($nid) {
  * Menu loader callback. Load a webform submission if the given sid is a valid.
  */
 function webform_menu_submission_load($sid, $nid) {
-  include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+  module_load_include('inc', 'webform', 'webform_submissions');
   $submission = webform_get_submission($nid, $sid);
   return empty($submission) ? FALSE : $submission;
 }
@@ -454,7 +454,7 @@ function webform_file_download($file) {
  * Implementation of hook_insert().
  */
 function webform_insert($node) {
-  include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
+  module_load_include('inc', 'webform', 'webform_components');
 
   // If this is submitted from the node form, do a little extra cleanup.
   if (isset($node->op) && $node->op == $node->submit) {
@@ -1054,7 +1054,8 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   }
 
   if (isset($sid_to_display) && is_numeric($sid_to_display)) {
-    include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+    module_load_include('inc', 'webform', 'webform_submissions');
+
     $submission = webform_get_submission($node->nid, $sid_to_display);
     $enabled = isset($_GET['op']) && $_GET['op'] == 'edit' && ((user_access('edit own webform submissions') && $submission->uid == $user->uid) || user_access('edit webform submissions'));
     if (!$enabled && (!user_access('access webform results') && !(user_access('access own webform submissions') && $submission->uid == $user->uid))) {
@@ -1077,7 +1078,8 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
 
   // Check if the user can add another submission.
   if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
-    include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+    module_load_include('inc', 'webform', 'webform_submissions');
+
     if ($limit_exceeded = _webform_submission_limit_check($node)) {
       $enabled = FALSE;
     }
@@ -1344,7 +1346,7 @@ function webform_client_form_load($node, $submission, $enabled, $preview) {
  *   editing.
  */
 function webform_client_form($form_state, &$node, $submission, $enabled = FALSE, $preview = FALSE) {
-  include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
+  module_load_include('inc', 'webform', 'webform_components');
   webform_load_components();
 
   if (isset($submission->sid)) {
@@ -1592,7 +1594,7 @@ function webform_client_form_validate($form, $form_state) {
 
 function webform_client_form_submit($form, &$form_state) {
   global $user, $base_url;
-  include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+  module_load_include('inc', 'webform', 'webform_submissions');
 
   $node = node_load(array('nid' => $form_state['values']['details']['nid']));
 
@@ -2252,7 +2254,7 @@ function webform_load_components($return_all = FALSE, $reset = FALSE) {
     foreach ($files as $filename => $file) {
       $enabled = variable_get('webform_enable_'. $file->name, 1);
       if ($return_all || $enabled) {
-        include_once($filename);
+        module_load_include('inc', 'webform', 'components/'. $file->name);
         $component_list[$file->name] = t($file->name);
       }
       if ($enabled) {

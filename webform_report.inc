@@ -9,8 +9,8 @@
  * @copyright Pontus Ullgren 2004
  */
 
-// All functions within this file need the webform_submissions.inc.
-include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+// All functions within this file need the webform_submissions.inc. 
+module_load_include('inc', 'webform', 'webform_submissions'); 
 
 /**
  * Retrieve lists of submissions for a given webform.
