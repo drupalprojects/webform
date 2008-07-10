@@ -12,12 +12,12 @@
 function _webform_edit_hidden($currfield) {
   $edit_fields = array();
   $edit_fields['value'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t("Default value"),
     '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') .'<br />'. webform_help('webform/helptext#variables'),
-    '#size' => 60,
-    '#maxlength' => 127,
+    '#cols' => 60,
+    '#rows' => 5,
     '#weight' => 0,
   );
   $edit_fields['mandatory'] = array(
