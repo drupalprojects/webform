@@ -939,6 +939,15 @@ function webform_update_6203() {
 }
 
 /**
+ * Set all files to permanent status uploaded by Webform.
+ */
+function webform_update_6204() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {files} SET status = 1 WHERE filepath LIKE '". file_directory_path() ."/webform/%'");
+  return $ret;
+}
+
+/**
  * Recursively delete all files and folders in the specified filepath, then
  * delete the containing folder.
  *
