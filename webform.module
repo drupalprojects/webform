@@ -1033,7 +1033,6 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
     return $node;
   }
 
-  $sid_to_display = isset($_GET['sid']) ? $_GET['sid'] : NULL;
   $submission = array();
   $enabled = TRUE;
   $preview = FALSE;
@@ -1051,20 +1050,6 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   // See http://drupal.org/node/239343.
   if (isset($_POST['op']) && isset($_POST['name']) && isset($_POST['pass'])) {
     $logging_in = TRUE;
-  }
-
-  if (isset($sid_to_display) && is_numeric($sid_to_display)) {
-    module_load_include('inc', 'webform', 'webform_submissions');
-
-    $submission = webform_get_submission($node->nid, $sid_to_display);
-    $enabled = isset($_GET['op']) && $_GET['op'] == 'edit' && ((user_access('edit own webform submissions') && $submission->uid == $user->uid) || user_access('edit webform submissions'));
-    if (!$enabled && (!user_access('access webform results') && !(user_access('access own webform submissions') && $submission->uid == $user->uid))) {
-      $submission = array();
-    }
-    else {
-      drupal_set_title(t('Submission #@sid', array('@sid' => $sid_to_display)));
-      $node->body = "";
-    }
   }
 
   // Check if the user's role can submit this webform.
@@ -1529,8 +1514,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
 function _webform_client_form_add_component($cid, $component, $component_value, &$parent_fieldset, &$form, $submission, $page_num, $enabled = false) {
   // Load with submission information if necessary.
   if (!$enabled) {
-    // This component is display only, with the value set according information
-    // previously submitted in the submission numbered $sid_to_display.
+    // This component is display only.
     $display_function = "_webform_submission_display_". $component['type'];
     if (function_exists($display_function)) {
       $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission->data[$cid], $component, $enabled);
@@ -1788,7 +1772,7 @@ function webform_client_form_submit($form, &$form_state) {
 
   // Log to watchdog if normal debug is on.
   if (variable_get('webform_debug', 0) >= 1) {
-    watchdog('webform', 'Submission posted to %title. <a href="!url">Results</a>. !details', array('%title' => $node->title, '!url' => url('node/'. $node->nid, array('query' =>'sid='. $sid)), '!results' => "<br />\n<pre>". htmlentities(print_r($form_state['values'], TRUE)) ."</pre>"), WATCHDOG_NOTICE);
+    watchdog('webform', 'Submission posted to %title. <a href="!url">Results</a>. !details', array('%title' => $node->title, '!url' => url('node/'. $node->nid .'/submission/'. $sid), '!results' => "<br />\n<pre>". htmlentities(print_r($form_state['values'], TRUE)) ."</pre>"), WATCHDOG_NOTICE);
   }
 
   // Check confirmation field to see if redirect should be to another node or a message.
