@@ -186,7 +186,7 @@ function _webform_submission_display_select($data, $component, $enabled = false)
  *   Nothing.
  */
 function _webform_submit_select(&$data, $component) {
-  $options = _webform_select_options($component['extra']['items']);
+  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['items'])));
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
