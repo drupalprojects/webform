@@ -338,6 +338,7 @@ function webform_theme() {
     'webform_form' => array(
       'arguments' => array('form' => NULL),
       'template' => 'webform-form',
+      'pattern' => 'webform_form_[0-9]+',
     ),
     'webform_mail_components_form' => array(
       'arguments' => array('form' => NULL),
@@ -354,16 +355,19 @@ function webform_theme() {
     'webform_confirmation' => array(
       'arguments' => array('node' => NULL, 'sid' => NULL),
       'template' => 'webform-confirmation',
+      'pattern' => 'webform_confirmation_[0-9]+',
     ),
     'webform_mail_message' => array(
       'arguments' => array('form_values' => NULL, 'node' => NULL, 'sid' => NULL, 'cid' => NULL),
       'template' => 'webform-mail',
+      'pattern' => 'webform_mail_[0-9]+',
     ),
     'webform_mail_fields' => array(
       'arguments' => array('cid' => NULL, 'value' => NULL, 'node' => NULL, 'indent' => NULL),
     ),
     'webform_mail_headers' => array(
       'arguments' => array('form_values' => NULL, 'node' => NULL, 'sid' => NULL, 'cid' => NULL),
+      'pattern' => 'webform_mail_headers_[0-9]+',
     ),
     'webform_admin_content' => array(
       'arguments' => array('nodes' => NULL),
@@ -1385,7 +1389,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
   }
 
   // Add a theme function for this form.
-  $form['#theme'] = 'webform_form';
+  $form['#theme'] = array('webform_form_'. $node->nid, 'webform_form');
 
   // Set the encoding type (necessary for file uploads).
   $form['#attributes']['enctype'] = 'multipart/form-data';
@@ -1696,8 +1700,8 @@ function webform_client_form_submit($form, &$form_state) {
     $froms = array();
     $subjects = array();
     foreach ($emails as $cid => $email) {
-      $messages[$cid] = theme("webform_mail_message", $form_state['values'], $node, $sid, $cid);
-      $headers[$cid] = theme("webform_mail_headers", $form_state['values'], $node, $sid, $cid);
+      $messages[$cid] = theme(array('webform_mail_'. $node->nid, 'webform_mail_message'), $form_state['values'], $node, $sid, $cid);
+      $headers[$cid] = theme(array('webform_mail_headers_'. $node->nid, 'webform_mail_headers'), $form_state['values'], $node, $sid, $cid);
 
       // Assemble the FROM string.
       if (isset($headers[$cid]['From'])) {
@@ -1839,7 +1843,7 @@ function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parent =
 function _webform_confirmation($node) {
   drupal_set_title(check_plain($node->title));
   if (empty($output)) {
-    $output = theme('webform_confirmation', $node, $_GET['sid']);
+    $output = theme(array('webform_confirmation_'. $node->nid, 'webform_confirmation'), $node, $_GET['sid']);
   }
   return $output;
 }
@@ -1849,7 +1853,6 @@ function _webform_confirmation($node) {
  */
 function template_preprocess_webform_form(&$vars) {
   $vars['nid'] = $vars['form']['details']['nid']['#value'];
-  $vars['template_files'][] = 'webform-form-'. $vars['nid'];
 }
 
 /**
@@ -1862,7 +1865,6 @@ function template_preprocess_webform_confirmation(&$vars) {
   }
 
   $vars['confirmation_message'] = check_markup($vars['node']->webform['confirmation'], $vars['node']->format, FALSE);
-  $vars['template_files'][] = 'webform-confirmation-'. $vars['node']->nid;
 }
 
 /**
@@ -1873,7 +1875,6 @@ function template_preprocess_webform_mail_message(&$vars) {
 
   $vars['user'] = $user;
   $vars['ip_address'] = ip_address();
-  $vars['template_files'][] = 'webform-mail-'. $vars['node']->nid;
 }
 
 /**
