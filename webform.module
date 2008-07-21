@@ -1696,15 +1696,8 @@ function webform_client_form_submit($form, &$form_state) {
     $froms = array();
     $subjects = array();
     foreach ($emails as $cid => $email) {
-      $messages[$cid] = theme("webform_mail_message_$node->nid", $form_state['values'], $node, $sid, $cid);
-      $headers[$cid] = theme("webform_mail_headers_$node->nid", $form_state['values'], $node, $sid, $cid);
-      // Otherwise use the generic message or headers:
-      if (empty($messages[$cid])) {
-        $messages[$cid] = theme("webform_mail_message", $form_state['values'], $node, $sid, $cid);
-      }
-      if (empty($headers[$cid])) {
-        $headers[$cid] = theme("webform_mail_headers", $form_state['values'], $node, $sid, $cid);
-      }
+      $messages[$cid] = theme("webform_mail_message", $form_state['values'], $node, $sid, $cid);
+      $headers[$cid] = theme("webform_mail_headers", $form_state['values'], $node, $sid, $cid);
 
       // Assemble the FROM string.
       if (isset($headers[$cid]['From'])) {
@@ -1854,7 +1847,7 @@ function _webform_confirmation($node) {
 /**
  * Prepare for theming of the webform form.
  */
-function webform_preprocess_webform_form(&$vars) {
+function template_preprocess_webform_form(&$vars) {
   $vars['nid'] = $vars['form']['details']['nid']['#value'];
   $vars['template_files'][] = 'webform-form-'. $vars['nid'];
 }
@@ -1862,7 +1855,7 @@ function webform_preprocess_webform_form(&$vars) {
 /**
  * Prepare for theming of the webform submission confirmation.
  */
-function webform_preprocess_webform_confirmation(&$vars) {
+function template_preprocess_webform_confirmation(&$vars) {
   if (empty($vars['node']->webform['confirmation'])) {
     drupal_set_message(t('Thank you, your submission has been received.'));
     drupal_goto('node/'. $vars['node']->nid);
@@ -1875,7 +1868,7 @@ function webform_preprocess_webform_confirmation(&$vars) {
 /**
  * Prepare to theme the contents of e-mails sent by webform.
  */
-function webform_preprocess_webform_mail_message(&$vars) {
+function template_preprocess_webform_mail_message(&$vars) {
   global $user;
 
   $vars['user'] = $user;
