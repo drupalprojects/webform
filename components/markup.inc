@@ -11,12 +11,12 @@
  */
 function _webform_edit_markup($currfield) {
   $edit_fields = array();
-  $edit_fields['mandatory'] = array(); // Do not render the mandatory checkbox.
+  $edit_fields['advanced']['mandatory'] = array(); // Do not render the mandatory checkbox.
   $edit_fields['value'] = array(
     '#type' => 'textarea',
     '#title' => t("Value"),
     '#default_value' => $currfield['value'],
-    '#description' => t('Markup allows you to enter custom HTML or PHP logic into your form.') .'<br />'. webform_help('webform/helptext#variables'),
+    '#description' => t('Markup allows you to enter custom HTML or PHP logic into your form.') . theme('webform_token_help'),
     '#weight' => -1,
   );
   // Add the filter form.
