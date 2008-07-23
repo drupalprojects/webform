@@ -84,7 +84,7 @@ function webform_components_form($node) {
   $form['add']['weight'] = array(
     '#type' => 'weight',
     '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
-    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['weight'] + 1 : NULL,
+    '#default_value' => (isset($_GET['cid']) && isset($node->webform['components'][$_GET['cid']])) ? $node->webform['components'][$_GET['cid']]['weight'] + 1 : count($node->webform['components']),
   );
 
   $form['add']['add'] = array(
