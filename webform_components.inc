@@ -288,14 +288,6 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     '#weight' => -2,
     '#maxlength' => 255,
   );
-  $form['form_key'] = array(
-    '#type' => 'textfield',
-    '#default_value' => empty($component['form_key']) ? _webform_safe_name($component['name']) : $component['form_key'],
-    '#title' => t('Field Key'),
-    '#description' => t('Enter a machine readable key for this form element. May contain only lowercase alphanumeric characters and underscores. This key will be used as the name attribute of the form element.'),
-    '#required' => TRUE,
-    '#weight' => -1,
-  );
   $form['extra']['description'] = array(
     '#type' => 'textarea',
     '#default_value' => isset($component['extra']['description']) ? $component['extra']['description'] : '',
@@ -303,19 +295,38 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     '#description' => t('A short description of the field used as help for the user when he/she uses the form.') .'<br />'. webform_help('webform/helptext#variables'),
     '#weight' => -1,
   );
-  $form['mandatory'] = array(
+
+  $form['advanced'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Advanced settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => FALSE,
+    'weight' => 20,
+  );
+  $form['advanced']['form_key'] = array(
+    '#type' => 'textfield',
+    '#default_value' => empty($component['form_key']) ? _webform_safe_name($component['name']) : $component['form_key'],
+    '#title' => t('Field Key'),
+    '#description' => t('Enter a machine readable key for this form element. May contain only lowercase alphanumeric characters and underscores. This key will be used as the name attribute of the form element. This value has no effect on the way data is saved, but may be helpful if using Additional Processing or Validation code.'),
+    '#required' => TRUE,
+    '#weight' => -1,
+  );
+  $form['advanced']['mandatory'] = array(
     '#type' => 'checkbox',
     '#title' => t("Mandatory"),
     '#default_value' => ($component['mandatory'] == '1' ? TRUE : FALSE),
     '#description' => t('Check this option if the user must enter a value.'),
     '#weight' => 2,
+    '#access' => !in_array($component['type'], array('pagebreak', 'fieldset')),
   );
-  $form['email'] = array(
+  $form['advanced']['email'] = array(
     '#type' => 'checkbox',
     '#title' => t("Include in e-mails"),
     '#default_value' => ($component['email'] == '1' ? TRUE : FALSE),
     '#description' => t('If checked, submitted values from this component will be included in e-mails.'),
     '#weight' => 2,
+    '#access' => !in_array($component['type'], array('pagebreak', 'fieldset')),
   );
 
   if (variable_get('webform_enable_fieldset', true) && is_array($node->webform['components'])) {
@@ -325,7 +336,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
         $options[$thiscid] = $value['name'];
       }
     }
-    $form['pid'] = array(
+    $form['advanced']['pid'] = array(
       '#type' => 'select',
       '#title' => t("Parent Fieldset"),
       '#default_value' => $component['pid'],
@@ -335,7 +346,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     );
   }
 
-  $form['weight'] = array(
+  $form['advanced']['weight'] = array(
     '#type' => 'weight',
     '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
     '#title' => t("Weight"),
@@ -357,8 +368,10 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
 
   // Merge the additional fields with the current fields:
   $extra_fields_copy = $form['extra'];
+  $advanced_fields_copy = $form['advanced'];
   $form = array_merge($form, $additional_form_elements);
   $form['extra'] = array_merge((array)$extra_fields_copy, (array)$additional_form_elements['extra']);
+  $form['advanced'] = array_merge((array)$advanced_fields_copy, (array)$additional_form_elements['advanced']);
 
   // Add the submit button.
   $form['submit'] = array(
