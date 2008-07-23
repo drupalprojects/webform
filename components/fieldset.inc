@@ -25,7 +25,7 @@ function _webform_edit_fieldset($currfield) {
     '#description' => t('Collapsible fieldsets are "open" by default. Select this option to default the fieldset to "closed."'),
     '#weight' => 3,
   );
-  $edit_fields['mandatory'] = array();
+  $edit_fields['advanced']['mandatory'] = array();
   return $edit_fields;
 }
 

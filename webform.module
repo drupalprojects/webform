@@ -40,13 +40,6 @@ function webform_help($section = "admin/help#webform", $arg = NULL) {
     case 'node/add#webform' :
       $output = t("A webform can be a questionnaires, contact or request forms. It can be used to let visitors make contact, register for a event or to enable a complex survey.");
       break;
-    case 'webform/helptext#variables' :
-      $output = t('Available variables are: %username, %useremail, %site, %date.');
-      $output .= ' '. t('You can also use %server[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.server">$_SERVER</a> variables, %session[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.session">$_SESSION</a> variables and %get[key] to create prefilled forms from the <a href="http://www.php.net/reserved.variables#reserved.variables.get">URL</a>. %cookie, %request and %post also work with their respective PHP variables. For example %server[HTTP_USER_AGENT], %session[id], or %get[q].');
-      if (module_exists('profile')) {
-        $output .= ' '. t('If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the varible %profile[profile_city].');
-      }
-      break;
     case 'node/%/edit/components':
       $output .= '<p>'. t('This page displays all the components currently configured for this webform node. You may add any number of components to the form, even multiple of the same type. To add a new component, fill in a name and select a type from the fields at the bottom of the table. Submit the form to create the new component or update any changed form values.') .'</p>';
       $output .= '<p>'. t('Click on any existing component\'s name to edit its settings.') .'</p>';
@@ -371,6 +364,9 @@ function webform_theme() {
     ),
     'webform_admin_content' => array(
       'arguments' => array('nodes' => NULL),
+    ),
+    'webform_token_help' => array(
+      'arguments' => array(),
     ),
     // webform_components.inc.
     'webform_components_form' => array(
@@ -2123,6 +2119,40 @@ function webform_variable_get($variable) {
       break;
   }
   return $result;
+}
+
+function theme_webform_token_help() {
+  $tokens = array(
+    '%username',
+    '%useremail',
+    '%site',
+    '%date',
+    '%server['. t('key') .']',
+    '%session['. t('key') .']',
+    '%get['. t('key') .']',
+    '%post['. t('key') .']',
+    '%request['. t('key') .']',
+  );
+  if (module_exists('profile')) {
+    $tokens[] = '%profile['. t('key') .']';
+  }
+
+  $output = '';
+  $output .= t('You may use special tokens in this field that will be replaced with dynamic values.');
+  $output .= theme('item_list', $tokens);
+  $output .= t('You can use %server[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.server">$_SERVER</a> variables, %session[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.session">$_SESSION</a> variables and %get[key] to create prefilled forms from the <a href="http://www.php.net/reserved.variables#reserved.variables.get">URL</a>. %cookie, %request and %post also work with their respective PHP variables. For example %server[HTTP_USER_AGENT], %session[id], or %get[q].');
+  if (module_exists('profile')) {
+    $output .= ' '. t('If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the varible %profile[profile_city].');
+  }
+
+  $fieldset = array(
+    '#title' => t('Token values'),
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#children' => '<div>'. $output .'</div>',
+  );
+  return theme('fieldset', $fieldset);
 }
 
 function _webform_safe_name($name) {

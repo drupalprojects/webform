@@ -19,12 +19,12 @@ function _webform_edit_pagebreak($currfield) {
       '#value' => '',
   );
   // Force the parent to always be root.
-  $form['pid'] = array(
+  $form['advanced']['pid'] = array(
       '#type' => 'hidden',
       '#value' => '0',
   );
   // Never mandatory.
-  $form['mandatory'] = array(
+  $form['advanced']['mandatory'] = array(
       '#type' => 'hidden',
       '#value' => '',
   );

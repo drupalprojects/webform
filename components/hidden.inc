@@ -15,12 +15,12 @@ function _webform_edit_hidden($currfield) {
     '#type' => 'textarea',
     '#title' => t("Default value"),
     '#default_value' => $currfield['value'],
-    '#description' => t('The default value of the field.') .'<br />'. webform_help('webform/helptext#variables'),
+    '#description' => t('The default value of the field.') . theme('webform_token_help'),
     '#cols' => 60,
     '#rows' => 5,
     '#weight' => 0,
   );
-  $edit_fields['mandatory'] = array(
+  $edit_fields['advanced']['mandatory'] = array(
     '#type' => 'hidden',
     '#value' => 1,
   );
