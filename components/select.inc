@@ -131,15 +131,20 @@ function _webform_render_select($component) {
  * different than the value hack needed in Drupal 5, which is no longer needed.
  */
 function webform_expand_checkboxes($element) {
-  // Elements that have a value set are already in the form structure, causing
+  // Elements that have a value set are already in the form structure cause
   // them not to be written when the expand_checkboxes function is called.
-  if (isset($element['#default_value'])) {
-    foreach ($element['#default_value'] as $key) {
+  $default_value = array();
+  foreach (element_children($element) as $key) {
+    if (isset($element[$key]['#default_value'])) {
+      $default_value[] = $key;
       unset($element[$key]);
     }
   }
 
   $element = expand_checkboxes($element);
+  foreach ($default_value as $key) {
+    $element[$key]['#default_value'] = 1;
+  }
   return $element;
 }
 
