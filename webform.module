@@ -1246,7 +1246,7 @@ function webform_admin_settings() {
   $form['email']['webform_default_subject']  = array(
     '#type' => 'textfield',
     '#title' => t("Default subject"),
-    '#default_value' => variable_get('webform_default_subject', t('Form submission from: [title]')),
+    '#default_value' => variable_get('webform_default_subject', t('Form submission from: %title')),
     '#description' => t('The default subject line of any e-mailed results.'),
   );
 
@@ -2119,7 +2119,7 @@ function webform_variable_get($variable) {
       $result = variable_get('webform_default_from_address', variable_get('site_mail', ini_get('sendmail_from')));
       break;
     case 'webform_default_subject':
-      $result = variable_get('webform_default_subject', t('Form submission from: [title]'));
+      $result = variable_get('webform_default_subject', t('Form submission from: %title'));
       break;
   }
   return $result;
