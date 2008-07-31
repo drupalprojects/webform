@@ -1394,6 +1394,7 @@ function webform_client_form_validate($form_id, $form_values) {
 function webform_client_form_submit($form_id, &$form_values) {
   global $user, $base_url;
   include_once(drupal_get_path('module', 'webform') ."/webform_submissions.inc");
+  webform_load_components();
 
   $node = node_load(array('nid' => $form_values['details']['nid']));
   $session_key = 'webform_form_'. $node->nid;
