@@ -1580,6 +1580,7 @@ function webform_client_form_validate($form, $form_state) {
 function webform_client_form_submit($form, &$form_state) {
   global $user, $base_url;
   module_load_include('inc', 'webform', 'webform_submissions');
+  webform_load_components();
 
   $node = node_load(array('nid' => $form_state['values']['details']['nid']));
 
@@ -1608,6 +1609,7 @@ function webform_client_form_submit($form, &$form_state) {
   if (isset($form_state['storage']['submitted'])) {
     // Merge any stored submission data for multistep forms.
     $original_values = is_array($form_state['values']['submitted']) ? $form_state['values']['submitted'] : array();
+    unset($form_state['values']['submitted']);
 
     foreach ($form_state['storage']['submitted'] as $key => $val) {
       $form_state['values']['submitted'][$key] = $val;
