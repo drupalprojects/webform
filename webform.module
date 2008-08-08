@@ -1152,7 +1152,8 @@ function theme_webform_admin_settings($form) {
  * @param $node
  *   The current webform node.
  * @param $submission
- *   An array of values for the form if we're displaying a result.
+ *   An object containing information about the form submission if we're 
+ *   displaying a result.
  * @param $enabled
  *   If displaying a result, specify if form elements are enabled for
  *   editing.
