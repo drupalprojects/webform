@@ -120,7 +120,7 @@ function webform_submission_delete_form($node, $submission) {
 function webform_submission_delete_form_submit($form_id, $form_values) {
   webform_submission_delete($form_values['node'], $form_values['submission']);
   drupal_set_message(t("Submission deleted."));
-  return 'node/'. $form_values['nid'] .'/results';
+  return 'node/'. $form_values['node']->nid .'/results';
 }
 
 /**
