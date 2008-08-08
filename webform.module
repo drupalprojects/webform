@@ -413,15 +413,13 @@ function webform_node_info() {
 /**
  * Implementation of hook_access().
  */
-function webform_access($op, $node) {
-  global $user;
-
+function webform_access($op, $node, $account) {
   switch ($op) {
     case "create":
-      return user_access("create webforms");
+      return user_access("create webforms", $account);
     case "update":
     case "delete":
-      return user_access("edit webforms") || (user_access("edit own webforms") && ($user->uid == $node->uid));
+      return user_access("edit webforms", $account) || (user_access("edit own webforms", $account) && ($account->uid == $node->uid));
   }
 }
 
