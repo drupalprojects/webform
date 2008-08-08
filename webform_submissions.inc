@@ -109,7 +109,7 @@ function webform_submission_delete_form_submit($form, &$form_state) {
   webform_submission_delete($form_state['values']['node'], $form_state['values']['submission']);
   drupal_set_message(t("Submission deleted."));
 
-  $form_state['redirect'] = 'node/'. $form_state['values']['nid'] .'/webform-results';
+  $form_state['redirect'] = 'node/'. $form_state['values']['node']->nid .'/webform-results';
 }
 
 /**
