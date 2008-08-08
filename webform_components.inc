@@ -429,7 +429,6 @@ function webform_component_edit_form_submit($form_id, $form_values) {
   }
 
   if ($form_values['clone']) {
-    unset($form_values['cid']);
     drupal_set_message(t('Component %name cloned.', array('%name' => $form_values['name'])));
     webform_component_clone($node, $form_values);
   }
@@ -535,13 +534,16 @@ function webform_component_delete($node, $component) {
  *   A full component containing fields from the component form.
  */
 function webform_component_clone(&$node, $component) {
+  $original_cid = $component['cid'];
+  unset($component['cid']);
   $new_cid = webform_component_insert($component);
   if ($component['type'] == 'fieldset') {
     foreach ($node->webform['components'] as $cid => $child_component) {
-      if ($child_component['pid'] == $component['cid']) {
+      if ($child_component['pid'] == $original_cid) {
         $child_component['pid'] = $new_cid;
         webform_component_clone($node, $child_component);
       }
     }
   }
+  return $new_cid;
 }
