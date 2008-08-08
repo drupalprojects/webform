@@ -100,6 +100,10 @@ function webform_expand_date($element) {
       'day' => $element['day']['#default_value'],
       'year' => $element['year']['#default_value'],
     );
+    // Remove the default values, or the elements will be forced into month/day/year order.
+    unset($element['month']);
+    unset($element['day']);
+    unset($element['year']);
   }
   // Or, if none, use set the defaults of the component.
   elseif (strlen($component['value']) > 0) {
@@ -195,6 +199,23 @@ function webform_validate_date($form_item, $component) {
       return;
     }
   }
+}
+
+/**
+ * Convert internationalized Date formats into the US order expected by Webform.
+ *
+ * @param $data
+ *   The POST data associated with the component.
+ * @param $component
+ *   An array of information describing the component, directly correlating to
+ *   the webform_component database schema.
+ * @return
+ *   Nothing.
+ */
+function _webform_submit_date(&$data, $component) {
+  // Webform stores dates in month/day/year rows.
+  // Ensure consistency when using international date formats.
+  $data = array($data['month'], $data['day'], $data['year']);
 }
 
 /**
