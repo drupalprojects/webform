@@ -119,7 +119,7 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
  *   Nothing
  **/
 function _webform_submit_grid(&$data, $component) {
-  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['items'])));
+  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['options'])));
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
