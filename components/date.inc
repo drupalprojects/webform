@@ -253,8 +253,8 @@ function _webform_submission_display_date($data, $component, $enabled = false) {
  */
 function theme_webform_mail_date($data, $component) {
   $output = $component['name'] .":";
-  if ($data['month'] && $data['day']) {
-    $timestamp = strtotime($data['month'] ."/". $data['day'] ."/". $data['year']);
+  if ($data[0] && $data[1]) {
+    $timestamp = strtotime($data[0] ."/". $data[1] ."/". $data[2]);
     $format = webform_date_format('medium');
     $output .= ' '. date($format, $timestamp);
   }
