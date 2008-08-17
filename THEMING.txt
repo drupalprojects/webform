@@ -89,8 +89,8 @@ function phptemplate_webform_confirmation_[node id here]($node, $sid) {
   </div>
   
   <ul>
-    <li><a href="<?php print url('node/'. $node->nid, 'sid='. $sid)">View your submission</a></li>
-    <li><a href="<?php print url('node/'. $node->nid, 'sid='. $sid .'&op=edit')">Edit your submission</a></li>
+    <li><a href="<?php print url('node/'. $node->nid . '/submission/'. $sid)?>">View your submission</a></li>
+    <li><a href="<?php print url('node/'. $node->nid . '/submission/'. $sid .'/edit')?>">Edit your submission</a></li>
   </ul>
   
   <?php /* End sample webform confirmation page */ ?>
