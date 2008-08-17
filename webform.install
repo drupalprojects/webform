@@ -176,11 +176,11 @@ function webform_uninstall() {
   _webform_recursive_delete($filepath);
 
   // Drop tables.
-  db_query("DROP TABLE IF EXISTS {webform}");
-  db_query("DROP TABLE IF EXISTS {webform_component}");
-  db_query("DROP TABLE IF EXISTS {webform_roles}");
-  db_query("DROP TABLE IF EXISTS {webform_submissions}");
-  db_query("DROP TABLE IF EXISTS {webform_submitted_data}");
+  db_query("DROP TABLE {webform}");
+  db_query("DROP TABLE {webform_component}");
+  db_query("DROP TABLE {webform_roles}");
+  db_query("DROP TABLE {webform_submissions}");
+  db_query("DROP TABLE {webform_submitted_data}");
 }
 
 /**
