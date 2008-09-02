@@ -1,10 +1,6 @@
 <?php
 // $Id$
 
-// Get the current schema so that updates that have already run for 5 don't get
-// run a second time when upgrading to 6.
-define('WEBFORM_VERSION', db_result(db_query("SELECT schema_version FROM {system} WHERE type = 'module' AND name = 'webform'")));
-
 /**
  * Implementation of hook_schema().
  */
@@ -830,7 +826,7 @@ function webform_update_6001() {
 function webform_update_6200() {
   $ret = array();
   // This update will already be run as webform_update_5200 on Drupal 5.
-  if (WEBFORM_VERSION > 6000) {
+  if (webform_update_version() > 6000) {
     db_change_field($ret, 'webform_component', 'name', 'name', array('type' => 'varchar', 'length' => 255, 'default' => "NULL"));
   }
   return $ret;
@@ -842,7 +838,7 @@ function webform_update_6200() {
 function webform_update_6201() {
   $ret = array();
   // This update will already be run as webform_update_5201 on Drupal 5.
-  if (WEBFORM_VERSION > 6000) {
+  if (webform_update_version() > 6000) {
     db_add_field($ret, 'webform_component', 'email', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
     $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
   }
@@ -856,7 +852,7 @@ function webform_update_6202() {
   $ret = array();
 
   // This update will already be run as webform_update_5202 on Drupal 5.
-  if (WEBFORM_VERSION > 6000) {
+  if (webform_update_version() > 6000) {
     db_create_table($ret, 'webform_roles', array(
       'description' => t('Holds access information regarding which roles are allowed to submit which webform nodes. Does not prevent access to the webform node entirely, use the {node_access} table for that purpose.'),
       'fields' => array(
@@ -899,7 +895,7 @@ function webform_update_6203() {
   $ret = array();
 
   // This update will already be run as webform_update_5203 on Drupal 5.
-  if (WEBFORM_VERSION > 6000) {
+  if (webform_update_version() > 6000) {
     $result = db_query("SELECT nid, cid, extra FROM {webform_component} WHERE type = 'file'");
     while ($component = db_fetch_object($result)) {
       $extra = unserialize($component->extra);
@@ -969,4 +965,18 @@ function _webform_recursive_delete($path) {
     }
     @rmdir($path);
   }
+}
+
+/**
+ * Get the current schema.
+ * 
+ * This is used to prevent updates that have already run for 5 don't get
+ * run a second time when upgrading to 6.
+ */
+function webform_update_version() {
+  static $version;
+  if (!isset($version)) {
+    $version = db_result(db_query("SELECT schema_version FROM {system} WHERE type = 'module' AND name = 'webform'"));
+  }
+  return $version;
 }
