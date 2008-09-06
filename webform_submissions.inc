@@ -136,10 +136,15 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
     $query .= ' AND u.uid = %d';
   }
 
-  $query .= ' ORDER BY sid ASC, cid ASC, no ASC';
-
   if (is_array($header)) {
     $query .= tablesort_sql($header);
+    if ($header[0]['sort'] != 'asc') {
+      $query .= ', sid ASC';
+    }
+    $query .= ', cid ASC, no ASC';
+  }
+  else {
+    $query .= ' ORDER BY sid ASC, cid ASC, no ASC';
   }
 
   $res = db_query($query, $nid, $uid);
