@@ -55,9 +55,11 @@ function phptemplate_webform_mail_message_[node id here]($form_values, $node, $s
   $form_values['submitted'] => An array of fields and their submitted values (identical to the previous value of $form_values)
   $form_values['submitted_tree'] => An array of fields and their values structured in a recursive array
 
-- Theming the e-mail headers may also be done in a similar manner. Over ride
-  the theme_webform_mail_headers() function from webform.module to customize
-  the e-mail headers.
+- Advanced Webform e-mail Theming: Theming the e-mail headers may also be done
+  by overriding the theme_webform_mail_headers() function from webform.module.
+  Just copy the code out of webform.module and change as necessary in your
+  template.php file. This allows you to customize the e-mail headers.
+
 
 Theme the confirmation page
 ---------------------------
