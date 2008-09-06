@@ -63,10 +63,26 @@ function _webform_render_grid($component, $random = true) {
   $options = _webform_grid_options($component['extra']['options']);
 
   if ($component['extra']['optrand'] && $random) {
-    shuffle($options);
+    // This maneuver shuffles the array keys, then uses them as
+    // the basis for ordering the options.
+    $aux = array();
+    $keys = array_keys($options);
+    shuffle($keys);
+    foreach($keys as $key) {
+      $aux[$key] = $options[$key];
+      unset($options[$key]);
+    }
+    $options = $aux;
   }
   if ($component['extra']['qrand'] && $random) {
-    shuffle($questions);
+    $aux = array();
+    $keys = array_keys($questions);
+    shuffle($keys);
+    foreach($keys as $key) {
+      $aux[$key] = $questions[$key];
+      unset($questions[$key]);
+    }
+    $questions = $aux;
   }
   foreach ($questions as $question) {
     if ($question != '') {
@@ -120,6 +136,7 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
  **/
 function _webform_submit_grid(&$data, $component) {
   $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['options'])));
+  $questions = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['questions'])));
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
@@ -131,6 +148,13 @@ function _webform_submit_grid(&$data, $component) {
   elseif (!empty($data)) {
     $data = $options[$data];
   }
+
+  // Put the form in the original option order before saving.
+  $order = $questions;
+  foreach ($data as $key => $value) {
+    $order[$key] = $value;
+  }
+  $data = $order;
 }
 /**
  * Format the output of emailed data for this component.
