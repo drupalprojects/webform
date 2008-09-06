@@ -91,7 +91,7 @@ function _webform_render_select($component) {
   $form_item['#options'] = $options;
 
   // Set the default value.
-  if ($default_value) {
+  if ($default_value != '') {
     // Convert default value to a list if necessary.
     if ($component['extra']['multiple'] == 'Y') {
       $varray = array_filter(explode(',', $default_value));
@@ -195,11 +195,15 @@ function _webform_submit_select(&$data, $component) {
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
-      if ($value) {
+      if ($value != '') {
         $data[$key] = $options[$key];
       }
+      // Checkboxes submit a value of 0 when not checked.
+      elseif ($value == 0 && $component['extra']['aslist'] != 'Y' && $component['extra']['multiple'] == 'Y') {
+        unset($data[$key]);
+      }
       else {
-        $data[$key] = NULL;
+        unset($data[$key]);
       }
     }
   }
