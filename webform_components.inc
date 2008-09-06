@@ -334,9 +334,9 @@ function webform_component_edit_form($form_state, &$node, $component, $clone = F
 
   if (variable_get('webform_enable_fieldset', true) && is_array($node->webform['components'])) {
     $options = array('0' => t('Root'));
-    foreach ($node->webform['components'] as $thiscid => $value) {
-      if ($value['type'] == 'fieldset' && $thiscid != $component['cid']) {
-        $options[$thiscid] = $value['name'];
+    foreach ($node->webform['components'] as $existing_cid => $value) {
+      if ($value['type'] == 'fieldset' && (!isset($component['cid']) || $existing_cid != $component['cid'])) {
+        $options[$existing_cid] = $value['name'];
       }
     }
     $form['advanced']['pid'] = array(
@@ -370,11 +370,17 @@ function webform_component_edit_form($form_state, &$node, $component, $clone = F
   }
 
   // Merge the additional fields with the current fields:
-  $extra_fields_copy = $form['extra'];
-  $advanced_fields_copy = $form['advanced'];
+  if (isset($additional_form_elements['extra'])) {
+    $extra_fields_copy = $form['extra'];
+    $form['extra'] = array_merge($extra_fields_copy, $additional_form_elements['extra']);
+    unset($additional_form_elements['extra']);
+  }
+  if (isset($additional_form_elements['advanced'])) {
+    $advanced_fields_copy = $form['advanced'];
+    $form['advanced'] = array_merge($advanced_fields_copy, $additional_form_elements['advanced']);
+    unset($additional_form_elements['advanced']);
+  }
   $form = array_merge($form, $additional_form_elements);
-  $form['extra'] = array_merge((array)$extra_fields_copy, (array)$additional_form_elements['extra']);
-  $form['advanced'] = array_merge((array)$advanced_fields_copy, (array)$additional_form_elements['advanced']);
 
   // Add the submit button.
   $form['submit'] = array(
@@ -487,6 +493,8 @@ function webform_component_delete_form_submit($form, &$form_state) {
 function webform_component_insert($component) {
   db_lock_table('webform_component');
   $component['cid'] = isset($component['cid']) ? $component['cid'] : db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
+  $component['value'] = isset($component['value']) ? $component['value'] : NULL;
+  $component['mandatory'] = isset($component['mandatory']) ? $component['mandatory'] : 0;
   db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight, email) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['email']);
   db_unlock_tables('webform_component');
   return $component['cid'];
@@ -500,6 +508,8 @@ function webform_component_insert($component) {
  *   component form. Additional properties are stored in the extra array.
  */
 function webform_component_update($component) {
+  $component['value'] = isset($component['value']) ? $component['value'] : NULL;
+  $component['mandatory'] = isset($component['mandatory']) ? $component['mandatory'] : 0;
   return db_query("UPDATE {webform_component} SET pid = %d, form_key = '%s', name = '%s', type = '%s', value = '%s', extra = '%s', mandatory = %d, weight = %d, email = %d WHERE nid = %d AND cid = %d", $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['email'], $component['nid'], $component['cid']);
 }
 
@@ -549,4 +559,26 @@ function webform_component_clone(&$node, $component) {
     }
   }
   return $new_cid;
+}
+
+/**
+ * Populate a component with the defaults for that type.
+ */
+function webform_component_defaults(&$component) {
+  webform_load_components();
+
+  $function = '_webform_defaults_'. $component['type'];
+  if (function_exists($function)) {
+    $defaults = $function();
+    foreach ($defaults as $key => $default) {
+      if (!isset($component[$key])) {
+        $component[$key] = $default;
+      }
+    }
+    foreach ($defaults['extra'] as $extra => $default) {
+      if (!isset($component['extra'][$extra])) {
+        $component['extra'][$extra] = $default;
+      }
+    }
+  }
 }

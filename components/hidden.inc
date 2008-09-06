@@ -1,5 +1,22 @@
 <?php
 // $Id$
+
+/**
+ * Create a default markup component.
+ */
+function _webform_defaults_hidden() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'value' => '',
+    'extra' => array(
+      'email' => 0,
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the

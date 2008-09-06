@@ -282,6 +282,7 @@ function webform_menu_submission_load($sid, $nid) {
  * Menu loader callback. Load a webform component if the given cid is a valid.
  */
 function webform_menu_component_load($cid, $nid, $type) {
+  module_load_include('inc', 'webform', 'webform_components');
   if ($cid == 'new') {
     $components = webform_load_components();
     $component = in_array($type, array_keys($components)) ? array('type' => $type, 'name' => $_GET['name'], 'mandatory' => $_GET['mandatory'], 'email' => $_GET['email'], 'pid' => $_GET['pid'], 'weight' => $_GET['weight']) : FALSE;
@@ -290,6 +291,7 @@ function webform_menu_component_load($cid, $nid, $type) {
     $node = node_load($nid);
     $component = isset($node->webform['components'][$cid]) ? $node->webform['components'][$cid] : FALSE;
   }
+  webform_component_defaults($component);
   return $component;
 }
 
@@ -511,6 +513,7 @@ function webform_delete(&$node) {
  * Implementation of hook_load().
  */
 function webform_load($node) {
+  module_load_include('inc', 'webform', 'webform_components');
   $additions = new stdClass();
 
   if ($webform = db_fetch_array(db_query("SELECT * FROM {webform} WHERE nid = %d", $node->nid))) {
@@ -558,6 +561,8 @@ function webform_load($node) {
     if (isset($component['extra']['email']) && $component['extra']['email']) {
       $additions->webform['additional_emails'][$c['cid']] = $c['cid'];
     }
+
+    webform_component_defaults($component);
   }
 
   // Organize the components into a fieldset-based order.
@@ -1056,7 +1061,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   // Check if the user's role can submit this webform.
   $allowed_roles = array();
   foreach ($node->webform['roles'] as $rid) {
-    $allowed_roles[$rid] = $user->roles[$rid] ? TRUE : FALSE;
+    $allowed_roles[$rid] = isset($user->roles[$rid]) ? TRUE : FALSE;
   }
   if (array_search(TRUE, $allowed_roles) === FALSE && $user->uid != 1) {
     $enabled = FALSE;
@@ -1182,7 +1187,7 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
     }
   }
 
-  if ($page) {
+  if ($page && isset($message)) {
     drupal_set_message($message, $type);
   }
 }
@@ -1479,7 +1484,7 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
       }
     }
 
-    // Recursively add components to the form. Microweights keep thins in webform order.
+    // Recursively add components to the form. Microweights keep things in webform order.
     $microweight = 0.001;
     foreach ($component_tree['children'] as $cid => $component) {
       $component_value = isset($form_state['values']['submitted'][$component['form_key']]) ? $form_state['values']['submitted'][$component['form_key']] : NULL;
@@ -1524,7 +1529,7 @@ function _webform_client_form_add_component($cid, $component, $component_value, 
     // This component is display only.
     $display_function = "_webform_submission_display_". $component['type'];
     if (function_exists($display_function)) {
-      $parent_fieldset[$component['form_key']] = $display_function(empty($submission) ? NULL : $submission->data[$cid], $component, $enabled);
+      $parent_fieldset[$component['form_key']] = $display_function(empty($submission->data[$cid]) ? NULL : $submission->data[$cid], $component, $enabled);
     }
   }
   elseif ($component['page_num'] == $page_num) {
@@ -1857,7 +1862,12 @@ function _webform_confirmation($node) {
  * Prepare for theming of the webform form.
  */
 function template_preprocess_webform_form(&$vars) {
-  $vars['nid'] = $vars['form']['details']['nid']['#value'];
+  if (isset($vars['form']['details']['nid']['#value'])) {
+    $vars['nid'] = $vars['form']['details']['nid']['#value'];
+  }
+  else {
+    $vars['nid'] = $vars['form']['submission']['#value']->nid;
+  }
 }
 
 /**
@@ -2021,7 +2031,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
         $find[] = $token .'['. $key .']';
 
         // This special case for profile module dates.
-        if ($token == '%profile' && is_array($value) && $value['year']) {
+        if ($token == '%profile' && is_array($value) && isset($value['year'])) {
           $replace[] = format_date(strtotime($value['month'] .'/'. $value['day'] .'/'. $value['year']), 'custom', 'F j, Y', '0');
         }
         else {

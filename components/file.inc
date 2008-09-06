@@ -1,5 +1,32 @@
 <?php
 // $Id$
+
+/**
+ * Create a default file component.
+ */
+function _webform_defaults_file() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'email' => 1,
+    'mandatory' => 0,
+    'pid' => 0,
+    'weight' => 0,
+    'extra' => array(
+      'filtering' => array(
+        'types' => array('gif', 'jpg', 'png'),
+        'addextensions' => '',
+        'size' => 800,
+      ),
+      'savelocation' => '',
+      'width' => '',
+      'description' => '',
+      'attributes' => array(),
+    ),
+  );
+}
+
+
 /**
  * Create a set of form items to be displayed on the form for editing this component.
  * Use care naming the form items, as this correlates directly to the database schema.
@@ -28,7 +55,7 @@ function _webform_edit_file($currfield) {
       '#type' => 'checkboxes',
       '#title' => t('Web Images'),
       '#options' => drupal_map_assoc($types),
-      '#default_value' => isset($currfield['extra']['filtering']) ? array_intersect($current_types, $types) : $types,
+      '#default_value' => array_intersect($current_types, $types),
     );
 
     $types = array('bmp', 'eps', 'tif', 'pict', 'psd');
@@ -80,7 +107,7 @@ function _webform_edit_file($currfield) {
       '#description' => t('Enter the max file size a user may upload (in KB).'),
       '#size' => 10,
       '#weight' => 3,
-      '#default_value' => strlen($currfield['extra']['filtering']['size']) == 0 ? 800 : $currfield['extra']['filtering']['size'],
+      '#default_value' => $currfield['extra']['filtering']['size'],
     );
     $edit_fields['extra']['savelocation'] = array(
       '#type' => 'textfield',

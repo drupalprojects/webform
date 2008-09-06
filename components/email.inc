@@ -1,5 +1,28 @@
 <?php
 // $Id$
+
+/**
+ * Create a default email component.
+ */
+function _webform_defaults_email() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'value' => '',
+    'mandatory' => 0,
+    'email' => 1,
+    'extra' => array(
+      'width' => '',
+      'disabled' => 0,
+      'email' => 0,
+      'description' => '',
+      'attributes' => array(),
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the

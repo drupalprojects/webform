@@ -1,5 +1,26 @@
 <?php
 // $Id$
+
+/**
+ * Create a default date component.
+ */
+function _webform_defaults_date() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'value' => '',
+    'mandatory' => 0,
+    'email' => 1,
+    'extra' => array(
+      'check_daylight_savings' => 0,
+      'year_textfield' => 0,
+      'description' => '',
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the

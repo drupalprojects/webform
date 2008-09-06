@@ -1,5 +1,27 @@
 <?php
 // $Id$
+
+/**
+ * Create a default time component.
+ */
+function _webform_defaults_time() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'value' => '',
+    'mandatory' => 0,
+    'email' => 1,
+    'extra' => array(
+      'timezone' => 'site',
+      'check_daylight_savings' => 0,
+      'hourformat' => '12-hour',
+      'description' => '',
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this component.
  * Use care naming the form items, as this correlates directly to the database schema.
@@ -176,7 +198,7 @@ function _webform_submission_display_time($data, $component, $enabled = false) {
 
   // Match the hourly data to the hour format.
   if ($data['value']['1']) {
-    $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . $data['value']['2']);
+    $timestamp = strtotime($data['value']['0'] .":". $data['value']['1'] . (isset($data['value']['2']) ? $data['value']['2'] : ''));
     if ($component['extra']['hourformat'] == "24-hour") {
       $form_item['hour']['#default_value'] = date("H", $timestamp);
     }
