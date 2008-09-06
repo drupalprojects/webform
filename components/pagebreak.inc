@@ -37,10 +37,8 @@ function _webform_edit_pagebreak($currfield) {
 function _webform_help_pagebreak($section) {
   switch ($section) {
     case 'admin/settings/webform#pagebreak_description':
-      $output = t("Break up a multi-page form.");
-      break;
+      return t("Break up a multi-page form.");
   }
-  return $output;
 }
 
 function _webform_render_pagebreak($component) {

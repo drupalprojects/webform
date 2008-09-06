@@ -218,10 +218,8 @@ function theme_webform_mail_time($data, $component) {
 function _webform_help_time($section) {
   switch ($section) {
     case 'admin/settings/webform#time_description':
-      $output = t("Presents the user with hour and minute fields. Optional am/pm fields.");
-      break;
+      return t("Presents the user with hour and minute fields. Optional am/pm fields.");
   }
-  return $output;
 }
 
 /**

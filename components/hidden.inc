@@ -84,10 +84,8 @@ function _webform_submission_display_hidden($data, $component, $enabled = false)
 function _webform_help_hidden($section) {
   switch ($section) {
     case 'admin/settings/webform#hidden_description':
-      $output = t("A field which is not visible to the user, but is recorded with the submission.");
-      break;
+      return t("A field which is not visible to the user, but is recorded with the submission.");
   }
-  return $output;
 }
 
 /**

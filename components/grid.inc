@@ -183,10 +183,8 @@ function theme_webform_mail_grid($data, $component) {
 function _webform_help_grid($section) {
   switch ($section) {
     case 'admin/settings/webform#grid_description':
-      $output = t("Allows creation of grid questions, denoted by radio buttons.");
-      break;
+      return t("Allows creation of grid questions, denoted by radio buttons.");
   }
-  return $output;
 }
 
 /** 

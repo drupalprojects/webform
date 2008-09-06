@@ -142,10 +142,8 @@ function theme_webform_mail_textfield($data, $component) {
 function _webform_help_textfield($section) {
   switch ($section) {
     case 'admin/settings/webform#textfield_description':
-      $output = t("Basic textfield type.");
-      break;
+      return t("Basic textfield type.");
   }
-  return $output;
 }
 
 /**

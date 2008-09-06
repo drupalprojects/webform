@@ -413,10 +413,8 @@ function _webform_delete_file($data, $component) {
 function _webform_help_file($section) {
   switch ($section) {
     case 'admin/settings/webform#file_description':
-      $output = t("Allow users to submit files of the configured types.");
-      break;
+      return t("Allow users to submit files of the configured types.");
   }
-  return $output;
 }
 
 /**
