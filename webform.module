@@ -1058,7 +1058,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   foreach ($node->webform['roles'] as $rid) {
     $allowed_roles[$rid] = $user->roles[$rid] ? TRUE : FALSE;
   }
-  if (array_search(TRUE, $allowed_roles) === FALSE) {
+  if (array_search(TRUE, $allowed_roles) === FALSE && $user->uid != 1) {
     $enabled = FALSE;
   }
 
@@ -1138,10 +1138,12 @@ function theme_webform_view($node, $teaser, $page, $form, $enabled) {
  *   A list of user roles that are allowed to submit this webform.
  */
 function theme_webform_view_messages($node, $teaser, $page, $submission_count, $limit_exceeded, $allowed_roles) {
+  global $user;
+
   $type = 'notice';
 
   // If not allowed to submit the form, give an explaination.
-  if (array_search(TRUE, $allowed_roles) === FALSE) {
+  if (array_search(TRUE, $allowed_roles) === FALSE && $user->uid != 1) {
     if (empty($allowed_roles)) {
       // No roles are allowed to submit the form.
       $message = t('Submissions for this form are closed.');
