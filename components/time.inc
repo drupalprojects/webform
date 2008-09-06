@@ -23,7 +23,7 @@ function _webform_edit_time($currfield) {
     '#type' => 'radios',
     '#title' => t("Timezone"),
     '#default_value' => empty($currfield['extra']['timezone']) ? "site" : $currfield['extra']['timezone'],
-    '#description' => t('Adjust the time according to a specific timezone. Website timezone is defined in the <a href="%settings">Site Settings</a> and is the default.', array('%settings' => url('admin/settings'))),
+    '#description' => t('Adjust the time according to a specific timezone. Website timezone is defined in the <a href="!settings">Site Settings</a> and is the default.', array('!settings' => url('admin/settings/date-time'))),
     '#options' => array('site' => 'Website Timezone', 'user' => 'User Timezone', 'gmt' => 'GMT'),
     '#weight' => 0,
   );
