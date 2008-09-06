@@ -138,7 +138,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
 
   if (is_array($header)) {
     $query .= tablesort_sql($header);
-    if ($header[0]['sort'] != 'asc') {
+    if (!isset($header[0]['sort'])) {
       $query .= ', sid ASC';
     }
     $query .= ', cid ASC, no ASC';
