@@ -78,8 +78,6 @@ function _webform_submission_display_markup($data, $component, $enabled = false)
 function _webform_help_markup($section) {
   switch ($section) {
     case 'admin/settings/webform#markup_description':
-      $output = t("Displays text as HTML in the form; does not render a field.");
-      break;
+      return t("Displays text as HTML in the form; does not render a field.");
   }
-  return $output;
 }

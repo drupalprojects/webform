@@ -249,10 +249,8 @@ function theme_webform_mail_select($data, $component) {
 function _webform_help_select($section) {
   switch ($section) {
     case 'admin/settings/webform#select_description':
-      $output = t("Allows creation of checkboxes, radio buttons, or select menus.");
-      break;
+      return t("Allows creation of checkboxes, radio buttons, or select menus.");
   }
-  return $output;
 }
 
 /**

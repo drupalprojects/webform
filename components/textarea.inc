@@ -99,10 +99,8 @@ function _webform_submission_display_textarea($data, $component, $enabled = fals
 function _webform_help_textarea($section) {
   switch ($section) {
     case 'admin/settings/webform#textarea_description':
-      $output = t("A large text area that allows for multiple lines of input.");
-      break;
+      return t("A large text area that allows for multiple lines of input.");
   }
-  return $output;
 }
 
 /**

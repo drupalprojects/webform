@@ -78,8 +78,6 @@ function _webform_submission_display_fieldset($data, $component, $enabled = fals
 function _webform_help_fieldset($section) {
   switch ($section) {
     case 'admin/settings/webform#fieldset_description':
-      $output = t("Fieldsets allow you to organize multiple fields into groups.");
-      break;
+      return t("Fieldsets allow you to organize multiple fields into groups.");
   }
-  return $output;
 }

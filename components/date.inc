@@ -268,10 +268,8 @@ function theme_webform_mail_date($data, $component) {
 function _webform_help_date($section) {
   switch ($section) {
     case 'admin/settings/webform#date_description':
-      $output = t("Presents month, day, and year fields.");
-      break;
+      return t("Presents month, day, and year fields.");
   }
-  return $output;
 }
 
 /**
