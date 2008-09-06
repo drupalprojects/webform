@@ -1,5 +1,28 @@
 <?php
 // $Id$
+
+/**
+ * Create a default textarea component.
+ */
+function _webform_defaults_textarea() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'value' => '',
+    'mandatory' => 0,
+    'email' => 1,
+    'extra' => array(
+      'cols' => '',
+      'rows' => '',
+      'disabled' => 0,
+      'description' => '',
+      'attributes' => array(),
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the

@@ -1,5 +1,27 @@
 <?php
 // $Id$
+
+/**
+ * Create a default grid component.
+ */
+function _webform_defaults_grid() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'email' => 1,
+    'mandatory' => 0,
+    'pid' => 0,
+    'weight' => 0,
+    'extra' => array(
+      'options' => '',
+      'questions' => '',
+      'optrand' => 0,
+      'qrand' => 0,
+      'description' => '',
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this component.
  * Use care naming the form items, as this correlates directly to the database schema.

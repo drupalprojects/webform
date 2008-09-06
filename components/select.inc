@@ -1,5 +1,28 @@
 <?php
 // $Id$
+
+/**
+ * Create a default select component.
+ */
+function _webform_defaults_select() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'email' => 1,
+    'mandatory' => 0,
+    'pid' => 0,
+    'weight' => 0,
+    'value' => '',
+    'extra' => array(
+      'items' => '',
+      'email' => 0,
+      'multiple' => NULL,
+      'aslist' => NULL,
+      'description' => '',
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the

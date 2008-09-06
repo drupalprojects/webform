@@ -1,5 +1,19 @@
 <?php
 // $Id$
+
+/**
+ * Create a default pagebreak component.
+ */
+function _webform_defaults_pagebreak() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'extra' => array(),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the

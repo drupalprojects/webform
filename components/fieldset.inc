@@ -1,5 +1,23 @@
 <?php
 // $Id$
+
+/**
+ * Create a default fieldset component.
+ */
+function _webform_defaults_fieldset() {
+  return array(
+    'name' => '',
+    'form_key' => NULL,
+    'pid' => 0,
+    'weight' => 0,
+    'extra' => array(
+      'collapsible' => 0,
+      'collapsed' => 0,
+      'description' => '',
+    ),
+  );
+}
+
 /**
  * Create a set of form items to be displayed on the form for editing this
  * component. Use care naming the form items, as this correlates directly to the
@@ -47,10 +65,6 @@ function _webform_render_fieldset($component) {
     '#collapsed'     => $component['extra']['collapsed'],
     '#attributes'    => array("class" => "webform-component-". $component['type'], "id" => "webform-component-". $component['form_key']),
   );
-  // Change the 'width' option to the correct 'size' option.
-  if ($component['extra']['width'] > 0) {
-    $form_item['#size'] = $component['extra']['width'];
-  }
 
   return $form_item;
 }
