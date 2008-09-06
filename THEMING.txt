@@ -44,7 +44,8 @@ customize the display of e-mails sent by each individual webform.
 
 - Advanced Webform e-mail Theming: Theming the e-mail headers may also be done
   by overriding the theme_webform_mail_headers() function from webform.module.
-  This allows you to customize the e-mail headers.
+  Just copy the code out of webform.module and change as necessary in your
+  template.php file. This allows you to customize the e-mail headers.
 
 Theme the confirmation page
 ---------------------------
