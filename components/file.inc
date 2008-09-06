@@ -123,8 +123,8 @@ function _webform_edit_file_filtering_validate($form_element, &$form_state) {
   // Predefined types.
   $extensions = array();
   foreach (element_children($form_element['types']) as $category) {
-    foreach ($form_element['types'][$category]['#value'] as $extension => $enabled) {
-      if ($enabled) {
+    foreach (array_keys($form_element['types'][$category]['#value']) as $extension) {
+      if ($form_element['types'][$category][$extension]['#value']) {
         $extensions[] = $extension;
       }
     }
