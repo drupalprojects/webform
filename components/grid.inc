@@ -290,18 +290,21 @@ function _webform_table_data_grid($data, $component) {
  **/
 function _webform_csv_headers_grid($component) {
   $header = array();
-  $header[0] = '';
-  $header[1] = $component['name'];
+  $header[0] = array('');
+  $header[1] = array($component['name']);
   $items = _webform_grid_options($component['extra']['questions']);
-  foreach ($items as $item) {
-    $header[2] .= "\,". $item;
+  $count = 0;
+  foreach ($items as $key => $item) {
     // Empty column per sub-field in main header.
-    $header[1] .= "\,";
+    if ($count != 0) {
+      $header[0][] = '';
+      $header[1][] = '';
+    }
+    // The value for this option.
+    $header[2][] = $item;
+    $count++;
   }
-  // Remove the preceding extra comma.
-  $header[2] = substr($header[2], 2);
-  // Remove the trailing column.
-  $header[1] = substr($header[1], 0, -2);
+
   return $header;
 }
 
@@ -317,13 +320,12 @@ function _webform_csv_headers_grid($component) {
  *   commas.
  **/
 function _webform_csv_data_grid($data, $component) {
-  $questions = array_values(_webform_grid_options($component['extra']['questions']));
-  foreach ($questions as $item => $question) {
-    $output .= "\," . $data['value'][$item];
+  $questions = array_keys(_webform_grid_options($component['extra']['questions']));
+  $return = array();
+  foreach ($questions as $key => $question) {
+    $return[] = isset($data['value'][$key]) ? $data['value'][$key] : '';
   }
-  // Remove the preceding extra comma.
-  $output = substr($output, 2);
-  return $output;
+  return $return;
 }
 
 function theme_webform_grid(&$grid_element) {
