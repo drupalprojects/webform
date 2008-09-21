@@ -535,10 +535,10 @@ function _webform_table_data_file($data) {
  */
 function _webform_csv_headers_file($component) {
   $header = array();
-  $header[0] = '';
   // Two columns in header.
-  $header[1] = $component['name'] .'\,';
-  $header[2] = 'Name\,Filesize (KB)';
+  $header[0] = array('', '');
+  $header[1] = array($component['name'], '');
+  $header[2] = array(t('Name'), t('Filesize (KB)'));
   return $header;
 }
 
@@ -554,7 +554,7 @@ function _webform_csv_headers_file($component) {
  */
 function _webform_csv_data_file($data) {
   $filedata = unserialize($data['value']['0']);
-  return empty($filedata['filename']) ? '\,' : $filedata['filename'] .'\,'. (int)($filedata['filesize']/1024);
+  return empty($filedata['filename']) ? array('', '') : array($filedata['filename'], (int)($filedata['filesize']/1024));
 }
 /**
  * Helper function to create proper URLs for uploaded file.

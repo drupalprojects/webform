@@ -213,10 +213,58 @@ function webform_results_clear_form_submit($form, &$form_state) {
 }
 
 /**
- * Generate a Excel-readable CSV file containing all submissions for a webform.
+ * Form to configure the download of CSV files.
+ */
+function webform_results_download_form(&$form_state, $node) {
+  module_load_include('inc', 'webform', 'webform_export');
+
+  $form = array();
+
+  $form['node'] = array(
+    '#type' => 'value',
+    '#value' => $node,
+  );
+
+  $form['format'] = array(
+    '#type' => 'radios',
+    '#title' => t('Export format'),
+    '#options' => webform_export_list(),
+    '#default_value' => variable_get('webform_export_format', 'delimited'),
+  );
+
+  $form['delimiter'] = array(
+    '#type' => 'select',
+    '#title' => t('Delimited text format'),
+    '#description' => t('This is the delimiter used in the CSV/TSV file when downloading Webform results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
+    '#default_value' => variable_get('webform_csv_delimiter', '\t'),
+    '#options' => array(
+      ','  => t('Comma (,)'),
+      '\t' => t('Tab (\t)'),
+      ';'  => t('Semicolon (;)'),
+      ':'  => t('Colon (:)'),
+      '|'  => t('Pipe (|)'),
+      '.'  => t('Period (.)'),
+      ' '  => t('Space ( )'),
+    ),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Download'),
+  );
+
+  return $form;
+}
+
+function webform_results_download_form_submit(&$form, &$form_state) {
+  webform_results_download($form_state['values']['node'], $form_state['values']['format'], $form_state['values']);
+}
+
+/**
+ * Generate a Excel-readable CSV file containing all submissions for a Webform.
  * 
  * The CSV requires that the data be presented in a flat file.  In order
- * to maximize useability to the Excel community and minimize subsequent
+ * to maximize usability to the Excel community and minimize subsequent
  * stats or spreadsheet programming this program extracts data from the
  * various records for a given session and presents them as a single file
  * where each row represents a single record.
@@ -238,75 +286,92 @@ function webform_results_clear_form_submit($form, &$form_state) {
  * 
  *   Submission Details,    ,   ,      ,Question 1,        ,        ,..,        ,Question 2,        ,        ,..,        ,Question n
  *   timestamp         ,time,SID,userid,Choice 1  ,Choice 2,Choice 3,..,Choice n,Choice 1  ,Choice 2,Choice 3,..,Choice n,Comment
- *   21 Feb 2005       ,1835,23 ,34    ,Yes       ,No      ,No      ,..,No      ,Yes       ,Yes     ,Yes     ,..,Yes     ,My comment
- *   23 Feb 2005       ,1125,24 ,89    ,Yes       ,Yes     ,No      ,..,No      ,Yes       ,Yes     ,Yes     ,..,Yes     ,Hello
- *   ...............................................................................................................
- *   27 Feb 2005       ,1035,56 ,212   ,Yes       ,No      ,No      ,..,No      ,Yes       ,No      ,Yes     ,..,Yes     ,How is this?
+ *   21 Feb 2005       ,1835,23 ,34    ,X         ,        ,        ,..,       ,X          ,X       ,X       ,..,X       ,My comment
+ *   23 Feb 2005       ,1125,24 ,89    ,X         ,X       ,        ,..,       ,X          ,X       ,X       ,..,X       ,Hello
+ *   .................................................................................................................................
+ *   27 Feb 2005       ,1035,56 ,212   ,X         ,        ,        ,..,       ,X          ,X       ,X       ,..,X       ,How is this?
  * 
  */
-function webform_results_download($node) {
-  $delim = variable_get('webform_csv_delimiter', ',');
-  // Convert tabs.
-  if ($delim == '\t') {
-    $delim = "\t";
-    $extension = 'tsv';
-    $content_type = 'text/tab-separated-values';
+function webform_results_download($node, $format = 'delimiter', $options = array()) {
+  module_load_include('inc', 'webform', 'webform_export');
+
+  if (empty($options)) {
+    $options = array(
+      'delimiter' => variable_get('webform_csv_delimiter', '\t'),
+      'format' => variable_get('webform_export_format', 'delimited'),
+    );
   }
-  else {
-    $extension = 'csv';
-    $content_type = 'text/csv';
-  }
+
+  // Open a new Webform exporter object.
+  $exporter = webform_export_create_handler($format, $options);
 
   $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors.
+  $exporter->bof($handle);
 
-  $header[0] .= $node->title . str_repeat($delim, 4);
-  $header[1] .= t("Submission Details") . str_repeat($delim, 5);
-  $header[2] .= implode($delim, array(t('Serial'), t('SID'), t('Time'), t('IP Address'), t('UID'), t('Username')));
+  $header[0] = array($node->title, '', '', '', '', '');
+  $header[1] = array(t("Submission Details"), '', '', '', '', '');
+  $header[2] = array(t('Serial'), t('SID'), t('Time'), t('IP Address'), t('UID'), t('Username'));
 
   // Compile header information.
   webform_load_components(); // Load all components.
   foreach ($node->webform['components'] as $cid => $component) {
-    $csv_header_function   = "_webform_csv_headers_". $component['type'];
+    $csv_header_function = "_webform_csv_headers_". $component['type'];
     if (function_exists($csv_header_function)) {
       // Let each component determine its headers.
       $component_header = $csv_header_function($component);
-      $header[0] .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $component_header[0]) .'"';
-      $header[1] .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $component_header[1]) .'"';
-      $header[2] .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $component_header[2]) .'"';
+      $header[0] = array_merge($header[0], (array)$component_header[0]);
+      $header[1] = array_merge($header[1], (array)$component_header[1]);
+      $header[2] = array_merge($header[2], (array)$component_header[2]);
     }
   }
 
-  // Write header information.
-  $file_record = $header[0] ."\n". $header[1] ."\n". $header[2] ."\n";
-  @fwrite($handle, $file_record);
+  // Add headers to the file.
+  foreach ($header as $row) {
+    $exporter->add_row($handle, $row);
+  }
 
   // Get all the submissions for the node.
   $submissions = webform_get_submissions($node->nid);
 
   // Generate a row for each submission.
-  $rowcount = 0;
+  $row_count = 0;
   foreach ($submissions as $sid => $submission) {
-    $row = ++$rowcount . $delim . $sid . $delim .'"'. format_date($submission->submitted, 'small') .'"'. $delim .'"'. $submission->remote_addr .'"'. $delim . $submission->uid . $delim.'"'. $submission->name .'"';
+    $row = array();
+    $row[] = ++$row_count;
+    $row[] = $sid;
+    $row[] = format_date($submission->submitted, 'small');
+    $row[] =  $submission->remote_addr;
+    $row[] = $submission->uid;
+    $row[] = $submission->name;
     foreach ($node->webform['components'] as $cid => $component) {
       $csv_data_function   = "_webform_csv_data_". $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
-        $row .= $delim .'"'. str_replace(array('"', '\,'), array('""', '"'. $delim .'"'), $csv_data_function($submission->data[$cid], $component)) .'"';
+        $data = $csv_data_function($submission->data[$cid], $component);
+        if (is_array($data)) {
+          $row = array_merge($row, array_values($data));
+        }
+        else {
+          $row[] = $data;
+        }
       }
     }
     // Write data from submissions.
-    @fwrite($handle, $row ."\n");
+    $data = $exporter->add_row($handle, $row);
   }
+
+  // Add the closing bytes.
+  $exporter->eof(&$handle);
+
   // Close the file.
   @fclose($handle);
 
-  drupal_set_header("Content-type: $content_type; charset=utf-8");
-  drupal_set_header("Content-Disposition: attachment; filename=". preg_replace('/\.$/', '', str_replace(' ', '_', $node->title)) .".". $extension);
-
+  $export_name = _webform_safe_name($node->title);
+  $exporter->set_headers($export_name);
   @readfile($file_name);  // The @ makes it silent.
   @unlink($file_name);  // Clean up, the @ makes it silent.
-  exit(0);
+  exit();
 }
 
 /**

@@ -183,8 +183,8 @@ function webform_menu() {
   );
   $items['node/%webform_menu/webform-results/download'] = array(
     'title' => 'Download',
-    'page callback' => 'webform_results_download',
-    'page arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('webform_results_download_form', 1),
     'access callback' => 'user_access',
     'access arguments' => array('access webform results'),
     'file' => 'webform_report.inc',
@@ -1205,6 +1205,8 @@ function webform_mail($key, &$message, $params) {
  * Menu callback for admin/webform/settings.
  */
 function webform_admin_settings() {
+  module_load_include('inc', 'webform', 'webform_export');
+
   $form['components'] = array(
     '#type' => 'fieldset',
     '#title' => t('Available components'),
@@ -1268,11 +1270,18 @@ function webform_admin_settings() {
     '#description' => t('<a href="http://www.wikipedia.org/wiki/HTTP_cookie">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. This feature is not needed for limiting submissions per user, though it can increase accuracy in some situations. Besides cookies, Webform also uses IP addresses and site usernames to prevent repeated submissions.'),
   );
 
+  $form['advanced']['webform_export_format'] = array(
+    '#type' => 'radios',
+    '#title' => t('Default export format'),
+    '#options' => webform_export_list(),
+    '#default_value' => variable_get('webform_export_format', 'delimited'),
+  );
+
   $form['advanced']['webform_csv_delimiter']  = array(
     '#type' => 'select',
-    '#title' => t('CSV export delimiter'),
-    '#description' => t('This is the delimiter used in the CSV/TSV file when downloading webform results. You may want to change this to another character depending on the program with which you anticipate importing results.'),
-    '#default_value' => variable_get('webform_csv_delimiter', ','),
+    '#title' => t('Default export delimiter'),
+    '#description' => t('This is the delimiter used in the CSV/TSV file when downloading Webform results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
+    '#default_value' => variable_get('webform_csv_delimiter', '\t'),
     '#options' => array(
       ','  => t('Comma (,)'),
       '\t' => t('Tab (\t)'),
@@ -1578,7 +1587,7 @@ function webform_client_form_validate($form, $form_state) {
 
   // Flatten trees within the submission.
   $form_state['values']['submitted_tree'] = $form_state['values']['submitted'];
-  _webform_client_form_submit_flatten($node, $form_state['values']['submitted'], $form_state['values']['submitted']);
+  $form_state['values']['submitted'] = _webform_client_form_submit_flatten($node, $form_state['values']['submitted']);
 
   if (trim($node->webform['additional_validate'])) {
     // Support for Drupal 5 validation code.
@@ -1641,7 +1650,7 @@ function webform_client_form_submit($form, &$form_state) {
   _webform_client_form_submit_process($node, $form_state['values']['submitted']);
   // Flatten trees within the submission.
   $form_state['values']['submitted_tree'] = $form_state['values']['submitted'];
-  _webform_client_form_submit_flatten($node, $form_state['values']['submitted'], $form_state['values']['submitted']);
+  $form_state['values']['submitted'] = _webform_client_form_submit_flatten($node, $form_state['values']['submitted']);
 
   // Convert additional email addresses into actual values.
   foreach ($node->webform['additional_emails'] as $cid => $value) {
@@ -1828,23 +1837,23 @@ function _webform_client_form_submit_process($node, &$form_values, $parent = 0) 
 /**
  * Flattens a submitted form back into a single array representation (rather than nested fields)
  */
-function _webform_client_form_submit_flatten($node, $fieldset, &$form, $parent = 0) {
+function _webform_client_form_submit_flatten($node, $fieldset, $parent = 0) {
+  $values = array();
+
   if (is_array($fieldset)) {
     foreach ($fieldset as $form_key => $value) {
       $cid = webform_get_cid($node, $form_key, $parent);
 
       if (is_array($value) && $node->webform['components'][$cid]['type'] == 'fieldset') {
-        _webform_client_form_submit_flatten($node, $value, $form, $cid);
-        unset($form[$form_key]);
-        unset($form[$cid]);
+        $values += _webform_client_form_submit_flatten($node, $value, $cid);
       }
       else {
-        // The order here is significant!
-        unset($form[$form_key]);
-        $form[$cid] = $value;
+        $values[$cid] = $value;
       }
     }
   }
+
+  return $values;
 }
 
 /**

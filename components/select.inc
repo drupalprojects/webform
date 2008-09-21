@@ -358,26 +358,33 @@ function _webform_table_data_select($data) {
  *   including either prefixed or trailing commas.
  */
 function _webform_csv_headers_select($component) {
-  $header = array();
-  $header[0] = '';
+  $headers = array(
+    0 => array(),
+    1 => array(),
+    2 => array(),
+  );
 
   if ($component['extra']['multiple']) {
-    $header[1] = $component['name'];
+    $headers[0][] = '';
+    $headers[1][] = $component['name'];
     $items = _webform_select_options($component['extra']['items']);
+    $count = 0;
     foreach ($items as $key => $item) {
-      $header[2] .= "\,". $key;
       // Empty column per sub-field in main header.
-      $header[1] .= "\,";
+      if ($count != 0) {
+        $headers[0][] = '';
+        $headers[1][] = '';
+      }
+      $headers[2][] = $key;
+      $count++;
     }
-    // Remove the preceding extra comma.
-    $header[2] = substr($header[2], 2);
-    // Remove the trailing column.
-    $header[1] = substr($header[1], 0, -2);
   }
   else {
-    $header[2] = $component['name'];
+    $headers[0][] = '';
+    $headers[1][] = '';
+    $headers[2][] = $component['name'];
   }
-  return $header;
+  return $headers;
 }
 
 /**
@@ -393,23 +400,22 @@ function _webform_csv_headers_select($component) {
 function _webform_csv_data_select($data, $component) {
   $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
   $options = _webform_select_options($component['extra']['items']);
+  $return = array();
 
   if ($component['extra']['multiple']) {
     foreach ($options as $key => $item) {
       if (in_array($key, (array)$data['value']) === TRUE) {
-        $output .= '\,Yes';
+        $return[] = 'X';
       }
       else {
-        $output .= '\,No';
+        $return[] = '';
       }
     }
-    // Remove the preceding extra comma.
-    $output = substr($output, 2);
   }
   else {
-    $output = $data['value'][0];
+    $return = $data['value'][0];
   }
-  return $output;
+  return $return;
 }
 
 /**
@@ -418,7 +424,7 @@ function _webform_csv_data_select($data, $component) {
  */
 function _webform_select_options($text) {
   $options = array();
-  $rows = array_filter(explode("\n", _webform_filter_values(trim($text))));
+  $rows = array_filter(explode("\n", _webform_filter_values(trim($text), NULL, NULL, FALSE)));
   foreach ($rows as $option) {
     $option = trim($option);
     if (preg_match('/^([^|]+)\|(.*)$/', $option, $matches)) {
