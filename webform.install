@@ -806,6 +806,10 @@ function webform_update_20() {
 }
 
 /**
+ * Set the upgrade 
+ */
+
+/**
  * Upgrade to Drupal 6. Convert submissions sid column to auto-increment.
  */
 function webform_update_6001() {
@@ -825,10 +829,7 @@ function webform_update_6001() {
  */
 function webform_update_6200() {
   $ret = array();
-  // This update will already be run as webform_update_5200 on Drupal 5.
-  if (webform_update_version() > 6000) {
-    db_change_field($ret, 'webform_component', 'name', 'name', array('type' => 'varchar', 'length' => 255, 'default' => "NULL"));
-  }
+  db_change_field($ret, 'webform_component', 'name', 'name', array('type' => 'varchar', 'length' => 255, 'default' => "NULL"));
   return $ret;
 }
 
@@ -837,11 +838,15 @@ function webform_update_6200() {
  */
 function webform_update_6201() {
   $ret = array();
+
   // This update will already be run as webform_update_5201 on Drupal 5.
-  if (webform_update_version() > 6000) {
-    db_add_field($ret, 'webform_component', 'email', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
-    $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
+  if (db_column_exists('webform_component', 'email')) {
+    return $ret;
   }
+
+  db_add_field($ret, 'webform_component', 'email', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+  $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
+
   return $ret;
 }
 
@@ -852,33 +857,35 @@ function webform_update_6202() {
   $ret = array();
 
   // This update will already be run as webform_update_5202 on Drupal 5.
-  if (webform_update_version() > 6000) {
-    db_create_table($ret, 'webform_roles', array(
-      'description' => t('Holds access information regarding which roles are allowed to submit which webform nodes. Does not prevent access to the webform node entirely, use the {node_access} table for that purpose.'),
-      'fields' => array(
-        'nid' => array(
-          'description' => t('The node identifier of a webform.'),
-          'type' => 'int',
-          'unsigned' => TRUE,
-          'not null' => TRUE,
-          'default' => 0,
-        ),
-        'rid' => array(
-          'description' => t('The role identifier.'),
-          'type' => 'int',
-          'unsigned' => TRUE,
-          'not null' => TRUE,
-          'default' => 0,
-        ),
-      ),
-      'primary key' => array('nid', 'rid'),
-    ));
+  if (db_table_exists('webform_roles')) {
+    return $ret;
+  }
 
-    $result = db_query("SELECT nid FROM {node} WHERE type = 'webform'");
-    while ($node = db_fetch_object($result)) {
-      db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 1)", $node->nid);
-      db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 2)", $node->nid);
-    }
+  db_create_table($ret, 'webform_roles', array(
+    'description' => t('Holds access information regarding which roles are allowed to submit which webform nodes. Does not prevent access to the webform node entirely, use the {node_access} table for that purpose.'),
+    'fields' => array(
+      'nid' => array(
+        'description' => t('The node identifier of a webform.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'rid' => array(
+        'description' => t('The role identifier.'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid', 'rid'),
+  ));
+
+  $result = db_query("SELECT nid FROM {node} WHERE type = 'webform'");
+  while ($node = db_fetch_object($result)) {
+    db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 1)", $node->nid);
+    db_query("INSERT INTO {webform_roles} (nid, rid) VALUES (%d, 2)", $node->nid);
   }
 
   return $ret;
@@ -895,40 +902,43 @@ function webform_update_6203() {
   $ret = array();
 
   // This update will already be run as webform_update_5203 on Drupal 5.
-  if (webform_update_version() > 6000) {
-    $result = db_query("SELECT nid, cid, extra FROM {webform_component} WHERE type = 'file'");
-    while ($component = db_fetch_object($result)) {
-      $extra = unserialize($component->extra);
-      $extensions = array();
 
-      // Sanity check, set some defaults if no filtering is in place.
-      if (!isset($extra['filtering']['types'])) {
-        $extra['filtering']['types'] = array(
-          'webimages' => drupal_map_assoc(array('png', 'gif', 'jpg')),
-        );
-      }
+  $result = db_query("SELECT nid, cid, extra FROM {webform_component} WHERE type = 'file'");
+  while ($component = db_fetch_object($result)) {
+    $extra = unserialize($component->extra);
+    $extensions = array();
 
-      // Defined types.
-      foreach ($extra['filtering']['types'] as $category => $category_extensions) {
-        foreach ((array)$category_extensions as $extension) {
-          if (!is_numeric($extension)) {
-            $extensions[] = $extension;
-          }
-        }
-      }
-
-      // Additional types.
-      $additional_extensions = explode(',', $extra['filtering']['addextensions']);
-      foreach ($additional_extensions as $extension) {
-        $clean_extension = strtolower(trim($extension));
-        if (!empty($clean_extension) && !in_array($clean_extension, $extensions)) {
-          $extensions[] = $clean_extension;
-        }
-      }
-
-      $extra['filtering']['types'] = $extensions;
-      db_query("UPDATE {webform_component} SET extra = '%s' WHERE nid = %d AND cid = %d", serialize($extra), $component->nid, $component->cid);
+    // Sanity check, set some defaults if no filtering is in place.
+    if (!isset($extra['filtering']['types'])) {
+      $extra['filtering']['types'] = array(
+        'webimages' => drupal_map_assoc(array('png', 'gif', 'jpg')),
+      );
     }
+    // Or if filtering has already been updated, skip this update.
+    elseif (!isset($extra['filtering']['types']['webimages'])) {
+      continue;
+    }
+
+    // Defined types.
+    foreach ($extra['filtering']['types'] as $category => $category_extensions) {
+      foreach ((array)$category_extensions as $extension) {
+        if (!is_numeric($extension)) {
+          $extensions[] = $extension;
+        }
+      }
+    }
+
+    // Additional types.
+    $additional_extensions = explode(',', $extra['filtering']['addextensions']);
+    foreach ($additional_extensions as $extension) {
+      $clean_extension = strtolower(trim($extension));
+      if (!empty($clean_extension) && !in_array($clean_extension, $extensions)) {
+        $extensions[] = $clean_extension;
+      }
+    }
+
+    $extra['filtering']['types'] = $extensions;
+    db_query("UPDATE {webform_component} SET extra = '%s' WHERE nid = %d AND cid = %d", serialize($extra), $component->nid, $component->cid);
   }
 
   return $ret;
@@ -965,18 +975,4 @@ function _webform_recursive_delete($path) {
     }
     @rmdir($path);
   }
-}
-
-/**
- * Get the current schema.
- * 
- * This is used to prevent updates that have already run for 5 don't get
- * run a second time when upgrading to 6.
- */
-function webform_update_version() {
-  static $version;
-  if (!isset($version)) {
-    $version = db_result(db_query("SELECT schema_version FROM {system} WHERE type = 'module' AND name = 'webform'"));
-  }
-  return $version;
 }
