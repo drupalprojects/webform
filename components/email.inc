@@ -33,9 +33,6 @@ function _webform_defaults_email() {
  *   An array of form items to be displayed on the edit component page.
  */
 function _webform_edit_email($currfield) {
-  $edit_fields = array(
-    '#validate' => array('_webform_edit_email_validate' => array()),
-  );
   $edit_fields['value'] = array(
     '#type' => 'textfield',
     '#title' => t("Default value"),
@@ -54,6 +51,7 @@ function _webform_edit_email($currfield) {
     '#description' => t('Set the default value of this field to the user email, if he/she is logged in.'),
     '#attributes' => array('onclick' => 'getElementById("email-value").value = (this.checked ? "%useremail" : ""); getElementById("email-value").disabled = this.checked;'),
     '#weight' => 0,
+    '#validate' => array('_webform_edit_email_validate' => array()),
   );
   $edit_fields['extra']['width'] = array(
     '#type' => 'textfield',
@@ -84,8 +82,8 @@ function _webform_edit_email($currfield) {
 /**
  * Validation function for the email edit form.
  */
-function _webform_edit_email_validate($form_id, $form_values) {
-  if ($form_values['user_email']) {
+function _webform_edit_email_validate($element) {
+  if ($element['#value']) {
     form_set_value(array('#parents' => array('value')), '%useremail');
   }
 }
