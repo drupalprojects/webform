@@ -694,7 +694,15 @@ function webform_update_5200() {
  */
 function webform_update_5201() {
   $ret = array();
-  $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int(1) UNSIGNED NOT NULL DEFAULT '0'");
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int(1) UNSIGNED NOT NULL DEFAULT '0'");
+      break;
+    case 'pgsql';
+      $ret[] = update_sql("ALTER TABLE {webform_component} ADD email int NOT NULL DEFAULT '0'");
+      break;
+  }
   $ret[] = update_sql("UPDATE {webform_component} SET email = 1");
   return $ret;
 }
