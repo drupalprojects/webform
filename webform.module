@@ -1497,6 +1497,14 @@ function webform_client_form_submit($form_id, &$form_values) {
     // No sid was found thus insert it in the datatabase.
     $form_values['details']['sid'] = webform_submission_insert($node, $form_values['submitted']);
     $form_values['details']['is_new'] = TRUE;
+
+    // Set a cookie including the server's submission time.
+    // The cookie expires in the length of the interval plus a day to compensate for different timezones.
+    if (variable_get("webform_use_cookies", 0)) {
+      $cookie_name = 'webform-'. $node->nid;
+      $time = time();
+      setcookie($cookie_name ."[". $time ."]", $time, $time + $node->webform['submit_interval'] + 86400);
+    }
   }
   else {
     // Sid was found thus update the existing sid in the datatbase.

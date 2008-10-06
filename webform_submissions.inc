@@ -231,7 +231,7 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
  *   Boolean TRUE if the user has exceeded their limit. FALSE otherwise.
  */
 function _webform_submission_limit_check($node) {
-  global $user, $db_type;
+  global $user;
 
   // Check if submission limiting is enabled.
   if ($node->webform['submit_limit'] == '-1') {
@@ -249,7 +249,8 @@ function _webform_submission_limit_check($node) {
   $num_submissions_database = db_num_rows($result);
 
   // Double check the submission history from the users machine using cookies.
-  if (variable_get("webform_use_cookies", 0)) {
+  $num_submissions_cookie = 0;
+  if ($user->uid == 0 && variable_get("webform_use_cookies", 0)) {
     $cookie_name = 'webform-'. $node->nid;
 
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
@@ -271,21 +272,7 @@ function _webform_submission_limit_check($node) {
     // Limit exceeded.
     return TRUE;
   }
-  else {
-    // Increment a cookie for triple recording of the submission.
-    if (variable_get("webform_use_cookies", 0)) {
-      $attempted_key = 0;
-      if ($num_submissions_cookie > 0) {
-        while (array_key_exists($attempted_key, $_COOKIE[$cookie_name])) {
-          $attempted_key++;
-        }
-      }
-      // Set a cookie including the server's submission time.
-      // The cookie expires in the length of the interval plus a day to compensate for different timezones.
-      setcookie($cookie_name ."[". $attempted_key ."]", time(), time() + $node->webform['submit_interval'] + 86400);
-    }
 
-    // Limit not exceeded.
-    return FALSE;
-  }
+  // Limit not exceeded.
+  return FALSE;
 }
