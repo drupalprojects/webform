@@ -1299,7 +1299,11 @@ function webform_admin_settings() {
     '#options' => array(0 => t("Off"), 1 => t("Log submissions"), 2 => t("Full debug")),
     '#description' => t('Set to "Log submissions" to log all submissions in the watchdog. Set to "Full debug" to print debug info on submission.')
   );
-  return system_settings_form($form);
+
+  $form = system_settings_form($form);
+  $form['#theme'] = 'webform_admin_settings';
+
+  return $form;
 }
 
 function theme_webform_admin_settings($form) {
