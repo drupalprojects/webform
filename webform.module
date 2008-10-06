@@ -1040,7 +1040,7 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
  * Menu callback for admin/webform/settings.
  */
 function webform_admin_settings() {
-  module_load_include('inc', 'webform', 'webform_export');
+  include_once(drupal_get_path('module', 'webform') .'/webform_export.inc');
 
   $form['components'] = array(
     '#type' => 'fieldset',
@@ -1116,7 +1116,7 @@ function webform_admin_settings() {
     '#type' => 'select',
     '#title' => t('Default export delimiter'),
     '#description' => t('This is the delimiter used in the CSV/TSV file when downloading Webform results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
-    '#default_value' => variable_get('webform_csv_delimiter', ',\t'),
+    '#default_value' => variable_get('webform_csv_delimiter', '\t'),
     '#options' => array(
       ','  => t('Comma (,)'),
       '\t' => t('Tab (\t)'),
