@@ -2190,7 +2190,7 @@ function theme_webform_token_help() {
 }
 
 function _webform_safe_name($name) {
-  // Ιf transliteration is available, use it to convert names to ASCII.
+  // If transliteration is available, use it to convert names to ASCII.
   if (function_exists('transliteration_get')) {
     return transliteration_get($name, '');
   }
