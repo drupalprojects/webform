@@ -46,7 +46,7 @@ function _webform_edit_date($currfield) {
     '#title' => t("Timezone"),
     '#default_value' => empty($currfield['extra']['timezone']) ? "site" : $currfield['extra']['timezone'],
     '#description' => t('Adjust the date according to a specific timezone. Website timezone is defined in the <a href="!settings">Site Settings</a> and is the default.', array('!settings' => url('admin/settings/date-time'))),
-    '#options' => array('site' => 'Website Timezone', 'user' => 'User Timezone', 'gmt' => 'GMT'),
+    '#options' => array('site' => t('Website timezone'), 'user' => t('User timezone'), 'gmt' => t('GMT')),
     '#weight' => 1,
   );
   $edit_fields['extra']['check_daylight_savings'] = array(
