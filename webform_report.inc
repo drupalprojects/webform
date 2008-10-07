@@ -362,7 +362,7 @@ function webform_results_download($node, $format = 'delimiter', $options = array
   }
 
   // Add the closing bytes.
-  $exporter->eof(&$handle);
+  $exporter->eof($handle);
 
   // Close the file.
   @fclose($handle);
