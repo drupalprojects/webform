@@ -2180,7 +2180,7 @@ function theme_webform_token_help() {
   $output .= theme('item_list', $tokens);
   $output .= t('You can use %server[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.server">$_SERVER</a> variables, %session[key] to add any of the special PHP <a href="http://www.php.net/reserved.variables#reserved.variables.session">$_SESSION</a> variables and %get[key] to create prefilled forms from the <a href="http://www.php.net/reserved.variables#reserved.variables.get">URL</a>. %cookie, %request and %post also work with their respective PHP variables. For example %server[HTTP_USER_AGENT], %session[id], or %get[q].');
   if (module_exists('profile')) {
-    $output .= ' '. t('If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the varible %profile[profile_city].');
+    $output .= ' '. t('If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the variable %profile[profile_city].');
   }
 
   $fieldset = array(

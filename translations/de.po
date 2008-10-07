@@ -200,7 +200,7 @@ msgid "You can also use %server[key] to add any of the special PHP <a href=\"htt
 msgstr "Sie können auch %server[key] verwenden, um jede der speziellen <a href=\"http://www.php.net/reserved.variables#reserved.variables.server\">$_SERVER</a>-Variablen von PHP zu benutzen oder mit %get[key] mittels <a href=\"http://www.php.net/reserved.variables#reserved.variables.get\">URL</a> vorausgefüllte Formulare zu erstellen (z.B. %server[HTTP_USER_AGENT] or %get[id])."
 
 #: webform.module:51
-msgid "If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the varible %profile[profile_city]."
+msgid "If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the variable %profile[profile_city]."
 msgstr "Bei Verwendung des Profilmoduls haben Sie Zugriff auf alle Profildaten mittels %profile[form_name]. Wenn Sie zum Beispiel ein Profilwert mit dem Namen profil_stadt haben, verwenden Sie die Variable %profile[profil_stadt]."
 
 #: webform.module:76
@@ -545,7 +545,7 @@ msgid "Parent Fieldset"
 msgstr "Übergeordnete Feld-Gruppe"
 
 #: webform.module:948
-msgid "Optional. You may organize your form by placing this component inside inside another fieldset."
+msgid "Optional. You may organize your form by placing this component inside another fieldset."
 msgstr "Optional. Das Formular kann durch die Platzierung von Komponenten in Feld-Gruppen organisiert werden."
 
 #: webform.module:959
