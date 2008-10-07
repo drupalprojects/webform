@@ -241,7 +241,7 @@ function _webform_submission_limit_check($node) {
   // Retrieve submission data for this IP address or username from the database.
   $query = "SELECT submitted, uid, remote_addr ".
            "FROM {webform_submissions} ".
-           "WHERE (( 0 = %d AND remote_addr = '%s') OR (uid > 0 && uid = %d)) ".
+           "WHERE (( 0 = %d AND remote_addr = '%s') OR (uid > 0 AND uid = %d)) ".
            "AND submitted > %d AND nid = %d";
 
   // Fetch all the entries from the database within the submit interval with this username and IP.
