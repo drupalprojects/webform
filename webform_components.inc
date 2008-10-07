@@ -340,7 +340,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
       '#type' => 'select',
       '#title' => t("Parent Fieldset"),
       '#default_value' => $component['pid'],
-      '#description' => t('Optional. You may organize your form by placing this component inside inside another fieldset.'),
+      '#description' => t('Optional. You may organize your form by placing this component inside another fieldset.'),
       '#options' => $options,
       '#weight' => 3,
     );

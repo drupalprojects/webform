@@ -139,7 +139,7 @@ msgid "Parent Fieldset"
 msgstr "Γονικό σύνολο πεδίων"
 
 #: webform_components.inc:332
-msgid "Optional. You may organize your form by placing this component inside inside another fieldset."
+msgid "Optional. You may organize your form by placing this component inside another fieldset."
 msgstr "Προαιρετικό. Μπορείτε να οργανώσετε τη φόρμα σας τοποθετώντας το συστατικό αυτό μέσα σε ένα άλλο σύνολο πεδίων."
 
 #: webform_components.inc:343
@@ -315,7 +315,7 @@ msgid "You can also use %server[key] to add any of the special PHP <a href=\"htt
 msgstr "Είναι επίσης δυνατή η χρησιμοποίηση του %server[κλειδί] για την προσθήκη μιας από τις ειδικές <a href=\"http://www.php.net/reserved.variables#reserved.variables.server\">$_SERVER</a> μεταβλητές της PHP, του %session[κλειδί] για την προσθήκη μιας από τις ειδικές <a href=\"http://www.php.net/reserved.variables#reserved.variables.session\">$_SESSION</a> μεταβλητές και του %get[κλειδί] για τη δημιουργία συμπληρωμένων από πριν φορμών από τη διεύθυνση <a href=\"http://www.php.net/reserved.variables#reserved.variables.get\">URL</a>. Τα %cookie, %request και %post δουλεύουν με τις αντίστοιχες μεταβλητές της PHP. Για παράδειγμα, %server[HTTP_USER_AGENT], %session[id] ή %get[q]."
 
 #: webform.module:47
-msgid "If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the varible %profile[profile_city]."
+msgid "If you are using the profiles module, you can also access all profile data using the syntax %profile[form_name]. If you for example have a profile value named profile_city, add the variable %profile[profile_city]."
 msgstr "Αν χρησιμοποιείτε τη μονάδα των προφίλ, μπορείτε επίσης να προσπελάσετε όλα τα δεδομένα ενός προφίλ χρησιμοποιώντας τη σύνταξη %profile[όνομα φόρμας]. Αν για παράδειγμα έχετε μια τιμή στο προφίλ με όνομα profile_city, προσθέστε τη μεταβλητή %profile[profile_city]."
 
 #: webform.module:65

@@ -211,7 +211,7 @@ msgstr ""
 msgid ""
 "If you are using the profiles module, you can also access all profile data "
 "using the syntax %profile[form_name]. If you for example have a profile "
-"value named profile_city, add the varible %profile[profile_city]."
+"value named profile_city, add the variable %profile[profile_city]."
 msgstr ""
 
 #: webform.module:74;282;329 webform.install:507 webform.info:0
@@ -626,7 +626,7 @@ msgstr "Szülő mezőcsoport"
 
 #: webform.module:935
 msgid ""
-"Optional. You may organize your form by placing this component inside inside "
+"Optional. You may organize your form by placing this component inside "
 "another fieldset."
 msgstr ""
 
