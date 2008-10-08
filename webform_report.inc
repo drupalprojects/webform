@@ -3,14 +3,14 @@
 
 /**
  * This file includes helper functions for creating reports for webform.module
- * 
+ *
  * @author Nathan Haug <nate@lullabot.com>
  * @author Pontus Ullgren <ullgren@user.sourceforge.net>
  * @copyright Pontus Ullgren 2004
  */
 
-// All functions within this file need the webform_submissions.inc. 
-module_load_include('inc', 'webform', 'webform_submissions'); 
+// All functions within this file need the webform_submissions.inc.
+module_load_include('inc', 'webform', 'webform_submissions');
 
 /**
  * Retrieve lists of submissions for a given webform.
@@ -31,7 +31,7 @@ function webform_results_submissions($node, $user_filter = FALSE) {
 
 /**
  * Theme the header of the submissions table.
- * 
+ *
  * This is done in it's own function so that webform can retrieve the header and
  * use it for sorting the results.
  */
@@ -51,7 +51,7 @@ function theme_webform_results_submissions_header($node) {
 
 /**
  * Theme the submissions tab of the webform results page.
- * 
+ *
  * @param $node
  *   The node whose results are being displayed.
  * @param $submissions
@@ -120,7 +120,7 @@ function theme_webform_results_table_header($node) {
 
 /**
  * Theme the results table displaying all the submissions for a particular node.
- * 
+ *
  * @param $node
  *   The node whose results are being displayed.
  * @param $components
@@ -173,7 +173,7 @@ function theme_webform_results_table($node, $components, $submissions) {
 
 /**
  * Delete all submissions for a node.
- * 
+ *
  * @param $nid
  *   The node id whose submissions will be deleted.
  */
@@ -187,7 +187,7 @@ function webform_results_clear($nid) {
 
 /**
  * Confirmation form to delete all submissions for a node.
- * 
+ *
  * @param $nid
  *   ID of node for which to clear submissions.
  */
@@ -262,7 +262,7 @@ function webform_results_download_form_submit(&$form, &$form_state) {
 
 /**
  * Generate a Excel-readable CSV file containing all submissions for a Webform.
- * 
+ *
  * The CSV requires that the data be presented in a flat file.  In order
  * to maximize usability to the Excel community and minimize subsequent
  * stats or spreadsheet programming this program extracts data from the
@@ -276,21 +276,21 @@ function webform_results_download_form_submit(&$form, &$form_state) {
  *   Heading line 2: gives column headings
  *   Data line 1 .....
  *   Data line 2 .....
- * 
+ *
  * An example of this format is given below.  Note the columns have had spaces
  * added so the columns line up.  This is not the case with actual file where
  * a column may be null.  Note also, that multiple choice questions as produced
  * by checkboxes or radio buttons have been presented as "yes" or "no" and the
  * actual choice text is retained only in the header line 2.
  * Data from text boxes and input fields are written out in the body of the table.
- * 
+ *
  *   Submission Details,    ,   ,      ,Question 1,        ,        ,..,        ,Question 2,        ,        ,..,        ,Question n
  *   timestamp         ,time,SID,userid,Choice 1  ,Choice 2,Choice 3,..,Choice n,Choice 1  ,Choice 2,Choice 3,..,Choice n,Comment
  *   21 Feb 2005       ,1835,23 ,34    ,X         ,        ,        ,..,       ,X          ,X       ,X       ,..,X       ,My comment
  *   23 Feb 2005       ,1125,24 ,89    ,X         ,X       ,        ,..,       ,X          ,X       ,X       ,..,X       ,Hello
  *   .................................................................................................................................
  *   27 Feb 2005       ,1035,56 ,212   ,X         ,        ,        ,..,       ,X          ,X       ,X       ,..,X       ,How is this?
- * 
+ *
  */
 function webform_results_download($node, $format = 'delimiter', $options = array()) {
   module_load_include('inc', 'webform', 'webform_export');

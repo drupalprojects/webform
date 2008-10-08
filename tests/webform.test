@@ -56,7 +56,7 @@ class WebformTestCase extends DrupalTestCase {
 
     foreach ($permissions as $user => $role_permissions) {
       $rid = $this->drupalCreateRolePerm($role_permissions);
-  
+
       $ua = array();
       $ua['name']   = $this->randomName();
       $ua['mail']   = $ua['name'] . '@localhost';
@@ -65,7 +65,7 @@ class WebformTestCase extends DrupalTestCase {
       $ua['status'] = 1;
       // Add a sample profile field for testing %profile values.
       $ua['profile_gender'] = 'Male';
-  
+
       $this->webform_users[$user] = user_save('', $ua);
       $this->webform_users[$user]->pass_raw = $ua['pass'];
     }
@@ -89,7 +89,7 @@ class WebformTestCase extends DrupalTestCase {
   }
 
   /**
-   * 
+   *
    */
   function webformReset() {
     $this->_webform_node = NULL;

@@ -122,7 +122,7 @@ function _webform_render_grid($component, $random = true) {
   return $form_item;
 }
 
-/** 
+/**
  * Display the result of a grid submission. The output of this function will be
  * displayed under the "results" tab then "submissions"
  * @param $data
@@ -144,10 +144,10 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
   return $form_item;
 }
 
-/** 
+/**
  * Translates the submitted 'safe' form values back into their un-edited
  * original form.
- * 
+ *
  * @param $data
  *   The POST data associated with the component
  * @param $component
@@ -198,7 +198,7 @@ function theme_webform_mail_grid($data, $component) {
   return $output;
 }
 
-/** 
+/**
  * function _webform_help_select
  * Module specific instance of hook_help
  **/
@@ -223,11 +223,11 @@ function _webform_theme_grid() {
   );
 }
 
-/** 
+/**
  * Calculate and returns statistics about results for this component from all
  * submission to this webform. The output of this function will be displayed
  * under the "results" tab then "analysis".
- * 
+ *
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
@@ -268,7 +268,7 @@ function _webform_analysis_rows_grid($component) {
   return array(array(array('data' => $output, 'colspan' => 2)));
 }
 
-/** 
+/**
  * function _webform_table_data_select
  * Return the result of this component's submission for display in a table. The output of this function will be displayed under the "results" tab then "table"
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
@@ -290,11 +290,11 @@ function _webform_table_data_grid($data, $component) {
   return $output;
 }
 
-/** 
+/**
  * Return the header information for this component to be displayed in a comma
  * seperated value file. The output of this function will be displayed under
  * the "results" tab then "download".
- * 
+ *
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
@@ -322,10 +322,10 @@ function _webform_csv_headers_grid($component) {
   return $header;
 }
 
-/** 
+/**
  * Return the result of a textfield submission. The output of this function will
  * be displayed under the "results" tab then "submissions".
- * 
+ *
  * @param $data
  *   An array of information containing the submission result, directly
  *   correlating to the webform_submitted_data database schema.

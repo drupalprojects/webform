@@ -26,7 +26,6 @@ function _webform_defaults_file() {
   );
 }
 
-
 /**
  * Create a set of form items to be displayed on the form for editing this component.
  * Use care naming the form items, as this correlates directly to the database schema.
