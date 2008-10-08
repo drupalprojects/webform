@@ -78,7 +78,7 @@ function webform_submission_insert($node, $submitted) {
 
 /**
  * Delete a single submission.
- * 
+ *
  * @param $nid
  *   ID of node for which this webform was submitted.
  * @param $sid
@@ -100,7 +100,7 @@ function webform_submission_delete($node, $submission) {
 
 /**
  * Confirm form to delete a single form submission.
- * 
+ *
  * @param $node
  *   The node for which this webform was submitted.
  * @param $submission
@@ -125,7 +125,7 @@ function webform_submission_delete_form_submit($form_id, $form_values) {
 
 /**
  * Return all the submissions for a particular node.
- * 
+ *
  * @param $nid
  *   The node ID for which submissions are being fetched.
  * @param $header

@@ -503,7 +503,6 @@ function _webform_table_data_file($data) {
   return $output;
 }
 
-
 /**
  * Return the header information for this component to be displayed in a comma
  * seperated value file. The output of this function will be displayed under the

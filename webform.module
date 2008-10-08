@@ -3,11 +3,11 @@
 
 /**
  * This module provides a simple way to create forms and questionnaires.
- * 
+ *
  * The initial development of this module was sponsered by ÅF Industri AB, Open
  * Source City and Karlstad University Library. Continued development sponsored
  * by Lullabot.
- * 
+ *
  * @author Nathan Haug <nate@lullabot.com>
  * @author Pontus Ullgren <ullgren@user.sourceforge.net>
  */
@@ -291,7 +291,7 @@ function webform_forms($args) {
 
 /**
  * Implementation of hook_file_download().
- * 
+ *
  * Only allow users with view webform submissions to download files.
  */
 function webform_file_download($file) {
@@ -852,7 +852,7 @@ function webform_form_alter($form_id, &$form) {
 
 /**
  * Submit handler for the webform node form.
- * 
+ *
  * Redirect the user to the components form on new node inserts. Note that this
  * fires after the hook_submit() function above.
  */
@@ -1164,11 +1164,11 @@ function theme_webform_admin_settings($form) {
  * Client form generation function. If this is displaying an existing
  * submission, pass in the $submission variable with the contents of the
  * submission to be displayed.
- * 
+ *
  * @param $node
  *   The current webform node.
  * @param $submission
- *   An object containing information about the form submission if we're 
+ *   An object containing information about the form submission if we're
  *   displaying a result.
  * @param $enabled
  *   If displaying a result, specify if form elements are enabled for
@@ -1176,7 +1176,7 @@ function theme_webform_admin_settings($form) {
  * @param $form_values
  *   The current form values of a submission, used in multipage webforms.
  *   Note: The position of this parameter depends on all other parameters being
- *   specified when using drupal_get_form(). 
+ *   specified when using drupal_get_form().
  */
 function webform_client_form(&$node, $submission, $enabled, $preview, $form_values = NULL) {
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
@@ -1351,7 +1351,7 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
           '#type'      => 'hidden',
           '#value'     => $submission->sid,
         );
-      }      
+      }
     }
   }
 
@@ -1698,7 +1698,7 @@ function _webform_confirmation($node) {
 
 /**
  * Themable function for webform submission confirmation.
- * 
+ *
  * @param $node
  *   The webform node that has just been submitted.
  */
@@ -1719,7 +1719,7 @@ function theme_webform_confirmation($node, $sid) {
 
 /**
  * Theme the contents of e-mails sent by webform.
- * 
+ *
  * @param $form_values
  *   An array of all form values submitted by the user. The array contains three
  *   keys containing the following:
@@ -1735,7 +1735,7 @@ function theme_webform_confirmation($node, $sid) {
  *   If you desire to make different e-mails depending on the recipient, you can
  *   check this component ID to output different content. This will be the ID
  *   of the component that is a conditional e-mail recipient. For the normal
- *   e-mails, it will have the value of 'default'. 
+ *   e-mails, it will have the value of 'default'.
  */
 function theme_webform_mail_message($form_values, $node, $sid, $cid) {
   global $user;
@@ -1764,11 +1764,11 @@ function theme_webform_mail_message($form_values, $node, $sid, $cid) {
 
 /**
  * Theme the fields portion of the e-mails sent by webform.
- * 
+ *
  * This function calls itself recursively to maintain the tree structure of
  * components in the webform. It is called intially by
  * theme_webform_create_mailmessage().
- * 
+ *
  * @param $cid
  *   The parent component ID we're currently printing.
  * @param $value
@@ -1826,7 +1826,7 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
 
 /**
  * Theme the headers when sending an email from webform.
- * 
+ *
  * @param $form_values
  *   An array of all form values submitted by the user. The array contains three
  *   keys containing the following:
@@ -2033,7 +2033,7 @@ function webform_results($node, $op = 'submissions') {
 
 /**
  * Given a form_key and a list of form_key parents, determine the cid.
- * 
+ *
  * @param $node
  *   A fully loaded node object.
  * @param $form_key
@@ -2108,8 +2108,8 @@ function _webform_safe_name($name) {
   }
 
   $new = str_replace(
-    array(' ', '€', 'ƒ', 'Š', 'Ž', 'š', 'ž', 'Ÿ', '¢', '¥', 'µ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Œ',  'œ',  'Æ',  'Ð',  'Þ',  'ß',  'æ',  'ð',  'þ'), 
-    array('_', 'E', 'f', 'S', 'Z', 's', 'z', 'Y', 'c', 'Y', 'u', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th'), 
+    array(' ', '€', 'ƒ', 'Š', 'Ž', 'š', 'ž', 'Ÿ', '¢', '¥', 'µ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Œ',  'œ',  'Æ',  'Ð',  'Þ',  'ß',  'æ',  'ð',  'þ'),
+    array('_', 'E', 'f', 'S', 'Z', 's', 'z', 'Y', 'c', 'Y', 'u', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th'),
     trim($name));
   $new = drupal_strtolower($new);
   $new = preg_replace('/[^a-z0-9_]/', '', $new);
@@ -2119,12 +2119,12 @@ function _webform_safe_name($name) {
 /**
  * Given a set of components, determine which one are appropriate for a
  * particular use, such as an email address or subject.
- * 
+ *
  * @param $components
  *   An array of components.
  * @param $type
  *   Either 'email' or 'string' (for use as subject or from value).
- * 
+ *
  */
 function _webform_component_options($components, $type) {
   $acceptable_types = $type == 'email' ? array('email', 'select', 'hidden') : array('textfield', 'select', 'hidden');

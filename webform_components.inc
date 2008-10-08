@@ -3,7 +3,7 @@
 
 /**
  * Provides interface and database handling for editing components of a webform.
- * 
+ *
  * @author Nathan Haug <nate@lullabot.com>
  */
 
@@ -198,7 +198,7 @@ function theme_webform_components_form($form) {
       }
 
       // Add the add form if this was the last edited component.
-      if (isset($_GET['cid']) && $component['cid'] == $_GET['cid'] && $add_form) { 
+      if (isset($_GET['cid']) && $component['cid'] == $_GET['cid'] && $add_form) {
         $add_form['data'][0] = $indents . $add_form['data'][0];
         $rows[] = $add_form;
         $add_form = FALSE;
@@ -483,7 +483,7 @@ function webform_component_delete_form_submit($form_id, $form_values) {
 
 /**
  * Insert a new component into the database.
- * 
+ *
  * @param $component
  *   A full component containing fields from the component form.
  */
@@ -499,7 +499,7 @@ function webform_component_insert($component) {
 
 /**
  * Update an existing component with new values.
- * 
+ *
  * @param $component
  *   A full component containing a nid, cid, and all other fields from the
  *   component form. Additional properties are stored in the extra array.
