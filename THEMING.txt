@@ -117,7 +117,7 @@ of the phptemplate engine.
 - Add the following lines of php code:
 
 function phptemplate_webform_form_[node id here] ($form) {
-  return _phptemplate_callback('webform_form_[node id here]', array('form' => $form));
+  return _phptemplate_callback('webform-form-[node id here]', array('form' => $form));
 }
 
 - Replace "[node id here]" with the node ID of the form.
