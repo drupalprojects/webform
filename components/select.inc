@@ -104,7 +104,7 @@ function _webform_render_select($component) {
 
   // Convert the user-entered options list into an array.
   $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $options = _webform_select_options($component['extra']['items']);
+  $options = _webform_select_options($component['extra']['items'], $component['extra']['aslist'] != 'Y');
 
   if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
     $options = array('' => t('select...')) + $options;
@@ -214,7 +214,7 @@ function _webform_submission_display_select($data, $component, $enabled = false)
  *   Nothing.
  */
 function _webform_submit_select(&$data, $component) {
-  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['items'])));
+  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['items'], TRUE)));
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
@@ -421,17 +421,44 @@ function _webform_csv_data_select($data, $component) {
 /**
  * Utility function to split user-entered values from new-line seperated
  * text into an array of options.
+ *
+ * @param $text
+ *   Text to be converted into a select option array.
+ * @param $flat
+ *   Optional. If specified, return the option array and exclude any optgroups.
  */
-function _webform_select_options($text) {
+function _webform_select_options($text, $flat = FALSE) {
   $options = array();
-  $rows = array_filter(explode("\n", _webform_filter_values(trim($text), NULL, NULL, FALSE)));
+  $rows = array_filter(explode("\n", trim($text)));
+  $group = NULL;
   foreach ($rows as $option) {
     $option = trim($option);
-    if (preg_match('/^([^|]+)\|(.*)$/', $option, $matches)) {
-      $options[$matches[1]] = $matches[2];
+    /**
+     * If the Key of the option is within < >, treat as an optgroup
+     * 
+     * <Group 1>
+     *   creates an optgroup with the label "Group 1"
+     * 
+     * <>
+     *   Unsets the current group, allowing items to be inserted at the root element.  
+     */
+    
+    if (preg_match('/^\<([^>]*)\>$/', $option, $matches)) {
+      if (empty($matches[1])) {
+        unset($group);
+      }
+      elseif (!$flat) {
+        $group = _webform_filter_values($matches[1], NULL, NULL, FALSE);
+      }
+    }
+    else if (preg_match('/^([^|]+)\|(.*)$/', $option, $matches)) {
+      $key = _webform_filter_values($matches[1]);
+      $value = _webform_filter_values($matches[2]);
+      isset($group) ? $options[$group][$key] = $value : $options[$key] = $value;
     }
     else {
-      $options[$option] = $option;
+      $filtered_option = _webform_filter_values($option);
+      isset($group) ? $options[$group][$filtered_option] = $filtered_option : $options[$filtered_option] = $filtered_option;
     }
   }
   return $options;

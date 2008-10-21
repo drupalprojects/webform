@@ -345,6 +345,28 @@ class WebformTestCase extends DrupalTestCase {
         'database values' => array('0'),
         'database default values' => array('0'),
       ),
+      'select_optgroup' => array(
+        'component' => array(
+          'form_key' => 'select_optgroup',
+          'name' => 'Select Optgroup',
+          'type' => 'select',
+          'value' => 'option 1-2',
+          'extra' => array(
+            'description' => '<p>Tests saving zero as a value.</p>',
+            'items' => "<Group 1>\noption 1-1\noption 1-2\noption 1-3\n<Group 2>\noption 2-1\noption 2-2\noption 2-3",
+            'aslist' => 'Y',
+            'email' => 0,
+          ),
+          'mandatory' => '1',
+          'email' => '1',
+          'pid' => '0',
+          'weight' => '-15',
+          'page_num' => 1,
+        ),
+        'sample values' => 'option 2-2',
+        'database values' => array('option 2-2'),
+        'database default values' => array('option 1-2'),
+      ),
       'select_email' => array(
         'component' => array(
           'form_key' => 'select_email',
