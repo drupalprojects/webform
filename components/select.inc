@@ -437,12 +437,12 @@ function _webform_select_options($text, $flat = FALSE) {
       }
     }
     else if (preg_match('/^([^|]+)\|(.*)$/', $option, $matches)) {
-      $key = _webform_filter_values($matches[1]);
-      $value = _webform_filter_values($matches[2]);
+      $key = _webform_filter_values($matches[1], NULL, NULL, FALSE);
+      $value = _webform_filter_values($matches[2], NULL, NULL, FALSE);
       isset($group) ? $options[$group][$key] = $value : $options[$key] = $value;
     }
     else {
-      $filtered_option = _webform_filter_values($option);
+      $filtered_option = _webform_filter_values($option, NULL, NULL, FALSE);
       isset($group) ? $options[$group][$filtered_option] = $filtered_option : $options[$filtered_option] = $filtered_option;
     }
   }
