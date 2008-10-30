@@ -223,6 +223,12 @@ function theme_webform_components_form($form) {
   return $output;
 }
 
+function webform_components_form_validate($form_id, $form_values) {
+  if (isset($_POST['op']) && $_POST['op'] == t('Add') && strlen(trim($form_values['add']['name'])) <= 0) {
+    form_set_error('add][name', t('When adding a new component, the name field is required.'));
+  }
+}
+
 function webform_components_form_submit($form_id, $form_values) {
   $node = node_load($form_values['nid']);
 
@@ -244,9 +250,7 @@ function webform_components_form_submit($form_id, $form_values) {
     drupal_set_message(t('Your webform has been published.'));
     return 'node/'. $node->nid;
   }
-
-  // Initiate a new form element if a name has been specified.
-  if (strlen(trim($form_values['add']['name'])) > 0) {
+  elseif (isset($_POST['op']) && $_POST['op'] == t('Add')) {
     $component = $form_values['add'];
     return array('node/'. $node->nid .'/edit/components/new/'. $component['type'], 'name='. urlencode($component['name']) .'&mandatory='. $component['mandatory'] .'&email='. $component['email'] .'&pid='. $component['pid'] .'&weight='. $component['weight']);
   }
