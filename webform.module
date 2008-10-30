@@ -426,7 +426,7 @@ function webform_load($node) {
  */
 function webform_link($type, $node = NULL, $teaser = FALSE) {
   $links = array();
-  if ($node->type == 'webform') {
+  if (isset($node->type) && $node->type === 'webform') {
     if ($teaser && !$node->webform['teaser']) {
       $links['webform_goto'] = array(
         'title' => t('Go to form'),
@@ -1937,7 +1937,7 @@ function _webform_filter_descriptions($string, $node = NULL, $submission = NULL,
  * Menu callback for admin/content/webform. Displays all webforms on the site.
  */
 function webform_admin_content() {
-  $result = db_query("SELECT nid, uid, title FROM {node} WHERE type = 'webform'");
+  $result = db_query("SELECT * FROM {node} WHERE type = 'webform'");
   $nodes = array();
   while ($node = db_fetch_object($result)) {
     $nodes[] = $node;
