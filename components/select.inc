@@ -38,7 +38,7 @@ function _webform_edit_select($currfield) {
     '#type' => 'textarea',
     '#title' => t("Options"),
     '#default_value' => $currfield['extra']['items'],
-    '#description' => t('A list of selectable options. One option per line. Key-value pairs may be entered seperated by pipes. i.e. safe_key|Some readable option') . theme('webform_token_help'),
+    '#description' => t('A list of selectable options. One option per line. Key-value pairs may be entered seperated by pipes, such as "safe_key|Some readable option". Option groups for lists and menus may be specified with &lt;Group Name&gt;. &lt;&gt; can be used to insert items at the root of the menu after specifing a group.') . theme('webform_token_help'),
     '#cols' => 60,
     '#rows' => 5,
     '#weight' => -2,
