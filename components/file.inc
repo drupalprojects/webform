@@ -263,14 +263,14 @@ function theme_webform_edit_file($form) {
  *   An array of a form item to be displayed on the client-side webform.
  */
 function _webform_render_file($component) {
-  $form_item = array(
+  $form_item[$component['form_key']] = array(
     '#type'          => $component['type'],
     '#title'         => $component['name'],
     //'#required'      => $component['mandatory'], // Drupal core bug with required file uploads.
     '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
-    '#tree'          => false, // file_check_upload assumes a flat $_FILES structure.
+    '#tree'          => FALSE, // file_check_upload assumes a flat $_FILES structure.
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
     '#element_validate'      => array(
@@ -278,6 +278,12 @@ function _webform_render_file($component) {
       '_webform_required_file',  // Custom required routine.
     ),
     '#webform_component' => $component,
+  );
+  $form_item['new'] = array(
+    '#type' => 'hidden',
+    '#weight' => $component['weight'],
+    '#value' => $component['form_key'],
+    '#tree' => TRUE,
   );
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
@@ -299,11 +305,6 @@ function _webform_required_file($form_element, $form_state) {
 function _webform_validate_file($form_element, &$form_state) {
   $component = $form_element['#webform_component'];
   $form_key = $component['form_key'];
-
-  // Set the previous file as the default.
-  if (isset($form_element['#webform_current_file'])) {
-    form_set_value(array('#parents' => $form_element['#array_parents']), serialize($form_element['#webform_current_file']), $form_state);
-  }
 
   if (empty($_FILES['files']['name'][$form_key])) {
     return;
@@ -349,23 +350,27 @@ function _webform_validate_file($form_element, &$form_state) {
  *   Nothing.
  */
 function _webform_submit_file(&$data, $component) {
-  $current_file = unserialize($data);
   $upload_dir = file_directory_path() ."/webform/". $component['extra']['savelocation'];
-  if (!empty($_FILES['files']['name'][$component['form_key']])) {
+  if (!empty($_FILES['files']['name'][$data['new']])) {
     if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
-      $file_saved = file_save_upload($component['form_key'], array(), $upload_dir);
+      $file_saved = file_save_upload($data['new'], array(), $upload_dir);
       if (!$file_saved) {
         drupal_set_message(t("The uploaded file %filename was unable to be saved. The destination directory may not be writable.", array('%filename' => $file_saved['filename'])), "error");
       }
       else {
         file_set_status($file_saved, FILE_STATUS_PERMANENT);
+        if (isset($data['existing']['filepath'])) {
+          file_delete($data['existing']['filepath']);
+        }
         $data = serialize((array)$file_saved);
-        file_delete($current_file['filepath']);
       }
     }
     else {
       drupal_set_message(t("The uploaded file was unable to be saved. The destination directory does not exist."), "error");
     }
+  }
+  else {
+    $data = serialize(array());
   }
 }
 
@@ -411,7 +416,10 @@ function _webform_submission_display_file($data, $component, $enabled = false) {
     $form_item['#suffix'] = ' <a href="'. webform_file_url($filedata['filepath']) .'">Download '. $filedata['filename'] .'</a>' . $form_item['#suffix'];
     if ($enabled) {
       $form_item['#description'] = t('Uploading a new file will replace the current file.');
-      $form_item['#webform_current_file'] = $filedata;
+      $form_item['existing'] = array(
+        '#type' => 'value',
+        '#value' => $filedata,
+      );
     }
   }
   return $form_item;

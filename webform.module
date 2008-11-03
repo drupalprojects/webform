@@ -1830,16 +1830,12 @@ function _webform_client_form_submit_process($node, &$form_values, $parent = 0) 
       if (is_array($value) && $node->webform['components'][$cid]['type'] == 'fieldset') {
         _webform_client_form_submit_process($node, $form_values[$form_key], $cid);
       }
-    }
-  }
 
-  // We loop through components rather than the actual submission, because
-  // some components (file) do not get things submitted in the $form_values.
-  foreach ($node->webform['components'] as $cid => $component) {
-    if ($component['pid'] == $parent) {
+      $component = $node->webform['components'][$cid];
       $submit_function = "_webform_submit_". $component['type'];
       if (function_exists($submit_function)) {
-        $submit_function($form_values[$component['form_key']], $component); // Call the component process submission function.
+        // Call the component process submission function.
+        $submit_function($form_values[$component['form_key']], $component);
       }
     }
   }
