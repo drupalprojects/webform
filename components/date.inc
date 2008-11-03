@@ -248,10 +248,12 @@ function _webform_submit_date(&$data, $component) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_date($data, $component, $enabled = false) {
+function _webform_submission_display_date($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_date($component);
   $form_item['month']['#default_value'] = $data['value']['0'];
   $form_item['day']['#default_value'] = $data['value']['1'];

@@ -186,10 +186,12 @@ function webform_validate_time($form_item, $form_state) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_time($data, $component, $enabled = false) {
+function _webform_submission_display_time($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_time($component);
   $form_item['minute']['#default_value'] = $data['value']['1'];
   $form_item['minute']['#disabled'] = !$enabled;

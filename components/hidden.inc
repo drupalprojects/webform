@@ -79,10 +79,12 @@ function _webform_render_hidden($component) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_hidden($data, $component, $enabled = false) {
+function _webform_submission_display_hidden($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_hidden($component);
   // Only allow administrators that can view or edit all submissions to view or edit hidden fields.
   if (user_access('edit webform submissions') || user_access('access webform results')) {
@@ -90,7 +92,9 @@ function _webform_submission_display_hidden($data, $component, $enabled = false)
     $form_item['#default_value'] = $data['value']['0'];
     $form_item['#type'] = 'textfield';
     $form_item['#title'] = t('@name (hidden)', array('@name' => $component['name']));
-    $form_item['#disabled'] = !$enabled;
+    if (!$enabled) {
+      $form_item['#attributes']['readonly'] = 'readonly';
+    }
   }
   return $form_item;
 }
