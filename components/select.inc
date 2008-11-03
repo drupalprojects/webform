@@ -176,10 +176,12 @@ function webform_expand_checkboxes($element) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_select($data, $component, $enabled = false) {
+function _webform_submission_display_select($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_select($component);
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array.

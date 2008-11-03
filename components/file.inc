@@ -394,16 +394,18 @@ function theme_webform_mail_file($data, $component) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_file($data, $component, $enabled = false) {
+function _webform_submission_display_file($data, $component, $enabled = FALSE) {
   $filedata = unserialize($data['value'][0]);
   $form_item = _webform_render_file($component);
   if (!$enabled) {
     $form_item['#type'] = 'textfield';
     $form_item['#tree'] = TRUE;
-    $form_item['#disabled'] = TRUE;
+    $form_item['#attributes']['readonly'] = 'readonly';
     $form_item['#default_value'] = empty($filedata['filepath']) ? $filedata['error'] : $filedata['filepath'];
   }
   if ($filedata['filename']) {

@@ -144,13 +144,17 @@ function _webform_validate_email($form_element, $component) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_email($data, $component, $enabled = false) {
+function _webform_submission_display_email($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_email($component);
   $form_item['#default_value'] = $data['value']['0'];
-  $form_item['#disabled'] = !$enabled;
+  if (!$enabled) {
+    $form_item['#attributes']['readonly'] = 'readonly';
+  }
   return $form_item;
 }
 
