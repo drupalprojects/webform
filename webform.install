@@ -240,7 +240,7 @@ function webform_schema() {
         'description' => t('The unique identifier for this submission.'),
         'type' => 'int',
         'unsigned' => TRUE,
-        'not null',
+        'not null' => TRUE,
         'default' => 0,
       ),
       'cid' => array(
