@@ -1553,6 +1553,7 @@ function webform_client_form_submit($form_id, &$form_values) {
       // Assemble the FROM string.
       if (isset($headers[$cid]['From'])) {
         $froms[$cid] = $headers[$cid]['From'];
+        unset($headers[$cid]['From']);
       }
       elseif (strlen($email_from_name) > 0) {
         $froms[$cid] = '"'. mime_header_encode($email_from_name) .'" <'. $email_from_address .'>';
@@ -1564,6 +1565,7 @@ function webform_client_form_submit($form_id, &$form_values) {
       // Update the subject if set in the themed headers.
       if (isset($headers[$cid]['Subject'])) {
         $subjects[$cid] = $headers[$cid]['Subject'];
+        unset($headers[$cid]['Subject']);
       }
       else {
         $subjects[$cid] = $email_subject;
@@ -1572,6 +1574,7 @@ function webform_client_form_submit($form_id, &$form_values) {
       // Update the to e-mail if set in the themed headers.
       if (isset($headers[$cid]['To'])) {
         $emails[$cid] = $headers[$cid]['To'];
+        unset($headers[$cid]['To']);
       }
     }
 
