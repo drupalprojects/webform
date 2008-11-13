@@ -85,7 +85,7 @@ msgstr "送信"
 
 #: webform_components.inc:104;244
 msgid "Publish"
-msgstr "掲載"
+msgstr "掲載する"
 
 #: webform_components.inc:130
 #: webform.module:865;1320
@@ -201,7 +201,7 @@ msgstr "任意。この項目を他のフィールドセットの中に配置し
 
 #: webform_components.inc:357
 msgid "Optional. In the menu, the heavier items will sink and the lighter items will be positioned nearer the top."
-msgstr "任意。メニュー内で、大きいウェイトのメニュー項目は下に、小さいウェイトのメニュー項目は上に表示されます。"
+msgstr "同じ階層にあるメニュー間での表示順位を決める、ウェイトを指定してください。ウェイトの数値が小さいほど上部に、大きいほど下部に配置されます。"
 
 #: webform_components.inc:369
 msgid "The webform component of type @type does not have an edit function defined."
@@ -1148,7 +1148,7 @@ msgstr "年"
 
 #: components/date.inc:205
 msgid "!name field is required."
-msgstr "!name 項目が必要です。"
+msgstr "!name フィールドは必須です。"
 
 #: components/date.inc:212
 msgid "Entered !name is not a valid date."
