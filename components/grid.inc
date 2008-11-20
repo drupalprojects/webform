@@ -360,7 +360,7 @@ function theme_webform_grid(&$grid_element) {
     }
 
     // Create a row with the question title.
-    $row = array($question_element['#title']);
+    $row = array(check_plain($question_element['#title']));
 
     // Render each radio button in the row.
     $radios = expand_radios($question_element);
