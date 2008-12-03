@@ -330,7 +330,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     '#default_value' => ($component['email'] == '1' ? TRUE : FALSE),
     '#description' => t('If checked, submitted values from this component will be included in e-mails.'),
     '#weight' => 2,
-    '#access' => !in_array($component['type'], array('pagebreak', 'fieldset')),
+    '#access' => !in_array($component['type'], array('pagebreak', 'fieldset', 'markup')),
   );
 
   if (variable_get('webform_enable_fieldset', true) && is_array($node->webform['components'])) {
