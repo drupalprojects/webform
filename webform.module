@@ -1527,6 +1527,9 @@ function webform_client_form_submit($form_id, &$form_values) {
       elseif (is_numeric($node->webform['email_'. $field])) {
         ${'email_'. $field} = _webform_filter_values($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
       }
+      else {
+        ${'email_'. $field} = _webform_filter_values(${'email_'. $field}, $node, $form_values['submitted']);
+      }
     }
 
     // Create a themed message for mailing.
@@ -1788,6 +1791,7 @@ function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
   // First check for component-level themes.
   $themed_output = theme("webform_mail_". $component['type'], $value, $component);
 
+  $message = '';
   if ($themed_output) {
     // Indent the output and add to message.
     $message .= $indent;
