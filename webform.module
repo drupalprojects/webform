@@ -1395,7 +1395,7 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
   }
 }
 
-function webform_client_form_validate($form_id, $form_values) {
+function webform_client_form_validate($form_id, &$form_values) {
   $node = node_load(array('nid' => $form_values['details']['nid']));
 
   // Flatten trees within the submission.
