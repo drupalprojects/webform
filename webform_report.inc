@@ -208,7 +208,7 @@ function webform_results_clear_form_submit($form, &$form_state) {
 
   $message = t('Webform %title entries cleared.', array('%title' => $title));
   drupal_set_message($message);
-  watchdog('webform', $message, WATCHDOG_NOTICE);
+  watchdog('webform', $message);
   $form_state['redirect'] = 'node/'. $form_state['values']['nid'] .'/webform-results';
 }
 
