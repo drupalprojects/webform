@@ -246,8 +246,9 @@ function theme_webform_mail_select($data, $component) {
   $options = _webform_select_options($component['extra']['items']);
 
   // Generate the output.
+  $output = '';
   if ($component['extra']['multiple']) {
-    $output = $component['name'] .":\n";
+    $output .= $component['name'] .":\n";
     foreach ((array)$data as $value) {
       if ($value) {
         if ($options[$value]) {
@@ -257,8 +258,8 @@ function theme_webform_mail_select($data, $component) {
     }
   }
   else {
-    if ($options[$data]) {
-      $output = $component['name'] .": ". $options[$data] ."\n";
+    if ($data !== '' && $options[$data]) {
+      $output .= $component['name'] .": ". $options[$data] ."\n";
     }
   }
   return $output;
