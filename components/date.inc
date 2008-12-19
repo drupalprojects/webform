@@ -15,6 +15,8 @@ function _webform_defaults_date() {
     'email' => 1,
     'extra' => array(
       'check_daylight_savings' => 0,
+      'year_start' => '1900',
+      'year_end' => '2050',
       'year_textfield' => 0,
       'description' => '',
     ),
