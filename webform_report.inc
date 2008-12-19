@@ -205,7 +205,7 @@ function webform_results_clear_form_submit($form_id, $form_values) {
 
   $message = t('Webform %title entries cleared.', array('%title' => $title));
   drupal_set_message($message);
-  watchdog('webform', $message, WATCHDOG_NOTICE);
+  watchdog('webform', $message);
   return 'node/'. $form_values['nid'] .'/results';
 }
 

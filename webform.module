@@ -1580,7 +1580,7 @@ function webform_client_form_submit($form_id, &$form_values) {
 
     // Verify that this submission is not attempting to send any spam hacks.
     if (_webform_submission_spam_check($emails['default'], $subjects['default'], $froms['default'], $headers['default'])) {
-      watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $_SERVER['REMOTE_ADDR'])) ."<br />\n". nl2br(htmlentities($messages['default'])), WATCHDOG_WARNING);
+      watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $_SERVER['REMOTE_ADDR'])) ."<br />\n". nl2br(htmlentities($messages['default'])));
       drupal_set_message(t("Illegal information. Data not submitted."), 'error');
       return false;
     }
@@ -1619,7 +1619,7 @@ function webform_client_form_submit($form_id, &$form_values) {
 
   // Log to watchdog if normal debug is on.
   if (variable_get('webform_debug', 0) >= 1) {
-    watchdog('webform', t('Submission posted to %title', array('%title' => $node->title)) . l(t('Results'), 'node/'. $node->nid .'/submission/'. $sid) ."<br />\n<pre>". htmlentities(print_r($form_values, TRUE)) ."</pre>", WATCHDOG_NOTICE);
+    watchdog('webform', t('Submission posted to %title', array('%title' => $node->title)) . l(t('Results'), 'node/'. $node->nid .'/submission/'. $sid) ."<br />\n<pre>". htmlentities(print_r($form_values, TRUE)) ."</pre>");
   }
 
   // Check confirmation field to see if redirect should be to another node or a message.
