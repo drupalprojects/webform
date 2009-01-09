@@ -2037,8 +2037,8 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
   if ($user->uid) {
     $find[] = '%username';
     $find[] = '%useremail';
-    $replace[] = $user->name;
-    $replace[] = $user->mail;
+    $replace[] = isset($user->name) ? $user->name : '';
+    $replace[] = isset($user->mail) ? $user->mail : '';
     if (module_exists('profile')) {
       profile_load_profile($user);
     }
