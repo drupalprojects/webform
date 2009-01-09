@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ *   Webform module fieldset component.
+ */
+
+/**
  * Create a default fieldset component.
  */
 function _webform_defaults_fieldset() {
@@ -31,14 +36,14 @@ function _webform_edit_fieldset($currfield) {
   $edit_fields = array();
   $edit_fields['extra']['collapsible'] = array(
     '#type' => 'checkbox',
-    '#title' => t("Collapsible"),
+    '#title' => t('Collapsible'),
     '#default_value' => $currfield['extra']['collapsible'],
     '#description' => t('If this fieldset is collapsible, the user may open or close the fieldset.'),
     '#weight' => 0,
   );
   $edit_fields['extra']['collapsed'] = array(
     '#type' => 'checkbox',
-    '#title' => t("Collapsed by Default"),
+    '#title' => t('Collapsed by Default'),
     '#default_value' => $currfield['extra']['collapsed'],
     '#description' => t('Collapsible fieldsets are "open" by default. Select this option to default the fieldset to "closed."'),
     '#weight' => 3,
@@ -63,7 +68,7 @@ function _webform_render_fieldset($component) {
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#collapsible'   => $component['extra']['collapsible'],
     '#collapsed'     => $component['extra']['collapsed'],
-    '#attributes'    => array("class" => "webform-component-". $component['type'], "id" => "webform-component-". $component['form_key']),
+    '#attributes'    => array('class' => 'webform-component-'. $component['type'], 'id' => 'webform-component-'. $component['form_key']),
   );
 
   return $form_item;
@@ -92,6 +97,6 @@ function _webform_submission_display_fieldset($data, $component, $enabled = FALS
 function _webform_help_fieldset($section) {
   switch ($section) {
     case 'admin/settings/webform#fieldset_description':
-      return t("Fieldsets allow you to organize multiple fields into groups.");
+      return t('Fieldsets allow you to organize multiple fields into groups.');
   }
 }

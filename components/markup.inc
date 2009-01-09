@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ *   Webform module markup component.
+ */
+
+/**
  * Create a default markup component.
  */
 function _webform_defaults_markup() {
@@ -31,7 +36,7 @@ function _webform_edit_markup($currfield) {
   $edit_fields['advanced']['mandatory'] = array(); // Do not render the mandatory checkbox.
   $edit_fields['value'] = array(
     '#type' => 'textarea',
-    '#title' => t("Value"),
+    '#title' => t('Value'),
     '#default_value' => $currfield['value'],
     '#description' => t('Markup allows you to enter custom HTML or PHP logic into your form.') . theme('webform_token_help'),
     '#weight' => -1,
@@ -56,10 +61,10 @@ function _webform_edit_markup($currfield) {
 function _webform_render_markup($component) {
   // We don't want users to be able to execute filters outside of their permissions on preview.
   if ($_POST['op'] == t('Preview')) {
-    $check_filter = true;
+    $check_filter = TRUE;
   }
   else {
-    $check_filter = false;
+    $check_filter = FALSE;
   }
 
   $form_item = array(
@@ -95,6 +100,6 @@ function _webform_submission_display_markup($data, $component, $enabled = FALSE)
 function _webform_help_markup($section) {
   switch ($section) {
     case 'admin/settings/webform#markup_description':
-      return t("Displays text as HTML in the form; does not render a field.");
+      return t('Displays text as HTML in the form; does not render a field.');
   }
 }

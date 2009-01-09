@@ -1,6 +1,11 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ * Webform module component tests.
+ */
+
 include_once(dirname(__FILE__) .'/webform.test');
 
 class WebformComponentsTestCase extends WebformTestCase {

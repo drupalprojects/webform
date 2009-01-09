@@ -2,7 +2,7 @@
 // $Id$
 
 /**
- * @file webform-mail-message.tpl.php
+ * @file
  * Customize the e-mails sent by Webform after successful submission.
  *
  * This file may be renamed "webform-mail-[nid].tpl.php" to target a
@@ -31,10 +31,7 @@
 <?php print t('Submitted by anonymous user: [@ip_address]', array('@ip_address' => $ip_address)) ?>
 <?php endif; ?>
 
-
 <?php print t('Submitted values are') ?>
-
-
 <?php
   // Print out all the Webform fields. This is purposely a theme function call
   // so that you may remove items from the submitted tree if you so choose.
@@ -42,9 +39,5 @@
   print theme('webform_mail_fields', 0, $form_values['submitted_tree'], $node);
 ?>
 
-
-
-
-<?php print t("The results of this submission may be viewed at:") ?>
-
-<?php print url('node/'. $node->nid ."/submission/". $sid, array('absolute' => TRUE)) ?>
+<?php print t('The results of this submission may be viewed at:') ?>
+<?php print url('node/'. $node->nid .'/submission/'. $sid, array('absolute' => TRUE)) ?>

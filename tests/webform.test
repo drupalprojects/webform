@@ -1,6 +1,11 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ * Webform module tests.
+ */
+
 class WebformTestCase extends DrupalTestCase {
   private $_webform_node;
   private $_webform_components;
@@ -59,8 +64,8 @@ class WebformTestCase extends DrupalTestCase {
 
       $ua = array();
       $ua['name']   = $this->randomName();
-      $ua['mail']   = $ua['name'] . '@localhost';
-      $ua['roles']  = array($rid=>$rid);
+      $ua['mail']   = $ua['name'] .'@localhost';
+      $ua['roles']  = array($rid => $rid);
       $ua['pass']   = user_password();
       $ua['status'] = 1;
       // Add a sample profile field for testing %profile values.
@@ -80,7 +85,7 @@ class WebformTestCase extends DrupalTestCase {
     // Delete the webform admin and any created nodes.
     foreach ($this->webform_users as $user) {
       $uid = $user->uid;
-      $result = db_query("SELECT nid FROM {node} WHERE uid = %d", $uid);
+      $result = db_query('SELECT nid FROM {node} WHERE uid = %d', $uid);
       while ($node = db_fetch_array($result)) {
         node_delete($node['nid']);
       }

@@ -2,7 +2,7 @@
 // $Id$
 
 /**
- * @file webform-form.tpl.php
+ * @file
  * Customize the display of a complete webform.
  *
  * This file may be renamed "webform-form-[nid].tpl.php" to target a specific

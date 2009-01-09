@@ -2,6 +2,7 @@
 // $Id$
 
 /**
+ * @file
  * This file includes helper functions for creating reports for webform.module
  *
  * @author Nathan Haug <nate@lullabot.com>
@@ -40,7 +41,7 @@ function theme_webform_results_submissions_header($node) {
     array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
     array('data' => t('Submitted'), 'field' => 'submitted'),
   );
-  if (user_access("access webform results")) {
+  if (user_access('access webform results')) {
     $columns[] = array('data' => t('User'), 'field' => 'name');
     $columns[] = array('data' => t('IP Address'), 'field' => 'remote_addr');
   }
@@ -74,7 +75,7 @@ function theme_webform_results_submissions($node, $submissions) {
       $row[] = $submission->remote_addr;
     }
     $row[] = l(t('View'), "node/$node->nid/submission/$sid");
-    if ((user_access("edit own webform submissions") && ($user->uid == $submission->uid)) || user_access("edit webform submissions")) {
+    if ((user_access('edit own webform submissions') && ($user->uid == $submission->uid)) || user_access('edit webform submissions')) {
       $row[] = l(t('Edit'), "node/$node->nid/submission/$sid/edit");
       $row[] = l(t('Delete'), "node/$node->nid/submission/$sid/delete", array('query' => drupal_get_destination()));
     }
@@ -140,14 +141,14 @@ function theme_webform_results_table($node, $components, $submissions) {
   // Generate a row for each submission.
   foreach ($submissions as $sid => $submission) {
     $cell[] = l($sid, 'node/'. $node->nid .'/submission/'. $sid);
-    $cell[] = format_date($submission->submitted, "small");
+    $cell[] = format_date($submission->submitted, 'small');
     $cell[] = theme('username', $submission);
     $cell[] = $submission->remote_addr;
     $component_headers = array();
 
     // Generate a cell for each component.
     foreach ($node->webform['components'] as $component) {
-      $table_function = "_webform_table_data_". $component['type'];
+      $table_function = '_webform_table_data_'. $component['type'];
       if (function_exists($table_function)) {
         $submission_output = $table_function($submission->data[$component['cid']], $component);
         if ($submission_output !== NULL) {
@@ -192,11 +193,11 @@ function webform_results_clear($nid) {
  *   ID of node for which to clear submissions.
  */
 function webform_results_clear_form($form_state, $node) {
-  drupal_set_title(t("Clear Form Submissions"));
+  drupal_set_title(t('Clear Form Submissions'));
 
   $form = array();
   $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
-  $question = t("Are you sure you want to delete all submissions for this form?");
+  $question = t('Are you sure you want to delete all submissions for this form?');
 
   return confirm_form($form, $question, 'node/'. $node->nid .'/webform-results', NULL, t('Clear'), t('Cancel'));
 }
@@ -310,13 +311,13 @@ function webform_results_download($node, $format = 'delimiter', $options = array
   $exporter->bof($handle);
 
   $header[0] = array($node->title, '', '', '', '', '');
-  $header[1] = array(t("Submission Details"), '', '', '', '', '');
+  $header[1] = array(t('Submission Details'), '', '', '', '', '');
   $header[2] = array(t('Serial'), t('SID'), t('Time'), t('IP Address'), t('UID'), t('Username'));
 
   // Compile header information.
   webform_load_components(); // Load all components.
   foreach ($node->webform['components'] as $cid => $component) {
-    $csv_header_function = "_webform_csv_headers_". $component['type'];
+    $csv_header_function = '_webform_csv_headers_'. $component['type'];
     if (function_exists($csv_header_function)) {
       // Let each component determine its headers.
       $component_header = $csv_header_function($component);
@@ -345,7 +346,7 @@ function webform_results_download($node, $format = 'delimiter', $options = array
     $row[] = $submission->uid;
     $row[] = $submission->name;
     foreach ($node->webform['components'] as $cid => $component) {
-      $csv_data_function   = "_webform_csv_data_". $component['type'];
+      $csv_data_function   = '_webform_csv_data_'. $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
         $data = $csv_data_function($submission->data[$cid], $component);
@@ -391,7 +392,7 @@ function webform_results_analysis($node) {
     $question_number++;
 
     // Do component specific call.
-    $analysis_function = "_webform_analysis_rows_". $component['type'];
+    $analysis_function = '_webform_analysis_rows_'. $component['type'];
     if (function_exists($analysis_function)) {
       $crows = $analysis_function($component);
       if (is_array($crows)) {

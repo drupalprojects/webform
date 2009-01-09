@@ -2,7 +2,7 @@
 // $Id$
 
 /**
- * @file webform-confirmation.tpl.php
+ * @file
  * Customize confirmation screen after successful submission.
  *
  * This file may be renamed "webform-confirmation-[nid].tpl.php" to target a
