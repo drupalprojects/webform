@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ *   Webform module page break component.
+ */
+
+/**
  * Create a default pagebreak component.
  */
 function _webform_defaults_pagebreak() {
@@ -51,7 +56,7 @@ function _webform_edit_pagebreak($currfield) {
 function _webform_help_pagebreak($section) {
   switch ($section) {
     case 'admin/settings/webform#pagebreak_description':
-      return t("Break up a multi-page form.");
+      return t('Break up a multi-page form.');
   }
 }
 

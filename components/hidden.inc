@@ -2,7 +2,12 @@
 // $Id$
 
 /**
- * Create a default markup component.
+ * @file
+ *   Webform module hidden component.
+ */
+
+/**
+ * Create a default hidden component.
  */
 function _webform_defaults_hidden() {
   return array(
@@ -30,7 +35,7 @@ function _webform_edit_hidden($currfield) {
   $edit_fields = array();
   $edit_fields['value'] = array(
     '#type' => 'textarea',
-    '#title' => t("Default value"),
+    '#title' => t('Default value'),
     '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') . theme('webform_token_help'),
     '#cols' => 60,
@@ -43,7 +48,7 @@ function _webform_edit_hidden($currfield) {
   );
   $edit_fields['extra']['email'] = array(
     '#type' => 'checkbox',
-    '#title' => t("E-mail a submission copy"),
+    '#title' => t('E-mail a submission copy'),
     '#return_value' => 1,
     '#default_value' => $currfield['extra']['email'],
     '#description' => t('Check this option if this component contains an e-mail address that should get a copy of the submission. Emails are sent individually so other emails will not be shown to the recipient.'),
@@ -105,7 +110,7 @@ function _webform_submission_display_hidden($data, $component, $enabled = FALSE)
 function _webform_help_hidden($section) {
   switch ($section) {
     case 'admin/settings/webform#hidden_description':
-      return t("A field which is not visible to the user, but is recorded with the submission.");
+      return t('A field which is not visible to the user, but is recorded with the submission.');
   }
 }
 
@@ -131,7 +136,7 @@ function _webform_analysis_rows_hidden($component) {
 
   $result = db_query($query, $component['nid'], $component['cid']);
   while ($data = db_fetch_array($result)) {
-    if ( strlen(trim($data['data'])) > 0 ) {
+    if (drupal_strlen(trim($data['data'])) > 0) {
       $nonblanks++;
       $wordcount += str_word_count(trim($data['data']));
     }
@@ -155,7 +160,7 @@ function _webform_analysis_rows_hidden($component) {
  *   Textual output formatted for human reading.
  */
 function _webform_table_data_hidden($data) {
-  return check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
+  return check_plain(empty($data['value']['0']) ? '' : $data['value']['0']);
 }
 
 
@@ -189,5 +194,5 @@ function _webform_csv_headers_hidden($component) {
  *   commas.
  */
 function _webform_csv_data_hidden($data) {
-  return empty($data['value']['0']) ? "" : $data['value']['0'];
+  return empty($data['value']['0']) ? '' : $data['value']['0'];
 }

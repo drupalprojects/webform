@@ -25,7 +25,7 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 
 function webform_submission_update($node, $sid, $submitted) {
   // Update the submission data by first removing all this submissions data.
-  db_query("DELETE FROM {webform_submitted_data} WHERE sid = %d", $sid);
+  db_query('DELETE FROM {webform_submitted_data} WHERE sid = %d', $sid);
   // Then re-add it to the database.
   foreach ($submitted as $cid => $value) {
     // Don't save pagebreaks as submitted data.
@@ -36,12 +36,12 @@ function webform_submission_update($node, $sid, $submitted) {
     if (is_array($value)) {
       $delta = 0;
       foreach ($value as $k => $v) {
-        db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) "."VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, $delta, $v);
+        db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, $delta, $v);
         $delta++;
       }
     }
     else {
-      db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) "."VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, 0, $value);
+      db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, 0, $value);
     }
   }
 
@@ -53,7 +53,7 @@ function webform_submission_insert($node, $submitted) {
 
   $sid = db_next_id('{webform_submissions}_sid');
 
-  db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) "." VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $_SERVER['REMOTE_ADDR']);
+  db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $_SERVER['REMOTE_ADDR']);
 
   foreach ($submitted as $cid => $value) {
     // Don't save pagebreaks as submitted data.
@@ -64,12 +64,12 @@ function webform_submission_insert($node, $submitted) {
     if (is_array($value)) {
       $delta = 0;
       foreach ($value as $k => $v) {
-        db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) "."VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, $delta, $v);
+        db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, $delta, $v);
         $delta++;
       }
     }
     else {
-      db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) "."VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, 0, $value);
+      db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $cid, 0, $value);
     }
   }
 
@@ -107,19 +107,19 @@ function webform_submission_delete($node, $submission) {
  *   The submission to be deleted (from webform_submitted_data).
  */
 function webform_submission_delete_form($node, $submission) {
-  drupal_set_title(t("Delete Form Submission"));
+  drupal_set_title(t('Delete Form Submission'));
 
   $form = array();
   $form['node'] = array('#type' => 'value', '#value' => $node);
   $form['submission'] = array('#type' => 'value', '#value' => $submission);
-  $question = t("Are you sure you want to delete this submission?");
+  $question = t('Are you sure you want to delete this submission?');
 
   return confirm_form($form, $question, isset($_GET['destination']) ? $_GET['destination'] : 'node/'. $node->nid .'/results', NULL, t('Delete'), t('Cancel'));
 }
 
 function webform_submission_delete_form_submit($form_id, $form_values) {
   webform_submission_delete($form_values['node'], $form_values['submission']);
-  drupal_set_message(t("Submission deleted."));
+  drupal_set_message(t('Submission deleted.'));
   return 'node/'. $form_values['node']->nid .'/results';
 }
 
@@ -217,9 +217,9 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
   $headers = implode('\n', (array)$headers);
   // Check if they are attempting to spam using a bcc or content type hack.
   if (preg_match('/(b?cc\s?:)|(content\-type:)/i', $to ."\n". $subject ."\n". $from ."\n". $headers)) {
-    return true; // Possible spam attempt.
+    return TRUE; // Possible spam attempt.
   }
-  return false; // Not spam.
+  return FALSE; // Not spam.
 }
 
 /**
@@ -239,10 +239,10 @@ function _webform_submission_limit_check($node) {
   }
 
   // Retrieve submission data for this IP address or username from the database.
-  $query = "SELECT submitted, uid, remote_addr ".
-           "FROM {webform_submissions} ".
+  $query = 'SELECT submitted, uid, remote_addr '.
+           'FROM {webform_submissions} '.
            "WHERE (( 0 = %d AND remote_addr = '%s') OR (uid > 0 AND uid = %d)) ".
-           "AND submitted > %d AND nid = %d";
+           'AND submitted > %d AND nid = %d';
 
   // Fetch all the entries from the database within the submit interval with this username and IP.
   $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, ($node->webform['submit_interval'] != -1) ? (time() - $node->webform['submit_interval']) : $node->webform['submit_interval'], $node->nid);
@@ -250,14 +250,14 @@ function _webform_submission_limit_check($node) {
 
   // Double check the submission history from the users machine using cookies.
   $num_submissions_cookie = 0;
-  if ($user->uid == 0 && variable_get("webform_use_cookies", 0)) {
+  if ($user->uid == 0 && variable_get('webform_use_cookies', 0)) {
     $cookie_name = 'webform-'. $node->nid;
 
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
       foreach ($_COOKIE[$cookie_name] as $key => $timestamp) {
         if ($timestamp <= time() - $node->webform['submit_interval']) {
           // Remove the cookie if past the required time interval.
-          setcookie($cookie_name ."[". $key ."]", "", 0);
+          setcookie($cookie_name .'['. $key .']', '', 0);
         }
       }
       // Count the number of submissions recorded in cookies.

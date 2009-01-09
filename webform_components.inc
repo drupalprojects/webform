@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ *   Webform module components handling.
+ */
+
+/**
  * Provides interface and database handling for editing components of a webform.
  *
  * @author Nathan Haug <nate@lullabot.com>
@@ -36,18 +41,18 @@ function webform_components_form($node) {
     $form['components'][$cid]['weight'] = array(
       '#type' => 'weight',
       '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
-      '#title' => t("Weight"),
+      '#title' => t('Weight'),
       '#default_value' => $component['weight'],
     );
     $form['components'][$cid]['mandatory'] = array(
       '#type' => 'checkbox',
-      '#title' => t("Mandatory"),
+      '#title' => t('Mandatory'),
       '#default_value' => $component['mandatory'],
       '#access' => !in_array($component['type'], array('markup', 'fieldset', 'pagebreak')),
     );
     $form['components'][$cid]['email'] = array(
       '#type' => 'checkbox',
-      '#title' => t("E-mail"),
+      '#title' => t('E-mail'),
       '#default_value' => $component['email'],
       '#access' => !in_array($component['type'], array('markup', 'fieldset', 'pagebreak')),
     );
@@ -154,9 +159,9 @@ function theme_webform_components_form($form) {
     // Build the table rows.
     function _webform_components_form_rows($node, $cid, $component, $level, &$form, &$rows, &$add_form) {
       // Create presentable values.
-      if (strlen($component['value']) > 30) {
-        $component['value'] = substr($component['value'], 0, 30);
-        $component['value'] .= "...";
+      if (drupal_strlen($component['value']) > 30) {
+        $component['value'] = drupal_substr($component['value'], 0, 30);
+        $component['value'] .= '...';
       }
       $component['value'] = check_plain($component['value']);
 
@@ -181,7 +186,7 @@ function theme_webform_components_form($form) {
       $row_data = array(
         $indents . $component['name'],
         $component['type'],
-        ($component['value'] == "") ? "-" : $component['value'],
+        ($component['value'] == '') ? '-' : $component['value'],
         drupal_render($form['components'][$cid]['mandatory']),
         drupal_render($form['components'][$cid]['email']),
         drupal_render($form['components'][$cid]['cid']) . drupal_render($form['components'][$cid]['pid']) . drupal_render($form['components'][$cid]['weight']),
@@ -189,7 +194,7 @@ function theme_webform_components_form($form) {
         l(t('Clone'), 'node/'. $node->nid .'/edit/components/'. $cid .'/clone'),
         l(t('Delete'), 'node/'. $node->nid .'/edit/components/'. $cid .'/delete'),
       );
-      $row_class = 'draggable' . ($component['type'] != 'fieldset' ? ' tabledrag-leaf' : '');
+      $row_class = 'draggable'. ($component['type'] != 'fieldset' ? ' tabledrag-leaf' : '');
       $rows[] = array('data' => $row_data, 'class' => $row_class);
       if (isset($component['children']) && is_array($component['children'])) {
         foreach ($component['children'] as $cid => $component) {
@@ -209,7 +214,7 @@ function theme_webform_components_form($form) {
     }
   }
   else {
-    $rows[] = array(array('data' => t("No Components, add a component below."), 'colspan' => 9));
+    $rows[] = array(array('data' => t('No Components, add a component below.'), 'colspan' => 9));
   }
 
   // Append the add form if not already printed.
@@ -286,7 +291,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   $form['name'] = array(
     '#type' => 'textfield',
     '#default_value' => $component['name'],
-    '#title' => t("Label"),
+    '#title' => t('Label'),
     '#description' => t('This is used as a descriptive label when displaying this form element.'),
     '#required' => TRUE,
     '#weight' => -2,
@@ -295,7 +300,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   $form['extra']['description'] = array(
     '#type' => 'textarea',
     '#default_value' => isset($component['extra']['description']) ? $component['extra']['description'] : '',
-    '#title' => t("Description"),
+    '#title' => t('Description'),
     '#description' => t('A short description of the field used as help for the user when he/she uses the form.') . theme('webform_token_help'),
     '#weight' => -1,
   );
@@ -318,7 +323,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   );
   $form['advanced']['mandatory'] = array(
     '#type' => 'checkbox',
-    '#title' => t("Mandatory"),
+    '#title' => t('Mandatory'),
     '#default_value' => ($component['mandatory'] == '1' ? TRUE : FALSE),
     '#description' => t('Check this option if the user must enter a value.'),
     '#weight' => 2,
@@ -342,7 +347,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
     }
     $form['advanced']['pid'] = array(
       '#type' => 'select',
-      '#title' => t("Parent Fieldset"),
+      '#title' => t('Parent Fieldset'),
       '#default_value' => $component['pid'],
       '#description' => t('Optional. You may organize your form by placing this component inside another fieldset.'),
       '#options' => $options,
@@ -353,7 +358,7 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
   $form['advanced']['weight'] = array(
     '#type' => 'weight',
     '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
-    '#title' => t("Weight"),
+    '#title' => t('Weight'),
     '#default_value' => $component['weight'],
     '#description' => t('Optional. In the menu, the heavier items will sink and the lighter items will be positioned nearer the top.'),
     '#weight' => 4,
@@ -361,13 +366,13 @@ function webform_component_edit_form(&$node, $component, $clone = FALSE) {
 
   // Add the fields specific to this component type:
   webform_load_components(); // Load all component types.
-  $edit_function = "_webform_edit_". $component['type'];
+  $edit_function = '_webform_edit_'. $component['type'];
   $additional_form_elements = array();
   if (function_exists($edit_function)) {
     $additional_form_elements = $edit_function($component); // Call the component render function.
   }
   else {
-    drupal_set_message(t("The webform component of type @type does not have an edit function defined.", array('@type' => $component['type'])));
+    drupal_set_message(t('The webform component of type @type does not have an edit function defined.', array('@type' => $component['type'])));
   }
 
   // Merge the additional fields with the current fields:
