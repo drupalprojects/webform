@@ -144,7 +144,7 @@ function webform_menu() {
   $items['node/%webform_menu/webform-results'] = array(
     'title' => 'Results',
     'page callback' => 'webform_results_submissions',
-    'page arguments' => array(1),
+    'page arguments' => array(1, FALSE, '50'),
     'access callback' => 'user_access',
     'access arguments' => array('access webform results'),
     'file' => 'webform_report.inc',
@@ -154,7 +154,7 @@ function webform_menu() {
   $items['node/%webform_menu/webform-results/submissions'] = array(
     'title' => 'Submissions',
     'page callback' => 'webform_results_submissions',
-    'page arguments' => array(1),
+    'page arguments' => array(1, FALSE, '50'),
     'access callback' => 'user_access',
     'access arguments' => array('access webform results'),
     'file' => 'webform_report.inc',
@@ -174,7 +174,7 @@ function webform_menu() {
   $items['node/%webform_menu/webform-results/table'] = array(
     'title' => 'Table',
     'page callback' => 'webform_results_table',
-    'page arguments' => array(1),
+    'page arguments' => array(1, '50'),
     'access callback' => 'user_access',
     'access arguments' => array('access webform results'),
     'file' => 'webform_report.inc',
@@ -206,7 +206,7 @@ function webform_menu() {
   $items['node/%webform_menu/submissions'] = array(
     'title' => 'Submissions',
     'page callback' => 'webform_results_submissions',
-    'page arguments' => array(1, TRUE),
+    'page arguments' => array(1, TRUE, '50'),
     'access callback' => 'webform_submission_access',
     'access arguments' => array(1, NULL, 'list'),
     'file' => 'webform_report.inc',
@@ -375,17 +375,20 @@ function webform_theme() {
       'arguments' => array('form' => NULL),
     ),
     // webform_report.inc.
+    'webform_results_per_page' => array(
+      'arguments' => array('total_count' => NULL, 'pager_count' => NULL),
+    ),
     'webform_results_submissions_header' => array(
       'arguments' => array('node' => NULL),
     ),
     'webform_results_submissions' => array(
-      'arguments' => array('node' => NULL, 'submissions' => NULL),
+      'arguments' => array('node' => NULL, 'submissions' => NULL, 'total_count' => NULL, 'pager_count' => NULL),
     ),
     'webform_results_table_header' => array(
       'arguments' => array('node' => NULL),
     ),
     'webform_results_table' => array(
-      'arguments' => array('node' => NULL, 'components' => NULL, 'submissions' => NULL, 'node' => NULL),
+      'arguments' => array('node' => NULL, 'components' => NULL, 'submissions' => NULL, 'node' => NULL, 'total_count' => NULL, 'pager_count' => NULL),
     ),
   );
   // Theme functions in all components.

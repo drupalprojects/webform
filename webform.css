@@ -13,6 +13,10 @@
 .webform-default-value {
   color: #999;
 }
+.webform-results-per-page a.selected {
+  font-weight: bold;
+}
+
 tr.webform-add-form .tabledrag-changed {
   display: none;
 }
