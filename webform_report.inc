@@ -13,18 +13,69 @@
 /**
  * Retrieve lists of submissions for a given webform.
  */
-function webform_results_submissions($node, $user_filter = FALSE) {
+function webform_results_submissions($node, $user_filter, $pager_count) {
   global $user;
+
+  if (isset($_GET['results']) && is_numeric($_GET['results'])) {
+    $pager_count = $_GET['results'];
+  }
 
   $header = theme('webform_results_submissions_header', $node);
   if ($user_filter) {
     drupal_set_title(t('Submissions for %user', array('%user' => $user->name)));
-    $submissions = webform_get_submissions($node->nid, $header, $user->uid);
+    $submissions = webform_get_submissions($node->nid, $header, $user->uid, $pager_count);
+    $count = webform_get_submission_count($node->nid, $user->uid);
   }
   else {
-    $submissions = webform_get_submissions($node->nid, $header);
+    $submissions = webform_get_submissions($node->nid, $header, NULL, $pager_count);
+    $count = webform_get_submission_count($node->nid);
   }
-  return theme('webform_results_submissions', $node, $submissions);
+  return theme('webform_results_submissions', $node, $submissions, $count, $pager_count);
+}
+
+/**
+ * Theme the list of links for selecting the number of results per page.
+ *
+ * @param $total_count
+ *   The total number of results available.
+ * @param $pager_count
+ *   The current number of results displayed per page.
+ */
+function theme_webform_results_per_page($total_count, $pager_count) {
+  $output = '';
+
+  // Create a list of results-per-page options.
+  $counts = array(
+    '20' => '20',
+    '50' => '50',
+    '100' => '100',
+    '200' => '200',
+    '500' => '500',
+    '1000' => '1000',
+    '0' => t('All'),
+  );
+
+  $count_links = array();
+
+  foreach ($counts as $number => $text) {
+    if ($number < $total_count) {
+      $count_links[] = l($text, $_GET['q'], array('class' => $pager_count == $number ? 'selected' : ''), 'results='. $number);
+    }
+  }
+
+  $output .= '<div class="webform-results-per-page">';
+  if (count($count_links) > 1) {
+    $output .= t('Show !count results per page.', array('!count' => implode(' | ', $count_links)));
+  }
+  else {
+    $output .= t('Showing all results.');
+  }
+  if ($total_count > 1) {
+    $output .= ' '. t('@total results total.', array('@total' => $total_count));
+  }
+  $output .= '</div>';
+
+  return $output;
 }
 
 /**
@@ -54,10 +105,17 @@ function theme_webform_results_submissions_header($node) {
  *   The node whose results are being displayed.
  * @param $submissions
  *   An array of all submissions for this webform.
+ * @param $total_count
+ *   The total number of submissions to this webform.
+ * @param $pager_count
+ *   The number of results to be shown per page.
  */
-function theme_webform_results_submissions($node, $submissions) {
+function theme_webform_results_submissions($node, $submissions, $total_count = 0, $pager_count = 0) {
   global $user;
-  // This header has to be generated seperately so we can add the SQL necessary
+
+  drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css');
+
+  // This header has to be generated separately so we can add the SQL necessary
   // to sort the results.
   $header = theme('webform_results_submissions_header', $node);
 
@@ -86,9 +144,14 @@ function theme_webform_results_submissions($node, $submissions) {
     $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 7));
   }
 
-  $output = theme('table', $header, $rows);
+  $output = '';
+  $output .= theme('webform_results_per_page', $total_count, $pager_count);
+  $output .= theme('table', $header, $rows);
   if (arg(2) == 'submissions') {
     $output .= theme('links', array('webform' => array('title' => t('Go back to the form'), 'href' => 'node/'. $node->nid)));
+  }
+  if ($pager_count) {
+    $output .= theme('pager', NULL, $pager_count, 0);
   }
   return $output;
 }
@@ -96,15 +159,24 @@ function theme_webform_results_submissions($node, $submissions) {
 /**
  * Create a table containing all submitted values for a webform node.
  */
-function webform_results_table($node) {
+function webform_results_table($node, $pager_count = 0) {
   // Load Components.
   webform_load_components();
 
+  if (isset($_GET['results']) && is_numeric($_GET['results'])) {
+    $pager_count = $_GET['results'];
+  }
+
   // Get all the submissions for the node.
   $header = theme('webform_results_table_header', $node);
-  $submissions = webform_get_submissions($node->nid, $header);
+  $submissions = webform_get_submissions($node->nid, $header, NULL, $pager_count);
+  $total_count = webform_get_submission_count($node->nid);
 
-  return theme('webform_results_table', $node, $node->webform['components'], $submissions);
+  $output = theme('webform_results_table', $node, $node->webform['components'], $submissions, $total_count, $pager_count);
+  if ($pager_count) {
+    $output .= theme('pager', NULL, $pager_count, 0);
+  }
+  return $output;
 }
 
 function theme_webform_results_table_header($node) {
@@ -125,8 +197,14 @@ function theme_webform_results_table_header($node) {
  *   An associative array of the components for this webform.
  * @param $submissions
  *   An array of all submissions for this webform.
+ * @param $total_count
+ *   The total number of submissions to this webform.
+ * @param $pager_count
+ *   The number of results to be shown per page.
  */
-function theme_webform_results_table($node, $components, $submissions) {
+function theme_webform_results_table($node, $components, $submissions, $total_count, $pager_count) {
+  drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css');
+
   $header = array();
   $rows = array();
   $cell = array();
@@ -147,7 +225,8 @@ function theme_webform_results_table($node, $components, $submissions) {
     foreach ($node->webform['components'] as $component) {
       $table_function = '_webform_table_data_'. $component['type'];
       if (function_exists($table_function)) {
-        $submission_output = $table_function($submission->data[$component['cid']], $component);
+        $data = isset($submission->data[$component['cid']]) ? $submission->data[$component['cid']] : NULL;
+        $submission_output = $table_function($data, $component);
         if ($submission_output !== NULL) {
           $component_headers[] = $component['name'];
           $cell[] = $submission_output;
@@ -166,7 +245,11 @@ function theme_webform_results_table($node, $components, $submissions) {
     $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 4));
   }
 
-  return theme('table', $header, $rows);
+
+  $output = '';
+  $output .= theme('webform_results_per_page', $total_count, $pager_count);
+  $output .= theme('table', $header, $rows);
+  return $output;
 }
 
 /**

@@ -2033,14 +2033,14 @@ function webform_results($node, $op = 'submissions') {
     case 'clear' :
       return drupal_get_form('webform_results_clear_form', $node);
     case 'table':
-      return webform_results_table($node);
+      return webform_results_table($node, '50');
     case 'download' :
       return drupal_get_form('webform_results_download_form', $node);
     case 'user_submissions':
-      return webform_results_submissions($node, TRUE);
+      return webform_results_submissions($node, TRUE, '50');
     case 'submissions':
     default :
-      return webform_results_submissions($node);
+      return webform_results_submissions($node, FALSE, '50');
       break;
   }
 }

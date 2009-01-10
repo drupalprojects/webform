@@ -136,12 +136,30 @@ function webform_submission_delete_form_submit($form_id, $form_values) {
  * @return $submissions
  *   An array of submissions matching your filters.
  */
-function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
+function webform_get_submissions($nid, $header = NULL, $uid = NULL, $pager_count = 0) {
+  $sids = NULL;
+  if ($pager_count) {
+    $pager_query = 'SELECT * FROM {webform_submissions} WHERE nid = %d';
+    if ($uid) {
+      $pager_query .= ' AND u.uid = %d';
+    }
+    $res = pager_query($pager_query, $pager_count, 0, NULL, $nid, $uid);
+    $sids = array();
+    while ($row = db_fetch_object($res)) {
+      $sids[] = $row->sid;
+    }
+    $sids = implode($sids, ',');
+  }
+
   $query = 'SELECT s.*, sd.cid, sd.no, sd.data, u.name, u.mail, u.status '.
            'FROM {webform_submissions} s '.
            'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid '.
            'LEFT JOIN {users} u ON u.uid = s.uid '.
            'WHERE sd.nid = %d';
+
+  if ($pager_count) {
+    $query .= ' AND s.sid IN (%s)';
+  }
 
   if ($uid) {
     $query .= ' AND u.uid = %d';
@@ -158,7 +176,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
     $query .= ' ORDER BY sid ASC, cid ASC, no ASC';
   }
 
-  $res = db_query($query, $nid, $uid);
+  $res = db_query($query, $nid, $sids, $uid);
   $submissions = array();
   $previous = array();
 
@@ -178,6 +196,24 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL) {
   }
 
   return $submissions;
+}
+
+/**
+ * Return a count of the total number of submissions for a node.
+ *
+ * @param $nid
+ *   The node ID for which submissions are being fetched.
+ * @param $uid
+ *   Optional; the user ID to filter the submissions by.
+ * @return
+ *   An integer value of the number of submissions.
+ */
+function webform_get_submission_count($nid, $uid = NULL) {
+  $query = 'SELECT count(*) FROM {webform_submissions} WHERE nid = %d';
+  if ($uid) {
+    $query .= ' AND u.uid = %d';
+  }
+  return db_result(db_query($query, $nid, $uid));
 }
 
 /**
