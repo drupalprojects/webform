@@ -1559,7 +1559,8 @@ function _webform_client_form_add_component($cid, $component, $component_value, 
     if (isset($submission->data)) {
       $display_function = '_webform_submission_display_'. $component['type'];
       if (function_exists($display_function)) {
-        $parent_fieldset[$component['form_key']] = $display_function($submission->data[$cid], $component, $enabled);
+        $data = isset($submission->data[$cid]) ? $submission->data[$cid] : NULL;
+        $parent_fieldset[$component['form_key']] = $display_function($data, $component, $enabled);
       }
     }
     else {
@@ -1843,15 +1844,17 @@ function _webform_client_form_submit_process($node, &$form_values, $parent = 0) 
   if (is_array($form_values)) {
     foreach ($form_values as $form_key => $value) {
       $cid = webform_get_cid($node, $form_key, $parent);
-      if (is_array($value) && $node->webform['components'][$cid]['type'] == 'fieldset') {
+      if (is_array($value) && isset($node->webform['components'][$cid]['type']) && $node->webform['components'][$cid]['type'] == 'fieldset') {
         _webform_client_form_submit_process($node, $form_values[$form_key], $cid);
       }
 
-      $component = $node->webform['components'][$cid];
-      $submit_function = '_webform_submit_'. $component['type'];
-      if (function_exists($submit_function)) {
-        // Call the component process submission function.
-        $submit_function($form_values[$component['form_key']], $component);
+      if (isset($node->webform['components'][$cid])) {
+        $component = $node->webform['components'][$cid];
+        $submit_function = '_webform_submit_'. $component['type'];
+        if (function_exists($submit_function)) {
+          // Call the component process submission function.
+          $submit_function($form_values[$component['form_key']], $component);
+        }
       }
     }
   }
