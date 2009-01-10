@@ -130,7 +130,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL, $pager_count
   if ($pager_count) {
     $pager_query = 'SELECT * FROM {webform_submissions} WHERE nid = %d';
     if ($uid) {
-      $pager_query .= ' AND u.uid = %d';
+      $pager_query .= ' AND uid = %d';
     }
     $res = pager_query($pager_query, $pager_count, 0, NULL, $nid, $uid);
     $sids = array();
@@ -200,7 +200,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL, $pager_count
 function webform_get_submission_count($nid, $uid = NULL) {
   $query = 'SELECT count(*) FROM {webform_submissions} WHERE nid = %d';
   if ($uid) {
-    $query .= ' AND u.uid = %d';
+    $query .= ' AND uid = %d';
   }
   return db_result(db_query($query, $nid, $uid));
 }
