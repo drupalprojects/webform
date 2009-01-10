@@ -303,7 +303,7 @@ function _webform_analysis_rows_select($component) {
   $result = db_query($query, $component['nid'], $component['cid']);
   $rows = array();
   while ($data = db_fetch_array($result)) {
-    if ($options[$data['data']]) {
+    if (isset($options[$data['data']])) {
       $display_option = $options[$data['data']];
     }
     else {
