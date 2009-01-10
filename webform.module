@@ -63,8 +63,6 @@ function webform_help($section = 'admin/help#webform', $arg = NULL) {
  * Implementation of hook_menu().
  */
 function webform_menu() {
-  global $user;
-
   $items = array();
 
   // Submissions listing.
