@@ -339,6 +339,7 @@ function _webform_analysis_rows_select($component) {
  *   Textual output formatted for human reading.
  */
 function _webform_table_data_select($data) {
+  $output = '';
   // Set the value as a single string.
   if (is_array($data['value'])) {
     foreach ($data['value'] as $value) {
@@ -348,7 +349,7 @@ function _webform_table_data_select($data) {
     }
   }
   else {
-    $output = check_plain(empty($data['value']['0']) ? '' : $data['value']['0']);
+    $output .= check_plain(empty($data['value']['0']) ? '' : $data['value']['0']);
   }
   return $output;
 }
