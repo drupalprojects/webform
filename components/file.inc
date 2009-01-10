@@ -500,6 +500,7 @@ function _webform_analysis_rows_file($component) {
  *   Textual output formatted for human reading.
  */
 function _webform_table_data_file($data) {
+  $output = '';
   $filedata = unserialize($data['value']['0']);
   if (!empty($filedata['filename'])) {
     $output = '<a href="'. base_path() . $filedata['filepath'] .'">'. $filedata['filename'] .'</a>';
@@ -507,9 +508,6 @@ function _webform_table_data_file($data) {
   }
   elseif (!empty($filedata['error'])) {
     $output = $filedata['error'];
-  }
-  else {
-    $output = '';
   }
   return $output;
 }
