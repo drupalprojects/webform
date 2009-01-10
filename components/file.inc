@@ -492,13 +492,13 @@ function _webform_analysis_rows_file($component) {
     ' WHERE nid = %d '.
     ' AND cid = %d';
   $nonblanks = 0;
+  $sizetotal = 0;
   $submissions = 0;
-  $wordcount = 0;
 
   $result = db_query($query, $component['nid'], $component['cid']);
   while ($data = db_fetch_array($result)) {
     $filedata = unserialize($data['data']);
-    if ($filedata['filesize']) {
+    if (isset($filedata['filesize'])) {
       $nonblanks++;
       $sizetotal += $filedata['filesize'];
     }
