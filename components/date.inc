@@ -179,9 +179,20 @@ function webform_expand_date($element) {
 
   // Set default values.
   foreach ($default_values as $type => $value) {
+    switch ($type) {
+      case 'month':
+        $none = t('Month');
+        break;
+      case 'day':
+        $none = t('Day');
+        break;
+      case 'year':
+        $none = t('Year');
+        break;
+    }
     unset($element[$type]['#value']);
     $element[$type]['#default_value'] = isset($default_values[$type]) ? $default_values[$type] : NULL;
-    $element[$type]['#options'] = array('' => t(drupal_ucfirst($type))) + $element[$type]['#options'];
+    $element[$type]['#options'] = array('' => $none) + $element[$type]['#options'];
   }
 
   // Tweak the year field.
