@@ -143,8 +143,8 @@ function webform_menu() {
     'title' => 'Results',
     'page callback' => 'webform_results_submissions',
     'page arguments' => array(1, FALSE, '50'),
-    'access callback' => 'user_access',
-    'access arguments' => array('access webform results'),
+    'access callback' => 'webform_results_access',
+    'access arguments' => array(1, 'access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
@@ -153,8 +153,8 @@ function webform_menu() {
     'title' => 'Submissions',
     'page callback' => 'webform_results_submissions',
     'page arguments' => array(1, FALSE, '50'),
-    'access callback' => 'user_access',
-    'access arguments' => array('access webform results'),
+    'access callback' => 'webform_results_access',
+    'access arguments' => array(1, 'access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 4,
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -163,8 +163,8 @@ function webform_menu() {
     'title' => 'Analysis',
     'page callback' => 'webform_results_analysis',
     'page arguments' => array(1),
-    'access callback' => 'user_access',
-    'access arguments' => array('access webform results'),
+    'access callback' => 'webform_results_access',
+    'access arguments' => array(1, 'access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 5,
     'type' => MENU_LOCAL_TASK,
@@ -173,8 +173,8 @@ function webform_menu() {
     'title' => 'Table',
     'page callback' => 'webform_results_table',
     'page arguments' => array(1, '50'),
-    'access callback' => 'user_access',
-    'access arguments' => array('access webform results'),
+    'access callback' => 'webform_results_access',
+    'access arguments' => array(1, 'access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 6,
     'type' => MENU_LOCAL_TASK,
@@ -183,8 +183,8 @@ function webform_menu() {
     'title' => 'Download',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('webform_results_download_form', 1),
-    'access callback' => 'user_access',
-    'access arguments' => array('access webform results'),
+    'access callback' => 'webform_results_access',
+    'access arguments' => array(1, 'access webform results'),
     'file' => 'webform_report.inc',
     'weight' => 7,
     'type' => MENU_LOCAL_TASK,
@@ -193,8 +193,8 @@ function webform_menu() {
     'title' => 'Clear',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('webform_results_clear_form', 1),
-    'access callback' => 'user_access',
-    'access arguments' => array('clear webform results'),
+    'access callback' => 'webform_results_access',
+    'access arguments' => array(1, 'clear webform results'),
     'file' => 'webform_report.inc',
     'weight' => 8,
     'type' => MENU_LOCAL_TASK,
@@ -307,6 +307,13 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
     case 'list':
       return user_access('access webform results') || user_access('access webform submissions') || (user_access('access own webform submissions')  && $user->uid);
   }
+}
+
+/**
+ * Menu access callback. Ensure a user both access and node 'view' permission.
+ */
+function webform_results_access($node, $perm) {
+  return node_access('view', $node) && user_access($perm);
 }
 
 /**
@@ -2113,7 +2120,7 @@ function _webform_filter_descriptions($string, $node = NULL, $submission = NULL,
  * Menu callback for admin/content/webform. Displays all webforms on the site.
  */
 function webform_admin_content() {
-  $result = db_query("SELECT * FROM {node} WHERE type = 'webform'");
+  $result = db_query(db_rewrite_sql("SELECT n.* FROM {node} n WHERE n.type = 'webform'"));
   $nodes = array();
   while ($node = db_fetch_object($result)) {
     $nodes[] = $node;
