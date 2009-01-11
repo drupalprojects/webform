@@ -188,7 +188,7 @@ class WebformTestCase extends DrupalTestCase {
           'page_num' => 1,
         ),
         'sample values' => array(
-          'What\'s your option?' => 'one',
+          'Whats your option?' => 'one', // Quotes removed from values.
           'Agåin?' => 'two',
           'One more time!' => 'three',
         ),
@@ -236,7 +236,7 @@ class WebformTestCase extends DrupalTestCase {
           'page_num' => 1,
         ),
         'sample values' => array(
-          'What\'s your option?' => 'one',
+          'Whats your option?' => 'one', // Quotes removed from values.
           'Agåin?' => 'two',
           'One more time!' => 'three',
         ),
