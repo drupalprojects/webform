@@ -188,7 +188,7 @@ function theme_webform_components_form($form) {
       // Add each component to a table row.
       $row_data = array(
         $indents . $component['name'],
-        $component['type'],
+        t($component['type']),
         ($component['value'] == '') ? '-' : $component['value'],
         drupal_render($form['components'][$cid]['mandatory']),
         drupal_render($form['components'][$cid]['email']),
