@@ -38,17 +38,17 @@ class WebformSubmissionTestCase extends WebformTestCase {
    * Test sending a submission and check database integrity.
    */
   function testWebformSubmission() {
-    $this->drupalLoginUser($this->webform_users['admin']);
+    $this->drupalLogin($this->webform_users['admin']);
     $this->webformReset();
     $this->webformSubmissionExecute('sample');
-    $this->drupalGet('logout');
+    $this->drupalLogout();
   }
 
   function testWebformSubmissionDefault() {
-    $this->drupalLoginUser($this->webform_users['admin']);
+    $this->drupalLogin($this->webform_users['admin']);
     $this->webformReset();
     $this->webformSubmissionExecute('default');
-    $this->drupalGet('logout');
+    $this->drupalLogout();
   }
 
   /**
@@ -67,29 +67,29 @@ class WebformSubmissionTestCase extends WebformTestCase {
 
     // Visit the node page with the "foo=bar" query, to test %get[] default values.
     $this->drupalGet('node/'. $node->nid, array('query' => 'foo=bar'));
-    $this->assertText($node->body, t('[webform] Webform node created and accessible at !url', array('!url' => 'node/'. $node->nid)));
+    $this->assertText($node->body, t('Webform node created and accessible at !url', array('!url' => 'node/'. $node->nid)), t('Webform'));
 
     // Submit our test data.
     $this->drupalPost(NULL, $submission_values, 'Submit');
 
     // Confirm that the submission has been created.
-    $this->assertText($node->webform['confirmation'], t('[webform] Confirmation message "@confirmation" received.', array('@confirmation' => $node->webform['confirmation'])));
+    $this->assertText($node->webform['confirmation'], t('Confirmation message "@confirmation" received.', array('@confirmation' => $node->webform['confirmation'])), t('Webform'));
 
     // Get the SID of the new submission.
     $matches = array();
-    preg_match('/sid=([0-9]+)/', $this->_browser->getUrl(), $matches);
+    preg_match('/sid=([0-9]+)/', $this->getUrl(), $matches);
     $sid = $matches[1];
 
     // Pull in the database submission and check the values.
-    $actual_submission = (array)webform_get_submission($node->nid, $sid);
+    $actual_submission = (array)webform_get_submission($node->nid, $sid, TRUE);
 
     $component_info = $this->webformTestComponents();
     foreach ($node->webform['components'] as $cid => $component) {
       $stable_value = $value_type == 'sample' ? $component_info[$component['form_key']]['database values'] : $component_info[$component['form_key']]['database default values'];
       $actual_value = $actual_submission['data'][$cid]['value'];
-      $success = $this->assertEqual($stable_value, $actual_value, t('[webform] Component @form_key data integrity check', array('@form_key' => $component['form_key'])));
-      if (!$success) {
-        $this->fail(t('Expected !expected', array('!expected' => print_r($stable_value, TRUE))) ."\n\n". t('Recieved !recieved', array('!recieved' => print_r($actual_value, TRUE))));
+      $result = $this->assertEqual($stable_value, $actual_value, t('Component @form_key data integrity check', array('@form_key' => $component['form_key'])), t('Webform'));
+      if ($result == 'fail') {
+        $this->fail(t('Expected !expected', array('!expected' => print_r($stable_value, TRUE))) ."\n\n". t('Recieved !recieved', array('!recieved' => print_r($actual_value, TRUE))), t('Webform'));
       }
     }
   }

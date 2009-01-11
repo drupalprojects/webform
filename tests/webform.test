@@ -6,7 +6,7 @@
  * Webform module tests.
  */
 
-class WebformTestCase extends DrupalTestCase {
+class WebformTestCase extends DrupalWebTestCase {
   private $_webform_node;
   private $_webform_components;
   public $webform_users;
@@ -26,7 +26,8 @@ class WebformTestCase extends DrupalTestCase {
    * Implementation of setUp().
    */
   function setUp() {
-    parent::setUp();
+    // Enable Webform.
+    parent::setUp('webform');
 
     // Create a normal user that can view their own submissions.
     $permissions['userAccess'] = array(
@@ -60,19 +61,7 @@ class WebformTestCase extends DrupalTestCase {
     );
 
     foreach ($permissions as $user => $role_permissions) {
-      $rid = $this->drupalCreateRolePerm($role_permissions);
-
-      $ua = array();
-      $ua['name']   = $this->randomName();
-      $ua['mail']   = $ua['name'] .'@localhost';
-      $ua['roles']  = array($rid => $rid);
-      $ua['pass']   = user_password();
-      $ua['status'] = 1;
-      // Add a sample profile field for testing %profile values.
-      $ua['profile_gender'] = 'Male';
-
-      $this->webform_users[$user] = user_save('', $ua);
-      $this->webform_users[$user]->pass_raw = $ua['pass'];
+      $this->webform_users[$user] = $this->drupalCreateUser($role_permissions);
     }
   }
 
