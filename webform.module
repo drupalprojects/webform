@@ -298,7 +298,16 @@ function webform_file_download($file) {
   $file = file_check_location(file_directory_path() .'/'. $file, file_directory_path() .'/webform/');
   if ($file && user_access('access webform results')) {
     $info = image_get_info(file_create_path($file));
-    return array('Content-type: '. $info['mime_type']);
+    if (isset($info['mime_type'])) {
+      $headers = array('Content-type: '. $info['mime_type']);
+    }
+    else {
+      $headers = array(
+        'Content-type: force-download',
+        'Content-disposition: attachment',
+      );
+    }
+    return $headers;
   }
 }
 
