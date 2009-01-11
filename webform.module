@@ -1555,7 +1555,16 @@ function webform_client_form_submit($form_id, &$form_values) {
         ${'email_'. $field} = _webform_filter_values(webform_variable_get('webform_default_'. $field), $node, $form_values['submitted']);
       }
       elseif (is_numeric($node->webform['email_'. $field])) {
-        ${'email_'. $field} = _webform_filter_values($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
+        if (is_array($form_values['submitted'][${'email_'. $field}])) {
+          $values = array();
+          foreach ($form_values['submitted'][${'email_'. $field}] as $key => $value) {
+            $values[] = _webform_filter_values($value, $node, $form_values['submitted']);
+          }
+          ${'email_'. $field} = implode(', ', $values);
+        }
+        else {
+          ${'email_'. $field} = _webform_filter_values($form_values['submitted'][${'email_'. $field}], $node, $form_values['submitted']);
+        }
       }
       else {
         ${'email_'. $field} = _webform_filter_values(${'email_'. $field}, $node, $form_values['submitted']);
