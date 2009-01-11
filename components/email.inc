@@ -111,12 +111,15 @@ function _webform_render_email($component) {
     '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
-    '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
     '#element_validate'  => array('_webform_validate_email'),
     '#webform_component' => $component,
   );
+
+  if ($component['extra']['disabled']) {
+    $form_item['#attributes']['readonly'] = 'readonly';
+  }
 
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {

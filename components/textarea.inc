@@ -94,10 +94,13 @@ function _webform_render_textarea($component) {
     '#rows'          => !empty($component['extra']['rows']) ? $component['extra']['rows'] : 5,
     '#cols'          => !empty($component['extra']['cols']) ? $component['extra']['cols'] : 60,
     '#attributes'    => $component['extra']['attributes'],
-    '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
+
+  if ($component['extra']['disabled']) {
+    $form_item['#attributes']['readonly'] = 'readonly';
+  }
 
   return $form_item;
 }
