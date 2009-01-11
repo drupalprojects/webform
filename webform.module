@@ -1350,8 +1350,10 @@ function webform_client_form(&$node, $submission, $enabled, $preview, $form_valu
     $microweight = 0.001;
     foreach ($component_tree['children'] as $cid => $component) {
       _webform_client_form_add_component($cid, $component, $form['submitted'], $form, $submission, $page_num, $enabled);
-      $form['submitted'][$component['form_key']]['#weight'] += $microweight;
-      $microweight += 0.001;
+      if (isset($form['submitted'][$component['form_key']])) {
+        $form['submitted'][$component['form_key']]['#weight'] += $microweight;
+        $microweight += 0.001;
+      }
     }
     // Do not display the submit button if this is a preview or submission view.
     if ((!$preview && $enabled)) {
@@ -1444,6 +1446,8 @@ function webform_client_form_submit($form_id, &$form_values) {
 
   // Check for a multi-page form that is not yet complete.
   if ($form_values['op'] != (empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'])) {
+    // Perform post processing by components.
+    _webform_client_form_submit_process($node, $form_values['submitted']);
     // This is a multi-page form that is not yet complete.
     // Save the order of the current post into a copied array.
     $original_post = is_array($_POST['submitted']) ? $_POST['submitted'] : array();
