@@ -1208,7 +1208,7 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
 function webform_mail($key, &$message, $params) {
   $message['headers'] = array_merge($message['headers'], $params['headers']);
   $message['subject'] = $params['subject'];
-  $message['body'] = $params['message'];
+  $message['body'] = preg_split('/\r?\n/', $params['message']);
 }
 
 /**
