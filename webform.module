@@ -628,6 +628,11 @@ function webform_form(&$node, &$param) {
     $node->nid = NULL;
   }
 
+  // When the form is rebuilt for a preview, submit_limit may be set incorrectly.
+  if (isset($node->build_mode) && $node->build_mode == NODE_BUILD_PREVIEW && $node->webform['enforce_limit'] == 'no') {
+    $node->webform['submit_limit'] = -1;
+  }
+
   /* Save Components in a value (helps with clone.module) */
   $form['webform']['components'] = array(
     '#type' => 'value',
