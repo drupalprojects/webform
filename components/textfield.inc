@@ -116,10 +116,14 @@ function _webform_render_textfield($component) {
     '#field_suffix'  => empty($component['extra']['field_suffix']) ? NULL : $component['extra']['field_suffix'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
-    '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
+
+  if ($component['extra']['disabled']) {
+    $form_item['#attributes']['readonly'] = 'readonly';
+  }
+
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
     $form_item['#size'] = $component['extra']['width'];
