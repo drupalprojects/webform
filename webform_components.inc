@@ -39,8 +39,8 @@ function webform_components_form($form_state, $node) {
       '#default_value' => $component['pid'],
     );
     $form['components'][$cid]['weight'] = array(
-      '#type' => 'weight',
-      '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
+      '#type' => 'textfield',
+      '#size' => 4,
       '#title' => t('Weight'),
       '#default_value' => $component['weight'],
     );
@@ -359,8 +359,8 @@ function webform_component_edit_form($form_state, &$node, $component, $clone = F
   }
 
   $form['advanced']['weight'] = array(
-    '#type' => 'weight',
-    '#delta' => count($node->webform['components']) > 10 ? count($node->webform['components']) : 10,
+    '#type' => 'textfield',
+    '#size' => 4,
     '#title' => t('Weight'),
     '#default_value' => $component['weight'],
     '#description' => t('Optional. In the menu, the heavier items will sink and the lighter items will be positioned nearer the top.'),
