@@ -177,12 +177,12 @@ function _webform_submit_grid(&$data, $component) {
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
-      if ($value) {
+      if ($value !== '') {
         $data[$key] = $options[$value];
       }
     }
   }
-  elseif (!empty($data)) {
+  elseif ($data !== '') {
     $data = $options[$data];
   }
 
@@ -249,7 +249,7 @@ function _webform_analysis_rows_grid($component) {
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
     ' AND cid = %d '.
-    " AND data != '0' AND data != '' ".
+    " AND data != '' ".
     ' GROUP BY no, data';
   $result = db_query($query, $component['nid'], $component['cid']);
   $counts = array();
@@ -259,7 +259,14 @@ function _webform_analysis_rows_grid($component) {
 
   // Create an entire table to be put into the returned row.
   $rows = array();
-  $header = array('') + $options;
+  $header = array('');
+
+  // Add options as a header row.
+  foreach ($options as $option) {
+    $header[] = $option;
+  }
+
+  // Add questions as each row.
   foreach ($questions as $qkey => $question) {
     $row = array($question);
     foreach ($options as $okey => $option) {
@@ -280,16 +287,17 @@ function _webform_analysis_rows_grid($component) {
  */
 function _webform_table_data_grid($data, $component) {
   $questions = array_values(_webform_grid_options($component['extra']['questions']));
+  $output = '';
   // Set the value as a single string.
   if (is_array($data['value'])) {
     foreach ($data['value'] as $item => $value) {
-      if ($value !== '0') {
+      if ($value !== '') {
         $output .= $questions[$item] .': '. check_plain($value) .'<br />';
       }
     }
   }
   else {
-    $output = check_plain(empty($data['value']['0']) ? '' : $data['value']['0']);
+    $output = check_plain(!isset($data['value']['0']) ? '' : $data['value']['0']);
   }
   return $output;
 }
