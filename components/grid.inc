@@ -113,7 +113,8 @@ function _webform_render_grid($component, $random = TRUE) {
   }
   foreach ($questions as $question) {
     if ($question != '') {
-      $form_item[$question] = array(
+      // Remove quotes from keys to prevent HTML breakage.
+      $form_item[str_replace(array('"', "'"), '', $question)] = array(
         '#title'         => $question,
         '#required'      => $component['mandatory'],
         '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
@@ -164,8 +165,15 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
  *   Nothing
  */
 function _webform_submit_grid(&$data, $component) {
-  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['options'])));
-  $questions = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['questions'])));
+  $options = drupal_map_assoc(array_flip(_webform_grid_options($component['extra']['options'])));
+
+  // Questions are a bit more tricky, since quotes were removed from them in
+  // _webform_render_grid(). Build a list of no_quotes => with_qoutes questions.
+  $questions = array();
+  foreach (_webform_grid_options($component['extra']['questions']) as $key => $question) {
+    $safe_question = str_replace(array('"', "'"), '', $question);
+    $questions[$safe_question] = $question;
+  }
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
@@ -179,11 +187,15 @@ function _webform_submit_grid(&$data, $component) {
   }
 
   // Put the form in the original option order before saving.
-  $order = $questions;
-  foreach ($data as $key => $value) {
-    $order[$key] = $value;
+  // Return the final data with the quotes back in place.
+  $ordered_data = array();
+  foreach ($questions as $safe_question => $question) {
+    if (isset($data[$safe_question])) {
+      $ordered_data[$question] = $data[$safe_question];
+    }
   }
-  $data = $order;
+
+  $data = $ordered_data;
 }
 /**
  * Format the output of emailed data for this component.
@@ -365,7 +377,7 @@ function theme_webform_grid(&$grid_element) {
 }
 
 /**
- * Utility function to split user-entered values from new-line seperated
+ * Utility function to split user-entered values from new-line separated
  * text into an array of options.
  */
 function _webform_grid_options($text) {
