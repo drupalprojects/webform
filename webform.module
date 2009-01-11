@@ -1532,8 +1532,10 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
     foreach ($component_tree['children'] as $cid => $component) {
       $component_value = isset($form_state['values']['submitted'][$component['form_key']]) ? $form_state['values']['submitted'][$component['form_key']] : NULL;
       _webform_client_form_add_component($cid, $component, $component_value, $form['submitted'], $form, $submission, $page_num, $enabled);
-      $form['submitted'][$component['form_key']]['#weight'] += $microweight;
-      $microweight += 0.001;
+      if (isset($form['submitted'][$component['form_key']])) {
+        $form['submitted'][$component['form_key']]['#weight'] += $microweight;
+        $microweight += 0.001;
+      }
     }
     // Do not display the submit button if this is a preview or submission view.
     if ((!$preview && $enabled)) {
@@ -1642,6 +1644,9 @@ function webform_client_form_submit($form, &$form_state) {
   // Check for a multi-page form that is not yet complete.
   $submit_op = empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'];
   if ($form_state['values']['op'] != $submit_op) {
+    // Perform post processing by components.
+    _webform_client_form_submit_process($node, $form_state['values']['submitted']);
+
     // Store values from the current page in the form state storage.
     if (is_array($form_state['values']['submitted'])) {
       foreach ($form_state['values']['submitted'] as $key => $val) {
