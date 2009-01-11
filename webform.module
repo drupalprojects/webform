@@ -136,7 +136,7 @@ function webform_menu($may_cache) {
         'title' => t('Results'),
         'callback' => 'webform_results',
         'callback arguments' => array($node),
-        'access' => user_access('access webform results'),
+        'access' => webform_results_access($node, 'access webform results'),
         'weight' => 2,
         'type' => MENU_LOCAL_TASK,
       );
@@ -145,7 +145,7 @@ function webform_menu($may_cache) {
         'title' => t('Submissions'),
         'callback' => 'webform_results',
         'callback arguments' => array($node),
-        'access' => user_access('access webform results'),
+        'access' => webform_results_access($node, 'access webform results'),
         'weight' => 4,
         'type' => MENU_DEFAULT_LOCAL_TASK,
       );
@@ -154,7 +154,7 @@ function webform_menu($may_cache) {
         'title' => t('Analysis'),
         'callback' => 'webform_results',
         'callback arguments' => array($node, 'analysis'),
-        'access' => user_access('access webform results'),
+        'access' => webform_results_access($node, 'access webform results'),
         'weight' => 5,
         'type' => MENU_LOCAL_TASK,
       );
@@ -163,7 +163,7 @@ function webform_menu($may_cache) {
         'title' => t('Table'),
         'callback' => 'webform_results',
         'callback arguments' => array($node, 'table'),
-        'access' => user_access('access webform results'),
+        'access' => webform_results_access($node, 'access webform results'),
         'weight' => 6,
         'type' => MENU_LOCAL_TASK,
       );
@@ -172,7 +172,7 @@ function webform_menu($may_cache) {
         'title' => t('Download'),
         'callback' => 'webform_results',
         'callback arguments' => array($node, 'download'),
-        'access' => user_access('access webform results'),
+        'access' => webform_results_access($node, 'access webform results'),
         'weight' => 7,
         'type' => MENU_LOCAL_TASK,
       );
@@ -181,7 +181,7 @@ function webform_menu($may_cache) {
         'title' => t('Clear'),
         'callback' => 'webform_results',
         'callback arguments' => array($node, 'clear'),
-        'access' => user_access('clear webform results'),
+        'access' => webform_results_access($node, 'clear webform results'),
         'weight' => 8,
         'type' => MENU_LOCAL_TASK,
       );
@@ -238,6 +238,13 @@ function webform_menu($may_cache) {
   }
 
   return $items;
+}
+
+/**
+ * Menu access callback. Ensure a user both access and node 'view' permission.
+ */
+function webform_results_access($node, $perm) {
+  return node_access('view', $node) && user_access($perm);
 }
 
 /**
@@ -1961,7 +1968,7 @@ function _webform_filter_descriptions($string, $node = NULL, $submission = NULL,
  * Menu callback for admin/content/webform. Displays all webforms on the site.
  */
 function webform_admin_content() {
-  $result = db_query("SELECT * FROM {node} WHERE type = 'webform'");
+  $result = db_query(db_rewrite_sql("SELECT n.* FROM {node} n WHERE n.type = 'webform'"));
   $nodes = array();
   while ($node = db_fetch_object($result)) {
     $nodes[] = $node;
