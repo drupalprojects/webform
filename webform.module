@@ -1602,7 +1602,8 @@ function webform_client_form_submit($form_id, &$form_values) {
 
     // Verify that this submission is not attempting to send any spam hacks.
     if (_webform_submission_spam_check($emails['default'], $subjects['default'], $froms['default'], $headers['default'])) {
-      watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $_SERVER['REMOTE_ADDR'])) ."<br />\n". nl2br(htmlentities($messages['default'])));
+      $ip_address = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+      watchdog('webform', t('Possible spam attempt from @remote_addr', array('@remote_add' => $ip_address)) ."<br />\n". nl2br(htmlentities($messages['default'])));
       drupal_set_message(t('Illegal information. Data not submitted.'), 'error');
       return FALSE;
     }
@@ -1763,7 +1764,7 @@ function theme_webform_mail_message($form_values, $node, $sid, $cid) {
 
   $message = '';
   $message .=  t('Submitted on') .' '. format_date(time(), 'small') ."\n";
-  $ip_address = $_SERVER['REMOTE_ADDR'];
+  $ip_address = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
 
   if ($user->uid) {
     $message .= t('Submitted by user') .": $user->name [$ip_address]\n";

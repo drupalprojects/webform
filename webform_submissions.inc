@@ -53,7 +53,8 @@ function webform_submission_insert($node, $submitted) {
 
   $sid = db_next_id('{webform_submissions}_sid');
 
-  db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $_SERVER['REMOTE_ADDR']);
+  $ip_address = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+  db_query("INSERT INTO {webform_submissions} (nid, sid, uid, submitted, remote_addr) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $sid, $user->uid, time(), $ip_address);
 
   foreach ($submitted as $cid => $value) {
     // Don't save pagebreaks as submitted data.
@@ -281,7 +282,8 @@ function _webform_submission_limit_check($node) {
            'AND submitted > %d AND nid = %d';
 
   // Fetch all the entries from the database within the submit interval with this username and IP.
-  $result = db_query($query, $user->uid, $_SERVER['REMOTE_ADDR'], $user->uid, ($node->webform['submit_interval'] != -1) ? (time() - $node->webform['submit_interval']) : $node->webform['submit_interval'], $node->nid);
+  $ip_address = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+  $result = db_query($query, $user->uid, $ip_address, $user->uid, ($node->webform['submit_interval'] != -1) ? (time() - $node->webform['submit_interval']) : $node->webform['submit_interval'], $node->nid);
   $num_submissions_database = db_num_rows($result);
 
   // Double check the submission history from the users machine using cookies.
