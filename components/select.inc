@@ -192,6 +192,7 @@ function webform_expand_checkboxes($element) {
  */
 function _webform_submission_display_select($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_select($component);
+  $form_item['#default_value'] = NULL;
   if ($component['extra']['multiple'] == 'Y') {
     // Set the value as an array.
     foreach ((array)$data['value'] as $key => $value) {
