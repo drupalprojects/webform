@@ -284,6 +284,7 @@ function _webform_render_file($component) {
     ),
     '#webform_component' => $component,
   );
+  $form_item['#weight'] = $component['weight'];
   $form_item['new'] = array(
     '#type' => 'hidden',
     '#weight' => $component['weight'],
@@ -292,7 +293,7 @@ function _webform_render_file($component) {
   );
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
-    $form_item['#size'] = $component['extra']['width'];
+    $form_item[$component['form_key']]['#size'] = $component['extra']['width'];
   }
 
   return $form_item;
