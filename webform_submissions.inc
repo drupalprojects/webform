@@ -158,7 +158,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL, $pager_count
            'LEFT JOIN {users} u ON u.uid = s.uid '.
            'WHERE sd.nid = %d';
 
-  if ($pager_count) {
+  if ($pager_count && !empty($sids)) {
     $query .= ' AND s.sid IN (%s)';
   }
 
