@@ -37,7 +37,6 @@ function webform_schema() {
         'description' => t('The title of the submit button on the form.'),
         'type' => 'varchar',
         'length' => 255,
-        'default' => NULL,
       ),
       'submit_limit' => array(
         'description' => t('The number of submissions a single user is allowed to submit within an interval. -1 is unlimited.'),
@@ -56,25 +55,21 @@ function webform_schema() {
         'description' => t('The primary e-mail address for receiving submission results.'),
         'type' => 'varchar',
         'length' => 255,
-        'default' => NULL,
       ),
       'email_from_name' => array(
         'description' => t('The name of the sender in sent submission e-mails.'),
         'type' => 'varchar',
         'length' => 255,
-        'default' => NULL,
       ),
       'email_from_address' => array(
         'description' => t('The address of the sender in sent submission e-mails.'),
         'type' => 'varchar',
         'length' => 255,
-        'default' => NULL,
       ),
       'email_subject' => array(
         'description' => t('The subject of sent submission e-mails'),
         'type' => 'varchar',
         'length' => 255,
-        'default' =>  NULL,
       ),
       'additional_validate' => array(
         'description' => t('PHP code for additional functionality when validating a form.'),
@@ -120,19 +115,16 @@ function webform_schema() {
         'description' => t('When the form is displayed and processed, this key can be used to reference the results.'),
         'type' => 'varchar',
         'length' => 128,
-        'default' => NULL,
       ),
       'name' => array(
         'description' => t('The label for this component.'),
         'type' => 'varchar',
         'length' => 255,
-        'default' => NULL,
       ),
       'type' => array(
         'description' => t('The field type of this component (textfield, select, hidden, etc.).'),
         'type' => 'varchar',
         'length' => 16,
-        'default' => NULL,
       ),
       'value' => array(
         'description' => t('The default value of the component when displayed to the end-user.'),
@@ -955,6 +947,71 @@ function webform_update_6203() {
 function webform_update_6204() {
   $ret = array();
   $ret[] = update_sql("UPDATE {files} SET status = 1 WHERE filepath LIKE '". file_directory_path() ."/webform/%'");
+  return $ret;
+}
+
+/**
+ * Schema fixes to make Drupal 5 upgrades identical to clean Drupal 6 installs.
+ */
+function webform_update_6205() {
+  $ret = array();
+
+  // Remove disp-width and default from webform.nid.
+  db_drop_primary_key($ret, 'webform');
+  db_change_field($ret, 'webform', 'nid', 'nid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE), array('primary key' => array('nid')));
+
+  // Set not null property on webform.confirmation.
+  db_change_field($ret, 'webform', 'confirmation', 'confirmation', array('type' => 'text', 'not null' => TRUE));
+
+  // Set size to tiny, remove disp-width on webform.submit_limit.
+  db_change_field($ret, 'webform', 'submit_limit', 'submit_limit', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => -1));
+
+  // Set default value to -1, remove disp-width on webform.submit_interval.
+  db_change_field($ret, 'webform', 'submit_interval', 'submit_interval', array('type' => 'int', 'not null' => TRUE, 'default' => -1));
+
+  // Set not null property on webform.additional_validate.
+  db_change_field($ret, 'webform', 'additional_validate', 'additional_validate', array('type' => 'text', 'not null' => TRUE));
+
+  // Set not null property on webform.additional_submit.
+  db_change_field($ret, 'webform', 'additional_submit', 'additional_submit', array('type' => 'text', 'not null' => TRUE));
+
+  // Set not null property, default on webform_component.name.
+  db_change_field($ret, 'webform_component', 'name', 'name', array('type' => 'varchar', 'length' => 255));
+
+  // Set not null property on webform_component.value.
+  db_change_field($ret, 'webform_component', 'value', 'value', array('type' => 'text', 'not null' => TRUE));
+ 
+  // Set not null property on webform_component.extra.
+  db_change_field($ret, 'webform_component', 'extra', 'extra', array('type' => 'text', 'not null' => TRUE));
+
+  // Set column size, disp-width on webform_component.mandatory.
+  db_change_field($ret, 'webform_component', 'mandatory', 'mandatory', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+
+  // Set column size, disp-width, not null property on webform_component.weight.
+  db_change_field($ret, 'webform_component', 'weight', 'weight', array('type' => 'int', 'size' => 'small', 'not null' => TRUE, 'default' => 0));
+
+  // Set unsigned, not null property on webform_submissions.sid.
+  db_drop_unique_key($ret, 'webform_submissions', 'sid_nid');
+  db_change_field($ret, 'webform_submissions', 'sid', 'sid', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE));
+  db_drop_primary_key($ret, 'webform_submissions');
+  db_change_field($ret, 'webform_submissions', 'sid', 'sid', array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE), array('primary key' => array('sid'), 'unique keys' => array('sid_nid' => array('sid', 'nid'))));
+
+  // Temporarily drop all keys from the webform_submitted_data table for changes.
+  db_drop_primary_key($ret, 'webform_submitted_data');
+  db_drop_index($ret, 'webform_submitted_data', 'nid');
+  db_drop_index($ret, 'webform_submitted_data', 'sid_nid');
+
+  // Set unsigned, size on webform_submitted_data.no.
+  db_change_field($ret, 'webform_submitted_data', 'no', 'no', array('type' => 'int', 'unsigned' => TRUE, 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+
+  // Set size, not null property on webform_submitted_data.data.
+  db_change_field($ret, 'webform_submitted_data', 'data', 'data', array('type' => 'text', 'size' => 'medium', 'not null' => TRUE));
+
+  // Set correct keys.
+  db_add_primary_key($ret, 'webform_submitted_data', array('nid', 'sid', 'cid', 'no'));
+  db_add_index($ret, 'webform_submitted_data', 'nid', array('nid'));
+  db_add_index($ret, 'webform_submitted_data', 'sid_nid', array('sid', 'nid'));
+
   return $ret;
 }
 
