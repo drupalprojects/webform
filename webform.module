@@ -1921,14 +1921,12 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
   }
 
   // User replacements.
-  if ($user->uid) {
-    $find[] = '%username';
-    $find[] = '%useremail';
-    $replace[] = isset($user->name) ? $user->name : '';
-    $replace[] = isset($user->mail) ? $user->mail : '';
-    if (module_exists('profile')) {
-      profile_load_profile($user);
-    }
+  $find[] = '%username';
+  $find[] = '%useremail';
+  $replace[] = isset($user->name) ? $user->name : '';
+  $replace[] = isset($user->mail) ? $user->mail : '';
+  if ($user->uid && module_exists('profile')) {
+    profile_load_profile($user);
   }
 
   // Provide a list of candidates for token replacement.
