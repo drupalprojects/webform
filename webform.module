@@ -1220,7 +1220,7 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
 function webform_mail($key, &$message, $params) {
   $message['headers'] = array_merge($message['headers'], $params['headers']);
   $message['subject'] = $params['subject'];
-  $message['body'] = preg_split('/\r?\n/', $params['message']);
+  $message['body'][] = $params['message'];
 }
 
 /**
@@ -1978,7 +1978,7 @@ function template_preprocess_webform_mail_message(&$vars) {
  * @param $indent
  *   The current amount of indentation being applied to printed components.
  */
-function theme_webform_mail_fields($cid, $value, $node, $indent = '') {
+function theme_webform_mail_fields($cid, $value, $node, $indent = "") {
   $component = $node->webform['components'][$cid];
 
   // Check if this component needs to be included in the email at all.
