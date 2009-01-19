@@ -272,7 +272,6 @@ function _webform_render_file($component) {
     '#type'          => $component['type'],
     '#title'         => $component['name'],
     //'#required'      => $component['mandatory'], // Drupal core bug with required file uploads.
-    '#weight'        => $component['weight'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#tree'          => FALSE, // file_check_upload assumes a flat $_FILES structure.
@@ -283,6 +282,7 @@ function _webform_render_file($component) {
       '_webform_required_file' => array($component['form_key'], $component['name'], $component['mandatory']), // Custom required routine.
     ),
   );
+  $form_item['#weight'] = $component['weight'];
   $form_item['new'] = array(
     '#type' => 'hidden',
     '#weight' => $component['weight'],
@@ -291,7 +291,7 @@ function _webform_render_file($component) {
   );
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
-    $form_item['#size'] = $component['extra']['width'];
+    $form_item[$component['form_key']]['#size'] = $component['extra']['width'];
   }
 
   return $form_item;
