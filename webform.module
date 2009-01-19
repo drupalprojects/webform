@@ -553,6 +553,7 @@ function webform_form(&$node, &$param) {
   $form['webform']['mail_settings']['email'] = array(
     '#type' => 'textfield',
     '#title' => t('E-mail to address'),
+    '#maxlength' => 255,
     '#default_value' => $node->webform['email'],
     '#description' => t('Form submissions will be e-mailed to this address. Leave blank for none. Multiple e-mail addresses may be separated by commas.'),
   );
