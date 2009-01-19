@@ -31,7 +31,9 @@
 <?php print t('Submitted by anonymous user: [@ip_address]', array('@ip_address' => $ip_address)) ?>
 <?php endif; ?>
 
-<?php print t('Submitted values are') ?>
+
+<?php print t('Submitted values are') ?>:
+
 <?php
   // Print out all the Webform fields. This is purposely a theme function call
   // so that you may remove items from the submitted tree if you so choose.
