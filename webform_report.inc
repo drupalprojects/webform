@@ -429,10 +429,11 @@ function webform_results_download($node, $format = 'delimiter', $options = array
     $row[] = $submission->uid;
     $row[] = $submission->name;
     foreach ($node->webform['components'] as $cid => $component) {
-      $csv_data_function   = '_webform_csv_data_'. $component['type'];
+      $csv_data_function = '_webform_csv_data_'. $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
-        $data = $csv_data_function($submission->data[$cid], $component);
+        $raw_data = isset($submission->data[$cid]) ? $submission->data[$cid] : NULL;
+        $data = $csv_data_function($raw_data, $component);
         if (is_array($data)) {
           $row = array_merge($row, array_values($data));
         }
