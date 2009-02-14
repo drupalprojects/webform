@@ -1185,7 +1185,7 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
     }
     elseif (isset($allowed_roles[2])) {
       // The "authenticated user" role is allowed to submit and the user is currently logged-out.
-      $message = t('You must <a href="!login">login</a> or <a href="!register">register</a> to view this form.', array('!login' => url('user/login'), '!register' => url('user/register')));
+      $message = t('You must <a href="!login">login</a> or <a href="!register">register</a> to view this form.', array('!login' => url(('user/login'), array('query' => drupal_get_destination())), '!register' => url(('user/register'), array('query' => drupal_get_destination()))));
     }
     else {
       // The user must be some other role to submit.
