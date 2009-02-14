@@ -1494,6 +1494,11 @@ function webform_client_form($form_state, &$node, $submission, $enabled = FALSE,
           '#value'     => $page_count,
         );
 
+        $form['details']['page_count'] = array(
+          '#type'      => 'hidden',
+          '#value'     => $page_count,
+        );
+
         // Add the submit button(s).
         if ($page_num > 1) {
           $form['previous'] = array(
