@@ -250,7 +250,7 @@ function _webform_submit_select(&$data, $component) {
  */
 function theme_webform_mail_select($data, $component) {
   // Convert submitted 'safe' values to un-edited, original form.
-  $options = _webform_select_options($component['extra']['items']);
+  $options = _webform_select_options($component['extra']['items'], TRUE);
 
   // Generate the output.
   $output = '';
@@ -294,7 +294,7 @@ function _webform_help_select($section) {
  *   submissions.
  */
 function _webform_analysis_rows_select($component) {
-  $options = _webform_select_options($component['extra']['items']);
+  $options = _webform_select_options($component['extra']['items'], TRUE);
 
   $query = 'SELECT data, count(data) as datacount '.
     ' FROM {webform_submitted_data} '.
@@ -363,7 +363,7 @@ function _webform_csv_headers_select($component) {
   if ($component['extra']['multiple']) {
     $headers[0][] = '';
     $headers[1][] = $component['name'];
-    $items = _webform_select_options($component['extra']['items']);
+    $items = _webform_select_options($component['extra']['items'], TRUE);
     $count = 0;
     foreach ($items as $key => $item) {
       // Empty column per sub-field in main header.
@@ -395,11 +395,12 @@ function _webform_csv_headers_select($component) {
  */
 function _webform_csv_data_select($data, $component) {
   $value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $options = _webform_select_options($component['extra']['items']);
+  $options = _webform_select_options($component['extra']['items'], TRUE);
   $return = array();
 
   if ($component['extra']['multiple']) {
     foreach ($options as $key => $item) {
+      
       if (in_array($key, (array)$data['value']) === TRUE) {
         $return[] = 'X';
       }
