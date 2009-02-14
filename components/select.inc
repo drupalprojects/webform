@@ -48,6 +48,7 @@ function _webform_edit_select($currfield) {
     '#rows' => 5,
     '#weight' => -2,
     '#required' => TRUE,
+    '#validate' => array('_webform_edit_validate_select' => array()),
   );
   $edit_fields['value'] = array(
     '#type' => 'textfield',
@@ -83,9 +84,48 @@ function _webform_edit_select($currfield) {
   return $edit_fields;
 }
 
-function _webform_edit_validate_select($form_values) {
-  // Currently no validation for selects.
-  // TODO: Validate e-mail addresses when used as keys?
+/**
+ * Element validation callback. Ensure keys are not duplicated.
+ */
+function _webform_edit_validate_select($element) {
+  // TODO: Validate e-mail addresses when used as keys?\
+
+  // Check for duplicate key values to prevent unexpected data loss.
+  if (!empty($element['#value'])) {
+    $lines = explode("\n", $element['#value']);
+    $existing_keys = array();
+    $duplicate_keys = array();
+    $group = '';
+    foreach ($lines as $line) {
+      $matches = array();
+      $line = trim($line);
+      if (preg_match('/^\<([^>]*)\>$/', $line, $matches)) {
+        $group = $matches[1];
+        $key = NULL; // No need to store group names.
+      }
+      elseif (preg_match('/^([^|]+)\|(.*)$/', $line, $matches)) {
+        $key = $matches[1];
+      }
+      else {
+        $key = $line;
+      }
+
+      if (isset($key)) {
+        if (isset($existing_keys[$group][$key])) {
+          $duplicate_keys[$key] = $key;
+        }
+        else {
+          $existing_keys[$group][$key] = $key;
+        }
+      }
+    }
+
+    if (!empty($duplicate_keys)) {
+      form_error($element, t('Options within the select list must be unique. The following keys have been used multiple times:') . theme('item_list', $duplicate_keys));
+    }
+
+  }
+
   return TRUE;
 }
 
