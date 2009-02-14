@@ -1022,6 +1022,14 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
       // No roles are allowed to submit the form.
       $message = t('Submissions for this form are closed.');
     }
+    elseif (isset($allowed_roles[2])) {
+      // The "authenticated user" role is allowed to submit and the user is currently logged-out.
+      $message = t('You must <a href="!login">login</a> or <a href="!register">register</a> to view this form.', array('!login' => url('user/login'), '!register' => url('user/register')));
+    }
+    else {
+      // The user must be some other role to submit.
+      $message = t('You do not have permission to view this form.');
+    }
   }
 
   // If the user has exceeded the limit of submissions, explain the limit.
