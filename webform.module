@@ -671,7 +671,7 @@ function webform_form(&$node, &$param) {
   $form['webform']['settings']['confirmation'] = array(
     '#type' => 'textarea',
     '#title' => t('Confirmation message or redirect URL'),
-    '#description' => t('Message to be shown upon successful submission or a path to a redirect page. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>'),
+    '#description' => t('Message to be shown upon successful submission or a path to a redirect page. Preface message with <em>message:</em> for a simple message that does not require a page refresh. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>'),
     '#default_value' => $node->webform['confirmation'],
     '#cols' => 40,
     '#rows' => 10,
@@ -1889,6 +1889,11 @@ function webform_client_form_submit($form, &$form_state) {
   elseif (preg_match('/^internal:/', $node->webform['confirmation'])) {
     $path = preg_replace('/^internal:/', '', $node->webform['confirmation']);
     $redirect = array(trim($path), 'sid='. $sid);
+  }
+  elseif (preg_match('/^message:/', $node->webform['confirmation'])) {
+    $message = preg_replace('/^message:/', '', $node->webform['confirmation']);
+    drupal_set_message($message);
+    $redirect = NULL;
   }
   else {
     $redirect = array('node/'. $node->nid .'/done', 'sid='. $sid);
