@@ -689,6 +689,7 @@ function webform_form(&$node, &$param) {
     '#weight' => -3,
     '#parents' => array('webform'),
     '#description' => t('These permissions affect which roles can submit this webform. It does not prevent access to the webform page. If needing to prevent access to the webform page entirely, use a content access module such as <a href="http://drupal.org/project/taxonomy_access">Taxonomy Access</a> or <a href="http://drupal.org/project/node_privacy_byrole">Node Privacy by Role</a>.'),
+    '#access' => variable_get('webform_submission_access_control', 1),
   );
   $user_roles = user_roles();
   $form['webform']['role_control']['roles'] = array(
@@ -1082,12 +1083,18 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   }
 
   // Check if the user's role can submit this webform.
-  $allowed_roles = array();
-  foreach ($node->webform['roles'] as $rid) {
-    $allowed_roles[$rid] = isset($user->roles[$rid]) ? TRUE : FALSE;
+  if (variable_get('webform_submission_access_control', 1)) {
+    $allowed_roles = array();
+    foreach ($node->webform['roles'] as $rid) {
+      $allowed_roles[$rid] = isset($user->roles[$rid]) ? TRUE : FALSE;
+    }
+    if (array_search(TRUE, $allowed_roles) === FALSE && $user->uid != 1) {
+      $enabled = FALSE;
+    }
   }
-  if (array_search(TRUE, $allowed_roles) === FALSE && $user->uid != 1) {
-    $enabled = FALSE;
+  else {
+    // If not using Webform submission access control, allow for all roles.
+    $allowed_roles = array_keys(user_roles());
   }
 
   // Check if the user can add another submission.
@@ -1175,14 +1182,6 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
     if (empty($allowed_roles)) {
       // No roles are allowed to submit the form.
       $message = t('Submissions for this form are closed.');
-    }
-    elseif (isset($allowed_roles[2])) {
-      // The "authenticated user" role is allowed to submit and the user is currently logged-out.
-      $message = t('You must <a href="!login">login</a> or <a href="!register">register</a> to view this form.', array('!login' => url('user/login'), '!register' => url('user/register')));
-    }
-    else {
-      // The user must be some other role to submit.
-      $message = t('You do not have permission to view this form.');
     }
   }
 
@@ -1314,6 +1313,17 @@ function webform_admin_settings() {
       '.'  => t('Period (.)'),
       ' '  => t('Space ( )'),
     ),
+  );
+
+  $form['advanced']['webform_submission_access_control']  = array(
+    '#type' => 'radios',
+    '#title' => t('Submission access control'),
+    '#options' => array(
+      '1' => t('Select the user roles that may submit each individual webform'),
+      '0' => t('Disable Webform submission access control'),
+    ),
+    '#default_value' => variable_get('webform_submission_access_control', 1),
+    '#description' => t('By default, the configuration form for each webform allows the administrator to choose which roles may submit the form. You may want to allow users to always submit the form if you are using a separate node access module to control access to webform nodes themselves.'),
   );
 
   $form['advanced']['webform_debug']  = array(
