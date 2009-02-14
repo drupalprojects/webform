@@ -152,8 +152,8 @@ class webform_exporter_delimited extends webform_exporter {
 class webform_exporter_excel extends webform_exporter_delimited {
   var $delimiter;
 
-  function webform_exporter_delimited($options) {
-    $this->delimiter = '\t';
+  function webform_exporter_excel($options) {
+    $options['delimiter'] = '\t';
     parent::webform_exporter_delimited($options);
   }
 
