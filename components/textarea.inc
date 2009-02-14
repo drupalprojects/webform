@@ -102,7 +102,7 @@ function _webform_render_textarea($component) {
     '#rows'          => !empty($component['extra']['rows']) ? $component['extra']['rows'] : 5,
     '#cols'          => !empty($component['extra']['cols']) ? $component['extra']['cols'] : 60,
     '#attributes'    => $component['extra']['attributes'],
-    '#resizable'     => $component['extra']['resizable'],
+    '#resizable'     => (bool) $component['extra']['resizable'], // MUST be FALSE to disable.
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
