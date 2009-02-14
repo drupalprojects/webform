@@ -177,7 +177,7 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL, $pager_count
     $query .= ' ORDER BY sid ASC, cid ASC, no ASC';
   }
 
-  $res = db_query($query, $nid, $sids, $uid);
+  $res = $pager_count ? db_query($query, $nid, $sids, $uid) : db_query($query, $nid, $uid);
   $submissions = array();
   $previous = array();
 
