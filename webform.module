@@ -1645,8 +1645,8 @@ function webform_client_form_submit($form, &$form_state) {
   // Check for a multi-page form that is not yet complete.
   $submit_op = empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text'];
   if ($form_state['values']['op'] != $submit_op) {
-    // Perform post processing by components.
-    _webform_client_form_submit_process($node, $form_state['values']['submitted']);
+    // Checkboxes need post-processing to maintain their values.
+    _webform_client_form_submit_process($node, $form_state['values']['submitted'], array('select', 'grid'));
 
     // Store values from the current page in the form state storage.
     if (is_array($form_state['values']['submitted'])) {
@@ -1875,19 +1875,28 @@ function webform_client_form_submit($form, &$form_state) {
 
 /**
  * Post processes the submission tree with any updates from components.
+ *
+ * @param $node
+ *   The full webform node.
+ * @param $form_values
+ *   The form values for the form.
+ * @param $types
+ *   Optional. Specific types to perform processing.
+ * @param $parent
+ *   Internal use. The current parent CID whose children are being processed.
  */
-function _webform_client_form_submit_process($node, &$form_values, $parent = 0) {
+function _webform_client_form_submit_process($node, &$form_values, $types = NULL, $parent = 0) {
   if (is_array($form_values)) {
     foreach ($form_values as $form_key => $value) {
       $cid = webform_get_cid($node, $form_key, $parent);
       if (is_array($value) && isset($node->webform['components'][$cid]['type']) && $node->webform['components'][$cid]['type'] == 'fieldset') {
-        _webform_client_form_submit_process($node, $form_values[$form_key], $cid);
+        _webform_client_form_submit_process($node, $form_values[$form_key], $types, $cid);
       }
 
       if (isset($node->webform['components'][$cid])) {
         $component = $node->webform['components'][$cid];
         $submit_function = '_webform_submit_'. $component['type'];
-        if (function_exists($submit_function)) {
+        if (function_exists($submit_function) && (!isset($types) || in_array($component['type'], $types))) {
           // Call the component process submission function.
           $submit_function($form_values[$component['form_key']], $component);
         }
