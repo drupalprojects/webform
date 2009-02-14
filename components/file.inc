@@ -385,7 +385,7 @@ function _webform_submit_file(&$data, $component) {
  *   Textual output to be included in the email.
  */
 function theme_webform_mail_file($data, $component) {
-  $file = unserialize($data);
+  $file = is_string($data) ? unserialize($data) : $data;
   $output = $component['name'] .': '. (!empty($file['filepath']) ? webform_file_url($file['filepath']) : '') ."\n";
   return $output;
 }
