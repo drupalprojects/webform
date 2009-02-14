@@ -21,6 +21,7 @@ function _webform_defaults_textarea() {
     'extra' => array(
       'cols' => '',
       'rows' => '',
+      'resizable' => 1,
       'disabled' => 0,
       'description' => '',
       'attributes' => array(),
@@ -64,6 +65,13 @@ function _webform_edit_textarea($currfield) {
     '#size' => 5,
     '#maxlength' => 10,
   );
+  $edit_fields['extra']['resizable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Resizable'),
+    '#description' => t('Make this field resizable by the user.'),
+    '#weight' => 2,
+    '#default_value' => $currfield['extra']['resizable'],
+  );  
   $edit_fields['extra']['disabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Disabled'),
@@ -94,6 +102,7 @@ function _webform_render_textarea($component) {
     '#rows'          => !empty($component['extra']['rows']) ? $component['extra']['rows'] : 5,
     '#cols'          => !empty($component['extra']['cols']) ? $component['extra']['cols'] : 60,
     '#attributes'    => $component['extra']['attributes'],
+    '#resizable'     => $component['extra']['resizable'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
