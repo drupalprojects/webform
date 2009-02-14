@@ -71,7 +71,7 @@ function _webform_edit_textarea($currfield) {
     '#description' => t('Make this field resizable by the user.'),
     '#weight' => 2,
     '#default_value' => $currfield['extra']['resizable'],
-  );  
+  );
   $edit_fields['extra']['disabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Disabled'),
