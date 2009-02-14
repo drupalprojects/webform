@@ -202,7 +202,8 @@ function theme_webform_edit_file($form) {
       // Render the checkboxes in two rows.
       $checkcount = 0;
       $jsboxes = '';
-      foreach ($checkboxes as $key => $checkbox) {
+      foreach (element_children($checkboxes) as $key) {
+        $checkbox = $checkboxes[$key];
         if ($checkbox['#type'] == 'checkbox') {
           $checkcount++;
           $jsboxes .= "'". $checkbox['#return_value'] ."',";
@@ -311,6 +312,7 @@ function _webform_validate_file($form_element, $form_key, $fieldname, $filters) 
 
   // Build a human readable list of extensions:
   $extensions = $filters['types'];
+  $extension_list = '';
   if (count($extensions) > 1) {
     for ($n = 0; $n < count($extensions) - 1; $n++) {
       $extension_list .= $extensions[$n] .', ';
@@ -326,7 +328,7 @@ function _webform_validate_file($form_element, $form_key, $fieldname, $filters) 
   }
 
   $dot = strrpos($_FILES['files']['name'][$form_key], '.');
-  $extension = drupal_strtolower(drupal_substr($_FILES['files']['name'][$form_key], $dot+1));
+  $extension = drupal_strtolower(substr($_FILES['files']['name'][$form_key], $dot+1));
   if (!in_array($extension, $extensions)) {
     form_set_error($form_key, t("Files with the '%ext' extension are not allowed, please upload a file with a %exts extension.", array('%ext' => $extension, '%exts' => $extension_list)));
   }
