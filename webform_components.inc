@@ -428,7 +428,7 @@ function webform_component_edit_form_submit($form_id, $form_values) {
   // Remove empty extra values.
   if (is_array($form_values['extra'])) {
     foreach ($form_values['extra'] as $key => $value) {
-      if (empty($value)) {
+      if ($value === '') {
         unset($form_values['extra'][$key]);
       }
     }
@@ -437,7 +437,7 @@ function webform_component_edit_form_submit($form_id, $form_values) {
   // Remove empty attribute values.
   if (is_array($form_values['extra']['attributes'])) {
     foreach ($form_values['extra']['attributes'] as $key => $value) {
-      if (empty($value)) {
+      if ($value === '') {
         unset($form_values['extra']['attributes'][$key]);
       }
     }
