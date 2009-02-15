@@ -63,14 +63,14 @@ function _webform_edit_select($currfield) {
     '#type' => 'checkbox',
     '#title' => t('Multiple'),
     '#return_value' => 'Y',
-    '#default_value' => ($currfield['extra']['multiple'] == 'Y' ? TRUE : FALSE),
+    '#default_value' => $currfield['extra']['multiple'],
     '#description' => t('Check this option if the user should be allowed to choose multiple values.'),
   );
   $edit_fields['extra']['aslist'] = array(
     '#type' => 'checkbox',
     '#title' => t('Listbox'),
     '#return_value' => 'Y',
-    '#default_value' => ($currfield['extra']['aslist'] == 'Y' ? TRUE : FALSE),
+    '#default_value' => $currfield['extra']['aslist'],
     '#description' => t('Check this option if you want the select component to be of listbox type instead of radiobuttons or checkboxes.'),
   );
   $edit_fields['extra']['email'] = array(
@@ -149,9 +149,9 @@ function _webform_render_select($component) {
 
   // Convert the user-entered options list into an array.
   $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
-  $options = _webform_select_options($component['extra']['items'], $component['extra']['aslist'] != 'Y');
+  $options = _webform_select_options($component['extra']['items'], $component['extra']['aslist'] !== 'Y');
 
-  if ($component['extra']['aslist'] == 'Y' && $component['extra']['multiple'] != 'Y') {
+  if ($component['extra']['aslist'] === 'Y' && $component['extra']['multiple'] !== 'Y') {
     $options = array('' => t('select...')) + $options;
   }
 
@@ -161,7 +161,7 @@ function _webform_render_select($component) {
   // Set the default value.
   if ($default_value != '') {
     // Convert default value to a list if necessary.
-    if ($component['extra']['multiple'] == 'Y') {
+    if ($component['extra']['multiple'] === 'Y') {
       $varray = array_filter(explode(',', $default_value));
       foreach ($varray as $key => $v) {
         $form_item['#default_value'][] = $v;
@@ -172,15 +172,15 @@ function _webform_render_select($component) {
     }
   }
 
-  if ($component['extra']['aslist'] == 'Y') {
+  if ($component['extra']['aslist'] === 'Y') {
     // Set display as a select list:
     $form_item['#type'] = 'select';
-    if ($component['extra']['multiple'] == 'Y') {
+    if ($component['extra']['multiple'] === 'Y') {
       $form_item['#multiple'] = TRUE;
     }
   }
   else {
-    if ($component['extra']['multiple'] == 'Y') {
+    if ($component['extra']['multiple'] === 'Y') {
       // Set display as a checkbox set.
       $form_item['#type'] = 'checkboxes';
       // Drupal 6 hack to properly render on multipage forms.
@@ -232,7 +232,7 @@ function webform_expand_checkboxes($element) {
  */
 function _webform_submission_display_select($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_select($component);
-  if ($component['extra']['multiple'] == 'Y') {
+  if ($component['extra']['multiple'] === 'Y') {
     // Set the value as an array.
     $form_item['#default_value'] = array();
     foreach ((array)$data['value'] as $key => $value) {
@@ -271,7 +271,7 @@ function _webform_submit_select(&$data, $component) {
         $data[$key] = $options[$key];
       }
       // Checkboxes submit a value of 0 when not checked.
-      elseif ($value == 0 && $component['extra']['aslist'] != 'Y' && $component['extra']['multiple'] == 'Y') {
+      elseif ($value == 0 && $component['extra']['aslist'] !== 'Y' && $component['extra']['multiple'] === 'Y') {
         unset($data[$key]);
       }
       else {
