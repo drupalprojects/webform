@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-22 02:02+0100\n"
-"PO-Revision-Date: 2009-02-23 01:00+0100\n"
+"PO-Revision-Date: 2009-02-23 01:17+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -235,9 +235,8 @@ msgid "Component %name deleted."
 msgstr "Komponente %name wurde gelöscht."
 
 #: webform_export.inc:21
-#, fuzzy
 msgid "Delimited text"
-msgstr "Abgegrenzter Text"
+msgstr "Abgetrennter Text"
 
 #: webform_export.inc:22
 msgid "A plain text file delimited by commas, tabs, or other characters."
@@ -612,11 +611,11 @@ msgstr "jede Woche"
 
 #: webform.module:842
 msgid "Submit button text"
-msgstr ""
+msgstr "Text des „Speichern“-Schaltknopfes"
 
 #: webform.module:844
 msgid "By default the submit button on this form will have the label <em>Submit</em>. Enter a new title here to override the default."
-msgstr ""
+msgstr "Standardmäßig wird der „Speichern“-Schaltknopf in diesem Formular die Beschriftung <em>Speichern</em> haben. Der Standard kann hier durch Eingabe eines neuen Titels übersteuert werden."
 
 #: webform.module:849
 msgid "Additional Validation"
@@ -740,20 +739,20 @@ msgstr ""
 
 #: webform.module:1285
 msgid "The default subject line of any e-mailed results."
-msgstr "Die standardmäßige Betreffzeile von alles E-Mail-Ergebnissen."
+msgstr "Die standardmäßige Betreffzeile von allen E-Mail-Ergebnissen."
 
 #: webform.module:1290
 msgid "Advanced options"
 msgstr "Erweiterte Einstellungen"
 
+# not literally, english sounds illogical
 #: webform.module:1298
-#, fuzzy
 msgid "Allow cookies for tracking submissions"
-msgstr "Cookies für die Nachverfolgung von Absendungen erlauben."
+msgstr "Cookies für die Nachverfolgung von Eingaben verwenden"
 
 #: webform.module:1300
 msgid "<a href=\"http://www.wikipedia.org/wiki/HTTP_cookie\">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. This feature is not needed for limiting submissions per user, though it can increase accuracy in some situations. Besides cookies, Webform also uses IP addresses and site usernames to prevent repeated submissions."
-msgstr "<a href=\"http://de.wikipedia.org/wiki/HTTP-Cookie\">Cookies</a> können verwendet werden, um einen Benutzer daran zu hindern, das gleiche Formular wiederholt abzuschicken. Diese Funktion wird nicht benötigt um „Eingaben pro Benutzer“ zu begrenzen, obwohl es in manchen Fällen die Genauigkeit erhöhen kann. Neben Cookies wird auch die IP-Adresse und der Benutzername verwendet, um wiederholte Eingaben zu unterbinden."
+msgstr "<a href=\"http://de.wikipedia.org/wiki/HTTP-Cookie\">Cookies</a> können verwendet werden, um einen Benutzer daran zu hindern, das gleiche Formular wiederholt abzuschicken. Diese Funktion wird nicht benötigt, um „Eingaben pro Benutzer“ zu begrenzen, obwohl es in manchen Fällen die Genauigkeit erhöhen kann. Neben Cookies wird auch die IP-Adresse und der Benutzername verwendet, um wiederholte Eingaben zu unterbinden."
 
 #: webform.module:1305
 msgid "Default export format"
@@ -765,11 +764,11 @@ msgstr "Standardmäßiges Export-Trennzeichen"
 
 #: webform.module:1328
 msgid "Submission access control"
-msgstr ""
+msgstr "Eingabezugriffskontrolle"
 
 #: webform.module:1330
 msgid "Select the user roles that may submit each individual webform"
-msgstr "Die Benutzerrollen auswählen, die jedes individuelle Webformular speichern können"
+msgstr "Benutzerrollen auswählen, die jedes individuelle Webformular speichern können"
 
 #: webform.module:1331
 msgid "Disable Webform submission access control"
@@ -797,7 +796,7 @@ msgstr "Vollständige Fehlersuche"
 
 #: webform.module:1342
 msgid "Set to \"Log submissions\" to log all submissions in the watchdog. Set to \"Full debug\" to print debug info on submission."
-msgstr "„Eingaben protokollieren“ auswählen, um alle Eingaben im Wächter zu protokollieren. Die „vollständige Fehlersuche“, um Debug-Informationen bei der Formulareingabe auszugeben."
+msgstr "„Eingaben protokollieren“ auswählen, um alle Eingaben im Wächter zu protokollieren. Die „vollständige Fehlersuche“ auswählen, um Debug-Informationen bei der Formulareingabe auszugeben."
 
 #: webform.module:1362
 msgid "Enabled"
@@ -1209,7 +1208,7 @@ msgstr ""
 
 #: components/date.inc:312
 msgid "Presents month, day, and year fields."
-msgstr "Zeigt Monat-, Tag- und Jahresfelder an."
+msgstr "Zeigt Monats-, Tages- und Jahresfelder an."
 
 #: components/date.inc:383
 #: components/email.inc:211
@@ -1505,7 +1504,7 @@ msgstr ""
 # not literally
 #: components/pagebreak.inc:59
 msgid "Break up a multi-page form."
-msgstr "Aufspalten in ein mehrseitigen Formular."
+msgstr "Aufspalten in ein mehrseitiges Formular."
 
 #: components/select.inc:46
 msgid "A list of selectable options. One option per line. Key-value pairs may be entered seperated by pipes, such as \"safe_key|Some readable option\". Option groups for lists and menus may be specified with &lt;Group Name&gt;. &lt;&gt; can be used to insert items at the root of the menu after specifying a group."
