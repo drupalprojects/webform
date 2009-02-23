@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-22 02:02+0100\n"
-"PO-Revision-Date: 2009-02-22 02:31+0100\n"
+"PO-Revision-Date: 2009-02-23 01:00+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -118,7 +118,7 @@ msgstr "Unbekannter Komponententyp %component"
 
 #: webform_components.inc:236
 msgid "When adding a new component, the name field is required."
-msgstr ""
+msgstr "Beim Hinzufügen einer neuen Komponente ist das Namensfeld erforderlich."
 
 #: webform_components.inc:258
 msgid "Your webform has been published."
@@ -235,8 +235,9 @@ msgid "Component %name deleted."
 msgstr "Komponente %name wurde gelöscht."
 
 #: webform_export.inc:21
+#, fuzzy
 msgid "Delimited text"
-msgstr ""
+msgstr "Abgegrenzter Text"
 
 #: webform_export.inc:22
 msgid "A plain text file delimited by commas, tabs, or other characters."
@@ -260,7 +261,7 @@ msgstr "Alle"
 
 #: webform_report.inc:71
 msgid "Show !count results per page."
-msgstr ""
+msgstr "!count Ergebnisse pro Seite anzeigen."
 
 #: webform_report.inc:74
 msgid "Showing all results."
@@ -319,7 +320,7 @@ msgstr "Einträge des Webformulars %title wurden gelöscht."
 
 #: webform_report.inc:314
 msgid "Export format"
-msgstr ""
+msgstr "Export Format"
 
 #: webform_report.inc:321
 msgid "Delimited text format"
@@ -499,7 +500,7 @@ msgstr "Titel"
 
 #: webform.module:664
 msgid "Text to be shown as teaser and before the form."
-msgstr "Text der als Teaser und zu Beginn des Formulars angezeigt werden soll."
+msgstr "Text der als Anrisstext und vor dem Formular angezeigt werden soll."
 
 #: webform.module:673
 msgid "Confirmation message or redirect URL"
@@ -508,11 +509,11 @@ msgstr "Bestätigungsnachricht oder Weiterleitungs-URL"
 #: webform.module:674
 #, fuzzy
 msgid "Message to be shown upon successful submission or a path to a redirect page. Preface message with <em>message:</em> for a simple message that does not require a page refresh. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>"
-msgstr "War die Eingabe im Formulr erfolgreich, wird auf eine andere Seite weitergeleitet. Die Adressen für die Weiterleitungsseiten müssen mit <em>http://</em> für externe Aurufe beginnen oder <em>internal:</em> für einen internen Aufruf (z.B. <em>http://www.example.com</em> bzw. <em>internal:node/10</em>)."
+msgstr "War die Eingabe im Formular erfolgreich, wird auf eine andere Seite weitergeleitet. Die Adressen für die Weiterleitungsseiten müssen mit <em>http://</em> für externe Aurufe beginnen oder <em>internal:</em> für einen internen Aufruf (z.B. <em>http://www.example.com</em> bzw. <em>internal:node/10</em>)."
 
 #: webform.module:686
 msgid "Webform access control"
-msgstr ""
+msgstr "Webformular-Zugriffskontrolle"
 
 #: webform.module:691
 msgid "These permissions affect which roles can submit this webform. It does not prevent access to the webform page. If needing to prevent access to the webform page entirely, use a content access module such as <a href=\"http://drupal.org/project/taxonomy_access\">Taxonomy Access</a> or <a href=\"http://drupal.org/project/node_privacy_byrole\">Node Privacy by Role</a>."
@@ -520,7 +521,7 @@ msgstr ""
 
 #: webform.module:699
 msgid "Roles that can submit this webform"
-msgstr ""
+msgstr "Rollen, die dieses Webformular speichern können"
 
 #: webform.module:700
 msgid "Uncheck all roles to prevent new submissions. The %authenticated role applies to any user signed into the site, regardless of other assigned roles."
@@ -535,13 +536,12 @@ msgid "E-mail to address"
 msgstr "Ziel-E-Mail-Adresse"
 
 #: webform.module:720
-#, fuzzy
 msgid "Form submissions will be e-mailed to this address. Leave blank for none. Multiple e-mail addresses may be separated by commas."
-msgstr "Formulareingaben werden an diese Email-Adresse gesendet. Leer lassen, wenn kein Versand gewünscht wird."
+msgstr "Formulareingaben werden an diese E-Mail-Adresse geschickt. Leer lassen, wenn kein Versand gewünscht wird. Mehrere E-Mail-Adressen können durch Kommata getrennt werden."
 
 #: webform.module:728
 msgid "Conditional e-mail recipients"
-msgstr ""
+msgstr "Bedingte E-Mail-Empfänger"
 
 #: webform.module:729
 msgid "The settings below allow you to send e-mails to multiple recipients based off the value of a component."
@@ -580,15 +580,15 @@ msgstr "Erweiterte Webformular-Einstellungen"
 
 #: webform.module:807
 msgid "Show complete form in teaser"
-msgstr ""
+msgstr "Das vollständige Formular im Anrisstext anzeigen"
 
 #: webform.module:809
 msgid "Display the entire form in the teaser display of this node."
-msgstr ""
+msgstr "Das vollständige Formular in der Anrisstextanzeige eines Beitrages anzeigen."
 
 #: webform.module:813
 msgid "Limit the number of submissions a user may send within a specified time period"
-msgstr "Anzahl von Eingaben eines Nutzers für einen bestimmten Zeitraum begrenzen."
+msgstr "Anzahl von Eingaben eines Benutzers auf einen bestimmten Zeitraum begrenzen"
 
 #: webform.module:818
 msgid "Unlimited"
@@ -642,7 +642,7 @@ msgstr "Zu"
 
 #: webform.module:903
 msgid "No components yet in this webform."
-msgstr ""
+msgstr "Noch keine Komponenten in diesem Webformular vorhanden."
 
 #: webform.module:918
 msgid "Custom"
@@ -658,7 +658,7 @@ msgstr "Standardwert"
 
 #: webform.module:950
 msgid "Limit to !count submission(s) !timespan"
-msgstr ""
+msgstr "!timespan auf !count Eingaben begrenzen"
 
 #: webform.module:963;970
 msgid "The entered email address %address is not a valid address."
@@ -708,7 +708,7 @@ msgstr "Verfügbare Komponenten"
 #: webform.module:1245
 #, fuzzy
 msgid "These are the available field types for your installation of Webform. You may disable any of these components by unchecking its corresponding box. Only checked components will be available in existing or new webforms."
-msgstr "In der Liste werden die Komponenten aufgelistet, welche für das Formular verfügbar sind. Jede dieser Komponenten kann durch Entfernen des Hakens deaktiviert werden. Nur aktivierte Komponenten können in bestehenden oder neuen Formularen verwendet werden."
+msgstr "In der Liste werden die Komponenten angezeigt, welche für das Formular verfügbar sind. Jede dieser Komponenten kann über das Kontrollkästches deaktiviert werden. Nur aktivierte Komponenten können in bestehenden oder neuen Formularen verwendet werden."
 
 #: webform.module:1262
 msgid "Default e-mail values"
@@ -719,18 +719,16 @@ msgid "From address"
 msgstr "Absenderadresse"
 
 #: webform.module:1271
-#, fuzzy
 msgid "The default sender address for emailed webform results; often the e-mail address of the maintainer of your forms."
-msgstr "Standardmäßige Absenderadresse. Diese könnte z.B. die E-Mail-Adresse von der Person sein, die das Formular pflegt. Die Adresse wird auch für \"Antwort an\" (Reply to), \"Rückleitung\" (Return path) und \"Fehler an\" (Errors to) verwendet."
+msgstr "Die standardmäßige Absenderadresse für verschickte Webformular-Ergebnisse. Dies ist oft die E-Mail-Adresse des Formularverwalters."
 
 #: webform.module:1276
 msgid "From name"
 msgstr "Absendername"
 
 #: webform.module:1278
-#, fuzzy
 msgid "The default sender name which is used along with the default from address."
-msgstr "Standard-Absendername, welcher zusammen mit der Email-Adresse angezeigt wird. "
+msgstr "Der standardmäßige Absendername, welcher zusammen mit der standardmäßigen Absender-E-Mail-Adresse verwendet wird."
 
 #: webform.module:1283
 msgid "Default subject"
@@ -742,7 +740,7 @@ msgstr ""
 
 #: webform.module:1285
 msgid "The default subject line of any e-mailed results."
-msgstr ""
+msgstr "Die standardmäßige Betreffzeile von alles E-Mail-Ergebnissen."
 
 #: webform.module:1290
 msgid "Advanced options"
@@ -754,17 +752,16 @@ msgid "Allow cookies for tracking submissions"
 msgstr "Cookies für die Nachverfolgung von Absendungen erlauben."
 
 #: webform.module:1300
-#, fuzzy
 msgid "<a href=\"http://www.wikipedia.org/wiki/HTTP_cookie\">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. This feature is not needed for limiting submissions per user, though it can increase accuracy in some situations. Besides cookies, Webform also uses IP addresses and site usernames to prevent repeated submissions."
-msgstr "<a href=\"http://de.wikipedia.org/wiki/HTTP-Cookie\">Cookies</a> können verwendet werden, um einen Benutzer daran zu hindern, das gleiche Formular wiederholt abzuschicken. Diese Funktion wird nicht benötigt um „Absendungen pro Benutzer“ zu begrenzen, obwohl es in manchen Fällen die Genauigkeit erhöhen kann. Neben Cookies wird auch die IP-Adresse und der Benutzername verwendet, um wiederholte Absendungen zu unterbinden."
+msgstr "<a href=\"http://de.wikipedia.org/wiki/HTTP-Cookie\">Cookies</a> können verwendet werden, um einen Benutzer daran zu hindern, das gleiche Formular wiederholt abzuschicken. Diese Funktion wird nicht benötigt um „Eingaben pro Benutzer“ zu begrenzen, obwohl es in manchen Fällen die Genauigkeit erhöhen kann. Neben Cookies wird auch die IP-Adresse und der Benutzername verwendet, um wiederholte Eingaben zu unterbinden."
 
 #: webform.module:1305
 msgid "Default export format"
-msgstr ""
+msgstr "Standardmäßiges Export-Format"
 
 #: webform.module:1312
 msgid "Default export delimiter"
-msgstr ""
+msgstr "Standardmäßiges Export-Trennzeichen"
 
 #: webform.module:1328
 msgid "Submission access control"
@@ -772,24 +769,23 @@ msgstr ""
 
 #: webform.module:1330
 msgid "Select the user roles that may submit each individual webform"
-msgstr ""
+msgstr "Die Benutzerrollen auswählen, die jedes individuelle Webformular speichern können"
 
 #: webform.module:1331
 msgid "Disable Webform submission access control"
-msgstr ""
+msgstr "Zugriffsschutz für das Speichern von Webformularen deaktivieren"
 
 #: webform.module:1334
 msgid "By default, the configuration form for each webform allows the administrator to choose which roles may submit the form. You may want to allow users to always submit the form if you are using a separate node access module to control access to webform nodes themselves."
 msgstr ""
 
 #: webform.module:1339
-#, fuzzy
 msgid "Webforms debug"
-msgstr "Webformular Debugging"
+msgstr "Webformular-Fehlersuche"
 
 #: webform.module:1341
 msgid "Off"
-msgstr "Aus"
+msgstr "Deaktiviert"
 
 #: webform.module:1341
 msgid "Log submissions"
@@ -797,12 +793,11 @@ msgstr "Eingaben protokollieren"
 
 #: webform.module:1341
 msgid "Full debug"
-msgstr ""
+msgstr "Vollständige Fehlersuche"
 
 #: webform.module:1342
-#, fuzzy
 msgid "Set to \"Log submissions\" to log all submissions in the watchdog. Set to \"Full debug\" to print debug info on submission."
-msgstr "„Eingaben aufzeichnen“ auswählen, um alle Eingaben im Wächter zu protokollieren. „Vollständige Fehlerausgabe“, um Debug-Informationen bei der Formulareingabe auszugeben. Sollte keine der beiden Optionen gewünscht sein, kann diese Option „Deaktiviert“ bleiben."
+msgstr "„Eingaben protokollieren“ auswählen, um alle Eingaben im Wächter zu protokollieren. Die „vollständige Fehlersuche“, um Debug-Informationen bei der Formulareingabe auszugeben."
 
 #: webform.module:1362
 msgid "Enabled"
@@ -1214,7 +1209,7 @@ msgstr ""
 
 #: components/date.inc:312
 msgid "Presents month, day, and year fields."
-msgstr "Stellt Monat, Tag und Jahr dar."
+msgstr "Zeigt Monat-, Tag- und Jahresfelder an."
 
 #: components/date.inc:383
 #: components/email.inc:211
@@ -1290,9 +1285,8 @@ msgid "%value is not a valid email address."
 msgstr "%value ist keine gültige E-Mail-Adresse."
 
 #: components/email.inc:178
-#, fuzzy
 msgid "A textfield that automatically fills in a logged-in user's e-mail."
-msgstr "Ein Textfeld, welches automatisch mit der E-Mail-Adresse gefüllt wird, wenn der Benutzer angemeldet ist."
+msgstr "Ein Textfeld, welches automatisch die E-Mail-Adresse eines angemeldeten Benutzers einfügt."
 
 #: components/email.inc:213
 #: components/hidden.inc:148
@@ -1318,9 +1312,8 @@ msgid "Collapsible fieldsets are \"open\" by default. Select this option to defa
 msgstr "Feldgruppen sind standardmäßig „geöffnet“. Diese Option zeigt die Feldgruppe im Ausgangszustand „geschlossen“ an."
 
 #: components/fieldset.inc:100
-#, fuzzy
 msgid "Fieldsets allow you to organize multiple fields into groups."
-msgstr "Feldgruppen können in komplexen Formularen die Einzelfelder in Gruppen gliedern."
+msgstr "Feldgruppen ermöglichen die Gliederung mehrere Felder in Gruppen."
 
 #: components/file.inc:49
 #, fuzzy
@@ -1423,7 +1416,7 @@ msgstr ""
 
 #: components/file.inc:463
 msgid "Allow users to submit files of the configured types."
-msgstr ""
+msgstr "Ermöglicht Benutzen die Speicherung von konfigurierten Dateitypen."
 
 #: components/file.inc:512
 msgid "User uploaded file"
@@ -1503,15 +1496,16 @@ msgstr "Vorschau"
 
 #: components/markup.inc:103
 msgid "Displays text as HTML in the form; does not render a field."
-msgstr ""
+msgstr "Zeigt Text im Formular als HTML an, rendert aber kein Feld."
 
 #: components/pagebreak.inc:32
 msgid "Use caution when combining the pagebreak and file components. File components will not be submitted unless they are after the last pagebreak in the form."
 msgstr ""
 
+# not literally
 #: components/pagebreak.inc:59
 msgid "Break up a multi-page form."
-msgstr "Aufspalten eines Mehrseitenformulars."
+msgstr "Aufspalten in ein mehrseitigen Formular."
 
 #: components/select.inc:46
 msgid "A list of selectable options. One option per line. Key-value pairs may be entered seperated by pipes, such as \"safe_key|Some readable option\". Option groups for lists and menus may be specified with &lt;Group Name&gt;. &lt;&gt; can be used to insert items at the root of the menu after specifying a group."
@@ -1547,7 +1541,7 @@ msgstr ""
 
 #: components/select.inc:155
 msgid "select..."
-msgstr "Auswählen..."
+msgstr "Auswahl..."
 
 #: components/select.inc:325
 msgid "Allows creation of checkboxes, radio buttons, or select menus."
@@ -1601,7 +1595,7 @@ msgstr "Beispiele: lb, kg, %."
 
 #: components/textfield.inc:195
 msgid "Basic textfield type."
-msgstr "Basis Texteingabetyp."
+msgstr "Basis Textfeldtyp."
 
 #: components/time.inc:43
 msgid "Accepts a time in any <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">GNU Date Input Format</a>. Strings such as now, +2 hours, and 10:30pm are all valid."
@@ -1644,5 +1638,5 @@ msgstr "Der eingegebene %name ist keine gültige Zeit."
 
 #: components/time.inc:250
 msgid "Presents the user with hour and minute fields. Optional am/pm fields."
-msgstr "Stellt dem Benutzer ein Feld für Stunde und Minute zur Verfügung. Optional auch am/pm Eingaben."
+msgstr "Zeigt dem Benutzer Felder mit Stunde und Minute an. Optional auch Vormittags/Nachmittags-Felder."
 
