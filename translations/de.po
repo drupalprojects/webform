@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-22 02:02+0100\n"
-"PO-Revision-Date: 2009-02-23 01:17+0100\n"
+"PO-Revision-Date: 2009-02-24 00:58+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -36,12 +36,11 @@ msgstr "Verfasst vom Gast: [@ip_address]"
 #: webform-mail.tpl.php:35
 #, fuzzy
 msgid "Submitted values are"
-msgstr "Abgeschickte Daten:"
+msgstr "Diese Werte wurden eingegeben"
 
 #: webform-mail.tpl.php:44
-#, fuzzy
 msgid "The results of this submission may be viewed at:"
-msgstr "Die abgeschickten Daten können unter folgender Adresse angeschaut werden:"
+msgstr "Die Ergebnisse dieser Eingabe können eingesehen werden unter:"
 
 #: webform_components.inc:44;135;364
 msgid "Weight"
@@ -112,9 +111,8 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: webform_components.inc:220
-#, fuzzy
 msgid "No Components, add a component below."
-msgstr "Unbekannter Komponententyp %component"
+msgstr "Keine Komponenten vorhanden, eine Komponente kann unten hinzugefügt werden."
 
 #: webform_components.inc:236
 msgid "When adding a new component, the name field is required."
@@ -138,7 +136,7 @@ msgstr "Beschriftung"
 
 #: webform_components.inc:298
 msgid "This is used as a descriptive label when displaying this form element."
-msgstr "Dieses Element wird als beschreibende Anzeige verwendet, wenn man dieses Formular anzeigt wird."
+msgstr "Dies wird als beschreibende Beschriftung verwendet, wenn dieses Formularelement angezeigt wird."
 
 #: webform_components.inc:306
 #: webform.module:663;1362
@@ -147,7 +145,7 @@ msgstr "Beschreibung"
 
 #: webform_components.inc:307
 msgid "A short description of the field used as help for the user when he/she uses the form."
-msgstr "Eine kurze Feldbeschreibung als Benutzerhilfe beim Ausfüllen des Formulars."
+msgstr "Eine kurze Feldbeschreibung, die dem Benutzer beim Ausfüllen des Formulars helfen soll."
 
 #: webform_components.inc:313
 msgid "Advanced settings"
@@ -168,11 +166,11 @@ msgstr "Diese Option aktivieren, wenn der Benutzer einen Wert eingeben muss."
 
 #: webform_components.inc:337
 msgid "Include in e-mails"
-msgstr ""
+msgstr "In E-Mails einfügen"
 
 #: webform_components.inc:339
 msgid "If checked, submitted values from this component will be included in e-mails."
-msgstr ""
+msgstr "Sobald aktiviert, werden gespeicherte Werte aus dieser Komponente in die E-Mail eingefügt."
 
 #: webform_components.inc:345
 msgid "Root"
@@ -248,7 +246,7 @@ msgstr "Microsoft Excel"
 
 #: webform_export.inc:27
 msgid "A file readable by Microsoft Excel."
-msgstr ""
+msgstr "Eine von Microsoft Excel lesbare Datei."
 
 #: webform_report.inc:28
 msgid "Submissions for %user"
@@ -461,12 +459,12 @@ msgstr ""
 
 #: webform.module:45
 msgid "Click on any existing component's name to edit its settings."
-msgstr ""
+msgstr "Auf einen vorhandenen Komponentennamen klicken, um dessen Einstellungen zu bearbeiten."
 
 #: webform.module:74
 #, fuzzy
 msgid "View and edit all the available webforms on your site."
-msgstr "Zeige und Bearbeite alle verfügbaren Webformulare dieser Webseite."
+msgstr "Zeige und Bearbeite alle verfügbaren Webformulare dieser Website."
 
 #: webform.module:85
 msgid "Global configuration of webform functionality."
@@ -665,7 +663,7 @@ msgstr "Die eingegebene E-Mail-Adresse %address ist keine gültige Adresse."
 
 #: webform.module:1044
 msgid "The new webform %title has been created. Add new fields to your webform with the form below."
-msgstr ""
+msgstr "Das neue Webformular %title wurde erstellt. Neue Felder können mit dem nachfolgenden Formular hinzugefügt werden."
 
 #: webform.module:1047
 msgid "This webform is currently unpublished. After finishing your changes to the webform, use the <em>Publish</em> button below."
@@ -684,13 +682,12 @@ msgid "You do not have permission to view this form."
 msgstr ""
 
 #: webform.module:1199
-#, fuzzy
 msgid "You have submitted this form the maximum number of times (@count)."
-msgstr "Die Höchstanzahl von Eingaben wurde gespeichert. Überprüfen Sie die Eingabe-Richtlinien."
+msgstr ""
 
 #: webform.module:1202;1213
 msgid "You have already submitted this form."
-msgstr ""
+msgstr "Dieses Formular wurde schon gespeichert."
 
 #: webform.module:1205
 msgid "You may not submit another entry at this time."
@@ -884,8 +881,9 @@ msgid "If you are using the profiles module, you can also access all profile dat
 msgstr "Bei Verwendung des Profilmoduls haben Sie Zugriff auf alle Profildaten mittels %profile[form_name]. Wenn Sie zum Beispiel ein Profilwert mit dem Namen profil_stadt haben, verwenden Sie die Variable %profile[profil_stadt]."
 
 #: webform.module:2275
+#, fuzzy
 msgid "Token values"
-msgstr ""
+msgstr "Token-Werte"
 
 #: webform.module:323
 msgid "create webforms"
@@ -908,19 +906,16 @@ msgid "clear webform results"
 msgstr "Webformular-Ergebnisse löschen"
 
 #: webform.module:323
-#, fuzzy
 msgid "access own webform submissions"
-msgstr "Zugriff auf Eigene-Webformular-Ergebnisse"
+msgstr "Zugriff auf eigene Webformular-Eingaben"
 
 #: webform.module:323
-#, fuzzy
 msgid "edit own webform submissions"
-msgstr "Eigene Webformulare bearbeiten"
+msgstr "Eigene Webformular-Eingaben bearbeiten"
 
 #: webform.module:323
-#, fuzzy
 msgid "edit webform submissions"
-msgstr "Webformulare bearbeiten"
+msgstr "Webformular-Eingaben bearbeiten"
 
 #: webform.module:323
 msgid "use PHP for additional processing"
@@ -940,7 +935,7 @@ msgstr "Konfiguration"
 
 #: webform.module:108
 msgid "Form components"
-msgstr "Von Komponenten"
+msgstr "Formularkomponenten"
 
 #: webform.module:143
 msgid "Results"
@@ -991,14 +986,12 @@ msgid "The name of the sender in sent submission e-mails."
 msgstr ""
 
 #: webform.install:65
-#, fuzzy
 msgid "The address of the sender in sent submission e-mails."
-msgstr "Die abgeschickten Daten können unter folgender Adresse angeschaut werden:"
+msgstr ""
 
 #: webform.install:70
-#, fuzzy
 msgid "The subject of sent submission e-mails"
-msgstr "Die abgeschickten Daten können unter folgender Adresse angeschaut werden:"
+msgstr ""
 
 #: webform.install:75
 msgid "PHP code for additional functionality when validating a form."
@@ -1073,9 +1066,8 @@ msgid "The unique identifier for this submission."
 msgstr ""
 
 #: webform.install:202
-#, fuzzy
 msgid "The id of the user that completed this submission."
-msgstr "Soll diese Eingabe wirklich gelöscht werden?"
+msgstr ""
 
 #: webform.install:209
 msgid "Timestamp of when the form was submitted."
@@ -1118,7 +1110,7 @@ msgstr "Standardwert"
 #: components/textfield.inc:48
 #: components/time.inc:43
 msgid "The default value of the field."
-msgstr "Der Standardwert von dieser Eingabe."
+msgstr "Der Standardwert des Feldes."
 
 #: components/date.inc:46
 msgid "Accepts any date in any <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid."
@@ -1140,7 +1132,7 @@ msgstr "Zeitzone der Website"
 
 #: components/date.inc:56
 msgid "User timezone"
-msgstr "Die Zeitzone des Benutzers."
+msgstr "Zeitzone des Benutzers"
 
 #: components/date.inc:56
 msgid "GMT"
@@ -1315,9 +1307,8 @@ msgid "Fieldsets allow you to organize multiple fields into groups."
 msgstr "Feldgruppen ermöglichen die Gliederung mehrere Felder in Gruppen."
 
 #: components/file.inc:49
-#, fuzzy
 msgid "Upload Filtering"
-msgstr "Hochladeverzeichnis"
+msgstr ""
 
 #: components/file.inc:50
 #, fuzzy
@@ -1405,9 +1396,8 @@ msgid "The uploaded file %filename was unable to be saved. The destination direc
 msgstr "Die hochgeladene Datei %filename konnte nicht gespeichert werden. Das Zielverzeichnis ist nicht beschreibbar."
 
 #: components/file.inc:377
-#, fuzzy
 msgid "The uploaded file was unable to be saved. The destination directory does not exist."
-msgstr "Die hochgeladene Datei %filename konnte nicht gespeichert werden. Das Zielverzeichnis ist nicht vorhanden."
+msgstr "Die hochgeladene Datei konnte nicht gespeichert werden. Das Zielverzeichnis ist nicht vorhanden."
 
 #: components/file.inc:428
 msgid "Uploading a new file will replace the current file."
@@ -1464,9 +1454,8 @@ msgid "Randomize the order of the questions on the side when they are displayed 
 msgstr ""
 
 #: components/grid.inc:227
-#, fuzzy
 msgid "Allows creation of grid questions, denoted by radio buttons."
-msgstr "Erlaubt die Erstellung von Kontrollkästchen, Optionsfeldern und auswählbaren Menüs."
+msgstr ""
 
 #: components/hidden.inc:99
 msgid "@name (hidden)"
@@ -1575,18 +1564,16 @@ msgid "Maxlength of the textfield."
 msgstr "Maximallänge des Textfeldes."
 
 #: components/textfield.inc:73
-#, fuzzy
 msgid "Label placed to the left of the textfield"
-msgstr "Maximallänge des Textfeldes."
+msgstr ""
 
 #: components/textfield.inc:75
 msgid "Examples: $, #, -."
 msgstr "Beispiele: $, #, -."
 
 #: components/textfield.inc:82
-#, fuzzy
 msgid "Label placed to the right of the textfield"
-msgstr "Höhe des Textfeldes."
+msgstr ""
 
 #: components/textfield.inc:84
 msgid "Examples: lb, kg, %."
@@ -1601,9 +1588,8 @@ msgid "Accepts a time in any <a href=\"http://www.gnu.org/software/tar/manual/ht
 msgstr "Es wird jedes Datum im <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">GNU Datums-Eingabeformat</a> akzeptiert. Folgende Zeichenketten sind z.B. gültig: '+2 hours' und 10:30pm'."
 
 #: components/time.inc:53
-#, fuzzy
 msgid "Adjust the time according to a specific timezone. Website timezone is defined in the <a href=\"!settings\">Site Settings</a> and is the default."
-msgstr "Stellen Sie das Datum auf eine bestimmte Zeitzone. Die Webseiten-Zeitzone wird eingestellt unter <a href=\"%settings\">Website-Einstellungen</a> und ist der Standardwert."
+msgstr "Stellen Sie das Datum auf eine bestimmte Zeitzone ein. Die Website-Zeitzone wird unter <a href=\"%settings\">Website-Einstellungen</a> eingestellt und entspricht dem Standardwert."
 
 #: components/time.inc:67
 msgid "Time Format"
