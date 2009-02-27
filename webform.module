@@ -71,7 +71,7 @@ function webform_menu() {
     'page callback' => 'webform_admin_content',
     'access callback' => 'user_access',
     'access arguments' => array('access webform results'),
-    'description' => t('View and edit all the available webforms on your site.'),
+    'description' => 'View and edit all the available webforms on your site.',
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -82,7 +82,7 @@ function webform_menu() {
     'page arguments' => array('webform_admin_settings'),
     'access callback' => 'user_access',
     'access arguments' => array('administer site configuration'),
-    'description' => t('Global configuration of webform functionality.'),
+    'description' => 'Global configuration of webform functionality.',
     'type' => MENU_NORMAL_ITEM,
   );
 
