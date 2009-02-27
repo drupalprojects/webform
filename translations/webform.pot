@@ -13,7 +13,6 @@
 #  webform_submissions.inc,v 1.6.2.23 2009/02/14 06:26:23 quicksketch
 #  webform_export.inc,v 1.1.4.5 2009/02/14 01:03:37 quicksketch
 #  webform.info: n/a
-#  webform.install,v 1.22.2.16 2009/01/19 03:00:11 quicksketch
 #  date.inc,v 1.15.2.17 2009/01/10 02:12:14 quicksketch
 #  email.inc,v 1.19.2.11 2009/01/11 03:01:48 quicksketch
 #  hidden.inc,v 1.12.2.10 2009/01/09 08:31:06 quicksketch
@@ -29,7 +28,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2009-02-22 02:02+0100\n"
+"POT-Creation-Date: 2009-02-27 23:13+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -424,14 +423,6 @@ msgstr ""
 
 #: webform.module:45
 msgid "Click on any existing component's name to edit its settings."
-msgstr ""
-
-#: webform.module:74
-msgid "View and edit all the available webforms on your site."
-msgstr ""
-
-#: webform.module:85
-msgid "Global configuration of webform functionality."
 msgstr ""
 
 #: webform.module:416;80 webform.info:0
@@ -878,6 +869,14 @@ msgstr ""
 msgid "Webforms"
 msgstr ""
 
+#: webform.module:74
+msgid "View and edit all the available webforms on your site."
+msgstr ""
+
+#: webform.module:85
+msgid "Global configuration of webform functionality."
+msgstr ""
+
 #: webform.module:91
 msgid "Webform confirmation"
 msgstr ""
@@ -900,146 +899,6 @@ msgstr ""
 
 #: webform.module:0
 msgid "webform"
-msgstr ""
-
-#: webform.install:16
-msgid "Table for storing additional properties for webform nodes."
-msgstr ""
-
-#: webform.install:19;92;195;230
-msgid "The node identifier of a webform"
-msgstr ""
-
-#: webform.install:25
-msgid "The confirmation message or URL displayed to the user after submitting a form."
-msgstr ""
-
-#: webform.install:30
-msgid "Boolean value for whether the entire form should be displayed on the teaser."
-msgstr ""
-
-#: webform.install:37
-msgid "The title of the submit button on the form."
-msgstr ""
-
-#: webform.install:42
-msgid "The number of submissions a single user is allowed to submit within an interval. -1 is unlimited."
-msgstr ""
-
-#: webform.install:49
-msgid "The amount of time in seconds that must pass before a user can submit another submission within the set limit."
-msgstr ""
-
-#: webform.install:55
-msgid "The primary e-mail address for receiving submission results."
-msgstr ""
-
-#: webform.install:60
-msgid "The name of the sender in sent submission e-mails."
-msgstr ""
-
-#: webform.install:65
-msgid "The address of the sender in sent submission e-mails."
-msgstr ""
-
-#: webform.install:70
-msgid "The subject of sent submission e-mails"
-msgstr ""
-
-#: webform.install:75
-msgid "PHP code for additional functionality when validating a form."
-msgstr ""
-
-#: webform.install:80
-msgid "PHP code for additional functionality when submitting a form."
-msgstr ""
-
-#: webform.install:89
-msgid "Stores information about components for webform nodes."
-msgstr ""
-
-#: webform.install:99;244
-msgid "The identifier for this component within this node, starts at 0 for each node."
-msgstr ""
-
-#: webform.install:107
-msgid "If this component has a parent fieldset, the cid of that component."
-msgstr ""
-
-#: webform.install:115
-msgid "When the form is displayed and processed, this key can be used to reference the results."
-msgstr ""
-
-#: webform.install:120
-msgid "The label for this component."
-msgstr ""
-
-#: webform.install:125
-msgid "The field type of this component (textfield, select, hidden, etc.)."
-msgstr ""
-
-#: webform.install:130
-msgid "The default value of the component when displayed to the end-user."
-msgstr ""
-
-#: webform.install:135
-msgid "Additional information unique to the display or processing of this component."
-msgstr ""
-
-#: webform.install:140
-msgid "Boolean flag for if this component is required."
-msgstr ""
-
-#: webform.install:147
-msgid "Boolean flag for if submitted values for this component will be included in sent e-mails."
-msgstr ""
-
-#: webform.install:154
-msgid "Determines the position of this component in the form."
-msgstr ""
-
-#: webform.install:165;862
-msgid "Holds access information regarding which roles are allowed to submit which webform nodes. Does not prevent access to the webform node entirely, use the {node_access} table for that purpose."
-msgstr ""
-
-#: webform.install:168;865
-msgid "The node identifier of a webform."
-msgstr ""
-
-#: webform.install:175;872
-msgid "The role identifier."
-msgstr ""
-
-#: webform.install:186
-msgid "Holds general information about submissions outside of field values."
-msgstr ""
-
-#: webform.install:189;237
-msgid "The unique identifier for this submission."
-msgstr ""
-
-#: webform.install:202
-msgid "The id of the user that completed this submission."
-msgstr ""
-
-#: webform.install:209
-msgid "Timestamp of when the form was submitted."
-msgstr ""
-
-#: webform.install:215
-msgid "The IP address of the user that submitted the form."
-msgstr ""
-
-#: webform.install:227
-msgid "Stores all submitted field data for webform submissions."
-msgstr ""
-
-#: webform.install:252
-msgid "Usually this value is 0, but if a field has multiple values (such as a time or date), it may require multiple rows in the database."
-msgstr ""
-
-#: webform.install:260
-msgid "The submitted value of this field, may be serialized for some components."
 msgstr ""
 
 #: webform.info:0
