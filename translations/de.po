@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-22 02:02+0100\n"
-"PO-Revision-Date: 2009-02-24 01:25+0100\n"
+"PO-Revision-Date: 2009-02-27 22:59+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -672,7 +672,7 @@ msgstr ""
 
 #: webform.module:1184
 msgid "Submissions for this form are closed."
-msgstr ""
+msgstr "Dieses Formular ist für Eingaben gesperrt."
 
 #: webform.module:1188
 msgid "You must <a href=\"!login\">login</a> or <a href=\"!register\">register</a> to view this form."
