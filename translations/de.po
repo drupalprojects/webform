@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-27 23:13+0100\n"
-"PO-Revision-Date: 2009-02-28 01:24+0100\n"
+"PO-Revision-Date: 2009-02-28 01:28+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -626,7 +626,7 @@ msgstr "Zu"
 
 #: webform.module:903
 msgid "No components yet in this webform."
-msgstr "Noch keine Komponenten in diesem Webformular vorhanden."
+msgstr "Dieses Webformular enthält noch keine Komponenten."
 
 #: webform.module:918
 msgid "Custom"
