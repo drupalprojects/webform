@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-27 23:13+0100\n"
-"PO-Revision-Date: 2009-02-28 01:28+0100\n"
+"PO-Revision-Date: 2009-02-28 01:34+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -496,7 +496,7 @@ msgstr "Bestätigungsnachricht oder Weiterleitungs-URL"
 
 #: webform.module:674
 msgid "Message to be shown upon successful submission or a path to a redirect page. Preface message with <em>message:</em> for a simple message that does not require a page refresh. Redirect pages must start with <em>http://</em> for external sites or <em>internal:</em> for an internal path. i.e. <em>http://www.example.com</em> or <em>internal:node/10</em>"
-msgstr "Die nach einer erfolgreichen Eingabe anzuzeigende Nachricht oder ein Pfad zu einer Weiterleitungsseite. Eine einfache Nachricht, die keine Seitenaktualisierung erfordert muss mit <em>message:</em> beginnen. Weiterleitungsseiten müssen mit <em>http://</em> für externe Websites beginnen oder <em>internal:</em> für einen internen Pfad (z.B. <em>http://www.example.com</em> bzw. <em>internal:node/10</em>)."
+msgstr "Die nach einer erfolgreichen Eingabe anzuzeigende Nachricht oder ein Pfad zu einer Weiterleitungsseite. Eine einfache Nachricht, die keine Seitenaktualisierung erfordert muss mit <em>message:</em> beginnen. Weiterleitungsseiten müssen mit <em>http://</em> für externe Websites oder <em>internal:</em> für einen internen Pfad beginnen (z.B. <em>http://www.example.com</em> bzw. <em>internal:node/10</em>)."
 
 #: webform.module:686
 msgid "Webform access control"
