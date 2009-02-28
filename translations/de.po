@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-27 23:13+0100\n"
-"PO-Revision-Date: 2009-02-28 01:06+0100\n"
+"PO-Revision-Date: 2009-02-28 01:24+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -408,7 +408,7 @@ msgstr "Formulareingabe löschen"
 
 #: webform_submissions.inc:103
 msgid "Are you sure you want to delete this submission?"
-msgstr "Soll die Eingabe wirklich gelöscht werden?"
+msgstr "Soll diese Eingabe wirklich gelöscht werden?"
 
 #: webform_submissions.inc:110
 msgid "Submission deleted."
