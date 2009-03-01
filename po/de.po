@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: German translation of Webforms\n"
 "POT-Creation-Date: 2009-02-28 12:37+0100\n"
-"PO-Revision-Date: 2009-02-28 12:42+0100\n"
+"PO-Revision-Date: 2009-03-01 17:51+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -176,11 +176,11 @@ msgstr "Der Feldschlüssel %field_key wird schon vom Feld %existing_field verwen
 
 #: webform_components.inc:447
 msgid "Component %name cloned."
-msgstr "Komponente %name wurde dupliziert."
+msgstr "Die Komponente %name wurde dupliziert."
 
 #: webform_components.inc:451
 msgid "Component %name updated."
-msgstr "Komponente %name wurde aktualisiert."
+msgstr "Die Komponente %name wurde aktualisiert."
 
 #: webform_components.inc:455
 msgid "New component %name added."
@@ -205,7 +205,7 @@ msgstr "Diese Aktion wird umgehend die Komponente %name aus dem Webformular %web
 
 #: webform_components.inc:488
 msgid "Component %name deleted."
-msgstr "Komponente %name wurde gelöscht."
+msgstr "Die Komponente %name wurde gelöscht."
 
 #: webform_export.inc:21
 msgid "Delimited text"
@@ -396,7 +396,7 @@ msgstr "Soll diese Eingabe wirklich gelöscht werden?"
 
 #: webform_submissions.inc:123
 msgid "Submission deleted."
-msgstr "Eingabe wurde gelöscht."
+msgstr "Die Eingabe wurde gelöscht."
 
 #: webform.module:22
 msgid "Webforms are forms and questionnaires. To add one, select <a href=\"!url\">Create content -&gt; Webform</a>."
