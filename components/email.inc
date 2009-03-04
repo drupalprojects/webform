@@ -186,20 +186,25 @@ function _webform_help_email($section) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema
+ * @param $sids
+ *   An optional array of submission IDs (sid). If supplied, the analysis will be limited
+ *   to these sids.
  * @return
  *   An array of data rows, each containing a statistic for this component's
  *   submissions.
  */
-function _webform_analysis_rows_email($component) {
+function _webform_analysis_rows_email($component, $sids = array()) {
+  $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
+  $sidfilter = count($sids) ? " AND sid in (".implode(",", $placeholders).")" : "";
   $query = 'SELECT data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
-    ' AND cid = %d';
+    ' AND cid = %d '. $sidfilter;
   $nonblanks = 0;
   $submissions = 0;
   $wordcount = 0;
 
-  $result = db_query($query, $component['nid'], $component['cid']);
+  $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   while ($data = db_fetch_array($result)) {
     if (drupal_strlen(trim($data['data'])) > 0) {
       $nonblanks++;

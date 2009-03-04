@@ -250,23 +250,28 @@ function _webform_theme_grid() {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $sids
+ *   An optional array of submission IDs (sid). If supplied, the analysis will be limited
+ *   to these sids.
  * @return
  *   An array of data rows, each containing a statistic for this component's
  *   submissions.
  */
-function _webform_analysis_rows_grid($component) {
+function _webform_analysis_rows_grid($component, $sids = array()) {
   // Generate the list of options and questions.
   $options = _webform_grid_options($component['extra']['options']);
   $questions = array_values(_webform_grid_options($component['extra']['questions']));
 
   // Generate a lookup table of results.
+  $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
+  $sidfilter = count($sids) ? " AND sid in (".implode(",", $placeholders).")" : "";
   $query = 'SELECT no, data, count(data) as datacount '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
     ' AND cid = %d '.
-    " AND data != '' ".
+    " AND data != '' ". $sidfilter .
     ' GROUP BY no, data';
-  $result = db_query($query, $component['nid'], $component['cid']);
+  $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   $counts = array();
   while ($data = db_fetch_object($result)) {
     $counts[$data->no][$data->data] = $data->datacount;
