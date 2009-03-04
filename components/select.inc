@@ -329,20 +329,25 @@ function _webform_help_select($section) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema
+ * @param $sids
+ *   An optional array of submission IDs (sid). If supplied, the analysis will be limited
+ *   to these sids.
  * @return
  *   An array of data rows, each containing a statistic for this component's
  *   submissions.
  */
-function _webform_analysis_rows_select($component) {
+function _webform_analysis_rows_select($component, $sids = array()) {
   $options = _webform_select_options($component['extra']['items'], TRUE);
+  $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
+  $sidfilter = count($sids) ? " AND sid in (".implode(",", $placeholders).")" : "";
 
   $query = 'SELECT data, count(data) as datacount '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
     ' AND cid = %d '.
-    " AND data != '0' AND data != '' ".
+    " AND data != '0' AND data != '' $sidfilter ".
     ' GROUP BY data ';
-  $result = db_query($query, $component['nid'], $component['cid']);
+  $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   $rows = array();
   while ($data = db_fetch_array($result)) {
     if (isset($options[$data['data']])) {
