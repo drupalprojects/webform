@@ -264,7 +264,7 @@ function webform_components_form_submit($form_id, $form_values) {
   }
 }
 
-function webform_component_edit_form(&$node, $component, $clone = FALSE) {
+function webform_component_edit_form($node, $component, $clone = FALSE) {
   drupal_set_title(t("Edit component: @name (@type)", array('@name' => $component['name'], '@type' => t($component['type']))));
 
   // Print the correct field type specification.

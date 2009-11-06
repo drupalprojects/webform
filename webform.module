@@ -1214,7 +1214,7 @@ function theme_webform_admin_settings($form) {
  *   Note: The position of this parameter depends on all other parameters being
  *   specified when using drupal_get_form().
  */
-function webform_client_form(&$node, $submission, $enabled, $preview, $form_values = NULL) {
+function webform_client_form($node, $submission, $enabled, $preview, $form_values = NULL) {
   include_once(drupal_get_path('module', 'webform') .'/webform_components.inc');
   webform_load_components();
 
