@@ -1997,13 +1997,17 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
     $replacements['unsafe']['%username'] = isset($user->name) ? $user->name : '';
     $replacements['unsafe']['%useremail'] = isset($user->mail) ? $user->mail : '';
     $replacements['unsafe']['%ip_address'] = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+
+    // Doesn't really belong here with user things, but works.
+    $special_tokens['unsafe']['%server'] = $_SERVER;
+  }
+
+  // User profile replacements.
+  if (!isset($replacements['unsafe']['%profile[uid]'])) {
     if ($user->uid && module_exists('profile')) {
       profile_load_profile($user);
     }
     $special_tokens['unsafe']['%profile'] = $user;
-
-    // Doesn't really belong here with user things, but works.
-    $special_tokens['unsafe']['%server'] = $_SERVER;
   }
 
   foreach ($special_tokens as $safe_state => $tokens) {
