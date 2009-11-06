@@ -42,4 +42,5 @@
 ?>
 
 <?php print t('The results of this submission may be viewed at:') ?>
+
 <?php print url('node/'. $node->nid .'/submission/'. $sid, array('absolute' => TRUE)) ?>
