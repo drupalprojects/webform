@@ -1410,7 +1410,7 @@ function webform_client_form_load($node, $submission, $enabled, $preview) {
  *   If displaying a result, specify if form elements are enabled for
  *   editing.
  */
-function webform_client_form($form_state, &$node, $submission, $enabled = FALSE, $preview = FALSE) {
+function webform_client_form(&$form_state, $node, $submission, $enabled = FALSE, $preview = FALSE) {
   module_load_include('inc', 'webform', 'webform_components');
   webform_load_components();
 
