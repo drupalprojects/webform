@@ -879,6 +879,23 @@ function webform_form(&$node, &$param) {
 }
 
 /**
+ * Implementation of hook_content_extra_fields().
+ */
+function webform_content_extra_fields($type_name) {
+  $extra = array();
+
+  if ($type_name == 'webform') {
+    $extra['webform'] = array(
+      'label' => t('Webform'),
+      'description' => t('Webform settings and display.'),
+      'weight' => 1,
+    );
+  }
+
+  return $extra;
+}
+
+/**
  * Theme the component options for sending e-mails.
  */
 function theme_webform_mail_components_form($form) {
