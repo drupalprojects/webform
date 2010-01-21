@@ -374,7 +374,7 @@ function _webform_csv_data_grid($data, $component) {
   return $return;
 }
 
-function theme_webform_grid(&$grid_element) {
+function theme_webform_grid($grid_element) {
   $rows = array();
   $header = array('');
   $first = TRUE;
