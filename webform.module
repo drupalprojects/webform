@@ -786,7 +786,7 @@ function webform_form(&$node, &$param) {
     $form['webform']['mail_settings']['email_'. $field .'_component'] = array(
       '#type' => 'select',
       '#default_value' =>  is_numeric($node->webform['email_'. $field]) ? $node->webform['email_'. $field] : NULL,
-      '#options' => empty($options) ? array('' => 'No available components') : $options,
+      '#options' => empty($options) ? array('' => t('No available components')) : $options,
       '#disabled' => empty($options) ? TRUE : FALSE,
       '#weight' => 6,
     );
