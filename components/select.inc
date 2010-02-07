@@ -151,7 +151,7 @@ function _webform_render_select($component) {
   $default_value = _webform_filter_values($component['value'], NULL, NULL, FALSE);
   $options = _webform_select_options($component['extra']['items'], $component['extra']['aslist'] !== 'Y');
 
-  if ($component['extra']['aslist'] === 'Y' && $component['extra']['multiple'] !== 'Y') {
+  if ($component['extra']['aslist'] === 'Y' && $component['extra']['multiple'] !== 'Y' && !($component['mandatory'] && !empty($component['value']))) {
     $options = array('' => t('select...')) + $options;
   }
 
