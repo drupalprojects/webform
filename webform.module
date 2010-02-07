@@ -1118,7 +1118,8 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
     module_load_include('inc', 'webform', 'webform_submissions');
 
-    if ($limit_exceeded = _webform_submission_limit_check($node)) {
+    // Disable the form if the limit is exceeded and page cache is not active.
+    if (($limit_exceeded = _webform_submission_limit_check($node)) && ($user->uid != 0 || variable_get('cache', CACHE_DISABLED) == CACHE_DISABLED)) {
       $enabled = FALSE;
     }
   }
@@ -1138,7 +1139,7 @@ function webform_view(&$node, $teaser = 0, $page = 0) {
   }
 
   // Print out messages for the webform.
-  if (!$preview && !$logging_in) {
+  if ($node->build_mode != NODE_BUILD_PREVIEW && !$logging_in && ($user->uid != 0 || !variable_get('cache', CACHE_DISABLED))) {
     theme('webform_view_messages', $node, $teaser, $page, $submission_count, $limit_exceeded, $allowed_roles);
   }
 
@@ -1662,6 +1663,18 @@ function _webform_client_form_add_component($cid, $component, $component_value, 
 
 function webform_client_form_validate($form, $form_state) {
   $node = node_load($form_state['values']['details']['nid']);
+  // Check that the user has not exceeded the submission limit.
+  // This usually will only apply to anonymous users when the page cache is
+  // enabled, because they may submit the form even if they do not have access.
+  if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
+    module_load_include('inc', 'webform', 'includes/webform.submissions');
+
+    if ($limit_exceeded = _webform_submission_limit_check($node)) {
+      $error = theme('webform_view_messages', $node, 0, 1, 0, $limit_exceeded, array_keys(user_roles()));
+      form_set_error('', $error);
+      return;
+    }
+  }
 
   // Flatten trees within the submission.
   $form_state['values']['submitted_tree'] = $form_state['values']['submitted'];
