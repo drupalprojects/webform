@@ -109,7 +109,7 @@ function _webform_render_textfield($component) {
   $form_item = array(
     '#type'          => $component['type'],
     '#title'         => $component['name'],
-    '#default_value' => _webform_filter_values($component['value']),
+    '#default_value' => _webform_filter_values($component['value'], NULL, NULL, FALSE),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
     '#field_prefix'  => empty($component['extra']['field_prefix']) ? NULL : check_plain($component['extra']['field_prefix']),
