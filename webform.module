@@ -492,7 +492,7 @@ function webform_insert($node) {
   }
 
   // Set the per-role submission access control.
-  foreach (array_filter($node->webform['roles']) as $rid) {
+  foreach (array_filter($node->webform['roles']) as $rid => $value) {
     db_query('INSERT INTO {webform_roles} (nid, rid) VALUES (%d, %d)', $node->nid, $rid);
   }
 }
