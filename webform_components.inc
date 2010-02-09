@@ -261,6 +261,11 @@ function webform_components_form_submit($form_id, $form_values) {
   }
   else {
     drupal_set_message(t('The component positions and mandatory values have been updated.'));
+
+    // Since Webform components have been updated but the node itself has not
+    // been saved, it is necessary to explicitly clear the cache to make sure
+    // the updated webform is visible to anonymous users.
+    cache_clear_all();
   }
 }
 
@@ -455,6 +460,11 @@ function webform_component_edit_form_submit($form_id, $form_values) {
     drupal_set_message(t('New component %name added.', array('%name' => $form_values['name'])));
     $cid = webform_component_insert($form_values);
   }
+
+  // Since Webform components have been updated but the node itself has not
+  // been saved, it is necessary to explicitly clear the cache to make sure
+  // the updated webform is visible to anonymous users.
+  cache_clear_all();
 
   return 'node/'. $form_values['nid'] .'/edit/components';
 }
