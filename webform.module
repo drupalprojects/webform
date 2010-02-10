@@ -2164,7 +2164,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $stri
   // Submission replacements.
   if (isset($submission) && !array_key_exists('%email_values', $replacements)) {
     foreach ($submission as $cid => $value) {
-      $replacements['unsafe']['%cid[' . $cid . ']'] = $value;
+      $replacements['unsafe']['%cid[' . $cid . ']'] = (string) $value;
     }
   }
 
