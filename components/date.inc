@@ -401,7 +401,9 @@ function _webform_analysis_rows_date($component, $sids = array()) {
  */
 function _webform_table_data_date($data) {
   if (drupal_strlen($data['value']['0']) > 0 && drupal_strlen($data['value']['1']) > 0 && drupal_strlen($data['value']['2']) > 0) {
-    return check_plain($data['value']['0'] .'/'. $data['value']['1'] .'/'. $data['value']['2']);
+    $timestamp = strtotime($data['value']['0'] .'/'. $data['value']['1'] .'/'. $data['value']['2']);
+    $format = webform_date_format('short');
+    return date($format, $timestamp);
   }
   else {
     return '';
