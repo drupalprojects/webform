@@ -297,7 +297,7 @@ function theme_webform_mail_date($data, $component) {
   if ($data[0] && $data[1]) {
     $timestamp = strtotime($data[0] .'/'. $data[1] .'/'. $data[2]);
     $format = webform_date_format('medium');
-    $output .= ' '. format_date($timestamp, 'custom', $format);
+    $output .= ' '. format_date($timestamp, 'custom', $format, 0);
   }
 
   return $output;
