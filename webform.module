@@ -994,7 +994,7 @@ function webform_validate(&$node) {
  */
 function webform_submit(&$node) {
   // Add the conditional e-mail recipients to components.
-  if ($node->nid) {
+  if (empty($node->is_new)) {
     $original_node = node_load($node->nid);
 
     foreach ($original_node->webform['components'] as $cid => $component) {
