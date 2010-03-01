@@ -102,7 +102,17 @@ function webform_submission_delete_form($form_state, $node, $submission) {
   $form['submission'] = array('#type' => 'value', '#value' => $submission);
   $question = t('Are you sure you want to delete this submission?');
 
-  return confirm_form($form, $question, isset($_GET['destination']) ? $_GET['destination'] : 'node/'. $node->nid .'/webform-results', NULL, t('Delete'), t('Cancel'));
+  if (isset($_GET['destination'])) {
+    $destination = $_GET['destination'];
+  }
+  elseif (user_access('access webform results')) {
+    $destination = 'node/'. $node->nid .'/webform-results';
+  }
+  else {
+    $destination = 'node/'. $node->nid .'/submissions';
+  }
+
+  return confirm_form($form, NULL, $destination, $question, t('Delete'), t('Cancel'));
 }
 
 function webform_submission_delete_form_submit($form, &$form_state) {
