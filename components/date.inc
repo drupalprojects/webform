@@ -174,9 +174,6 @@ function webform_expand_date($element) {
   // Let Drupal do it's normal expansion.
   $element = expand_date($element);
 
-  // Don't use Drupal's validation though.
-  $element['#validate'] = array('webform_validate_date' => array($component));
-
   // Set default values.
   foreach ($default_values as $type => $value) {
     switch ($type) {
