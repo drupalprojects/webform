@@ -112,7 +112,7 @@ function webform_submission_delete_form($form_state, $node, $submission) {
     $destination = 'node/'. $node->nid .'/submissions';
   }
 
-  return confirm_form($form, NULL, $destination, $question, t('Delete'), t('Cancel'));
+  return confirm_form($form, $question, $destination, NULL, t('Delete'), t('Cancel'));
 }
 
 function webform_submission_delete_form_submit($form, &$form_state) {
