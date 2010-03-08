@@ -318,7 +318,6 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
       $submissions[$row->sid]->remote_addr = $row->remote_addr;
       $submissions[$row->sid]->uid = $row->uid;
       $submissions[$row->sid]->name = $row->name;
-      $submissions[$row->sid]->status = $row->status;
       $submissions[$row->sid]->is_draft = $row->is_draft;
     }
     $submissions[$row->sid]->data[$row->cid]['value'][$row->no] = $row->data;
@@ -470,5 +469,5 @@ function template_preprocess_webform_submission_navigation(&$vars) {
  * Preprocess function for webform-submission-navigation.tpl.php
  */
 function template_preprocess_webform_submission_information(&$vars) {
-  $vars['account'] = user_load(array('uid' => $vars['submission']->uid));
+  $vars['account'] = user_load($vars['submission']->uid);
 }

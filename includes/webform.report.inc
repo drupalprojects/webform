@@ -370,7 +370,7 @@ function webform_results_download_form(&$form_state, $node) {
   );
 
   $csv_components = array(
-    '' => t('Submission information'),
+    'info' => t('Submission information'),
     'serial' => '-' . t('Submission Number'),
     'sid' => '-' . t('Submission ID'),
     'time' => '-' . t('Time'),
@@ -433,6 +433,7 @@ function theme_webform_results_download_select_format($element) {
     array('', 'X', 'X'),
   );
 
+  $element['separate']['#attributes']['class'] = '';
   $element['separate']['#description'] = theme('table', $header, $rows);
   $element['separate']['#description'] .= t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application.');
   $output .= drupal_render($element['separate']);
@@ -445,12 +446,10 @@ function theme_webform_results_download_select_format($element) {
     array('Option B,Option C'),
   );
 
+  $element['separate']['#attributes']['class'] = '';
   $element['compact']['#description'] = theme('table', $header, $rows);
   $element['compact']['#description'] .= t('Compact options are more suitable for importing data into other systems.');
   $output .= drupal_render($element['compact']);
-
-  $element['#type'] = 'markup';
-  $element['#value'] = $output;
 
   return $output;
 }
@@ -659,7 +658,7 @@ function theme_webform_results_analysis($node, $data, $sids = array(), $analysis
   $question_number = 0;
   $single = isset($analysis_component);
 
-  $headers = array(
+  $header = array(
     $single ? $analysis_component['name'] : t('Q'),
     array('data' => $single ? '&nbsp' : t('responses'), 'colspan' => '10')
   );
@@ -681,5 +680,5 @@ function theme_webform_results_analysis($node, $data, $sids = array(), $analysis
     $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/' . $node->nid))), 'colspan' => 20));
   }
 
-  return theme('table', $headers, $rows);
+  return theme('table', $header, $rows);
 }

@@ -163,7 +163,7 @@ function theme_webform_components_form($form) {
 
   $node = $form['#node'];
 
-  $headers = array(t('Name'), t('Type'), t('Value'), t('Mandatory'), t('Weight'), array('data' => t('Operations'), 'colspan' => 3));
+  $header = array(t('Name'), t('Type'), t('Value'), t('Mandatory'), t('Weight'), array('data' => t('Operations'), 'colspan' => 3));
   $rows = array();
 
   // Add a row containing form elements for a new item.
@@ -261,7 +261,7 @@ function theme_webform_components_form($form) {
   }
 
   $output = '';
-  $output .= theme('table', $headers, $rows, array('id' => 'webform-components'));
+  $output .= theme('table', $header, $rows, array('id' => 'webform-components'));
   $output .= drupal_render($form);
   return $output;
 }

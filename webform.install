@@ -790,7 +790,7 @@ function webform_update_6307() {
     if ($file && isset($file['filename'])) {
       // Create an entry in the files table if needed.
       if (!isset($file['fid'])) {
-        db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp) VALUES (%d, %d, '%s', '%s', '%s', %d, 1, %d)", $row->uid, $file['filename'], $file['filepath'], $file['filemime'], $file['filesize'], $row->submitted);
+        db_query("INSERT INTO {files} (uid, filename, filepath, filemime, filesize, status, timestamp) VALUES (%d, '%s', '%s', '%s', %d, 1, %d)", $row->uid, $file['filename'], $file['filepath'], $file['filemime'], $file['filesize'], $row->submitted);
         $fid = db_last_insert_id('files', 'fid');
       }
       else {

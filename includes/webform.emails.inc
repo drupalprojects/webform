@@ -90,7 +90,7 @@ function theme_webform_emails_form($form) {
 
   $node = $form['#node'];
 
-  $headers = array(t('E-mail to'), t('Subject'), t('From'), array('data' => t('Operations'), 'colspan' => 2));
+  $header = array(t('E-mail to'), t('Subject'), t('From'), array('data' => t('Operations'), 'colspan' => 2));
   $rows = array();
 
   if (!empty($form['emails'])) {
@@ -117,7 +117,7 @@ function theme_webform_emails_form($form) {
   $rows[] = array('data' => $row_data, 'class' => 'webform-add-form');
 
   $output = '';
-  $output .= theme('table', $headers, $rows, array('id' => 'webform-emails'));
+  $output .= theme('table', $header, $rows, array('id' => 'webform-emails'));
   $output .= drupal_render($form);
   return $output;
 }

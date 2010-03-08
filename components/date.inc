@@ -313,7 +313,8 @@ function _webform_analysis_date($component, $sids = array()) {
     ' ORDER BY sid,no ASC ';
 
   $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
-  // build an array of timestamps from entered values.
+
+  // Build an array of timestamps from entered values.
   $timestamps = array();
   $submissions = 1;
   while ($row = db_fetch_array($result)) {

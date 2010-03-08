@@ -521,14 +521,14 @@ function _webform_analysis_select($component, $sids = array(), $single = FALSE) 
   $sid_placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
   $sid_filter = count($sids) ? " AND sid IN (" . implode(",", $sid_placeholders) . ")" : "";
 
-  $not = $show_other_results ? 'NOT ' : '';
+  $option_operator = $show_other_results ? 'NOT IN' : 'IN';
   $placeholders = count($options) ? array_fill(0, count($options), "'%s'") : array();
   $query = 'SELECT data, count(data) as datacount ' .
     ' FROM {webform_submitted_data} ' .
     ' WHERE nid = %d ' .
     ' AND cid = %d ' .
     " AND data != ''" . $sid_filter .
-    ($placeholders ? ' AND data ' . $not . 'IN (' . implode(',', $placeholders) . ')' : '') .
+    ($placeholders ? ' AND data ' . $option_operator . ' (' . implode(',', $placeholders) . ')' : '') .
     ' GROUP BY data ';
 
   $count_query = 'SELECT count(*) as datacount ' .

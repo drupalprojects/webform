@@ -169,8 +169,8 @@ function theme_webform_admin_settings($form) {
     $row = array();
     $row[] = $form['components'][$key]['#title'];
     $row[] = $form['components'][$key]['#description'];
-    unset($form['components'][$key]['#title']);
-    unset($form['components'][$key]['#description']);
+    $form['components'][$key]['#title'] = NULL;
+    $form['components'][$key]['#description'] = NULL;
     $row[] = array('data' => drupal_render($form['components'][$key]), 'align' => 'center');
     $rows[] = $row;
   }
@@ -181,8 +181,7 @@ function theme_webform_admin_settings($form) {
     '#value' => theme('table', $header, $rows)
   );
 
-  $output = drupal_render($form);
-  return $output;
+  return drupal_render($form);
 }
 
 /**
