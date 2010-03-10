@@ -673,7 +673,7 @@ function webform_component_delete($node, $component) {
     $submissions = webform_get_submissions($node->nid);
     foreach ($submissions as $submission) {
       if (isset($submission->data[$component['cid']])) {
-        webform_component_invoke($component['type'], 'delete', $component, $submission->data[$component['cid']]);
+        webform_component_invoke($component['type'], 'delete', $component, $submission->data[$component['cid']]['value']);
       }
     }
   }
