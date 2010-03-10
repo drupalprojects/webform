@@ -125,7 +125,7 @@ function hook_webform_component_presave(&$component) {
  */
 function hook_webform_component_insert($component) {
   // Insert a record into a 3rd-party module table when a component is inserted.
-  db_query("INSERT INTO {mymodule_table} (nid, cid) VALUES (%d, %d)", $component['nid'], $component['sid']);
+  db_query("INSERT INTO {mymodule_table} (nid, cid) VALUES (%d, %d)", $component['nid'], $component['cid']);
 }
 
 /**
@@ -133,15 +133,15 @@ function hook_webform_component_insert($component) {
  */
 function hook_webform_component_update($component) {
   // Update a record in a 3rd-party module table when a component is updated.
-  db_query('UPDATE {mymodule_table} SET value "%s" WHERE nid = %d AND cid = %d)', 'foo', $component['nid'], $component['sid']);
+  db_query('UPDATE {mymodule_table} SET value "%s" WHERE nid = %d AND cid = %d)', 'foo', $component['nid'], $component['cid']);
 }
 
 /**
  * Respond to a Webform component being deleted.
  */
 function hook_webform_component_delete($component) {
-  // Update a record in a 3rd-party module table when a component is updated.
-  db_query('DELETE FROM {mymodule_table} WHERE nid = %d AND cid = %d)', $component['nid'], $component['sid']);
+  // Delete a record in a 3rd-party module table when a component is deleted.
+  db_query('DELETE FROM {mymodule_table} WHERE nid = %d AND cid = %d)', $component['nid'], $component['cid']);
 }
 
 /**
