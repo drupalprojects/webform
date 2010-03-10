@@ -129,7 +129,7 @@ function _webform_edit_file($component) {
       '#default_value' => $component['extra']['savelocation'],
       '#description' => '<div style="display: block">' . t('Webform uploads are always saved in the site files directory. You may optionally specify a subfolder to store your files.') . '</div>',
       '#weight' => 3,
-      '#element_validate' => array('_webform_edit_file_check_directory', '_webform_edit_file_validate'),
+      '#element_validate' => array('_webform_edit_file_check_directory'),
       '#after_build' => array('_webform_edit_file_check_directory'),
     );
     $form['display']['width'] = array(
@@ -192,18 +192,16 @@ function _webform_edit_file_filtering_validate($element, &$form_state) {
 }
 
 function theme_webform_edit_file($form) {
-  // Add a little javascript to check all the items in one type.
+  // Add a little JavaScript to check all the items in one type.
   $javascript = '
-    <script type="text/javascript">
-      function check_category_boxes() {
-        var checkValue = !document.getElementById("edit-extra-filtering-types-"+arguments[0]+"-"+arguments[1]).checked;
-        for(var i=1; i < arguments.length; i++) {
-          document.getElementById("edit-extra-filtering-types-"+arguments[0]+"-"+arguments[i]).checked = checkValue;
-        }
+    function check_category_boxes() {
+      var checkValue = !document.getElementById("edit-extra-filtering-types-"+arguments[0]+"-"+arguments[1]).checked;
+      for(var i=1; i < arguments.length; i++) {
+        document.getElementById("edit-extra-filtering-types-"+arguments[0]+"-"+arguments[i]).checked = checkValue;
       }
-  </script>
+    }
  ';
-  drupal_set_html_head($javascript);
+  drupal_add_js($javascript, 'inline');
 
   // Format the components into a table.
   $per_row = 6;
