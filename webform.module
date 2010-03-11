@@ -450,10 +450,6 @@ function webform_results_clear_access($node, $account = NULL) {
  * Implementation of hook_init().
  */
 function webform_init() {
-  if (module_exists('form_builder') && strpos($_GET['q'], 'admin/build/form-builder') !== FALSE) {
-    module_load_include('inc', 'webform', 'includes/webform.form_builder');
-  }
-
   // Use the administrative theme if set to use on content editing pages.
   // See system_init().
   if (variable_get('node_admin_theme', '0') && arg(0) == 'node' && (arg(2) == 'webform' || arg(2) == 'webform-results')) {
@@ -551,7 +547,7 @@ function webform_theme() {
     ),
     // webform.components.inc.
     'webform_components_page' => array(
-      'arguments' => array('node' => NULL, 'mode' => NULL, 'form' => NULL),
+      'arguments' => array('node' => NULL, 'form' => NULL),
       'file' => 'includes/webform.components.inc',
     ),
     'webform_components_form' => array(
