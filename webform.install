@@ -310,11 +310,10 @@ function webform_schema() {
       ),
       'no' => array(
         'description' => 'Usually this value is 0, but if a field has multiple values (such as a time or date), it may require multiple rows in the database.',
-        'type' => 'int',
-        'size' => 'tiny',
-        'unsigned' => TRUE,
+        'type' => 'varchar',
+        'length' => 128,
         'not null' => TRUE,
-        'default' => 0,
+        'default' => '0',
       ),
       'data' => array(
         'description' => 'The submitted value of this field, may be serialized for some components.',
@@ -891,6 +890,203 @@ function webform_update_6310() {
       db_query("UPDATE {webform} SET redirect_url = '%s' WHERE nid = %d", 'node/' . $row->nid, $row->nid);
       db_query("UPDATE {webform} SET confirmation = '%s' WHERE nid = %d", $message, $row->nid);
     }
+  }
+
+  return $ret;
+}
+
+/**
+ * Convert the "no" column to be a varchar column instead of an integer.
+ */
+function webform_update_6311() {
+  $ret = array();
+
+  // Change the column.
+  db_drop_primary_key($ret, 'webform_submitted_data');
+  db_change_field($ret, 'webform_submitted_data', 'no', 'no', array('type' => 'varchar', 'length' => 128, 'not null' => TRUE, 'default' => '0'), array());
+  db_add_primary_key($ret, 'webform_submitted_data', array('nid', 'sid', 'cid', 'no'));
+
+  // Update date components.
+  $ret[] = update_sql("UPDATE {webform_submitted_data} SET no = 'month' WHERE no = '0' AND (nid, cid) IN (SELECT nid, cid FROM {webform_component} WHERE type = 'date')");
+  $ret[] = update_sql("UPDATE {webform_submitted_data} SET no = 'day' WHERE no = '1' AND (nid, cid) IN (SELECT nid, cid FROM {webform_component} WHERE type = 'date')");
+  $ret[] = update_sql("UPDATE {webform_submitted_data} SET no = 'year' WHERE no = '2' AND (nid, cid) IN (SELECT nid, cid FROM {webform_component} WHERE type = 'date')");
+
+  // Update time components.
+  $ret[] = update_sql("UPDATE {webform_submitted_data} SET no = 'hour' WHERE no = '0' AND (nid, cid) IN (SELECT nid, cid FROM {webform_component} WHERE type = 'time')");
+  $ret[] = update_sql("UPDATE {webform_submitted_data} SET no = 'minute' WHERE no = '1' AND (nid, cid) IN (SELECT nid, cid FROM {webform_component} WHERE type = 'time')");
+  $ret[] = update_sql("UPDATE {webform_submitted_data} SET no = 'ampm' WHERE no = '2' AND (nid, cid) IN (SELECT nid, cid FROM {webform_component} WHERE type = 'time')");
+
+  // Updating of select and grid components is done in following updates.
+
+  return $ret;
+}
+
+/**
+ * Convert select options to use numeric keys if none are manually specified.
+ */
+function webform_update_6312() {
+  $ret = array();
+
+  $result = db_query("SELECT * FROM {webform_component} WHERE type = 'select'");
+  while ($row = db_fetch_object($result)) {
+    $extra = unserialize($row->extra);
+    $lines = explode("\n", $extra['items']);
+
+    // Get a list of items that have manual keys or no keys at all.
+    $keys = array();
+    $values = array();
+    foreach ($lines as $line) {
+      $line = rtrim($line, "\r\n");
+      if (strlen($line) == 0) {
+        continue;
+      }
+      $matches = array();
+      if (preg_match('/^\<([^>]*)\>$/', $line, $matches)) {
+        $keys[] = '<group>';
+        $values = $line;
+      }
+      elseif (preg_match('/^([^|]+)\|(.*)$/', $line, $matches)) {
+        $keys[] = $matches[1];
+        $values[] = $matches[2];
+      }
+      else {
+        $keys[] = '<unknown>';
+        $values[] = $line;
+      }
+    }
+
+    // Assign new keys to items that have none.
+    $new_key = 0;
+    $new_keys = array();
+    $items = '';
+    foreach ($keys as $n => $key) {
+      if ($key == '<group>') {
+        $items .= $values[$n] . "\n";
+      }
+      elseif ($key == '<unknown>') {
+        while (in_array($new_key, $keys, TRUE) || in_array($new_key, $new_keys, TRUE)) {
+          $new_key++;
+        }
+        $new_keys[$n] = $new_key;
+        $items .= $new_key . '|' . $values[$n] . "\n";
+      }
+      else {
+        $items .= $key . '|' . $values[$n] . "\n";
+      }
+    }
+
+    // While we're here, get rid of the 'Y' value for options.
+    foreach ($extra as $key => $value) {
+      if ($value === 'Y') {
+        $extra[$key] = '1';
+      }
+      elseif ($value === 'N') {
+        $extra[$key] = 0;
+      }
+    }
+
+    // Update the component.
+    $extra['items'] = $items;
+    db_query("UPDATE {webform_component} SET extra = '%s' WHERE nid = %d AND cid = %d", serialize($extra), $row->nid, $row->cid);
+
+    // Update the saved results.
+    foreach ($new_keys as $delta => $new_key) {
+      db_query("UPDATE {webform_submitted_data} SET data = '%s' WHERE nid = %d AND cid = %d AND data = '%s'", $new_key, $row->nid, $row->cid, $values[$delta]);
+    }
+
+    // Delete empty rows, which are no longer stored for select lists.
+    db_query("DELETE FROM {webform_submitted_data} WHERE data = '' AND nid = %d AND cid = %d");
+  }
+
+  return $ret;
+}
+
+/**
+ * Create keys for all questions (which don't currently have keys at all),
+ * create keys for all options that don't yet have any, and then convert the
+ * existing data to use these keys.
+ */
+function webform_update_6313() {
+  $ret = array();
+
+  $result = db_query("SELECT * FROM {webform_component} WHERE type = 'grid'");
+  while ($row = db_fetch_object($result)) {
+    $extra = unserialize($row->extra);
+    $lines = explode("\n", $extra['options']);
+
+    // Get a list of items that have manual keys or no keys at all.
+    $keys = array();
+    $values = array();
+    foreach ($lines as $line) {
+      $line = rtrim($line, "\r\n");
+      if (strlen($line) == 0) {
+        continue;
+      }
+      $matches = array();
+      if (preg_match('/^([^|]+)\|(.*)$/', $line, $matches)) {
+        $keys[] = $matches[1];
+        $values[] = $matches[2];
+      }
+      else {
+        $keys[] = '<unknown>';
+        $values[] = $line;
+      }
+    }
+
+    // Assign new keys to options that have none.
+    $new_key = 0;
+    $new_keys = array();
+    $options = '';
+    foreach ($keys as $n => $key) {
+      if ($key == '<unknown>') {
+        while (in_array($new_key, $keys, TRUE) || in_array($new_key, $new_keys, TRUE)) {
+          $new_key++;
+        }
+        $new_keys[$n] = $new_key;
+        $options .= $new_key . '|' . $values[$n] . "\n";
+      }
+      else {
+        $options .= $key . '|' . $values[$n] . "\n";
+      }
+    }
+    $extra['options'] = $options;
+
+    // Assign question keys. This is easier since they don't have keys at all.
+    $lines = explode("\n", $extra['questions']);
+    $questions = array();
+    foreach ($lines as $delta => $line) {
+      $line = rtrim($line, "\r\n");
+      if (strlen($line) == 0) {
+        continue;
+      }
+      $questions[$delta] = $delta . '|' . $line;
+    }
+    $extra['questions'] = implode("\n", $questions);
+
+    // While we're here, get rid of the 'Y' value for options.
+    foreach ($extra as $key => $value) {
+      if ($value === 'Y') {
+        $extra[$key] = '1';
+      }
+      elseif ($value === 'N') {
+        $extra[$key] = 0;
+      }
+    }
+
+    // Update the component.
+    db_query("UPDATE {webform_component} SET extra = '%s' WHERE nid = %d AND cid = %d", serialize($extra), $row->nid, $row->cid);
+
+    // Convert the option values into keys if new ones were created.
+    foreach ($new_keys as $delta => $new_key) {
+      db_query("UPDATE {webform_submitted_data} SET data = '%s' WHERE nid = %d AND cid = %d AND data = '%s'", $new_key, $row->nid, $row->cid, $values[$delta]);
+    }
+
+    // Note: Converting the question values into keys is not necessary because
+    // data was already stored based on the question position. Since we assigned
+    // permanent keys based on position, all our keys are already accurate.
+
+    // Delete empty rows, which are no longer stored for grids.
+    db_query("DELETE FROM {webform_submitted_data} WHERE data = '' AND nid = %d AND cid = %d");
   }
 
   return $ret;

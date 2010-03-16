@@ -22,11 +22,7 @@ function webform_submission_data($node, $submitted) {
     }
 
     if (is_array($values)) {
-      $delta = 0;
-      foreach ($values as $key => $value) {
-        $data[$cid]['value'][$delta] = $value;
-        $delta++;
-      }
+      $data[$cid]['value'] = $values;
     }
     else {
       $data[$cid]['value'][0] = $values;
@@ -81,7 +77,7 @@ function webform_submission_insert($node, $submission) {
 
   foreach ($submission->data as $cid => $values) {
     foreach ($values['value'] as $delta => $value) {
-      db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) VALUES (%d, %d, %d, %d, '%s')", $node->nid, $submission->sid, $cid, $delta, $value);
+      db_query("INSERT INTO {webform_submitted_data} (nid, sid, cid, no, data) VALUES (%d, %d, %d, '%s', '%s')", $node->nid, $submission->sid, $cid, $delta, $value);
     }
   }
 
