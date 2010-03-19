@@ -816,7 +816,7 @@ function webform_update_6308() {
   $ret = array();
 
   // Add the new column to the e-mail table.
-  db_add_field($ret, 'webform_emails', 'excluded_components', array('type' => 'text', 'not null' => TRUE, 'default' => ''));
+  db_add_field($ret, 'webform_emails', 'excluded_components', array('type' => 'text', 'not null' => TRUE));
 
   // Build up our EXCLUSION lists, finding all components not in e-mails.
   $result = db_query("SELECT nid, cid FROM {webform_component} WHERE email = 0 ORDER BY nid");
