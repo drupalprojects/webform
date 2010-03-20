@@ -1093,6 +1093,52 @@ function webform_update_6313() {
 }
 
 /**
+ * Convert Dates and Times into using ISO 8601 strings instead of 3 rows.
+ */
+function webform_update_6314() {
+  $ret = array();
+
+  webform_component_include('date');
+  webform_component_include('time');
+
+  $result = db_query("SELECT c.type, c.extra, d.* FROM {webform_component} c INNER JOIN {webform_submitted_data} d ON c.nid = d.nid AND c.cid = d.cid WHERE c.type = 'time' OR c.type = 'date' ORDER BY d.sid, d.cid");
+  $current_cid = NULL;
+  $current_sid = NULL;
+  while ($row = db_fetch_object($result)) {
+    if ($current_cid != $row->cid || $current_sid != $row->sid) {
+      $current_cid = $row->cid;
+      $current_sid = $row->sid;
+      $extra = unserialize($row->extra);
+      $value = array();
+    }
+
+    $value[$row->no] = $row->data;
+
+    // Update a complete date.
+    if ($row->type == 'date' && array_key_exists('day', $value) && array_key_exists('month', $value) && array_key_exists('year', $value)) {
+      $value = ($value['day'] && $value['month'] && $value['year']) ? webform_date_string($value, 'date') : '';
+      db_query("UPDATE {webform_submitted_data} SET no = '0', data = '%s' WHERE sid = %d AND cid = %d AND no = 'day'", $value, $current_sid, $current_cid);
+    }
+
+    // Update a complete time.
+    if ($row->type == 'time' && array_key_exists('hour', $value) && array_key_exists('minute', $value) && ($extra['hourformat'] == '24-hour' || array_key_exists('ampm', $value))) {
+      if ($extra['hourformat'] == '12-hour') {
+        $value = webform_time_convert($value, '24-hour');
+      }
+      $value = ($value['hour']) ? webform_date_string($value, 'time') : '';
+      db_query("UPDATE {webform_submitted_data} SET no = '0', data = '%s' WHERE sid = %d AND cid = %d AND no = 'hour'", $value, $current_sid, $current_cid);
+    }
+  }
+
+  // Remove all extra rows (which should just be day, minute, and ampm values).
+  db_query("DELETE FROM {webform_submitted_data} WHERE no IN ('day', 'month', 'year', 'hour', 'minute', 'second', 'ampm')");
+
+  $ret[] = array('success' => TRUE, 'query' => t('Updated date and time components to use ISO 8601 formatted strings in the submitted values.'));
+
+  return $ret;
+}
+
+/**
  * Recursively delete all files and folders in the specified filepath, then
  * delete the containing folder.
  *
