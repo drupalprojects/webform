@@ -366,6 +366,7 @@ function _webform_submit_file(&$data, $component) {
         drupal_set_message(t('The uploaded file %filename was unable to be saved. The destination directory may not be writable.', array('%filename' => $file_saved['filename'])), 'error');
       }
       else {
+        @chmod($file_saved->filepath, 0664);
         file_set_status($file_saved, FILE_STATUS_PERMANENT);
         if (isset($data['existing']['filepath'])) {
           file_delete($data['existing']['filepath']);
