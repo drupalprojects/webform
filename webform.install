@@ -1139,6 +1139,27 @@ function webform_update_6314() {
 }
 
 /**
+ * Remove "daylight_savings" and the GMT option in "timezone".
+ */
+function webform_update_6315() {
+  $ret = array();
+
+  $result = db_query("SELECT * FROM {webform_component} WHERE type IN ('date', 'time')");
+  while ($row = db_fetch_object($result)) {
+    $extra = unserialize($row->extra);
+    if ($extra['timezone'] == 'gmt') {
+      $extra['timezone'] = 'site';
+    }
+    unset($extra['check_daylight_savings']);
+    db_query("UPDATE {webform_component} SET extra = '%s' WHERE nid = %d AND cid = %d", serialize($extra), $row->nid, $row->cid);
+  }
+
+  $ret[] = array('success' => TRUE, 'query' => t('Removed Webform-specific daylight savings handling, now provided by Date API module if available.'));
+
+  return $ret;
+}
+
+/**
  * Recursively delete all files and folders in the specified filepath, then
  * delete the containing folder.
  *
