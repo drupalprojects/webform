@@ -431,6 +431,8 @@ function _webform_validate_file($element, &$form_state) {
     if (file_check_directory($upload_dir, FILE_CREATE_DIRECTORY)) {
       $file = file_save_upload($form_key, array(), $upload_dir);
       if ($file) {
+        @chmod($file->filepath, 0664);
+
         // Set the hidden field value.
         $parents = $element['#array_parents'];
         array_pop($parents);
