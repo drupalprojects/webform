@@ -512,12 +512,12 @@ function webform_theme() {
       'arguments' => array('element' => NULL, 'value' => NULL),
     ),
     'webform_mail_message' => array(
-      'arguments' => array('node' => NULL, 'submission' => NULL, 'cid' => NULL),
+      'arguments' => array('node' => NULL, 'submission' => NULL, 'email' => NULL),
       'template' => 'templates/webform-mail',
       'pattern' => 'webform_mail(_[0-9]+)?',
     ),
     'webform_mail_headers' => array(
-      'arguments' => array('node' => NULL, 'submission' => NULL, 'cid' => NULL),
+      'arguments' => array('node' => NULL, 'submission' => NULL, 'email' => NULL),
       'pattern' => 'webform_mail_headers_[0-9]+',
     ),
     'webform_token_help' => array(
@@ -1779,11 +1779,9 @@ function webform_client_form_submit($form, &$form_state) {
 
     // Create a themed message for mailing.
     foreach ($node->webform['emails'] as $eid => $email) {
-      $cid = is_numeric($email['email']) && isset($node->webform['components'][$email['email']]) ? $email['email'] : 'custom';
-
       // Pass through the theme layer if using the default template.
       if ($email['template'] == 'default') {
-        $email['message'] = theme(array('webform_mail_' . $node->nid, 'webform_mail', 'webform_mail_message'), $node, $submission, $cid);
+        $email['message'] = theme(array('webform_mail_' . $node->nid, 'webform_mail', 'webform_mail_message'), $node, $submission, $email);
       }
       else {
         $email['message'] = $email['template'];
@@ -1793,7 +1791,7 @@ function webform_client_form_submit($form, &$form_state) {
       $email['message'] = _webform_filter_values($email['message'], $node, $submission, $email, FALSE, TRUE);
 
       // Build the e-mail headers.
-      $email['headers'] = theme(array('webform_mail_headers_' . $node->nid, 'webform_mail_headers'), $node, $submission, $cid);
+      $email['headers'] = theme(array('webform_mail_headers_' . $node->nid, 'webform_mail_headers'), $node, $submission, $email);
 
       // Assemble the FROM string.
       if (isset($email['headers']['From'])) {
@@ -1815,9 +1813,9 @@ function webform_client_form_submit($form, &$form_state) {
       }
 
       // Update the to e-mail if set in the themed headers.
-      if (isset($headers[$cid]['To'])) {
-        $email['email'] = $headers[$cid]['To'];
-        unset($headers[$cid]['To']);
+      if (isset($headers['To'])) {
+        $email['email'] = $headers['To'];
+        unset($headers['To']);
       }
 
       // Generate the list of addresses that this e-mail will be sent to.
@@ -1863,7 +1861,7 @@ function webform_client_form_submit($form, &$form_state) {
   
         // Debugging output for email.
         if (variable_get('webform_debug', 0) >= 2) {
-          drupal_set_message('E-mail Headers: <pre>' . check_plain(print_r($headers[$cid], TRUE)) . '</pre>To: ' . check_plain($address) . '<br />From: ' . check_plain($email['from']) . '<br />Subject: ' . check_plain($email['subject']) . '<br />E-mail Body: <pre>' . check_plain($email['message']) . '</pre>');
+          drupal_set_message('E-mail Headers: <pre>' . check_plain(print_r($headers, TRUE)) . '</pre>To: ' . check_plain($address) . '<br />From: ' . check_plain($email['from']) . '<br />Subject: ' . check_plain($email['subject']) . '<br />E-mail Body: <pre>' . check_plain($email['message']) . '</pre>');
         }
       }
 
@@ -2124,17 +2122,17 @@ function theme_webform_element_text($element, $value) {
  *   The complete node object for the webform.
  * @param $submission
  *   The webform submission of the user.
- * @param $cid
+ * @param $email
  *   If you desire to make different e-mail headers depending on the recipient,
- *   you can check this component ID to output different content. This will be
- *   the ID of the component that is a conditional e-mail recipient. For the
- *   normal e-mails, it will have the value of 'default'.
+ *   you can check the $email['email'] property to output different content.
+ *   This will be the ID of the component that is a conditional e-mail
+ *   recipient. For the normal e-mails, it will have the value of 'default'.
  * @return
  *   An array of headers to be used when sending a webform email. If headers
  *   for "From", "To", or "Subject" are set, they will take precedence over
  *   the values set in the webform configuration.
  */
-function theme_webform_mail_headers($node, $submission, $cid) {
+function theme_webform_mail_headers($node, $submission, $email) {
   $headers = array(
     'X-Mailer' => 'Drupal Webform (PHP/' . phpversion() . ')',
   );
