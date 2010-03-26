@@ -730,6 +730,7 @@ function webform_component_feature($type, $feature) {
     'email_name' => FALSE,
     'required' => TRUE,
     'conditional' => TRUE,
+    'spam_analysis' => FALSE,
   );
   return isset($components[$type]['features'][$feature]) ? $components[$type]['features'][$feature] : $defaults[$feature];
 }
