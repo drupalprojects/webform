@@ -174,14 +174,30 @@ function _webform_render_time($component, $value = NULL) {
   return $element;
 }
 
+/**
+ * Theme a webform time element.
+ */
+function theme_webform_time($element) {
+  // Add error classes to all items within the element.
+  if (form_get_error($element)) {
+    $element['hour']['#attributes']['class'] = 'error';
+    $element['minute']['#attributes']['class'] = 'error';
+  }
+
+  $output = '<div class="container-inline">' . drupal_render($element['hour']) . drupal_render($element['minute']) . drupal_render($element['ampm']) . '</div>';
+
+  $element['#type'] = 'element';
+  return theme('form_element', $element, $output);
+}
+
 function webform_validate_time($element, $form_state) {
   $form_key = $element['#webform_component']['form_key'];
   $name = $element['#webform_component']['name'];
 
   // Check if the user filled the required fields.
   foreach ($element['#hourformat'] == '12-hour' ? array('hour', 'minute', 'ampm') : array('hour', 'minute') as $field_type) {
-    if (!is_numeric($element[$field_type]['#value']) && $element['#required']) {
-      form_error($element[$field_type], t('%field field is required.', array('%field' => $name)));
+    if ($element[$field_type]['#value'] == '' && $element['#required']) {
+      form_error($element, t('%field field is required.', array('%field' => $name)));
       return;
     }
   }
@@ -323,16 +339,6 @@ function _webform_csv_data_time($component, $export_options, $value) {
   else {
     return '';
   }
-}
-
-/**
- * Theme a webform time element.
- */
-function theme_webform_time($element) {
-  $element['#type'] = 'element';
-  $element['#children'] = '<div class="container-inline">' . drupal_render($element['hour']) . drupal_render($element['minute']) . drupal_render($element['ampm']) . '</div>';
-
-  return theme('form_element', $element, $element['#children']);
 }
 
 /**
