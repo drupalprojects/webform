@@ -833,7 +833,7 @@ function webform_node_insert($node) {
   module_load_include('inc', 'webform', 'includes/webform.components');
 
   // Insert the webform.
-  db_query("INSERT INTO {webform} (nid, confirmation, confirmation_format, redirect_url, teaser, allow_draft, submit_notice, submit_text, submit_limit, submit_interval, additional_validate, additional_submit) VALUES (%d, '%s', %d, '%s', %d, %d, %d, '%s', %d, %d, '%s', '%s')", $node->nid, $node->webform['confirmation'], $node->webform['confirmation_format'], $node->webform['redirect_url'], $node->webform['teaser'], $node->webform['allow_draft'], $node->webform['submit_notice'], $node->webform['submit_text'], $node->webform['submit_limit'], $node->webform['submit_interval'], $node->webform['additional_validate'], $node->webform['additional_submit']);
+  db_query("INSERT INTO {webform} (nid, confirmation, confirmation_format, redirect_url, teaser, allow_draft, submit_notice, submit_text, submit_limit, submit_interval) VALUES (%d, '%s', %d, '%s', %d, %d, %d, '%s', %d, %d)", $node->nid, $node->webform['confirmation'], $node->webform['confirmation_format'], $node->webform['redirect_url'], $node->webform['teaser'], $node->webform['allow_draft'], $node->webform['submit_notice'], $node->webform['submit_text'], $node->webform['submit_limit'], $node->webform['submit_interval']);
 
   // Insert the components into the database. Used with clone.module.
   if (isset($node->webform['components']) && !empty($node->webform['components'])) {
@@ -930,8 +930,6 @@ function webform_node_load($node) {
       'submit_text' => '',
       'submit_limit' => -1,
       'submit_interval' => -1,
-      'additional_validate' => '',
-      'additional_submit' => '',
       'roles' => array(1, 2),
       'emails' => array(),
     );
@@ -1249,8 +1247,8 @@ function webform_client_form(&$form_state, $node, $submission, $is_draft = FALSE
     $form['#action'] = url('node/' . $node->nid);
   }
 
-  $form['#submit'][] = 'webform_client_form_submit';
-  $form['#validate'][] = 'webform_client_form_validate';
+  $form['#submit'] = array('webform_client_form_pages', 'webform_client_form_submit');
+  $form['#validate'] = array('webform_client_form_validate');
 
   if (is_array($node->webform['components']) && !empty($node->webform['components'])) {
     // Prepare a new form array.
@@ -1538,23 +1536,6 @@ function webform_client_form_validate($form, &$form_state) {
   // Run all #element_validate and #required checks. These are skipped initially
   // by setting #validated = TRUE on all components when they are added.
   _webform_client_form_validate($form, $form_state);
-
-  // TODO: Remove additional validation (and submission) handling entirely? This
-  // is a terrible hack where we need to flatten the submission for validation
-  // but then restore the tree version so that the submit handling functions.
-  if (trim($node->webform['additional_validate'])) {
-    // Flatten trees within the submission.
-    $form_state['values']['submitted_tree'] = $form_state['values']['submitted'];
-    $form_state['values']['submitted'] = _webform_client_form_submit_flatten($node, $form_state['values']['submitted']);
-
-    // Support for Drupal 5 validation code.
-    $form_values =& $form_state['values'];
-    // We use eval here (rather than drupal_eval) because the user needs access to local variables.
-    eval('?>' . $node->webform['additional_validate']);
-
-    // Restore the original form state so that the submit handler can reflatten.
-    $form_state['values']['submitted'] = $form_state['values']['submitted_tree'];
-  }
 }
 
 /**
@@ -1627,10 +1608,10 @@ function _webform_client_form_validate($elements, &$form_state, $first_run = TRU
   }
 }
 
-function webform_client_form_submit($form, &$form_state) {
-  global $user, $base_url;
-  module_load_include('inc', 'webform', 'includes/webform.submissions');
-
+/**
+ * Handle the processing of pages and conditional logic.
+ */
+function webform_client_form_pages($form, &$form_state) {
   $node = node_load($form_state['values']['details']['nid']);
 
   // Move special settings to storage.
@@ -1732,17 +1713,19 @@ function webform_client_form_submit($form, &$form_state) {
   // Flatten trees within the submission.
   $form_state['values']['submitted_tree'] = $form_state['values']['submitted'];
   $form_state['values']['submitted'] = _webform_client_form_submit_flatten($node, $form_state['values']['submitted']);
+}
 
-  // Perform additional submit processing.
-  if (trim($node->webform['additional_submit'])) {
-    // Support for Drupal 5 validation code.
-    $form_values =& $form_state['values'];
-    // We use eval here (rather than drupal_eval) because the user needs access to local variables.
-    eval('?>' . $node->webform['additional_submit']);
-  }
+/**
+ * Submit handler for saving the form values and sending e-mails.
+ */
+function webform_client_form_submit($form, &$form_state) {
+  module_load_include('inc', 'webform', 'includes/webform.submissions');
+  global $user;
+
+  $node = node_load($form_state['values']['details']['nid']);
 
   // Check if user is submitting as a draft.
-  $is_draft = $form_state['values']['op'] == $draft_op;
+  $is_draft = $form_state['values']['op'] == t('Save Draft');
 
   // Create a submission object.
   $submission = (object) array(
