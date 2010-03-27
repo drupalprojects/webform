@@ -1101,7 +1101,10 @@ function webform_node_view(&$node, $teaser, $page) {
   // Add the output to the node.
   $node = node_prepare($node, $teaser);
   if (isset($output)) {
-    $node->content['webform'] = array('#value' => $output, '#weight' => 10);
+    if (module_exists('content')) {
+      $weight = content_extra_field_weight($node->type, 'webform');
+    }
+    $node->content['webform'] = array('#value' => $output, '#weight' => isset($weight) ? $weight : 10);
   }
 }
 
@@ -2727,6 +2730,21 @@ function webform_views_api() {
     'api' => 2.0,
     'path' => drupal_get_path('module', 'webform') .'/views',
   );
+}
+
+/**
+ * Implementation of hook_content_extra_fields().
+ */
+function webform_content_extra_fields($type_name) {
+  $extra = array();
+  if (in_array($type_name, webform_variable_get('webform_node_types'))) {
+    $extra['webform'] = array(
+      'label' => t('Webform'),
+      'description' => t('Webform client form.'),
+      'weight' => 10,
+    );
+  }
+  return $extra;
 }
 
 /**
