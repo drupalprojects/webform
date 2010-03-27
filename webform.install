@@ -933,7 +933,7 @@ function webform_update_6312() {
       $matches = array();
       if (preg_match('/^\<([^>]*)\>$/', $line, $matches)) {
         $keys[] = '<group>';
-        $values = $line;
+        $values[] = $line;
       }
       elseif (preg_match('/^([^|]+)\|(.*)$/', $line, $matches)) {
         $keys[] = $matches[1];
