@@ -64,6 +64,11 @@ function webform_emails_form($form_state, $node) {
     '#options' => webform_component_list($node, 'email_address', FALSE),
   );
 
+  if (empty($form['add']['email_component']['#options'])) {
+    $form['add']['email_component']['#options'][''] = t('No available components');
+    $form['add']['email_component']['#disabled'] = TRUE;
+  }
+
   $form['add_button'] = array(
     '#type' => 'submit',
     '#value' => t('Add'),
@@ -401,7 +406,7 @@ function webform_email_edit_form_submit($form, &$form_state) {
   // Save the list of included components.
   // We actually maintain an *exclusion* list, so any new components will
   // default to being included in the %email_values token until unchecked.
-  $included = array_keys(array_filter($form_state['values']['components']));
+  $included = array_keys(array_filter((array) $form_state['values']['components']));
   $excluded = array_diff(array_keys($form_state['values']['node']->webform['components']), $included);
   $email['excluded_components'] = $excluded;
 
