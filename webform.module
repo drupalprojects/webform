@@ -1454,13 +1454,15 @@ function _webform_client_form_add_component($cid, $component, &$parent_fieldset,
 
 function webform_client_form_validate($form_id, &$form_values) {
   $node = node_load(array('nid' => $form_values['details']['nid']));
+  $sid = $form_values['details']['sid'];
+
   // Check that the user has not exceeded the submission limit.
   // This usually will only apply to anonymous users when the page cache is
   // enabled, because they may submit the form even if they do not have access.
   if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
     include_once(drupal_get_path('module', 'webform') .'/webform_submissions.inc');
 
-    if ($limit_exceeded = _webform_submission_limit_check($node)) {
+    if (empty($sid) && $limit_exceeded = _webform_submission_limit_check($node)) {
       $error = theme('webform_view_messages', $node, 0, 1, 0, $limit_exceeded, array_keys(user_roles()));
       form_set_error('', $error);
       return;
