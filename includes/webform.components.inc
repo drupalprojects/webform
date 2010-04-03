@@ -295,7 +295,7 @@ function webform_components_form_submit($form, &$form_state) {
   }
   elseif (isset($_POST['op']) && $_POST['op'] == t('Add')) {
     $component = $form_state['values']['add'];
-    $form_state['redirect'] = array('node/' . $node->nid . '/webform/components/new/' . $component['type'], 'name=' . urlencode($component['name']) . ' &mandatory=' . $component['mandatory'] . '&pid=' . $component['pid'] . '&weight=' . $component['weight']);
+    $form_state['redirect'] = array('node/' . $node->nid . '/webform/components/new/' . $component['type'], 'name=' . urlencode($component['name']) . '&mandatory=' . $component['mandatory'] . '&pid=' . $component['pid'] . '&weight=' . $component['weight']);
   }
   else {
     drupal_set_message(t('The component positions and mandatory values have been updated.'));

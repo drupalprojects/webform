@@ -57,8 +57,7 @@ class WebformPermissionsTestCase extends WebformTestCase {
     $this->drupalGet('node/' . $node->nid);
     // Note: Should be: You must <a href="!login">login</a> or <a href="!register">register</a> to view this form.
     // Something in SimpleTest isn't handling the string correctly.
-    $this->assertText(t('to view this form.', array('!login' => url('user/login'), '!register' => url('user/register'))), t('Anonymous user is not allowed to submit form.'), t('Webform'));
-    $this->drupalLogout();
+    $this->assertText('to view this form.', t('Anonymous user is not allowed to submit form.'), t('Webform'));
   }
 
   /**

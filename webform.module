@@ -2243,7 +2243,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $emai
     ),
     'unsafe' => array(
       '%cookie' => $_COOKIE,
-      '%session' => $_SESSION,
+      '%session' => isset($_SESSION) ? $_SESSION : array(),
       '%request' => $_REQUEST,
       '%server' => $_SERVER,
       '%profile' => (array) $user,
