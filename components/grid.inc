@@ -201,15 +201,13 @@ function _webform_display_grid($component, $value, $format = 'html') {
     '#sorted' => TRUE,
   );
 
-  $cid = 0;
-  foreach ($questions as $question) {
+  foreach ($questions as $key => $question) {
     if ($question != '') {
       $element[$question] = array(
         '#title' => $question,
-        '#value' => isset($value[$cid]) ? $value[$cid] : NULL,
+        '#value' => isset($value[$key]) ? $value[$key] : NULL,
       );
     }
-    $cid++;
   }
 
   return $element;
@@ -248,7 +246,7 @@ function theme_webform_display_grid($element) {
   else {
     $items = array();
     foreach (element_children($element) as $key) {
-      $items[] = ' - ' . $element[$key]['#title'] . ': ' . $element[$key]['#value'];
+      $items[] = ' - ' . $element[$key]['#title'] . ': ' . (isset($element['#options'][$element[$key]['#value']]) ? $element['#options'][$element[$key]['#value']] : '');
     }
     $output = implode("\n", $items);
   }
@@ -307,18 +305,16 @@ function _webform_analysis_grid($component, $sids = array()) {
  */
 function _webform_table_grid($component, $value) {
   $questions = _webform_select_options_from_text($component['extra']['questions'], TRUE);
+  $options = _webform_select_options_from_text($component['extra']['options'], TRUE);
+
   $output = '';
   // Set the value as a single string.
-  if (is_array($value)) {
-    foreach ($value as $item => $value) {
-      if ($value !== '') {
-        $output .= _webform_filter_xss($questions[$item]) . ': ' . _webform_filter_xss($value) . '<br />';
-      }
+  foreach ($questions as $key => $label) {
+    if (isset($value[$key]) && isset($options[$value[$key]])) {
+      $output .= _webform_filter_xss($label) . ': ' . _webform_filter_xss($options[$value[$key]]) . '<br />';
     }
   }
-  else {
-    $output = !isset($value[0]) ? '' : _webform_filter_xss($value[0]);
-  }
+
   return $output;
 }
 
@@ -350,9 +346,10 @@ function _webform_csv_headers_grid($component, $export_options) {
  */
 function _webform_csv_data_grid($component, $export_options, $value) {
   $questions = _webform_select_options_from_text($component['extra']['questions'], TRUE);
+  $options = _webform_select_options_from_text($component['extra']['options'], TRUE);
   $return = array();
   foreach ($questions as $key => $question) {
-    $return[] = isset($value[$key]) ? $question : '';
+    $return[] = isset($value[$key]) && isset($options[$value[$key]]) ? $options[$value[$key]] : '';
   }
   return $return;
 }

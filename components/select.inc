@@ -91,7 +91,7 @@ function _webform_edit_select($component) {
   }
 
   if (module_exists('options_element')) {
-    $options = _webform_select_options($component);
+    $options = _webform_select_options($component, FALSE, FALSE);
 
     $form['items'] = array(
       '#type' => 'fieldset',
@@ -265,7 +265,7 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
 
   // Convert the user-entered options list into an array.
   $default_value = $filter ? _webform_filter_values($component['value'], NULL, NULL, NULL, FALSE) : $component['value'];
-  $options = _webform_select_options($component, $filter);
+  $options = _webform_select_options($component, !$component['extra']['aslist'], $filter);
 
   if ($component['extra']['optrand']) {
     _webform_shuffle_options($options);
@@ -407,8 +407,6 @@ function webform_expand_select_ids($element) {
  * Implementation of _webform_display_component().
  */
 function _webform_display_select($component, $value, $format = 'html') {
-  $value = (array) $value;
-  ksort($value);
   return array(
     '#title' => $component['name'],
     '#weight' => $component['weight'],
@@ -417,7 +415,7 @@ function _webform_display_select($component, $value, $format = 'html') {
     '#post_render' => array('webform_element_wrapper'),
     '#component' => $component,
     '#format' => $format,
-    '#value' => $value,
+    '#value' => (array) $value,
   );
 }
 
@@ -428,27 +426,16 @@ function _webform_display_select($component, $value, $format = 'html') {
  */
 function _webform_submit_select($component, $value) {
   // Build a list of all valid keys expected to be submitted.
-  $options = _webform_select_options($component);
-  $keys = array();
-  foreach ($options as $option_key => $option_value) {
-    if (is_array($option_key)) {
-      foreach ($option_key as $option_subkey => $option_subvalue) {
-        $keys[$option_subkey] = $option_subkey;
-      }
-    }
-    else {
-      $keys[$option_key] = $option_key;
-    }
-  }
+  $options = _webform_select_options($component, TRUE);
 
   $return = NULL;
   if (is_array($value)) {
     $return = array();
-    foreach ($value as $key => $option_value) {
+    foreach ($value as $key) {
       // Handle options that are specified options.
-      if ($option_value !== '' && isset($keys[$key])) {
+      if ($key !== '' && isset($options[$key])) {
         // Checkboxes submit an *integer* value of 0 when not checked.
-        if ($option_value === 0 && $keys[$key] !== '0' && !$component['extra']['aslist'] && $component['extra']['multiple']) {
+        if ($key === 0 && $options[$key] !== '0' && !$component['extra']['aslist'] && $component['extra']['multiple']) {
           unset($value[$key]);
         }
         else {
@@ -457,7 +444,7 @@ function _webform_submit_select($component, $value) {
       }
       // Handle options that are added through the "other" field.
       elseif ($component['extra']['other_option'] && module_exists('select_or_other')) {
-        $return[] = $option_value;
+        $return[] = $key;
       }
     }
   }
@@ -475,7 +462,7 @@ function theme_webform_display_select($element) {
   $component = $element['#component'];
 
   // Convert submitted 'safe' values to un-edited, original form.
-  $options = _webform_select_options($component);
+  $options = _webform_select_options($component, TRUE);
 
   $items = array();
   if ($component['extra']['multiple']) {
@@ -483,11 +470,11 @@ function theme_webform_display_select($element) {
       if ($option_value !== '') {
         // Administer provided values.
         if (isset($options[$option_value])) {
-          $items[] = _webform_filter_xss($options[$option_value]);
+          $items[] = $element['#format'] == 'html' ? _webform_filter_xss($options[$option_value]) : $options[$option_value];
         }
         // User-specified in the "other" field.
         else {
-          $items[] = $option_value;
+          $items[] = $element['#format'] == 'html' ? check_plain($option_value) : $option_value;
         }
       }
     }
@@ -527,7 +514,7 @@ function theme_webform_display_select($element) {
  * Implementation of _webform_analysis_component().
  */
 function _webform_analysis_select($component, $sids = array(), $single = FALSE) {
-  $options = _webform_select_options($component);
+  $options = _webform_select_options($component, TRUE);
   $show_other_results = $single;
 
   $sid_placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
@@ -584,19 +571,24 @@ function _webform_analysis_select($component, $sids = array(), $single = FALSE) 
  * Implementation of _webform_table_component().
  */
 function _webform_table_select($component, $value) {
-  $output = '';
+  // Convert submitted 'safe' values to un-edited, original form.
+  $options = _webform_select_options($component, TRUE);
+
+  $value = (array) $value;
+  $items = array();
   // Set the value as a single string.
-  if (is_array($value)) {
-    foreach ($value as $option_value) {
-      if ($option_value !== '') {
-        $output .= _webform_filter_xss($option_value) . '<br />';
+  foreach ($value as $option_value) {
+    if ($option_value !== '') {
+      if (isset($options[$option_value])) {
+        $items[] = _webform_filter_xss($options[$option_value]);
+      }
+      else {
+        $items[] = check_plain($option_value);
       }
     }
   }
-  else {
-    $output .= empty($value[0]) ? '' : _webform_filter_xss($value[0]);
-  }
-  return $output;
+
+  return implode('<br />', $items);
 }
 
 /**
@@ -612,7 +604,7 @@ function _webform_csv_headers_select($component, $export_options) {
   if ($component['extra']['multiple'] && $export_options['select_format'] == 'separate') {
     $headers[0][] = '';
     $headers[1][] = $component['name'];
-    $items = _webform_select_options($component);
+    $items = _webform_select_options($component, TRUE, FALSE);
     if ($component['extra']['other_option']) {
       $other_label = !empty($component['extra']['other_text']) ? check_plain($component['extra']['other_text']) : t('Other...');
       $items[$other_label] = $other_label;
@@ -640,7 +632,7 @@ function _webform_csv_headers_select($component, $export_options) {
  * Implementation of _webform_csv_data_component().
  */
 function _webform_csv_data_select($component, $export_options, $value) {
-  $options = _webform_select_options($component);
+  $options = _webform_select_options($component, TRUE, FALSE);
   $return = array();
 
   if ($component['extra']['multiple']) {
@@ -661,7 +653,7 @@ function _webform_csv_data_select($component, $export_options, $value) {
     }
   }
   else {
-    $return = $value[0];
+    $return = isset($options[$value[0]]) ? $options[$value[0]] : $value[0];
   }
 
   if ($component['extra']['multiple'] && $export_options['select_format'] == 'compact') {
@@ -679,7 +671,7 @@ function webform_select_options_ajax($source_name = '') {
 
   $component['extra']['options_source'] = $source_name;
   if ($source_name && isset($info[$source_name])) {
-    $options = _webform_select_options_to_text(_webform_select_options($component, FALSE));
+    $options = _webform_select_options_to_text(_webform_select_options($component, !$component['extra']['aslist'], FALSE));
   }
   else {
     $options = '';
@@ -697,12 +689,12 @@ function webform_select_options_ajax($source_name = '') {
 /**
  * Generate a list of options for a select list.
  */
-function _webform_select_options($component, $filter = TRUE) {
+function _webform_select_options($component, $flat = FALSE, $filter = TRUE) {
   if ($component['extra']['options_source']) {
-    $options = _webform_select_options_callback($component['extra']['options_source'], 'options', $component);
+    $options = _webform_select_options_callback($component['extra']['options_source'], $component, $flat, $filter);
   }
   else {
-    $options = _webform_select_options_from_text($component['extra']['items'], !$component['extra']['aslist'], $filter);
+    $options = _webform_select_options_from_text($component['extra']['items'], $flat, $filter);
   }
 
   return isset($options) ? $options : array();
@@ -733,14 +725,14 @@ function _webform_select_options_info() {
  *
  * @param $name
  *   The name of the options group.
- * @param $type
- *   The callback to be executed, with "form" or "options".
  * @param $component
  *   The full Webform component.
+ * @param $flat
+ *   Whether the information returned should exclude any nested groups.
  * @param $filter
  *   Whether information returned should be sanitized. Defaults to TRUE.
  */
-function _webform_select_options_callback($name, $type, $component, $filter = TRUE) {
+function _webform_select_options_callback($name, $component, $flat = FALSE, $filter = TRUE) {
   $info = _webform_select_options_info();
 
   // Include any necessary files.
@@ -751,9 +743,9 @@ function _webform_select_options_callback($name, $type, $component, $filter = TR
   }
 
   // Execute the callback function.
-  if (isset($info[$name][$type . ' callback']) && function_exists($info[$name][$type . ' callback'])) {
-    $function = $info[$name][$type . ' callback'];
-    return $function($component, $filter);
+  if (isset($info[$name]['options callback']) && function_exists($info[$name]['options callback'])) {
+    $function = $info[$name]['options callback'];
+    return $function($component, $flat, $filter);
   }
 }
 
