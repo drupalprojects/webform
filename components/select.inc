@@ -49,7 +49,7 @@ function _webform_theme_select() {
 function _webform_edit_select($component) {
   $form = array();
 
-  drupal_add_js(drupal_get_path('module', 'webform') . '/components/select.js', 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/select-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
   drupal_add_js(array('webform' => array('selectOptionsUrl' => url('webform/ajax/options/' . $component['nid']))), 'setting');
 
   $other = array();

@@ -28,8 +28,8 @@ function webform_components_page($node) {
  */
 function theme_webform_components_page($node, $form) {
   // Add CSS and JS. Don't preprocess because these files are used rarely.
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
-  drupal_add_js(drupal_get_path('module', 'webform') . '/webform.js', 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
   return $form;
 }
@@ -127,8 +127,8 @@ function webform_components_form($form_state, $node) {
  */
 function theme_webform_components_form($form) {
   // Add CSS to display submission info. Don't preprocess because this CSS file is used rarely.
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
-  drupal_add_js(drupal_get_path('module', 'webform') . '/webform.js', 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
   drupal_add_tabledrag('webform-components', 'order', 'sibling', 'webform-weight');
   drupal_add_tabledrag('webform-components', 'match', 'parent', 'webform-pid', 'webform-pid', 'webform-cid');
@@ -309,7 +309,7 @@ function webform_components_form_submit($form, &$form_state) {
 
 function webform_component_edit_form(&$form_state, $node, $component, $clone = FALSE) {
   drupal_set_title(t('Edit component: @name', array('@name' => $component['name'])));
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 
   // Print the correct field type specification.
   // We always need: name and description.
@@ -823,7 +823,7 @@ function webform_component_select($element) {
  */
 function theme_webform_component_select($element) {
   drupal_add_js('misc/tableselect.js');
-  drupal_add_js(drupal_get_path('module', 'webform') . '/webform.js', 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
   $rows = array();
   $header = array();

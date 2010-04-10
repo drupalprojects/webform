@@ -125,7 +125,7 @@ function theme_webform_results_submissions_header($node) {
 function theme_webform_results_submissions($node, $submissions, $total_count = 0, $pager_count = 0) {
   global $user;
 
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 
   // This header has to be generated separately so we can add the SQL necessary
   // to sort the results.
@@ -227,7 +227,7 @@ function theme_webform_results_table_header($node) {
  *   The number of results to be shown per page.
  */
 function theme_webform_results_table($node, $components, $submissions, $total_count, $pager_count) {
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 
   $header = array();
   $rows = array();
@@ -412,7 +412,7 @@ function webform_results_download_form_submit(&$form, &$form_state) {
  * Theme the output of the export form.
  */
 function theme_webform_results_download_form($form) {
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 
   return drupal_render($form);
 }
@@ -421,7 +421,7 @@ function theme_webform_results_download_form($form) {
  * Theme the output of the select list format radio buttons.
  */
 function theme_webform_results_download_select_format($element) {
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 
   $output = '';
 

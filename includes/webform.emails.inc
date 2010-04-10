@@ -90,8 +90,8 @@ function webform_emails_form($form_state, $node) {
  */
 function theme_webform_emails_form($form) {
   // Add CSS to display submission info. Don't preprocess because this CSS file is used rarely.
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
-  drupal_add_js(drupal_get_path('module', 'webform') . '/webform.js', 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
   $node = $form['#node'];
 
@@ -304,8 +304,8 @@ function webform_email_edit_form($form_state, $node, $email = array()) {
  * Theme the Webform mail settings section of the node form.
  */
 function theme_webform_email_edit_form($form) {
-  drupal_add_css(drupal_get_path('module', 'webform') . '/webform.css', 'theme', 'all', FALSE);
-  drupal_add_js(drupal_get_path('module', 'webform') . '/webform.js', 'module', 'header', FALSE, TRUE, FALSE);
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
   // Loop through fields, rendering them into radio button options.
   foreach (array('email', 'subject', 'from_address', 'from_name') as $field) {
