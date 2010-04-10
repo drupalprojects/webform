@@ -350,7 +350,6 @@ function webform_install() {
 function webform_uninstall() {
   // Unset webform variables.
   variable_del('webform_use_cookies');
-  variable_del('webform_debug');
   variable_del('webform_enable_fieldset');
   variable_del('webform_default_from_address');
   variable_del('webform_default_from_name');
@@ -1146,6 +1145,16 @@ function webform_update_6315() {
 
   $ret[] = array('success' => TRUE, 'query' => t('Removed Webform-specific daylight savings handling, now provided by Date API module if available.'));
 
+  return $ret;
+}
+
+/**
+ * Remove the Webform Debug variable.
+ */
+function webform_update_6316() {
+  $ret = array();
+  variable_del('webform_debug');
+  $ret[] = array('success' => TRUE, 'query' => t('Removed the webform_debug variable which is no longer used.'));
   return $ret;
 }
 
