@@ -1293,6 +1293,9 @@ function webform_mail($key, &$message, $params) {
 function webform_client_form(&$form_state, $node, $submission, $is_draft = FALSE, $filter = TRUE) {
   global $user;
 
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform.css');
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform.js');
+
   // Add a theme function for this form.
   $form['#theme'] = array('webform_form_' . $node->nid, 'webform_form');
 

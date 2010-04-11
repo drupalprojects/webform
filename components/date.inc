@@ -23,6 +23,7 @@ function _webform_defaults_date() {
       'year_start' => '1900',
       'year_end' => '2050',
       'year_textfield' => 0,
+      'datepicker' => 1,
       'description' => '',
     ),
   );
@@ -38,6 +39,10 @@ function _webform_theme_date() {
     ),
     'webform_display_date' => array(
       'arguments' => array('element' => NULL),
+    ),
+    'webform_calendar' => array(
+      'arguments' => array('component' => NULL, 'calendar_classes' => NULL),
+      'template' => 'templates/webform-calendar',
     ),
   );
 }
@@ -64,6 +69,16 @@ function _webform_edit_date($component) {
     '#options' => array('user' => t('User timezone'), 'site' => t('Website timezone')),
     '#weight' => 1,
     '#access' => variable_get('configurable_timezones', 1) && module_exists('date_timezone'),
+  );
+
+  $form['display']['datepicker'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable popup calendar'),
+    '#default_value' => $component['extra']['datepicker'],
+    '#description' => t('Enable a JavaScript date picker next to the date field.'),
+    '#weight' => 2,
+    '#access' => function_exists('date_popup_load'),
+    '#parents' => array('extra', 'datepicker'),
   );
 
   $form['display']['year_textfield'] = array(
@@ -111,11 +126,17 @@ function _webform_render_date($component, $value = NULL) {
     '#prefix' => '<div class="webform-component webform-component-' . $component['type'] . '" id="webform-component-' . $component['form_key'] . '">',
     '#suffix' => '</div>',
     '#required' => $component['mandatory'],
+    '#year_start' => $component['extra']['year_start'],
+    '#year_end' => $component['extra']['year_end'],
     '#webform_component' => $component,
     '#process' => array('webform_expand_date'),
     '#theme' => 'webform_date',
     '#element_validate' => array('webform_validate_date'),
   );
+
+  if ($component['extra']['datepicker'] && function_exists('date_popup_load')) {
+    $element['#datepicker'] = TRUE;
+  }
 
   if (isset($value[0]) && $value[0] !== '') {
     $value = webform_date_array($value[0], 'date');
@@ -195,8 +216,8 @@ function webform_expand_date($element) {
     $element['year']['#maxlength'] = 4;
     unset($element['year']['#options']);
   }
-  elseif (is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
-    $element['year']['#options'] = array('' => t('Year')) + drupal_map_assoc(range($component['extra']['year_start'], $component['extra']['year_end']));
+  elseif (is_numeric($element['#year_start']) && is_numeric($element['#year_end'])) {
+    $element['year']['#options'] = array('' => t('Year')) + drupal_map_assoc(range($element['#year_start'], $element['#year_end']));
   }
 
   return $element;
@@ -206,18 +227,39 @@ function webform_expand_date($element) {
  * Theme a webform date element.
  */
 function theme_webform_date($element) {
+  $element['year']['#attributes']['class'] = 'year';
+  $element['month']['#attributes']['class'] = 'month';
+  $element['day']['#attributes']['class'] = 'day';
+
   // Add error classes to all items within the element.
   if (form_get_error($element)) {
-    $element['year']['#attributes']['class'] = 'error';
-    $element['month']['#attributes']['class'] = 'error';
-    $element['day']['#attributes']['class'] = 'error';
+    $element['year']['#attributes']['class'] .= ' error';
+    $element['month']['#attributes']['class'] .= ' error';
+    $element['day']['#attributes']['class'] .= ' error';
+  }
+
+  $class = array('container-inline');
+
+  // Add the JavaScript calendar if available (provided by Date module package).
+  if (!empty($element['#datepicker']) && function_exists('date_popup_load')) {
+    date_popup_load();
+    $class[] = 'webform-datepicker';
+    $calendar_class = array('webform-calendar');
+    if ($element['#year_start'] && is_numeric($element['#year_start'])) {
+      $calendar_class[] = 'webform-calendar-start-' . $element['#year_start'];
+    }
+    if ($element['#year_start'] && is_numeric($element['#year_end'])) {
+      $calendar_class[] = 'webform-calendar-end-' . $element['#year_end'];
+    }
+    $calendar = theme('webform_calendar', $element['#webform_component'], $calendar_class);
   }
 
   $output = '';
-  $output .= '<div class="container-inline">';
+  $output .= '<div class="' . implode(' ', $class) . '">';
   foreach (element_children($element) as $key) {
     $output .= drupal_render($element[$key]);
   }
+  $output .= isset($calendar) ? $calendar : '';
   $output .= '</div>';
   return $output;
 }
@@ -245,10 +287,10 @@ function webform_validate_date($element, $form_state) {
     }
   }
   // Check the date is between allowed years.
-  if ($element['year']['#value'] !== '' && is_numeric($component['extra']['year_start']) && is_numeric($component['extra']['year_end'])) {
+  if ($element['year']['#value'] !== '' && is_numeric($element['#year_start']) && is_numeric($element['#year_end'])) {
     // Allow years to be in reverse order.
-    $start = $component['extra']['year_start'] < $component['extra']['year_end'] ? $component['extra']['year_start'] : $component['extra']['year_end'];
-    $end   = $component['extra']['year_start'] > $component['extra']['year_end'] ? $component['extra']['year_start'] : $component['extra']['year_end'];
+    $start = $element['#year_start'] < $element['#year_end'] ? $element['#year_start'] : $element['#year_end'];
+    $end   = $element['#year_start'] > $element['#year_end'] ? $element['#year_start'] : $element['#year_end'];
     if ($element['year']['#value'] < $start || $element['year']['#value'] > $end) {
       form_error($element['year'], t('The entered date needs to be between the years @start and @end.', array('@start' => $start, '@end' => $end)));
       return;
