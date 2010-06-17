@@ -850,6 +850,7 @@ function webform_node_insert($node) {
   }
 
   module_load_include('inc', 'webform', 'includes/webform.components');
+  module_load_include('inc', 'webform', 'includes/webform.emails');
 
   // Insert the webform.
   db_query("INSERT INTO {webform} (nid, confirmation, confirmation_format, redirect_url, teaser, allow_draft, submit_notice, submit_text, submit_limit, submit_interval) VALUES (%d, '%s', %d, '%s', %d, %d, %d, '%s', %d, %d)", $node->nid, $node->webform['confirmation'], $node->webform['confirmation_format'], $node->webform['redirect_url'], $node->webform['teaser'], $node->webform['allow_draft'], $node->webform['submit_notice'], $node->webform['submit_text'], $node->webform['submit_limit'], $node->webform['submit_interval']);
@@ -859,6 +860,14 @@ function webform_node_insert($node) {
     foreach ($node->webform['components'] as $cid => $component) {
       $component['nid'] = $node->nid; // Required for clone.module.
       webform_component_insert($component);
+    }
+  }
+
+  // Insert emails. Also used with clone.module.
+  if (isset($node->webform['emails']) && !empty($node->webform['emails'])) {
+    foreach ($node->webform['emails'] as $eid => $email) {
+      $email['nid'] = $node->nid;
+      webform_email_insert($email);
     }
   }
 
@@ -915,6 +924,31 @@ function webform_node_update($node) {
     }
   }
 
+  // Compare the webform e-mails and don't do anything if it's not needed.
+  if ($original->webform['emails'] != $node->webform['emails']) {
+    module_load_include('inc', 'webform', 'includes/webform.emails');
+
+    $original_eids = array_keys($original->webform['emails']);
+    $current_eids = array_keys($node->webform['emails']);
+
+    $all_eids = $original_eids + $current_eids;
+    $deleted_eids = array_diff($original_eids, $current_eids);
+    $inserted_eids = array_diff($current_eids, $original_eids);
+
+    foreach ($all_eids as $eid) {
+      if (in_array($eid, $inserted_eids)) {
+        webform_email_insert($node->webform['emails'][$eid]);
+      }
+      elseif (in_array($eid, $deleted_eids)) {
+        webform_email_delete($node, $original->webform['emails'][$eid]);
+      }
+      elseif ($node->webform['emails'][$eid] != $original->webform['emails'][$eid]) {
+        $node->webform['emails'][$eid]['nid'] = $node->nid;
+        webform_email_update($node->webform['emails'][$eid]);
+      }
+    }
+  }
+
   // Just delete and re-insert roles if they've changed.
   if ($original->webform['roles'] != $node->webform['roles']) {
     db_query('DELETE FROM {webform_roles} WHERE nid = %d', $node->nid);
@@ -941,6 +975,7 @@ function webform_node_delete($node) {
   // Remove any trace of webform data from the database.
   db_query('DELETE FROM {webform} WHERE nid = %d', $node->nid);
   db_query('DELETE FROM {webform_component} WHERE nid = %d', $node->nid);
+  db_query('DELETE FROM {webform_emails} WHERE nid = %d', $node->nid);
   db_query('DELETE FROM {webform_roles} WHERE nid = %d', $node->nid);
   db_query('DELETE FROM {webform_submissions} WHERE nid = %d', $node->nid);
   db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d', $node->nid);

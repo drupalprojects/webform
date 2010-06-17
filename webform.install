@@ -1160,6 +1160,15 @@ function webform_update_6316() {
 }
 
 /**
+ * Remove orphaned e-mail settings of nodes that have been deleted.
+ */
+function webform_update_6317() {
+  $ret = array();
+  $ret[] = update_sql("DELETE FROM {webform_emails} WHERE nid NOT IN (SELECT nid FROM {node})");
+  return $ret;
+}
+
+/**
  * Recursively delete all files and folders in the specified filepath, then
  * delete the containing folder.
  *
