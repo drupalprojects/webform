@@ -1087,6 +1087,7 @@ function webform_update_6313() {
 function webform_update_6314() {
   $ret = array();
 
+  drupal_load('module', 'webform');
   webform_component_include('date');
   webform_component_include('time');
 
