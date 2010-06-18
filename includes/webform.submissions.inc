@@ -266,7 +266,7 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
       $where[] = $column . ' = ' . (is_numeric($value) ? '%d' : "'%s'");
     }
 
-    if (isset($filters['uid']) && $filters['uid'] === 0) {
+    if (isset($filters['uid']) && $filters['uid'] === 0 && isset($_SESSION['webform_submission'])) {
       $anonymous_sids = array_keys($_SESSION['webform_submission']);
       if (count($anonymous_sids)) {
         $placeholders = array_fill(0, count($anonymous_sids), "%d");
