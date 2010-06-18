@@ -142,6 +142,8 @@ function webform_get_submissions($nid, $header = NULL, $uid = NULL, $pager_count
     if ($uid) {
       $pager_query .= ' AND uid = %d';
     }
+    $pager_query .= is_array($header) ? tablesort_sql($header) : ' ORDER BY sid ASC';
+
     $res = pager_query($pager_query, $pager_count, 0, NULL, $nid, $uid);
     $sids = array();
     while ($row = db_fetch_object($res)) {
