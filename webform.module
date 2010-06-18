@@ -1167,7 +1167,7 @@ function webform_node_view(&$node, $teaser, $page) {
     module_load_include('inc', 'webform', 'includes/webform.submissions');
 
     // Disable the form if the limit is exceeded and page cache is not active.
-    if (($limit_exceeded = _webform_submission_limit_check($node)) && ($user->uid != 0 || variable_get('cache', CACHE_DISABLED) == CACHE_DISABLED)) {
+    if (($limit_exceeded = _webform_submission_limit_check($node)) && ($user->uid != 0 || variable_get('cache', 0) == 0)) {
       $enabled = FALSE;
     }
   }
@@ -1256,7 +1256,7 @@ function theme_webform_view_messages($node, $teaser, $page, $submission_count, $
   global $user;
 
   $type = 'notice';
-  $cached = $user->uid == 0 && variable_get('cache', CACHE_DISABLED);
+  $cached = $user->uid == 0 && variable_get('cache', 0);
 
   // If not allowed to submit the form, give an explanation.
   if (array_search(TRUE, $allowed_roles) === FALSE && $user->uid != 1) {
