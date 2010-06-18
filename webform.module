@@ -834,6 +834,9 @@ function webform_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
     case 'prepare':
       webform_node_prepare($node);
       break;
+    case 'prepare translation':
+      webform_node_prepare_translation($node);
+      break;
     case 'load':
       return webform_node_load($node);
     case 'view':
@@ -986,8 +989,31 @@ function webform_node_delete($node) {
  */
 function webform_node_prepare(&$node) {
   if (!isset($node->webform)) {
-    $additions = webform_node_load($node);
-    $node->webform = $additions['webform'];
+    $node->webform = array(
+      'confirmation' => '',
+      'confirmation_format' => FILTER_FORMAT_DEFAULT,
+      'redirect_url' => '',
+      'teaser' => 0,
+      'allow_draft' => 0,
+      'submit_notice' => 0,
+      'submit_text' => '',
+      'submit_limit' => -1,
+      'submit_interval' => -1,
+      'roles' => array(1, 2),
+      'emails' => array(),
+      'components' => array(),
+    );
+  }
+}
+
+/**
+ * Implementation of hook_node_prepare_translation().
+ */
+function webform_node_prepare_translation(&$node) {
+  // Copy all Webform settings over to translated versions of this node.
+  if (isset($node->translation_source)) {
+    $source_node = node_load($node->translation_source->nid);
+    $node->webform = $source_node->webform;
   }
 }
 
@@ -1013,21 +1039,6 @@ function webform_node_load($node) {
       $additions['webform']['emails'][$email['eid']] = $email;
       $additions['webform']['emails'][$email['eid']]['excluded_components'] = array_filter(explode(',', $email['excluded_components']));
     }
-  }
-  else {
-    $additions['webform'] = array(
-      'confirmation' => '',
-      'confirmation_format' => FILTER_FORMAT_DEFAULT,
-      'redirect_url' => '',
-      'teaser' => 0,
-      'allow_draft' => 0,
-      'submit_notice' => 0,
-      'submit_text' => '',
-      'submit_limit' => -1,
-      'submit_interval' => -1,
-      'roles' => array(1, 2),
-      'emails' => array(),
-    );
   }
 
   $additions['webform']['components'] = array();
