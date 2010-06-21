@@ -82,8 +82,17 @@ function _webform_display_hidden($component, $value, $format = 'html') {
     '#theme' => 'webform_display_hidden',
     '#theme_wrappers' => $format == 'text' ? array('webform_element_text') : array('webform_element'),
     '#post_render' => array('webform_element_wrapper'),
-    '#access' => user_access('edit all webform submissions') || user_access('access all webform results'),
   );
+
+  // TODO: This check is unusual. It shows hidden fields in e-mails but not
+  // when viewing in the browser unless you're an administrator. This should be
+  // a more logical check. See these related issues:
+  // http://drupal.org/node/313639
+  // http://drupal.org/node/781786
+  if ($format == 'html') {
+    $element['#access'] = user_access('edit all webform submissions') || user_access('access all webform results');
+  }
+
   return $element;
 }
 
