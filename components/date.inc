@@ -518,9 +518,8 @@ function webform_strtodate($format, $string, $timezone_name = NULL) {
   if (variable_get('configurable_timezones', 1) && $timezone_name == 'user') {
     $timezone_name = isset($GLOBALS['user']->timezone_name) ? $GLOBALS['user']->timezone_name : NULL;
   }
-  if (empty($timezone_name)) {
+  elseif (empty($timezone_name) || $timezone_name == 'user') {
     $timezone_name = variable_get('date_default_timezone_name', NULL);
-    $timezone_name = NULL;
   }
 
   if (!empty($timezone_name) && class_exists('DateTimeZone')) {
