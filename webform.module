@@ -986,24 +986,31 @@ function webform_node_delete($node) {
 }
 
 /**
+ * Default settings for a newly created webform node.
+ */
+function webform_node_defaults() {
+  return array(
+    'confirmation' => '',
+    'confirmation_format' => FILTER_FORMAT_DEFAULT,
+    'redirect_url' => '',
+    'teaser' => 0,
+    'allow_draft' => 0,
+    'submit_notice' => 0,
+    'submit_text' => '',
+    'submit_limit' => -1,
+    'submit_interval' => -1,
+    'roles' => array(1, 2),
+    'emails' => array(),
+    'components' => array(),
+  );
+}
+
+/**
  * Implementation of hook_node_prepare().
  */
 function webform_node_prepare(&$node) {
   if (!isset($node->webform)) {
-    $node->webform = array(
-      'confirmation' => '',
-      'confirmation_format' => FILTER_FORMAT_DEFAULT,
-      'redirect_url' => '',
-      'teaser' => 0,
-      'allow_draft' => 0,
-      'submit_notice' => 0,
-      'submit_text' => '',
-      'submit_limit' => -1,
-      'submit_interval' => -1,
-      'roles' => array(1, 2),
-      'emails' => array(),
-      'components' => array(),
-    );
+    $node->webform = webform_node_defaults();
   }
 }
 
@@ -1025,8 +1032,9 @@ function webform_node_load($node) {
   module_load_include('inc', 'webform', 'includes/webform.components');
   $additions = array();
 
-  if (isset($node->nid) && ($webform = db_fetch_array(db_query('SELECT * FROM {webform} WHERE nid = %d', $node->nid)))) {
-    $additions['webform'] = $webform;
+  if (isset($node->nid)) {
+    $webform = db_fetch_array(db_query('SELECT * FROM {webform} WHERE nid = %d', $node->nid));
+    $additions['webform'] = $webform ? $webform : webform_node_defaults();
 
     $additions['webform']['roles'] = array();
     $result = db_query('SELECT rid FROM {webform_roles} WHERE nid = %d', $node->nid);
