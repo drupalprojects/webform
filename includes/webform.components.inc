@@ -688,8 +688,8 @@ function webform_component_delete($node, $component) {
   // Delete all elements under this element.
   $result = db_query('SELECT cid FROM {webform_component} WHERE nid = %d AND pid = %d', $node->nid, $component['cid']);
   while ($row = db_fetch_object($result)) {
-    $component = $node->webform['components'][$row->cid];
-    webform_component_delete($node, $component);
+    $child_component = $node->webform['components'][$row->cid];
+    webform_component_delete($node, $child_component);
   }
 
   // Post-delete actions.
