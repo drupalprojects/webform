@@ -1087,9 +1087,11 @@ function webform_update_6313() {
 function webform_update_6314() {
   $ret = array();
 
+  // Note that we can't use webform_component_include(), because calls to
+  // hook_webform_component_info() will fail if webform.module is disabled.
   drupal_load('module', 'webform');
-  webform_component_include('date');
-  webform_component_include('time');
+  module_load_include('inc', 'webform', 'components/time');
+  module_load_include('inc', 'webform', 'components/date');
 
   $result = db_query("SELECT c.type, c.extra, d.* FROM {webform_component} c INNER JOIN {webform_submitted_data} d ON c.nid = d.nid AND c.cid = d.cid WHERE c.type = 'time' OR c.type = 'date' ORDER BY d.sid, d.cid");
   $current_cid = NULL;
