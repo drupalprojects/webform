@@ -291,7 +291,7 @@ function _webform_analysis_rows_time($component, $sids = array()) {
   $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   // build an array of timestamps from entered values.
   $timestamps = array();
-  $submissions = 1;
+  $submissions = 0;
   while ($row = db_fetch_array($result)) {
     if ($row['no'] == '0') {
       $submissions++;
