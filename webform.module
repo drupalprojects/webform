@@ -468,7 +468,7 @@ function webform_init() {
     drupal_add_css(drupal_get_path('module', 'system') . '/admin.css', 'module');
 
     // Support for Admin module (1.x).
-    if (function_exists('_admin_init_theme')) {
+    if (function_exists('_admin_init_theme') && empty($custom_theme)) {
       _admin_init_theme();
     }
   }
