@@ -284,7 +284,7 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
     }
 
     $where_clause = implode(' AND ', $where);
-    $pager_query = 'SELECT sid FROM {webform_submissions} WHERE ' . $where_clause;
+    $pager_query = 'SELECT sid FROM {webform_submissions} s LEFT JOIN {users} u ON u.uid = s.uid WHERE ' . $where_clause;
 
     if (is_array($header)) {
       $pager_query .= tablesort_sql($header);
