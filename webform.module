@@ -1199,7 +1199,7 @@ function webform_node_view(&$node, $teaser, $page) {
   }
 
   // Render the form and generate the output.
-  $form = drupal_get_form('webform_client_form_' . $node->nid, $node, $submission, $is_draft);
+  $form = !empty($node->webform['components']) ? drupal_get_form('webform_client_form_' . $node->nid, $node, $submission, $is_draft) : '';
   $output = theme('webform_view', $node, $teaser, $page, $form, $enabled);
 
   // Remove the surrounding <form> tag if this is a preview.
