@@ -1212,14 +1212,6 @@ function webform_node_view(&$node, $teaser, $page) {
     theme('webform_view_messages', $node, $teaser, $page, $submission_count, $limit_exceeded, $allowed_roles);
   }
 
-  // If the node body is null, for instance if the body field is omitted in
-  // the content type, then it will get set to 'n/a' when check_markup() is
-  // run during node_prepare(). Get around this by setting it to an empty
-  // string.
-  $node->body = isset($node->body) ? $node->body : '';
-
-  // Add the output to the node.
-  $node = node_prepare($node, $teaser);
   if (isset($output)) {
     if (module_exists('content')) {
       $weight = content_extra_field_weight($node->type, 'webform');
