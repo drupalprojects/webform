@@ -29,6 +29,7 @@ function webform_schema() {
       'confirmation_format' => array(
         'description' => 'The input format used by the confirmation message.',
         'type' => 'int',
+        'size' => 'tiny',
         'not null' => TRUE,
         'default' => 0,
       ),
@@ -1168,6 +1169,15 @@ function webform_update_6316() {
 function webform_update_6317() {
   $ret = array();
   $ret[] = update_sql("DELETE FROM {webform_emails} WHERE nid NOT IN (SELECT nid FROM {node})");
+  return $ret;
+}
+
+/**
+ * Ensure that the confirmation format column is correctly using size = 'tiny'.
+ */
+function webform_update_6318() {
+  $ret = array();
+  db_change_field($ret, 'webform', 'confirmation_format', 'confirmation_format', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
   return $ret;
 }
 
