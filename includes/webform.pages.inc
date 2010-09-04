@@ -13,7 +13,9 @@
 function webform_configure_form(&$form_state, $node) {
   $form = array();
 
-  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css');
+  // Add CSS and JS. Don't preprocess because these files are used rarely.
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
   $form['nid'] = array(
     '#type' => 'value',
