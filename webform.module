@@ -567,7 +567,8 @@ function webform_theme() {
       'file' => 'includes/webform.report.inc',
     ),
     'webform_results_submissions' => array(
-      'arguments' => array('node' => NULL, 'submissions' => NULL, 'total_count' => 0, 'pager_count' => 0),
+      'arguments' => array('element' => NULL),
+      'template' => 'templates/webform-results-submissions',
       'file' => 'includes/webform.report.inc',
     ),
     'webform_results_table_header' => array(
