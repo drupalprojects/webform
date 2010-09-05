@@ -242,7 +242,6 @@ function _webform_edit_validate_options($element, &$form_state) {
   $form_state['values']['extra'][$key] = form_options_to_text($element_options['options'], 'custom');
 
   // Options saved for select components.
-  dsm($element_options);
   if ($key == 'items') {
     $form_state['values']['extra']['multiple'] = $element_options['multiple'];
     $form_state['values']['extra']['custom_keys'] = $element_options['custom_keys'];
