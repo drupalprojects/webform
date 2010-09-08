@@ -19,7 +19,7 @@
 drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 ?>
 
-<?php if (count($table['rows'])): ?>
+<?php if (count($table['#rows'])): ?>
   <?php print theme('webform_results_per_page', $total_count, $pager_count); ?>
   <?php print theme('table', $table['#header'], $table['#rows']); ?>
 <?php else: ?>
