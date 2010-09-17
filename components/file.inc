@@ -120,6 +120,7 @@ function _webform_edit_file($component) {
       '#description' => t('Enter the max file size a user may upload (in KB).'),
       '#size' => 10,
       '#weight' => 3,
+      '#field_suffix' => t('KB'),
       '#default_value' => $component['extra']['filtering']['size'],
       '#parents' => array('extra', 'filtering', 'size'),
     );
@@ -129,6 +130,7 @@ function _webform_edit_file($component) {
       '#default_value' => $component['extra']['savelocation'],
       '#description' => '<div style="display: block">' . t('Webform uploads are always saved in the site files directory. You may optionally specify a subfolder to store your files.') . '</div>',
       '#weight' => 3,
+      '#field_prefix' => file_directory_path() . '/webform/',
       '#element_validate' => array('_webform_edit_file_check_directory'),
       '#after_build' => array('_webform_edit_file_check_directory'),
     );
@@ -269,9 +271,6 @@ function theme_webform_edit_file($form) {
   );
 
   $output = drupal_render($form);
-
-  // Prefix the upload location field with the default path for webform.
-  $output = str_replace('Upload Directory: </label>', 'Upload Directory: </label>' . file_directory_path() . '/webform/', $output);
 
   return $output;
 }
