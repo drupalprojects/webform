@@ -123,6 +123,7 @@ function _webform_edit_file($component) {
       '#field_suffix' => t('KB'),
       '#default_value' => $component['extra']['filtering']['size'],
       '#parents' => array('extra', 'filtering', 'size'),
+      '#element_validate' => array('_webform_edit_file_size_validate'),
     );
     $form['extra']['savelocation'] = array(
       '#type' => 'textfield',
@@ -148,6 +149,17 @@ function _webform_edit_file($component) {
 }
 
 /**
+ * A Form API element validate function to check filesize is numeric.
+ */
+function _webform_edit_file_size_validate($element) {
+  if (!empty($element['#value'])) {
+    if (!is_numeric($element['#value']) || intval($element['#value']) != $element['#value']) {
+      form_error($element, t('Max upload size must be a number in KB.'));
+    }
+  }
+}
+
+/**
  * A Form API after build function.
  *
  * Ensure that the destination directory exists and is writable.
@@ -157,6 +169,11 @@ function _webform_edit_file_check_directory($element) {
   $base_success = file_check_directory($base_dir, FILE_CREATE_DIRECTORY);
 
   $destination_dir = $base_dir . '/' . $element['#value'];
+
+  // Try to make the directory recursively before calling file_check_directory().
+  // This may be removed in D7, as recusive is the default there.
+  @mkdir($destination_dir, 0775, TRUE);
+
   $destination_success = file_check_directory($destination_dir, FILE_CREATE_DIRECTORY);
   if (!$base_success || !$destination_success) {
     form_set_error('savelocation', t('The save directory %directory could not be created. Check that the webform files directory is writtable.', array('%directory' => $destination_dir)));
