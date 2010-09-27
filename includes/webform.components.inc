@@ -846,6 +846,8 @@ function theme_webform_component_select($element) {
     $element['#children'] = theme('table', $header, $rows);;
   }
 
+  $element['#value'] = NULL;
+
   return theme('fieldset', $element);
 }
 
