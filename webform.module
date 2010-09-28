@@ -1037,8 +1037,14 @@ function webform_node_load($node) {
 
   if (isset($node->nid)) {
     $webform = db_fetch_array(db_query('SELECT * FROM {webform} WHERE nid = %d', $node->nid));
-    $additions['webform'] = $webform ? $webform : webform_node_defaults();
 
+    // If a webform record doesn't exist, just return the defaults.
+    if (!$webform) {
+      $additions['webform'] = webform_node_defaults();
+      return $additions;
+    }
+
+    $additions['webform'] = $webform;
     $additions['webform']['roles'] = array();
     $result = db_query('SELECT rid FROM {webform_roles} WHERE nid = %d', $node->nid);
     while ($role = db_fetch_object($result)) {
@@ -1144,8 +1150,8 @@ function webform_form_submit($form, &$form_state) {
  */
 function webform_node_view(&$node, $teaser, $page) {
   global $user;
-  // If a teaser or a new node (during preview), do not display the form.
-  if (($teaser && !$node->webform['teaser']) || empty($node->nid)) {
+  // If empty, a teaser, or a new node (during preview) do not display.
+  if (empty($node->webform['components']) || ($teaser && !$node->webform['teaser']) || empty($node->nid)) {
     return;
   }
 
