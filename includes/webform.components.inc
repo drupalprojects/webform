@@ -843,7 +843,7 @@ function theme_webform_component_select($element) {
     $element['#children'] = t('No available components.');
   }
   else {
-    $element['#children'] = theme('table', $header, $rows);;
+    $element['#children'] = '<div class="webform-component-select-wrapper">' . theme('table', $header, $rows) . '</div>';
   }
 
   $element['#value'] = NULL;
