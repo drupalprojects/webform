@@ -38,8 +38,9 @@ function _webform_edit_markup($component) {
   // Add the filter form.
   $form['markup']['format'] = filter_form($component['extra']['format'], 0, array('extra', 'format'));
 
-  // No description for markup.
-  $form['extra']['description'] = array();
+  $form['extra']['description'] = array(); // No description for markup.
+  $form['display'] = array('#type' => 'markup'); // Hide the display options.
+  $form['display']['title_display'] = array();
 
   return $form;
 }
@@ -50,12 +51,13 @@ function _webform_edit_markup($component) {
 function _webform_render_markup($component, $value = NULL, $filter = TRUE) {
   $element = array(
     '#type'   => 'markup',
-    '#title'  => $component['name'],
+    '#title'  => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#weight' => $component['weight'],
     '#markup' => $filter ? _webform_filter_values(check_markup($component['value'], $component['extra']['format'], FALSE), NULL, NULL, NULL, FALSE) : $component['value'],
     '#input_format' => $component['extra']['format'],
     '#prefix' => '<div class="webform-component webform-component-' . $component['type'] . '" id="webform-component-' . $component['form_key'] . '">',
     '#suffix' => '</div>',
+    '#webform_component' => $component,
   );
 
   // TODO: Remove when #markup becomes available in D7.

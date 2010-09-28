@@ -2181,6 +2181,19 @@ function template_preprocess_webform_mail_message(&$vars) {
 }
 
 /**
+ * A Form API #pre_render function. Sets display based on #title_display.
+ *
+ * Note: this entire function may be removed in Drupal 7, which supports
+ * #title_display natively.
+ */
+function webform_element_title_display($element) {
+  if (isset($element['#title_display']) && $element['#title_display'] == 'none') {
+    $element['#title'] = NULL;
+  }
+  return $element;
+}
+
+/**
  * A Form API #post_render function. Wraps displayed elements in their label.
  *
  * Note: this entire function may be removed in Drupal 7, which supports
