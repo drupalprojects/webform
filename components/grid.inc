@@ -358,7 +358,9 @@ function _webform_csv_data_grid($component, $export_options, $value) {
   $options = _webform_select_options_from_text($component['extra']['options'], TRUE);
   $return = array();
   foreach ($questions as $key => $question) {
-    $return[] = isset($value[$key]) && isset($options[$value[$key]]) ? $options[$value[$key]] : '';
+    if (isset($value[$key]) && isset($options[$value[$key]])) {
+      $return[] = $export_options['select_keys'] ? $value[$key] : $options[$value[$key]];
+    }
   }
   return $return;
 }
