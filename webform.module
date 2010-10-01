@@ -2240,7 +2240,7 @@ function theme_webform_element($element, $value) {
  */
 function theme_webform_element_text($element, $value) {
   $output = '';
-  $is_group = webform_component_feature($element['#component']['type'], 'group');
+  $is_group = webform_component_feature($element['#webform_component']['type'], 'group');
 
   // Output the element title.
   if (isset($element['#title'])) {
