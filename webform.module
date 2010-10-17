@@ -1509,8 +1509,6 @@ function webform_block_save($delta = '', $edit = array()) {
 function webform_client_form(&$form_state, $node, $submission, $is_draft = FALSE, $filter = TRUE) {
   global $user;
 
-  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform.css');
-  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform.js');
   module_load_include('inc', 'webform', 'includes/webform.components');
 
   // Bind arguments to $form to make them available in theming and form_alter.
@@ -2304,6 +2302,9 @@ function _webform_confirmation($node) {
  * Prepare for theming of the webform form.
  */
 function template_preprocess_webform_form(&$vars) {
+  drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform.css');
+  drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform.js');
+
   if (isset($vars['form']['details']['nid']['#value'])) {
     $vars['nid'] = $vars['form']['details']['nid']['#value'];
   }
