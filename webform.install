@@ -57,7 +57,7 @@ function webform_schema() {
         'type' => 'int',
         'size' => 'tiny',
         'not null' => TRUE,
-        'default' => 0,
+        'default' => 1,
       ),
       'submit_text' => array(
         'description' => 'The title of the submit button on the form.',
@@ -1207,6 +1207,15 @@ function webform_update_6319() {
     db_add_field($ret, 'webform_emails', 'html', array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'default' => 0, 'not null' => TRUE));
     db_add_field($ret, 'webform_emails', 'attachments', array('type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'default' => 0, 'not null' => TRUE));
   }
+  return $ret;
+}
+
+/**
+ * Set the default for the "submit_notice" column to 1.
+ */
+function webform_update_6320() {
+  $ret = array();
+  db_change_field($ret, 'webform', 'submit_notice', 'submit_notice', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 1));
   return $ret;
 }
 

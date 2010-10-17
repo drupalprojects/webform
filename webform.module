@@ -998,7 +998,7 @@ function webform_node_defaults() {
     'redirect_url' => '',
     'teaser' => 0,
     'allow_draft' => 0,
-    'submit_notice' => 0,
+    'submit_notice' => 1,
     'submit_text' => '',
     'submit_limit' => -1,
     'submit_interval' => -1,
