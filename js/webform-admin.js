@@ -50,7 +50,6 @@ Drupal.webform.setActive = function(context) {
     $('.form-radio', $(this).parent().parent()).attr('checked', true);
     e.preventDefault();
   };
-  console.log($('.webform-set-active', context));
   $('.webform-set-active', context).click(setActive).change(setActive);
 };
 
