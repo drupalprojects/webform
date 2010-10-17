@@ -37,6 +37,14 @@ function webform_schema() {
         'description' => 'The URL a user is redirected to after submitting a form.',
         'type' => 'varchar',
         'length' => 255,
+        'default' => '<confirmation>',
+      ),
+      'block' => array(
+         'description' => 'Boolean value for whether this form be available as a block.',
+         'type' => 'int',
+         'size' => 'tiny',
+         'not null' => TRUE,
+         'default' => 0,
       ),
       'teaser' => array(
         'description' => 'Boolean value for whether the entire form should be displayed on the teaser.',
@@ -374,6 +382,7 @@ function webform_uninstall() {
   variable_del('webform_default_format');
   variable_del('webform_format_override');
   variable_del('webform_csv_delimiter');
+  variable_del('webform_blocks');
 
   $component_list = array();
   $path = drupal_get_path('module', 'webform') . '/components';
@@ -1216,6 +1225,17 @@ function webform_update_6319() {
 function webform_update_6320() {
   $ret = array();
   db_change_field($ret, 'webform', 'submit_notice', 'submit_notice', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 1));
+  return $ret;
+}
+
+/**
+ * Add field for block feature and redirection setting.
+ */
+function webform_update_6321() {
+  $ret = array();
+  db_add_field($ret, 'webform', 'block', array('type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0));
+  db_change_field($ret, 'webform', 'redirect_url', 'redirect_url', array('type' => 'varchar', 'length' => 255, 'default' => '<confirmation>'));
+  update_sql("UPDATE {webform} SET redirect_url = '<confirmation>' WHERE redirect_url = ''");
   return $ret;
 }
 

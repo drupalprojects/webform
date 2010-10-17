@@ -4,7 +4,7 @@
  * Webform node form interface enhancments.
  */
 
-Drupal.behaviors.webform = function(context) {
+Drupal.behaviors.webformAdmin = function(context) {
   // Apply special behaviors to fields with default values.
   Drupal.webform.defaultValues(context);
   // On click or change, make a parent radio button selected.
@@ -50,6 +50,7 @@ Drupal.webform.setActive = function(context) {
     $('.form-radio', $(this).parent().parent()).attr('checked', true);
     e.preventDefault();
   };
+  console.log($('.webform-set-active', context));
   $('.webform-set-active', context).click(setActive).change(setActive);
 };
 
