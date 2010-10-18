@@ -386,10 +386,27 @@ function webform_expand_checkboxes($element) {
     $element[$key]['#return_value'] = check_plain($element[$key]['#return_value']);
     $element[$key]['#name'] = $element['#name'] . '[' . $element[$key]['#return_value'] . ']';
     $element[$key]['#value_callback'] = 'webform_checkbox_value';
+    $element[$key]['#pre_render'][] = 'webform_checkbox_prerender';
   }
 
   foreach ($default_value as $key => $val) {
     $element[$key]['#default_value'] = $val;
+  }
+  return $element;
+}
+
+/**
+ * Helper function to ensure that the default value of "0" checkboxes renders.
+ *
+ * The default handling of checkboxes only checks checkboxes based on the #value
+ * property. If a checkbox has a value of "0" (as a string), the checkbox
+ * doesn't print out the way it should.
+ *
+ * @see theme_checkbox()
+ */
+function webform_checkbox_prerender($element) {
+  if ($element['#value'] === '0') {
+    $element['#value'] = TRUE;
   }
   return $element;
 }
@@ -401,12 +418,12 @@ function webform_expand_checkboxes($element) {
  * a checked checkbox that has a value of '0'. This value callback will return
  * NULL instead of an integer 0 for checkboxes that are not checked.
  *
- * @see form_checkbox_value()
+ * @see form_type_checkbox_value()
  */
 function webform_checkbox_value($form, $edit = FALSE) {
   if ($edit !== FALSE) {
     if (empty($form['#disabled'])) {
-      return !empty($edit) ? $form['#return_value'] : NULL; // 0 in core.
+      return $edit !== NULL ? $form['#return_value'] : NULL; // 0 in core.
     }
     else {
       return $form['#default_value'];
