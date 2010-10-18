@@ -374,6 +374,8 @@ function webform_install() {
  */
 function webform_uninstall() {
   // Unset webform variables.
+  variable_del('webform_node_types');
+  variable_del('webform_node_types_redirect');
   variable_del('webform_use_cookies');
   variable_del('webform_enable_fieldset');
   variable_del('webform_default_from_address');
@@ -748,6 +750,10 @@ function webform_update_6304() {
   if (!db_affected_rows()) {
     $ret[] = update_sql("INSERT INTO {node_type} (type, name, module, description, help, has_title, title_label, has_body, body_label, min_word_count, custom, modified, locked, orig_type) VALUES ('webform', 'Webform', 'node', 'Create a new form or questionnaire accessible to users. Submission results and statistics are recorded and accessible to privileged users.', '', 1, 'Title', 1, 'Body', 0, 1, 1, 0, 'webform')");
   }
+
+  // This variable for some reason must be set manually.
+  variable_set('webform_node_types', array('webform'));
+
   return $ret;
 }
 
