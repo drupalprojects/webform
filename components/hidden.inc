@@ -81,7 +81,7 @@ function _webform_display_hidden($component, $value, $format = 'html') {
     '#theme' => 'webform_display_hidden',
     '#format' => $format,
     '#theme' => 'webform_display_hidden',
-    '#theme_wrappers' => $format == 'text' ? array('webform_element_text') : array('webform_element'),
+    '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
     '#webform_component' => $component,
   );

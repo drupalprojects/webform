@@ -509,6 +509,9 @@ function webform_theme() {
     'webform_element' => array(
       'arguments' => array('element' => NULL, 'value' => NULL),
     ),
+    'webform_element_wrapper' => array(
+      'arguments' => array('element' => NULL, 'content' => NULL),
+    ),
     'webform_element_text' => array(
       'arguments' => array('element' => NULL, 'value' => NULL),
     ),
@@ -2366,7 +2369,6 @@ function webform_element_wrapper($content, $elements) {
 function theme_webform_element($element, $value) {
   $wrapper_classes = array(
    'form-item',
-   $element['#format'] == 'html' ? 'webform-display-item' : 'webform-item',
   );
   $output = '<div class="' . implode(' ', $wrapper_classes) . '" id="' . $element['#id'] . '-wrapper">' . "\n";
   $required = !empty($element['#required']) ? '<span class="form-required" title="' . t('This field is required.') . '">*</span>' : '';
@@ -2384,6 +2386,30 @@ function theme_webform_element($element, $value) {
 
   $output .= "</div>\n";
 
+  return $output;
+}
+
+/**
+ * Wrap form elements in a DIV with appropriate classes and an ID.
+ *
+ * This is a temporary work-around until we can use theme_webform_element() for
+ * all webform form elements in Drupal 7.
+ */
+function theme_webform_element_wrapper($element, $content) {
+  // All elements using this for display only are given the "display" type.
+  if (isset($element['#format']) && $element['#format'] == 'html') {
+    $type = 'display';
+  }
+  else {
+    $type = (isset($element['#type']) && !in_array($element['#type'], array('markup', 'textfield'))) ? $element['#type'] : $element['#webform_component']['type'];
+  }
+
+  $parents = str_replace('_', '-', implode('--', array_slice($element['#parents'], 1)));
+
+  $output = '';
+  $output .= '<div class="webform-component webform-component-' . $type . '" id="webform-component-' . $parents . '">';
+  $output .= $content;
+  $output .= '</div>';
   return $output;
 }
 

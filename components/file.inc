@@ -303,7 +303,6 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE) {
     '#title' => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#title_display' => $component['extra']['title_display'] ? $component['extra']['title_display'] : 'before',
     //'#required' => $component['mandatory'], // Drupal core bug with required file uploads.
-    '#weight' => $component['weight'],
     '#description' => $filter ? _webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
     '#attributes' => $component['extra']['attributes'],
     '#tree' => FALSE, // file_check_upload assumes a flat $_FILES structure.
@@ -318,9 +317,9 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE) {
   $element['#webform_form_key'] = $form_key;
   $element['#weight'] = $component['weight'];
   $element['#theme'] = 'webform_render_file';
-  $element['#prefix'] = '<div class="webform-component webform-component-' . $component['type'] . '" id="webform-component-' . $component['form_key'] . '">';
-  $element['#suffix'] = '</div>';
-
+  $element['#theme_wrappers'] = array('webform_element_wrapper');
+  $element['#post_render'] = array('webform_element_wrapper');
+  $element['#webform_component'] = $component;
 
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
@@ -358,7 +357,11 @@ function theme_webform_render_file($element) {
     $element[$element['#webform_form_key']]['#required'] = TRUE;
   }
 
-  return drupal_render($element);
+  $output = '';
+  foreach (element_children($element) as $key) {
+    $output .= drupal_render($element[$key]);
+  }
+  return $output;
 }
 
 /**
@@ -501,7 +504,7 @@ function _webform_display_file($component, $value, $format = 'html') {
      '#value' => $fid ? webform_get_file($fid) : NULL,
      '#weight' => $component['weight'],
      '#theme' => 'webform_display_file',
-     '#theme_wrappers' => $format == 'text' ? array('webform_element_text') : array('webform_element'),
+     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
      '#post_render' => array('webform_element_wrapper'),
      '#webform_component' => $component,
      '#format' => $format,

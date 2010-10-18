@@ -131,12 +131,12 @@ function _webform_render_time($component, $value = NULL, $filter = TRUE) {
     '#required' => $component['mandatory'],
     '#weight' => $component['weight'],
     '#description' => $filter ? _webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
-    '#prefix' => '<div class="webform-component webform-component-' . $component['type'] . '" id="webform-component-' . $component['form_key'] . '">',
-    '#suffix' => '</div>',
-    '#theme' => 'webform_time',
     '#element_validate' => array('webform_validate_time'),
     '#hourformat' => $component['extra']['hourformat'],
+    '#theme' => 'webform_time',
+    '#theme_wrappers' => array('webform_element_wrapper'),
     '#pre_render' => array('webform_element_title_display'),
+    '#post_render' => array('webform_element_wrapper'),
     '#webform_component' => $component,
   );
 
@@ -239,7 +239,7 @@ function _webform_display_time($component, $value, $format = 'html') {
     '#title' => $component['name'],
     '#weight' => $component['weight'],
     '#theme' => 'webform_display_time',
-    '#theme_wrappers' => $format == 'html' ? array('webform_element') : array('webform_element_text'),
+    '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
     '#format' => $format,
     '#hourformat' => $component['extra']['hourformat'],
@@ -254,7 +254,7 @@ function _webform_display_time($component, $value, $format = 'html') {
  */
 function theme_webform_display_time($element) {
   $output = ' ';
-  if (isset($element['#value']['hour']) && isset($element['#value']['minute'])) {
+  if (isset($element['#value']['hour']) && $element['#value']['hour'] !== '' && isset($element['#value']['minute']) && $element['#value']['minute'] !== '') {
     if ($element['#hourformat'] == '24-hour') {
       $output = sprintf('%02d', $element['#value']['hour']) . ':' . sprintf('%02d', $element['#value']['minute']);
     }
