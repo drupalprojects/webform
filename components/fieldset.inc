@@ -71,8 +71,8 @@ function _webform_render_fieldset($component, $value = NULL, $filter = TRUE) {
 /**
  * Pre-render function to set a fieldset ID.
  */
-function _webform_fieldset_prerender($element) {
-  $element['#attributes']['id'] = 'webform-component-' . implode('--', array_slice($element['#parents'], 1));
+function webform_fieldset_prerender($element) {
+  $element['#attributes']['id'] = 'webform-component-' . str_replace('_', '-', implode('--', array_slice($element['#parents'], 1)));
   return $element;
 }
 
