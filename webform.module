@@ -1382,7 +1382,7 @@ function webform_block_info() {
   $blocks = array();
   $webform_node_types = webform_variable_get('webform_node_types');
   if (!empty($webform_node_types)) {
-    $placeholders = db_placeholders($webform_node_types);
+    $placeholders = db_placeholders($webform_node_types, 'varchar');
     $result = db_query("SELECT n.title, n.nid FROM {webform} w LEFT JOIN {node} n ON w.nid = n.nid WHERE w.block = 1 AND n.type IN ($placeholders)", $webform_node_types);
     while ($data = db_fetch_object($result)) {
       $blocks['client-block-'. $data->nid] = array(
