@@ -1273,8 +1273,8 @@ msgid "The options for this select contain illegal characters (quotes or spaces)
 msgstr "このセレクトのオプションに無効な文字が含まれています (クオートや空白)。<em>空白なしの安全な値</em>|<em>表示する値</em>という形式でオプションを指定してください。"
 
 #: components/select.inc:94
-msgid "select..."
-msgstr "選択..."
+msgid "- Select -"
+msgstr "- 選択 -"
 
 #: components/select.inc:310
 msgid "Allows creation of checkboxes, radio buttons, or select menus."

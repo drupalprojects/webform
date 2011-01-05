@@ -1406,8 +1406,8 @@ msgid "To use the option with a select component, you must use key-value pairs s
 msgstr "Για τη χρησιμοποίηση των επιλογών με ένα συστατικό τύπου επιλογής, πρέπει να χρησιμοποιήσετε ζεύγη κλειδιών-τιμών χωρισμένα με το |. Για παράδειγμα, user@example.com|Δοκιμαστικός χρήστης."
 
 #: components/select.inc:110
-msgid "select..."
-msgstr "επιλογή..."
+msgid "- Select -"
+msgstr "- Επιλογή -"
 
 #: components/select.inc:277
 msgid "Allows creation of checkboxes, radio buttons, or select menus."

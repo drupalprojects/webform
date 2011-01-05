@@ -277,8 +277,10 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
     _webform_shuffle_options($options);
   }
 
-  if ($component['extra']['aslist'] && !$component['extra']['multiple'] && !($component['mandatory'] && $default_value !== '')) {
-    $options = array('' => t('select...')) + $options;
+  // Add default options if using a select list with no default. This matches
+  // Drupal 7's handling of select lists.
+  if ($component['extra']['aslist'] && !$component['extra']['multiple'] && $default_value === '') {
+    $options = array('' => ($component['mandatory'] ? t('- Select -') : t('- None -'))) + $options;
   }
 
   // Set the component options.

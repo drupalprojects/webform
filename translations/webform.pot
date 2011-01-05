@@ -1427,7 +1427,7 @@ msgid "Options within the select list must be unique. The following keys have be
 msgstr ""
 
 #: components/select.inc:155
-msgid "select..."
+msgid "- Select -"
 msgstr ""
 
 #: components/select.inc:325
