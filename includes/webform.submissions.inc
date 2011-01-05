@@ -288,12 +288,14 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
       $where[] = $column . ' = ' . (is_numeric($value) ? '%d' : "'%s'");
     }
 
-    if (isset($filters['uid']) && $filters['uid'] === 0 && isset($_SESSION['webform_submission'])) {
-      $anonymous_sids = array_keys($_SESSION['webform_submission']);
-      if (count($anonymous_sids)) {
-        $placeholders = array_fill(0, count($anonymous_sids), "%d");
-        $where[] = 'sid IN (' . implode(',', $placeholders) . ')';
+    if (isset($filters['u.uid']) && $filters['u.uid'] === 0) {
+      if (!empty($_SESSION['webform_submission'])) {
+        $anonymous_sids = array_keys($_SESSION['webform_submission']);
+        $where[] = 'sid IN (' . db_placeholders($anonymous_sids) . ')';
         $arguments = array_merge($arguments, $anonymous_sids);
+      }
+      else {
+        $where[] = 'sid = 0';
       }
     }
 
@@ -331,10 +333,10 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
            'FROM {webform_submissions} s ' .
            'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid ' .
            'LEFT JOIN {users} u ON u.uid = s.uid ' .
-           'WHERE s.sid IN (' . implode($sids, ',') . ') ' .
+           'WHERE s.sid IN (' . db_placeholders($sids) . ') ' .
            'ORDER BY sd.sid ASC, sd.cid ASC, sd.no ASC';
 
-  $result = db_query($query);
+  $result = db_query($query, $sids);
 
   // Convert the queried rows into submissions.
   $previous = array();
@@ -383,8 +385,7 @@ function webform_get_submission_count($nid, $uid = NULL, $reset = FALSE) {
     }
     if ($uid === 0) {
       $submissions = isset($_SESSION['webform_submission']) ? $_SESSION['webform_submission'] : array();
-      $placeholders = count($submissions) ? array_fill(0, count($submissions), "%d") : array();
-      $query .= count($submissions) ? ' AND sid IN (' . implode(',', $placeholders) . ')' : ' AND sid = 0';
+      $query .= count($submissions) ? ' AND sid IN (' . db_placeholders($submissions) . ')' : ' AND sid = 0';
       $arguments = array_merge($arguments, array_keys($submissions));
     }
 
