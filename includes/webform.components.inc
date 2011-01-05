@@ -133,6 +133,7 @@ function webform_components_form($form_state, $node) {
     '#type' => 'submit',
     '#value' => t('Submit'),
     '#weight' => 45,
+    '#access' => count($node->webform['components']) > 0,
   );
 
   return $form;
