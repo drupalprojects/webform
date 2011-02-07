@@ -46,7 +46,11 @@ function webform_submission_update($node, $submission) {
   // preserve any data from form pages not visited in this submission.
   if ($submission->is_draft) {
     $submitted_cids = array_keys($submission->data);
-    db_query("DELETE FROM {webform_submitted_data} WHERE sid = %d AND cid IN (" . implode(', ', $submitted_cids) . ")", $submission->sid);
+    if ($submitted_cids) {
+      $placeholders = db_placeholders($submitted_cids);
+      $arguments = array_merge(array($submission->sid), $submitted_cids);
+      db_query("DELETE FROM {webform_submitted_data} WHERE sid = %d AND cid IN (" . $placeholders . ")", $arguments);
+    }
   }
   else {
     db_query("DELETE FROM {webform_submitted_data} WHERE sid = %d", $submission->sid);
@@ -377,7 +381,7 @@ function webform_get_submission_count($nid, $uid = NULL, $reset = FALSE) {
   static $counts;
 
   if (!isset($counts[$nid][$uid]) || $reset) {
-    $query = 'SELECT count(*) FROM {webform_submissions} WHERE nid = %d';
+    $query = 'SELECT count(*) FROM {webform_submissions} WHERE nid = %d AND is_draft = 0';
     $arguments = array($nid);
     if ($uid !== NULL) {
       $query .= ' AND uid = %d';
