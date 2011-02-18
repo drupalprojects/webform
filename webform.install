@@ -306,10 +306,13 @@ function webform_schema() {
         'length' => 128,
       ),
     ),
+    'primary key' => array('sid'),
     'unique keys' => array(
       'sid_nid' => array('sid', 'nid'),
     ),
-    'primary key' => array('sid'),
+    'indexes' => array(
+      'nid_uid_sid' => array('nid', 'uid', 'sid'),
+    ),
   );
 
   $schema['webform_submitted_data'] = array(
@@ -351,11 +354,11 @@ function webform_schema() {
         'not null' => TRUE,
       ),
     ),
+    'primary key' => array('nid', 'sid', 'cid', 'no'),
     'indexes' => array(
       'nid' => array('nid'),
       'sid_nid' => array('sid', 'nid'),
     ),
-    'primary key' => array('nid', 'sid', 'cid', 'no'),
   );
 
   return $schema;
@@ -1310,6 +1313,15 @@ function webform_update_6325() {
     $empty_list = implode(',', $empty_nids);
     $ret[] = update_sql("DELETE FROM {webform} WHERE nid in ($empty_list)");
   }
+  return $ret;
+}
+
+/**
+ * Add an index for sid_nid_uid to webform_submissions.
+ */
+function webform_update_6326() {
+  $ret = array();
+  db_add_index($ret, 'webform_submissions', 'nid_uid_sid', array('nid', 'uid', 'sid'));
   return $ret;
 }
 
