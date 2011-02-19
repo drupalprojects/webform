@@ -564,8 +564,7 @@ function _webform_analysis_component($component, $sids = array(), $single = FALS
   $questions = array_values(_webform_component_options($component['extra']['questions']));
 
   // Generate a lookup table of results.
-  $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
-  $sidfilter = count($sids) ? " AND sid in (".implode(",", $placeholders).")" : "";
+  $sidfilter = count($sids) ? " AND sid in (" . db_placeholders($sids, 'int') . ")" : "";
   $query = 'SELECT no, data, count(data) as datacount '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
