@@ -170,6 +170,9 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
   // Create a themed message for mailing.
   $send_count = 0;
   foreach ($emails as $eid => $email) {
+    // Set the HTML property based on availablity of MIME Mail.
+    $email['html'] = ($email['html'] && module_exists('mimemail'));
+
     // Pass through the theme layer if using the default template.
     if ($email['template'] == 'default') {
       $email['message'] = theme(array('webform_mail_' . $node->nid, 'webform_mail', 'webform_mail_message'), $node, $submission, $email);
@@ -179,7 +182,6 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
     }
 
     // Replace tokens in the message.
-    $email['html'] = ($email['html'] && module_exists('mimemail'));
     $email['message'] = _webform_filter_values($email['message'], $node, $submission, $email, FALSE, TRUE);
 
     // Build the e-mail headers.
