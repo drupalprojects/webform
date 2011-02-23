@@ -22,13 +22,13 @@ Installation
 
 4. Create a webform node at node/add/webform.
 
-Upgrading from any previous version
------------------------------------
+Upgrading from previous versions
+--------------------------------
 1. Copy the entire webform directory the Drupal modules directory.
 
-2. Login as the FIRST user or change the $access_check in upgrade.php to FALSE
+2. Login as the FIRST user or change the $access_check in update.php to FALSE
 
-3. Run upgrade.php (at http://www.example.com/update.php)
+3. Run update.php (at http://www.example.com/update.php)
 
 Support
 -------
