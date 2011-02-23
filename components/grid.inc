@@ -242,7 +242,7 @@ function theme_webform_display_grid($element) {
           $row[] = array('data' => '<strong>X</strong>', 'class' => 'checkbox webform-grid-option');
         }
         else {
-          $row[] = array('data' => '&nbsp', 'class' => 'checkbox webform-grid-option');
+          $row[] = array('data' => '&nbsp;', 'class' => 'checkbox webform-grid-option');
         }
       }
       $rows[] = $row;

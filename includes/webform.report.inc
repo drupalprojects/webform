@@ -661,7 +661,7 @@ function theme_webform_results_analysis($node, $data, $sids = array(), $analysis
 
   $header = array(
     $single ? $analysis_component['name'] : t('Q'),
-    array('data' => $single ? '&nbsp' : t('responses'), 'colspan' => '10')
+    array('data' => $single ? '&nbsp;' : t('responses'), 'colspan' => '10')
   );
 
   foreach ($data as $cid => $row_data) {
