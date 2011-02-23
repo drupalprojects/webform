@@ -791,7 +791,7 @@ function webform_update_6305() {
 
   $result = db_query("SELECT * FROM {role} r INNER JOIN {permission} p ON p.rid = r.rid");
   while ($role = db_fetch_object($result)) {
-    $role->perm = drupal_map_assoc(explode(', ', $role->perm));
+    $role->perm = drupal_map_assoc(explode(', ', db_escape_string($role->perm)));
     foreach ($updated_permissions as $old => $new) {
       if (isset($role->perm[$old])) {
         unset($role->perm[$old]);
@@ -893,7 +893,7 @@ function webform_update_6309() {
   while ($role = db_fetch_object($result)) {
     $perms = explode(',', $role->perm);
     foreach ($perms as $id => $perm) {
-      $perms[$id] = trim($perm);
+      $perms[$id] = db_escape_string(trim($perm));
     }
     $ret[] = update_sql("UPDATE {permission} SET perm = '" . implode(', ', $perms) . "' WHERE rid = " . $role->rid);
   }
