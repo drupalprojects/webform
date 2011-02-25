@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function webform_install() {
   drupal_set_message('Installing webform');

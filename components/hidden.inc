@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /** 
  * function webform_edit_hidden
  * Create a set of form items to be displayed on the form for editing this component.

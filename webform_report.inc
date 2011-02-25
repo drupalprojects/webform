@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /** 
  * This file includes helper functions for creating reports for webform.module
