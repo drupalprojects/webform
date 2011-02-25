@@ -108,4 +108,3 @@ of the phptemplate engine.
   you have good reason to do so (like you're forwarding your webform to a custom
   PHP or PERL script).
 
-$Id$

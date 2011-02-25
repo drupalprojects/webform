@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Webform node form interface enhancments.
