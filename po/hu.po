@@ -6,7 +6,6 @@
 # #-#-#-#-#  webform-module.po (webform-module)  #-#-#-#-#
 # translation of webform-module.po to
 # LANGUAGE translation of Drupal (webform.module)
-# $Id$
 # Copyright YEAR NAME <EMAIL@ADDRESS>, 2005.
 #
 # FEHÉR János (http://mindworks.hu) <feher.janos _at- mindworks.hu>, 2007.

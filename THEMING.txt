@@ -101,4 +101,3 @@ function phptemplate_webform_form_[node id here] ($form) {
   PHP or PERL script).
 
 
-$Id$
