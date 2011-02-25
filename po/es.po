@@ -1,6 +1,5 @@
 # translation of es.po to Spanish
 # LANGUAGE translation of Drupal (webform.module)
-# $Id$
 # Copyright YEAR NAME <EMAIL@ADDRESS>.
 # Sergio González González <sergio.gonzalez@hispalinux.es>, 2004.
 #

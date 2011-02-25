@@ -1,6 +1,5 @@
 # LANGUAGE translation of Drupal (webform.module)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
-# $Id$
 #
 #, fuzzy
 msgid ""
