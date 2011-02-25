@@ -1,5 +1,4 @@
 <?php
-  // $Id$
 
   /** 
    * @author Pontus Ullgren <ullgren@user.sourceforge.net>
