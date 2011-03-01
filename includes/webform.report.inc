@@ -136,7 +136,7 @@ function theme_webform_results_per_page($total_count, $pager_count) {
  */
 function theme_webform_results_submissions_header($node) {
   $columns = array(
-    array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
+    array('data' => t('#'), 'field' => 'sid', 'sort' => 'desc'),
     array('data' => t('Submitted'), 'field' => 'submitted'),
   );
   if (webform_results_access($node)) {
@@ -184,7 +184,7 @@ function webform_results_table($node, $pager_count = 0) {
 
 function theme_webform_results_table_header($node) {
   return array(
-    array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
+    array('data' => t('#'), 'field' => 'sid', 'sort' => 'desc'),
     array('data' => t('Submitted'), 'field' => 'submitted'),
     array('data' => t('User'), 'field' => 'name'),
     array('data' => t('IP Address'), 'field' => 'remote_addr'),
