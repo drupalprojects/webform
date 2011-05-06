@@ -62,9 +62,9 @@ function _webform_edit_date($component) {
   );
   $form['extra']['timezone'] = array(
     '#type' => 'radios',
-    '#title' => t('Timezone'),
+    '#title' => t('Default value timezone'),
     '#default_value' => empty($component['extra']['timezone']) ? 'user' : $component['extra']['timezone'],
-    '#description' => t('Adjust the default time value according to a specific timezone.'),
+    '#description' => t('If using relative dates for a default value (e.g. "today") base the current day on this timezone.'),
     '#options' => array('user' => t('User timezone'), 'site' => t('Website timezone')),
     '#weight' => 1,
     '#access' => variable_get('configurable_timezones', 1) && module_exists('date_timezone'),
@@ -126,6 +126,9 @@ function _webform_render_date($component, $value = NULL, $filter = TRUE) {
     '#required' => $component['mandatory'],
     '#year_start' => $component['extra']['year_start'],
     '#year_end' => $component['extra']['year_end'],
+    '#year_textfield' => $component['extra']['year_textfield'],
+    '#default_value' => $component['value'],
+    '#default_timezone' => $component['extra']['timezone'],
     '#process' => array('webform_expand_date'),
     '#theme' => 'webform_date',
     '#theme_wrappers' => array('webform_element_wrapper'),
@@ -139,9 +142,15 @@ function _webform_render_date($component, $value = NULL, $filter = TRUE) {
     $element['#datepicker'] = TRUE;
   }
 
+  // Set the value from Webform.
   if (isset($value[0]) && $value[0] !== '') {
     $value = webform_date_array($value[0], 'date');
     $element['#default_value'] = $value;
+  }
+
+  // Allow the date to be edited as the string value in Form Builder.
+  if (!$filter) {
+    $element['#default_value'] = $component['value'];
   }
 
   return $element;
@@ -155,7 +164,9 @@ function webform_expand_date($element) {
 
   // Accept a string or array value for #default_value.
   if (isset($element['#default_value']) && is_string($element['#default_value'])) {
-    $element['#default_value'] = webform_date_array($element['#default_value'], 'date');
+    $timezone = $element['#default_timezone'] != 'user' ? NULL : 'user';
+    $timestring = webform_strtodate('c', $element['#default_value'], $timezone);
+    $element['#default_value'] = webform_date_array($timestring, 'date');
   }
 
   // Set defaults according to existing #default_value (set by Form API)
@@ -165,11 +176,6 @@ function webform_expand_date($element) {
       'day' => $element['#default_value']['day'],
       'year' => $element['#default_value']['year'],
     );
-  }
-  // Or, if none, use set the defaults of the component.
-  elseif (drupal_strlen($component['value']) > 0) {
-    $timezone = $component['extra']['timezone'] != 'user' ? NULL : 'user';
-    $default_values = webform_date_array(webform_strtodate('c', $component['value'], $timezone), 'date');
   }
   else {
     $default_values = array(
@@ -210,7 +216,7 @@ function webform_expand_date($element) {
   }
 
   // Tweak the year field.
-  if ($component['extra']['year_textfield']) {
+  if ($element['#year_textfield']) {
     $element['year']['#type'] = 'textfield';
     $element['year']['#size'] = 5;
     $element['year']['#maxlength'] = 4;
