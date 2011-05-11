@@ -325,6 +325,11 @@ function webform_components_form_submit($form, &$form_state) {
     // been saved, it is necessary to explicitly clear the cache to make sure
     // the updated webform is visible to anonymous users.
     cache_clear_all();
+
+    // Clear the entity cache if Entity Cache module is installed.
+    if (module_exists('entitycache')) {
+      cache_clear_all($node->nid, 'cache_entity_node');
+    }
   }
 }
 
@@ -609,7 +614,12 @@ function webform_component_edit_form_submit($form, &$form_state) {
   // the updated webform is visible to anonymous users.
   cache_clear_all();
 
-  $form_state['redirect'] = array('node/' . $form_state['values']['nid'] . '/webform/components', isset($cid) ? 'cid=' . $cid : '');
+  // Clear the entity cache if Entity Cache module is installed.
+  if (module_exists('entitycache')) {
+    cache_clear_all($node->nid, 'cache_entity_node');
+  }
+
+  $form_state['redirect'] = array('node/' . $node->nid . '/webform/components', isset($cid) ? 'cid=' . $cid : '');
 }
 
 function webform_component_delete_form($form_state, $node, $component) {
@@ -648,7 +658,17 @@ function webform_component_delete_form_submit($form, &$form_state) {
   unset($node->webform['components'][$component['cid']]);
   webform_check_record($node);
 
-  $form_state['redirect'] = 'node/' . $form_state['values']['node']->nid . '/webform/components';
+  // Since Webform components have been updated but the node itself has not
+  // been saved, it is necessary to explicitly clear the cache to make sure
+  // the updated webform is visible to anonymous users.
+  cache_clear_all();
+
+  // Clear the entity cache if Entity Cache module is installed.
+  if (module_exists('entitycache')) {
+    cache_clear_all($node->nid, 'cache_entity_node');
+  }
+
+  $form_state['redirect'] = 'node/' . $node->nid . '/webform/components';
 }
 
 /**
