@@ -3338,6 +3338,15 @@ function webform_tt($name, $string, $langcode = NULL, $update = FALSE) {
 }
 
 /**
+ * Check if any available HTML mail handlers are available for Webform to use.
+ */
+function webform_email_html_capable() {
+  // The D7 version of this function is much more capable. This function exists
+  // as a wrapper for consistency in the rest of Webform.
+  return module_exists('mimemail');
+}
+
+/**
  * Implementation of hook_views_api().
  */
 function webform_views_api() {

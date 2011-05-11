@@ -272,14 +272,14 @@ function webform_email_edit_form($form_state, $node, $email = array()) {
     '#type' => 'checkbox',
     '#title' => t('Send e-mail as HTML'),
     '#default_value' => $email['html'],
-    '#access' => module_exists('mimemail') && !variable_get('webform_format_override', 0),
+    '#access' => webform_email_html_capable() && !variable_get('webform_format_override', 0),
   );
 
   $form['template']['attachments'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include files as attachments'),
     '#default_value' => $email['attachments'],
-    '#access' => module_exists('mimemail'),
+    '#access' => webform_email_html_capable(),
   );
 
   $form['template']['tokens'] = array(
