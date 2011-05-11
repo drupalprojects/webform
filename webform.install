@@ -1344,6 +1344,16 @@ function webform_update_6326() {
 }
 
 /**
+ * Remove unused Webform variables.
+ */
+function webform_update_6327() {
+  $ret = array();
+  variable_del('node_types');
+  variable_del('components');
+  return $ret;
+}
+
+/**
  * Recursively delete all files and folders in the specified filepath, then
  * delete the containing folder.
  *
