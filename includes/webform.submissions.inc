@@ -484,7 +484,7 @@ function webform_submission_resend_submit($form, &$form_state) {
  *   Formatted HTML form, ready for display.
  */
 function theme_webform_submission_resend($form) {
-  $header = array('',t('E-mail to'), t('Subject'));
+  $header = array('', t('E-mail to'), t('Subject'));
   $rows = array();
   if (!empty($form['emails'])) {
     foreach (element_children($form['emails']) as $eid) {

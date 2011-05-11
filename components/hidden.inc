@@ -6,7 +6,7 @@
  */
 
 /**
- * Implementation of _webform_defaults_component().
+ * Implements _webform_defaults_component().
  */
 function _webform_defaults_hidden() {
   return array(
@@ -21,7 +21,7 @@ function _webform_defaults_hidden() {
 }
 
 /**
- * Implementation of _webform_theme_component().
+ * Implements _webform_theme_component().
  */
 function _webform_theme_hidden() {
   return array(
@@ -32,7 +32,7 @@ function _webform_theme_hidden() {
 }
 
 /**
- * Implementation of _webform_edit_component().
+ * Implements _webform_edit_component().
  */
 function _webform_edit_hidden($component) {
   $form = array();
@@ -52,7 +52,7 @@ function _webform_edit_hidden($component) {
 }
 
 /**
- * Implementation of _webform_render_component().
+ * Implements _webform_render_component().
  */
 function _webform_render_hidden($component, $value = NULL, $filter = TRUE) {
   $element = array(
@@ -70,7 +70,7 @@ function _webform_render_hidden($component, $value = NULL, $filter = TRUE) {
 }
 
 /**
- * Implementation of _webform_display_component().
+ * Implements _webform_display_component().
  */
 function _webform_display_hidden($component, $value, $format = 'html') {
   $element = array(
@@ -102,7 +102,7 @@ function theme_webform_display_hidden($element) {
 }
 
 /**
- * Implementation of _webform_analysis_component().
+ * Implements _webform_analysis_component().
  */
 function _webform_analysis_hidden($component, $sids = array()) {
   $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
@@ -117,7 +117,7 @@ function _webform_analysis_hidden($component, $sids = array()) {
 
   $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   while ($data = db_fetch_array($result)) {
-    if ( strlen(trim($data['data'])) > 0 ) {
+    if (strlen(trim($data['data'])) > 0) {
       $nonblanks++;
       $wordcount += str_word_count(trim($data['data']));
     }
@@ -132,14 +132,14 @@ function _webform_analysis_hidden($component, $sids = array()) {
 }
 
 /**
- * Implementation of _webform_csv_data_component().
+ * Implements _webform_csv_data_component().
  */
 function _webform_table_hidden($component, $value) {
   return check_plain(empty($value[0]) ? '' : $value[0]);
 }
 
 /**
- * Implementation of _webform_csv_data_component().
+ * Implements _webform_csv_data_component().
  */
 function _webform_csv_headers_hidden($component, $export_options) {
   $header = array();
@@ -150,7 +150,7 @@ function _webform_csv_headers_hidden($component, $export_options) {
 }
 
 /**
- * Implementation of _webform_csv_data_component().
+ * Implements _webform_csv_data_component().
  */
 function _webform_csv_data_hidden($component, $export_options, $value) {
   return empty($value[0]) ? '' : $value[0];

@@ -6,7 +6,7 @@
  */
 
 /**
- * Implementation of _webform_defaults_component().
+ * Implements _webform_defaults_component().
  */
 function _webform_defaults_email() {
   return array(
@@ -28,7 +28,7 @@ function _webform_defaults_email() {
 }
 
 /**
- * Implementation of _webform_theme_component().
+ * Implements _webform_theme_component().
  */
 function _webform_theme_email() {
   return array(
@@ -39,7 +39,7 @@ function _webform_theme_email() {
 }
 
 /**
- * Implementation of _webform_edit_component().
+ * Implements _webform_edit_component().
  */
 function _webform_edit_email($component) {
   $form['value'] = array(
@@ -102,7 +102,7 @@ function _webform_edit_email_validate($element, &$form_state) {
 }
 
 /**
- * Implementation of _webform_render_component().
+ * Implements _webform_render_component().
  */
 function _webform_render_email($component, $value = NULL, $filter = TRUE) {
   global $user;
@@ -169,7 +169,7 @@ function _webform_validate_email($form_element, &$form_state) {
 }
 
 /**
- * Implementation of _webform_display_component().
+ * Implements _webform_display_component().
  */
 function _webform_display_email($component, $value, $format = 'html') {
   return array(
@@ -193,7 +193,7 @@ function theme_webform_display_email($element) {
 }
 
 /**
- * Implementation of _webform_analysis_component().
+ * Implements _webform_analysis_component().
  */
 function _webform_analysis_email($component, $sids = array()) {
   $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
@@ -222,7 +222,7 @@ function _webform_analysis_email($component, $sids = array()) {
 }
 
 /**
- * Implementation of _webform_table_component().
+ * Implements _webform_table_component().
  */
 function _webform_table_email($component, $value) {
   return check_plain(empty($value[0]) ? '' : $value[0]);
@@ -230,7 +230,7 @@ function _webform_table_email($component, $value) {
 
 
 /**
- * Implementation of _webform_csv_headers_component().
+ * Implements _webform_csv_headers_component().
  */
 function _webform_csv_headers_email($component, $export_options) {
   $header = array();
@@ -241,7 +241,7 @@ function _webform_csv_headers_email($component, $export_options) {
 }
 
 /**
- * Implementation of _webform_csv_data_component().
+ * Implements _webform_csv_data_component().
  */
 function _webform_csv_data_email($component, $export_options, $value) {
   return empty($value[0]) ? '' : $value[0];

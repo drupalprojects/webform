@@ -6,7 +6,7 @@
  */
 
 /**
- * Implementation of _webform_defaults_component().
+ * Implements _webform_defaults_component().
  */
 function _webform_defaults_select() {
   return array(
@@ -32,7 +32,7 @@ function _webform_defaults_select() {
 }
 
 /**
- * Implementation of _webform_theme_component().
+ * Implements _webform_theme_component().
  */
 function _webform_theme_select() {
   return array(
@@ -43,7 +43,7 @@ function _webform_theme_select() {
 }
 
 /**
- * Implementation of _webform_edit_component().
+ * Implements _webform_edit_component().
  */
 function _webform_edit_select($component) {
   $form = array();
@@ -253,7 +253,7 @@ function _webform_edit_validate_options($element, &$form_state) {
 }
 
 /**
- * Implementation of _webform_render_component().
+ * Implements _webform_render_component().
  */
 function _webform_render_select($component, $value = NULL, $filter = TRUE) {
   $element = array(
@@ -449,7 +449,7 @@ function webform_expand_select_ids($element) {
 }
 
 /**
- * Implementation of _webform_display_component().
+ * Implements _webform_display_component().
  */
 function _webform_display_select($component, $value, $format = 'html') {
   return array(
@@ -465,7 +465,7 @@ function _webform_display_select($component, $value, $format = 'html') {
 }
 
 /**
- * Implementation of _webform_submit_component().
+ * Implements _webform_submit_component().
  *
  * Convert FAPI 0/1 values into something saveable.
  */
@@ -557,7 +557,7 @@ function theme_webform_display_select($element) {
 }
 
 /**
- * Implementation of _webform_analysis_component().
+ * Implements _webform_analysis_component().
  */
 function _webform_analysis_select($component, $sids = array(), $single = FALSE) {
   $options = _webform_select_options($component, TRUE);
@@ -614,7 +614,7 @@ function _webform_analysis_select($component, $sids = array(), $single = FALSE) 
 }
 
 /**
- * Implementation of _webform_table_component().
+ * Implements _webform_table_component().
  */
 function _webform_table_select($component, $value) {
   // Convert submitted 'safe' values to un-edited, original form.
@@ -638,7 +638,7 @@ function _webform_table_select($component, $value) {
 }
 
 /**
- * Implementation of _webform_csv_headers_component().
+ * Implements _webform_csv_headers_component().
  */
 function _webform_csv_headers_select($component, $export_options) {
   $headers = array(
@@ -664,7 +664,8 @@ function _webform_csv_headers_select($component, $export_options) {
       }
       if ($export_options['select_keys']) {
         $headers[2][] = $key;
-      } else {
+      }
+      else {
         $headers[2][] = $item;
       }
       $count++;
@@ -679,7 +680,7 @@ function _webform_csv_headers_select($component, $export_options) {
 }
 
 /**
- * Implementation of _webform_csv_data_component().
+ * Implements _webform_csv_data_component().
  */
 function _webform_csv_data_select($component, $export_options, $value) {
   $options = _webform_select_options($component, TRUE, FALSE);
@@ -709,7 +710,7 @@ function _webform_csv_data_select($component, $export_options, $value) {
   }
   else {
     $key = $value[0];
-    if ($export_options['select_keys']){
+    if ($export_options['select_keys']) {
       $return = $key;
     }
     else {
@@ -882,7 +883,7 @@ function _webform_select_options_from_text($text, $flat = FALSE, $filter = TRUE)
  */
 function _webform_select_options_to_text($options) {
   $output = '';
-  $previous_key = false;
+  $previous_key = FALSE;
 
   foreach ($options as $key => $value) {
     // Convert groups.
