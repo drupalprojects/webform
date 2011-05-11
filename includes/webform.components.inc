@@ -332,11 +332,10 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
   drupal_set_title(t('Edit component: @name', array('@name' => $component['name'])));
   drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
 
+  $form['#tree'] = TRUE;
+
   // Print the correct field type specification.
   // We always need: name and description.
-  $form = array(
-    '#tree' => TRUE,
-  );
   $form['type'] = array(
     '#type' => 'value',
     '#value' => $component['type'],

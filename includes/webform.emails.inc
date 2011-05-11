@@ -13,11 +13,9 @@
 function webform_emails_form($form_state, $node) {
   module_load_include('inc', 'webform', 'includes/webform.components');
 
-  $form = array(
-    '#tree' => TRUE,
-    '#node' => $node,
-    'components' => array(),
-  );
+  $form['#tree'] = TRUE;
+  $form['#node'] = $node;
+  $form['components'] = array();
 
   $form['nid'] = array(
     '#type' => 'value',
@@ -170,9 +168,7 @@ function webform_emails_form_submit($form, &$form_state) {
 function webform_email_edit_form($form_state, $node, $email = array()) {
   module_load_include('inc', 'webform', 'includes/webform.components');
 
-  $form = array(
-    '#tree' => TRUE,
-  );
+  $form['#tree'] = TRUE;
   $form['node'] = array(
     '#type' => 'value',
     '#value' => $node,
