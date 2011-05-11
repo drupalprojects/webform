@@ -261,7 +261,6 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
             if (webform_component_feature($component['type'], 'attachment') && !empty($submission->data[$component['cid']]['value'][0])) {
               $file = webform_get_file($submission->data[$component['cid']]['value'][0]);
               if ($file) {
-                $file->list = 1; // Needed to include in attachments.
                 $attachments[] = $file;
               }
             }
