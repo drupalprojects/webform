@@ -272,7 +272,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
         $message = drupal_mail('webform', 'submission', $address, $language, $mail_params, $email['from'], FALSE);
 
         // Send the e-mail via MIME mail.
-        $message = mimemail($email['from'], $address, $message['subject'], $message['body'], !$email['html'], $email['headers'], $email['html'] ? NULL : $message['body'], $attachments, 'webform');
+        $message = mimemail($message['from'], $message['to'], $message['subject'], $message['body'], !$email['html'], $message['headers'], $email['html'] ? NULL : $message['body'], $attachments, 'webform');
         if ($message) {
           $send_count++;
         }
