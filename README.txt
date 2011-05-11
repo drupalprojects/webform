@@ -8,7 +8,7 @@ can optionally be mailed to e-mail addresses upon submission.
 
 Requirements
 ------------
-Drupal 6.x
+Drupal 6.16 or higher
 
 Installation
 ------------

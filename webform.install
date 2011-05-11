@@ -418,6 +418,25 @@ function webform_uninstall() {
 }
 
 /**
+ * Implementation of hook_requirements().
+ */
+function webform_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+
+  if (version_compare(VERSION, '6.16') < 0) {
+    $requirements['webform_drupal_version'] = array(
+      'title' => $t('Webform'),
+      'value' => VERSION,
+      'severity' => REQUIREMENT_ERROR,
+      'description' => $t('Webform requires at least version @version of Drupal core.', array('@version' => '6.16')),
+    );
+  }
+
+  return $requirements;
+}
+
+/**
  * Set the minimum upgrade version.
  *
  * This should allow updates from any 2.x version of Webform (for D5 or D6),

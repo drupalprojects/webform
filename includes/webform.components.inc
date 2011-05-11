@@ -664,12 +664,17 @@ function webform_component_insert(&$component) {
     $function($component);
   }
 
-  db_lock_table('webform_component');
-  $component['cid'] = isset($component['cid']) ? $component['cid'] : db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
-  $component['value'] = isset($component['value']) ? $component['value'] : NULL;
-  $component['mandatory'] = isset($component['mandatory']) ? $component['mandatory'] : 0;
-  db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight']);
-  db_unlock_tables();
+  if (lock_acquire('webform_component_insert_' . $component['nid'], 5)) {
+    $component['cid'] = isset($component['cid']) ? $component['cid'] : db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
+    $component['value'] = isset($component['value']) ? $component['value'] : NULL;
+    $component['mandatory'] = isset($component['mandatory']) ? $component['mandatory'] : 0;
+    db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight']);
+    lock_release('webform_component_insert_' . $component['nid']);
+  }
+  else {
+    watchdog('webform', 'A Webform component could not be saved because a timeout occurred while trying to acquire a lock for the node. Details: <pre>@component</pre>', array('@component' => print_r($component, TRUE)));
+    return FALSE;
+  }
 
   // Post-insert actions.
   module_invoke_all('webform_component_insert', $component);
