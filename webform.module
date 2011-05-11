@@ -538,7 +538,7 @@ function webform_theme() {
       'pattern' => 'webform_mail_headers_[0-9]+',
     ),
     'webform_token_help' => array(
-      'arguments' => array(),
+      'arguments' => array('arguments' => array('node' => NULL)),
     ),
     // webform.admin.inc.
     'webform_admin_settings' => array(
@@ -2191,7 +2191,10 @@ function webform_client_form_submit($form, &$form_state) {
 
   // Strip out empty tags added by WYSIWYG editors if needed.
   $confirmation = strlen(trim(strip_tags($node->webform['confirmation']))) ? $node->webform['confirmation'] : '';
+
+  // Clean up the redirect URL and filter it for webform tokens.
   $redirect_url = trim($node->webform['redirect_url']);
+  $redirect_url = _webform_filter_values($redirect_url, $node, $submission, NULL, FALSE, TRUE);
 
   // Remove the domain name from the redirect.
   $redirect_url = preg_replace('/^' . preg_quote($GLOBALS['base_url'], '/') . '\//', '', $redirect_url);
