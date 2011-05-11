@@ -273,7 +273,8 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
 
         // Send the e-mail via MIME mail.
         $message = mimemail($message['from'], $message['to'], $message['subject'], $message['body'], !$email['html'], $message['headers'], $email['html'] ? NULL : $message['body'], $attachments, 'webform');
-        if ($message) {
+        // Support boolean (older) or array-based return values from MIME Mail.
+        if ((is_array($message) && $message['result']) || (!is_array($message) && $message)) {
           $send_count++;
         }
       }
