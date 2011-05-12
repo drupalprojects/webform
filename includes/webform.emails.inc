@@ -284,7 +284,7 @@ function webform_email_edit_form($form_state, $node, $email = array()) {
   );
 
   $form['template']['tokens'] = array(
-    '#value' => theme('webform_token_help', $node),
+    '#value' => theme('webform_token_help', 'all'),
   );
 
   $form['template']['components'] = array(
