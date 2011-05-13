@@ -123,10 +123,8 @@ function webform_expand_time($element) {
       $timezone_name = variable_get('date_default_timezone_name', NULL);
     }
 
-    if (isset($timezone_name) && class_exists('DateTimeZone')) {
-      $timezone = new DateTimeZone($timezone_name);
-      $datetime = new DateTime($element['#default_value'], $timezone);
-      $default_values = webform_date_array($datetime->format('c'), 'time');
+    if (!empty($timezone_name) && class_exists('DateTimeZone')) {
+      $default_values = webform_date_array(webform_strtodate('c', $element['#default_value'], $timezone_name), 'time');
     }
     else {
       $default_values = webform_date_array(date('c', strtotime($element['#default_value'])), 'time');
