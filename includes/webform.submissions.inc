@@ -266,12 +266,13 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
             }
           }
         }
+        $message['attachments'] = $attachments;
 
         // Prepare (but don't send) the e-mail normally.
         $message = drupal_mail('webform', 'submission', $address, $language, $mail_params, $email['from'], FALSE);
 
         // Send the e-mail via MIME mail.
-        $message = mimemail($message['from'], $message['to'], $message['subject'], $message['body'], !$email['html'], $message['headers'], $email['html'] ? NULL : $message['body'], $attachments, 'webform');
+        $message = mimemail($message['from'], $message['to'], $message['subject'], $message['body'], !$email['html'], $message['headers'], $email['html'] ? NULL : $message['body'], $message['attachments'], 'webform');
         // Support boolean (older) or array-based return values from MIME Mail.
         if ((is_array($message) && $message['result']) || (!is_array($message) && $message)) {
           $send_count++;
