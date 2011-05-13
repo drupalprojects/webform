@@ -324,6 +324,7 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE) {
   $element['#webform_form_key'] = $form_key;
   $element['#weight'] = $component['weight'];
   $element['#theme'] = 'webform_render_file';
+  $element['#title_display'] = $element[$form_key]['#title_display'];
   $element['#theme_wrappers'] = array('webform_element_wrapper');
   $element['#post_render'] = array('webform_element_wrapper');
   $element['#webform_component'] = $component;

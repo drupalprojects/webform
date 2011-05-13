@@ -47,7 +47,6 @@ function _webform_edit_hidden($component) {
   );
   $form['extra']['description'] = array(); // Hide the description box.
   $form['display'] = array('#type' => 'markup'); // Hide the display options.
-  $form['display']['title_display'] = array();
   return $form;
 }
 

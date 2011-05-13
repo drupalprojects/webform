@@ -699,6 +699,7 @@ function webform_webform_component_info() {
         'required' => FALSE,
         'conditional' => FALSE,
         'group' => TRUE,
+        'title_inline' => FALSE,
       ),
       'file' => 'components/fieldset.inc',
     ),
@@ -716,6 +717,7 @@ function webform_webform_component_info() {
       'description' => t('Allows creation of grid questions, denoted by radio buttons.'),
       'features' => array(
         'conditional' => FALSE,
+        'title_inline' => FALSE,
       ),
       'file' => 'components/grid.inc',
     ),
@@ -727,6 +729,7 @@ function webform_webform_component_info() {
         'required' => FALSE,
         'email_address' => TRUE,
         'email_name' => TRUE,
+        'title_display' => FALSE,
       ),
     ),
     'markup' => array(
@@ -737,6 +740,7 @@ function webform_webform_component_info() {
         'email' => FALSE,
         'required' => FALSE,
         'conditional' => FALSE,
+        'title_display' => FALSE,
       ),
       'file' => 'components/markup.inc',
     ),
@@ -746,6 +750,7 @@ function webform_webform_component_info() {
       'features' => array(
         'csv' => FALSE,
         'required' => FALSE,
+        'title_display' => FALSE,
       ),
       'file' => 'components/pagebreak.inc',
     ),
@@ -764,6 +769,7 @@ function webform_webform_component_info() {
       'file' => 'components/textarea.inc',
       'features' => array(
         'spam_analysis' => TRUE,
+        'title_inline' => FALSE,
       ),
     ),
     'textfield' => array(
@@ -2415,8 +2421,16 @@ function theme_webform_element_wrapper($element, $content) {
 
   $parents = str_replace('_', '-', implode('--', array_slice($element['#parents'], 1)));
 
+  $wrapper_classes = array(
+    'webform-component',
+    'webform-component-' . $type,
+  );
+  if (isset($element['#title_display']) && $element['#title_display'] == 'inline') {
+    $wrapper_classes[] = 'webform-container-inline';
+  }
+
   $output = '';
-  $output .= '<div class="webform-component webform-component-' . $type . '" id="webform-component-' . $parents . '">';
+  $output .= '<div class="' . implode(' ', $wrapper_classes) . '" id="webform-component-' . $parents . '">';
   $output .= $content;
   $output .= '</div>';
   return $output;
