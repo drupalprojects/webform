@@ -325,11 +325,12 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
   }
 
   if ($component['extra']['other_option'] && module_exists('select_or_other')) {
-    // Set display as a select list:
+    // Set display as a select_or_other element:
     $element['#type'] = 'select_or_other';
     $element['#other'] = !empty($component['extra']['other_text']) ? check_plain($component['extra']['other_text']) : t('Other...');
     $element['#other_unknown_defaults'] = 'other';
     $element['#other_delimiter'] = ', ';
+    $element['#process'] = array('select_or_other_process', 'webform_expand_select_or_other');
     if ($component['extra']['multiple']) {
       $element['#multiple'] = TRUE;
       $element['#select_type'] = 'checkboxes';
@@ -362,6 +363,29 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
       $element['#type'] = 'radios';
       $element['#process'] = array('expand_radios', 'webform_expand_select_ids');
     }
+  }
+
+  return $element;
+}
+
+/**
+ * Process function to ensure select_or_other elements validate properly.
+ */
+function webform_expand_select_or_other($element) {
+  // Disable validation for back-button and save draft.
+  $element['select']['#validated'] = TRUE;
+  $element['select']['#webform_validated'] = FALSE;
+
+  $element['other']['#validated'] = TRUE;
+  $element['other']['#webform_validated'] = FALSE;
+
+  // If the default value contains "select_or_other" (the key of the select
+  // element for the "other..." choice), discard it and set the "other" value.
+  if (is_array($element['#default_value']) && in_array('select_or_other', $element['#default_value'])) {
+    $key = array_search('select_or_other', $element['#default_value']);
+    unset($element['#default_value'][$key]);
+    $element['#default_value'] = array_values($element['#default_value']);
+    $element['other']['#default_value'] = implode(', ', $element['#default_value']);
   }
 
   return $element;
@@ -491,8 +515,9 @@ function _webform_submit_select($component, $value) {
           $return[] = $option_value;
         }
       }
-      // Handle options that are added through the "other" field.
-      elseif ($component['extra']['other_option'] && module_exists('select_or_other')) {
+      // Handle options that are added through the "other" field. Specifically
+      // exclude the "select_or_other" value, which is added by the select list.
+      elseif ($component['extra']['other_option'] && module_exists('select_or_other') && $option_value != 'select_or_other') {
         $return[] = $option_value;
       }
     }
