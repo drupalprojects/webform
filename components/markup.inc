@@ -52,7 +52,7 @@ function _webform_render_markup($component, $value = NULL, $filter = TRUE) {
     '#title' => $filter ? NULL : $component['name'],
     '#weight' => $component['weight'],
     '#markup' => $filter ? _webform_filter_values(check_markup($component['value'], $component['extra']['format'], FALSE), NULL, NULL, NULL, FALSE) : $component['value'],
-    '#input_format' => $component['extra']['format'],
+    '#format' => $component['extra']['format'],
     '#theme_wrappers' => array('webform_element_wrapper'),
     '#post_render' => array('webform_element_wrapper'),
     '#webform_component' => $component,
