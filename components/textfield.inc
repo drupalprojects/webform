@@ -37,6 +37,7 @@ function _webform_theme_textfield() {
   return array(
     'webform_display_textfield' => array(
       'arguments' => array('element' => NULL),
+      'file' => 'components/textfield.inc',
     ),
   );
 }

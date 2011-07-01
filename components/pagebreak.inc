@@ -25,6 +25,7 @@ function _webform_theme_pagebreak() {
   return array(
     'webform_display_pagebreak' => array(
       'arguments' => array('element' => NULL),
+      'file' => 'components/pagebreak.inc',
     ),
   );
 }

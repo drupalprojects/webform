@@ -34,6 +34,7 @@ function _webform_theme_email() {
   return array(
     'webform_display_email' => array(
       'arguments' => array('component' => NULL, 'value' => NULL, 'format' => 'plain'),
+      'file' => 'components/email.inc',
     ),
   );
 }

@@ -38,6 +38,7 @@ function _webform_theme_select() {
   return array(
     'webform_display_select' => array(
       'arguments' => array('element' => NULL),
+      'file' => 'components/select.inc',
     ),
   );
 }
