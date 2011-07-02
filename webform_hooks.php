@@ -417,15 +417,19 @@ function _webform_edit_component($component) {
  *   an array of values to be shown instead of the default in the component
  *   configuration. This value will always be an array, keyed numerically for
  *   each value saved in this field.
+ * @param $filter
+ *   Whether or not to filter the contents of descriptions and values when
+ *   rendering the component. Values need to be unfiltered to be editable by
+ *   Form Builder. @see _webform_client_form_add_component()
  */
 function _webform_render_component($component, $value = NULL) {
   $form_item = array(
     '#type' => 'textfield',
-    '#title' => $component['name'],
+    '#title' => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#required' => $component['mandatory'],
     '#weight' => $component['weight'],
-    '#description'   => _webform_filter_descriptions($component['extra']['description']),
-    '#default_value' => $component['value'],
+    '#description'   => $filter ? _webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
+    '#default_value' => $filter ? _webform_filter_values($component['value']) : $component['value'],
     '#prefix' => '<div class="webform-component-' . $component['type'] . '" id="webform-component-' . $component['form_key'] . '">',
     '#suffix' => '</div>',
   );
