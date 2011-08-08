@@ -376,16 +376,16 @@ function webform_submission_page($node, $submission, $format) {
 
   // Determine the mode in which we're displaying this submission.
   $mode = ($format != 'form') ? 'display' : 'form';
-  if (preg_match("!^q=print/!", $_SERVER['QUERY_STRING'])) {
+  if (strpos($_SERVER['REQUEST_URI'], 'print/') !== FALSE) {
     $mode = 'print';
   }
-  if (preg_match("!^q=printpdf/!", $_SERVER['QUERY_STRING'])) {
+  if (strpos($_SERVER['REQUEST_URI'], 'printpdf/') !== FALSE) {
     $mode = 'pdf';
   }
 
   // Add navigation for administrators.
   if (webform_results_access($node)) {
-    $navigation = in_array($mode, array('display', 'form')) ? theme('webform_submission_navigation', $node, $submission, $mode) : NULL;
+    $navigation = theme('webform_submission_navigation', $node, $submission, $mode);
     $information = theme('webform_submission_information', $node, $submission, $mode);
   }
   else {
@@ -401,7 +401,7 @@ function webform_submission_page($node, $submission, $format) {
     webform_disable_page_cache();
   }
 
-  return theme('webform_submission_page', $node, $submission, $output, $navigation, $information, $actions);
+  return theme('webform_submission_page', $node, $submission, $output, $navigation, $information, $actions, $mode);
 }
 
 /**
