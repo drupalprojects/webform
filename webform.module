@@ -1393,7 +1393,7 @@ function theme_webform_view($node, $teaser, $page, $form, $enabled) {
 function theme_webform_view_messages($node, $teaser, $page, $submission_count, $limit_exceeded, $allowed_roles, $closed, $cached) {
   global $user;
 
-  $type = 'notice';
+  $type = 'status';
 
   if ($closed) {
     $message = t('Submissions for this form are closed.');
