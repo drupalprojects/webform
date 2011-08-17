@@ -1168,7 +1168,7 @@ function webform_node_load($node) {
     $component['nid'] = $node->nid;
     $component['cid'] = $c['cid'];
     $component['form_key'] = $c['form_key'] ? $c['form_key'] : $c['cid'];
-    $component['name'] = t($c['name']);
+    $component['name'] = $c['name'];
     $component['type'] = $c['type'];
     $component['value'] = $c['value'];
     $component['extra'] = unserialize($c['extra']);
