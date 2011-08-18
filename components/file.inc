@@ -507,7 +507,7 @@ function _webform_submit_file($component, $value) {
     file_set_status($file, FILE_STATUS_PERMANENT);
 
     // Delete any previous files.
-    if ($value['_old'] && ($existing = webform_get_file($value['_old']))) {
+    if ($value['_old'] && $value['_old'] != $value['_fid'] && ($existing = webform_get_file($value['_old']))) {
       file_delete($existing->filepath);
       db_query("DELETE FROM {files} WHERE fid = %d", $existing->fid);
     }
