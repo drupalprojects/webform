@@ -417,6 +417,19 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
     $form['display']['title_display']['#parents'] = array('extra', 'title_display');
   }
 
+  if (webform_component_feature($component['type'], 'private')) {
+  // May user mark fields as Private?
+    $form['display']['private'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Private'),
+    '#default_value' => ($component['extra']['private'] == '1' ? TRUE : FALSE),
+    '#description' => t('Private fields are shown only to users with results access.'),
+    '#weight' => 45,
+    '#parents' => array('extra', 'private'),
+    '#disabled' => !webform_results_access($node),
+    );
+  }
+
   // Validation settings.
   $form['validation'] = array(
     '#type' => 'fieldset',
@@ -705,6 +718,7 @@ function webform_component_insert(&$component) {
     $component['cid'] = isset($component['cid']) ? $component['cid'] : db_result(db_query('SELECT MAX(cid) FROM {webform_component} WHERE nid = %d', $component['nid'])) + 1;
     $component['value'] = isset($component['value']) ? $component['value'] : NULL;
     $component['mandatory'] = isset($component['mandatory']) ? $component['mandatory'] : 0;
+    $component['extra']['private'] = isset($component['extra']['private']) ? $component['extra']['private'] : 0;
     db_query("INSERT INTO {webform_component} (nid, cid, pid, form_key, name, type, value, extra, mandatory, weight) VALUES (%d, %d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d)", $component['nid'], $component['cid'], $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight']);
     lock_release('webform_component_insert_' . $component['nid']);
   }
@@ -735,6 +749,7 @@ function webform_component_update($component) {
 
   $component['value'] = isset($component['value']) ? $component['value'] : NULL;
   $component['mandatory'] = isset($component['mandatory']) ? $component['mandatory'] : 0;
+  $component['extra']['private'] = isset($component['extra']['private']) ? $component['extra']['private'] : 0;
   $success = db_query("UPDATE {webform_component} SET pid = %d, form_key = '%s', name = '%s', type = '%s', value = '%s', extra = '%s', mandatory = %d, weight = %d WHERE nid = %d AND cid = %d", $component['pid'], $component['form_key'], $component['name'], $component['type'], $component['value'], serialize($component['extra']), $component['mandatory'], $component['weight'], $component['nid'], $component['cid']);
 
   // Post-update actions.
@@ -815,6 +830,7 @@ function webform_component_feature($type, $feature) {
     'spam_analysis' => FALSE,
     'group' => FALSE,
     'attachment' => FALSE,
+    'private' => TRUE,
   );
   return isset($components[$type]['features'][$feature]) ? $components[$type]['features'][$feature] : !empty($defaults[$feature]);
 }
