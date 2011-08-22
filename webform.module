@@ -1077,6 +1077,7 @@ function webform_node_delete($node) {
   db_query('DELETE FROM {webform_roles} WHERE nid = %d', $node->nid);
   db_query('DELETE FROM {webform_submissions} WHERE nid = %d', $node->nid);
   db_query('DELETE FROM {webform_submitted_data} WHERE nid = %d', $node->nid);
+  db_query('DELETE FROM {webform_last_download} WHERE nid = %d', $node->nid);
 }
 
 /**
