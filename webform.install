@@ -360,6 +360,41 @@ function webform_schema() {
     ),
   );
 
+  $schema['webform_last_download'] = array(
+   'description' => 'Stores last submission number per user download.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node identifier of a webform.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid' => array(
+       'description' => 'The user identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+     'sid' => array(
+        'description' => 'The last downloaded submission number.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+     'requested' => array(
+        'description' => 'Timestamp of last download request.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid', 'uid'),
+  );
+
   return $schema;
 }
 
@@ -620,7 +655,7 @@ function webform_update_6205() {
 
   // Set not null property on webform_component.value.
   db_change_field($ret, 'webform_component', 'value', 'value', array('type' => 'text', 'not null' => TRUE));
- 
+
   // Set not null property on webform_component.extra.
   db_change_field($ret, 'webform_component', 'extra', 'extra', array('type' => 'text', 'not null' => TRUE));
 
@@ -1405,4 +1440,52 @@ function _webform_recursive_delete($path) {
     }
     @rmdir($path);
   }
+}
+
+/**
+ * Add webform_last_download table to store last downloaded sid per user.
+ */
+function webform_update_6329() {
+  // Safety check to prevent recreating the webform_last_download table.
+  $ret = array();
+  if (db_table_exists('webform_last_download')) {
+    return $ret;
+  }
+
+  $schema['webform_last_download'] = array(
+    'description' => 'Stores last submission number per user download.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node identifier of a webform.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid' => array(
+        'description' => 'The user identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'sid' => array(
+        'description' => 'The last downloaded submission number.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'requested' => array(
+        'description' => 'Timestamp of last download request.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid', 'uid'),
+  );
+
+  db_create_table($ret, 'webform_last_download', $schema['webform_last_download']);
 }
