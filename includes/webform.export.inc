@@ -172,10 +172,10 @@ class webform_exporter_excel extends webform_exporter_delimited {
       parent::set_headers($filename);
     }
     else {
-      drupal_add_http_header('Content-Type', 'application/x-msexcel');
-      drupal_add_http_header('Content-Disposition', "attachment; filename=$filename.xls");
-      drupal_add_http_header('Pragma', 'public');
-      drupal_add_http_header('Cache-Control', 'max-age=0');
+      drupal_set_header("Content-Type: application/x-msexcel");
+      drupal_set_header("Content-Disposition: attachment; filename=$filename.xls");
+      drupal_set_header("Pragma: public");
+      drupal_set_header("Cache-Control: max-age=0");
     }
   }
 }
