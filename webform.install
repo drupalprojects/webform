@@ -1488,4 +1488,5 @@ function webform_update_6329() {
   );
 
   db_create_table($ret, 'webform_last_download', $schema['webform_last_download']);
+  return $ret;
 }
