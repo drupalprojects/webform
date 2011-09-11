@@ -102,9 +102,6 @@ class webform_exporter_delimited extends webform_exporter {
     if ($this->delimiter == '\t') {
       $this->delimiter = "\t";
     }
-    if ($options['compress'] == 1) {
-      $this->compress = 1;
-    }
   }
 
   function bof(&$file_handle) {
@@ -138,11 +135,8 @@ class webform_exporter_delimited extends webform_exporter {
   function set_headers($filename) {
     parent::set_headers($filename);
 
-    if ($this->compress == 1) {
-      $extension = 'zip';
-      $content_type = 'application/octet-stream';
-    }
-    elseif ($this->delimiter == "\t") {
+    // Convert tabs.
+    if ($this->delimiter == "\t") {
       $extension = 'tsv';
       $content_type = 'text/tab-separated-values';
     }
@@ -168,14 +162,9 @@ class webform_exporter_excel extends webform_exporter_delimited {
   }
 
   function set_headers($filename) {
-    if ($this->compress == 1) {
-      parent::set_headers($filename);
-    }
-    else {
-      drupal_set_header("Content-Type: application/x-msexcel");
-      drupal_set_header("Content-Disposition: attachment; filename=$filename.xls");
-      drupal_set_header("Pragma: public");
-      drupal_set_header("Cache-Control: max-age=0");
-    }
+    drupal_set_header('Content-Type: application/x-msexcel');
+    drupal_set_header("Content-Disposition: attachment; filename=$filename.xls");
+    drupal_set_header('Pragma: public');
+    drupal_set_header('Cache-Control: max-age=0');
   }
 }
