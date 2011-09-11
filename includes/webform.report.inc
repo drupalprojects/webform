@@ -330,17 +330,6 @@ function webform_results_download_form(&$form_state, $node) {
     ),
   );
 
-  $form['compress'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Include files'),
-    '#description' => t('All files in the webform results will be bundled in a .zip archive along with the exported results.'),
-  );
-
-  if (!class_exists('ZipArchive')) {
-    $form['compress']['#description'] = t('Unable to load ZipArchive class. This usually happens because the PHP interpreter is not compiled with zlib.');
-    $form['compress']['#disabled'] = TRUE;
-  }
-
   $form['select_options'] = array(
     '#type' => 'fieldset',
     '#title' => t('Select list options'),
@@ -507,7 +496,6 @@ function webform_results_download_form_submit(&$form, &$form_state) {
     'components' => array_keys(array_filter($form_state['values']['components'])),
     'select_keys' => $form_state['values']['select_keys'],
     'select_format' => $form_state['values']['select_format'],
-    'compress' => $form_state['values']['compress'],
     'range_type' => $form_state['values']['range_type'],
     'sids' => $sids,
   );
@@ -624,7 +612,6 @@ function webform_results_download($node, $format = 'delimited', $options = array
       'components' => array_merge(array_keys($submission_information), array_keys(webform_component_list($node, 'csv', TRUE))),
       'select_display' => 'value',
       'select_format' => 'separate',
-      'compress' => 0,
       'range_type' => 0,
     );
     $fake_state = array('values' => array('node' => $node->nid, 'range_type' => 1));
@@ -681,7 +668,6 @@ function webform_results_download($node, $format = 'delimited', $options = array
     $filters['sid'] = $options['sids'];
   }
   $submissions = webform_get_submissions($filters);
-  $attached_files = array();
 
   // Generate a row for each submission.
   $row_count = 0;
@@ -718,9 +704,6 @@ function webform_results_download($node, $format = 'delimited', $options = array
         $raw_data = isset($submission->data[$cid]['value']) ? $submission->data[$cid]['value'] : NULL;
         if (webform_component_feature($component['type'], 'csv')) {
           $data = webform_component_invoke($component['type'], 'csv_data', $component, $options, $raw_data);
-          if ($component['type'] == 'file') {
-            $attached_files[] = webform_get_file($raw_data[0])->filepath;
-          }
           if (is_array($data)) {
             $row = array_merge($row, array_values($data));
           }
@@ -743,28 +726,7 @@ function webform_results_download($node, $format = 'delimited', $options = array
 
   $export_name = _webform_safe_name($node->title);
   $exporter->set_headers($export_name);
-
-  if ($options['compress'] == 1) {
-    $zh = new ZipArchive();
-    $zipfile = variable_get('file_directory_temp', file_directory_temp()) . '/webform' . time() . '.zip';
-    $zh->open($zipfile, ZIPARCHIVE::CREATE);
-    foreach ($attached_files as $file) {
-      if (!empty($file)) {
-        $zh->addFile(realpath($base_path . $file), basename($file));
-      }
-    }
-    $extension = '.csv';
-    if ($exporter->delimiter == "\t") {
-      $extension = '.tsv';
-    }
-    $zh->addFile(realpath($file_name), $export_name . $extension);
-    $zh->close();
-    @readfile($zipfile);
-    @unlink($zipfile);
-  }
-  else {
-    @readfile($file_name);  // The @ makes it silent.
-  }
+  @readfile($file_name);  // The @ makes it silent.
   @unlink($file_name);  // Clean up, the @ makes it silent.
 
   // Update user last downloaded sid if required.
