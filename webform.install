@@ -1419,30 +1419,6 @@ function webform_update_6328() {
 }
 
 /**
- * Recursively delete all files and folders in the specified filepath, then
- * delete the containing folder.
- *
- * Note that this only deletes visible files with write permission
- *
- * @param string $path
- *   A filepath relative to file_directory_path
- */
-function _webform_recursive_delete($path) {
-  if ($path && is_dir($path)) {
-    $listing = $path . '/*';
-    foreach (glob($listing) as $file) {
-      if (is_file($file) === TRUE) {
-        @unlink($file);
-      }
-      elseif (is_dir($file) === TRUE) {
-        _webform_recursive_delete($file);
-      }
-    }
-    @rmdir($path);
-  }
-}
-
-/**
  * Add webform_last_download table to store last downloaded sid per user.
  */
 function webform_update_6329() {
@@ -1488,4 +1464,30 @@ function webform_update_6329() {
   );
 
   db_create_table($ret, 'webform_last_download', $schema['webform_last_download']);
+
+  return $ret;
+}
+
+/**
+ * Recursively delete all files and folders in the specified filepath, then
+ * delete the containing folder.
+ *
+ * Note that this only deletes visible files with write permission
+ *
+ * @param string $path
+ *   A filepath relative to file_directory_path
+ */
+function _webform_recursive_delete($path) {
+  if ($path && is_dir($path)) {
+    $listing = $path . '/*';
+    foreach (glob($listing) as $file) {
+      if (is_file($file) === TRUE) {
+        @unlink($file);
+      }
+      elseif (is_dir($file) === TRUE) {
+        _webform_recursive_delete($file);
+      }
+    }
+    @rmdir($path);
+  }
 }
