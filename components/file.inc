@@ -174,9 +174,7 @@ function _webform_edit_file_check_directory($element) {
   $destination_dir = $base_dir . '/' . $element['#value'];
 
   // Sanity check input to prevent use parent (../) directories.
-  $real_base = realpath($base_dir);
-  $real_destination = realpath($destination_dir);
-  if (strpos($real_destination, $real_base) !== 0) {
+  if (preg_match('/\.\.[\/\\\]/', $destination_dir . '/')) {
     form_error($element, t('The save directory %directory is not valid.', array('%directory' => $destination_dir)));
   }
   else {
