@@ -98,6 +98,18 @@ function webform_schema() {
         'not null' => TRUE,
         'default' => -1,
       ),
+      'total_submit_limit' => array(
+        'description' => 'The total number of submissions allowed within an interval. -1 is unlimited.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => -1,
+      ),
+      'total_submit_interval' => array(
+        'description' => 'The amount of time in seconds that must pass before another submission can be submitted within the set limit.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => -1,
+      ),
     ),
     'primary key' => array('nid'),
   );
@@ -1464,6 +1476,22 @@ function webform_update_6329() {
   );
 
   db_create_table($ret, 'webform_last_download', $schema['webform_last_download']);
+
+  return $ret;
+}
+
+/**
+ * Add additional columns for total submission limit.
+ */
+function webform_update_6330() {
+  $ret = array();
+  if (!db_column_exists('webform', 'total_submit_limit')) {
+    db_add_field($ret, 'webform', 'total_submit_limit', array('type' => 'int', 'not null' => TRUE, 'default' => -1));
+  }
+
+  if (!db_column_exists('webform', 'total_submit_interval')) {
+    db_add_field($ret, 'webform', 'total_submit_interval', array('type' => 'int', 'not null' => TRUE, 'default' => -1));
+  }
 
   return $ret;
 }
