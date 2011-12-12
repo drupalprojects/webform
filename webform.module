@@ -3447,7 +3447,8 @@ function webform_strtodate($format, $string, $timezone_name = NULL) {
   if (variable_get('configurable_timezones', 1) && $timezone_name == 'user') {
     $timezone_name = isset($GLOBALS['user']->timezone_name) ? $GLOBALS['user']->timezone_name : NULL;
   }
-  elseif (empty($timezone_name) || $timezone_name == 'user') {
+  // If the timezone is still empty or not set, use the site timezone.
+  if (empty($timezone_name) || $timezone_name == 'user') {
     $timezone_name = variable_get('date_default_timezone_name', NULL);
   }
 
