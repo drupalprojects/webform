@@ -640,13 +640,21 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
 
   // Query the required submission data.
   $query = 'SELECT s.*, sd.cid, sd.no, sd.data, u.name, u.mail, u.status ' .
-           'FROM {webform_submissions} s ' .
-           'LEFT JOIN {webform_submitted_data} sd ON sd.sid = s.sid ' .
+           'FROM {webform_submitted_data} sd ' .
+           'LEFT JOIN {webform_submissions} s ON s.sid = sd.sid ' .
            'LEFT JOIN {users} u ON u.uid = s.uid ' .
-           'WHERE s.sid IN (' . db_placeholders($sids) . ') ' .
+           'WHERE sd.sid IN (' . db_placeholders($sids) . ') ' .
+           // By adding the NID to this query we allow MySQL to use the primary
+           // key in webform_submitted_data for sorting (nid_sid_cid_no).
+           (isset($filters['nid']) ? 'AND sd.nid = %d ' : '') .
            'ORDER BY sd.sid ASC, sd.cid ASC, sd.no ASC';
 
-  $result = db_query($query, $sids);
+  $args = $sids;
+  if (isset($filters['nid'])) {
+    $args[] = $filters['nid'];
+  }
+
+  $result = db_query($query, $args);
 
   // Convert the queried rows into submissions.
   $previous = array();
