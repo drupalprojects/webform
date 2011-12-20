@@ -260,6 +260,9 @@ function _webform_render_number($component, $value = NULL, $filter = TRUE) {
     '#description' => $filter ? _webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
     '#attributes' => $component['extra']['attributes'],
     '#element_validate' => array('_webform_validate_number'),
+    '#theme_wrappers' => array('webform_element_wrapper'),
+    '#pre_render' => array('webform_element_title_display'),
+    '#post_render' => array('webform_element_wrapper'),
     '#min' => $component['extra']['min'],
     '#max' => $component['extra']['max'],
     '#step' => abs($component['extra']['step']),
@@ -302,10 +305,6 @@ function _webform_render_number($component, $value = NULL, $filter = TRUE) {
     if ($component['extra']['type'] == 'select' && $element['#default_value'] === '') {
       $element['#options'] = array('' => ($component['mandatory'] ? t('- Select -') : t('- None -'))) + $element['#options'];
     }
-
-    $element['#theme_wrappers'] = array('webform_element_wrapper');
-    $element['#pre_render'] = array('webform_element_title_display');
-    $element['#post_render'] = array('webform_element_wrapper');
   }
 
   // Set user-entered values.

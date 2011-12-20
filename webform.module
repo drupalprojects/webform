@@ -671,12 +671,14 @@ function webform_elements() {
   $elements['webform_time'] = array('#input' => 'TRUE');
   $elements['webform_grid'] = array('#input' => 'TRUE');
 
+  $elements['webform_email'] = array(
+    '#input' => TRUE,
+    '#theme' => 'webform_email',
+    '#size' => 60,
+  );
   $elements['webform_number'] = array(
     '#input' => TRUE,
     '#theme' => 'webform_number',
-    '#theme_wrappers' => array('webform_element_wrapper'),
-    '#pre_render' => array('webform_element_title_display'),
-    '#post_render' => array('webform_element_wrapper'),
     '#min' => NULL,
     '#max' => NULL,
     '#step' => NULL,
