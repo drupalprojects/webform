@@ -338,7 +338,6 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE) {
   $element['#title_display'] = $element[$form_key]['#title_display'];
   $element['#theme_wrappers'] = array('webform_element_wrapper');
   $element['#post_render'] = array('webform_element_wrapper');
-  $element['#webform_component'] = $component;
 
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
@@ -531,7 +530,6 @@ function _webform_display_file($component, $value, $format = 'html') {
      '#theme' => 'webform_display_file',
      '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
      '#post_render' => array('webform_element_wrapper'),
-     '#webform_component' => $component,
      '#format' => $format,
   );
 }

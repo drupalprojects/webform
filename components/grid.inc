@@ -158,7 +158,6 @@ function _webform_render_grid($component, $value = NULL, $filter = TRUE) {
     '#process' => array('webform_expand_grid'),
     '#pre_render' => array('webform_element_title_display'),
     '#post_render' => array('webform_element_wrapper'),
-    '#webform_component' => $component,
   );
 
   if ($value) {
@@ -229,7 +228,6 @@ function _webform_display_grid($component, $value, $format = 'html') {
     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
     '#sorted' => TRUE,
-    '#webform_component' => $component,
   );
 
   foreach ($questions as $key => $question) {

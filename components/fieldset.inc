@@ -62,7 +62,6 @@ function _webform_render_fieldset($component, $value = NULL, $filter = TRUE) {
     '#collapsed' => $component['extra']['collapsed'],
     '#attributes' => array('class' => 'webform-component-fieldset'),
     '#pre_render' => array('webform_fieldset_prerender', 'webform_element_title_display'),
-    '#webform_component' => $component,
   );
 
   // Hide the fieldset title if #title_display is 'none'.
@@ -97,7 +96,6 @@ function _webform_display_fieldset($component, $value, $format = 'html') {
     $element = _webform_render_fieldset($component, $value);
   }
 
-  $element['#webform_component'] = $component;
   $element['#format'] = $format;
 
   return $element;

@@ -83,7 +83,6 @@ function _webform_display_hidden($component, $value, $format = 'html') {
     '#theme' => 'webform_display_hidden',
     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
-    '#webform_component' => $component,
   );
 
   // TODO: This check is unusual. It shows hidden fields in e-mails but not

@@ -125,7 +125,6 @@ function _webform_render_email($component, $value = NULL, $filter = TRUE) {
     '#theme_wrappers' => array('webform_element_wrapper'),
     '#pre_render' => array('webform_element_title_display'),
     '#post_render' => array('webform_element_wrapper'),
-    '#webform_component' => $component,
   );
 
   // Add an e-mail class for identifying the difference from normal textfields.
@@ -209,7 +208,6 @@ function _webform_display_email($component, $value, $format = 'html') {
     '#post_render' => array('webform_element_wrapper'),
     '#format' => $format,
     '#value' => isset($value[0]) ? $value[0] : '',
-    '#webform_component' => $component,
   );
 }
 

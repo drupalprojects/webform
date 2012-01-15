@@ -56,7 +56,6 @@ function _webform_render_markup($component, $value = NULL, $filter = TRUE) {
     '#format' => $component['extra']['format'],
     '#theme_wrappers' => array('webform_element_wrapper'),
     '#post_render' => array('webform_element_wrapper'),
-    '#webform_component' => $component,
   );
 
   // TODO: Remove when #markup becomes available in D7.
