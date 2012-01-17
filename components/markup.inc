@@ -38,9 +38,6 @@ function _webform_edit_markup($component) {
   // Add the filter form.
   $form['markup']['format'] = filter_form($component['extra']['format'], 0, array('extra', 'format'));
 
-  $form['extra']['description'] = array(); // No description for markup.
-  $form['display'] = array('#type' => 'markup'); // Hide the display options.
-
   return $form;
 }
 
