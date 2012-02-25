@@ -266,6 +266,7 @@ function _webform_render_number($component, $value = NULL, $filter = TRUE) {
     '#max' => $component['extra']['max'],
     '#step' => abs($component['extra']['step']),
     '#integer' => $component['extra']['integer'],
+    '#translatable' => array('title', 'description', 'field_prefix', 'field_suffix'),
   );
 
   // Flip the min and max properties to make min less than max if needed.
@@ -331,6 +332,7 @@ function _webform_display_number($component, $value, $format = 'html') {
     '#field_suffix' => $component['extra']['field_suffix'],
     '#format' => $format,
     '#value' => isset($value[0]) ? _webform_number_format($component, $value[0]) : '',
+    '#translatable' => array('title', 'field_prefix', 'field_suffix'),
   );
 }
 

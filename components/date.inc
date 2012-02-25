@@ -136,6 +136,7 @@ function _webform_render_date($component, $value = NULL, $filter = TRUE) {
     '#pre_render' => array('webform_element_title_display'),
     '#post_render' => array('webform_element_wrapper'),
     '#element_validate' => array('webform_validate_date'),
+    '#translatable' => array('title', 'description'),
   );
 
   if ($component['extra']['datepicker'] && function_exists('date_popup_load')) {
@@ -339,6 +340,7 @@ function _webform_display_date($component, $value, $format = 'html') {
     '#post_render' => array('webform_element_wrapper'),
     '#format' => $format,
     '#value' => $value,
+    '#translatable' => array('title'),
   );
 }
 

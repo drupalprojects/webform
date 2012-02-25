@@ -60,6 +60,7 @@ function _webform_render_hidden($component, $value = NULL, $filter = TRUE) {
     '#title' => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#default_value' => $filter ? _webform_filter_values($component['value']) : $component['value'],
     '#weight' => $component['weight'],
+    '#translatable' => array('title'),
   );
 
   if (isset($value[0])) {
@@ -74,14 +75,14 @@ function _webform_render_hidden($component, $value = NULL, $filter = TRUE) {
  */
 function _webform_display_hidden($component, $value, $format = 'html') {
   $element = array(
-    '#title' => t('!name (hidden)', array('!name' => $component['name'])),
+    '#title' => $component['name'],
     '#value' => isset($value[0]) ? $value[0] : NULL,
     '#weight' => $component['weight'],
-    '#theme' => 'webform_display_hidden',
     '#format' => $format,
     '#theme' => 'webform_display_hidden',
     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
+    '#translatable' => array('title'),
   );
 
   // TODO: This check is unusual. It shows hidden fields in e-mails but not

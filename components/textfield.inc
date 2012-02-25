@@ -136,6 +136,7 @@ function _webform_render_textfield($component, $value = NULL, $filter = TRUE) {
     '#theme_wrappers' => array('webform_element_wrapper'),
     '#pre_render' => array('webform_element_title_display'),
     '#post_render' => array('webform_element_wrapper'),
+    '#translatable' => array('title', 'description', 'field_prefix', 'field_suffix'),
   );
 
   if ($component['extra']['disabled']) {
@@ -181,6 +182,7 @@ function _webform_display_textfield($component, $value, $format = 'html') {
     '#field_suffix' => $component['extra']['field_suffix'],
     '#format' => $format,
     '#value' => isset($value[0]) ? $value[0] : '',
+    '#translatable' => array('title', 'field_prefix', 'field_suffix'),
   );
 }
 

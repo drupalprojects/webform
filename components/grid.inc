@@ -158,6 +158,7 @@ function _webform_render_grid($component, $value = NULL, $filter = TRUE) {
     '#process' => array('webform_expand_grid'),
     '#pre_render' => array('webform_element_title_display'),
     '#post_render' => array('webform_element_wrapper'),
+    '#translatable' => array('title', 'description', 'grid_options', 'grid_questions'),
   );
 
   if ($value) {
@@ -194,6 +195,7 @@ function webform_expand_grid($element) {
         // Webform handles validation manually.
         '#validated' => TRUE,
         '#webform_validated' => FALSE,
+        '#translatable' => array('title'),
       );
     }
   }
@@ -228,13 +230,15 @@ function _webform_display_grid($component, $value, $format = 'html') {
     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
     '#sorted' => TRUE,
+    '#translatable' => array('#title', '#grid_questions', '#grid_options'),
   );
 
   foreach ($questions as $key => $question) {
     if ($question !== '') {
-      $element[$question] = array(
+      $element[$key] = array(
         '#title' => $question,
         '#value' => isset($value[$key]) ? $value[$key] : NULL,
+        '#translatable' => array('#title', '#value'),
       );
     }
   }
@@ -390,18 +394,14 @@ function _webform_csv_data_grid($component, $export_options, $value) {
 
 function theme_webform_grid($element) {
   $rows = array();
-  $header = array(array('data' => '', 'class' => 'webform-grid-question'));
-  $first = TRUE;
+  $header = array(array('data' => '', 'class' => array('webform-grid-question')));
+  // Set the header for the table.
+  foreach ($element['#grid_options'] as $option) {
+    $header[] = array('data' => _webform_filter_xss($option), 'class' => array('checkbox', 'webform-grid-option'));
+  }
+
   foreach (element_children($element) as $key) {
     $question_element = $element[$key];
-
-    // Set the header for the table.
-    if ($first) {
-      foreach ($question_element['#options'] as $option) {
-        $header[] = array('data' => _webform_filter_xss($option), 'class' => 'checkbox webform-grid-option');
-      }
-      $first = FALSE;
-    }
 
     // Create a row with the question title.
     $row = array(array('data' => _webform_filter_xss($question_element['#title']), 'class' => 'webform-grid-question'));

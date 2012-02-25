@@ -329,6 +329,7 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE) {
       '_webform_required_file',  // Custom required routine.
     ),
     '#pre_render' => array('webform_element_title_display'),
+    '#translatable' => array('title', 'description'),
     '#webform_component' => $component,
   );
   $element['#webform_required'] = $component['mandatory'];
@@ -524,13 +525,14 @@ function _webform_submit_file($component, $value) {
 function _webform_display_file($component, $value, $format = 'html') {
   $fid = isset($value[0]) ? $value[0] : NULL;
   return array(
-     '#title' => $component['name'],
-     '#value' => $fid ? webform_get_file($fid) : NULL,
-     '#weight' => $component['weight'],
-     '#theme' => 'webform_display_file',
-     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
-     '#post_render' => array('webform_element_wrapper'),
-     '#format' => $format,
+    '#title' => $component['name'],
+    '#value' => $fid ? webform_get_file($fid) : NULL,
+    '#weight' => $component['weight'],
+    '#theme' => 'webform_display_file',
+    '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
+    '#post_render' => array('webform_element_wrapper'),
+    '#format' => $format,
+    '#translatable' => array('title'),
   );
 }
 

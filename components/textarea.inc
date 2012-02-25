@@ -113,6 +113,7 @@ function _webform_render_textarea($component, $value = NULL, $filter = TRUE) {
     '#theme_wrappers' => array('webform_element_wrapper'),
     '#pre_render' => array('webform_element_title_display'),
     '#post_render' => array('webform_element_wrapper'),
+    '#translatable' => array('title', 'description'),
   );
 
   if ($component['extra']['disabled']) {
@@ -143,6 +144,7 @@ function _webform_display_textarea($component, $value, $format = 'html') {
     '#post_render' => array('webform_element_wrapper'),
     '#format' => $format,
     '#value' => isset($value[0]) ? $value[0] : '',
+    '#translatable' => array('title'),
   );
 }
 

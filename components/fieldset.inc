@@ -62,6 +62,7 @@ function _webform_render_fieldset($component, $value = NULL, $filter = TRUE) {
     '#collapsed' => $component['extra']['collapsed'],
     '#attributes' => array('class' => 'webform-component-fieldset'),
     '#pre_render' => array('webform_fieldset_prerender', 'webform_element_title_display'),
+    '#translatable' => array('title', 'description'),
   );
 
   // Hide the fieldset title if #title_display is 'none'.
@@ -90,6 +91,7 @@ function _webform_display_fieldset($component, $value, $format = 'html') {
       '#weight' => $component['weight'],
       '#post_render' => array('webform_element_wrapper'),
       '#theme_wrappers' => array('webform_element_text'),
+      '#translatable' => array('title'),
     );
   }
   else {
