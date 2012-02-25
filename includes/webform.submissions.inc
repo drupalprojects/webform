@@ -732,13 +732,8 @@ function webform_get_submission($nid, $sid, $reset = FALSE) {
 
   // Load the submission if needed.
   if (!isset($submissions[$sid])) {
-    $new_submissions = webform_get_submissions(array('sid' => $sid));
-    $submissions[$sid] = $new_submissions[$sid];
-  }
-
-  // Ensure that the requested NID matches the submission NID.
-  if ($submissions[$sid]->nid != $nid) {
-    return FALSE;
+    $new_submissions = webform_get_submissions(array('nid' => $nid, 'sid' => $sid));
+    $submissions[$sid] = isset($new_submissions[$sid]) ? $new_submissions[$sid] : FALSE;
   }
 
   return $submissions[$sid];
