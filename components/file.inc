@@ -371,7 +371,7 @@ function theme_webform_render_file($element) {
   $value = $element['_fid']['#value'] ? $element['_fid']['#value'] : $element['_old']['#value'];
 
   if ($value && ($file = webform_get_file($value))) {
-    $firstchild = array_shift(array_keys($element));
+    $firstchild = array_shift(element_children($element));
     $element[$firstchild]['#suffix'] = ' ' . l(t('Download @filename', array('@filename' => webform_file_name($file->filepath))), webform_file_url($file->filepath)) . (isset($element['#suffix']) ? $element['#suffix'] : '');
     $element[$firstchild]['#description'] = '<div class="webform-newfile-message">' . t('Uploading a new file will replace the current file.') . '</div>' . (isset($element[$firstchild]['#description']) ? $element[$firstchild]['#description'] : '');
   }
