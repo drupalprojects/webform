@@ -658,3 +658,12 @@ function webform_get_file($fid) {
 
   return $files[$fid];
 }
+
+/**
+ * Implements _webform_attachments_component().
+ */
+function _webform_attachments_file($component, $value) {
+  $file = (array) webform_get_file($value[0]);
+  $files = array($file);
+  return $files;
+}
