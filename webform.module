@@ -783,6 +783,8 @@ function webform_webform_component_info() {
       'features' => array(
         'csv' => FALSE,
         'default_value' => FALSE,
+        'description' => FALSE,
+        'private' => FALSE,
         'required' => FALSE,
         'title_display' => FALSE,
       ),
@@ -2500,11 +2502,11 @@ function template_preprocess_webform_mail_message(&$vars) {
 /**
  * A Form API #pre_render function. Sets display based on #title_display.
  *
- * Note: this entire function may be removed in Drupal 7, which supports
- * #title_display natively.
+ * This function is used regularly in D6 for all elements, but specifically for
+ * fieldsets in D7, which don't support #title_display natively.
  */
 function webform_element_title_display($element) {
-  if (isset($element['#title_display']) && $element['#title_display'] == 'none') {
+  if (isset($element['#title_display']) && strcmp($element['#title_display'], 'none') === 0) {
     $element['#title'] = NULL;
   }
   return $element;
@@ -2572,7 +2574,8 @@ function theme_webform_element_wrapper($element, $content) {
     'webform-component',
     'webform-component-' . $type,
   );
-  if (isset($element['#title_display']) && $element['#title_display'] == 'inline') {
+
+  if (isset($element['#title_display']) && strcmp($element['#title_display'], 'inline') === 0) {
     $wrapper_classes[] = 'webform-container-inline';
   }
 
