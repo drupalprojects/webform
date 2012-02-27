@@ -179,5 +179,5 @@ function _webform_csv_headers_hidden($component, $export_options) {
  * Implements _webform_csv_data_component().
  */
 function _webform_csv_data_hidden($component, $export_options, $value) {
-  return empty($value[0]) ? '' : $value[0];
+  return isset($value[0]) ? $value[0] : '';
 }
