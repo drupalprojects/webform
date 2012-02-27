@@ -394,10 +394,10 @@ function _webform_csv_data_grid($component, $export_options, $value) {
 
 function theme_webform_grid($element) {
   $rows = array();
-  $header = array(array('data' => '', 'class' => array('webform-grid-question')));
+  $header = array(array('data' => '', 'class' => 'webform-grid-question'));
   // Set the header for the table.
   foreach ($element['#grid_options'] as $option) {
-    $header[] = array('data' => _webform_filter_xss($option), 'class' => array('checkbox', 'webform-grid-option'));
+    $header[] = array('data' => _webform_filter_xss($option), 'class' => 'checkbox webform-grid-option');
   }
 
   foreach (element_children($element) as $key) {
