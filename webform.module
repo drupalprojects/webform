@@ -1819,6 +1819,7 @@ function webform_client_form(&$form_state, $node, $submission, $is_draft = FALSE
         '#value' => t('Save Draft'),
         '#weight' => -2,
         '#validate' => array(),
+        '#attributes' => array('formnovalidate' => 'formnovalidate'),
       );
     }
 
@@ -1833,6 +1834,7 @@ function webform_client_form(&$form_state, $node, $submission, $is_draft = FALSE
           '#value' => $prev_page,
           '#weight' => 5,
           '#validate' => array(),
+          '#attributes' => array('formnovalidate' => 'formnovalidate'),
         );
       }
       if ($page_num == $page_count) {
