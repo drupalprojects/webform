@@ -267,6 +267,8 @@ function theme_webform_edit_file_extensions($element) {
  * Implements _webform_render_component().
  */
 function _webform_render_file($component, $value = NULL, $filter = TRUE) {
+  $node = isset($component['nid']) ? node_load($component['nid']) : NULL;
+
   // Normally every file component is given a unique ID based on its key.
   if (isset($component['nid'])) {
     $node = node_load($component['nid']);
@@ -282,7 +284,7 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE) {
     '#title' => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#title_display' => $component['extra']['title_display'] ? $component['extra']['title_display'] : 'before',
     //'#required' => $component['mandatory'], // Drupal core bug with required file uploads.
-    '#description' => $filter ? _webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
+    '#description' => $filter ? _webform_filter_descriptions($component['extra']['description'], $node) : $component['extra']['description'],
     '#attributes' => $component['extra']['attributes'],
     '#tree' => FALSE, // file_check_upload assumes a flat $_FILES structure.
     '#element_validate' => array(
