@@ -68,6 +68,8 @@ function _webform_edit_hidden($component) {
  * Implements _webform_render_component().
  */
 function _webform_render_hidden($component, $value = NULL, $filter = TRUE) {
+  $node = isset($component['nid']) ? node_load($component['nid']) : NULL;
+
   // Set filtering options for "value" types, which are not displayed to the
   // end user so they do not need to be sanitized.
   $strict = $component['extra']['hidden_type'] != 'value';
