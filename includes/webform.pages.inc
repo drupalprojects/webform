@@ -16,6 +16,13 @@ function webform_configure_form(&$form_state, $node) {
   drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
   drupal_add_js(drupal_get_path('module', 'webform') . '/js/webform-admin.js', 'module', 'header', FALSE, TRUE, FALSE);
 
+  $form['#node'] = $node;
+
+  $form['#submit'] = array(
+    'webform_configure_form_submit',
+    'webform_configure_form_submit_save',
+  );
+
   $form['nid'] = array(
     '#type' => 'value',
     '#value' => $node->nid,
@@ -227,10 +234,14 @@ function webform_configure_form(&$form_state, $node) {
   );
   /* End Advanced Settings Form */
 
-  $form['submit'] = array(
+  $form['actions'] = array(
+    '#type' => 'markup',
+    '#weight' => 300,
+  );
+
+  $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save configuration'),
-    '#weight' => 300,
   );
 
   return $form;
@@ -276,7 +287,8 @@ function webform_configure_form_validate($form, &$form_state) {
  * Submit handler for webform_configure_form().
  */
 function webform_configure_form_submit($form, &$form_state) {
-  $node = node_load($form_state['values']['nid']);
+  // Edit the node by reference just to shorten it up.
+  $node = &$form['#node'];
 
   // Save the confirmation.
   $node->webform['confirmation'] = $form_state['values']['confirmation'];
@@ -328,9 +340,16 @@ function webform_configure_form_submit($form, &$form_state) {
 
   // Set submit button text.
   $node->webform['submit_text'] = $form_state['values']['submit_text'];
+}
 
-  node_save($node);
-
+/**
+ * Submit handler for webform_configure_form() that saves the node.
+ *
+ * This is separate from webform_configure_form_submit() to allow other modules
+ * to add properties if needed into the $form['#node'] object before save.
+ */
+function webform_configure_form_submit_save($form, &$form_state) {
+  node_save($form['#node']);
   drupal_set_message(t('The form settings have been updated.'));
 }
 
