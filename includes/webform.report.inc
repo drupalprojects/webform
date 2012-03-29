@@ -798,6 +798,7 @@ function webform_results_export($node, $format = 'delimited', $options = array()
   $export_info['file_name'] = $file_name;
   $export_info['exporter'] = $exporter;
   $export_info['row_count'] = $row_count;
+  $export_info['last_sid'] = $sid;
 
   return $export_info;
 }
@@ -820,11 +821,11 @@ function webform_results_download($node, $export_info) {
   @unlink($export_info['file_name']);  // Clean up, the @ makes it silent.
 
   // Update user last downloaded sid if required.
-  if ($options['range_type'] != 'range' && $row_count > 0) {
+  if ($export_info['options']['range_type'] != 'range' && $export_info['row_count'] > 0) {
     // Delete existing record.
     db_query('DELETE FROM {webform_last_download} WHERE nid = %d AND uid = %d', $node->nid, $user->uid);
     // Write new record.
-    db_query('INSERT INTO {webform_last_download} (nid, uid, sid, requested) VALUES (%d, %d, %d, %d)', $node->nid, $user->uid, $sid, time());
+    db_query('INSERT INTO {webform_last_download} (nid, uid, sid, requested) VALUES (%d, %d, %d, %d)', $node->nid, $user->uid, $export_info['last_sid'], time());
   }
 
   exit();
