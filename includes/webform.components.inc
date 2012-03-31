@@ -334,6 +334,9 @@ function webform_components_form_submit($form, &$form_state) {
   }
 }
 
+/**
+ * Form to configure a webform component.
+ */
 function webform_component_edit_form(&$form_state, $node, $component, $clone = FALSE) {
   drupal_set_title(t('Edit component: @name', array('@name' => $component['name'])));
   drupal_add_css(drupal_get_path('module', 'webform') . '/css/webform-admin.css', 'theme', 'all', FALSE);
@@ -611,6 +614,9 @@ function webform_component_edit_form_validate($form, &$form_state) {
   }
 }
 
+/**
+ * Submit handler for webform_component_edit_form().
+ */
 function webform_component_edit_form_submit($form, &$form_state) {
   // Ensure a webform record exists.
   $node = node_load($form_state['values']['nid']);
@@ -660,6 +666,9 @@ function webform_component_edit_form_submit($form, &$form_state) {
   $form_state['redirect'] = array('node/' . $node->nid . '/webform/components', isset($cid) ? 'cid=' . $cid : '');
 }
 
+/**
+ * Form to confirm deletion of a component.
+ */
 function webform_component_delete_form($form_state, $node, $component) {
   $cid = $component['cid'];
 
@@ -685,6 +694,9 @@ function webform_component_delete_form($form_state, $node, $component) {
   return confirm_form($form, $question, 'node/' . $node->nid . '/webform/components', $description, t('Delete'));
 }
 
+/**
+ * Submit handler for webform_component_delete_form().
+ */
 function webform_component_delete_form_submit($form, &$form_state) {
   // Delete the component.
   $node = $form_state['values']['node'];
