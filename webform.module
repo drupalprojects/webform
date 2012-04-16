@@ -1309,6 +1309,12 @@ function webform_node_view(&$node, $teaser, $page) {
   // Let webform form know if the node is displayed as teaser or not.
   $node->webform['is_teaser'] = $teaser;
 
+  // If a teaser, tell the form to load subsequent pages on the node page.
+  if ($teaser && !isset($node->webform['action'])) {
+    $query = array_diff_key($_GET, array('q' => ''));
+    $node->webform['action'] = url('node/' . $node->nid, array('query' => $query));
+  }
+
   // When logging in using a form on the same page as a webform node, suppress
   // output messages so that they don't show up after the user has logged in.
   // See http://drupal.org/node/239343.
@@ -1609,6 +1615,15 @@ function webform_block_view($delta = '') {
   // Use the node title for the block title.
   $subject = $node->title;
 
+  // If not displaying pages in the block, set the #action property on the form.
+  if ($settings['pages_block']) {
+    $node->webform['action'] = FALSE;
+  }
+  else {
+    $query = array_diff_key($_GET, array('q' => ''));
+    $node->webform['action'] = url('node/' . $node->nid, array('query' => $query));
+  }
+
   // Generate the content of the block based on display settings.
   if ($settings['display'] == 'form') {
     webform_node_view($node, FALSE, TRUE, FALSE);
@@ -1729,21 +1744,10 @@ function webform_client_form(&$form_state, $node, $submission, $is_draft = FALSE
   // Set the encoding type (necessary for file uploads).
   $form['#attributes']['enctype'] = 'multipart/form-data';
 
-  // If this is a webform block, load the block-specific configuration settings.
-  $pages_in_node = !empty($node->webform['is_teaser']);
-  if (isset($node->webform_block)) {
-    $webform_blocks = variable_get('webform_blocks', array());
-    $delta = 'client-block-' . $node->nid;
-    $block_settings = isset($webform_blocks[$delta]) ? $webform_blocks[$delta] : array();
-    $pages_in_node = empty($block_settings['pages_block']);
-  }
-
-  // Set the form action to the node ID in case this is being displayed on the
-  // teaser or in a block, subsequent pages should be on the node page directly.
-  if ($pages_in_node) {
-    $query = $_GET;
-    unset($query['q']);
-    $form['#action'] = url('node/' . $node->nid, array('query' => $query));
+  // Sometimes when displaying a webform as a teaser or block, a custom action
+  // property is set to direct the user to the node page.
+  if (!empty($node->webform['action'])) {
+    $form['#action'] = $node->webform['action'];
   }
 
   $form['#submit'] = array('webform_client_form_pages', 'webform_client_form_submit');
