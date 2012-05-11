@@ -656,9 +656,11 @@ function _webform_theme_component() {
   return array(
     'webform_grid' => array(
       'arguments' => array('grid_element' => NULL),
+      'file' => 'components/grid.inc',
     ),
-    'webform_mail_grid' => array(
-      'arguments' => array('component' => NULL, 'value' => NULL),
+    'webform_display_grid' => array(
+      'arguments' => array('element' => NULL),
+      'file' => 'components/grid.inc',
     ),
   );
 }
