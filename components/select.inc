@@ -381,12 +381,13 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
       // Set display as a checkbox set.
       $element['#type'] = 'checkboxes';
       // Drupal 6 hack to properly render on multipage forms.
-      $element['#process'] = array('webform_expand_checkboxes', 'webform_expand_select_ids');
+      $element['#process'] = array('webform_expand_checkboxes');
+      $element['#pre_render'][] = 'webform_expand_select_ids';
     }
     else {
       // Set display as a radio set.
       $element['#type'] = 'radios';
-      $element['#process'] = array('expand_radios', 'webform_expand_select_ids');
+      $element['#pre_render'][] = 'webform_expand_select_ids';
     }
   }
 
@@ -419,10 +420,10 @@ function webform_expand_select_or_other($element) {
 
   // Sanitize the options in Select or other check boxes and radio buttons.
   if ($element['#select_type'] == 'checkboxes') {
-    $element['select']['#process'][] = 'webform_expand_select_ids';
+    $element['select']['#pre_render'][] = 'webform_expand_select_ids';
   }
   elseif ($element['#select_type'] == 'radios') {
-    $element['select']['#select_type'] = array('expand_radios', 'webform_expand_select_ids');
+    $element['select']['#pre_render'][] = 'webform_expand_select_ids';
   }
 
   return $element;
