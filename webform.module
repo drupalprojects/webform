@@ -2915,7 +2915,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $emai
   if (!isset($replacements)) {
     $replacements['unsafe'] = array();
     $replacements['safe']['%site'] = variable_get('site_name', 'drupal');
-    $replacements['safe']['%date'] = format_date(REQUEST_TIME, 'large');
+    $replacements['safe']['%date'] = format_date(REQUEST_TIME, 'long');
   }
 
   // Node replacements.
