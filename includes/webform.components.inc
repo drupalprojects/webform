@@ -427,10 +427,11 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
     }
     $form['display']['title_display']['#weight'] = 8;
     $form['display']['title_display']['#parents'] = array('extra', 'title_display');
+  }
 
-    if (webform_component_feature($component['type'], 'private')) {
+  if (webform_component_feature($component['type'], 'private')) {
     // May user mark fields as Private?
-      $form['display']['private'] = array(
+    $form['display']['private'] = array(
       '#type' => 'checkbox',
       '#title' => t('Private'),
       '#default_value' => ($component['extra']['private'] == '1' ? TRUE : FALSE),
@@ -438,8 +439,7 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
       '#weight' => 45,
       '#parents' => array('extra', 'private'),
       '#disabled' => !webform_results_access($node),
-      );
-    }
+    );
   }
 
   // Validation settings.
