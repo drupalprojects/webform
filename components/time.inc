@@ -239,10 +239,13 @@ function webform_expand_time($element) {
  * Theme a webform time element.
  */
 function theme_webform_time($element) {
+  $element['hour']['#attributes']['class'] = 'hour';
+  $element['minute']['#attributes']['class'] = 'minute';
+
   // Add error classes to all items within the element.
   if (form_get_error($element)) {
-    $element['hour']['#attributes']['class'] = 'error';
-    $element['minute']['#attributes']['class'] = 'error';
+    $element['hour']['#attributes']['class'] .= 'error';
+    $element['minute']['#attributes']['class'] .= 'error';
   }
 
   $output = '<div class="webform-container-inline">' . drupal_render($element['hour']) . drupal_render($element['minute']) . drupal_render($element['ampm']) . '</div>';
