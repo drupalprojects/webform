@@ -711,17 +711,21 @@ function _webform_help_component($section) {
 /**
  * Module specific instance of hook_theme().
  *
- * This allows each Webform component to add information into hook_theme().
+ * This allows each Webform component to add information into hook_theme(). If
+ * you specify a file to include, you must define the path to the module that
+ * this file belongs to.
  */
 function _webform_theme_component() {
   return array(
     'webform_grid' => array(
       'arguments' => array('grid_element' => NULL),
       'file' => 'components/grid.inc',
+      'path' => drupal_get_path('module', 'webform'),
     ),
     'webform_display_grid' => array(
       'arguments' => array('element' => NULL),
       'file' => 'components/grid.inc',
+      'path' => drupal_get_path('module', 'webform'),
     ),
   );
 }
