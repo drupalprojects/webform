@@ -442,7 +442,7 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
       '#description' => t('Private fields are shown only to users with results access.'),
       '#weight' => 45,
       '#parents' => array('extra', 'private'),
-      '#disabled' => !webform_results_access($node),
+      '#disabled' => empty($node->nid) ? FALSE : !webform_results_access($node),
     );
   }
 
@@ -476,7 +476,7 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
     '#attributes' => array('class' => 'webform-position'),
   );
 
-  if (variable_get('webform_enable_fieldset', TRUE) && is_array($node->webform['components'])) {
+  if (!empty($node->webform['components'])) {
     $options = array('0' => t('Root'));
     foreach ($node->webform['components'] as $existing_cid => $value) {
       if (webform_component_feature($value['type'], 'group') && (!isset($component['cid']) || $existing_cid != $component['cid'])) {
@@ -485,7 +485,7 @@ function webform_component_edit_form(&$form_state, $node, $component, $clone = F
     }
     $form['position']['pid'] = array(
       '#type' => 'select',
-      '#title' => t('Parent Fieldset'),
+      '#title' => t('Parent'),
       '#default_value' => $component['pid'],
       '#description' => t('Optional. You may organize your form by placing this component inside another fieldset.'),
       '#options' => $options,
