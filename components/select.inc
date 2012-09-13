@@ -520,6 +520,7 @@ function _webform_display_select($component, $value, $format = 'html') {
   return array(
     '#title' => $component['name'],
     '#weight' => $component['weight'],
+    '#multiple' => $component['extra']['multiple'],
     '#theme' => 'webform_display_select',
     '#theme_wrappers' => $format == 'html' ? array('webform_element', 'webform_element_wrapper') : array('webform_element_text'),
     '#post_render' => array('webform_element_wrapper'),
@@ -572,8 +573,6 @@ function _webform_submit_select($component, $value) {
  * Format the text output for this component.
  */
 function theme_webform_display_select($element) {
-  $component = $element['#webform_component'];
-
   // Flatten the list of options so we can get values easily. These options
   // may be translated by hook_webform_display_component_alter().
   $options = array();
@@ -589,7 +588,7 @@ function theme_webform_display_select($element) {
   }
 
   $items = array();
-  if ($component['extra']['multiple']) {
+  if ($element['#multiple']) {
     foreach ((array) $element['#value'] as $option_value) {
       if ($option_value !== '') {
         // Administer provided values.
