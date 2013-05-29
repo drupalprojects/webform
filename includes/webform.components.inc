@@ -933,7 +933,7 @@ function webform_component_select($element) {
     $label = preg_replace('/^(\-)+/', '', $label);
     $indents = $label_length - strlen($label);
     $element[$key] = array(
-      '#title' => $label,
+      '#title' => check_plain($label),
       '#type' => 'checkbox',
       '#default_value' => array_search($key, $element['#value']) !== FALSE,
       '#return_value' => $key,
