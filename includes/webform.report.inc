@@ -212,7 +212,7 @@ function theme_webform_results_table($node, $components, $submissions, $total_co
   $rows = array();
   $cell = array();
 
-  // This header has to be generated seperately so we can add the SQL necessary.
+  // This header has to be generated separately so we can add the SQL necessary.
   // to sort the results.
   $header = theme('webform_results_table_header', $node);
 
