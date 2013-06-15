@@ -801,6 +801,7 @@ function _webform_submission_user_limit_check($node) {
 
   // Retrieve submission data for this IP address or username from the database.
   $query = db_select('webform_submissions')
+    ->addTag('webform_submission_user_limit_check')
     ->condition('nid', $node->nid)
     ->condition('is_draft', 0);
 
@@ -865,6 +866,7 @@ function _webform_submission_total_limit_check($node) {
 
   // Retrieve submission data from the database.
   $query = db_select('webform_submissions')
+    ->addTag('webform_submission_total_limit_check')
     ->condition('nid', $node->nid)
     ->condition('is_draft', 0);
 
