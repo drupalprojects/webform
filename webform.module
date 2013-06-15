@@ -2920,7 +2920,7 @@ function _webform_fetch_draft_sid($nid, $uid) {
  */
 function _webform_filter_values($string, $node = NULL, $submission = NULL, $email = NULL, $strict = TRUE, $allow_anonymous = FALSE) {
   global $user;
-  static $replacements;
+  $replacements = &drupal_static(__FUNCTION__);
 
   // Don't do any filtering if the string is empty.
   if (strlen(trim($string)) == 0) {
