@@ -375,8 +375,8 @@ function theme_webform_advanced_redirection_form($variables) {
  */
 function theme_webform_advanced_submit_limit_form($variables) {
   $form = $variables['form'];
-  $form['submit_limit']['#attributes']['class'] = array('webform-set-active');
-  $form['submit_interval']['#attributes']['class'] = array('webform-set-active');
+  $form['submit_limit']['#attributes']['class'][] = 'webform-set-active';
+  $form['submit_interval']['#attributes']['class'][] = 'webform-set-active';
   // Remove div wrappers around limit options.
   $form['submit_limit']['#theme_wrappers'] = array();
   $form['submit_interval']['#theme_wrappers'] = array();
