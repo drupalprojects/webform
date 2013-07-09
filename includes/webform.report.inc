@@ -585,14 +585,14 @@ function theme_webform_results_download_range($variables) {
   }
 
   // Render latest x submissions option.
-  $element['latest']['#attributes']['class'] = array('webform-set-active');
+  $element['latest']['#attributes']['class'][] = 'webform-set-active';
   $element['range_type']['latest']['#theme_wrappers'] = array('webform_inline_radio');
   $element['range_type']['latest']['#inline_element'] = t('Only the latest !number submissions', array('!number' => drupal_render($element['latest'])));
   $element['range_type']['latest']['#title'] = NULL;
 
   // Render Start-End submissions option.
-  $element['start']['#attributes']['class'] = array('webform-set-active');
-  $element['end']['#attributes']['class'] = array('webform-set-active');
+  $element['start']['#attributes']['class'][] = 'webform-set-active';
+  $element['end']['#attributes']['class'][] = 'webform-set-active';
   $element['range_type']['range']['#theme_wrappers'] = array('webform_inline_radio');
   $element['range_type']['range']['#inline_element'] = t('All submissions starting from: !start and optionally to: !end', array('!start' => drupal_render($element['start']), '!end' => drupal_render($element['end'])));
   $element['range_type']['range']['#title'] = NULL;
