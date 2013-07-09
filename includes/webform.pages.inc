@@ -355,7 +355,7 @@ function webform_configure_form_submit_save($form, &$form_state) {
 function theme_webform_advanced_redirection_form($variables) {
   $form = $variables['form'];
   // Add special class for setting the active radio button.
-  $form['redirect_url']['#attributes']['class'] = array('webform-set-active');
+  $form['redirect_url']['#attributes']['class'][] = 'webform-set-active';
 
   // Remove title and description for Redirect URL field.
   $form['redirect_url']['#title'] = NULL;
