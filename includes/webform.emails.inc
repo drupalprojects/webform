@@ -310,7 +310,8 @@ function webform_email_edit_form($form, $form_state, $node, $email = array()) {
   );
 
   // Add the submit button.
-  $form['submit'] = array(
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save e-mail settings'),
     '#weight' => 20,
