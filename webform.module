@@ -2838,7 +2838,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $emai
       '%post' => $_POST,
     ),
     'unsafe' => array(
-      '%cookie' => $_COOKIE,
+      '%cookie' => isset($_COOKIE) ? $_COOKIE : array(),
       '%session' => isset($_SESSION) ? $_SESSION : array(),
       '%request' => $_REQUEST,
       '%server' => $_SERVER,
