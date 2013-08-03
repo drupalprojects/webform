@@ -2933,7 +2933,7 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $emai
   $format = isset($email['html']) && $email['html'] ? 'html' : 'text';
 
   // Submission replacements.
-  if (isset($submission) && !isset($replacements['email'][$format])) {
+  if (isset($submission) && (!isset($replacements['email'][$format]) || (isset($replacements['unsafe']['%sid']) && $replacements['unsafe']['%sid'] != $submission->sid))) {
     module_load_include('inc', 'webform', 'includes/webform.components');
 
     // Set the submission ID.
