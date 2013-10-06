@@ -560,15 +560,14 @@ function webform_schema() {
  */
 function webform_requirements($phase) {
   $requirements = array();
-  $t = get_t();
 
   // Ensure cURL exists if SimpleTest hasn't checked it already.
   if (!class_exists('ZipArchive')) {
     $requirements['webform_zip'] = array(
-      'title' => $t('Zip archive support'),
-      'value' => $t('Missing'),
+      'title' => t('Zip archive support'),
+      'value' => t('Missing'),
       'severity' => REQUIREMENT_WARNING,
-      'description' => $t('PHP does not have the zip archive extension available. Webform module requires zip support for exporting submissions to Microsoft Excel.'),
+      'description' => t('PHP does not have the zip archive extension available. Webform module requires zip support for exporting submissions to Microsoft Excel.'),
     );
   }
 
@@ -579,34 +578,12 @@ function webform_requirements($phase) {
  * Implements hook_install().
  */
 function webform_install() {
-  module_load_include('inc', 'node', 'content_types');
-  db_update('system')
-    ->condition('name', 'webform')
-    ->condition('type', 'module')
-    ->fields(array('weight' => -1))
-    ->execute();
+  module_set_weight('webform', -1);
 
-  // Optionally create the default webform type.
-  if (variable_get('webform_install_create_content_type', TRUE)) {
-    $webform_type = array(
-      'type' => 'webform',
-      'name' => st('Webform'),
-      'base' => 'node_content',
-      'description' => st('Create a new form or questionnaire accessible to users. Submission results and statistics are recorded and accessible to privileged users.'),
-      'custom' => TRUE,
-      'modified' => TRUE,
-      'locked' => FALSE,
-    );
-    $webform_type = node_type_set_defaults($webform_type);
-    node_type_save($webform_type);
-    if (variable_get('webform_install_add_body_field', FALSE)) {
-      node_add_body_field($webform_type);
-    }
-    // Enable webform components by default on Webform nodes.
-    variable_set('webform_node_webform', TRUE);
-    // Disable comments by default on Webform nodes.
-    variable_set('comment_webform', '0');
-  }
+  // Enable webform components by default on Webform nodes.
+  \Drupal::config('webform.settings')
+    ->set('webform_node_webform', TRUE)
+    ->save();
 }
 
 /**
