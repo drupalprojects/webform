@@ -1315,7 +1315,7 @@ function webform_node_view(&$node, $teaser, $page) {
   }
 
   // Do not include the form in the search index if indexing is disabled.
-  if (module_exists('search') && $node->build_mode == NODE_BUILD_SEARCH_INDEX && !variable_get('webform_search_index', 1)) {
+  if (module_exists('search') && isset($node->build_mode) && $node->build_mode == NODE_BUILD_SEARCH_INDEX && !variable_get('webform_search_index', 1)) {
     return;
   }
 
@@ -1414,12 +1414,12 @@ function webform_node_view(&$node, $teaser, $page) {
   $output = theme('webform_view', $node, $teaser, $page, $form, $enabled);
 
   // Remove the surrounding <form> tag if this is a preview.
-  if ($node->build_mode == NODE_BUILD_PREVIEW) {
+  if (isset($node->build_mode) && $node->build_mode == NODE_BUILD_PREVIEW) {
     $output = preg_replace('/<\/?form[^>]*>/', '', $output);
   }
 
   // Print out messages for the webform.
-  if ($node->build_mode != NODE_BUILD_PREVIEW && !isset($node->webform_block) && !$logging_in) {
+  if ((!isset($node->build_mode) || $node->build_mode != NODE_BUILD_PREVIEW) && !isset($node->webform_block) && !$logging_in) {
     theme('webform_view_messages', $node, $teaser, $page, $submission_count, $user_limit_exceeded, $total_limit_exceeded, $allowed_roles, $closed, $cached);
   }
 
