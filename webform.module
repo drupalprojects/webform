@@ -1010,6 +1010,7 @@ function webform_webform_submission_render_alter(&$renderable) {
   // are being displayed.
   $node = $renderable['#node'];
   $is_admin = webform_results_access($node);
+  module_load_include('inc', 'webform', 'includes/webform.components');
   if (empty($renderable['#email']) && !$is_admin) {
     // Find and hide the display of all hidden components.
     foreach ($node->webform['components'] as $cid => $component) {
