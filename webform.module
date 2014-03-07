@@ -3656,7 +3656,7 @@ function webform_mollom_form_list() {
   }
 
   $placeholders = db_placeholders($webform_types, 'varchar');
-  $result = db_query("SELECT n.title, n.nid FROM {webform} w LEFT JOIN {node} n ON w.nid = n.nid WHERE n.type IN ($placeholders)", $placeholders);
+  $result = db_query("SELECT n.title, n.nid FROM {webform} w LEFT JOIN {node} n ON w.nid = n.nid WHERE n.type IN ($placeholders)", $webform_types);
 
   while ($node = db_fetch_object($result)) {
     $form_id = 'webform_client_form_' . $node->nid;
