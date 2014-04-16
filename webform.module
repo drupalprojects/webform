@@ -3781,11 +3781,11 @@ function webform_email_html_capable() {
   // if available through a hook?
   if (module_exists('mimemail')) {
     $mail_systems = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
-    $enable = (!isset($mail_systems['webform']) || $mail_systems['webform'] == 'MimeMailSystem') ? 'MimeMailSystem' : FALSE;
+    $enable = (!isset($mail_systems['webform']) || strpos($mail_systems['webform'], 'MimeMailSystem') !== FALSE) ? $mail_systems['webform'] : FALSE;
   }
   elseif (module_exists('htmlmail')) {
     $mail_systems = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
-    $enable = (!isset($mail_systems['webform']) || $mail_systems['webform'] == 'HTMLMailSystem') ? 'HTMLMailSystem' : FALSE;
+    $enable = (!isset($mail_systems['webform']) || strpos($mail_systems['webform'], 'HTMLMailSystem') !== FALSE) ? $mail_systems['webform'] : FALSE;
   }
   if (!empty($enable)) {
     // We assume that if a solution exists even if it's not specified we should
