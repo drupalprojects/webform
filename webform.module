@@ -3779,13 +3779,20 @@ function webform_tt($name, $string, $langcode = NULL, $update = FALSE) {
 function webform_email_html_capable() {
   // TODO: Right now we only support MIME Mail and HTML Mail. Support others
   // if available through a hook?
-  if (module_exists('mimemail')) {
-    $mail_systems = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
-    $enable = (!isset($mail_systems['webform']) || strpos($mail_systems['webform'], 'MimeMailSystem') !== FALSE) ? $mail_systems['webform'] : FALSE;
-  }
-  elseif (module_exists('htmlmail')) {
-    $mail_systems = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
-    $enable = (!isset($mail_systems['webform']) || strpos($mail_systems['webform'], 'HTMLMailSystem') !== FALSE) ? $mail_systems['webform'] : FALSE;
+  $supported_html_modules = array(
+    'mimemail' => 'MimeMailSystem',
+    'htmlmail' => 'HTMLMailSystem',
+  );
+  foreach ($supported_html_modules as $mail_module => $mail_system_name) {
+    if (module_exists($mail_module)) {
+      $mail_systems = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
+      if (isset($mail_systems['webform'])) {
+        $enable = strpos($mail_systems['webform'], $mail_system_name) !== FALSE ? $mail_systems['webform'] : FALSE;
+      }
+      else {
+        $enable = $mail_system_name;
+      }
+    }
   }
   if (!empty($enable)) {
     // We assume that if a solution exists even if it's not specified we should
