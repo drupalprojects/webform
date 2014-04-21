@@ -3,4 +3,6 @@ description: Enables the creation of forms and questionnaires.
 core: 8.x
 type: module
 package: Webform
+dependencies:
+  - views
 configure: admin/config/content/webform
