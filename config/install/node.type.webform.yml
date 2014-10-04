@@ -1,18 +1,17 @@
 type: webform
-uuid: 9928e0e0-2e19-11e3-aa6e-0800200c9a66
 name: 'Webform'
 description: 'Create a new form or questionnaire accessible to users. Submission results and statistics are recorded and accessible to privileged users.'
 help: ''
-has_title: '1'
+has_title: true
 title_label: Title
 settings:
   node:
-    preview: '1'
+    preview: 1
     options:
-      status: status
-      promote: '0'
-      sticky: '0'
-      revision: '0'
-    submitted: '1'
-status: '1'
+      status: true
+      promote: false
+      sticky: false
+      revision: false
+    submitted: true
+status: true
 langcode: en
