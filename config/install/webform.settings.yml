@@ -1,0 +1,18 @@
+node_types_primary: webform
+node_webform: 1
+disabled_components: []
+email:
+  default_subject: 'Form submission from: [node:title]'
+  default_format: 0
+  format_override: 0
+progressbar:
+  style: [progressbar_bar, progressbar_pagebreak_labels, progressbar_include_confirmation]
+  label_first: 'Start'
+  label_confirmation: 'Complete'
+search_index: 1
+tracking_mode: 'cookie'
+email_address_format: 'long'
+export_format: 'excel'
+csv_delimiter: '\t'
+submission_access_control: 1
+email_select_max: 50
