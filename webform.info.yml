@@ -7,4 +7,4 @@ dependencies:
   - views
 test_dependencies:
   - token
-configure: admin/config/content/webform
+configure: webform.settings

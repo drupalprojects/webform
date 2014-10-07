@@ -1,0 +1,14 @@
+webform.content_overview:
+  path: '/admin/content/webform'
+  defaults:
+    _title: 'Webforms'
+    _content: '\Drupal\webform\Controller\WebformController::contentOverview'
+  requirements:
+    _permission: 'access all webform results'
+
+webform.settings:
+  path: '/admin/config/content/webform'
+  defaults:
+    _form: '\Drupal\webform\Form\WebformSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
