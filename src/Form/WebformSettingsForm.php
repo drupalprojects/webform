@@ -2,324 +2,259 @@
 
 /**
  * @file
- * Administration pages provided by Webform module.
+ * Contains \Drupal\webform\Form\WebformSettingsForm.
  */
+
+namespace Drupal\webform\Form;
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\ConfigFormBase;
 
 /**
- * Menu callback for admin/config/content/webform.
+ * Configure Webform admin settings.
  */
-function webform_admin_settings() {
-  module_load_include('inc', 'webform', 'includes/webform.export');
+class WebformSettingsForm extends ConfigFormBase {
 
-  $form['components'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Available components'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-    '#description' => t('These are the available field types for your installation of Webform. You may disable any of these components by unchecking its corresponding box. Only checked components will be available in existing or new webforms.'),
-  );
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'webform_settings';
+  }
 
-  // Add each component to the form:
-  $form['components'] = array('#tree' => TRUE);
-  $component_types = webform_components(TRUE);
-  foreach ($component_types as $key => $component) {
-    $form['components'][$key] = array(
-      '#title' => $component['label'],
-      '#description' => $component['description'],
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $config = $this->config('webform.settings');
+
+    $form['#tree'] = TRUE;
+
+    $form['components'] = array(
+      '#type' => 'details',
+      '#title' => t('Available components'),
+      '#description' => t('These are the available field types for your installation of Webform. You may disable any of these components by unchecking its corresponding box. Only checked components will be available in existing or new webforms.'),
+      '#open' => TRUE,
+      '#theme' => 'webform_admin_settings_components_table',
+    );
+
+    // Add each component to the form.
+    $component_types = webform_components(TRUE);
+    foreach ($component_types as $key => $component) {
+      $form['components'][$key] = array(
+        '#type' => 'checkbox',
+        '#title' => $component['label'],
+        '#description' => $component['description'],
+        '#return_value' => 1,
+        '#default_value' => $component['enabled'],
+      );
+    }
+
+    $form['email'] = array(
+      '#type' => 'details',
+      '#title' => t('Default e-mail values'),
+      '#open' => TRUE,
+    );
+
+    $form['email']['default_from_address']  = array(
+      '#type' => 'textfield',
+      '#title' => t('From address'),
+      '#default_value' => $config->get('email.default_from_address'),
+      '#description' => t('The default sender address for emailed webform results; often the e-mail address of the maintainer of your forms.'),
+    );
+
+    $form['email']['default_from_name']  = array(
+      '#type' => 'textfield',
+      '#title' => t('From name'),
+      '#default_value' => $config->get('email.default_from_name'),
+      '#description' => t('The default sender name which is used along with the default from address.'),
+    );
+
+    $form['email']['default_subject']  = array(
+      '#type' => 'textfield',
+      '#title' => t('Default subject'),
+      '#default_value' => $config->get('email.default_subject'),
+      '#description' => t('The default subject line of any e-mailed results.'),
+    );
+
+    $form['email']['default_format']  = array(
+      '#type' => 'radios',
+      '#title' => t('Format'),
+      '#options' => array(
+        0 => t('Plain text'),
+        1 => t('HTML'),
+      ),
+      '#default_value' => $config->get('email.default_format'),
+      '#description' => t('The default format for new e-mail settings. Webform e-mail options take precedence over the settings for system-wide e-mails configured in MIME mail.'),
+      '#access' => webform_email_html_capable(),
+    );
+
+    $form['email']['format_override']  = array(
+      '#type' => 'radios',
+      '#title' => t('Format override'),
+      '#options' => array(
+        0 => t('Per-webform configuration of e-mail format'),
+        1 => t('Send all e-mails in the default format'),
+      ),
+      '#default_value' => $config->get('email.format_override'),
+      '#description' => t('Force all webform e-mails to be sent in the default format.'),
+      '#access' => webform_email_html_capable(),
+    );
+
+    $form['progressbar'] = array(
+      '#type' => 'details',
+      '#title' => t('Progress bar'),
+      '#open' => TRUE,
+    );
+
+    $form['progressbar']['style']  = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Progress bar style'),
+      '#options' => array(
+        'progressbar_bar' => t('Show progress bar'),
+        'progressbar_page_number' => t('Show page number as number of completed (i.e. Page 1 of 10)'),
+        'progressbar_percent' => t('Show percentage completed (i.e. 10%)'),
+        'progressbar_pagebreak_labels' => t('Show page labels from page break components'),
+        'progressbar_include_confirmation' => t('Include confirmation page in progress bar'),
+      ),
+      '#default_value' => $config->get('progressbar.style'),
+      '#description' => t('Choose how the progress bar should be displayed for multi-page forms.'),
+    );
+
+    $form['progressbar']['label_first'] = array(
+      '#type' => 'textfield',
+      '#title' => t('First page label'),
+      '#default_value' => $config->get('progressbar.label_first'),
+      '#maxlength' => 255,
+    );
+
+    $form['progressbar']['label_confirmation'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Confirmation page label'),
+      '#default_value' => $config->get('progressbar.label_confirmation'),
+      '#maxlength' => 255,
+    );
+
+    $form['advanced'] = array(
+      '#type' => 'details',
+      '#title' => t('Advanced options'),
+      '#open' => FALSE,
+    );
+
+    $form['advanced']['search_index']  = array(
       '#type' => 'checkbox',
-      '#return_value' => 1,
-      '#default_value' => $component['enabled'],
+      '#checked_value' => 1,
+      '#title' => t('Include webform forms in search index'),
+      '#default_value' => $config->get('search_index'),
+      '#description' => t('When selected, all Webform nodes will have their form components indexed by the search engine.'),
+      '#access' => \Drupal::moduleHandler()->moduleExists('search'),
     );
-  }
 
-  $form['email'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Default e-mail values'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-
-  $form['email']['webform_default_from_address']  = array(
-    '#type' => 'textfield',
-    '#title' => t('From address'),
-    '#default_value' => webform_variable_get('webform_default_from_address'),
-    '#description' => t('The default sender address for emailed webform results; often the e-mail address of the maintainer of your forms.'),
-  );
-
-  $form['email']['webform_default_from_name']  = array(
-    '#type' => 'textfield',
-    '#title' => t('From name'),
-    '#default_value' => webform_variable_get('webform_default_from_name'),
-    '#description' => t('The default sender name which is used along with the default from address.'),
-  );
-
-  $form['email']['webform_default_subject']  = array(
-    '#type' => 'textfield',
-    '#title' => t('Default subject'),
-    '#default_value' => webform_variable_get('webform_default_subject'),
-    '#description' => t('The default subject line of any e-mailed results.'),
-  );
-
-  $form['email']['webform_default_format']  = array(
-    '#type' => 'radios',
-    '#title' => t('Format'),
-    '#options' => array(
-      0 => t('Plain text'),
-      1 => t('HTML'),
-    ),
-    '#default_value' => variable_get('webform_default_format', 0),
-    '#description' => t('The default format for new e-mail settings. Webform e-mail options take precedence over the settings for system-wide e-mails configured in MIME mail.'),
-    '#access' => webform_email_html_capable(),
-  );
-
-  $form['email']['webform_format_override']  = array(
-    '#type' => 'radios',
-    '#title' => t('Format override'),
-    '#options' => array(
-      0 => t('Per-webform configuration of e-mail format'),
-      1 => t('Send all e-mails in the default format'),
-    ),
-    '#default_value' => variable_get('webform_format_override', 0),
-    '#description' => t('Force all webform e-mails to be sent in the default format.'),
-    '#access' => webform_email_html_capable(),
-  );
-
-  $form['progressbar'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Progress bar'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-  $form['progressbar']['webform_progressbar_style']  = array(
-    '#type' => 'checkboxes',
-    '#title' => t('Progress bar style'),
-    '#options' => array(
-      'progressbar_bar' => t('Show progress bar'),
-      'progressbar_page_number' => t('Show page number as number of completed (i.e. Page 1 of 10)'),
-      'progressbar_percent' => t('Show percentage completed (i.e. 10%)'),
-      'progressbar_pagebreak_labels' => t('Show page labels from page break components'),
-      'progressbar_include_confirmation' => t('Include confirmation page in progress bar'),
-    ),
-    '#default_value' => webform_variable_get('webform_progressbar_style'),
-    '#description' => t('Choose how the progress bar should be displayed for multi-page forms.'),
-  );
-  $form['progressbar']['webform_progressbar_label_first'] = array(
-    '#type' => 'textfield',
-    '#title' => t('First page label'),
-    '#default_value' => webform_variable_get('webform_progressbar_label_first'),
-    '#maxlength' => 255,
-  );
-  $form['progressbar']['webform_progressbar_label_confirmation'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Confirmation page label'),
-    '#default_value' => webform_variable_get('webform_progressbar_label_confirmation'),
-    '#maxlength' => 255,
-  );
-
-  $form['advanced'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Advanced options'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#weight' => 20,
-  );
-
-  $form['advanced']['webform_search_index']  = array(
-    '#type' => 'checkbox',
-    '#checked_value' => 1,
-    '#title' => t('Include webform forms in search index'),
-    '#default_value' => variable_get('webform_search_index', 1),
-    '#description' => t('When selected, all Webform nodes will have their form components indexed by the search engine.'),
-    '#access' => module_exists('search'),
-  );
-
-  $form['advanced']['webform_tracking_mode']  = array(
-    '#type' => 'radios',
-    '#title' => t('Track anonymous users by:'),
-    '#options' => array(
-      'cookie' => t('Cookie only (least strict)'),
-      'ip_address' => t('IP address only'),
-      'strict' => t('Both cookie and IP address (most strict)'),
-    ),
-    '#default_value' => variable_get('webform_tracking_mode', 'cookie'),
-    '#description' => t('<a href="http://www.wikipedia.org/wiki/HTTP_cookie">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. Limiting by IP address is more effective against repeated submissions, but may result in unintentional blocking of users sharing the same address. Logged-in users are always tracked by their user ID and are not affected by this option.'),
-  );
-
-  $form['advanced']['webform_email_address_format'] = array(
-    '#type' => 'radios',
-    '#title' => t('E-mail address format'),
-    '#options' => array(
-      'long' => t('Long format: "Example Name" &lt;name@example.com&gt;'),
-      'short' => t('Short format: name@example.com'),
-    ),
-    '#default_value' => variable_get('webform_email_address_format', 'long'),
-    '#description' => t('Most servers support the "long" format which will allow for more friendly From addresses in e-mails sent. However many Windows-based servers are unable to send in the long format. Change this option if experiencing problems sending e-mails with Webform.'),
-  );
-
-  $form['advanced']['webform_export_format'] = array(
-    '#type' => 'radios',
-    '#title' => t('Default export format'),
-    '#options' => webform_export_list(),
-    '#default_value' => webform_variable_get('webform_export_format'),
-  );
-
-  $form['advanced']['webform_csv_delimiter']  = array(
-    '#type' => 'select',
-    '#title' => t('Default export delimiter'),
-    '#description' => t('This is the delimiter used in the CSV/TSV file when downloading Webform results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
-    '#default_value' => webform_variable_get('webform_csv_delimiter'),
-    '#options' => array(
-      ','  => t('Comma (,)'),
-      '\t' => t('Tab (\t)'),
-      ';'  => t('Semicolon (;)'),
-      ':'  => t('Colon (:)'),
-      '|'  => t('Pipe (|)'),
-      '.'  => t('Period (.)'),
-      ' '  => t('Space ( )'),
-    ),
-  );
-
-  $form['advanced']['webform_submission_access_control']  = array(
-    '#type' => 'radios',
-    '#title' => t('Submission access control'),
-    '#options' => array(
-      '1' => t('Select the user roles that may submit each individual webform'),
-      '0' => t('Disable Webform submission access control'),
-    ),
-    '#default_value' => variable_get('webform_submission_access_control', 1),
-    '#description' => t('By default, the configuration form for each webform allows the administrator to choose which roles may submit the form. You may want to allow users to always submit the form if you are using a separate node access module to control access to webform nodes themselves.'),
-  );
-
-  $form['advanced']['webform_email_select_max'] = array(
-    '#type' => 'textfield',
-    '#title' => t("Select email mapping limit"),
-    '#default_value' => variable_get('webform_email_select_max', 50),
-    '#description' => t('When mapping emails addresses to a select component, limit the choice to components with less than the amount of options indicated. This is to avoid flooding the email settings form. '),
-  );
-
-  $form = system_settings_form($form);
-  $form['#theme'] = 'webform_admin_settings';
-  array_unshift($form['#submit'], 'webform_admin_settings_submit');
-
-  return $form;
-}
-
-/**
- * Submit handler for the webform_admin_settings() form.
- */
-function webform_admin_settings_submit($form, &$form_state) {
-  $disabled_components = array();
-  foreach ($form_state['values']['components'] as $name => $enabled) {
-    if (!$enabled) {
-      $disabled_components[] = $name;
-    }
-  }
-  // Update $form_state and let system_settings_form_submit() handle saving.
-  $form_state['values']['webform_disabled_components'] = $disabled_components;
-  unset($form_state['values']['components']);
-
-  // Trim out empty options in the progress bar options.
-  $form_state['values']['webform_progressbar_style'] = array_keys(array_filter($form_state['values']['webform_progressbar_style']));
-}
-
-/**
- * Theme the output of the webform_admin_settings() form.
- */
-function theme_webform_admin_settings($variables) {
-  $form = $variables['form'];
-
-  // Format the components into a table.
-  foreach (element_children($form['components']) as $key) {
-    $row = array();
-    $row[] = $form['components'][$key]['#title'];
-    $row[] = $form['components'][$key]['#description'];
-    $form['components'][$key]['#title'] = NULL;
-    $form['components'][$key]['#description'] = NULL;
-    $row[] = array('data' => drupal_render($form['components'][$key]), 'align' => 'center');
-    $rows[] = $row;
-  }
-  $header = array(t('Name'), t('Description'), array('data' => t('Enabled'), 'class' => array('checkbox')));
-
-  // Create the table inside the form.
-  $form['components']['table'] = array(
-    '#theme' => 'table',
-    '#header' => $header,
-    '#rows' => $rows,
-  );
-
-  return drupal_render_children($form);
-}
-
-/**
- * Menu callback for admin/content/webform. Displays all webforms on the site.
- */
-function webform_admin_content() {
-  $query = db_select('webform', 'w');
-  $query->join('node', 'n', 'w.nid = n.nid');
-  $query->fields('n');
-  $nodes = $query->execute()->fetchAllAssoc('nid');
-  return theme('webform_admin_content', array('nodes' => $nodes));
-}
-
-/**
- * Create a comma-separate list of content types that are webform enabled.
- */
-function webform_admin_type_list() {
-  $webform_types = webform_node_types();
-  $webform_type_list = '';
-  $webform_type_count = count($webform_types);
-  foreach ($webform_types as $n => $type) {
-    $webform_type_list .= l(node_type_get_name($type), 'node/add/' . $type);
-    if ($n + 1 < $webform_type_count) {
-      $webform_type_list .= $webform_type_count == 2 ? ' ' : ', ';
-    }
-    if ($n + 2 == $webform_type_count) {
-      $webform_type_list .= t('or') . ' ';
-    }
-  }
-
-  return $webform_type_list;
-}
-
-/**
- * Generate a list of all webforms avaliable on this site.
- */
-function theme_webform_admin_content($variables) {
-  $nodes = $variables['nodes'];
-  $header = array(
-    t('Title'),
-    array('data' => t('View'), 'colspan' => '4'),
-    array('data' => t('Operations'), 'colspan' => '3')
-  );
-
-  $rows = array();
-  foreach ($nodes as $node) {
-    $rows[] = array(
-      l($node->title, 'node/' . $node->nid),
-      l(t('Submissions'), 'node/' . $node->nid . '/webform-results'),
-      l(t('Analysis'), 'node/' . $node->nid . '/webform-results/analysis'),
-      l(t('Table'), 'node/' . $node->nid . '/webform-results/table'),
-      l(t('Download'), 'node/' . $node->nid . '/webform-results/download'),
-      node_access('update', $node) ? l(t('Edit'), 'node/' . $node->nid . '/edit') : '',
-      node_access('update', $node) ? l(t('Components'), 'node/' . $node->nid . '/webform') : '',
-      user_access('delete all webform submissions') ? l(t('Clear'), 'node/' . $node->nid . '/webform-results/clear') : '',
+    $form['advanced']['tracking_mode']  = array(
+      '#type' => 'radios',
+      '#title' => t('Track anonymous users by:'),
+      '#options' => array(
+        'cookie' => t('Cookie only (least strict)'),
+        'ip_address' => t('IP address only'),
+        'strict' => t('Both cookie and IP address (most strict)'),
+      ),
+      '#default_value' => $config->get('tracking_mode'),
+      '#description' => t('<a href="http://www.wikipedia.org/wiki/HTTP_cookie">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. Limiting by IP address is more effective against repeated submissions, but may result in unintentional blocking of users sharing the same address. Logged-in users are always tracked by their user ID and are not affected by this option.'),
     );
-  }
 
-  if (empty($rows)) {
-    $webform_types = webform_node_types();
-    if (empty($webform_types)) {
-      $message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => url('admin/config/content/webform')));
-    }
-    else {
-      $webform_type_list = webform_admin_type_list();
-      $message = t('There are currently no webforms on your site. Create a !types piece of content.', array('!types' => $webform_type_list));
-    }
-
-    $rows[] = array(
-      array('data' => $message, 'colspan' => 7),
+    $form['advanced']['email_address_format'] = array(
+      '#type' => 'radios',
+      '#title' => t('E-mail address format'),
+      '#options' => array(
+        'long' => t('Long format: "Example Name" &lt;name@example.com&gt;'),
+        'short' => t('Short format: name@example.com'),
+      ),
+      '#default_value' => $config->get('email_address_format'),
+      '#description' => t('Most servers support the "long" format which will allow for more friendly From addresses in e-mails sent. However many Windows-based servers are unable to send in the long format. Change this option if experiencing problems sending e-mails with Webform.'),
     );
+
+    module_load_include('inc', 'webform', 'includes/webform.export');
+    $form['advanced']['export_format'] = array(
+      '#type' => 'radios',
+      '#title' => t('Default export format'),
+      '#options' => webform_export_list(),
+      '#default_value' => $config->get('export_format'),
+    );
+
+    $form['advanced']['csv_delimiter']  = array(
+      '#type' => 'select',
+      '#title' => t('Default export delimiter'),
+      '#description' => t('This is the delimiter used in the CSV/TSV file when downloading Webform results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
+      '#default_value' => $config->get('csv_delimiter'),
+      '#options' => array(
+        ','  => t('Comma (,)'),
+        '\t' => t('Tab (\t)'),
+        ';'  => t('Semicolon (;)'),
+        ':'  => t('Colon (:)'),
+        '|'  => t('Pipe (|)'),
+        '.'  => t('Period (.)'),
+        ' '  => t('Space ( )'),
+      ),
+    );
+
+    $form['advanced']['submission_access_control']  = array(
+      '#type' => 'radios',
+      '#title' => t('Submission access control'),
+      '#options' => array(
+        '1' => t('Select the user roles that may submit each individual webform'),
+        '0' => t('Disable Webform submission access control'),
+      ),
+      '#default_value' => $config->get('submission_access_control'),
+      '#description' => t('By default, the configuration form for each webform allows the administrator to choose which roles may submit the form. You may want to allow users to always submit the form if you are using a separate node access module to control access to webform nodes themselves.'),
+    );
+
+    $form['advanced']['email_select_max'] = array(
+      '#type' => 'textfield',
+      '#title' => t("Select email mapping limit"),
+      '#default_value' => $config->get('email_select_max'),
+      '#description' => t('When mapping emails addresses to a select component, limit the choice to components with less than the amount of options indicated. This is to avoid flooding the email settings form. '),
+    );
+
+    return parent::buildForm($form, $form_state);
   }
 
-  return theme('table', array('header' => $header, 'rows' => $rows));
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $values = $form_state->getValues();
+
+    $disabled_components = array();
+    foreach ($values['components'] as $name => $enabled) {
+      if (!$enabled) {
+        $disabled_components[] = $name;
+      }
+    }
+    $values['email']['disabled_components'] = $disabled_components;
+
+    // Trim out empty options in the progress bar options.
+    $values['progressbar']['style'] = array_keys(array_filter($values['progressbar']['style']));
+
+    \Drupal::config('webform.settings')
+      ->set('disabled_components', $values['email']['disabled_components'])
+      ->set('email.default_from_address', $values['email']['default_from_address'])
+      ->set('email.default_from_name', $values['email']['default_from_name'])
+      ->set('email.default_subject', $values['email']['default_subject'])
+      ->set('email.default_format', $values['email']['default_format'])
+      ->set('email.format_override', $values['email']['format_override'])
+      ->set('email.address_format', $values['advanced']['email_address_format'])
+      ->set('email.select_max', $values['advanced']['email_select_max'])
+      ->set('progressbar.style', $values['progressbar']['style'])
+      ->set('progressbar.label_first', $values['progressbar']['label_first'])
+      ->set('progressbar.label_confirmation', $values['progressbar']['label_confirmation'])
+      ->set('search_index', $values['advanced']['search_index'])
+      ->set('tracking_mode', $values['advanced']['tracking_mode'])
+      ->set('export_format', $values['advanced']['export_format'])
+      ->set('csv_delimiter', $values['advanced']['csv_delimiter'])
+      ->set('submission_access_control', $values['advanced']['submission_access_control'])
+      ->save();
+
+    parent::submitForm($form, $form_state);
+  }
+
 }

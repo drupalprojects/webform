@@ -50,7 +50,7 @@ function webform_webform_exporters() {
     unset($exporters['excel']);
   }
   // By default the legacy Excel exporter is disabled.
-  if (!variable_get('webform_excel_legacy_exporter', 0)) {
+  if (!\Drupal::config('webform.settings')->get('excel_legacy_exporter')) {
     unset($exporters['excel_legacy']);
   }
 
@@ -75,8 +75,8 @@ function webform_export_list() {
 function webform_export_fetch_definition($format = NULL) {
   static $cache;
   if (!isset($cache)) {
-    $cache = module_invoke_all('webform_exporters');
-    drupal_alter('webform_exporters', $cache);
+    $cache = \Drupal::moduleHandler()->invokeAll('webform_exporters');
+    \Drupal::moduleHandler()->alter('webform_exporters', $cache);
     foreach ($cache as $key => $exporter) {
       $cache[$key] += array('weight' => 0);
       $cache[$key]['name'] = $key; // Used in sorting.

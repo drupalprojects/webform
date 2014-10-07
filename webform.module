@@ -10,6 +10,10 @@
  * @author Nathan Haug <nate@lullabot.com>
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Constants used in conditional logic.
  */
@@ -20,10 +24,10 @@ define('WEBFORM_CONDITIONAL_SAME_PAGE', 2);
 /**
  * Implements hook_help().
  */
-function webform_help($section = 'admin/help#webform', $arg = NULL) {
+function webform_help($route_name, RouteMatchInterface $route_match) {
   $output = '';
-  switch ($section) {
-    case 'admin/config/content/webform':
+  switch ($route_name) {
+    case 'webform.settings':
       module_load_include('inc', 'webform', 'includes/webform.admin');
       $type_list = webform_admin_type_list();
       $output = t('Webform enables nodes to have attached forms and questionnaires.');
@@ -31,22 +35,22 @@ function webform_help($section = 'admin/help#webform', $arg = NULL) {
         $output .= ' ' . t('To add one, create a !types piece of content.', array('!types' => $type_list));
       }
       else {
-        $output .= ' <strong>' . t('Webform is currently not enabled on any content types.') . '</strong> ' . t('To use Webform, please enable it on at least one <a href="!url">content type</a>.', array('!url' => url('admin/structure/types')));
+        $output .= ' <strong>' . t('Webform is currently not enabled on any content types.') . '</strong> ' . t('To use Webform, please enable it on at least one <a href="!url">content type</a>.', array('!url' => _url('admin/structure/types')));
       }
       $output = '<p>' . $output . '</p>';
       break;
     case 'admin/content/webform':
       $output = '<p>' . t('This page lists all of the content on the site that may have a webform attached to it.') . '</p>';
       break;
-    case 'admin/help#webform':
+    case 'help.page.webform':
       module_load_include('inc', 'webform', 'includes/webform.admin');
       $types = webform_admin_type_list();
       if (empty($types)) {
         $types = t('Webform-enabled piece of content');
-        $types_message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => url('admin/config/content/webform')));
+        $types_message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => _url('admin/config/content/webform')));
       }
       else {
-        $types_message = t('Optional: Enable Webform on multiple types by visiting the <a href="!url">Webform settings</a> page.', array('!url' => url('admin/config/content/webform')));
+        $types_message = t('Optional: Enable Webform on multiple types by visiting the <a href="!url">Webform settings</a> page.', array('!url' => _url('admin/config/content/webform')));
       }
       $output = t("<p>This module lets you create forms or questionnaires and define their content. Submissions from these forms are stored in the database and optionally also sent by e-mail to a predefined address.</p>
       <p>Here is how to create one:</p>
@@ -66,7 +70,7 @@ function webform_help($section = 'admin/help#webform', $arg = NULL) {
         <li>Your form is now ready for viewing. After receiving submissions, you can check the results users have submitted by visiting the <em>Results</em> tab on the piece of content.</li>
       </ul>
       <p>Help on adding and configuring the components will be shown after you add your first component.</p>
-      ", array('!webform-types-message' => $types_message, '!create-content' => url('node/add'), '!types' => $types));
+      ", array('!webform-types-message' => $types_message, '!create-content' => _url('node/add'), '!types' => $types));
       break;
     case 'node/%/webform/conditionals':
       $output .= '<p>' . t('Conditionals may be used to hide or show certain components (or entire pages!) based on the value of other components.') . '</p>';
@@ -88,24 +92,15 @@ function webform_menu() {
   // Submissions listing.
   $items['admin/content/webform'] = array(
     'title' => 'Webforms',
-    'page callback' => 'webform_admin_content',
-    'access callback' => 'user_access',
-    'access arguments' => array('access all webform results'),
     'description' => 'View and edit all the available webforms on your site.',
-    'file' => 'includes/webform.admin.inc',
-    'type' => MENU_LOCAL_TASK,
+    'route_name' => 'webform.content_overview',
   );
 
   // Admin Settings.
   $items['admin/config/content/webform'] = array(
     'title' => 'Webform settings',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('webform_admin_settings'),
-    'access callback' => 'user_access',
-    'access arguments' => array('administer site configuration'),
     'description' => 'Global configuration of webform functionality.',
-    'file' => 'includes/webform.admin.inc',
-    'type' => MENU_NORMAL_ITEM,
+    'route_name' => 'webform.settings',
   );
 
   // Autocomplete used in Views integration.
@@ -714,7 +709,7 @@ function webform_theme() {
       'variables' => array('groups' => array('node')),
     ),
     // webform.admin.inc.
-    'webform_admin_settings' => array(
+    'webform_admin_settings_components_table' => array(
       'render element' => 'form',
       'file' => 'includes/webform.admin.inc',
     ),
@@ -1063,7 +1058,7 @@ function webform_webform_component_info() {
     ),
   );
 
-  if (module_exists('file')) {
+  if (\Drupal::moduleHandler()->moduleExists('file')) {
     $component_info['file'] = array(
       'label' => t('File'),
       'description' => t('Allow users to upload files of configurable types.'),
@@ -1295,8 +1290,9 @@ function webform_file_download($uri) {
  */
 function webform_node_types() {
   $types = array();
+  $config = \Drupal::config('webform.settings');
   foreach (node_type_get_names() as $type => $name) {
-    if (variable_get('webform_node_' . $type, FALSE)) {
+    if ($config->get('node_' . $type)) {
       $types[] = $type;
     }
   }
@@ -1311,10 +1307,12 @@ function webform_node_type_delete($info) {
 }
 
 /**
- * Implements hook_node_insert().
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
  */
-function webform_node_insert($node) {
-  if (!variable_get('webform_node_' . $node->type, FALSE)) {
+function webform_node_insert(EntityInterface $node) {
+  $config = \Drupal::config('webform.settings');
+
+  if (!$config->get('node_' . $node->getNodeType())) {
     return;
   }
 
@@ -1328,7 +1326,7 @@ function webform_node_insert($node) {
   $node->webform += webform_node_defaults();
 
   // Do not make an entry if this node does not have any Webform settings.
-  if ($node->webform == webform_node_defaults() && !in_array($node->type, webform_variable_get('webform_node_types_primary'))) {
+  if ($node->webform == webform_node_defaults() && !in_array($node->type, $config->get('node_types_primary'))) {
     return;
   }
 
@@ -1710,13 +1708,11 @@ function webform_form_alter(&$form, $form_state, $form_id) {
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
-function webform_form_node_type_form_alter(&$form, $form_state) {
+function webform_form_node_type_form_alter(&$form, FormStateInterface $form_state) {
   if (isset($form['type'])) {
     $form['webform'] = array(
       '#title' => t('Webform'),
-      '#type' => 'fieldset',
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
+      '#type' => 'details',
       '#group' => 'additional_settings',
       '#weight' => 10,
       '#attached' => array(
@@ -1728,13 +1724,25 @@ function webform_form_node_type_form_alter(&$form, $form_state) {
       '#title' => t('Enable webform functionality'),
       '#description' => t('Allows a form to be attached to content. This will add tabs for "Webform" and "Results" on all content of this type.'),
       '#weight' => 0,
-      '#default_value' => variable_get('webform_node_' . $form['#node_type']->type, FALSE),
+      '#default_value' => \Drupal::config('webform.settings')->get('node_' . $form_state->getFormObject()->getEntity()->type),
       '#attributes' => array(
         'data-enabled-description' => t('Enabled'),
         'data-disabled-description' => t('Disabled'),
       ),
     );
+    $form['actions']['submit']['#submit'][] = 'webform_form_node_type_form_submit';
   }
+}
+
+/**
+ * Form submission handler for node type 'Enable webform functionality' option.
+ *
+ * @see webform_form_node_type_form_alter()
+ */
+function webform_form_node_type_form_submit($form, FormStateInterface $form_state) {
+  \Drupal::config('webform.settings')
+    ->set('node_' . $form_state->getFormObject()->getEntity()->type, $form_state->getValue('webform_node'))
+    ->save();
 }
 
 /**
@@ -4253,18 +4261,20 @@ function _webform_components_tree_sort($tree) {
 function webform_components($include_disabled = FALSE, $reset = FALSE) {
   static $components, $disabled;
 
+  $config = \Drupal::config('webform.settings');
+
   if (!isset($components) || $reset) {
     $components = array();
-    $disabled = array_flip(variable_get('webform_disabled_components', array()));
-    foreach (module_implements('webform_component_info') as $module) {
-      $module_components = module_invoke($module, 'webform_component_info');
+    $disabled = array_flip($config->get('disabled_components'));
+    foreach (\Drupal::moduleHandler()->getImplementations('webform_component_info') as $module) {
+      $module_components = \Drupal::moduleHandler()->invoke($module, 'webform_component_info');
       foreach ($module_components as $type => $info) {
         $module_components[$type]['module'] = $module;
         $module_components[$type]['enabled'] = !array_key_exists($type, $disabled);
       }
       $components += $module_components;
     }
-    drupal_alter('webform_component_info', $components);
+    \Drupal::moduleHandler()->alter('webform_component_info', $components);
     ksort($components);
   }
 
@@ -4578,25 +4588,25 @@ function webform_email_html_capable() {
   }
   // Build a list of HTML-capable mail systems.
   $systems = array();
-  if (module_exists('mandrill')) {
+  if (\Drupal::moduleHandler()->moduleExists('mandrill')) {
     $systems[] = 'MandrillMailSystem';
   }
-  if (module_exists('mimemail')) {
+  if (\Drupal::moduleHandler()->moduleExists('mimemail')) {
     $systems[] = 'MimeMailSystem';
     $systems[] = 'MimeMailSystem__SmtpMailSystem';
   }
-  if (module_exists('htmlmail')) {
+  if (\Drupal::moduleHandler()->moduleExists('htmlmail')) {
     $systems[] = 'HTMLMailSystem';
     $systems[] = 'HTMLMailSystem__SmtpMailSystem';
   }
   // Allow other modules to alter the list.
-  drupal_alter('webform_html_capable_mail_systems', $systems);
+  \Drupal::moduleHandler()->alter('webform_html_capable_mail_systems', $systems);
 
   if (!count($systems)) {
     $capable = FALSE;
     return FALSE;
   }
-  $mail_systems = variable_get('mail_system', array('default-system' => 'DefaultMailSystem'));
+  $mail_systems = \Drupal::config('webform.settings')->get('mail_system');
   // If an HTML mail system exists then we will use it for Webform emails, even
   // if it's not already specified.
   if (!isset($mail_systems['webform']) || !in_array($mail_systems['webform'], $systems)) {
