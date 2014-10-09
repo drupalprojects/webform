@@ -1,0 +1,69 @@
+# Schema for the configuration files of the Webform module.
+
+webform.settings:
+  type: mapping
+  label: 'Webform settings'
+  mapping:
+    node_types_primary:
+      type: array
+      label: 'Primary webform node type(s)'
+    disabled_components:
+      type: array
+      label: 'Available components'
+    email:
+      type: mapping
+      label: 'Default e-mail values'
+      mapping:
+        default_from_address:
+          type: string
+          label: 'From address'
+        default_from_name:
+          type: string
+          label: 'From name'
+        default_subject:
+          type: string
+          label: 'Default subject'
+        default_format:
+          type: integer
+          label: 'Format'
+        format_override:
+          type: integer
+          label: 'Format override'
+    progressbar:
+      type: mapping
+      label: 'Progress bar'
+      mapping:
+        style:
+          type: array
+          label: 'Progress bar style'
+        label_first:
+          type: string
+          label: 'First page label'
+        label_confirmation:
+          type: string
+          label: 'Confirmation page label'
+    advanced:
+      type: mapping
+      label: 'Advanced options'
+      mapping:
+        search_index:
+          type: boolean
+          label: 'Include webform forms in search index'
+        tracking_mode:
+          type: string
+          label: 'Track anonymous users by'
+        email_address_format:
+          type: string
+          label: 'E-mail address format'
+        export_format:
+          type: string
+          label: 'Default export format'
+        csv_delimiter:
+          type: string
+          label: 'Default export delimiter'
+        submission_access_control:
+          type: boolean
+          label: 'Submission access control'
+        email_select_max:
+          type: boolean
+          label: 'E-mail mapping limit'

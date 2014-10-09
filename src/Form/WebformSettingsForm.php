@@ -145,7 +145,7 @@ class WebformSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#checked_value' => 1,
       '#title' => t('Include webform forms in search index'),
-      '#default_value' => $config->get('search_index'),
+      '#default_value' => $config->get('advanced.search_index'),
       '#description' => t('When selected, all Webform nodes will have their form components indexed by the search engine.'),
       '#access' => \Drupal::moduleHandler()->moduleExists('search'),
     );
@@ -158,7 +158,7 @@ class WebformSettingsForm extends ConfigFormBase {
         'ip_address' => t('IP address only'),
         'strict' => t('Both cookie and IP address (most strict)'),
       ),
-      '#default_value' => $config->get('tracking_mode'),
+      '#default_value' => $config->get('advanced.tracking_mode'),
       '#description' => t('<a href="http://www.wikipedia.org/wiki/HTTP_cookie">Cookies</a> can be used to help prevent the same user from repeatedly submitting a webform. Limiting by IP address is more effective against repeated submissions, but may result in unintentional blocking of users sharing the same address. Logged-in users are always tracked by their user ID and are not affected by this option.'),
     );
 
@@ -169,7 +169,7 @@ class WebformSettingsForm extends ConfigFormBase {
         'long' => t('Long format: "Example Name" &lt;name@example.com&gt;'),
         'short' => t('Short format: name@example.com'),
       ),
-      '#default_value' => $config->get('email_address_format'),
+      '#default_value' => $config->get('advanced.email_address_format'),
       '#description' => t('Most servers support the "long" format which will allow for more friendly From addresses in e-mails sent. However many Windows-based servers are unable to send in the long format. Change this option if experiencing problems sending e-mails with Webform.'),
     );
 
@@ -178,14 +178,14 @@ class WebformSettingsForm extends ConfigFormBase {
       '#type' => 'radios',
       '#title' => t('Default export format'),
       '#options' => webform_export_list(),
-      '#default_value' => $config->get('export_format'),
+      '#default_value' => $config->get('advanced.export_format'),
     );
 
     $form['advanced']['csv_delimiter']  = array(
       '#type' => 'select',
       '#title' => t('Default export delimiter'),
       '#description' => t('This is the delimiter used in the CSV/TSV file when downloading Webform results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
-      '#default_value' => $config->get('csv_delimiter'),
+      '#default_value' => $config->get('advanced.csv_delimiter'),
       '#options' => array(
         ','  => t('Comma (,)'),
         '\t' => t('Tab (\t)'),
@@ -204,14 +204,14 @@ class WebformSettingsForm extends ConfigFormBase {
         '1' => t('Select the user roles that may submit each individual webform'),
         '0' => t('Disable Webform submission access control'),
       ),
-      '#default_value' => $config->get('submission_access_control'),
+      '#default_value' => $config->get('advanced.submission_access_control'),
       '#description' => t('By default, the configuration form for each webform allows the administrator to choose which roles may submit the form. You may want to allow users to always submit the form if you are using a separate node access module to control access to webform nodes themselves.'),
     );
 
     $form['advanced']['email_select_max'] = array(
       '#type' => 'textfield',
       '#title' => t("Select email mapping limit"),
-      '#default_value' => $config->get('email_select_max'),
+      '#default_value' => $config->get('advanced.email_select_max'),
       '#description' => t('When mapping emails addresses to a select component, limit the choice to components with less than the amount of options indicated. This is to avoid flooding the email settings form. '),
     );
 
@@ -230,28 +230,28 @@ class WebformSettingsForm extends ConfigFormBase {
         $disabled_components[] = $name;
       }
     }
-    $values['email']['disabled_components'] = $disabled_components;
+    $values['disabled_components'] = $disabled_components;
 
     // Trim out empty options in the progress bar options.
     $values['progressbar']['style'] = array_keys(array_filter($values['progressbar']['style']));
 
     \Drupal::config('webform.settings')
-      ->set('disabled_components', $values['email']['disabled_components'])
+      ->set('disabled_components', $values['disabled_components'])
       ->set('email.default_from_address', $values['email']['default_from_address'])
       ->set('email.default_from_name', $values['email']['default_from_name'])
       ->set('email.default_subject', $values['email']['default_subject'])
       ->set('email.default_format', $values['email']['default_format'])
       ->set('email.format_override', $values['email']['format_override'])
-      ->set('email.address_format', $values['advanced']['email_address_format'])
-      ->set('email.select_max', $values['advanced']['email_select_max'])
       ->set('progressbar.style', $values['progressbar']['style'])
       ->set('progressbar.label_first', $values['progressbar']['label_first'])
       ->set('progressbar.label_confirmation', $values['progressbar']['label_confirmation'])
-      ->set('search_index', $values['advanced']['search_index'])
-      ->set('tracking_mode', $values['advanced']['tracking_mode'])
-      ->set('export_format', $values['advanced']['export_format'])
-      ->set('csv_delimiter', $values['advanced']['csv_delimiter'])
-      ->set('submission_access_control', $values['advanced']['submission_access_control'])
+      ->set('advanced.search_index', $values['advanced']['search_index'])
+      ->set('advanced.tracking_mode', $values['advanced']['tracking_mode'])
+      ->set('advanced.email_address_format', $values['advanced']['email_address_format'])
+      ->set('advanced.export_format', $values['advanced']['export_format'])
+      ->set('advanced.csv_delimiter', $values['advanced']['csv_delimiter'])
+      ->set('advanced.submission_access_control', $values['advanced']['submission_access_control'])
+      ->set('advanced.email_select_max', $values['advanced']['email_select_max'])
       ->save();
 
     parent::submitForm($form, $form_state);
