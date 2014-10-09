@@ -628,9 +628,12 @@ function webform_requirements($phase) {
 function webform_install() {
   module_set_weight('webform', -1);
 
-  // Enable webform components by default on Webform nodes.
+  // Set default values for config which require dynamic values.
+  $default_from_address = \Drupal::config('system.site')->get('mail') ? \Drupal::config('system.site')->get('mail') : ini_get('sendmail_from');
+  $default_from_name = \Drupal::config('system.site')->get('name');
   \Drupal::config('webform.settings')
-    ->set('webform_node_webform', TRUE)
+    ->set('email.default_from_address', $default_from_address)
+    ->set('email.default_from_name', $default_from_name)
     ->save();
 }
 
