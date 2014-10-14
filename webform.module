@@ -89,20 +89,6 @@ function webform_help($route_name, RouteMatchInterface $route_match) {
 function webform_menu() {
   $items = array();
 
-  // Submissions listing.
-  $items['admin/content/webform'] = array(
-    'title' => 'Webforms',
-    'description' => 'View and edit all the available webforms on your site.',
-    'route_name' => 'webform.content_overview',
-  );
-
-  // Admin Settings.
-  $items['admin/config/content/webform'] = array(
-    'title' => 'Webform settings',
-    'description' => 'Global configuration of webform functionality.',
-    'route_name' => 'webform.settings',
-  );
-
   // Autocomplete used in Views integration.
   $items['webform/autocomplete'] = array(
     'title' => 'Webforms',

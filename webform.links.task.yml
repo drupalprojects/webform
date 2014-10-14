@@ -1,0 +1,4 @@
+webform.content_overview:
+  title: 'Webforms'
+  route_name: webform.content_overview
+  base_route: system.admin_content
