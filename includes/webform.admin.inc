@@ -98,4 +98,3 @@ function theme_webform_admin_content($variables) {
 
   return _theme('table', array('header' => $header, 'rows' => $rows));
 }
-
