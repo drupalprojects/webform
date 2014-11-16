@@ -4658,6 +4658,10 @@ function webform_email_html_capable() {
     $systems[] = 'HTMLMailSystem';
     $systems[] = 'HTMLMailSystem__SmtpMailSystem';
   }
+  if (\Drupal::moduleHandler()->moduleExists('mailsystem')) {
+    $systems[] = 'MailsystemDelegateMailSystem';
+  }
+
   // Allow other modules to alter the list.
   \Drupal::moduleHandler()->alter('webform_html_capable_mail_systems', $systems);
 
