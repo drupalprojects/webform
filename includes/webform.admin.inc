@@ -5,7 +5,13 @@ use Drupal\Core\Render\Element;
 
 /**
  * Theme the components table of the Webform settings form.
- * @see WebformSettingsForm::buildForm().
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - form: A render element representing the form.
+ *
+ * @see \Drupal\webform\Form\WebformSettingsForm::buildForm().
+ * @ingroup themeable
  */
 function theme_webform_admin_settings_components_table($variables) {
   $form = $variables['form'];

@@ -721,6 +721,7 @@ function webform_theme() {
     'webform_admin_settings_components_table' => array(
       'render element' => 'form',
       'file' => 'includes/webform.admin.inc',
+      'function' => 'theme_webform_admin_settings_components_table',
     ),
     'webform_admin_content' => array(
       'variables' => array('nodes' => NULL),
