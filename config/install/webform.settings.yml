@@ -19,5 +19,6 @@ advanced:
   email_address_format: 'long'
   export_format: 'excel'
   csv_delimiter: '\t'
+  export_wordwrap: 0
   submission_access_control: 1
   email_select_max: 50

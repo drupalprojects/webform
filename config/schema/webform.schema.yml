@@ -61,6 +61,9 @@ webform.settings:
         csv_delimiter:
           type: string
           label: 'Default export delimiter'
+        export_wordwrap:
+          type: boolean
+          label: 'Word-wrap all exported text'
         submission_access_control:
           type: boolean
           label: 'Submission access control'

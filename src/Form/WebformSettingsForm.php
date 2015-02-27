@@ -197,6 +197,17 @@ class WebformSettingsForm extends ConfigFormBase {
       ),
     );
 
+  $form['advanced']['export_wordwrap'] = array(
+    '#type' => 'radios',
+    '#title' => t('Export word-wrap'),
+    '#options' => array(
+      '0' => t('Only text containing return characters'),
+      '1' => t('All text'),
+    ),
+    '#default_value' => $config->get('advanced.export_wordwrap'),
+    '#description' => t('Some export formats, such as Microsoft Excel, support word-wrapped text cells.'),
+  );
+
     $form['advanced']['submission_access_control']  = array(
       '#type' => 'radios',
       '#title' => t('Submission access control'),
@@ -250,6 +261,7 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('advanced.email_address_format', $values['advanced']['email_address_format'])
       ->set('advanced.export_format', $values['advanced']['export_format'])
       ->set('advanced.csv_delimiter', $values['advanced']['csv_delimiter'])
+      ->set('advanced.export_wordwrap', $values['advanced']['export_wordwrap'])
       ->set('advanced.submission_access_control', $values['advanced']['submission_access_control'])
       ->set('advanced.email_select_max', $values['advanced']['email_select_max'])
       ->save();

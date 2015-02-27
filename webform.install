@@ -658,6 +658,7 @@ function webform_uninstall() {
   $config->clear('advanced.email_address_format');
   $config->clear('advanced.export_format');
   $config->clear('advanced.csv_delimiter');
+  $config->clear('advanced.export_wordwrap');
   $config->clear('advanced.submission_access_control');
   $config->clear('advanced.email_select_max');
   $config->clear('progressbar_style');
