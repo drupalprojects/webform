@@ -390,11 +390,6 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE) {
       $element['#type'] = 'checkboxes';
       $element['#theme_wrappers'] = array_merge(array('checkboxes'), $element['#theme_wrappers']);
       $element['#process'] = array_merge(element_info_property('checkboxes', '#process'), array('webform_expand_select_ids'));
-
-      // Entirely replace the normal expand checkboxes with our custom version.
-      // This helps render checkboxes in multipage forms.
-      $process_key = array_search('form_process_checkboxes', $element['#process']);
-      $element['#process'][$process_key] = 'webform_expand_checkboxes';
     }
     else {
       // Set display as a radio set.
@@ -436,35 +431,6 @@ function webform_expand_select_or_other($element) {
     $element['select']['#process'] = array_merge(element_info_property($element['#select_type'], '#process'), array('webform_expand_select_ids'));
   }
 
-  return $element;
-}
-
-/**
- * Drupal 6 hack that properly *renders* checkboxes in multistep forms. This is
- * different than the value hack needed in Drupal 5, which is no longer needed.
- */
-function webform_expand_checkboxes($element) {
-  // Elements that have a value set are already in the form structure cause
-  // them not to be written when the expand_checkboxes function is called.
-  $default_value = array();
-  foreach (element_children($element) as $key) {
-    if (isset($element[$key]['#default_value'])) {
-      $default_value[$key] = $element[$key]['#default_value'];
-      unset($element[$key]);
-    }
-  }
-
-  $element = form_process_checkboxes($element);
-
-  // Escape the values of checkboxes.
-  foreach (element_children($element) as $key) {
-    $element[$key]['#return_value'] = check_plain($element[$key]['#return_value']);
-    $element[$key]['#name'] = $element['#name'] . '[' . $element[$key]['#return_value'] . ']';
-  }
-
-  foreach ($default_value as $key => $val) {
-    $element[$key]['#default_value'] = $val;
-  }
   return $element;
 }
 
