@@ -235,7 +235,7 @@ class WebformSettingsForm extends ConfigFormBase {
     // Trim out empty options in the progress bar options.
     $values['progressbar']['style'] = array_keys(array_filter($values['progressbar']['style']));
 
-    \Drupal::config('webform.settings')
+    \Drupal::configFactory()->getEditable('webform.settings')
       ->set('disabled_components', $values['disabled_components'])
       ->set('email.default_from_address', $values['email']['default_from_address'])
       ->set('email.default_from_name', $values['email']['default_from_name'])
@@ -257,4 +257,10 @@ class WebformSettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return ['webform.settings'];
+  }
 }

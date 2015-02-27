@@ -632,7 +632,7 @@ function webform_install() {
   // Set default values for config which require dynamic values.
   $default_from_address = \Drupal::config('system.site')->get('mail') ? \Drupal::config('system.site')->get('mail') : ini_get('sendmail_from');
   $default_from_name = \Drupal::config('system.site')->get('name');
-  \Drupal::config('webform.settings')
+  \Drupal::configFactory()->getEditable('webform.settings')
     ->set('email.default_from_address', $default_from_address)
     ->set('email.default_from_name', $default_from_name)
     ->save();
@@ -643,36 +643,36 @@ function webform_install() {
  */
 function webform_uninstall() {
   // Unset webform variables.
-  \Drupal::config('webform.settings')->clear('node_types_primary');
-  \Drupal::config('webform.settings')->clear('disabled_components');
-  \Drupal::config('webform.settings')->clear('default_from_address');
-  \Drupal::config('webform.settings')->clear('default_from_name');
-  \Drupal::config('webform.settings')->clear('default_subject');
-  \Drupal::config('webform.settings')->clear('default_format');
-  \Drupal::config('webform.settings')->clear('format_override');
-  \Drupal::config('webform.settings')->clear('allowed_tags');
-  \Drupal::config('webform.settings')->clear('blocks');
-  \Drupal::config('webform.settings')->clear('advanced.search_index');
-  \Drupal::config('webform.settings')->clear('advanced.tracking_mode');
-  \Drupal::config('webform.settings')->clear('advanced.email_address_format');
-  \Drupal::config('webform.settings')->clear('advanced.export_format');
-  \Drupal::config('webform.settings')->clear('advanced.csv_delimiter');
-  \Drupal::config('webform.settings')->clear('advanced.submission_access_control');
-  \Drupal::config('webform.settings')->clear('advanced.email_select_max');
-  \Drupal::config('webform.settings')->clear('progressbar_style');
-  \Drupal::config('webform.settings')->clear('progressbar_label_first');
-  \Drupal::config('webform.settings')->clear('progressbar_label_confirmation');
-  \Drupal::config('webform.settings')->clear('excel_legacy_exporter');
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $config->clear('node_types_primary');
+  $config->clear('disabled_components');
+  $config->clear('default_from_address');
+  $config->clear('default_from_name');
+  $config->clear('default_subject');
+  $config->clear('default_format');
+  $config->clear('format_override');
+  $config->clear('allowed_tags');
+  $config->clear('blocks');
+  $config->clear('advanced.search_index');
+  $config->clear('advanced.tracking_mode');
+  $config->clear('advanced.email_address_format');
+  $config->clear('advanced.export_format');
+  $config->clear('advanced.csv_delimiter');
+  $config->clear('advanced.submission_access_control');
+  $config->clear('advanced.email_select_max');
+  $config->clear('progressbar_style');
+  $config->clear('progressbar_label_first');
+  $config->clear('progressbar_label_confirmation');
+  $config->clear('excel_legacy_exporter');
 
   foreach (node_type_get_names() as $type => $name) {
-    \Drupal::config('webform.settings')->clear('node_' . $type);
+    $config->clear('node_' . $type);
   }
-
-  $component_list = array();
+  
   $path = drupal_get_path('module', 'webform') . '/components';
   $files = file_scan_directory($path, '/^.*\.inc$/');
   foreach ($files as $filename => $file) {
-    \Drupal::config('webform.settings')->clear('enable_' . $file->name, 1);
+    $config->clear('enable_' . $file->name, 1);
   }
 
   // Delete uploaded files.
