@@ -1636,9 +1636,6 @@ function webform_block_view($delta = '') {
   // This is a webform node block.
   $node->webform_block = TRUE;
 
-  // Use the node title for the block title.
-  $subject = $node->title;
-
   // If not displaying pages in the block, set the #action property on the form.
   if ($settings['pages_block']) {
     $node->webform['action'] = FALSE;
@@ -1658,9 +1655,9 @@ function webform_block_view($delta = '') {
     $content = node_view($node, $teaser, TRUE, FALSE);
   }
 
-  // Create the block.
+  // Create the block, using the node title for the block title.
   $block = array(
-    'subject' => $subject,
+    'subject' => check_plain($node->title),
     'content' => $content,
   );
   return $block;
