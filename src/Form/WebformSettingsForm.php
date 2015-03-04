@@ -141,15 +141,6 @@ class WebformSettingsForm extends ConfigFormBase {
       '#open' => FALSE,
     );
 
-    $form['advanced']['search_index']  = array(
-      '#type' => 'checkbox',
-      '#checked_value' => 1,
-      '#title' => t('Include webform forms in search index'),
-      '#default_value' => $config->get('advanced.search_index'),
-      '#description' => t('When selected, all Webform nodes will have their form components indexed by the search engine.'),
-      '#access' => \Drupal::moduleHandler()->moduleExists('search'),
-    );
-
     $form['advanced']['tracking_mode']  = array(
       '#type' => 'radios',
       '#title' => t('Track anonymous users by:'),
@@ -256,7 +247,6 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('progressbar.style', $values['progressbar']['style'])
       ->set('progressbar.label_first', $values['progressbar']['label_first'])
       ->set('progressbar.label_confirmation', $values['progressbar']['label_confirmation'])
-      ->set('advanced.search_index', $values['advanced']['search_index'])
       ->set('advanced.tracking_mode', $values['advanced']['tracking_mode'])
       ->set('advanced.email_address_format', $values['advanced']['email_address_format'])
       ->set('advanced.export_format', $values['advanced']['export_format'])

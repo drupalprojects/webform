@@ -14,7 +14,6 @@ progressbar:
   label_first: 'Start'
   label_confirmation: 'Complete'
 advanced:
-  search_index: 1
   tracking_mode: 'cookie'
   email_address_format: 'long'
   export_format: 'excel'

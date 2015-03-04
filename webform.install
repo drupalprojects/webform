@@ -653,7 +653,6 @@ function webform_uninstall() {
   $config->clear('format_override');
   $config->clear('allowed_tags');
   $config->clear('blocks');
-  $config->clear('advanced.search_index');
   $config->clear('advanced.tracking_mode');
   $config->clear('advanced.email_address_format');
   $config->clear('advanced.export_format');

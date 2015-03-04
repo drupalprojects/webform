@@ -1789,11 +1789,6 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
     return;
   }
 
-  // Do not include the form in the search index if indexing is disabled.
-  if (\Drupal::moduleHandler()->moduleExists('search') && $view_mode == 'search_index' && !$config->get('advanced.search_index')) {
-    return;
-  }
-
   // If the webform is not set to display in this view mode, return early.
   $extra_fields = field_extra_fields_get_display('node', $node->type, $view_mode);
   if (empty($extra_fields['webform']['visible'])) {
