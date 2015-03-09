@@ -50,7 +50,7 @@ function webform_webform_exporters() {
     unset($exporters['excel']);
   }
   // By default the legacy Excel exporter is disabled.
-  if (!\Drupal::config('webform.settings')->get('excel_legacy_exporter')) {
+  if (!\Drupal::config('webform.settings')->get('advanced.excel_legacy_exporter')) {
     unset($exporters['excel_legacy']);
   }
 

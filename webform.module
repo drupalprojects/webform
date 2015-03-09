@@ -1642,8 +1642,8 @@ function webform_node_load($nodes) {
     foreach ($nodes[$nid]->webform['emails'] as $eid => $email) {
       $nodes[$nid]->webform['emails'][$eid]['excluded_components'] = array_filter(explode(',', $email['excluded_components']));
       $nodes[$nid]->webform['emails'][$eid]['extra'] = unserialize($email['extra']);
-      if (variable_get('webform_format_override', 0)) {
-        $nodes[$nid]->webform['emails'][$eid]['html'] = variable_get('webform_default_format', 0);
+      if (webform_variable_get('webform_format_override')) {
+        $nodes[$nid]->webform['emails'][$eid]['html'] = webform_variable_get('webform_default_format');
       }
     }
 
@@ -2075,7 +2075,7 @@ function webform_block_view($delta = '') {
   global $user;
 
   // Load the block-specific configuration settings.
-  $webform_blocks = variable_get('webform_blocks', array());
+  $webform_blocks = webform_variable_get('webform_blocks');
   $settings = isset($webform_blocks[$delta]) ? $webform_blocks[$delta] : array();
   $settings += array(
     'display' => 'form',
@@ -2146,7 +2146,7 @@ function webform_block_configure($delta = '') {
   $node = node_load($nid);
 
   // Load the block-specific configuration settings.
-  $webform_blocks = variable_get('webform_blocks', array());
+  $webform_blocks = webform_variable_get('webform_blocks');
   $settings = isset($webform_blocks[$delta]) ? $webform_blocks[$delta] : array();
   $settings += array(
     'display' => 'form',
@@ -2190,7 +2190,7 @@ function webform_block_configure($delta = '') {
  */
 function webform_block_save($delta = '', $edit = array()) {
   // Load the previously defined block-specific configuration settings.
-  $settings = variable_get('webform_blocks', array());
+  $settings = webform_variable_get('webform_blocks');
   // Build the settings array.
   $new_settings[$delta] = array(
     'display' => $edit['display'],
@@ -2805,7 +2805,7 @@ function webform_client_form_prevalidate($form, &$form_state) {
   // submission, otherwise a stale form in another window may be allowed.
   $allowed_role = TRUE;
   $allowed_roles = array();
-  if (variable_get('webform_submission_access_control', 1) && !$finished) {
+  if (webform_variable_get('webform_submission_access_control') && !$finished) {
     $allowed_roles = array();
     foreach ($node->webform['roles'] as $rid) {
       $allowed_roles[$rid] = isset($user->roles[$rid]) ? TRUE : FALSE;
@@ -4130,7 +4130,7 @@ function _webform_safe_name($name) {
  */
 function webform_format_email_address($address, $name, $node = NULL, $submission = NULL, $encode = TRUE, $single = TRUE, $format = NULL) {
   if (!isset($format)) {
-    $format = variable_get('webform_email_address_format', 'long');
+    $format = webform_variable_get('webform_email_address_format');
   }
 
   if ($name == 'default') {

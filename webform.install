@@ -646,11 +646,12 @@ function webform_uninstall() {
   $config = \Drupal::configFactory()->getEditable('webform.settings');
   $config->clear('node_types_primary');
   $config->clear('disabled_components');
-  $config->clear('default_from_address');
-  $config->clear('default_from_name');
-  $config->clear('default_subject');
-  $config->clear('default_format');
-  $config->clear('format_override');
+  $config->clear('email.default_from_address');
+  $config->clear('email.default_from_name');
+  $config->clear('email.default_subject');
+  $config->clear('email.default_format');
+  $config->clear('email.format_override');
+  $config->clear('email.html_capable');
   $config->clear('allowed_tags');
   $config->clear('blocks');
   $config->clear('advanced.tracking_mode');
@@ -658,12 +659,13 @@ function webform_uninstall() {
   $config->clear('advanced.export_format');
   $config->clear('advanced.csv_delimiter');
   $config->clear('advanced.export_wordwrap');
+  $config->clear('advanced.excel_legacy_exporter');
   $config->clear('advanced.submission_access_control');
   $config->clear('advanced.email_select_max');
-  $config->clear('progressbar_style');
-  $config->clear('progressbar_label_first');
-  $config->clear('progressbar_label_confirmation');
-  $config->clear('excel_legacy_exporter');
+  $config->clear('progressbar.style');
+  $config->clear('progressbar.label_first');
+  $config->clear('progressbar.label_confirmation');
+  $config->clear('update_batch_size');
 
   foreach (node_type_get_names() as $type => $name) {
     $config->clear('node_' . $type);
@@ -985,7 +987,7 @@ function webform_update_7319(&$sandbox) {
   }
 
   // Process all files attached to a given revision during the same batch.
-  $limit = variable_get('webform_update_batch_size', 100);
+  $limit = webform_variable_get('webform_update_batch_size');
   $files = db_select('file_managed', 'f')
     ->fields('f')
     ->condition('uri', '%' . db_like('://webform/') . '%', 'LIKE')
@@ -1096,7 +1098,7 @@ function webform_update_7401(&$sandbox) {
     '[current-user:$1]',
   );
 
-  $limit = variable_get('webform_update_batch_size', 100);
+  $limit = webform_variable_get('webform_update_batch_size');
   $processed_count = _webform_update_7401_batch($sandbox, $patterns, $replacements, $dpatterns, $dreplacements, $limit);
 
   // If less than limit was processed, the update process is finished.
@@ -1361,7 +1363,7 @@ function webform_update_7403(&$sandbox) {
       ->fetchField();
   }
 
-  $limit = variable_get('webform_update_batch_size', 100);
+  $limit = webform_variable_get('webform_update_batch_size');
   $webforms = db_select('webform', 'w')
     ->fields('w')
     ->condition('nid', $sandbox['last_nid_processed'], '>')
@@ -1625,7 +1627,7 @@ function webform_update_7411(&$sandbox) {
     '[submission:values$1]',
   );
 
-  $limit = variable_get('webform_update_batch_size', 100);
+  $limit = webform_variable_get('webform_update_batch_size');
   $processed_count = _webform_update_7401_batch($sandbox, $patterns, $replacements, $dpatterns, $dreplacements, $limit);
 
   // If less than limit was processed, the update process is finished.

@@ -29,6 +29,9 @@ webform.settings:
         format_override:
           type: integer
           label: 'Format override'
+        html_capable:
+          type: boolean
+          label: 'HTML capable mail system'
     progressbar:
       type: mapping
       label: 'Progress bar'
@@ -64,9 +67,15 @@ webform.settings:
         export_wordwrap:
           type: boolean
           label: 'Word-wrap all exported text'
+        excel_legacy_exporter:
+          type: boolean
+          label: 'Legacy Excel exporter enabled'
         submission_access_control:
           type: boolean
           label: 'Submission access control'
         email_select_max:
           type: boolean
           label: 'E-mail mapping limit'
+    update_batch_size
+      type: integer
+      label: 'Update batch size'

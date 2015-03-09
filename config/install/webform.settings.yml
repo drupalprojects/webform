@@ -6,6 +6,7 @@ email:
   default_subject: 'Form submission from: [node:title]'
   default_format: 0
   format_override: 0
+  html_capable: 0
 progressbar:
   style:
    - progressbar_bar
@@ -19,5 +20,7 @@ advanced:
   export_format: 'excel'
   csv_delimiter: '\t'
   export_wordwrap: 0
+  excel_legacy_exporter: 0
   submission_access_control: 1
   email_select_max: 50
+update_batch_size: 100
