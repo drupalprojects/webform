@@ -76,6 +76,6 @@ webform.settings:
         email_select_max:
           type: boolean
           label: 'E-mail mapping limit'
-    update_batch_size
+    update_batch_size:
       type: integer
       label: 'Update batch size'
