@@ -23,15 +23,15 @@ webform.settings:
         default_subject:
           type: string
           label: 'Default subject'
+        html_capable:
+          type: boolean
+          label: 'HTML capable mail system'
         default_format:
           type: integer
           label: 'Format'
         format_override:
           type: integer
           label: 'Format override'
-        html_capable:
-          type: boolean
-          label: 'HTML capable mail system'
     progressbar:
       type: mapping
       label: 'Progress bar'

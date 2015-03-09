@@ -77,6 +77,13 @@ class WebformSettingsForm extends ConfigFormBase {
       '#description' => t('The default subject line of any e-mailed results.'),
     );
 
+    $form['email']['html_capable']  = array(
+      '#type' => 'checkbox',
+      '#title' => t('HTML mail system'),
+      '#default_value' => $config->get('email.html_capable'),
+      '#description' => t('Whether the mail system configured for webform is capable of sending mail in HTML format.'),
+    );
+
     $form['email']['default_format']  = array(
       '#type' => 'radios',
       '#title' => t('Format'),
@@ -86,7 +93,11 @@ class WebformSettingsForm extends ConfigFormBase {
       ),
       '#default_value' => $config->get('email.default_format'),
       '#description' => t('The default format for new e-mail settings. Webform e-mail options take precedence over the settings for system-wide e-mails configured in MIME mail.'),
-      '#access' => webform_email_html_capable(),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="email[html_capable]"]' => array('checked' => TRUE),
+        ),
+      ),
     );
 
     $form['email']['format_override']  = array(
@@ -98,7 +109,11 @@ class WebformSettingsForm extends ConfigFormBase {
       ),
       '#default_value' => $config->get('email.format_override'),
       '#description' => t('Force all webform e-mails to be sent in the default format.'),
-      '#access' => webform_email_html_capable(),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="email[html_capable]"]' => array('checked' => TRUE),
+        ),
+      ),
     );
 
     $form['progressbar'] = array(
@@ -242,6 +257,7 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('email.default_from_address', $values['email']['default_from_address'])
       ->set('email.default_from_name', $values['email']['default_from_name'])
       ->set('email.default_subject', $values['email']['default_subject'])
+      ->set('email.html_capable', $values['email']['html_capable'])
       ->set('email.default_format', $values['email']['default_format'])
       ->set('email.format_override', $values['email']['format_override'])
       ->set('progressbar.style', $values['progressbar']['style'])

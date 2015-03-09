@@ -649,9 +649,9 @@ function webform_uninstall() {
   $config->clear('email.default_from_address');
   $config->clear('email.default_from_name');
   $config->clear('email.default_subject');
+  $config->clear('email.html_capable');
   $config->clear('email.default_format');
   $config->clear('email.format_override');
-  $config->clear('email.html_capable');
   $config->clear('allowed_tags');
   $config->clear('blocks');
   $config->clear('advanced.tracking_mode');
