@@ -4,6 +4,7 @@ node_webform: 1
 disabled_components: {  }
 email:
   default_subject: 'Form submission from: [node:title]'
+  replyto: 0
   html_capable: 0
   default_format: 0
   format_override: 0

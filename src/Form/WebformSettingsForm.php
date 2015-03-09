@@ -77,6 +77,13 @@ class WebformSettingsForm extends ConfigFormBase {
       '#description' => t('The default subject line of any e-mailed results.'),
     );
 
+    $form['email']['replyto']  = array(
+      '#type' => 'checkbox',
+      '#title' => t('Use Reply-To header'),
+      '#default_value' => $config->get('email.replyto'),
+      '#description' => t('Sends all e-mail from the domain of the default address above and sets the "Reply-To" header to the actual sender. Helps prevent e-mail from being flagged as spam.'),
+    );
+
     $form['email']['html_capable']  = array(
       '#type' => 'checkbox',
       '#title' => t('HTML mail system'),
@@ -257,6 +264,7 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('email.default_from_address', $values['email']['default_from_address'])
       ->set('email.default_from_name', $values['email']['default_from_name'])
       ->set('email.default_subject', $values['email']['default_subject'])
+      ->set('email.replyto', $values['email']['replyto'])
       ->set('email.html_capable', $values['email']['html_capable'])
       ->set('email.default_format', $values['email']['default_format'])
       ->set('email.format_override', $values['email']['format_override'])

@@ -23,6 +23,9 @@ webform.settings:
         default_subject:
           type: string
           label: 'Default subject'
+        replyto:
+          type: boolean
+          label: 'Use Reply-To header'
         html_capable:
           type: boolean
           label: 'HTML capable mail system'
