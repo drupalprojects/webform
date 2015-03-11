@@ -75,8 +75,9 @@ function _webform_edit_file($component) {
       '#theme_wrappers' => array('form_element'),
       '#title' => t('Allowed file extensions'),
       '#attached' => array(
-        'js' => array(drupal_get_path('module', 'webform') . '/js/webform-admin.js'),
-        'css' => array(drupal_get_path('module', 'webform') . '/css/webform-admin.css'),
+        'library' => array(
+          'webform/webform.admin',
+        ),
       ),
       '#type' => 'webform_file_extensions',
       '#weight' => 2,

@@ -866,28 +866,6 @@ function webform_theme() {
 }
 
 /**
- * Implements hook_library().
- */
-function webform_library() {
-  $module_path = drupal_get_path('module', 'webform');
-
-  // Webform administration.
-  $libraries['admin'] = array(
-    'title' => 'Webform: Administration',
-    'website' => 'http://drupal.org/project/webform',
-    'version' => '1.0',
-    'js' => array(
-      $module_path . '/js/webform-admin.js' => array('group' => JS_DEFAULT),
-    ),
-    'css' => array(
-      $module_path . '/css/webform-admin.css' => array('group' => CSS_DEFAULT, 'weight' => 1),
-    ),
-  );
-
-  return $libraries;
-}
-
-/**
  * Implements hook_element_info().
  */
 function webform_element_info() {
@@ -1732,7 +1710,9 @@ function webform_form_node_type_form_alter(&$form, FormStateInterface $form_stat
       '#group' => 'additional_settings',
       '#weight' => 10,
       '#attached' => array(
-        'js' => array(drupal_get_path('module', 'webform') . '/js/node-type-form.js'),
+        'library' => array(
+          'webform/webform.node_type_form',
+        ),
       ),
     );
     $form['webform']['webform_node'] = array(

@@ -362,7 +362,7 @@ function webform_results_download_form($form, &$form_state, $node) {
   module_load_include('inc', 'webform', 'includes/webform.export');
   module_load_include('inc', 'webform', 'includes/webform.components');
 
-  $form['#attached']['js'][] = drupal_get_path('module', 'webform') . '/js/webform-admin.js';
+  $form['#attached']['library'][] = 'webform/webform.admin';
 
   // If an export is waiting to be downloaded, redirect the user there after
   // the page has finished loading.
