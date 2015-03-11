@@ -1720,7 +1720,7 @@ function webform_form_node_type_form_alter(&$form, FormStateInterface $form_stat
       '#title' => t('Enable webform functionality'),
       '#description' => t('Allows a form to be attached to content. This will add tabs for "Webform" and "Results" on all content of this type.'),
       '#weight' => 0,
-      '#default_value' => \Drupal::config('webform.settings')->get('node_' . $form_state->getFormObject()->getEntity()->type),
+      '#default_value' => \Drupal::config('webform.settings')->get('node_' . $form_state->getFormObject()->getEntity()->id()),
       '#attributes' => array(
         'data-enabled-description' => t('Enabled'),
         'data-disabled-description' => t('Disabled'),
@@ -1737,7 +1737,7 @@ function webform_form_node_type_form_alter(&$form, FormStateInterface $form_stat
  */
 function webform_form_node_type_form_submit($form, FormStateInterface $form_state) {
   \Drupal::configFactory()->getEditable('webform.settings')
-    ->set('node_' . $form_state->getFormObject()->getEntity()->type, $form_state->getValue('webform_node'))
+    ->set('node_' . $form_state->getFormObject()->getEntity()->id(), $form_state->getValue('webform_node'))
     ->save();
 }
 
