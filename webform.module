@@ -1323,17 +1323,26 @@ function webform_node_insert(EntityInterface $node) {
   module_load_include('inc', 'webform', 'includes/webform.emails');
 
   // Prepare the record for writing.
-  $node->webform['nid'] = $node->nid;
+  $node->webform['nid'] = $node->id();
   $webform_record = $node->webform;
   $webform_record['preview_excluded_components'] = implode(',', $webform_record['preview_excluded_components']);
 
+  // Remove fields which do not exist in the webform table.
+  unset($webform_record['components']);
+  unset($webform_record['conditionals']);
+  unset($webform_record['emails']);
+  unset($webform_record['roles']);
+  unset($webform_record['record_exists']);
+
   // Insert the webform.
-  $node->webform['record_exists'] = (bool) drupal_write_record('webform', $webform_record);
+  $node->webform['record_exists'] = (bool) db_insert('webform')
+    ->fields($webform_record)
+    ->execute();
 
   // Insert the components into the database. Used with clone.module.
   if (isset($node->webform['components']) && !empty($node->webform['components'])) {
     foreach ($node->webform['components'] as $cid => $component) {
-      $component['nid'] = $node->nid; // Required for clone.module.
+      $component['nid'] = $node->id(); // Required for clone.module.
       webform_component_insert($component);
     }
   }
@@ -1341,7 +1350,7 @@ function webform_node_insert(EntityInterface $node) {
   // Insert conditionals. Also used with clone.module.
   if (isset($node->webform['conditionals']) && !empty($node->webform['conditionals'])) {
     foreach ($node->webform['conditionals'] as $rgid => $conditional) {
-      $conditional['nid'] = $node->nid;
+      $conditional['nid'] = $node->id();
       $conditional['rgid'] = $rgid;
       webform_conditional_insert($conditional);
     }
@@ -1350,14 +1359,16 @@ function webform_node_insert(EntityInterface $node) {
   // Insert emails. Also used with clone.module.
   if (isset($node->webform['emails']) && !empty($node->webform['emails'])) {
     foreach ($node->webform['emails'] as $eid => $email) {
-      $email['nid'] = $node->nid;
+      $email['nid'] = $node->id();
       webform_email_insert($email);
     }
   }
 
   // Set the per-role submission access control.
   foreach (array_filter($node->webform['roles']) as $rid) {
-    db_insert('webform_roles')->fields(array('nid' => $node->nid, 'rid' => $rid))->execute();
+    db_insert('webform_roles')
+      ->fields(array('nid' => $node->id(), 'rid' => $rid))
+      ->execute();
   }
 
   // Flush the block cache if creating a block.
@@ -1370,7 +1381,7 @@ function webform_node_insert(EntityInterface $node) {
  * Implements hook_node_update().
  */
 function webform_node_update($node) {
-  if (!variable_get('webform_node_' . $node->type, FALSE)) {
+  if (!\Drupal::config('webform.settings')->get('node_' . $node->getType())) {
     return;
   }
 
@@ -1386,12 +1397,22 @@ function webform_node_update($node) {
   }
 
   // Prepare the record for writing.
-  $node->webform['nid'] = $node->nid;
+  $node->webform['nid'] = $node->id();
   $webform_record = $node->webform;
   $webform_record['preview_excluded_components'] = implode(',', $webform_record['preview_excluded_components']);
 
+  // Remove fields which do not exist in the webform table.
+  unset($webform_record['components']);
+  unset($webform_record['conditionals']);
+  unset($webform_record['emails']);
+  unset($webform_record['roles']);
+  unset($webform_record['record_exists']);
+
   // Update the webform entry.
-  drupal_write_record('webform', $webform_record, array('nid'));
+  db_update('webform')
+    ->fields($webform_record)
+    ->condition('nid', $node->id())
+    ->execute();
 
   // Compare the webform components and don't do anything if it's not needed.
   $original = $node->original;
@@ -1407,7 +1428,7 @@ function webform_node_update($node) {
     $inserted_cids = array_diff($current_cids, $original_cids);
 
     foreach ($all_cids as $cid) {
-      $node->webform['components'][$cid]['nid'] = $node->nid;
+      $node->webform['components'][$cid]['nid'] = $node->id();
       if (in_array($cid, $inserted_cids)) {
         webform_component_insert($node->webform['components'][$cid]);
       }
@@ -1432,7 +1453,7 @@ function webform_node_update($node) {
       }
     }
     foreach ($node->webform['conditionals'] as $rgid => $conditional) {
-      $conditional['nid'] = $node->nid;
+      $conditional['nid'] = $node->id();
       $conditional['rgid'] = $rgid;
       webform_conditional_insert($conditional);
     }
@@ -1465,9 +1486,13 @@ function webform_node_update($node) {
 
   // Just delete and re-insert roles if they've changed.
   if ($original->webform['roles'] != $node->webform['roles']) {
-    db_delete('webform_roles')->condition('nid', $node->nid)->execute();
+    db_delete('webform_roles')
+      ->condition('nid', $node->nid)
+      ->execute();
     foreach (array_filter($node->webform['roles']) as $rid) {
-      db_insert('webform_roles')->fields(array('nid' => $node->nid, 'rid' => $rid))->execute();
+      db_insert('webform_roles')
+        ->fields(array('nid' => $node->nid, 'rid' => $rid))
+        ->execute();
     }
   }
 
@@ -1481,7 +1506,7 @@ function webform_node_update($node) {
  * Implements hook_node_delete().
  */
 function webform_node_delete($node) {
-  if (!variable_get('webform_node_' . $node->type, FALSE)) {
+  if (!\Drupal::config('webform.settings')->get('node_' . $node->getType())) {
     return;
   }
 
@@ -1492,15 +1517,15 @@ function webform_node_delete($node) {
   }
 
   // Remove any trace of webform data from the database.
-  db_delete('webform')->condition('nid', $node->nid)->execute();
-  db_delete('webform_component')->condition('nid', $node->nid)->execute();
-  db_delete('webform_conditional')->condition('nid', $node->nid)->execute();
-  db_delete('webform_conditional_rules')->condition('nid', $node->nid)->execute();
-  db_delete('webform_emails')->condition('nid', $node->nid)->execute();
-  db_delete('webform_roles')->condition('nid', $node->nid)->execute();
-  db_delete('webform_submissions')->condition('nid', $node->nid)->execute();
-  db_delete('webform_submitted_data')->condition('nid', $node->nid)->execute();
-  db_delete('webform_last_download')->condition('nid', $node->nid)->execute();
+  db_delete('webform')->condition('nid', $node->id())->execute();
+  db_delete('webform_component')->condition('nid', $node->id())->execute();
+  db_delete('webform_conditional')->condition('nid', $node->id())->execute();
+  db_delete('webform_conditional_rules')->condition('nid', $node->id())->execute();
+  db_delete('webform_emails')->condition('nid', $node->id())->execute();
+  db_delete('webform_roles')->condition('nid', $node->id())->execute();
+  db_delete('webform_submissions')->condition('nid', $node->id())->execute();
+  db_delete('webform_submitted_data')->condition('nid', $node->id())->execute();
+  db_delete('webform_last_download')->condition('nid', $node->id())->execute();
 }
 
 /**
@@ -3900,7 +3925,7 @@ function webform_ensure_record(&$node) {
  * If the node is no longer using any webform settings, this function will
  * delete the settings from the webform table. Note that this function will NOT
  * delete rows from the webform table if the node-type is exclusively used for
- * webforms (per the "webform_node_types_primary" variable).
+ * webforms (per the $config->get('node_types_primary') setting).
  *
  * @param $node
  *   The node object to check if a database entry is still required.
@@ -3918,7 +3943,7 @@ function webform_check_record(&$node) {
   // extend Webform with empty defaults won't affect cleanup of rows.
   $webform = array_filter($webform);
   $defaults = array_filter(webform_node_defaults());
-  if ($webform == $defaults && !in_array($node->type, webform_variable_get('webform_node_types_primary'))) {
+  if ($webform == $defaults && !in_array($node->getType(), \Drupal::config('webform.settings')->get('node_types_primary'))) {
     webform_node_delete($node);
     $node->webform = webform_node_defaults();
   }
