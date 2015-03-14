@@ -723,10 +723,6 @@ function webform_theme() {
       'file' => 'includes/webform.admin.inc',
       'function' => 'theme_webform_admin_settings_components_table',
     ),
-    'webform_admin_content' => array(
-      'variables' => array('nodes' => NULL),
-      'file' => 'includes/webform.admin.inc',
-    ),
     // webform.emails.inc.
     'webform_emails_form' => array(
       'render element' => 'form',

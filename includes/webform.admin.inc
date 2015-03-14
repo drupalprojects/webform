@@ -2,6 +2,7 @@
 
 use Drupal\Core\Url;
 use Drupal\Core\Render\Element;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Theme the components table of the Webform settings form.
@@ -47,8 +48,8 @@ function webform_admin_type_list() {
   $webform_type_list = '';
   $webform_type_count = count($webform_types);
   foreach ($webform_types as $n => $type) {
-    $node_type = node_type_load($type);
-    $webform_type_list .= _l($node_type->name, 'node/add/' . str_replace('_', '-', $type));
+    $node_type = NodeType::load($type);
+    $webform_type_list .= \Drupal::l(t('@type', array('@type' => $node_type->label())), Url::fromRoute('node.add', ['node_type' => $type]));
     if ($n + 1 < $webform_type_count) {
       $webform_type_list .= $webform_type_count == 2 ? ' ' : ', ';
     }
@@ -57,50 +58,4 @@ function webform_admin_type_list() {
     }
   }
   return $webform_type_list;
-}
-
-/**
- * Generate a list of all webforms avaliable on this site.
- */
-function theme_webform_admin_content($variables) {
-  $nodes = $variables['nodes'];
-
-  $header = array(
-    t('Title'),
-    array('data' => t('View'), 'colspan' => '4'),
-    array('data' => t('Operations'), 'colspan' => '3')
-  );
-
-  $rows = array();
-  if (!empty($nodes)) {
-    foreach ($nodes as $node) {
-      $rows[] = array(
-        _l($node->title, 'node/' . $node->nid),
-        _l(t('Submissions'), 'node/' . $node->nid . '/webform-results'),
-        _l(t('Analysis'), 'node/' . $node->nid . '/webform-results/analysis'),
-        _l(t('Table'), 'node/' . $node->nid . '/webform-results/table'),
-        _l(t('Download'), 'node/' . $node->nid . '/webform-results/download'),
-        node_access('update', $node) ? _l(t('Edit'), 'node/' . $node->nid . '/edit') : '',
-        node_access('update', $node) ? _l(t('Components'), 'node/' . $node->nid . '/webform') : '',
-        user_access('delete all webform submissions') ? _l(t('Clear'), 'node/' . $node->nid . '/webform-results/clear') : '',
-      );
-    }
-  }
-
-  if (empty($nodes)) {
-    $webform_types = webform_node_types();
-    if (empty($webform_types)) {
-      $message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => _url('admin/config/content/webform')));
-    }
-    else {
-      $webform_type_list = webform_admin_type_list();
-      $message = t('There are currently no webforms on your site. Create a !types piece of content.', array('!types' => $webform_type_list));
-    }
-
-    $rows[] = array(
-      array('data' => $message, 'colspan' => 7),
-    );
-  }
-
-  return _theme('table', array('header' => $header, 'rows' => $rows));
 }
