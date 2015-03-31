@@ -38,7 +38,7 @@ function webform_help($route_name, RouteMatchInterface $route_match) {
         $output .= ' ' . t('To add one, create a !types piece of content.', array('!types' => $type_list));
       }
       else {
-        $output .= ' <strong>' . t('Webform is currently not enabled on any content types.') . '</strong> ' . t('To use Webform, please enable it on at least one <a href="!url">content type</a>.', array('!url' => Url::fromRoute('entity.node_type.collection')));
+        $output .= ' <strong>' . t('Webform is currently not enabled on any content types.') . '</strong> ' . t('To use Webform, please enable it on at least one <a href="!url">content type</a>.', array('!url' => Url::fromRoute('entity.node_type.collection')->toString()));
       }
       $output = '<p>' . $output . '</p>';
       break;
@@ -50,10 +50,10 @@ function webform_help($route_name, RouteMatchInterface $route_match) {
       $types = webform_admin_type_list();
       if (empty($types)) {
         $types = t('Webform-enabled piece of content');
-        $types_message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => Url::fromRoute('webform.settings')));
+        $types_message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => Url::fromRoute('webform.settings')->toString()));
       }
       else {
-        $types_message = t('Optional: Enable Webform on multiple types by visiting the <a href="!url">Webform settings</a> page.', array('!url' => Url::fromRoute('webform.settings')));
+        $types_message = t('Optional: Enable Webform on multiple types by visiting the <a href="!url">Webform settings</a> page.', array('!url' => Url::fromRoute('webform.settings')->toString()));
       }
       $output = t("<p>This module lets you create forms or questionnaires and define their content. Submissions from these forms are stored in the database and optionally also sent by e-mail to a predefined address.</p>
       <p>Here is how to create one:</p>
@@ -73,7 +73,7 @@ function webform_help($route_name, RouteMatchInterface $route_match) {
         <li>Your form is now ready for viewing. After receiving submissions, you can check the results users have submitted by visiting the <em>Results</em> tab on the piece of content.</li>
       </ul>
       <p>Help on adding and configuring the components will be shown after you add your first component.</p>
-      ", array('!webform-types-message' => $types_message, '!create-content' => Url::fromRoute('node.add_page'), '!types' => $types));
+      ", array('!webform-types-message' => $types_message, '!create-content' => Url::fromRoute('node.add_page')->toString(), '!types' => $types));
       break;
     case 'node/%/webform/conditionals':
       $output .= '<p>' . t('Conditionals may be used to hide or show certain components (or entire pages!) based on the value of other components.') . '</p>';

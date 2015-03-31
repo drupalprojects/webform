@@ -53,7 +53,7 @@ class WebformController extends ControllerBase {
     if (empty($nodes)) {
       $webform_types = webform_node_types();
       if (empty($webform_types)) {
-        $message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => Url::fromRoute('webform.settings')));
+        $message = t('Webform is currently not enabled on any content types.') . ' ' . t('Visit the <a href="!url">Webform settings</a> page and enable Webform on at least one content type.', array('!url' => Url::fromRoute('webform.settings')->toString()));
       }
       else {
         $webform_type_list = webform_admin_type_list();
