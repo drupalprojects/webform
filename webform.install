@@ -5,6 +5,8 @@
  *   Webform module install/schema hooks.
  */
 
+use Drupal\node\Entity\NodeType;
+
 /**
  * Implements hook_schema().
  */
@@ -681,4 +683,21 @@ function webform_uninstall() {
   // Delete uploaded files.
   $filepath = file_build_uri('webform');
   file_unmanaged_delete_recursive($filepath);
+
+  // Delete the content type "webform" if:
+  //   a) there are no existing nodes of type webform and
+  //   b) no additional fields have been defined for node type webform, beyond
+  //      the default body field.
+  $webform_nodes = \Drupal::entityQuery('node')
+    ->condition('type', 'webform')
+    ->range(0, 1)
+    ->execute();
+  $entity_manager = \Drupal::entityManager();
+  $additional_fields = array_diff_assoc($entity_manager->getFieldDefinitions('node', 'webform'), $entity_manager->getBaseFieldDefinitions('node', 'webform'));
+  unset($additional_fields['body']);
+  if (!$webform_nodes && !$additional_fields) {
+    $node_type = NodeType::load('webform');
+    $node_type->delete();
+    drupal_flush_all_caches();
+  }
 }
