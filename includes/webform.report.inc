@@ -1715,7 +1715,7 @@ function webform_download_sids_query($nid, $range_options, $uid = NULL) {
   switch ($range_options['range_type']) {
     case 'all':
       // All Submissions.
-      $query->orderBy('sid', 'ASC');
+      $query->orderBy('ws.sid', 'ASC');
       break;
     case 'new':
       // All Since Last Download.
@@ -1723,7 +1723,7 @@ function webform_download_sids_query($nid, $range_options, $uid = NULL) {
       $last_sid = $download_info ? $download_info['sid'] : 0;
       $query
         ->condition('sid', $last_sid, '>')
-        ->orderBy('sid', 'ASC');
+        ->orderBy('ws.sid', 'ASC');
       break;
     case 'latest':
       // Last x Submissions.
@@ -1736,7 +1736,7 @@ function webform_download_sids_query($nid, $range_options, $uid = NULL) {
       if ($range_options['end']){
         $query->condition('sid', $range_options['end'], '<=');
       }
-      $query->orderBy('sid', 'ASC');
+      $query->orderBy('ws.sid', 'ASC');
       break;
     case 'range_serial':
       // Submissions Start-End, using serial numbers.
@@ -1744,7 +1744,7 @@ function webform_download_sids_query($nid, $range_options, $uid = NULL) {
       if ($range_options['end']){
         $query->condition('serial', $range_options['end'], '<=');
       }
-      $query->orderBy('serial', 'ASC');
+      $query->orderBy('ws.serial', 'ASC');
       break;
   }
 
