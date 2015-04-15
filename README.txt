@@ -8,7 +8,8 @@ can optionally be mailed to e-mail addresses upon submission.
 
 Requirements
 ------------
-Drupal 7.x
+Drupal 8.x
+See https://www.drupal.org/project/webform for additional requirements.
 
 Installation
 ------------
