@@ -302,6 +302,10 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
     // Generate the list of addresses that this e-mail will be sent to.
     $addresses_final = array_filter($addresses, 'webform_valid_email_address');
 
+    if (!$addresses_final) {
+      continue;
+    }
+
     // Mail the webform results.
     foreach ($addresses_final as $address) {
       // Verify that this submission is not attempting to send any spam hacks.
