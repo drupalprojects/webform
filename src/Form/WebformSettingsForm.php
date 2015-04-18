@@ -193,6 +193,17 @@ class WebformSettingsForm extends ConfigFormBase {
       '#description' => t('Most servers support the "long" format which will allow for more friendly From addresses in e-mails sent. However many Windows-based servers are unable to send in the long format. Change this option if experiencing problems sending e-mails with Webform.'),
     );
 
+    $form['advanced']['email_address_individual'] = array(
+      '#type' => 'radios',
+      '#title' => t('E-mailing multiple recipients'),
+      '#options' => array(
+        0 => t('Send a single e-mail to all recipients'),
+        1 => t('Send individual e-mails to each recipient'),
+      ),
+      '#default_value' => $config->get('advanced.email_address_individual'),
+      '#description' => t('Individual e-mails increases privacy by not revealing the addresses of other recipients. A single e-mail to all recipients lets them use "Reply All" to communicate.'),
+    );
+
     module_load_include('inc', 'webform', 'includes/webform.export');
     $form['advanced']['export_format'] = array(
       '#type' => 'radios',
@@ -280,6 +291,7 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('progressbar.label_confirmation', $values['progressbar']['label_confirmation'])
       ->set('advanced.tracking_mode', $values['advanced']['tracking_mode'])
       ->set('advanced.email_address_format', $values['advanced']['email_address_format'])
+      ->set('advanced.email_address_individual', $values['advanced']['email_address_individual'])
       ->set('advanced.export_format', $values['advanced']['export_format'])
       ->set('advanced.csv_delimiter', $values['advanced']['csv_delimiter'])
       ->set('advanced.export_wordwrap', $values['advanced']['export_wordwrap'])

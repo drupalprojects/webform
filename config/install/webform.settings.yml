@@ -18,6 +18,7 @@ progressbar:
 advanced:
   tracking_mode: 'cookie'
   email_address_format: 'long'
+  email_address_individual: 0
   export_format: 'excel'
   csv_delimiter: '\t'
   export_wordwrap: 0

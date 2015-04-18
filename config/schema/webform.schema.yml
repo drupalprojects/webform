@@ -61,6 +61,9 @@ webform.settings:
         email_address_format:
           type: string
           label: 'E-mail address format'
+        email_address_individual:
+          type: integer
+          label: 'E-mailing multiple recipients'
         export_format:
           type: string
           label: 'Default export format'
