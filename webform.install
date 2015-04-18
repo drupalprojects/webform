@@ -700,42 +700,6 @@ function webform_install() {
  * Implements hook_uninstall().
  */
 function webform_uninstall() {
-  // Unset webform variables.
-  $config = \Drupal::configFactory()->getEditable('webform.settings')
-    ->clear('node_types_primary')
-    ->clear('disabled_components')
-    ->clear('email.default_from_address')
-    ->clear('email.default_from_name')
-    ->clear('email.default_subject')
-    ->clear('email.replyto')
-    ->clear('email.html_capable')
-    ->clear('email.default_format')
-    ->clear('email.format_override')
-    ->clear('allowed_tags')
-    ->clear('blocks')
-    ->clear('advanced.tracking_mode')
-    ->clear('advanced.email_address_format')
-    ->clear('advanced.export_format')
-    ->clear('advanced.csv_delimiter')
-    ->clear('advanced.export_wordwrap')
-    ->clear('advanced.excel_legacy_exporter')
-    ->clear('advanced.submission_access_control')
-    ->clear('advanced.email_select_max')
-    ->clear('progressbar.style')
-    ->clear('progressbar.label_first')
-    ->clear('progressbar.label_confirmation')
-    ->clear('update_batch_size');
-
-  foreach (node_type_get_names() as $type => $name) {
-    $config->clear('node_' . $type);
-  }
-
-  $path = drupal_get_path('module', 'webform') . '/components';
-  $files = file_scan_directory($path, '/^.*\.inc$/');
-  foreach ($files as $filename => $file) {
-    $config->clear('enable_' . $file->name, 1);
-  }
-
   // Delete uploaded files.
   $filepath = file_build_uri('webform');
   file_unmanaged_delete_recursive($filepath);
