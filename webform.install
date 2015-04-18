@@ -473,8 +473,16 @@ function webform_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'exclude_empty' => array(
+        'description' => 'Determines if the e-mail will include component with an empty value.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'extra' => array(
-        'description' => 'A serialized array of additional options for the e-mail configuration, including excluded components and value mapping for the TO and FROM addresses for select lists.',
+        'description' => 'A serialized array of additional options for the e-mail configuration, including value mapping for the TO and FROM addresses for select lists.',
         'type' => 'text',
         'not null' => TRUE,
       ),
