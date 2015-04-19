@@ -548,7 +548,19 @@ function webform_schema() {
          'default' => 0,
       ),
       'submitted' => array(
-        'description' => 'Timestamp of when the form was submitted.',
+        'description' => 'Timestamp when the form was first saved as draft or submitted.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'completed' => array(
+        'description' => 'Timestamp when the form was submitted as complete (not draft).',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'modified' => array(
+        'description' => 'Timestamp when the form was last saved (complete or draft).',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
