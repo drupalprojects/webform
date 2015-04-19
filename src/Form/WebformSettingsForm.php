@@ -9,6 +9,7 @@ namespace Drupal\webform\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Datetime\Entity\DateFormat;
 
 /**
  * Configure Webform admin settings.
@@ -204,6 +205,20 @@ class WebformSettingsForm extends ConfigFormBase {
       '#description' => t('Individual e-mails increases privacy by not revealing the addresses of other recipients. A single e-mail to all recipients lets them use "Reply All" to communicate.'),
     );
 
+    $date_types = DateFormat::loadMultiple();
+    $date_formatter = \Drupal::service('date.formatter');
+    $date_format_options = array();
+    foreach ($date_types as $machine_name => $format) {
+      $date_format_options[$machine_name] = t('@name - @sample', array('@name' => $format->label, '@sample' => $date_formatter->format(REQUEST_TIME, $machine_name)));
+    }
+    $form['advanced']['date_type'] = array(
+      '#type' => 'select',
+      '#title' => t('Date format'),
+      '#options' => $date_format_options,
+      '#default_value' => $config->get('advanced.date_type'),
+      '#description' => t('Choose the format for the display of date components. Only the date portion of the format is used. Reporting and export use the short format.'),
+    );
+
     module_load_include('inc', 'webform', 'includes/webform.export');
     $form['advanced']['export_format'] = array(
       '#type' => 'radios',
@@ -292,6 +307,7 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('advanced.tracking_mode', $values['advanced']['tracking_mode'])
       ->set('advanced.email_address_format', $values['advanced']['email_address_format'])
       ->set('advanced.email_address_individual', $values['advanced']['email_address_individual'])
+      ->set('advanced.date_type', $values['advanced']['date_type'])
       ->set('advanced.export_format', $values['advanced']['export_format'])
       ->set('advanced.csv_delimiter', $values['advanced']['csv_delimiter'])
       ->set('advanced.export_wordwrap', $values['advanced']['export_wordwrap'])
