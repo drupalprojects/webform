@@ -554,6 +554,13 @@ function webform_schema() {
          'not null' => TRUE,
          'default' => 0,
       ),
+      'highest_valid_page' => array(
+         'description' => 'For drafts, the highest validated page number.',
+         'type' => 'int',
+         'size' => 'small',
+         'not null' => TRUE,
+         'default' => 0,
+      ),
       'submitted' => array(
         'description' => 'Timestamp when the form was first saved as draft or submitted.',
         'type' => 'int',
