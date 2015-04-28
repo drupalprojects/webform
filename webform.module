@@ -2381,7 +2381,6 @@ function webform_client_form($form, &$form_state, $node, $submission = FALSE, $r
   // Bind arguments to $form to make them available in theming and form_alter.
   $form['#node'] = $node;
   $form['#submission'] = $submission;
-  $form['#is_draft'] = $submission && $submission->is_draft;
   $form['#filter'] = $filter;
 
   // Add a theme function for this form.
