@@ -1324,9 +1324,9 @@ function webform_node_types() {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_delete() for node_type entities.
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
  */
-function webform_node_type_delete(NodeTypeInterface $type) {
+function webform_node_type_delete(EntityInterface $type) {
   \Drupal::configFactory()->getEditable('webform.settings')->clear('node_' . $type->id())->save();
 }
 
