@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript for the node content type editing form.
+ * Enhancements for webform node type forms.
  */
 
 (function ($) {

@@ -269,7 +269,7 @@ class WebformSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => t("Select email mapping limit"),
       '#default_value' => $config->get('advanced.email_select_max'),
-      '#description' => t('When mapping emails addresses to a select component, limit the choice to components with less than the amount of options indicated. This is to avoid flooding the email settings form. '),
+      '#description' => t('When mapping emails addresses to a select component, limit the choice to components with less than the amount of options indicated. This is to avoid flooding the email settings form.'),
     );
 
     return parent::buildForm($form, $form_state);
