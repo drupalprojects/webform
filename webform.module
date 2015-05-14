@@ -11,7 +11,9 @@
  * @author Nathan Haug <nate@lullabot.com>
  */
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -109,17 +111,6 @@ function webform_menu() {
     'access callback' => 'webform_confirmation_page_access',
     'access arguments' => array(1),
     'type' => MENU_CALLBACK,
-  );
-  $items['node/%webform_menu/webform'] = array(
-    'title' => 'Webform',
-    'page callback' => 'webform_components_page',
-    'page arguments' => array(1),
-    'access callback' => 'webform_node_update_access',
-    'access arguments' => array(1),
-    'file' => 'includes/webform.components.inc',
-    'weight' => 1,
-    'type' => MENU_LOCAL_TASK,
-    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
   );
   $items['node/%webform_menu/webform/components'] = array(
     'title' => 'Form components',
@@ -759,14 +750,6 @@ function webform_theme() {
       'file' => 'includes/webform.emails.inc',
     ),
     // webform.components.inc.
-    'webform_components_page' => array(
-      'variables' => array('node' => NULL, 'form' => NULL),
-      'file' => 'includes/webform.components.inc',
-    ),
-    'webform_components_form' => array(
-      'render element' => 'form',
-      'file' => 'includes/webform.components.inc',
-    ),
     'webform_component_select' => array(
       'render element' => 'element',
       'file' => 'includes/webform.components.inc',
@@ -3940,17 +3923,8 @@ function _webform_filter_descriptions($string, $node = NULL, $submission = NULL)
  */
 function webform_filter_xss($string) {
   static $allowed_tags;
-  $allowed_tags = isset($allowed_tags) ? $allowed_tags : webform_variable_get('webform_allowed_tags');
-  return filter_xss($string, $allowed_tags);
-}
-
-/**
- * Deprecated! Use webform_filter_xss() instead!
- *
- * @deprecated
- */
-function _webform_filter_xss($string) {
-  return webform_filter_xss($string);
+  $allowed_tags = isset($allowed_tags) ? $allowed_tags : \Drupal::config('webform.settings')->get('allowed_tags');
+  return Xss::filter($string, $allowed_tags);
 }
 
 /**
@@ -5143,14 +5117,15 @@ function webform_input_vars_check(&$form, $form_state, $detect_key, $parent_key 
     $form['#pre_render'] = array('webform_pre_render_input_vars');
     $form['#input_var_waring_parent'] = $parent_key;
   }
-  if (!empty($form_state['input']) && key_exists($detect_key, $form_state['input']) && !key_exists('form_id', $form_state['input'])) {
+  $input = $form_state->getUserInput();
+  if (!empty($input) && array_key_exists($detect_key, $input) && !array_key_exists('form_id', $input)) {
     // A form was submitted with POST, but the form_id was missing. The most likely cause of this
     // is that the POST was truncated because PHP exceeded its max_input_vars limit.
     $subs = array(
       '@count' => webform_count_terminals($_POST),
       '@limit' => (int)ini_get('max_input_vars'),
     );
-    drupal_set_message(user_access('administer site configuration')
+    drupal_set_message(\Drupal::currentUser()->hasPermission('administer site configuration')
                           ? t('This form could not be submitted because $_POST was truncated to @count input vars.  PHP max_input_vars is @limit and needs to be increased.', $subs)
                           : t('This form could not be submitted because it exceeds the server configuration. Contact the administrator.'),
                       'error');
@@ -5238,7 +5213,7 @@ function webform_count_input_vars($element) {
     'webform_email' => 1,
     'webform_number' => 1,
   );
-  $children = array_intersect_key($element, array_flip(element_children($element)));
+  $children = array_intersect_key($element, array_flip(Element::children($element)));
   return $children
           ? array_reduce($children, function($carry, $item) {return $carry + webform_count_input_vars($item);}, 0)
           : (isset($element['#type']) && isset($input_types[$element['#type']]) ? $input_types[$element['#type']] : 0);

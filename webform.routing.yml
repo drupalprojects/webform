@@ -12,3 +12,15 @@ webform.settings:
     _form: '\Drupal\webform\Form\WebformSettingsForm'
   requirements:
     _permission: 'administer site configuration'
+
+# @todo Only show on webform enabled node types
+entity.node.webform:
+  path: '/node/{node}/webform'
+  defaults:
+    _title: 'Webform'
+    _form: '\Drupal\webform\Form\WebformComponentsForm'
+  requirements:
+    # @todo This needs to call/replicate webform_node_update_access().
+    _permission: 'edit webform components'
+  options:
+    _node_operation_route: TRUE
