@@ -1827,8 +1827,8 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
 
   // If the webform is not set to display in this view mode, return early.
   // View mode of 'form' is exempted to allow blocks and views to force display.
-  $extra_fields = field_extra_fields_get_display('node', $node->type, $view_mode);
-  if ($view_mode != 'form' && empty($extra_fields['webform']['visible'])) {
+  $is_visible_in_extra_fields = $display->getComponent('webform') ? TRUE : FALSE;
+  if ($view_mode != 'form' && !$is_visible_in_extra_fields) {
     return;
   }
 
@@ -1941,7 +1941,7 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
     '#page' => $page,
     '#form' => $form,
     '#enabled' => $enabled,
-    '#visible' => $extra_fields['webform']['visible'],
+    '#visible' => $is_visible_in_extra_fields,
     '#weight' => 10,
   );
 }
@@ -4902,16 +4902,16 @@ function webform_views_default_views() {
 }
 
 /**
- * Implements hook_field_extra_fields().
+ * Implements hook_entity_extra_field_info().
  */
-function webform_field_extra_fields() {
-  $extra = array();
+function webform_entity_extra_field_info() {
+  $extra = [];
   foreach (webform_node_types() as $type) {
-    $extra['node'][$type]['display']['webform'] = array(
+    $extra['node'][$type]['display']['webform'] = [
       'label' => t('Webform'),
       'description' => t('Webform client form.'),
       'weight' => 10,
-    );
+    ];
   }
   return $extra;
 }
