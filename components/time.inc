@@ -176,7 +176,8 @@ function webform_expand_time($element) {
   if (!empty($element['#default_value'])) {
     // Adjust the time based on the user or site timezone.
     if (variable_get('configurable_timezones', 1) && $element['#timezone'] == 'user') {
-      $timezone_name = isset($GLOBALS['user']->timezone) ? $GLOBALS['user']->timezone : 'UTC';
+      $account = \Drupal::currentUser();
+      $timezone_name = isset($account->timezone) ? $account->timezone : 'UTC';
     }
     else {
       $timezone_name = variable_get('date_default_timezone', 'UTC');

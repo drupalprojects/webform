@@ -62,7 +62,7 @@ function webform_submission_create($node, $account, $form_state, $is_preview = F
   else {
     $submission = (object) array(
       'nid' => $node->nid,
-      'uid' => $account->uid,
+      'uid' => $account->id(),
       'sid' => NULL,
       'submitted' => REQUEST_TIME,
       'completed' => 0,
@@ -224,7 +224,7 @@ function webform_submission_delete($node, $submission) {
  *   e-mails in $node->webform['emails'] will be sent.
  */
 function webform_submission_send_mail($node, $submission, $emails = NULL) {
-  global $user;
+  $account = \Drupal::currentUser();
 
   // Get the list of e-mails we'll be sending.
   $emails = isset($emails) ? $emails : $node->webform['emails'];
@@ -332,7 +332,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
     // Mail the webform results.
     foreach ($addresses_final as $address) {
 
-      $language = $user->uid ? user_preferred_language($user) : language_default();
+      $language = $account->id() ? user_preferred_language($account) : language_default();
       $mail_params = array(
         'message' => $email['message'],
         'subject' => $email['subject'],
@@ -441,7 +441,7 @@ function webform_submission_title($node, $submission) {
  * Menu callback; Present a Webform submission page for display or editing.
  */
 function webform_submission_page($node, $submission, $format) {
-  global $user;
+  $account = \Drupal::currentUser();
 
   // Render the admin UI breadcrumb.
   webform_set_breadcrumb($node, $submission);
@@ -481,7 +481,7 @@ function webform_submission_page($node, $submission, $format) {
   $actions = theme('links', array('links' => module_invoke_all('webform_submission_actions', $node, $submission), 'attributes' => array('class' => array('links', 'inline', 'webform-submission-actions'))));
 
   // Disable the page cache for anonymous users viewing or editing submissions.
-  if (!$user->uid) {
+  if (!$account->id()) {
     webform_disable_page_cache();
   }
 
@@ -943,16 +943,15 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
  *   Boolean TRUE if the user has exceeded their limit. FALSE otherwise.
  */
 function webform_submission_user_limit_check($node, $account = NULL) {
-  global $user;
   $tracking_mode = webform_variable_get('webform_tracking_mode');
 
   if (!isset($account)) {
-    $account = $user;
+    $account = \Drupal::currentUser();
   }
 
   // We can only check access for anonymous users through their cookies.
-  if ($user->uid !== 0 && $account->uid === 0) {
-    watchdog('webform', 'Unable to check anonymous user submission limit when logged in as user @uid.', array('@uid' => $user->uid), WATCHDOG_WARNING);
+  if (\Drupal::currentUser()->id() !== 0 && $account->id() === 0) {
+    watchdog('webform', 'Unable to check anonymous user submission limit when logged in as user @uid.', array('@uid' => \Drupal::currentUser()->id()), WATCHDOG_WARNING);
     return FALSE;
   }
 
@@ -965,7 +964,7 @@ function webform_submission_user_limit_check($node, $account = NULL) {
   // this username and IP.
   $num_submissions_database = 0;
   if (!$node->webform['confidential'] &&
-      ($account->uid !== 0 || $tracking_mode === 'ip_address' || $tracking_mode === 'strict')) {
+      ($account->id() !== 0 || $tracking_mode === 'ip_address' || $tracking_mode === 'strict')) {
     $query = db_select('webform_submissions')
       ->addTag('webform_submission_user_limit_check')
       ->condition('nid', $node->nid)
@@ -975,8 +974,8 @@ function webform_submission_user_limit_check($node, $account = NULL) {
       $query->condition('submitted', REQUEST_TIME - $node->webform['submit_interval'], '>');
     }
 
-    if ($account->uid) {
-      $query->condition('uid', $account->uid);
+    if ($account->id()) {
+      $query->condition('uid', $account->id());
     }
     else {
       $query->condition('remote_addr', ip_address());
@@ -986,7 +985,7 @@ function webform_submission_user_limit_check($node, $account = NULL) {
 
   // Double check the submission history from the users machine using cookies.
   $num_submissions_cookie = 0;
-  if ($account->uid === 0 && ($tracking_mode === 'cookie' || $tracking_mode === 'strict')) {
+  if ($account->id() === 0 && ($tracking_mode === 'cookie' || $tracking_mode === 'strict')) {
     $cookie_name = 'webform-' . $node->nid;
 
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {

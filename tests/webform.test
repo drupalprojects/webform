@@ -86,7 +86,7 @@ class WebformTestCase extends DrupalWebTestCase {
   function tearDown() {
     // Delete the webform admin and any created nodes.
     foreach ($this->webform_users as $account) {
-      $uid = $account->uid;
+      $uid = $account->id();
       $result = db_select('node')
         ->fields('node')
         ->condition('uid', $uid)

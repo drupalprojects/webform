@@ -34,18 +34,18 @@ class webform_handler_field_submission_count extends views_handler_field {
   }
 
   function render($values) {
-    global $user;
+    $account = \Drupal::currentUser();
 
     $output = NULL;
     if ($this->count_type == 'node' && variable_get('webform_node_' . $values->{$this->aliases['type']}, FALSE)) {
       module_load_include('inc', 'webform', 'includes/webform.submissions');
       $node = node_load($values->{$this->aliases['nid']});
-      if (webform_results_access($node, $user)) {
+      if (webform_results_access($node, $account)) {
         $count = webform_get_submission_count($node->nid);
         $output = l($count, "node/$node->nid/webform-results");
       }
-      elseif (webform_submission_access($node, NULL, 'list', $user)) {
-        $count = webform_get_submission_count($node->nid, $user->uid);
+      elseif (webform_submission_access($node, NULL, 'list', $account)) {
+        $count = webform_get_submission_count($node->nid, $account->id());
         $output = l($count, "node/$node->nid/submissions");
       }
       else {

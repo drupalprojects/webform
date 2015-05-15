@@ -14,7 +14,7 @@ module_load_include('inc', 'webform', 'includes/webform.submissions');
  * Retrieve lists of submissions for a given webform.
  */
 function webform_results_submissions($node, $user_filter, $pager_count) {
-  global $user;
+  $account = \Drupal::currentUser();
 
   // Determine whether views or hard-coded tables should be used for the
   // submissions table.
@@ -22,14 +22,14 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
     // Load the submissions view
     $view = webform_get_view($node, 'webform_submissions');
     if ($user_filter) {
-      if ($user->uid) {
-        drupal_set_title(t('Submissions for %user', array('%user' => $user->name)), PASS_THROUGH);
+      if ($account->id()) {
+        drupal_set_title(t('Submissions for %user', array('%user' => $account->name)), PASS_THROUGH);
       }
       else {
         drupal_set_title(t('Your submissions'));
         webform_disable_page_cache();
       }
-      return $view->preview('default', array($node->nid, $user->uid));
+      return $view->preview('default', array($node->nid, $account->id()));
     }
     else {
       return $view->preview('default', array($node->nid));
@@ -42,15 +42,15 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
 
   $header = theme('webform_results_submissions_header', array('node' => $node));
   if ($user_filter) {
-    if ($user->uid) {
-      drupal_set_title(t('Submissions for %user', array('%user' => $user->name)), PASS_THROUGH);
+    if ($account->id()) {
+      drupal_set_title(t('Submissions for %user', array('%user' => $account->name)), PASS_THROUGH);
     }
     else {
       drupal_set_title(t('Your submissions'));
       webform_disable_page_cache();
     }
-    $submissions = webform_get_submissions(array('nid' => $node->nid, 'uid' => $user->uid), $header, $pager_count);
-    $count = webform_get_submission_count($node->nid, $user->uid, NULL);
+    $submissions = webform_get_submissions(array('nid' => $node->nid, 'uid' => $account->id()), $header, $pager_count);
+    $count = webform_get_submission_count($node->nid, $account->id(), NULL);
   }
   else {
     $submissions = webform_get_submissions($node->nid, $header, $pager_count);
@@ -66,7 +66,7 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
       $submission->is_draft ? t('@serial (draft)', array('@serial' => $submission->serial)) : $submission->serial,
       format_date($submission->submitted, 'short'),
     );
-    if (webform_results_access($node, $user)) {
+    if (webform_results_access($node, $account)) {
       $row[] = theme('username', array('account' => $submission));
       $row[] = $submission->remote_addr;
     }
@@ -74,11 +74,11 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
     $operation_count = 1;
     // No need to call this multiple times, just reference this in a variable.
     $destination = drupal_get_destination();
-    if (webform_submission_access($node, $submission, 'edit', $user)) {
+    if (webform_submission_access($node, $submission, 'edit', $account)) {
       $row[] = l(t('Edit'), "node/$node->nid/submission/$sid/edit", array('query' => $destination));
       $operation_count++;
     }
-    if (webform_submission_access($node, $submission, 'delete', $user)) {
+    if (webform_submission_access($node, $submission, 'delete', $account)) {
       $row[] = l(t('Delete'), "node/$node->nid/submission/$sid/delete", array('query' => $destination));
       $operation_count++;
     }
@@ -821,7 +821,6 @@ function _webform_export_tempname() {
  *   The array of export info or null if the file could not be opened.
  */
 function webform_results_export($node, $format = 'delimited', $options = array()) {
-  global $user;
   module_load_include('inc', 'webform', 'includes/webform.export');
   module_load_include('inc', 'webform', 'includes/webform.components');
 
@@ -1206,7 +1205,7 @@ function webform_results_download_default_options($node, $format) {
  *   Export information array retrieved from webform_results_export().
  */
 function webform_results_download($node, $export_info) {
-  global $user;
+  $account = \Drupal::currentUser();
 
   // If the exporter provides a custom download method, use that.
   if (method_exists($export_info['exporter'], 'download')) {
@@ -1230,7 +1229,7 @@ function webform_results_download($node, $export_info) {
     db_merge('webform_last_download')
       ->key(array(
         'nid' => $node->nid,
-        'uid' => $user->uid,
+        'uid' => $account->id(),
       ))
       ->fields(array(
         'sid' => $export_info['last_sid'],
@@ -1853,7 +1852,7 @@ function webform_download_sids_query($nid, $range_options, $uid = NULL) {
  *   results for this particular node.
  */
 function webform_download_last_download_info($nid, $uid = NULL) {
-  $uid = isset($uid) ? $uid : $GLOBALS['user']->uid;
+  $uid = isset($uid) ? $uid : \Drupal::currentUser()->id();
 
   $query = db_select('webform_last_download', 'wld');
   $query->leftJoin('webform_submissions', 'wfs', 'wld.sid = wfs.sid');
