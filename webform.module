@@ -1922,7 +1922,7 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
   }
   // If this is the first time, generate the form array.
   else {
-    $form = drupal_get_form('webform_client_form_' . $node->id(), $node, $submission, $resume_draft);
+    $form = \Drupal::formBuilder()->getForm('webform_client_form_' . $node->id(), $node, $submission, $resume_draft);
     $cached_forms[$node->id()] = $form;
   }
 

@@ -450,7 +450,7 @@ function webform_submission_page($node, $submission, $format) {
   drupal_set_title(webform_submission_title($node, $submission));
 
   if ($format == 'form') {
-    $output = drupal_get_form('webform_client_form_' . $node->id(), $node, $submission);
+    $output = \Drupal::formBuilder()->getForm('webform_client_form_' . $node->id(), $node, $submission);
   }
   else {
     $renderable = webform_submission_render($node, $submission, NULL, $format);

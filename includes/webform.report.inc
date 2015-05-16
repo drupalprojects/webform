@@ -1504,7 +1504,7 @@ function webform_results_analysis($node, $sids = array(), $analysis_component = 
 
   // If showing all components, display selection form.
   if (!$analysis_component) {
-    $analysis['form'] = drupal_get_form('webform_analysis_components_form', $node);
+    $analysis['form'] = \Drupal::formBuilder()->getForm('webform_analysis_components_form', $node);
   }
 
   // Add all the components to the analysis renderable array.
