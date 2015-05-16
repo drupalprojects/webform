@@ -417,7 +417,7 @@ function webform_component_insert(&$component) {
     ->execute();
 
   // Post-insert actions.
-  module_invoke_all('webform_component_insert', $component);
+  \Drupal::moduleHandler()->invokeAll('webform_component_insert', $component);
 
   return $component['cid'];
 }
@@ -535,7 +535,7 @@ function webform_component_delete($node, $component) {
   }
 
   // Post-delete actions.
-  module_invoke_all('webform_component_delete', $component);
+  \Drupal::moduleHandler()->invokeAll('webform_component_delete', $component);
 }
 
 /**

@@ -1037,7 +1037,7 @@ function webform_results_download_rows_process($node, $options, $serial_start, $
     $row = array();
     // Add submission information.
     foreach (array_keys($submission_information) as $token) {
-      $cell = module_invoke_all('webform_results_download_submission_information_data', $token, $submission, $options, $serial_start, $row_count);
+      $cell = \Drupal::moduleHandler()->invokeAll('webform_results_download_submission_information_data', $token, $submission, $options, $serial_start, $row_count);
       $context = array('token' => $token, 'submission' => $submission, 'options' => $options, 'serial_start' => $serial_start, 'row_count' => $row_count);
       drupal_alter('webform_results_download_submission_information_data', $cell, $context);
       // implode() to ensure everything from a single value goes into one
@@ -1083,7 +1083,7 @@ function webform_results_download_rows_process($node, $options, $serial_start, $
  *   Filter down the list of columns based on a provided column list.
  */
 function webform_results_download_submission_information($node, $options = array()) {
-  $submission_information = module_invoke_all('webform_results_download_submission_information_info');
+  $submission_information = \Drupal::moduleHandler()->invokeAll('webform_results_download_submission_information_info');
   drupal_alter('webform_results_download_submission_information_info', $submission_information);
 
   if (isset($options['components'])) {

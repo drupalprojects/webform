@@ -594,7 +594,7 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
     webform_disable_page_cache();
   }
 
-  $module_access = count(array_filter(module_invoke_all('webform_submission_access', $node, $submission, $op, $account))) > 0;
+  $module_access = count(array_filter(\Drupal::moduleHandler()->invokeAll('webform_submission_access', $node, $submission, $op, $account))) > 0;
 
   switch ($op) {
     case 'view':
@@ -614,7 +614,7 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 function webform_results_access($node, $account = NULL) {
   $account = isset($account) ? $account : \Drupal::currentUser();
 
-  $module_access = count(array_filter(module_invoke_all('webform_results_access', $node, $account))) > 0;
+  $module_access = count(array_filter(\Drupal::moduleHandler()->invokeAll('webform_results_access', $node, $account))) > 0;
 
   return node_access('view', $node, $account) && ($module_access || $account->hasPermission('access all webform results') || ($account->hasPermission('access own webform results') && $account->id() == $node->uid));
 }
@@ -626,7 +626,7 @@ function webform_results_access($node, $account = NULL) {
 function webform_results_clear_access($node, $account = NULL) {
   $account = isset($account) ? $account : \Drupal::currentUser();
 
-  $module_access = count(array_filter(module_invoke_all('webform_results_clear_access', $node, $account))) > 0;
+  $module_access = count(array_filter(\Drupal::moduleHandler()->invokeAll('webform_results_clear_access', $node, $account))) > 0;
 
   return webform_results_access($node, $account) && ($module_access || $account->hasPermission('delete all webform submissions'));
 }
@@ -651,7 +651,7 @@ function webform_results_clear_access($node, $account = NULL) {
  */
 function webform_node_update_access($node, $account = NULL) {
   $account = isset($account) ? $account : \Drupal::currentUser();
-  $module_access = module_invoke_all('webform_update_access', $node, $account);
+  $module_access = \Drupal::moduleHandler()->invokeAll('webform_update_access', $node, $account);
   return empty($module_access)
             ? node_access('update', $node, $account) && $account->hasPermission('edit webform components')
             : count(array_filter($module_access)) == count($module_access);

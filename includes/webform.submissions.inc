@@ -123,7 +123,7 @@ function webform_submission_update($node, $submission) {
   $submission->is_new = FALSE;
   webform_submission_insert($node, $submission);
 
-  module_invoke_all('webform_submission_update', $node, $submission);
+  \Drupal::moduleHandler()->invokeAll('webform_submission_update', $node, $submission);
 
   return $submission->sid;
 }
@@ -170,7 +170,7 @@ function webform_submission_insert($node, $submission) {
 
   // Invoke the insert hook after saving all the data.
   if (isset($is_new)) {
-    module_invoke_all('webform_submission_insert', $node, $submission);
+    \Drupal::moduleHandler()->invokeAll('webform_submission_insert', $node, $submission);
   }
 
   return $submission->sid;
@@ -206,7 +206,7 @@ function webform_submission_delete($node, $submission) {
     ->condition('sid', $submission->sid)
     ->execute();
 
-  module_invoke_all('webform_submission_delete', $node, $submission);
+  \Drupal::moduleHandler()->invokeAll('webform_submission_delete', $node, $submission);
 }
 
 /**
@@ -478,7 +478,7 @@ function webform_submission_page($node, $submission, $format) {
   }
 
   // Actions may be shown to all users.
-  $actions = theme('links', array('links' => module_invoke_all('webform_submission_actions', $node, $submission), 'attributes' => array('class' => array('links', 'inline', 'webform-submission-actions'))));
+  $actions = theme('links', array('links' => \Drupal::moduleHandler()->invokeAll('webform_submission_actions', $node, $submission), 'attributes' => array('class' => array('links', 'inline', 'webform-submission-actions'))));
 
   // Disable the page cache for anonymous users viewing or editing submissions.
   if (!$account->id()) {
@@ -1084,5 +1084,5 @@ function template_preprocess_webform_submission_navigation(&$vars) {
  */
 function template_preprocess_webform_submission_information(&$vars) {
   $vars['account'] = user_load($vars['submission']->uid);
-  $vars['actions'] = theme('links', module_invoke_all('webform_submission_actions', $vars['node'], $vars['submission']));
+  $vars['actions'] = theme('links', \Drupal::moduleHandler()->invokeAll('webform_submission_actions', $vars['node'], $vars['submission']));
 }
