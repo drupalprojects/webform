@@ -18,6 +18,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\PageCache\RequestPolicyInterface;
 
 /**
  * Constants used in conditional logic.
@@ -1869,7 +1870,11 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
   }
 
   // Check if this page is cached or not.
-  $cached = drupal_page_is_cacheable();
+  // @todo D8's cache handling is very different from D7, revisit cache checks
+  //   below.
+  $request_policy = \Drupal::service('page_cache_request_policy');
+  $request = \Drupal::requestStack()->getCurrentRequest();
+  $cached = $request_policy->check($request) === RequestPolicyInterface::ALLOW;
 
   // Check if the user can add another submission based on the individual submission limit.
   if ($node->webform['submit_limit'] != -1) { // -1: Submissions are never throttled.
@@ -3250,7 +3255,7 @@ function webform_client_form_submit($form, &$form_state) {
       'sid' => $sid,
       'confirmation_page' => $redirect_url == '<confirmation>',
     );
-    drupal_page_is_cacheable(FALSE);
+    webform_disable_page_cache();
   }
   elseif ($redirect_url == '<none>') {
     // No redirect needed. Show a confirmatin message if there is one.
@@ -4570,9 +4575,12 @@ function _webform_component_classes(&$element, $component) {
 
 /**
  * Disable the Drupal page cache.
+ *
+ * @todo D8's page cache is very different from D7, revisit all places this is
+ *   called.
  */
 function webform_disable_page_cache() {
-  drupal_page_is_cacheable(FALSE);
+  \Drupal::service('page_cache_kill_switch')->trigger();
 }
 
 /**
