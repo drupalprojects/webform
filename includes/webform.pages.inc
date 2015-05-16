@@ -12,6 +12,8 @@
 function webform_configure_form($form, &$form_state, $node) {
   form_load_include($form_state, 'inc', 'webform', 'includes/webform.components');
 
+  $account = \Drupal::currentUser();
+
   $form['#attached']['library'][] = array('webform', 'admin');
 
   // Refresh the entity cache to get the lastest submission number.
@@ -331,7 +333,7 @@ function webform_configure_form($form, &$form_state, $node) {
     '#title' => t('Available as block'),
     '#default_value' => $node->webform['block'],
     '#description' => t('If enabled this webform will be available as a block.'),
-    '#access' => user_access('administer blocks') || user_access('administer site configuration') || user_access('use panels dashboard'),
+    '#access' => $account->hasPermission('administer blocks') || $account->hasPermission('administer site configuration') || $account->hasPermission('use panels dashboard'),
   );
   $form['advanced']['allow_draft'] = array(
     '#type' => 'checkbox',

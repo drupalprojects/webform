@@ -580,9 +580,9 @@ function webform_confirmation_page_access($node) {
 function webform_submission_access($node, $submission, $op = 'view', $account = NULL) {
   $account = isset($account) ? $account : \Drupal::currentUser();
 
-  $access_all = user_access('access all webform results', $account);
-  $access_own_submission = isset($submission) && user_access('access own webform submissions', $account) && (($account->id() && $account->id() == $submission->uid) || isset($_SESSION['webform_submission'][$submission->sid]));
-  $access_node_submissions = user_access('access own webform results', $account) && $account->id() == $node->uid;
+  $access_all = $account->hasPermission('access all webform results');
+  $access_own_submission = isset($submission) && $account->hasPermission('access own webform submissions') && (($account->id() && $account->id() == $submission->uid) || isset($_SESSION['webform_submission'][$submission->sid]));
+  $access_node_submissions = $account->hasPermission('access own webform results') && $account->id() == $node->uid;
 
   $token_access = $submission && isset($_GET['token']) && $_GET['token'] == webform_get_submission_access_token($submission);
 
@@ -590,7 +590,7 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
 
   // Disable the page cache for anonymous users in this access callback,
   // otherwise the "Access denied" page gets cached.
-  if (!$account->id() && user_access('access own webform submissions', $account)) {
+  if (!$account->id() && $account->hasPermission('access own webform submissions')) {
     webform_disable_page_cache();
   }
 
@@ -600,11 +600,11 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
     case 'view':
       return $module_access || $general_access;
     case 'edit':
-      return $module_access || ($general_access && (user_access('edit all webform submissions', $account) || (user_access('edit own webform submissions', $account) && $account->id() == $submission->uid)));
+      return $module_access || ($general_access && ($account->hasPermission('edit all webform submissions') || ($account->hasPermission('edit own webform submissions') && $account->id() == $submission->uid)));
     case 'delete':
-      return $module_access || ($general_access && (user_access('delete all webform submissions', $account) || (user_access('delete own webform submissions', $account) && $account->id() == $submission->uid)));
+      return $module_access || ($general_access && ($account->hasPermission('delete all webform submissions') || ($account->hasPermission('delete own webform submissions') && $account->id() == $submission->uid)));
     case 'list':
-      return $module_access || user_access('access all webform results', $account) || (user_access('access own webform submissions', $account) && ($account->id() || isset($_SESSION['webform_submission']))) || (user_access('access own webform results', $account) && $account->id() == $node->uid);
+      return $module_access || $account->hasPermission('access all webform results') || ($account->hasPermission('access own webform submissions') && ($account->id() || isset($_SESSION['webform_submission']))) || ($account->hasPermission('access own webform results') && $account->id() == $node->uid);
   }
 }
 
@@ -616,7 +616,7 @@ function webform_results_access($node, $account = NULL) {
 
   $module_access = count(array_filter(module_invoke_all('webform_results_access', $node, $account))) > 0;
 
-  return node_access('view', $node, $account) && ($module_access || user_access('access all webform results', $account) || (user_access('access own webform results', $account) && $account->id() == $node->uid));
+  return node_access('view', $node, $account) && ($module_access || $account->hasPermission('access all webform results') || ($account->hasPermission('access own webform results') && $account->id() == $node->uid));
 }
 
 /**
@@ -628,7 +628,7 @@ function webform_results_clear_access($node, $account = NULL) {
 
   $module_access = count(array_filter(module_invoke_all('webform_results_clear_access', $node, $account))) > 0;
 
-  return webform_results_access($node, $account) && ($module_access || user_access('delete all webform submissions', $account));
+  return webform_results_access($node, $account) && ($module_access || $account->hasPermission('delete all webform submissions'));
 }
 
 /**
@@ -653,7 +653,7 @@ function webform_node_update_access($node, $account = NULL) {
   $account = isset($account) ? $account : \Drupal::currentUser();
   $module_access = module_invoke_all('webform_update_access', $node, $account);
   return empty($module_access)
-            ? node_access('update', $node, $account) && user_access('edit webform components')
+            ? node_access('update', $node, $account) && $account->hasPermission('edit webform components')
             : count(array_filter($module_access)) == count($module_access);
 }
 
@@ -1099,8 +1099,9 @@ function webform_webform_select_options_info() {
 function webform_webform_submission_actions($node, $submission) {
   $actions = array();
   $destination = drupal_get_destination();
+  $account = \Drupal::currentUser();
 
-  if (module_exists('print_pdf') && user_access('access PDF version')) {
+  if (module_exists('print_pdf') && $account->hasPermission('access PDF version')) {
     $actions['printpdf'] = array(
       'title' => t('Download PDF'),
       'href' => 'printpdf/' . $node->nid . '/submission/' . $submission->sid,
@@ -1108,7 +1109,7 @@ function webform_webform_submission_actions($node, $submission) {
     );
   }
 
-  if (module_exists('print') && user_access('access print')) {
+  if (module_exists('print') && $account->hasPermission('access print')) {
     $actions['print'] = array(
       'title' => t('Print'),
       'href' => 'print/' . $node->nid . '/submission/' . $submission->sid,
@@ -2809,7 +2810,7 @@ function webform_client_form_prevalidate($form, &$form_state) {
   // Another way to consider this is that the form is open when its status is
   // open OR there is a submission and the user is an admin.
   $closed = empty($node->webform['status']) &&
-            (empty($form['#submission']) || !user_access('edit all webform submissions'));
+            (empty($form['#submission']) || !\Drupal::currentUser()->hasPermission('edit all webform submissions'));
 
   // Prevent submission by throwing an error.
   if ((!$allowed_role || $total_limit_exceeded || $user_limit_exceeded || $closed)) {
@@ -3137,6 +3138,8 @@ function webform_client_form_submit($form, &$form_state) {
   module_load_include('inc', 'webform', 'includes/webform.submissions');
   module_load_include('inc', 'webform', 'includes/webform.components');
 
+  $account = \Drupal::currentUser();
+
   if (empty($form_state['save_draft']) && empty($form_state['webform_completed'])) {
     return;
   }
@@ -3165,7 +3168,7 @@ function webform_client_form_submit($form, &$form_state) {
   }
   else {
     // Create a new submission object.
-    $submission = webform_submission_create($node, $user, $form_state);
+    $submission = webform_submission_create($node, $account, $form_state);
     // Since this is a new submission, a new sid is needed.
     $sid = NULL;
   }
@@ -3205,7 +3208,7 @@ function webform_client_form_submit($form, &$form_state) {
 
     // Save session information about this submission for anonymous users,
     // allowing them to access or edit their submissions.
-    if (!$user->uid && user_access('access own webform submissions')) {
+    if (!$account->id() && $account->hasPermission('access own webform submissions')) {
       $_SESSION['webform_submission'][$form_state['values']['details']['sid']] = $node->nid;
     }
   }
@@ -3257,7 +3260,7 @@ function webform_client_form_submit($form, &$form_state) {
     // confirmation page.
     $message = FALSE;
     $query = array('sid' => $sid);
-    if ((int) $user->uid === 0) {
+    if ((int) $account->id() === 0) {
       $query['token'] = webform_get_submission_access_token($submission);
     }
     $redirect = array('node/' . $node->nid . '/done', array('query' => $query));
@@ -4626,7 +4629,7 @@ function webform_set_breadcrumb($node, $submission = NULL) {
       if (webform_results_access($node)) {
         $breadcrumb[] = l(t('Webform results'), $node_path . '/webform-results');
       }
-      elseif (user_access('access own webform results')) {
+      elseif (\Drupal::currentUser()->hasPermission('access own webform results')) {
         $breadcrumb[] = l(t('Submissions'), $node_path . '/submissions');
       }
     }
@@ -5145,7 +5148,7 @@ function webform_pre_render_input_vars($element) {
       );
       $warning = array(
         '#markup' => '<div class="messages warning">' .
-                     (user_access('administer site configuration')
+                     (\Drupal::currentUser()->hasPermission('administer site configuration')
                         ? t('This form contains @count input elements. PHP max_input_vars is @limit and should be increased.', $subs)
                         : t('This form may be too long to work properly. Contact the administrator.'))
                      . '</div>',

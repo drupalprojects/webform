@@ -36,7 +36,7 @@ class webform_handler_field_node_link_results extends views_handler_field_node_l
     }
 
     // For clear, ensure user has access to clear all the submissions.
-    if (stripos($this->options['subpath'], 'clear') === 0 && !user_access('delete all webform submissions')) {
+    if (stripos($this->options['subpath'], 'clear') === 0 && !\Drupal::currentUser()->hasPermission('delete all webform submissions')) {
       return;
     }
 
