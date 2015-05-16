@@ -92,7 +92,7 @@ class WebformTestCase extends DrupalWebTestCase {
         ->condition('uid', $uid)
         ->execute();
       foreach ($result as $node) {
-        node_delete($node->nid);
+        node_delete($node->id());
       }
       user_cancel(array(), $uid, 'user_cancel_delete');
     }
@@ -1094,12 +1094,12 @@ class WebformGeneralTestCase extends WebformTestCase {
 
     // Because this is a "webform" type node, it should have an entry in the
     // database even though it's using the default settings.
-    $this->assertTrue($this->webformRecordExists($node->nid), t('Webform record made in the database for the new webform node.'));
+    $this->assertTrue($this->webformRecordExists($node->id()), t('Webform record made in the database for the new webform node.'));
 
     // Make a change to the node, ensure that the record stays intact.
     $node->title .= '!';
     node_save($node);
-    $this->assertTrue($this->webformRecordExists($node->nid), t('Webform record still in the database after modifying webform node.'));
+    $this->assertTrue($this->webformRecordExists($node->id()), t('Webform record still in the database after modifying webform node.'));
   }
 
   /**
@@ -1119,12 +1119,12 @@ class WebformGeneralTestCase extends WebformTestCase {
     // Because this is a webform-enabled type node but does not yet have any
     // components, it should not have an entry in the database because it is
     // using the default settings.
-    $this->assertFalse($this->webformRecordExists($node->nid), t('Webform record not in the database for the new page node.'));
+    $this->assertFalse($this->webformRecordExists($node->id()), t('Webform record not in the database for the new page node.'));
 
     // Make a change to the node, ensure that the record stays empty.
     $node->title .= '!';
     node_save($node);
-    $this->assertFalse($this->webformRecordExists($node->nid), t('Webform record still not in the database after modifying page node.'));
+    $this->assertFalse($this->webformRecordExists($node->id()), t('Webform record still not in the database after modifying page node.'));
 
     // Add a new component to the node and check that a record is made in the
     // webform table.
@@ -1137,12 +1137,12 @@ class WebformGeneralTestCase extends WebformTestCase {
     $textarea = array_merge(webform_component_invoke('textarea', 'defaults'), $textarea);
     $node->webform['components'][1] = $textarea;
     node_save($node);
-    $this->assertTrue($this->webformRecordExists($node->nid), t('Webform record now exists after adding a new component.'));
+    $this->assertTrue($this->webformRecordExists($node->id()), t('Webform record now exists after adding a new component.'));
 
     // Remove the new component and ensure that the record is deleted.
     $node->webform['components'] = array();
     node_save($node);
-    $this->assertFalse($this->webformRecordExists($node->nid), t('Webform record deleted after deleting last component.'));
+    $this->assertFalse($this->webformRecordExists($node->id()), t('Webform record deleted after deleting last component.'));
   }
 
   function webformRecordExists($nid) {

@@ -330,7 +330,7 @@ class WebformComponentsForm extends FormBase {
       unset($_GET['destination']);
       drupal_static_reset('drupal_get_destination');
     }
-    $form_state['redirect'] = ['node/' . $node->nid . '/webform/components/new/' . $component['type'], ['query' => $query]];
+    $form_state['redirect'] = ['node/' . $node->id() . '/webform/components/new/' . $component['type'], ['query' => $query]];
     */
   }
 

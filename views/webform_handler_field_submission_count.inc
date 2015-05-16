@@ -41,15 +41,15 @@ class webform_handler_field_submission_count extends views_handler_field {
       module_load_include('inc', 'webform', 'includes/webform.submissions');
       $node = node_load($values->{$this->aliases['nid']});
       if (webform_results_access($node, $account)) {
-        $count = webform_get_submission_count($node->nid);
-        $output = l($count, "node/$node->nid/webform-results");
+        $count = webform_get_submission_count($node->id());
+        $output = l($count, "node/$node->id()/webform-results");
       }
       elseif (webform_submission_access($node, NULL, 'list', $account)) {
-        $count = webform_get_submission_count($node->nid, $account->id());
-        $output = l($count, "node/$node->nid/submissions");
+        $count = webform_get_submission_count($node->id(), $account->id());
+        $output = l($count, "node/$node->id()/submissions");
       }
       else {
-        $output = webform_get_submission_count($node->nid);
+        $output = webform_get_submission_count($node->id());
       }
     }
     elseif ($this->count_type == 'users') {

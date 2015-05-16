@@ -73,7 +73,7 @@ class WebformSubmissionTestCase extends WebformTestCase {
     // Create the Webform test node, and set all components to be required
     // with no default value.
     $node = $this->testWebformForm();
-    $node = node_load($node->nid);
+    $node = node_load($node->id());
     foreach ($node->webform['components'] as &$component) {
       $component['value'] = '';
       $component['required'] = '1';
@@ -85,7 +85,7 @@ class WebformSubmissionTestCase extends WebformTestCase {
     // be made required, and date fields, which default to the current date
     // when no default value is provided; therefore, we don't expect a message
     // for those.)
-    $this->drupalPost('node/' . $node->nid, array(), 'Submit', array(), array(), 'webform-client-form-' . $node->nid);
+    $this->drupalPost('node/' . $node->id(), array(), 'Submit', array(), array(), 'webform-client-form-' . $node->id());
     foreach ($node->webform['components'] as $component) {
       if ($component['type'] != 'hidden' && $component['type'] != 'date') {
         $this->assertText(t('!name field is required.', array('!name' => $component['name'])));
@@ -111,11 +111,11 @@ class WebformSubmissionTestCase extends WebformTestCase {
 
     // Visit the node page with the "foo=bar" query, to test
     // [current-page:query:?] default values.
-    $this->drupalGet('node/' . $node->nid, array('query' => array('foo' => 'bar')));
-    $this->assertText($node->title, t('Webform node created and accessible at !url', array('!url' => 'node/' . $node->nid)), t('Webform'));
+    $this->drupalGet('node/' . $node->id(), array('query' => array('foo' => 'bar')));
+    $this->assertText($node->title, t('Webform node created and accessible at !url', array('!url' => 'node/' . $node->id())), t('Webform'));
 
     // Submit our test data.
-    $this->drupalPost(NULL, $submission_values, 'Submit', array(), array(), 'webform-client-form-' . $node->nid);
+    $this->drupalPost(NULL, $submission_values, 'Submit', array(), array(), 'webform-client-form-' . $node->id());
 
     // Confirm that the submission has been created.
     $this->assertText($node->webform['confirmation'], t('Confirmation message "@confirmation" received.', array('@confirmation' => $node->webform['confirmation'])), t('Webform'));
@@ -127,7 +127,7 @@ class WebformSubmissionTestCase extends WebformTestCase {
 
     // Pull in the database submission and check the values.
     drupal_static_reset('webform_get_submission');
-    $actual_submission = webform_get_submission($node->nid, $sid);
+    $actual_submission = webform_get_submission($node->id(), $sid);
 
     $component_info = $this->testWebformComponents();
     foreach ($node->webform['components'] as $cid => $component) {
@@ -154,7 +154,7 @@ class WebformSubmissionTestCase extends WebformTestCase {
     $node = $this->testWebformForm();
 
     // Visit the node page.
-    $this->drupalGet('node/' . $node->nid);
+    $this->drupalGet('node/' . $node->id());
 
     foreach ($this->testWebformComponents() as $key => $component_info) {
       if (isset($component_info['error values'])) {
@@ -163,7 +163,7 @@ class WebformSubmissionTestCase extends WebformTestCase {
           $submission_values["submitted[$key]"] = $value;
 
           // Submit our test data.
-          $this->drupalPost('node/' . $node->nid, $submission_values, 'Submit', array(), array(), 'webform-client-form-' . $node->nid);
+          $this->drupalPost('node/' . $node->id(), $submission_values, 'Submit', array(), array(), 'webform-client-form-' . $node->id());
 
           // Confirm that the validation error occurred and the submission did not save.
           $this->assertRaw($error_message, t('Validation message properly thrown: "%message".', array('%message' => $error_message)), t('Webform'));

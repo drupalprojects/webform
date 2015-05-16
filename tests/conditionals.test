@@ -120,7 +120,7 @@ class WebformConditionalsTestCase extends WebformTestCase {
 
     $settings['webform']['components'] = $components;
     $node = $this->drupalCreateNode($settings);
-    $node = node_load($node->nid); // Needed to get a complete object.
+    $node = node_load($node->id()); // Needed to get a complete object.
 
     // We now have a new test node. First try checking same-page conditionals.
     $rules = array();
@@ -155,7 +155,7 @@ class WebformConditionalsTestCase extends WebformTestCase {
 
     // Submit our test data.
     $edit = $this->testWebformPost(array($component['form_key'] => $input_values));
-    $this->drupalPost('node/' . $node->nid, $edit, 'Next Page >', array(), array(), 'webform-client-form-' . $node->nid);
+    $this->drupalPost('node/' . $node->id(), $edit, 'Next Page >', array(), array(), 'webform-client-form-' . $node->id());
 
     // Ensure we reached the second page for matched conditionals.
     $message = t('Conditional same-page skipping of validation passed for "%form_key": %input_values @conditional_string be @operator %match_string', array('%form_key' => $component['form_key'], '%input_values' => $input_string, '@conditional_string' => $conditional_string, '@operator' => $operator, '%match_string' => $match_string));
@@ -175,7 +175,7 @@ class WebformConditionalsTestCase extends WebformTestCase {
 
     // Re-submit the form again, this time checking for the field on the
     // second page.
-    $this->drupalPost('node/' . $node->nid, $edit, 'Next Page >', array(), array(), 'webform-client-form-' . $node->nid);
+    $this->drupalPost('node/' . $node->id(), $edit, 'Next Page >', array(), array(), 'webform-client-form-' . $node->id());
     $string_match = 'name="submitted[' . $textfield['form_key'] . ']"';
 
     // Ensure that the field is properly hidden based on a match.

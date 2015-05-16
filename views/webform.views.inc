@@ -566,7 +566,7 @@ function webform_views_pre_view($view, $display_id, $args) {
             'field' => 'value',
             'table' => 'webform_submissions',
             'label' => $component['name'],
-            'webform_nid' => $node->nid,
+            'webform_nid' => $node->id(),
             'webform_cid' => $component['cid'],
             'exclude' => 0,
           ) + $prototype,
@@ -663,7 +663,7 @@ function webform_views_autocomplete($string = '') {
       ->range(0, 10)
       ->execute();
     foreach ($result as $node) {
-      $options[$node->title . ' [nid:' . $node->nid . ']'] = check_plain($node->title) . ' [nid:' . $node->nid . ']';
+      $options[$node->title . ' [nid:' . $node->id() . ']'] = check_plain($node->title) . ' [nid:' . $node->id() . ']';
     }
   }
 
@@ -680,7 +680,7 @@ function _webform_views_options_form(&$form, &$form_state, $nid, $cid) {
   $form['webform_nid'] = array(
     '#type' => 'textfield',
     '#title' => t('Webform node'),
-    '#default_value' => isset($node) ? $node->title . ' [nid:' . $node->nid . ']' : '',
+    '#default_value' => isset($node) ? $node->title . ' [nid:' . $node->id() . ']' : '',
     '#ajax' => array(
       'path' => views_ui_build_form_url($form_state),
       'event' => 'blur',

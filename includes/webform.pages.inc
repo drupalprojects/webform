@@ -17,7 +17,7 @@ function webform_configure_form($form, &$form_state, $node) {
   $form['#attached']['library'][] = array('webform', 'admin');
 
   // Refresh the entity cache to get the lastest submission number.
-  $nid = $node->nid;
+  $nid = $node->id();
   entity_get_controller('node')->resetCache(array($nid));
   $node = node_load($nid);
 
@@ -30,7 +30,7 @@ function webform_configure_form($form, &$form_state, $node) {
 
   $form['nid'] = array(
     '#type' => 'value',
-    '#value' => $node->nid,
+    '#value' => $node->id(),
   );
 
   /* Start Edit Form */
@@ -519,7 +519,7 @@ function webform_configure_form_submit($form, &$form_state) {
   // Set next serial number. It must be a positive integer greater than any
   // existing serial number, which could have increased while this form was
   // being edited.
-  $next_min = _webform_submission_serial_next_value_used($node->nid);
+  $next_min = _webform_submission_serial_next_value_used($node->id());
   $next_serial = (int)$form_state['values']['next_serial'];
   if ($next_serial < $next_min) {
     drupal_set_message(t('The next submission number was increased to @min to make it higher than existing submissions.',
@@ -541,7 +541,7 @@ function webform_configure_form_submit_save($form, &$form_state) {
 
   $node = &$form['#node'];
   if (!$node->webform['block'] && function_exists('block_load') && 
-      ($block = block_load('webform', 'client-block-' . $node->nid)) &&
+      ($block = block_load('webform', 'client-block-' . $node->id())) &&
       !empty($block->bid)) {
     // An existing block for this not-currently-available block was already configured.
     // See https://www.drupal.org/node/2365825

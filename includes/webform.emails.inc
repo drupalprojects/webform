@@ -97,9 +97,9 @@ function theme_webform_emails_form($variables) {
         drupal_render($form['emails'][$eid]['email']),
         drupal_render($form['emails'][$eid]['subject']),
         drupal_render($form['emails'][$eid]['from']),
-        l(t('Edit'), 'node/' . $node->nid . '/webform/emails/' . $eid),
-        l(t('Clone'), 'node/' . $node->nid . '/webform/emails/' . $eid . '/clone'),
-        l(t('Delete'), 'node/' . $node->nid . '/webform/emails/' . $eid . '/delete'),
+        l(t('Edit'), 'node/' . $node->id() . '/webform/emails/' . $eid),
+        l(t('Clone'), 'node/' . $node->id() . '/webform/emails/' . $eid . '/clone'),
+        l(t('Delete'), 'node/' . $node->id() . '/webform/emails/' . $eid . '/delete'),
       );
     }
   }
@@ -152,7 +152,7 @@ function webform_emails_form_submit($form, &$form_state) {
   else {
     $email = $form_state['values']['email_component'];
   }
-  $form_state['redirect'] = array('node/' . $form['#node']->nid . '/webform/emails/new', array('query' => array('option' => $form_state['values']['email_option'], 'email' => trim($email))));
+  $form_state['redirect'] = array('node/' . $form['#node']->id() . '/webform/emails/new', array('query' => array('option' => $form_state['values']['email_option'], 'email' => trim($email))));
 }
 
 /**
@@ -301,7 +301,7 @@ function webform_email_edit_form($form, $form_state, $node, $email = array(), $c
     '#default_value' => $email['template'] == 'default' ? 'default' : 'custom',
   );
 
-  $default_template = theme(array('webform_mail_' . $node->nid, 'webform_mail', 'webform_mail_message'), array('node' => $node, 'email' => $email));
+  $default_template = theme(array('webform_mail_' . $node->id(), 'webform_mail', 'webform_mail_message'), array('node' => $node, 'email' => $email));
   $template = $email['template'] == 'default' ? $default_template : $email['template'];
   $form['template']['template'] = array(
     '#type' => 'textarea',
@@ -500,7 +500,7 @@ function webform_email_edit_form_submit($form, &$form_state) {
   // Merge the e-mail, name, address, and subject options into single values.
   $email = array(
     'eid' => $form_state['values']['eid'],
-    'nid' => $node->nid,
+    'nid' => $node->id(),
   );
 
   foreach (array('email', 'from_name', 'from_address', 'subject') as $field) {
@@ -559,9 +559,9 @@ function webform_email_edit_form_submit($form, &$form_state) {
   }
 
   // Refresh the entity cache, should it be cached in persistent storage.
-  entity_get_controller('node')->resetCache(array($node->nid));
+  entity_get_controller('node')->resetCache(array($node->id()));
 
-  $form_state['redirect'] = array('node/' . $node->nid . '/webform/emails');
+  $form_state['redirect'] = array('node/' . $node->id() . '/webform/emails');
 }
 
 /**
@@ -587,7 +587,7 @@ function webform_email_delete_form($form, $form_state, $node, $email) {
     $description = t('This will immediately delete the e-mail settings sending to the @address address.', array('@address' => $email['email']));
   }
 
-  return confirm_form($form, $question, 'node/' . $node->nid . '/webform/emails', $description, t('Delete'));
+  return confirm_form($form, $question, 'node/' . $node->id() . '/webform/emails', $description, t('Delete'));
 }
 
 /**
@@ -605,9 +605,9 @@ function webform_email_delete_form_submit($form, &$form_state) {
   webform_check_record($node);
 
   // Refresh the entity cache, should it be cached in persistent storage.
-  entity_get_controller('node')->resetCache(array($node->nid));
+  entity_get_controller('node')->resetCache(array($node->id()));
 
-  $form_state['redirect'] = 'node/' . $node->nid . '/webform/emails';
+  $form_state['redirect'] = 'node/' . $node->id() . '/webform/emails';
 }
 
 /**
@@ -692,7 +692,7 @@ function webform_email_update($email) {
  */
 function webform_email_delete($node, $email) {
   db_delete('webform_emails')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('eid', $email['eid'])
     ->execute();
 }

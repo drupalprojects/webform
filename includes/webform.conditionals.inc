@@ -69,7 +69,7 @@ function webform_conditionals_form($form, &$form_state, $node) {
     $form['conditionals'][$rgid]['conditional'] = array(
       '#type' => 'webform_conditional',
       '#default_value' => $conditional_group,
-      '#nid' => $node->nid,
+      '#nid' => $node->id(),
       '#sources' => $source_list,
       '#actions' => array(
         'show' => t('shown'),
@@ -1057,15 +1057,15 @@ function webform_conditional_update($node, $conditional) {
  */
 function webform_conditional_delete($node, $conditional) {
   db_delete('webform_conditional')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('rgid', $conditional['rgid'])
     ->execute();
   db_delete('webform_conditional_rules')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('rgid', $conditional['rgid'])
     ->execute();
   db_delete('webform_conditional_actions')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('rgid', $conditional['rgid'])
     ->execute();
 }

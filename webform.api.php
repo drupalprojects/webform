@@ -155,7 +155,7 @@ function hook_webform_submission_insert($node, $submission) {
   // Insert a record into a 3rd-party module table when a submission is added.
   db_insert('mymodule_table')
     ->fields(array(
-      'nid' => $node->nid,
+      'nid' => $node->id(),
       'sid' => $submission->sid,
       'foo' => 'foo_data',
     ))
@@ -180,7 +180,7 @@ function hook_webform_submission_update($node, $submission) {
     ->fields(array(
       'foo' => 'foo_data',
     ))
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('sid', $submission->sid)
     ->execute();
 }
@@ -196,7 +196,7 @@ function hook_webform_submission_update($node, $submission) {
 function hook_webform_submission_delete($node, $submission) {
   // Delete a record from a 3rd-party module table when a submission is deleted.
   db_delete('mymodule_table')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('sid', $submission->sid)
     ->execute();
 }
@@ -221,7 +221,7 @@ function hook_webform_submission_actions($node, $submission) {
   if (webform_results_access($node)) {
     $actions['myaction'] = array(
       'title' => t('Do my action'),
-      'href' => 'node/' . $node->nid . '/submission/' . $submission->sid . '/myaction',
+      'href' => 'node/' . $node->id() . '/submission/' . $submission->sid . '/myaction',
       'query' => drupal_get_destination(),
     );
   }

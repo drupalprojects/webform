@@ -35,10 +35,10 @@ class WebformConditionals {
    * Creates and caches a WebformConditional for a given node.
    */
   static function factory($node) {
-    if (!isset(self::$conditionals[$node->nid])) {
-      self::$conditionals[$node->nid] = new WebformConditionals($node);
+    if (!isset(self::$conditionals[$node->id()])) {
+      self::$conditionals[$node->id()] = new WebformConditionals($node);
     }
-    return self::$conditionals[$node->nid];
+    return self::$conditionals[$node->id()];
   }
 
   /**

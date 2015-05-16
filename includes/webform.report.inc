@@ -29,10 +29,10 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
         drupal_set_title(t('Your submissions'));
         webform_disable_page_cache();
       }
-      return $view->preview('default', array($node->nid, $account->id()));
+      return $view->preview('default', array($node->id(), $account->id()));
     }
     else {
-      return $view->preview('default', array($node->nid));
+      return $view->preview('default', array($node->id()));
     }
   }
 
@@ -49,12 +49,12 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
       drupal_set_title(t('Your submissions'));
       webform_disable_page_cache();
     }
-    $submissions = webform_get_submissions(array('nid' => $node->nid, 'uid' => $account->id()), $header, $pager_count);
-    $count = webform_get_submission_count($node->nid, $account->id(), NULL);
+    $submissions = webform_get_submissions(array('nid' => $node->id(), 'uid' => $account->id()), $header, $pager_count);
+    $count = webform_get_submission_count($node->id(), $account->id(), NULL);
   }
   else {
-    $submissions = webform_get_submissions($node->nid, $header, $pager_count);
-    $count = webform_get_submission_count($node->nid, NULL, NULL);
+    $submissions = webform_get_submissions($node->id(), $header, $pager_count);
+    $count = webform_get_submission_count($node->id(), NULL, NULL);
   }
 
   $operation_column = end($header);
@@ -70,16 +70,16 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
       $row[] = theme('username', array('account' => $submission));
       $row[] = $submission->remote_addr;
     }
-    $row[] = l(t('View'), "node/$node->nid/submission/$sid");
+    $row[] = l(t('View'), "node/$node->id()/submission/$sid");
     $operation_count = 1;
     // No need to call this multiple times, just reference this in a variable.
     $destination = drupal_get_destination();
     if (webform_submission_access($node, $submission, 'edit', $account)) {
-      $row[] = l(t('Edit'), "node/$node->nid/submission/$sid/edit", array('query' => $destination));
+      $row[] = l(t('Edit'), "node/$node->id()/submission/$sid/edit", array('query' => $destination));
       $operation_count++;
     }
     if (webform_submission_access($node, $submission, 'delete', $account)) {
-      $row[] = l(t('Delete'), "node/$node->nid/submission/$sid/delete", array('query' => $destination));
+      $row[] = l(t('Delete'), "node/$node->id()/submission/$sid/delete", array('query' => $destination));
       $operation_count++;
     }
     if ($operation_count < $operation_total) {
@@ -119,7 +119,7 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
  *   The loaded view.
  */
 function webform_get_view($node, $view_id) {
-  foreach (array("{$view_id}_{$node->nid}", "{$view_id}_{$node->type}", $view_id) as $id) {
+  foreach (array("{$view_id}_{$node->id()}", "{$view_id}_{$node->type}", $view_id) as $id) {
     $view = views_get_view($id);
     if ($view) {
       return $view;
@@ -220,7 +220,7 @@ function webform_results_table($node, $pager_count = 0) {
   if (!webform_variable_get('webform_table')) {
     // Load and preview the results view with a node id argument
     $view = webform_get_view($node, 'webform_results');
-    return $view->preview('default', array($node->nid));
+    return $view->preview('default', array($node->id()));
   }
 
   // Get all the submissions for the node
@@ -230,8 +230,8 @@ function webform_results_table($node, $pager_count = 0) {
 
   // Get all the submissions for the node.
   $header = theme('webform_results_table_header', array('node' => $node));
-  $submissions = webform_get_submissions($node->nid, $header, $pager_count);
-  $total_count = webform_get_submission_count($node->nid, NULL, NULL);
+  $submissions = webform_get_submissions($node->id(), $header, $pager_count);
+  $total_count = webform_get_submission_count($node->id(), NULL, NULL);
 
   $output = theme('webform_results_table', array('node' => $node, 'components' => $node->webform['components'], 'submissions' => $submissions, 'total_count' => $total_count, 'pager_count' => $pager_count));
   if ($pager_count) {
@@ -283,7 +283,7 @@ function theme_webform_results_table($variables) {
   // Generate a row for each submission.
   foreach ($submissions as $sid => $submission) {
     $link_text = $submission->is_draft ? t('@serial (draft)', array('@serial' => $submission->serial)) : $submission->serial;
-    $cell[] = l($link_text, 'node/' . $node->nid . '/submission/' . $sid);
+    $cell[] = l($link_text, 'node/' . $node->id() . '/submission/' . $sid);
     $cell[] = format_date($submission->submitted, 'short');
     $cell[] = theme('username', array('account' => $submission));
     $cell[] = $submission->remote_addr;
@@ -307,7 +307,7 @@ function theme_webform_results_table($variables) {
   }
 
   if (count($rows) == 0) {
-    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/' . $node->nid))), 'colspan' => 4));
+    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/' . $node->id()))), 'colspan' => 4));
   }
 
 
@@ -341,10 +341,10 @@ function webform_results_clear_form($form, $form_state, $node) {
   drupal_set_title(t('Clear Form Submissions'));
 
   $form = array();
-  $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
+  $form['nid'] = array('#type' => 'value', '#value' => $node->id());
   $question = t('Are you sure you want to delete all submissions for this form?');
 
-  return confirm_form($form, $question, 'node/' . $node->nid . '/webform-results', NULL, t('Clear'), t('Cancel'));
+  return confirm_form($form, $question, 'node/' . $node->id() . '/webform-results', NULL, t('Clear'), t('Cancel'));
 }
 
 function webform_results_clear_form_submit($form, &$form_state) {
@@ -369,7 +369,7 @@ function webform_results_download_form($form, &$form_state, $node) {
   // If an export is waiting to be downloaded, redirect the user there after
   // the page has finished loading.
   if (isset($_SESSION['webform_export_info'])) {
-    $download_url = url('node/' . $node->nid . '/webform-results/download-file', array('absolute' => TRUE));
+    $download_url = url('node/' . $node->id() . '/webform-results/download-file', array('absolute' => TRUE));
     $form['#attached']['js'][] = array('data' => array('webformExport' => $download_url), 'type' => 'setting');
   }
 
@@ -635,7 +635,7 @@ function webform_results_download_range_validate($element, $form_state) {
     'batch_size' => 1,
     'batch_number' => 0,
   );
-  if (!form_get_errors() && !webform_download_sids_count($form_state['values']['node']->nid, $range_options)) {
+  if (!form_get_errors() && !webform_download_sids_count($form_state['values']['node']->id(), $range_options)) {
     form_error($element['range_type'], t('The specified range will not return any results.'));
   }
 
@@ -648,13 +648,13 @@ function webform_results_download_range_after_build($element, &$form_state) {
   $node = $form_state['values']['node'];
 
   // Build a list of counts of new and total submissions.
-  $last_download = webform_download_last_download_info($node->nid);
+  $last_download = webform_download_last_download_info($node->id());
 
   $element['#webform_download_info']['sid'] = $last_download ? $last_download['sid'] : 0;
   $element['#webform_download_info']['serial'] = $last_download ? $last_download['serial'] : NULL;
   $element['#webform_download_info']['requested'] = $last_download ? $last_download['requested'] : $node->created;
-  $element['#webform_download_info']['total'] = webform_get_submission_count($node->nid, NULL, NULL);
-  $element['#webform_download_info']['new'] = webform_download_sids_count($node->nid, array('range_type' => 'new'));
+  $element['#webform_download_info']['total'] = webform_get_submission_count($node->id(), NULL, NULL);
+  $element['#webform_download_info']['new'] = webform_download_sids_count($node->id(), array('range_type' => 'new'));
 
   return $element;
 }
@@ -990,7 +990,7 @@ function webform_results_download_headers($node, $options) {
  */
 function webform_results_download_rows($node, $options, $serial_start = 0) {
   // Get all the required submissions for the download.
-  $filters['nid'] = $node->nid;
+  $filters['nid'] = $node->id();
   if (isset($options['sids'])) {
     $filters['sid'] = $options['sids'];
   }
@@ -1228,7 +1228,7 @@ function webform_results_download($node, $export_info) {
     // Insert a new record or update an existing record.
     db_merge('webform_last_download')
       ->key(array(
-        'nid' => $node->nid,
+        'nid' => $node->id(),
         'uid' => $account->id(),
       ))
       ->fields(array(
@@ -1272,7 +1272,7 @@ function webform_results_download_callback($node) {
     webform_results_download($node, $export_info);
   }
   else {
-    return t('No export file ready for download. The file may have already been downloaded by your browser. Visit the <a href="!href">download export form</a> to create a new export.', array('!href' => url('node/' . $node->nid . '/webform-results/download')));
+    return t('No export file ready for download. The file may have already been downloaded by your browser. Visit the <a href="!href">download export form</a> to create a new export.', array('!href' => url('node/' . $node->id() . '/webform-results/download')));
   }
 }
 
@@ -1328,7 +1328,7 @@ function webform_results_batch_rows($node, $format = 'delimited', $options = arr
   // operation.
   if (!isset($context['sandbox']['batch_number'])) {
     $context['sandbox']['batch_number'] = 0;
-    $context['sandbox']['sid_count'] = webform_download_sids_count($node->nid, $options['range']);
+    $context['sandbox']['sid_count'] = webform_download_sids_count($node->id(), $options['range']);
     $context['sandbox']['batch_max'] = max(1, ceil($context['sandbox']['sid_count'] / $options['range']['batch_size']));
     $context['sandbox']['serial'] = 0;
     $context['sandbox']['last_sid'] = 0;
@@ -1337,7 +1337,7 @@ function webform_results_batch_rows($node, $format = 'delimited', $options = arr
   // Retrieve the submissions for this batch process.
   $options['range']['batch_number'] = $context['sandbox']['batch_number'];
 
-  $query = webform_download_sids_query($node->nid, $options['range']);
+  $query = webform_download_sids_query($node->id(), $options['range']);
 
   // Join to the users table to include user name in results, as required by
   // webform_results_download_rows_process.
@@ -1438,7 +1438,7 @@ function webform_results_batch_results($node, $format, $options, &$context) {
  */
 function webform_results_batch_finished($success, $results, $operations) {
   if ($success) {
-    $download_url = url('node/' . $results['node']->nid . '/webform-results/download-file');
+    $download_url = url('node/' . $results['node']->id() . '/webform-results/download-file');
     drupal_set_message(t('Export creation complete. Your download should begin now. If it does not start, <a href="!href">download the file here</a>. This file may only be downloaded once.', array('!href' => $download_url)));
   }
   else {
@@ -1469,7 +1469,7 @@ function webform_results_analysis($node, $sids = array(), $analysis_component = 
 
   // Build a renderable for the content of this page.
   $analysis = array(
-    '#theme' => array('webform_analysis__' . $node->nid, 'webform_analysis'),
+    '#theme' => array('webform_analysis__' . $node->id(), 'webform_analysis'),
     '#node' => $node,
     '#component' => $analysis_component,
   );
@@ -1485,7 +1485,7 @@ function webform_results_analysis($node, $sids = array(), $analysis_component = 
       $view->init_handlers();
       $view->override_url = $_GET['q'];
       $view->preview = TRUE;
-      $view->pre_execute(array($node->nid));
+      $view->pre_execute(array($node->id()));
       $view->build();
       // Let modules modify the view just prior to executing it.
       foreach (module_implements('views_pre_execute') as $module) {
@@ -1515,13 +1515,13 @@ function webform_results_analysis($node, $sids = array(), $analysis_component = 
     if ($data = webform_component_invoke($component['type'], 'analysis', $component, $sids, isset($analysis_component), $query)) {
       drupal_alter('webform_analysis_component_data', $data, $node, $component);
       $analysis['data'][$cid] = array(
-        '#theme' => array('webform_analysis_component__' . $node->nid . '__' . $cid, 'webform_analysis_component__' . $node->nid, 'webform_analysis_component'),
+        '#theme' => array('webform_analysis_component__' . $node->id() . '__' . $cid, 'webform_analysis_component__' . $node->id(), 'webform_analysis_component'),
         '#node' => $node,
         '#component' => $component,
         '#data' => $data,
       );
       $analysis['data'][$cid]['basic'] = array(
-        '#theme' => array('webform_analysis_component_basic__' . $node->nid . '__' . $cid, 'webform_analysis_component_basic__' . $node->nid, 'webform_analysis_component_basic'),
+        '#theme' => array('webform_analysis_component_basic__' . $node->id() . '__' . $cid, 'webform_analysis_component_basic__' . $node->id(), 'webform_analysis_component_basic'),
         '#component' => $component,
         '#data' => $data,
       );
@@ -1638,7 +1638,7 @@ function webform_analysis_components_form($form, &$form_state, $node) {
   $component_list = webform_component_list($node, 'analysis', TRUE);
   $enabled_components = webform_analysis_enabled_components($node);
   if (empty($component_list)) {
-    $help = t('No components have added that support analysis. <a href="!url">Add components to your form</a> to see calculated data.', array('!url' => url('node/' . $node->nid . '/webform')));
+    $help = t('No components have added that support analysis. <a href="!url">Add components to your form</a> to see calculated data.', array('!url' => url('node/' . $node->id() . '/webform')));
   }
   elseif (empty($enabled_components)) {
     $help = t('No components have analysis enabled in this form. Enable analysis under the "Add analysis components" fieldset.');
@@ -1723,7 +1723,7 @@ function theme_webform_results_analysis($variables) {
   }
 
   if (count($rows) == 0) {
-    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/' . $node->nid))), 'colspan' => 20));
+    $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/' . $node->id()))), 'colspan' => 20));
   }
 
   return theme('table', array('header' => $header, 'rows' => $rows, 'sticky' => FALSE, 'attributes' => array('class' => array('webform-results-analysis'))));

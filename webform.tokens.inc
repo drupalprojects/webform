@@ -135,10 +135,10 @@ function webform_tokens($type, $tokens, array $data = array(), array $options = 
           $replacements[$original] = $sanitize ? check_plain($name) : $name;
           break;
         case 'url':
-          $replacements[$original] = $submission->sid ? url("node/{$node->nid}/submission/{$submission->sid}", $url_options) : '';
+          $replacements[$original] = $submission->sid ? url("node/{$node->id()}/submission/{$submission->sid}", $url_options) : '';
           break;
         case 'edit-url':
-          $replacements[$original] = $submission->sid ? url("node/{$node->nid}/submission/{$submission->sid}/edit", $url_options) : '';
+          $replacements[$original] = $submission->sid ? url("node/{$node->id()}/submission/{$submission->sid}/edit", $url_options) : '';
           break;
         case 'values':
           $submission_renderable = webform_submission_render($node, $submission, $email, $format, $excluded_components);
@@ -260,10 +260,10 @@ function webform_tokens($type, $tokens, array $data = array(), array $options = 
     }
     if ($submission->sid) {
       if ($url_tokens = token_find_with_prefix($tokens, 'url')) {
-        $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->nid}/submission/{$submission->sid}"), $options);
+        $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->id()}/submission/{$submission->sid}"), $options);
       }
       if ($url_tokens = token_find_with_prefix($tokens, 'edit-url')) {
-        $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->nid}/submission/{$submission->sid}/edit"), $options);
+        $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->id()}/submission/{$submission->sid}/edit"), $options);
       }
     }
   }

@@ -29,7 +29,7 @@ function webform_component_edit_form($form, $form_state, $node, $component, $clo
   );
   $form['nid'] = array(
     '#type' => 'value',
-    '#value' => $node->nid,
+    '#value' => $node->id(),
   );
   $form['cid'] = array(
     '#type' => 'value',
@@ -116,7 +116,7 @@ function webform_component_edit_form($form, $form_state, $node, $component, $clo
       '#description' => t('Private fields are shown only to users with results access.'),
       '#weight' => 45,
       '#parents' => array('extra', 'private'),
-      '#disabled' => empty($node->nid) ? FALSE : !webform_results_access($node),
+      '#disabled' => empty($node->id()) ? FALSE : !webform_results_access($node),
     );
   }
 
@@ -309,9 +309,9 @@ function webform_component_edit_form_submit($form, &$form_state) {
   cache_clear_all();
 
   // Refresh the entity cache, should it be cached in persistent storage.
-  entity_get_controller('node')->resetCache(array($node->nid));
+  entity_get_controller('node')->resetCache(array($node->id()));
 
-  $form_state['redirect'] = array('node/' . $node->nid . '/webform/components', isset($cid) ? array('query' => array('cid' => $cid)) : array());
+  $form_state['redirect'] = array('node/' . $node->id() . '/webform/components', isset($cid) ? array('query' => array('cid' => $cid)) : array());
 }
 
 /**
@@ -339,7 +339,7 @@ function webform_component_delete_form($form, $form_state, $node, $component) {
     $description = t('This will immediately delete the %name component from the %webform webform. This cannot be undone.', array('%name' => $node->webform['components'][$cid]['name'], '%webform' => $node->title));
   }
 
-  return confirm_form($form, $question, 'node/' . $node->nid . '/webform/components', $description, t('Delete'));
+  return confirm_form($form, $question, 'node/' . $node->id() . '/webform/components', $description, t('Delete'));
 }
 
 /**
@@ -363,9 +363,9 @@ function webform_component_delete_form_submit($form, &$form_state) {
   cache_clear_all();
 
   // Refresh the entity cache, should it be cached in persistent storage.
-  entity_get_controller('node')->resetCache(array($node->nid));
+  entity_get_controller('node')->resetCache(array($node->id()));
 
-  $form_state['redirect'] = 'node/' . $node->nid . '/webform/components';
+  $form_state['redirect'] = 'node/' . $node->id() . '/webform/components';
 }
 
 /**
@@ -465,7 +465,7 @@ function webform_component_delete($node, $component) {
   $delete_function = '_webform_delete_' . $component['type'];
   if (function_exists($delete_function)) {
     module_load_include('inc', 'webform', 'includes/webform.submissions');
-    $submissions = webform_get_submissions($node->nid);
+    $submissions = webform_get_submissions($node->id());
     foreach ($submissions as $submission) {
       if (isset($submission->data[$component['cid']])) {
         webform_component_invoke($component['type'], 'delete', $component, $submission->data[$component['cid']]);
@@ -475,11 +475,11 @@ function webform_component_delete($node, $component) {
 
   // Remove database entries.
   db_delete('webform_component')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('cid', $component['cid'])
     ->execute();
   db_delete('webform_submitted_data')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('cid', $component['cid'])
     ->execute();
 
@@ -513,7 +513,7 @@ function webform_component_delete($node, $component) {
             break 2;
           }
           db_delete($spec['table'])
-            ->condition('nid', $node->nid)
+            ->condition('nid', $node->id())
             ->condition('rgid', $rgid)
             ->condition($spec['index'], $key)
             ->execute();
@@ -526,7 +526,7 @@ function webform_component_delete($node, $component) {
   // Delete all elements under this element.
   $result = db_select('webform_component', 'c')
     ->fields('c')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('pid', $component['cid'])
     ->execute();
   foreach ($result as $row) {

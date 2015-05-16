@@ -36,7 +36,7 @@ class webform_handler_field_node_link_edit extends views_handler_field_node_link
     }
 
     $this->options['alter']['make_link'] = TRUE;
-    $this->options['alter']['path'] = "node/$node->nid/webform" .
+    $this->options['alter']['path'] = "node/$node->id()/webform" .
                                       (strlen($this->options['subpath']) ? '/' . $this->options['subpath'] : '');
 
     $text = !empty($this->options['text']) ? $this->options['text'] : t('edit webform');

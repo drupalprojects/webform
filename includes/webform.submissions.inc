@@ -61,7 +61,7 @@ function webform_submission_create($node, $account, $form_state, $is_preview = F
   }
   else {
     $submission = (object) array(
-      'nid' => $node->nid,
+      'nid' => $node->id(),
       'uid' => $account->id(),
       'sid' => NULL,
       'submitted' => REQUEST_TIME,
@@ -148,7 +148,7 @@ function webform_submission_insert($node, $submission) {
     }
     $submission->nid = $node->webform['nid'];
     if (empty($submission->serial)) {
-      $submission->serial = _webform_submission_serial_next_value($node->nid);
+      $submission->serial = _webform_submission_serial_next_value($node->id());
     }
     $submission->completed = empty($submission->completed) && !$submission->is_draft ? REQUEST_TIME : $submission->completed;
     drupal_write_record('webform_submissions', $submission);
@@ -198,11 +198,11 @@ function webform_submission_delete($node, $submission) {
   }
 
   db_delete('webform_submitted_data')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('sid', $submission->sid)
     ->execute();
   db_delete('webform_submissions')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('sid', $submission->sid)
     ->execute();
 
@@ -237,7 +237,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
 
     // Pass through the theme layer if using the default template.
     if ($email['template'] == 'default') {
-      $email['message'] = theme(array('webform_mail_' . $node->nid, 'webform_mail', 'webform_mail_message'), array('node' => $node, 'submission' => $submission, 'email' => $email));
+      $email['message'] = theme(array('webform_mail_' . $node->id(), 'webform_mail', 'webform_mail_message'), array('node' => $node, 'submission' => $submission, 'email' => $email));
     }
     else {
       $email['message'] = $email['template'];
@@ -247,7 +247,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
     $email['message'] = webform_replace_tokens($email['message'], $node, $submission, $email, (boolean)$email['html']);
 
     // Build the e-mail headers.
-    $email['headers'] = theme(array('webform_mail_headers_' . $node->nid, 'webform_mail_headers'), array('node' => $node, 'submission' => $submission, 'email' => $email));
+    $email['headers'] = theme(array('webform_mail_headers_' . $node->id(), 'webform_mail_headers'), array('node' => $node, 'submission' => $submission, 'email' => $email));
 
     // Assemble the From string.
     if (isset($email['headers']['From'])) {
@@ -406,7 +406,7 @@ function webform_submission_delete_form($form, $form_state, $node, $submission) 
   $form['#tree'] = TRUE;
   $form['details']['nid'] = array(
     '#type' => 'value',
-    '#value' => $node->nid,
+    '#value' => $node->id(),
   );
   $form['details']['sid'] = array(
     '#type' => 'value',
@@ -415,7 +415,7 @@ function webform_submission_delete_form($form, $form_state, $node, $submission) 
 
   $question = t('Are you sure you want to delete this submission?');
 
-  return confirm_form($form, NULL, "node/{$node->nid}/submission/{$submission->sid}", $question, t('Delete'), t('Cancel'));
+  return confirm_form($form, NULL, "node/{$node->id()}/submission/{$submission->sid}", $question, t('Delete'), t('Cancel'));
 }
 
 function webform_submission_delete_form_submit($form, &$form_state) {
@@ -426,7 +426,7 @@ function webform_submission_delete_form_submit($form, &$form_state) {
 
   // If no destination query was supplied in the URL (e.g. Edit tab), redirect
   // to the most-privledged destination.
-  $form_state['redirect'] = 'node/' . $node->nid .
+  $form_state['redirect'] = 'node/' . $node->id() .
                             (webform_results_access($node) ? '/webform-results' : '/submissions');
 }
 
@@ -450,7 +450,7 @@ function webform_submission_page($node, $submission, $format) {
   drupal_set_title(webform_submission_title($node, $submission));
 
   if ($format == 'form') {
-    $output = drupal_get_form('webform_client_form_' . $node->nid, $node, $submission);
+    $output = drupal_get_form('webform_client_form_' . $node->id(), $node, $submission);
   }
   else {
     $renderable = webform_submission_render($node, $submission, NULL, $format);
@@ -539,7 +539,7 @@ function webform_submission_resend($form, $form_state, $node, $submission) {
     );
     $form['actions']['cancel'] = array(
       '#type' => 'markup',
-      '#markup' => l(t('Cancel'), isset($_GET['destination']) ? $_GET['destination'] : 'node/' . $node->nid . '/submission/' . $submission->sid),
+      '#markup' => l(t('Cancel'), isset($_GET['destination']) ? $_GET['destination'] : 'node/' . $node->id() . '/submission/' . $submission->sid),
     );
   }
   return $form;
@@ -628,7 +628,7 @@ function webform_submission_render($node, $submission, $email, $format, $exclude
   $renderable['#format'] = $format;
 
   // Set the theme function for submissions.
-  $renderable['#theme'] = array('webform_submission_' . $node->nid, 'webform_submission');
+  $renderable['#theme'] = array('webform_submission_' . $node->id(), 'webform_submission');
 
   $components = $node->webform['components'];
   
@@ -967,7 +967,7 @@ function webform_submission_user_limit_check($node, $account = NULL) {
       ($account->id() !== 0 || $tracking_mode === 'ip_address' || $tracking_mode === 'strict')) {
     $query = db_select('webform_submissions')
       ->addTag('webform_submission_user_limit_check')
-      ->condition('nid', $node->nid)
+      ->condition('nid', $node->id())
       ->condition('is_draft', 0);
 
     if ($node->webform['submit_interval'] != -1) {
@@ -986,7 +986,7 @@ function webform_submission_user_limit_check($node, $account = NULL) {
   // Double check the submission history from the users machine using cookies.
   $num_submissions_cookie = 0;
   if ($account->id() === 0 && ($tracking_mode === 'cookie' || $tracking_mode === 'strict')) {
-    $cookie_name = 'webform-' . $node->nid;
+    $cookie_name = 'webform-' . $node->id();
 
     if (isset($_COOKIE[$cookie_name]) && is_array($_COOKIE[$cookie_name])) {
       foreach ($_COOKIE[$cookie_name] as $key => $timestamp) {
@@ -1028,7 +1028,7 @@ function webform_submission_total_limit_check($node) {
   // Retrieve submission data from the database.
   $query = db_select('webform_submissions')
     ->addTag('webform_submission_total_limit_check')
-    ->condition('nid', $node->nid)
+    ->condition('nid', $node->id())
     ->condition('is_draft', 0);
 
   if ($node->webform['total_submit_interval'] != -1) {
@@ -1064,19 +1064,19 @@ function template_preprocess_webform_submission_navigation(&$vars) {
   $start_path = ($vars['mode'] == 'print') ? 'print/' : 'node/';
 
   $previous_query = db_select('webform_submissions')
-    ->condition('nid', $vars['node']->nid)
+    ->condition('nid', $vars['node']->id())
     ->condition('sid', $vars['submission']->sid, '<');
   $previous_query->addExpression('MAX(sid)');
 
   $next_query = db_select('webform_submissions')
-    ->condition('nid', $vars['node']->nid)
+    ->condition('nid', $vars['node']->id())
     ->condition('sid', $vars['submission']->sid, '>');
   $next_query->addExpression('MIN(sid)');
 
   $vars['previous'] = $previous_query->execute()->fetchField();
   $vars['next'] = $next_query->execute()->fetchField();
-  $vars['previous_url'] = $start_path . $vars['node']->nid . '/submission/' . $vars['previous'] . ($vars['mode'] == 'form' ? '/edit' : '');
-  $vars['next_url'] = $start_path . $vars['node']->nid . '/submission/' . $vars['next'] . ($vars['mode'] == 'form' ? '/edit' : '');
+  $vars['previous_url'] = $start_path . $vars['node']->id() . '/submission/' . $vars['previous'] . ($vars['mode'] == 'form' ? '/edit' : '');
+  $vars['next_url'] = $start_path . $vars['node']->id() . '/submission/' . $vars['next'] . ($vars['mode'] == 'form' ? '/edit' : '');
 }
 
 /**

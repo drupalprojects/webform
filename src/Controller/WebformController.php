@@ -36,16 +36,16 @@ class WebformController extends ControllerBase {
     $rows = array();
     if (!empty($nodes)) {
       foreach ($nodes as $node) {
-        $node = Node::load($node->nid);
+        $node = Node::load($node->id());
         $rows[] = array(
           \Drupal::l($node->getTitle(), Url::fromRoute('entity.node.canonical', ['node' => $node->id()])),
-          t('Submissions'), //l(t('Submissions'), 'node/' . $node->nid . '/webform-results'),
-          t('Analysis'), //l(t('Analysis'), 'node/' . $node->nid . '/webform-results/analysis'),
-          t('Table'), //l(t('Table'), 'node/' . $node->nid . '/webform-results/table'),
-          t('Download'), //l(t('Download'), 'node/' . $node->nid . '/webform-results/download'),
+          t('Submissions'), //l(t('Submissions'), 'node/' . $node->id() . '/webform-results'),
+          t('Analysis'), //l(t('Analysis'), 'node/' . $node->id() . '/webform-results/analysis'),
+          t('Table'), //l(t('Table'), 'node/' . $node->id() . '/webform-results/table'),
+          t('Download'), //l(t('Download'), 'node/' . $node->id() . '/webform-results/download'),
           $node->access('update') ? \Drupal::l(t('Edit'), Url::fromRoute('entity.node.edit_form', ['node' => $node->id()])) : '',
-          t('Components'), //node_access('update', $node) ? l(t('Components'), 'node/' . $node->nid . '/webform') : '',
-          t('Clear'), //\Drupal::currentUser()->hasPermission('delete all webform submissions') ? l(t('Clear'), 'node/' . $node->nid . '/webform-results/clear') : '',
+          t('Components'), //node_access('update', $node) ? l(t('Components'), 'node/' . $node->id() . '/webform') : '',
+          t('Clear'), //\Drupal::currentUser()->hasPermission('delete all webform submissions') ? l(t('Clear'), 'node/' . $node->id() . '/webform-results/clear') : '',
         );
       }
     }
