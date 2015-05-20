@@ -2359,7 +2359,7 @@ function webform_client_form($form, &$form_state, $node, $submission = FALSE, $r
   $finished = isset($submission->is_draft) ? (!$submission->is_draft) : 0;
   $submit_button_text = $finished
                           ? t('Save')
-                          : (empty($node->webform['submit_text']) ? t('Submit') : t($node->webform['submit_text']));
+                          : (empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text']);
 
   // Bind arguments to $form to make them available in theming and form_alter.
   $form['#node'] = $node;
@@ -2506,8 +2506,8 @@ function webform_client_form($form, &$form_state, $node, $submission = FALSE, $r
     // form (typically used in Form Builder), includes all components.
     foreach ($component_tree['children'] as $cid => $component) {
       if ($component['type'] == 'pagebreak') {
-        $next_page_labels[$component['page_num'] - 1] = !empty($component['extra']['next_page_label']) ? t($component['extra']['next_page_label']) : t('Next Page >');
-        $prev_page_labels[$component['page_num']] = !empty($component['extra']['prev_page_label']) ? t($component['extra']['prev_page_label']) : t('< Previous Page');
+        $next_page_labels[$component['page_num'] - 1] = !empty($component['extra']['next_page_label']) ? $component['extra']['next_page_label'] : t('Next Page >');
+        $prev_page_labels[$component['page_num']] = !empty($component['extra']['prev_page_label']) ? $component['extra']['prev_page_label'] : t('< Previous Page');
       }
       if (!$filter || $sorter->componentVisibility($cid, $page_num)) {
         $component_value = isset($input_values[$cid]) ? $input_values[$cid] : NULL;
@@ -2515,8 +2515,8 @@ function webform_client_form($form, &$form_state, $node, $submission = FALSE, $r
       }
     }
     if ($preview) {
-      $next_page_labels[$page_count - 1] = $node->webform['preview_next_button_label'] ? t($node->webform['preview_next_button_label']) : t('Preview');
-      $prev_page_labels[$page_count] = $node->webform['preview_prev_button_label'] ? t($node->webform['preview_prev_button_label']) : t('< Previous');
+      $next_page_labels[$page_count - 1] = $node->webform['preview_next_button_label'] ? $node->webform['preview_next_button_label'] : t('Preview');
+      $prev_page_labels[$page_count] = $node->webform['preview_prev_button_label'] ? $node->webform['preview_prev_button_label'] : t('< Previous');
     }
 
     // Add the preview if needed.
@@ -4006,7 +4006,7 @@ function webform_get_cid(&$node, $form_key, $pid) {
 function webform_page_labels($node, $form_state = array()) {
   $page_count = 1;
   $page_labels = array();
-  $page_labels[0] = t($node->webform['progressbar_label_first']);
+  $page_labels[0] = $node->webform['progressbar_label_first'];
   foreach ($node->webform['components'] as $component) {
     if ($component['type'] == 'pagebreak') {
       $page_labels[$page_count] = $component['name'];
@@ -4014,10 +4014,10 @@ function webform_page_labels($node, $form_state = array()) {
     }
   }
   if ($node->webform['preview'] || !empty($form_state['webform']['preview'])) {
-    $page_labels[] = $node->webform['preview_title'] ? t($node->webform['preview_title']) : t('Preview');
+    $page_labels[] = $node->webform['preview_title'] ? $node->webform['preview_title'] : t('Preview');
   }
   if ($node->webform['progressbar_include_confirmation']) {
-    $page_labels[] = t($node->webform['progressbar_label_confirmation']);
+    $page_labels[] = $node->webform['progressbar_label_confirmation'];
   }
   return $page_labels;
 }
@@ -4969,7 +4969,7 @@ function webform_mollom_form_info($form_id) {
   foreach ($node->webform['components'] as $cid => $component) {
     if (webform_component_feature($component['type'], 'spam_analysis')) {
       $parents = implode('][', webform_component_parent_keys($node, $component));
-      $form_info['elements']['submitted][' . $parents] = check_plain(t($component['name']));
+      $form_info['elements']['submitted][' . $parents] = check_plain($component['name']);
     }
   }
   // Assign field mappings based on webform configuration.

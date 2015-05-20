@@ -299,7 +299,7 @@ function webform_configure_form($form, &$form_state, $node) {
     '#description' => t('The text for the button to go backwards from the preview page. If left blank, the default label %previous will be used.', array('%previous' => t('< Previous'))),
     '#size' => 20,
   );
-  $submit_button_text = $node->webform['submit_text'] ? t($node->webform['submit_text']) : t('Submit');
+  $submit_button_text = $node->webform['submit_text'] ? $node->webform['submit_text'] : t('Submit');
   $preview_default_message = t('Please review your submission. Your submission is not complete until you press the "@button" button!', array('@button' => $submit_button_text));
   $form['preview']['settings']['preview_message'] = array(
     '#type' => 'text_format',
