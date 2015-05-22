@@ -956,7 +956,7 @@ function webform_results_download_headers($node, $options) {
       if (webform_component_feature($component['type'], 'csv')) {
         $component_header = (array) webform_component_invoke($component['type'], 'csv_headers', $component, $options);
         // Allow modules to modify the component CSV header.
-        drupal_alter('webform_csv_header', $component_header, $component);
+        \Drupal::moduleHandler()->alter('webform_csv_header', $component_header, $component);
 
         // Merge component CSV header to overall CSV header
         $header[0] = array_merge($header[0], (array) $component_header[0]);
@@ -1038,7 +1038,7 @@ function webform_results_download_rows_process($node, $options, $serial_start, $
     foreach (array_keys($submission_information) as $token) {
       $cell = \Drupal::moduleHandler()->invokeAll('webform_results_download_submission_information_data', $token, $submission, $options, $serial_start, $row_count);
       $context = array('token' => $token, 'submission' => $submission, 'options' => $options, 'serial_start' => $serial_start, 'row_count' => $row_count);
-      drupal_alter('webform_results_download_submission_information_data', $cell, $context);
+      \Drupal::moduleHandler()->alter('webform_results_download_submission_information_data', $cell, $context);
       // implode() to ensure everything from a single value goes into one
       // column, even if more than one module responds to this item.
       $row[] = implode(', ', $cell);
@@ -1053,7 +1053,7 @@ function webform_results_download_rows_process($node, $options, $serial_start, $
           $data = webform_component_invoke($component['type'], 'csv_data', $component, $options, $raw_data);
 
           // Allow modules to modify the CSV data.
-          drupal_alter('webform_csv_data', $data, $component, $submission);
+          \Drupal::moduleHandler()->alter('webform_csv_data', $data, $component, $submission);
 
           if (is_array($data)) {
             $row = array_merge($row, array_values($data));
@@ -1083,7 +1083,7 @@ function webform_results_download_rows_process($node, $options, $serial_start, $
  */
 function webform_results_download_submission_information($node, $options = array()) {
   $submission_information = \Drupal::moduleHandler()->invokeAll('webform_results_download_submission_information_info');
-  drupal_alter('webform_results_download_submission_information_info', $submission_information);
+  \Drupal::moduleHandler()->alter('webform_results_download_submission_information_info', $submission_information);
 
   if (isset($options['components'])) {
     foreach ($submission_information as $key => $label) {
@@ -1512,7 +1512,7 @@ function webform_results_analysis($node, $sids = array(), $analysis_component = 
     // Do component specific call.
     $component = $node->webform['components'][$cid];
     if ($data = webform_component_invoke($component['type'], 'analysis', $component, $sids, isset($analysis_component), $query)) {
-      drupal_alter('webform_analysis_component_data', $data, $node, $component);
+      \Drupal::moduleHandler()->alter('webform_analysis_component_data', $data, $node, $component);
       $analysis['data'][$cid] = array(
         '#theme' => array('webform_analysis_component__' . $node->id() . '__' . $cid, 'webform_analysis_component__' . $node->id(), 'webform_analysis_component'),
         '#node' => $node,
@@ -1527,7 +1527,7 @@ function webform_results_analysis($node, $sids = array(), $analysis_component = 
     }
   }
 
-  drupal_alter('webform_analysis', $analysis);
+  \Drupal::moduleHandler()->alter('webform_analysis', $analysis);
   return drupal_render($analysis);
 }
 

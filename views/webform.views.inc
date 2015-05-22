@@ -614,7 +614,7 @@ function webform_views_pre_view($view, $display_id, $args) {
     $display->handler->get_handlers('field');
 
     // Allow other modules to alter these modifications to the view.
-    drupal_alter('webform_view', $view, $display_id, $args);
+    \Drupal::moduleHandler()->alter('webform_view', $view, $display_id, $args);
   }
 }
 

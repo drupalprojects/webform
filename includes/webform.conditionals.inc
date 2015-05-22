@@ -689,7 +689,7 @@ function webform_conditional_operators() {
 
   if (!isset($operators)) {
     $operators = \Drupal::moduleHandler()->invokeAll('webform_conditional_operator_info');
-    drupal_alter('webform_conditional_operators', $operators);
+    \Drupal::moduleHandler()->alter('webform_conditional_operators', $operators);
   }
 
   return $operators;

@@ -2702,7 +2702,7 @@ function _webform_client_form_add_component($node, $component, $component_value,
       _webform_component_classes($display_element, $component);
 
       // Allow modules to modify a "display only" webform component.
-      drupal_alter('webform_component_display', $display_element, $component);
+      \Drupal::moduleHandler()->alter('webform_component_display', $display_element, $component);
 
       // The form_builder() function usually adds #parents and #id for us, but
       // because these are not marked for #input, we need to add them manually.
@@ -2747,7 +2747,7 @@ function _webform_client_form_add_component($node, $component, $component_value,
       _webform_component_classes($element, $component);
 
       // Allow modules to modify a webform component that is going to be render in a form.
-      drupal_alter('webform_component_render', $element, $component);
+      \Drupal::moduleHandler()->alter('webform_component_render', $element, $component);
 
       // Add the element into the proper parent in the form.
       $parent_fieldset[$component['form_key']] = $element;
@@ -3747,7 +3747,7 @@ function _webform_fetch_draft_sid($nid, $uid) {
         'nid' => $nid,
         'uid' => $uid,
       );
-      drupal_alter('webform_draft', $sid, $context);
+      \Drupal::moduleHandler()->alter('webform_draft', $sid, $context);
     }
   }
   return $sid;
@@ -5088,7 +5088,7 @@ function _webform_submission_serial_next_value_used($nid) {
  *   - 'original_node' : The original fully loaded node object being cloned.
  *
  * @see clone_node_save()
- * @see drupal_alter()
+ * @see \Drupal::moduleHandler()->alter()
  */
 function webform_clone_node_alter(&$node, $context) {
   if (isset($node->webform)) {

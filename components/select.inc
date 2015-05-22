@@ -925,7 +925,7 @@ function _webform_select_options_info() {
       }
       $info = array_merge($info, $additions);
     }
-    drupal_alter('webform_select_options_info', $info);
+    \Drupal::moduleHandler()->alter('webform_select_options_info', $info);
   }
   return $info;
 }

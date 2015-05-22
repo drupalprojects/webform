@@ -74,7 +74,7 @@ function webform_submission_create($node, $account, $form_state, $is_preview = F
       'serial' => NULL,
       'data' => $data,
     );
-  drupal_alter('webform_submission_create', $submission, $node, $account, $form_state);
+    \Drupal::moduleHandler()->alter('webform_submission_create', $submission, $node, $account, $form_state);
   }
   return $submission;
 }
@@ -662,7 +662,7 @@ function webform_submission_render($node, $submission, $email, $format, $exclude
     }
   }
 
-  drupal_alter('webform_submission_render', $renderable);
+  \Drupal::moduleHandler()->alter('webform_submission_render', $renderable);
   return $renderable;
 }
 
