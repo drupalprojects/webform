@@ -5,6 +5,8 @@
  * Webform module textfield component.
  */
 
+use Drupal\Component\Utility\Unicode;
+
 /**
  * Implements _webform_defaults_component().
  */
@@ -238,7 +240,7 @@ function _webform_analysis_textfield($component, $sids = array(), $single = FALS
 
   $result = $query->execute();
   foreach ($result as $data) {
-    if (drupal_strlen(trim($data['data'])) > 0) {
+    if (Unicode::strlen(trim($data['data'])) > 0) {
       $nonblanks++;
       $wordcount += str_word_count(trim($data['data']));
     }

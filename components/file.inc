@@ -5,6 +5,8 @@
  * Webform module file component.
  */
 
+use Drupal\Component\Utility\Unicode;
+
 /**
  * Implements _webform_defaults_component().
  */
@@ -238,7 +240,7 @@ function _webform_edit_file_check_directory($element) {
   $directory = $element['extra']['directory']['#value'];
 
   $destination_dir = file_stream_wrapper_uri_normalize($scheme . '://webform/' . $directory);
-  $tokenized_dir = drupal_strtolower(webform_replace_tokens($destination_dir, $element['#node']));
+  $tokenized_dir = Unicode::strtolower(webform_replace_tokens($destination_dir, $element['#node']));
 
   // Sanity check input to prevent use parent (../) directories.
   if (preg_match('/\.\.[\/\\\]/', $tokenized_dir . '/')) {
@@ -277,7 +279,7 @@ function _webform_edit_file_extensions_validate($element, &$form_state) {
   // Additional types.
   $additional_extensions = explode(',', $element['addextensions']['#value']);
   foreach ($additional_extensions as $extension) {
-    $clean_extension = drupal_strtolower(trim($extension));
+    $clean_extension = Unicode::strtolower(trim($extension));
     if (!empty($clean_extension) && !in_array($clean_extension, $extensions)) {
       $extensions[] = $clean_extension;
     }
@@ -354,7 +356,7 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE, $submis
     ),
     '#pre_render' => array_merge(element_info_property('managed_file', '#pre_render'), array('webform_file_allow_access')),
     '#upload_location' => $component['extra']['scheme'] . '://webform/' . ($filter
-                                                                              ? drupal_strtolower(webform_replace_tokens($component['extra']['directory'], $node))
+                                                                              ? Unicode::strtolower(webform_replace_tokens($component['extra']['directory'], $node))
                                                                               : $component['extra']['directory']),
     '#progress_indicator' => $component['extra']['progress_indicator'],
     '#description' => $filter ? webform_filter_descriptions($component['extra']['description'], $node) : $component['extra']['description'],
@@ -608,7 +610,7 @@ function webform_file_process_rename($node, $submission, $component, $fid) {
 
   if ($file) {
     // Get the destination uri.
-    $destination_dir = $component['extra']['scheme'] . '://webform/' . drupal_strtolower(webform_replace_tokens($component['extra']['directory'], $node));
+    $destination_dir = $component['extra']['scheme'] . '://webform/' . Unicode::strtolower(webform_replace_tokens($component['extra']['directory'], $node));
     $destination_dir = file_stream_wrapper_uri_normalize($destination_dir);
 
     // Get the file extension.

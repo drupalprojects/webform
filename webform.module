@@ -11,14 +11,15 @@
  * @author Nathan Haug <nate@lullabot.com>
  */
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Url;
-use Drupal\Core\Render\Element;
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\PageCache\RequestPolicyInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 
 /**
  * Constants used in conditional logic.
@@ -2145,7 +2146,7 @@ function webform_block_view($delta = '') {
   );
 
   // Get the node ID from delta.
-  $nid = drupal_substr($delta, strrpos($delta, '-') + 1);
+  $nid = Unicode::substr($delta, strrpos($delta, '-') + 1);
 
   // Load node in current language.
   if (module_exists('translation')) {
@@ -2916,8 +2917,8 @@ function _webform_client_form_validate(&$elements, &$form_state, $form_id = NULL
       }
 
       // Verify that the value is not longer than #maxlength.
-      if (isset($elements['#maxlength']) && drupal_strlen($elements['#value']) > $elements['#maxlength']) {
-        form_error($elements, t('!name cannot be longer than %max characters but is currently %length characters long.', array('!name' => empty($elements['#title']) ? $elements['#parents'][0] : $elements['#title'], '%max' => $elements['#maxlength'], '%length' => drupal_strlen($elements['#value']))));
+      if (isset($elements['#maxlength']) && Unicode::strlen($elements['#value']) > $elements['#maxlength']) {
+        form_error($elements, t('!name cannot be longer than %max characters but is currently %length characters long.', array('!name' => empty($elements['#title']) ? $elements['#parents'][0] : $elements['#title'], '%max' => $elements['#maxlength'], '%length' => Unicode::strlen($elements['#value']))));
       }
 
       if (isset($elements['#options']) && isset($elements['#value'])) {
@@ -3573,7 +3574,7 @@ function theme_webform_element_text($variables) {
     if ($is_group) {
       $output .= '==' . $element['#title'] . '==';
     }
-    elseif (!in_array(drupal_substr($element['#title'], -1), array('?', ':', '!', '%', ';', '@'))) {
+    elseif (!in_array(Unicode::substr($element['#title'], -1), array('?', ':', '!', '%', ';', '@'))) {
       $output .= $element['#title'] . ':';
     }
     else {
@@ -3583,7 +3584,7 @@ function theme_webform_element_text($variables) {
 
   // Wrap long values at 65 characters, allowing for a few fieldset indents.
   // It's common courtesy to wrap at 75 characters in e-mails.
-  if ($is_group && drupal_strlen($value) > 65) {
+  if ($is_group && Unicode::strlen($value) > 65) {
     $value = wordwrap($value, 65, "\n");
     $lines = explode("\n", $value);
     foreach ($lines as $key => $line) {
@@ -4125,7 +4126,7 @@ function _webform_safe_name($name) {
   $new = trim($name);
   $new = _webform_transliterate($new);
   $new = str_replace(array(' ', '-', '/'), array('_', '_', '_'), $new);
-  $new = drupal_strtolower($new);
+  $new = Unicode::strtolower($new);
   $new = preg_replace('/[^a-z0-9_]/', '', $new);
   return $new;
 }
@@ -4240,7 +4241,7 @@ function webform_format_email_address($address, $name, $node = NULL, $submission
       $individual_name = $name[$key];
       $individual_name = webform_replace_tokens($individual_name, $node, $submission);
       if ($encode) {
-        $individual_name = mime_header_encode($individual_name);
+        $individual_name = Unicode::mimeHeaderEncode($individual_name);
       }
       $individual_name = trim($individual_name);
       $individual_address = '"' . $individual_name . '" <' . $individual_address . '>';
@@ -4563,11 +4564,11 @@ function webform_conditional_expand($element) {
  * Add class and wrapper class attributes to an element.
  */
 function _webform_component_classes(&$element, $component) {
-  if (isset($component['extra']['css_classes']) && drupal_strlen($component['extra']['css_classes'])) {
+  if (isset($component['extra']['css_classes']) && Unicode::strlen($component['extra']['css_classes'])) {
     $element['#attributes']['class'] = isset($element['#attributes']['class']) ? $element['#attributes']['class'] : array();
     $element['#attributes']['class'] = array_merge($element['#attributes']['class'], explode(' ' , $component['extra']['css_classes']));
   }
-  if (isset($component['extra']['wrapper_classes']) && drupal_strlen($component['extra']['wrapper_classes'])) {
+  if (isset($component['extra']['wrapper_classes']) && Unicode::strlen($component['extra']['wrapper_classes'])) {
     $element['#wrapper_attributes']['class'] = isset($element['#wrapper_attributes']['class']) ? $element['#wrapper_attributes']['class'] : array();
     $element['#wrapper_attributes']['class'] = array_merge($element['#wrapper_attributes']['class'], explode(' ' , $component['extra']['wrapper_classes']));
   }
@@ -4950,7 +4951,7 @@ function webform_mollom_form_list() {
 function webform_mollom_form_info($form_id) {
   module_load_include('inc', 'webform', 'includes/webform.components');
 
-  $nid = drupal_substr($form_id, 20);
+  $nid = Unicode::substr($form_id, 20);
   $node = node_load($nid);
   $form_info = array(
     'title' => t('@name form', array('@name' => $node->title)),
