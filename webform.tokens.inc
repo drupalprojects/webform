@@ -150,7 +150,7 @@ function webform_tokens($type, $tokens, array $data = array(), array $options = 
     }
 
     // Webform submission tokens for individual components.
-    if ($value_tokens = token_find_with_prefix($tokens, 'values')) {
+    if ($value_tokens = \Drupal::token()->findWithPrefix($tokens, 'values')) {
       // Get the full submission renderable without $excluded_components so that
       // individually referenced values are available.
       $submission_renderable = webform_submission_render($node, $submission, $email, $format);
@@ -248,24 +248,24 @@ function webform_tokens($type, $tokens, array $data = array(), array $options = 
     }
 
     // Chained token relationships.
-    if ($date_tokens = token_find_with_prefix($tokens, 'date')) {
-      $replacements += token_generate('date', $date_tokens, array('date' => $submission->submitted), $options);
+    if ($date_tokens = \Drupal::token()->findWithPrefix($tokens, 'date')) {
+      $replacements += \Drupal::token()->generate('date', $date_tokens, array('date' => $submission->submitted), $options);
     }
-    if ($submission->completed && ($date_tokens = token_find_with_prefix($tokens, 'completed_date'))) {
-      $replacements += token_generate('date', $date_tokens, array('date' => $submission->completed), $options);
+    if ($submission->completed && ($date_tokens = \Drupal::token()->findWithPrefix($tokens, 'completed_date'))) {
+      $replacements += \Drupal::token()->generate('date', $date_tokens, array('date' => $submission->completed), $options);
     }
-    if ($date_tokens = token_find_with_prefix($tokens, 'modified_date')) {
-      $replacements += token_generate('date', $date_tokens, array('date' => $submission->modified), $options);
+    if ($date_tokens = \Drupal::token()->findWithPrefix($tokens, 'modified_date')) {
+      $replacements += \Drupal::token()->generate('date', $date_tokens, array('date' => $submission->modified), $options);
     }
-    if (($user_tokens = token_find_with_prefix($tokens, 'user')) && $account = user_load($submission->uid)) {
-      $replacements += token_generate('user', $user_tokens, array('user' => $account), $options);
+    if (($user_tokens = \Drupal::token()->findWithPrefix($tokens, 'user')) && $account = user_load($submission->uid)) {
+      $replacements += \Drupal::token()->generate('user', $user_tokens, array('user' => $account), $options);
     }
     if ($submission->sid) {
-      if ($url_tokens = token_find_with_prefix($tokens, 'url')) {
-        $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->id()}/submission/{$submission->sid}"), $options);
+      if ($url_tokens = \Drupal::token()->findWithPrefix($tokens, 'url')) {
+        $replacements += \Drupal::token()->generate('url', $url_tokens, array('path' => "node/{$node->id()}/submission/{$submission->sid}"), $options);
       }
-      if ($url_tokens = token_find_with_prefix($tokens, 'edit-url')) {
-        $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->id()}/submission/{$submission->sid}/edit"), $options);
+      if ($url_tokens = \Drupal::token()->findWithPrefix($tokens, 'edit-url')) {
+        $replacements += \Drupal::token()->generate('url', $url_tokens, array('path' => "node/{$node->id()}/submission/{$submission->sid}/edit"), $options);
       }
     }
   }

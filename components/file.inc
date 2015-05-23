@@ -207,7 +207,7 @@ function _webform_edit_file($component) {
 function _webform_edit_file_rename_validate($element, &$form_state, $form) {
   $rename = trim($form_state['values']['extra']['rename']);
   form_set_value($element, $rename, $form_state);
-  if (strlen($rename) && !count(token_scan($rename))) {
+  if (strlen($rename) && !count(\Drupal::token()->scan($rename))) {
     form_error($element, t('To create unique file names, use at least one token in the file name pattern.'));
   }
 }

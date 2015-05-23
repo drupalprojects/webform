@@ -3796,8 +3796,8 @@ function _webform_filter_values($string, $node = NULL, $submission = NULL, $emai
  *   also result in all Webform submission tokens being returned as plain-text,
  *   without HTML markup, in preparation for e-mailing or other text-only
  *   purposes (default values, etc.). If TRUE, the tokens only are sanitized by
- *   token_replace. Otherwise $sanitize is the machine name of an import filter
- *   to be used with check_markup().
+ *   \Drupal::token()->replace(). Otherwise $sanitize is the machine name of an
+ *   import filter to be used with check_markup().
  */
 function webform_replace_tokens($string, $node = NULL, $submission = NULL, $email = NULL, $sanitize = FALSE) {
   // Don't do any filtering if the string is empty.
@@ -3816,7 +3816,7 @@ function webform_replace_tokens($string, $node = NULL, $submission = NULL, $emai
     $token_data['webform-email'] = $email;
   }
   $clear = is_bool($sanitize);
-  $string = token_replace($string, $token_data, array('clear' => $clear, 'sanitize' => $sanitize === TRUE));
+  $string = \Drupal::token()->replace($string, $token_data, array('clear' => $clear, 'sanitize' => $sanitize === TRUE));
   if (!$clear) {
     $string = webform_replace_tokens_clear(check_markup($string, $sanitize));
   }
@@ -3829,26 +3829,26 @@ function webform_replace_tokens($string, $node = NULL, $submission = NULL, $emai
  * Call this function in cases where you need to remove unreplaced tokens but
  * can't call webform_replace_tokens() with the option $clear = TRUE.
  *
- * In some cases the function token_replace() in webform_replace_tokens() needs
- * to be called with the option 'clear' => FALSE, to not remove input filters.
- * For security reasons webform_replace_tokens() is called before
- * check_markup(), where input filters get replaced. Tokens won't be replaced if
- * there is no value provided. These tokens i.e. [current-page:query:*] needs to
- * be removed to not show up in the output.
+ * In some cases the function \Drupal::token()->replace() in
+ * webform_replace_tokens() needs to be called with the option 'clear' => FALSE,
+ * to not remove input filters. For security reasons webform_replace_tokens() is
+ * called before check_markup(), where input filters get replaced. Tokens won't
+ * be replaced if there is no value provided. These tokens i.e.
+ * [current-page:query:*] needs to be removed to not show up in the output.
  *
  * Note: This function was previously named webform_clear_tokens, which
  * conflicted with the webform_clear module, being called as hook_tokens.
  *
  * @param string $text
  *   The text to have its tokens removed.
- * @see token_replace()
+ * @see \Drupal::token()->replace()
  */
 function webform_replace_tokens_clear($text) {
   if (empty($text)) {
     return $text;
   }
 
-  $text_tokens = token_scan($text);
+  $text_tokens = \Drupal::token()->scan($text);
   if (empty($text_tokens)) {
     return $text;
   }
