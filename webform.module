@@ -4309,7 +4309,7 @@ function webform_valid_email_address(&$emails, $allow_tokens = FALSE, $format = 
   $count = 0;
   foreach ($email_array as $email) {
     if ($allow_tokens) {
-      foreach (token_scan($email) as $tokens) {
+      foreach (\Drupal::token()->scan($email) as $tokens) {
         foreach ($tokens as $token) {
           $email = str_replace($token, 'admin@example.com', $email);
         }
