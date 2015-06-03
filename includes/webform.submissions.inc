@@ -8,6 +8,8 @@
  * @author Nathan Haug <nate@lullabot.com>
  */
 
+use Drupal\webform\Form\WebformClientForm;
+
 /**
  * Given an array of submitted values, flatten it into data for a submission.
  *
@@ -53,7 +55,7 @@ function webform_submission_data($node, $submitted) {
  *   A new submission object, possibly for preview
  */
 function webform_submission_create($node, $account, $form_state, $is_preview = FALSE, $prototype = NULL) {
-  $data = webform_submission_data($node, $form_state['values']['submitted']);
+  $data = webform_submission_data($node, $form_state->getValue('submitted'));
   if ($prototype) {
     $submission = clone $prototype;
     $submission->preview = $is_preview;
@@ -451,7 +453,8 @@ function webform_submission_page($node, $submission, $format) {
   drupal_set_title(webform_submission_title($node, $submission));
 
   if ($format == 'form') {
-    $output = \Drupal::formBuilder()->getForm('webform_client_form_' . $node->id(), $node, $submission);
+    $form_object = new WebformClientForm($node, $submission);
+    $output = \Drupal::formBuilder()->getForm($form_object);
   }
   else {
     $renderable = webform_submission_render($node, $submission, NULL, $format);

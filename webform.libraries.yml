@@ -1,3 +1,15 @@
+webform.webform:
+  version: VERSION
+  js:
+    js/webform.js: {}
+  css:
+    theme:
+      css/webform.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+
 webform.admin:
   version: VERSION
   js:

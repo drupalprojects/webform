@@ -21,6 +21,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
+use Drupal\webform\Form\WebformClientForm;
 
 /**
  * Constants used in conditional logic.
@@ -683,13 +684,14 @@ function webform_theme() {
     // webform.module.
     'webform_view' => array(
       'render element' => 'webform',
+      'function' => 'theme_webform_view',
     ),
     'webform_view_messages' => array(
       'variables' => array('node' => NULL, 'page' => NULL, 'submission_count' => NULL, 'user_limit_exceeded' => NULL, 'total_limit_exceeded' => NULL, 'allowed_roles' => NULL, 'closed' => NULL, 'cached' => NULL),
+      'function' => 'theme_webform_view_messages',
     ),
     'webform_form' => array(
       'render element' => 'form',
-      'template' => 'templates/webform-form',
       'pattern' => 'webform_form_[0-9]+',
     ),
     'webform_confirmation' => array(
@@ -699,6 +701,7 @@ function webform_theme() {
     ),
     'webform_element' => array(
       'render element' => 'element',
+      'function' => 'theme_webform_element',
     ),
     'webform_element_text' => array(
       'render element' => 'element',
@@ -1073,19 +1076,6 @@ function webform_webform_component_info() {
 function webform_webform_conditional_operator_info() {
   module_load_include('inc', 'webform', 'includes/webform.conditionals');
   return _webform_conditional_operator_info();
-}
-
-/**
- * Implements hook_forms().
- *
- * All webform_client_form forms share the same form handler
- */
-function webform_forms($form_id) {
-  $forms = array();
-  if (strpos($form_id, 'webform_client_form_') === 0) {
-    $forms[$form_id]['callback'] = 'webform_client_form';
-  }
-  return $forms;
 }
 
 /**
@@ -1924,7 +1914,8 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
   }
   // If this is the first time, generate the form array.
   else {
-    $form = \Drupal::formBuilder()->getForm('webform_client_form_' . $node->id(), $node, $submission, $resume_draft);
+    $form_object = new WebformClientForm($node, $submission, $resume_draft);
+    $form = \Drupal::formBuilder()->getForm($form_object);
     $cached_forms[$node->id()] = $form;
   }
 
@@ -1935,11 +1926,21 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
 
   // Print out messages for the webform.
   if (empty($node->in_preview) && !isset($node->webform_block) && !$logging_in) {
-    theme('webform_view_messages', array('node' => $node, 'page' => $page, 'submission_count' => $submission_count, 'user_limit_exceeded' => $user_limit_exceeded, 'total_limit_exceeded' => $total_limit_exceeded, 'allowed_roles' => $allowed_roles, 'closed' => $closed, 'cached' => $cached));
+    $build['webform_view_messages'] = [
+      '#theme' => 'webform_view_messages',
+      'node' => $node,
+      'page' => $page,
+      'submission_count' => $submission_count,
+      'user_limit_exceeded' => $user_limit_exceeded,
+      'total_limit_exceeded' => $total_limit_exceeded,
+      'allowed_roles' => $allowed_roles,
+      'closed' => $closed,
+      'cached' => $cached,
+    ];
   }
 
   // Add the output to the node.
-  $node->content['webform'] = array(
+  $build['webform'] = [
     '#theme' => 'webform_view',
     '#node' => $node,
     '#page' => $page,
@@ -1947,7 +1948,7 @@ function webform_node_view(array &$build, EntityInterface $node, EntityViewDispl
     '#enabled' => $enabled,
     '#visible' => $is_visible_in_extra_fields,
     '#weight' => 10,
-  );
+  ];
 }
 
 /**
@@ -2317,317 +2318,6 @@ function webform_block_save($delta = '', $edit = array()) {
   // We store settings for multiple blocks in just one variable
   // so we merge the existing settings with the new ones before save.
   variable_set('webform_blocks', array_merge($settings, $new_settings));
-}
-
-/**
- * Client form generation function. If this is displaying an existing
- * submission, pass in the $submission variable with the contents of the
- * submission to be displayed.
- *
- * @param $form
- *   The current form array (always empty).
- * @param $form_state
- *   The current form values of a submission, used in multipage webforms.
- * @param $node
- *   The current webform node.
- * @param $submission
- *   An object containing information about the form submission if we're
- *   displaying a result.
- * @param $resume_draft
- *   Optional. Set to TRUE when resuming a draft and skipping past previously-
- *   validated pages is desired.
- * @param $filter
- *   Whether or not to filter the contents of descriptions and values when
- *   building the form. Values need to be unfiltered to be editable by
- *   Form Builder.
- */
-function webform_client_form($form, &$form_state, $node, $submission = FALSE, $resume_draft = FALSE, $filter = TRUE) {
-  $account = \Drupal::currentUser();
-
-  // Attach necessary JavaScript and CSS.
-  $form['#attached'] = array(
-    'css' => array(drupal_get_path('module', 'webform') . '/css/webform.css'),
-    'js' => array(drupal_get_path('module', 'webform') . '/js/webform.js'),
-  );
-  form_load_include($form_state, 'inc', 'webform', 'includes/webform.components');
-  form_load_include($form_state, 'inc', 'webform', 'includes/webform.submissions');
-
-  // If in a multi-step form, a submission ID may be specified in form state.
-  // Load this submission. This allows anonymous users to use auto-save.
-  if (empty($submission) && !empty($form_state['values']['details']['sid'])) {
-    $submission = webform_get_submission($node->id(), $form_state['values']['details']['sid']);
-  }
-
-  $finished = isset($submission->is_draft) ? (!$submission->is_draft) : 0;
-  $submit_button_text = $finished
-                          ? t('Save')
-                          : (empty($node->webform['submit_text']) ? t('Submit') : $node->webform['submit_text']);
-
-  // Bind arguments to $form to make them available in theming and form_alter.
-  $form['#node'] = $node;
-  $form['#submission'] = $submission;
-  $form['#filter'] = $filter;
-
-  // Add a theme function for this form.
-  $form['#theme'] = array('webform_form_' . $node->id(), 'webform_form');
-
-  // Add a CSS class for all client forms.
-  $form['#attributes']['class'][] = 'webform-client-form';
-  $form['#attributes']['class'][] = 'webform-client-form-' . $node->id();
-
-  // Set the encoding type (necessary for file uploads).
-  $form['#attributes']['enctype'] = 'multipart/form-data';
-
-  // Sometimes when displaying a webform as a teaser or block, a custom action
-  // property is set to direct the user to the node page.
-  if (!empty($node->webform['action'])) {
-    $form['#action'] = $node->webform['action'];
-  }
-
-  $form['#submit'] = array('webform_client_form_pages', 'webform_client_form_submit');
-  $form['#validate'] = array('webform_client_form_validate');
-  // Add includes for used component types and pre/post validation handlers
-  $form['#process'] = array('webform_client_form_process');
-
-  if (is_array($node->webform['components']) && !empty($node->webform['components'])) {
-    // Prepare a new form array.
-    $form['submitted'] = array(
-      '#tree' => TRUE
-    );
-    $form['details'] = array(
-      '#tree' => TRUE,
-    );
-
-    // Put the components into a tree structure.
-    if (!isset($form_state['storage']['component_tree'])) {
-      $form_state['webform']['component_tree'] = array();
-      $form_state['webform']['page_count'] = 1;
-      $form_state['webform']['page_num'] = 1;
-      _webform_components_tree_build($node->webform['components'], $form_state['webform']['component_tree'], 0, $form_state['webform']['page_count']);
-
-      // If preview is enabled, increase the page count by one.
-      if ($node->webform['preview']) {
-        $form_state['webform']['page_count']++;
-      }
-      $form_state['webform']['preview'] = $node->webform['preview'];
-
-      // If this is the first time this draft has been restore and presented to
-      // the user, let them know that they are looking at a draft, rather than
-      // a new form. This applies to the node view page, but not to a submission
-      // edit page (where they presummably know what submission they are
-      // editing).
-      if ($resume_draft && empty($form_state['input'])) {
-        drupal_set_message(t('A partially-completed form was found. Please complete the remaining portions.'));
-      }
-    }
-    else {
-      $form_state['webform']['component_tree'] = $form_state['storage']['component_tree'];
-      $form_state['webform']['page_count'] = $form_state['storage']['page_count'];
-      $form_state['webform']['page_num'] = $form_state['storage']['page_num'];
-      $form_state['webform']['preview'] = $form_state['storage']['preview'];
-    }
-
-    // Set the input values based on whether we're editing an existing
-    // submission or not.
-    $input_values = isset($submission->data) ? $submission->data : array();
-
-    // Form state storage override any default submission information. Convert
-    // the value structure to always be an array, matching $submission->data.
-    if (isset($form_state['storage']['submitted'])) {
-      foreach ($form_state['storage']['submitted'] as $cid => $data) {
-        $input_values[$cid] = is_array($data) ? $data : array($data);
-      }
-    }
-
-    // Form state values override any default submission information. Convert
-    // the value structure to always be an array, matching $submission->data.
-    if (isset($form_state['values']['submitted'])) {
-      foreach ($form_state['values']['submitted'] as $cid => $data) {
-        $input_values[$cid] = is_array($data) ? $data : array($data);
-      }
-    }
-
-    // Generate conditional topological order & report any errors.
-    $sorter = webform_get_conditional_sorter($node);
-    $sorter->reportErrors();
-
-    // Excecute the condtionals on the current input values
-    $input_values = $sorter->executeConditionals($input_values);
-
-    // Allow values from other pages to be sent to browser for conditionals.
-    $form['#conditional_values'] = $input_values;
-
-    // For resuming a previous draft, find the next page after the last
-    // validated page.
-    if (!isset($form_state['storage']['page_num']) && $submission && $submission->is_draft && $submission->highest_valid_page) {
-      // Find the
-      //    1) previous/next non-empty page, or
-      //    2) the preview page, or
-      //    3) the preview page, forcing its display if the form would unexpectedly submit, or
-      //    4) page 1 even if empty, if no other previous page would be shown
-      $form_state['webform']['page_num'] = $submission->highest_valid_page;
-      do {
-        $form_state['webform']['page_num']++;
-      } while (!webform_get_conditional_sorter($node)->pageVisibility($form_state['webform']['page_num']));
-      if (!$form_state['webform']['preview'] && $form_state['webform']['page_num'] == $form_state['webform']['page_count'] + (int)!$form_state['webform']['preview']) {
-        // Force a preview to avert an unintended submission via Next.
-        $form_state['webform']['preview'] = TRUE;
-        $form_state['webform']['page_count']++;
-        // The form hasn't been submitted (ever) and the preview code will
-        // expect $form_state['values']['submitted'] to be set from a previous
-        // submission, so provide these values here.
-        $form_state['values']['submitted'] = $input_values;
-      }
-      $form_state['storage']['submitted'] = $input_values;
-    }
-
-    // Shorten up our variable names.
-    $component_tree = $form_state['webform']['component_tree'];
-    $page_count = $form_state['webform']['page_count'];
-    $page_num = $form_state['webform']['page_num'];
-    $preview = $form_state['webform']['preview'];
-
-    if ($page_count > 1) {
-      $page_labels = webform_page_labels($node, $form_state);
-      $form['progressbar'] = array(
-        '#theme' => 'webform_progressbar',
-        '#node' => $node,
-        '#page_num' => $page_num,
-        '#page_count' => count($page_labels),
-        '#page_labels' => $page_labels,
-        '#weight' => -100
-      );
-    }
-
-    // Check whether a previous submission was truncated. The length of the client form is not
-    // estimated before submission because a) the determination may not be accurate for some
-    // webform components and b) the error will be apparent upon submission.
-    webform_input_vars_check($form, $form_state, 'submitted');
-
-    // Recursively add components to the form. The unfiltered version of the
-    // form (typically used in Form Builder), includes all components.
-    foreach ($component_tree['children'] as $cid => $component) {
-      if ($component['type'] == 'pagebreak') {
-        $next_page_labels[$component['page_num'] - 1] = !empty($component['extra']['next_page_label']) ? $component['extra']['next_page_label'] : t('Next Page >');
-        $prev_page_labels[$component['page_num']] = !empty($component['extra']['prev_page_label']) ? $component['extra']['prev_page_label'] : t('< Previous Page');
-      }
-      if (!$filter || $sorter->componentVisibility($cid, $page_num)) {
-        $component_value = isset($input_values[$cid]) ? $input_values[$cid] : NULL;
-        _webform_client_form_add_component($node, $component, $component_value, $form['submitted'], $form, $input_values, 'form', $page_num, $filter);
-      }
-    }
-    if ($preview) {
-      $next_page_labels[$page_count - 1] = $node->webform['preview_next_button_label'] ? $node->webform['preview_next_button_label'] : t('Preview');
-      $prev_page_labels[$page_count] = $node->webform['preview_prev_button_label'] ? $node->webform['preview_prev_button_label'] : t('< Previous');
-    }
-
-    // Add the preview if needed.
-    if ($preview && $page_num === $page_count) {
-      $preview_submission = webform_submission_create($node, $account, $form_state, TRUE, $submission);
-      $preview_message = $node->webform['preview_message'];
-      if (strlen(trim(strip_tags($preview_message))) === 0) {
-        $preview_message = t('Please review your submission. Your submission is not complete until you press the "!button" button!', array('!button' => $submit_button_text));
-      }
-      $form['preview_message'] = array(
-        '#type' => 'markup',
-        '#markup' => webform_replace_tokens($preview_message, $node, $preview_submission, NULL, $node->webform['preview_message_format']),
-      );
-
-      $form['preview'] = webform_submission_render($node, $preview_submission, NULL, 'html', $node->webform['preview_excluded_components']);
-      $form['#attributes']['class'][] = 'preview';
-    }
-
-    // These form details help managing data upon submission.
-    $form['details']['nid'] = array(
-      '#type' => 'value',
-      '#value' => $node->id(),
-    );
-    $form['details']['sid'] = array(
-      '#type' => 'hidden',
-      '#value' => isset($submission->sid) ? $submission->sid : NULL,
-    );
-    $form['details']['uid'] = array(
-      '#type' => 'value',
-      '#value' => isset($submission->uid) ? $submission->uid : $account->id(),
-    );
-    $form['details']['page_num'] = array(
-      '#type'  => 'hidden',
-      '#value' => $page_num,
-    );
-    $form['details']['page_count'] = array(
-      '#type'  => 'hidden',
-      '#value' => $page_count,
-    );
-    $form['details']['finished'] = array(
-      '#type' => 'hidden',
-      '#value' => $finished,
-    );
-
-    // Add process functions to remove the IDs forced upon buttons and wrappers.
-    $actions_pre_render = array_merge(element_info_property('actions', '#pre_render', array()), array('webform_pre_render_remove_id'));
-    $buttons_pre_render = array_merge(element_info_property('submit', '#pre_render', array()), array('webform_pre_render_remove_id'));
-
-    // Add buttons for pages, drafts, and submissions.
-    $form['actions'] = array(
-      '#type' => 'actions',
-      '#weight' => 1000,
-      '#pre_render' => $actions_pre_render,
-    );
-
-    // Add the draft button.
-    if ($node->webform['allow_draft'] && (empty($submission) || $submission->is_draft) && $account->id() != 0) {
-      $form['actions']['draft'] = array(
-        '#type' => 'submit',
-        '#value' => t('Save Draft'),
-        '#weight' => -2,
-        '#validate' => array('webform_client_form_prevalidate'),    // Prevalidation only; no element validation for Save Draft
-        '#attributes' => array(
-          'formnovalidate' => 'formnovalidate',
-          'class' => array('webform-draft'),
-        ),
-        '#pre_render' => $buttons_pre_render,
-      );
-    }
-
-    // Add the submit button(s).
-    if ($page_num > 1) {
-      $form['actions']['previous'] = array(
-        '#type' => 'submit',
-        '#value' => $prev_page_labels[$page_num],
-        '#weight' => 5,
-        '#validate' => array(),
-        '#attributes' => array(
-          'formnovalidate' => 'formnovalidate',
-          'class' => array('webform-previous'),
-        ),
-        '#pre_render' => $buttons_pre_render,
-      );
-    }
-    if ($page_num == $page_count) {
-      $form['actions']['submit'] = array(
-        '#type' => 'submit',
-        '#value' => $submit_button_text,
-        '#weight' => 10,
-        '#attributes' => array(
-          'class' => array('webform-submit', 'button-primary'),
-        ),
-        '#pre_render' => $buttons_pre_render,
-      );
-    }
-    elseif ($page_num < $page_count) {
-      $form['actions']['next'] = array(
-        '#type' => 'submit',
-        '#value' => $next_page_labels[$page_num],
-        '#weight' => 10,
-        '#attributes' => array(
-          'class' => array('webform-next', 'button-primary'),
-        ),
-        '#pre_render' => $buttons_pre_render,
-      );
-    }
-  }
-
-  return $form;
 }
 
 /**
@@ -3535,13 +3225,15 @@ function theme_webform_element($variables) {
     case 'inline':
     case 'before':
     case 'invisible':
-      $output .= ' ' . theme('form_element_label', $variables);
+      $render_element = ['#theme' => 'form_element_label'] + $variables;
+      $output .= ' ' . drupal_render($render_element);
       $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
     case 'after':
       $output .= ' ' . $prefix . $element['#children'] . $suffix;
-      $output .= ' ' . theme('form_element_label', $variables) . "\n";
+      $render_element = ['#theme' => 'form_element_label'] + $variables;
+      $output .= ' ' . drupal_render($render_element) . "\n";
       break;
 
     case 'none':
@@ -3758,6 +3450,8 @@ function _webform_fetch_draft_sid($nid, $uid) {
 /**
  * Returns a new or cached WebformConditionals object for the specified node.
  *
+ * @todo Implement WebformConditionals as a service.
+ *
  * @param object $node
  *   The loaded webform node.
  * @returns object
@@ -3765,6 +3459,7 @@ function _webform_fetch_draft_sid($nid, $uid) {
  *   analyzed for dependencies.
  */
 function webform_get_conditional_sorter($node) {
+  module_load_include('inc', 'webform', 'includes/webform.webformconditionals');
   return WebformConditionals::factory($node);
 }
 
@@ -4015,7 +3710,7 @@ function webform_page_labels($node, $form_state = array()) {
       $page_count++;
     }
   }
-  if ($node->webform['preview'] || !empty($form_state['webform']['preview'])) {
+  if ($node->webform['preview'] || (!empty($form_state) && !empty($form_state->get(['webform', 'preview'])))) {
     $page_labels[] = $node->webform['preview_title'] ? $node->webform['preview_title'] : t('Preview');
   }
   if ($node->webform['progressbar_include_confirmation']) {
