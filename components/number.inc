@@ -5,6 +5,8 @@
  * Webform module number component.
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements _webform_defaults_component().
  */
@@ -266,7 +268,7 @@ function theme_webform_number($variables) {
   }
   _form_set_class($element, array('form-text', 'form-number'));
 
-  return '<input' . drupal_attributes($element['#attributes']) . ' />';
+  return '<input' . new Attribute($element['#attributes']) . ' />';
 }
 
 /**

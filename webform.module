@@ -19,6 +19,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\PageCache\RequestPolicyInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 
 /**
@@ -3519,7 +3520,7 @@ function template_preprocess_webform_element(&$variables) {
 function theme_webform_element($variables) {
   $element = $variables['element'];
 
-  $output = '<div ' . drupal_attributes($element['#wrapper_attributes']) . '>' . "\n";
+  $output = '<div ' . new Attribute($element['#wrapper_attributes']) . '>' . "\n";
   $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . webform_filter_xss($element['#field_prefix']) . '</span> ' : '';
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . webform_filter_xss($element['#field_suffix']) . '</span>' : '';
 
@@ -3695,7 +3696,7 @@ function theme_webform_inline_radio_label($variables) {
    }
 
   // The leading whitespace helps visually separate fields from inline labels.
-  return ' <label' . drupal_attributes($attributes) . '>' . $t('!title !required', array('!title' => $title, '!required' => $required)) . "</label>\n";
+  return ' <label' . new Attribute($attributes) . '>' . $t('!title !required', array('!title' => $title, '!required' => $required)) . "</label>\n";
 }
 
 /**

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Implements _webform_defaults_component().
@@ -237,7 +238,7 @@ function theme_webform_email($variables) {
   }
   _form_set_class($element, array('form-text', 'form-email'));
 
-  return '<input' . drupal_attributes($element['#attributes']) . ' />';
+  return '<input' .  new Attribute($element['#attributes']) . ' />';
 }
 
 /**
