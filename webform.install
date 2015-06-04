@@ -739,7 +739,7 @@ function webform_uninstall() {
     ->range(0, 1)
     ->execute();
   $entity_manager = \Drupal::entityManager();
-  $additional_fields = array_diff_assoc($entity_manager->getFieldDefinitions('node', 'webform'), $entity_manager->getBaseFieldDefinitions('node', 'webform'));
+  $additional_fields = array_diff_key($entity_manager->getFieldDefinitions('node', 'webform'), $entity_manager->getBaseFieldDefinitions('node', 'webform'));
   unset($additional_fields['body']);
   if (!$webform_nodes && !$additional_fields) {
     $node_type = NodeType::load('webform');
