@@ -37,7 +37,7 @@ class webform_handler_field_submission_count extends views_handler_field {
     $account = \Drupal::currentUser();
 
     $output = NULL;
-    if ($this->count_type == 'node' && variable_get('webform_node_' . $values->{$this->aliases['type']}, FALSE)) {
+    if ($this->count_type == 'node' && \Drupal::config('webform.settings')->get('node_' . $values->{$this->aliases['type']})) {
       module_load_include('inc', 'webform', 'includes/webform.submissions');
       $node = node_load($values->{$this->aliases['nid']});
       if (webform_results_access($node, $account)) {

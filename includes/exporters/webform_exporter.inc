@@ -17,7 +17,7 @@ class webform_exporter {
    */
   function __construct($options) {
     $this->options = $options;
-    $this->export_wordwrap = webform_variable_get('webform_export_wordwrap');
+    $this->export_wordwrap = \Drupal::config('webform.settings')->get('advanced.export_wordwrap');
   }
 
   /**

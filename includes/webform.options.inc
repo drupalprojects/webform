@@ -49,7 +49,7 @@ function webform_options_days($component, $flat, $arguments) {
   );
 
   // Order according to site settings for first day.
-  if ($first_day = variable_get('date_first_day', 0)) {
+  if ($first_day = \Drupal::config('system.date')->get('first_day')) {
     $week = array_splice($days, $first_day);
     $days = array_merge($week, $days);
   }

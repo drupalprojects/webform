@@ -185,17 +185,17 @@ function webform_email_edit_form($form, $form_state, $node, $email = array(), $c
         $description = t('Form submissions will be e-mailed to this address. Any email, select, or hidden form element may be selected as the recipient address. Multiple e-mail addresses may be separated by commas.');
         break;
       case 'subject':
-        $default_value = webform_replace_tokens(webform_variable_get('webform_default_subject'), $node);
+        $default_value = webform_replace_tokens(\Drupal::config('webform.settings')->get('email.default_subject'), $node);
         $title = t('E-mail subject');
         $description = t('Any textfield, select, or hidden form element may be selected as the subject for e-mails.');
         break;
       case 'from_address':
-        $default_value = webform_replace_tokens(webform_variable_get('webform_default_from_address'), $node);
+        $default_value = webform_replace_tokens(\Drupal::config('webform.settings')->get('email.default_from_address'), $node);
         $title = t('E-mail from address');
         $description = t('Any email, select, or hidden form element may be selected as the sender\'s e-mail address.');
         break;
       case 'from_name':
-        $default_value = webform_replace_tokens(webform_variable_get('webform_default_from_name'), $node);
+        $default_value = webform_replace_tokens(\Drupal::config('webform.settings')->get('email.default_from_name'), $node);
         $title = t('E-mail from name');
         $description = t('Any textfield, select, or hidden form element may be selected as the sender\'s name for e-mails.');
         break;
@@ -243,7 +243,7 @@ function webform_email_edit_form($form, $form_state, $node, $email = array(), $c
 
         // To avoid flooding the form with hundreds of textfields, skip select
         // lists that have huge numbers of options.
-        if (count($options) > webform_variable_get('webform_email_select_max')) {
+        if (count($options) > \Drupal::config('webform.settings')->get('advanced.email_select_max')) {
           unset($form[$field . '_component']['#options'][$cid]);
           continue;
         }
@@ -274,7 +274,7 @@ function webform_email_edit_form($form, $form_state, $node, $email = array(), $c
   }
 
   // Do not show the "E-mail from name" if using the short e-mail format.
-  if (webform_variable_get('webform_email_address_format') == 'short') {
+  if (\Drupal::config('webform.settings')->get('advanced.email_address_format') == 'short') {
     $form['from_name_option']['#access'] = FALSE;
     $form['from_name_custom']['#access'] = FALSE;
     $form['from_name_component']['#access'] = FALSE;
@@ -307,7 +307,7 @@ function webform_email_edit_form($form, $form_state, $node, $email = array(), $c
     '#type' => 'textarea',
     '#rows' => max(10, min(20, count(explode("\n", $template)))),
     '#default_value' => $template,
-    '#wysiwyg' => webform_variable_get('webform_email_html_capable') ? NULL : FALSE,
+    '#wysiwyg' => \Drupal::config('webform.settings')->get('email.html_capable') ? NULL : FALSE,
     '#description' => theme('webform_token_help', array('groups' => array('node', 'submission'))),
   );
 
@@ -315,14 +315,14 @@ function webform_email_edit_form($form, $form_state, $node, $email = array(), $c
     '#type' => 'checkbox',
     '#title' => t('Send e-mail as HTML'),
     '#default_value' => $email['html'],
-    '#access' => webform_variable_get('webform_email_html_capable') && !webform_variable_get('webform_format_override'),
+    '#access' => \Drupal::config('webform.settings')->get('email.html_capable') && !\Drupal::config('webform.settings')->get('email.format_override'),
   );
 
   $form['template']['attachments'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include files as attachments'),
     '#default_value' => $email['attachments'],
-    '#access' => webform_variable_get('webform_email_html_capable'),
+    '#access' => \Drupal::config('webform.settings')->get('email.html_capable'),
   );
 
   $form['template']['components'] = array(
@@ -624,15 +624,15 @@ function webform_email_load($eid, $nid) {
       'template' => 'default',
       'excluded_components' => array(),
       'exclude_empty' => 0,
-      'html' => webform_variable_get('webform_default_format'),
+      'html' => \Drupal::config('webform.settings')->get('email.default_format'),
       'attachments' => 0,
       'extra' => '',
     );
   }
   else {
     $email = isset($node->webform['emails'][$eid]) ? $node->webform['emails'][$eid] : FALSE;
-    if ($email && webform_variable_get('webform_format_override')) {
-      $email['html'] = webform_variable_get('webform_default_format');
+    if ($email && \Drupal::config('webform.settings')->get('email.format_override')) {
+      $email['html'] = \Drupal::config('webform.settings')->get('email.default_format');
     }
   }
 

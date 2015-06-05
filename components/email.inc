@@ -82,7 +82,7 @@ function _webform_edit_email($component) {
     '#description' => t('Allow multiple e-mail addresses, separated by commas.'),
     '#weight' => 0,
   );
-  if (webform_variable_get('webform_email_address_format') == 'long') {
+  if (\Drupal::config('webform.settings')->get('advanced.email_address_format') == 'long') {
     $form['extra']['format'] = array(
       '#type' => 'radios',
       '#title' => t('Format'),
@@ -254,7 +254,7 @@ function theme_webform_email($variables) {
  */
 function _webform_validate_email($form_element, &$form_state) {
   $component = $form_element['#webform_component'];
-  $format = webform_variable_get('webform_email_address_format') == 'long' ? $component['extra']['format'] : 'short';
+  $format = \Drupal::config('webform.settings')->get('advanced.email_address_format') == 'long' ? $component['extra']['format'] : 'short';
   webform_email_validate($form_element['#value'],
                          implode('][', $form_element ['#parents']),
                          TRUE,  // Required validation is done elsewhere.

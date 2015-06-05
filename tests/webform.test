@@ -1107,8 +1107,10 @@ class WebformGeneralTestCase extends WebformTestCase {
    */
   function testWebformCreateNewType() {
     // Enable webforms on the page content type.
-    variable_set('webform_node_webform', TRUE);
-    variable_set('webform_node_page', TRUE);
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('node_webform', TRUE)
+      ->set('node_page', TRUE)
+      ->save();
 
     $settings = array(
       'title' => 'Test webform-enabled page',

@@ -235,7 +235,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
   $send_count = 0;
   foreach ($emails as $eid => $email) {
     // Set the HTML property based on availablity of MIME Mail.
-    $email['html'] = ($email['html'] && webform_variable_get('webform_email_html_capable'));
+    $email['html'] = ($email['html'] && \Drupal::config('webform.settings')->get('email.html_capable'));
 
     // Pass through the theme layer if using the default template.
     if ($email['template'] == 'default') {
@@ -264,10 +264,10 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
     }
 
     // If requested and not already set, set Reply-To to the From and re-format From address.
-    if (webform_variable_get('webform_email_replyto') &&
+    if (\Drupal::config('webform.settings')->get('email.replyto') &&
         empty($email['headers']['Reply-To']) &&
-        ($default_from_name = webform_variable_get('webform_default_from_name')) &&
-        ($default_from_address = webform_variable_get('webform_default_from_address')) &&
+        ($default_from_name = \Drupal::config('webform.settings')->get('email.default_from_name')) &&
+        ($default_from_address = \Drupal::config('webform.settings')->get('email.default_from_address')) &&
         ($default_from_parts = explode('@', $default_from_address)) &&
         count($default_from_parts) == 2 &&
         $default_from_parts[1] &&
@@ -276,7 +276,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
       // webform from address.
       $email['headers']['Reply-To'] = $email['from'];
       $email['from'] = $default_from_address;
-      if (webform_variable_get('webform_email_address_format') == 'long') {
+      if (\Drupal::config('webform.settings')->get('advanced.email_address_format') == 'long') {
         $email_parts = webform_parse_email_address($email['headers']['Reply-To']);
         $from_name = t('!name via !site_name',
                         array('!name' => strlen($email_parts['name']) ? $email_parts['name'] : $email_parts['address'],
@@ -327,7 +327,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
 
     // Consolidate addressees into one message if permitted by configuration.
     $send_increment = 1;
-    if (!webform_variable_get('webform_email_address_individual')) {
+    if (!\Drupal::config('webform.settings')->get('advanced.email_address_individual')) {
       $send_increment = count($addresses_final);
       $addresses_final = array(implode(', ', $addresses_final));
     }
@@ -345,7 +345,7 @@ function webform_submission_send_mail($node, $submission, $emails = NULL) {
         'email' => $email,
       );
 
-      if (webform_variable_get('webform_email_html_capable')) {
+      if (\Drupal::config('webform.settings')->get('email.html_capable')) {
         // Load attachments for the e-mail.
         $attachments = array();
         if ($email['attachments']) {
@@ -947,7 +947,7 @@ function _webform_submission_spam_check($to, $subject, $from, $headers = array()
  *   Boolean TRUE if the user has exceeded their limit. FALSE otherwise.
  */
 function webform_submission_user_limit_check($node, $account = NULL) {
-  $tracking_mode = webform_variable_get('webform_tracking_mode');
+  $tracking_mode = \Drupal::config('webform.settings')->get('advanced.tracking_mode');
 
   if (!isset($account)) {
     $account = \Drupal::currentUser();

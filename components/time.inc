@@ -88,7 +88,7 @@ function _webform_edit_time($component) {
     '#description' => t('If using relative dates for a default value (e.g. "now") base the current time on this timezone.'),
     '#options' => array('user' => t('User timezone'), 'site' => t('Website timezone')),
     '#weight' => 2,
-    '#access' => variable_get('configurable_timezones', 1),
+    '#access' => \Drupal::config('system.date')->get('timezone.user.configurable'),
   );
   $form['display']['hourformat'] = array(
     '#type' => 'radios',
@@ -175,12 +175,12 @@ function webform_expand_time($element) {
   // Expand the default value from a string into an array.
   if (!empty($element['#default_value'])) {
     // Adjust the time based on the user or site timezone.
-    if (variable_get('configurable_timezones', 1) && $element['#timezone'] == 'user') {
+    if (\Drupal::config('system.date')->get('timezone.user.configurable') && $element['#timezone'] == 'user') {
       $account = \Drupal::currentUser();
       $timezone_name = isset($account->timezone) ? $account->timezone : 'UTC';
     }
     else {
-      $timezone_name = variable_get('date_default_timezone', 'UTC');
+      $timezone_name = \Drupal::config('system.date')->get('timezone.default');
     }
 
     $default_values = webform_date_array(webform_strtodate('c', $element['#default_value'], $timezone_name), 'time');

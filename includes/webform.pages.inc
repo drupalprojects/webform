@@ -174,7 +174,7 @@ function webform_configure_form($form, &$form_state, $node) {
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#description' => t('These permissions affect which roles can submit this webform. It does not prevent access to the webform page. If needing to prevent access to the webform page entirely, use a content access module such as <a href="http://drupal.org/project/taxonomy_access">Taxonomy Access</a> or <a href="http://drupal.org/project/node_privacy_byrole">Node Privacy by Role</a>.'),
-    '#access' => webform_variable_get('webform_submission_access_control'),
+    '#access' => \Drupal::config('webform.settings')->get('advanced.submission_access_control'),
     '#weight' => 10,
     '#states' => array(
       'invisible' => array(
@@ -423,7 +423,7 @@ function webform_configure_form_validate($form, &$form_state) {
 
   // Prohibit the combination of confidential + per-user limit + ip-only
   // submission tracking for anonymous users as it would not be enforceable.
-  if (webform_variable_get('webform_tracking_mode') == 'ip_address' &&
+  if (\Drupal::config('webform.settings')->get('advanced.tracking_mode') == 'ip_address' &&
       $form_state['values']['confidential'] &&
       $form_state['values']['enforce_limit'] == 'yes') {
     // Note that FAPI doesn't actually support error highlighting on radio or

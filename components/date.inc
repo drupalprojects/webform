@@ -72,7 +72,7 @@ function _webform_edit_date($component) {
     '#description' => t('If using relative dates for a default value (e.g. "today") base the current day on this timezone.'),
     '#options' => array('user' => t('User timezone'), 'site' => t('Website timezone')),
     '#weight' => 2,
-    '#access' => variable_get('configurable_timezones', 1),
+    '#access' => \Drupal::config('system.date')->get('timezone.user.configurable'),
   );
 
   $form['extra']['exclude'] = array(
@@ -383,7 +383,7 @@ function theme_webform_date($variables) {
     if ($element['#end_date']) {
       $calendar_class[] = 'webform-calendar-end-' . $element['#end_date'];
     }
-    $calendar_class[] ='webform-calendar-day-' . variable_get('date_first_day', 0);
+    $calendar_class[] ='webform-calendar-day-' . \Drupal::config('system.date')->get('first_day');
 
     $calendar = theme('webform_calendar', array('component' => $element['#webform_component'], 'calendar_classes' => $calendar_class));
   }
