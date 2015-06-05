@@ -28,7 +28,7 @@ class webform_handler_field_form_body extends views_handler_field {
   function render($values) {
     $node = node_load($values->{$this->aliases['nid']});
 
-    if (node_access('view', $node)) {
+    if ($node->access('view')) {
       // Populate $node->content['webform'] by reference.
       webform_node_view($node, 'form');
       $form_body = isset($node->content['webform']) ? drupal_render($node->content['webform']) : NULL;

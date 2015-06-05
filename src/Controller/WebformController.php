@@ -44,7 +44,7 @@ class WebformController extends ControllerBase {
           t('Table'), //l(t('Table'), 'node/' . $node->id() . '/webform-results/table'),
           t('Download'), //l(t('Download'), 'node/' . $node->id() . '/webform-results/download'),
           $node->access('update') ? \Drupal::l(t('Edit'), Url::fromRoute('entity.node.edit_form', ['node' => $node->id()])) : '',
-          t('Components'), //node_access('update', $node) ? l(t('Components'), 'node/' . $node->id() . '/webform') : '',
+          t('Components'), //$node->access('update') ? l(t('Components'), 'node/' . $node->id() . '/webform') : '',
           t('Clear'), //\Drupal::currentUser()->hasPermission('delete all webform submissions') ? l(t('Clear'), 'node/' . $node->id() . '/webform-results/clear') : '',
         );
       }

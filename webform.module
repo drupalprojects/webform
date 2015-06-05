@@ -537,7 +537,7 @@ function webform_confirmation_page_access($node) {
     // Logged-in users.
     if ($account->id()) {
       // User's own submission.
-      if ($submission->uid === $account->id() && node_access('view', $node)) {
+      if ($submission->uid === $account->id() && $node->access('view')) {
         return TRUE;
       }
       // User has results access to this submission.
@@ -557,8 +557,9 @@ function webform_confirmation_page_access($node) {
   }
   else {
     // No submission exists (such as auto-deleted by another module, such as
-    // webform_clear), just ensure that the user has access to view the node page.
-    if (node_access('view', $node)) {
+    // webform_clear), just ensure that the user has access to view the node
+    // page.
+    if ($node->access('view')) {
       return TRUE;
     }
   }
@@ -620,7 +621,7 @@ function webform_results_access($node, $account = NULL) {
 
   $module_access = count(array_filter(\Drupal::moduleHandler()->invokeAll('webform_results_access', $node, $account))) > 0;
 
-  return node_access('view', $node, $account) && ($module_access || $account->hasPermission('access all webform results') || ($account->hasPermission('access own webform results') && $account->id() == $node->uid));
+  return $node->access('view', $account) && ($module_access || $account->hasPermission('access all webform results') || ($account->hasPermission('access own webform results') && $account->id() == $node->uid));
 }
 
 /**
@@ -643,13 +644,14 @@ function webform_results_clear_access($node, $account = NULL) {
  *
  * If hook_webform_update_access is implemented by one or more other modules,
  * the results must be unanimously TRUE for access to be granted; otherwise it
- * is denied if even one implementation returns FALSE, regardless of node_access
- * and the 'edit webform components' permission. This allows implementors
- * complete flexibility.
+ * is denied if even one implementation returns FALSE, regardless of
+ * $node->access() and the 'edit webform components' permission. This allows
+ * implementers complete flexibility.
  *
  * hook_webform_update_access should return TRUE if access should absolutely
- * be granted, FALSE if it should absolutely be denied, or NULL if node_access
- * and 'edit webform components' permission should determine access.
+ * be granted, FALSE if it should absolutely be denied, or NULL if
+ * $node->access() and 'edit webform components' permission should determine
+ * access.
  *
  * @see hook_webform_update_access().
  */
@@ -657,7 +659,7 @@ function webform_node_update_access($node, $account = NULL) {
   $account = isset($account) ? $account : \Drupal::currentUser();
   $module_access = \Drupal::moduleHandler()->invokeAll('webform_update_access', $node, $account);
   return empty($module_access)
-            ? node_access('update', $node, $account) && $account->hasPermission('edit webform components')
+            ? $node->access('update', $account) && $account->hasPermission('edit webform components')
             : count(array_filter($module_access)) == count($module_access);
 }
 
@@ -2162,7 +2164,7 @@ function webform_block_view($delta = '') {
   $node = node_load($nid);
 
   // Return if user has no access to the webform node.
-  if (!node_access('view', $node)) {
+  if (!$node->access('view')) {
     return;
   }
 

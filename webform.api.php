@@ -681,8 +681,8 @@ function hook_webform_results_clear_access($node, $account) {
 }
 
 /**
- * Overrides the node_access and $account->hasPermission permission to access
- * and edit webform components, e-mails, conditions, and form settings.
+ * Overrides the $node->access() and $account->hasPermission() permission to
+ * access and edit webform components, e-mails, conditions, and form settings.
  *
  * Return NULL to defer to other modules. If all implementations defer, then
  * access to the node's EDIT tab plus 'edit webform components' permission
@@ -704,7 +704,7 @@ function hook_webform_results_clear_access($node, $account) {
  * @return boolean|NULL
  *   TRUE or FALSE if the user can access the webform results, or NULL if
  *   access should be deferred to other implementations of this hook or
- *   node_access('update') plus
+ *   $node->access('update') plus
  *   $account->hasPermission('edit webform components').
  */
 function hook_webform_update_access($node, $account) {
@@ -712,7 +712,7 @@ function hook_webform_update_access($node, $account) {
   // 'my webform component edit access' permission to see, edit, and delete the
   // webform components, e-mails, conditionals, and form settings.
   if ($node->type == 'webform_editable_by_user') {
-    return node_access('view', $node, $account) && $account->hasPermission('my webform component edit access');
+    return $node->access('view', $account) && $account->hasPermission('my webform component edit access');
   }
 }
 
