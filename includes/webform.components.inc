@@ -376,7 +376,7 @@ function webform_component_delete_form_submit($form, &$form_state) {
  */
 function webform_component_insert(&$component) {
   // Allow modules to modify the component before saving.
-  foreach (module_implements('webform_component_presave') as $module) {
+  foreach (\Drupal::moduleHandler()->getImplementations('webform_component_presave') as $module) {
     $function = $module . '_webform_component_presave';
     $function($component);
   }

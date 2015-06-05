@@ -1329,7 +1329,7 @@ function hook_webform_view_alter($view, $display_id, $args) {
  *   An array of mail system class names.
  */
 function hook_webform_html_capable_mail_systems_alter(&$systems) {
-  if (module_exists('my_module')) {
+  if (\Drupal::moduleHandler()->moduleExists('my_module')) {
     $systems[] = 'MyModuleMailSystem';
   }
 }

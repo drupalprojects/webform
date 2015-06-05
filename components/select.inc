@@ -78,7 +78,7 @@ function _webform_edit_select($component) {
     );
   }
 
-  if (module_exists('select_or_other')) {
+  if (\Drupal::moduleHandler()->moduleExists('select_or_other')) {
     $other['other_option'] = array(
       '#type' => 'checkbox',
       '#title' => t('Allow "Other..." option'),
@@ -103,7 +103,7 @@ function _webform_edit_select($component) {
     );
   }
 
-  if (module_exists('options_element')) {
+  if (\Drupal::moduleHandler()->moduleExists('options_element')) {
     $options = _webform_select_options($component, FALSE, FALSE);
 
     $form['items'] = array(
@@ -383,7 +383,7 @@ function _webform_render_select($component, $value = NULL, $filter = TRUE, $subm
     $element['#default_value'] = $option_value === '' ? NULL : $option_value;
   }
   
-  if ($component['extra']['other_option'] && module_exists('select_or_other')) {
+  if ($component['extra']['other_option'] && \Drupal::moduleHandler()->moduleExists('select_or_other')) {
     // Set display as a select_or_other element:
     $element['#type'] = 'select_or_other';
     $element['#other'] = !empty($component['extra']['other_text']) ? check_plain($component['extra']['other_text']) : t('Other...');
@@ -514,7 +514,7 @@ function _webform_display_select($component, $value, $format = 'html') {
  * something saveable.
  */
 function _webform_submit_select($component, $value) {
-  if (module_exists('select_or_other') && $component['extra']['other_option'] && is_array($value) && count($value) == 2 && isset($value['select'])) {
+  if (\Drupal::moduleHandler()->moduleExists('select_or_other') && $component['extra']['other_option'] && is_array($value) && count($value) == 2 && isset($value['select'])) {
     if (is_array($value['select']) && isset($value['select']['select_or_other'])) {
       unset($value['select']['select_or_other']);
       $value['select'][] = $value['other'];
@@ -545,7 +545,7 @@ function _webform_submit_select($component, $value) {
       }
       // Handle options that are added through the "other" field. Specifically
       // exclude the "select_or_other" value, which is added by the select list.
-      elseif ($component['extra']['other_option'] && module_exists('select_or_other') && $option_value != 'select_or_other') {
+      elseif ($component['extra']['other_option'] && \Drupal::moduleHandler()->moduleExists('select_or_other') && $option_value != 'select_or_other') {
         $return[] = $option_value;
       }
     }
@@ -868,7 +868,7 @@ function webform_select_options_ajax($source_name = '') {
   }
 
   $return = array(
-    'elementId' => module_exists('options_element') ? 'edit-items-options-options-field-widget' : 'edit-extra-items',
+    'elementId' => \Drupal::moduleHandler()->moduleExists('options_element') ? 'edit-items-options-options-field-widget' : 'edit-extra-items',
     'options' => $options,
   );
 
@@ -918,8 +918,8 @@ function _webform_select_options_info() {
   if (!isset($info)) {
     $info = array();
 
-    foreach (module_implements('webform_select_options_info') as $module) {
-      $additions = module_invoke($module, 'webform_select_options_info');
+    foreach (\Drupal::moduleHandler()->getImplementations('webform_select_options_info') as $module) {
+      $additions = \Drupal::moduleHandler()->invoke($module, 'webform_select_options_info');
       foreach ($additions as $key => $addition) {
         $additions[$key]['module'] = $module;
       }

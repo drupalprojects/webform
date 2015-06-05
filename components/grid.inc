@@ -59,7 +59,7 @@ function _webform_theme_grid() {
 function _webform_edit_grid($component) {
   $form = array();
 
-  if (module_exists('options_element')) {
+  if (\Drupal::moduleHandler()->moduleExists('options_element')) {
     $form['options'] = array(
       '#type' => 'fieldset',
       '#title' => t('Options'),

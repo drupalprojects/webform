@@ -191,7 +191,7 @@ function theme_webform_results_submissions_header($variables) {
     $columns[] = array('data' => t('User'), 'field' => 'name');
     $columns[] = array('data' => t('IP Address'), 'field' => 'remote_addr');
   }
-  $columns[] = array('data' => t('Operations'), 'colspan' => module_exists('print') ? 5 : 3);
+  $columns[] = array('data' => t('Operations'), 'colspan' => \Drupal::moduleHandler()->moduleExists('print') ? 5 : 3);
 
   return $columns;
 }

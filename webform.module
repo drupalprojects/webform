@@ -374,7 +374,7 @@ function webform_menu() {
   );
 
   // Devel integration for submissions.
-  if (module_exists('devel')) {
+  if (\Drupal::moduleHandler()->moduleExists('devel')) {
     $items['node/%webform_menu/submission/%webform_menu_submission/devel'] = array(
       'title' => 'Devel',
       'load arguments' => array(1),
@@ -390,7 +390,7 @@ function webform_menu() {
       'title' => 'Load',
       'type' => MENU_DEFAULT_LOCAL_TASK,
     );
-    if (module_exists('token')) {
+    if (\Drupal::moduleHandler()->moduleExists('token')) {
       $items['node/%webform_menu/submission/%webform_menu_submission/devel/token'] = array(
         'title' => 'Tokens',
         'load arguments' => array(1),
@@ -1096,7 +1096,7 @@ function webform_webform_submission_actions($node, $submission) {
   $destination = drupal_get_destination();
   $account = \Drupal::currentUser();
 
-  if (module_exists('print_pdf') && $account->hasPermission('access PDF version')) {
+  if (\Drupal::moduleHandler()->moduleExists('print_pdf') && $account->hasPermission('access PDF version')) {
     $actions['printpdf'] = array(
       'title' => t('Download PDF'),
       'href' => 'printpdf/' . $node->id() . '/submission/' . $submission->sid,
@@ -1104,7 +1104,7 @@ function webform_webform_submission_actions($node, $submission) {
     );
   }
 
-  if (module_exists('print') && $account->hasPermission('access print')) {
+  if (\Drupal::moduleHandler()->moduleExists('print') && $account->hasPermission('access print')) {
     $actions['print'] = array(
       'title' => t('Print'),
       'href' => 'print/' . $node->id() . '/submission/' . $submission->sid,
@@ -2153,7 +2153,7 @@ function webform_block_view($delta = '') {
   $nid = Unicode::substr($delta, strrpos($delta, '-') + 1);
 
   // Load node in current language.
-  if (module_exists('translation')) {
+  if (\Drupal::moduleHandler()->moduleExists('translation')) {
     global $language;
     if (($translations = translation_node_get_translations($nid)) && (isset($translations[$language->language]))) {
       $nid = $translations[$language->language]->nid;
@@ -3802,7 +3802,7 @@ function theme_webform_token_help($variables) {
     ),
   );
 
-  if (!module_exists('token')) {
+  if (!\Drupal::moduleHandler()->moduleExists('token')) {
     // No token module at all. Display a simple suggestion to enable it.
     $help['help']['#markup'] .= '<p>' . t('A full listing of tokens may be listed here by installing the <a href="http://drupal.org/project/token">Token module</a>.') . '</p>';
     unset($help['token_tree']);
