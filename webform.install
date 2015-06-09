@@ -707,6 +707,33 @@ function webform_requirements($phase) {
 function webform_install() {
   module_set_weight('webform', -1);
 
+  // Create Webform content type, if required.
+  $config = \Drupal::config('webform.settings');
+  if (!$config->get('install_skip_content_type_creation')) {
+    $webform = NodeType::create([
+      'name' => 'Webform',
+      'type' => 'webform',
+      'description' => 'Use <em>webforms</em> for forms or questionnaires accessible to users. Submission results and statistics are recorded and accessible to privileged users.',
+      'has_title' => TRUE,
+      'title_label' => 'Title',
+      'preview' => TRUE,
+      'status' => TRUE,
+      'promote' => FALSE,
+      'sticky' => FALSE,
+      'revision' => FALSE,
+      'submitted' => TRUE,
+      'langcode' => 'en',
+    ])->save();
+    if ($config->get('install_add_body_field')) {
+      node_add_body_field($webform);
+    }
+  }
+  else {
+    $edit_config = \Drupal::configFactory()->getEditable('webform.settings');
+    $edit_config->set('node_types_primary', [])->save();
+    $edit_config->clear('node_webform')->save();
+  }
+
   // Set default values for config which require dynamic values.
   $default_from_address = \Drupal::config('system.site')->get('mail') ? \Drupal::config('system.site')->get('mail') : ini_get('sendmail_from');
   $default_from_name = \Drupal::config('system.site')->get('name');
@@ -743,7 +770,9 @@ function webform_uninstall() {
   unset($additional_fields['body']);
   if (!$webform_nodes && !$additional_fields) {
     $node_type = NodeType::load('webform');
-    $node_type->delete();
-    drupal_flush_all_caches();
+    if (!empty($node_type)) {
+      $node_type->delete();
+      drupal_flush_all_caches();
+    }
   }
 }
