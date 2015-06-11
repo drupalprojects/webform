@@ -3,9 +3,11 @@ node_types_primary:
 node_webform: 1
 disabled_components: {  }
 email:
+  # default_from_address has a dynamic default value defined in webform.install
+  # default_from_name has a dynamic default value defined in webform.install
   default_subject: 'Form submission from: [node:title]'
-  replyto: 1
-  html_capable: 0
+  replyto: true
+  html_capable: false
   default_format: 0
   format_override: 0
 progressbar:
@@ -23,7 +25,7 @@ advanced:
   export_format: 'excel'
   csv_delimiter: '\t'
   export_wordwrap: 0
-  excel_legacy_exporter: 0
+  excel_legacy_exporter: false
   submission_access_control: 1
   email_select_max: 50
 allowed_tags:

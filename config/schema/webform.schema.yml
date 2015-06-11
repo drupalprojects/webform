@@ -52,9 +52,6 @@ webform.settings:
       type: mapping
       label: 'Advanced options'
       mapping:
-        search_index:
-          type: boolean
-          label: 'Include webform forms in search index'
         tracking_mode:
           type: string
           label: 'Track anonymous users by'
@@ -74,16 +71,16 @@ webform.settings:
           type: string
           label: 'Default export delimiter'
         export_wordwrap:
-          type: boolean
+          type: integer
           label: 'Word-wrap all exported text'
         excel_legacy_exporter:
           type: boolean
           label: 'Legacy Excel exporter enabled'
         submission_access_control:
-          type: boolean
+          type: integer
           label: 'Submission access control'
         email_select_max:
-          type: boolean
+          type: integer
           label: 'E-mail mapping limit'
     allowed_tags:
       type: array
