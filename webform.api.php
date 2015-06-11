@@ -711,7 +711,7 @@ function hook_webform_update_access($node, $account) {
   // Allow anyone who can see webform_editable_by_user nodes and who has
   // 'my webform component edit access' permission to see, edit, and delete the
   // webform components, e-mails, conditionals, and form settings.
-  if ($node->type == 'webform_editable_by_user') {
+  if ($node->bundle() == 'webform_editable_by_user') {
     return $node->access('view', $account) && $account->hasPermission('my webform component edit access');
   }
 }

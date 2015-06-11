@@ -416,7 +416,7 @@ function webform_menu_load($nid) {
     return FALSE;
   }
   $node = node_load($nid);
-  if (!isset($node->type) || !\Drupal::config('webform.settings')->get('node_' . $node->type)) {
+  if (!\Drupal::config('webform.settings')->get('node_' . $node->bundle())) {
     return FALSE;
   }
   return $node;
@@ -1590,7 +1590,7 @@ function webform_node_defaults() {
  * Implements hook_node_prepare().
  */
 function webform_node_prepare($node) {
-  if (\Drupal::config('webform.settings')->get('node_' . $node->type) && !isset($node->webform)) {
+  if (\Drupal::config('webform.settings')->get('node_' . $node->bundle()) && !isset($node->webform)) {
     $node->webform = webform_node_defaults();
   }
 }
@@ -1732,7 +1732,7 @@ function webform_user_role_delete($role) {
  */
 function webform_form_alter(&$form, $form_state, $form_id) {
   $matches = array();
-  if (isset($form['#node']->type) && $form_id == $form['#node']->type . '_node_form' && \Drupal::config('webform.settings')->get('node_' . $form['#node']->type)) {
+  if (isset($form['#node']) && $form_id == $form['#node']->bundle() . '_node_form' && \Drupal::config('webform.settings')->get('node_' . $form['#node']->bundle())) {
     $node = $form['#node'];
     // Preserve all Webform options currently set on the node.
     $form['webform'] = array(
@@ -1741,7 +1741,7 @@ function webform_form_alter(&$form, $form_state, $form_id) {
     );
 
     // If a new node, redirect the user to the components form after save.
-    if (empty($node->id()) && in_array($node->type, \Drupal::config('webform.settings')->get('node_types_primary'))) {
+    if (empty($node->id()) && in_array($node->bundle(), \Drupal::config('webform.settings')->get('node_types_primary'))) {
       $form['actions']['submit']['#submit'][] = 'webform_form_submit';
     }
   }
@@ -2278,7 +2278,7 @@ function webform_block_configure($delta = '') {
     '#title' => t('View mode'),
     '#default_value' => $settings['display'],
     '#options' => $view_modes,
-    '#description' => t('The view mode determines how much of the webform to show within the block. You may <a href="!view_modes">customize different view modes</a> (other than the "Form only" mode) or even create new custom view modes if either the <a href="http://drupal.org/project/entity_view_mode">Entity view modes</a> or <a href="http://drupal.org/project/ds">Display Suite</a> modules are installed.', array('!view_modes' => url('admin/structure/types/manage/' . $node->type . '/display'))),
+    '#description' => t('The view mode determines how much of the webform to show within the block. You may <a href="!view_modes">customize different view modes</a> (other than the "Form only" mode) or even create new custom view modes if either the <a href="http://drupal.org/project/entity_view_mode">Entity view modes</a> or <a href="http://drupal.org/project/ds">Display Suite</a> modules are installed.', array('!view_modes' => url('admin/structure/types/manage/' . $node->bundle() . '/display'))),
   );
 
   $form['pages_block'] = array(

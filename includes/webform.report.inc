@@ -119,7 +119,7 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
  *   The loaded view.
  */
 function webform_get_view($node, $view_id) {
-  foreach (array("{$view_id}_{$node->id()}", "{$view_id}_{$node->type}", $view_id) as $id) {
+  foreach (array("{$view_id}_{$node->id()}", "{$view_id}_{$node->bundle()}", $view_id) as $id) {
     $view = views_get_view($id);
     if ($view) {
       return $view;
