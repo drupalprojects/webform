@@ -3722,18 +3722,6 @@ function webform_page_labels($node, $form_state = array()) {
 }
 
 /**
- * Retrieve a Drupal variable with the appropriate default value.
- */
-function webform_variable_get($variable) {
-  switch ($variable) {
-    case 'webform_table':
-      $result = variable_get('webform_table', FALSE);
-      break;
-  }
-  return $result;
-}
-
-/**
  * Output the contents of token help used throughout Webform.
  *
  * In earlier versions of Token, a fieldset is used to show all the tokens.
@@ -4419,7 +4407,8 @@ function webform_date_format($type = NULL, $exclude = array()) {
     $type_name = $type ? $type : \Drupal::config('webform.settings')->get('advanced.date_type');
 
     // Format date according to site's given format.
-    $format = variable_get('date_format_' . $type_name, 'D, m/d/Y');
+    $pattern = \Drupal::config('core.date_format.' . $type_name)->get('pattern');
+    $format = $pattern ? $pattern : 'D, m/d/Y';
 
     // Date/Time formatting characters
     // WHAT           REQUIRED (at least 1) OPTIONAL (allowed but insufficient)

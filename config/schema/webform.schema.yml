@@ -88,3 +88,9 @@ webform.settings:
     update_batch_size:
       type: integer
       label: 'Update batch size'
+    export_path:
+      type: string
+      label: 'Export path'
+    table:
+      type: boolean
+      label: 'Enable table listings'

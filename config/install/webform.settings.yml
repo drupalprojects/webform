@@ -35,3 +35,5 @@ allowed_tags:
   - code
   - img
 update_batch_size: 100
+export_path: 'temporary://'
+table: false

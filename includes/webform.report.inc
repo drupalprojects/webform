@@ -18,7 +18,7 @@ function webform_results_submissions($node, $user_filter, $pager_count) {
 
   // Determine whether views or hard-coded tables should be used for the
   // submissions table.
-  if (!webform_variable_get('webform_table')) {
+  if (!\Drupal::config('webform.settings')->get('table')) {
     // Load the submissions view
     $view = webform_get_view($node, 'webform_submissions');
     if ($user_filter) {
@@ -217,7 +217,7 @@ function webform_results_table($node, $pager_count = 0) {
 
   // Determine whether views or hard-coded tables should be used for the
   // submissions table.
-  if (!webform_variable_get('webform_table')) {
+  if (!\Drupal::config('webform.settings')->get('table')) {
     // Load and preview the results view with a node id argument
     $view = webform_get_view($node, 'webform_results');
     return $view->preview('default', array($node->id()));
@@ -754,6 +754,7 @@ function theme_webform_results_download_select_format($variables) {
 function webform_results_download_form_submit(&$form, &$form_state) {
   $node = $form_state['values']['node'];
   $format = $form_state['values']['format'];
+  $config = \Drupal::config('webform.settings');
 
   $options = array(
     'delimiter' => $form_state['values']['delimiter'],
@@ -786,7 +787,7 @@ function webform_results_download_form_submit(&$form, &$form_state) {
     $batch_size = min($batch_size, 5000);
 
     // Allow a non-UI configuration to override the batch size.
-    $batch_size = variable_get('webform_export_batch_size', $batch_size);
+    $batch_size = $config->get('export_batch_size') ? $config->get('export_batch_size') : $batch_size;
 
     $options['range']['batch_size'] = $batch_size;
   }
@@ -802,7 +803,7 @@ function webform_results_download_form_submit(&$form, &$form_state) {
  * Returns a temporary export filename.
  */
 function _webform_export_tempname() {
-  return drupal_tempnam(variable_get('webform_export_path', 'temporary://'), 'webform_');
+  return drupal_tempnam(\Drupal::config('webform.settings')->get('export_path'), 'webform_');
 }
 
 /**
