@@ -1294,11 +1294,14 @@ function webform_file_download($uri) {
  *   An array of node type names.
  */
 function webform_node_types() {
-  $types = array();
+  static $types = NULL;
   $config = \Drupal::config('webform.settings');
-  foreach (node_type_get_names() as $type => $name) {
-    if ($config->get('node_' . $type)) {
-      $types[] = $type;
+  if (!isset($types)) {
+    $types = [];
+    foreach (node_type_get_names() as $type => $name) {
+      if ($config->get('node_' . $type)) {
+        $types[] = $type;
+      }
     }
   }
   return $types;
