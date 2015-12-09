@@ -602,7 +602,7 @@ function webform_submission_access($node, $submission, $op = 'view', $account = 
     webform_disable_page_cache();
   }
 
-  $module_access = count(array_filter(\Drupal::moduleHandler()->invokeAll('webform_submission_access', $node, $submission, $op, $account))) > 0;
+  $module_access = count(array_filter(\Drupal::moduleHandler()->invokeAll('webform_submission_access', array($node, $submission, $op, $account)))) > 0;
 
   switch ($op) {
     case 'view':
@@ -2215,7 +2215,7 @@ function webform_block_view($delta = '') {
         '#node' => $node,
         '#sid' => $_SESSION['webform_confirmation'][$nid]['sid'],
       );
-    } 
+    }
     elseif (strlen(trim(strip_tags($node->webform['confirmation'])))) {
       // Display confirmation link drupal status messages, but in the block.
       $message = webform_replace_tokens($node->webform['confirmation'],
