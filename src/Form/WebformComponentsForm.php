@@ -321,17 +321,26 @@ class WebformComponentsForm extends FormBase {
       'required' => $component['required'],
       'pid' => $component['pid'],
       'weight' => $component['weight'],
+      'type' => $component['type'],
     ];
 
-    /* @todo Set the destination when the route exists.
+    /* @TODO Maintain destination query string between forms.
     // Forward the "destination" query string value to the next form.
     if (isset($_GET['destination'])) {
       $query['destination'] = $_GET['destination'];
       unset($_GET['destination']);
       drupal_static_reset('drupal_get_destination');
     }
-    $form_state['redirect'] = ['node/' . $node->id() . '/webform/components/new/' . $component['type'], ['query' => $query]];
     */
+
+    $form_state->setRedirect(
+      'webform.component_add_form',
+      array(
+        'node' => $form_state->getValue('nid'),
+        'component' => $component['type'],
+      ),
+      array( 'query' => $query )
+    );
   }
 
   /**
@@ -449,7 +458,7 @@ class WebformComponentsForm extends FormBase {
     // @todo Fix these links once the routes exist.
     $form['components'][$cid]['operations']['#links']['edit'] = [
       'title' => $this->t('Edit'),
-      'url' => Url::fromRoute('entity.node.webform', ['node' => $node->id()]),
+      'url' => Url::fromRoute('webform.component_edit_form', ['node' => $node->id(), 'component' => $cid]),
     ];
     $form['components'][$cid]['operations']['#links']['clone'] = [
       'title' => $this->t('Clone'),
