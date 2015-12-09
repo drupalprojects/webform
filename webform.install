@@ -752,8 +752,23 @@ function webform_install() {
 
   // Note: MS SQL Server does not support size-limited indexes and the column
   // type (text) is too big to fit inside index size limits.
+
   if (!db_index_exists('webform_submitted_data', 'data') && db_driver() != 'sqlsrv') {
-    db_add_index('webform_submitted_data', 'data', array(array('data', 64)));
+    $spec = [
+      // Example partial specification for a table:
+      'fields' => [
+        'data' => [
+          'description' => 'The submitted value of this field, may be serialized for some components.',
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => TRUE,
+        ],
+      ],
+      'indexes' => [
+        'webform_submitted_data' => ['data'],
+      ],
+    ];
+        db_add_index('webform_submitted_data', 'data', array(array('data', 64)), $spec);
   }
 }
 
