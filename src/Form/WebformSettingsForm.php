@@ -47,14 +47,16 @@ class WebformSettingsForm extends ConfigFormBase {
     );
 
     // Add each component to the form.
-    $component_types = webform_components(TRUE);
-    foreach ($component_types as $key => $component) {
+    $manager = \Drupal::service('plugin.manager.webform.component');
+    $component_types = $manager->getDefinitions();
+    foreach ($component_types as $key => $component_type) {
+      $component = $manager->createInstance($component_type['id']);
       $form['components'][$key] = array(
         '#type' => 'checkbox',
-        '#title' => $component['label'],
-        '#description' => $component['description'],
+        '#title' => $component->getLabel(),
+        '#description' => $component->getDescription(),
         '#return_value' => 1,
-        '#default_value' => $component['enabled'],
+        '#default_value' => 1,//$component['enabled'],
       );
     }
 
@@ -209,7 +211,7 @@ class WebformSettingsForm extends ConfigFormBase {
     $date_formatter = \Drupal::service('date.formatter');
     $date_format_options = array();
     foreach ($date_types as $machine_name => $format) {
-      $date_format_options[$machine_name] = t('@name - @sample', array('@name' => $format->label, '@sample' => $date_formatter->format(REQUEST_TIME, $machine_name)));
+      $date_format_options[$machine_name] = t('@name - @sample', array('@name' => $format->get('label'), '@sample' => $date_formatter->format(REQUEST_TIME, $machine_name)));
     }
     $form['advanced']['date_type'] = array(
       '#type' => 'select',
