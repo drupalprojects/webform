@@ -205,6 +205,9 @@ class WebformClientForm extends FormBase {
       // Allow values from other pages to be sent to browser for conditionals.
       $form['#conditional_values'] = $input_values;
 
+      // Allow components access to most up-to-date values.
+      $form_state['#conditional_values'] = $input_values;
+
       // For resuming a previous draft, find the next page after the last
       // validated page.
       if (!isset($form_state->getStorage()['page_num']) && $submission && $submission->is_draft && $submission->highest_valid_page) {
@@ -222,11 +225,11 @@ class WebformClientForm extends FormBase {
           // Force a preview to avert an unintended submission via Next.
           $form_state->set(['webform', 'preview'], TRUE);
           $form_state->set(['webform', 'page_count'], ($form_state->get(['webform', 'page_count']) + 1));
-          // The form hasn't been submitted (ever) and the preview code will
-          // expect $form_state['values']['submitted'] to be set from a previous
-          // submission, so provide these values here.
-          $form_state->setValue('submitted', $input_values);
         }
+        // The form hasn't been submitted (ever) and the preview code will
+        // expect $form_state['values']['submitted'] to be set from a previous
+        // submission, so provide these values here.
+        $form_state->setValue('submitted', $input_values);
         $form_state->setStorage(['submitted' => $input_values]);
       }
 
