@@ -94,6 +94,12 @@ class WebformClientForm extends FormBase {
     $form_state->loadInclude('webform', 'inc', 'includes/webform.components');
     $form_state->loadInclude('webform', 'inc', 'includes/webform.submissions');
 
+    // For ajax requests, $form_state->getValue('details') is missing. Restore
+    // from storage, if available, for multi-page forms.
+    if (empty($form_state->getValue('details')) && !empty($form_state->getValue(['storage', 'details']))) {
+      $form_state->setValue('details', $form_state->getValue(['storage', 'details']));
+    }
+
     $node = $this->node;
     $submission = $this->node;
     $resume_draft = $this->resume_draft;

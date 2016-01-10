@@ -2926,6 +2926,11 @@ function webform_client_form_submit($form, &$form_state) {
     $form_state['values']['details']['sid'] = $sid = webform_submission_insert($node, $submission);
     $form_state['values']['details']['is_new'] = TRUE;
 
+    // Save the new details in storage. When ajax calls for file upload/remove,
+    // $form_state->getValue('details') is missing. This allows the proper
+    // submission to be retrieved in webform_client_form. See #2562703.
+    $form_state->setValue(['storage', 'details'], $form_state->getValue('details'));
+
     // Set a cookie including the server's submission time. The cookie expires
     // in the length of the interval plus a day to compensate for timezones.
     $tracking_mode = \Drupal::config('webform.settings')->get('advanced.tracking_mode');
