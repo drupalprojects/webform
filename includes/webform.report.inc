@@ -1205,8 +1205,6 @@ function webform_results_download_default_options($node, $format) {
  *   Export information array retrieved from webform_results_export().
  */
 function webform_results_download($node, $export_info) {
-  $account = \Drupal::currentUser();
-
   // If the exporter provides a custom download method, use that.
   if (method_exists($export_info['exporter'], 'download')) {
     $export_info['exporter']->download($node);
@@ -1223,13 +1221,28 @@ function webform_results_download($node, $export_info) {
     @unlink($export_info['file_name']);  // Clean up, the @ makes it silent.
   }
 
+  // Save the last exported sid for new-only exports.
+  webform_results_export_success($node, $export_info);
+
+  exit();
+}
+
+/**
+ * Save the last-exported sid for new-only exports.
+ *
+ * @param $node
+ *   The webform node.
+ * @param $export_info
+ *   Export information array retrieved from webform_results_export().
+ */
+function webform_results_export_success($node, $export_info) {
   // Update user last downloaded sid if required.
   if (!in_array($export_info['options']['range']['range_type'], array('range', 'range_serial', 'range_date')) && !empty($export_info['last_sid'])) {
     // Insert a new record or update an existing record.
     db_merge('webform_last_download')
       ->key(array(
         'nid' => $node->id(),
-        'uid' => $account->id(),
+        'uid' => \Drupal::currentUser()->id(),
       ))
       ->fields(array(
         'sid' => $export_info['last_sid'],
@@ -1237,8 +1250,6 @@ function webform_results_download($node, $export_info) {
       ))
       ->execute();
   }
-
-  exit();
 }
 
 /**
@@ -1425,12 +1436,20 @@ function webform_results_batch_results($node, $format, $options, &$context) {
     'last_sid' => $context['results']['last_sid'],
   );
 
-  // Set a session variable containing the information referencing the exported
-  // file. A cookie is also set to allow the browser to ensure the redirect
-  // to the file only happens one time.
-  $_SESSION['webform_export_info'] = $export_info;
-  $params = session_get_cookie_params();
-  setcookie('webform_export_info', '1', REQUEST_TIME + 120, $params['path'], $params['domain'], $params['secure'], FALSE);
+  if (isset($_SESSION)) {
+    // UI exection. Defer resetting last-downloaded sid until download page.
+    // Set a session variable containing the information referencing the exported
+    // file. A cookie is also set to allow the browser to ensure the redirect
+    // to the file only happens one time.
+    $_SESSION['webform_export_info'] = $export_info;
+    $params = session_get_cookie_params();
+    setcookie('webform_export_info', '1', REQUEST_TIME + 120, $params['path'], $params['domain'], $params['secure'], FALSE);
+  }
+  else {
+    // Drush execution of wfx command. Reset last-downloaded sid now. $_SESSION
+    // is not supported for command line execution.
+    webform_results_export_success($node, $export_info);
+  }
 }
 
 /**
