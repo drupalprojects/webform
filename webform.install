@@ -732,6 +732,10 @@ function webform_install() {
       'submitted' => TRUE,
       'langcode' => 'en',
     ])->save();
+    // Now that a webform node type has been created, reset the cache of the
+    // node types that support webforms. This is needed for tests which will
+    // create nodes in the same execution.
+    drupal_static_reset('webform_node_types');
     if ($config->get('install_add_body_field')) {
       node_add_body_field($webform);
     }

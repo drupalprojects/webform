@@ -1293,7 +1293,7 @@ function webform_file_download($uri) {
  *   An array of node type names.
  */
 function webform_node_types() {
-  static $types = NULL;
+  $types = &drupal_static(__FUNCTION__, NULL);
   $config = \Drupal::config('webform.settings');
   if (!isset($types)) {
     $types = [];
