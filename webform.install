@@ -6,6 +6,7 @@
  */
 
 use Drupal\node\Entity\NodeType;
+use Drupal\Core\Database\Database;
 
 /**
  * Implements hook_schema().
@@ -756,23 +757,10 @@ function webform_install() {
 
   // Note: MS SQL Server does not support size-limited indexes and the column
   // type (text) is too big to fit inside index size limits.
-
-  if (!db_index_exists('webform_submitted_data', 'data') && db_driver() != 'sqlsrv') {
-    $spec = [
-      // Example partial specification for a table:
-      'fields' => [
-        'data' => [
-          'description' => 'The submitted value of this field, may be serialized for some components.',
-          'type' => 'text',
-          'size' => 'medium',
-          'not null' => TRUE,
-        ],
-      ],
-      'indexes' => [
-        'webform_submitted_data' => ['data'],
-      ],
-    ];
-        db_add_index('webform_submitted_data', 'data', array(array('data', 64)), $spec);
+  $database_connection = Database::getConnection();
+  if (!$database_connection->schema()->indexExists('webform_submitted_data', 'data') && $database_connection->driver() != 'sqlsrv') {
+    $webform_schema = webform_schema();
+    $database_connection->schema()->addIndex('webform_submitted_data', 'data', array(array('data', 64)), $webform_schema['webform_submitted_data']);
   }
 }
 
