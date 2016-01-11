@@ -36,7 +36,7 @@ class WebformController extends ControllerBase {
     $rows = array();
     if (!empty($nodes)) {
       foreach ($nodes as $node) {
-        $node = Node::load($node->id());
+        $node = Node::load($node->nid);
         $rows[] = array(
           \Drupal::l($node->getTitle(), Url::fromRoute('entity.node.canonical', ['node' => $node->id()])),
           t('Submissions'), //l(t('Submissions'), 'node/' . $node->id() . '/webform-results'),
