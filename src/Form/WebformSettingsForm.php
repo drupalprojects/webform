@@ -267,6 +267,17 @@ class WebformSettingsForm extends ConfigFormBase {
       '#description' => t('By default, the configuration form for each webform allows the administrator to choose which roles may submit the form. You may want to allow users to always submit the form if you are using a separate node access module to control access to webform nodes themselves.'),
     );
 
+    $form['advanced']['token_access']  = array(
+      '#type' => 'radios',
+      '#title' => t('Token access'),
+      '#options' => array(
+          '1' => t('Allow tokens to be used in Webforms.'),
+          '0' => t('Disable tokens in Webforms'),
+        ),
+      '#default_value' => $config->get('advanced.token_access'),
+      '#description' => t('Tokens can be used to reveal sensitive information. Allow tokens if Webform creators are trusted.'),
+    );
+
     $form['advanced']['email_select_max'] = array(
       '#type' => 'textfield',
       '#title' => t("Select email mapping limit"),
@@ -314,6 +325,7 @@ class WebformSettingsForm extends ConfigFormBase {
       ->set('advanced.csv_delimiter', $values['advanced']['csv_delimiter'])
       ->set('advanced.export_wordwrap', $values['advanced']['export_wordwrap'])
       ->set('advanced.submission_access_control', $values['advanced']['submission_access_control'])
+      ->set('advanced.token_access', $values['advanced']['token_access'])
       ->set('advanced.email_select_max', $values['advanced']['email_select_max'])
       ->save();
 

@@ -85,8 +85,10 @@ function webform_token_info() {
 function webform_tokens($type, $tokens, array $data = array(), array $options = array()) {
   static $recursion_level = 0;
 
+  $config = \Drupal::config('webform.settings');
+
   // Return early unless submission tokens are needed and there is a submission.
-  if ($type != 'submission' || empty($data['webform-submission'])) {
+  if ($type != 'submission' || empty($data['webform-submission']) || !$config->get('advanced.token_access')) {
     return array();
   }
 
@@ -127,15 +129,15 @@ function webform_tokens($type, $tokens, array $data = array(), array $options = 
         $replacements[$original] = webform_get_submission_access_token($submission);
         break;
       case 'date':
-        $replacements[$original] = format_date($submission->submitted, \Drupal::config('webform.settings')->get('advanced.date_type'), '', NULL, $language_code);
+        $replacements[$original] = format_date($submission->submitted, $config->get('advanced.date_type'), '', NULL, $language_code);
         break;
       case 'completed_date':
         if ($submission->completed) {
-          $replacements[$original] = format_date($submission->completed, \Drupal::config('webform.settings')->get('advanced.date_type'), '', NULL, $language_code);
+          $replacements[$original] = format_date($submission->completed, $config->get('advanced.date_type'), '', NULL, $language_code);
         }
         break;
       case 'modified_date':
-        $replacements[$original] = format_date($submission->modified, \Drupal::config('webform.settings')->get('advanced.date_type'), '', NULL, $language_code);
+        $replacements[$original] = format_date($submission->modified, $config->get('advanced.date_type'), '', NULL, $language_code);
         break;
       case 'ip-address':
         $replacements[$original] = $sanitize ? check_plain($submission->remote_addr) : $submission->remote_addr;

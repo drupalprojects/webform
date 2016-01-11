@@ -79,6 +79,9 @@ webform.settings:
         submission_access_control:
           type: integer
           label: 'Submission access control'
+        token_access:
+          type: integer
+          label: 'Token access'
         email_select_max:
           type: integer
           label: 'E-mail mapping limit'

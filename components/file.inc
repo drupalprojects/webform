@@ -172,6 +172,7 @@ function _webform_edit_file($component) {
       '#description' => t('You may optionally use tokens to create a pattern used to rename files upon submission. Omit the extension; it will be added automatically.') . ' ' . theme('webform_token_help', array('groups' => array('node', 'submission'))),
       '#weight' => 6,
       '#element_validate' => array('_webform_edit_file_rename_validate'),
+      '#access' => \Drupal::config('webform.settings')->get('advanced.token_access'),
     );
 
     $form['display']['progress_indicator'] = array(
