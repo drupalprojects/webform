@@ -1,4 +1,9 @@
 services:
+  webform.webform_node:
+    class: Drupal\webform\Access\WebformNodeAccessCheck
+    arguments: ['@entity.manager']
+    tags:
+      - { name: access_check, applies_to: _access_check_webform }
   plugin.manager.webform.component:
     class: Drupal\webform\ComponentManager
     parent: default_plugin_manager

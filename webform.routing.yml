@@ -44,7 +44,6 @@ webform.component_delete_form:
   requirements:
     _permission: 'administer site configuration'
 
-# @todo Only show on webform enabled node types
 entity.node.webform:
   path: '/node/{node}/webform'
   defaults:
@@ -53,5 +52,6 @@ entity.node.webform:
   requirements:
     # @todo This needs to call/replicate webform_node_update_access().
     _permission: 'edit webform components'
+    _access_check_webform: 'TRUE'
   options:
     _node_operation_route: TRUE
