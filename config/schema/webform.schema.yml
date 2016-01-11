@@ -70,6 +70,9 @@ webform.settings:
         csv_delimiter:
           type: string
           label: 'Default export delimiter'
+        csv_line_ending:
+          type: string
+          label: 'Default export line ending'
         export_wordwrap:
           type: integer
           label: 'Word-wrap all exported text'

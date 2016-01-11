@@ -24,6 +24,7 @@ advanced:
   date_type: 'medium'
   export_format: 'excel'
   csv_delimiter: '\t'
+  csv_line_ending: '\n'
   export_wordwrap: 0
   excel_legacy_exporter: false
   submission_access_control: 1
