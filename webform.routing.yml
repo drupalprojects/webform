@@ -13,16 +13,19 @@ webform.settings:
   requirements:
     _permission: 'administer site configuration'
 
-
-# @TODO: These probably need different permissions.
-# @TODO: This needs to be restricted to only show on webform node types.
-webform.components:
+entity.node.webform:
   path: '/node/{node}/webform'
   defaults:
+    _title: 'Webform'
     _form: '\Drupal\webform\Form\WebformComponentsForm'
   requirements:
-    _permission: 'administer site configuration'
+    # @todo This needs to call/replicate webform_node_update_access().
+    _permission: 'edit webform components'
+    _access_check_webform: 'TRUE'
+  options:
+    _node_operation_route: TRUE
 
+# @TODO: These probably need different permissions.
 webform.component_add_form:
   path: '/node/{node}/webform/components/new/{component}'
   defaults:
@@ -43,15 +46,3 @@ webform.component_delete_form:
     _form: '\Drupal\webform\Form\WebformComponentDeleteForm'
   requirements:
     _permission: 'administer site configuration'
-
-entity.node.webform:
-  path: '/node/{node}/webform'
-  defaults:
-    _title: 'Webform'
-    _form: '\Drupal\webform\Form\WebformComponentsForm'
-  requirements:
-    # @todo This needs to call/replicate webform_node_update_access().
-    _permission: 'edit webform components'
-    _access_check_webform: 'TRUE'
-  options:
-    _node_operation_route: TRUE
