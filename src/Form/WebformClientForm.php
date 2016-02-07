@@ -212,7 +212,7 @@ class WebformClientForm extends FormBase {
       $form['#conditional_values'] = $input_values;
 
       // Allow components access to most up-to-date values.
-      $form_state['#conditional_values'] = $input_values;
+      $form_state->set('#conditional_values', $input_values);
 
       // For resuming a previous draft, find the next page after the last
       // validated page.
