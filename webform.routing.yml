@@ -32,6 +32,8 @@ webform.component_add_form:
     _form: '\Drupal\webform\Form\WebformComponentAddForm'
   requirements:
     _permission: 'administer site configuration'
+  options:
+    _node_operation_route: TRUE
 
 webform.component_edit_form:
   path: '/node/{node}/webform/components/edit/{component}'
@@ -39,6 +41,8 @@ webform.component_edit_form:
     _form: '\Drupal\webform\Form\WebformComponentEditForm'
   requirements:
     _permission: 'administer site configuration'
+  options:
+    _node_operation_route: TRUE
 
 webform.component_delete_form:
   path: '/node/{node}/webform/components/delete/{component}'
@@ -46,3 +50,5 @@ webform.component_delete_form:
     _form: '\Drupal\webform\Form\WebformComponentDeleteForm'
   requirements:
     _permission: 'administer site configuration'
+  options:
+    _node_operation_route: TRUE
