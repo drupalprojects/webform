@@ -96,7 +96,7 @@ abstract class WebformComponentFormBase extends FormBase {
       '#value' => $config['cid'],
     );
 
-    $form_state->setRedirect( 'webform.components', array( 'node' => $node->id()));
+    $form_state->setRedirect('entity.node.webform', ['node' => $node->id()]);
   }
 
   /**
