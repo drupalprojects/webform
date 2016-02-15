@@ -1106,7 +1106,7 @@ function webform_results_download_rows_process($node, $options, $serial_start, $
     $row = array();
     // Add submission information.
     foreach (array_keys($submission_information) as $token) {
-      $cell = \Drupal::moduleHandler()->invokeAll('webform_results_download_submission_information_data', $token, $submission, $options, $serial_start, $row_count);
+      $cell = \Drupal::moduleHandler()->invokeAll('webform_results_download_submission_information_data', [$token, $submission, $options, $serial_start, $row_count]);
       $context = array('token' => $token, 'submission' => $submission, 'options' => $options, 'serial_start' => $serial_start, 'row_count' => $row_count);
       \Drupal::moduleHandler()->alter('webform_results_download_submission_information_data', $cell, $context);
       // implode() to ensure everything from a single value goes into one
