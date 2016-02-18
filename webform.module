@@ -201,15 +201,6 @@ function webform_menu() {
     'file' => 'includes/webform.components.inc',
     'type' => MENU_LOCAL_TASK,
   );
-  $items['node/%webform_menu/webform/components/%webform_menu_component/delete'] = array(
-    'load arguments' => array(1, 5),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('webform_component_delete_form', 1, 4),
-    'access callback' => 'webform_node_update_access',
-    'access arguments' => array(1),
-    'file' => 'includes/webform.components.inc',
-    'type' => MENU_LOCAL_TASK,
-  );
 
   // AJAX callback for loading select list options.
   $items['webform/ajax/options/%webform_menu'] = array(

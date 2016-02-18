@@ -328,64 +328,6 @@ function webform_component_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Form to confirm deletion of a component.
- */
-function webform_component_delete_form($form, $form_state, $node, $component) {
-  $cid = $component['cid'];
-
-  $form = array();
-  $form['node'] = array(
-    '#type' => 'value',
-    '#value' => $node,
-  );
-  $form['component'] = array(
-    '#type' => 'value',
-    '#value' => $component,
-  );
-
-  $component_type = $node->webform['components'][$cid]['type'];
-  if (webform_component_feature($component_type, 'group')) {
-    $question = t('Delete the %name fieldset?', array('%name' => $node->webform['components'][$cid]['name']));
-    $description = t('This will immediately delete the %name @type component and all nested components within %name from the %webform webform. This cannot be undone.',
-                     array('%name' => $node->webform['components'][$cid]['name'],
-                           '@type' => webform_component_property($component_type, 'label'),
-                           '%webform' => $node->title));
-  }
-  else {
-    $question = t('Delete the %name component?', array('%name' => $node->webform['components'][$cid]['name']));
-    $description = t('This will immediately delete the %name component from the %webform webform. This cannot be undone.', array('%name' => $node->webform['components'][$cid]['name'], '%webform' => $node->title));
-  }
-
-  return confirm_form($form, $question, 'node/' . $node->id() . '/webform/components', $description, t('Delete'));
-}
-
-/**
- * Submit handler for webform_component_delete_form().
- */
-function webform_component_delete_form_submit($form, &$form_state) {
-  // Delete the component.
-  $node = $form_state['values']['node'];
-  $component = $form_state['values']['component'];
-  webform_component_delete($node, $component);
-  drupal_set_message(t('Component %name deleted.', array('%name' => $component['name'])));
-
-  // Check if this webform still contains any information.
-  unset($node->webform['components'][$component['cid']]);
-  webform_check_record($node);
-
-  // Since Webform components have been updated but the node itself has not
-  // been saved, it is necessary to explicitly clear the cache to make sure
-  // the updated webform is visible to anonymous users. This resets the page
-  // and block caches (only);
-  cache_clear_all();
-
-  // Refresh the entity cache, should it be cached in persistent storage.
-  entity_get_controller('node')->resetCache(array($node->id()));
-
-  $form_state['redirect'] = 'node/' . $node->id() . '/webform/components';
-}
-
-/**
  * Insert a new component into the database.
  *
  * @param $component

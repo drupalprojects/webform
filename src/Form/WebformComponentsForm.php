@@ -466,7 +466,7 @@ class WebformComponentsForm extends FormBase {
     ];
     $form['components'][$cid]['operations']['#links']['delete'] = [
       'title' => $this->t('Delete'),
-      'url' => Url::fromRoute('entity.node.webform', ['node' => $node->id()]),
+      'url' => Url::fromRoute('webform.component_delete_form', ['node' => $node->id(), 'component' => $cid]),
     ];
 
     if (isset($component['children']) && is_array($component['children'])) {
