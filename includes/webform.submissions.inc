@@ -705,7 +705,12 @@ function webform_get_submissions($filters = array(), $header = NULL, $pager_coun
     $function($submissions);
   }
 
-  return $submissions;
+  // Reorder submissions to reflect table header sorting.
+  $ordered_submissions = array();
+  foreach($sids as $sid) {
+    $ordered_submissions[$sid] = $submissions[$sid];
+  }
+  return $ordered_submissions;
 }
 
 /**
