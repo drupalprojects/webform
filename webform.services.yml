@@ -1,0 +1,64 @@
+services:
+  webform.route_subscriber:
+    class: Drupal\webform\Routing\WebformRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  webform.breadcrumb:
+    class: Drupal\webform\BreadCrumb\WebformBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1002 }
+
+  webform.elements_validator:
+    class: Drupal\webform\WebformEntityElementsValidator
+
+  webform.translation_manager:
+    class: Drupal\webform\WebformTranslationManager
+    arguments: ['@language_manager', '@config.factory', '@plugin.manager.webform.element']
+
+  webform.request:
+    class: Drupal\webform\WebformRequest
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@request_stack', '@current_route_match']
+
+  webform.message_manager:
+    class: Drupal\webform\WebformMessageManager
+    arguments: ['@current_user', '@config.factory', '@entity_type.manager', '@token', '@logger.channel.webform', '@webform.request']
+
+  webform_submission.generate:
+    class: Drupal\webform\WebformSubmissionGenerate
+    arguments: ['@config.factory', '@token', '@plugin.manager.webform.element']
+
+  webform_submission.exporter:
+    class: Drupal\webform\WebformSubmissionExporter
+    arguments: ['@config.factory', '@entity_type.manager', '@entity.query', '@stream_wrapper_manager', '@plugin.manager.webform.element', '@plugin.manager.webform.exporter']
+
+  webform.third_party_settings_manager:
+    class: Drupal\webform\WebformThirdPartySettingsManager
+    arguments: ['@config.factory', '@module_handler', '@path.validator', '@webform.addons_manager']
+
+  webform.addons_manager:
+    class: Drupal\webform\WebformAddonsManager
+
+  webform.libraries_manager:
+    class: Drupal\webform\WebformLibrariesManager
+
+  webform.email_provider:
+    class: Drupal\webform\WebformEmailProvider
+    arguments: ['@config.factory', '@module_handler', '@plugin.manager.mail']
+
+  plugin.manager.webform.element:
+    class: Drupal\webform\WebformElementManager
+    parent: default_plugin_manager
+
+  plugin.manager.webform.handler:
+    class: Drupal\webform\WebformHandlerManager
+    parent: default_plugin_manager
+
+  plugin.manager.webform.exporter:
+    class: Drupal\webform\WebformExporterManager
+    parent: default_plugin_manager
+
+  logger.channel.webform:
+    class: Drupal\Core\Logger\LoggerChannel√
+    factory: logger.factory:get
+    arguments: ['webform']

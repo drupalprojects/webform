@@ -1,0 +1,9 @@
+# Schema for the configuration files of the webform test module.
+
+webform.handler.test:
+  type: mapping
+  label: 'Test'
+  mapping:
+    message:
+      label: 'Message'
+      type: string

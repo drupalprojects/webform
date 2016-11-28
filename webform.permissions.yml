@@ -1,0 +1,32 @@
+'access webform overview':
+  title: 'Access the webform overview page'
+  description: 'Get an overview of all webforms.'
+'administer webform':
+  title: 'Administer webforms'
+  description: 'Allows administration of global YAML configuration and options. <em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+'administer webform submission':
+  title: 'Administer webform submissions'
+  description: 'Allows accessing, updating, and deleting <em>all</em> webform submissions.'
+'administer webform element access':
+  title: 'Administer webform element access'
+  description: 'Restrict webform element access use to certain roles and users.'
+'view any webform submission':
+  title: 'View any webform submissions'
+  description: 'Allows viewing <em>all</em> webforms and submissions.'
+'create webform':
+  title: 'Create webforms'
+'edit any webform':
+  title: 'Edit any webform'
+  description: 'Allows managing any webform and its results. <em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+'edit own webform':
+  title: 'Edit own webform'
+  description: 'Allows managing of webform created by the user and its results. <em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+'delete any webform':
+  title: 'Delete any webform'
+'delete own webform':
+  title: 'Delete own webform'
+'delete own webform':
+  title: 'Delete own webform'
+'edit webform assets':
+  title: 'Edit CSS/JS webform assets'
+  description: 'Allows administrators to attach custom CSS and JavaScript to a webform.'

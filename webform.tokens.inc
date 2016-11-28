@@ -2,285 +2,338 @@
 
 /**
  * @file
- * Builds placeholder replacement tokens for webform-related data.
+ * Builds placeholder replacement tokens for webforms and submissions.
  */
+
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Url;
+use Drupal\user\Entity\User;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\Utility\WebformDateHelper;
 
 /**
  * Implements hook_token_info().
  */
 function webform_token_info() {
-  // Webform submission tokens.
-  $info['types']['submission'] = array(
-    'name' => t('Submission'),
+  $types['webform-authenticated-user'] = [
+    'name' => t('Webform authenticated user'),
+    'description' => t('Tokens related to the currently authenticated user.'),
+    'type' => 'user',
+  ];
+  $types['webform-submission'] = [
+    'name' => t('Webform submissions'),
     'description' => t('Tokens related to webform submissions.'),
     'needs-data' => 'webform-submission',
-  );
+  ];
+  $types['webform'] = [
+    'name' => t('Webforms'),
+    'description' => t('Tokens related to webforms.'),
+    'needs-data' => 'webform',
+  ];
 
-  $info['tokens']['submission']['serial'] = array(
-    'name' => t('Serial number'),
-    'description' => t('The serial number of this webform submission.'),
-  );
-  $info['tokens']['submission']['sid'] = array(
-    'name' => t('Submission ID'),
-    'description' => t('The unique indentifier for the webform submission.'),
-  );
-  $info['tokens']['submission']['access-token'] = array(
-    'name' => t('Access token'),
-    'description' => t('The security token used to gain access to this webform submission.'),
-  );
-  $info['tokens']['submission']['date'] = array(
-    'name' => t('Date submitted'),
-    'description' => t('The date the webform was first save as draft or completed.'),
-    'type' => 'date',
-  );
-  $info['tokens']['submission']['completed_date'] = array(
-    'name' => t('Date completed'),
-    'description' => t('The date the webform was first completed (not draft).'),
-    'type' => 'date',
-  );
-  $info['tokens']['submission']['modified_date'] = array(
-    'name' => t('Date modified'),
-    'description' => t('The date the webform was last saved (draft or completed).'),
-    'type' => 'date',
-  );
-  $info['tokens']['submission']['ip-address'] = array(
+  // Webform submission related variables.
+  $webform_submission['serial'] = [
+    'name' => t('Webform submission serial number'),
+    'description' => t('The serial number of the webform submission .'),
+  ];
+  $webform_submission['sid'] = [
+    'name' => t('Webform submission ID'),
+    'description' => t('The ID of the webform submission .'),
+  ];
+  $webform_submission['uuid'] = [
+    'name' => t('UUID'),
+    'description' => t('The UUID of the webform submission.'),
+  ];
+  $webform_submission['token'] = [
+    'name' => t('Token'),
+    'description' => t('A secure token used to look up a submission.'),
+  ];
+  $webform_submission['ip-address'] = [
     'name' => t('IP address'),
-    'description' => t('The IP address that was used when submitting the webform.'),
-  );
-  $info['tokens']['submission']['user'] = array(
-    'name' => t('Submitter'),
-    'description' => t('The user that submitted the webform result.'),
-    'type' => 'user',
-  );
-  $info['tokens']['submission']['url'] = array(
+    'description' => t('The IP address that was used when submitting the webform submission.'),
+  ];
+  $webform_submission['source-url'] = [
+    'name' => t('Source URL'),
+    'description' => t('The URL the user submitted the webform submission.'),
+  ];
+  $webform_submission['update-url'] = [
+    'name' => t('Update URL'),
+    'description' => t("The URL that can used to update the webform submission. The webform must be configurated to allow users to update a submission using a secure token."),
+  ];
+  $webform_submission['url'] = [
     'name' => t('URL'),
-    'description' => t("Webform tokens related to the submission's URL."),
-    'type' => 'url',
-  );
-  $info['tokens']['submission']['edit-url'] = array(
-    'name' => t('Edit URL'),
-    'description' => t("Webform tokens related to the submission's Edit URL."),
-    'type' => 'url',
-  );
-  $info['tokens']['submission']['values'] = array(
-    'name' => t('Webform submission values'),
-    'description' => '<div>' . t('Webform tokens from submitted data. Replace the "?" with the "form key", including any parent form keys separated by colons. You can append:') . '</div>' .
-                     '<ul>' .
-                     '<li>' . t('the question key for just that one question (grid components).') . '</li>' .
-                     '<li>' . t('the option key for just that one option (grid and select components).') . '</li>' .
-                     '<li>' . t('<code>@token</code> for the value without the label (the default).', array('@token' => ':nolabel')) . '</li>' .
-                     '<li>' . t('<code>@token</code> for just the label.', array('@token' => ':label')) . '</li>' .
-                     '<li>' . t('<code>@token</code> for both the label and value together.', array('@token' => ':withlabel')) . '</li>' .
-                     '<li>' . t('<code>@token</code> for just the key in a key|label pair (grid and select components).', array('@token' => ':key')) . '</li>' .
-                     '</ul>',
+    'description' => t("The URL of the webform submission. Replace the '?' with the link template. Defaults to 'canonical' which displays the submission's data."),
     'dynamic' => TRUE,
-  );
+  ];
+  $webform_submission['user'] = [
+    'name' => t('Submitter'),
+    'description' => t('The user that submitted the webform submission.'),
+    'type' => 'user',
+  ];
+  $webform_submission['langcode'] = [
+    'name' => t('Langcode'),
+    'description' => t('The language code of the webform submission.'),
+    'type' => 'user',
+  ];
+  $webform_submission['language'] = [
+    'name' => t('Language'),
+    'description' => t('The language name of the the webform submission.'),
+    'type' => 'user',
+  ];
+  $webform_submission['created'] = [
+    'name' => t('Date created'),
+    'description' => t('The date the webform submission was created.'),
+    'type' => 'date',
+  ];
+  $webform_submission['completed'] = [
+    'name' => t('Date completed'),
+    'description' => t('The date the webform submission was completed.'),
+    'type' => 'date',
+  ];
+  $webform_submission['changed'] = [
+    'name' => t('Date changed'),
+    'description' => t('The date the webform submission was most recently updated.'),
+    'type' => 'date',
+  ];
+  $webform_submission['values'] = [
+    'name' => t('Webform submission values'),
+    'description' => t("Webform tokens from submitted data. Replace the '?' with the 'element_key' or 'element_key:format'.") . ' ' .
+    t("The 'format' can be 'value', 'raw', or custom format specifically associated with the <a href=\":href\">element</a>.", [':href' => Url::fromRoute('webform.element_plugins')->toString()]) . ' ' .
+    t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform-submission:values:subject] token."),
+    'dynamic' => TRUE,
+  ];
 
-  return $info;
+  // Webform related variables.
+  $webform['id'] = [
+    'name' => t('Webform ID'),
+    'description' => t('The ID of the webform.'),
+  ];
+  $webform['title'] = [
+    'name' => t('title'),
+    'description' => t('The title of the webform.'),
+  ];
+
+  $webform['description'] = [
+    'name' => t('Description'),
+    'description' => t('The administrative description of the webform.'),
+  ];
+  $webform['url'] = [
+    'name' => t('URL'),
+    'description' => t("The URL of the webform. Replace the '?' with the link template. Defaults to 'canonical' which displays the submission webform."),
+    'dynamic' => TRUE,
+  ];
+
+  // Chained tokens for webform submissions.
+  $webform_submission['webform'] = [
+    'name' => t('Webform'),
+    'description' => t('The webform that the webform submission belongs to.'),
+    'type' => 'webform',
+  ];
+  $webform_submission['source-entity'] = [
+    'name' => t('Source entity'),
+    'description' => t("The (source) entity that the webform submission was submitted from.  Use [webform-submission:source-entity] to get the source entity's label or [webform-submission:source-entity:{field_name|property}] retrieve a source entity's field or property value."),
+    'type' => 'entity',
+  ];
+
+  return [
+    'types' => $types,
+    'tokens' => [
+      'webform-submission' => $webform_submission,
+      'webform' => $webform,
+    ],
+  ];
 }
 
 /**
  * Implements hook_tokens().
  */
-function webform_tokens($type, $tokens, array $data = array(), array $options = array()) {
-  static $recursion_level = 0;
+function webform_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $token_service = \Drupal::token();
 
-  // Return early unless submission tokens are needed and there is a submission.
-  if ($type != 'submission' || empty($data['webform-submission']) || !webform_variable_get('webform_token_access')) {
-    return array();
+  $url_options = ['absolute' => TRUE];
+  if (isset($options['langcode'])) {
+    $url_options['language'] = \Drupal::languageManager()->getLanguage($options['langcode']);
+    $langcode = $options['langcode'];
+  }
+  else {
+    $langcode = NULL;
   }
 
-  // Generate Webform tokens.
-  $replacements = array();
-
-  // Prepare all the data that we will likely need more than once.
-  $submission = $data['webform-submission'];
-  $node = isset($data['node']) ? $data['node'] : node_load($submission->nid);
-  $email = isset($data['webform-email']) ? $data['webform-email'] : NULL;
-  $sanitize = !empty($options['sanitize']);
-  $format = $sanitize ? 'html' : 'text';
-  $url_options = isset($options['language']) ? $options['language'] : array('absolute' => TRUE);
-  $language_code = isset($options['language']) ? $options['language']->language : NULL;
-  $markup_components = array();
-
-  // Markup components may use tokens when displayed. Displaying the tokens
-  // requires rendering the components. Rendering a markup component can then
-  // cause infinite recursion. To prevent this, markup components are omitted
-  // from the rendered submission if recursion has been detected.
-  if ($recursion_level) {
-    $markup_components = array_keys(array_filter($node->webform['components'],
-      function ($component) { return $component['type'] == 'markup'; }));
-  }
-
-  $recursion_level++;
-
-  // Replace individual tokens that have an exact replacement.
-  foreach ($tokens as $name => $original) {
-    switch ($name) {
-      case 'serial':
-        $replacements[$original] = $submission->serial ? $submission->serial : '';
-        break;
-      case 'sid':
-        $replacements[$original] = $submission->sid ? $submission->sid : '';
-        break;
-      case 'access-token':
-        $replacements[$original] = webform_get_submission_access_token($submission);
-        break;
-      case 'date':
-        $replacements[$original] = format_date($submission->submitted, webform_variable_get('webform_date_type'), '', NULL, $language_code);
-        break;
-      case 'completed_date':
-        if ($submission->completed) {
-          $replacements[$original] = format_date($submission->completed, webform_variable_get('webform_date_type'), '', NULL, $language_code);
-        }
-        break;
-      case 'modified_date':
-        $replacements[$original] = format_date($submission->modified, webform_variable_get('webform_date_type'), '', NULL, $language_code);
-        break;
-      case 'ip-address':
-        $replacements[$original] = $sanitize ? check_plain($submission->remote_addr) : $submission->remote_addr;
-        break;
-      case 'user':
-        $account = user_load($submission->uid);
-        $name = format_username($account);
-        $replacements[$original] = $sanitize ? check_plain($name) : $name;
-        break;
-      case 'url':
-        $replacements[$original] = $submission->sid ? url("node/{$node->nid}/submission/{$submission->sid}", $url_options) : '';
-        break;
-      case 'edit-url':
-        $replacements[$original] = $submission->sid ? url("node/{$node->nid}/submission/{$submission->sid}/edit", $url_options) : '';
-        break;
-      case 'values':
-        $excluded_components = isset($email['excluded_components']) ? $email['excluded_components'] : array();
-        $excluded_components = array_merge($excluded_components, $markup_components);
-        $submission_renderable = webform_submission_render($node, $submission, $email, $format, $excluded_components);
-        $replacements[$original] = drupal_render($submission_renderable);
-        break;
+  $replacements = [];
+  if ($type == 'webform-authenticated-user') {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      $account = User::load(\Drupal::currentUser()->id());
+      $bubbleable_metadata->addCacheContexts(['user']);
+      $replacements += $token_service->generate('user', $tokens, ['user' => $account], $options, $bubbleable_metadata);
+    }
+    else {
+      foreach ($replacements as $name => $token) {
+        $replacements[$name] = '';
+      }
     }
   }
+  elseif ($type == 'webform-submission' && !empty($data['webform-submission'])) {
 
-  // Webform submission tokens for individual components.
-  if ($value_tokens = token_find_with_prefix($tokens, 'values')) {
-    // Get the full submission renderable without $excluded_components so that
-    // individually referenced values are available.
-    $submission_renderable = webform_submission_render($node, $submission, $email, $format, $markup_components);
-    $available_modifiers = array(
-      'label',
-      'withlabel',
-      'nolabel',
-      'key',
-    );
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $data['webform-submission'];
 
-    foreach ($node->webform['components'] as $cid => $component) {
-      // Build the list of parents for this component.
-      $parents = ($component['pid'] == 0) ? array($component['form_key']) : webform_component_parent_keys($node, $component);
-      $parent_token = implode(':', $parents);
-      foreach ($value_tokens as $name => $original) {
-        if (strpos($name, $parent_token) !== 0) {
-          // Token not found as a prefix or exact match for this component.
-          continue;   // Token loop continue.
-        }
-        // Drill down into the renderable to find the element.
-        $display_element = $submission_renderable;
-        foreach ($parents as $parent) {
-          if (!isset($display_element[$parent])) {
-            // Sometimes an element won't exist in the submission renderable
-            // due to conditional logic. If not found, skip that element.
-            continue 2;   // Token loop continue.
-          }
-          $display_element = $display_element[$parent];
-        }
-        // Individual tokens always have access granted even if they're
-        // not displayed when printing the whole renderable.
-        $display_element['#access'] = TRUE;
+    /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
+    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
 
-        // For grid components, see if optional question key is present.
-        $matched_token = $parent_token;
-        if ($display_element['#webform_component']['type'] === 'grid') {
-          list($question_key) = explode(':', substr($name, strlen($matched_token) + 1));
-          if (strlen($question_key) && isset($display_element[$question_key]['#value'])) {
-            // Generate a faux select component for this grid question.
-            $select_component = _webform_defaults_select();
-            $select_component['type'] = 'select';
-            $select_component['nid'] = $display_element['#webform_component']['nid'];
-            $select_component['name'] = $display_element['#grid_questions'][$question_key];
-            $select_component['extra']['items'] = $display_element['#webform_component']['extra']['options'];
-            $display_element = _webform_display_select($select_component, $display_element[$question_key]['#value'], $format);
-            $display_element['#webform_component'] = $select_component;
-            $matched_token .= ':' . $question_key;
-          }
-        }
+    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
 
-        // For select components, see if the optional option key is present.
-        if ($display_element['#webform_component']['type'] === 'select') {
-          list($option_key) = explode(':', substr($name, strlen($matched_token) + 1));
-          if (strlen($option_key) && strpos("\n" . $display_element['#webform_component']['extra']['items'], "\n" . $option_key . '|') !== FALSE) {
-            // Return only this specified option and no other values.
-            $display_element['#value'] = array_intersect($display_element['#value'], array($option_key));
-            $matched_token .= ':' . $option_key;
-          }
-        }
+    $form_elements = $webform_submission->getWebform()->getElementsInitializedAndFlattened();
+    $submission_data = $webform_submission->getData();
 
-        // Assume no modifier (implied 'nolabel').
-        $modifier = NULL;
-        if (strcmp($name, $matched_token) !== 0) {
-          // Check if this matches the key plus a modifier.
-          $modifier = substr($name, strrpos($name, ':') + 1);
-          // TODO: Allow components to provide additional modifiers per
-          // type, i.e. key, day, hour, minute, etc.
-          if (strcmp($name, $matched_token . ':' . $modifier) !== 0 || !in_array($modifier, $available_modifiers)) {
-            // No match.
-            continue;   // Token loop continue.
-          }
-        }
+    $submission_options = isset($data['webform-submission-options']) ? $data['webform-submission-options'] : [];
 
-        if ($modifier === 'label') {
-          $replacements[$original] = webform_filter_xss($display_element['#title']);
-        }
-        elseif ($modifier === 'key' && $display_element['#webform_component']['type'] === 'select') {
-          $values = array();
-          foreach ($display_element['#value'] as $value) {
-            $values[] = webform_filter_xss($value);
+    foreach ($tokens as $name => $original) {
+      if (strpos($name, 'values:') === 0) {
+        // Parse [values:{name}:{format}] token with optional format.
+        $keys = explode(':', $name);
+        $key = $keys[1];
+        $format = (isset($keys[2])) ? $keys[2] : NULL;
+        if (isset($submission_data[$key]) && isset($form_elements[$key])) {
+          $element = $form_elements[$key];
+          // Apply $format to the element.
+          if (isset($format)) {
+            $element['#format'] = $format;
           }
-          $replacements[$original] = implode(' ', $values);
+          $format_method = (empty($submission_options['html'])) ? 'formatText' : 'formatHtml';
+          $value = $element_manager->invokeMethod($format_method, $element, $submission_data[$key], $submission_options);
+          // Note, tokens can't include CSS and JS libraries since they will
+          // can be included in an email.
+          $replacements[$original] = (is_array($value)) ? \Drupal::service('renderer')->renderPlain($value) : (string) $value;
         }
-        else {
-          // Remove theme wrappers for the nolabel modifier.
-          if ($modifier === 'nolabel' || empty($modifier)) {
-            $display_element['#theme_wrappers'] = array();
-          }
-          $replacements[$original] = render($display_element);
+      }
+      elseif (strpos($name, 'url:') === 0) {
+        $key = str_replace('url:', '', $name);
+        if ($webform_submission->id() && $webform_submission->hasLinkTemplate($key)) {
+          $replacements[$original] = $webform_submission->toUrl($key, $url_options)->toString();
         }
-        // Continue processing tokens in case another modifier is used.
+      }
+      else {
+        switch ($name) {
+          case 'created':
+          case 'completed':
+          case 'changed':
+            $replacements[$original] = WebformDateHelper::format($webform_submission->{$name}->value, 'medium', '', NULL, $langcode);
+            break;
+
+          case 'langcode':
+          case 'serial':
+          case 'sid':
+          case 'uuid':
+            $replacements[$original] = $webform_submission->{$name}->value;
+            break;
+
+          case 'ip-address':
+            $replacements[$original] = $webform_submission->remote_addr->value;
+            break;
+
+          case 'in_draft':
+            $replacements[$original] = $webform_submission->in_draft->value ? t('Yes') : t('No');
+            break;
+
+          case 'language':
+            $replacements[$original] = \Drupal::languageManager()->getLanguage($webform_submission->langcode->value)->getName();
+            break;
+
+          case 'source-url':
+            $replacements[$original] = $webform_submission->getSourceUrl()->toString();
+            break;
+
+          case 'update-url':
+            $replacements[$original] = $webform_submission->getTokenUrl()->toString();
+            break;
+
+          case 'source-entity':
+            $source_entity = $webform_submission->getSourceEntity();
+            $replacements[$original] = ($source_entity) ? $source_entity->label() : '';
+            break;
+
+          case 'token':
+            $replacements[$original] = $webform_submission->getToken();
+            break;
+
+          case 'url':
+            if ($webform_submission->id()) {
+              $replacements[$original] = $webform_submission->toUrl('canonical', $url_options)->toString();
+            }
+            break;
+
+          case 'user':
+            /** @var \Drupal\Core\Session\AccountInterface $account */
+            $account = $webform_submission->uid->entity;
+            $replacements[$original] = $account->getDisplayName();
+            break;
+
+          case 'values':
+            $submission_format = (!empty($submission_options['html'])) ? 'html' : 'text';
+            $build = $view_builder->buildElements(
+              $webform_submission->getWebform()->getElementsInitialized(),
+              $submission_data,
+              $submission_options,
+              $submission_format
+            );
+            // Note, tokens can't include CSS and JS libraries since they will
+            // can be included in an email.
+            $replacements[$original] = \Drupal::service('renderer')->renderPlain($build);
+            break;
+
+          case 'webform':
+            $webform = $webform_submission->getWebform();
+            $bubbleable_metadata->addCacheableDependency($webform);
+            $replacements[$original] = $webform->label();
+            break;
+
+        }
       }
     }
 
-  }
-
-  // Chained token relationships.
-  if ($date_tokens = token_find_with_prefix($tokens, 'date')) {
-    $replacements += token_generate('date', $date_tokens, array('date' => $submission->submitted), $options);
-  }
-  if ($submission->completed && ($date_tokens = token_find_with_prefix($tokens, 'completed_date'))) {
-    $replacements += token_generate('date', $date_tokens, array('date' => $submission->completed), $options);
-  }
-  if ($date_tokens = token_find_with_prefix($tokens, 'modified_date')) {
-    $replacements += token_generate('date', $date_tokens, array('date' => $submission->modified), $options);
-  }
-  if (($user_tokens = token_find_with_prefix($tokens, 'user')) && $account = user_load($submission->uid)) {
-    $replacements += token_generate('user', $user_tokens, array('user' => $account), $options);
-  }
-  if ($submission->sid) {
-    if ($url_tokens = token_find_with_prefix($tokens, 'url')) {
-      $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->nid}/submission/{$submission->sid}"), $options);
+    // Chained token relationships.
+    if ($webform_tokens = $token_service->findWithPrefix($tokens, 'webform')) {
+      $webform = Webform::load($webform_submission->bundle());
+      $replacements += $token_service->generate('webform', $webform_tokens, ['webform' => $webform], $options, $bubbleable_metadata);
     }
-    if ($url_tokens = token_find_with_prefix($tokens, 'edit-url')) {
-      $replacements += token_generate('url', $url_tokens, array('path' => "node/{$node->nid}/submission/{$submission->sid}/edit"), $options);
+    if ($entity_tokens = $token_service->findWithPrefix($tokens, 'source-entity')) {
+      if ($entity = $webform_submission->getSourceEntity()) {
+        $replacements += $token_service->generate($entity->getEntityTypeId(), $entity_tokens, [$entity->getEntityTypeId() => $entity], $options, $bubbleable_metadata);
+      }
     }
   }
+  elseif ($type == 'webform' && !empty($data['webform'])) {
 
-  $recursion_level--;
+    $webform = $data['webform'];
+    foreach ($tokens as $name => $original) {
+      if (strpos($name, 'url:') === 0) {
+        $key = str_replace('url:', '', $name);
+        if ($webform->hasLinkTemplate($key)) {
+          $replacements[$original] = $webform->toUrl($key, $url_options)->toString();
+        }
+      }
+      else {
+        switch ($name) {
+          case 'id':
+            $replacements[$original] = $webform->id();
+            break;
+
+          case 'title':
+            $replacements[$original] = $webform->label();
+            break;
+
+          case 'description':
+            $replacements[$original] = $webform->getDescription();
+            break;
+
+          case 'url':
+            $replacements[$original] = $webform->toUrl('canonical', $url_options)->toString();
+            break;
+        }
+      }
+    }
+  }
 
   return $replacements;
 }

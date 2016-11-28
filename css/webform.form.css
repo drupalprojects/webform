@@ -1,0 +1,33 @@
+/**
+ * @file
+ * Webform styles.
+ */
+
+/**
+ * Container inline
+ */
+.form-item .container-inline {
+  margin: 2px 0;
+}
+
+/**
+ * Element inline
+ */
+.webform-element--title-inline label {
+  display: inline;
+}
+
+.webform-element--title-inline label {
+  padding-right: 0.5em;
+}
+
+.webform-element--title-inline label::after {
+  content: ':';
+}
+
+/**
+ * Readonly
+ */
+.webform-readonly {
+  background-color: #f0f0f0;
+}

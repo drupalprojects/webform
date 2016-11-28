@@ -1,0 +1,32 @@
+<?php
+
+namespace Drupal\webform\Plugin\WebformElement;
+
+/**
+ * Provides a 'container' element.
+ *
+ * @WebformElement(
+ *   id = "container",
+ *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Container.php/class/Container",
+ *   label = @Translation("Container"),
+ *   category = @Translation("Containers"),
+ * )
+ */
+class Container extends ContainerBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultProperties() {
+    return [
+      // Custom attributes.
+      'attributes__class' => '',
+      'attributes__style' => '',
+      // Flexbox.
+      'flex' => 1,
+      // Conditional logic.
+      'states' => [],
+    ];
+  }
+
+}

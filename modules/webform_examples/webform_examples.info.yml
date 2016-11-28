@@ -1,0 +1,7 @@
+name: 'Webform Examples'
+type: module
+description: 'Provides examples of all webform elements and functionality which can used for demonstrating and testing advanced functionality or used as cut-n-paste code snippets for creating new webforms.'
+package: 'Webform'
+core: 8.x
+dependencies:
+  - webform

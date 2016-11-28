@@ -1,0 +1,12 @@
+name: 'Webform Node'
+type: module
+description: 'Provides a webform content type which allows webforms to be integrated into a website as nodes.'
+package: 'Webform'
+core: 8.x
+dependencies:
+  - field
+  - node
+  - path
+  - text
+  - user
+  - webform

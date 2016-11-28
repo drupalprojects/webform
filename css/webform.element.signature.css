@@ -1,0 +1,42 @@
+/**
+ * @file
+ * Signature element styles.
+ *
+ * @see https://css-tricks.com/snippets/sass/maintain-aspect-ratio-mixin/
+ */
+
+.webform-signature-pad {
+  position: relative;
+  background-color: #f0f0f0;
+}
+
+.webform-signature-pad:before {
+  display: block;
+  content: "";
+  width: 100%;
+  padding-top: 33%;
+}
+
+.webform-signature-pad canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  cursor: crosshair;
+}
+
+.webform-signature-pad .button {
+  z-index: 100;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.webform-signature-pad-image {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  border: 1px solid #ccc;
+}

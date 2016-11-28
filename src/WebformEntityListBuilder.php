@@ -1,0 +1,350 @@
+<?php
+
+namespace Drupal\webform;
+
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Url;
+use Drupal\webform\Utility\WebformDialogHelper;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Defines a class to build a listing of webform entities.
+ *
+ * @see \Drupal\webform\Entity\Webform
+ */
+class WebformEntityListBuilder extends ConfigEntityListBuilder {
+
+  /**
+   * Webform state open.
+   */
+  const STATE_OPEN = 'open';
+
+  /**
+   * Webform state closed.
+   */
+  const STATE_CLOSED = 'closed';
+
+  /**
+   * Search keys.
+   *
+   * @var string
+   */
+  protected $keys;
+
+  /**
+   * Search state.
+   *
+   * @var string
+   */
+  protected $state;
+
+  /**
+   * Webform submission storage.
+   *
+   * @var \Drupal\webform\WebformSubmissionStorageInterface
+   */
+  protected $submissionStorage;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage) {
+    parent::__construct($entity_type, $storage);
+    $this->keys = \Drupal::request()->query->get('search');
+    $this->state = \Drupal::request()->query->get('state');
+    $this->submissionStorage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render() {
+    // Handler autocomplete redirect.
+    if ($this->keys && preg_match('#\(([^)]+)\)$#', $this->keys, $match)) {
+      if ($webform = $this->getStorage()->load($match[1])) {
+        return new RedirectResponse($webform->toUrl()->setAbsolute(TRUE)->toString());
+      }
+    }
+
+    $build = [];
+
+    // Must manually add local actions to the webform because we can't alter local
+    // actions and add the needed dialog attributes.
+    // @see https://www.drupal.org/node/2585169
+    if ($this->moduleHandler()->moduleExists('webform_ui')) {
+      $add_form_attributes = WebformDialogHelper::getModalDialogAttributes(640, ['button', 'button-action', 'button--primary', 'button--small']);
+    }
+    else {
+      $add_form_attributes = ['class' => ['button', 'button-action', 'button--primary', 'button--small']];
+    }
+
+    if (\Drupal::currentUser()->hasPermission('create webform')) {
+      $build['local_actions'] = [
+        'add_form' => [
+          '#type' => 'link',
+          '#title' => $this->t('Add webform'),
+          '#url' => new Url('entity.webform.add_form'),
+          '#attributes' => $add_form_attributes,
+        ],
+      ];
+    }
+
+    // Add the filter by key(word) and/or state.
+    $state_options = [
+      '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
+      WebformEntityListBuilder::STATE_OPEN => $this->t('Open [@total]', ['@total' => $this->getTotal(NULL, self::STATE_OPEN)]),
+      WebformEntityListBuilder::STATE_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, self::STATE_CLOSED)]),
+    ];
+    $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->state, $state_options);
+
+    // Display info.
+    if ($this->isAdmin()) {
+      if ($total = $this->getTotal($this->keys, $this->state)) {
+        $t_args = [
+          '@total' => $total,
+          '@results' => $this->formatPlural($total, $this->t('webform'), $this->t('webforms')),
+        ];
+        $build['info'] = [
+          '#markup' => $this->t('@total @results', $t_args),
+          '#prefix' => '<div>',
+          '#suffix' => '</div>',
+        ];
+      }
+    }
+    $build += parent::render();
+
+    $build['#attached']['library'][] = 'webform/webform.admin';
+
+    // Must preload CKEditor and CodeMirror library so that the
+    // window.dialog:aftercreate trigger is set before any dialogs are opened.
+    // @see js/webform.element.codemirror.js
+    $build['#attached']['library'][] = 'webform/webform.element.codemirror.yaml';
+    $build['#attached']['library'][] = 'webform/webform.element.html_editor';
+
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildHeader() {
+    $header['title'] = [
+      'data' => $this->t('Title'),
+    ];
+    $header['description'] = [
+      'data' => $this->t('Description'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    $header['status'] = [
+      'data' => $this->t('Status'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    $header['author'] = [
+      'data' => $this->t('Author'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    $header['results_total'] = [
+      'data' => $this->t('Total Results'),
+      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+    ];
+    $header['results_operations'] = [
+      'data' => $this->t('Operations'),
+      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+    ];
+    $header['operations'] = [
+      'data' => '',
+    ];
+    return $header;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildRow(EntityInterface $entity) {
+    /* @var $entity \Drupal\webform\WebformInterface */
+    $settings = $entity->getSettings();
+
+    // ISSUE: Webforms that the current user can't access are not being hidden via the EntityQuery.
+    // WORK-AROUND: Don't link to the webform.
+    // See: Access control is not applied to config entity queries
+    // https://www.drupal.org/node/2636066
+    $row['title']['data']['title'] = ['#markup' => ($entity->access('view')) ? $entity->toLink()->toString() : $entity->label()];
+    if ($entity->isTemplate()) {
+      $row['title']['data']['template'] = ['#markup' => ' <b>(' . $this->t('Template') . ')</b>'];
+    }
+    $row['description']['data']['description']['#markup'] = $entity->get('description');
+    $row['status'] = $entity->isOpen() ? $this->t('Open') : $this->t('Closed');
+    $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
+    $row['results_total'] = $this->submissionStorage->getTotal($entity) . (!empty($settings['results_disabled']) ? ' ' . $this->t('(Disabled)') : '');
+    $row['results_operations']['data'] = [
+      '#type' => 'operations',
+      '#links' => $this->getDefaultOperations($entity, 'results'),
+    ];
+    return $row + parent::buildRow($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultOperations(EntityInterface $entity, $type = 'edit') {
+    /* @var $entity \Drupal\webform\WebformInterface */
+    $route_parameters = ['webform' => $entity->id()];
+    if ($type == 'results') {
+      $operations = [];
+      if ($entity->access('submission_view_any')) {
+        $operations['submissions'] = [
+          'title' => $this->t('Submissions'),
+          'url' => Url::fromRoute('entity.webform.results_submissions', $route_parameters),
+        ];
+        $operations['table'] = [
+          'title' => $this->t('Table'),
+          'url' => Url::fromRoute('entity.webform.results_table', $route_parameters),
+        ];
+        $operations['export'] = [
+          'title' => $this->t('Download'),
+          'url' => Url::fromRoute('entity.webform.results_export', $route_parameters),
+        ];
+      }
+      if ($entity->access('submission_delete_any')) {
+        $operations['clear'] = [
+          'title' => $this->t('Clear'),
+          'url' => Url::fromRoute('entity.webform.results_clear', $route_parameters),
+        ];
+      }
+    }
+    else {
+      $operations = parent::getDefaultOperations($entity);
+      if ($entity->access('view')) {
+        $operations['view'] = [
+          'title' => $this->t('View'),
+          'weight' => 20,
+          'url' => Url::fromRoute('entity.webform.canonical', $route_parameters),
+        ];
+      }
+      if ($entity->access('submission_update_any')) {
+        $operations['test'] = [
+          'title' => $this->t('Test'),
+          'weight' => 21,
+          'url' => Url::fromRoute('entity.webform.test', $route_parameters),
+        ];
+      }
+      if ($entity->access('duplicate')) {
+        $operations['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'weight' => 23,
+          'url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
+          'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
+        ];
+      }
+    }
+    return $operations;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityIds() {
+    return $this->getQuery($this->keys, $this->state)
+      ->sort('title')
+      ->pager($this->getLimit())
+      ->execute();
+  }
+
+  /**
+   * Get the total number of submissions.
+   *
+   * @param string $keys
+   *   (optional) Search key.
+   * @param string $state
+   *   (optional) Webform state. Can be 'open' or 'closed'.
+   *
+   * @return int
+   *   The total number of submissions.
+   */
+  protected function getTotal($keys = '', $state = '') {
+    return $this->getQuery($keys, $state)
+      ->count()
+      ->execute();
+  }
+
+  /**
+   * Get the base entity query filtered by webform and search.
+   *
+   * @param string $keys
+   *   (optional) Search key.
+   * @param string $state
+   *   (optional) Webform state. Can be 'open' or 'closed'.
+   *
+   * @return \Drupal\Core\Entity\Query\QueryInterface
+   *   An entity query.
+   */
+  protected function getQuery($keys = '', $state = '') {
+    $query = $this->getStorage()->getQuery();
+
+    // Filter by key(word).
+    if ($keys) {
+      $or = $query->orConditionGroup()
+        ->condition('title', $this->keys, 'CONTAINS')
+        ->condition('description', $this->keys, 'CONTAINS')
+        ->condition('elements', $this->keys, 'CONTAINS');
+      $query->condition($or);
+    }
+
+    // Filter by (form) state.
+    if ($state == self::STATE_OPEN || $state == self::STATE_CLOSED) {
+      $query->condition('status', ($state == self::STATE_OPEN) ? TRUE : FALSE);
+    }
+
+    // Filter out templates if the webform_template.module is enabled.
+    if ($this->moduleHandler()->moduleExists('webform_templates')) {
+      $query->condition('template', FALSE);
+    }
+    return $query;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function load() {
+    $entity_ids = $this->getEntityIds();
+    /* @var $entities \Drupal\webform\WebformInterface[] */
+    $entities = $this->storage->loadMultiple($entity_ids);
+
+    // If the user is not a webform admin, check access to each webform.
+    if (!$this->isAdmin()) {
+      foreach ($entities as $entity_id => $entity) {
+        if (!$entity->access('update')) {
+          unset($entities[$entity_id]);
+        }
+      }
+    }
+
+    return $entities;
+  }
+
+  /**
+   * Get number of entities to list per page.
+   *
+   * @return int|false
+   *   The number of entities to list per page, or FALSE to list all entities.
+   */
+  protected function getLimit() {
+    return ($this->isAdmin()) ? $this->limit : FALSE;
+  }
+
+  /**
+   * Is the current user a webform administrator.
+   *
+   * @return bool
+   *   TRUE if the current user has 'administer webform' or 'edit any webform'
+   *   permission.
+   */
+  protected function isAdmin() {
+    $account = \Drupal::currentUser();
+    return ($account->hasPermission('administer webform') || $account->hasPermission('edit any webform') || $account->hasPermission('view any webform submission'));
+  }
+
+}

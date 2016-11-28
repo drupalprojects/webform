@@ -1,0 +1,79 @@
+<?php
+
+namespace Drupal\webform\Tests;
+
+use Drupal\webform\Element\WebformSelectOther;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
+
+/**
+ * Tests for basic email webform handler functionality.
+ *
+ * @group Webform
+ */
+class WebformHandlerEmailBasicTest extends WebformTestBase {
+
+  /**
+   * Test basic email handler.
+   */
+  public function testBasicEmailHandler() {
+    /** @var \Drupal\webform\WebformInterface $webform_handler_email */
+    $webform_handler_email = Webform::load('test_handler_email');
+
+    // Create a submission using the test webform's default values.
+    $this->drupalLogout();
+    $this->postSubmission($webform_handler_email);
+
+    // Check sending a basic email via a submission.
+    $sent_email = $this->getLastEmail();
+    $this->assertEqual($sent_email['reply-to'], "from@example.com <John Smith>");
+    $this->assertContains($sent_email['body'], 'Submitted by: Anonymous');
+    $this->assertContains($sent_email['body'], 'First name: John');
+    $this->assertContains($sent_email['body'], 'Last name: Smith');
+    $this->assertEqual($sent_email['headers']['From'], 'from@example.com');
+    $this->assertEqual($sent_email['headers']['Cc'], 'cc@example.com');
+    $this->assertEqual($sent_email['headers']['Bcc'], 'bcc@example.com');
+
+    // Check sending with the saving of results disabled.
+    $webform_handler_email->setSetting('results_disabled', TRUE)->save();
+    $this->postSubmission($webform_handler_email, ['first_name' => 'Jane', 'last_name' => 'Doe']);
+    $sent_email = $this->getLastEmail();
+    $this->assertContains($sent_email['body'], 'First name: Jane');
+    $this->assertContains($sent_email['body'], 'Last name: Doe');
+    $webform_handler_email->setSetting('results_disabled', FALSE)->save();
+
+    // Check sending a custom email using tokens.
+    $this->drupalLogin($this->adminFormUser);
+    $body = implode("\n", [
+      'full name: [webform-submission:values:first_name] [webform-submission:values:last_name]',
+      'uuid: [webform-submission:uuid]',
+      'sid: [webform-submission:sid]',
+      'date: [webform-submission:created]',
+      'ip-address: [webform-submission:ip-address]',
+      'user: [webform-submission:user]',
+      'url: [webform-submission:url]',
+      'edit-url: [webform-submission:url:edit-form]',
+      'Test that "double quotes" are not encoded.',
+    ]);
+
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_email/handlers/email/edit', ['settings[body]' => WebformSelectOther::OTHER_OPTION, 'settings[body_custom_text]' => $body], t('Save'));
+
+    $sid = $this->postSubmission($webform_handler_email);
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = WebformSubmission::load($sid);
+
+    $sent_email = $this->getLastEmail();
+    $this->assertContains($sent_email['body'], 'full name: John Smith');
+    $this->assertContains($sent_email['body'], 'uuid: ' . $webform_submission->uuid->value);
+    $this->assertContains($sent_email['body'], 'sid: ' . $sid);
+    $this->assertContains($sent_email['body'], 'date: ' . \Drupal::service('date.formatter')->format($webform_submission->created->value, 'medium'));
+    $this->assertContains($sent_email['body'], 'ip-address: ' . $webform_submission->remote_addr->value);
+    $this->assertContains($sent_email['body'], 'user: ' . $this->adminFormUser->label());
+    $this->assertContains($sent_email['body'], "url:");
+    $this->assertContains($sent_email['body'], $webform_submission->toUrl('canonical', ['absolute' => TRUE])->toString());
+    $this->assertContains($sent_email['body'], "edit-url:");
+    $this->assertContains($sent_email['body'], $webform_submission->toUrl('edit-form', ['absolute' => TRUE])->toString());
+    $this->assertContains($sent_email['body'], 'Test that "double quotes" are not encoded.');
+  }
+
+}

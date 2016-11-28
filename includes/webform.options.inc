@@ -2,131 +2,66 @@
 
 /**
  * @file
- * A collection of built-in select list options for Webform.
+ * Options alter hooks.
  */
 
+use Drupal\webform\Utility\WebformOptionsHelper;
+use Drupal\Core\Locale\CountryManager;
+use Drupal\Core\Language\LanguageManager;
+
 /**
- * Implements hook_webform_select_options_info().
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  *
- * @see webform_webform_select_options_info()
+ * @see config/install/webform.webform.example_options.yml
  */
-function _webform_options_info() {
-  $items = array();
+function webform_webform_options_range_alter(array &$options, array $element = []) {
+  $element += [
+    '#min' => 1,
+    '#max' => 100,
+    '#step' => 1,
+    '#pad_length' => NULL,
+    '#pad_str' => 0,
+  ];
 
-  $items['days'] = array(
-    'title' => t('Days of the week'),
-    'options callback' => 'webform_options_days',
-    'file' => 'includes/webform.options.inc',
+  $options = WebformOptionsHelper::range(
+    $element['#min'],
+    $element['#max'],
+    $element['#step'],
+    $element['#pad_length'],
+    $element['#pad_str']
   );
-
-  $items['countries'] = array(
-    'title' => t('Countries'),
-    'options callback' => 'webform_options_countries',
-    'file' => 'includes/webform.options.inc',
-  );
-
-  $items['united_states'] = array(
-    'title' => t('US states'),
-    'options callback' => 'webform_options_united_states',
-    'file' => 'includes/webform.options.inc',
-  );
-
-  return $items;
 }
 
 /**
- * Option list containing the days of the week.
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  */
-function webform_options_days($component, $flat, $arguments) {
-  $days = array(
-    'sunday' => t('Sunday'),
-    'monday' => t('Monday'),
-    'tuesday' => t('Tuesday'),
-    'wednesday' => t('Wednesday'),
-    'thursday' => t('Thursday'),
-    'friday' => t('Friday'),
-    'saturday' => t('Saturday'),
-  );
+function webform_webform_options_time_zones_alter(array &$options, array $element = []) {
+  $options = system_time_zones();
+}
 
-  // Order according to site settings for first day.
-  if ($first_day = variable_get('date_first_day', 0)) {
-    $week = array_splice($days, $first_day);
-    $days = array_merge($week, $days);
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
+ */
+function webform_webform_options_country_codes_alter(array &$options, array $element = []) {
+  $options = CountryManager::getStandardList();
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
+ */
+function webform_webform_options_country_names_alter(array &$options, array $element = []) {
+  $countries = CountryManager::getStandardList();
+  $options = array_combine($countries, $countries);
+}
+
+/**
+ * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
+ */
+function webform_webform_options_languages_alter(array &$options, array $element = []) {
+  $languages = LanguageManager::getStandardLanguageList();
+  unset($languages['en-x-simple']);
+  $options = [];
+  foreach ($languages as $language) {
+    $options[$language[0]] = $language[0];
   }
-
-  return $days;
-}
-
-/**
- * Options list containing country names.
- */
-function webform_options_countries($component, $flat, $arguments) {
-  include_once DRUPAL_ROOT . '/includes/locale.inc';
-  return country_get_list();
-}
-
-/**
- * Options list containing United States states and territories.
- */
-function webform_options_united_states($component, $flat, $arguments) {
-  return array(
-    'AL' => t('Alabama'),
-    'AK' => t('Alaska'),
-    'AS' => t('American Samoa'),
-    'AZ' => t('Arizona'),
-    'AR' => t('Arkansas'),
-    'CA' => t('California'),
-    'CO' => t('Colorado'),
-    'CT' => t('Connecticut'),
-    'DE' => t('Delaware'),
-    'DC' => t('District of Columbia'),
-    'FL' => t('Florida'),
-    'GA' => t('Georgia'),
-    'GU' => t('Guam'),
-    'HI' => t('Hawaii'),
-    'ID' => t('Idaho'),
-    'IL' => t('Illinois'),
-    'IN' => t('Indiana'),
-    'IA' => t('Iowa'),
-    'KS' => t('Kansas'),
-    'KY' => t('Kentucky'),
-    'LA' => t('Louisiana'),
-    'ME' => t('Maine'),
-    'MH' => t('Marshall Islands'),
-    'MD' => t('Maryland'),
-    'MA' => t('Massachusetts'),
-    'MI' => t('Michigan'),
-    'MN' => t('Minnesota'),
-    'MS' => t('Mississippi'),
-    'MO' => t('Missouri'),
-    'MT' => t('Montana'),
-    'NE' => t('Nebraska'),
-    'NV' => t('Nevada'),
-    'NH' => t('New Hampshire'),
-    'NJ' => t('New Jersey'),
-    'NM' => t('New Mexico'),
-    'NY' => t('New York'),
-    'NC' => t('North Carolina'),
-    'ND' => t('North Dakota'),
-    'MP' => t('Northern Marianas Islands'),
-    'OH' => t('Ohio'),
-    'OK' => t('Oklahoma'),
-    'OR' => t('Oregon'),
-    'PW' => t('Palau'),
-    'PA' => t('Pennsylvania'),
-    'PR' => t('Puerto Rico'),
-    'RI' => t('Rhode Island'),
-    'SC' => t('South Carolina'),
-    'SD' => t('South Dakota'),
-    'TN' => t('Tennessee'),
-    'TX' => t('Texas'),
-    'UT' => t('Utah'),
-    'VT' => t('Vermont'),
-    'VI' => t('Virgin Islands'),
-    'VA' => t('Virginia'),
-    'WA' => t('Washington'),
-    'WV' => t('West Virginia'),
-    'WI' => t('Wisconsin'),
-    'WY' => t('Wyoming'),
-  );
 }
