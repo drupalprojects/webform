@@ -136,7 +136,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
   $settings = $webform->getSettings();
 
   // Set progress.
-  if ($settings['wizard_complete'] && ($settings['wizard_progress_bar'] || $settings['wizard_progress_pages'] || $settings['wizard_progress_percentage'])) {
+  if ($webform->getPages() && $settings['wizard_complete'] && ($settings['wizard_progress_bar'] || $settings['wizard_progress_pages'] || $settings['wizard_progress_percentage'])) {
     $variables['progress'] = [
       '#theme' => 'webform_progress',
       '#webform' => $webform,
@@ -491,15 +491,15 @@ function template_preprocess_webform_container_base_text(array &$variables) {
 function template_preprocess_webform_progress(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
+  $current_page = $variables['current_page'];
 
   $pages = $webform->getPages();
 
-  $total = count($pages);
-  $current_page = $variables['current_page'];
-  // Jump to last page if 'current_page' is complete.
-  if ($current_page === 'complete') {
-    $current_page = $total - 1;
-  }
+  $page_keys = array_keys($pages);
+  $page_indexes = array_flip($page_keys);
+  $current_index = $page_indexes[$current_page];
+
+  $total = count($page_keys);
 
   if ($webform->getSetting('wizard_progress_bar')) {
     $variables['bar'] = [
@@ -510,11 +510,11 @@ function template_preprocess_webform_progress(array &$variables) {
   }
 
   if ($webform->getSetting('wizard_progress_pages')) {
-    $variables['pages'] = t('Page @start of @end', ['@start' => $current_page + 1, '@end' => $total]);
+    $variables['summary'] = t('Page @start of @end', ['@start' => $current_index  + 1, '@end' => $total]);
   }
 
   if ($webform->getSetting('wizard_progress_percentage')) {
-    $variables['percentage'] = number_format(($current_page / ($total - 1)) * 100, 0) . '%';
+    $variables['percentage'] = number_format(($current_index / ($total - 1)) * 100, 0) . '%';
   }
 }
 
@@ -531,16 +531,19 @@ function template_preprocess_webform_progress(array &$variables) {
 function template_preprocess_webform_progress_bar(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
+  $current_page = $variables['current_page'];
 
   $pages = $webform->getPages();
-  $variables['pages'] = [];
-  foreach ($pages as $page) {
-    $variables['pages'][] = (isset($page['#title'])) ? $page['#title'] : '';
-  }
 
-  // Jump to last page if 'current_page' is complete.
-  if ($variables['current_page'] && $variables['current_page'] === 'complete') {
-    $variables['current_page'] = count($variables['pages']) - 1;
+  $page_keys = array_keys($pages);
+  $page_indexes = array_flip($page_keys);
+  $current_index = $page_indexes[$current_page];
+  $variables['current_index'] = $current_index;
+
+  // Reset the pages variable.
+  $variables['progress'] = [];
+  foreach ($pages as $page) {
+    $variables['progress'][] = (isset($page['#title'])) ? $page['#title'] : '';
   }
 }
 

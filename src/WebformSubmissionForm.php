@@ -13,6 +13,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Controller\WebformController;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -142,6 +143,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
+    $webform = $this->getWebform();
 
     // This submission webform is based on the current URL, and hence it depends
     // on the 'url' cache context.
@@ -159,43 +161,12 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Build the webform.
     $form = parent::buildForm($form, $form_state);
 
-    // Get wizard.
-    $wizard = $form_state->get('wizard');
-
-    // Add unsaved message.
-    if ($this->getWebformSetting('form_unsaved')) {
-      $form['#attributes']['class'][] = 'js-webform-unsaved';
-      $form['#attached']['library'][] = 'webform/webform.form.unsaved';
-      if ($wizard['current']) {
-        $form['#attributes']['data-webform-unsaved'] = TRUE;
-      }
-    }
-
-    // Add novalidate attribute to webform if client side validation disabled.
-    if ($this->getWebformSetting('form_novalidate')) {
-      $form['#attributes']['novalidate'] = 'novalidate';
-    }
-
-    // Display collapse/expand all details link.
-    if ($this->getWebformSetting('form_details_toggle')) {
-      $form['#attributes']['class'][] = 'webform-details-toggle';
-      $form['#attached']['library'][] = 'webform/webform.element.details.toggle';
-    }
-
-    // Add autofocus class to webform.
-    if ($this->entity->isNew() && $this->getWebformSetting('form_autofocus')) {
-      $form['#attributes']['class'][] = 'js-webform-autofocus';
-    }
-
-    // Disable webform auto submit on enter for wizard webforms only.
-    if ($wizard['total']) {
-      $form['#attributes']['class'][] = 'js-webform-disable-autosubmit';
-    }
+    // Alter webform via webform handler.
+    $this->getWebform()->invokeHandlers('alterForm', $form, $form_state, $webform_submission);
 
     // Call custom webform alter hook.
     $form_id = $this->getFormId();
     $this->thirdPartySettingsManager->alter('webform_submission_form', $form, $form_state, $form_id);
-
     return $form;
   }
 
@@ -256,32 +227,24 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Move all $elements properties to the $form.
     $this->setFormPropertiesFromElements($form, $elements);
 
-    // Init wizard.
-    $this->initFormWizardState($form, $form_state);
-
     // Add wizard progress tracker to the webform.
-    if ($this->getWebformSetting('wizard_progress_bar') || $this->getWebformSetting('wizard_progress_pages') || $this->getWebformSetting('wizard_progress_percentage')) {
-      $wizard = $form_state->get('wizard');
-      if ($wizard['total']) {
-        $form['progress'] = [
-          '#theme' => 'webform_progress',
-          '#webform' => $this->getWebform(),
-          '#current_page' => $wizard['current'],
-        ];
-      }
+    $current_page = $this->getCurrentPage($form, $form_state);
+    if ($current_page && $this->getWebformSetting('wizard_progress_bar') || $this->getWebformSetting('wizard_progress_pages') || $this->getWebformSetting('wizard_progress_percentage')) {
+      $form['progress'] = [
+        '#theme' => 'webform_progress',
+        '#webform' => $this->getWebform(),
+        '#current_page' => $current_page,
+      ];
     }
 
     // Append elements to the webform.
     $form['elements'] = $elements;
 
-    // Alter webform via webform handler.
-    $this->getWebform()->invokeHandlers('alterForm', $form, $form_state, $webform_submission);
-
-    // Add CSS and JS.
+    // Default: Add CSS and JS.
     // @see https://www.drupal.org/node/2274843#inline
     $form['#attached']['library'][] = 'webform/webform.form';
 
-    // Add custom CSS and JS.
+    // Assets: Add custom CSS and JS.
     // @see webform_css_alter()
     // @see webform_js_alter()
     $assets = [
@@ -300,15 +263,46 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attached']['library'][] = 'webform/webform.form.disable_back';
     }
 
-    // Attach details element save open/close library.
-    // This ensures that the library will be loaded even if the
-    // Webform is used as a block or a node.
+    // Unsaved: Add unsaved message.
+    if ($this->getWebformSetting('form_unsaved')) {
+      $form['#attributes']['class'][] = 'js-webform-unsaved';
+      $form['#attached']['library'][] = 'webform/webform.form.unsaved';
+      $current_page = $this->getCurrentPage($form, $form_state);
+      if ($current_page && ($current_page != $this->getFirstPage($form, $form_state))) {
+        $form['#attributes']['data-webform-unsaved'] = TRUE;
+      }
+    }
+
+    // Novalidate: Add novalidate attribute to webform if client side validation disabled.
+    if ($this->getWebformSetting('form_novalidate')) {
+      $form['#attributes']['novalidate'] = 'novalidate';
+    }
+
+    // Details toggle: Display collapse/expand all details link.
+    if ($this->getWebformSetting('form_details_toggle')) {
+      $form['#attributes']['class'][] = 'webform-details-toggle';
+      $form['#attached']['library'][] = 'webform/webform.element.details.toggle';
+    }
+
+    // Autofocus: Add autofocus class to webform.
+    if ($this->entity->isNew() && $this->getWebformSetting('form_autofocus')) {
+      $form['#attributes']['class'][] = 'js-webform-autofocus';
+    }
+
+    // Details save: Attach details element save open/close library.
+    // This ensures that the library will be loaded even if the webform is
+    // used as a block or a node.
     if ($this->config('webform.settings')->get('ui.details_save')) {
       $form['#attached']['library'][] = 'webform/webform.element.details.save';
     }
 
-    // Set current wizard or preview page.
-    $this->setFormCurrentPage($form, $form_state);
+    // Pages: Disable webform auto submit on enter for wizard webform pages only.
+    if ($this->getPages($form, $form_state)) {
+      $form['#attributes']['class'][] = 'js-webform-disable-autosubmit';
+    }
+
+    // Pages: Set current wizard or preview page.
+    $this->displayCurrentPage($form, $form_state);
 
     // Add #after_build callbacks.
     $form['#after_build'][] = '::afterBuild';
@@ -503,12 +497,12 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->entity;
+    $webform = $this->getWebform();
 
     $element = parent::actions($form, $form_state);
 
     /* @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $preview_mode = $this->getWebformSetting('preview');
-    $wizard = $form_state->get('wizard');
 
     // Remove the delete button from the webform submission webform.
     unset($element['delete']);
@@ -530,27 +524,29 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Add confirm(ation) handler to submit button.
     $element['submit']['#submit'][] = '::confirmForm';
 
-    $wizard_enabled = ($wizard['total']) ? TRUE : FALSE;
+    $pages = $this->getPages($form, $form_state);
+    $current_page = $this->getCurrentPage($form, $form_state);
+    if ($pages) {
+      // Get current page element which can contain custom prev(ious) and next button
+      // labels.
+      $current_page_element = $this->getWebform()->getPage($current_page);
 
-    if ($wizard_enabled) {
-      $is_wizard_last_page = ($wizard['total'] == ($wizard['current'] + ($this->getWebformSetting('wizard_complete') ? 2 : 1))) ? TRUE : FALSE;
-      $is_preview_page = $this->isPreview($form_state);
-      $is_next_page_optional_preview = ($this->isNextPagePreview($form_state) && $preview_mode != DRUPAL_REQUIRED);
+      $is_first_page = ($current_page == $this->getFirstPage($form, $form_state)) ? TRUE : FALSE;
+      $is_last_page = (in_array($current_page, ['preview', 'complete', $this->getLastPage($form, $form_state)])) ? TRUE : FALSE;
+      $is_preview_page = ($current_page == 'preview');
+      $is_next_page_preview = ($this->getNextPage($form, $form_state) == 'preview') ? TRUE : FALSE;
+      $is_next_page_optional_preview = ($is_next_page_preview && $preview_mode != DRUPAL_REQUIRED);
 
       // Only show that save button if this is the last page of the wizard or
       // on preview page or right before the optional preview.
-      $element['submit']['#access'] = $is_wizard_last_page || $is_preview_page || $is_next_page_optional_preview;
+      $element['submit']['#access'] = $is_last_page || $is_preview_page || $is_next_page_optional_preview;
 
-      // Get current page which can contain custom prev(ious) and next button
-      // labels.
-      $current_page = $this->getWebform()->getPage($wizard['current']);
-
-      if ($wizard['current']) {
-        if ($this->isPreview($form_state)) {
+      if (!$is_first_page) {
+        if ($is_preview_page) {
           $previous_label = $this->getWebformSetting('preview_prev_button_label');
         }
         else {
-          $previous_label = (isset($current_page['#prev_button_label'])) ? $current_page['#prev_button_label'] : $this->getWebformSetting('wizard_prev_button_label');
+          $previous_label = (isset($current_page_element['#prev_button_label'])) ? $current_page_element['#prev_button_label'] : $this->getWebformSetting('wizard_prev_button_label');
         }
         $element['previous'] = [
           '#type' => 'submit',
@@ -561,13 +557,13 @@ class WebformSubmissionForm extends ContentEntityForm {
         ];
       }
 
-      if (!$is_wizard_last_page) {
-        if ($this->isNextPagePreview($form_state)) {
+      if (!$is_last_page) {
+        if ($is_next_page_preview) {
           $next_label = $this->getWebformSetting('preview_next_button_label');
           $next_class = 'webform-button--preview';
         }
         else {
-          $next_label = (isset($current_page['#next_button_label'])) ? $current_page['#next_button_label'] : $this->getWebformSetting('wizard_next_button_label');
+          $next_label = (isset($current_page_element['#next_button_label'])) ? $current_page_element['#next_button_label'] : $this->getWebformSetting('wizard_next_button_label');
           $next_class = 'webform-button--next';
         }
         $element['next'] = [
@@ -606,11 +602,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($form_state->getErrors()) {
       return;
     }
-    // Move wizard forward.
-    $wizard = $form_state->get('wizard');
-    $wizard['current']++;
-    $form_state->set('wizard', $wizard);
-
+    $form_state->set('current_page', $this->getNextPage($form, $form_state));
     $this->wizardSubmit($form, $form_state);
   }
 
@@ -623,11 +615,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function previous(array &$form, FormStateInterface $form_state) {
-    // Move wizard back.
-    $wizard = $form_state->get('wizard');
-    $wizard['current']--;
-    $form_state->set('wizard', $wizard);
-
+    $form_state->set('current_page', $this->getPreviousPage($form, $form_state));
     $this->wizardSubmit($form, $form_state);
   }
 
@@ -804,9 +792,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = $this->getEntity();
 
     // Set current page.
-    $wizard = $form_state->get('wizard');
-    if ($wizard['total']) {
-      $current_page = $wizard['pages'][$wizard['current']];
+    if ($current_page = $this->getCurrentPage($form, $form_state)) {
       $webform_submission->setCurrentPage($current_page);
     }
 
@@ -859,38 +845,138 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
   }
 
+  /****************************************************************************/
+  // Wizard page functions
+  /****************************************************************************/
+
   /**
-   * Initialize the webform wizard state manager.
+   * Get visible wizard pages.
+   *
+   * Note: The array of pages is stored in the webform's state so that it can be
+   * altered using hook_form_alter() and #validate callbacks.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
+   *
+   * @return array
+   *   Array of visible wizard pages.
    */
-  protected function initFormWizardState(array &$form, FormStateInterface $form_state) {
-    if ($form_state->get('wizard')) {
-      return;
+  protected function getPages(array &$form, FormStateInterface $form_state) {
+    if ($form_state->get('pages') === NULL) {
+      $pages = $this->getWebform()->getPages();
+      foreach ($pages as &$page) {
+        $page['#access'] = TRUE;
+      }
+      $form_state->set('pages', $pages);
     }
 
-    // Get pages, total, and current.
-    $pages = array_keys($this->getWebform()->getPages());
-    $total = count($pages);
-    $current = 0;
-
-    // Get current page from saved draft.
-    $current_page = $this->entity->getCurrentPage();
-    if ($current_page  && $this->draftEnabled()) {
-      $index = array_flip($pages);
-      if (isset($index[$current_page])) {
-        $current = $index[$current_page];
+    // Get pages and check #access.
+    $pages = $form_state->get('pages');
+    foreach ($pages as $page_key => $page) {
+      if ($page['#access'] === FALSE) {
+        unset($pages[$page_key]);
       }
     }
 
-    $form_state->set('wizard', [
-      'total' => $total,
-      'current' => $current,
-      'pages' => $pages ,
-    ]);
+    return $pages;
+  }
+
+  /**
+   * Get the current page's key.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return string
+   *   The current page's key.
+   */
+  protected function getCurrentPage(array &$form, FormStateInterface $form_state) {
+    if ($form_state->get('current_page') === NULL) {
+      $pages = $this->getPages($form, $form_state);
+      if (empty($pages)) {
+        $form_state->set('current_page', '');
+      }
+      else {
+        $current_page = $this->entity->getCurrentPage();
+        if ($current_page && isset($pages[$current_page]) && $this->draftEnabled()) {
+          $form_state->set('current_page', $current_page);
+        }
+        else {
+          $form_state->set('current_page', WebformArrayHelper::getFirstKey($pages));
+        }
+      }
+    }
+    return $form_state->get('current_page');
+  }
+
+  /**
+   * Get first page's key.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return null|string
+   *   The first page's key.
+   */
+  protected function getFirstPage(array &$form, FormStateInterface $form_state) {
+    $pages = $this->getPages($form, $form_state);
+    return WebformArrayHelper::getFirstKey($pages);
+  }
+
+  /**
+   * Get last page's key.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return null|string
+   *   The last page's key.
+   */
+  protected function getLastPage(array &$form, FormStateInterface $form_state) {
+    $pages = $this->getPages($form, $form_state);
+    return WebformArrayHelper::getLastKey($pages);
+  }
+
+  /**
+   * Get next page's key.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return null|string
+   *   The next page's key. NULL if there is no next page.
+   */
+  protected function getNextPage(array &$form, FormStateInterface $form_state) {
+    $pages = $this->getPages($form, $form_state);
+    $current_page = $this->getCurrentPage($form, $form_state);
+    return WebformArrayHelper::getNextKey($pages, $current_page);
+  }
+
+  /**
+   * Get previous page's key.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return null|string
+   *   The previous page's key. NULL if there is no previous page.
+   */
+  protected function getPreviousPage(array &$form, FormStateInterface $form_state) {
+    $pages = $this->getPages($form, $form_state);
+    $current_page = $this->getCurrentPage($form, $form_state);
+    return WebformArrayHelper::getPreviousKey($pages, $current_page);
   }
 
   /**
@@ -901,8 +987,9 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  protected function setFormCurrentPage(array &$form, FormStateInterface $form_state) {
-    if ($this->isPreview($form_state)) {
+  protected function displayCurrentPage(array &$form, FormStateInterface $form_state) {
+    $current_page = $this->getCurrentPage($form, $form_state);
+    if ($current_page == 'preview') {
       // Hide elements.
       $form['elements']['#access'] = FALSE;
 
@@ -916,18 +1003,25 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
     else {
-      $wizard = $form_state->get('wizard');
-      foreach ($wizard['pages'] as $index => $page_key) {
-        if ($index != $wizard['current']) {
-          $form['elements'][$page_key]['#access'] = FALSE;
-          $this->hideElements($form['elements'][$page_key]);
-        }
-        else {
-          $form['elements'][$page_key]['#type'] = 'container';
+      // Get all pages so that we can also hide skipped pages.
+      $pages = $this->getWebform()->getPages();
+      foreach ($pages as $page_key => $page) {
+        if (isset($form['elements'][$page_key])) {
+          if ($page_key != $current_page) {
+            $form['elements'][$page_key]['#access'] = FALSE;
+            $this->hideElements($form['elements'][$page_key]);
+          }
+          else {
+            $form['elements'][$page_key]['#type'] = 'container';
+          }
         }
       }
     }
   }
+
+  /****************************************************************************/
+  // Webform state functions
+  /****************************************************************************/
 
   /**
    * Set webform state to redirect to a trusted redirect response.
@@ -1260,36 +1354,6 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function isRoute($route_name) {
     return ($route_name == $this->getRouteMatch()->getRouteName()) ? TRUE : FALSE;
-  }
-
-  /**
-   * Determine if the webform is in preview mode.
-   *
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return bool
-   *   TRUE if webform is in preview.
-   */
-  protected function isPreview(FormStateInterface $form_state) {
-    $wizard = $form_state->get('wizard');
-    $page = $this->getWebform()->getPage($wizard['current']);
-    return ($page['#type'] == 'webform_preview') ? TRUE : FALSE;
-  }
-
-  /**
-   * Determine if the webform's next page is preview mode.
-   *
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return bool
-   *   TRUE if the webform's next page is preview.
-   */
-  protected function isNextPagePreview(FormStateInterface $form_state) {
-    $wizard = $form_state->get('wizard');
-    $page = $this->getWebform()->getPage($wizard['current'] + 1);
-    return ($page && $page['#type'] == 'webform_preview') ? TRUE : FALSE;
   }
 
   /**

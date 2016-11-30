@@ -11,6 +11,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformHandlerInterface;
 use Drupal\webform\WebformHandlerPluginCollection;
@@ -1051,37 +1052,45 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getPages() {
-    if (!isset($this->pages)) {
-      // Add webform page containers.
-      $this->pages = [];
-      $elements = $this->getElementsInitialized();
+    if (isset($this->pages)) {
+      return $this->pages;
+    }
+
+    $wizard_properties = [
+      '#title' => '#title',
+      '#prev_button_label' => '#prev_button_label',
+      '#next_button_label' => '#next_button_label',
+    ];
+
+    $elements = $this->getElementsInitialized();
+
+    // Add webform page containers.
+    $this->pages = [];
+    if (is_array($elements)) {
       foreach ($elements as $key => $element) {
         if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
-          $this->pages[$key] = $element;
+          $this->pages[$key] = array_intersect_key($element, $wizard_properties);
         }
-      }
-
-      // Add preview page.
-      $settings = $this->getSettings();
-      if ($settings['preview'] != DRUPAL_DISABLED) {
-        // If there is no start page, we must define one.
-        if (empty($this->pages)) {
-          $this->pages['start'] = [
-            '#type' => 'webform_wizard_page',
-            '#title' => $this->getSetting('wizard_start_label') ?: \Drupal::config('webform.settings')->get('settings.default_wizard_start_label'),
-          ];
-        }
-        $this->pages['preview'] = [
-          '#type' => 'webform_preview',
-          '#title' => $this->t('Preview'),
-        ];
       }
     }
 
+    // Add preview page.
+    $settings = $this->getSettings();
+    if ($settings['preview'] != DRUPAL_DISABLED) {
+      // If there is no start page, we must define one.
+      if (empty($this->pages)) {
+        $this->pages['start'] = [
+          '#title' => $this->getSetting('wizard_start_label') ?: \Drupal::config('webform.settings')->get('settings.default_wizard_start_label'),
+        ];
+      }
+      $this->pages['preview'] = [
+        '#title' => $this->t('Preview'),
+      ];
+    }
+
     // Only add complete page, if there are some pages.
-    if ($this->pages  && $this->getSetting('wizard_complete')) {
+    if ($this->pages && $this->getSetting('wizard_complete')) {
       $this->pages['complete'] = [
-        '#type' => 'webform_wizard_page',
         '#title' => $this->getSetting('wizard_complete_label') ?: \Drupal::config('webform.settings')->get('settings.default_wizard_complete_label'),
       ];
     }
@@ -1092,18 +1101,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPage($index) {
+  public function getPage($key) {
     $pages = $this->getPages();
-    if (isset($pages[$index])) {
-      return $pages[$index];
-    }
-
-    $keys = array_keys($pages);
-    if (isset($keys[$index])) {
-      return $pages[$keys[$index]];
-    }
-
-    return NULL;
+    return (isset($pages[$key])) ? $pages[$key] : NULL;
   }
 
   /**

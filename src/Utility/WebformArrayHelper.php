@@ -85,4 +85,88 @@ class WebformArrayHelper {
     return !self::isAssociative($array);
   }
 
+  /**
+   * Get the first key in an array.
+   *
+   * @param array $array
+   *   An array.
+   *
+   * @return string|null
+   *   The first key in an array.
+   */
+  public static function getFirstKey(array $array) {
+    $keys = array_keys($array);
+    return reset($keys);
+  }
+
+  /**
+   * Get the last key in an array.
+   *
+   * @param array $array
+   *   An array.
+   *
+   * @return string|null
+   *   The last key in an array.
+   */
+  public static function getLastKey(array $array) {
+    $keys = array_keys($array);
+    return end($keys);
+  }
+
+  /**
+   * Get the next key in an array.
+   *
+   * @param array $array
+   *   An array.
+   * @param string $key
+   *   A key.
+   *
+   * @return string|null
+   *   The next key in an array or NULL is there is no next key.
+   */
+  public static function getNextKey(array $array, $key) {
+    return self::getKey($array, $key, 'next');
+  }
+
+  /**
+   * Get the prev(ious) key in an array.
+   *
+   * @param array $array
+   *   An array.
+   * @param string $key
+   *   A key.
+   *
+   * @return string|null
+   *   The prev(ious) key in an array or NULL is there is no previous key.
+   */
+  public static function getPreviousKey(array $array, $key) {
+    return self::getKey($array, $key, 'prev');
+  }
+
+  /**
+   * Get next or prev(ious) page key.
+   *
+   * @param $key
+   *   A page key.
+   * @param string $direction
+   *   The direction of the page key to retrieve
+   * @param bool $visible
+   *   If TRUE only visible pages will be returned.  Defaults to FALSE.
+   *
+   * @return string|null
+   *   The next or prev(ious) page key or NULL if no key is found.
+   *
+   * @see http://stackoverflow.com/questions/6407795/get-the-next-array-item-using-the-key-php
+   */
+  protected static function getKey(array $array, $key, $direction) {
+    $array_keys = array_keys($array);
+    $array_key = reset($array_keys);
+    do {
+      if ($array_key == $key) {
+        return $direction($array_keys);
+      }
+    } while ($array_key = next($array_keys));
+    return NULL;
+  }
+
 }

@@ -92,7 +92,7 @@ class WebformHandlerTest extends WebformTestBase {
     $this->assertRaw('Invoked: Drupal\webform_test\Plugin\WebformHandler\TestWebformHandler:preCreate');
     $this->assertRaw('Invoked: Drupal\webform_test\Plugin\WebformHandler\TestWebformHandler:postCreate');
     $this->assertRaw('Invoked: Drupal\webform_test\Plugin\WebformHandler\TestWebformHandler:alterElements');
-    $this->assertNoRaw('Invoked: Drupal\webform_test\Plugin\WebformHandler\TestWebformHandler:alterForm');
+    $this->assertRaw('Invoked: Drupal\webform_test\Plugin\WebformHandler\TestWebformHandler:alterForm');
 
     // Check admin can still post submission.
     $this->drupalLogin($this->adminFormUser);

@@ -19,6 +19,10 @@ function webform_test_theme() {
   ];
 }
 
+/******************************************************************************/
+// Alter options.
+/******************************************************************************/
+
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  */
@@ -28,7 +32,38 @@ function webform_test_webform_options_test_alter(array &$options, array &$elemen
     'two' => t('Two'),
     'three' => t('Three'),
   ];
+}
 
+/******************************************************************************/
+// Alter webforms.
+/******************************************************************************/
+
+/**
+ * Implements hook_webform_form_FORM_ID_alter().
+ */
+function webform_test_form_webform_submission_test_form_wizard_custom_form_alter(array &$form, FormStateInterface $form_state) {
+  $form['#validate'][] = '_webform_test_form_webform_submission_test_form_wizard_custom_form_validate';
+}
+
+/**
+ * Validate handler for 'test_form_wizard_custom'.
+ */
+function _webform_test_form_webform_submission_test_form_wizard_custom_form_validate(array &$form, FormStateInterface $form_state) {
+  if ($form_state->hasAnyErrors()) {
+    return;
+  }
+
+  // Ge submitted values.
+  $values  = $form_state->getValues();
+
+  // Alter pages based on selected 'pages'.
+  $pages = $form_state->get('pages');
+  foreach ($pages as $page_key => &$page) {
+    if (isset($form['elements'][$page_key])) {
+      $page['#access'] = in_array($page_key, $values['pages']);
+    }
+  }
+  $form_state->set('pages', $pages);
 }
 
 /**
@@ -47,6 +82,10 @@ function webform_test_form_webform_submission_test_form_validate_form_validate($
     $form_state->setErrorByName('custom', t('Custom element is required.'));
   }
 }
+
+/******************************************************************************/
+// Generate elements.
+/******************************************************************************/
 
 /**
  * Implements hook_webform_load().

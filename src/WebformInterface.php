@@ -375,13 +375,13 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   /**
    * Get webform wizard page.
    *
-   * @param string|int $index
-   *   The name or index of a webform wizard page.
+   * @param string|int $key
+   *   The name/key of a webform wizard page.
    *
    * @return array|null
    *   A webform wizard page element.
    */
-  public function getPage($index);
+  public function getPage($key);
 
   /**
    * Update submit and confirm paths (ie URL aliases) associated with this webform.

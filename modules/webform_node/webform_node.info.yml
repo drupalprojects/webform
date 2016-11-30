@@ -4,9 +4,9 @@ description: 'Provides a webform content type which allows webforms to be integr
 package: 'Webform'
 core: 8.x
 dependencies:
-  - field
-  - node
-  - path
-  - text
-  - user
+  - 'drupal:field'
+  - 'drupal:node'
+  - 'drupal:path'
+  - 'drupal:text'
+  - 'drupal:user'
   - webform
