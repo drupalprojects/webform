@@ -22,7 +22,6 @@ use Drupal\Core\Form\FormStateInterface;
 function webform_test_custom_properties_form_webform_ui_element_form_alter(&$form, FormStateInterface $form_state) {
   // Define default custom properties.
   $default_custom_properties = [
-    'custom_property' => '',
     'custom_data' => '',
   ];
 
@@ -56,23 +55,10 @@ function webform_test_custom_properties_form_webform_ui_element_form_alter(&$for
     '#title' => t('Custom properties'),
     '#description' => t('The below custom properties are provided and managed by the webform_test_custom_properties.module.'),
     '#open' => TRUE,
-    // Add custom properties immediately after fieldsets,
-    // which have a weight of -20.
+    // Add custom properties after all fieldset elements, which have a
+    // weight of -20.
     // @see \Drupal\webform\WebformElementBase::buildConfigurationForm
     '#weight' => -10,
-  ];
-
-  // Set custom property.
-  $form['properties']['custom_properties']['custom_property'] = [
-    '#type' => 'textfield',
-    '#title' => t('Custom property'),
-    '#description' => t("The custom property will be added to the \$element's render array properties."),
-    // IMPORTANT:
-    // You must define the parents for all custom properties to ensure the
-    // submitted value is added to the element's properties render array.
-    // @see \Drupal\webform_ui\Form\WebformUiElementFormBase::submitForm
-    '#parents' => ['properties', 'custom_property'],
-    '#default_value' => $custom_properties['custom_property'],
   ];
 
   // Set custom data.
@@ -80,29 +66,21 @@ function webform_test_custom_properties_form_webform_ui_element_form_alter(&$for
     '#type' => 'textfield',
     '#title' => t('Custom data'),
     '#description' => t("The custom data value will be added to the \$element's render array attributes."),
+    // IMPORTANT:
+    // You must define the parents for all custom properties to ensure the
+    // submitted value is added to the element's properties render array.
+    // @see \Drupal\webform_ui\Form\WebformUiElementFormBase::submitForm
     '#parents' => ['properties', 'custom_data'],
     '#default_value' => $custom_properties['custom_data'],
   ];
 }
 
 /**
- * Implements hook_preprocess().
- *
- * Below is a very basic approach to altering inputs.
- *
- * The main problem with this approach is hook_preprocess() is called for
- * every template and can cause performance issues.
- *
- * @Todo Provide element alter(ation) hooks that make it easier and faster to alter an element's output.
+ * Implements hook_webform_element_alter().
  */
-function webform_test_custom_properties_preprocess(&$variables, $hook, $info) {
-  if (isset($variables['element']) && isset($variables['element']['#webform_key']) && $hook !== 'form_element') {
-    $element = $variables['element'];
-
-    // Add data-custom attributes to attributes variable
-    // (not the element's attributes).
-    if (!empty($element['#custom_data'])) {
-      $variables['attributes']['data-custom'] = $element['#custom_data'];
-    }
+function webform_test_custom_properties_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
+  // Add data-custom to the element's attributes.
+  if (!empty($element['#custom_data'])) {
+    $element['#attributes']['data-custom'] = $element['#custom_data'];
   }
 }

@@ -7,7 +7,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -180,11 +179,13 @@ class WebformSubmissionForm extends ContentEntityForm {
       return $custom_form;
     }
 
-    $form = parent::form($form, $form_state);
-
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
     $webform = $this->getWebform();
+
+    $form = parent::form($form, $form_state);
+
+    /* Information */
 
     // Prepend webform submission data using the default view without the data.
     if (!$webform_submission->isNew() && !$webform_submission->isDraft()) {
@@ -201,30 +202,22 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
 
+    /* Data */
+
+    // Get and prepopulate (via query string) submission data.
+    $data = $webform_submission->getData();
+    $this->prepopulateData($data);
+
+    /* Elements */
+
     // Get webform elements.
     $elements = $webform_submission->getWebform()->getElementsInitialized();
-
-    // Get submission data.
-    $data = $webform_submission->getData();
-
-    // Prepopulate data using query string parameters.
-    $this->prepopulateData($data);
 
     // Populate webform elements with webform submission data.
     $this->populateElements($elements, $data);
 
     // Prepare webform elements.
-    $this->prepareElements($elements);
-
-    // Handle webform with managed file upload but saving of submission is disabled.
-    if ($this->getWebform()->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
-      $this->messageManager->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
-      $this->messageManager->display(WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
-      return $form;
-    }
-
-    // Move all $elements properties to the $form.
-    $this->setFormPropertiesFromElements($form, $elements);
+    $this->prepareElements($elements, $form, $form_state);
 
     // Add wizard progress tracker to the webform.
     $current_page = $this->getCurrentPage($form, $form_state);
@@ -238,6 +231,14 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Append elements to the webform.
     $form['elements'] = $elements;
+
+    // Pages: Set current wizard or preview page.
+    $this->displayCurrentPage($form, $form_state);
+
+    /* Webform  */
+
+    // Move all $elements properties to the $form.
+    $this->setFormPropertiesFromElements($form, $elements);
 
     // Default: Add CSS and JS.
     // @see https://www.drupal.org/node/2274843#inline
@@ -300,9 +301,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attributes']['class'][] = 'js-webform-disable-autosubmit';
     }
 
-    // Pages: Set current wizard or preview page.
-    $this->displayCurrentPage($form, $form_state);
-
     // Add #after_build callbacks.
     $form['#after_build'][] = '::afterBuild';
 
@@ -329,6 +327,13 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Exit if elements are broken, usually occurs when elements YAML is edited
     // directly in the export config file.
     if (!$webform_submission->getWebform()->getElementsInitialized()) {
+      $this->messageManager->display(WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
+      return $form;
+    }
+
+    // Handle webform with managed file upload but saving of submission is disabled.
+    if ($webform->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
+      $this->messageManager->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
       $this->messageManager->display(WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
       return $form;
     }
@@ -1192,8 +1197,12 @@ class WebformSubmissionForm extends ContentEntityForm {
    *
    * @param array $elements
    *   An render array representing elements.
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
-  protected function prepareElements(array &$elements) {
+  protected function prepareElements(array &$elements, array &$form, FormStateInterface $form_state) {
     foreach ($elements as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;
@@ -1207,8 +1216,17 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Invoke WebformElement::setDefaultValue.
       $this->elementManager->invokeMethod('setDefaultValue', $element);
 
+      // Allow modules to alter the webform element.
+      // @see \Drupal\Core\Field\WidgetBase::formSingleElement()
+      $hooks = ['webform_element'];
+      if (!empty($element['#type'])) {
+        $hooks[] = 'webform_element_' . $element['#type'];
+      }
+      $context = ['webform' => $form];
+      $this->moduleHandler->alter($hooks, $element, $form_state, $context);
+
       // Recurse and prepare nested elements.
-      $this->prepareElements($element);
+      $this->prepareElements($element, $form, $form_state);
     }
   }
 

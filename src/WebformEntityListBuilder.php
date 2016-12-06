@@ -56,6 +56,15 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $this->keys = \Drupal::request()->query->get('search');
     $this->state = \Drupal::request()->query->get('state');
     $this->submissionStorage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+
+    if (\Drupal::currentUser()->hasPermission('administer webform')) {
+      $help = _webform_help();
+      $build = [
+        '#theme' => 'webform_help',
+        '#info' => $help['introduction'],
+      ];
+      drupal_set_message($build);
+    }
   }
 
   /**

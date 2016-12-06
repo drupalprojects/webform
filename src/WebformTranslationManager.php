@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -76,7 +77,7 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
     $default_langcode = $this->languageManager->getDefaultLanguage()->getId();
     $config_elements = $this->getConfigElements($webform, $default_langcode);
     $elements = WebformElementHelper::getFlattened($config_elements);
-    $translatable_properties = WebformElementHelper::addPrefix($this->elementManager->getTranslatableProperties());
+    $translatable_properties = WebformArrayHelper::addPrefix($this->elementManager->getTranslatableProperties());
     foreach ($elements as $element_key => &$element) {
       foreach ($element as $property_key => $property_value) {
         $translatable_property_key = $property_key;

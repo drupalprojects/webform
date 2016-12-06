@@ -764,8 +764,8 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' =>
         $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
         '<br/>' .
-        $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformElementHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
-      '#default_value' => WebformElementHelper::removePrefix($properties),
+        $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
+      '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
 
     $this->appendDefaultValueToElementDescriptions($form, $default_settings);
@@ -802,7 +802,7 @@ class WebformEntitySettingsForm extends EntityForm {
       $properties['#action'] = $values['action'];
     }
     if (!empty($values['custom'])) {
-      $properties += WebformElementHelper::addPrefix($values['custom']);
+      $properties += WebformArrayHelper::addPrefix($values['custom']);
     }
     if (!empty($values['attributes'])) {
       $properties['#attributes'] = $values['attributes'];

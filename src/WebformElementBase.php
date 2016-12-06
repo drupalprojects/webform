@@ -1199,7 +1199,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $default_properties = $this->getDefaultProperties();
-    $element_properties = WebformElementHelper::removePrefix($this->configuration) + $default_properties;
+    $element_properties = WebformArrayHelper::removePrefix($this->configuration) + $default_properties;
 
     // Set default and element properties.
     // Note: Storing this information in the webform's state allows modules to view
@@ -1259,7 +1259,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Custom properties'),
       '#description' => $this->t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
       '<br/>' .
-      $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformElementHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
+      $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => $custom_properties ,
       '#parents' => ['properties', 'custom'],
     ];
@@ -1442,11 +1442,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Remove all hash prefixes so that we can filter out any default
     // properties.
-    WebformElementHelper::removePrefix($element_properties);
+    WebformArrayHelper::removePrefix($element_properties);
 
     // Build a temp element used to see if multiple value and/or composite
     // elements need to be supported.
-    $element = WebformElementHelper::addPrefix($element_properties);
+    $element = WebformArrayHelper::addPrefix($element_properties);
     foreach ($element_properties as $property_name => $property_value) {
       if (!isset($default_properties[$property_name])) {
         continue;
@@ -1465,7 +1465,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element_properties = ['type' => $element_properties['type']] + $element_properties;
     }
 
-    return WebformElementHelper::addPrefix($element_properties);
+    return WebformArrayHelper::addPrefix($element_properties);
   }
 
   /**

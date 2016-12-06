@@ -52,7 +52,6 @@ class WebformElementCustomPropertiesTest extends WebTestBase {
 
     // Submit empty custom property and data.
     $edit = [
-      'properties[custom_property]' => '',
       'properties[custom_data]' => '',
     ];
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/name/edit', $edit, t('Save'));
@@ -67,7 +66,6 @@ class WebformElementCustomPropertiesTest extends WebTestBase {
 
     // Add custom property and data.
     $edit = [
-      'properties[custom_property]' => 'custom-property',
       'properties[custom_data]' => 'custom-data',
     ];
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/name/edit', $edit, t('Save'));
@@ -78,14 +76,13 @@ class WebformElementCustomPropertiesTest extends WebTestBase {
 
     // Check that name element does contain custom property or data.
     $name_element += [
-      '#custom_property' => 'custom-property',
       '#custom_data' => 'custom-data',
     ];
     $this->assertEqual($webform->getElementDecoded('name'), $name_element);
 
     // Check that name input does contain custom data.
     $this->drupalGet('webform/contact');
-    $this->assertRaw('<input data-drupal-selector="edit-name" type="text" id="edit-name" name="name" value="' . htmlentities($admin_user->label()) . '" size="60" maxlength="255" class="form-text required" required="required" aria-required="true" data-custom="custom-data" />');
+    $this->assertRaw('<input data-custom="custom-data" data-drupal-selector="edit-name" type="text" id="edit-name" name="name" value="' . htmlentities($admin_user->label()) . '" size="60" maxlength="255" class="form-text required" required="required" aria-required="true" />');
   }
 
 }
