@@ -4,7 +4,6 @@ namespace Drupal\webform_ui\Form;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\webform\Entity\Webform;
@@ -180,7 +179,12 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
     // LogicException: Settings can not be serialized.
     // $form_state->setRebuild();
     // @todo Determine what object is being serialized with webform.
-    $element_form_state = (new FormState())->setValues($form_state->getValue('properties') ?: []);
+
+    // The webform element configuration is stored in the 'properties' key in
+    // the webform, pass that through for submission.
+    $element_form_state = clone $form_state;
+    $element_form_state->setValues($form_state->getValue('properties'));
+
     $properties = $this->webformElement->getConfigurationFormProperties($form, $element_form_state);
 
     // Set #default_value using 'test' element value.

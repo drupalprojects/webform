@@ -72,7 +72,6 @@ class WebformSubmissionController extends ControllerBase implements ContainerInj
       '#theme' => 'webform_submission_information',
       '#webform_submission' => $webform_submission,
       '#source_entity' => $source_entity,
-      '#open' => FALSE,
     ];
 
     // Submission.

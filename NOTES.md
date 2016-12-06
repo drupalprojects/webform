@@ -24,26 +24,26 @@ Tidy YAML files
     drush webform-tidy webform; 
     drush webform-tidy webform_ui; 
     drush webform-tidy webform_test;
-    drush webform-tidy webform_translation_test;
+    drush webform-tidy webform_test_translation;
 
 
 2. Export configuration
 -----------------------
 
     # Install all sub-modules.
-    drush en -y webform webform_test webform_translation_test webform_examples webform_templates webform_node
+    drush en -y webform webform_test webform_test_translation webform_examples webform_templates webform_node
     
     # Export webform configuration from your site.
     drush features-export -y webform
     drush features-export -y webform_test
-    drush features-export -y webform_translation_test
+    drush features-export -y webform_test_translation
     drush features-export -y webform_examples
     drush features-export -y webform_templates
     
     # Tidy webform configuration from your site.
     drush webform-tidy -y --dependencies webform
     drush webform-tidy -y --dependencies webform_test
-    drush features-tidy -y --dependencies webform_translation_test
+    drush features-tidy -y --dependencies webform_test_translation
     drush webform-tidy -y --dependencies webform_examples
     drush webform-tidy -y --dependencies webform_templates
     

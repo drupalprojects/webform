@@ -75,11 +75,14 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
+    $field_names = array_keys(\Drupal::service('entity_field.manager')->getBaseFieldDefinitions('webform_submission'));
+    $excluded_data = array_combine($field_names, $field_names);
     return [
       'type' => 'x-www-form-urlencoded',
       'insert_url' => '',
       'update_url' => '',
       'delete_url' => '',
+      'excluded_data' => $excluded_data,
       'debug' => FALSE,
     ];
   }
@@ -117,7 +120,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
     $form['type'] = [
       '#type' => 'select',
-      '#title' => $this->t('Post Type'),
+      '#title' => $this->t('Post type'),
       '#description' => $this->t('Use x-www-form-urlencoded if unsure, as it is the default format for HTML webforms. You also have the option to post data in <a href="http://www.json.org/" target="_blank">JSON</a> format.'),
       '#options' => [
         'x-www-form-urlencoded' => $this->t('x-www-form-urlencoded'),
@@ -125,6 +128,20 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       ],
       '#required' => TRUE,
       '#default_value' => $this->configuration['type'],
+    ];
+
+    $form['post_data'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Posted data'),
+    ];
+    $form['post_data']['excluded_data'] = [
+      '#type' => 'webform_excluded_columns',
+      '#title' => $this->t('Posted data'),
+      '#title_display' => 'invisible',
+      '#webform' => $webform,
+      '#required' => TRUE,
+      '#parents' => ['settings', 'excluded_data'],
+      '#default_value' => $this->configuration['excluded_data'],
     ];
 
     $form['debug'] = [
@@ -230,7 +247,18 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    *   A webform submission converted to an associative array.
    */
   protected function getPostData(WebformSubmissionInterface $webform_submission) {
-    return $webform_submission->toArray(TRUE);
+    // Get submission and elements data.
+    $data = $webform_submission->toArray(TRUE);
+
+    // Flatten data.
+    // Prioritizing elements before the submissions fields.
+    $data = $data['data'] + $data;
+    unset($data['data']);
+
+    // Excluded selected data.
+    $data = array_diff_key($data, $this->configuration['excluded_data']);
+
+    return $data;
   }
 
   /**

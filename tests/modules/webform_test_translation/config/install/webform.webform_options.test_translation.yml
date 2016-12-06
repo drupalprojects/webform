@@ -4,7 +4,7 @@ dependencies:
   enforced:
     module:
       - webform
-      - webform_translation_test
+      - webform_test_translation
 id: test_translation
 label: 'Test: Translation'
 options: |

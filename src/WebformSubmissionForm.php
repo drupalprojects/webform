@@ -197,7 +197,6 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#theme' => 'webform_submission_information',
         '#webform_submission' => $webform_submission,
         '#source_entity' => $this->sourceEntity,
-        '#open' => FALSE,
         '#weight' => -19,
       ];
     }
@@ -509,6 +508,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Mark the submit action as the primary action, when it appears.
     $element['submit']['#button_type'] = 'primary';
+    $element['submit']['#attributes'] = $this->getWebformSetting('form_submit_attributes');
     $element['submit']['#attributes']['class'][] = 'webform-button--submit';
 
     // Customize the submit button's label for new submissions only.
@@ -543,47 +543,55 @@ class WebformSubmissionForm extends ContentEntityForm {
 
       if (!$is_first_page) {
         if ($is_preview_page) {
+          $previous_attributes = $this->getWebformSetting('preview_prev_button_attributes');
           $previous_label = $this->getWebformSetting('preview_prev_button_label');
         }
         else {
+          $previous_attributes = $this->getWebformSetting('wizard_prev_button_attributes');
           $previous_label = (isset($current_page_element['#prev_button_label'])) ? $current_page_element['#prev_button_label'] : $this->getWebformSetting('wizard_prev_button_label');
         }
+        $previous_attributes['class'][] = 'js-webform-novalidate';
+        $previous_attributes['class'][] = 'webform-button--previous';
         $element['previous'] = [
           '#type' => 'submit',
           '#value' => $previous_label,
           '#validate' => ['::noValidate'],
           '#submit' => ['::previous'],
-          '#attributes' => ['class' => ['js-webform-novalidate', 'webform-button--previous']],
+          '#attributes' => $previous_attributes,
         ];
       }
 
       if (!$is_last_page) {
         if ($is_next_page_preview) {
+          $next_attributes = $this->getWebformSetting('preview_next_button_attributes');
           $next_label = $this->getWebformSetting('preview_next_button_label');
-          $next_class = 'webform-button--preview';
+          $next_attributes['class'][] = 'webform-button--preview';
         }
         else {
+          $next_attributes = $this->getWebformSetting('wizard_next_button_attributes');
           $next_label = (isset($current_page_element['#next_button_label'])) ? $current_page_element['#next_button_label'] : $this->getWebformSetting('wizard_next_button_label');
-          $next_class = 'webform-button--next';
+          $next_attributes['class'][] = 'webform-button--next';
         }
         $element['next'] = [
           '#type' => 'submit',
           '#value' => $next_label,
           '#validate' => ['::validateForm'],
           '#submit' => ['::next'],
-          '#attributes' => ['class' => [$next_class]],
+          '#attributes' => $next_attributes,
         ];
       }
     }
 
     // Draft.
     if ($this->draftEnabled()) {
+      $draft_attributes = $this->getWebformSetting('draft_button_attributes');
+      $draft_attributes['class'][] = 'webform-button--draft';
       $element['draft'] = [
         '#type' => 'submit',
         '#value' => $this->getWebformSetting('draft_button_label'),
         '#validate' => ['::draft'],
         '#submit' => ['::submitForm', '::save', '::rebuild'],
-        '#attributes' => ['class' => ['webform-button--draft']],
+        '#attributes' => $draft_attributes,
       ];
     }
 
@@ -1164,11 +1172,10 @@ class WebformSubmissionForm extends ContentEntityForm {
    * Webform element #element_validate callback: Execute #element_validate and suppress errors.
    */
   public static function hiddenElementValidate(array $element, FormStateInterface $form_state) {
-    // Create a temp webform state that will capture and suppress element
+    // Create a temp webform state that will capture and suppress all element
     // validation errors.
-    $temp_form_state = new FormState();
+    $temp_form_state = clone $form_state;
     $temp_form_state->setLimitValidationErrors([]);
-    $temp_form_state->setValues($form_state->getValues());
 
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {

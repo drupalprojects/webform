@@ -520,8 +520,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     }
 
     // Add attachments.
+    $message['attachments'] = [];
     if ($this->configuration['attachments'] && $this->supportsAttachments()) {
-      $message['attachments'] = [];
       $elements = $this->webform->getElementsInitializedAndFlattened();
       foreach ($elements as $key => $element) {
         if (!isset($element['#type']) || $element['#type'] != 'managed_file') {

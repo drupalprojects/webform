@@ -9,6 +9,14 @@ libraries:
       type: get
       url: 'https://github.com/codemirror/CodeMirror/archive/5.21.0.zip'
 
+  # @see https://github.com/codemirror/CodeMirror/issues/4328
+  codemirror_lib:
+    directory_name: lib
+    destination: libraries/codemirror
+    download:
+      type: file
+      url: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.js'
+
   ckeditor:
     directory_name: ckeditor
     destination: libraries

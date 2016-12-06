@@ -3,45 +3,41 @@ status: true
 dependencies:
   enforced:
     module:
-      - webform_translation_test
+      - webform_test
 uid: null
 template: false
-id: test_translation
-title: 'Test: Translations'
-description: 'Test translating a webform.'
+id: test_form_buttons
+title: 'Test: Webform: Buttons'
+description: 'Test custom webform buttons.'
 elements: |
-  textfield:
-    '#type': textfield
-    '#title': 'Text field'
-  select_options:
-    '#type': select
-    '#title': 'Select (options)'
-    '#options': test_translation
-  select_custom:
-    '#type': select_other
-    '#title': 'Select (custom)'
-    '#options':
-      4: Four
-      5: Five
-      6: Six
-    '#other__option_label': 'Custom number...'
-  details:
-    '#type': details
-    '#title': 'Details'
-    'markup':
-      '#markup': 'This is some HTML markup.'
+  wizard_page_1:
+    '#type': wizard_page
+    '#title': 'Page 1'
+    text_1:
+      '#type': textfield
+      '#title': 'Text 1'
+  wizard_page_2:
+    '#type': wizard_page
+    '#title': 'Page 2'
+    text_2:
+      '#type': textfield
+      '#title': 'Text 2'
 css: ''
 javascript: ''
 settings:
   page: true
   page_submit_path: ''
   page_confirm_path: ''
-  form_submit_label: 'Send message'
+  form_submit_label: ''
+  form_submit_attributes:
+    class:
+      - form_submit_attributes
+    style: 'color: green'
   form_exception_message: ''
   form_closed_message: ''
   form_confidential: false
   form_confidential_message: ''
-  form_prepopulate: false
+  form_prepopulate: true
   form_prepopulate_source_entity: false
   form_novalidate: false
   form_unsaved: false
@@ -52,22 +48,42 @@ settings:
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_next_button_label: ''
+  wizard_next_button_attributes:
+    class:
+      - wizard_next_button_attributes
+    style: 'color: yellow'
   wizard_prev_button_label: ''
+  wizard_prev_button_attributes:
+    class:
+      - wizard_prev_button_attributes
+    style: 'color: yellow'
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
-  preview: 0
+  preview: 1
   preview_next_button_label: ''
+  preview_next_button_attributes:
+    class:
+      - preview_next_button_attributes
+    style: 'color: orange'
   preview_prev_button_label: ''
+  preview_prev_button_attributes:
+    class:
+      - preview_prev_button_attributes
+    style: 'color: orange'
   preview_message: ''
-  draft: false
+  draft: true
   draft_auto_save: false
   draft_button_label: ''
+  draft_button_attributes:
+    class:
+      - draft_button_attributes
+    style: 'color: blue'
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: url_message
-  confirmation_message: 'Your message has been sent.'
-  confirmation_url: '<front>'
+  confirmation_type: page
+  confirmation_message: ''
+  confirmation_url: ''
   limit_total: null
   limit_total_message: ''
   limit_user: null
@@ -104,22 +120,4 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-handlers:
-  email_confirmation:
-    id: email
-    label: 'Email confirmation'
-    handler_id: email_confirmation
-    status: true
-    weight: 1
-    settings:
-      to_mail: default
-      cc_mail: ''
-      bcc_mail: ''
-      from_mail: default
-      from_name: default
-      subject: default
-      body: default
-      excluded_elements: {  }
-      html: true
-      attachments: false
-      debug: false
+handlers: {  }

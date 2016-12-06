@@ -2,7 +2,6 @@
 
 namespace Drupal\webform;
 
-use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -100,8 +99,8 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['general']['results_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable saving of submissions.'),
-      '#return_value' => TRUE,
       '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits and the saving of drafts will be disabled.  Submissions must be sent via an email or handled using a custom <a href=":href">webform handler</a>.', [':href' => Url::fromRoute('entity.webform.handlers_form', ['webform' => $webform->id()])->toString()]),
+      '#return_value' => TRUE,
       '#default_value' => $settings['results_disabled'],
     ];
     // Display warning when disabling the saving of submissions with no
@@ -124,6 +123,7 @@ class WebformEntitySettingsForm extends EntityForm {
         '#title' => $this->t('Ignore disabled results warning'),
         '#description' => $this->t("If checked, all warnings and log messages about 'This webform is currently not saving any submitted data.' will be suppressed."),
         '#return_value' => TRUE,
+        '#default_value' => $settings['results_disabled_ignore'],
         '#states' => [
           'visible' => [
             ':input[name="results_disabled"]' => ['checked' => TRUE],
@@ -210,11 +210,20 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
     ];
-    $form['webform']['form_submit_label'] = [
+    $form['webform']['form_submit'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Webform submit button'),
+    ];
+    $form['webform']['form_submit']['form_submit_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Webform submit button label'),
       '#size' => 20,
       '#default_value' => $settings['form_submit_label'],
+    ];
+    $form['webform']['form_submit']['form_submit_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Webform submit button'),
+      '#default_value' => $settings['form_submit_attributes'],
     ];
     $form['webform']['form_prepopulate'] = [
       '#type' => 'checkbox',
@@ -289,18 +298,17 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Form attributes'),
-      '#open' => FALSE,
+      '#open' => TRUE,
     ];
-    $form['attributes']['form_attributes__class'] = WebformElementBase::getAttributesClassElement(
-      $this->t('Form CSS classes'),
-      $this->t("Apply classes to the webform. Select 'custom...' to enter custom classes."),
-      $this->configFactory->get('webform.settings')->get('settings.classes')
-    ) + ['#default_value' => (isset($elements['#attributes']['class'])) ? $elements['#attributes']['class'] : ''];
-    $form['attributes']['form_attributes__style'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Form CSS style'),
-      '#description' => $this->t('Apply custom styles to the webform.'),
-      '#default_value' => (isset($elements['#attributes']['style'])) ? $elements['#attributes']['style'] : '',
+    $form['attributes']['attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Webform'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.form_classes'),
+      '#class__description' => $this->t("Apply classes to the webform. Select 'custom...' to enter custom classes."),
+      '#style__description' => $this->t('Apply custom styles to the webform.'),
+      '#attributes__description' => $this->t("Enter additional attributes to be added the webform."),
+      '#attributes__access' => !$this->moduleHandler->moduleExists('webform_ui') || $this->currentUser->hasPermission('edit webform source'),
+      '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
 
     // Wizard.
@@ -332,19 +340,37 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Show wizard progress percentage'),
       '#default_value' => $settings['wizard_progress_percentage'],
     ];
-    $form['wizard']['wizard_prev_button_label'] = [
+    $form['wizard']['wizard_prev_button'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Previous wizard page button'),
+      '#description' => $this->t('This is used for the previous page button within a wizard.'),
+    ];
+    $form['wizard']['wizard_prev_button']['wizard_prev_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Previous wizard page button label'),
-      '#description' => $this->t('This is used for the previous page button within a wizard.'),
       '#size' => 20,
       '#default_value' => $settings['wizard_prev_button_label'],
     ];
-    $form['wizard']['wizard_next_button_label'] = [
+    $form['wizard']['wizard_prev_button']['wizard_prev_button_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Previous wizard page button'),
+      '#default_value' => $settings['wizard_prev_button_attributes'],
+    ];
+    $form['wizard']['wizard_next_button'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Next wizard page button'),
+      '#description' => $this->t('This is used for the next page button within a wizard.'),
+    ];
+    $form['wizard']['wizard_next_button']['wizard_next_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Next wizard page button label'),
-      '#description' => $this->t('This is used for the next page button within a wizard.'),
       '#size' => 20,
       '#default_value' => $settings['wizard_next_button_label'],
+    ];
+    $form['wizard']['wizard_next_button']['wizard_next_button_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Next wizard page button'),
+      '#default_value' => $settings['wizard_next_button_attributes'],
     ];
     $form['wizard']['wizard_complete'] = [
       '#type' => 'checkbox',
@@ -400,19 +426,39 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['preview']['settings']['preview_next_button_label'] = [
+    // Preview next button.
+    $form['preview']['settings']['preview_next_button'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Preview button'),
+    ];
+    $form['preview']['settings']['preview_next_button']['preview_next_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview button label'),
       '#description' => $this->t('The text for the button that will proceed to the preview page.'),
       '#size' => 20,
       '#default_value' => $settings['preview_next_button_label'],
     ];
-    $form['preview']['settings']['preview_prev_button_label'] = [
+    $form['preview']['settings']['preview_next_button']['preview_next_button_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Preview button'),
+      '#default_value' => $settings['preview_next_button_attributes'],
+    ];
+    // Preview previous button.
+    $form['preview']['settings']['preview_prev_button'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Previous page button'),
+    ];
+    $form['preview']['settings']['preview_prev_button']['preview_prev_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Previous page button label'),
       '#description' => $this->t('The text for the button to go backwards from the preview page.'),
       '#size' => 20,
       '#default_value' => $settings['preview_prev_button_label'],
+    ];
+    $form['preview']['settings']['preview_prev_button']['preview_prev_button_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Previous page button'),
+      '#default_value' => $settings['preview_prev_button_attributes'],
     ];
     $form['preview']['settings']['preview_message'] = [
       '#type' => 'webform_html_editor',
@@ -455,12 +501,21 @@ class WebformEntitySettingsForm extends EntityForm {
       "#description" => $this->t('Automatically save partial submissions when users click the "Preview" button or when validation errors prevent a webform from being submitted.'),
       '#default_value' => $settings['draft_auto_save'],
     ];
-    $form['draft']['settings']['draft_button_label'] = [
+    $form['draft']['settings']['draft_button'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Draft button'),
+    ];
+    $form['draft']['settings']['draft_button']['draft_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Draft button label'),
       '#description' => $this->t('The text for the button that will save a draft.'),
       '#size' => 20,
       '#default_value' => $settings['draft_button_label'],
+    ];
+    $form['draft']['settings']['draft_button']['draft_button_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Draft button'),
+      '#default_value' => $settings['draft_button_attributes'],
     ];
     $form['draft']['settings']['draft_saved_message'] = [
       '#type' => 'webform_html_editor',
@@ -699,25 +754,18 @@ class WebformEntitySettingsForm extends EntityForm {
     unset(
       $properties['#method'],
       $properties['#action'],
-      $properties['#novalidate']
+      $properties['#novalidate'],
+      $properties['#attributes']
     );
-    if (isset($properties['#attributes'])) {
-      unset($properties['#attributes']['class']);
-      unset($properties['#attributes']['style']);
-      if (empty($properties['#attributes'])) {
-        unset($properties['#attributes']);
-      }
-    }
     $form['custom']['custom'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
-      '#description' => $this->t('Properties can include additional custom <a href=":attributes_href">#attributes</a>.', [':attributes_href' => 'https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7.x#attributes']) .
-        ' ' .
+      '#description' =>
         $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
         '<br/>' .
         $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformElementHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
-      '#default_value' => Yaml::encode(WebformElementHelper::removePrefix($properties)),
+      '#default_value' => WebformElementHelper::removePrefix($properties),
     ];
 
     $this->appendDefaultValueToElementDescriptions($form, $default_settings);
@@ -753,22 +801,20 @@ class WebformEntitySettingsForm extends EntityForm {
     if (!empty($values['action'])) {
       $properties['#action'] = $values['action'];
     }
-    $properties += (!empty($values['custom'])) ? WebformElementHelper::addPrefix(Yaml::decode($values['custom'])) : [];
-    if (!empty($values['form_attributes__class'])) {
-      $properties['#attributes']['class'] = $values['form_attributes__class'];
+    if (!empty($values['custom'])) {
+      $properties += WebformElementHelper::addPrefix($values['custom']);
     }
-    if (!empty($values['form_attributes__style'])) {
-      $properties['#attributes']['style'] = $values['form_attributes__style'];
+    if (!empty($values['attributes'])) {
+      $properties['#attributes'] = $values['attributes'];
     }
     $elements = $properties + $elements;
     $webform->setElements($elements);
 
-    // Remove custom properties, class, and style.
+    // Remove custom properties and attributes.
     unset(
       $values['method'],
       $values['action'],
-      $values['form_attributes__class'],
-      $values['form_attributes__style'],
+      $values['attributes'],
       $values['custom']
     );
 

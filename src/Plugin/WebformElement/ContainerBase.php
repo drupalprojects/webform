@@ -22,9 +22,8 @@ abstract class ContainerBase extends WebformElementBase {
       'title_display' => '',
       // Form validation.
       'required' => FALSE,
-      // Custom attributes.
-      'attributes__class' => '',
-      'attributes__style' => '',
+      // Attributes.
+      'attributes' => [],
     ] + $this->getDefaultBaseProperties();
   }
 

@@ -52,7 +52,7 @@
    */
   Drupal.behaviors.yamlFormSelectOther = {
     attach: function (context) {
-      $(context).find('.form-type-webform-select-other').once('webform-select-other').each(function () {
+      $(context).find('.js-webform-select-other').once('webform-select-other').each(function () {
         var $element = $(this);
 
         var $select = $element.find('.form-type-select');
@@ -77,7 +77,7 @@
    */
   Drupal.behaviors.yamlFormCheckboxesOther = {
     attach: function (context) {
-      $(context).find('.form-type-webform-checkboxes-other').once('webform-checkboxes-other').each(function () {
+      $(context).find('.js-webform-checkboxes-other').once('webform-checkboxes-other').each(function () {
         var $element = $(this);
         var $checkbox = $element.find('input[value="_other_"]');
         var $input = $element.find('.js-webform-checkboxes-other-input');
@@ -100,7 +100,7 @@
    */
   Drupal.behaviors.yamlFormRadiosOther = {
     attach: function (context) {
-      $(context).find('.form-type-webform-radios-other').once('webform-radios-other').each(function () {
+      $(context).find('.js-webform-radios-other').once('webform-radios-other').each(function () {
         var $element = $(this);
 
         var $radios = $element.find('input[type="radio"]');
@@ -124,7 +124,7 @@
    */
   Drupal.behaviors.yamlFormButtonsOther = {
     attach: function (context) {
-      $(context).find('.form-type-webform-buttons-other').once('webform-buttons-other').each(function () {
+      $(context).find('.js-webform-buttons-other').once('webform-buttons-other').each(function () {
         var $element = $(this);
 
         var $buttons = $element.find('input[type="radio"]');

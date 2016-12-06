@@ -124,30 +124,6 @@ class WebformElementExtrasTest extends WebTestBase {
     $this->assertRaw('<div class="rateit svg rateit-large" data-rateit-min="0" data-rateit-max="10" data-rateit-step="0.1" data-rateit-resetable="true" data-rateit-readonly="false" data-rateit-backingfld="#edit-rating-advanced" data-rateit-value="" data-rateit-starheight="32" data-rateit-starwidth="32">');
 
     /**************************************************************************/
-    // code:yaml
-    /**************************************************************************/
-
-    // Check YAML.
-    $this->assertRaw('<label for="edit-yaml-basic">YAML basic</label>');
-    $this->assertRaw('<textarea data-drupal-selector="edit-yaml-basic" class="js-webform-codemirror webform-codemirror yaml form-textarea resize-vertical" data-webform-codemirror-mode="text/x-yaml" id="edit-yaml-basic" name="yaml_basic" rows="5" cols="60"></textarea>');
-
-    /**************************************************************************/
-    // code:html
-    /**************************************************************************/
-
-    // Check HTML.
-    $this->assertRaw('<label for="edit-html-basic">HTML basic</label>');
-    $this->assertRaw('<textarea data-drupal-selector="edit-html-basic" class="js-webform-codemirror webform-codemirror html form-textarea resize-vertical" data-webform-codemirror-mode="text/html" id="edit-html-basic" name="html_basic" rows="5" cols="60"></textarea>');
-
-    /**************************************************************************/
-    // code:text
-    /**************************************************************************/
-
-    // Check Text.
-    $this->assertRaw('<label for="edit-text-basic">Text basic</label>');
-    $this->assertRaw('<textarea data-drupal-selector="edit-text-basic" class="js-webform-codemirror webform-codemirror text form-textarea resize-vertical" data-webform-codemirror-mode="text/plain" id="edit-text-basic" name="text_basic" rows="5" cols="60"></textarea>');
-
-    /**************************************************************************/
     // contact (composite element)
     /**************************************************************************/
 
@@ -339,44 +315,6 @@ class WebformElementExtrasTest extends WebTestBase {
     ];
     $this->drupalPostForm('webform/test_element_extras', $edit, t('Submit'));
     $this->assertNoRaw('<li class="messages__item">Confirm Email field is required.</li>');
-
-    /**************************************************************************/
-    // code:yaml
-    /**************************************************************************/
-
-    // Check invalid YAML.
-    $edit = [
-      'yaml_basic' => "'not: valid",
-    ];
-    $this->drupalPostForm('webform/test_element_extras', $edit, t('Submit'));
-    $this->assertRaw('<em class="placeholder">YAML basic</em> is not valid.');
-
-    // Check valid YAML.
-    $edit = [
-      'yaml_basic' => 'is: valid',
-    ];
-    $this->drupalPostForm('webform/test_element_extras', $edit, t('Submit'));
-    $this->assertNoRaw('<em class="placeholder">YAML basic</em> is not valid.');
-
-    /**************************************************************************/
-    // code:html
-    /**************************************************************************/
-
-    // Check invalid HTML.
-    $edit = [
-      'html_basic' => "<b>bold</bold>",
-    ];
-    $this->drupalPostForm('webform/test_element_extras', $edit, t('Submit'));
-    $this->assertRaw('<em class="placeholder">HTML basic</em> is not valid.');
-    $this->assertRaw('expected &#039;&gt;&#039;');
-
-    // Check valid HTML.
-    $edit = [
-      'html_basic' => '<b>bold</b>',
-    ];
-    $this->drupalPostForm('webform/test_element_extras', $edit, t('Submit'));
-    $this->assertNoRaw('<em class="placeholder">HTML basic</em> is not valid.');
-    $this->assertNoRaw('expected &#039;&gt;&#039;');
 
     /**************************************************************************/
     // rating

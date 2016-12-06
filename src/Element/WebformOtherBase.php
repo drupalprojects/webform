@@ -82,6 +82,9 @@ abstract class WebformOtherBase extends FormElement {
 
     $element['#tree'] = TRUE;
 
+    $element['#wrapper_attributes']['class'][] = "js-webform-$type-other";
+    $element['#wrapper_attributes']['class'][] = "webform-$type-other";
+
     $element[$type]['#type'] = static::$type;
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {

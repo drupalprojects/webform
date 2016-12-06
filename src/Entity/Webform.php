@@ -11,7 +11,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
-use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformHandlerInterface;
 use Drupal\webform\WebformHandlerPluginCollection;
@@ -494,6 +493,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'page_submit_path' => '',
       'page_confirm_path' => '',
       'form_submit_label' => '',
+      'form_submit_attributes' => [],
       'form_exception_message' => '',
       'form_closed_message' => '',
       'form_confidential' => FALSE,
@@ -509,17 +509,22 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'wizard_progress_pages' => FALSE,
       'wizard_progress_percentage' => FALSE,
       'wizard_next_button_label' => '',
+      'wizard_next_button_attributes' => [],
       'wizard_prev_button_label' => '',
+      'wizard_prev_button_attributes' => [],
       'wizard_start_label' => '',
       'wizard_complete' => TRUE,
       'wizard_complete_label' => '',
       'preview' => DRUPAL_DISABLED,
       'preview_next_button_label' => '',
+      'preview_next_button_attributes' => [],
       'preview_prev_button_label' => '',
+      'preview_prev_button_attributes' => [],
       'preview_message' => '',
       'draft' => FALSE,
       'draft_auto_save' => FALSE,
       'draft_button_label' => '',
+      'draft_button_attributes' => [],
       'draft_saved_message' => '',
       'draft_loaded_message' => '',
       'confirmation_type' => 'page',

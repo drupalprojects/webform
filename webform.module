@@ -334,7 +334,7 @@ function webform_theme() {
       'variables' => ['webform_submission' => NULL],
     ],
     'webform_submission_information' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'open' => TRUE],
+      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'open' => FALSE],
     ],
 
     'webform_submission_html' => [

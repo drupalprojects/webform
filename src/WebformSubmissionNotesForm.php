@@ -31,7 +31,6 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
       '#theme' => 'webform_submission_information',
       '#webform_submission' => $webform_submission,
       '#source_entity' => $source_entity,
-      '#open' => FALSE,
       '#access' => $this->isModalDialog() ? FALSE : TRUE,
     ];
 

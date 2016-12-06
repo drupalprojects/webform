@@ -87,11 +87,9 @@ class WebformPluginElementController extends ControllerBase {
       'unique',
       // Submission display.
       'format',
-      // Custom attributes.
-      'wrapper_attributes__class',
-      'wrapper_attributes__style',
-      'attributes__class',
-      'attributes__style',
+      // Attributes.
+      'wrapper_attributes',
+      'attributes',
       // Administration.
       'admin_title',
       'private',

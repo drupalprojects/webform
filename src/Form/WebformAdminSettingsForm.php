@@ -107,7 +107,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['page'] = [
       '#type' => 'details',
       '#title' => $this->t('Page default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['page']['default_page_base_path']  = [
@@ -121,7 +120,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['webform'] = [
       '#type' => 'details',
       '#title' => $this->t('Webform default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['webform']['default_form_closed_message']  = [
@@ -177,19 +175,23 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#return_value' => TRUE,
       '#default_value' => $config->get('settings.default_form_details_toggle'),
     ];
-    $form['webform']['classes'] = [
+    $form['webform']['form_classes'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Webform CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Webform CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('settings.classes'),
+      '#default_value' => $config->get('settings.form_classes'),
+    ];
+    $form['webform']['button_classes'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Button CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in "Button CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#default_value' => $config->get('settings.button_classes'),
     ];
 
     // Wizard.
     $form['wizard'] = [
       '#type' => 'details',
       '#title' => $this->t('Wizard default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['wizard']['default_wizard_prev_button_label'] = [
@@ -225,7 +227,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['preview'] = [
       '#type' => 'details',
       '#title' => $this->t('Preview default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['preview']['default_preview_next_button_label'] = [
@@ -253,7 +254,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['draft'] = [
       '#type' => 'details',
       '#title' => $this->t('Draft default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['draft']['default_draft_button_label'] = [
@@ -279,7 +279,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['confirmation'] = [
       '#type' => 'details',
       '#title' => $this->t('Confirmation default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['confirmation']['default_confirmation_message']  = [
@@ -293,7 +292,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['limit'] = [
       '#type' => 'details',
       '#title' => $this->t('Limit default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['limit']['default_limit_total_message']  = [
@@ -313,7 +311,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['elements'] = [
       '#type' => 'details',
       '#title' => $this->t('Element default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['elements']['allowed_tags'] = [
@@ -383,7 +380,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('Element types'),
       '#description' => $this->t('Select enable element types'),
-      '#open' => FALSE,
     ];
     $form['types']['excluded_types'] = [
       '#type' => 'tableselect',
@@ -397,7 +393,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['file'] = [
       '#type' => 'details',
       '#title' => $this->t('File upload default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['file']['file_public'] = [
@@ -439,7 +434,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['format'] = [
       '#type' => 'details',
       '#title' => $this->t('Format default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     foreach ($element_plugins as $element_id => $element_plugin) {
@@ -481,7 +475,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['mail'] = [
       '#type' => 'details',
       '#title' => $this->t('Email default settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['mail']['default_from_mail']  = [
@@ -529,7 +522,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['export'] = [
       '#type' => 'details',
       '#title' => $this->t('Export default settings'),
-      '#open' => FALSE,
     ];
     $export_options = NestedArray::mergeDeep($config->get('export') ?: [],
       $this->submissionExporter->getValuesFromInput($form_state->getUserInput())
@@ -541,7 +533,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['batch'] = [
       '#type' => 'details',
       '#title' => $this->t('Batch settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['batch']['default_batch_export_size'] = [
@@ -570,7 +561,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['test'] = [
       '#type' => 'details',
       '#title' => $this->t('Test settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['test']['types'] = [
@@ -592,7 +582,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['ui'] = [
       '#type' => 'details',
       '#title' => $this->t('User interface settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['ui']['video_display'] = [
@@ -635,7 +624,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['library'] = [
       '#type' => 'details',
       '#title' => $this->t('Library settings'),
-      '#open' => FALSE,
       '#tree' => TRUE,
     ];
     $form['library']['cdn'] = [

@@ -8,12 +8,13 @@ settings:
   default_form_unsaved: false
   default_form_novalidate: false
   default_form_details_toggle: true
-  classes: |
+  form_classes: |
     container-inline clearfix
     form--inline clearfix
     messages messages--error
     messages messages--warning
     messages messages--status
+  button_classes: ''
   default_wizard_prev_button_label: '< Previous Page'
   default_wizard_next_button_label: 'Next Page >'
   default_wizard_start_label: Start

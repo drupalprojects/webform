@@ -21,9 +21,8 @@ class WebformMessage extends WebformMarkupBase {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
-      // Custom attributes.
-      'attributes__class' => '',
-      'attributes__style' => '',
+      // Attributes.
+      'attributes' => [],
       // Message settings.
       'message_type' => 'status',
       'message_message' => '',

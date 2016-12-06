@@ -382,7 +382,8 @@ function drush_webform_tidy($module = 'webform') {
       }
     }
 
-    $tidied_yaml = WebformTidy::tidy($tidied_yaml);
+    // Tidy and add new line to the end of the tidied file.
+    $tidied_yaml = WebformTidy::tidy($tidied_yaml) . "\n";
     if ($tidied_yaml != $original_yaml) {
       drush_print(dt('Tidying @file...', ['@file' => $file->filename]));
       file_put_contents($file->uri, $tidied_yaml);

@@ -3,7 +3,6 @@
 namespace Drupal\webform_ui\Form;
 
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
@@ -16,6 +15,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for webform element webforms.
+ *
+ * The basic workflow for handling webform elements.
+ *
+ * - Read the element.
+ * - Build element's properties webform.
+ * - Set the property values.
+ * - Alter the element's properties webform.
+ * - Process the element's properties webform.
+ * - Validate the element's properties webform.
+ * - Submit the element's properties webform.
+ * - Get property values from the webform state's values.
+ * - Remove default properties from the element's properties.
+ * - Update element properties.
  */
 abstract class WebformUiElementFormBase extends FormBase implements WebformUiElementFormInterface {
 
@@ -112,30 +124,6 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
 
     $webform_element = $this->getWebformElement();
 
-    $form['parent_key'] = [
-      '#type' => 'value',
-      '#value' => $parent_key,
-    ];
-
-    $form['key'] = [
-      '#type' => 'machine_name',
-      '#title' => $this->t('Key'),
-      '#default_value' => $key,
-      '#machine_name' => [
-        'label' => $this->t('Key'),
-        'exists' => [$this, 'exists'],
-        'source' => ['title'],
-      ],
-      '#disabled' => $key,
-      '#required' => TRUE,
-      '#weight' => -50,
-    ];
-
-    // Remove the key's help text (aka description) once it has been set.
-    if ($key) {
-      $form['key']['#description'] = NULL;
-    }
-
     $form['properties'] = $webform_element->buildConfigurationForm([], $form_state);
 
     // Move messages to the top of the webform.
@@ -145,12 +133,13 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       unset($form['properties']['messages']);
     }
 
-    // Hide #flex property if parent element is not a 'webform_flexbox'.
-    if (isset($form['properties']['flex']) && !$this->isParentElementFlexbox($key, $parent_key)) {
-      $form['properties']['flex']['#access'] = FALSE;
-    }
+    // Set parent key.
+    $form['parent_key'] = [
+      '#type' => 'value',
+      '#value' => $parent_key,
+    ];
 
-    // Add type to the general details.
+    // Set element type.
     $form['properties']['element']['type'] = [
       '#type' => 'item',
       '#title' => $this->t('Type'),
@@ -161,7 +150,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#parents' => ['type'],
     ];
 
-    // Allows users to change element type.
+    // Set change element type.
     if ($key && $webform_element->getRelatedTypes($this->element)) {
       $route_parameters = ['webform' => $webform->id(), 'key' => $key];
       if ($this->originalType) {
@@ -185,12 +174,53 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       }
     }
 
+    // Set element key reserved word warning message.
+    if (!$key) {
+      $reserved_keys = ['form_build_id', 'form_token', 'form_id', 'data', 'op'];
+      $reserved_keys = array_merge($reserved_keys, array_keys(\Drupal::service('entity_field.manager')->getBaseFieldDefinitions('webform_submission')));
+      $form['#attached']['drupalSettings']['webform_ui']['reserved_keys'] = $reserved_keys;
+      $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
+      $form['properties']['element']['key_warning'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t("Please avoid using the reserved word '@key' as the element's key."),
+        '#weight' => -99,
+        '#attributes' => ['style' => 'display:none'],
+      ];
+    }
+
+    // Set element key.
+    $form['properties']['element']['key'] = [
+      '#type' => 'machine_name',
+      '#title' => $this->t('Key'),
+      '#machine_name' => [
+        'label' => $this->t('Key'),
+        'exists' => [$this, 'exists'],
+        'source' => ['title'],
+      ],
+      '#required' => TRUE,
+      '#parents' => ['key'],
+      '#disabled' => ($key) ? TRUE : FALSE,
+      '#default_value' => $key,
+      '#weight' => -98,
+    ];
+    // Remove the key's help text (aka description) once it has been set.
+    if ($key) {
+      $form['properties']['element']['key']['#description'] = NULL;
+    }
     // Use title for key (machine_name).
     if (isset($form['properties']['element']['title'])) {
-      $form['key']['#machine_name']['source'] = ['properties', 'element', 'title'];
+      $form['properties']['element']['key']['#machine_name']['source'] = ['properties', 'element', 'title'];
       $form['properties']['element']['title']['#id'] = 'title';
     }
 
+    // Set flex.
+    // Hide #flex property if parent element is not a 'webform_flexbox'.
+    if (isset($form['properties']['flex']) && !$this->isParentElementFlexbox($key, $parent_key)) {
+      $form['properties']['flex']['#access'] = FALSE;
+    }
+
+    // Set actions.
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -214,15 +244,16 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       return;
     }
 
-    $webform_element = $this->getWebformElement();
-
     // The webform element configuration is stored in the 'properties' key in
     // the webform, pass that through for validation.
-    $element_form_state = (new FormState())->setValues($form_state->getValue('properties') ?: []);
-    $element_form_state->setFormObject($this);
+    $element_form_state = clone $form_state;
+    $element_form_state->setValues($form_state->getValue('properties'));
 
-    // Validate configuration webform and set webform errors.
+    // Validate configuration webform.
+    $webform_element = $this->getWebformElement();
     $webform_element->validateConfigurationForm($form, $element_form_state);
+
+    // Get errors for element validation.
     $element_errors = $element_form_state->getErrors();
     foreach ($element_errors as $element_error) {
       $form_state->setErrorByName(NULL, $element_error);
@@ -263,8 +294,16 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
 
     // The webform element configuration is stored in the 'properties' key in
     // the webform, pass that through for submission.
-    $element_data = (new FormState())->setValues($form_state->getValue('properties'));
-    $webform_element->submitConfigurationForm($form, $element_data);
+    $element_form_state = clone $form_state;
+    $element_form_state->setValues($form_state->getValue('properties'));
+
+    // Submit element configuration.
+    // Generally, elements will not be processing any submitted properties.
+    // It is possible that a custom element might need to call a third-party API
+    // to 'register' the element.
+    $webform_element->submitConfigurationForm($form, $element_form_state);
+
+    // Save the webform with its updated element.
     $this->webform->save();
 
     // Display status message.

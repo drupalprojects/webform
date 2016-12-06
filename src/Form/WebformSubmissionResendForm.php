@@ -173,7 +173,6 @@ class WebformSubmissionResendForm extends FormBase {
       '#theme' => 'webform_submission_information',
       '#webform_submission' => $webform_submission,
       '#source_entity' => $source_entity,
-      '#open' => FALSE,
       '#weight' => -19,
     ];
     $form['#attached']['library'][] = 'webform/webform.admin';

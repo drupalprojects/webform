@@ -125,8 +125,8 @@ drush en -y webform webform_ui webform_devel webform_examples webform_templates 
 # Optional.
 drush en -y webform_test;
 drush en -y webform_test_third_party_settings;
-drush en -y webform_translation_test;
-drush pmu -y webform_test_third_party_settings webform_translation_test;
+drush en -y webform_test_translation;
+drush pmu -y webform_test_third_party_settings webform_test_translation;
 ```
 
 **Reinstall Webform Test module.**
@@ -150,6 +150,7 @@ drush features-export -y webform
 drush features-export -y webform_test
 drush features-export -y webform_examples
 drush features-export -y webform_templates
+drush features-export -y webform_test_translation
 drush features-export -y webform_node
 
 # Tidy webform configuration from your site.          
@@ -157,6 +158,7 @@ drush webform-tidy -y --dependencies webform
 drush webform-tidy -y --dependencies webform_test
 drush webform-tidy -y --dependencies webform_examples
 drush webform-tidy -y --dependencies webform_templates
+drush features-tidy -y --dependencies webform_test_translation
 drush webform-tidy -y --dependencies webform_node
 
 # Re-import all webform configuration into your site.      
@@ -164,6 +166,7 @@ drush features-import -y webform
 drush features-import -y webform_test
 drush features-import -y webform_examples
 drush features-import -y webform_templates
+drush features-import -y webform_test_translation
 drush features-import -y webform_node
 ```
 
@@ -267,5 +270,5 @@ drush -y pm-enable\
   webform_node\
   webform_templates\
   webform_test\
-  webform_translation_test;
+  webform_test_translation;
 ```

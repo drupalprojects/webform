@@ -1421,3 +1421,18 @@ function webform_update_8072(&$sandbox) {
   $settings_config->set('format', array_filter($settings_config->get('format')));
   $settings_config->save();
 }
+
+/**
+ * Issue #2823918: Add custom classes, styles, and properties to webform settings and class names to submit buttons
+ */
+function webform_update_8073(&$sandbox) {
+  // Update 'webform.settings' configuration.
+  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $settings_config->set('form_classes', $settings_config->get('classes'));
+  $settings_config->set('button_classes', '');
+  $settings_config->clear('classes');
+  $settings_config->save();
+
+  // Update 'webform.webform.*' configuration.
+  _webform_update_form_settings();
+}
