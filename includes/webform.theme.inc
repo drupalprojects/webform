@@ -9,6 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\Xss;
 use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\WebformMessageManagerInterface;
@@ -146,6 +147,14 @@ function template_preprocess_webform_confirmation(array &$variables) {
 
   // Set message.
   $variables['message'] = $message_manager->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+
+  // Set attributes.
+  $variables['attributes'] = new Attribute($settings['confirmation_attributes']);
+
+  // Set back.
+  $variables['back'] = $settings['confirmation_back'];
+  $variables['back_label'] = $settings['confirmation_back_label'] ?: \Drupal::config('webform.settings')->get('settings.default_confirmation_back_label');
+  $variables['back_attributes'] = new Attribute($settings['confirmation_back_attributes']);
 
   // Apply all passed query string parameters to the 'Back to form' link.
   $query = \Drupal::request()->query->all();

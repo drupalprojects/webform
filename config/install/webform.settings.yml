@@ -26,6 +26,13 @@ settings:
   default_draft_saved_message: 'Submission saved. You may return to this form later and it will restore the current values.'
   default_draft_loaded_message: 'A partially-completed form was found. Please complete the remaining portions.'
   default_confirmation_message: 'New submission added to [webform:title].'
+  default_confirmation_back_label: 'Back to form'
+  confirmation_classes: |
+    messages messages--error
+    messages messages--warning
+    messages messages--status
+  confirmation_back_classes: |
+    button
   default_limit_total_message: 'No more submissions are permitted.'
   default_limit_user_message: 'No more submissions are permitted.'
 export:

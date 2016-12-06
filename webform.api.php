@@ -31,6 +31,61 @@ function hook_webform_handler_info_alter(array &$handlers) {
 }
 
 /**
+ * Alter webform elements.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing the following key-value pairs:
+ *   - webform: The webform structure to which elements is being attached.
+ *
+ * @see \Drupal\webform\WebformSubmissionForm::prepareElements()
+ * @see hook_webform_element_ELEMENT_TYPE_form_alter()
+ */
+function hook_webform_element_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
+  // Code here acts on all elements included in a webform.
+  /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+  $form_object = $form_state->getFormObject();
+  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+  $webform_submission = $form_object->getEntity();
+  /** @var \Drupal\webform\WebformInterface $webform */
+  $webform = $webform_submission->getWebform();
+
+  // Add custom data attributes to all elements.
+  $element['#attributes']['data-custom'] = '{custom data goes here}';
+}
+
+/**
+ * Alter webform elements for a specific type.
+ *
+ * Modules can implement hook_webform_element_ELEMENT_TYPE_form_alter() to
+ * modify a specific webform element, rather than using
+ * hook_webform_element_alter() and checking the element type.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array. See hook_field_widget_form_alter() for the structure
+ *   and content of the array.
+ *
+ * @see \Drupal\webform\WebformSubmissionForm::prepareElements()
+ * @see hook_webform_element_alter(()
+ */
+function hook_webform_element_ELEMENT_TYPE_form_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
+  // Code here will only act on element type ELEMENT_TYPE.
+
+  // Add custom data attributes to a specific element type.
+  $element['#attributes']['data-custom'] = '{custom data goes here}';
+
+  // Attach a custom library to the element type.
+  $element['#attached']['library'][] = 'MODULE/MODULE.element.ELEMENT_TYPE';
+}
+
+/**
  * Alter the webform options by id.
  *
  * @param array $options

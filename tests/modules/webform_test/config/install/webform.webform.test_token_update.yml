@@ -57,6 +57,10 @@ settings:
   confirmation_type: page
   confirmation_message: '<p>You can update your submission via <a href="[webform-submission:update-url]">[webform-submission:update-url]</a></p>'
   confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
   limit_total: null
   limit_total_message: ''
   limit_user: null

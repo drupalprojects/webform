@@ -59,67 +59,6 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->drupalPostForm('admin/structure/webform/manage/contact/settings', ['next_serial' => 1], t('Save'));
     $this->assertRaw('The next submission number was increased to 100 to make it higher than existing submissions.');
 
-    /* Test confirmation message (confirmation_type=message) */
-
-    // Check confirmation message.
-    $this->drupalPostForm('webform/test_confirmation_message', [], t('Submit'));
-    $this->assertRaw('This is a <b>custom</b> confirmation message.');
-    $this->assertUrl('webform/test_confirmation_message');
-
-    // Check confirmation page with custom query parameters.
-    $this->drupalPostForm('webform/test_confirmation_message', [], t('Submit'), ['query' => ['custom' => 'param']]);
-    $this->assertUrl('webform/test_confirmation_message', ['query' => ['custom' => 'param']]);
-
-    /* Test confirmation inline (confirmation_type=inline) */
-
-    $webform_confirmation_inline = Webform::load('test_confirmation_inline');
-
-    // Check confirmation inline.
-    $this->drupalPostForm('webform/test_confirmation_inline', [], t('Submit'));
-    $this->assertRaw('<a href="' . $webform_confirmation_inline->toUrl()->toString() . '" rel="back" title="Go back to form">Back to form</a>');
-    $this->assertUrl('webform/test_confirmation_inline', ['query' => ['webform_id' => $webform_confirmation_inline->id()]]);
-
-    // Check confirmation inline with custom query parameters.
-    $this->drupalPostForm('webform/test_confirmation_inline', [], t('Submit'), ['query' => ['custom' => 'param']]);
-    $this->assertRaw('<a href="' . $webform_confirmation_inline->toUrl()->toString() . '?custom=param" rel="back" title="Go back to form">Back to form</a>');
-    $this->assertUrl('webform/test_confirmation_inline', ['query' => ['custom' => 'param', 'webform_id' => $webform_confirmation_inline->id()]]);
-
-    /* Test confirmation page (confirmation_type=page) */
-
-    $webform_confirmation_page = Webform::load('test_confirmation_page');
-
-    // Check confirmation page.
-    $this->drupalPostForm('webform/test_confirmation_page', [], t('Submit'));
-    $this->assertRaw('This is a custom confirmation page.');
-    $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '" rel="back" title="Go back to form">Back to form</a>');
-    $this->assertUrl('webform/test_confirmation_page/confirmation');
-
-    // Check that the confirmation page's 'Back to form 'link includes custom
-    // query parameters.
-    $this->drupalGet('webform/test_confirmation_page/confirmation', ['query' => ['custom' => 'param']]);
-
-    // Check confirmation page with custom query parameters.
-    $this->drupalPostForm('webform/test_confirmation_page', [], t('Submit'), ['query' => ['custom' => 'param']]);
-    $this->assertUrl('webform/test_confirmation_page/confirmation', ['query' => ['custom' => 'param']]);
-
-    // TODO: (TESTING)  Figure out why the inline confirmation link is not including the query string parameters.
-    // $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '?custom=param">Back to form</a>');
-
-    /* Test confirmation URL (confirmation_type=url) */
-
-    // Check confirmation URL.
-    $this->drupalPostForm('webform/test_confirmation_url', [], t('Submit'));
-    $this->assertNoRaw('<h2 class="visually-hidden">Status message</h2>');
-    $this->assertUrl('<front>');
-
-    /* Test confirmation URL (confirmation_type=url_message) */
-
-    // Check confirmation URL.
-    $this->drupalPostForm('webform/test_confirmation_url_message', [], t('Submit'));
-    $this->assertRaw('<h2 class="visually-hidden">Status message</h2>');
-    $this->assertRaw('This is a custom confirmation message.');
-    $this->assertUrl('<front>');
-
     /* Test webform closed (status=false) */
 
     $webform_closed = Webform::load('test_form_closed');

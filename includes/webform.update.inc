@@ -9,6 +9,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\webform\Entity\Webform;
 use Drupal\Core\Render\Element;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -1343,7 +1344,7 @@ function webform_update_8067(&$sandbox) {
       // @see \Drupal\webform\WebformTranslationManager::getBaseElements()
       $elements = Yaml::decode($config_elements);
       $elements = WebformElementHelper::getFlattened($elements);
-      $translatable_properties = WebformElementHelper::addPrefix($element_manager->getTranslatableProperties());
+      $translatable_properties = WebformArrayHelper::addPrefix($element_manager->getTranslatableProperties());
       foreach ($elements as $element_key => &$element) {
         foreach ($element as $property_key => $property_value) {
           $translatable_property_key = $property_key;
@@ -1423,7 +1424,7 @@ function webform_update_8072(&$sandbox) {
 }
 
 /**
- * Issue #2823918: Add custom classes, styles, and properties to webform settings and class names to submit buttons
+ * Issue #2823918: Add custom classes, styles, and properties to webform settings and class names to submit buttons.
  */
 function webform_update_8073(&$sandbox) {
   // Update 'webform.settings' configuration.
@@ -1432,6 +1433,17 @@ function webform_update_8073(&$sandbox) {
   $settings_config->set('button_classes', '');
   $settings_config->clear('classes');
   $settings_config->save();
+
+  // Update 'webform.webform.*' configuration.
+  _webform_update_form_settings();
+}
+
+/**
+ * Issue #2833576: Custom confirmation attributes and back link.
+ */
+function webform_update_8074(&$sandbox) {
+  // Update 'webform.settings' configuration.
+  _webform_update_admin_settings();
 
   // Update 'webform.webform.*' configuration.
   _webform_update_form_settings();

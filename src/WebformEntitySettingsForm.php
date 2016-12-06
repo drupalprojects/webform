@@ -671,6 +671,49 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
+    $form['confirmation']['page'] = [
+      '#type' => 'container',
+      '#states' => [
+        'visible' => [
+          [':input[name="confirmation_type"]' => ['value' => 'page']],
+          'or',
+          [':input[name="confirmation_type"]' => ['value' => 'inline']],
+        ],
+      ],
+    ];
+    $form['confirmation']['page']['confirmation_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Confirmation'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.confirmation_classes'),
+      '#default_value' => $settings['confirmation_attributes'],
+    ];
+    $form['confirmation']['page']['confirmation_back'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display back to webform link'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['confirmation_back'],
+    ];
+    $form['confirmation']['page']['back'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Confirmation back link'),
+      '#states' => [
+        'visible' => [
+          [':input[name="confirmation_back"]' => ['checked' => TRUE]],
+        ],
+      ],
+    ];
+    $form['confirmation']['page']['back']['confirmation_back_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Confirmation back link label'),
+      '#size' => 20,
+      '#default_value' => $settings['confirmation_back_label'],
+    ];
+    $form['confirmation']['page']['back']['confirmation_back_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Confirmation back link'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.confirmation_back_classes'),
+      '#default_value' => $settings['confirmation_back_attributes'],
+    ];
     if ($this->moduleHandler->moduleExists('token')) {
       $form['confirmation']['token_tree_link'] = [
         '#theme' => 'token_tree_link',
@@ -764,8 +807,8 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' =>
         $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
         '<br/>' .
-        $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformElementHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
-      '#default_value' => WebformElementHelper::removePrefix($properties),
+        $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
+      '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
 
     $this->appendDefaultValueToElementDescriptions($form, $default_settings);
@@ -802,7 +845,7 @@ class WebformEntitySettingsForm extends EntityForm {
       $properties['#action'] = $values['action'];
     }
     if (!empty($values['custom'])) {
-      $properties += WebformElementHelper::addPrefix($values['custom']);
+      $properties += WebformArrayHelper::addPrefix($values['custom']);
     }
     if (!empty($values['attributes'])) {
       $properties['#attributes'] = $values['attributes'];

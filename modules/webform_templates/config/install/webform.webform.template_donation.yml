@@ -123,6 +123,10 @@ settings:
     <h2>Thank you!!!</h2>
     <p>Your donation was processed successfully!</p>
   confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
   limit_total: null
   limit_total_message: ''
   limit_user: null

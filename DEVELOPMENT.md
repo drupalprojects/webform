@@ -147,25 +147,25 @@ drush features-diff webform_test
 
 # Export webform configuration from your site.          
 drush features-export -y webform
-drush features-export -y webform_test
 drush features-export -y webform_examples
 drush features-export -y webform_templates
+drush features-export -y webform_test
 drush features-export -y webform_test_translation
 drush features-export -y webform_node
 
 # Tidy webform configuration from your site.          
 drush webform-tidy -y --dependencies webform
-drush webform-tidy -y --dependencies webform_test
 drush webform-tidy -y --dependencies webform_examples
 drush webform-tidy -y --dependencies webform_templates
-drush features-tidy -y --dependencies webform_test_translation
+drush webform-tidy -y --dependencies webform_test
+drush webform-tidy -y --dependencies webform_test_translation
 drush webform-tidy -y --dependencies webform_node
 
 # Re-import all webform configuration into your site.      
 drush features-import -y webform
-drush features-import -y webform_test
 drush features-import -y webform_examples
 drush features-import -y webform_templates
+drush features-import -y webform_test
 drush features-import -y webform_test_translation
 drush features-import -y webform_node
 ```
@@ -272,3 +272,38 @@ drush -y pm-enable\
   webform_test\
   webform_test_translation;
 ```
+
+### How to take a screencast
+
+**Setup**
+
+- Drupal
+    - Install Drupal locally.
+    - Remove all blocks in first sidebar.  
+      http://localhost/d8_dev/admin/structure/block
+- Desktop
+    - Switch to laptop.
+    - Turn 'Hiding on' in the Dock System Preferences.
+    - Set screen display to 'Large Text'
+- Chrome
+    - Hide Bookmarks.
+    - Hide Extra Icons.
+    - Always Show Toolbar in Full Screen.
+    - Delete all webform.* keys from local storage.
+
+**Generate list of screencasts**
+
+    $help = _webform_help();
+    print '<pre>';
+    foreach ($help as $name => $info) {
+      print "webform-" . $name . "\n";
+      print 'Webform Help: ' . $info['title'] . "\n";
+      print "\n";
+    }
+    print '</pre>'; exit;
+  
+**Uploading**
+
+- Title : Webform Help: {title} [v01]
+- Tags: Drupal 8,Webform,Form Builder
+- Privacy: Unlisted

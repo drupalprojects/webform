@@ -165,6 +165,13 @@ function _webform_help() {
     // 'youtube_id' => '9jSOOEpzAy8',
   ];
 
+  // Introduction.
+  $help['introduction'] = [
+    'title' => t('Welcome'),
+    'content' => t('Welcome to new Webform module for Drupal 8.'),
+    'youtube_id' => 'sQGsfQ_LZJ4',
+  ];
+
   /****************************************************************************/
   // General.
   /****************************************************************************/
@@ -486,6 +493,19 @@ function _webform_help() {
     'content' => t("A webform block allows a webform to be placed anywhere on a website."),
     // 'youtube_id' => 'CkRQMS6eJII',
   ];
+
+  // Webform to Webform.
+  if (\Drupal::moduleHandler()->moduleExists('webform_to_webform')) {
+    $help['webform_to_webform'] = [
+      'routes' => [
+        // @see /admin/structure/webform/migrate
+        'webform_to_webform.migrate',
+      ],
+      'title' => t('Migrating from Webform 8.x-1.x to Webform 8.x-1.x'),
+      'content' => t("The Migrate page will move your Webform configuration and modules to the Webform module."),
+      // 'youtube_id' => 'XXXXXXXX',
+    ];
+  }
 
   foreach ($help as $id => &$info) {
     $info['id'] = $id;

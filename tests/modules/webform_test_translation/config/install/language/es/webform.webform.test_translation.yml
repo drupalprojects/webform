@@ -22,3 +22,7 @@ settings:
 handlers:
   email_confirmation:
     label: ' Confirmación de correo electrónico'
+dependencies:
+  enforced:
+    module:
+      - webform_test_translation

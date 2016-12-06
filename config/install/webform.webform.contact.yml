@@ -74,6 +74,10 @@ settings:
   confirmation_type: url_message
   confirmation_message: 'Your message has been sent.'
   confirmation_url: '<front>'
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
   limit_total: null
   limit_total_message: ''
   limit_user: null

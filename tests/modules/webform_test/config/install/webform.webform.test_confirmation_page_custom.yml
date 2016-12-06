@@ -4,44 +4,14 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
-id: test_element_likert
-title: 'Test: Element: Likert'
-description: 'Test the likert element.'
+id: test_confirmation_page_custom
+title: 'Test: Confirmation: Page custom'
+description: 'Test redirecting to a customized confirmation page.'
 elements: |
-  likert_elements:
-    '#type': details
-    '#title': 'Likert Elements'
-    '#open': true
-    likert_default:
-      '#type': likert
-      '#title': 'likert (default)'
-      '#questions':
-        q1: 'Question 1'
-        q2: 'Question 2'
-        q3: 'Question 3'
-      '#answers':
-        1: 'Option 1'
-        2: 'Option 2'
-        3: 'Option 3'
-    likert_advanced:
-      '#type': likert
-      '#title': 'likert (advanced)'
-      '#required': true
-      '#na_answer': true
-      '#na_answer_value': 'N/A'
-      '#na_answer_text': 'Not applicable'
-      '#questions':
-        q1: 'Question 1'
-        q2: 'Question 2'
-        q3: 'Question 3'
-      '#answers':
-        1: 'Option 1'
-        2: 'Option 2'
-        3: 'Option 3'
+  description:
+    '#markup': 'This webform will redirect to the confirmation page when submitted.'
 css: ''
 javascript: ''
 settings:
@@ -83,21 +53,24 @@ settings:
   draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: message
-  confirmation_message: ''
+  confirmation_type: inline
+  confirmation_message: 'This is a custom confirmation page.'
   confirmation_url: ''
-  confirmation_attributes: {  }
+  confirmation_attributes:
+    style: 'border: 10px solid red; padding: 1em;'
   confirmation_back: true
-  confirmation_back_label: ''
-  confirmation_back_attributes: {  }
+  confirmation_back_label: 'Custom back to link'
+  confirmation_back_attributes:
+    class:
+      - button
   limit_total: null
   limit_total_message: ''
   limit_user: null
   limit_user_message: ''
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: false
-  results_disabled_ignore: false
+  results_disabled: true
+  results_disabled_ignore: true
   token_update: false
 access:
   create:
@@ -126,11 +99,4 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-handlers:
-  debug:
-    id: debug
-    label: Debug
-    handler_id: debug
-    status: true
-    weight: 1
-    settings: {  }
+handlers: {  }

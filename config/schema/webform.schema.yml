@@ -68,6 +68,9 @@ webform.settings:
         default_confirmation_message:
           type: text
           label: 'Default confirmation message'
+        default_confirmation_back_label:
+          type: text
+          label: 'Default confirmation back label'
         default_limit_total_message:
           type: text
           label: 'Default limit total message'
@@ -80,6 +83,12 @@ webform.settings:
         button_classes:
           type: string
           label: 'Button CSS classes'
+        confirmation_classes:
+          type: string
+          label: 'Confirmation CSS classes'
+        confirmation_back_classes:
+          type: string
+          label: 'Confirmation back link CSS classes'
     elements:
       type: mapping
       label: 'Elements default settings'
@@ -408,6 +417,18 @@ webform.webform.*:
         confirmation_message:
           type: text
           label: 'Confirmation message'
+        confirmation_attributes:
+          type: ignore
+          label: 'Confirmation attributes'
+        confirmation_back:
+          type: boolean
+          label: 'Display back to webform link.'
+        confirmation_back_label:
+          type: text
+          label: 'Confirmation back link label'
+        confirmation_back_attributes:
+          type: ignore
+          label: 'Confirmation back link attributes'
         limit_total:
           type: integer
           label: 'Limit total submissions'

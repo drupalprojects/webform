@@ -176,13 +176,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('settings.default_form_details_toggle'),
     ];
     $form['webform']['form_classes'] = [
-      '#type' => 'textarea',
+      '#type' => 'webform_codemirror',
       '#title' => $this->t('Webform CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Webform CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.form_classes'),
     ];
     $form['webform']['button_classes'] = [
-      '#type' => 'textarea',
+      '#type' => 'webform_codemirror',
       '#title' => $this->t('Button CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in "Button CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.button_classes'),
@@ -286,6 +286,24 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Default confirmation message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_confirmation_message'),
+    ];
+    $form['confirmation']['default_confirmation_back_label']  = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default confirmation back label'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('settings.default_confirmation_back_label'),
+    ];
+    $form['confirmation']['confirmation_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Confirmation CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Confirmation CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#default_value' => $config->get('settings.confirmation_classes'),
+    ];
+    $form['confirmation']['confirmation_back_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Confirmation back link CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Confirmation back link CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#default_value' => $config->get('settings.confirmation_back_classes'),
     ];
 
     // Limit.
