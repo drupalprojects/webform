@@ -555,7 +555,7 @@ function webform_process_states(&$elements, $key = '#attributes') {
  *
  * @see \Drupal\webform\WebformEntityElementsValidator::validateRendering()
  */
-function _webform_entity_element_validate_rendering_error_handler($error_level, $message, $filename, $line, $context) {
+function _webform_entity_element_validate_rendering_error_handler($error_level, $message, $filename, $line, array $context) {
   // From: http://stackoverflow.com/questions/15461611/php-try-catch-not-catching-all-exceptions
   if (E_RECOVERABLE_ERROR === $error_level) {
     // Allow Drupal to still log the error but convert it to a warning.

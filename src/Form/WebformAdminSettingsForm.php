@@ -347,14 +347,14 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('elements.allowed_tags'),
     ];
     $form['elements']['wrapper_classes'] = [
-      '#type' => 'textarea',
+      '#type' => 'webform_codemirror',
       '#title' => $this->t('Wrapper CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Wrapper CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#required' => TRUE,
       '#default_value' => $config->get('elements.wrapper_classes'),
     ];
     $form['elements']['classes'] = [
-      '#type' => 'textarea',
+      '#type' => 'webform_codemirror',
       '#title' => $this->t('Element CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Element CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#required' => TRUE,

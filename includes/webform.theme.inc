@@ -28,7 +28,7 @@ use Drupal\webform\Utility\WebformElementHelper;
  *   - title: Help title.
  *   - content: Help content.
  */
-function template_preprocess_webform_help(&$variables) {
+function template_preprocess_webform_help(array &$variables) {
   $info = $variables['info'];
 
   $variables += $info;
@@ -87,7 +87,7 @@ function template_preprocess_webform_help(&$variables) {
  *   - element: An associative array containing the properties of the element.
  *     Properties used: #action, #method, #attributes, #webform_children.
  */
-function template_preprocess_webform(&$variables) {
+function template_preprocess_webform(array &$variables) {
   template_preprocess_form($variables);
 }
 
@@ -103,7 +103,7 @@ function template_preprocess_webform(&$variables) {
  * @see \Drupal\webform\WebformSubmissionForm::actionsElement
  * @see \Drupal\webform\WebformSubmissionForm::actions
  */
-function template_preprocess_webform_actions(&$variables) {
+function template_preprocess_webform_actions(array &$variables) {
   $element = $variables['element'];
   // Buttons include submit, previous, next, and draft.
   foreach (Element::children($element) as $key) {
@@ -519,7 +519,7 @@ function template_preprocess_webform_progress(array &$variables) {
   }
 
   if ($webform->getSetting('wizard_progress_pages')) {
-    $variables['summary'] = t('Page @start of @end', ['@start' => $current_index  + 1, '@end' => $total]);
+    $variables['summary'] = t('Page @start of @end', ['@start' => $current_index + 1, '@end' => $total]);
   }
 
   if ($webform->getSetting('wizard_progress_percentage')) {
@@ -571,7 +571,7 @@ function template_preprocess_webform_progress_bar(array &$variables) {
  *     Properties used: #title, #value, #options, #description, #required,
  *     #attributes.
  */
-function template_preprocess_webform_composite_address(&$variables) {
+function template_preprocess_webform_composite_address(array &$variables) {
   $element = $variables['element'];
   foreach (Element::children($element) as $key) {
     if ($element[$key]['#access']) {
@@ -592,7 +592,7 @@ function template_preprocess_webform_composite_address(&$variables) {
  *     Properties used: #title, #value, #options, #description, #required,
  *     #attributes.
  */
-function template_preprocess_webform_composite_contact(&$variables) {
+function template_preprocess_webform_composite_contact(array &$variables) {
   $element = $variables['element'];
   foreach (Element::children($element) as $key) {
     if ($element[$key]['#access']) {
@@ -613,7 +613,7 @@ function template_preprocess_webform_composite_contact(&$variables) {
  *     Properties used: #title, #value, #options, #description, #required,
  *     #attributes.
  */
-function template_preprocess_webform_composite_creditcard(&$variables) {
+function template_preprocess_webform_composite_creditcard(array &$variables) {
   $element = $variables['element'];
   foreach (Element::children($element) as $key) {
     if ($element[$key]['#access']) {
@@ -634,7 +634,7 @@ function template_preprocess_webform_composite_creditcard(&$variables) {
  *     Properties used: #title, #value, #options, #description, #required,
  *     #attributes.
  */
-function template_preprocess_webform_composite_location(&$variables) {
+function template_preprocess_webform_composite_location(array &$variables) {
   $variables['content'] = $variables['element'];
 }
 
@@ -649,7 +649,7 @@ function template_preprocess_webform_composite_location(&$variables) {
  *     Properties used: #title, #value, #options, #description, #required,
  *     #attributes.
  */
-function template_preprocess_webform_composite_name(&$variables) {
+function template_preprocess_webform_composite_name(array &$variables) {
   $element = $variables['element'];
   foreach (Element::children($element) as $key) {
     if ($element[$key]['#access']) {

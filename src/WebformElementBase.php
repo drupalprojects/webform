@@ -1058,7 +1058,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom...' to enter custom classes."),
       '#style__description' => $this->t("Apply custom styles to the element's wrapper around both the field and its label."),
       '#attributes__description' => $this->t("Enter additional attributes to be added the element's wrapper."),
-      '#attributes__access' => $this->currentUser->hasPermission('edit webform source'),
       '#classes' => $this->configFactory->get('webform.settings')->get('elements.wrapper_classes'),
     ];
     $form['element_attributes'] = [
@@ -1069,10 +1068,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['element_attributes']['attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Element'),
-      '#class__description' => $this->t("Apply classes to the element. Select 'custom...' to enter custom classes."),
-      '#style__description' => $this->t('Apply custom styles to the element.'),
-      '#attributes__description' => $this->t("Enter additional attributes to be added the element."),
-      '#attributes__access' => $this->currentUser->hasPermission('edit webform source'),
       '#classes' => $this->configFactory->get('webform.settings')->get('elements.classes'),
     ];
 

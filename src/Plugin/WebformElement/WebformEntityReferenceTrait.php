@@ -332,7 +332,7 @@ trait WebformEntityReferenceTrait {
    *   A render array containing an entity autocomplete targets using a view
    *   mode.
    */
-  protected function formatView(array $element, $value, $options) {
+  protected function formatView(array $element, $value, array $options) {
     list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
 
     $view_mode = $this->getFormat($element);
@@ -364,7 +364,7 @@ trait WebformEntityReferenceTrait {
    * @return array|string
    *   A array containing $entity_ids and $entityies.
    */
-  protected function getTargetEntities(array $element, $value, $options) {
+  protected function getTargetEntities(array $element, $value, array $options) {
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     $entity_ids = $this->getTargetEntityIds($value);

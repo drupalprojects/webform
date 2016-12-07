@@ -223,6 +223,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['webform']['form_submit']['form_submit_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Webform submit button'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['form_submit_attributes'],
     ];
     $form['webform']['form_prepopulate'] = [
@@ -304,10 +305,6 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Webform'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.form_classes'),
-      '#class__description' => $this->t("Apply classes to the webform. Select 'custom...' to enter custom classes."),
-      '#style__description' => $this->t('Apply custom styles to the webform.'),
-      '#attributes__description' => $this->t("Enter additional attributes to be added the webform."),
-      '#attributes__access' => !$this->moduleHandler->moduleExists('webform_ui') || $this->currentUser->hasPermission('edit webform source'),
       '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
 
@@ -354,6 +351,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['wizard']['wizard_prev_button']['wizard_prev_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Previous wizard page button'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['wizard_prev_button_attributes'],
     ];
     $form['wizard']['wizard_next_button'] = [
@@ -370,6 +368,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['wizard']['wizard_next_button']['wizard_next_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Next wizard page button'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['wizard_next_button_attributes'],
     ];
     $form['wizard']['wizard_complete'] = [
@@ -441,6 +440,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['preview']['settings']['preview_next_button']['preview_next_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Preview button'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['preview_next_button_attributes'],
     ];
     // Preview previous button.
@@ -458,6 +458,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['preview']['settings']['preview_prev_button']['preview_prev_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Previous page button'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['preview_prev_button_attributes'],
     ];
     $form['preview']['settings']['preview_message'] = [
@@ -515,6 +516,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['draft']['settings']['draft_button']['draft_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Draft button'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['draft_button_attributes'],
     ];
     $form['draft']['settings']['draft_saved_message'] = [

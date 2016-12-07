@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Serialization\Yaml;
@@ -47,17 +48,26 @@ class WebformElementAttributes extends FormElement {
   public static function processWebformElementAttributes(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
-    $t_args = ['@title' => $element['#title']];
+    // Determine what type of HTML element the attributes are being applied to.
+    $type = t('element');
+    $types = [preg_quote(t('webform')), preg_quote(t('link')), preg_quote(t('button'))];
+    if (preg_match('/\b(' . implode('|', $types) . ')\b/i', $element['#title'], $match)) {
+      $type = $match[1];
+    }
+
+    $t_args = [
+      '@title' => $element['#title'],
+      '@type' => Unicode::strtolower($type),
+    ];
 
     // Class.
-    $classes = NULL;
-    if (!empty($element['#classes'])) {
-      $classes = preg_split('/\r?\n/', trim($element['#classes']));
-    }
-    if ($classes) {
+    $element['#classes'] = trim($element['#classes']);
+    if ($element['#classes']) {
+      $classes = preg_split('/\r?\n/', $element['#classes']);
       $element['class'] = [
         '#type' => 'webform_select_other',
         '#title' => t('@title CSS classes', $t_args),
+        '#description' => t("Apply classes to the @type. Select 'custom...' to enter custom classes.", $t_args),
         '#multiple' => TRUE,
         '#options' => [ WebformSelectOther::OTHER_OPTION => t('custom...')] + array_combine($classes, $classes),
         '#other__option_delimiter' => ' ',
@@ -87,10 +97,10 @@ class WebformElementAttributes extends FormElement {
       $element['class'] = [
         '#type' => 'textfield',
         '#title' => t('@title CSS classes', $t_args),
+        '#description' => t("Apply classes to the @type.", $t_args),
         '#default_value' => implode(' ', $element['#default_value']['class']),
       ];
     }
-
 
     // Custom options.
     $element['custom'] = [
@@ -109,6 +119,7 @@ class WebformElementAttributes extends FormElement {
     $element['style'] = [
       '#type' => 'textfield',
       '#title' => t('@title CSS style', $t_args),
+      '#description' => t('Apply custom styles to the @type.', $t_args),
       '#default_value' => $element['#default_value']['style'],
     ];
 
@@ -118,7 +129,9 @@ class WebformElementAttributes extends FormElement {
     $element['attributes'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
-      '#title' => t('@title custom attributes', $t_args),
+      '#title' => t('@title custom attributes (YAML)', $t_args),
+      '#description' => t('Enter additional attributes to be added the @type.', $t_args),
+      '#attributes__access' => (!\Drupal::moduleHandler()->moduleExists('webform_ui') || \Drupal::currentUser()->hasPermission('edit webform source')),
       '#default_value' => WebformTidy::tidy(Yaml::encode($attributes)),
     ];
 

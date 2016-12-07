@@ -76,8 +76,6 @@ function hook_webform_element_alter(array &$element, \Drupal\Core\Form\FormState
  * @see hook_webform_element_alter(()
  */
 function hook_webform_element_ELEMENT_TYPE_form_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
-  // Code here will only act on element type ELEMENT_TYPE.
-
   // Add custom data attributes to a specific element type.
   $element['#attributes']['data-custom'] = '{custom data goes here}';
 

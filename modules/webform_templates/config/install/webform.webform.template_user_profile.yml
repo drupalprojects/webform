@@ -103,7 +103,7 @@ elements: |
     emails:
       '#type': email_multiple
       '#title': 'Secondary E-mall Addresses'
-      '#description': 'Enter multiple e-mail addresses seperated by commas.'
+      '#description': 'Enter multiple e-mail addresses separated by commas.'
   regional_settings:
     '#title': 'Regional Settings'
     '#type': fieldset

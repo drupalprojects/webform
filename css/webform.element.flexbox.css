@@ -15,9 +15,20 @@
     margin: 1em 0;
   }
 
-  .webform-flexbox--flex-start { -webkit-align-items: flex-start; align-items: flex-start; }
-  .webform-flexbox--flex-end { -webkit-align-items: flex-end; align-items: flex-end; }
-  .webform-flexbox--center { -webkit-align-items: center; align-items: center; }
+  .webform-flexbox--flex-start {
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+  }
+
+  .webform-flexbox--flex-end {
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+  }
+
+  .webform-flexbox--center {
+    -webkit-align-items: center;
+    align-items: center;
+  }
 
   .webform-flexbox input[type="checkbox"],
   .webform-flexbox input[type="radio"] /* Never allow checkboxes and radio buttons to have a width */{
@@ -56,10 +67,6 @@
   .webform-flex--container > .webform-has-field-prefix.webform-flex.webform-has-field-suffix > input,
   .webform-flex--container > .webform-has-field-prefix.webform-flex.webform-has-field-suffix > select {
     width: 70%;
-  }
-
-  .webform-flex--0 {
-    /* None */
   }
 
   .webform-flex--1 {
@@ -140,7 +147,6 @@
   /**
    * Range.
    */
-
   .webform-flex--container > .form-type-range-output > .form-range-output {
     width: 66%;
   }

@@ -75,7 +75,7 @@ because Drupal's YAML utility is not a service.](https://www.drupal.org/node/192
 
 **[Issue #1149078: States API doesn't work with multiple select fields](https://www.drupal.org/node/1149078)**
 
-**[Issue #2791741: FAPI states: fields aren't hidden initally when depending on multi-value selection](https://www.drupal.org/node/2791741)**
+**[Issue #2791741: FAPI states: fields aren't hidden initially when depending on multi-value selection](https://www.drupal.org/node/2791741)**
 
 #### Radios (radios)
 

@@ -2,7 +2,6 @@ name: 'Webform module translation tests'
 type: module
 description: 'Support module for Webform module translatation testing that provides working examples for translating webforms.'
 package: Testing
-version: VERSION
 core: 8.x
 dependencies:
   - webform

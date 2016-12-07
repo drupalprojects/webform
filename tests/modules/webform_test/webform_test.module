@@ -157,7 +157,7 @@ function _webform_test_issues() {
     'select' => [
       '1426646' => '"-Select-" option is lost when webform elements uses \'#states\'',
       '1149078' => 'States API doesn\'t work with multiple select fields',
-      '2791741' => 'FAPI states: fields aren\'t hidden initally when depending on multi-value selection',
+      '2791741' => 'FAPI states: fields aren\'t hidden initially when depending on multi-value selection',
     ],
     'radios' => [
       '2731991' => 'Setting required on radios marks all options required',

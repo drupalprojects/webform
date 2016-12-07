@@ -109,8 +109,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
     $this->drupalGet('webform/test_element_text_autocomplete/autocomplete/autocomplete_existing', ['query' => ['q' => 'ab']]);
     $this->assertRaw('[]');
     $this->assertNoRaw('[{"value":"abcdefg","label":"abcdefg"}]');
-
-
+    
     // Check 'entity_autocomplete' #default_value.
     $webform_entity_autocomplete = Webform::load('test_element_entity_reference');
 
