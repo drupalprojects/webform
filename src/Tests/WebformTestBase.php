@@ -16,7 +16,7 @@ abstract class WebformTestBase extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_test'];
 
   /**
    * Webform submission storage.

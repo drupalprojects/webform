@@ -20,7 +20,7 @@ class WebformTranslationTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'block', 'webform', 'webform_examples', 'webform_test_translation'];
+  protected static $modules = ['system', 'user', 'block', 'webform', 'webform_examples', 'webform_test_translation'];
 
   /**
    * {@inheritdoc}

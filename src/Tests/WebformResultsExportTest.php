@@ -19,7 +19,7 @@ class WebformResultsExportTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'node', 'user', 'locale', 'webform', 'webform_test'];
+  protected static $modules = ['system', 'block', 'node', 'user', 'locale', 'webform', 'webform_test'];
 
   /**
    * Tests download files.

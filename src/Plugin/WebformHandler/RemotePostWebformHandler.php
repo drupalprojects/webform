@@ -3,7 +3,9 @@
 namespace Drupal\webform\Plugin\WebformHandler;
 
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Utility\Token;
 use Drupal\webform\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use GuzzleHttp\ClientInterface;
@@ -27,6 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RemotePostWebformHandler extends WebformHandlerBase {
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * The HTTP client to fetch the feed data with.
    *
    * @var \GuzzleHttp\ClientInterface
@@ -34,11 +43,20 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $httpClient;
 
   /**
+   * The token service.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $token;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ClientInterface $http_client) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ModuleHandlerInterface $module_handler, ClientInterface $http_client, Token $token) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
+    $this->moduleHandler = $module_handler;
     $this->httpClient = $http_client;
+    $this->token = $token;
   }
 
   /**
@@ -50,7 +68,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory')->get('webform.remote_post'),
-      $container->get('http_client')
+      $container->get('module_handler'),
+      $container->get('http_client'),
+      $container->get('token')
     );
   }
 
@@ -83,6 +103,10 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       'update_url' => '',
       'delete_url' => '',
       'excluded_data' => $excluded_data,
+      'custom_data' => '',
+      'insert_custom_data' => '',
+      'update_custom_data' => '',
+      'delete_custom_data' => '',
       'debug' => FALSE,
     ];
   }
@@ -130,11 +154,11 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['type'],
     ];
 
-    $form['post_data'] = [
+    $form['submission_data'] = [
       '#type' => 'details',
-      '#title' => $this->t('Posted data'),
+      '#title' => $this->t('Submission data'),
     ];
-    $form['post_data']['excluded_data'] = [
+    $form['submission_data']['excluded_data'] = [
       '#type' => 'webform_excluded_columns',
       '#title' => $this->t('Posted data'),
       '#title_display' => 'invisible',
@@ -143,6 +167,62 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'excluded_data'],
       '#default_value' => $this->configuration['excluded_data'],
     ];
+
+    $form['custom_data'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Custom data'),
+      '#description' => $this->t('Custom data will take precedence over submission data. You may use tokens.'),
+    ];
+
+    $form['custom_data']['custom_data'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'yaml',
+      '#title' => $this->t('Custom data'),
+      '#description' => $this->t('Enter custom data that will be included in all remote post requests.'),
+      '#parents' => ['settings', 'custom_data'],
+      '#default_value' => $this->configuration['custom_data'],
+    ];
+    $form['custom_data']['insert_custom_data'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'yaml',
+      '#title' => $this->t('Insert data'),
+      '#description' => $this->t("Enter custom data that will be included when a new webform submission is saved."),
+      '#parents' => ['settings', 'insert_custom_data'],
+      '#states' => [
+        'visible' => [
+          [':input[name="settings[update_url]"]' => ['filled' => TRUE]],
+          'or',
+          [':input[name="settings[delete_url]"]' => ['filled' => TRUE]],
+        ],
+      ],
+      '#default_value' => $this->configuration['insert_custom_data'],
+    ];
+    $form['custom_data']['update_custom_data'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'yaml',
+      '#title' => $this->t('Update data'),
+      '#description' => $this->t("Enter custom data that will be included when a webform submission is updated."),
+      '#parents' => ['settings', 'update_custom_data'],
+      '#states' => ['visible' => [':input[name="settings[update_url]"]' => ['filled' => TRUE]]],
+      '#default_value' => $this->configuration['update_custom_data'],
+    ];
+    $form['custom_data']['delete_custom_data'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'yaml',
+      '#title' => $this->t('Delete data'),
+      '#description' => $this->t("Enter custom data that will be included when a webform submission is deleted."),
+      '#parents' => ['settings', 'delete_custom_data'],
+      '#states' => ['visible' => [':input[name="settings[delete_url]"]' => ['filled' => TRUE]]],
+      '#default_value' => $this->configuration['delete_custom_data'],
+    ];
+    if ($this->moduleHandler->moduleExists('token')) {
+      $form['custom_data']['token_tree_link'] = [
+        '#theme' => 'token_tree_link',
+        '#token_types' => ['webform', 'webform-submission'],
+        '#click_insert' => FALSE,
+        '#dialog' => TRUE,
+      ];
+    }
 
     $form['debug'] = [
       '#type' => 'checkbox',
@@ -199,7 +279,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     }
 
     $request_type = $this->configuration['type'];
-    $request_post_data = $this->getPostData($webform_submission);
+    $request_post_data = $this->getPostData($operation, $webform_submission);
 
     try {
       switch ($request_type) {
@@ -240,13 +320,16 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   /**
    * Get a webform submission's post data.
    *
+   * @param string $operation
+   *   The type of webform submission operation to be posted. Can be 'insert',
+   *   'update', or 'delete'.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
+   *   The webform submission to be posted.
    *
    * @return array
    *   A webform submission converted to an associative array.
    */
-  protected function getPostData(WebformSubmissionInterface $webform_submission) {
+  protected function getPostData($operation, WebformSubmissionInterface $webform_submission) {
     // Get submission and elements data.
     $data = $webform_submission->toArray(TRUE);
 
@@ -255,10 +338,43 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $data = $data['data'] + $data;
     unset($data['data']);
 
-    // Excluded selected data.
+    // Excluded selected submission data.
     $data = array_diff_key($data, $this->configuration['excluded_data']);
 
+    // Append custom data.
+    if (!empty($this->configuration['custom_data'])) {
+      $data = Yaml::decode($this->replaceTokens($this->configuration['custom_data'], $webform_submission)) + $data;
+    }
+
+    // Append operation data.
+    if (!empty($this->configuration[$operation . '_custom_data'])) {
+      $data = Yaml::decode($this->replaceTokens($this->configuration[$operation . '_custom_data'], $webform_submission)) + $data;
+    }
+
     return $data;
+  }
+
+  /**
+   * Replace tokens in text.
+   *
+   * @param string $text
+   *   A string of text that main contain tokens.
+   *
+   * @return string
+   *   Text will tokens replaced.
+   */
+  protected function replaceTokens($text, WebformSubmissionInterface $webform_submission) {
+    // Most strings won't contain tokens so lets check and return ASAP.
+    if (!is_string($text) || strpos($text, '[') === FALSE) {
+      return $text;
+    }
+
+    $token_data = [
+      'webform' => $webform_submission->getWebform(),
+      'webform-submission' => $webform_submission,
+    ];
+    $token_options = ['clear' => TRUE];
+    return \Drupal::token()->replace($text, $token_data, $token_options);
   }
 
   /**
@@ -312,8 +428,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#markup' => $request_type,
     ];
     $build['request_post_data'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Request post data'),
+      '#type' => 'item',
+      '#title' => $this->t('Request data'),
       'data' => [
         '#markup' => htmlspecialchars(Yaml::encode($request_post_data)),
         '#prefix' => '<pre>',
@@ -351,6 +467,13 @@ class RemotePostWebformHandler extends WebformHandlerBase {
           '#prefix' => '<pre>',
           '#suffix' => '</pre>',
         ],
+      ];
+    }
+    else {
+      $build['response_code'] = [
+        '#markup' => t('No response. Please see the recent log messages.'),
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
       ];
     }
 

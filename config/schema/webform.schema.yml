@@ -679,6 +679,18 @@ webform.handler.remote_post:
       sequence:
         type: string
         label: 'Data name'
+    custom_data:
+      label: 'Custom data'
+      type: string
+    insert_custom_data:
+      label: 'Insert custom data'
+      type: string
+    update_custom_data:
+      label: 'Update custom data'
+      type: string
+    delete_custom_data:
+      label: 'Delete custom data'
+      type: string
     debug:
       type: boolean
       label: 'Enable debugging'

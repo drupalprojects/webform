@@ -16,7 +16,7 @@ class WebformElementCodeMirrorTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'webform', 'webform_test'];
+  protected static $modules = ['system', 'webform', 'webform_test'];
 
   /**
    * Tests CodeMirror element.

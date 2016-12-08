@@ -19,7 +19,7 @@ class WebformDraftTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['system', 'user', 'webform', 'webform_test'];
 
   /**
    * {@inheritdoc}

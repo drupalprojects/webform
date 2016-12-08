@@ -86,7 +86,7 @@ mail:
   default_body_text: |
     Submitted on [webform-submission:created]
     Submitted by: [webform-submission:user]
-    
+
     Submitted values are:
     [webform-submission:values]
   default_body_html: |
@@ -194,6 +194,6 @@ ui:
   dialog_disabled: false
   html_editor_disabled: false
 library:
-  cdn: true
+  cdn: false
 langcode: en
 third_party_settings: {  }

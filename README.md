@@ -1,15 +1,6 @@
 Webform
 ---------
 
-> GOOD NEWS!!!
-
-### The Webform module is moving to the Webform module. 
-
-An experimental Webform to Webform migration module is now being included 
-with the Webform module. Read more about the 
-[Webform to Webform migration](https://www.drupal.org/node/2827845) 
-        
-
 ### About this Module
 
 The Webform module is a webform builder and submission manager for Drupal 8.

@@ -14,7 +14,7 @@ class WebformThirdPartySettingsTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'node', 'user', 'webform'];
+  protected static $modules = ['system', 'node', 'user', 'webform'];
 
   /**
    * Tests webform third party settings.

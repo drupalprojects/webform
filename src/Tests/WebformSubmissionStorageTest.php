@@ -19,7 +19,7 @@ class WebformSubmissionStorageTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'webform'];
+  protected static $modules = ['system', 'user', 'webform'];
 
   /**
    * {@inheritdoc}

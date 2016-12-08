@@ -9,7 +9,7 @@ namespace Drupal\webform\Tests;
  */
 class WebformPathTest extends WebformTestBase {
 
-  public static $modules = ['system', 'block', 'node', 'user', 'path', 'webform'];
+  protected static $modules = ['system', 'block', 'node', 'user', 'path', 'webform'];
 
   /**
    * Tests YAML page and title.

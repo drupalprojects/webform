@@ -24,13 +24,21 @@
       }
       $context.find('input[type="time"]').once('timePicker').each(function () {
         var $input = $(this);
-        var timeFormat = $input.data('webformTimeFormat');
-        var options = {
-          'timeFormat': timeFormat,
-          'minTime': $input.attr('min') || null,
-          'maxTime': $input.attr('max') || null,
-          'step': ($input.attr('step')) ? Math.round($input.attr('step') / 60) : null
-        };
+
+        var options = {};
+        if ($input.data('webformTimeFormat')) {
+          options.timeFormat = $input.data('webformTimeFormat');
+        }
+        if ($input.attr('min')) {
+          options.minTime = $input.attr('min');
+        }
+        if ($input.attr('max')) {
+          options.maxTime = $input.attr('max');
+        }
+        if ($input.attr('step')) {
+          options.step = Math.round($input.attr('step') / 60);
+        }
+
         $input.timepicker(options);
       });
     }

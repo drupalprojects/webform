@@ -23,6 +23,9 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     // Check remote post 'create' operation.
     $sid = $this->postSubmission($webform_handler_remote);
     $this->assertPattern('#<label>Remote operation</label>\s+insert#ms');
+    $this->assertRaw('custom_insert: true');
+    $this->assertRaw('custom_all: true');
+    $this->assertRaw("custom_title: 'Test: Handler: Remote post: Submission #$sid'");
     $this->assertRaw('first_name: John');
     $this->assertRaw('last_name: Smith');
     $this->assertRaw('email: from@example.com');
@@ -32,10 +35,18 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
 
     // Check remote post 'update' operation.
     $this->drupalPostForm("admin/structure/webform/manage/test_handler_remote_post/submission/$sid/edit", [], t('Save'));
+    $this->assertRaw('custom_update: true');
+    $this->assertRaw('custom_all: true');
+    $this->assertRaw("custom_title: 'Test: Handler: Remote post: Submission #$sid'");
+    $this->assertRaw('first_name: John');
     $this->assertPattern('#<label>Remote operation</label>\s+update#ms');
 
     // Check remote post 'delete' operation.
     $this->drupalPostForm("admin/structure/webform/manage/test_handler_remote_post/submission/$sid/delete", [], t('Delete'));
+    $this->assertRaw('custom_delete: true');
+    $this->assertRaw('custom_all: true');
+    $this->assertRaw("custom_title: 'Test: Handler: Remote post: Submission #$sid'");
+    $this->assertRaw('first_name: John');
     $this->assertPattern('#<label>Remote operation</label>\s+delete#ms');
 
     // Check including data.

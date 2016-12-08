@@ -16,7 +16,7 @@ class WebformElementTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test'];
+  protected static $modules = ['webform', 'webform_test'];
 
   /**
    * Test element settings.

@@ -16,7 +16,7 @@ class WebformElementCustomPropertiesTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'webform', 'webform_ui', 'webform_test_custom_properties'];
+  protected static $modules = ['system', 'user', 'webform', 'webform_ui', 'webform_test_custom_properties'];
 
   /**
    * Tests webform element custom properties.

@@ -15,7 +15,7 @@ class WebformEntityReferenceItemNormalizerTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'block',
     'node',

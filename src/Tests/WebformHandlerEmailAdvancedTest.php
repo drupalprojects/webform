@@ -11,7 +11,7 @@ use Drupal\webform\Entity\Webform;
  */
 class WebformHandlerEmailAdvancedTest extends WebformTestBase {
 
-  public static $modules = ['system', 'block', 'filter', 'node', 'user', 'file', 'webform', 'webform_test'];
+  protected static $modules = ['system', 'block', 'filter', 'node', 'user', 'file', 'webform', 'webform_test'];
 
   /**
    * Create webform test users.

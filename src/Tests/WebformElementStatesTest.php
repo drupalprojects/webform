@@ -20,7 +20,7 @@ class WebformElementStatesTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'filter', 'file', 'language', 'node', 'user', 'webform', 'webform_examples', 'webform_test'];
+  protected static $modules = ['system', 'filter', 'file', 'language', 'node', 'user', 'webform', 'webform_examples', 'webform_test'];
 
   /**
    * Tests element #states selectors.

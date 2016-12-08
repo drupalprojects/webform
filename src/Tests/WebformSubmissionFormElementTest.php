@@ -20,7 +20,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'filter', 'node', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['system', 'block', 'filter', 'node', 'user', 'webform', 'webform_test'];
 
   /**
    * Tests elements.

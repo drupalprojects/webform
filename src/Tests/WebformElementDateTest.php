@@ -18,7 +18,7 @@ class WebformElementDateTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test'];
+  protected static $modules = ['webform', 'webform_test'];
 
   /**
    * Test date element.

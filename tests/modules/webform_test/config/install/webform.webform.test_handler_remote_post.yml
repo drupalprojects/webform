@@ -150,4 +150,13 @@ handlers:
         entity_id: entity_id
         sticky: sticky
         notes: notes
+      custom_data: |
+        custom_all: true
+        custom_title: '[webform:title]: Submission #[webform-submission:serial]'
+      insert_custom_data: |
+        custom_insert: true
+      update_custom_data: |
+        custom_update: true
+      delete_custom_data: |
+        custom_delete: true
       debug: true
