@@ -10,11 +10,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 
-// Using include_once instead of module_load_include() to make sure all
-// update hooks are loaded even when a module is not fully installed.
-// @see https://www.drupal.org/node/2813333
-include_once 'includes/webform.update.inc';
-
 /**
  * Implements hook_uninstall().
  */
