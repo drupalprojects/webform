@@ -8,8 +8,6 @@ Steps for creating a new release
   4. Run tests
   5. Generate release notes
   6. Tag and create a new release
-  7. Update project page
-  8. Update documentation
 
 
 1. Cleanup code
@@ -59,7 +57,7 @@ Tidy YAML files
 
 [Online](http://pareview.sh)
 
-    http://git.drupal.org/project/webform.git 8.x-1.x
+    http://git.drupal.org/project/webform.git 8.x-5.x
 
 [Commandline](https://www.drupal.org/node/1587138)
 
@@ -111,7 +109,7 @@ Tidy YAML files
 
 [Git Release Notes for Drush](https://www.drupal.org/project/grn)
 
-    drush release-notes --nouser 8.x-1.0-VERSION 8.x-1.x
+    drush release-notes --nouser 8.x-5.0-VERSION 8.x-5.x
 
 
 6. Tag and create a new release
@@ -119,28 +117,8 @@ Tidy YAML files
 
 [Tag a release](https://www.drupal.org/node/1066342)
 
-    git tag 8.x-1.0-VERSION
+    git tag 8.x-5.0-VERSION
     git push --tags
-    git push origin tag 8.x-1.0-VERSION
+    git push origin tag 8.x-5.0-VERSION
 
 [Create new release](https://www.drupal.org/node/add/project-release/2640714)
-
-
-7. Update project page
-----------------------
-
-[Export README](https://www.drupal.org/project/readme)
-    
-     # Update project page
-     drush readme-export --project --path='docs/index.md' webform
-     open https://www.drupal.org/node/2640714/edit
-     
-[Edit project page](https://www.drupal.org/node/2640714/edit)
-
-
-8. Update documentation
------------------------
-
-[Update Roadmap](http://webform.io/developers/roadmap/)
-
-     npm install; grunt docs-deploy;
