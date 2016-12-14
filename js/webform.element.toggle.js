@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormToggle = {
+  Drupal.behaviors.webformToggle = {
     attach: function (context) {
       $(context).find('.js-webform-toggle').once('webform-toggle').each(function () {
         var $toggle = $(this);

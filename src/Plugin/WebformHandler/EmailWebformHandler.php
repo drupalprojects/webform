@@ -14,6 +14,7 @@ use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\WebformHandlerBase;
 use Drupal\webform\WebformHandlerMessageInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -46,11 +47,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected $configFactory;
 
   /**
-   * The token handler.
+   * The token manager.
    *
-   * @var \Drupal\Core\Utility\Token
+   * @var \Drupal\webform\WebformTranslationManagerInterface
    */
-  protected $token;
+  protected $tokenManager;
 
   /**
    * Cache of default configuration values.
@@ -62,11 +63,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, MailManagerInterface $mail_manager, ConfigFactoryInterface $config_factory, Token $token) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, MailManagerInterface $mail_manager, ConfigFactoryInterface $config_factory, WebformTokenManagerInterface $token_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
     $this->mailManager = $mail_manager;
     $this->configFactory = $config_factory;
-    $this->token = $token;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -80,7 +81,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $container->get('logger.factory')->get('webform.email'),
       $container->get('plugin.manager.mail'),
       $container->get('config.factory'),
-      $container->get('token')
+      $container->get('webform.token_manager')
     );
   }
 
@@ -134,7 +135,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'bcc_mail' => $default_mail,
       'from_mail' => $default_mail,
       'from_name' => $webform_settings->get('mail.default_from_name') ?: $site_settings->get('name'),
-      'subject' => $webform_settings->get('mail.default_subject') ?: 'Webform submission from: [webform-submission:source-entity]',
+      'subject' => $webform_settings->get('mail.default_subject') ?: 'Webform submission from: [webform_submission:source-entity]',
       'body' => $this->getBodyDefaultValues($body_format),
     ];
 
@@ -188,9 +189,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         // Note: Token must use the :raw webform mail elements.
         // For example a select menu's option value would be used to route an
         // email address.
-        $mail_element_options["[webform-submission:values:$key:raw]"] = $title;
+        $mail_element_options["[webform_submission:values:$key:raw]"] = $title;
       }
-      $text_element_options["[webform-submission:values:$key:value]"] = $title;
+      $text_element_options["[webform_submission:values:$key:value]"] = $title;
     }
 
     $default_optgroup = (string) $this->t('Default');
@@ -382,14 +383,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         ],
       ];
     }
-    if (\Drupal::moduleHandler()->moduleExists('token')) {
-      $form['message']['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Elements.
     $form['elements'] = [
@@ -399,7 +393,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     $form['elements']['excluded_elements'] = [
       '#type' => 'webform_excluded_elements',
-      '#description' => $this->t('The selected elements will be included in the [webform-submission:values] token. Individual values may still be printed if explicitly specified as a [webform-submission:values:?] in the email body template.'),
+      '#description' => $this->t('The selected elements will be included in the [webform_submission:values] token. Individual values may still be printed if explicitly specified as a [webform_submission:values:?] in the email body template.'),
       '#webform' => $this->webform,
       '#default_value' => $this->configuration['excluded_elements'],
       '#parents' => ['settings', 'excluded_elements'],
@@ -479,15 +473,12 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function getMessage(WebformSubmissionInterface $webform_submission) {
     $token_data = [
-      'webform' => $webform_submission->getWebform(),
-      'webform-submission' => $webform_submission,
       'webform-submission-options' => [
         'email' => TRUE,
         'excluded_elements' => $this->configuration['excluded_elements'],
         'html' => ($this->configuration['html'] && $this->supportsHtml()),
       ],
     ];
-    $token_options = ['clear' => TRUE];
 
     $message = $this->configuration;
 
@@ -497,7 +488,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         $message[$key] = $this->getDefaultConfigurationValue($key);
       }
       if (is_string($message[$key])) {
-        $message[$key] = $this->token->replace($message[$key], $token_data, $token_options);
+        $message[$key] = $this->tokenManager->replace($message[$key], $webform_submission, $token_data);
       }
     }
 
@@ -729,8 +720,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected function getBodyDefaultValues($format = NULL) {
     $webform_settings = $this->configFactory->get('webform.settings');
     $formats = [
-      'text' => $webform_settings->get('mail.default_body_text') ?: '[webform-submission:values]',
-      'html' => $webform_settings->get('mail.default_body_html') ?: '[webform-submission:values]',
+      'text' => $webform_settings->get('mail.default_body_text') ?: '[webform_submission:values]',
+      'html' => $webform_settings->get('mail.default_body_html') ?: '[webform_submission:values]',
     ];
     return ($format === NULL) ? $formats : $formats[$format];
   }

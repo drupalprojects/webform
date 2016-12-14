@@ -11,7 +11,7 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**
- * Base for controller for webform options.
+ * Provides a webform to set options.
  */
 class WebformOptionsForm extends EntityForm {
 

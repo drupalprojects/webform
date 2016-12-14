@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormRange = {
+  Drupal.behaviors.webformRange = {
     attach: function (context) {
       $(context).find('.form-range[data-range-output]').once('webform-range').each(function () {
         var $element = $(this);

@@ -36,6 +36,13 @@ class WebformEntityForm extends BundleEntityFormBase {
   protected $elementsValidator;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Constructs a new WebformUiElementFormBase.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -44,11 +51,15 @@ class WebformEntityForm extends BundleEntityFormBase {
    *   The webform element manager.
    * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
    *   Webform element validator.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(RendererInterface $renderer, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator) {
+  public function __construct(RendererInterface $renderer, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator, WebformTokenManagerInterface $token_manager) {
     $this->renderer = $renderer;
     $this->elementManager = $element_manager;
     $this->elementsValidator = $elements_validator;
+    $this->tokenManager = $token_manager;
+
   }
 
   /**
@@ -58,7 +69,8 @@ class WebformEntityForm extends BundleEntityFormBase {
     return new static(
       $container->get('renderer'),
       $container->get('plugin.manager.webform.element'),
-      $container->get('webform.elements_validator')
+      $container->get('webform.elements_validator'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -183,14 +195,7 @@ class WebformEntityForm extends BundleEntityFormBase {
       '#default_value' => $webform->get('elements') ,
       '#required' => TRUE,
     ];
-    if ($this->moduleHandler->moduleExists('token')) {
-      $form['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     return $form;
   }

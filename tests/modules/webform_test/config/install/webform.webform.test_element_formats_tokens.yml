@@ -120,13 +120,13 @@ handlers:
       from_name: default
       subject: default
       body: |
-        <h3>default:</h3>[webform-submission:values:checkboxes]<hr/>
-        <h3>comma:</h3>[webform-submission:values:checkboxes:comma]<hr/>
-        <h3>semicolon:</h3>[webform-submission:values:checkboxes:semicolon]<hr/>
-        <h3>and:</h3>[webform-submission:values:checkboxes:and]<hr/>
-        <h3>ul:</h3>[webform-submission:values:checkboxes:ul]<hr/>
-        <h3>ol:</h3>[webform-submission:values:checkboxes:ol]<hr/>
-        <h3>raw:</h3>[webform-submission:values:checkboxes:raw]<hr/>
+        <h3>default:</h3>[webform_submission:values:checkboxes]<hr/>
+        <h3>comma:</h3>[webform_submission:values:checkboxes:comma]<hr/>
+        <h3>semicolon:</h3>[webform_submission:values:checkboxes:semicolon]<hr/>
+        <h3>and:</h3>[webform_submission:values:checkboxes:and]<hr/>
+        <h3>ul:</h3>[webform_submission:values:checkboxes:ul]<hr/>
+        <h3>ol:</h3>[webform_submission:values:checkboxes:ol]<hr/>
+        <h3>raw:</h3>[webform_submission:values:checkboxes:raw]<hr/>
       excluded_elements: {  }
       html: true
       attachments: false
@@ -146,25 +146,25 @@ handlers:
       subject: default
       body: |
         default:
-        [webform-submission:values:checkboxes]
-        
+        [webform_submission:values:checkboxes]
+
         comma:
-        [webform-submission:values:checkboxes:comma]
-        
+        [webform_submission:values:checkboxes:comma]
+
         semicolon:
-        [webform-submission:values:checkboxes:semicolon]
-        
+        [webform_submission:values:checkboxes:semicolon]
+
         and:
-        [webform-submission:values:checkboxes:and]
-        
+        [webform_submission:values:checkboxes:and]
+
         ul:
-        [webform-submission:values:checkboxes:ul]
-        
+        [webform_submission:values:checkboxes:ul]
+
         ol:
-        [webform-submission:values:checkboxes:ol]
-        
+        [webform_submission:values:checkboxes:ol]
+
         raw:
-        [webform-submission:values:checkboxes:raw]
+        [webform_submission:values:checkboxes:raw]
       excluded_elements: {  }
       html: false
       attachments: false

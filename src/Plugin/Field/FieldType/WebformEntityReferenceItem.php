@@ -2,11 +2,11 @@
 
 namespace Drupal\webform\Plugin\Field\FieldType;
 
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\DataDefinition;
-
 /**
  * Defines the 'webform_entity_reference' entity field type.
  *
@@ -52,7 +52,7 @@ class WebformEntityReferenceItem extends EntityReferenceItem {
         'target_id' => [
           'description' => 'The ID of the webform entity.',
           'type' => 'varchar_ascii',
-          'length' => 255,
+          'length' => EntityTypeInterface::BUNDLE_MAX_LENGTH,
         ],
         'default_data' => [
           'description' => 'Default submission data.',

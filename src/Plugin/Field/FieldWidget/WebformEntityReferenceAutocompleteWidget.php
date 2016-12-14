@@ -47,15 +47,9 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       '#default_value' => $items[$delta]->default_data,
     ];
 
-    if (\Drupal::moduleHandler()->moduleExists('token')) {
-      $element['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-        '#weight' => $weight++,
-      ];
-    }
+    /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
+    $token_manager = \Drupal::service('webform.token_manager');
+    $element['token_tree_link'] = $token_manager->buildTreeLink();
 
     $element['status'] = [
       '#type' => 'radios',

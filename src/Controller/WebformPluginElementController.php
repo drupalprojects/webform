@@ -3,6 +3,7 @@
 namespace Drupal\webform\Controller;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\ElementInfoManagerInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Controller for all webform elements.
  */
-class WebformPluginElementController extends ControllerBase {
+class WebformPluginElementController extends ControllerBase implements ContainerInjectionInterface{
 
   /**
    * The module handler.
@@ -253,7 +254,7 @@ class WebformPluginElementController extends ControllerBase {
     $build['elements'] = [
       '#type' => 'details',
       '#title' => $this->t('Additional elements'),
-      '#description' => $this->t('Below are elements that available but do not have a Webform Element integration plugin.'),
+      '#description' => $this->t('Below are elements that are available but do not have a Webform Element integration plugin.'),
       'table' => [
         '#type' => 'table',
         '#header' => [

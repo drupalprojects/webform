@@ -39,7 +39,7 @@ export:
   exporter: delimited
   delimiter: ','
   excel: false
-  file_name: 'submission-[webform-submission:serial]'
+  file_name: 'submission-[webform_submission:serial]'
   header_format: label
   header_prefix: true
   header_prefix_label_delimiter: ': '
@@ -82,18 +82,18 @@ format: {  }
 mail:
   default_from_mail: '[site:mail]'
   default_from_name: '[site:name]'
-  default_subject: 'Webform submission from: [webform-submission:source-entity]'
+  default_subject: 'Webform submission from: [webform_submission:source-entity]'
   default_body_text: |
-    Submitted on [webform-submission:created]
-    Submitted by: [webform-submission:user]
+    Submitted on [webform_submission:created]
+    Submitted by: [webform_submission:user]
 
     Submitted values are:
-    [webform-submission:values]
+    [webform_submission:values]
   default_body_html: |
-    <p>Submitted on [webform-submission:created]</p>
-    <p>Submitted by: [webform-submission:user]</p>
+    <p>Submitted on [webform_submission:created]</p>
+    <p>Submitted by: [webform_submission:user]</p>
     <p>Submitted values are:</p>
-    [webform-submission:values]
+    [webform_submission:values]
 test:
   types: |
     checkbox:

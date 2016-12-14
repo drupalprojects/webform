@@ -35,7 +35,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *       "assets" = "Drupal\webform\WebformEntityAssetsForm",
  *       "access" = "Drupal\webform\WebformEntityAccessForm",
  *       "handlers" = "Drupal\webform\WebformEntityHandlersForm",
- *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
+ *       "delete" = "Drupal\webform\WebformEntityDeleteForm",
  *       "duplicate" = "Drupal\webform\WebformEntityForm",
  *     }
  *   },
@@ -1148,7 +1148,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       $entity->deletePaths();
 
       // Delete the state.
-      \Drupal::state()->delete('webform.' . $entity->id());
+      \Drupal::state()->delete('webform.webform.' . $entity->id());
     }
 
     // Delete all submission associated with this webform.
@@ -1451,7 +1451,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getState($key, $default = NULL) {
-    $namespace = 'webform.' . $this->id();
+    $namespace = 'webform.webform.' . $this->id();
     $values = \Drupal::state()->get($namespace, []);
     return (isset($values[$key])) ? $values[$key] : $default;
   }
@@ -1460,7 +1460,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function setState($key, $value) {
-    $namespace = 'webform.' . $this->id();
+    $namespace = 'webform.webform.' . $this->id();
     $values = \Drupal::state()->get($namespace, []);
     $values[$key] = $value;
     \Drupal::state()->set($namespace, $values);
@@ -1470,7 +1470,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function deleteState($key) {
-    $namespace = 'webform.' . $this->id();
+    $namespace = 'webform.webform.' . $this->id();
     $values = \Drupal::state()->get($namespace, []);
     unset($values[$key]);
     \Drupal::state()->set($namespace, $values);
@@ -1480,7 +1480,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function hasState($key) {
-    $namespace = 'webform.' . $this->id();
+    $namespace = 'webform.webform.' . $this->id();
     $values = \Drupal::state()->get($namespace, []);
     return (isset($values[$key])) ? TRUE : FALSE;
   }

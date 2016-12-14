@@ -15,6 +15,7 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformElementManagerInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -42,6 +43,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    * @var \Drupal\webform\WebformSubmissionExporterInterface
    */
   protected $submissionExporter;
+
+  /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
 
   /**
    * An array of element types.
@@ -75,12 +83,15 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    *   The webform element manager.
    * @param \Drupal\webform\WebformSubmissionExporterInterface $submission_exporter
    *   The webform submission exporter.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $third_party_settings_manager, WebformElementManagerInterface $element_manager, WebformSubmissionExporterInterface $submission_exporter) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $third_party_settings_manager, WebformElementManagerInterface $element_manager, WebformSubmissionExporterInterface $submission_exporter, WebformTokenManagerInterface $token_manager) {
     parent::__construct($config_factory);
     $this->moduleHandler = $third_party_settings_manager;
     $this->elementManager = $element_manager;
     $this->submissionExporter = $submission_exporter;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -91,7 +102,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('module_handler'),
       $container->get('plugin.manager.webform.element'),
-      $container->get('webform_submission.exporter')
+      $container->get('webform_submission.exporter'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -527,14 +539,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_body_html'),
     ];
-    if ($this->moduleHandler->moduleExists('token')) {
-      $form['mail']['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['mail']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Export.
     $form['export'] = [
@@ -654,7 +659,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['library']['cdn_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('Note that it is in general not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and usually is not in the browser cache anyway.'),
+      '#message_message' => $this->t('Note that it is in general not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and these external assets are usually not in the browser cache anyway.'),
       '#states' => [
         'visible' => [
           ':input[name="library[cdn]"]' => [

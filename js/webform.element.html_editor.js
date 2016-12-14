@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormHtmlEditor = {
+  Drupal.behaviors.webformHtmlEditor = {
     attach: function (context) {
       $(context).find('.js-form-type-webform-html-editor textarea').once('webform-html-editor').each(function () {
         var allowedContent = drupalSettings['webform']['html_editor']['allowedContent'];

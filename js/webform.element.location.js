@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormLocation = {
+  Drupal.behaviors.webformLocation = {
     attach: function (context) {
 
       $(context).find('div.js-webform-location').once('webform-location').each(function () {

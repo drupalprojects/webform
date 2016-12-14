@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Base for controller for webform assets.
+ * Provides a webform to inject CSS and JS assets.
  */
 class WebformEntityAssetsForm extends EntityForm {
 

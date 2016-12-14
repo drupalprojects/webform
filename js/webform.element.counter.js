@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormCounter = {
+  Drupal.behaviors.webformCounter = {
     attach: function (context) {
       $(context).find('.js-webform-counter').once('webform-counter').each(function () {
         var options = {

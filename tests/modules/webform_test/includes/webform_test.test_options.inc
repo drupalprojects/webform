@@ -9,12 +9,12 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\WebformOptions;
 
 /**
- * Generate test options example.
+ * Generate test options.
  *
  * @return array
- *   An array containing test elements with Flexbox wrappers.
+ *   An array containing test options.
  */
-function webform_test_example_options() {
+function webform_test_test_options() {
   $data = [
     'general' => [
       '#type' => 'details',
@@ -41,13 +41,14 @@ function webform_test_example_options() {
       '#title' => 'Likert options',
       '#open' => TRUE,
     ],
+    'test' => [
+      '#type' => 'details',
+      '#title' => 'Test options',
+      '#open' => TRUE,
+    ],
   ];
   $webform_options = WebformOptions::loadMultiple();
   foreach ($webform_options as $id => $webform_option) {
-    if ($id == 'test') {
-      continue;
-    }
-
     $title = $webform_option->label() . ' (' . $id . ')';
     if (strpos($id, 'likert') === 0) {
       $data['likert'][$id] = [
@@ -71,9 +72,13 @@ function webform_test_example_options() {
       elseif (preg_match('/(time_zones|creditcard|yes_no|days|size)/', $id)) {
         $group = 'general';
       }
+      elseif ($id == 'test') {
+        $group = 'test';
+      }
       else {
         $group = 'bio';
       }
+
       $data[$group][$id] = [
         '#type' => 'select',
         '#title' => $title,
@@ -83,7 +88,7 @@ function webform_test_example_options() {
     }
   }
 
-  $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.example_options.yml');
+  $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.test_options.yml');
   $default_elements = Yaml::decode($yaml);
 
   return $data + $default_elements;

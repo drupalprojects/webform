@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormDetailsToggle = {
+  Drupal.behaviors.webformDetailsToggle = {
     attach: function (context) {
       $('.js-webform-details-toggle', context).once('webform-details-toggle').each(function () {
         var $form = $(this);
@@ -40,9 +40,9 @@
 
             // Set the saved states for all the details elements.
             // @see webform.element.details.save.js
-            if (Drupal.yamlFormDetailsSaveGetName) {
+            if (Drupal.webformDetailsSaveGetName) {
               $form.find('details').each(function() {
-                var name = Drupal.yamlFormDetailsSaveGetName($(this));
+                var name = Drupal.webformDetailsSaveGetName($(this));
                 if (name) {
                   localStorage.setItem(name, open);
                 }

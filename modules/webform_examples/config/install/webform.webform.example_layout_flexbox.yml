@@ -7,8 +7,8 @@ dependencies:
 uid: null
 template: false
 id: example_layout_flexbox
-title: 'Example: Flexbox layout'
-description: 'Layout example using <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Flexbox</a>.'
+title: 'Example: Layout: Flexbox'
+description: 'Examples of multiple column webform layout using <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Flexbox</a>.'
 elements: |
   name:
     '#type': flexbox

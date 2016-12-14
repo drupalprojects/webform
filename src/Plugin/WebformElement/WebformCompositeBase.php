@@ -92,7 +92,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       'description' => '',
       'default_value' => [],
       // Form display.
-      'title_display' => '',
+      'title_display' => 'invisible',
       'description_display' => '',
       // Form validation.
       'required' => FALSE,
@@ -479,7 +479,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
    */
   public function formatText(array &$element, $value, array $options = []) {
     // Return empty value.
-    if (empty(array_filter($value))) {
+    if (empty($value) || (is_array($value) && empty(array_filter($value)))) {
       return '';
     }
 

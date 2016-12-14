@@ -152,7 +152,7 @@ handlers:
         notes: notes
       custom_data: |
         custom_all: true
-        custom_title: '[webform:title]: Submission #[webform-submission:serial]'
+        custom_title: '[webform:title]: Submission #[webform_submission:serial]'
       insert_custom_data: |
         custom_insert: true
       update_custom_data: |

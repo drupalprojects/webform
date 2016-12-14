@@ -2,45 +2,75 @@
 
 namespace Drupal\webform\Controller;
 
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\webform\WebformHelpManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides route responses for webform help.
  */
-class WebformHelpController {
+class WebformHelpController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * Returns dedicated help page with a video.
+   * The help manager.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $helpManager;
+
+  /**
+   * Constructs a WebformPluginBaseController object.
+   *
+   * @param \Drupal\webform\WebformHelpManagerInterface $help_manager
+   *   The help manager.
+   */
+  public function __construct(WebformHelpManagerInterface $help_manager) {
+    $this->helpManager = $help_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('webform.help_manager')
+    );
+  }
+
+  /**
+   * Returns dedicated help video page.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    * @param string $id
-   *   The id of the dedicated help section.
+   *   The video id.
    *
    * @return array
-   *   A renderable array containing a dedicated help page with a video.
+   *   A renderable array containing a help video player page.
    */
   public function index(Request $request, $id) {
     $id = str_replace('-', '_', $id);
-    $help = _webform_help();
-    if (!isset($help[$id])) {
+    $video = $this->helpManager->getVideo($id);
+    if (!$video) {
       throw new NotFoundHttpException();
     }
 
     $build = [];
-    if (is_array($help[$id]['content'])) {
-      $build['content'] = $help[$id]['content'];
+    if (is_array($video['content'])) {
+      $build['content'] = $video['content'];
     }
     else {
       $build['content'] = [
-        '#markup' => $help[$id]['content'],
+        '#markup' => $video['content'],
       ];
     }
-    if ($help[$id]['youtube_id']) {
+    if ($video['youtube_id']) {
       $build['video'] = [
         '#theme' => 'webform_help_video_youtube',
-        '#youtube_id' => $help[$id]['youtube_id'],
+        '#youtube_id' => $video['youtube_id'],
       ];
     }
     return $build;
@@ -57,8 +87,8 @@ class WebformHelpController {
    */
   public function title(Request $request, $id) {
     $id = str_replace('-', '_', $id);
-    $help = _webform_help();
-    return (isset($help[$id])) ? $help[$id]['title'] : t('Watch video');
+    $video = $this->helpManager->getVideo($id);
+    return (isset($video)) ? $video['title'] : $this->t('Watch video');
   }
 
 }

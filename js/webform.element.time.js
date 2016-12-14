@@ -15,7 +15,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior to time elements.
    */
-  Drupal.behaviors.yamlFormTime = {
+  Drupal.behaviors.webformTime = {
     attach: function (context, settings) {
       var $context = $(context);
       // Skip if time inputs are supported by the browser.

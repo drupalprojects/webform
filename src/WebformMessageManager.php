@@ -8,7 +8,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Utility\Token;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Psr\Log\LoggerInterface;
 
@@ -62,6 +61,13 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   protected $requestHandler;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * A webform.
    *
    * @var \Drupal\webform\WebformInterface
@@ -91,20 +97,20 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    *   The configuration object factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
-   * @param \Drupal\Core\Utility\Token $token
-   *   The token service.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, Token $token, LoggerInterface $logger, WebformRequestInterface $request_handler) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, WebformRequestInterface $request_handler, WebformTokenManagerInterface $token_manager) {
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
     $this->entityStorage = $entity_type_manager->getStorage('webform_submission');
-    $this->token = $token;
     $this->logger = $logger;
     $this->requestHandler = $request_handler;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -164,13 +170,14 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    */
   public function get($key) {
     $webform_settings = ($this->webform) ? $this->webform->getSettings() : [];
+    $entity = $this->webformSubmission ?: $this->webform;
     if (!empty($webform_settings[$key])) {
-      return $this->replaceTokens($webform_settings[$key]);
+      return $this->tokenManager->replace($webform_settings[$key], $entity);
     }
 
     $default_settings = $this->configFactory->get('webform.settings')->get('settings');
     if (!empty($default_settings['default_' . $key])) {
-      return $this->replaceTokens($default_settings['default_' . $key]);
+      return $this->tokenManager->replace($default_settings['default_' . $key], $entity);
     }
 
     $webform = $this->webform;
@@ -243,30 +250,6 @@ class WebformMessageManager implements WebformMessageManagerInterface {
     }
 
     $this->logger->$type($message, $context);
-  }
-
-  /**
-   * Replace tokens in text.
-   *
-   * @param string $text
-   *   A string of text that main contain tokens.
-   *
-   * @return string
-   *   Text will tokens replaced.
-   */
-  protected function replaceTokens($text) {
-    // Most strings won't contain tokens so lets check and return ASAP.
-    if (!is_string($text) || strpos($text, '[') === FALSE) {
-      return $text;
-    }
-
-    $token_data = [
-      'webform' => $this->webform,
-      'webform-submission' => $this->webformSubmission,
-    ];
-    $token_options = ['clear' => TRUE];
-
-    return $this->token->replace($text, $token_data, $token_options);
   }
 
 }

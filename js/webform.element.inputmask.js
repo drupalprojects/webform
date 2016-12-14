@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormElementMask = {
+  Drupal.behaviors.webformElementMask = {
     attach: function (context) {
       $(context).find('input.js-webform-element-mask').once('webform-element-mask').inputmask();
     }

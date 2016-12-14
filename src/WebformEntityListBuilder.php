@@ -56,15 +56,6 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $this->keys = \Drupal::request()->query->get('search');
     $this->state = \Drupal::request()->query->get('state');
     $this->submissionStorage = \Drupal::entityTypeManager()->getStorage('webform_submission');
-
-    if (\Drupal::currentUser()->hasPermission('administer webform')) {
-      $help = _webform_help();
-      $build = [
-        '#theme' => 'webform_help',
-        '#info' => $help['introduction'],
-      ];
-      drupal_set_message($build);
-    }
   }
 
   /**
@@ -125,13 +116,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     }
     $build += parent::render();
 
-    $build['#attached']['library'][] = 'webform/webform.admin';
-
-    // Must preload CKEditor and CodeMirror library so that the
-    // window.dialog:aftercreate trigger is set before any dialogs are opened.
-    // @see js/webform.element.codemirror.js
-    $build['#attached']['library'][] = 'webform/webform.element.codemirror.yaml';
-    $build['#attached']['library'][] = 'webform/webform.element.html_editor';
+    // Must preload libraries required by (modal) dialogs.
+    $build['#attached']['library'][] = 'webform/webform.admin.dialog';
 
     return $build;
   }

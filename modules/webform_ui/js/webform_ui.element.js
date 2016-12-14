@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormUiElementKey = {
+  Drupal.behaviors.webformUiElementKey = {
     attach: function (context) {
       if (!$(context).find(':input[name="key"]').length) {
         return;

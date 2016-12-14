@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
@@ -43,20 +44,20 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $httpClient;
 
   /**
-   * The token service.
+   * The token manager.
    *
-   * @var \Drupal\Core\Utility\Token
+   * @var \Drupal\webform\WebformTranslationManagerInterface
    */
-  protected $token;
+  protected $tokenManager;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ModuleHandlerInterface $module_handler, ClientInterface $http_client, Token $token) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ModuleHandlerInterface $module_handler, ClientInterface $http_client, WebformTokenManagerInterface $token_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
     $this->moduleHandler = $module_handler;
     $this->httpClient = $http_client;
-    $this->token = $token;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -70,7 +71,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $container->get('logger.factory')->get('webform.remote_post'),
       $container->get('module_handler'),
       $container->get('http_client'),
-      $container->get('token')
+      $container->get('webform.token_manager')
     );
   }
 
@@ -215,14 +216,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#states' => ['visible' => [':input[name="settings[delete_url]"]' => ['filled' => TRUE]]],
       '#default_value' => $this->configuration['delete_custom_data'],
     ];
-    if ($this->moduleHandler->moduleExists('token')) {
-      $form['custom_data']['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['custom_data']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     $form['debug'] = [
       '#type' => 'checkbox',
@@ -343,38 +337,18 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
     // Append custom data.
     if (!empty($this->configuration['custom_data'])) {
-      $data = Yaml::decode($this->replaceTokens($this->configuration['custom_data'], $webform_submission)) + $data;
+      $data = Yaml::decode($this->configuration['custom_data']) + $data;
     }
 
     // Append operation data.
     if (!empty($this->configuration[$operation . '_custom_data'])) {
-      $data = Yaml::decode($this->replaceTokens($this->configuration[$operation . '_custom_data'], $webform_submission)) + $data;
+      $data = Yaml::decode($this->configuration[$operation . '_custom_data']) + $data;
     }
+
+    // Replace tokens.
+    $data = $this->tokenManager->replace($data, $webform_submission);
 
     return $data;
-  }
-
-  /**
-   * Replace tokens in text.
-   *
-   * @param string $text
-   *   A string of text that main contain tokens.
-   *
-   * @return string
-   *   Text will tokens replaced.
-   */
-  protected function replaceTokens($text, WebformSubmissionInterface $webform_submission) {
-    // Most strings won't contain tokens so lets check and return ASAP.
-    if (!is_string($text) || strpos($text, '[') === FALSE) {
-      return $text;
-    }
-
-    $token_data = [
-      'webform' => $webform_submission->getWebform(),
-      'webform-submission' => $webform_submission,
-    ];
-    $token_options = ['clear' => TRUE];
-    return \Drupal::token()->replace($text, $token_data, $token_options);
   }
 
   /**
@@ -477,7 +451,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       ];
     }
 
-    drupal_set_message(\Drupal::service('renderer')->render($build), $type);
+    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), $type);
   }
 
 }

@@ -274,13 +274,9 @@ class WebformUiEntityForm extends WebformEntityForm {
       ],
     ] + $rows;
 
+    // Must preload libraries required by (modal) dialogs.
+    $form['#attached']['library'][] = 'webform/webform.admin.dialog';
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
-
-    // Must preload CKEditor and CodeMirror library so that the
-    // window.dialog:aftercreate trigger is set before any dialogs are opened.
-    // @see js/webform.element.codemirror.js
-    $form['#attached']['library'][] = 'webform/webform.element.codemirror.yaml';
-    $form['#attached']['library'][] = 'webform/webform.element.html_editor';
 
     return $form;
   }

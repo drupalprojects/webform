@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormSelect2 = {
+  Drupal.behaviors.webformSelect2 = {
     attach: function (context) {
       $(context)
         .find('select.js-webform-select2, .js-webform-select2 select')

@@ -137,7 +137,9 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
         'tags' => $this->webformStorage->getEntityType()->getListCacheTags(),
       ],
     ];
-    $build['#attached']['library'][] = 'webform/webform.admin';
+
+    // Must preload libraries required by (modal) dialogs.
+    $build['#attached']['library'][] = 'webform/webform.admin.dialog';
 
     return $build;
   }

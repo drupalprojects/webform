@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormFilterAutocomplete = {
+  Drupal.behaviors.webformFilterAutocomplete = {
     attach: function (context) {
       $('.webform-filter-form input.form-autocomplete', context).once('webform-autocomplete')
         .each(function () {
@@ -38,7 +38,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormTableRowHref = {
+  Drupal.behaviors.webformTableRowHref = {
     attach: function (context) {
       // Only attach the click event handler to the entire table and determine
       // which row triggers the event.

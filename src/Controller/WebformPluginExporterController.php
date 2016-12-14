@@ -4,12 +4,13 @@ namespace Drupal\webform\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for all results exporters.
  */
-class WebformPluginExporterController extends ControllerBase {
+class WebformPluginExporterController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * A results exporter plugin manager.

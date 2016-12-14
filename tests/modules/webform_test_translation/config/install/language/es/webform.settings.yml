@@ -12,14 +12,14 @@ settings:
   default_limit_total_message: 'No se podrán hacer más presentaciones.'
   default_limit_user_message: 'No se podrán hacer más presentaciones.'
 mail:
-  default_subject: 'Formulario de envío de: [webform-submission:source-entity]'
+  default_subject: 'Formulario de envío de: [webform_submission:source-entity]'
   default_body: |
-    Enviada [webform-submission:created]
-    Presentado por:[webform-submission:user]
+    Enviada [webform_submission:created]
+    Presentado por:[webform_submission:user]
 
     Los valores presentados son:
 
-    [webform-submission:values]
+    [webform_submission:values]
 test:
   types: |
     checkbox:

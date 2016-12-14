@@ -23,3 +23,46 @@
   box-shadow: 8px 0 0 #0074bd;
   margin-left: 0;
 }
+
+/**
+ * Message close.
+ */
+.webform-message--close .messages {
+  position: relative;
+}
+
+.webform-message--close .webform-message__link {
+  display: none;
+}
+
+html.js .webform-message--close .webform-message__link {
+  display: block;
+  position: absolute;
+  top: 11px;
+  right: 10px;
+  line-height: 24px;
+  font-size: 24px;
+}
+
+.webform-message__link {
+  color: inherit;
+  opacity: 0.33;
+}
+
+.webform-message__link:link {
+  border-bottom: none;
+  text-decoration: none;
+}
+
+.webform-message__link:hover,
+.webform-message__link:focus,
+.webform-message__link:active {
+  border-bottom: none;
+  text-decoration: none;
+  color: inherit;
+  opacity: 1;
+}
+
+html.js .js-webform-message--close-storage {
+  display: none;
+}

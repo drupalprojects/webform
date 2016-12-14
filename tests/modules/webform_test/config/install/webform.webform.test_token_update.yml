@@ -55,7 +55,7 @@ settings:
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: page
-  confirmation_message: '<p>You can update your submission via <a href="[webform-submission:update-url]">[webform-submission:update-url]</a></p>'
+  confirmation_message: '<p>You can update your submission via <a href="[webform_submission:update-url]">[webform_submission:update-url]</a></p>'
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -111,7 +111,7 @@ handlers:
       from_mail: default
       from_name: default
       subject: default
-      body: '<a href="[webform-submission:update-url]">[webform-submission:update-url]</a>'
+      body: '<a href="[webform_submission:update-url]">[webform_submission:update-url]</a>'
       excluded_elements: {  }
       html: true
       attachments: false

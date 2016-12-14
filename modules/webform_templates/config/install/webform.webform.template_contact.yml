@@ -118,13 +118,13 @@ handlers:
     status: true
     weight: 1
     settings:
-      to_mail: '[webform-submission:values:email:raw]'
+      to_mail: '[webform_submission:values:email:raw]'
       cc_mail: ''
       bcc_mail: ''
       from_mail: default
       from_name: default
-      subject: '[webform-submission:values:subject:value]'
-      body: '[webform-submission:values:message:value]'
+      subject: '[webform_submission:values:subject:value]'
+      body: '[webform_submission:values:message:value]'
       excluded_elements: {  }
       html: true
       attachments: false
@@ -139,10 +139,10 @@ handlers:
       to_mail: default
       cc_mail: ''
       bcc_mail: ''
-      from_mail: '[webform-submission:values:email:raw]'
-      from_name: '[webform-submission:values:name:value]'
-      subject: '[webform-submission:values:subject:value]'
-      body: '[webform-submission:values:message:value]'
+      from_mail: '[webform_submission:values:email:raw]'
+      from_name: '[webform_submission:values:name:value]'
+      subject: '[webform_submission:values:subject:value]'
+      body: '[webform_submission:values:message:value]'
       excluded_elements: {  }
       html: true
       attachments: false

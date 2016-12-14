@@ -77,6 +77,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   protected $elementManager;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Constructs a Drupal\Component\Plugin\PluginBase object.
    *
    * @param array $configuration
@@ -95,8 +102,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The element info manager.
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->logger = $logger;
     $this->configFactory = $config_factory;
@@ -104,6 +113,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->elementInfo = $element_info;
     $this->elementManager = $element_manager;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -119,7 +129,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.element_info'),
-      $container->get('plugin.manager.webform.element')
+      $container->get('plugin.manager.webform.element'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -444,12 +455,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $this->prepareWrapper($element);
 
     // Replace tokens for all properties.
-    $token_data = [
-      'webform' => $webform_submission->getWebform(),
-      'webform-submission' => $webform_submission,
-    ];
-    $token_options = ['clear' => TRUE];
-    WebformElementHelper::replaceTokens($element, $token_data, $token_options);
+    $element = $this->tokenManager->replace($element, $webform_submission);
   }
 
   /**
@@ -1259,14 +1265,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#parents' => ['properties', 'custom'],
     ];
 
-    if (\Drupal::moduleHandler()->moduleExists('token')) {
-      $form['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Set custom properties.
     // Note: Storing this information in the webform's state allows modules to view

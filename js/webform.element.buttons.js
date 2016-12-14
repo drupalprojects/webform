@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormButtons = {
+  Drupal.behaviors.webformButtons = {
     attach: function (context) {
 
 

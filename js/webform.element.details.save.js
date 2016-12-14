@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormDetailsSave = {
+  Drupal.behaviors.webformDetailsSave = {
     attach: function (context) {
       if (!window.localStorage) {
         return;
@@ -22,7 +22,7 @@
       $('details > summary', context).once('webform-details-summary-save').click(function () {
         var $details = $(this).parent();
 
-        var name = Drupal.yamlFormDetailsSaveGetName($details);
+        var name = Drupal.webformDetailsSaveGetName($details);
         if (!name) {
           return;
         }
@@ -35,7 +35,7 @@
       $('details', context).once('webform-details-save').each(function () {
         var $details = $(this);
 
-        var name = Drupal.yamlFormDetailsSaveGetName($details);
+        var name = Drupal.webformDetailsSaveGetName($details);
         if (!name) {
           return;
         }
@@ -65,7 +65,7 @@
    * @returns string
    *   The name used to store the state of details element.
    */
-  Drupal.yamlFormDetailsSaveGetName = function($details) {
+  Drupal.webformDetailsSaveGetName = function($details) {
     if (!window.localStorage) {
       return '';
     }
@@ -73,7 +73,7 @@
     // Any details element not included a webform must have define its own id.
     var webformId = $details.attr('data-webform-element-id');
     if (webformId) {
-      return 'webform.' + webformId.replace('--', '.');
+      return 'Drupal.webform.' + webformId.replace('--', '.');
     }
 
     var detailsId = $details.attr('id');
@@ -96,7 +96,7 @@
     // WORKAROUND: Remove the unique id that delimited using double dashes.
     formId = formId.replace(/--.+?$/, '').replace(/-/g, '_');
     detailsId = detailsId.replace(/--.+?$/, '').replace(/-/g, '_');
-    return 'webform.' + formId + '.' + detailsId;
+    return 'Drupal.webform.' + formId + '.' + detailsId;
   }
 
 

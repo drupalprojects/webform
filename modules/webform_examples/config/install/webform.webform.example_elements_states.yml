@@ -7,8 +7,8 @@ dependencies:
 uid: null
 template: false
 id: example_elements_states
-title: 'Example: Elements with #states API'
-description: 'Examples of Drupal''s element #states API.'
+title: 'Example: Elements: Condition Logic'
+description: 'Examples of elements using conditional logic.'
 elements: |
   checkbox_example:
     '#type': details

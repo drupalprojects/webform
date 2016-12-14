@@ -188,3 +188,64 @@ function _webform_update_form_settings() {
     $webform_config->setData($data)->save();
   }
 }
+
+/**
+ * Issue #2834203: Convert webform field target_id to 32 characters.
+ */
+function webform_update_8001() {
+  $database_schema = \Drupal::database()->schema();
+  $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
+  foreach ($schema as $item_name => $item) {
+    foreach ($item as $table_name => $table_schema) {
+      foreach ($table_schema as $schema_key => $schema_data) {
+        if ($schema_key == 'fields') {
+          foreach ($schema_data as $field_name => $field_data) {
+            if (preg_match('/_target_id$/', $field_name) && $field_data['description'] == 'The ID of the webform entity.' && $schema[$item_name][$table_name]['fields'][$field_name]['length'] === 255) {
+              $schema[$item_name][$table_name]['fields'][$field_name]['length'] = 32;
+              $database_schema->changeField($table_name, $field_name, $field_name, $schema[$item_name][$table_name]['fields'][$field_name]);
+            }
+          }
+        }
+      }
+    }
+  }
+  \Drupal::keyValue('entity.storage_schema.sql')->setMultiple($schema);
+}
+
+/**
+ * Issue #2834572: Refactor and improve token management.
+ */
+function webform_update_8002() {
+  $config_factory = \Drupal::configFactory();
+
+  // Update 'webform.settings' configuration.
+  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $yaml = Yaml::encode($settings_config->getRawData());
+  $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
+  $settings_config->setData(Yaml::decode($yaml));
+  $settings_config->save();
+
+  // Update 'webform.webform.*' configuration.
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $yaml = Yaml::encode($webform_config->getRawData());
+    $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
+    $webform_config->setData(Yaml::decode($yaml));
+    $webform_config->save();
+  }
+}
+
+/**
+ * Issue #2834654: Add close button to messages.
+ */
+function webform_update_8003() {
+  // Change webform.* to webform.* state.
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $state = \Drupal::state()->get('webform.' . $webform->id(), NULL);
+    if ($state !== NULL) {
+      \Drupal::state()->set('webform.webform.' . $webform->id(), $state);
+      \Drupal::state()->delete('webform.' . $webform->id());
+    }
+  }
+}

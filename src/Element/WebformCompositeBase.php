@@ -30,6 +30,7 @@ abstract class WebformCompositeBase extends FormElement {
       ],
       '#theme' => str_replace('webform_', 'webform_composite_', $this->getPluginId()),
       '#theme_wrappers' => ['container'],
+      '#title_display' => 'invisible',
       '#required' => FALSE,
       '#flexbox' => TRUE,
     ];

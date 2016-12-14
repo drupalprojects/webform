@@ -7,8 +7,8 @@ dependencies:
 uid: null
 template: false
 id: example_layout_basic
-title: 'Example: Basic layout'
-description: 'Basic layout examples using messages, CSS classes, custom attributes, and tables that are included in Drupal 8 core.'
+title: 'Example: Layout: Basic'
+description: 'Examples of basic element layout and enhancements using messages, CSS classes, custom attributes, and tables.'
 elements: |
   message_example:
     '#type': details
@@ -18,17 +18,21 @@ elements: |
       '#type': message
       '#message_type': info
       '#message_message': 'This is an <strong>info</strong> message.'
+      '#message_close': true
     message_status:
       '#type': message
       '#message_message': 'This is a <strong>status</strong> message.'
+      '#message_close': true
     message_warning:
       '#type': message
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
+      '#message_close': true
     message_error:
       '#type': message
       '#message_type': error
       '#message_message': 'This is a <strong>error</strong> message.'
+      '#message_close': true
   form_inline_example:
     '#type': details
     '#title': 'Webform inline with warning (.form--inline.message.message--warning)'

@@ -130,9 +130,9 @@ handlers:
       to_mail: to@example.com
       cc_mail: cc@example.com
       bcc_mail: bcc@example.com
-      from_mail: '[webform-submission:values:email:raw]'
-      from_name: '[webform-submission:values:first_name] [webform-submission:values:last_name]'
-      subject: '[webform-submission:values:subject:value]'
+      from_mail: '[webform_submission:values:email:raw]'
+      from_name: '[webform_submission:values:first_name] [webform_submission:values:last_name]'
+      subject: '[webform_submission:values:subject:value]'
       body: default
       excluded_elements: {  }
       html: false

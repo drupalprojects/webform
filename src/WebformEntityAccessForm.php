@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 
 /**
- * Base for controller for webform access.
+ * Provides a webform to manage access.
  */
 class WebformEntityAccessForm extends EntityForm {
 

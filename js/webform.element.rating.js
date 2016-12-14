@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormRating = {
+  Drupal.behaviors.webformRating = {
     attach: function (context) {
       $(context)
         .find('[data-rateit-backingfld]')

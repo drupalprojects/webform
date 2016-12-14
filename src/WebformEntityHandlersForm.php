@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
- * Controller for webform handlers.
+ * Provides a webform to manage submission handlers.
  */
 class WebformEntityHandlersForm extends EntityForm {
 
@@ -138,13 +138,8 @@ class WebformEntityHandlersForm extends EntityForm {
       '#empty' => $this->t('There are currently no handlers setup for this webform.'),
     ] + $rows;
 
-    $form['#attached']['library'][] = 'webform/webform.admin';
-
-    // Must preload CKEditor and CodeMirror library so that the
-    // window.dialog:aftercreate trigger is set before any dialogs are opened.
-    // @see js/webform.element.codemirror.js
-    $form['#attached']['library'][] = 'webform/webform.element.codemirror.yaml';
-    $form['#attached']['library'][] = 'webform/webform.element.html_editor';
+    // Must preload libraries required by (modal) dialogs.
+    $form['#attached']['library'][] = 'webform/webform.admin.dialog';
 
     return parent::form($form, $form_state);
   }

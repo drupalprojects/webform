@@ -20,7 +20,6 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
 
-module_load_include('inc', 'webform', 'includes/webform.help');
 module_load_include('inc', 'webform', 'includes/webform.libraries');
 module_load_include('inc', 'webform', 'includes/webform.options');
 module_load_include('inc', 'webform', 'includes/webform.translation');
@@ -29,6 +28,37 @@ module_load_include('inc', 'webform', 'includes/webform.translation');
  * Return status for saving which deleted an existing item.
  */
 const WEBFORM_SAVED_DRAFT = 4;
+
+/**
+ * Implements hook_help().
+ */
+function webform_help($route_name, RouteMatchInterface $route_match) {
+  // Get path from route match.
+  $path = preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', Url::fromRouteMatch($route_match)->setAbsolute(FALSE)->toString());
+  if (!in_array($route_name, ['system.modules_list']) && strpos($route_name, 'webform') === FALSE && strpos($path, '/webform') === FALSE) {
+    return NULL;
+  }
+
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+  if ($route_name == 'help.page.webform') {
+    $build = $help_manager->buildIndex();
+  }
+  else {
+    $build = $help_manager->buildHelp($route_name, $route_match);
+  }
+
+  if ($build) {
+    $renderer = \Drupal::service('renderer');
+    $config = \Drupal::config('webform.settings');
+    $renderer->addCacheableDependency($build, $config);
+    return $build;
+  }
+  else {
+    return NULL;
+  }
+}
+
 
 /**
  * Implements hook_modules_installed().
@@ -384,6 +414,9 @@ function webform_theme() {
       'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
     ],
 
+    'webform_message' => [
+      'render element' => 'element',
+    ],
     'webform_composite_address' => [
       'render element' => 'element',
     ],

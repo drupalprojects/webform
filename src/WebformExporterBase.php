@@ -235,7 +235,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
     $file_name = $export_options['file_name'];
     $token_data = [
       'webform' => $webform_submission->getWebform(),
-      'webform-submission' => $webform_submission,
+      'webform_submission' => $webform_submission,
     ];
     $token_options = ['clear' => TRUE];
     $file_name = \Drupal::token()->replace($file_name, $token_data, $token_options);

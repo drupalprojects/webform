@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormSignature = {
+  Drupal.behaviors.webformSignature = {
     attach: function (context) {
       $(context).find('input.js-webform-signature').once('webform-signature').each(function () {
         var $input = $(this);

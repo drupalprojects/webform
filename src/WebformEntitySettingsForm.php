@@ -13,7 +13,7 @@ use Drupal\Core\Url;
 use Drupal\user\Entity\User;
 
 /**
- * Base for controller for webform settings.
+ * Provides a webform to manage settings.
  */
 class WebformEntitySettingsForm extends EntityForm {
 
@@ -32,16 +32,26 @@ class WebformEntitySettingsForm extends EntityForm {
   protected $messageManager;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Constructs a new WebformUiElementFormBase.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
    *   The message manager.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(AccountInterface $current_user, WebformMessageManagerInterface $message_manager) {
+  public function __construct(AccountInterface $current_user, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
     $this->currentUser = $current_user;
     $this->messageManager = $message_manager;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -50,7 +60,8 @@ class WebformEntitySettingsForm extends EntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_user'),
-      $container->get('webform.message_manager')
+      $container->get('webform.message_manager'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -565,7 +576,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['submission']['token_update'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to update a submission using a secure token.'),
-      '#description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token.  The URL to update a submission will be available when viewing a submission's information and can be inserted into the an email using the [webform-submission:update-url] token."),
+      '#description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token.  The URL to update a submission will be available when viewing a submission's information and can be inserted into the an email using the [webform_submission:update-url] token."),
       '#return_value' => TRUE,
       '#default_value' => $settings['token_update'],
     ];
@@ -716,14 +727,8 @@ class WebformEntitySettingsForm extends EntityForm {
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.confirmation_back_classes'),
       '#default_value' => $settings['confirmation_back_attributes'],
     ];
-    if ($this->moduleHandler->moduleExists('token')) {
-      $form['confirmation']['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['confirmation']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
     // Author.
     $form['author'] = [
       '#type' => 'details',
@@ -816,15 +821,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $this->appendDefaultValueToElementDescriptions($form, $default_settings);
 
     return parent::form($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function actions(array $form, FormStateInterface $form_state) {
-    $actions = parent::actions($form, $form_state);
-    unset($actions['delete']);
-    return $actions;
   }
 
   /**

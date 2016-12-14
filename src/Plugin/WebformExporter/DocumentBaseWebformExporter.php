@@ -15,7 +15,7 @@ abstract class DocumentBaseWebformExporter extends WebformExporterBase {
    */
   public function defaultConfiguration() {
     return parent::defaultConfiguration() + [
-      'file_name' => 'submission-[webform-submission:serial]',
+      'file_name' => 'submission-[webform_submission:serial]',
     ];
   }
 

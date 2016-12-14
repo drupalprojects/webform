@@ -4,6 +4,7 @@ namespace Drupal\webform\Controller;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\WebformHandlerInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Controller for all webform handlers.
  */
-class WebformPluginHandlerController extends ControllerBase {
+class WebformPluginHandlerController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * A webform handler plugin manager.

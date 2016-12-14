@@ -117,7 +117,6 @@ class WebformSubmissionController extends ControllerBase implements ContainerInj
       new FormattableMarkup('<span class="webform-icon webform-icon-sticky webform-icon-sticky--@state"></span>', ['@state' => $state])
     ));
     return $response;
-
   }
 
   /**

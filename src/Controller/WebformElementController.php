@@ -3,8 +3,10 @@
 namespace Drupal\webform\Controller;
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
+use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +16,30 @@ use Symfony\Component\HttpFoundation\Request;
  * Provides route responses for webform element.
  */
 class WebformElementController extends ControllerBase {
+
+  /**
+   * Returns response for message close using user or state storage.
+   *
+   * @param string $storage
+   *   Mechanism that the message state should be stored in, user or state.
+   * @param string $id
+   *   The unique id of the message.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An empty AJAX response.
+   *
+   * @throws \Exception
+   *   Throws exception is storage is not set to 'user' or 'state'.
+   *
+   * @see \Drupal\webform\Element\WebformMessage::setClosed
+   */
+  public function close($storage, $id) {
+    if (!in_array($storage, ['user', 'state'])) {
+      throw new \Exception('Undefined storage mechanism for Webform close message.');
+    }
+    WebformMessage::setClosed($storage, $id);
+    return new AjaxResponse();
+  }
 
   /**
    * Returns response for the element autocomplete route.

@@ -15,7 +15,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior for the webform autofocusing.
    */
-  Drupal.behaviors.yamlFormAutofocus = {
+  Drupal.behaviors.webformAutofocus = {
     attach: function (context) {
       $(context).find('.webform-submission-form.js-webform-autofocus :input:visible:enabled:first').focus();
     }
@@ -29,7 +29,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior for disabling webform autosubmit.
    */
-  Drupal.behaviors.yamlFormDisableAutoSubmit = {
+  Drupal.behaviors.webformDisableAutoSubmit = {
     attach: function (context) {
       // @see http://stackoverflow.com/questions/11235622/jquery-disable-form-submit-on-enter
       $(context).find('.webform-submission-form.js-webform-disable-autosubmit input').once('webform-disable-autosubmit').on('keyup keypress', function(e) {
@@ -50,7 +50,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior for the skipping client-side validation.
    */
-  Drupal.behaviors.yamlFormSubmitNoValidate = {
+  Drupal.behaviors.webformSubmitNoValidate = {
     attach: function (context) {
       $(context).find(':button.js-webform-novalidate').once('webform-novalidate').on('click', function () {
         $(this.form).attr('novalidate', 'novalidate');
@@ -66,7 +66,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior for the webform draft submit button.
    */
-  Drupal.behaviors.yamlFormDraft = {
+  Drupal.behaviors.webformDraft = {
     attach: function (context) {
       $(context).find('#edit-draft').once('webform-draft').on('click', function () {
         $(this.form).attr('novalidate', 'novalidate');

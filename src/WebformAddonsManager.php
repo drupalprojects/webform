@@ -66,6 +66,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
    */
   public function getCategories() {
     $categories = [];
+    $categories['config'] = [
+      'title' => $this->t('Configuration management'),
+    ];
     $categories['integration'] = [
       'title' => $this->t('Integration'),
     ];
@@ -178,6 +181,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Provides migration routines from  Drupal 6 YAML Form module to  Drupal 8 YAML Form module.'),
       'url' => Url::fromUri('https://www.drupal.org/sandbox/dippers/2819169'),
       'category' => 'migrate',
+    ];
+
+    // Config: Drush CMI tools.
+    $projects['drush_cmi_tools'] = [
+      'title' => $this->t('Drush CMI tools'),
+      'description' => $this->t('Provides advanced CMI import and export functionality for CMI workflows. Drush CMI tools should be used to protect Forms from being overwritten during a configuration import.'),
+      'url' => Url::fromUri('https://github.com/previousnext/drush_cmi_tools'),
+      'category' => 'config',
     ];
 
     return $projects;

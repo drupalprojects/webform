@@ -4,11 +4,11 @@ namespace Drupal\webform\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,6 +30,13 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
   protected $moduleHandler;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Creates a HelpBlock instance.
    *
    * @param array $configuration
@@ -38,12 +45,12 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, WebformTokenManagerInterface $token_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->moduleHandler = $module_handler;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -54,7 +61,7 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('module_handler')
+      $container->get('webform.token_manager')
     );
   }
 
@@ -86,14 +93,7 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
       '#mode' => 'yaml',
       '#default_value' => $this->configuration['default_data'],
     ];
-    if ($this->moduleHandler->moduleExists('token')) {
-      $form['token_tree_link'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform-submission'],
-        '#click_insert' => FALSE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
     return $form;
   }
 

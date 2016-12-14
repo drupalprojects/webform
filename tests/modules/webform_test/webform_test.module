@@ -150,6 +150,7 @@ function _webform_test_issues() {
     ],
     'managed_file' => [
       '2705471' => 'Webform states managed file fields',
+      '2113931' => 'File Field design update',
     ],
     'password_confirm' => [
       '1427838' => 'password and password_confirm children do not pick up #states or #attributes',
@@ -170,6 +171,9 @@ function _webform_test_issues() {
     ],
     'webform_markup' => [
       2700667 => 'Notice: Undefined index: #type in drupal_process_states()',
+    ],
+    'webform_message' => [
+      77245 => 'A place for JavaScript status messages',
     ],
     'webform_time' => [
       1838234 => 'Add jQuery Timepicker for the Time element of the datetime field',

@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormCodeMirror = {
+  Drupal.behaviors.webformCodeMirror = {
     attach: function (context) {
 
       // Webform CodeMirror editor.

@@ -43,7 +43,7 @@ class WebformTest extends WebformTestBase {
     $this->assertEqual($this->submissionStorage->getTotal($webform), 0);
 
     // Check that 'test' state was deleted with the webform.
-    $this->assertEqual(\Drupal::state()->get('webform.' . $webform->id()), NULL);
+    $this->assertEqual(\Drupal::state()->get('webform.webform.' . $webform->id()), NULL);
   }
 
 }

@@ -398,6 +398,7 @@ entity.webform_submission.sticky_toggle:
     _controller: '\Drupal\webform\Controller\WebformSubmissionController::sticky'
   requirements:
     _entity_access: 'webform_submission.update'
+    _csrf_token: 'TRUE'
 
 # Handlers
 
@@ -481,3 +482,15 @@ webform.element.autocomplete:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_page'
+
+
+# Autocomplete
+
+webform.element.message.close:
+  path: '/webform/message/close/{storage}/{id}'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformElementController::close'
+    _storage: user
+  requirements:
+    _access: 'TRUE'
+    _csrf_token: 'TRUE'

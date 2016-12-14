@@ -17,7 +17,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormTooltip = {
+  Drupal.behaviors.webformTooltip = {
     attach: function (context) {
       $(context).find('.js-webform-element-tooltip').once('webform-element-tooltip').each(function () {
         var $element = $(this);

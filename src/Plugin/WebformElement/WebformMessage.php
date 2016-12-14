@@ -3,6 +3,8 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformSubmissionInterface;
+use \Drupal\webform\Element\WebformMessage as WebformMessageElement;
 
 /**
  * Provides a 'webform_message' element.
@@ -11,7 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "webform_message",
  *   label = @Translation("Message"),
  *   category = @Translation("Markup elements"),
- *   states_wrapper = TRUE,
  * )
  */
 class WebformMessage extends WebformMarkupBase {
@@ -26,6 +27,10 @@ class WebformMessage extends WebformMarkupBase {
       // Message settings.
       'message_type' => 'status',
       'message_message' => '',
+      'message_close' => FALSE,
+      'message_close_effect' => 'slide',
+      'message_id' => '',
+      'message_storage' => '',
     ];
   }
 
@@ -34,6 +39,28 @@ class WebformMessage extends WebformMarkupBase {
    */
   public function getTranslatableProperties() {
     return array_merge(parent::getTranslatableProperties(), ['message_message']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+    parent::prepare($element, $webform_submission);
+
+    if (!empty($element['#message_storage']) && empty($element['#message_id'])) {
+      // Use
+      // [webform:id]--[source_entity:type]-[source_entity:id]--[element:key]
+      // as the message id.
+      $id = [];
+      if ($webform = $webform_submission->getWebform()) {
+        $id[] = $webform->id();
+      }
+      if ($source_entity = $webform_submission->getSourceEntity()) {
+        $id[] = $source_entity->getEntityTypeId() . '-' . $source_entity->id();
+      }
+      $id[] = $element['#webform_key'];
+      $element['#message_id'] = implode('--', $id);
+    }
   }
 
   /**
@@ -55,6 +82,47 @@ class WebformMessage extends WebformMarkupBase {
     $form['markup']['message_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Message content'),
+    ];
+    $form['markup']['message_close'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to close the message.'),
+      '#return_value' => TRUE,
+    ];
+    $form['markup']['message_close_effect'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Message close effect'),
+      '#options' => [
+        'hide' => $this->t('Hide'),
+        'slide' => $this->t('Slide'),
+        'fade' => $this->t('Fade'),
+      ],
+      '#states' => [
+        'visible' => [':input[name="properties[message_close]"]' => ['checked' => TRUE]],
+      ],
+    ];
+    $form['markup']['message_storage'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Message storage'),
+      '#options' => [
+        WebformMessageElement::STORAGE_NONE => $this->t('None: Message state is never stored.'),
+        WebformMessageElement::STORAGE_SESSION => $this->t('Session storage: Message state is reset after the browser is closed.'),
+        WebformMessageElement::STORAGE_LOCAL => $this->t('Local storage: Message state persists after the browser is closed.'),
+        WebformMessageElement::STORAGE_USER => $this->t("User data: Message state is saved to the current user's data. (Applies to authenticated users only)"),
+        WebformMessageElement::STORAGE_STATE => $this->t("State API: Message state is saved to the site's system state. (Applies to authenticated users only)"),
+      ],
+      '#states' => [
+        'visible' => [':input[name="properties[message_close]"]' => ['checked' => TRUE]],
+      ],
+    ];
+    $form['markup']['message_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Message ID'),
+      '#description' => $this->t("Unique ID used to store the message's closed state. Please enter only lower-case letters, numbers, dashes, and underscores.") . '<br/>' .
+      $this->t('Defaults to: %value', ['%value' => '[webform:id]--[element:key]']),
+      '#pattern' => '/^[a-z0-9-_]+$/',
+      '#states' => [
+        'visible' => [':input[name="properties[message_close]"]' => ['checked' => TRUE]],
+      ],
     ];
     return $form;
   }

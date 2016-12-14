@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormColor = {
+  Drupal.behaviors.webformColor = {
     attach: function (context) {
       $(context).find('.form-color:not(.form-color-output)').once('webform-color').each(function () {
         var $element = $(this);

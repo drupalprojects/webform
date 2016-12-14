@@ -17,7 +17,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior for unsaved changes.
    */
-  Drupal.behaviors.yamlFormUnsaved = {
+  Drupal.behaviors.webformUnsaved = {
     attach: function (context) {
       // Look for the 'data-webform-unsaved' attribute which indicates that the
       // multi-step webform has unsaved data.

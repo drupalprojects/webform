@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormRoles = {
+  Drupal.behaviors.webformRoles = {
     attach: function (context) {
       $(context).find('.js-webform-roles-role[value="authenticated"]').once('webform-roles').each(function () {
         var $authenticated = $(this);

@@ -16,7 +16,7 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base for controller for webform submission webforms.
+ * Provides a webform to collect and edit submissions.
  */
 class WebformSubmissionForm extends ContentEntityForm {
 
@@ -58,6 +58,13 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $messageManager;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * The webform settings.
    *
    * @var array
@@ -79,7 +86,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $sourceEntity;
 
   /**
-   * Constructs a ContentEntityForm object.
+   * Constructs a WebformSubmissionForm object.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.
@@ -91,14 +98,17 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The webform third party settings manager.
    * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
    *   The webform message manager.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(EntityManagerInterface $entity_manager, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager) {
+  public function __construct(EntityManagerInterface $entity_manager, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
     parent::__construct($entity_manager);
     $this->requestHandler = $request_handler;
     $this->elementManager = $element_manager;
     $this->storage = $this->entityManager->getStorage('webform_submission');
     $this->thirdPartySettingsManager = $third_party_settings_manager;
     $this->messageManager = $message_manager;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -110,7 +120,8 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('webform.request'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.third_party_settings_manager'),
-      $container->get('webform.message_manager')
+      $container->get('webform.message_manager'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -1462,34 +1473,11 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     if (isset($this->settings[$name])) {
-      return $this->replaceTokens($this->settings[$name]);
+      return $this->tokenManager->replace($this->settings[$name], $this->getEntity());
     }
     else {
       return $default_value;
     }
-  }
-
-  /**
-   * Replace tokens in text.
-   *
-   * @param string $text
-   *   A string of text that main contain tokens.
-   *
-   * @return string
-   *   Text will tokens replaced.
-   */
-  protected function replaceTokens($text) {
-    // Most strings won't contain tokens so lets check and return ASAP.
-    if (!is_string($text) || strpos($text, '[') === FALSE) {
-      return $text;
-    }
-
-    $token_data = [
-      'webform' => $this->getWebform(),
-      'webform-submission' => $this->entity,
-    ];
-    $token_options = ['clear' => TRUE];
-    return \Drupal::token()->replace($text, $token_data, $token_options);
   }
 
 }

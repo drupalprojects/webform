@@ -12,7 +12,7 @@
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.yamlFormTextFormat = {
+  Drupal.behaviors.webformTextFormat = {
     attach: function (context) {
       $(context).find('.js-text-format-wrapper textarea').once('webform-text-format').each(function () {
         var $textarea = $(this);

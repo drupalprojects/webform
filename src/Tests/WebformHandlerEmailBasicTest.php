@@ -45,14 +45,14 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     // Check sending a custom email using tokens.
     $this->drupalLogin($this->adminFormUser);
     $body = implode("\n", [
-      'full name: [webform-submission:values:first_name] [webform-submission:values:last_name]',
-      'uuid: [webform-submission:uuid]',
-      'sid: [webform-submission:sid]',
-      'date: [webform-submission:created]',
-      'ip-address: [webform-submission:ip-address]',
-      'user: [webform-submission:user]',
-      'url: [webform-submission:url]',
-      'edit-url: [webform-submission:url:edit-form]',
+      'full name: [webform_submission:values:first_name] [webform_submission:values:last_name]',
+      'uuid: [webform_submission:uuid]',
+      'sid: [webform_submission:sid]',
+      'date: [webform_submission:created]',
+      'ip-address: [webform_submission:ip-address]',
+      'user: [webform_submission:user]',
+      'url: [webform_submission:url]',
+      'edit-url: [webform_submission:url:edit-form]',
       'Test that "double quotes" are not encoded.',
     ]);
 

@@ -13,6 +13,24 @@ webform.admin:
     - core/jquery.once
     - webform/webform.form
 
+# Used preload libraries required by (modal) dialogs.
+# @see js/webform.element.codemirror.js
+webform.admin.dialog:
+  version: 1.x
+  css:
+    theme:
+      css/webform.admin.css: {}
+  js:
+    js/webform.admin.js:  {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/webform.form
+    - webform/webform.element.codemirror.yaml
+    - webform/webform.element.html_editor
+    - webform/webform.element.select2
+
 webform.admin.translation:
   version: 1.x
   css:
@@ -46,6 +64,7 @@ webform.help:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - core/jquery.ui.accordion
 
 # Webform.
 
@@ -301,6 +320,12 @@ webform.element.message:
   css:
     theme:
       css/webform.element.message.css: {}
+  js:
+    js/webform.element.message.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
 
 webform.element.options:
   version: 1.x

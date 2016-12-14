@@ -8,7 +8,7 @@ uid: null
 template: false
 id: example_wizard
 title: 'Example: Wizard'
-description: 'An example of multiple step ''wizard'' webform.'
+description: 'Example of a multiple step ''wizard'' webform.'
 elements: |
   information:
     '#title': 'Your Information'

@@ -233,7 +233,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       'exporter' => 'delimited',
 
       'delimiter' => ',',
-      'file_name' => 'submission-[webform-submission:serial]',
+      'file_name' => 'submission-[webform_submission:serial]',
 
       'header_format' => 'label',
       'header_prefix' => TRUE,

@@ -43,28 +43,34 @@ function template_preprocess_webform_help(array &$variables) {
     ];
   }
 
-  if (!empty($info['youtube_id'])) {
-    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
+  // Build watch video link.
+  if (!empty($info['video_id'])) {
     $classes = ['button', 'button-action', 'button--small', 'button-webform-play'];
+
+    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
     switch ($video_display) {
       case 'dialog';
         $help['link'] = [
           '#type' => 'link',
-          '#title' => 'Watch video',
-          '#url' => Url::fromRoute('webform.help', ['id' => str_replace('_', '-', $info['id'])]),
+          '#title' => t('Watch video'),
+          '#url' => Url::fromRoute('webform.help', ['id' => str_replace('_', '-', $info['video_id'])]),
           '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, $classes),
           '#prefix' => ' ',
         ];
         break;
 
       case 'link':
-        $help['link'] = [
-          '#type' => 'link',
-          '#title' => 'Watch video',
-          '#url' => Url::fromUri('https://youtu.be/' . $info['youtube_id']),
-          '#attributes' => ['class' => $classes],
-          '#prefix' => ' ',
-        ];
+        /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+        $help_manager = \Drupal::service('webform.help_manager');
+        if ($video = $help_manager->getVideo($info['video_id'])) {
+          $help['link'] = [
+            '#type' => 'link',
+            '#title' => t('Watch video'),
+            '#url' => Url::fromUri('https://youtu.be/' . $video['youtube_id']),
+            '#attributes' => ['class' => $classes],
+            '#prefix' => ' ',
+          ];
+        }
 
         break;
 
@@ -553,6 +559,44 @@ function template_preprocess_webform_progress_bar(array &$variables) {
   $variables['progress'] = [];
   foreach ($pages as $page) {
     $variables['progress'][] = (isset($page['#title'])) ? $page['#title'] : '';
+  }
+}
+
+/******************************************************************************/
+// Element templates
+/******************************************************************************/
+
+/**
+ * Prepares variables for Webform message templates.
+ *
+ * Default template: webform-message.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #id, #attributes, #children.
+ *
+ * @see  template_preprocess_container
+ */
+function template_preprocess_webform_message(&$variables) {
+  $variables['has_parent'] = FALSE;
+  $element = $variables['element'];
+  // Ensure #attributes is set.
+  $element += array('#attributes' => array());
+
+  // Special handling for webform elements.
+  if (isset($element['#array_parents'])) {
+    // Assign an html ID.
+    if (!isset($element['#attributes']['id'])) {
+      $element['#attributes']['id'] = $element['#id'];
+    }
+    $variables['has_parent'] = TRUE;
+  }
+
+  $variables['message'] = $element['#message'];
+  $variables['attributes'] = $element['#attributes'];
+  if (isset($element['#closed'])) {
+    $variables['closed'] = $element['#closed'];
   }
 }
 

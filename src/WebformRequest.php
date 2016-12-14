@@ -217,7 +217,7 @@ class WebformRequest implements WebformRequestInterface {
 
     // Get and check source entity type.
     $source_entity_type = $this->request->query->get('source_entity_type');
-    if (!$source_entity_type) {
+    if (!$source_entity_type || !$this->entityTypeManager->hasDefinition($source_entity_type)) {
       return NULL;
     }
 

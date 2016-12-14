@@ -208,21 +208,6 @@ elements: |
         civ: 111
         expiration_month: 1
         expiration_year: 2025
-  message:
-    '#type': details
-    '#title': 'Message elements'
-    '#open': true
-    message_default:
-      '#type': message
-      '#message_message': 'This is a <strong>default</strong> message.'
-    message_custom:
-      '#type': message
-      '#message_type': warning
-      '#message_message': 'This is a <strong>custom</strong> message.'
-      '#states':
-        visible:
-          ':input[name="not_an_element"]':
-            checked: true
 css: ''
 javascript: ''
 settings:
