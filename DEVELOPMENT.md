@@ -15,8 +15,8 @@ git checkout -b [issue-number]-[issue-description]
 # Push issue branch to D.O. (optional)
 git push -u origin [issue-number]-[issue-description]
 
-# Create patch by comparing (current) issue branch with 8.x-1.x branch 
-git diff 8.x-1.x > [project_name]-[issue-description]-[issue-number]-[comment-number]-[drupal-version].patch
+# Create patch by comparing (current) issue branch with 8.x-5.x branch 
+git diff 8.x-5.x > [project_name]-[issue-description]-[issue-number]-[comment-number]-[drupal-version].patch
 ```
 
 **Ignoring *.patch, *.diff, and .gitignore files**
@@ -46,12 +46,12 @@ curl https://www.drupal.org/files/[patch-name].patch | git apply -R -
 
 ```bash
 # Merge branch with all commits
-git checkout 8.x-1.x
+git checkout 8.x-5.x
 git merge [issue-number]-[issue-description]
 git push
 
 # Merge branch as a single new commit
-git checkout 8.x-1.x
+git checkout 8.x-5.x
 git merge --squash [issue-number]-[issue-description]
 git commit -m 'Issue #[issue-number]: [issue-description]'
 git push
@@ -89,20 +89,20 @@ for development.
 
 ```bash
 # Create branch
-git checkout 8.x-1.x
+git checkout 8.x-5.x
 git checkout -b [issue-number]-[issue-description]
 git push -u origin [issue-number]-[issue-description]
 
 # Create patch
-git diff 8.x-1.x > [project_name]-[issue-description]-[issue-number]-00.patch
+git diff 8.x-5.x > [project_name]-[issue-description]-[issue-number]-00.patch
 
 # Merge branch with all commits
-git checkout 8.x-1.x
+git checkout 8.x-5.x
 git merge [issue-number]-[issue-description]
 git push
 
 # Merge branch as a single new commit
-git checkout 8.x-1.x
+git checkout 8.x-5.x
 git merge --squash [issue-number]-[issue-description]
 git commit -m 'Issue #[issue-number]: [issue-description]'
 git push

@@ -29,22 +29,27 @@ use Drupal\webform\Utility\WebformElementHelper;
  *   - content: Help content.
  */
 function template_preprocess_webform_help(array &$variables) {
-  $info = $variables['info'];
+  $help_info = $variables['info'];
 
-  $variables += $info;
+  $variables += $help_info;
 
   $help = [];
-  if (is_array($info['content'])) {
-    $help['content'] = $info['content'];
+  if (is_array($help_info['content'])) {
+    $help['content'] = $help_info['content'];
   }
   else {
     $help['content'] = [
-      '#markup' => $info['content'],
+      '#markup' => $help_info['content'],
     ];
   }
 
   // Build watch video link.
-  if (!empty($info['video_id'])) {
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+
+  // If help info load the video else this is the video info.
+  $video_info = (isset($help_info['video_id'])) ? $help_manager->getVideo($help_info['video_id']) : $help_info;
+  if (!empty($video_info['youtube_id'])) {
     $classes = ['button', 'button-action', 'button--small', 'button-webform-play'];
 
     $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
@@ -53,25 +58,20 @@ function template_preprocess_webform_help(array &$variables) {
         $help['link'] = [
           '#type' => 'link',
           '#title' => t('Watch video'),
-          '#url' => Url::fromRoute('webform.help', ['id' => str_replace('_', '-', $info['video_id'])]),
+          '#url' => Url::fromRoute('webform.help', ['id' => str_replace('_', '-', $video_info['id'])]),
           '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, $classes),
           '#prefix' => ' ',
         ];
         break;
 
       case 'link':
-        /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
-        $help_manager = \Drupal::service('webform.help_manager');
-        if ($video = $help_manager->getVideo($info['video_id'])) {
-          $help['link'] = [
-            '#type' => 'link',
-            '#title' => t('Watch video'),
-            '#url' => Url::fromUri('https://youtu.be/' . $video['youtube_id']),
-            '#attributes' => ['class' => $classes],
-            '#prefix' => ' ',
-          ];
-        }
-
+        $help['link'] = [
+          '#type' => 'link',
+          '#title' => t('Watch video'),
+          '#url' => Url::fromUri('https://youtu.be/' . $video_info['youtube_id']),
+          '#attributes' => ['class' => $classes],
+          '#prefix' => ' ',
+        ];
         break;
 
       case 'hidden':
