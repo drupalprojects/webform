@@ -81,8 +81,8 @@ notes and assume that _things will be changing_.
 
 ### Project Status
 
-- [Project Board](https://contribkanban.com/board/webform/8.x-5.x)
-- [Currently Missing Features]h(https://www.drupal.org/node/2807571)
+- [Webform Project Board](https://contribkanban.com/board/webform/8.x-5.x)
+- [Webform 4.x features currently missing from the Webform module](https://www.drupal.org/node/2807571)
 
 
 ### Similar Modules
