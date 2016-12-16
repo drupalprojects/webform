@@ -420,7 +420,13 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $videos['admin'] = [
       'title' => $this->t('Administering and Extending the Webform module'),
       'content' => $this->t("This screencast walks through administering the Webform module's admin settings, options, and behaviors."),
-      'youtube_id' => 'OdfVm5LMH9A',
+      'youtube_id' => 'bkScAX_Qbt4',
+    ];
+
+    $videos['source'] = [
+      'title' => $this->t('Using the Source'),
+      'content' => $this->t('This screencast walks through viewing and editing source code and configuration behind a Webform.'),
+      'youtube_id' => '2pWkJiYeR6E',
     ];
 
     $videos['help'] = [
@@ -462,6 +468,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'message_close' => TRUE,
       'message_storage' => WebformMessage::STORAGE_STATE,
       'access' => $this->currentUser->hasPermission('administer webform'),
+      'video_id' => 'install',
     ];
 
     // Release.
@@ -518,6 +525,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Managing webforms'),
       'url' => Url::fromRoute('entity.webform.collection'),
       'content' => $this->t('The Forms page lists all available webforms, which can be filtered by title, description, and/or elements.'),
+      'video_id' => 'forms',
     ];
 
     // Templates.
@@ -530,6 +538,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'title' => $this->t('Using templates'),
         'url' => Url::fromRoute('entity.webform.templates'),
         'content' => $this->t('The Templates page lists reusable templates that can be duplicated and customized to create new webforms.'),
+        'video_id' => 'forms',
       ];
     }
 
@@ -553,6 +562,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Defining default settings'),
       'url' => Url::fromRoute('webform.settings'),
       'content' => $this->t('The Settings page allows administrators to manage global webform and UI configuration settings, including updating default labels & descriptions, settings default format, and defining test dataset.'),
+      'video_id' => 'admin',
     ];
 
     // Options.
@@ -637,6 +647,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'title' => $this->t('Building a webform'),
       'content' => $this->t('The Webform elements page allows users to add, update, duplicate, and delete webform elements and wizard pages.'),
+      'video_id' => 'form_elements',
     ];
 
     // Webform source.
@@ -648,6 +659,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Editing YAML source'),
       'content' => $this->t("The (View) Source page allows developers to edit a webform's render array using YAML markup.") . ' ' .
         $this->t("Developers can use the (View) Source page to quickly alter a webform's labels, cut-n-paste multiple elements, reorder elements, and add customize properties and markup to elements."),
+      'video_id' => 'source',
     ];
 
     // Webform test.
@@ -672,6 +684,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Customizing webform settings'),
       'content' => $this->t("The Webform settings page allows a webform's labels, messaging, and behaviors to be customized.") . ' ' .
         $this->t('Administrators can open/close a webform, enable/disable drafts, allow previews, set submission limits, and disable the saving of results.'),
+      'video_id' => 'form_settings',
     ];
 
     // Webform assets.
@@ -692,6 +705,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'title' => $this->t('Controlling access to submissions'),
       'content' => $this->t('The Webform access control page allows administrator to determine who can create, update, delete, and purge webform submissions.'),
+      'video_id' => 'access',
     ];
 
     // Webform handlers.
@@ -704,6 +718,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'content' => $this->t('The Webform handlers page lists additional handlers (aka behaviors) that can process webform submissions.') . ' ' .
         $this->t('Handlers are <a href=":href">plugins</a> that act on a webform submission.', [':href' => 'https://www.drupal.org/developing/api/8/plugins']) . ' ' .
         $this->t('For example, sending email confirmations and notifications is done using the Email handler which is provided by the Webform module.'),
+      'video_id' => 'submissions',
     ];
 
     // Webform third party settings.
@@ -741,6 +756,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Managing results'),
       'content' => $this->t("The Results page displays an overview of a webform's submissions.") . ' ' .
         $this->t("Submissions can be reviewed, updated, flagged, annotated, and downloaded."),
+      'video_id' => 'submissions',
     ];
 
     // Webform results.
@@ -777,6 +793,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'title' => $this->t('Exporting configuration'),
         'content' => $this->t("The Export (form) page allows developers to quickly export a single webform's configuration file.") . ' ' .
           $this->t('If you run into any issues with a webform, you can also attach the below configuration (without any personal information) to a new ticket in the Webform module\'s <a href=":href">issue queue</a>.', [':href' => 'https://www.drupal.org/project/issues/webform']),
+        'video_id' => 'help',
       ];
     }
 
@@ -791,6 +808,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'title' => $this->t('Creating a webform node'),
       'content' => $this->t("A webform node allows webforms to be fully integrated into a website as nodes."),
+      'video_id' => 'blocks',
     ];
 
     // Webform Block.
@@ -800,6 +818,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'title' => $this->t('Creating a webform block'),
       'content' => $this->t("A webform block allows a webform to be placed anywhere on a website."),
+      'video_id' => 'blocks',
     ];
 
     foreach ($help as $id => &$help_info) {
