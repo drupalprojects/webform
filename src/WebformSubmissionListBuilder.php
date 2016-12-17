@@ -153,7 +153,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     /** @var WebformSubmissionStorageInterface $webform_submission_storage */
     $webform_submission_storage = $this->getStorage();
 
-    if (\Drupal::routeMatch()->getRouteName() == "$base_route_name.webform.results_table") {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($route_name == "$base_route_name.webform.results_table") {
       $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
       $this->sort = $webform_submission_storage->getCustomSetting('sort', 'serial', $this->webform, $this->sourceEntity);
       $this->direction  = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
@@ -171,7 +172,16 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     }
     else {
       $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
-      $this->sort = 'serial';
+      // Display the sid when show results from all webforms.
+      if ($route_name == 'entity.webform_submission.collection') {
+        unset($this->columns['serial']);
+        $this->columns['sid']['title'] = '#';
+        $this->sort = 'sid';
+      }
+      else {
+        unset($this->columns['sid']);
+        $this->sort = 'serial';
+      }
       $this->direction  = 'desc';
       $this->limit = 50;
       $this->customize = FALSE;

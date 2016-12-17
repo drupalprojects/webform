@@ -1,0 +1,57 @@
+/**
+ * @file
+ * Options element styles.
+ */
+
+.webform-list-table {
+  max-width: 800px;
+}
+
+.webform-list-table td {
+  white-space: nowrap;
+}
+
+.webform-list-table th:last-child,
+.webform-list-table td:last-child {
+  padding: 0 2px;
+  vertical-align: middle;
+  text-align: center !important;
+  width: 60px !important;
+}
+
+.webform-list-table td:last-child input {
+  margin: 0 2px;
+}
+
+.webform-list-table td input[type="text"] {
+  width: 95%;
+}
+
+.webform-list-table .webform-list-sort-weight {
+  width: 4em;
+}
+
+.webform-list-table td input[type="image"] {
+  padding: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.webform-list-table .container-inline input[type="submit"] {
+  width: inherit !important;
+}
+
+/**
+ * Hide AJAX throbber.
+ */
+.form-type-webform-list .ajax-progress-throbber {
+  display: none;
+}
+
+/**
+ * Suppress table drag warnings.
+ */
+.webform-list-table .tabledrag-changed-warning,
+.webform-list-table .tabledrag-changed {
+  display: none !important;
+}

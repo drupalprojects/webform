@@ -32,6 +32,7 @@ class WebformElementOptions extends FormElement {
         [$class, 'processAjaxForm'],
       ],
       '#theme_wrappers' => ['form_element'],
+      '#custom__type' => 'webform_options',
     ];
   }
 
@@ -102,20 +103,36 @@ class WebformElementOptions extends FormElement {
     ];
 
     // Custom options.
-    $element['custom'] = [
-      '#type' => 'webform_options',
-      '#title' => $element['#title'],
-      '#title_display' => 'invisible',
-      '#label' => ($element['#likert']) ? t('answer') : t('option'),
-      '#labels' => ($element['#likert']) ? t('answers') : t('options'),
-      '#states' => [
-        'visible' => [
-          'select.js-' . $element['#id'] . '-options' => ['value' => ''],
+    if ($element['#custom__type'] === 'webform_list') {
+      $element['custom'] = [
+        '#type' => 'webform_list',
+        '#title' => $element['#title'],
+        '#title_display' => 'invisible',
+        '#states' => [
+          'visible' => [
+            'select.js-' . $element['#id'] . '-options' => ['value' => ''],
+          ],
         ],
-      ],
-      '#error_no_message' => TRUE,
-      '#default_value' => (isset($element['#default_value']) && !is_string($element['#default_value'])) ? $element['#default_value'] : [],
-    ];
+        '#error_no_message' => TRUE,
+        '#default_value' => (isset($element['#default_value']) && !is_string($element['#default_value'])) ? $element['#default_value'] : [],
+      ];
+    }
+    else {
+      $element['custom'] = [
+        '#type' => 'webform_options',
+        '#title' => $element['#title'],
+        '#title_display' => 'invisible',
+        '#label' => ($element['#likert']) ? t('answer') : t('option'),
+        '#labels' => ($element['#likert']) ? t('answers') : t('options'),
+        '#states' => [
+          'visible' => [
+            'select.js-' . $element['#id'] . '-options' => ['value' => ''],
+          ],
+        ],
+        '#error_no_message' => TRUE,
+        '#default_value' => (isset($element['#default_value']) && !is_string($element['#default_value'])) ? $element['#default_value'] : [],
+      ];
+    }
 
     $element['#element_validate'] = [[get_called_class(), 'validateWebformElementOptions']];
 

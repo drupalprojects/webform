@@ -4,22 +4,21 @@ dependencies:
   enforced:
     module:
       - webform_test
+  module:
+    - webform_test
 uid: null
 template: false
-id: test_element_text_autocomplete
-title: 'Test: Element: Textfield Autocomplete'
-description: 'Test the text element autocompletion.'
+id: test_element_list
+title: 'Test: Element: List'
+description: 'Test List element.'
 elements: |
-  autocomplete_options:
-    '#type': autocomplete
-    '#title': 'autocomplete (options)'
-    '#autocomplete_options': 'country_names'
-    '#autocomplete_limit': 5
-    '#autocomplete_match': 1
-  autocomplete_existing:
-    '#type': autocomplete
-    '#title': 'autocomplete (existing)'
-    '#autocomplete_existing': TRUE
+  webform_list_basic:
+    '#type': webform_list
+    '#title': 'webform_list (default_value)'
+    '#default_value':
+      - One
+      - Two
+      - Three
 css: ''
 javascript: ''
 settings:
@@ -74,7 +73,7 @@ settings:
   limit_user_message: ''
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: false
+  results_disabled: true
   results_disabled_ignore: false
   token_update: false
 access:
@@ -104,4 +103,11 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-handlers: {  }
+handlers:
+  debug:
+    id: debug
+    label: Debug
+    handler_id: debug
+    status: true
+    weight: 0
+    settings: {  }

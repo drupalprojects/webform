@@ -36,7 +36,7 @@ elements: |
     webform_autocomplete:
       '#type': autocomplete
       '#title': 'Autocomplete | <script>alert(''This markup is not escaped properly!!!'') </script>'
-      '#autocomplete_options': country_names
+      '#autocomplete_items': country_names
     captcha:
       '#type': captcha
       '#title': 'CAPTCHA | <script>alert(''This markup is not escaped properly!!!'') </script>'

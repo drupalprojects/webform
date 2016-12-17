@@ -23,7 +23,7 @@ class WebformAutocomplete extends TextField {
     return parent::getDefaultProperties() + [
       // Autocomplete settings.
       'autocomplete_existing' => FALSE,
-      'autocomplete_options' => [],
+      'autocomplete_items' => [],
       'autocomplete_limit' => 10,
       'autocomplete_match' => 3,
       'autocomplete_match_operator' => 'CONTAINS',
@@ -36,21 +36,20 @@ class WebformAutocomplete extends TextField {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
     parent::prepare($element, $webform_submission);
 
-    // Query webform submission for existing values.
-    if (!empty($element['#autocomplete_existing'])) {
-      // Make sure Webform has submission values to use in autocompletion.
-      $display_autocomplete = \Drupal::database()->select('webform_submission_data')
+
+    $has_items = !empty($element['#autocomplete_items']);
+    // Query webform submission for existing items.
+    if (!$has_items && !empty($element['#autocomplete_existing'])) {
+      $has_items = \Drupal::database()->select('webform_submission_data')
         ->fields('webform_submission_data', ['value'])
         ->condition('webform_id', $webform_submission->getWebform()->id())
         ->condition('name', $element['#webform_key'])
+        ->condition('value', '', '!=')
         ->execute()
         ->fetchField();
     }
-    else {
-      $display_autocomplete = !empty($element['#autocomplete_options']);
-    }
 
-    if ($display_autocomplete && isset($element['#webform_key'])) {
+    if ($has_items && isset($element['#webform_key'])) {
       $element['#autocomplete_route_name'] = 'webform.element.autocomplete';
       $element['#autocomplete_route_parameters'] = [
         'webform' => $webform_submission->getWebform()->id(),
@@ -68,20 +67,16 @@ class WebformAutocomplete extends TextField {
       '#type' => 'fieldset',
       '#title' => $this->t('Autocomplete settings'),
     ];
+    $form['autocomplete']['autocomplete_items'] = [
+      '#type' => 'webform_element_options',
+      '#custom__type' => 'webform_list',
+      '#title' => $this->t('Autocomplete values'),
+    ];
     $form['autocomplete']['autocomplete_existing'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include existing submission values.'),
       '#description' => $this->t("If checked, all existing submission values will be visible to the webform's users."),
       '#return_value' => TRUE,
-    ];
-    $form['autocomplete']['autocomplete_options'] = [
-      '#type' => 'webform_element_options',
-      '#title' => $this->t('Autocomplete options'),
-      '#states' => [
-        'visible' => [
-          ':input[name="properties[autocomplete_existing]"]' => ['checked' => FALSE],
-        ],
-      ],
     ];
     $form['autocomplete']['autocomplete_limit'] = [
       '#type' => 'number',

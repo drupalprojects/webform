@@ -13,10 +13,14 @@
 
 .webform-options-table th:last-child,
 .webform-options-table td:last-child {
-  padding: 0 4px;
+  padding: 0 2px;
   vertical-align: middle;
-  text-align: center;
-  width: 24px;
+  text-align: center !important;
+  width: 60px !important;
+}
+
+.webform-options-table td:last-child input {
+  margin: 0 2px;
 }
 
 .webform-options-table td input[type="text"] {
@@ -40,7 +44,7 @@
 /**
  * Hide AJAX throbber.
  */
-.form-type-webform-options .ajax-progress-throbber .message {
+.form-type-webform-options .ajax-progress-throbber {
   display: none;
 }
 

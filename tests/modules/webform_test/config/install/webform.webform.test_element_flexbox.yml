@@ -163,11 +163,11 @@ elements: |
     flex_webform_autocomplete_left:
       '#type': autocomplete
       '#title': 'Autocomplete 01'
-      '#autocomplete_options': country_names
+      '#autocomplete_items': country_names
     flex_webform_autocomplete_right:
       '#type': autocomplete
       '#title': 'Autocomplete 02'
-      '#autocomplete_options': country_names
+      '#autocomplete_items': country_names
   flexbox_webform_buttons:
     '#type': webform_flexbox
     flex_webform_buttons_left:

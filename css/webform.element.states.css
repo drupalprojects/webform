@@ -37,10 +37,14 @@
 
 .webform-states-table th:last-child,
 .webform-states-table td:last-child {
-  padding: 0 4px;
+  padding: 0 2px;
   vertical-align: middle;
-  text-align: center;
-  width: 30px !important;
+  text-align: center !important;
+  width: 60px !important;
+}
+
+.webform-states-table td:last-child input {
+  margin: 0 2px;
 }
 
 /**

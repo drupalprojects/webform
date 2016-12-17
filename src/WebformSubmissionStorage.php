@@ -326,7 +326,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     // Submission ID.
     $columns['sid'] = [
       'title' => $this->t('SID'),
-      'default' => FALSE,
     ];
 
     // UUID.

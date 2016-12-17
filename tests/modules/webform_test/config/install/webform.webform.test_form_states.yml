@@ -184,7 +184,7 @@ elements: |
     visible_webform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
-      '#autocomplete_options': country_names
+      '#autocomplete_items': country_names
       '#default_value': Dixisset
       '#states':
         visible:
@@ -1019,7 +1019,7 @@ elements: |
     invisible_webform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
-      '#autocomplete_options': country_names
+      '#autocomplete_items': country_names
       '#default_value': Loremipsum
       '#states':
         invisible:
@@ -1590,7 +1590,7 @@ elements: |
     disabled_webform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
-      '#autocomplete_options': country_names
+      '#autocomplete_items': country_names
       '#default_value': Loremipsum
       '#states':
         disabled:

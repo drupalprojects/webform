@@ -296,6 +296,12 @@ webform.element.inputmask:
     - core/jquery.once
     - webform/jquery.inputmask
 
+webform.element.list:
+  version: 1.x
+  css:
+    component:
+      css/webform.element.list.css: {}
+
 webform.element.likert:
   version: 1.x
   css:

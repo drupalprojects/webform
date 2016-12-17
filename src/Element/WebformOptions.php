@@ -225,7 +225,21 @@ class WebformOptions extends FormElement {
       '#default_value' => $weight,
     ];
 
-    $row['remove'] = [
+    $row['operations'] = [];
+    $row['operations']['add'] = [
+      '#type' => 'image_button',
+      '#src' => 'core/misc/icons/787878/plus.svg',
+      '#limit_validation_errors' => [],
+      '#submit' => [[get_called_class(), 'addOptionSubmit']],
+      '#ajax' => $ajax_settings,
+      // Issue #1342066 Document that buttons with the same #value need a unique
+      // #name for the webform API to distinguish them, or change the webform API to
+      // assign unique #names automatically.
+      '#row_index' => $row_index,
+      '#name' => $table_id . '_add_' . $row_index,
+    ];
+
+    $row['operations']['remove'] = [
       '#type' => 'image_button',
       '#src' => 'core/misc/icons/787878/ex.svg',
       '#limit_validation_errors' => [],
@@ -276,6 +290,40 @@ class WebformOptions extends FormElement {
   }
 
   /**
+   * Webform submission handler for adding an option.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public static function addOptionSubmit(array &$form, FormStateInterface $form_state) {
+    $button = $form_state->getTriggeringElement();
+    $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -4));
+
+    // Add option.
+    $values = [];
+    foreach ($element['options']['#value'] as $row_index => $value) {
+      $values[] = $value;
+      if ($row_index == $button['#row_index']) {
+        $values[] = ['value' => '', 'text' => ''];
+      }
+    }
+
+    // Add one option to the 'number of options'.
+    $number_of_options_storage_key = self::getStorageKey($element, 'number_of_options');
+    $number_of_options = $form_state->get($number_of_options_storage_key);
+    $form_state->set($number_of_options_storage_key, $number_of_options + 1);
+
+    // Reset values.
+    $form_state->setValueForElement($element['options'], $values);
+    NestedArray::setValue($form_state->getUserInput(), $element['options']['#parents'], $values);
+
+    // Rebuild the webform.
+    $form_state->setRebuild();
+  }
+
+  /**
    * Webform submission handler for removing an option.
    *
    * @param array $form
@@ -285,10 +333,12 @@ class WebformOptions extends FormElement {
    */
   public static function removeOptionSubmit(array &$form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();
-    $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -3));
+    $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -4));
+    $values = $element['options']['#value'];
 
-    // Remove options.
-    unset($element['options']['#value'][$button['#row_index']]);
+    // Remove option.
+    unset($values[$button['#row_index']]);
+    $values = array_values($values);
 
     // Remove one option from the 'number of options'.
     $number_of_options_storage_key = self::getStorageKey($element, 'number_of_options');
@@ -299,9 +349,8 @@ class WebformOptions extends FormElement {
     }
 
     // Reset values.
-    $element['options']['#value'] = array_values($element['options']['#value']);
-    $form_state->setValueForElement($element['options'], $element['options']['#value']);
-    NestedArray::setValue($form_state->getUserInput(), $element['options']['#parents'], $element['options']['#value']);
+    $form_state->setValueForElement($element['options'], $values);
+    NestedArray::setValue($form_state->getUserInput(), $element['options']['#parents'], $values);
 
     // Rebuild the webform.
     $form_state->setRebuild();
@@ -312,7 +361,7 @@ class WebformOptions extends FormElement {
    */
   public static function ajaxCallback(array &$form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();
-    $parent_length = (isset($button['#row_index'])) ? -3 : -2;
+    $parent_length = (isset($button['#row_index'])) ? -4 : -2;
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, $parent_length));
     return $element['options'];
   }
