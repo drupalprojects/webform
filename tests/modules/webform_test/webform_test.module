@@ -163,20 +163,25 @@ function _webform_test_issues() {
     'radios' => [
       '2731991' => 'Setting required on radios marks all options required',
       '994360' => '#states cannot disable/enable radios and checkboxes',
+      '2836364' => 'Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.',
+    ],
+    'checkboxes' => [
+      '994360' => '#states cannot disable/enable radios and checkboxes',
+      '2836364' => 'Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.',
     ],
     'text_format' => [
-      997826 => '#states doesn\'t work correctly with type text_format',
-      2625128 => 'Text format selection stays visible when using editor and a hidden webform state',
-      1954968 => 'Required CKEditor fields always fail HTML5 validation',
+      '997826' => '#states doesn\'t work correctly with type text_format',
+      '2625128' => 'Text format selection stays visible when using editor and a hidden webform state',
+      '1954968' => 'Required CKEditor fields always fail HTML5 validation',
     ],
     'webform_markup' => [
-      2700667 => 'Notice: Undefined index: #type in drupal_process_states()',
+      '2700667' => 'Notice: Undefined index: #type in drupal_process_states()',
     ],
     'webform_message' => [
-      77245 => 'A place for JavaScript status messages',
+      '77245' => 'A place for JavaScript status messages',
     ],
     'webform_time' => [
-      1838234 => 'Add jQuery Timepicker for the Time element of the datetime field',
+      '1838234' => 'Add jQuery Timepicker for the Time element of the datetime field',
     ],
   ];
 }

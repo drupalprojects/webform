@@ -26,7 +26,7 @@ The primary use case for this module is to:
 
 > Evaluate this project online using [simplytest.me](https://simplytest.me/project/drupal/8.2.x?add[]=webform).
 
-> [Watch a demo](http://youtu.be/9jSOOEpzAy8) of the Webform module.
+> [Watch a demo](http://youtu.be/sQGsfQ_LZJ4) of the Webform module.
 
 
 ### Blog Posts & Articles
