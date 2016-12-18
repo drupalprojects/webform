@@ -1,11 +1,11 @@
 Features
 --------
 
-### Webform Builder
+## Form Builder
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/form-builder.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/form-builder.png" alt="Webform Builder" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-builder.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-builder.png" alt="Form Builder" />
 </a>
 </div>
 
@@ -19,11 +19,11 @@ Form builder features include:
 - Duplication of existing webforms, templates, and elements
 
 
-### Webform Settings
+## Form Settings
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/form-settings.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/form-settings.png" alt="Webform Settings" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-settings.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-settings-thumbnail.png" alt="Form Settings" />
 </a>
 </div>
 
@@ -34,16 +34,23 @@ Form settings that can be customized include:
 
 - Messages and button labels
 - Confirmation page, messages, and redirects
+- Saving drafts
+- Previewing submissions
 - Confidential submissions
 - Prepopulating a webform's elements using query string parameters
+- Disabling back button
+- Warning users about unsaved changes
+- Disabling client-side validation
 - Limiting number of submission per user, per webform, and/or per node
+- Look-n-feel of webform, confirmation page, and buttons
+- Injection webform specific CSS and JavaScript
 
 
-### Webform Elements
+## Elements
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/form-elements.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/form-elements.png" alt="Webform Elements" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-elements.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-elements-thumbnail.png" alt="Elements" />
 </a>
 </div>
 
@@ -55,20 +62,22 @@ Form elements include:
 
 - **HTML:** Textfield, Textareas, Checkboxes, Radios, Select menu, 
   Password, and more...
-- **HTML5:** Email, Url, Number, Telephone), Date, Number, Range, 
+- **HTML5:** Email, Url, Number, Telephone, Date, Number, Range, 
   and more...
 - **Drupal specific** File uploads, Entity References, Table select, Date list, 
   and more...
 - **Custom:** [Likert scale](https://en.wikipedia.org/wiki/Likert_scale), 
-  Star rating, Toggle, Credit card number, Select/Checkboxes/Radios with other, 
-  and more...
-- **Composite elements:** Address, Contact, and Credit Card 
+  Star rating, Toggle, Buttons, Credit card number, Geolocation, 
+  Select/Checkboxes/Radios with other, and more...
+- **Markups** Inline dismissable messages, HTML Markup, Details, and Fieldsets.   
+- **Composite elements:** Name, Address, Contact, and Credit Card 
 
-### Custom Properties
+
+## Element Settings
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/custom-properties.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/custom-properties.png" alt="Custom Properties" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-element-settings.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-element-settings-thumbnail.png" alt="Element Settings" />
 </a>
 </div>
 
@@ -78,18 +87,22 @@ available to enhance a webform element's behavior.
  
 Standard and custom properties allow for:
 
+- **Customizable required error messages**
 - **Conditional logic** using [FAPI States API](https://api.drupal.org/api/examples/form_example%21form_example_states.inc/function/form_example_states_form/7)
 - **Input masks** (using [jquery.inputmask](https://github.com/RobinHerbots/jquery.inputmask))
 - **[Select2](https://select2.github.io/)** replacement of select boxes 
+- **Word and character counting** for text elements
+- **Help popup** (using [jQuery UI Tooltip](https://jqueryui.com/tooltip/))
+- **Regular expression pattern validation**
 - **Private** elements, visible only to administrators
 - **Unique** values per element
 
 
-### Viewing Source
+## Viewing Source
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/viewing-source.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/viewing-source.png" alt="Viewing Source" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-source.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-source-thumbnail.png" alt="Viewing Source" />
 </a>
 </div>
 
@@ -100,11 +113,11 @@ allowing developers to make bulk updates to a webform's label, descriptions, and
 behaviors.
 
 
-### States/Conditional Logic
+## States/Conditional Logic
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/states-conditional-logic.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/states-conditional-logic.png" alt="States/Conditional Logic" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-states.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-states.png" alt="States/Conditional Logic" />
 </a>
 </div>
 
@@ -117,11 +130,12 @@ Drupal's State API supports:
 - Open/Close
 - Enable/Disable
 
-### Multistep Forms
+
+## Multistep Forms
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/multistep-forms.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/multistep-forms.png" alt="Multistep Forms" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-wizard.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-wizard.png" alt="Multistep Forms" />
 </a>
 </div>
 
@@ -132,15 +146,15 @@ progress through a long webform.
 Multistep webform features include:
 
 - Customizable progress bar
-- Customizable previous and next button labels
+- Customizable previous and next button labels and styles
 - Saving drafts between steps
 
 
-### Email/Handlers
+## Email & Remote Post Handlers
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/email-handlers.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/email-handlers.png" alt="Email/Handlers" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-handlers.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-handlers-thumbnail.png" alt="Email/Handlers" />
 </a>
 </div>
 
@@ -158,12 +172,17 @@ Email support features include:
 - HTML and plain-text email-friendly Twig templates
 - Customizable display formats for individual webform elements
 
+Remote post features include:
 
-### Results Management
+- Posting selected elements to remote server
+- Adding custom parameters to remote post requests
+
+
+## Results Management
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/results-management.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/results-management.png" alt="Results Management" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-results.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-results-thumbnail.png" alt="Results Management" />
 </a>
 </div>
 
@@ -182,11 +201,11 @@ Results management features include:
 - Saving of download preferences per form
 
 
-### Access Controls
+## Access Controls
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/access-controls.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/access-controls.png" alt="Access Controls" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-access.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-access-thumbnail.png" alt="Access Controls" />
 </a>
 </div>
 
@@ -202,13 +221,15 @@ Access controls allow users to:
 - View submissions
 - Update submissions
 - Delete submissions
+- View selected elements
+- Update selected elements
 
 
-### Reusable Templates
+## Reusable Templates
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/reusable-templates.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/reusable-templates.png" alt="Reusable Templates" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-templates.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-templates-thumbnail.png" alt="Reusable Templates" />
 </a>
 </div>
 
@@ -218,25 +239,32 @@ for their organization.
 
 Starter templates include:
 
-- Contact Us form
-- Registration form
-- Job Application webform 
-- Subscribe form
+- Contact Us	
+- Donation
+- Employee Evaluation
+- Issue
+- Job Application	
+- Job Seeker Profile
+- Registration
+- Session Evaluation
+- Subscribe
+- User Profile
 
 Example webforms include:
 
-- Basic layout
 - Elements
+- Basic layout
 - Flexbox layout
+- Input masks
 - Options
 - Wizard
 
 
-### Reusable Options
+## Reusable Options
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/reusable-options.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/reusable-options.png" alt="Reusable Options" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-options.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-options-thumbnail.png" alt="Reusable Options" />
 </a>
 </div>
 
@@ -248,17 +276,20 @@ and more.
 Reusable options include:
 
 - Country codes & names	
-- State/province codes & names	
-- State codes	& names		
+- Credit card codes
+- Days, Months, Time zones
+- Education, Employment status, Ethnicity, Industry, Languages, Marital status, Relationship, Size, and Titles
 - Likert agreement, comparison, importance, quality, satisfaction, ten scale, and
   would you
+- State/province codes & names	
+- State codes	& names		
 
 
-### Internationalization
+## Internationalization
     
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/internationalization.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/internationalization.png" alt="Internationalization" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-internalization.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-internalization-thumbnail.png" alt="Internationalization" />
 </a>
 </div>
 
@@ -266,11 +297,11 @@ Forms and configuration can be translated into multiple languages using Drupal's
 configuration translation system.    
 
 
-### Drupal Integration
+## Drupal Integration
 
 <div class="thumbnail">
-<a href="http://thebigbluehouse.com/images/webform/features/drupal-integration.png">
-<img src="http://thebigbluehouse.com/images-thumbnails/webform/features/drupal-integration.png" alt="Drupal Integration" />
+<a href="https://www.drupal.org/files/webform-8.x-5.x-integration.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-integration-thumbnail.png" alt="Drupal Integration" />
 </a>
 </div>
 
@@ -279,7 +310,72 @@ dedicated SEO-friendly URLs. Webform elements are simply render arrays that can
 easily be altered using custom hooks and/or plugins.
 
 
-### Drush Integration
+## Add-ons & Third Party Settings
+
+<div class="thumbnail">
+<a href="https://www.drupal.org/files/webform-8.x-5.x-add-ons.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-add-ons-thumbnail.png" alt="Add-ons & Third Party Settings" />
+</a>
+</div>
+
+Includes a list of modules and projects that extend and/or provide additional 
+functionality to the Webform module and Drupal's Webform API.
+
+
+## Extendable Plugins
+
+<div class="thumbnail">
+<a href="https://www.drupal.org/files/webform-8.x-5.x-plugin.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-plugin.png" alt="Extendable Plugins" />
+</a>
+</div>
+
+The Webform module provides [plugins](https://www.drupal.org/developing/api/8/plugins)
+and hooks that allow contrib and custom modules to extend and enhance webform 
+elements and submission handling.
+
+**WebformElement plugin** is used to integrate and enhance webform elements so 
+that they can be properly integrated into the Webform module.
+
+**WebformHandler plugin** allows developers to extend a webform's submission 
+handling. 
+
+**WebformExporter plugin** allows developers to export results using custom
+formats and file types. 
+
+
+## Help & Video Tutorials
+
+<div class="thumbnail">
+<a href="https://www.drupal.org/files/webform-8.x-5.x-help.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-help-thumbnail.png" alt="Help & Video Tutorials" />
+</a>
+</div>
+
+The Webform module provides examples, inline help, and screencast walk throughs.
+
+Screencasts include:
+ 
+- [Welcome to the Webform module](https://youtu.be/sQGsfQ_LZJ4)
+- [Installing the Webform module and third party libraries](https://youtu.be/IMfFTrsjg5k)
+- [Managing Webforms, Templates, and Examples](https://youtu.be/T5MVGa_3jOQ)
+- [Adding Elements, Composites, and Containers](https://youtu.be/LspF9mAvRcY)
+- [Configuring Webform Settings and Behaviors](https://youtu.be/UJ0y09ZS9Uc)
+- [Controlling Access to Webforms and Elements](https://youtu.be/SFm76DAVjbE)
+- [Collecting Submissions, Sending Emails, and Posting Results](https://youtu.be/OdfVm5LMH9A)
+- [Placing Webforms in Blocks and Creating Webform Nodes](https://youtu.be/xYBW2g0osd4)
+- [Administering and Extending the Webform module](https://youtu.be/bkScAX_Qbt4)
+- [Using the Source](https://youtu.be/2pWkJiYeR6E)
+- [Getting Help](https://youtu.be/sRXUR2c2brA) 
+
+
+## Drush Integration
+
+<div class="thumbnail">
+<a href="https://www.drupal.org/files/webform-8.x-5.x-drush.png">
+<img src="https://www.drupal.org/files/webform-8.x-5.x-drush.png" alt="Drush Integration" />
+</a>
+</div>
 
 Drush commands are provided to:
 
@@ -289,20 +385,6 @@ Drush commands are provided to:
 - Download and manage third party libraries
 - Tidy YAML configuration files
 
-<!-- Creates the bootstrap modal where the image will appear -->
-<div class="modal fade" id="modal-lightbox" tabindex="-1" role="dialog" aria-labelledby="modal-lightbox-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="modal-lightbox-label"></h4>
-      </div>
-      <div class="modal-body">
-        <img class="img-responsive">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+--------------------------------------------------------------------------------
+
+_This file was generated from [FEATURES.md](http://cgit.drupalcode.org/webform/tree/FEATURES.md?h=8.x-5.x)._
