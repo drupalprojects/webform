@@ -62,6 +62,13 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   protected $pathMatcher;
 
   /**
+   * The Webform addo-ns manager.
+   *
+   * @var \Drupal\webform\WebformAddonsManagerInterface
+   */
+  protected $addOnsManager;
+
+  /**
    * The Webform libraries manager.
    *
    * @var \Drupal\webform\WebformLibrariesManagerInterface
@@ -79,14 +86,17 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    *   The state service.
    * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
    *   The path matcher.
+   * @param \Drupal\webform\WebformAddOnsManagerInterface $addons_manager
+   *   The Webform add-ons manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The Webform libraries manager.
    */
-  public function __construct(AccountInterface $current_user, ModuleHandlerInterface $module_handler, StateInterface $state, PathMatcherInterface $path_matcher, WebformLibrariesManagerInterface $libraries_manager) {
+  public function __construct(AccountInterface $current_user, ModuleHandlerInterface $module_handler, StateInterface $state, PathMatcherInterface $path_matcher, WebformAddOnsManagerInterface $addons_manager, WebformLibrariesManagerInterface $libraries_manager) {
     $this->currentUser = $current_user;
     $this->moduleHandler = $module_handler;
     $this->state = $state;
     $this->pathMatcher = $path_matcher;
+    $this->addOnsManager = $addons_manager;
     $this->librariesManager = $libraries_manager;
 
     $this->help = $this->initHelp();
@@ -189,6 +199,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       $build['videos'] = $this->buildVideos();
     }
     $build['uses'] = $this->buildUses();
+    $build['addons'] = $this->buildAddOns();
     $build['libraries'] = $this->buildLibraries();
     $build['#attached']['library'][] = 'webform/webform.help';
     return $build;
@@ -308,6 +319,58 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           '#info' => $video,
         ],
       ];
+    }
+    return $build;
+  }
+
+  /**
+   * Build the add-ons section.
+   *
+   * @return array
+   *   An render array containing the add-ons section.
+   */
+  protected function buildAddOns() {
+    // Libraries.
+    $build = [
+      'title' => [
+        '#markup' => $this->t('Add-ons'),
+        '#prefix' => '<h3 id="addons">',
+        '#suffix' => '</h3>',
+      ],
+      'content' => [
+        '#prefix' => '<div>',
+        '#suffix' => '</div>',
+      ],
+    ];
+
+    $categories = $this->addOnsManager->getCategories();
+    foreach ($categories as $category_name => $category) {
+      $build['content'][$category_name]['title'] = [
+        '#markup' => $category['title'],
+        '#prefix' => '<h2>',
+        '#suffix' => '</h2>',
+      ];
+      $build['content'][$category_name]['projects'] = [
+        '#prefix' => '<dl>',
+        '#suffix' => '</dl>',
+      ];
+      $projects = $this->addOnsManager->getProjects($category_name);
+      foreach ($projects as $project_name => $project) {
+        $build['content'][$category_name]['projects'][$project_name] = [
+          'title' => [
+            '#type' => 'link',
+            '#title' => $project['title'],
+            '#url' => $project['url'],
+            '#prefix' => '<dt>',
+            '#suffix' => '</dt>',
+          ],
+          'description' => [
+            '#markup' => $project['description'] . ((isset($project['notes'])) ? '<br/><em>(' . $project['notes'] . ')</em>' : ''),
+            '#prefix' => '<dd>',
+            '#suffix' => '</dd>',
+          ],
+        ];
+      }
     }
     return $build;
   }
