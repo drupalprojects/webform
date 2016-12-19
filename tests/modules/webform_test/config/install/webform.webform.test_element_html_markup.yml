@@ -103,25 +103,6 @@ elements: |
     value:
       '#type': value
       '#title': '<u>Value</u>'
-  composite_elements:
-    '#type': details
-    '#title': '<u>Composite elements</u>'
-    '#open': true
-    webform_address:
-      '#type': address
-      '#title': '<u>Address</u>'
-    webform_contact:
-      '#type': contact
-      '#title': '<u>Contact</u>'
-    webform_creditcard:
-      '#type': creditcard
-      '#title': '<u>Credit card</u>'
-    webform_location:
-      '#type': location
-      '#title': '<u>Location</u>'
-    webform_name:
-      '#type': name
-      '#title': '<u>Name</u>'
   file_upload_elements:
     '#type': details
     '#title': '<u>File upload elements</u>'
@@ -138,7 +119,7 @@ elements: |
     managed_file:
       '#type': managed_file
       '#title': '<u>Managed file</u>'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
     webform_video_file:
       '#type': video_file
       '#title': '<u>Video file</u>'
@@ -163,6 +144,7 @@ elements: |
     checkboxes:
       '#type': checkboxes
       '#title': '<u>Checkboxes</u>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
         One: One
         Two: Two
@@ -190,7 +172,7 @@ elements: |
     radios:
       '#type': radios
       '#title': '<u>Radios</u>'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
         One: One
         Two: Two
@@ -238,6 +220,13 @@ elements: |
         One: One
         Two: Two
         Three: Three
+    webform_toggles:
+      '#type': toggles
+      '#title': '<u>Toggles</u>'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   containers:
     '#type': details
     '#title': '<u>Containers</u>'
@@ -258,11 +247,6 @@ elements: |
       '#title': '<u>Fieldset</u>'
       fieldset_content:
         '#markup': 'This is a Fieldset container.'
-    webform_flexbox:
-      '#type': flexbox
-      '#title': '<u>Flexbox layout</u>'
-      webform_flexbox_content:
-        '#markup': 'This is a Flexbox layout container.'
     item:
       '#type': item
       '#title': '<u>Item</u>'
@@ -341,6 +325,7 @@ elements: |
     webform_message:
       '#type': message
       '#title': '<u>Message</u>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       webform_message_content:
@@ -350,24 +335,6 @@ elements: |
       '#title': '<u>Processed text</u>'
       processed_text_content:
         '#markup': 'This is a Processed text container.'
-  table:
-    '#type': details
-    '#title': '<u>Table</u>'
-    '#open': true
-    table:
-      '#type': table
-      '#title': '<u>Table</u>'
-      table_content:
-        '#markup': 'This is a Table container.'
-  wizard:
-    '#type': details
-    '#title': '<u>Wizard</u>'
-    '#open': true
-    webform_wizard_page:
-      '#type': wizard_page
-      '#title': '<u>Wizard page</u>'
-      webform_wizard_page_content:
-        '#markup': 'This is a Wizard page container.'
   other_elements:
     '#type': details
     '#title': '<u>Other elements</u>'
@@ -382,9 +349,6 @@ elements: |
     machine_name:
       '#type': machine_name
       '#title': '<u>Machine name</u>'
-    webform_test:
-      '#type': test
-      '#title': '<u>Test element</u>'
 css: ''
 javascript: ''
 settings:

@@ -14,6 +14,10 @@ elements: |
     '#type': details
     '#title': 'General options'
     '#open': true
+    creditcard_codes:
+      '#type': select
+      '#title': 'Credit card codes (creditcard_codes)'
+      '#options': creditcard_codes
     size:
       '#type': select
       '#title': 'Size (size)'
@@ -26,10 +30,6 @@ elements: |
       '#type': select
       '#title': 'Yes/No (yes_no)'
       '#options': yes_no
-    creditcard_codes:
-      '#type': select
-      '#title': 'Credit card codes (creditcard_codes)'
-      '#options': creditcard_codes
   bio:
     '#type': details
     '#title': 'Biographical options'
@@ -78,6 +78,10 @@ elements: |
       '#type': select
       '#title': 'Country codes (country_codes)'
       '#options': country_codes
+    country_names:
+      '#type': select
+      '#title': 'Country names (country_names)'
+      '#options': country_names
     state_codes:
       '#type': select
       '#title': 'State codes (state_codes)'
@@ -90,10 +94,6 @@ elements: |
       '#type': select
       '#title': 'State/Province codes (state_province_codes)'
       '#options': state_province_codes
-    country_names:
-      '#type': select
-      '#title': 'Country names (country_names)'
-      '#options': country_names
     state_province_names:
       '#type': select
       '#title': 'State/Province names (state_province_names)'

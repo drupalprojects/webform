@@ -147,22 +147,22 @@ handlers:
       body: |
         default:
         [webform_submission:values:checkboxes]
-
+        
         comma:
         [webform_submission:values:checkboxes:comma]
-
+        
         semicolon:
         [webform_submission:values:checkboxes:semicolon]
-
+        
         and:
         [webform_submission:values:checkboxes:and]
-
+        
         ul:
         [webform_submission:values:checkboxes:ul]
-
+        
         ol:
         [webform_submission:values:checkboxes:ol]
-
+        
         raw:
         [webform_submission:values:checkboxes:raw]
       excluded_elements: {  }

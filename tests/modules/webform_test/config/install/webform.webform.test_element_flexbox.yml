@@ -107,6 +107,7 @@ elements: |
     flex_webform_message_left:
       '#type': message
       '#title': 'Message 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       webform_message_content:
@@ -114,6 +115,7 @@ elements: |
     flex_webform_message_right:
       '#type': message
       '#title': 'Message 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       webform_message_content:
@@ -213,6 +215,7 @@ elements: |
     flex_checkboxes_left:
       '#type': checkboxes
       '#title': 'Checkboxes 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
         One: One
         Two: Two
@@ -220,6 +223,7 @@ elements: |
     flex_checkboxes_right:
       '#type': checkboxes
       '#title': 'Checkboxes 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
         One: One
         Two: Two
@@ -481,11 +485,11 @@ elements: |
     flex_managed_file_left:
       '#type': managed_file
       '#title': 'Managed file 01'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
     flex_managed_file_right:
       '#type': managed_file
       '#title': 'Managed file 02'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
   flexbox_webform_name:
     '#type': webform_flexbox
     flex_webform_name_left:
@@ -531,7 +535,7 @@ elements: |
     flex_radios_left:
       '#type': radios
       '#title': 'Radios 01'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
         One: One
         Two: Two
@@ -539,7 +543,7 @@ elements: |
     flex_radios_right:
       '#type': radios
       '#title': 'Radios 02'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
         One: One
         Two: Two
@@ -738,6 +742,22 @@ elements: |
     flex_webform_toggle_right:
       '#type': toggle
       '#title': 'Toggle 02'
+  flexbox_webform_toggles:
+    '#type': webform_flexbox
+    flex_webform_toggles_left:
+      '#type': toggles
+      '#title': 'Toggles 01'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    flex_webform_toggles_right:
+      '#type': toggles
+      '#title': 'Toggles 02'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   flexbox_url:
     '#type': webform_flexbox
     flex_url_left:
