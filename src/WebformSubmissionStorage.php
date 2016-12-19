@@ -526,19 +526,19 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     ];
     switch ($entity->getState()) {
       case WebformSubmissionInterface::STATE_DRAFT;
-        \Drupal::logger('webform')->notice('@form:Submission #@id draft saved.', $context);
+        \Drupal::logger('webform')->notice('@form: Submission #@id draft saved.', $context);
         break;
 
       case WebformSubmissionInterface::STATE_UPDATED;
-        \Drupal::logger('webform')->notice('@form:Submission #@id updated.', $context);
+        \Drupal::logger('webform')->notice('@form: Submission #@id updated.', $context);
         break;
 
       case WebformSubmissionInterface::STATE_COMPLETED;
         if ($result === SAVED_NEW) {
-          \Drupal::logger('webform')->notice('@form:Submission #@id created.', $context);
+          \Drupal::logger('webform')->notice('@form: Submission #@id created.', $context);
         }
         else {
-          \Drupal::logger('webform')->notice('@form:Submission #@id completed.', $context);
+          \Drupal::logger('webform')->notice('@form: Submission #@id completed.', $context);
         }
         break;
     }
@@ -610,7 +610,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     // Log deleted.
     foreach ($entities as $entity) {
       \Drupal::logger('webform')
-        ->notice('Deleted @form:Submission #@id.', [
+        ->notice('Deleted @form: Submission #@id.', [
           '@id' => $entity->id(),
           '@form' => $entity->getWebform()->label(),
         ]);
