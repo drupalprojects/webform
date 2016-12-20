@@ -91,10 +91,14 @@ abstract class WebformExcludedBase extends FormElement {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $element['#webform'];
 
+    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+
     $options = [];
     $elements = $webform->getElementsInitializedAndFlattened();
     foreach ($elements as $key => $element) {
-      if (empty($element['#type']) || in_array($element['#type'], ['container', 'details', 'fieldset', 'item', 'label'])) {
+      $element_handler = $element_manager->getElementInstance($element);
+      if (!$element_handler->isInput($element)) {
         continue;
       }
 
