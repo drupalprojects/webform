@@ -69,7 +69,7 @@ class WebformElementAttributes extends FormElement {
         '#title' => t('@title CSS classes', $t_args),
         '#description' => t("Apply classes to the @type. Select 'custom...' to enter custom classes.", $t_args),
         '#multiple' => TRUE,
-        '#options' => [ WebformSelectOther::OTHER_OPTION => t('custom...')] + array_combine($classes, $classes),
+        '#options' => [WebformSelectOther::OTHER_OPTION => t('custom...')] + array_combine($classes, $classes),
         '#other__option_delimiter' => ' ',
         '#attributes' => [
           'class' => [

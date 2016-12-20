@@ -36,7 +36,6 @@ class WebformAutocomplete extends TextField {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
     parent::prepare($element, $webform_submission);
 
-
     $has_items = !empty($element['#autocomplete_items']);
     // Query webform submission for existing items.
     if (!$has_items && !empty($element['#autocomplete_existing'])) {

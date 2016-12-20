@@ -58,4 +58,3 @@ function drush_webform_devel_reset() {
   drush_print('Resetting message closed via User Data...');
   \Drupal::service('user.data')->delete('webform', NULL, 'webform.element.message');
 }
-

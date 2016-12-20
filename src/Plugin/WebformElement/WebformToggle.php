@@ -47,5 +47,4 @@ class WebformToggle extends Checkbox {
     }
   }
 
-
 }

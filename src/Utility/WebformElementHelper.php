@@ -6,7 +6,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Template\Attribute;
 
 /**

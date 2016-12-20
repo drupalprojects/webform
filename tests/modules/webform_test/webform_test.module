@@ -134,7 +134,7 @@ function webform_test_webform_load(array $entities) {
 function _webform_test_issues() {
   return [
     'submit' => [
-      '1671190' =>'Use <button /> webform element type instead of <input type="submit" />',
+      '1671190' => 'Use <button /> webform element type instead of <input type="submit" />',
     ],
     'datetime' => [
       '2419131' => '#states attribute does not work on #type datetime',

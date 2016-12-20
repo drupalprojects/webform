@@ -576,13 +576,13 @@ function template_preprocess_webform_progress_bar(array &$variables) {
  *   - element: An associative array containing the properties of the element.
  *     Properties used: #id, #attributes, #children.
  *
- * @see  template_preprocess_container
+ * @see template_preprocess_container()
  */
 function template_preprocess_webform_message(&$variables) {
   $variables['has_parent'] = FALSE;
   $element = $variables['element'];
   // Ensure #attributes is set.
-  $element += array('#attributes' => array());
+  $element += ['#attributes' => []];
 
   // Special handling for webform elements.
   if (isset($element['#array_parents'])) {

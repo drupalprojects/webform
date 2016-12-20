@@ -132,10 +132,10 @@ function webform_token_info() {
     'name' => t('URL'),
     'description' => t('The URL of the webform.'),
   ];
-  $webform['author'] = array(
+  $webform['author'] = [
     'name' => t('Author'),
     'type' => 'user',
-  );
+  ];
 
   return [
     'types' => $types,
@@ -313,16 +313,16 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     /* Chained token relationships. */
 
     if (($user_tokens = $token_service->findWithPrefix($tokens, 'user')) && ($user = $webform_submission->getOwner())) {
-      $replacements += $token_service->generate('user', $user_tokens, array('user' => $user), $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('user', $user_tokens, ['user' => $user], $options, $bubbleable_metadata);
     }
     if (($created_tokens = $token_service->findWithPrefix($tokens, 'created')) && ($created_time = $webform_submission->getCreatedTime())) {
-      $replacements += $token_service->generate('date', $created_tokens, array('date' => $created_time), $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('date', $created_tokens, ['date' => $created_time], $options, $bubbleable_metadata);
     }
     if (($changed_tokens = $token_service->findWithPrefix($tokens, 'changed')) && ($changed_time = $webform_submission->getChangedTime())) {
-      $replacements += $token_service->generate('date', $changed_tokens, array('date' => $changed_time), $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('date', $changed_tokens, ['date' => $changed_time], $options, $bubbleable_metadata);
     }
     if (($completed_tokens = $token_service->findWithPrefix($tokens, 'completed')) && ($completed_time = $webform_submission->getCompletedTime())) {
-      $replacements += $token_service->generate('date', $completed_tokens, array('date' => $completed_time), $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('date', $completed_tokens, ['date' => $completed_time], $options, $bubbleable_metadata);
     }
     if (($webform_tokens = $token_service->findWithPrefix($tokens, 'webform')) && ($webform = $webform_submission->getWebform())) {
       $replacements += $token_service->generate('webform', $webform_tokens, ['webform' => $webform], $options, $bubbleable_metadata);
@@ -379,7 +379,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     /* Chained token relationships. */
 
     if ($author_tokens = $token_service->findWithPrefix($tokens, 'author')) {
-      $replacements += $token_service->generate('user', $author_tokens, array('user' => $webform->getOwner()), $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('user', $author_tokens, ['user' => $webform->getOwner()], $options, $bubbleable_metadata);
     }
 
   }

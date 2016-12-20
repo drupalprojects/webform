@@ -23,4 +23,5 @@ class WebformEntityDeleteForm extends EntityDeleteForm {
     ];
     return $form;
   }
+
 }

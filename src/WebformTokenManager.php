@@ -102,4 +102,5 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $token_data['webform'] = $entity;
     }
   }
+
 }

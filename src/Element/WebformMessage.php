@@ -138,10 +138,10 @@ class WebformMessage extends RenderElement {
       '#theme' => 'status_messages',
       '#message_list' => [$message_type => [$messages]],
       '#status_headings' => $element['#status_headings'] + [
-          'status' => t('Status message'),
-          'error' => t('Error message'),
-          'warning' => t('Warning message'),
-        ],
+        'status' => t('Status message'),
+        'error' => t('Error message'),
+        'warning' => t('Warning message'),
+      ],
     ];
 
     $element['#attached']['library'][] = 'webform/webform.element.message';

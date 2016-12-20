@@ -144,17 +144,17 @@ class WebformArrayHelper {
   }
 
   /**
-   * Get next or prev(ious) page key.
+   * Get next or prev(ious) array key.
    *
-   * @param $key
-   *   A page key.
+   * @param array $array
+   *   An array.
+   * @param string $key
+   *   A array key.
    * @param string $direction
-   *   The direction of the page key to retrieve
-   * @param bool $visible
-   *   If TRUE only visible pages will be returned.  Defaults to FALSE.
+   *   The direction of the  key to retrieve.
    *
    * @return string|null
-   *   The next or prev(ious) page key or NULL if no key is found.
+   *   The next or prev(ious) array key or NULL if no key is found.
    *
    * @see http://stackoverflow.com/questions/6407795/get-the-next-array-item-using-the-key-php
    */

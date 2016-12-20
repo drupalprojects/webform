@@ -8,7 +8,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Utility\Token;
 use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\WebformHandlerBase;

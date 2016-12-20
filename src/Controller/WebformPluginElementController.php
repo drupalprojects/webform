@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Controller for all webform elements.
  */
-class WebformPluginElementController extends ControllerBase implements ContainerInjectionInterface{
+class WebformPluginElementController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * The module handler.

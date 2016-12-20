@@ -59,7 +59,6 @@ function webform_help($route_name, RouteMatchInterface $route_match) {
   }
 }
 
-
 /**
  * Implements hook_modules_installed().
  */
