@@ -146,6 +146,7 @@ class WebformController extends ControllerBase implements ContainerInjectionInte
 
     $query = $webform_storage->getQuery()
       ->condition('title', $q, 'CONTAINS')
+      ->range(0, 10)
       ->sort('title');
 
     // Limit query to templates.

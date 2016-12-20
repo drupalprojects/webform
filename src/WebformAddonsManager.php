@@ -191,6 +191,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'config',
     ];
 
+    // Configuration Split.
+    $projects['config_split'] = [
+      'title' => $this->t('Configuration Split'),
+      'description' => $this->t('Provides configuration filter for importing and exporting split config.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/config_split'),
+      'category' => 'config',
+    ];
+
     return $projects;
   }
 

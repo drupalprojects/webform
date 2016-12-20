@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
@@ -263,5 +264,17 @@ function webform_update_8004() {
       $webform_config->set('elements', $elements);
       $webform_config->save(TRUE);
     }
+  }
+}
+
+/**
+ * Issue #2837090: Undefined function call webform_schema.
+ */
+function webform_update_8005() {
+  // Fix key_value.collection which was no updated during the migration.
+  $module_handler = \Drupal::moduleHandler();
+  $database_type = Database::getConnection('default')->databaseType();
+  if ($module_handler->moduleExists('webform') && !$module_handler->moduleExists('yamlform') && $database_type == 'mysql') {
+    db_query("UPDATE {key_value} SET collection = REPLACE(collection, 'yamlform', 'webform');");
   }
 }
