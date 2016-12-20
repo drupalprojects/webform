@@ -399,6 +399,9 @@ abstract class OptionsBase extends WebformElementBase {
       elseif ($export_options['options_item_format'] == 'label') {
         $record[] = WebformOptionsHelper::getOptionText($value, $element_options);
       }
+      else {
+        $record[] = $value;
+      }
     }
 
     return $record;
