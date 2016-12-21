@@ -120,7 +120,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * {@inheritdoc}
    */
   public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    $query = $this->getQuery()->count();
+    $query = $this->getQuery();
     $query->condition('in_draft', FALSE);
     if ($webform) {
       $query->condition('webform_id', $webform->id());
@@ -132,7 +132,11 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     if ($account) {
       $query->condition('uid', $account->id());
     }
-    return $query->execute();
+
+    // Issue: Query count method is not working for SQL Lite.
+    // return $query->count()->execute();
+    // Work-around: Manually count the number of entity ids.
+    return count($query->execute());
   }
 
   /**
