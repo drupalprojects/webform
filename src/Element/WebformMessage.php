@@ -68,7 +68,7 @@ class WebformMessage extends RenderElement {
    * @return array
    *   The modified element with status message.
    */
-  public static function preRenderMessage(&$element) {
+  public static function preRenderMessage($element) {
     $message_type = $element['#message_type'];
     $message_close = $element['#message_close'];
     $message_close_effect = $element['#message_close_effect'];
