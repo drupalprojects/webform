@@ -143,6 +143,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: Webform Views Integration.
+    $projects['webform_views'] = [
+      'title' => $this->t('Webform Views Integration'),
+      'description' => $this->t('Integrates Forms 8.x-5.x and Views modules.'),
+      'url' => Url::fromUri('https://www.drupal.org/node/2838128'),
+      'category' => 'integration',
+    ];
+
     // Handler: YAML Form Queue.
     $projects['yamlform_queue'] = [
       'title' => $this->t('YAML Form Queue'),
