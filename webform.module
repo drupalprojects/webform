@@ -283,7 +283,7 @@ function webform_page_attachments(&$page) {
  * @see \Drupal\webform\WebformSubmissionForm::form
  */
 function webform_css_alter(&$css, AttachedAssetsInterface $assets) {
-  _webform_asset_alter($css, $assets, 'css');
+  _webform_asset_alter($css, $assets, 'css', 'css');
 }
 
 /**
@@ -292,7 +292,7 @@ function webform_css_alter(&$css, AttachedAssetsInterface $assets) {
  * @see \Drupal\webform\WebformSubmissionForm::form
  */
 function webform_js_alter(&$javascript, AttachedAssetsInterface $assets) {
-  _webform_asset_alter($javascript, $assets, 'javascript');
+  _webform_asset_alter($javascript, $assets, 'javascript', 'js');
 }
 
 /**
@@ -308,19 +308,26 @@ function webform_js_alter(&$javascript, AttachedAssetsInterface $assets) {
  *   The assets attached to the current response.
  * @param string $type
  *   The type of asset being attached.
+ * @param string $extension
+ *   The asset file extension being attached.
  */
-function _webform_asset_alter(array &$items, AttachedAssetsInterface $assets, $type) {
+function _webform_asset_alter(array &$items, AttachedAssetsInterface $assets, $type, $extension) {
   $settings = $assets->getSettings();
-  if (!empty($settings['webform']['assets'][$type])) {
-    foreach ($settings['webform']['assets'][$type] as $id => $hash) {
-      $items["webform/$id/assets/javascript"] = [
+  if (empty($settings['webform']['assets'][$type])) {
+    return;
+  }
+
+  $path = drupal_get_path('module', 'webform');
+  foreach ($settings['webform']['assets'][$type] as $id => $hash) {
+    $key = "$path/$extension/webform.assets.$extension";
+    if (isset($items[$key])) {
+      $items[$key] = [
         'data' => base_path() . "webform/$id/assets/$type?v=$hash",
         'group' => 1000,
         'weight' => 1000,
-      ] + $items["//webform/{webform}/assets/$type"];
+      ] + $items[$key];
     }
   }
-  unset($items["//webform/{webform}/assets/$type"]);
 }
 
 /**

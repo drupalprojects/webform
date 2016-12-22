@@ -91,12 +91,12 @@ webform.assets.css:
   version: 1.x
   css:
     theme:
-      //webform/{webform}/assets/css: { preprocess: false, minified: false }
+      css/webform.assets.css: { preprocess: false, minified: false }
 
 webform.assets.javascript:
   version: 1.x
   js:
-    //webform/{webform}/assets/javascript: { preprocess: false, minified: false }
+    js/webform.assets.js: { preprocess: false, minified: false }
   dependencies:
     - core/drupal
     - core/jquery
