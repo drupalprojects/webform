@@ -37,6 +37,27 @@ abstract class WebformCompositeBase extends FormElement {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
+    $composite_elements = static::getCompositeElements();
+    $default_value = [];
+    foreach ($composite_elements as $composite_key => $composite_element) {
+      if (isset($composite_element['#type']) && $composite_element['#type'] != 'label') {
+        $default_value[$composite_key] = '';
+      }
+    }
+
+    if ($input === FALSE) {
+      if (empty($element['#default_value']) || !is_array($element['#default_value'])) {
+        $element['#default_value'] = [];
+      }
+      return $element['#default_value'] + $default_value;
+    }
+    return (is_array($input)) ? $input + $default_value : $default_value;
+  }
+
+  /**
    * Get a renderable array of webform elements.
    *
    * @return array
@@ -131,27 +152,6 @@ abstract class WebformCompositeBase extends FormElement {
     }
 
     return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
-    $composite_elements = static::getCompositeElements();
-    $default_value = [];
-    foreach ($composite_elements as $composite_key => $composite_element) {
-      if (isset($composite_element['#type']) && $composite_element['#type'] != 'label') {
-        $default_value[$composite_key] = '';
-      }
-    }
-
-    if ($input === FALSE) {
-      if (empty($element['#default_value']) || !is_array($element['#default_value'])) {
-        $element['#default_value'] = [];
-      }
-      return $element['#default_value'] + $default_value;
-    }
-    return $input + $default_value;
   }
 
   /**

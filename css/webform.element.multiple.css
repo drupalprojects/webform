@@ -1,0 +1,61 @@
+/**
+ * @file
+ * Multiple element styles.
+ */
+
+.webform-multiple-table td {
+  white-space: nowrap;
+}
+
+.webform-multiple-table th:first-child,
+.webform-multiple-table td:first-child {
+  padding: 0 0 0 1em;
+  width: 26px !important;
+  vertical-align: middle;
+  text-align: center !important;
+}
+
+.webform-multiple-table th:last-child,
+.webform-multiple-table td:last-child {
+  padding: 0 2px;
+  vertical-align: middle;
+  text-align: center !important;
+  width: 60px !important;
+}
+
+.webform-multiple-table td:last-child input {
+  margin: 0 2px;
+}
+
+.webform-multiple-table td input[type="text"] {
+  width: 95%;
+}
+
+.webform-multiple-table .webform-multiple-sort-weight {
+  width: 4em;
+}
+
+.webform-multiple-table td input[type="image"] {
+  padding: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.webform-multiple-table .container-inline input[type="submit"] {
+  width: inherit !important;
+}
+
+/**
+ * Hide AJAX throbber.
+ */
+.form-type-webform-multiple .ajax-progress-throbber {
+  display: none;
+}
+
+/**
+ * Suppress table drag warnings.
+ */
+.webform-multiple-table .tabledrag-changed-warning,
+.webform-multiple-table .tabledrag-changed {
+  display: none !important;
+}

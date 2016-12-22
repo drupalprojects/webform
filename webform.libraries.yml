@@ -22,8 +22,10 @@ webform.admin.dialog:
       css/webform.admin.css: {}
   js:
     js/webform.admin.js:  {}
+    js/webform.dialog.js:  {}
   dependencies:
     - core/drupal
+    - core/drupal.dialog
     - core/jquery
     - core/jquery.once
     - webform/webform.form
@@ -107,12 +109,6 @@ webform.navigation:
   css:
     theme:
       css/webform.navigation.css: {}
-
-webform.options:
-  version: 1.x
-  css:
-    theme:
-      css/webform.options.css: {}
 
 webform.progress:
   version: 1.x
@@ -296,11 +292,11 @@ webform.element.inputmask:
     - core/jquery.once
     - webform/jquery.inputmask
 
-webform.element.list:
+webform.element.multiple:
   version: 1.x
   css:
     component:
-      css/webform.element.list.css: {}
+      css/webform.element.multiple.css: {}
 
 webform.element.likert:
   version: 1.x

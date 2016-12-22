@@ -27,7 +27,7 @@ class WebformElementStates extends FormElement {
       '#selector_options' => [],
       '#empty_states' => 3,
       '#process' => [
-        [$class, 'processStates'],
+        [$class, 'processWebformStates'],
       ],
       '#theme_wrappers' => ['form_element'],
     ];
@@ -62,7 +62,7 @@ class WebformElementStates extends FormElement {
   /**
    * Expand an email confirm field into two HTML5 email elements.
    */
-  public static function processStates(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformStates(&$element, FormStateInterface $form_state, &$complete_form) {
     // Define default #state_options and #trigger_options.
     // There are also defined by \Drupal\webform\WebformElementBase::form.
     $element += [
@@ -92,7 +92,7 @@ class WebformElementStates extends FormElement {
     $element['#tree'] = TRUE;
 
     // Add validate callback that extracts the associative array of states.
-    $element['#element_validate'] = [[get_called_class(), 'validateStates']];
+    $element['#element_validate'] = [[get_called_class(), 'validateWebformElementStates']];
 
     // For customized #states display a CodeMirror YAML editor.
     if ($warning_message = self::isDefaultValueCustomizedFormApiStates($element)) {
@@ -473,7 +473,7 @@ class WebformElementStates extends FormElement {
   /**
    * Validates webform states element.
    */
-  public static function validateStates(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformElementStates(&$element, FormStateInterface $form_state, &$complete_form) {
     if (isset($element['states']['#value']) && is_string($element['states']['#value'])) {
       $states = Yaml::decode($element['states']['#value']);
     }

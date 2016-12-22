@@ -149,7 +149,7 @@ class WebformLocation extends WebformCompositeBase {
 
     $element['#attached']['library'][] = 'webform/webform.element.location';
 
-    $element['#element_validate'] = [[get_called_class(), 'validateLocation']];
+    $element['#element_validate'] = [[get_called_class(), 'validateWebformLocation']];
 
     return $element;
   }
@@ -157,7 +157,7 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * Validates location.
    */
-  public static function validateLocation(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformLocation(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = $element['#value'];
 
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);

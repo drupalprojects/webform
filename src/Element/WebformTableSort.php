@@ -26,10 +26,10 @@ class WebformTableSort extends Table {
       '#sticky' => FALSE,
       '#pre_render' => [
         [$class, 'preRenderTable'],
-        [$class, 'preRenderTableSort'],
+        [$class, 'preRenderWebformTableSort'],
       ],
       '#process' => [
-        [$class, 'processTableSort'],
+        [$class, 'processWebformTableSort'],
       ],
       '#options' => [],
       '#empty' => '',
@@ -74,7 +74,7 @@ class WebformTableSort extends Table {
    * @return array
    *   The processed element.
    */
-  public static function preRenderTableSort($element) {
+  public static function preRenderWebformTableSort($element) {
     $rows = [];
     $header = $element['#header'];
     if (!empty($element['#options'])) {
@@ -146,15 +146,15 @@ class WebformTableSort extends Table {
    * @return array
    *   The processed element.
    */
-  public static function processTableSort(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformTableSort(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = is_array($element['#value']) ? $element['#value'] : [];
 
     // Add validate callback that extracts the associative array of options.
     if (isset($element['#element_validate'])) {
-      array_unshift($element['#element_validate'], [get_called_class(), 'validateTableSelectOrder']);
+      array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformTableSelectOrder']);
     }
     else {
-      $element['#element_validate'][] = [get_called_class(), 'validateTableSelectOrder'];
+      $element['#element_validate'][] = [get_called_class(), 'validateWebformTableSelectOrder'];
     }
 
     $element['#tree'] = TRUE;
@@ -227,7 +227,7 @@ class WebformTableSort extends Table {
   /**
    * Validates webform_table_other.
    */
-  public static function validateTableSelectOrder(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformTableSelectOrder(&$element, FormStateInterface $form_state, &$complete_form) {
     // Get and sort checked values.
     $checked_values = [];
     foreach (Element::children($element) as $key) {

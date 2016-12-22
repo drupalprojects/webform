@@ -68,7 +68,7 @@ class WebformAutocomplete extends TextField {
     ];
     $form['autocomplete']['autocomplete_items'] = [
       '#type' => 'webform_element_options',
-      '#custom__type' => 'webform_list',
+      '#custom__type' => 'webform_multiple',
       '#title' => $this->t('Autocomplete values'),
     ];
     $form['autocomplete']['autocomplete_existing'] = [

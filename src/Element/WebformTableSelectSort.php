@@ -26,10 +26,10 @@ class WebformTableSelectSort extends Table {
       '#sticky' => FALSE,
       '#pre_render' => [
         [$class, 'preRenderTable'],
-        [$class, 'preRenderTableselectSort'],
+        [$class, 'preRenderWebformTableSelectSort'],
       ],
       '#process' => [
-        [$class, 'processTableselectSort'],
+        [$class, 'processWebformTableSelectSort'],
       ],
       '#options' => [],
       '#empty' => '',
@@ -74,7 +74,7 @@ class WebformTableSelectSort extends Table {
    * @return array
    *   The processed element.
    */
-  public static function preRenderTableselectSort($element) {
+  public static function preRenderWebformTableSelectSort($element) {
     $rows = [];
     $header = $element['#header'];
 
@@ -162,15 +162,15 @@ class WebformTableSelectSort extends Table {
    * @return array
    *   The processed element.
    */
-  public static function processTableselectSort(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformTableSelectSort(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = is_array($element['#value']) ? $element['#value'] : [];
 
     // Add validate callback that extracts the associative array of options.
     if (isset($element['#element_validate'])) {
-      array_unshift($element['#element_validate'], [get_called_class(), 'validateTableSelectOrder']);
+      array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformTableSelectOrder']);
     }
     else {
-      $element['#element_validate'][] = [get_called_class(), 'validateTableSelectOrder'];
+      $element['#element_validate'][] = [get_called_class(), 'validateWebformTableSelectOrder'];
     }
 
     $element['#tree'] = TRUE;
@@ -255,7 +255,7 @@ class WebformTableSelectSort extends Table {
   /**
    * Validates webform_tableselect_other.
    */
-  public static function validateTableSelectOrder(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformTableSelectOrder(&$element, FormStateInterface $form_state, &$complete_form) {
     // Get and sort checked values.
     $checked_values = [];
     foreach (Element::children($element) as $key) {

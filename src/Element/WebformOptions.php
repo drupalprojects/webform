@@ -3,9 +3,7 @@
 namespace Drupal\webform\Element;
 
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -29,10 +27,10 @@ class WebformOptions extends FormElement {
       '#input' => TRUE,
       '#label' => t('option'),
       '#labels' => t('options'),
-      '#empty_options' => 5,
+      '#empty_items' => 5,
       '#add_more' => 1,
       '#process' => [
-        [$class, 'processOptions'],
+        [$class, 'processWebformOptions'],
       ],
       '#theme_wrappers' => ['form_element'],
     ];
@@ -43,15 +41,18 @@ class WebformOptions extends FormElement {
    */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input === FALSE) {
-      if (isset($element['#default_value'])) {
-        return (is_string($element['#default_value'])) ? Yaml::decode($element['#default_value']) : $element['#default_value'];
-      }
-      else {
+      if (!isset($element['#default_value'])) {
         return [];
       }
+
+      $options = (is_string($element['#default_value'])) ? Yaml::decode($element['#default_value']) : $element['#default_value'];
+      if (self::hasOptGroup($options)) {
+        return $options;
+      }
+      return self::convertOptionsToValues($options);
     }
     elseif (is_array($input) && isset($input['options'])) {
-      return (is_string($input['options'])) ? Yaml::decode($input['options']) : self::convertValuesToOptions($input['options']);
+      return (is_string($input['options'])) ? Yaml::decode($input['options']) : $input['options'];
     }
     else {
       return NULL;
@@ -61,11 +62,11 @@ class WebformOptions extends FormElement {
   /**
    * Process options and build options widget.
    */
-  public static function processOptions(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
     // Add validate callback that extracts the associative array of options.
-    $element['#element_validate'] = [[get_called_class(), 'validateOptions']];
+    $element['#element_validate'] = [[get_called_class(), 'validateWebformOptions']];
 
     // Wrap this $element in a <div> that handle #states.
     WebformElementHelper::fixStatesWrapper($element);
@@ -82,314 +83,42 @@ class WebformOptions extends FormElement {
       ];
       return $element;
     }
-
-    // Get unique key used to store the current number of options.
-    $number_of_options_storage_key = self::getStorageKey($element, 'number_of_options');
-
-    // Store the number of options which is the number of
-    // #default_values + number of empty_options.
-    if ($form_state->get($number_of_options_storage_key) === NULL) {
-      if (empty($element['#default_value']) || !is_array($element['#default_value'])) {
-        $number_of_default_values = 0;
-        $number_of_empty_options = (int) $element['#empty_options'];
-      }
-      else {
-        $number_of_default_values = count($element['#default_value']);
-        $number_of_empty_options = 1;
-      }
-
-      $form_state->set($number_of_options_storage_key, $number_of_default_values + $number_of_empty_options);
-    }
-
-    $number_of_options = $form_state->get($number_of_options_storage_key);
-
-    $table_id = implode('_', $element['#parents']) . '_table';
-    // DEBUG: Disable AJAX callback by commenting out the below callback and
-    // wrapper.
-    $ajax_settings = [
-      'callback' => [get_called_class(), 'ajaxCallback'],
-      'wrapper' => $table_id,
-    ];
-
-    // Build header.
-    $t_args = ['@label' => Unicode::ucfirst($element['#label'])];
-    $header = [
-      t('@label value', $t_args),
-      t('@label text', $t_args),
-      t('Weight'),
-      '',
-    ];
-
-    // Build rows.
-    $row_index = 0;
-    $weight = 0;
-    $rows = [];
-    if (!$form_state->isRebuilding() && isset($element['#default_value']) && is_array($element['#default_value'])) {
-      foreach ($element['#default_value'] as $value => $label) {
-        $rows[$row_index] = self::buildOptionRow($table_id, $row_index, $value, $label, $weight++, $ajax_settings);
-        $row_index++;
-      }
-    }
-    while ($row_index < $number_of_options) {
-      $rows[$row_index] = self::buildOptionRow($table_id, $row_index, '', '', $weight++, $ajax_settings);
-      $row_index++;
-    }
-
-    // Build table.
-    $element['options'] = [
-      '#prefix' => '<div id="' . $table_id . '" class="webform-options-table">',
-      '#suffix' => '</div>',
-      '#type' => 'table',
-      '#header' => $header,
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'webform-options-sort-weight',
+    else {
+      $properties = ['#label', '#labels', '#empty_items', '#add_more'];
+      $element['options'] = array_intersect_key($element, array_combine($properties, $properties)) + [
+        '#type' => 'webform_multiple',
+        '#header' => TRUE,
+        '#element' => [
+          'value' => [
+            '#type' => 'textfield',
+            '#title' => t('Option value'),
+            '#title_display' => t('invisible'),
+            '#placeholder' => t('Enter value'),
+          ],
+          'text' => [
+            '#type' => 'textfield',
+            '#title' => t('Option text'),
+            '#title_display' => t('invisible'),
+            '#placeholder' => t('Enter text'),
+          ],
         ],
-      ],
-    ] + $rows;
-
-    // Build add options actions.
-    $element['add'] = [
-      '#prefix' => '<div class="container-inline">',
-      '#suffix' => '</div>',
-    ];
-    $element['add']['submit'] = [
-      '#type' => 'submit',
-      '#value' => t('Add'),
-      '#limit_validation_errors' => [],
-      '#submit' => [[get_called_class(), 'addOptionsSubmit']],
-      '#ajax' => $ajax_settings,
-      '#name' => $table_id . '_add',
-    ];
-    $element['add']['more_options'] = [
-      '#type' => 'number',
-      '#min' => 1,
-      '#max' => 100,
-      '#default_value' => $element['#add_more'],
-      '#field_suffix' => t('more @labels', ['@labels' => $element['#labels']]),
-    ];
-
-    $element['#attached']['library'][] = 'webform/webform.element.options';
-
-    return $element;
-  }
-
-  /**
-   * Build an option's row that contains the options value, text, and weight.
-   *
-   * @param string $table_id
-   *   The option element's table id.
-   * @param int $row_index
-   *   The option's row index.
-   * @param string $value
-   *   The option's value.
-   * @param string $text
-   *   The option's text.
-   * @param int $weight
-   *   The option's weight.
-   * @param array $ajax_settings
-   *   An array containing AJAX callback settings.
-   *
-   * @return array
-   *   A render array containing inputs for an option's value, text, and weight.
-   */
-  public static function buildOptionRow($table_id, $row_index, $value, $text, $weight, array $ajax_settings) {
-    $row = [];
-    $row['value'] = [
-      '#type' => 'textfield',
-      '#title' => t('Option value'),
-      '#title_display' => 'invisible',
-      '#size' => 25,
-      '#placeholder' => t('Enter value'),
-      '#default_value' => $value,
-    ];
-    $row['text'] = [
-      '#type' => 'textfield',
-      '#title' => t('Option text'),
-      '#title_display' => 'invisible',
-      '#size' => 25,
-      '#maxlength' => NULL,
-      '#placeholder' => t('Enter text'),
-      '#default_value' => $text,
-    ];
-    $row['weight'] = [
-      '#type' => 'weight',
-      '#delta' => 1000,
-      '#title' => t('Option weight'),
-      '#title_display' => 'invisible',
-      '#attributes' => [
-        'class' => ['webform-options-sort-weight'],
-      ],
-      '#default_value' => $weight,
-    ];
-
-    $row['operations'] = [];
-    $row['operations']['add'] = [
-      '#type' => 'image_button',
-      '#src' => 'core/misc/icons/787878/plus.svg',
-      '#limit_validation_errors' => [],
-      '#submit' => [[get_called_class(), 'addOptionSubmit']],
-      '#ajax' => $ajax_settings,
-      // Issue #1342066 Document that buttons with the same #value need a unique
-      // #name for the webform API to distinguish them, or change the webform API to
-      // assign unique #names automatically.
-      '#row_index' => $row_index,
-      '#name' => $table_id . '_add_' . $row_index,
-    ];
-
-    $row['operations']['remove'] = [
-      '#type' => 'image_button',
-      '#src' => 'core/misc/icons/787878/ex.svg',
-      '#limit_validation_errors' => [],
-      '#submit' => [[get_called_class(), 'removeOptionSubmit']],
-      '#ajax' => $ajax_settings,
-      // Issue #1342066 Document that buttons with the same #value need a unique
-      // #name for the webform API to distinguish them, or change the webform API to
-      // assign unique #names automatically.
-      '#row_index' => $row_index,
-      '#name' => $table_id . '_remove_' . $row_index,
-    ];
-
-    $row['#weight'] = $weight;
-    $row['#attributes']['class'][] = 'draggable';
-    return $row;
-  }
-
-  /****************************************************************************/
-  // Callbacks.
-  /****************************************************************************/
-
-  /**
-   * Webform submission handler for adding more options.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   */
-  public static function addOptionsSubmit(array &$form, FormStateInterface $form_state) {
-    // Get the webform options element by going up two levels.
-    $button = $form_state->getTriggeringElement();
-    $element =& NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -2));
-
-    // Add more options to the number of options.
-    $number_of_options_storage_key = self::getStorageKey($element, 'number_of_options');
-    $number_of_options = $form_state->get($number_of_options_storage_key);
-    $more_options = (int) $element['add']['more_options']['#value'];
-    $form_state->set($number_of_options_storage_key, $number_of_options + $more_options);
-
-    // Reset values.
-    $element['options']['#value'] = array_values($element['options']['#value']);
-    $form_state->setValueForElement($element['options'], $element['options']['#value']);
-    NestedArray::setValue($form_state->getUserInput(), $element['options']['#parents'], $element['options']['#value']);
-
-    // Rebuild the webform.
-    $form_state->setRebuild();
-  }
-
-  /**
-   * Webform submission handler for adding an option.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   */
-  public static function addOptionSubmit(array &$form, FormStateInterface $form_state) {
-    $button = $form_state->getTriggeringElement();
-    $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -4));
-
-    // Add option.
-    $values = [];
-    foreach ($element['options']['#value'] as $row_index => $value) {
-      $values[] = $value;
-      if ($row_index == $button['#row_index']) {
-        $values[] = ['value' => '', 'text' => ''];
-      }
+        '#default_value' => (isset($element['#default_value'])) ? self::convertOptionsToValues($element['#default_value']) : [],
+      ];
+      return $element;
     }
-
-    // Add one option to the 'number of options'.
-    $number_of_options_storage_key = self::getStorageKey($element, 'number_of_options');
-    $number_of_options = $form_state->get($number_of_options_storage_key);
-    $form_state->set($number_of_options_storage_key, $number_of_options + 1);
-
-    // Reset values.
-    $form_state->setValueForElement($element['options'], $values);
-    NestedArray::setValue($form_state->getUserInput(), $element['options']['#parents'], $values);
-
-    // Rebuild the webform.
-    $form_state->setRebuild();
-  }
-
-  /**
-   * Webform submission handler for removing an option.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   */
-  public static function removeOptionSubmit(array &$form, FormStateInterface $form_state) {
-    $button = $form_state->getTriggeringElement();
-    $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -4));
-    $values = $element['options']['#value'];
-
-    // Remove option.
-    unset($values[$button['#row_index']]);
-    $values = array_values($values);
-
-    // Remove one option from the 'number of options'.
-    $number_of_options_storage_key = self::getStorageKey($element, 'number_of_options');
-    $number_of_options = $form_state->get($number_of_options_storage_key);
-    // Never allow the number of options to be less than 1.
-    if ($number_of_options != 1) {
-      $form_state->set($number_of_options_storage_key, $number_of_options - 1);
-    }
-
-    // Reset values.
-    $form_state->setValueForElement($element['options'], $values);
-    NestedArray::setValue($form_state->getUserInput(), $element['options']['#parents'], $values);
-
-    // Rebuild the webform.
-    $form_state->setRebuild();
-  }
-
-  /**
-   * Webform submission AJAX callback the returns the options table.
-   */
-  public static function ajaxCallback(array &$form, FormStateInterface $form_state) {
-    $button = $form_state->getTriggeringElement();
-    $parent_length = (isset($button['#row_index'])) ? -4 : -2;
-    $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, $parent_length));
-    return $element['options'];
   }
 
   /**
    * Validates webform options element.
    */
-  public static function validateOptions(&$element, FormStateInterface $form_state, &$complete_form) {
-    if (isset($element['options']['#value']) && is_string($element['options']['#value'])) {
-      $options = Yaml::decode($element['options']['#value']);
+  public static function validateWebformOptions(&$element, FormStateInterface $form_state, &$complete_form) {
+    $options_value = NestedArray::getValue($form_state->getValues(), $element['options']['#parents']);
+
+    if (is_string($options_value)) {
+      $options = Yaml::decode($options_value);
     }
     else {
-      // Collect the option values in a sortable array.
-      $values = [];
-      foreach (Element::children($element['options']) as $child_key) {
-        $row = $element['options'][$child_key];
-        $values[] = [
-          'value' => $row['value']['#value'],
-          'text' => $row['text']['#value'],
-          'weight' => $row['weight']['#value'],
-        ];
-      }
-
-      // Sort the option values.
-      uasort($values, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
-
-      // Convert values to options.
-      $options = self::convertValuesToOptions($values);
+      $options = self::convertValuesToOptions($options_value);
     }
 
     // Validate required options.
@@ -406,10 +135,6 @@ class WebformOptions extends FormElement {
       return;
     }
 
-    // Clear the element's value by setting it to NULL.
-    $form_state->setValueForElement($element, NULL);
-
-    // Now, set the sorted options as the element's value.
     $form_state->setValueForElement($element, $options);
   }
 
@@ -418,40 +143,19 @@ class WebformOptions extends FormElement {
   /****************************************************************************/
 
   /**
-   * Get unique key used to store the number of options for an element.
-   *
-   * @param array $element
-   *   An element.
-   *
-   * @return string
-   *   A unique key used to store the number of options for an element.
-   */
-  public static function getStorageKey(array $element, $name) {
-    return 'webform_options__' . $element['#name'] . '__' . $name;
-  }
-
-  /**
-   * Convert an array containing of option value, text, and weight to an associative array of options.
+   * Convert values from yamform_multiple element to options.
    *
    * @param array $values
-   *   An array containing of option value, text, and weight.
+   *   An array of values.
    *
    * @return array
-   *   An associative array of options.
+   *   An array of options.
    */
   public static function convertValuesToOptions(array $values = []) {
-    // Sort the option values.
-    uasort($values, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
-
-    // Now build the associative array of options.
     $options = [];
     foreach ($values as $value) {
       $option_value = $value['value'];
       $option_text = $value['text'];
-      // Skip completely empty options.
-      if ($option_value === '' && $option_text === '') {
-        continue;
-      }
 
       // Populate empty option value or option text.
       if ($option_value === '') {
@@ -463,8 +167,24 @@ class WebformOptions extends FormElement {
 
       $options[$option_value] = $option_text;
     }
-
     return $options;
+  }
+
+  /**
+   * Convert options to values for yamform_multiple element.
+   *
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array
+   *   An array of values.
+   */
+  public static function convertOptionsToValues(array $options = []) {
+    $values = [];
+    foreach ($options as $value => $text) {
+      $values[] = ['value' => $value, 'text' => $text];
+    }
+    return $values;
   }
 
   /**

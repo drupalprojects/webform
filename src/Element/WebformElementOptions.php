@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
@@ -103,9 +104,9 @@ class WebformElementOptions extends FormElement {
     ];
 
     // Custom options.
-    if ($element['#custom__type'] === 'webform_list') {
+    if ($element['#custom__type'] === 'webform_multiple') {
       $element['custom'] = [
-        '#type' => 'webform_list',
+        '#type' => 'webform_multiple',
         '#title' => $element['#title'],
         '#title_display' => 'invisible',
         '#states' => [
@@ -143,8 +144,9 @@ class WebformElementOptions extends FormElement {
    * Validates a webform element options element.
    */
   public static function validateWebformElementOptions(&$element, FormStateInterface $form_state, &$complete_form) {
-    $options_value = $element['options']['#value'];
-    $custom_value = $element['custom']['#value'];
+    $options_value = NestedArray::getValue($form_state->getValues(), $element['options']['#parents']);
+    $custom_value = NestedArray::getValue($form_state->getValues(), $element['custom']['#parents']);
+
     $value = $options_value;
     if ($options_value == self::CUSTOM_OPTION) {
       try {
