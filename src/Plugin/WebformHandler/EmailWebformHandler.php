@@ -517,12 +517,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         if (!isset($element['#type']) || $element['#type'] != 'managed_file') {
           continue;
         }
-        $fid = $webform_submission->getData($key);
-        if (!$fid) {
+
+        $fids = $webform_submission->getData($key);
+        if (empty($fids)) {
           continue;
         }
-        /** @var \Drupal\file\FileInterface $file */
-        if ($file = File::load($fid)) {
+
+        /** @var \Drupal\file\FileInterface[] $files */
+        $files = File::loadMultiple(is_array($fids) ? $fids : [$fids]);
+        foreach ($files as $file) {
           $filepath = \Drupal::service('file_system')->realpath($file->getFileUri());
           $message['attachments'][] = [
             'filecontent' => file_get_contents($filepath),
