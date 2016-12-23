@@ -275,6 +275,34 @@ function webform_update_8005() {
   $module_handler = \Drupal::moduleHandler();
   $database_type = Database::getConnection('default')->databaseType();
   if ($module_handler->moduleExists('webform') && !$module_handler->moduleExists('yamlform') && $database_type == 'mysql') {
-    db_query("UPDATE {key_value} SET collection = REPLACE(collection, 'yamlform', 'webform');");
+    $database = \Drupal::database();
+
+    $select = $database->select('key_value', 'kv');
+    $select->fields('kv', ['collection', 'name', 'value']);
+    $select->condition('collection', '%webform%', 'LIKE');
+    $result = $select->execute();
+    while ($record = $result->fetchAssoc()) {
+      $old_collection = $record['collection'];
+      $new_collection = str_replace('webform', 'webform', $record['collection']);
+
+      $collection_select = $database->select('key_value', 'kv');
+      $collection_select->fields('kv', ['collection', 'name', 'value']);
+      $collection_select->condition('collection', $new_collection);
+      $collection_result = $collection_select->execute();
+
+      // Only insert the new record if there the collection does not exist.
+      if (!$collection_result->fetchAll()) {
+        $record['collection'] = $new_collection;
+        $database->insert('key_value')
+          ->fields(['collection', 'name', 'value'])
+          ->values(array_values($record))
+          ->execute();
+      }
+
+      // Delete the old record.
+      $database->delete('key_value')
+        ->condition('collection', $old_collection)
+        ->execute();
+    }
   }
 }
