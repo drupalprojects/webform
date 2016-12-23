@@ -271,7 +271,13 @@ function webform_update_8004() {
  * Issue #2837090: Undefined function call webform_schema.
  */
 function webform_update_8005() {
-  // Fix key_value.collection which was no updated during the migration.
+  // @see webform_update_8006() which fixes this broken hook.
+}
+
+/**
+ * Issue #2837090: Undefined function call webform_schema. Fix key_value.collection which was not updated during the migration.
+ */
+function webform_update_8006() {
   $module_handler = \Drupal::moduleHandler();
   $database_type = Database::getConnection('default')->databaseType();
   if ($module_handler->moduleExists('webform') && !$module_handler->moduleExists('yamlform') && $database_type == 'mysql') {
@@ -279,11 +285,11 @@ function webform_update_8005() {
 
     $select = $database->select('key_value', 'kv');
     $select->fields('kv', ['collection', 'name', 'value']);
-    $select->condition('collection', '%webform%', 'LIKE');
+    $select->condition('collection', '%yamlform%', 'LIKE');
     $result = $select->execute();
     while ($record = $result->fetchAssoc()) {
       $old_collection = $record['collection'];
-      $new_collection = str_replace('webform', 'webform', $record['collection']);
+      $new_collection = str_replace('yamlform', 'webform', $record['collection']);
 
       $collection_select = $database->select('key_value', 'kv');
       $collection_select->fields('kv', ['collection', 'name', 'value']);
