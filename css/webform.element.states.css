@@ -3,10 +3,6 @@
  * States element styles.
  */
 
-.webform-states-table {
-  max-width: 800px;
-}
-
 .webform-states-table td {
   white-space: nowrap;
 }
@@ -45,6 +41,17 @@
 
 .webform-states-table td:last-child input {
   margin: 0 2px;
+}
+
+.webform-states-table td:last-child input {
+  opacity: 0.4;
+}
+
+.webform-states-table td:last-child input:hover,
+.webform-states-table td:last-child input:focus,
+.webform-states-table td:last-child input:active {
+  opacity: 1;
+  background: none;
 }
 
 /**

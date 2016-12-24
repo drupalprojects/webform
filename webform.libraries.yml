@@ -31,6 +31,7 @@ webform.admin.dialog:
     - webform/webform.form
     - webform/webform.element.codemirror.yaml
     - webform/webform.element.html_editor
+    - webform/webform.element.other
     - webform/webform.element.select2
 
 webform.admin.translation:

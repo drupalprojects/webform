@@ -27,6 +27,17 @@
   margin: 0 2px;
 }
 
+.webform-multiple-table td:last-child input {
+  opacity: 0.4;
+}
+
+.webform-multiple-table td:last-child input:hover,
+.webform-multiple-table td:last-child input:focus,
+.webform-multiple-table td:last-child input:active {
+  opacity: 1;
+  background: none;
+}
+
 .webform-multiple-table td input[type="text"] {
   width: 95%;
 }

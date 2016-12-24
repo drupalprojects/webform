@@ -275,9 +275,10 @@ function webform_update_8005() {
 }
 
 /**
- * Issue #2837090: Undefined function call webform_schema. Fix key_value.collection which was not updated during the migration.
+ * Issue #2837090: Undefined function call webform_schema.
  */
 function webform_update_8006() {
+  // Fix key_value.collection which was no updated during the migration.
   $module_handler = \Drupal::moduleHandler();
   $database_type = Database::getConnection('default')->databaseType();
   if ($module_handler->moduleExists('webform') && !$module_handler->moduleExists('yamlform') && $database_type == 'mysql') {

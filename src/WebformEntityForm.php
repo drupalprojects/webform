@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -104,7 +105,7 @@ class WebformEntityForm extends BundleEntityFormBase {
     }
 
     $form = parent::buildForm($form, $form_state);
-
+    $form = $this->buildDialog($form, $form_state);
     return $form;
   }
 
@@ -218,6 +219,21 @@ class WebformEntityForm extends BundleEntityFormBase {
   /**
    * {@inheritdoc}
    */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($response = $this->validateDialog($form, $form_state)) {
+      return $response;
+    }
+
+    parent::submitForm($form, $form_state);
+
+    if ($this->isModalDialog()) {
+      return $this->redirectForm($form, $form_state, Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function save(array $form, FormStateInterface $form_state) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
@@ -233,8 +249,6 @@ class WebformEntityForm extends BundleEntityFormBase {
       $this->logger('webform')->notice('Webform @label elements saved.', ['@label' => $webform->label()]);
       drupal_set_message($this->t('Webform %label elements saved.', ['%label' => $webform->label()]));
     }
-
-    $form_state->setRedirect('entity.webform.edit_form', ['webform' => $webform->id()]);
   }
 
 }

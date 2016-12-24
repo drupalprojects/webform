@@ -409,7 +409,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['types'] = [
       '#type' => 'details',
       '#title' => $this->t('Element types'),
-      '#description' => $this->t('Select enable element types'),
+      '#description' => $this->t('Select available element types'),
     ];
     $form['types']['excluded_types'] = [
       '#type' => 'tableselect',

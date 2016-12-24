@@ -262,7 +262,7 @@ class WebformMultiple extends FormElement {
       $row['_operations_'] = [];
       $row['_operations_']['add'] = [
         '#type' => 'image_button',
-        '#src' => 'core/misc/icons/787878/plus.svg',
+        '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
         '#limit_validation_errors' => [],
         '#submit' => [[get_called_class(), 'addItemSubmit']],
         '#ajax' => $ajax_settings,
@@ -274,7 +274,7 @@ class WebformMultiple extends FormElement {
       ];
       $row['_operations_']['remove'] = [
         '#type' => 'image_button',
-        '#src' => 'core/misc/icons/787878/ex.svg',
+        '#src' => drupal_get_path('module', 'webform') . '/images/icons/ex.svg',
         '#limit_validation_errors' => [],
         '#submit' => [[get_called_class(), 'removeItemSubmit']],
         '#ajax' => $ajax_settings,

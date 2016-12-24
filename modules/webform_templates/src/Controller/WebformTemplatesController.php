@@ -108,6 +108,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
             'duplicate' => [
               'title' => $this->t('Select'),
               'url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
+              'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
             ],
           ],
         ];
