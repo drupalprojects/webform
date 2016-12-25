@@ -41,7 +41,6 @@
       $input.data('webform-value', $input.val());
       // Empty and un-required the input.
       $input.find('input').val('').prop('required', false);
-
     }
   }
 

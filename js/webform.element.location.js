@@ -14,7 +14,6 @@
    */
   Drupal.behaviors.webformLocation = {
     attach: function (context) {
-
       $(context).find('div.js-webform-location').once('webform-location').each(function () {
         var $element = $(this);
         var $geocomplete = $element.find('.webform-location-geocomplete').geocomplete({
@@ -49,7 +48,6 @@
           });
         }
       })
-
     }
   };
 
