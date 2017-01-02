@@ -289,7 +289,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         }
       }
     }
-    if (($value_tokens = $token_service->findWithPrefix($tokens, 'values')) && $webform_submission->id()) {
+    if ($value_tokens = $token_service->findWithPrefix($tokens, 'values')) {
       foreach ($value_tokens as $value_token => $original) {
         // Parse [values:{name}:{format}] token with optional format.
         $keys = explode(':', $value_token);
