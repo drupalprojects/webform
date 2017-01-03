@@ -8,7 +8,7 @@
   'use strict';
 
   /**
-   * Attach datepicker fallback on time elements.
+   * Attach timepicker fallback on time elements.
    *
    * @type {Drupal~behavior}
    *
@@ -35,8 +35,18 @@
         if ($input.attr('max')) {
           options.maxTime = $input.attr('max');
         }
-        if ($input.attr('step')) {
+
+        // HTML5 time element steps is in seconds but for the timepicker
+        // fallback it needs to be in minutes.
+        // Note: The 'datetime' element uses the #date_increment which defaults
+        // to 1 (second).
+        // @see \Drupal\Core\Datetime\Element\Datetime::processDatetime
+        // Only use step if it is greater than 60 seconds.
+        if ($input.attr('step') && ($input.attr('step') > 60)) {
           options.step = Math.round($input.attr('step') / 60);
+        }
+        else {
+          options.step = 1;
         }
 
         $input.timepicker(options);
