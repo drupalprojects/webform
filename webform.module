@@ -242,7 +242,7 @@ function webform_mail_alter(&$message) {
   // @see \Drupal\Core\Mail\MailManager::mail()
   // @see \Drupal\webform\Plugin\WebformHandler\EmailWebformHandler::getMessage().
   if (strpos($message['id'], 'webform') === 0) {
-    if ($message['params']['html']) {
+    if (isset($message['params']['html']) && $message['params']['html']) {
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
     }
   }
