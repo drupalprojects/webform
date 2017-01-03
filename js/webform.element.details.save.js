@@ -81,7 +81,7 @@
       return '';
     }
 
-    var $form = $details.parents('webform');
+    var $form = $details.parents('form');
     if (!$form.length || !$form.attr('id')) {
       return '';
     }

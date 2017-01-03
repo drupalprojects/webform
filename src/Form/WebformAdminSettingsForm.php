@@ -337,6 +337,27 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('settings.default_limit_user_message'),
     ];
 
+    // Assets.
+    $form['assets'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Global Assets (CSS/JavaScript)'),
+      '#tree' => TRUE,
+    ];
+    $form['assets']['css'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'css',
+      '#title' => $this->t('CSS'),
+      '#description' => $this->t('Enter custom CSS to be attached to all webforms.'),
+      '#default_value' => $config->get('assets.css'),
+    ];
+    $form['assets']['javascript'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'javascript',
+      '#title' => $this->t('JavaScript'),
+      '#description' => $this->t('Enter custom JavaScript to be attached to all webforms.'),
+      '#default_value' => $config->get('assets.javascript'),
+    ];
+
     // Elements.
     $form['elements'] = [
       '#type' => 'details',
@@ -694,6 +715,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     ksort($excluded_types);
 
     $config->set('settings', $settings);
+    $config->set('assets', $form_state->getValue('assets'));
     $config->set('elements', $form_state->getValue('elements') + ['excluded_types' => $excluded_types]);
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', array_filter($form_state->getValue('format')));

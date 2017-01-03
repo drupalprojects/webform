@@ -404,6 +404,22 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function getAssets() {
+    $shared_css = \Drupal::config('webform.settings')->get('assets.css') ?: '';
+    $webform_css = $this->css ?: '';
+
+    $shared_javascript = \Drupal::config('webform.settings')->get('assets.javascript') ?: '';
+    $webform_javascript = $this->javascript ?: '';
+
+    return [
+      'css' => $shared_css . (($shared_css && $webform_css) ? "\n" : '') . $webform_css,
+      'javascript' => $shared_javascript . (($shared_javascript && $webform_javascript) ? "\n" : '') . $webform_javascript,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCss() {
     return $this->css;
   }

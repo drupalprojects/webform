@@ -315,3 +315,10 @@ function webform_update_8006() {
     }
   }
 }
+
+/**
+ * Issue #2840521: Add support for global CSS and JS.
+ */
+function webform_update_8007() {
+  _webform_update_admin_settings();
+}

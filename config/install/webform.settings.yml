@@ -35,6 +35,9 @@ settings:
     button
   default_limit_total_message: 'No more submissions are permitted.'
   default_limit_user_message: 'No more submissions are permitted.'
+assets:
+  css: ''
+  javascript: ''
 export:
   exporter: delimited
   delimiter: ','

@@ -89,6 +89,16 @@ webform.settings:
         confirmation_back_classes:
           type: string
           label: 'Confirmation back link CSS classes'
+    assets:
+      type: mapping
+      label: 'Global Assets (CSS/JavaScript)'
+      mapping:
+        css:
+          type: string
+          label: 'CSS (Cascading Style Sheets)'
+        javascript:
+          type: string
+          label: 'JavaScript'
     elements:
       type: mapping
       label: 'Elements default settings'
