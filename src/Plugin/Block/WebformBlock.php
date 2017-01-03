@@ -109,8 +109,11 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function build() {
-    $values = ['data' => $this->configuration['default_data']];
-    return $this->getWebform()->getSubmissionForm($values);
+    return [
+      '#type' => 'webform',
+      '#webform' => $this->getWebform(),
+      '#default_data' => $this->configuration['default_data'],
+    ];
   }
 
   /**
