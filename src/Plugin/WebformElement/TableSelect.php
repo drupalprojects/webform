@@ -9,6 +9,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   id = "tableselect",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Tableselect.php/class/Tableselect",
  *   label = @Translation("Table select"),
+ *   description = @Translation("Provides a form element for a table with radios or checkboxes in left column."),
  *   category = @Translation("Options elements"),
  *   multiple = TRUE,
  *   states_wrapper = TRUE,

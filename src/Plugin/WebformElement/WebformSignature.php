@@ -13,6 +13,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "webform_signature",
  *   label = @Translation("Signature"),
+ *   description = @Translation("Provides a form element to collect electronic signatures from users."),
  *   category = @Translation("Advanced elements"),
  * )
  */

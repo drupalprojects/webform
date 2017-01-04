@@ -8,6 +8,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  * @WebformElement(
  *   id = "webform_audio_file",
  *   label = @Translation("Audio file"),
+ *   description = @Translation("Provides a form element for uploading and saving an audio file."),
  *   category = @Translation("File upload elements"),
  *   states_wrapper = TRUE,
  * )

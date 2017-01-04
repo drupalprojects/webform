@@ -10,6 +10,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "webform_checkboxes_other",
  *   label = @Translation("Checkboxes other"),
+ *   description = @Translation("Provides a form element for a set of checkboxes."),
  *   category = @Translation("Options elements"),
  *   multiple = TRUE,
  * )

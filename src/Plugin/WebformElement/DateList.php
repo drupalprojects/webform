@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "datelist",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Datetime!Element!Datelist.php/class/Datelist",
  *   label = @Translation("Date list"),
+ *   description = @Translation("Provides a form element for date & time selection using select menus and text fields."),
  *   category = @Translation("Date/time elements"),
  * )
  */

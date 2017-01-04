@@ -10,6 +10,7 @@ use Drupal\webform\WebformElementBase;
  * @WebformElement(
  *   id = "webform_creditcard_number",
  *   label = @Translation("Credit card number"),
+ *   description = @Translation("Provides a form element for entering a credit card number."),
  *   category = @Translation("Advanced elements"),
  *   hidden = TRUE,
  * )

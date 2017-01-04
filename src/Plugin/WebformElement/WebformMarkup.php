@@ -11,6 +11,7 @@ use Drupal\Core\Mail\MailFormatHelper;
  * @WebformElement(
  *   id = "webform_markup",
  *   label = @Translation("HTML markup"),
+ *   description = @Translation("Provides an element to render HTML markup."),
  *   category = @Translation("Markup elements"),
  *   states_wrapper = TRUE,
  * )

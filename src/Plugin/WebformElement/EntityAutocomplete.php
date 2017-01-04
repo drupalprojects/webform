@@ -13,6 +13,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "entity_autocomplete",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Entity!Element!EntityAutocomplete.php/class/EntityAutocomplete",
  *   label = @Translation("Entity autocomplete"),
+ *   description = @Translation("Provides a form element to select an entity reference using an autocompletion."),
  *   category = @Translation("Entity reference elements"),
  * )
  */

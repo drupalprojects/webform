@@ -160,6 +160,33 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
   /**
    * {@inheritdoc}
    */
+  public function getGroupedDefinitions(array $definitions = NULL, $label_key = 'label') {
+    /** @var \Drupal\Core\Plugin\CategorizingPluginManagerTrait|\Drupal\Component\Plugin\PluginManagerInterface $this */
+    $definitions = $this->getSortedDefinitions(isset($definitions) ? $definitions : $this->getDefinitions(), $label_key);
+
+    // Organize grouped definition with basic and advanced first and other last.
+    $basic_category = (string) $this->t('Basic elements');
+    $advanced_category = (string) $this->t('Advanced elements');
+    $other_category = (string) $this->t('Other elements');
+
+    $grouped_definitions = [
+      $basic_category => [],
+      $advanced_category => [],
+    ];
+    foreach ($definitions as $id => $definition) {
+      $grouped_definitions[(string) $definition['category']][$id] = $definition;
+    }
+    if (isset($grouped_definitions[''])) {
+      $no_category = $grouped_definitions[''];
+      unset($grouped_definitions['']);
+      $grouped_definitions += [$other_category => $no_category];
+    }
+    return $grouped_definitions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getTranslatableProperties() {
     $properties = [];
     $webform_elements = $this->getInstances();

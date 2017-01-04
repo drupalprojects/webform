@@ -8,6 +8,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  * @WebformElement(
  *   id = "webform_table_sort",
  *   label = @Translation("Table sort"),
+ *   description = @Translation("Provides a form element for a table of values that can be sorted."),
  *   category = @Translation("Options elements"),
  *   multiple = TRUE,
  *   states_wrapper = TRUE,

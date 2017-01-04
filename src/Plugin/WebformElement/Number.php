@@ -9,6 +9,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   id = "number",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Number.php/class/Number",
  *   label = @Translation("Number"),
+ *   description = @Translation("Provides a form element for numeric input, with special numeric validation."),
  *   category = @Translation("Advanced elements"),
  * )
  */

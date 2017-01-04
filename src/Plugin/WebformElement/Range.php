@@ -12,6 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "range",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Range.php/class/Range",
  *   label = @Translation("Range"),
+ *   description = @Translation("Provides a form element for input of a number within a specific range using a slider."),
  *   category = @Translation("Advanced elements"),
  * )
  */

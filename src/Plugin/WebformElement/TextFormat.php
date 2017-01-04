@@ -15,6 +15,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "text_format",
  *   api = "https://api.drupal.org/api/drupal/core!modules!filter!src!Element!TextFormat.php/class/TextFormat",
  *   label = @Translation("Text format"),
+ *   description = @Translation("Provides a text format form element."),
  *   category = @Translation("Advanced elements"),
  *   composite = TRUE,
  *   multiline = TRUE,

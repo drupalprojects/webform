@@ -12,7 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "webform_test",
  *   label = @Translation("Test element"),
- *   description = @Translation("Test element.")
+ *   description = @Translation("Provides a form element for testing.")
  * )
  */
 class WebformTest extends WebformElementBase {

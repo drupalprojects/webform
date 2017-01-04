@@ -9,6 +9,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   id = "value",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Value.php/class/Value",
  *   label = @Translation("Value"),
+ *   description = @Translation("Provides a form element for storage of internal information."),
  *   category = @Translation("Advanced elements"),
  * )
  */

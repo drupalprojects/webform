@@ -11,6 +11,7 @@ use Drupal\webform\WebformElementBase;
  * @WebformElement(
  *   id = "webform_time",
  *   label = @Translation("Time"),
+ *   description = @Translation("Provides a form element for time selection."),
  *   category = @Translation("Date/time elements"),
  * )
  */

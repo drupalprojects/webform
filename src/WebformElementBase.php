@@ -242,6 +242,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
+  public function getPluginDescription() {
+    return $this->pluginDefinition['description'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getTypeName() {
     return str_replace('webform_', '', $this->pluginDefinition['id']);
   }
@@ -431,9 +438,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Add tooltip description display support.
     if (isset($element['#description_display']) && $element['#description_display'] === 'tooltip') {
       $element['#description_display'] = 'invisible';
-      $element[$attributes_property]['class'][] = 'js-webform-element-tooltip';
-      $element[$attributes_property]['class'][] = 'webform-element-tooltip';
-      $element['#attached']['library'][] = 'webform/webform.element.tooltip';
+      $element[$attributes_property]['class'][] = 'js-webform-tooltip-element';
+      $element[$attributes_property]['class'][] = 'webform-tooltip-element';
+      $element['#attached']['library'][] = 'webform/webform.tooltip';
     }
 
     // Add .webform-has-field-prefix and .webform-has-field-suffix class.

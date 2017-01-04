@@ -12,6 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "item",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Item.php/class/Item",
  *   label = @Translation("Item"),
+ *   description = @Translation("Provides a display-only form element with an optional title and description."),
  *   category = @Translation("Containers"),
  * )
  */

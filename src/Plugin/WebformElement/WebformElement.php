@@ -12,6 +12,7 @@ use Drupal\Core\Url as UrlGenerator;
  * @WebformElement(
  *   id = "webform_element",
  *   label = @Translation("Generic element"),
+ *   description = @Translation("Provides a generic form element."),
  * )
  */
 class WebformElement extends WebformElementBase {

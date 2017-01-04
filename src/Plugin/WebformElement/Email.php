@@ -11,6 +11,7 @@ use Drupal\webform\WebformElementBase;
  *   id = "email",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Email.php/class/Email",
  *   label = @Translation("Email"),
+ *   description = @Translation("Provides a form element for entering an email address."),
  *   category = @Translation("Advanced elements"),
  * )
  */

@@ -58,7 +58,7 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
 
     // Check managed_file element is enabled.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file/element/add');
-    $this->assertRaw('<td><div class="webform-form-filter-text-source">Managed file</div></td>');
+    $this->assertRaw('>Managed file<');
 
     // Disable managed file element.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -67,7 +67,7 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
 
     // Check disabled managed_file element remove from add element dialog.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file/element/add');
-    $this->assertNoRaw('<td><div class="webform-form-filter-text-source">Managed file</div></td>');
+    $this->assertNoRaw('>Managed file<');
 
     // Check disabled managed_file element warning.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file');

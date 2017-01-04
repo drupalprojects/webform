@@ -35,7 +35,7 @@ services:
 
   webform.help_manager:
     class: Drupal\webform\WebformHelpManager
-    arguments: ['@current_user', '@module_handler', '@state', '@path.matcher', '@webform.addons_manager', '@webform.libraries_manager']
+    arguments: ['@current_user', '@module_handler', '@state', '@path.matcher', '@webform.addons_manager', '@webform.libraries_manager', '@plugin.manager.webform.element']
 
   webform.libraries_manager:
     class: Drupal\webform\WebformLibrariesManager

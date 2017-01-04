@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "textarea",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Textarea.php/class/Textarea",
  *   label = @Translation("Textarea"),
+ *   description = @Translation("Provides a form element for input of multiple-line text."),
  *   category = @Translation("Basic elements"),
  *   multiline = TRUE,
  * )

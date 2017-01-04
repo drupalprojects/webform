@@ -56,6 +56,17 @@ class WebformElement extends Plugin {
   public $category = '';
 
   /**
+   * A brief description of the webform element.
+   *
+   * This will be shown when adding or configuring this webform element.
+   *
+   * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
+   */
+  public $description = '';
+
+  /**
    * Flag that defines hidden element.
    *
    * @var bool

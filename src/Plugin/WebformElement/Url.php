@@ -9,6 +9,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   id = "url",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Url.php/class/Url",
  *   label = @Translation("URL"),
+ *   description = @Translation("Provides a form element for input of a URL."),
  *   category = @Translation("Advanced elements"),
  * )
  */

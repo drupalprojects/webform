@@ -127,6 +127,15 @@ webform.states:
   js:
     js/webform.states.js:  {}
 
+webform.tooltip:
+  version: 1.x
+  js:
+    js/webform.tooltip.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+    - core/jquery.ui.tooltip
+
 webform.form.disable_back:
   version: 1.x
   header: true
@@ -438,15 +447,6 @@ webform.element.toggle:
   dependencies:
     - core/drupal
     - webform/jquery.toggles
-
-webform.element.tooltip:
-  version: 1.x
-  js:
-    js/webform.element.tooltip.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery.once
-    - core/jquery.ui.tooltip
 
 webform.element.video_file:
   version: 1.x

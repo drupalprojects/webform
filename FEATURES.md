@@ -319,7 +319,7 @@ easily be altered using custom hooks and/or plugins.
 </div>
 
 Includes a list of modules and projects that extend and/or provide additional 
-functionality to the Webform module and Drupal's Webform API.
+functionality to the Webform module and Drupal's Form API.
 
 
 ## Extendable Plugins

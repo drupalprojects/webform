@@ -11,6 +11,7 @@ use Drupal\webform\WebformInterface;
  * @WebformElement(
  *   id = "webform_wizard_page",
  *   label = @Translation("Wizard page"),
+ *   description = @Translation("Provides an element to display multiple form elements as a page in a multistep form wizard."),
  *   category = @Translation("Wizard"),
  * )
  */

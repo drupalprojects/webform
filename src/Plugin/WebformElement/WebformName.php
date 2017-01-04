@@ -13,6 +13,7 @@ use Drupal\webform\Element\WebformName as WebformNameElement;
  *   id = "webform_name",
  *   label = @Translation("Name"),
  *   category = @Translation("Composite elements"),
+ *   description = @Translation("Provides a form element to collect a person's full name."),
  *   multiline = TRUE,
  *   composite = TRUE,
  * )

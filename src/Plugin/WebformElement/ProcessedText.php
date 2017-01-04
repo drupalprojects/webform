@@ -12,6 +12,7 @@ use Drupal\Core\Mail\MailFormatHelper;
  *   id = "processed_text",
  *   label = @Translation("Processed text"),
  *   category = @Translation("Markup elements"),
+ *   description = @Translation("Provides an element to render processed text."),
  *   states_wrapper = TRUE,
  * )
  */

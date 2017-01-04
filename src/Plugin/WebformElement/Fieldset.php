@@ -9,6 +9,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   id = "fieldset",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Fieldset.php/class/Fieldset",
  *   label = @Translation("Fieldset"),
+ *   description = @Translation("Provides an element for a group of form elements."),
  *   category = @Translation("Containers"),
  * )
  */

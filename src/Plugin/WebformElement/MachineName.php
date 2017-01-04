@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "machine_name",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!MachineName.php/class/MachineName",
+ *   description = @Translation("Provides a form element to enter a machine name, which is validated to ensure that the name is unique and does not contain disallowed characters."),
  *   label = @Translation("Machine name"),
  *   hidden = TRUE,
  * )

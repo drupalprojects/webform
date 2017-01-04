@@ -8,6 +8,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  * @WebformElement(
  *   id = "webform_email_multiple",
  *   label = @Translation("Email multiple"),
+ *   description = @Translation("Provides a form element for multiple email addresses."),
  *   category = @Translation("Advanced elements"),
  * )
  */

@@ -12,6 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "webform_rating",
  *   label = @Translation("Rating"),
+ *   description = @Translation("Provides a form element to rate something using an attractive voting widget."),
  *   category = @Translation("Advanced elements"),
  * )
  */

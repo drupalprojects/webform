@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "textfield",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Textfield.php/class/Textfield",
  *   label = @Translation("Text field"),
+ *   description = @Translation("Provides a form element for input of a single-line text."),
  *   category = @Translation("Basic elements"),
  * )
  */

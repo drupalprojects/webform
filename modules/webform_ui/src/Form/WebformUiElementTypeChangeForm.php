@@ -46,7 +46,12 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
       $plugin_definition = $definitions[$related_type_name];
 
       $row = [];
-      $row['title']['data'] = $plugin_definition['label'];
+      $row['title']['data'] = [
+        '#type' => 'link',
+        '#title' => $plugin_definition['label'],
+        '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['webform-tooltip-link', 'js-webform-tooltip-link']) + ['title' => $plugin_definition['description']],
+      ];
       $row['category']['data'] = (isset($plugin_definition['category'])) ? $plugin_definition['category'] : $this->t('Other');
       $row['operations']['data'] = [
         '#type' => 'operations',
@@ -86,7 +91,7 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
       '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button']),
       '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key]),
     ];
-
+    $form['#attached']['library'][] = 'webform/webform.tooltip';
     return $form;
   }
 

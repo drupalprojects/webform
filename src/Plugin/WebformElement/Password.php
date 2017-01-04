@@ -11,6 +11,7 @@ use Drupal\webform\WebformElementBase;
  *   id = "password",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Password.php/class/Password",
  *   label = @Translation("Password"),
+ *   description = @Translation("Provides a form element for entering a password, with hidden text."),
  *   category = @Translation("Basic elements"),
  * )
  */

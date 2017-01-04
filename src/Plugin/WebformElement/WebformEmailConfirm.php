@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
  * @WebformElement(
  *   id = "webform_email_confirm",
  *   label = @Translation("Email confirm"),
+ *   description = @Translation("Provides a form element for double-input of email addresses."),
  *   category = @Translation("Advanced elements"),
  *   states_wrapper = TRUE,
  * )

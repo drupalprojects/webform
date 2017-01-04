@@ -56,28 +56,15 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     $definitions = $this->elementManager->getSortedDefinitions($definitions, 'category');
     $grouped_definitions = $this->elementManager->getGroupedDefinitions($definitions);
 
-    // Get definitions with basic and advanced first and uncategorized elements
-    // last.
-    $no_category = '';
-    $basic_category = (string) $this->t('Basic elements');
-    $advanced_category = (string) $this->t('Advanced elements');
-    $uncategorized = $grouped_definitions[$no_category];
-
     $sorted_definitions = [];
-    $sorted_definitions += $grouped_definitions[$basic_category];
-    $sorted_definitions += $grouped_definitions[$advanced_category];
-    unset($grouped_definitions[$basic_category], $grouped_definitions[$advanced_category], $grouped_definitions[$no_category]);
     foreach ($grouped_definitions as $grouped_definition) {
       $sorted_definitions += $grouped_definition;
     }
-    $sorted_definitions += $uncategorized;
-
     foreach ($sorted_definitions as &$plugin_definition) {
-      if (!isset($plugin_definition['category'])) {
+      if (empty($plugin_definition['category'])) {
         $plugin_definition['category'] = $this->t('Other elements');
       }
     }
-
     return $sorted_definitions;
   }
 

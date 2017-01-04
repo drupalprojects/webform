@@ -11,6 +11,7 @@ use Drupal\webform\Element\WebformContact as WebformContactElement;
  * @WebformElement(
  *   id = "webform_contact",
  *   label = @Translation("Contact"),
+ *   description = @Translation("Provides a form element to collect contact information (name, address, phone, email)."),
  *   category = @Translation("Composite elements"),
  *   multiline = TRUE,
  *   composite = TRUE,

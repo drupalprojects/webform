@@ -8,6 +8,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  * @WebformElement(
  *   id = "webform_toggle",
  *   label = @Translation("Toggle"),
+ *   description = @Translation("Provides a form element for toggling a single on/off state."),
  *   category = @Translation("Advanced elements"),
  * )
  */

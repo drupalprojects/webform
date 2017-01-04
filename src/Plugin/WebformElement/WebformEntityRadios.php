@@ -8,6 +8,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  * @WebformElement(
  *   id = "webform_entity_radios",
  *   label = @Translation("Entity radios"),
+ *   description = @Translation("Provides a form element to select a single entity reference using radio buttons."),
  *   category = @Translation("Entity reference elements"),
  * )
  */

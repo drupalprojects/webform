@@ -13,6 +13,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "date",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Date.php/class/Date",
  *   label = @Translation("Date"),
+ *   description = @Translation("Provides a form element for date selection."),
  *   category = @Translation("Date/time elements"),
  * )
  */

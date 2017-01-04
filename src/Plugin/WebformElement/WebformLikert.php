@@ -16,6 +16,7 @@ use Drupal\webform\WebformInterface;
  * @WebformElement(
  *   id = "webform_likert",
  *   label = @Translation("Likert"),
+ *   description = @Translation("Provides a form element where users can respond to multiple questions using the same scale."),
  *   category = @Translation("Options elements"),
  *   multiline = TRUE,
  *   composite = TRUE,

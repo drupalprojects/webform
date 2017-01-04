@@ -19,6 +19,10 @@ details details details {
   background-color: #f5f5f2;
 }
 
+.ui-tooltip.ui-widget {
+  background: #fff;
+}
+
 @media print {
   .shortcut-action,
   .dropbutton-wrapper,

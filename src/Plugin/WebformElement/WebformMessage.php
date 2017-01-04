@@ -12,6 +12,7 @@ use \Drupal\webform\Element\WebformMessage as WebformMessageElement;
  * @WebformElement(
  *   id = "webform_message",
  *   label = @Translation("Message"),
+ *   description = @Translation("Provides an element to render custom, dismissible, inline status messages."),
  *   category = @Translation("Markup elements"),
  * )
  */

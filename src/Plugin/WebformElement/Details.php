@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "details",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Details.php/class/Details",
  *   label = @Translation("Details"),
+ *   description = @Translation("Provides an interactive element that a user can open and close."),
  *   category = @Translation("Containers"),
  * )
  */

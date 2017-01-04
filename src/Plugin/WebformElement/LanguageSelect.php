@@ -11,6 +11,7 @@ use Drupal\webform\WebformElementBase;
  *   id = "language_select",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!LanguageSelect.php/class/LanguageSelect",
  *   label = @Translation("Language select"),
+ *   description = @Translation("Provides a form element for selecting a language."),
  *   hidden = TRUE,
  * )
  */

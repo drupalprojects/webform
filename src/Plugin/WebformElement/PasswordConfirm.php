@@ -12,6 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "password_confirm",
  *   label = @Translation("Password confirm"),
  *   category = @Translation("Advanced elements"),
+ *   description = @Translation("Provides a form element for double-input of passwords."),
  *   states_wrapper = TRUE,
  * )
  */

@@ -8,6 +8,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  * @WebformElement(
  *   id = "webform_video_file",
  *   label = @Translation("Video file"),
+ *   description = @Translation("Provides a form element for uploading and saving a video file."),
  *   category = @Translation("File upload elements"),
  *   states_wrapper = TRUE,
  * )

@@ -14,6 +14,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "datetime",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Datetime!Element!Datetime.php/class/Datetime",
  *   label = @Translation("Date/time"),
+ *   description = @Translation("Provides a form element for date & time selection."),
  *   category = @Translation("Date/time elements"),
  * )
  */

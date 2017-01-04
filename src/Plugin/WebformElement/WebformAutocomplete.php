@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * @WebformElement(
  *   id = "webform_autocomplete",
  *   label = @Translation("Autocomplete"),
+ *   description = @Translation("Provides a text field element with auto completion."),
  *   category = @Translation("Advanced elements"),
  * )
  */

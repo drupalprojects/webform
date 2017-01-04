@@ -12,6 +12,7 @@ use Drupal\webform\WebformInterface;
  * @WebformElement(
  *   id = "webform_codemirror",
  *   label = @Translation("CodeMirror"),
+ *   description = @Translation("Provides a form element for editing code in a number of programming languages and markup."),
  *   category = @Translation("Advanced elements"),
  *   multiline = TRUE,
  * )
