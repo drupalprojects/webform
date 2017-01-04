@@ -279,7 +279,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           continue;
         }
 
-        $build['content'][$category_name]['projects'][$element_name] = [
+        $build['content'][$category_name]['elements'][$element_name] = [
           'title' => [
             '#markup' => $element['label'],
             '#prefix' => '<dt>',
