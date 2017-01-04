@@ -275,21 +275,35 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#suffix' => '</dl>',
       ];
       foreach ($elements as $element_name => $element) {
-        if (!empty($element['hidden'])) {
+        /** @var \Drupal\webform\WebformElementInterface $webform_element */
+        $webform_element = $this->elementManager->createInstance($element_name);
+
+        if ($webform_element->isHidden()) {
           continue;
         }
 
-        $build['content'][$category_name]['elements'][$element_name] = [
-          'title' => [
+
+        if ($api_url = $webform_element->getPluginApiUrl()) {
+          $build['content'][$category_name]['elements'][$element_name]['title'] = [
+            '#type' => 'link',
+            '#title' => $element['label'],
+            '#url' => $api_url,
+          ];
+        }
+        else {
+          $build['content'][$category_name]['elements'][$element_name]['title'] = [
             '#markup' => $element['label'],
-            '#prefix' => '<dt>',
-            '#suffix' => '</dt>',
-          ],
-          'description' => [
-            '#markup' => $element['description'],
-            '#prefix' => '<dd>',
-            '#suffix' => '</dd>',
-          ],
+          ];
+        }
+        $build['content'][$category_name]['elements'][$element_name]['title'] += [
+          '#prefix' => '<dt>',
+          '#suffix' => '</dt>',
+        ];
+
+        $build['content'][$category_name]['elements'][$element_name]['description'] = [
+          '#markup' => $element['description'],
+          '#prefix' => '<dd>',
+          '#suffix' => '</dd>',
         ];
       }
     }

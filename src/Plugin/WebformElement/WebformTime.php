@@ -10,6 +10,7 @@ use Drupal\webform\WebformElementBase;
  *
  * @WebformElement(
  *   id = "webform_time",
+ *   api = "http://www.w3schools.com/tags/tag_time.asp",
  *   label = @Translation("Time"),
  *   description = @Translation("Provides a form element for time selection."),
  *   category = @Translation("Date/time elements"),
