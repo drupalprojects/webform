@@ -118,7 +118,7 @@ elements: |
       '#title': 'Image file'
     managed_file:
       '#type': managed_file
-      '#title': 'Managed file'
+      '#title': 'File'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
     webform_video_file:
       '#type': video_file

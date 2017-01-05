@@ -463,7 +463,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('file.default_max_filesize'),
     ];
     $file_types = [
-      'managed_file' => 'managed file',
+      'managed_file' => 'file',
       'audio_file' => 'audio file',
       'document_file' => 'document file',
       'image_file' => 'image file',

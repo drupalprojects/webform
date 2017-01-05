@@ -65,7 +65,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       return FALSE;
     }
 
-    // Disable managed file element is there are no visible stream wrappers.
+    // Disable File element is there are no visible stream wrappers.
     $scheme_options = self::getVisibleStreamWrappers();
     return (empty($scheme_options)) ? FALSE : TRUE;
   }
@@ -83,11 +83,11 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $scheme_options = self::getVisibleStreamWrappers();
       $uri_scheme = $this->getUriScheme($element);
       if (!isset($scheme_options[$uri_scheme]) && $this->currentUser->hasPermission('administer webform')) {
-        drupal_set_message($this->t('The \'Managed file\' element is unavailable because a <a href="https://www.drupal.org/documentation/modules/file">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
+        drupal_set_message($this->t('The \'File\' element is unavailable because a <a href="https://www.drupal.org/documentation/modules/file">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
         $context = [
           'link' => Link::fromTextAndUrl($this->t('Edit'), \Drupal\Core\Url::fromRoute('<current>'))->toString(),
         ];
-        $this->logger->notice("The 'Managed file' element is unavailable because no stream wrappers are available", $context);
+        $this->logger->notice("The 'File' element is unavailable because no stream wrappers are available", $context);
       }
     }
   }
@@ -133,7 +133,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   protected function prepareWrapper(array &$element) {
     parent::prepareWrapper($element);
 
-    // Issue #2705471: Webform states managed file fields.
+    // Issue #2705471: Webform states File fields.
     // Workaround: Wrap the 'managed_file' element in a basic container.
     if (!empty($element['#fixed_wrapper']) || empty($element['#prefix'])) {
       return;
@@ -209,7 +209,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   }
 
   /**
-   * Format a managed files as array of strings.
+   * Format a Files as array of strings.
    *
    * @param array $element
    *   An element.
@@ -219,7 +219,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   An array of options.
    *
    * @return array
-   *   Managed files as array of strings.
+   *   Files as array of strings.
    */
   protected function formatItems(array &$element, $value, array $options) {
     $fids = (is_array($value)) ? $value : [$value];
@@ -356,7 +356,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $value = isset($data[$key]) ? $data[$key] : [];
     $fids = (is_array($value)) ? $value : [$value];
 
-    // Delete managed file record.
+    // Delete File record.
     foreach ($fids as $fid) {
       file_delete($fid);
     }

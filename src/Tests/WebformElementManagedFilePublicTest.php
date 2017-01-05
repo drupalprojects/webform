@@ -58,7 +58,7 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
 
     // Check managed_file element is enabled.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file/element/add');
-    $this->assertRaw('>Managed file<');
+    $this->assertRaw('>File<');
 
     // Disable managed file element.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -67,12 +67,12 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
 
     // Check disabled managed_file element remove from add element dialog.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file/element/add');
-    $this->assertNoRaw('>Managed file<');
+    $this->assertNoRaw('>File<');
 
     // Check disabled managed_file element warning.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file');
-    $this->assertRaw('<em class="placeholder">managed_file (single)</em> is a <em class="placeholder">Managed file</em> element, which has been disabled and will not be rendered.');
-    $this->assertRaw('<em class="placeholder">managed_file (multiple)</em> is a <em class="placeholder">Managed file</em> element, which has been disabled and will not be rendered.');
+    $this->assertRaw('<em class="placeholder">managed_file (single)</em> is a <em class="placeholder">File</em> element, which has been disabled and will not be rendered.');
+    $this->assertRaw('<em class="placeholder">managed_file (multiple)</em> is a <em class="placeholder">File</em> element, which has been disabled and will not be rendered.');
   }
 
 }
