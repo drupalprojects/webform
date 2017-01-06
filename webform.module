@@ -531,7 +531,7 @@ function webform_preprocess_checkboxes(&$variables) {
   $element = $variables['element'];
   $options_display = (!empty($element['#options_display'])) ? $element['#options_display'] : 'one_column';
   $variables['attributes']['class'][] = 'webform-options-display-' . str_replace('_', '-', $options_display);
-  $variables['#attached']['library'][] = 'webform/webform.options';
+  $variables['#attached']['library'][] = 'webform/webform.element.options';
 }
 
 /**
