@@ -6,6 +6,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\WebformMessageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -89,7 +90,11 @@ class WebformEntityReferenceEntityFormatter extends EntityReferenceFormatterBase
       }
 
       if ($entity->id() && $items[$delta]->status) {
-        $elements[$delta] = $entity->getSubmissionForm();
+        $values = [];
+        if (!empty($items[$delta]->default_data)) {
+          $values['data'] = Yaml::decode($items[$delta]->default_data);
+        }
+        $elements[$delta] = $entity->getSubmissionForm($values);
       }
       else {
         $this->messageManager->setWebform($entity);

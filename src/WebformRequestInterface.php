@@ -105,4 +105,15 @@ interface WebformRequestInterface {
    */
   public function isValidSourceEntity(EntityInterface $webform_entity, EntityInterface $source_entity = NULL);
 
+  /**
+   * Get the source entity's webform field name.
+   *
+   * @param EntityInterface $source_entity
+   *   A webform submission's source entity.
+   *
+   * @return string
+   *   The name of the webform field, or an empty string.
+   */
+  public function getSourceEntityWebformFieldName(EntityInterface $source_entity);
+
 }

@@ -587,11 +587,9 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       $source_entity = \Drupal::entityTypeManager()
         ->getStorage($values['entity_type'])
         ->load($values['entity_id']);
-      if ($source_entity && method_exists($source_entity, 'hasField') && $source_entity->hasField('webform')) {
-        foreach ($source_entity->webform as $item) {
-          if ($item->target_id == $webform->id() && $item->default_data) {
-            $values['data'] += Yaml::decode($item->default_data);
-          }
+      if ($webform_field_name = $request_handler->getSourceEntityWebformFieldName($source_entity)) {
+        if ($source_entity->$webform_field_name->target_id == $webform->id() && $source_entity->$webform_field_name->default_data) {
+          $values['data'] += Yaml::decode($source_entity->$webform_field_name->default_data);
         }
       }
     }
