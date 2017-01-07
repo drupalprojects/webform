@@ -98,6 +98,15 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $this->assertEqual($sent_mail['params']['attachments'][0]['filecontent'], "this is a sample txt file\nit has two lines\n");
     $this->assertEqual($sent_mail['params']['attachments'][0]['filename'], 'file.txt');
     $this->assertEqual($sent_mail['params']['attachments'][0]['filemime'], 'text/plain');
+
+    // Check excluding files.
+    $handler = $webform_email_advanced->getHandler('email');
+    $handler->setConfiguration(['excluded_elements' => ['file' => 'file']]);
+    $webform_email_advanced->save();
+
+    $this->drupalPostForm('webform/' . $webform_email_advanced->id() . '/test', [], t('Submit'));
+    $sent_mail = $this->getLastEmail();
+    $this->assertFalse(isset($sent_mail['params']['attachments'][0]['filecontent']));
   }
 
 }

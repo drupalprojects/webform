@@ -10,6 +10,8 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformSelectOther;
+use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
+use Drupal\webform\WebformElementManagerInterface;
 use Drupal\webform\WebformHandlerBase;
 use Drupal\webform\WebformHandlerMessageInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -53,6 +55,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected $tokenManager;
 
   /**
+   * A webform element plugin manager.
+   *
+   * @var \Drupal\webform\WebformElementManagerInterface
+   */
+  protected $elementManager;
+
+  /**
    * Cache of default configuration values.
    *
    * @var array
@@ -62,11 +71,12 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, MailManagerInterface $mail_manager, ConfigFactoryInterface $config_factory, WebformTokenManagerInterface $token_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, MailManagerInterface $mail_manager, ConfigFactoryInterface $config_factory, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
     $this->mailManager = $mail_manager;
     $this->configFactory = $config_factory;
     $this->tokenManager = $token_manager;
+    $this->elementManager = $element_manager;
   }
 
   /**
@@ -80,7 +90,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $container->get('logger.factory')->get('webform.email'),
       $container->get('plugin.manager.mail'),
       $container->get('config.factory'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('plugin.manager.webform.element')
     );
   }
 
@@ -514,10 +525,19 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if ($this->configuration['attachments'] && $this->supportsAttachments()) {
       $elements = $this->webform->getElementsInitializedAndFlattened();
       foreach ($elements as $key => $element) {
-        if (!isset($element['#type']) || $element['#type'] != 'managed_file') {
+        $element_handler = $this->elementManager->getElementInstance($element);
+        // Only elements that extend the 'Managed file' element can add
+        // file attachments.
+        if (!($element_handler instanceof WebformManagedFileBase)) {
           continue;
         }
 
+        // Check if the element is excluded and should not attach any files.
+        if (isset($this->configuration['excluded_elements'][$key])) {
+          continue;
+        }
+
+        // Get file ids.
         $fids = $webform_submission->getData($key);
         if (empty($fids)) {
           continue;
@@ -691,7 +711,6 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if (\Drupal::configFactory()->get('system.mail')->get('interface.default') == 'test_mail_collector') {
       return TRUE;
     }
-
     return \Drupal::moduleHandler()->moduleExists('mailsystem');
   }
 
