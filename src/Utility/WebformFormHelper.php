@@ -5,7 +5,7 @@ namespace Drupal\webform\Utility;
 /**
  * Helper class webform based methods.
  */
-class WebformHelper {
+class WebformFormHelper {
 
   /**
    * Cleanup webform state values.

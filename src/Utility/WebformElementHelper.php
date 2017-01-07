@@ -55,7 +55,7 @@ class WebformElementHelper {
    *   TRUE if a webform element's title is displayed.
    */
   public static function isTitleDisplayed(array $element) {
-    return (!empty($element['#title']) && (empty($element['#title_display']) || !in_array($element['#title_display'], ['invisible', ['attribute']]))) ? TRUE : FALSE;
+    return (!empty($element['#title']) && (empty($element['#title_display']) || !in_array($element['#title_display'], ['invisible', 'attribute']))) ? TRUE : FALSE;
   }
 
   /**

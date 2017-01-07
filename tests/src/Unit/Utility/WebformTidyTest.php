@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\webform\Unit;
+namespace Drupal\Tests\webform\Unit\Utility;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Utility\WebformTidy;
@@ -9,7 +9,7 @@ use Drupal\Tests\UnitTestCase;
 /**
  * Tests webform tidy utility.
  *
- * @group WebformUnit
+ * @group webform
  *
  * @coversDefaultClass \Drupal\webform\Utility\WebformTidy
  */

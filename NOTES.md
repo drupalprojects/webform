@@ -89,19 +89,26 @@ Tidy YAML files
 
 [PHPUnit](https://www.drupal.org/node/2116263)
 
+- [Commerce 2.x: Unit, Kernel, and Functional Tests Oh My!](https://drupalcommerce.org/blog/45322/commerce-2x-unit-kernel-and-functional-tests-oh-my)
+
+
     # Execute all PHPUnit tests.
     cd core
-    php ../vendor/phpunit/phpunit/phpunit --group WebformUnit
+    php ../vendor/phpunit/phpunit/phpunit --group webform
+
+    cd core
 
     # Execute individual PHPUnit tests.
-    cd core
     export SIMPLETEST_DB=mysql://drupal_d8_dev:drupal.@dm1n@localhost/drupal_d8_dev;
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/WebformTidyTest.php
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/WebformHelperTest.php
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/WebformElementHelperTest.php
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/WebformOptionsHelperTest.php
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/WebformArrayHelperTest.php     
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/src/Tests/WebformEntityElementsValidationUnitTest.php    
+
+    # Functional test.    
+    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Functional/WebformExampleFunctionalTest.php
+
+    # Kernal test.    
+    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Kernal/Utility/WebformDialogHelperTest.php
+
+    # Unit test.
+    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/Utility/WebformTidyTest.php
 
 
 5. Generate release notes

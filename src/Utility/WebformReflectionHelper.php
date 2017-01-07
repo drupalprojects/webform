@@ -8,22 +8,27 @@ namespace Drupal\webform\Utility;
 class WebformReflectionHelper {
 
   /**
-   * Get this element's class hierarchy.
+   * Get an object's class hierarchy.
+   *
+   * @param object $object
+   *   An object.
+   * @param string $base_class_name
+   *   (optional) Base class name to use as the root of object's class
+   *   hierarchy.
    *
    * @return array
    *   An array containing this elements class hierarchy.
    */
   public static function getParentClasses($object, $base_class_name = '') {
     $class = get_class($object);
-    $parent_classes = [
-      self::getClassName($class),
-    ];
-    do {
-      $parent_class = get_parent_class($class);
-      $parent_class_name = self::getClassName($parent_class);
-      $parent_classes[] = $parent_class_name;
-      $class = $parent_class;
-    } while ($parent_class_name != $base_class_name && $class);
+    $parent_classes = [];
+    while ($class_name = self::getClassName($class)) {
+      $parent_classes[] = $class_name;
+      $class = get_parent_class($class);
+      if ($class_name == $base_class_name || !$class) {
+        break;
+      }
+    }
     return array_reverse($parent_classes);
   }
 

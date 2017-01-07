@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\webform\Unit;
+namespace Drupal\Tests\webform\Unit\Utility;
 
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\Tests\UnitTestCase;
@@ -8,11 +8,44 @@ use Drupal\Tests\UnitTestCase;
 /**
  * Tests webform element utility.
  *
- * @group WebformUnit
+ * @group webform
  *
  * @coversDefaultClass \Drupal\webform\Utility\WebformElementHelper
  */
 class WebformElementHelperTest extends UnitTestCase {
+
+  /**
+   * Tests WebformElementHelper::isTitleDisplayed().
+   *
+   * @param array $element
+   *   The element to run through WebformElementHelper::IsTitleDisplayed().
+   * @param string $expected
+   *   The expected result from calling the function.
+   *
+   * @see WebformElementHelper::isTitleDisplayed()
+   *
+   * @dataProvider providerIsTitleDisplayed
+   */
+  public function testIsTitleDisplayed(array $element, $expected) {
+    $result = WebformElementHelper::IsTitleDisplayed($element);
+    $this->assertEquals($expected, $result, serialize($element));
+  }
+
+  /**
+   * Data provider for testIsTitleDisplayed().
+   *
+   * @see testIsTitleDisplayed()
+   */
+  public function providerIsTitleDisplayed() {
+    $tests[] = [['#title' => 'Test'], TRUE];
+    $tests[] = [['#title' => 'Test', '#title_display' => 'above'], TRUE];
+    $tests[] = [[], FALSE];
+    $tests[] = [['#title' => ''], FALSE];
+    $tests[] = [['#title' => NULL], FALSE];
+    $tests[] = [['#title' => 'Test', '#title_display' => 'invisible'], FALSE];
+    $tests[] = [['#title' => 'Test', '#title_display' => 'attribute'], FALSE];
+    return $tests;
+  }
 
   /**
    * Tests WebformElementHelper::GetIgnoredProperties().
@@ -22,7 +55,7 @@ class WebformElementHelperTest extends UnitTestCase {
    * @param string $expected
    *   The expected result from calling the function.
    *
-   * @see WebformElementHelperl::GetIgnoredProperties()
+   * @see WebformElementHelper::GetIgnoredProperties()
    *
    * @dataProvider providerGetIgnoredProperties
    */
@@ -68,7 +101,7 @@ class WebformElementHelperTest extends UnitTestCase {
    * @param string $expected
    *   The expected result from calling the function.
    *
-   * @see WebformElementHelperl::RemoveIgnoredProperties()
+   * @see WebformElementHelper::RemoveIgnoredProperties()
    *
    * @dataProvider providerRemoveIgnoredProperties
    */
