@@ -30,11 +30,6 @@
     align-items: center;
   }
 
-  .webform-flexbox input[type="checkbox"],
-  .webform-flexbox input[type="radio"] /* Never allow checkboxes and radio buttons to have a width */{
-    width: inherit !important;
-  }
-
   .webform-flex {
     min-width: 0;
   }
