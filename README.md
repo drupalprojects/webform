@@ -1,9 +1,9 @@
-Webform
----------
+Webform 8.x-5.x
+---------------
 
 ### About this Module
 
-The Webform module is a webform builder and submission manager for Drupal 8.
+The Webform module is a form builder and submission manager for Drupal 8.
 
 The primary use case for this module is to:
 
@@ -17,9 +17,9 @@ The primary use case for this module is to:
 
 ### Goals
 
-- A comprehensive webform and survey building solution for Drupal 8. 
-- A stable, maintainable, and tested API for building webforms and handling submission.
-- A pluggable/extensible API for custom webform elements and submission handling. 
+- A comprehensive form and survey building solution for Drupal 8. 
+- A stable, maintainable, and tested API for building forms and handling submission.
+- A pluggable/extensible API for custom form elements and submission handling. 
 
 
 ### Demo

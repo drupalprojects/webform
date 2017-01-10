@@ -89,10 +89,7 @@ Tidy YAML files
 
 [PHPUnit](https://www.drupal.org/node/2116263)
 
-- [Commerce 2.x: Unit, Kernel, and Functional Tests Oh My!](https://drupalcommerce.org/blog/45322/commerce-2x-unit-kernel-and-functional-tests-oh-my)
-
-
-    # Execute all PHPUnit tests.
+    # Execute all Webform PHPUnit tests.
     cd core
     php ../vendor/phpunit/phpunit/phpunit --group webform
 
