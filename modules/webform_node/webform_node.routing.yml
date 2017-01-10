@@ -164,6 +164,7 @@ entity.node.webform_submission.canonical:
     operation: webform_submission_view
     entity_access: 'webform_submission.view'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -179,6 +180,7 @@ entity.node.webform_submission.table:
     operation: webform_submission_view
     entity_access: 'webform_submission.view_any'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -194,6 +196,7 @@ entity.node.webform_submission.text:
     operation: webform_submission_view
     entity_access: 'webform_submission.view_any'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -209,6 +212,7 @@ entity.node.webform_submission.yaml:
     operation: webform_submission_view
     entity_access: 'webform_submission.view_any'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -223,6 +227,7 @@ entity.node.webform_submission.edit_form:
     operation: webform_submission_edit
     entity_access: 'webform_submission.update'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -237,6 +242,7 @@ entity.node.webform_submission.notes_form:
     operation: webform_submission_notes
     entity_access: 'webform_submission.update_any'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -251,6 +257,7 @@ entity.node.webform_submission.resend_form:
     operation: webform_submission_resend
     entity_access: 'webform_submission.update_any'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
@@ -266,6 +273,7 @@ entity.node.webform_submission.delete_form:
     operation: webform_submission_delete
     entity_access: 'webform_submission.delete'
   options:
+    _admin_route: TRUE
     parameters:
       node:
         type: 'entity:node'
