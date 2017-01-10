@@ -20,7 +20,7 @@ class WebformAddonsController extends ControllerBase implements ContainerInjecti
   protected $addons;
 
   /**
-   * Constructs a new WebformSubmissionController object.
+   * Constructs a WebformAddonsController object.
    *
    * @param \Drupal\webform\WebformAddonsManagerInterface $addons
    *   The add-ons manager.

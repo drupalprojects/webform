@@ -20,7 +20,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
   protected $elementManager;
 
   /**
-   * Constructs a WebformUiElementSelectTypeForm object.
+   * Constructs a WebformUiElementTypeFormBase object.
    *
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.

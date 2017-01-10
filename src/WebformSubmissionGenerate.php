@@ -50,7 +50,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
   protected $names;
 
   /**
-   * Constructs a WebformEmailBuilder object.
+   * Constructs a WebformSubmissionGenerate object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.

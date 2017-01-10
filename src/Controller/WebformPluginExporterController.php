@@ -20,7 +20,7 @@ class WebformPluginExporterController extends ControllerBase implements Containe
   protected $pluginManager;
 
   /**
-   * Constructs a WebformPluginBaseController object.
+   * Constructs a WebformPluginExporterController object.
    *
    * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
    *   A results exporter plugin manager.

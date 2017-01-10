@@ -39,7 +39,7 @@ class WebformPluginElementController extends ControllerBase implements Container
   protected $elementManager;
 
   /**
-   * Constructs a WebformPluginBaseController object.
+   * Constructs a WebformPluginElementController object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.

@@ -19,7 +19,7 @@ class WebformEntityThirdPartySettingsForm extends EntityForm {
   protected $settingsManager;
 
   /**
-   * Constructs a new WebformEntityThirdPartySettingsForm.
+   * Constructs a WebformEntityThirdPartySettingsForm.
    *
    * @param \Drupal\webform\WebformThirdPartySettingsManagerInterface $settings_manager
    *   The third party settings manager.

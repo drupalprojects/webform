@@ -90,7 +90,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   }
 
   /**
-   * Constructs a new WebformUiElementFormBase.
+   * Constructs a WebformUiElementFormBase.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.

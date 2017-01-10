@@ -22,7 +22,7 @@ class WebformHelpController extends ControllerBase implements ContainerInjection
   protected $helpManager;
 
   /**
-   * Constructs a WebformPluginBaseController object.
+   * Constructs a WebformHelpController object.
    *
    * @param \Drupal\webform\WebformHelpManagerInterface $help_manager
    *   The help manager.

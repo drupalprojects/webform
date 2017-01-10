@@ -53,7 +53,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
   protected $elementManager;
 
   /**
-   * Constructs a new WebformSubmissionViewBuilder.
+   * Constructs a WebformSubmissionViewBuilder.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
    *   The entity type definition.

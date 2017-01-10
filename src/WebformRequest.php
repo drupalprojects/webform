@@ -43,20 +43,22 @@ class WebformRequest implements WebformRequestInterface {
   protected $request;
 
   /**
-   * Constructs a WebformSubmissionExporter object.
+   * Constructs a WebformRequest object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeRepositoryInterface $entity_type_repository
-   *   The entity type repository.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type repository.
+   * @param \Drupal\Core\Entity\EntityTypeRepositoryInterface $entity_type_repository
+   *   The entity type repository.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, RequestStack $request_stack, RouteMatchInterface $route_match) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->entityTypeRepository = $entity_type_repository;
+  public function __construct(RequestStack $request_stack, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository) {
     $this->request = $request_stack->getCurrentRequest();
     $this->routeMatch = $route_match;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->entityTypeRepository = $entity_type_repository;
   }
 
   /**

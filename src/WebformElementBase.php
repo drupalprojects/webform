@@ -84,7 +84,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   protected $tokenManager;
 
   /**
-   * Constructs a Drupal\Component\Plugin\PluginBase object.
+   * Constructs a WebformElementBast object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

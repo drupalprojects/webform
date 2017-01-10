@@ -44,7 +44,7 @@ class WebformResultsExportController extends ControllerBase implements Container
   protected $requestHandler;
 
   /**
-   * Constructs a new WebformResultsExportController object.
+   * Constructs a WebformResultsExportController object.
    *
    * @param \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface $mime_type_guesser
    *   The MIME type guesser instance to use.

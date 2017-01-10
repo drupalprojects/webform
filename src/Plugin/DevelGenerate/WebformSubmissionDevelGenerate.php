@@ -66,7 +66,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
   protected $webformSubmissionGenerate;
 
   /**
-   * Constructs a new WebformSubmissionDevelGenerate object.
+   * Constructs a WebformSubmissionDevelGenerate object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

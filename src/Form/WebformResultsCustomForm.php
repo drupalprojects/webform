@@ -49,7 +49,7 @@ class WebformResultsCustomForm extends FormBase {
   protected $requestHandler;
 
   /**
-   * Constructs a new WebformResultsDeleteBaseForm object.
+   * Constructs a WebformResultsCustomForm object.
    *
    * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage
    *   The webform submission storage.

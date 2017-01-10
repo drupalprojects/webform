@@ -29,7 +29,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
   protected $instances = [];
 
   /**
-   * Constructs a new WebformElementManager.
+   * Constructs a WebformElementManager.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths

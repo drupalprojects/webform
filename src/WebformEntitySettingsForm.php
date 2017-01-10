@@ -39,7 +39,7 @@ class WebformEntitySettingsForm extends EntityForm {
   protected $tokenManager;
 
   /**
-   * Constructs a new WebformUiElementFormBase.
+   * Constructs a WebformEntitySettingsForm.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.

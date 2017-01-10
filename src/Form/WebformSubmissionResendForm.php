@@ -43,7 +43,7 @@ class WebformSubmissionResendForm extends FormBase {
   protected $requestHandler;
 
   /**
-   * Constructs a new WebformResultsDeleteBaseForm object.
+   * Constructs a WebformResultsResendForm object.
    *
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.

@@ -24,7 +24,7 @@ class WebformSubmissionController extends ControllerBase implements ContainerInj
   protected $requestHandler;
 
   /**
-   * Constructs a new WebformSubmissionController object.
+   * Constructs a WebformSubmissionController object.
    *
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.

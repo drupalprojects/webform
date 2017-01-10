@@ -50,7 +50,7 @@ services:
 
   webform.request:
     class: Drupal\webform\WebformRequest
-    arguments: ['@entity_type.manager', '@entity_type.repository', '@request_stack', '@current_route_match']
+    arguments: ['@request_stack', '@current_route_match', '@entity_type.manager', '@entity_type.repository']
 
   webform_submission.generate:
     class: Drupal\webform\WebformSubmissionGenerate
@@ -77,6 +77,7 @@ services:
 
   webform.breadcrumb:
     class: Drupal\webform\BreadCrumb\WebformBreadcrumbBuilder
+    arguments: ['@module_handler', '@webform.request', '@string_translation']
     tags:
       - { name: breadcrumb_builder, priority: 1002 }
 

@@ -25,7 +25,7 @@ class WebformController extends ControllerBase implements ContainerInjectionInte
   protected $requestHandler;
 
   /**
-   * Constructs a new WebformSubmissionController object.
+   * Constructs a WebformController object.
    *
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.

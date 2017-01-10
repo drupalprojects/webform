@@ -59,7 +59,7 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
   protected $element;
 
   /**
-   * Constructs a new WebformUiElementDeleteForm.
+   * Constructs a WebformUiElementDeleteForm.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.

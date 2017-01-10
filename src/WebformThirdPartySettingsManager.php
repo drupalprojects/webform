@@ -24,7 +24,7 @@ class WebformThirdPartySettingsManager implements WebformThirdPartySettingsManag
   protected $configFactory;
 
   /**
-   * The module handler to load includes.
+   * The module handler service.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
@@ -52,7 +52,7 @@ class WebformThirdPartySettingsManager implements WebformThirdPartySettingsManag
   protected $config;
 
   /**
-   * Constructs a new WebformThirdPartySettingsManager.
+   * Constructs a WebformThirdPartySettingsManager.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.

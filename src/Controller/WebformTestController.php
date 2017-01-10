@@ -30,7 +30,7 @@ class WebformTestController extends ControllerBase implements ContainerInjection
   protected $generate;
 
   /**
-   * Constructs a new WebformTestController object.
+   * Constructs a WebformTestController object.
    *
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.

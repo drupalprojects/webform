@@ -24,7 +24,7 @@ class WebformHandlerManager extends DefaultPluginManager implements WebformHandl
   }
 
   /**
-   * Constructs a new WebformHandlerManager.
+   * Constructs a WebformHandlerManager.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths

@@ -25,7 +25,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
   protected $pluginManager;
 
   /**
-   * Constructs a WebformPluginBaseController object.
+   * Constructs a WebformPluginHanderController object.
    *
    * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
    *   A webform handler plugin manager.

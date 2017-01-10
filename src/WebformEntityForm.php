@@ -44,7 +44,7 @@ class WebformEntityForm extends BundleEntityFormBase {
   protected $tokenManager;
 
   /**
-   * Constructs a new WebformUiElementFormBase.
+   * Constructs a WebformEntityForm.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.

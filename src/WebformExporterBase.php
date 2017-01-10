@@ -47,7 +47,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
   protected $elementManager;
 
   /**
-   * Constructs a Drupal\Component\Plugin\PluginBase object.
+   * Constructs a WebformExporterBase object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

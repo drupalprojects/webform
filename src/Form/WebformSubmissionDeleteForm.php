@@ -44,7 +44,7 @@ class WebformSubmissionDeleteForm extends ContentEntityDeleteForm {
   protected $requestHandler;
 
   /**
-   * Constructs a new WebformSubmissionDeleteForm object.
+   * Constructs a WebformSubmissionDeleteForm object.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.

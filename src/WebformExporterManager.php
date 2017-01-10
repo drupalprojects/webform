@@ -23,7 +23,7 @@ class WebformExporterManager extends DefaultPluginManager implements WebformExpo
   }
 
   /**
-   * Constructs a new WebformExporterManager.
+   * Constructs a WebformExporterManager.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths

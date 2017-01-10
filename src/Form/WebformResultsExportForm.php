@@ -28,7 +28,7 @@ class WebformResultsExportForm extends FormBase {
   protected $submissionExporter;
 
   /**
-   * Constructs a new WebformResultsExportForm object.
+   * Constructs a WebformResultsExportForm object.
    *
    * @param \Drupal\webform\WebformSubmissionExporterInterface $webform_submission_exporter
    *   The webform submission exported.

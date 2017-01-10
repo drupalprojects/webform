@@ -20,7 +20,7 @@ class WebformHandlerAddForm extends WebformHandlerFormBase {
   protected $webformHandlerManager;
 
   /**
-   * Constructs a new WebformHandlerAddForm.
+   * Constructs a WebformHandlerAddForm.
    *
    * @param \Drupal\webform\WebformHandlerManagerInterface $webform_handler
    *   The webform handler manager.
