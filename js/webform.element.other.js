@@ -143,6 +143,13 @@
         $container.buttonset().change(function () {
           toggleOther(($(this).find(':radio:checked').val() === '_other_'), $input);
         });
+        // Disable buttonset.
+        $container.buttonset('option', 'disabled', $container.find('input[type="radio"]:disabled').length);
+        // Turn buttonset off/on when the input is disabled/enabled.
+        // @see webform.states.js
+        $container.on('webform:disabled', function () {
+          $container.buttonset('option', 'disabled', $container.find('input[type="radio"]:disabled').length);
+        });
       });
     }
   };

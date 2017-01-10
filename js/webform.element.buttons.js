@@ -15,11 +15,21 @@
   Drupal.behaviors.webformButtons = {
     attach: function (context) {
       $(context).find('fieldset.js-webform-buttons div.fieldset-wrapper').once('webform-buttons').each(function() {
+        var $input = $(this);
         // Remove all div and classes around radios and labels.
-        $(this).html($(this).find('input[type="radio"], label').removeClass());
+        $input.html($input.find('input[type="radio"], label').removeClass());
         // Create buttonset.
-        $(this).buttonset();
+        $input.buttonset();
+        // Disable buttonset.
+        $input.buttonset('option', 'disabled', $input.find('input[type="radio"]:disabled').length);
+
+        // Turn buttonset off/on when the input is disabled/enabled.
+        // @see webform.states.js
+        $input.on('webform:disabled', function () {
+          $input.buttonset('option', 'disabled', $input.find('input[type="radio"]:disabled').length);
+        });
       });
+
     }
   };
 
