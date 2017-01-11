@@ -65,7 +65,7 @@ class WebformAccess {
    */
   public static function checkEmailAccess(WebformSubmissionInterface $webform_submission, AccountInterface $account) {
     $webform = $webform_submission->getWebform();
-    if ($webform->access('submission_update_any')) {
+    if ($webform->access('submission_update_any', $account)) {
       $handlers = $webform->getHandlers();
       foreach ($handlers as $handler) {
         if ($handler instanceof WebformHandlerMessageInterface) {
@@ -73,7 +73,7 @@ class WebformAccess {
         }
       }
     }
-    return AccessResult::forbidden();
+    return AccessResult::neutral();
   }
 
   /**
@@ -88,7 +88,7 @@ class WebformAccess {
    *   The access result.
    */
   public static function checkEntityResultsAccess(EntityInterface $entity, AccountInterface $account) {
-    return AccessResult::allowedIf($entity->access('update') && $entity->hasField('webform') && $entity->webform->entity);
+    return AccessResult::allowedIf($entity->access('update', $account) && $entity->hasField('webform') && $entity->webform->entity);
   }
 
 }
