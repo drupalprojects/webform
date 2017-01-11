@@ -7,13 +7,17 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -331,6 +335,19 @@ function _webform_asset_alter(array &$items, AttachedAssetsInterface $assets, $t
 }
 
 /**
+ * Implements hook_file_access().
+ *
+ * @see file_file_download()
+ * @see webform_preprocess_file_link()
+ */
+function webform_file_access(FileInterface $file, $operation, AccountInterface $account) {
+  // Block access to temporary anonymous private file uploads.
+  if ($operation == 'download' && $file->isTemporary() && $file->getOwnerId() == 0 && strpos($file->getFileUri(), 'private://webform/') === 0) {
+    return AccessResult::forbidden();
+  }
+}
+
+/**
  * Implements hook_file_download().
  */
 function webform_file_download($uri) {
@@ -544,6 +561,22 @@ function webform_preprocess_radios(&$variables) {
 }
 
 /**
+ * Prepares variables for file link templates.
+ *
+ * @see webform_file_access
+ */
+function webform_preprocess_file_link(&$variables) {
+  /** @var \Drupal\file\FileInterface $file */
+  $file = $variables['file'];
+  $file = ($file instanceof File) ? $file : File::load($file->fid);
+
+  // Remove link to temporary anonymous private file uploads.
+  if ($file->isTemporary() && $file->getOwnerId() === 0 && strpos($file->getFileUri(), 'private://webform/') === 0) {
+    $variables['link'] = $file->getFilename();
+  }
+}
+
+/**
  * Adds JavaScript to change the state of an element based on another element.
  *
  * @param array $elements
@@ -565,6 +598,7 @@ function webform_process_states(&$elements, $key = '#attributes') {
     $elements[$key]['class'][] = 'js-form-item';
   }
 }
+
 
 /******************************************************************************/
 // Private functions.

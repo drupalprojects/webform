@@ -65,7 +65,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
 
     $this->drupalLogin($this->adminSubmissionUser);
 
-    // Upload private file.
+    // Upload private file as authenticated user.
     $edit = [
       'files[managed_file_single]' => \Drupal::service('file_system')->realpath($this->files[0]->uri),
     ];
@@ -96,12 +96,33 @@ class WebformElementManagedFileTest extends WebformTestBase {
     // Check private file access denied.
     $this->drupalGet(file_create_url($file->getFileUri()));
     $this->assertResponse(403);
+
+    // Upload private file and preview as anonymous user.
+    $edit = [
+      'files[managed_file_single]' => \Drupal::service('file_system')->realpath($this->files[1]->uri),
+    ];
+    $this->drupalPostForm('webform/' . $this->webform->id(), $edit, t('Preview'));
+
+    $temp_file_uri = file_create_url('private://webform/test_element_managed_file/_sid_/' . basename($this->files[1]->uri));
+
+    // Check that temp file is not linked.
+    $this->assertRaw('<span class="file file--mime-text-plain file--text"> <a href="' . $temp_file_uri  . '" type="text/plain; length=16384">text-1.txt</a></span>');
+    $this->assertNoRaw('<span class="file file--mime-text-plain file--text"> ' . basename($this->files[1]->uri) . '</span>');
+
+    // Check that anonymous user can't access temp file.
+    $this->drupalGet($temp_file_uri);
+    $this->assertResponse(403);
+
+    // Check that authenticated user can't access temp file.
+    $this->drupalLogin($this->adminSubmissionUser);
+    $this->drupalGet($temp_file_uri);
+    $this->assertResponse(403);
   }
 
   /**
    * Test single and multiple file upload.
    */
-  public function testFileUpload() {
+  public function _testFileUpload() {
     $this->checkFileUpload('single', $this->files[0], $this->files[1]);
     $this->checkFileUpload('multiple', $this->files[2], $this->files[3]);
   }
@@ -109,7 +130,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
   /**
    * Test media file upload elements.
    */
-  public function testMediaFileUpload() {
+  public function _testMediaFileUpload() {
     global $base_url;
 
     /* Element processing */
@@ -144,6 +165,10 @@ class WebformElementManagedFileTest extends WebformTestBase {
     // Check video file preview.
     $this->assertRaw('<source src="' . $base_url . '/system/files/webform/test_element_media_file/_sid_/video_file_mp4.mp4" type="video/mp4">');
   }
+
+  /****************************************************************************/
+  // Helper functions. From: \Drupal\file\Tests\FileFieldTestBase::getTestFile
+  /****************************************************************************/
 
   /**
    * Check file upload.
@@ -240,10 +265,6 @@ class WebformElementManagedFileTest extends WebformTestBase {
     $this->assert(!file_exists($new_file->getFileUri()), 'Test new file deleted from disk');
     $this->assertEqual(0, db_query('SELECT COUNT(fid) AS total FROM {file_managed} WHERE fid=:fid', [':fid' => $new_fid])->fetchField(), 'Test new file deleted from database');
   }
-
-  /****************************************************************************/
-  // Helper functions. From: \Drupal\file\Tests\FileFieldTestBase::getTestFile
-  /****************************************************************************/
 
   /**
    * Retrieves the fid of the last inserted file.

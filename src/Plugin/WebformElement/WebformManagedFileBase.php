@@ -617,6 +617,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       return NULL;
     }
 
+    /** @var \Drupal\file\FileInterface $file */
     $file = reset($files);
     if (empty($file)) {
       return NULL;
