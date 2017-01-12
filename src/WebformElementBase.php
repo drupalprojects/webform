@@ -1063,7 +1063,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['wrapper_attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Wrapper attributes'),
-      '#open' => TRUE,
     ];
     $form['wrapper_attributes']['wrapper_attributes'] = [
       '#type' => 'webform_element_attributes',
