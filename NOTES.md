@@ -105,7 +105,7 @@ Tidy YAML files
     php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Kernal/Utility/WebformDialogHelperTest.php
 
     # Unit test.
-    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/Utility/WebformTidyTest.php
+    php ../vendor/phpunit/phpunit/phpunit ../modules/sandbox/webform/tests/src/Unit/Utility/WebformYamlTidyTest.php
 
 
 5. Generate release notes

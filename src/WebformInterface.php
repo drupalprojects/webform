@@ -330,7 +330,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @return array
    *   Webform elements flattened into an associative array keyed by element name.
    */
-  public function getElementsFlattenedAndHasValue();
+  public function getElementsInitializedFlattenedAndHasValue();
 
   /**
    * Get webform elements selectors as options.

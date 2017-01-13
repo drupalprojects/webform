@@ -406,7 +406,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
       $element_manager = \Drupal::service('plugin.manager.webform.element');
 
-      $elements = $webform->getElementsFlattenedAndHasValue();
+      $elements = $webform->getElementsInitializedFlattenedAndHasValue();
       foreach ($elements as $element) {
         /** @var \Drupal\webform\WebformElementInterface $element_handler */
         $element_handler = $element_manager->createInstance($element['#type']);
@@ -665,7 +665,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         $sid = $record['sid'];
         $name = $record['name'];
 
-        $elements = $webform_submissions[$sid]->getWebform()->getElementsFlattenedAndHasValue();
+        $elements = $webform_submissions[$sid]->getWebform()->getElementsInitializedFlattenedAndHasValue();
         $element = (isset($elements[$name])) ? $elements[$name] : ['#webform_multiple' => FALSE, '#webform_composite' => FALSE];
 
         if ($element['#webform_multiple']) {
@@ -701,7 +701,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $webform_id = $webform_submission->getWebform()->id();
     $sid = $webform_submission->id();
 
-    $elements = $webform_submission->getWebform()->getElementsFlattenedAndHasValue();
+    $elements = $webform_submission->getWebform()->getElementsInitializedFlattenedAndHasValue();
 
     $rows = [];
     foreach ($data as $name => $item) {

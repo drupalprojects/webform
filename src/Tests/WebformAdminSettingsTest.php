@@ -3,7 +3,7 @@
 namespace Drupal\webform\Tests;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\webform\Utility\WebformTidy;
+use Drupal\webform\Utility\WebformYamlTidy;
 
 /**
  * Tests for webform entity.
@@ -41,8 +41,8 @@ class WebformAdminSettingsTest extends WebformTestBase {
     $this->assertEqual($updated_data, $original_data, 'Updated admin settings via the UI did not lose or change any data');
 
     // DEBUG:
-    $this->verbose('<pre>' . WebformTidy::tidy(Yaml::encode($original_data)) . '</pre>');
-    $this->verbose('<pre>' . WebformTidy::tidy(Yaml::encode($updated_data)) . '</pre>');
+    $this->verbose('<pre>' . WebformYamlTidy::tidy(Yaml::encode($original_data)) . '</pre>');
+    $this->verbose('<pre>' . WebformYamlTidy::tidy(Yaml::encode($updated_data)) . '</pre>');
 
     /* Elements */
 

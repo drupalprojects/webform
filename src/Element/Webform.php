@@ -18,14 +18,14 @@ class Webform extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return array(
-      '#pre_render' => array(
-        array($class, 'preRenderWebformElement'),
-      ),
+    return [
+      '#pre_render' => [
+        [$class, 'preRenderWebformElement'],
+      ],
       '#webform' => NULL,
       '#default_data' => [],
       '#cache' => ['max-age' => 0],
-    );
+    ];
   }
 
   /**

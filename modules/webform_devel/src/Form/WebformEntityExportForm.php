@@ -5,7 +5,7 @@ namespace Drupal\webform_devel\Form;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Utility\WebformTidy;
+use Drupal\webform\Utility\WebformYamlTidy;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -63,7 +63,7 @@ class WebformEntityExportForm extends EntityForm {
     $config_name = $this->getConfigName();
     $data = $this->config($config_name)->getRawData();
     $yaml = Yaml::encode($data);
-    return WebformTidy::tidy($yaml);
+    return WebformYamlTidy::tidy($yaml);
   }
 
   /**

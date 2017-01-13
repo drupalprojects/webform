@@ -21,7 +21,7 @@ class WebformTest extends WebformTestBase {
     $this->assert(is_array($elements));
 
     // Check getElements.
-    $columns = $webform->getElementsFlattenedAndHasValue();
+    $columns = $webform->getElementsInitializedFlattenedAndHasValue();
     $this->assertEqual(array_keys($columns), ['first_name', 'last_name', 'sex', 'dob', 'node', 'colors', 'likert', 'address']);
 
     // Set invalid elements.
@@ -31,7 +31,7 @@ class WebformTest extends WebformTestBase {
     $this->assertFalse($webform->getElementsInitialized());
 
     // Check invalid element columns.
-    $this->assertEqual($webform->getElementsFlattenedAndHasValue(), []);
+    $this->assertEqual($webform->getElementsInitializedFlattenedAndHasValue(), []);
 
     // Check for 3 submissions..
     $this->assertEqual($this->submissionStorage->getTotal($webform), 3);

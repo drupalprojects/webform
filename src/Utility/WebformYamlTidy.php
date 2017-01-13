@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Unescaper;
 /**
  * Provides YAML tidy function.
  */
-class WebformTidy {
+class WebformYamlTidy {
 
   /**
    * Tidy export YAML includes tweaking array layout and multiline strings.

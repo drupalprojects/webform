@@ -221,11 +221,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $elementsInitializedAndFlattened;
 
   /**
-   * The webform elements flattened and has value.
+   * The webform elements initialized, flattened, and has value.
    *
    * @var array
    */
-  protected $elementsFlattenedAndHasValue;
+  protected $elementsInitializedFlattenedAndHasValue;
 
   /**
    * The webform elements translations.
@@ -735,9 +735,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getElementsFlattenedAndHasValue() {
+  public function getElementsInitializedFlattenedAndHasValue() {
     $this->initElements();
-    return $this->elementsFlattenedAndHasValue;
+    return $this->elementsInitializedFlattenedAndHasValue;
   }
 
   /**
@@ -775,7 +775,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
-    $this->elementsFlattenedAndHasValue = [];
+    $this->elementsInitializedFlattenedAndHasValue = [];
     $this->elementsTranslations = [];
     try {
       /** @var \Drupal\webform\WebformTranslationManagerInterface $translation_manager */
@@ -825,7 +825,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->elementsInitialized = NULL;
     $this->elementsDecodedAndFlattened = NULL;
     $this->elementsInitializedAndFlattened = NULL;
-    $this->elementsFlattenedAndHasValue = NULL;
+    $this->elementsInitializedFlattenedAndHasValue = NULL;
     $this->elementsTranslations = NULL;
   }
 
@@ -922,7 +922,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       // Check if element has value (aka can be exported) and add it to
       // flattened has value array.
       if ($element_handler && $element_handler->isInput($element)) {
-        $this->elementsFlattenedAndHasValue[$key] =& $this->elementsInitializedAndFlattened[$key];
+        $this->elementsInitializedFlattenedAndHasValue[$key] =& $this->elementsInitializedAndFlattened[$key];
       }
 
       $this->initElementsRecursive($element, $key, $depth + 1);

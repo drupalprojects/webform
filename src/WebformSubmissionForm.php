@@ -774,7 +774,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Get elements values from webform submission.
     $values = array_intersect_key(
       $form_state->getValues(),
-      $webform->getElementsFlattenedAndHasValue()
+      $webform->getElementsInitializedFlattenedAndHasValue()
     );
 
     // Serialize the values as YAML and merge existing data.

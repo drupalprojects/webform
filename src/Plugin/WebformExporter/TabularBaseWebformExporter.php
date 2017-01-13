@@ -200,7 +200,7 @@ abstract class TabularBaseWebformExporter extends WebformExporterBase {
     $export_options = $this->getConfiguration();
 
     $webform = $this->getWebform();
-    $element_columns = $webform->getElementsFlattenedAndHasValue();
+    $element_columns = $webform->getElementsInitializedFlattenedAndHasValue();
     $this->elements = array_diff_key($element_columns, $export_options['excluded_columns']);
     return $this->elements;
   }

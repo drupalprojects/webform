@@ -3,7 +3,7 @@
 namespace Drupal\Tests\webform\Unit\Utility;
 
 use Drupal\Core\Serialization\Yaml;
-use Drupal\webform\Utility\WebformTidy;
+use Drupal\webform\Utility\WebformYamlTidy;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -11,24 +11,24 @@ use Drupal\Tests\UnitTestCase;
  *
  * @group webform
  *
- * @coversDefaultClass \Drupal\webform\Utility\WebformTidy
+ * @coversDefaultClass \Drupal\webform\Utility\WebformYamlTidy
  */
-class WebformTidyTest extends UnitTestCase {
+class WebformYamlTidyTest extends UnitTestCase {
 
   /**
-   * Tests WebformTidy tidy with WebformTidy::tidy().
+   * Tests WebformYamlTidy tidy with WebformYamlTidy::tidy().
    *
    * @param array $data
-   *   The array to run through WebformTidy::tidy().
+   *   The array to run through WebformYamlTidy::tidy().
    * @param string $expected
    *   The expected result from calling the function.
    *
-   * @see WebformTidy::tidy()
+   * @see WebformYamlTidy::tidy()
    *
    * @dataProvider providerTidy
    */
   public function testTidy(array $data, $expected) {
-    $result = WebformTidy::tidy(Yaml::encode($data));
+    $result = WebformYamlTidy::tidy(Yaml::encode($data));
     $this->assertEquals($expected, $result);
   }
 
