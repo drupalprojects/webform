@@ -11,6 +11,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
+use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformHandlerInterface;
 use Drupal\webform\WebformHandlerPluginCollection;
@@ -890,8 +891,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
       $element_handler = NULL;
       if (isset($element['#type'])) {
+        // Load the element's handler.
+        $element_handler = $element_manager->getElementInstance($element);
+
+        // Initialize the element.
+        $element_handler->initialize($element);
+
         // Track managed file upload.
-        if ($element['#type'] == 'managed_file') {
+        if ($element_handler instanceof WebformManagedFileBase) {
           $this->hasManagedFile = TRUE;
         }
 
@@ -905,12 +912,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         if (!$element_info->hasDefinition($element['#type']) && $element_info->hasDefinition('webform_' . $element['#type'])) {
           $element['#type'] = 'webform_' . $element['#type'];
         }
-
-        // Load the element's handler.
-        $element_handler = $element_manager->createInstance($element['#type']);
-
-        // Initialize the element.
-        $element_handler->initialize($element);
 
         $element['#webform_multiple'] = $element_handler->hasMultipleValues($element);
         $element['#webform_composite'] = $element_handler->isComposite();

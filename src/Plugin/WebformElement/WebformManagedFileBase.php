@@ -96,6 +96,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+    // Track if this element has been processed because the work-around below
+    // for 'Issue #2705471: Webform states File fields' which nests  the
+    // 'managed_file' element in a basic container, which triggers this element
+    // to processed a second time.
+    if (!empty($element['#webform_managed_file_processed'])) {
+      return;
+    }
+    $element['#webform_managed_file_processed'] = TRUE;
+
     parent::prepare($element, $webform_submission);
 
     // Check if the URI scheme exists and can be used the upload location.
@@ -125,27 +134,18 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#prefix' => '<div class="description">',
       '#suffix' => '</div>',
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function prepareWrapper(array &$element) {
-    parent::prepareWrapper($element);
 
     // Issue #2705471: Webform states File fields.
     // Workaround: Wrap the 'managed_file' element in a basic container.
-    if (!empty($element['#fixed_wrapper']) || empty($element['#prefix'])) {
-      return;
+    if (!empty($element['#prefix'])) {
+      $container = [
+        '#prefix' => $element['#prefix'],
+        '#suffix' => $element['#suffix'],
+      ];
+      unset($element['#prefix'], $element['#suffix']);
+      $container[$element['#webform_key']] = $element + ['#webform_managed_file_processed' => TRUE];
+      $element = $container;
     }
-
-    $container = [
-      '#prefix' => $element['#prefix'],
-      '#suffix' => $element['#suffix'],
-    ];
-    unset($element['#prefix'], $element['#suffix']);
-    $container[$element['#webform_key']] = $element + ['#fixed_wrapper' => TRUE];
-    $element = $container;
   }
 
   /**

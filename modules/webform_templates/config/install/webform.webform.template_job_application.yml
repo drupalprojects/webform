@@ -46,10 +46,11 @@ elements: |
       '#prefix': '<div class="container-inline">'
       '#suffix': '</div>'
       '#default_value': attach
-    resume_file_container:
+    resume_file:
       '#type': container
       '#title': Resume
       '#title_display': invisible
+      '#type': managed_file
       '#states':
         visible:
           ':input[name="resume_method"]':
@@ -60,8 +61,6 @@ elements: |
         enabled:
           ':input[name="resume_method"]':
             value: attach
-      resume_file:
-        '#type': managed_file
     resume_text:
       '#type': textarea
       '#title': Resume
