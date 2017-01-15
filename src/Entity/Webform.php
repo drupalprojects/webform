@@ -11,6 +11,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
+use Drupal\webform\Plugin\WebformElement\Details;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformHandlerInterface;
@@ -774,6 +775,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return;
     }
 
+    $this->hasManagedFile = FALSE;
+    $this->hasFlexboxLayout = FALSE;
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
     $this->elementsInitializedFlattenedAndHasValue = [];
@@ -822,6 +825,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * Reset parsed and cached webform elements.
    */
   protected function resetElements() {
+    $this->hasManagedFile = NULL;
+    $this->hasFlexboxLayout = NULL;
     $this->elementsDecoded = NULL;
     $this->elementsInitialized = NULL;
     $this->elementsDecodedAndFlattened = NULL;

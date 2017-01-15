@@ -92,7 +92,7 @@ class Table extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     // Containers should never have values and therefore should never have
     // a test value.
     return NULL;

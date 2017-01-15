@@ -11,6 +11,7 @@ use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\Link;
 use Drupal\file\Entity\File;
 use Drupal\file\Element\ManagedFile as ManagedFileElement;
+use Drupal\file\FileInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\WebformElementBase;
 use Drupal\Component\Utility\Bytes;
@@ -165,7 +166,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       return '';
     }
 
-    $items = $this->formatItems($element, $value, $options);
+    $format = $this->getFormat($element);
+
+    $fids = (is_array($value)) ? $value : [$value];
+    $files = File::loadMultiple($fids);
+
+    $items = [];
+    foreach ($files as $fid => $file) {
+      $items[$fid] = $this->formatHtmlItem($element, $value, $options, $file, $format);
+    }
     if (empty($items)) {
       return '';
     }
@@ -193,7 +202,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $element['#format'] = 'url';
     }
 
-    $items = $this->formatItems($element, $value, $options);
+    $format = $this->getFormat($element);
+
+    $fids = (is_array($value)) ? $value : [$value];
+    $files = File::loadMultiple($fids);
+
+    $items = [];
+    foreach ($files as $fid => $file) {
+      $items[$fid] = $this->formatTextItem($element, $value, $options, $file, $format);
+    }
     if (empty($items)) {
       return '';
     }
@@ -209,7 +226,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   }
 
   /**
-   * Format a Files as array of strings.
+   * Format element file as HTML.
    *
    * @param array $element
    *   An element.
@@ -217,52 +234,73 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   A value.
    * @param array $options
    *   An array of options.
+   * @param \Drupal\file\FileInterface $file
+   *   A file
+   * @param string $format
+   *   A format
    *
-   * @return array
-   *   Files as array of strings.
+   * @return array|string
+   *   The element's value as formatted HTML.
    */
-  protected function formatItems(array &$element, $value, array $options) {
-    $fids = (is_array($value)) ? $value : [$value];
+  protected function formatHtmlItem(array &$element, $value, array $options, FileInterface $file, $format) {
+    switch ($format) {
+      case 'id':
+      case 'url':
+      case 'value':
+      case 'raw':
+        return $this->formatTextItem($element, $value, $options, $file, $format);
 
-    $files = File::loadMultiple($fids);
-    $format = $this->getFormat($element);
-    $items = [];
-    foreach ($files as $fid => $file) {
-      switch ($format) {
-        case 'link':
-          $items[$fid] = [
-            '#theme' => 'file_link',
-            '#file' => $file,
-          ];
-          break;
+      case 'link':
+        return [
+          '#theme' => 'file_link',
+          '#file' => $file,
+        ];
 
-        case 'id':
-          $items[$fid] = $file->id();
-          break;
-
-        case 'url':
-        case 'value':
-        case 'raw':
-          $items[$fid] = file_create_url($file->getFileUri());
-          break;
-
-        default:
-          $theme = str_replace('webform_', 'webform_element_', $this->getPluginId());
-          if (strpos($theme, 'webform_') !== 0) {
-            $theme = 'webform_element_' . $theme;
-          }
-          $items[$fid] = [
-            '#theme' => $theme,
-            '#element' => $element,
-            '#value' => $value,
-            '#options' => $options,
-            '#file' => $file,
-          ];
-          break;
-      }
+      default:
+        $theme = str_replace('webform_', 'webform_element_', $this->getPluginId());
+        if (strpos($theme, 'webform_') !== 0) {
+          $theme = 'webform_element_' . $theme;
+        }
+        return [
+          '#theme' => $theme,
+          '#element' => $element,
+          '#value' => $value,
+          '#options' => $options,
+          '#file' => $file,
+        ];
     }
-    return $items;
   }
+
+  /**
+   * Format element file as plain text.
+   *
+   * @param array $element
+   *   An element.
+   * @param array|mixed $value
+   *   A value.
+   * @param array $options
+   *   An array of options.
+   * @param \Drupal\file\FileInterface $file
+   *   A file
+   * @param string $format
+   *   A format
+   *
+   * @return array|string
+   *   The element's value as plain text.
+   */
+  protected function formatTextItem(array &$element, $value, array $options, FileInterface $file, $format) {
+    switch ($format) {
+      case 'id':
+        return $file->id();
+
+      case 'url':
+      case 'value':
+      case 'raw':
+      default:
+        return file_create_url($file->getFileUri());
+    }
+  }
+
 
   /**
    * {@inheritdoc}
@@ -371,8 +409,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
-    if ($this->isDisabled()) {
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    if ($this->isDisabled() || !isset($element['#webform_key'])) {
       return NULL;
     }
 
@@ -407,7 +445,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $file->save();
 
     $fid = $file->id();
-    return ($this->hasMultipleValues($element)) ? [$fid] : $fid;
+    return [$fid];
   }
 
   /**

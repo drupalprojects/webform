@@ -192,9 +192,10 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
-    // Use test values include in settings.
-    return '';
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    // Use test values included in settings and not from
+    // WebformCompositeBase::getTestValues.
+    return FALSE;
   }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\webform\WebformInterface;
+
 /**
  * Provides a 'webform_table_sort' element.
  *
@@ -51,6 +53,17 @@ class WebformTableSort extends OptionsBase {
    */
   public function getElementSelectorOptions(array $element) {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    $values = array_keys($element['#options']);
+    if ($options['random']) {
+      shuffle($values);
+    }
+    return $values;
   }
 
 }

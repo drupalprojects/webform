@@ -3,7 +3,9 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Element\Webform;
 use Drupal\webform\WebformElementBase;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -31,6 +33,15 @@ abstract class NumericBase extends WebformElementBase {
     if ($this->hasProperty('step') && !isset($element['#step'])) {
       $element['#step'] = 'any';
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    $element += ['#min' => 1, '#max' => 10];
+    $value = ($options['random']) ? rand($element['#min'], $element['#max']) : floor((($element['#max'] - $element['#min']) / 2) + $element['#min']);
+    return [$value];
   }
 
   /**

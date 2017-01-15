@@ -210,6 +210,7 @@ abstract class OptionsBase extends WebformElementBase {
         return implode('; ', $options_text);
 
       case 'raw';
+      case 'value';
         return implode(', ', $value);
 
       default:

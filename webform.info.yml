@@ -1,10 +1,10 @@
-name: 'Webform'
+name: Webform
 type: module
 description: 'Enables the creation of webforms and questionnaires.'
-package: 'Webform'
+package: Webform
 core: 8.x
 configure: entity.webform.collection
 dependencies:
-  - 'drupal:system (>= 8.2)'
   - 'drupal:field'
+  - 'drupal:system (>= 8.2)'
   - 'drupal:user'

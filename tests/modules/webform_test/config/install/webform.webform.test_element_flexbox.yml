@@ -410,6 +410,16 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+  flexbox_managed_file:
+    '#type': webform_flexbox
+    flex_managed_file_left:
+      '#type': managed_file
+      '#title': 'File 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+    flex_managed_file_right:
+      '#type': managed_file
+      '#title': 'File 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
   flexbox_webform_element:
     '#type': webform_flexbox
     flex_webform_element_left:
@@ -480,16 +490,6 @@ elements: |
     flex_machine_name_right:
       '#type': machine_name
       '#title': 'Machine name 02'
-  flexbox_managed_file:
-    '#type': webform_flexbox
-    flex_managed_file_left:
-      '#type': managed_file
-      '#title': 'Managed file 01'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
-    flex_managed_file_right:
-      '#type': managed_file
-      '#title': 'Managed file 02'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
   flexbox_webform_name:
     '#type': webform_flexbox
     flex_webform_name_left:

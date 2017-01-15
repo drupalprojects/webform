@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme().
@@ -86,6 +87,18 @@ function webform_test_form_webform_submission_test_form_validate_form_validate($
 /******************************************************************************/
 // Generate elements.
 /******************************************************************************/
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function webform_test_preprocess_page(&$variables) {
+  if ((!isset($_GET['generate'])) && in_array(\Drupal::routeMatch()->getRouteName(), ['entity.webform.edit_form', 'entity.webform.source_form'])) {
+    $t_args = [
+      ':href' => Url::fromRouteMatch(\Drupal::routeMatch())->toString() . '?generate',
+    ];
+    drupal_set_message(t('The below webform\'s elements are automatically generated and exported. You can regenerate the below elements by appending <a href=":href">?generate</a> to this page\'s URL.', $t_args), 'warning');
+  }
+}
 
 /**
  * Implements hook_webform_load().
@@ -191,11 +204,12 @@ function _webform_test_issues() {
  *
  * @param string $type
  *   An element type.
- *
+ * @parame array $options
+ *   Options for generating the example element.
  * @return array|bool
  *   An example element or FALSE if the element type can't have an example.
  */
-function _webform_test_get_example_element($type) {
+function _webform_test_get_example_element($type, array $options = []) {
   static $skipped_elements;
   static $default_elements;
 
@@ -218,6 +232,9 @@ function _webform_test_get_example_element($type) {
     }
   }
 
+  $options += [
+    'issues' => TRUE,
+  ];
   // Default element properties.
   if (!isset($default_elements)) {
     $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.example_elements.yml');
@@ -239,27 +256,20 @@ function _webform_test_get_example_element($type) {
   ];
 
   // Add known issues to #description.
-  $issues = _webform_test_issues();
-  if (isset($issues[$type])) {
-    $items = [];
-    foreach ($issues[$type] as $issue_number => $issue_title) {
-      $items[$issue_number] = "<a href=\"https://www.drupal.org/node/$issue_number\">Issue #$issue_number: $issue_title</a>";
+  if ($options['issues']) {
+    $issues = _webform_test_issues();
+    if (isset($issues[$type])) {
+      $items = [];
+      foreach ($issues[$type] as $issue_number => $issue_title) {
+        $items[$issue_number] = "<a href=\"https://www.drupal.org/node/$issue_number\">Issue #$issue_number: $issue_title</a>";
+      }
+      $element['#description'] = '<b>' . t('Known Issues:') . '</b><br/>' . implode('<br/>', $items);
     }
-    $element['#description'] = '<b>' . t('Known Issues:') . '</b><br/>' . implode('<br/>', $items);
   }
 
   // Set default element properties.
   if (isset($default_elements[$type])) {
     $element += $default_elements[$type];
-  }
-
-  // Set default options.
-  if ($webform_element->hasProperty('options')) {
-    $element['#options'] = [
-      'One' => 'One',
-      'Two' => 'Two',
-      'Three' => 'Three',
-    ];
   }
 
   // Set default container content.
@@ -291,6 +301,8 @@ function _webform_test_get_example_element($type) {
       'One' => 'One',
       'Two' => 'Two',
       'Three' => 'Three',
+      'Four' => 'Four',
+      'Five' => 'Five',
     ];
   }
 

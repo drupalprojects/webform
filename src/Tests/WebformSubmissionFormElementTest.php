@@ -173,7 +173,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_properties');
     $this->assertPattern('/Form prefix<form /');
     $this->assertPattern('/<\/form>\s+Form suffix/');
-    $this->assertRaw('<form class="webform-submission-test-form-properties-form webform-submission-form test-form-properties webform-details-toggle" invalid="invalid" style="border: 10px solid red; padding: 1em;" data-drupal-selector="webform-submission-test-form-properties-form" action="https://www.google.com/search" method="get" id="webform-submission-test-form-properties-form" accept-charset="UTF-8">');
+    $this->assertRaw('<form class="webform-submission-test-form-properties-form webform-submission-form test-form-properties js-webform-details-toggle webform-details-toggle" invalid="invalid" style="border: 10px solid red; padding: 1em;" data-drupal-selector="webform-submission-test-form-properties-form" action="https://www.google.com/search" method="get" id="webform-submission-test-form-properties-form" accept-charset="UTF-8">');
 
     // Check editing webform settings style attributes and custom properties
     // updates the element's root properties.
@@ -192,7 +192,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_properties');
     $this->assertPattern('/Form prefix TEST<form /');
     $this->assertPattern('/<\/form>\s+Form suffix TEST/');
-    $this->assertRaw('<form class="webform-submission-test-form-properties-form webform-submission-form form--inline clearfix test-form-properties webform-details-toggle" style="border: 10px solid green; padding: 1em;" data-drupal-selector="webform-submission-test-form-properties-form" action="' . $base_path . 'webform/test_form_properties" method="post" id="webform-submission-test-form-properties-form" accept-charset="UTF-8">');
+    $this->assertRaw('<form class="webform-submission-test-form-properties-form webform-submission-form form--inline clearfix test-form-properties js-webform-details-toggle webform-details-toggle" style="border: 10px solid green; padding: 1em;" data-drupal-selector="webform-submission-test-form-properties-form" action="' . $base_path . 'webform/test_form_properties" method="post" id="webform-submission-test-form-properties-form" accept-charset="UTF-8">');
 
     /* Test webform buttons */
 

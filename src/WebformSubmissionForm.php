@@ -288,6 +288,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Details toggle: Display collapse/expand all details link.
     if ($this->getWebformSetting('form_details_toggle')) {
+      $form['#attributes']['class'][] = 'js-webform-details-toggle';
       $form['#attributes']['class'][] = 'webform-details-toggle';
       $form['#attached']['library'][] = 'webform/webform.element.details.toggle';
     }

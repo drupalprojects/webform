@@ -5,6 +5,8 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\webform\Element\WebformEntityTrait;
+use Drupal\webform\WebformInterface;
 
 /**
  * Provides an 'entity_reference' trait.
@@ -81,6 +83,14 @@ trait WebformEntityReferenceTrait {
     }
 
     return implode("\n", $items);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    WebformEntityTrait::setOptions($element);
+    return array_keys($element['#options']);
   }
 
   /**

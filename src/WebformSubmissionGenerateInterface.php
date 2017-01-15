@@ -30,10 +30,12 @@ interface WebformSubmissionGenerateInterface {
    *   The name of the element.
    * @param array $element
    *   The FAPI element.
+   * @param array $options
+   *   Options used to generate a test value.
    *
    * @return array|int|null
    *   An array containing multiple values or a single value.
    */
-  public function getTestValue(WebformInterface $webform, $name, array $element);
+  public function getTestValue(WebformInterface $webform, $name, array $element, array $options = []);
 
 }

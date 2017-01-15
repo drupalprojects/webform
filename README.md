@@ -34,7 +34,7 @@ The primary use case for this module is to:
 - [Getting NYU onto Webform](https://www.fourkitchens.com/blog/article/getting-nyu-yaml-form)
 - [Webforms for Drupal 8](https://www.gaiaresources.com.au/yaml-forms-drupal-8/)
 - [Creating Webform Handlers in Drupal 8](http://fivemilemedia.co.uk/blog/creating-yaml-form-handlers-drupal-8)
-
+- [Les formulaires en Drupal 8](https://makina-corpus.com/blog/metier/2016/les-formulaires-en-drupal-8)
 
 ### Installing the Webform Module
 

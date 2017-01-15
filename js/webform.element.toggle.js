@@ -22,6 +22,7 @@
 
         $toggle.toggles({
           checkbox: $checkbox,
+          on: $checkbox.is(':checked'),
           clicker: $label,
           text: {
             on: $toggle.attr('data-toggle-text-on') || '',

@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -24,6 +25,13 @@ class PasswordConfirm extends Password {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
     parent::prepare($element, $webform_submission);
     $element['#element_validate'][] = [get_class($this), 'validate'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    return '';
   }
 
   /**

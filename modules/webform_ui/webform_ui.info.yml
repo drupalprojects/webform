@@ -1,7 +1,7 @@
 name: 'Webform UI'
 type: module
 description: 'Provides a user interface for building and maintaining webforms.'
-package: 'Webform'
+package: Webform
 core: 8.x
 dependencies:
   - webform

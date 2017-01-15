@@ -22,11 +22,11 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
   protected $configFactory;
 
   /**
-   * The token service.
+   * The webform token manager.
    *
-   * @var \Drupal\Core\Utility\Token
+   * @var \Drupal\webform\WebformTokenManager
    */
-  protected $token;
+  protected $tokenManager;
 
   /**
    * The webform element manager.
@@ -54,14 +54,14 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
-   * @param \Drupal\Core\Utility\Token $token
-   *   The token service.
+   * @param \Drupal\webform\WebformTokenManager $token_manager
+   *   The webform token manager.
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, Token $token, WebformElementManagerInterface $element_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, WebformTokenManager $token_manager, WebformElementManagerInterface $element_manager) {
     $this->configFactory = $config_factory;
-    $this->token = $token;
+    $this->tokenManager = $token_manager;
     $this->elementManager = $element_manager;
 
     $this->types = Yaml::decode($this->configFactory->get('webform.settings')->get('test.types') ?: '');
@@ -87,7 +87,13 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(WebformInterface $webform, $name, array $element) {
+  public function getTestValue(WebformInterface $webform, $name, array $element, array $options = []) {
+    // Set default options.
+    $options += [
+      // Return random test value(s).
+      'random' => TRUE,
+    ];
+
     /** @var \Drupal\webform\WebformElementInterface $element_handler */
     $plugin_id = $this->elementManager->getElementPluginId($element);
     $element_handler = $this->elementManager->createInstance($plugin_id);
@@ -98,35 +104,27 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
     }
 
     // Exit if test values are null.
-    $values = $this->getTestValues($webform, $name, $element);
+    $values = $this->getTestValues($webform, $name, $element, $options);
     if ($values === NULL) {
       return NULL;
     }
-
-    // Get random test value.
-    $value = (is_array($values)) ? $values[array_rand($values)] : $values;
-
-    // Replace tokens.
-    $token_data = ['webform' => $webform];
-    $token_options = ['clear' => TRUE];
-    if (is_string($value)) {
-      $value = $this->token->replace($value, $token_data, $token_options);
+    // Make sure value is an array.
+    if (!is_array($values)) {
+      $values = [$values];
     }
-    elseif (is_array($value)) {
-      foreach (array_keys($value) as $value_key) {
-        if (is_string($value[$value_key])) {
-          $value[$value_key] = $this->token->replace($value[$value_key], $token_data, $token_options);
-        }
-      }
-    }
+
+    // $values = $this->tokenManager->replace($values, $webform);
 
     // Elements that use multiple values require an array as the
     // default value.
-    if ($element_handler->hasMultipleValues($element) && !is_array($value)) {
-      return [$value];
+    if ($element_handler->hasMultipleValues($element)) {
+      if ($options['random']) {
+        shuffle($values);
+      }
+      return array_slice($values, 0, 3);
     }
     else {
-      return $value;
+      return ($options['random']) ? $values[array_rand($values)] : reset($values);
     }
   }
 
@@ -139,11 +137,13 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
    *   The name of the element.
    * @param array $element
    *   The FAPI element.
+   * @param array $option
+   *   (options) Options for generated value.
    *
    * @return array|int|null
    *   An array containing multiple test values or a single test value.
    */
-  protected function getTestValues(WebformInterface $webform, $name, array $element) {
+  protected function getTestValues(WebformInterface $webform, $name, array $element, array $options = []) {
     // Get test value from the actual element.
     if (isset($element['#test'])) {
       return $element['#test'];
@@ -155,13 +155,14 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
     }
 
     // Invoke WebformElement::test and get a test value.
-    // If test value is NULL this element should be populated with test data.
-    // @see \Drupal\webform\Plugin\WebformElement\ContainerBase::getTestValue().
-    $test_value = $this->elementManager->invokeMethod('getTestValue', $element, $webform);
-    if ($test_value) {
-      return $test_value;
+    // If test value is NULL this element should never be populated with
+    // test data.
+    // @see \Drupal\webform\Plugin\WebformElement\ContainerBase::getTestValues().
+    $test_values = $this->elementManager->invokeMethod('getTestValues', $element, $webform, $options);
+    if ($test_values) {
+      return $test_values;
     }
-    elseif ($test_value === NULL) {
+    elseif ($test_values === NULL) {
       return NULL;
     }
 
@@ -185,14 +186,6 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       if (preg_match('/(^|_)' . $key . '(_|$)/i', $name)) {
         return $values;
       }
-    }
-
-    // Get test value using #type.
-    switch ($element['#type']) {
-      case 'range';
-      case 'number';
-        $element += ['#min' => 1, '#max' => 10];
-        return rand($element['#min'], $element['#max']);
     }
 
     // Get test #unique value.

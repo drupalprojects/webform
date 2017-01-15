@@ -308,11 +308,11 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     $value = [];
     foreach ($element['#questions'] as $key => $question) {
       $keys = array_keys($element['#answers']);
-      $value[$key] = $keys[array_rand($keys)];
+      $value[$key] = ($options['random']) ? $keys[array_rand($keys)] : reset($keys);
     }
     return [$value];
   }

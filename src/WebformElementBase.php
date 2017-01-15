@@ -658,8 +658,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
-    return '';
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    return FALSE;
   }
 
   /**

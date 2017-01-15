@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\user\Kernel;
+namespace Drupal\Tests\user\Kernel\Entity;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\KernelTests\KernelTestBase;

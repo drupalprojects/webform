@@ -11,7 +11,7 @@ use Drupal\KernelTests\KernelTestBase;
  *
  * @group webform
  */
-class WebformEntityElementsValidationUnitTest extends KernelTestBase {
+class WebformEntityElementsValidationTest extends KernelTestBase {
 
   /**
    * Modules to enable.

@@ -363,17 +363,19 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function formatText(array &$element, $value, array $options = []);
 
   /**
-   * Get test value for an element.
+   * Get test values for an element.
    *
    * @param array $element
    *   An element.
    * @param \Drupal\webform\WebformInterface $webform
    *   A webform.
+   * @param array $options
+   *   Options used to generate a test value.
    *
    * @return mixed
    *   A test value for an element.
    */
-  public function getTestValue(array $element, WebformInterface $webform);
+  public function getTestValues(array $element, WebformInterface $webform, array $options);
 
   /**
    * Get an element's available formats.

@@ -4,6 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Element\WebformRating as WebformRatingElement;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -46,6 +47,15 @@ class WebformRating extends Range {
       $element['#step'] = 1;
     }
     parent::prepare($element, $webform_submission);
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    $element += ['#min' => 1, '#max' => 5];
+    return parent::getTestValues($element, $webform, $options);
   }
 
   /**

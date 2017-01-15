@@ -113,13 +113,13 @@ elements: |
     webform_document_file:
       '#type': document_file
       '#title': '<u>Document file</u>'
-    webform_image_file:
-      '#type': image_file
-      '#title': '<u>Image file</u>'
     managed_file:
       '#type': managed_file
       '#title': '<u>File</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+    webform_image_file:
+      '#type': image_file
+      '#title': '<u>Image file</u>'
     webform_video_file:
       '#type': video_file
       '#title': '<u>Video file</u>'
@@ -134,6 +134,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_buttons_other:
       '#type': buttons_other
       '#title': '<u>Buttons other</u>'
@@ -141,6 +143,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     checkboxes:
       '#type': checkboxes
       '#title': '<u>Checkboxes</u>'
@@ -149,6 +153,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_checkboxes_other:
       '#type': checkboxes_other
       '#title': '<u>Checkboxes other</u>'
@@ -156,6 +162,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_likert:
       '#type': likert
       '#title': '<u>Likert</u>'
@@ -177,6 +185,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_radios_other:
       '#type': radios_other
       '#title': '<u>Radios other</u>'
@@ -184,6 +194,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     select:
       '#type': select
       '#title': '<u>Select</u>'
@@ -192,6 +204,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_select_other:
       '#type': select_other
       '#title': '<u>Select other</u>'
@@ -199,6 +213,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     tableselect:
       '#type': tableselect
       '#title': '<u>Table select</u>'
@@ -206,6 +222,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_tableselect_sort:
       '#type': tableselect_sort
       '#title': '<u>Tableselect sort</u>'
@@ -213,6 +231,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_table_sort:
       '#type': table_sort
       '#title': '<u>Table sort</u>'
@@ -220,6 +240,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
     webform_toggles:
       '#type': toggles
       '#title': '<u>Toggles</u>'
@@ -227,6 +249,8 @@ elements: |
         One: One
         Two: Two
         Three: Three
+        Four: Four
+        Five: Five
   containers:
     '#type': details
     '#title': '<u>Containers</u>'

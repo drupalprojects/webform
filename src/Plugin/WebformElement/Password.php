@@ -21,6 +21,11 @@ class Password extends WebformElementBase {
    * {@inheritdoc}
    */
   public function formatText(array &$element, $value, array $options = []) {
+    // Return empty value.
+    if ($value === '' || $value === NULL) {
+      return '';
+    }
+
     $format = $this->getFormat($element);
     switch ($format) {
       case 'obscured':

@@ -136,9 +136,8 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     return;
   }
 
+  // Don't include details toggle all for submission forms.
   $is_submission_form = ($form_state->getFormObject() instanceof WebformSubmissionForm);
-
-  // Don't include details toggle all for submission webforms.
   if (!$is_submission_form) {
     $form['#attributes']['class'][] = 'js-webform-details-toggle';
     $form['#attributes']['class'][] = 'webform-details-toggle';

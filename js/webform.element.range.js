@@ -32,7 +32,7 @@
         html += (suffix ? '<span class="field-suffix">' + suffix + '</span>': '');
         html += '</div>';
 
-        var height = $element.outerHeight();
+        var height = parseInt($element.outerHeight()) || 24;
         var $outputContainer = $(html);
 
         // Set the container element's line height which will vertically

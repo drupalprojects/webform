@@ -489,11 +489,16 @@ abstract class WebformCompositeBase extends WebformElementBase {
         $items = [];
         $composite_elements = $this->getInitializedCompositeElement($element);
         foreach (RenderElement::children($composite_elements) as $composite_key) {
-          $composite_element = $composite_elements[$composite_key];
-          $composite_title = $composite_element['#title'];
-          $composite_value = $value[$composite_key];
-          if ($composite_value !== '') {
-            $items[$composite_key] = "$composite_title: $composite_value";
+          if (isset($value[$composite_key]) && $value[$composite_key] !== '') {
+            $composite_value = $value[$composite_key];
+            if (!empty($composite_elements[$composite_key]['#title'])) {
+              $composite_title = $composite_elements[$composite_key]['#title'];
+              $items[$composite_key] = "$composite_title: $composite_value";
+            }
+            else {
+              $items[$composite_key] = $composite_value;
+
+            }
           }
         }
         return implode("\n", $items);
@@ -502,8 +507,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
         $items = [];
         $composite_elements = $this->getInitializedCompositeElement($element);
         foreach (RenderElement::children($composite_elements) as $composite_key) {
-          $composite_value = $value[$composite_key];
-          if ($composite_value !== '') {
+          if (isset($value[$composite_key]) && $value[$composite_key] !== '') {
+            $composite_value = $value[$composite_key];
             $items[$composite_key] = "$composite_key: $composite_value";
           }
         }
@@ -593,14 +598,14 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     /** @var \Drupal\webform\WebformSubmissionGenerateInterface $generate */
     $generate = \Drupal::service('webform_submission.generate');
 
     $value = [];
     $composite_elements = $this->getInitializedCompositeElement($element);
     foreach (RenderElement::children($composite_elements) as $composite_key) {
-      $value[$composite_key] = $generate->getTestValue($webform, $composite_key, $composite_elements[$composite_key]);
+      $value[$composite_key] = $generate->getTestValue($webform, $composite_key, $composite_elements[$composite_key], $options);
     }
     return [$value];
   }

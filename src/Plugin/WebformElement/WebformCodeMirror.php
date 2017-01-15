@@ -70,19 +70,19 @@ class WebformCodeMirror extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getTestValue(array $element, WebformInterface $webform) {
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     switch ($element['#mode']) {
       case 'html':
-        return '<p><b>Hello World!!!</b></p>';
+        return ['<p><b>Hello World!!!</b></p>'];
 
       case 'yaml':
-        return "message: 'Hello World'";
+        return ["message: 'Hello World'"];
 
       case 'text':
-        return "Hello World";
+        return ["Hello World"];
 
       default:
-        return '';
+        return [];
 
     }
 
