@@ -145,6 +145,7 @@ settings:
   form_submit_attributes: {  }
   form_exception_message: ''
   form_closed_message: ''
+  form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
   form_prepopulate: false

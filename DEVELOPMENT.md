@@ -139,7 +139,7 @@ drush webform-purge --all -y; drush pmu -y webform_test; drush en -y webform_tes
 
 ```
 # Make sure all modules that are going to be exported are enabled
-drush en -y webform webform_examples webform_templates webform_test webform_node;
+drush en -y webform webform_examples webform_templates webform_test webform_test_translation webform_node;
 
 # Show the difference between the active config and the default config.
 drush features-diff webform

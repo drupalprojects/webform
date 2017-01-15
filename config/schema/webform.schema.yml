@@ -322,6 +322,9 @@ webform.webform.*:
         form_exception_message:
           type: text
           label: 'Webform exception message'
+        form_previous_submissions:
+          type: boolean
+          label: 'Webform previous submissions notification'
         form_confidential:
           type: boolean
           label: 'Webform confidential'

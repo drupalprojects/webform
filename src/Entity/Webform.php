@@ -514,6 +514,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_submit_attributes' => [],
       'form_exception_message' => '',
       'form_closed_message' => '',
+      'form_previous_submissions' => TRUE,
       'form_confidential' => FALSE,
       'form_confidential_message' => '',
       'form_prepopulate' => FALSE,

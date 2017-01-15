@@ -322,3 +322,10 @@ function webform_update_8006() {
 function webform_update_8007() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2839615: Disabling message about viewing user's previous submissions.
+ */
+function webform_update_8008() {
+  _webform_update_form_settings();
+}

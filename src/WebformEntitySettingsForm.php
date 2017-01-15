@@ -555,6 +555,12 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
+    $form['submission']['form_previous_submissions'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show the notification about previous submissions'),
+      '#description' => $this->t('Show the previous submissions notification that appears when users have previously submitted this form.'),
+      '#default_value' => $settings['form_previous_submissions'],
+    );
     $form['submission']['form_confidential'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Confidential submissions'),

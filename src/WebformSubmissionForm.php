@@ -451,6 +451,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Display link to previous submissions message when user is adding a new
     // submission.
     if ($this->isGet()
+      && $this->getWebformSetting('form_previous_submissions', FALSE)
       && ($this->isRoute('entity.webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
       && $webform->access('submission_view_own')
       && ($previous_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
