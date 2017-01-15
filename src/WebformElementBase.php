@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
@@ -393,6 +394,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+    // Add webform and webform_submission IDs to every element.
+    $element['#webform'] = $webform_submission->getWebform()->id();
+    $element['#webform_submission'] = $webform_submission->id();
+
     $attributes_property = ($this->hasWrapper($element)) ? '#wrapper_attributes' : '#attributes';
 
     // Check is the element is disabled and hide it.
@@ -451,11 +456,25 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element[$attributes_property]['class'][] = 'webform-has-field-suffix';
     }
 
-    // Add validation handler for #unique value.
-    if (!empty($element['#unique']) && !$this->hasMultipleValues($element)) {
-      $element['#element_validate'][] = [get_class($this), 'validateUnique'];
-      $element['#webform'] = $webform_submission->getWebform()->id();
-      $element['#webform_submission'] = $webform_submission->id();
+    // Get and set the element's default #element_validate property so that
+    // it is not skipped when custom callbacks are added to #element_validate.
+    // @see \Drupal\Core\Render\Element\Color
+    // @see \Drupal\Core\Render\Element\Number
+    // @see \Drupal\Core\Render\Element\Email
+    // @see \Drupal\Core\Render\Element\MachineName
+    // @see \Drupal\Core\Render\Element\Url
+    if ($this->isInput($element)) {
+      $type = $element['#type'];
+      $element['#element_validate'] = $this->elementInfo->getInfoProperty($type, '#element_validate')
+        ?: $this->elementInfo->getInfoProperty("webform_$type", '#element_validate', []);
+
+      // Add webform element #minlength and/or #unique validation handler.
+      if (isset($element['#minlength'])) {
+        $element['#element_validate'][] = [get_class($this), 'validateMinlength'];
+      }
+      if (isset($element['#unique'])) {
+        $element['#element_validate'][] = [get_class($this), 'validateUnique'];
+      }
     }
 
     // Prepare Flexbox and #states wrapper.
@@ -785,16 +804,38 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
-   * Webform API callback. Validate #unique value.
+   * Webform API callback. Validate element #minlength value.
+   */
+  public static function validateMinlength(&$element, FormStateInterface &$form_state) {
+    if (!isset($element['#minlength'])) {
+      return;
+    }
+
+    if (Unicode::strlen($element['#value']) < $element['#minlength']) {
+      $t_args = array(
+        '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
+        '%min' => $element['#minlength'],
+        '%length' => Unicode::strlen($element['#value'])
+      );
+      $form_state->setError($element, t('%name cannot be less than %min characters but is currently %length characters long.', $t_args));
+    }
+  }
+
+  /**
+   * Webform API callback. Validate element #unique value.
    */
   public static function validateUnique(array &$element, FormStateInterface $form_state) {
+    if (!isset($element['#unique'])) {
+      return;
+    }
+
     $webform_id = $element['#webform'];
     $sid = $element['#webform_submission'];
     $name = $element['#name'];
     $value = $element['#value'];
 
-    // Skip empty unique fields.
-    if ($value == '') {
+    // Skip empty unique fields or arrays (aka #multiple).
+    if ($value === '' || is_array($element['#value'])) {
       return;
     }
 
@@ -810,7 +851,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
     $count = $query->execute()->fetchField();
     if ($count) {
-      $form_state->setError($element, t('The value %value has already been submitted once for the %title field. You may have already submitted this webform, or you need to use a different value.', ['%value' => $element['#value'], '%title' => $element['#title']]));
+      $t_args = [
+        '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
+        '%value' => $element['#value'],
+      ];
+      $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
     }
   }
 
@@ -1020,6 +1065,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'number',
       '#title' => $this->t('Maxlength'),
       '#description' => $this->t('Leaving blank will use the default maxlength.'),
+      '#min' => 1,
+      '#size' => 4,
+    ];
+    $form['webform']['minlength'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Minlength'),
+      '#description' => $this->t('The element may still be empty unless it is required.'),
       '#min' => 1,
       '#size' => 4,
     ];

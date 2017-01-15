@@ -24,7 +24,7 @@ class PasswordConfirm extends Password {
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
     parent::prepare($element, $webform_submission);
-    $element['#element_validate'][] = [get_class($this), 'validate'];
+    $element['#element_validate'][] = [get_class($this), 'validatePasswordConfirm'];
   }
 
   /**
@@ -59,7 +59,7 @@ class PasswordConfirm extends Password {
   /**
    * Webform API callback. Convert password confirm array to single value.
    */
-  public static function validate(array &$element, FormStateInterface $form_state) {
+  public static function validatePasswordConfirm(array &$element, FormStateInterface $form_state, array &$completed_form) {
     $name = $element['#name'];
     $value = $form_state->getValue($name);
     $form_state->setValue($name, $value['pass1']);

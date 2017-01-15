@@ -124,7 +124,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
 
     // Use custom validation callback so that File entities can be converted
     // into file ids (akk fids).
-    $element['#element_validate'][] = [get_class($this), 'validate'];
+    $element['#element_validate'][] = [get_class($this), 'validateManagedFile'];
 
     // Add file upload help to the element.
     $element['help'] = [
@@ -547,7 +547,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   /**
    * Webform API callback. Consolidate the array of fids for this field into a single fids.
    */
-  public static function validate(array &$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateManagedFile(array &$element, FormStateInterface $form_state, &$complete_form) {
     // Call the default managed_element validation handler, which checks
     // the file entity and #required.
     // @see \Drupal\file\Element\ManagedFile::getInfo

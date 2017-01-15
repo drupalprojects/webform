@@ -102,7 +102,13 @@ class WebformEmailConfirm extends FormElement {
     unset($element['#maxlength']);
     unset($element['#atributes']);
 
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformEmailConfirm']];
+    // Set validation.
+    if (isset($element['#element_validate'])) {
+      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformEmailConfirm']], $element['#element_validate']);
+    }
+    else {
+      $element['#element_validate'] = [[get_called_class(), 'validateWebformEmailConfirm']];
+    }
 
     return $element;
   }

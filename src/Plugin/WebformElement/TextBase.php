@@ -18,6 +18,7 @@ abstract class TextBase extends WebformElementBase {
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
       'size' => '',
+      'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
       'pattern' => '',

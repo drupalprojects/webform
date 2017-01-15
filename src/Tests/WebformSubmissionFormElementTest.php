@@ -28,22 +28,25 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
   public function testElements() {
     global $base_path;
 
-    /* Test #unique element property */
+    /* Test validate element #minlength and #unique property */
 
     $this->drupalLogin($this->adminFormUser);
 
-    $webform_unique = Webform::load('test_element_unique');
+    $webform_validate = Webform::load('test_element_validate');
 
-    // Check element with #unique property only allows one unique 'value' to be
-    // submitted.
-    $sid = $this->postSubmission($webform_unique, [], t('Submit'));
-    $this->assertNoRaw('The value <em class="placeholder">value</em> has already been submitted once for the <em class="placeholder">textfield</em> field. You may have already submitted this webform, or you need to use a different value.');
-    $this->drupalPostForm('webform/test_element_unique', [], t('Submit'));
-    $this->assertRaw('The value <em class="placeholder">value</em> has already been submitted once for the <em class="placeholder">textfield</em> field. You may have already submitted this webform, or you need to use a different value.');
+    // Check minlength validation.
+    $this->postSubmission($webform_validate, ['minlength_textfield' => 'X'], t('Submit'));
+    $this->assertRaw('<em class="placeholder">minlength_textfield</em> cannot be less than <em class="placeholder">5</em> characters but is currently <em class="placeholder">1</em> characters long.');
 
-    // Check element with #unique can be updated.
-    $this->drupalPostForm("admin/structure/webform/manage/test_element_unique/submission/$sid/edit", [], t('Save'));
-    $this->assertNoRaw('The value <em class="placeholder">value</em> has already been submitted once for the <em class="placeholder">textfield</em> field. You may have already submitted this webform, or you need to use a different value.');
+    // Check #unique validation only allows one unique 'value' to be submitted.
+    $sid = $this->postSubmission($webform_validate, [], t('Submit'));
+    $this->assertNoRaw('The value <em class="placeholder">value</em> has already been submitted once for the <em class="placeholder">unique_textfield</em> element. You may have already submitted this webform, or you need to use a different value.');
+    $this->drupalPostForm('webform/test_element_validate', [], t('Submit'));
+    $this->assertRaw('The value <em class="placeholder">value</em> has already been submitted once for the <em class="placeholder">unique_textfield</em> element. You may have already submitted this webform, or you need to use a different value.');
+
+    // Check #unique element can be updated.
+    $this->drupalPostForm("admin/structure/webform/manage/test_element_validate/submission/$sid/edit", [], t('Save'));
+    $this->assertNoRaw('The value <em class="placeholder">value</em> has already been submitted once for the <em class="placeholder">unique_textfield</em> element. You may have already submitted this webform, or you need to use a different value.');
     // @todo Determine why test_element_unique is not updating correctly during
     // testing.
     // $this->assertRaw('Submission updated in <em class="placeholder">Test: Element: Unique</em>.');

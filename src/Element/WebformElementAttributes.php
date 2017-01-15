@@ -143,7 +143,13 @@ class WebformElementAttributes extends FormElement {
       }
     }
 
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformElementAttributes']];
+    // Set validation.
+    if (isset($element['#element_validate'])) {
+      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformElementAttributes']], $element['#element_validate']);
+    }
+    else {
+      $element['#element_validate'] = [[get_called_class(), 'validateWebformElementAttributes']];
+    }
 
     return $element;
   }

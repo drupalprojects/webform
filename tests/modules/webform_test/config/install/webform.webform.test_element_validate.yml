@@ -6,27 +6,40 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_element_unique
-title: 'Test: Element: Unique'
-description: 'Test #unique element value support.'
+id: test_element_validate
+title: 'Test: Element: Validate'
+description: 'Test #minlength and #unique element validation support.'
 elements: |
-  textfield:
-    '#type': 'textfield'
-    '#title': 'textfield'
-    '#description': '#unique property is validated by single value elements'
-    '#unique': true
-    '#default_value': 'value'
-  checkboxes:
-    '#type': checkboxes
-    '#title': 'checkboxes'
-    '#description': '#unique property is ignored by multiple value elements'
-    '#unique': true
-    '#options':
-      1: one
-      2: two
-    '#default_value':
-      - 1
-      - 2
+  minlength:
+    '#type': details
+    '#title': Minlength
+    '#open': true
+    minlength_textfield:
+      '#type': 'textfield'
+      '#title': 'minlength_textfield'
+      '#minlength': 5
+      '#default_value': 'value'
+  unique:
+    '#type': details
+    '#title': Unique
+    '#open': true
+    unique_textfield:
+      '#type': 'textfield'
+      '#title': 'unique_textfield'
+      '#description': '#unique property is validated by single value elements'
+      '#unique': true
+      '#default_value': 'value'
+    unique_checkboxes:
+      '#type': checkboxes
+      '#title': 'unique_checkboxes'
+      '#description': '#unique property is ignored by multiple value elements'
+      '#unique': true
+      '#options':
+        1: one
+        2: two
+      '#default_value':
+        - 1
+        - 2
 css: ''
 javascript: ''
 settings:

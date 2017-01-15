@@ -411,7 +411,7 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * Webform API callback. Remove unchecked options from value array.
    */
-  public static function validateMultipleOptions(array &$element, FormStateInterface $form_state) {
+  public static function validateMultipleOptions(array &$element, FormStateInterface $form_state, array &$completed_form) {
     $name = $element['#name'];
     $values = $form_state->getValue($name);
     // Filter unchecked/unselected options whose value is 0.

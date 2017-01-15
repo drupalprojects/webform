@@ -24,6 +24,7 @@ class Email extends WebformElementBase {
     return parent::getDefaultProperties() + [
       // Form validation.
       'size' => '',
+      'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
     ];
