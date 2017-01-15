@@ -92,10 +92,11 @@ function webform_test_form_webform_submission_test_form_validate_form_validate($
  * Implements hook_preprocess_HOOK().
  */
 function webform_test_preprocess_page(&$variables) {
-  if ((!isset($_GET['generate'])) && in_array(\Drupal::routeMatch()->getRouteName(), ['entity.webform.edit_form', 'entity.webform.source_form'])) {
-    $t_args = [
-      ':href' => Url::fromRouteMatch(\Drupal::routeMatch())->toString() . '?generate',
-    ];
+  if (!isset($_GET['generate'])
+    && in_array(\Drupal::routeMatch()->getRouteName(), ['entity.webform.edit_form', 'entity.webform.source_form'])
+    && _webform_test_load_include(\Drupal::routeMatch()->getRawParameter('webform'))
+  ) {
+    $t_args = [':href' => Url::fromRouteMatch(\Drupal::routeMatch())->toString() . '?generate'];
     drupal_set_message(t('The below webform\'s elements are automatically generated and exported. You can regenerate the below elements by appending <a href=":href">?generate</a> to this page\'s URL.', $t_args), 'warning');
   }
 }
@@ -110,17 +111,9 @@ function webform_test_webform_load(array $entities) {
     return;
   }
 
-  $include_base_path = drupal_get_path('module', 'webform_test') . '/includes';
   foreach ($entities as $id => $entity) {
-    if (preg_match('/^(test_form_(?:wizard_)?long)_\d+$/', $id, $match)) {
-      $name = $match[1];
-    }
-    else {
-      $name = $id;
-    }
-
-    if (file_exists("$include_base_path/webform_test.$name.inc")) {
-      module_load_include('inc', 'webform_test', 'includes/webform_test.' . $name);
+    $name = _webform_test_load_include($id);
+    if ($name) {
       $function = 'webform_test_' . $name;
       $elements = $function($entity);
       $entity->setElements($elements);
@@ -135,6 +128,31 @@ function webform_test_webform_load(array $entities) {
       // Display message.
       drupal_set_message(t('Generated elements for %title webform', ['%title' => $entity->label()]));
     }
+  }
+}
+
+/**
+ * Load webform test include file.
+ *
+ * @param string $id
+ *   The webform ID.
+ *
+ * @return string|bool
+ *   The webform test generating name or FALSE if the webform has not test
+ *   include file.
+ */
+function _webform_test_load_include($id) {
+  if (preg_match('/^(test_form_(?:wizard_)?long)_\d+$/', $id, $match)) {
+    $id = $match[1];
+  }
+
+  $include_base_path = drupal_get_path('module', 'webform_test') . '/includes';
+  if (file_exists("$include_base_path/webform_test.$id.inc")) {
+    module_load_include('inc', 'webform_test', 'includes/webform_test.' . $id);
+    return $id;
+  }
+  else {
+    return FALSE;
   }
 }
 
