@@ -19,6 +19,7 @@ use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformInterface;
@@ -118,13 +119,34 @@ function webform_local_tasks_alter(&$local_tasks) {
  * Implements hook_menu_local_tasks_alter().
  */
 function webform_menu_local_tasks_alter(&$data, $route_name) {
-  if (strpos($route_name, 'entity.webform.') !== 0) {
-    return;
+  // Change 'Translate webform' tab to be just label 'Translate'.
+  if (strpos($route_name, 'entity.webform.') === 0) {
+    if (isset($data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'])) {
+      $data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'] = t('Translate');
+    }
   }
 
-  // Change 'Translate webform' tab to be just label 'Translate'.
-  if (isset($data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'])) {
-    $data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'] = t('Translate');
+  // ISSUE:
+  // Devel routes do not use 'webform' parameter which throws the below error.
+  // Some mandatory parameters are missing ("webform") to generate a URL for
+  // route "entity.webform_submission.canonical"
+  //
+  // WORKAROUND:
+  // Make sure webform parameter is set for all routes.
+  if (strpos($route_name, 'entity.webform_submission.devel_') === 0 || $route_name === 'entity.webform_submission.token_devel') {
+    foreach ($data['tabs'] as $tab_level) {
+      foreach ($tab_level as $tab) {
+        /** @var Drupal\Core\Url $url */
+        $url = $tab['#link']['url'];
+        $tab_route_name = $url->getRouteName();
+        $tab_route_parameters = $url->getRouteParameters();
+
+        if (strpos($tab_route_name, 'entity.webform_submission.devel_') !== 0) {
+          $webform_submission = WebformSubmission::load($tab_route_parameters['webform_submission']);
+          $url->setRouteParameter('webform', $webform_submission->getWebform()->id());
+        }
+      }
+    }
   }
 }
 
