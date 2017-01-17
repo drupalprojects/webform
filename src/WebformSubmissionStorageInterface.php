@@ -12,7 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 interface WebformSubmissionStorageInterface extends ContentEntityStorageInterface {
 
   /**
-   * Return status for saving of YAML forb submission when saving results is disabled.
+   * Return status for saving of webform submission when saving results is disabled.
    */
   const SAVED_DISABLED = 0;
 
