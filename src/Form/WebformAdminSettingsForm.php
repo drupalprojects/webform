@@ -146,6 +146,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_exception_message'),
     ];
+    $form['webform']['default_form_confidential_message']  = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default confidential message'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('settings.default_form_confidential_message'),
+    ];
     $form['webform']['default_form_submit_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default submit button label'),
@@ -153,11 +159,11 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#size' => 20,
       '#default_value' => $settings['default_form_submit_label'],
     ];
-    $form['webform']['default_form_confidential_message']  = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Default confidential message'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('settings.default_form_confidential_message'),
+    $form['webform']['default_form_submit_once'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Prevent duplicate submissions'),
+      '#description' => $this->t('If checked, the submit button will be disabled immediately after is is clicked.'),
+      '#default_value' => $settings['default_form_submit_once'],
     ];
     $form['webform']['default_form_disable_back']  = [
       '#type' => 'checkbox',

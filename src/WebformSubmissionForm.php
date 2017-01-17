@@ -281,6 +281,12 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
+    // Submit once: Prevent duplicate submissions.
+    if ($this->getWebformSetting('form_submit_once')) {
+      $form['#attributes']['class'][] = 'js-webform-submit-once';
+      $form['#attached']['library'][] = 'webform/webform.form.submit_once';
+    }
+
     // Novalidate: Add novalidate attribute to webform if client side validation disabled.
     if ($this->getWebformSetting('form_novalidate')) {
       $form['#attributes']['novalidate'] = 'novalidate';
@@ -297,6 +303,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->entity->isNew() && $this->getWebformSetting('form_autofocus')) {
       $form['#attributes']['class'][] = 'js-webform-autofocus';
     }
+
+
 
     // Details save: Attach details element save open/close library.
     // This ensures that the library will be loaded even if the webform is

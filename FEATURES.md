@@ -38,6 +38,7 @@ Form settings that can be customized include:
 - Previewing submissions
 - Confidential submissions
 - Prepopulating a webform's elements using query string parameters
+- Preventing duplicate submissions 
 - Disabling back button
 - Warning users about unsaved changes
 - Disabling client-side validation

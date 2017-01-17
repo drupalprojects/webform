@@ -14,6 +14,9 @@ webform.settings:
         default_form_submit_label:
           type: label
           label: 'Default webform submit text'
+        default_form_submit_once:
+          type: boolean
+          label: 'Prevent duplicate submissions'
         default_form_closed_message:
           type: text
           label: 'Default webform closed message'
@@ -313,6 +316,9 @@ webform.webform.*:
         form_submit_label:
           type: label
           label: 'Webform submit text'
+        form_submit_once:
+          type: boolean
+          label: 'Prevent duplicate submissions'
         form_submit_attributes:
           type: ignore
           label: 'Webform submit attributes'

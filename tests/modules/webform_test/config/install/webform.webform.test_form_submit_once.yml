@@ -6,20 +6,21 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_form_details_toggle
-title: 'Test: Webform: Details toggle'
-description: 'Test details expand/collapse all toggle link.'
+id: test_form_submit_once
+title: 'Test: Webform: Submit once'
+description: 'Test submit once.'
 elements: |
-  details_01:
-    '#type': details
-    '#title': 'Details 01'
-    details_01:
-      '#markup': 'Detail 01 Markup'
-  details_02:
-    '#type': details
-    '#title': 'Details 02'
-    details_02:
-      '#markup': 'Detail 02 Markup'
+  message:
+    '#markup': 'The below submit buttons can only be clicked once.'
+  wizard_1:
+    '#type': wizard_page
+    '#title': 'Wizard page #1'
+  wizard_2:
+    '#type': wizard_page
+    '#title': 'Wizard page #2'
+  wizard_3:
+    '#type': wizard_page
+    '#title': 'Wizard page #3'
 css: ''
 javascript: ''
 settings:
@@ -27,7 +28,7 @@ settings:
   page_submit_path: ''
   page_confirm_path: ''
   form_submit_label: ''
-  form_submit_once: false
+  form_submit_once: true
   form_submit_attributes: {  }
   form_exception_message: ''
   form_closed_message: ''
@@ -51,13 +52,13 @@ settings:
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
-  preview: 0
+  preview: 1
   preview_next_button_label: ''
   preview_next_button_attributes: {  }
   preview_prev_button_label: ''
   preview_prev_button_attributes: {  }
   preview_message: ''
-  draft: false
+  draft: true
   draft_auto_save: false
   draft_button_label: ''
   draft_button_attributes: {  }
@@ -76,8 +77,8 @@ settings:
   limit_user_message: ''
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: true
-  results_disabled_ignore: true
+  results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

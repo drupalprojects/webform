@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for webforms.
+ * Javascript behaviors for unsaved webforms.
  */
 
 (function ($, Drupal) {

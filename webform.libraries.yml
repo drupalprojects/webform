@@ -142,6 +142,16 @@ webform.form.disable_back:
   js:
     js/webform.form.disable_back.js:  {preprocess: false}
 
+webform.form.submit_once:
+  version: 1.x
+  js:
+    js/webform.form.submit_once.js:  {}
+  dependencies:
+    - system/base
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+
 webform.form.unsaved:
   version: 1.x
   js:

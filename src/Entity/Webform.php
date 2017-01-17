@@ -511,6 +511,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'page_submit_path' => '',
       'page_confirm_path' => '',
       'form_submit_label' => '',
+      'form_submit_once' => FALSE,
       'form_submit_attributes' => [],
       'form_exception_message' => '',
       'form_closed_message' => '',
