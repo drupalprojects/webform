@@ -199,6 +199,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'config',
     ];
 
+    // Configuration Ignore.
+    $projects['config_ignore'] = [
+      'title' => $this->t('Config Ignore'),
+      'description' => $this->t('Ignore certain configuration during import'),
+      'url' => Url::fromUri('https://www.drupal.org/project/config_ignore'),
+      'category' => 'config',
+    ];
+
     // Configuration Split.
     $projects['config_split'] = [
       'title' => $this->t('Configuration Split'),
@@ -206,6 +214,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/config_split'),
       'category' => 'config',
     ];
+
 
     return $projects;
   }
