@@ -214,6 +214,52 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
+  public function purge($count) {
+    $days_to_seconds = 60 * 60 * 24;
+
+    $query = $this->entityManager->getStorage('webform')->getQuery();
+    $query->condition('settings.purge', [self::PURGE_DRAFT, self::PURGE_COMPLETED, self::PURGE_ALL], 'IN');
+    $query->condition('settings.purge_days', 0, '>');
+    $webforms_to_purge = array_values($query->execute());
+
+    $webform_submissions_to_purge = array();
+
+    if (!empty($webforms_to_purge)) {
+      $webforms_to_purge = $this->entityManager->getStorage('webform')->loadMultiple($webforms_to_purge);
+      foreach ($webforms_to_purge as $webform) {
+        $query = $this->getQuery();
+        $query->condition('created', REQUEST_TIME - ($webform->getSetting('purge_days') * $days_to_seconds), '<');
+        $query->condition('webform_id', $webform->id());
+        switch ($webform->getSetting('purge')) {
+          case self::PURGE_DRAFT:
+            $query->condition('in_draft', TRUE);
+            break;
+
+          case self::PURGE_COMPLETED:
+            $query->condition('in_draft', FALSE);
+            break;
+        }
+        $query->range(0, $count - count($webform_submissions_to_purge));
+        $result = array_values($query->execute());
+        if (!empty($result)) {
+          $webform_submissions_to_purge = array_merge($webform_submissions_to_purge, $result);
+        }
+        if (count($webform_submissions_to_purge) == $count) {
+          // We've collected enough webform submissions for purging in this run.
+          break;
+        }
+      }
+    }
+
+    if (!empty($webform_submissions_to_purge)) {
+      $webform_submissions_to_purge = $this->loadMultiple($webform_submissions_to_purge);
+      $this->delete($webform_submissions_to_purge);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getTerminusSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $sort = 'DESC') {
     $query = $this->getQuery();
     $query->condition('webform_id', $webform->id());

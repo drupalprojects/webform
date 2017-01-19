@@ -17,6 +17,34 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   const SAVED_DISABLED = 0;
 
   /**
+   * Denote not to purge automatically anything at all.
+   *
+   * @var string
+   */
+  const PURGE_NONE = 'none';
+
+  /**
+   * Denote to purge automatically only drafts.
+   *
+   * @var string
+   */
+  const PURGE_DRAFT = 'draft';
+
+  /**
+   * Denote to purge automatically only completed submissions.
+   *
+   * @var string
+   */
+  const PURGE_COMPLETED = 'completed';
+
+  /**
+   * Denote to purge automatically all submissions.
+   *
+   * @var string
+   */
+  const PURGE_ALL = 'all';
+
+  /**
    * Get webform submission entity field definitions.
    *
    * The helper method is generally used for exporting results.
@@ -175,6 +203,14 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   An array of entity types that the webform has been submitted from.
    */
   public function getSourceEntityTypes(WebformInterface $webform);
+
+  /**
+   * Purge webform submissions.
+   *
+   * @param int $count
+   *   Amount of webform submissions to purge
+   */
+  public function purge($count);
 
   /**
    * Get customized submission columns used to display custom table.

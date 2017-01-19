@@ -14,6 +14,7 @@ use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -607,6 +608,19 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('batch.default_batch_delete_size'),
     ];
 
+    $form['purge_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Automated purging settings'),
+      '#tree' => TRUE,
+    ];
+    $form['purge_settings']['cron_size'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Amount of submissions to process'),
+      '#min' => 1,
+      '#default_value' => $config->get('purge_settings.cron_size'),
+      '#description' => $this->t('Amount of submissions to purge during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
+    ];
+
     // Test.
     $form['test'] = [
       '#type' => 'details',
@@ -728,6 +742,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $config->set('mail', $form_state->getValue('mail'));
     $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()));
     $config->set('batch', $form_state->getValue('batch'));
+    $config->set('purge_settings', $form_state->getValue('purge_settings'));
     $config->set('test', $form_state->getValue('test'));
     $config->set('ui', $form_state->getValue('ui'));
     $config->set('library', $form_state->getValue('library'));

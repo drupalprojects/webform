@@ -18,6 +18,7 @@ use Drupal\webform\WebformHandlerInterface;
 use Drupal\webform\WebformHandlerPluginCollection;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformSubmissionStorageInterface;
 
 /**
  * Defines the webform entity.
@@ -558,6 +559,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'limit_total_message' => '',
       'limit_user' => NULL,
       'limit_user_message' => '',
+      'purge' => WebformSubmissionStorageInterface::PURGE_NONE,
+      'purge_days' => NULL,
       'entity_limit_total' => NULL,
       'entity_limit_user' => NULL,
       'results_disabled' => FALSE,

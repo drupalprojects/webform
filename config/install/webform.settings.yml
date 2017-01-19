@@ -57,6 +57,8 @@ batch:
   default_batch_export_size: 500
   default_batch_update_size: 500
   default_batch_delete_size: 500
+purge_settings:
+  cron_size: 100
 elements:
   allowed_tags: admin
   wrapper_classes: |
@@ -90,7 +92,7 @@ mail:
   default_body_text: |
     Submitted on [webform_submission:created]
     Submitted by: [webform_submission:user]
-    
+
     Submitted values are:
     [webform_submission:values]
   default_body_html: |

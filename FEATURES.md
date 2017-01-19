@@ -200,6 +200,7 @@ Results management features include:
 - Customizable reports
 - Downloading results as a CSV to Google Sheets or MS Excel
 - Saving of download preferences per form
+- Automatically purging old submissions based on certain criteria
 
 
 ## Access Controls

@@ -103,6 +103,14 @@ function webform_modules_uninstalled($modules) {
 }
 
 /**
+ * Implements hook_cron().
+ */
+function webform_cron() {
+  $config = \Drupal::config('webform.settings');
+  \Drupal::entityTypeManager()->getStorage('webform_submission')->purge($config->get('purge_settings.cron_size'));
+}
+
+/**
  * Implements hook_local_tasks_alter().
  */
 function webform_local_tasks_alter(&$local_tasks) {

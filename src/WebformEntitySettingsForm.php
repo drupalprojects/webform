@@ -110,7 +110,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['general']['results_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable saving of submissions.'),
-      '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits and the saving of drafts will be disabled.  Submissions must be sent via an email or handled using a custom <a href=":href">webform handler</a>.', [':href' => Url::fromRoute('entity.webform.handlers_form', ['webform' => $webform->id()])->toString()]),
+      '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts will be disabled. Submissions must be sent via an email or handled using a custom <a href=":href">webform handler</a>.', [':href' => Url::fromRoute('entity.webform.handlers_form', ['webform' => $webform->id()])->toString()]),
       '#return_value' => TRUE,
       '#default_value' => $settings['results_disabled'],
     ];
@@ -647,6 +647,40 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $settings['limit_user_message'],
     ];
 
+    $form['purge'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission purging'),
+      '#open' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="results_disabled"]' => ['checked' => FALSE],
+          ':input[name="method"]' => ['value' => ''],
+        ],
+      ],
+    ];
+    $form['purge']['purge'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Automatically purge'),
+      '#options' => [
+        WebformSubmissionStorageInterface::PURGE_NONE => $this->t('None'),
+        WebformSubmissionStorageInterface::PURGE_DRAFT => $this->t('Draft'),
+        WebformSubmissionStorageInterface::PURGE_COMPLETED => $this->t('Completed'),
+        WebformSubmissionStorageInterface::PURGE_ALL => $this->t('Draft and completed'),
+      ],
+      '#default_value' => $settings['purge'],
+    ];
+    $form['purge']['purge_days'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Days to retain submissions'),
+      '#min' => 1,
+      '#default_value' => $settings['purge_days'],
+      '#states' => array(
+        'invisible' => array('select[name="purge"]' => array('value' => WebformSubmissionStorageInterface::PURGE_NONE)),
+        'optional' => array('select[name="purge"]' => array('value' => WebformSubmissionStorageInterface::PURGE_NONE)),
+      ),
+      '#field_suffix' => $this->t('days'),
+    ];
+
     // Confirmation.
     $form['confirmation'] = [
       '#type' => 'details',
@@ -778,7 +812,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'select',
       '#title' => $this->t('Method'),
       '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br/>' .
-        '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, and confirmations.') . '</em>',
+        '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, and confirmations.') . '</em>',
       '#options' => [
         '' => $this->t('POST (Default)'),
         'post' => $this->t('POST (Custom)'),

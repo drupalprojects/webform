@@ -230,6 +230,13 @@ webform.settings:
         default_batch_delete_size:
           type: integer
           label: 'Batch delete size'
+    purge_settings:
+      type: mapping
+      label: 'Automated purging settings'
+      mapping:
+        cron_size:
+          type: integer
+          label: 'Amount of submissions to process'
     test:
       type: mapping
       label: 'Test settings'
@@ -460,6 +467,12 @@ webform.webform.*:
         limit_user_message:
           type: text
           label: 'Limit user message'
+        purge:
+          type: string
+          label: 'Default purging'
+        purge_days:
+          type: integer
+          label: 'Default days to retain submissions'
         entity_limit_total:
           type: integer
           label: 'Entity limit total submissions'
