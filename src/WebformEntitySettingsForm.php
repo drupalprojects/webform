@@ -147,7 +147,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['page'] = [
       '#type' => 'details',
       '#title' => $this->t('URL path settings'),
-      '#open' => TRUE,
     ];
     $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
     $t_args = [
@@ -191,7 +190,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['webform'] = [
       '#type' => 'details',
       '#title' => $this->t('Webform settings'),
-      '#open' => TRUE,
     ];
     $form['webform']['status'] = [
       '#type' => 'radios',
@@ -315,7 +313,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Form attributes'),
-      '#open' => TRUE,
     ];
     $form['attributes']['attributes'] = [
       '#type' => 'webform_element_attributes',
@@ -328,7 +325,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['wizard'] = [
       '#type' => 'details',
       '#title' => $this->t('Wizard settings'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="method"]' => ['value' => ''],
@@ -415,7 +411,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['preview'] = [
       '#type' => 'details',
       '#title' => $this->t('Preview settings'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="method"]' => ['value' => ''],
@@ -488,7 +483,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['draft'] = [
       '#type' => 'details',
       '#title' => $this->t('Draft settings'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="results_disabled"]' => ['checked' => FALSE],
@@ -552,7 +546,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['submission'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission settings'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="results_disabled"]' => ['checked' => FALSE],
@@ -603,7 +596,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['limits'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission limits'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="results_disabled"]' => ['checked' => FALSE],
@@ -650,7 +642,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['purge'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission purging'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="results_disabled"]' => ['checked' => FALSE],
@@ -685,7 +676,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['confirmation'] = [
       '#type' => 'details',
       '#title' => $this->t('Confirmation settings'),
-      '#open' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="method"]' => ['value' => ''],
@@ -778,7 +768,6 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['author'] = [
       '#type' => 'details',
       '#title' => $this->t('Author information'),
-      '#open' => TRUE,
       '#access' => $this->currentUser()->hasPermission('administer webform'),
     ];
     $form['author']['uid'] = [
@@ -805,7 +794,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['custom'] = [
       '#type' => 'details',
       '#title' => $this->t('Custom settings'),
-      '#open' => $properties ? TRUE : FALSE,
+      '#open' => array_filter($properties) ? TRUE : FALSE,
       '#access' => !$this->moduleHandler->moduleExists('webform_ui') || $this->currentUser()->hasPermission('edit webform source'),
     ];
     $form['custom']['method'] = [
