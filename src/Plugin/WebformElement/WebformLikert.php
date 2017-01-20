@@ -39,7 +39,7 @@ class WebformLikert extends WebformElementBase {
       // Form validation.
       'required' => FALSE,
       // Submission display.
-      'format' => $this->getDefaultFormat(),
+      'format' => $this->getItemDefaultFormat(),
       // Likert settings.
       'questions' => [],
       'questions_randomize' => FALSE,
@@ -75,8 +75,8 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $answers = []) {
-    $format = $this->getFormat($element);
+  public function formatHtmlItem(array &$element, $value, array $answers = []) {
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
         $items = [];
@@ -156,13 +156,13 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $answers = []) {
+  public function formatTextItem(array &$element, $value, array $answers = []) {
     // Return empty value.
     if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';
     }
 
-    $format = $this->getFormat($element);
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
         $list = [];
@@ -248,15 +248,15 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'list';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
-    return parent::getFormats() + [
+  public function getItemFormats() {
+    return parent::getItemFormats() + [
       'list' => $this->t('List'),
       'table' => $this->t('Table'),
     ];

@@ -495,38 +495,59 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#tree' => TRUE,
     ];
     foreach ($element_plugins as $element_id => $element_plugin) {
-      $formats = $element_plugin->getFormats();
-      // Make sure the element has formats.
-      if (empty($formats)) {
-        continue;
-      }
+      $items_formats = $element_plugin->getItemsFormats();
 
-      // Skip if the element just uses the default 'value' format.
-      if (count($formats) == 1 && isset($formats['value'])) {
-        continue;
-      }
+//      // Make sure the element has formats.
+//      if (empty($item_formats)) {
+//        continue;
+//      }
 
-      // Append formats name to formats label.
-      foreach ($formats as $format_name => $format_label) {
-        $formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
-      }
+//      // Skip if the element just uses the default 'value' format.
+//      if (count($item_formats) == 1 && isset($item_formats['value'])) {
+//        continue;
+//      }
 
-      // Create empty format since the select element is not required.
-      // @see https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Select.php/class/Select/8
-      $formats = ['' => '<' . $this->t('Default') . '>'] + $formats;
-
-      $default_format = $element_plugin->getDefaultFormat();
-      $default_format_label = (isset($formats[$default_format])) ? $formats[$default_format] : $default_format;
+      // Element.
       $element_plugin_definition = $element_plugin->getPluginDefinition();
       $element_plugin_label = $element_plugin_definition['label'];
-
       $form['format'][$element_id] = [
-        '#type' => 'select',
+        '#type' => 'details',
         '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => $element_plugin->getTypeName()]),
-        '#description' => $this->t('Defaults to: %value', ['%value' => $default_format_label]),
-        '#options' => $formats,
+      ];
+      // Element item format.
+      $item_formats = $element_plugin->getItemFormats();
+      foreach ($item_formats as $format_name => $format_label) {
+        $item_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
+      }
+      $item_formats = ['' => '<' . $this->t('Default') . '>'] + $item_formats;
+      $item_default_format = $element_plugin->getItemDefaultFormat();
+      $item_default_format_label = (isset($item_formats[$item_default_format])) ? $item_formats[$item_default_format] : $item_default_format;
+      $form['format'][$element_id]['item'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Item format'),
+        '#description' => $this->t("Select how a @label element's single value is displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
+          $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
+        '#options' => $item_formats,
         '#default_value' => $config->get("format.$element_id"),
       ];
+      // Element items format.
+      if ($element_plugin->supportsMultipleValues()) {
+        $items_formats = $element_plugin->getItemsFormats();
+        foreach ($items_formats as $format_name => $format_label) {
+          $items_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
+        }
+        $items_formats = ['' => '<' . $this->t('Default') . '>'] + $items_formats;
+        $items_default_format = $element_plugin->getItemsDefaultFormat();
+        $items_default_format_label = (isset($item_formats[$items_default_format])) ? $items_formats[$items_default_format] : $items_default_format;
+        $form['format'][$element_id]['items'] = [
+          '#type' => 'select',
+          '#title' => $this->t('Items format'),
+          '#description' => $this->t("Select how a @label element's multiple values are displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
+            $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
+          '#options' => $items_formats,
+          '#default_value' => $config->get("format.$element_id"),
+        ];
+      }
     }
 
     // Mail.
@@ -717,6 +738,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    /* Settings */
+
     $settings = $form_state->getValue('page')
       + $form_state->getValue('webform')
       + $form_state->getValue('wizard')
@@ -725,20 +748,32 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       + $form_state->getValue('confirmation')
       + $form_state->getValue('limit');
 
-    // Trigger update all webform paths if the 'default_page_base_path' changed.
+    // Track if we need to trigger an update of all webform paths
+    // because the 'default_page_base_path' changed.
     $update_paths = ($settings['default_page_base_path'] != $this->config('webform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
 
-    $config = $this->config('webform.settings');
+    /* Excluded types */
 
     // Convert list of included types to excluded types.
     $excluded_types = array_diff($this->elementTypes, array_filter($form_state->getValue('excluded_types')));
     ksort($excluded_types);
 
+    /* Format */
+
+    $format = $form_state->getValue('format');
+    foreach ($format as $element_id => $element_format) {
+      $format[$element_id] = array_filter($element_format);
+    }
+    $format = array_filter($format);
+
+    /* Config save */
+
+    $config = $this->config('webform.settings');
     $config->set('settings', $settings);
     $config->set('assets', $form_state->getValue('assets'));
     $config->set('elements', $form_state->getValue('elements') + ['excluded_types' => $excluded_types]);
     $config->set('file', $form_state->getValue('file'));
-    $config->set('format', array_filter($form_state->getValue('format')));
+    $config->set('format', $format);
     $config->set('mail', $form_state->getValue('mail'));
     $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()));
     $config->set('batch', $form_state->getValue('batch'));
@@ -747,6 +782,9 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $config->set('ui', $form_state->getValue('ui'));
     $config->set('library', $form_state->getValue('library'));
     $config->save();
+
+    /* Update paths */
+
     if ($update_paths) {
       /** @var \Drupal\webform\WebformInterface[] $webforms */
       $webforms = Webform::loadMultiple();
@@ -754,6 +792,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         $webform->updatePaths();
       }
     }
+
     parent::submitForm($form, $form_state);
   }
 

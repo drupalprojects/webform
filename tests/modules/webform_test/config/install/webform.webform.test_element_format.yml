@@ -6,9 +6,9 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_element_formats
-title: 'Test: Element: Formats'
-description: 'Test elements with additional formats.'
+id: test_element_format
+title: 'Test: Element: Format'
+description: 'Test element formatting.'
 elements: |
   basic_elements:
     '#type': details
@@ -378,19 +378,6 @@ elements: |
         '#title': 'URL (Link)'
         '#default_value': 'http://example.com'
         '#format': link
-    value:
-      '#type': details
-      '#title': Value
-      value_value:
-        '#type': value
-        '#title': 'Value (Value)'
-        '#default_value': null
-        '#format': value
-      value_raw:
-        '#type': value
-        '#title': 'Value (Raw value)'
-        '#default_value': null
-        '#format': raw
   composite_elements:
     '#type': details
     '#title': 'Composite elements'
@@ -589,79 +576,24 @@ elements: |
         '#type': buttons
         '#title': 'Buttons (Value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': value
       webform_buttons_raw:
         '#type': buttons
         '#title': 'Buttons (Raw value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': raw
-      webform_buttons_comma:
-        '#type': buttons
-        '#title': 'Buttons (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': comma
-      webform_buttons_semicolon:
-        '#type': buttons
-        '#title': 'Buttons (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': semicolon
-      webform_buttons_and:
-        '#type': buttons
-        '#title': 'Buttons (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': and
-      webform_buttons_ol:
-        '#type': buttons
-        '#title': 'Buttons (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ol
-      webform_buttons_ul:
-        '#type': buttons
-        '#title': 'Buttons (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ul
     webform_buttons_other:
       '#type': details
       '#title': 'Buttons other'
@@ -669,281 +601,24 @@ elements: |
         '#type': buttons_other
         '#title': 'Buttons other (Value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': value
       webform_buttons_other_raw:
         '#type': buttons_other
         '#title': 'Buttons other (Raw value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': raw
-      webform_buttons_other_comma:
-        '#type': buttons_other
-        '#title': 'Buttons other (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': comma
-      webform_buttons_other_semicolon:
-        '#type': buttons_other
-        '#title': 'Buttons other (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': semicolon
-      webform_buttons_other_and:
-        '#type': buttons_other
-        '#title': 'Buttons other (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': and
-      webform_buttons_other_ol:
-        '#type': buttons_other
-        '#title': 'Buttons other (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ol
-      webform_buttons_other_ul:
-        '#type': buttons_other
-        '#title': 'Buttons other (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ul
-    checkboxes:
-      '#type': details
-      '#title': Checkboxes
-      checkboxes_value:
-        '#type': checkboxes
-        '#title': 'Checkboxes (Value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': value
-      checkboxes_raw:
-        '#type': checkboxes
-        '#title': 'Checkboxes (Raw value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': raw
-      checkboxes_comma:
-        '#type': checkboxes
-        '#title': 'Checkboxes (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': comma
-      checkboxes_semicolon:
-        '#type': checkboxes
-        '#title': 'Checkboxes (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': semicolon
-      checkboxes_and:
-        '#type': checkboxes
-        '#title': 'Checkboxes (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': and
-      checkboxes_ol:
-        '#type': checkboxes
-        '#title': 'Checkboxes (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ol
-      checkboxes_ul:
-        '#type': checkboxes
-        '#title': 'Checkboxes (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ul
-    webform_checkboxes_other:
-      '#type': details
-      '#title': 'Checkboxes other'
-      webform_checkboxes_other_value:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (Value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': value
-      webform_checkboxes_other_raw:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (Raw value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': raw
-      webform_checkboxes_other_comma:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': comma
-      webform_checkboxes_other_semicolon:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': semicolon
-      webform_checkboxes_other_and:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': and
-      webform_checkboxes_other_ol:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ol
-      webform_checkboxes_other_ul:
-        '#type': checkboxes_other
-        '#title': 'Checkboxes other (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ul
     webform_likert:
       '#type': details
       '#title': Likert
@@ -1026,79 +701,24 @@ elements: |
         '#type': radios
         '#title': 'Radios (Value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': value
       radios_raw:
         '#type': radios
         '#title': 'Radios (Raw value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': raw
-      radios_comma:
-        '#type': radios
-        '#title': 'Radios (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': comma
-      radios_semicolon:
-        '#type': radios
-        '#title': 'Radios (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': semicolon
-      radios_and:
-        '#type': radios
-        '#title': 'Radios (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': and
-      radios_ol:
-        '#type': radios
-        '#title': 'Radios (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ol
-      radios_ul:
-        '#type': radios
-        '#title': 'Radios (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ul
     webform_radios_other:
       '#type': details
       '#title': 'Radios other'
@@ -1106,79 +726,24 @@ elements: |
         '#type': radios_other
         '#title': 'Radios other (Value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': value
       webform_radios_other_raw:
         '#type': radios_other
         '#title': 'Radios other (Raw value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': raw
-      webform_radios_other_comma:
-        '#type': radios_other
-        '#title': 'Radios other (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': comma
-      webform_radios_other_semicolon:
-        '#type': radios_other
-        '#title': 'Radios other (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': semicolon
-      webform_radios_other_and:
-        '#type': radios_other
-        '#title': 'Radios other (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': and
-      webform_radios_other_ol:
-        '#type': radios_other
-        '#title': 'Radios other (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ol
-      webform_radios_other_ul:
-        '#type': radios_other
-        '#title': 'Radios other (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ul
     select:
       '#type': details
       '#title': Select
@@ -1186,79 +751,24 @@ elements: |
         '#type': select
         '#title': 'Select (Value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': value
       select_raw:
         '#type': select
         '#title': 'Select (Raw value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': raw
-      select_comma:
-        '#type': select
-        '#title': 'Select (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': comma
-      select_semicolon:
-        '#type': select
-        '#title': 'Select (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': semicolon
-      select_and:
-        '#type': select
-        '#title': 'Select (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': and
-      select_ol:
-        '#type': select
-        '#title': 'Select (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ol
-      select_ul:
-        '#type': select
-        '#title': 'Select (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ul
     webform_select_other:
       '#type': details
       '#title': 'Select other'
@@ -1266,483 +776,24 @@ elements: |
         '#type': select_other
         '#title': 'Select other (Value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': value
       webform_select_other_raw:
         '#type': select_other
         '#title': 'Select other (Raw value)'
         '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
+          one: One
+          two: Two
+          three: Three
+          four: Four
+          five: Five
+        '#default_value': one
         '#format': raw
-      webform_select_other_comma:
-        '#type': select_other
-        '#title': 'Select other (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': comma
-      webform_select_other_semicolon:
-        '#type': select_other
-        '#title': 'Select other (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': semicolon
-      webform_select_other_and:
-        '#type': select_other
-        '#title': 'Select other (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': and
-      webform_select_other_ol:
-        '#type': select_other
-        '#title': 'Select other (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ol
-      webform_select_other_ul:
-        '#type': select_other
-        '#title': 'Select other (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value': One
-        '#format': ul
-    tableselect:
-      '#type': details
-      '#title': 'Table select'
-      tableselect_value:
-        '#type': tableselect
-        '#title': 'Table select (Value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': value
-      tableselect_raw:
-        '#type': tableselect
-        '#title': 'Table select (Raw value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': raw
-      tableselect_comma:
-        '#type': tableselect
-        '#title': 'Table select (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': comma
-      tableselect_semicolon:
-        '#type': tableselect
-        '#title': 'Table select (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': semicolon
-      tableselect_and:
-        '#type': tableselect
-        '#title': 'Table select (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': and
-      tableselect_ol:
-        '#type': tableselect
-        '#title': 'Table select (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ol
-      tableselect_ul:
-        '#type': tableselect
-        '#title': 'Table select (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ul
-    webform_tableselect_sort:
-      '#type': details
-      '#title': 'Tableselect sort'
-      webform_tableselect_sort_value:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (Value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': value
-      webform_tableselect_sort_raw:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (Raw value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': raw
-      webform_tableselect_sort_comma:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': comma
-      webform_tableselect_sort_semicolon:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': semicolon
-      webform_tableselect_sort_and:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': and
-      webform_tableselect_sort_ol:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ol
-      webform_tableselect_sort_ul:
-        '#type': tableselect_sort
-        '#title': 'Tableselect sort (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ul
-    webform_table_sort:
-      '#type': details
-      '#title': 'Table sort'
-      webform_table_sort_value:
-        '#type': table_sort
-        '#title': 'Table sort (Value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': value
-      webform_table_sort_raw:
-        '#type': table_sort
-        '#title': 'Table sort (Raw value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': raw
-      webform_table_sort_comma:
-        '#type': table_sort
-        '#title': 'Table sort (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': comma
-      webform_table_sort_semicolon:
-        '#type': table_sort
-        '#title': 'Table sort (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': semicolon
-      webform_table_sort_and:
-        '#type': table_sort
-        '#title': 'Table sort (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': and
-      webform_table_sort_ol:
-        '#type': table_sort
-        '#title': 'Table sort (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ol
-      webform_table_sort_ul:
-        '#type': table_sort
-        '#title': 'Table sort (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ul
-    webform_toggles:
-      '#type': details
-      '#title': Toggles
-      webform_toggles_value:
-        '#type': toggles
-        '#title': 'Toggles (Value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': value
-      webform_toggles_raw:
-        '#type': toggles
-        '#title': 'Toggles (Raw value)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': raw
-      webform_toggles_comma:
-        '#type': toggles
-        '#title': 'Toggles (Comma)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': comma
-      webform_toggles_semicolon:
-        '#type': toggles
-        '#title': 'Toggles (Semicolon)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': semicolon
-      webform_toggles_and:
-        '#type': toggles
-        '#title': 'Toggles (And)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': and
-      webform_toggles_ol:
-        '#type': toggles
-        '#title': 'Toggles (Ordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ol
-      webform_toggles_ul:
-        '#type': toggles
-        '#title': 'Toggles (Unordered list)'
-        '#options':
-          One: One
-          Two: Two
-          Three: Three
-          Four: Four
-          Five: Five
-        '#default_value':
-          - One
-          - Two
-          - Three
-        '#format': ul
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements'
@@ -2043,152 +1094,6 @@ elements: |
           include_anonymous: true
         '#default_value': 1
         '#format': default
-    webform_entity_checkboxes:
-      '#type': details
-      '#title': 'Entity checkboxes'
-      webform_entity_checkboxes_value:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Value)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': value
-      webform_entity_checkboxes_raw:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Raw value)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': raw
-      webform_entity_checkboxes_comma:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Comma)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': comma
-      webform_entity_checkboxes_semicolon:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Semicolon)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': semicolon
-      webform_entity_checkboxes_and:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (And)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': and
-      webform_entity_checkboxes_ol:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Ordered list)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': ol
-      webform_entity_checkboxes_ul:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Unordered list)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': ul
-      webform_entity_checkboxes_link:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Link)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': link
-      webform_entity_checkboxes_id:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Entity ID)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': id
-      webform_entity_checkboxes_label:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Label)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': label
-      webform_entity_checkboxes_text:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Label (ID))'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': text
-      webform_entity_checkboxes_teaser:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Teaser)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': teaser
-      webform_entity_checkboxes_default:
-        '#type': entity_checkboxes
-        '#title': 'Entity checkboxes (Default)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value':
-          - 1
-          - 0
-        '#format': default
     webform_entity_radios:
       '#type': details
       '#title': 'Entity radios'
@@ -2210,51 +1115,6 @@ elements: |
           include_anonymous: true
         '#default_value': 1
         '#format': raw
-      webform_entity_radios_comma:
-        '#type': entity_radios
-        '#title': 'Entity radios (Comma)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': comma
-      webform_entity_radios_semicolon:
-        '#type': entity_radios
-        '#title': 'Entity radios (Semicolon)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': semicolon
-      webform_entity_radios_and:
-        '#type': entity_radios
-        '#title': 'Entity radios (And)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': and
-      webform_entity_radios_ol:
-        '#type': entity_radios
-        '#title': 'Entity radios (Ordered list)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': ol
-      webform_entity_radios_ul:
-        '#type': entity_radios
-        '#title': 'Entity radios (Unordered list)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': ul
       webform_entity_radios_link:
         '#type': entity_radios
         '#title': 'Entity radios (Link)'
@@ -2330,51 +1190,6 @@ elements: |
           include_anonymous: true
         '#default_value': 1
         '#format': raw
-      webform_entity_select_comma:
-        '#type': entity_select
-        '#title': 'Entity select (Comma)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': comma
-      webform_entity_select_semicolon:
-        '#type': entity_select
-        '#title': 'Entity select (Semicolon)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': semicolon
-      webform_entity_select_and:
-        '#type': entity_select
-        '#title': 'Entity select (And)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': and
-      webform_entity_select_ol:
-        '#type': entity_select
-        '#title': 'Entity select (Ordered list)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': ol
-      webform_entity_select_ul:
-        '#type': entity_select
-        '#title': 'Entity select (Unordered list)'
-        '#target_type': user
-        '#selection_handler': 'default:user'
-        '#selection_settings':
-          include_anonymous: true
-        '#default_value': 1
-        '#format': ul
       webform_entity_select_link:
         '#type': entity_select
         '#title': 'Entity select (Link)'

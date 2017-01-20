@@ -34,18 +34,18 @@ class WebformTime extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
+  public function formatTextItem(array &$element, $value, array $options = []) {
     if (empty($value)) {
       return '';
     }
 
-    $format = $this->getFormat($element);
+    $format = $this->getItemFormat($element);
     if ($format == 'value') {
       $time_format = (isset($element['#time_format'])) ? $element['#time_format'] : 'H:i';
       return date($time_format, strtotime($value));
     }
 
-    return parent::formatText($element, $value, $options);
+    return parent::formatTextItem($element, $value, $options);
   }
 
   /**

@@ -131,39 +131,39 @@ elements: |
       '#type': buttons
       '#title': '<u>Buttons</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_buttons_other:
       '#type': buttons_other
       '#title': '<u>Buttons other</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     checkboxes:
       '#type': checkboxes
       '#title': '<u>Checkboxes</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_checkboxes_other:
       '#type': checkboxes_other
       '#title': '<u>Checkboxes other</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_likert:
       '#type': likert
       '#title': '<u>Likert</u>'
@@ -182,75 +182,75 @@ elements: |
       '#title': '<u>Radios</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a><br/><a href="https://www.drupal.org/node/2836364">Issue #2836364: Wrapper attributes are not supported by composite elements, this includes radios, checkboxes, and buttons.</a>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_radios_other:
       '#type': radios_other
       '#title': '<u>Radios other</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     select:
       '#type': select
       '#title': '<u>Select</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1426646">Issue #1426646: "-Select-" option is lost when webform elements uses ''#states''</a><br/><a href="https://www.drupal.org/node/1149078">Issue #1149078: States API doesn''t work with multiple select fields</a><br/><a href="https://www.drupal.org/node/2791741">Issue #2791741: FAPI states: fields aren''t hidden initially when depending on multi-value selection</a>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_select_other:
       '#type': select_other
       '#title': '<u>Select other</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     tableselect:
       '#type': tableselect
       '#title': '<u>Table select</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_tableselect_sort:
       '#type': tableselect_sort
       '#title': '<u>Tableselect sort</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_table_sort:
       '#type': table_sort
       '#title': '<u>Table sort</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
     webform_toggles:
       '#type': toggles
       '#title': '<u>Toggles</u>'
       '#options':
-        One: One
-        Two: Two
-        Three: Three
-        Four: Four
-        Five: Five
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
   containers:
     '#type': details
     '#title': '<u>Containers</u>'

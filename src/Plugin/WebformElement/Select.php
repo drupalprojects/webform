@@ -14,6 +14,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   label = @Translation("Select"),
  *   description = @Translation("Provides a form element for a drop-down menu or scrolling selection box."),
  *   category = @Translation("Options elements"),
+ *   multiple = TRUE,
  * )
  */
 class Select extends OptionsBase {

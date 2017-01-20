@@ -43,7 +43,7 @@ class Textarea extends TextBase {
       'counter_maximum' => '',
       'counter_message' => '',
       // Submission display.
-      'format' => $this->getDefaultFormat(),
+      'format' => $this->getItemDefaultFormat(),
     ] + $this->getDefaultBaseProperties();
   }
 
@@ -57,7 +57,7 @@ class Textarea extends TextBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
     return [
       '#markup' => nl2br(new HtmlEscapedText($value)),
     ];

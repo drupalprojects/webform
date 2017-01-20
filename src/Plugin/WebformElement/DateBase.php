@@ -64,13 +64,13 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
+  public function formatTextItem(array &$element, $value, array $options = []) {
     $timestamp = strtotime($value);
     if (empty($timestamp)) {
       return $value;
     }
 
-    $format = $this->getFormat($element) ?: 'html_' . $this->getDateType($element);
+    $format = $this->getItemFormat($element) ?: 'html_' . $this->getDateType($element);
     if (DateFormat::load($format)) {
       return \Drupal::service('date.formatter')->format($timestamp, $format);
     }
@@ -82,27 +82,27 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormat(array $element) {
+  public function getItemFormat(array $element) {
     if (isset($element['#format'])) {
       return $element['#format'];
     }
     else {
-      return parent::getFormat($element);
+      return parent::getItemFormat($element);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'fallback';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
-    $formats = parent::getFormats();
+  public function getItemFormats() {
+    $formats = parent::getItemFormats();
     $date_formats = DateFormat::loadMultiple();
     foreach ($date_formats as $date_format) {
       $formats[$date_format->id()] = $date_format->label();

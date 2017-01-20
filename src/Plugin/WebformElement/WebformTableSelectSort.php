@@ -36,14 +36,7 @@ class WebformTableSelectSort extends OptionsBase {
   /**
    * {@inheritdoc}
    */
-  public function hasMultipleValues(array $element) {
-    return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'ol';
   }
 

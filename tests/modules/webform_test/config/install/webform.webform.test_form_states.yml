@@ -160,11 +160,11 @@ elements: |
       '#title': Address
       '#default_value':
         address: '10 Main Street'
-        address_2: '11 Brook Alley Road. APT 1'
-        city: Pleasantville
-        state_province: Oregon
-        postal_code: Oratione
-        country: Eritrea
+        address_2: '10 Main Street'
+        city: Springfield
+        state_province: Alabama
+        postal_code: Loremipsum
+        country: Afghanistan
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -216,7 +216,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -244,8 +244,8 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
         - One
+        - Two
         - Three
       '#states':
         visible:
@@ -262,9 +262,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
+        - One
         - Two
         - Three
-        - One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -287,7 +287,7 @@ elements: |
     visible_color:
       '#type': color
       '#title': Color
-      '#default_value': '#ccffff'
+      '#default_value': '#ffffcc'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -299,16 +299,16 @@ elements: |
       '#type': contact
       '#title': Contact
       '#default_value':
-        name: Dixisset
-        company: Oratione
-        email: test@test.com
+        name: Loremipsum
+        company: Loremipsum
+        email: example@example.com
         phone: 123-456-7890
         address: '10 Main Street'
         address_2: '10 Main Street'
-        city: 'Hill Valley'
-        state_province: Colorado
-        postal_code: Dixisset
-        country: 'Papua New Guinea'
+        city: Springfield
+        state_province: Alabama
+        postal_code: Loremipsum
+        country: Afghanistan
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -321,13 +321,13 @@ elements: |
       '#title': 'Credit card'
       '#default_value':
         warning: null
-        name: Oratione
-        type: MC
+        name: Loremipsum
+        type: VI
         number: '4111111111111111'
-        civ: 222
+        civ: 111
         expiration: null
-        expiration_month: 9
-        expiration_year: 2020
+        expiration_month: 1
+        expiration_year: 2017
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -349,7 +349,7 @@ elements: |
     visible_date:
       '#type': date
       '#title': Date
-      '#default_value': '1940-10-09'
+      '#default_value': '1942-06-18'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -361,7 +361,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '1943-02-25'
+      '#default_value': '1942-06-18'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -372,7 +372,7 @@ elements: |
     visible_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '1940-10-09'
+      '#default_value': '1942-06-18'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -404,7 +404,7 @@ elements: |
     visible_webform_email_confirm:
       '#type': email_confirm
       '#title': 'Email confirm'
-      '#default_value': test@test.com
+      '#default_value': example@example.com
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -431,6 +431,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#default_value': 1
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -447,7 +448,6 @@ elements: |
         include_anonymous: true
       '#default_value':
         - 1
-        - 0
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -477,6 +477,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#default_value': 1
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -498,7 +499,7 @@ elements: |
     visible_webform_element:
       '#type': element
       '#title': 'Generic element'
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -543,7 +544,7 @@ elements: |
         5: 5
       '#default_value':
         q1: 1
-        q2: 3
+        q2: 1
         q3: 1
       '#states':
         visible:
@@ -556,7 +557,7 @@ elements: |
       '#type': location
       '#title': Location
       '#default_value':
-        value: 'Moscow, Russia, 10307'
+        value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -567,7 +568,7 @@ elements: |
     visible_machine_name:
       '#type': machine_name
       '#title': 'Machine name'
-      '#default_value': dixisset
+      '#default_value': loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -580,11 +581,11 @@ elements: |
       '#title': Name
       '#default_value':
         title: Miss
-        first: Dixisset
-        middle: Dixisset
+        first: Loremipsum
+        middle: Loremipsum
         last: Loremipsum
         suffix: Loremipsum
-        degree: Oratione
+        degree: Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -598,6 +599,7 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
+      '#default_value': !!float 5
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -608,7 +610,7 @@ elements: |
     visible_password:
       '#type': password
       '#title': Password
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -636,7 +638,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -651,7 +653,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -668,7 +670,7 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': 43
+      '#default_value': !!float 50
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -679,7 +681,7 @@ elements: |
     visible_webform_rating:
       '#type': rating
       '#title': Rating
-      '#default_value': 3
+      '#default_value': !!float 3
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -690,7 +692,7 @@ elements: |
     visible_search:
       '#type': search
       '#title': Search
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -706,7 +708,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -766,9 +768,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
-        - Two
         - One
+        - Two
+        - Three
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -808,7 +810,7 @@ elements: |
     visible_textarea:
       '#type': textarea
       '#title': Textarea
-      '#default_value': 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;'
+      '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -819,7 +821,7 @@ elements: |
     visible_textfield:
       '#type': textfield
       '#title': 'Text field'
-      '#default_value': Oratione
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -844,7 +846,7 @@ elements: |
       '#type': time
       '#title': Time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1838234">Issue #1838234: Add jQuery Timepicker for the Time element of the datetime field</a>'
-      '#default_value': '17:00'
+      '#default_value': '09:00'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -855,7 +857,7 @@ elements: |
     visible_webform_toggle:
       '#type': toggle
       '#title': Toggle
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -871,8 +873,8 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
         - One
+        - Two
         - Three
       '#states':
         visible:
@@ -1030,10 +1032,10 @@ elements: |
       '#default_value':
         address: '10 Main Street'
         address_2: '10 Main Street'
-        city: Pleasantville
-        state_province: Delaware
-        postal_code: Dixisset
-        country: Belgium
+        city: Springfield
+        state_province: Alabama
+        postal_code: Loremipsum
+        country: Afghanistan
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1073,7 +1075,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1095,9 +1097,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
+        - One
         - Two
         - Three
-        - One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1138,16 +1140,16 @@ elements: |
       '#type': contact
       '#title': Contact
       '#default_value':
-        name: Dixisset
-        company: Oratione
+        name: Loremipsum
+        company: Loremipsum
         email: example@example.com
         phone: 123-456-7890
         address: '10 Main Street'
         address_2: '10 Main Street'
-        city: 'Hill Valley'
-        state_province: 'New York'
+        city: Springfield
+        state_province: Alabama
         postal_code: Loremipsum
-        country: 'British Virgin Islands'
+        country: Afghanistan
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1157,13 +1159,13 @@ elements: |
       '#title': 'Credit card'
       '#default_value':
         warning: null
-        name: Dixisset
-        type: DC
+        name: Loremipsum
+        type: VI
         number: '4111111111111111'
         civ: 111
         expiration: null
-        expiration_month: 10
-        expiration_year: 2021
+        expiration_month: 1
+        expiration_year: 2017
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1179,7 +1181,7 @@ elements: |
     invisible_date:
       '#type': date
       '#title': Date
-      '#default_value': '1940-10-09'
+      '#default_value': '1942-06-18'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1188,7 +1190,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '1940-07-07'
+      '#default_value': '1942-06-18'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1196,7 +1198,7 @@ elements: |
     invisible_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '1940-07-07'
+      '#default_value': '1942-06-18'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1211,7 +1213,7 @@ elements: |
     invisible_email:
       '#type': email
       '#title': Email
-      '#default_value': random@random.com
+      '#default_value': example@example.com
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1254,7 +1256,6 @@ elements: |
         include_anonymous: true
       '#default_value':
         - 1
-        - 0
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1266,6 +1267,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#default_value': 1
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1293,7 +1295,7 @@ elements: |
     invisible_webform_element:
       '#type': element
       '#title': 'Generic element'
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1328,9 +1330,9 @@ elements: |
         4: 4
         5: 5
       '#default_value':
-        q1: 3
+        q1: 1
         q2: 1
-        q3: 3
+        q3: 1
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1339,7 +1341,7 @@ elements: |
       '#type': location
       '#title': Location
       '#default_value':
-        value: 'Moscow, Russia, 10307'
+        value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1347,7 +1349,7 @@ elements: |
     invisible_machine_name:
       '#type': machine_name
       '#title': 'Machine name'
-      '#default_value': dixisset
+      '#default_value': loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1356,11 +1358,11 @@ elements: |
       '#type': name
       '#title': Name
       '#default_value':
-        title: Ms
-        first: Oratione
+        title: Miss
+        first: Loremipsum
         middle: Loremipsum
-        last: Dixisset
-        suffix: Oratione
+        last: Loremipsum
+        suffix: Loremipsum
         degree: Loremipsum
       '#states':
         invisible:
@@ -1372,7 +1374,7 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
-      '#default_value': 10
+      '#default_value': !!float 5
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1380,7 +1382,7 @@ elements: |
     invisible_password:
       '#type': password
       '#title': Password
-      '#default_value': Oratione
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1389,7 +1391,7 @@ elements: |
       '#type': password_confirm
       '#title': 'Password confirm'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1427838">Issue #1427838: password and password_confirm children do not pick up #states or #attributes</a>'
-      '#default_value': Oratione
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1402,7 +1404,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1414,7 +1416,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1428,7 +1430,7 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': 66
+      '#default_value': !!float 50
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1436,7 +1438,7 @@ elements: |
     invisible_webform_rating:
       '#type': rating
       '#title': Rating
-      '#default_value': 4
+      '#default_value': !!float 3
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1469,7 +1471,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1490,9 +1492,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
+        - One
         - Two
         - Three
-        - One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1505,9 +1507,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
         - One
         - Two
+        - Three
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1520,8 +1522,8 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
         - One
+        - Two
         - Three
       '#states':
         invisible:
@@ -1538,7 +1540,7 @@ elements: |
     invisible_textarea:
       '#type': textarea
       '#title': Textarea
-      '#default_value': 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;'
+      '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1546,7 +1548,7 @@ elements: |
     invisible_textfield:
       '#type': textfield
       '#title': 'Text field'
-      '#default_value': Oratione
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1556,7 +1558,7 @@ elements: |
       '#title': 'Text format'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden webform state</a><br/><a href="https://www.drupal.org/node/1954968">Issue #1954968: Required CKEditor fields always fail HTML5 validation</a>'
       '#default_value':
-        value: '<p>Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;</p>'
+        value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1573,7 +1575,7 @@ elements: |
     invisible_webform_toggle:
       '#type': toggle
       '#title': Toggle
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1586,9 +1588,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
-        - Two
         - One
+        - Two
+        - Three
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1596,7 +1598,7 @@ elements: |
     invisible_url:
       '#type': url
       '#title': URL
-      '#default_value': 'http://test.com'
+      '#default_value': 'http://example.com'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1625,12 +1627,12 @@ elements: |
       '#type': address
       '#title': Address
       '#default_value':
-        address: '11 Brook Alley Road. APT 1'
+        address: '10 Main Street'
         address_2: '10 Main Street'
-        city: 'Hill Valley'
-        state_province: 'Rhode Island'
-        postal_code: Oratione
-        country: Uganda
+        city: Springfield
+        state_province: Alabama
+        postal_code: Loremipsum
+        country: Afghanistan
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1646,7 +1648,7 @@ elements: |
       '#type': autocomplete
       '#title': Autocomplete
       '#autocomplete_items': country_names
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1658,7 +1660,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1670,7 +1672,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1692,9 +1694,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
+        - One
         - Two
         - Three
-        - One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1707,9 +1709,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
-        - Two
         - One
+        - Two
+        - Three
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1726,7 +1728,7 @@ elements: |
     disabled_color:
       '#type': color
       '#title': Color
-      '#default_value': '#ccffff'
+      '#default_value': '#ffffcc'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1736,15 +1738,15 @@ elements: |
       '#title': Contact
       '#default_value':
         name: Loremipsum
-        company: Dixisset
-        email: test@test.com
+        company: Loremipsum
+        email: example@example.com
         phone: 123-456-7890
         address: '10 Main Street'
-        address_2: '11 Brook Alley Road. APT 1'
-        city: Pleasantville
-        state_province: Montana
-        postal_code: Dixisset
-        country: Libya
+        address_2: '10 Main Street'
+        city: Springfield
+        state_province: Alabama
+        postal_code: Loremipsum
+        country: Afghanistan
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1754,13 +1756,13 @@ elements: |
       '#title': 'Credit card'
       '#default_value':
         warning: null
-        name: Oratione
-        type: DC
+        name: Loremipsum
+        type: VI
         number: '4111111111111111'
-        civ: 333
+        civ: 111
         expiration: null
-        expiration_month: 2
-        expiration_year: 2026
+        expiration_month: 1
+        expiration_year: 2017
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1785,7 +1787,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '1940-10-09'
+      '#default_value': '1942-06-18'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1793,7 +1795,7 @@ elements: |
     disabled_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '1943-02-25'
+      '#default_value': '1942-06-18'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1808,7 +1810,7 @@ elements: |
     disabled_email:
       '#type': email
       '#title': Email
-      '#default_value': random@random.com
+      '#default_value': example@example.com
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1816,7 +1818,7 @@ elements: |
     disabled_webform_email_confirm:
       '#type': email_confirm
       '#title': 'Email confirm'
-      '#default_value': test@test.com
+      '#default_value': example@example.com
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1850,7 +1852,6 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#default_value':
-        - 0
         - 1
       '#states':
         disabled:
@@ -1863,6 +1864,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#default_value': 1
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1925,9 +1927,9 @@ elements: |
         4: 4
         5: 5
       '#default_value':
-        q1: 3
-        q2: 5
-        q3: 3
+        q1: 1
+        q2: 1
+        q3: 1
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1944,7 +1946,7 @@ elements: |
     disabled_machine_name:
       '#type': machine_name
       '#title': 'Machine name'
-      '#default_value': oratione
+      '#default_value': loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1953,12 +1955,12 @@ elements: |
       '#type': name
       '#title': Name
       '#default_value':
-        title: Dr
+        title: Miss
         first: Loremipsum
-        middle: Oratione
-        last: Dixisset
-        suffix: Dixisset
-        degree: Dixisset
+        middle: Loremipsum
+        last: Loremipsum
+        suffix: Loremipsum
+        degree: Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1969,6 +1971,7 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
+      '#default_value': !!float 5
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1976,7 +1979,7 @@ elements: |
     disabled_password:
       '#type': password
       '#title': Password
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1985,7 +1988,7 @@ elements: |
       '#type': password_confirm
       '#title': 'Password confirm'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1427838">Issue #1427838: password and password_confirm children do not pick up #states or #attributes</a>'
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1998,7 +2001,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2010,7 +2013,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2024,7 +2027,7 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': 88
+      '#default_value': !!float 50
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2032,7 +2035,7 @@ elements: |
     disabled_webform_rating:
       '#type': rating
       '#title': Rating
-      '#default_value': 3
+      '#default_value': !!float 3
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2040,7 +2043,7 @@ elements: |
     disabled_search:
       '#type': search
       '#title': Search
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2053,7 +2056,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2065,7 +2068,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': One
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2101,9 +2104,9 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
-        - Two
         - One
+        - Two
+        - Three
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2116,8 +2119,8 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
         - One
+        - Two
         - Three
       '#states':
         disabled:
@@ -2126,7 +2129,7 @@ elements: |
     disabled_tel:
       '#type': tel
       '#title': Telephone
-      '#default_value': 098-765-4321
+      '#default_value': 123-456-7890
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2142,7 +2145,7 @@ elements: |
     disabled_textfield:
       '#type': textfield
       '#title': 'Text field'
-      '#default_value': Oratione
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2152,7 +2155,7 @@ elements: |
       '#title': 'Text format'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden webform state</a><br/><a href="https://www.drupal.org/node/1954968">Issue #1954968: Required CKEditor fields always fail HTML5 validation</a>'
       '#default_value':
-        value: '<p>Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;</p>'
+        value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2161,7 +2164,7 @@ elements: |
       '#type': time
       '#title': Time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1838234">Issue #1838234: Add jQuery Timepicker for the Time element of the datetime field</a>'
-      '#default_value': '17:00'
+      '#default_value': '09:00'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

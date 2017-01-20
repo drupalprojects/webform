@@ -93,7 +93,7 @@ function webform_test_form_webform_submission_test_form_validate_form_validate($
  */
 function webform_test_preprocess_page(&$variables) {
   if (!isset($_GET['generate'])
-    && in_array(\Drupal::routeMatch()->getRouteName(), ['entity.webform.edit_form', 'entity.webform.source_form'])
+    && in_array(\Drupal::routeMatch()->getRouteName(), ['entity.webform.canonical', 'entity.webform.edit_form', 'entity.webform.source_form'])
     && _webform_test_load_include(\Drupal::routeMatch()->getRawParameter('webform'))
   ) {
     $t_args = [':href' => Url::fromRouteMatch(\Drupal::routeMatch())->toString() . '?generate'];
@@ -316,11 +316,11 @@ function _webform_test_get_example_element($type, array $options = []) {
   // Set default options.
   if ($webform_element->hasProperty('options')) {
     $element['#options'] = [
-      'One' => 'One',
-      'Two' => 'Two',
-      'Three' => 'Three',
-      'Four' => 'Four',
-      'Five' => 'Five',
+      'one' => 'One',
+      'two' => 'Two',
+      'three' => 'Three',
+      'four' => 'Four',
+      'five' => 'Five',
     ];
   }
 

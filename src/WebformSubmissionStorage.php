@@ -575,15 +575,15 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'link' => $entity->toLink(t('Edit'), 'edit-form')->toString(),
     ];
     switch ($entity->getState()) {
-      case WebformSubmissionInterface::STATE_DRAFT;
+      case WebformSubmissionInterface::STATE_DRAFT:
         \Drupal::logger('webform')->notice('@form: Submission #@id draft saved.', $context);
         break;
 
-      case WebformSubmissionInterface::STATE_UPDATED;
+      case WebformSubmissionInterface::STATE_UPDATED:
         \Drupal::logger('webform')->notice('@form: Submission #@id updated.', $context);
         break;
 
-      case WebformSubmissionInterface::STATE_COMPLETED;
+      case WebformSubmissionInterface::STATE_COMPLETED:
         if ($result === SAVED_NEW) {
           \Drupal::logger('webform')->notice('@form: Submission #@id created.', $context);
         }

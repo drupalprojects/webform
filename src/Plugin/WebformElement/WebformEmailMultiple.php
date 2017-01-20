@@ -17,12 +17,12 @@ class WebformEmailMultiple extends Email {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
     if (empty($value)) {
       return '';
     }
 
-    $format = $this->getFormat($element);
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'link':
         $emails = preg_split('/\s*,\s*/', $value);
@@ -40,7 +40,7 @@ class WebformEmailMultiple extends Email {
         return $links;
 
       default:
-        return parent::formatHtml($element, $value, $options);
+        return parent::formatHtmlItem($element, $value, $options);
     }
   }
 

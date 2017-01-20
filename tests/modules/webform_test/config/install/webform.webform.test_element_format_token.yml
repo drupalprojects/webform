@@ -6,9 +6,9 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_element_formats_tokens
-title: 'Test: Element: Formats: Tokens'
-description: 'Test element using tokens with formats.'
+id: test_element_format_token
+title: 'Test: Element: Format: Token'
+description: 'Test element formatting using tokens.'
 elements: |
   checkboxes:
     '#type': checkboxes
@@ -123,11 +123,11 @@ handlers:
       subject: default
       body: |
         <h3>default:</h3>[webform_submission:values:checkboxes]<hr/>
-        <h3>comma:</h3>[webform_submission:values:checkboxes:comma]<hr/>
-        <h3>semicolon:</h3>[webform_submission:values:checkboxes:semicolon]<hr/>
-        <h3>and:</h3>[webform_submission:values:checkboxes:and]<hr/>
-        <h3>ul:</h3>[webform_submission:values:checkboxes:ul]<hr/>
-        <h3>ol:</h3>[webform_submission:values:checkboxes:ol]<hr/>
+        <h3>comma:</h3>[webform_submission:values:checkboxes:value:comma]<hr/>
+        <h3>semicolon:</h3>[webform_submission:values:checkboxes:value:semicolon]<hr/>
+        <h3>and:</h3>[webform_submission:values:checkboxes:value:and]<hr/>
+        <h3>ul:</h3>[webform_submission:values:checkboxes:value:ul]<hr/>
+        <h3>ol:</h3>[webform_submission:values:checkboxes:value:ol]<hr/>
         <h3>raw:</h3>[webform_submission:values:checkboxes:raw]<hr/>
       excluded_elements: {  }
       html: true
@@ -151,19 +151,19 @@ handlers:
         [webform_submission:values:checkboxes]
         
         comma:
-        [webform_submission:values:checkboxes:comma]
+        [webform_submission:values:checkboxes:value:comma]
         
         semicolon:
-        [webform_submission:values:checkboxes:semicolon]
+        [webform_submission:values:checkboxes:value:semicolon]
         
         and:
-        [webform_submission:values:checkboxes:and]
+        [webform_submission:values:checkboxes:value:and]
         
         ul:
-        [webform_submission:values:checkboxes:ul]
+        [webform_submission:values:checkboxes:value:ul]
         
         ol:
-        [webform_submission:values:checkboxes:ol]
+        [webform_submission:values:checkboxes:value:ol]
         
         raw:
         [webform_submission:values:checkboxes:raw]

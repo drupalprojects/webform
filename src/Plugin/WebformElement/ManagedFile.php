@@ -11,6 +11,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   label = @Translation("File"),
  *   description = @Translation("Provides a form element for uploading and saving a file."),
  *   category = @Translation("File upload elements"),
+ *   multiple = TRUE,
  *   states_wrapper = TRUE,
  * )
  */

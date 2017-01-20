@@ -20,9 +20,9 @@ class LanguageSelect extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
+  public function formatTextItem(array &$element, $value, array $options = []) {
     $language = \Drupal::languageManager()->getLanguage($value);
-    $format = $this->getFormat($element);
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'langcode':
         return $language->getId();
@@ -41,15 +41,15 @@ class LanguageSelect extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'text';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
-    return parent::getFormats() + [
+  public function getItemFormats() {
+    return parent::getItemFormats() + [
       'text' => $this->t('Text'),
       'langcode' => $this->t('Langcode'),
       'language' => $this->t('Language'),

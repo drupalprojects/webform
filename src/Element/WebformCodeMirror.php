@@ -161,7 +161,7 @@ class WebformCodeMirror extends Textarea {
         }
         return $messages;
 
-      case 'yaml';
+      case 'yaml':
         try {
           $value = trim($element['#value']);
           $data = Yaml::decode($value);

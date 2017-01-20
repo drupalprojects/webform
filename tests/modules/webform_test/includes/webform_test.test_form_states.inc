@@ -177,7 +177,7 @@ function _webform_test_form_states($type, array $default_properties = []) {
       // Set default test data as default value.
       // Don't generate a managed files.
       if (!preg_match('/_file$/', $element_type)) {
-        if ($value = $generate->getTestValue($webform, $element_type, $element)) {
+        if ($value = $generate->getTestValue($webform, $element_type, $element, ['random' => FALSE])) {
           $element['#default_value'] = $value;
         }
       }

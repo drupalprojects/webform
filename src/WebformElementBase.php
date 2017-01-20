@@ -135,6 +135,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     );
   }
 
+  /****************************************************************************/
+  // Property methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    *
@@ -146,7 +150,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @see \Drupal\webform\Plugin\WebformElement\ContainerBase
    */
   public function getDefaultProperties() {
-    return [
+    $properties = [
       // Element settings.
       'title' => '',
       'description' => '',
@@ -161,11 +165,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'required_error' => '',
       'unique' => FALSE,
       // Submission display.
-      'format' => $this->getDefaultFormat(),
+      'format' => $this->getItemDefaultFormat(),
       // Attributes.
       'wrapper_attributes' => [],
       'attributes' => [],
-    ] + $this->getDefaultBaseProperties();
+    ];
+
+    // Submission display.
+    $properties['format'] = $this->getItemDefaultFormat();
+    if ($this->supportsMultipleValues()) {
+      $properties['format_items'] = $this->getItemsDefaultFormat();
+    }
+    $properties += $this->getDefaultBaseProperties();
+
+    return $properties;
   }
 
   /**
@@ -217,6 +230,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $default_properties = $this->getDefaultProperties();
     return isset($default_properties[$property_name]);
   }
+
+  /****************************************************************************/
+  // Definition and meta data methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -285,8 +302,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function isMultiline(array $element) {
-    return $this->pluginDefinition['multiline'];
+  public function supportsMultipleValues() {
+    return $this->pluginDefinition['multiple'];
   }
 
   /**
@@ -294,6 +311,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function hasMultipleValues(array $element) {
     return $this->pluginDefinition['multiple'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isMultiline(array $element) {
+    return $this->pluginDefinition['multiline'];
   }
 
   /**
@@ -330,6 +354,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   public function getInfo() {
     return $this->elementInfo->getInfo($this->getPluginId());
   }
+
+  /****************************************************************************/
+  // Element relationship methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -379,6 +407,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     asort($types);
     return $types;
   }
+
+  /****************************************************************************/
+  // Element rendering methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -580,6 +612,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return $element['#webform_key'];
   }
 
+  /****************************************************************************/
+  // Display submission value methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    */
@@ -636,33 +672,167 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function formatHtml(array &$element, $value, array $options = []) {
-    return $this->formatText($element, $value, $options);
+    return $this->format('Html', $element, $value, $options);
   }
 
   /**
    * {@inheritdoc}
    */
   public function formatText(array &$element, $value, array $options = []) {
+    return $this->format('Text', $element, $value, $options);
+  }
+
+  /**
+   * Format an element's value as HTML or plain text.
+   *
+   * @param string $type.
+   *   The format type, HTML or Text.
+   * @param array $element
+   *   An element.
+   * @param array|mixed $value
+   *   A value.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's value formatted as plain text or a render array.
+   */
+  protected function format($type = 'Html', array &$element, $value, array $options = []) {
     // Return empty value.
-    if ($value === '' || $value === NULL) {
+    if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';
     }
 
-    // Flatten arrays. Generally, $value is a string.
-    if (is_array($value) && count($value) == count($value, COUNT_RECURSIVE)) {
-      $value = implode(', ', $value);
+    $item_function = 'format' . $type . 'Item';
+    $items_function = 'format' . $type . 'Items';
+    if ($this->hasMultipleValues($element)) {
+      $items = [];
+      foreach ($value as $item) {
+        $items[] = $this->$item_function($element, $item, $options);
+      }
+      return $this->$items_function($element, $items, $options);
     }
+    else {
+      return $this->$item_function($element, $value, $options);
+    }
+  }
 
+  /**
+   * Format an element's items as HTML.
+   *
+   * @param array $element
+   *   An element.
+   * @param array
+   *   An array of items to be displayed as HTML.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return string|array
+   *   The element's items as HTML.
+   */
+  protected function formatHtmlItems(array &$element, array $items, array $options = []) {
+    $format = $this->getItemsFormat($element);
+    if (in_array($format, ['ol', 'ul'])) {
+      return [
+        '#theme' => 'item_list',
+        '#items' => $items,
+        '#list_type' => $format,
+      ];
+    }
+    else {
+      // Render items so that then can be displayed as plain text.
+      foreach ($items as $index => $item) {
+        if (is_array($item)) {
+          $items[$index] = \Drupal::service('renderer')->renderPlain($item);
+        }
+      }
+      return $this->formatTextItems($element, $items, $options);
+    }
+  }
+
+  /**
+   * Format an element's items as text.
+   *
+   * @param array $element
+   *   An element.
+   * @param array
+   *   An array of items to be displayed as text.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return string
+   *   The element's items as text.
+   */
+  protected function formatTextItems(array &$element, array $items, array $options = []) {
+    $format = $this->getItemsFormat($element);
+    switch ($format) {
+      case 'ol':
+        $list = [];
+        $index = 1;
+        foreach ($items as $item) {
+          $list[] = ($index++) . '. ' . $item;
+        }
+        return implode("\n", $list);
+
+      case 'ul':
+        $list = [];
+        foreach ($items as $index => $item) {
+          $list[] = '- ' . $item;
+        }
+        return implode("\n", $list);
+
+      case 'and':
+        return WebformArrayHelper::toString($items, t('and'));
+
+      case 'semicolon':
+        return implode('; ', $items);
+
+      case 'comma':
+      default:
+        return implode(', ', $items);
+    }
+  }
+
+  /**
+   * Format an element's value as HTML.
+   *
+   * @param array $element
+   *   An element.
+   * @param array|mixed $value
+   *   A value.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's value formatted as HTML or a render array.
+   */
+  protected function formatHtmlItem(array &$element, $value, array $options = []) {
+    return $this->formatTextItem($element, $value, $options);
+  }
+
+  /**
+   * Format an element's value as text.
+   *
+   * @param array $element
+   *   An element.
+   * @param array|mixed $value
+   *   A value.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return string
+   *   The element's value formatted as text.
+   */
+  protected function formatTextItem(array &$element, $value, array $options = []) {
     // Apply XSS filter to value that contains HTML tags and is not formatted as
     // raw.
-    $format = $this->getFormat($element);
+    $format = $this->getItemFormat($element);
     if ($format != 'raw' && is_string($value) && strpos($value, '<') !== FALSE) {
       $value = Xss::filter($value);
     }
 
-    // Format value based on the element type using default settings.
+    // Apply #field prefix and #field_suffix to value.
     if (isset($element['#type'])) {
-      // Apply #field prefix and #field_suffix to value.
       if (isset($element['#field_prefix'])) {
         $value = $element['#field_prefix'] . $value;
       }
@@ -677,14 +847,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormats() {
+  public function getItemFormats() {
     return [
       'value' => $this->t('Value'),
       'raw' => $this->t('Raw value'),
@@ -694,24 +857,74 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'value';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormat(array $element) {
+  public function getItemFormat(array $element) {
     if (isset($element['#format'])) {
       return $element['#format'];
     }
-    elseif ($default_format = $this->configFactory->get('webform.settings')->get('format.' . $this->getPluginId())) {
+    elseif ($default_format = $this->configFactory->get('webform.settings')->get('format.' . $this->getPluginId() . '.item')) {
       return $default_format;
     }
     else {
-      return $this->getDefaultFormat();
+      return $this->getItemDefaultFormat();
     }
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getItemsDefaultFormat() {
+    return 'ul';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getItemsFormats() {
+    return [
+      'comma' => $this->t('Comma'),
+      'semicolon' => $this->t('Semicolon'),
+      'and' => $this->t('And'),
+      'ol' => $this->t('Ordered list'),
+      'ul' => $this->t('Unordered list'),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getItemsFormat(array $element) {
+    if (isset($element['#format_items'])) {
+      return $element['#format_items'];
+    }
+    elseif ($default_format = $this->configFactory->get('webform.settings')->get('format.' . $this->getPluginId() . '.items')) {
+      return $default_format;
+    }
+    else {
+      return $this->getItemsDefaultFormat();
+    }
+  }
+
+  /****************************************************************************/
+  // Test methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    return FALSE;
+  }
+
+  /****************************************************************************/
+  // Table methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -736,6 +949,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   public function formatTableColumn(array $element, $value, array $options = []) {
     return $this->formatHtml($element, $value);
   }
+
+  /****************************************************************************/
+  // Export methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -803,6 +1020,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [$this->formatText($element, $value, $export_options)];
   }
 
+  /****************************************************************************/
+  // Validation methods.
+  /****************************************************************************/
+
   /**
    * Webform API callback. Validate element #minlength value.
    */
@@ -858,6 +1079,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
     }
   }
+
+  /****************************************************************************/
+  // #states API methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -927,6 +1152,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [];
   }
 
+  /****************************************************************************/
+  // Operation methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    */
@@ -961,6 +1190,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function postSave(array &$element, WebformSubmissionInterface $webform_submission, $update = TRUE) {}
+
+  /****************************************************************************/
+  // Element configuration methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -1188,8 +1421,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
     $form['display']['format'] = [
       '#type' => 'select',
-      '#title' => $this->t('Format'),
-      '#options' => $this->getFormats(),
+      '#title' => $this->t('Item format'),
+      '#description' => $this->t('Select how a single value is displayed.'),
+      '#options' => $this->getItemFormats(),
+    ];
+    $form['display']['format_items'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Items format'),
+      '#description' => $this->t('Select how multiple values are grouped displayed.'),
+      '#options' => $this->getItemsFormats(),
     ];
 
     /* Element access */

@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformEntityTrait;
@@ -36,53 +37,64 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
-    if (empty($value)) {
-      return '';
+  public function format($type, array &$element, $value, array $options = []) {
+    if ($this->hasMultipleValues($element)) {
+      $value = $this->getTargetEntities($element, $value, $options);
     }
+    else {
+      $value = $this->getTargetEntity($element, $value, $options);
+    }
+    return parent::format($type, $element, $value, $options);
+  }
 
-    $format = $this->getFormat($element);
+  /**
+   * {@inheritdoc}
+   */
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
+    $entity = $this->getTargetEntity($element, $value, $options);
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
+      case 'value':
       case 'id':
       case 'label':
       case 'text':
-        $items = $this->formatItems($element, $value, $options);
-        if ($this->isMultiline($element)) {
-          return [
-            '#theme' => 'item_list',
-            '#items' => $items,
-          ];
-        }
-        else {
-          return implode('; ', $items);
-        }
+        return $this->formatTextItem($element, $value, $options);
 
       case 'link':
-        return $this->formatLinks($element, $value, $options);
+        return [
+          '#type' => 'link',
+          '#title' => $entity->label(),
+          '#url' => $entity->toUrl()->setAbsolute(TRUE),
+        ];
 
       default:
-        return $this->formatView($element, $value, $options);
+        return \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, $format);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
-    if (empty($value)) {
-      return '';
-    }
+  public function formatTextItem(array &$element, $value, array $options = []) {
+    $entity = $this->getTargetEntity($element, $value, $options);
+    $format = $this->getItemFormat($element);
+    switch ($format) {
+      case 'id':
+        return $entity->id();
 
-    $items = $this->formatItems($element, $value, $options);
-    // Add dash (aka bullet) before each item.
-    if ($this->isMultiline($element)) {
-      foreach ($items as &$item) {
-        $item = '- ' . $item;
-      }
-    }
+      case 'label':
+        return $entity->label();
 
-    return implode("\n", $items);
+      case 'raw':
+        $entity_id = $entity->id();
+        $entity_type = $element['#target_type'];
+        return "$entity_type:$entity_id";
+
+      case 'text':
+      default:
+        return sprintf('%s (%s)', $entity->label(), $entity->id());
+    }
   }
 
   /**
@@ -90,6 +102,10 @@ trait WebformEntityReferenceTrait {
    */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     WebformEntityTrait::setOptions($element);
+    // Exclude 'anonymous' user.
+    if ($element['#target_type'] == 'user') {
+      unset($element['#options'][0]);
+    }
     return array_keys($element['#options']);
   }
 
@@ -108,15 +124,15 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'link';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
-    return parent::getFormats() + [
+  public function getItemFormats() {
+    return parent::getItemFormats() + [
       'link' => $this->t('Link'),
       'id' => $this->t('Entity ID'),
       'label' => $this->t('Label'),
@@ -186,9 +202,8 @@ trait WebformEntityReferenceTrait {
    */
   public function buildExportRecord(array $element, $value, array $options) {
     if ($this->hasMultipleValues($element)) {
-      $element = ['#format' => 'text'] + $element;
-      $items = $this->formatItems($element, $value, $options);
-      return [implode(', ', $items)];
+      $element = ['#format' => 'text', '#format_items' => 'comma'] + $element;
+      return $this->formatTextItems($element, $value, $options);
     }
 
     if ($options['entity_reference_format'] == 'link') {
@@ -215,25 +230,7 @@ trait WebformEntityReferenceTrait {
   }
 
   /**
-   * Get target entity ids from entity autocomplete element's value.
-   *
-   * @param array|string|int $value
-   *   Entity autocomplete element's value.
-   *
-   * @return array
-   *   An array of entity ids.
-   */
-  protected function getTargetEntityIds($value) {
-    if (is_array($value)) {
-      return array_combine($value, $value);
-    }
-    else {
-      return [$value => $value];
-    }
-  }
-
-  /**
-   * Format an entity autocomplete targets as array of strings.
+   * Get referenced entity.
    *
    * @param array $element
    *   An element.
@@ -242,123 +239,23 @@ trait WebformEntityReferenceTrait {
    * @param array $options
    *   An array of options.
    *
-   * @return array
-   *   An entity autocomplete targets as array of strings
-   *
-   * @see \Drupal\webform\WebformSubmissionExporterInterface::formatRecordEntityAutocomplete
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The referenced entity.
    */
-  protected function formatItems(array &$element, $value, array $options) {
-    list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
-
-    $format = $this->getFormat($element);
-
-    $items = [];
-    foreach ($entity_ids as $entity_id) {
-      $entity = (isset($entities[$entity_id])) ? $entities[$entity_id] : NULL;
-      switch ($format) {
-        case 'id':
-          $items[$entity_id] = $entity_id;
-          break;
-
-        case 'label':
-          $items[$entity_id] = ($entity) ? $entity->label() : $entity_id;
-          break;
-
-        case 'raw':
-          $entity_type = $element['#target_type'];
-          $items[$entity_id] = "$entity_type:$entity_id";
-          break;
-
-        case 'text':
-        default:
-          if ($entity) {
-            // Use `sprintf` instead of FormattableMarkup because we really just
-            // want a basic string.
-            $items[$entity_id] = sprintf('%s (%s)', $entity->label(), $entity->id());
-          }
-          else {
-            $items[$entity_id] = $entity_id;
-          }
-          break;
-      }
+  protected function getTargetEntity(array $element, $value, array $options = []) {
+    if (empty($value)) {
+      return NULL;
     }
-    return $items;
-  }
-
-  /**
-   * Format an entity autocomplete as a link or a list of links.
-   *
-   * @param array $element
-   *   An element.
-   * @param array|mixed $value
-   *   A value.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return array|string
-   *   A render array containing an entity autocomplete as a link or
-   *   a list of links.
-   */
-  protected function formatLinks(array $element, $value, array $options) {
-    list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
-
-    $build = [];
-    foreach ($entity_ids as $entity_id) {
-      $entity = (isset($entities[$entity_id])) ? $entities[$entity_id] : NULL;
-      if ($entity) {
-        $build[$entity_id] = [
-          '#type' => 'link',
-          '#title' => $entity->label(),
-          '#url' => $entity->toUrl()->setAbsolute(TRUE),
-        ];
-      }
-      else {
-        $build[$entity_id] = ['#markup' => $entity_id];
-      }
+    if ($value instanceof EntityInterface) {
+      return $value;
     }
 
-    if ($this->isMultiline($element) || count($build) > 1) {
-      return [
-        '#theme' => 'item_list',
-        '#items' => $build,
-      ];
+    $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $entity = $this->entityTypeManager->getStorage($element['#target_type'])->load($value);
+    if ($entity && $entity->hasTranslation($langcode)) {
+      $entity = $entity->getTranslation($langcode);
     }
-    else {
-      return reset($build);
-    }
-  }
-
-  /**
-   * Format an entity autocomplete targets using a view mode.
-   *
-   * @param array $element
-   *   An element.
-   * @param array|mixed $value
-   *   A value.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return array|string
-   *   A render array containing an entity autocomplete targets using a view
-   *   mode.
-   */
-  protected function formatView(array $element, $value, array $options) {
-    list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
-
-    $view_mode = $this->getFormat($element);
-
-    $build = [];
-    foreach ($entity_ids as $entity_id) {
-      $entity = (isset($entities[$entity_id])) ? $entities[$entity_id] : NULL;
-      $build[$entity_id] = ($entity) ? \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, $view_mode) : ['#markup' => $entity_id];
-    }
-
-    if ($this->isMultiline($element) || count($build) > 1) {
-      return $build;
-    }
-    else {
-      return reset($build);
-    }
+    return $entity;
   }
 
   /**
@@ -371,20 +268,22 @@ trait WebformEntityReferenceTrait {
    * @param array $options
    *   An array of options.
    *
-   * @return array|string
-   *   A array containing $entity_ids and $entityies.
+   * @return array
+   *   An associative array containing entities keyed by entity_id.
    */
-  protected function getTargetEntities(array $element, $value, array $options) {
-    $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
+  protected function getTargetEntities(array $element, $value, array $options = []) {
+    if (empty($value)) {
+      return [];
+    }
 
-    $entity_ids = $this->getTargetEntityIds($value);
-    $entities = $this->entityTypeManager->getStorage($element['#target_type'])->loadMultiple($entity_ids);
+    $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $entities = $this->entityTypeManager->getStorage($element['#target_type'])->loadMultiple($value);
     foreach ($entities as $entity_id => $entity) {
       if ($entity->hasTranslation($langcode)) {
         $entities[$entity_id] = $entity->getTranslation($langcode);
       }
     }
-    return [$entity_ids, $entities];
+    return $entities;
   }
 
   /**
@@ -454,14 +353,12 @@ trait WebformEntityReferenceTrait {
     ];
 
     // Tags (only applies to 'entity_autocomplete' element).
-    if ($this->hasProperty('tags')) {
-      $form['entity_reference']['tags'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Tags'),
-        '#description' => $this->t('Check this option if the user should be allowed to enter multiple entity references.'),
-        '#return_value' => TRUE,
-      ];
-    }
+    $form['entity_reference']['tags'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Tags'),
+      '#description' => $this->t('Check this option if the user should be allowed to enter multiple entity references.'),
+      '#return_value' => TRUE,
+    ];
 
     // Target type.
     $form['entity_reference']['target_type'] = [
@@ -515,6 +412,15 @@ trait WebformEntityReferenceTrait {
     // Remove user role filter, which is not working correctly.
     // @see \Drupal\user\Plugin\EntityReferenceSelection\UserSelection
     unset($form['entity_reference']['selection_settings']['filter']);
+
+    // Add hide/show #format_items based on #tags.
+    if ($this->supportsMultipleValues() && $this->hasProperty('tags')) {
+      $form['display']['format_items']['#states'] = [
+        'visible' => [
+          [':input[name="properties[tags]"]' => ['checked' => TRUE]],
+        ],
+      ];
+    }
 
     return $form;
   }

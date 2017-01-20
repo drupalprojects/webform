@@ -15,6 +15,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   label = @Translation("Entity autocomplete"),
  *   description = @Translation("Provides a form element to select an entity reference using an autocompletion."),
  *   category = @Translation("Entity reference elements"),
+ *   multiple = TRUE,
  * )
  */
 class EntityAutocomplete extends WebformElementBase implements WebformEntityReferenceInterface {
@@ -39,13 +40,11 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
    */
   public function setDefaultValue(array &$element) {
     if (isset($element['#default_value']) && (!empty($element['#default_value']) || $element['#default_value'] === 0)) {
-      $target_storage = $this->entityTypeManager->getStorage($element['#target_type']);
       if ($this->hasMultipleValues($element)) {
-        $entity_ids = $this->getTargetEntityIds($element['#default_value']);
-        $element['#default_value'] = ($entity_ids) ? $target_storage->loadMultiple($entity_ids) : [];
+        $element['#default_value'] = $this->getTargetEntities($element, $element['#default_value']);
       }
       else {
-        $element['#default_value'] = $target_storage->load($element['#default_value']) ?: NULL;
+        $element['#default_value'] = $this->getTargetEntity($element, $element['#default_value']);
       }
     }
     else {
@@ -57,7 +56,12 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
    * {@inheritdoc}
    */
   public function hasMultipleValues(array $element) {
-    return (!empty($element['#tags'])) ? TRUE : parent::hasMultipleValues($element);
+    if ($this->hasProperty('tags')) {
+      return (!empty($element['#tags'])) ? TRUE : FALSE;
+    }
+    else {
+      return parent::hasMultipleValues($element);
+    }
   }
 
   /**

@@ -8,6 +8,7 @@
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 
@@ -344,4 +345,77 @@ function webform_update_8009() {
 function webform_update_8010() {
   _webform_update_admin_settings();
   _webform_update_form_settings();
+}
+
+/**
+ * Issue #2845028: Refactor and rework element formatting to better support multiple values.
+ */
+function webform_update_8011() {
+  // Update admin.settings format to support
+  // 'formats.{element_type}.item' and 'formats.{element_type}.items'.
+  $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $data = $admin_config->getRawData();
+  if (!empty($data['format'])) {
+    foreach ($data['format'] as $element_type => $element_format) {
+      if (is_string($element_format)) {
+        $data['format'][$element_type] = ['item' => $element_format];
+      }
+    }
+    $admin_config->setData($data)->save();
+  }
+
+  // Update webform element to support #format_items.
+  $config_factory = \Drupal::configFactory();
+  // Update 'webform.webform.*' configuration.
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    // Get data.
+    $data = $webform_config->getRawData();
+    if (strpos($data['elements'], "'#format'") === FALSE) {
+      continue;
+    }
+
+    $elements = Yaml::decode($data['elements']);
+    _webform_update_8011($elements);
+
+    $data['elements'] = Yaml::encode($elements);
+    $webform_config->setData($data);
+    $webform_config->save();
+  }
+}
+
+/**
+ * Move $element['#format'] to $element['#format_items'].
+ *
+ * Applies to...
+ * - ol
+ * - ul
+ * - comma
+ * - semicolon
+ *
+ * @param array $element
+ *   A form element.
+ */
+function _webform_update_8011(array &$element) {
+  if (isset($element['#format'])) {
+    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+    $webform_element = $element_manager->getElementInstance($element);
+
+    $format = $element['#format'];
+    $item_formats = $webform_element->getItemFormats();
+    $items_formats = $webform_element->getItemsFormats();
+    if (!isset($item_formats[$format]) && isset($items_formats[$format])) {
+      unset($element['#format']);
+      $element['#format_items'] = $format;
+    }
+  }
+
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      _webform_update_8011($element[$key]);
+    }
+  }
+
 }

@@ -747,11 +747,11 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
 
     // Filter by (completion) state.
     switch ($export_options['state']) {
-      case 'draft';
+      case 'draft':
         $query->condition('in_draft', 1);
         break;
 
-      case 'completed';
+      case 'completed':
         $query->condition('in_draft', 0);
         break;
 

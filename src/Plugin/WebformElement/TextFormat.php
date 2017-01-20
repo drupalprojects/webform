@@ -98,9 +98,9 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
     $value = (isset($value['value'])) ? $value['value'] : $value;
-    $format = (isset($value['format'])) ? $value['format'] : $this->getFormat($element);
+    $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
         return $value;
@@ -114,8 +114,8 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
-    $format = (isset($value['format'])) ? $value['format'] : $this->getFormat($element);
+  public function formatTextItem(array &$element, $value, array $options = []) {
+    $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
         return $value;
@@ -134,16 +134,16 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return filter_default_format();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
+  public function getItemFormats() {
     $filters = FilterFormat::loadMultiple();
-    $formats = parent::getFormats();
+    $formats = parent::getItemFormats();
     foreach ($filters as $filter) {
       $formats[$filter->id()] = $filter->label();
     }

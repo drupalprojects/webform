@@ -12,11 +12,11 @@ abstract class BooleanBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
-    $format = $this->getFormat($element);
+  public function formatTextItem(array &$element, $value, array $options = []) {
+    $format = $this->getItemFormat($element);
 
     switch ($format) {
-      case 'value';
+      case 'value':
         return ($value) ? $this->t('Yes') : $this->t('No');
 
       default:

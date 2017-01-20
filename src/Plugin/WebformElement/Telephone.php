@@ -18,12 +18,12 @@ class Telephone extends TextBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
     if (empty($value)) {
       return '';
     }
 
-    $format = $this->getFormat($element);
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'link':
         // Issue #2484693: Telephone Link fied formatter breaks Drupal with 5
@@ -38,22 +38,22 @@ class Telephone extends TextBase {
         return t('<a href=":tel">@tel</a>', $t_args);
 
       default:
-        return parent::formatHtml($element, $value, $options);
+        return parent::formatHtmlItem($element, $value, $options);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'link';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
-    return parent::getFormats() + [
+  public function getItemFormats() {
+    return parent::getItemFormats() + [
       'link' => $this->t('Link'),
     ];
   }

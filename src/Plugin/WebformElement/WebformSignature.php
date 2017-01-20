@@ -42,8 +42,8 @@ class WebformSignature extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
-    $format = $this->getFormat($element);
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
+    $format = $this->getItemFormat($element);
 
     switch ($format) {
       case 'image':
@@ -69,35 +69,35 @@ class WebformSignature extends WebformElementBase {
         ];
 
       default:
-        return parent::formatHtml($element, $value, $options);
+        return parent::formatHtmlItem($element, $value, $options);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
-    $format = $this->getFormat($element);
+  public function formatTextItem(array &$element, $value, array $options = []) {
+    $format = $this->getItemFormat($element);
     switch ($format) {
       case 'image':
       case 'status':
         $value = ($value) ? '[' . $this->t('signed') . ']' : '[' . $this->t('not signed') . ']';
     }
 
-    return parent::formatText($element, $value, $options);
+    return parent::formatTextItem($element, $value, $options);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultFormat() {
+  public function getItemDefaultFormat() {
     return 'image';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
+  public function getItemFormats() {
     return [
       'raw' => $this->t('Raw value'),
       'status' => $this->t('Status'),

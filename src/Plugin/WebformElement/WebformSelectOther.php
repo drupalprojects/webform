@@ -10,6 +10,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   label = @Translation("Select other"),
  *   description = @Translation("Provides a form element for a drop-down menu or scrolling selection box, with the ability to enter a custom value."),
  *   category = @Translation("Options elements"),
+ *   multiple = TRUE,
  * )
  */
 class WebformSelectOther extends Select {

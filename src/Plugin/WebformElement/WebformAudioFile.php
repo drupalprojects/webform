@@ -10,6 +10,7 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   label = @Translation("Audio file"),
  *   description = @Translation("Provides a form element for uploading and saving an audio file."),
  *   category = @Translation("File upload elements"),
+ *   multiple = TRUE,
  *   states_wrapper = TRUE,
  * )
  */
@@ -18,8 +19,8 @@ class WebformAudioFile extends WebformManagedFileBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormats() {
-    $formats = parent::getFormats();
+  public function getItemFormats() {
+    $formats = parent::getItemFormats();
     $formats['file'] = $this->t('HTML5 Audio player (MP3 only)');
     return $formats;
   }

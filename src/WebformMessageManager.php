@@ -218,10 +218,10 @@ class WebformMessageManager implements WebformMessageManagerInterface {
       case WebformMessageManagerInterface::SUBMISSION_UPDATED:
         return $this->t('Submission updated in %form.', $t_args);
 
-      case WebformMessageManagerInterface::SUBMISSION_TEST;
+      case WebformMessageManagerInterface::SUBMISSION_TEST:
         return $this->t("The below webform has been prepopulated with custom/random test data. When submitted, this information <strong>will still be saved</strong> and/or <strong>sent to designated recipients</strong>.", $t_args);
 
-      case WebformMessageManagerInterface::TEMPLATE_PREVIEW;
+      case WebformMessageManagerInterface::TEMPLATE_PREVIEW:
         return $this->t('You are previewing the below template, which can be used to <a href=":duplicate_href">create a new webform</a>. <strong>Submitted data will be ignored</strong>.', $t_args);
 
       default:

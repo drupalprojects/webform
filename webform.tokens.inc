@@ -77,8 +77,9 @@ function webform_token_info() {
   ];
   $webform_submission['values'] = [
     'name' => t('Submission values'),
-    'description' => t("Webform tokens from submitted data. Replace the '?' with the 'element_key' or 'element_key:format'.") . ' ' .
+    'description' => t("Webform tokens from submitted data. Replace the '?' with the 'element_key', 'element_key:format' or 'element_key:format:items'.") . ' ' .
     t("The 'format' can be 'value', 'raw', or custom format specifically associated with the element") . ' ' .
+    t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . ' ' .
     t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token."),
     'dynamic' => TRUE,
   ];
@@ -294,12 +295,16 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         // Parse [values:{name}:{format}] token with optional format.
         $keys = explode(':', $value_token);
         $key = $keys[0];
-        $format = (isset($keys[1])) ? $keys[1] : NULL;
+        $format_item = (isset($keys[1])) ? $keys[1] : NULL;
+        $format_items = (isset($keys[2])) ? $keys[2] : NULL;
         if (isset($submission_data[$key]) && isset($form_elements[$key])) {
           $element = $form_elements[$key];
-          // Apply $format to the element.
-          if (isset($format)) {
-            $element['#format'] = $format;
+          // Apply #format to the element.
+          if (isset($format_item)) {
+            $element['#format'] = $format_item;
+          }
+          if (isset($format_items)) {
+            $element['#format_items'] = $format_items;
           }
           $format_method = (empty($submission_options['html'])) ? 'formatText' : 'formatHtml';
           $value = $element_manager->invokeMethod($format_method, $element, $submission_data[$key], $submission_options);

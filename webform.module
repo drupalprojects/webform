@@ -546,14 +546,6 @@ function webform_theme_suggestions_alter(array &$suggestions, array $variables, 
 
     $suggestions[] = $hook . '__' . $type;
     $suggestions[] = $hook . '__' . $type . '__' . $name;
-
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
-    $element_manager = \Drupal::service('plugin.manager.webform.element');
-    $element_handler = $element_manager->createInstance($type);
-    if ($format = $element_handler->getFormat($element)) {
-      $suggestions[] = $hook . '__' . $type . '__' . $format;
-      $suggestions[] = $hook . '__' . $type . '__' . $name . '__' . $format;
-    }
   }
   elseif (isset($variables['webform_submission'])) {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
