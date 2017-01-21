@@ -411,7 +411,7 @@ class WebformMultiple extends FormElement {
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
     // Convert values to items.
-    $items = self::convertValuesToItems($element, $values['items']);
+    $items = self::convertValuesToItems($values['items']);
 
     // Validate required items.
     if (!empty($element['#required']) && empty($items)) {
@@ -449,15 +449,13 @@ class WebformMultiple extends FormElement {
   /**
    * Convert an array containing of values (elements or _item_ and weight) to an array of items.
    *
-   * @param array $element
-   *   The element.
    * @param array $values
    *   An array containing of item and weight.
    *
    * @return array
    *   An array of items.
    */
-  public static function convertValuesToItems(array &$element, array $values = []) {
+  public static function convertValuesToItems(array $values = []) {
     // Sort the item values.
     uasort($values, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
 
