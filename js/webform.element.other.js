@@ -54,7 +54,7 @@
       $(context).find('.js-webform-select-other').once('webform-select-other').each(function () {
         var $element = $(this);
 
-        var $select = $element.find('.form-type-select');
+        var $select = $element.find('select');
         var $otherOption = $element.find('option[value="_other_"]');
         var $input = $element.find('.js-webform-select-other-input');
 
