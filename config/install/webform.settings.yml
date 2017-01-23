@@ -42,6 +42,7 @@ assets:
 export:
   exporter: delimited
   delimiter: ','
+  multiple_delimiter: ';'
   excel: false
   file_name: 'submission-[webform_submission:serial]'
   header_format: label
@@ -53,6 +54,7 @@ export:
   options_item_format: label
   entity_reference_format: link
   likert_answers_format: label
+  signature_format: status
 batch:
   default_batch_export_size: 500
   default_batch_update_size: 500

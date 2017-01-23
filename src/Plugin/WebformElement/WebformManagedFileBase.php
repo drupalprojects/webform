@@ -42,8 +42,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function hasMultipleValues(array $element) {
-    return (!empty($element['#multiple'])) ? TRUE : FALSE;
+  public function supportsMultipleValues() {
+    return TRUE;
   }
 
   /**

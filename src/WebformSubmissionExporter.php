@@ -233,6 +233,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       'exporter' => 'delimited',
 
       'delimiter' => ',',
+      'multiple_delimiter' => ';',
+
       'file_name' => 'submission-[webform_submission:serial]',
 
       'header_format' => 'label',
@@ -317,6 +319,28 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     foreach ($exporter_plugins as $plugin_id => $exporter) {
       $form['export']['format'] = $exporter->buildConfigurationForm($form['export']['format'], $form_state);
     }
+
+    // Element.
+    $form['export']['element'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Element options'),
+      '#open' => TRUE,
+      '#states' => $states_options,
+    ];
+    $form['export']['element']['multiple_delimiter'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Element multiple values delimiter'),
+      '#description' => $this->t('This is the delimiter when an element has multiple values.'),
+      '#required' => TRUE,
+      '#options' => [
+        ';' => $this->t('Semicolon (;)'),
+        ',' => $this->t('Comma (,)'),
+        '|' => $this->t('Pipe (|)'),
+        '.' => $this->t('Period (.)'),
+        ' ' => $this->t('Space ()'),
+      ],
+      '#default_value' => $export_options['multiple_delimiter'],
+    ];
 
     // Header.
     $form['export']['header'] = [
@@ -579,6 +603,11 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     // Append format.
     if (isset($export_values['format'])) {
       $values += $export_values['format'];
+    }
+
+    // Append element.
+    if (isset($export_values['element'])) {
+      $values += $export_values['element'];
     }
 
     // Append header.

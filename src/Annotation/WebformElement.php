@@ -81,13 +81,6 @@ class WebformElement extends Plugin {
   public $multiline = FALSE;
 
   /**
-   * Flag that defines multiple (value) element.
-   *
-   * @var bool
-   */
-  public $multiple = FALSE;
-
-  /**
    * Flag that defines composite element.
    *
    * @var bool

@@ -15,7 +15,6 @@ use Drupal\webform\WebformSubmissionInterface;
  *   label = @Translation("Entity autocomplete"),
  *   description = @Translation("Provides a form element to select an entity reference using an autocompletion."),
  *   category = @Translation("Entity reference elements"),
- *   multiple = TRUE,
  * )
  */
 class EntityAutocomplete extends WebformElementBase implements WebformEntityReferenceInterface {
@@ -55,9 +54,21 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
   /**
    * {@inheritdoc}
    */
+  public function supportsMultipleValues() {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasMultipleValues(array $element) {
     if ($this->hasProperty('tags')) {
-      return (!empty($element['#tags'])) ? TRUE : FALSE;
+      if (isset($element['#tags'])) {
+        return $element['#tags'];
+      }
+      else {
+        return $this->getDefaultProperty('tags');
+      }
     }
     else {
       return parent::hasMultipleValues($element);

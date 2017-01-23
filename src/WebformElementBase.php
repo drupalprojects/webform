@@ -164,8 +164,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'required' => FALSE,
       'required_error' => '',
       'unique' => FALSE,
-      // Submission display.
-      'format' => $this->getItemDefaultFormat(),
       // Attributes.
       'wrapper_attributes' => [],
       'attributes' => [],
@@ -229,6 +227,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   public function hasProperty($property_name) {
     $default_properties = $this->getDefaultProperties();
     return isset($default_properties[$property_name]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultProperty($property_name) {
+    $default_properties = $this->getDefaultProperties();
+    return (isset($default_properties[$property_name])) ? $default_properties[$property_name] : NULL;
   }
 
   /****************************************************************************/
@@ -303,14 +309,25 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function supportsMultipleValues() {
-    return $this->pluginDefinition['multiple'];
+    return FALSE;
   }
 
   /**
    * {@inheritdoc}
    */
   public function hasMultipleValues(array $element) {
-    return $this->pluginDefinition['multiple'];
+    if ($this->hasProperty('multiple')) {
+      if (isset($element['#multiple'])) {
+        return $element['#multiple'];
+      }
+      else {
+        $default_property = $this->getDefaultProperties();
+        return $default_property['multiple'];
+      }
+    }
+    else {
+      return FALSE;
+    }
   }
 
   /**
@@ -788,8 +805,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         return implode('; ', $items);
 
       case 'comma':
-      default:
         return implode(', ', $items);
+
+      default:
+        return implode($format, $items);
     }
   }
 
@@ -965,7 +984,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
-    return [];
+    return;
   }
 
   /**
@@ -1016,7 +1035,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function buildExportRecord(array $element, $value, array $export_options) {
-    $element['#format'] = 'raw';
+    $element['#format_items'] = $export_options['multiple_delimiter'];
     return [$this->formatText($element, $value, $export_options)];
   }
 
@@ -1772,7 +1791,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The element whose properties are being updated.
    */
   protected function getConfigurationFormProperty(array &$properties, $property_name, $property_value, array $element) {
-    if ($property_name == 'default_value' && is_string($property_value) && $this->hasMultipleValues($element)) {
+    if ($property_name == 'default_value' && is_string($property_value) && $property_value && $this->hasMultipleValues($element)) {
       $properties[$property_name] = preg_split('/\s*,\s*/', $property_value);
     }
   }

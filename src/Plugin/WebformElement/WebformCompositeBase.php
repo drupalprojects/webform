@@ -533,9 +533,14 @@ abstract class WebformCompositeBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
+    parent::buildExportOptionsForm($form, $form_state, $export_options);
+    if (isset($form['composite'])) {
+      return;
+    }
+
     $form['composite'] = [
       '#type' => 'details',
-      '#title' => $this->t('Composite element'),
+      '#title' => $this->t('Composite element options'),
       '#open' => TRUE,
       '#weight' => -10,
     ];

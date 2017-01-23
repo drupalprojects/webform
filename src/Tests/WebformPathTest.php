@@ -2,6 +2,9 @@
 
 namespace Drupal\webform\Tests;
 
+use Drupal\Core\Serialization\Yaml;
+use Drupal\webform\Entity\Webform;
+
 /**
  * Tests for webform path and page.
  *
@@ -15,7 +18,16 @@ class WebformPathTest extends WebformTestBase {
    * Tests YAML page and title.
    */
   public function testPaths() {
-    $webform = $this->createWebform();
+    $webform = Webform::create([
+      'langcode' => 'en',
+      'status' => TRUE,
+      'id' => 'test_paths',
+      'title' => 'test_paths',
+      'elements' => Yaml::encode([
+        'test' => ['#markup' => 'test']
+      ]),
+    ]);
+    $webform->save();
 
     // Check default system submit path.
     $this->drupalGet('webform/' . $webform->id());

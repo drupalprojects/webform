@@ -9,6 +9,8 @@ namespace Drupal\webform\Tests;
  */
 class WebformSubmissionAccessTest extends WebformTestBase {
 
+  use WebformTestCreationTrait;
+
   /**
    * Tests webform submission access.
    */

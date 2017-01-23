@@ -11,6 +11,8 @@ use Drupal\webform\Entity\WebformSubmission;
  */
 class WebformSubmissionTest extends WebformTestBase {
 
+  use WebformTestCreationTrait;
+
   /**
    * Tests webform submission entity.
    */

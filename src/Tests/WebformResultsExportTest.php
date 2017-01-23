@@ -14,6 +14,8 @@ use Drupal\webform\Entity\WebformSubmission;
  */
 class WebformResultsExportTest extends WebformTestBase {
 
+  use WebformTestCreationTrait;
+
   /**
    * Modules to enable.
    *
@@ -134,23 +136,29 @@ class WebformResultsExportTest extends WebformTestBase {
     // Check options format compact.
     $this->getExport($webform, ['options_format' => 'compact']);
     $this->assertRaw('"Flag colors"');
-    $this->assertRaw('"Red,White,Blue"');
+    $this->assertRaw('Red;White;Blue');
 
     // Check options format separate.
     $this->getExport($webform, ['options_format' => 'separate']);
     $this->assertRaw('"Flag colors: Red","Flag colors: White","Flag colors: Blue"');
     $this->assertNoRaw('"Flag colors"');
     $this->assertRaw('X,X,X');
-    $this->assertNoRaw('"Red,White,Blue"');
+    $this->assertNoRaw('Red;White;Blue');
 
     // Check options item format label.
     $this->getExport($webform, ['options_item_format' => 'label']);
-    $this->assertRaw('"Red,White,Blue"');
+    $this->assertRaw('Red;White;Blue');
 
     // Check options item format key.
     $this->getExport($webform, ['options_item_format' => 'key']);
-    $this->assertNoRaw('"Red,White,Blue"');
-    $this->assertRaw('"red,white,blue"');
+    $this->assertNoRaw('Red;White;Blue');
+    $this->assertRaw('red;white;blue');
+
+    // Check multiple delimiter.
+    $this->getExport($webform, ['multiple_delimiter' => '|']);
+    $this->assertRaw('Red|White|Blue');
+    $this->getExport($webform, ['multiple_delimiter' => ',']);
+    $this->assertRaw('"Red,White,Blue"');
 
     // Check entity reference format link.
     $nodes = $this->getNodes();

@@ -12,6 +12,8 @@ use Drupal\webform\Entity\Webform;
  */
 class WebformAccessTest extends WebformTestBase {
 
+  use WebformTestCreationTrait;
+
   /**
    * Tests webform access rules.
    */

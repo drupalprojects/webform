@@ -154,7 +154,8 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values) {
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
+    parent::buildExportOptionsForm($form, $form_state, $export_options);
     if (isset($form['entity_reference'])) {
       return;
     }
@@ -171,7 +172,7 @@ trait WebformEntityReferenceTrait {
         'link' => $this->t('Entity link; with entity id, title and url in their own column.') . '<div class="description">' . $this->t("Entity links are suitable as long as there are not too many submissions (ie 1000's) pointing to just a few unique entities (ie 100's).") . '</div>',
         'id' => $this->t('Entity id; just the entity id column') . '<div class="description">' . $this->t('Entity links are suitable as long as there is mechanism for the referenced entity to be looked up external (ie REST API).') . '</div>',
       ],
-      '#default_value' => $default_values['entity_reference_format'],
+      '#default_value' => $export_options['entity_reference_format'],
     ];
   }
 
@@ -201,12 +202,7 @@ trait WebformEntityReferenceTrait {
    * {@inheritdoc}
    */
   public function buildExportRecord(array $element, $value, array $options) {
-    if ($this->hasMultipleValues($element)) {
-      $element = ['#format' => 'text', '#format_items' => 'comma'] + $element;
-      return $this->formatTextItems($element, $value, $options);
-    }
-
-    if ($options['entity_reference_format'] == 'link') {
+    if (!$this->hasMultipleValues($element) && $options['entity_reference_format'] == 'link') {
       $entity_type = $element['#target_type'];
       $entity_storage = $this->entityTypeManager->getStorage($entity_type);
       $entity_id = $value;
@@ -225,6 +221,9 @@ trait WebformEntityReferenceTrait {
       return $record;
     }
     else {
+      if ($options['entity_reference_format'] == 'id') {
+        $element['#format'] = 'raw';
+      }
       return parent::buildExportRecord($element, $value, $options);
     }
   }

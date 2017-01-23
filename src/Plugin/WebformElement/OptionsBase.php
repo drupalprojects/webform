@@ -129,24 +129,6 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function hasMultipleValues(array $element) {
-    if ($this->hasProperty('multiple')) {
-      if (isset($element['#multiple'])) {
-        return $element['#multiple'];
-      }
-      else {
-        $default_property = $this->getDefaultProperties();
-        return $default_property['multiple'];
-      }
-    }
-    else {
-      return parent::hasMultipleValues($element);
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isMultiline(array $element) {
     $format = $this->getItemsFormat($element);
     if (in_array($format, ['ol', 'ul'])) {
@@ -215,6 +197,7 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
+    parent::buildExportOptionsForm($form, $form_state, $export_options);
     if (isset($form['options'])) {
       return;
     }
@@ -270,9 +253,8 @@ abstract class OptionsBase extends WebformElementBase {
   public function buildExportRecord(array $element, $value, array $export_options) {
     $element_options = $element['#options'];
 
-    $record = [];
-
     if ($export_options['options_format'] == 'separate') {
+      $record = [];
       // Combine the values so that isset can be used instead of in_array().
       // http://stackoverflow.com/questions/13483219/what-is-faster-in-array-or-isset
       $deltas = FALSE;
@@ -289,25 +271,14 @@ abstract class OptionsBase extends WebformElementBase {
           $record[] = '';
         }
       }
+      return $record;
     }
     else {
-      // Handle multiple values with options.
-      if (is_array($value)) {
-        if ($export_options['options_item_format'] == 'label') {
-          $value = WebformOptionsHelper::getOptionsText($value, $element_options);
-        }
-        $record[] = implode(',', $value);
+      if ($export_options['options_item_format'] == 'key') {
+        $element['#format'] = 'raw';
       }
-      // Handle single values with options.
-      elseif ($export_options['options_item_format'] == 'label') {
-        $record[] = WebformOptionsHelper::getOptionText($value, $element_options);
-      }
-      else {
-        $record[] = $value;
-      }
+      return parent::buildExportRecord($element, $value, $export_options);
     }
-
-    return $record;
   }
 
   /**

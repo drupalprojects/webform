@@ -14,7 +14,6 @@ use Drupal\webform\WebformSubmissionInterface;
  *   label = @Translation("Select"),
  *   description = @Translation("Provides a form element for a drop-down menu or scrolling selection box."),
  *   category = @Translation("Options elements"),
- *   multiple = TRUE,
  * )
  */
 class Select extends OptionsBase {
@@ -30,6 +29,13 @@ class Select extends OptionsBase {
       'empty_value' => '',
       'select2' => FALSE,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function supportsMultipleValues() {
+    return TRUE;
   }
 
   /**

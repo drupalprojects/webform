@@ -40,6 +40,18 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function getTranslatableProperties();
 
   /**
+   * Get an element's default property value.
+   *
+   * @param string $property_name
+   *   An element's property name.
+   *
+   * @return mixed
+   *   An element's default property value or NULL is default property does not
+   *   exist.
+   */
+  public function getDefaultProperty($property_name);
+
+  /**
    * Determine if an element supports a specified property.
    *
    * @param string $property_name

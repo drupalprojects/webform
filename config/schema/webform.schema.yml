@@ -181,6 +181,9 @@ webform.settings:
         delimiter:
           type: string
           label: 'Delimiter text format'
+        multiple_delimiter:
+          type: string
+          label: 'Element multiple values delimiter'
         excel:
           type: boolean
           label: 'Open HTML table in Excel'

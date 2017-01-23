@@ -200,9 +200,14 @@ class WebformLikert extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
+    parent::buildExportOptionsForm($form, $form_state, $export_options);
+    if (isset($form['likert'])) {
+      return;
+    }
+
     $form['likert'] = [
       '#type' => 'details',
-      '#title' => $this->t('Likert questions and answers'),
+      '#title' => $this->t('Likert questions and answers options'),
       '#open' => TRUE,
       '#weight' => -10,
     ];

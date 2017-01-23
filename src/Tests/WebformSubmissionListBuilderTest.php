@@ -9,6 +9,8 @@ namespace Drupal\webform\Tests;
  */
 class WebformSubmissionListBuilderTest extends WebformTestBase {
 
+  use WebformTestCreationTrait;
+
   /**
    * Tests results.
    */

@@ -9,6 +9,8 @@ namespace Drupal\webform\Tests;
  */
 class WebformTest extends WebformTestBase {
 
+  use WebformTestCreationTrait;
+
   /**
    * Tests webform entity.
    */

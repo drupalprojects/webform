@@ -30,6 +30,8 @@ function webform_drush_command() {
     'options' => [
       // Delimited export options.
       'delimiter' => 'Delimiter between columns (defaults to site-wide setting). This option may need to be wrapped in quotes. i.e. --delimiter="\t".',
+      'multiple_delimiter' => 'Delimiter between an element with multiple values (defaults to site-wide setting).',
+
       // Document and managed file export options.
       'file-name' => 'File name used to export submission and uploaded filed. You may use tokens.',
       // Tabular export options.

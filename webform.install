@@ -419,3 +419,10 @@ function _webform_update_8011(array &$element) {
   }
 
 }
+
+/**
+ * Issue #2845776 by jrockowitz: Improve #multiple handling.
+ */
+function webform_update_8012() {
+  _webform_update_admin_settings();
+}

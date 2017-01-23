@@ -118,7 +118,8 @@ class WebformSignature extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
-    if (isset($form['options'])) {
+    parent::buildExportOptionsForm($form, $form_state, $export_options);
+    if (isset($form['signature'])) {
       return;
     }
 
