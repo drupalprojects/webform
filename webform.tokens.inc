@@ -67,8 +67,17 @@ function webform_token_info() {
   ];
   $webform_submission['language'] = [
     'name' => t('Language'),
-    'description' => t('The language name of the the webform submission.'),
+    'description' => t('The language name of the webform submission.'),
   ];
+  $webform_submission['current-page'] = [
+    'name' => t('Current page'),
+    'description' => t('The current (wizard) page of the webform submission.'),
+  ];
+  $webform_submission['in-draft'] = [
+    'name' => t('In draft'),
+    'description' => t('Is the webform submission in draft.'),
+  ];
+
   // Dynamic tokens for webform submissions.
   $webform_submission['url'] = [
     'name' => t('URL'),
@@ -205,8 +214,17 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform_submission->remote_addr->value;
           break;
 
-        case 'in_draft':
+        case 'in-draft':
           $replacements[$original] = $webform_submission->in_draft->value ? t('Yes') : t('No');
+          break;
+
+        case 'current-page':
+          $current_page = $webform_submission->current_page->value;
+          if (empty($current_page) && $pages = $webform_submission->getWebform()->getPages()) {
+            $page_keys = array_keys($pages);
+            $current_page = reset($page_keys);
+          }
+          $replacements[$original] = $current_page;
           break;
 
         case 'language':

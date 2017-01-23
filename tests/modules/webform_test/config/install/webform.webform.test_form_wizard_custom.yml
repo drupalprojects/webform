@@ -10,6 +10,8 @@ id: test_form_wizard_custom
 title: 'Test: Webform: Wizard custom'
 description: 'Test a multiple step ''wizard'' webform with custom hide/show pages logic.'
 elements: |
+  '#attributes':
+    'data-current-page': '[webform-submission:current-page]'
   wizard_1:
     '#type': wizard_page
     '#title': 'Wizard page #1'

@@ -10,6 +10,8 @@ id: example_wizard
 title: 'Example: Wizard'
 description: 'Example of a multiple step ''wizard'' webform.'
 elements: |
+  '#attributes':
+    'data-current-page': '[webform-submission:current-page]'
   information:
     '#title': 'Your Information'
     '#type': wizard_page

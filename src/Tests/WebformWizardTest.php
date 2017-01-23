@@ -46,15 +46,15 @@ class WebformWizardTest extends WebTestBase {
 
     // Check current page is #1.
     $this->drupalGet('webform/test_form_wizard_custom');
-    $this->assertCurrentPage('Wizard page #1');
+    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
 
     // Check next page is #2.
     $this->drupalPostForm('webform/test_form_wizard_custom', [], 'Next Page >');
-    $this->assertCurrentPage('Wizard page #2');
+    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
 
     // Check previous page is #1.
     $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #1');
+    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
 
     // Hide pages #3 and #4.
     $edit = [
@@ -69,19 +69,19 @@ class WebformWizardTest extends WebTestBase {
     $this->drupalPostForm(NULL, $edit, 'Next Page >');
 
     // Check next page is #2.
-    $this->assertCurrentPage('Wizard page #2');
+    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
 
     // Check next page is #5.
     $this->drupalPostForm(NULL, [], 'Next Page >');
-    $this->assertCurrentPage('Wizard page #5');
+    $this->assertCurrentPage('Wizard page #5', 'wizard_5');
 
     // Check previous page is #2.
     $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #2');
+    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
 
     // Check previous page is #1.
     $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #1');
+    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
 
     /* Advanced wizard */
 
@@ -167,7 +167,7 @@ class WebformWizardTest extends WebTestBase {
     // Check nosave attributes.
     $this->assertRaw('data-webform-unsaved');
     // Check progress bar is set to 'Contact Information'.
-    $this->assertCurrentPage('Contact Information');
+    $this->assertCurrentPage('Contact Information', 'contact');
     // Check progress pages.
     $this->assertRaw('Page 2 of 5');
     // Check progress percentage.
@@ -184,12 +184,12 @@ class WebformWizardTest extends WebTestBase {
     // Complete reload the webform.
     $this->drupalGet('webform/test_form_wizard_advanced');
     // Check progress bar is still set to 'Contact Information'.
-    $this->assertCurrentPage('Contact Information');
+    $this->assertCurrentPage('Contact Information', 'contact');
 
     // Move to last page (Your Feedback).
     $this->drupalPostForm(NULL, [], t('Next Page >'));
     // Check progress bar is set to 'Your Feedback'.
-    $this->assertCurrentPage('Your Feedback');
+    $this->assertCurrentPage('Your Feedback', 'feedback');
     // Check previous button does exist.
     $this->assertFieldById('edit-previous', '< Previous Page');
     // Check next button is labeled 'Preview'.
@@ -203,7 +203,7 @@ class WebformWizardTest extends WebTestBase {
     ];
     $this->drupalPostForm(NULL, $edit, t('Preview'));
     // Check progress bar is set to 'Preview'.
-    $this->assertCurrentPage('Preview');
+    $this->assertCurrentPage('Preview', 'preview');
     // Check progress pages.
     $this->assertRaw('Page 4 of 5');
     // Check progress percentage.
@@ -326,9 +326,14 @@ class WebformWizardTest extends WebTestBase {
    *
    * @param string $title
    *   The title of the current page.
+   * @param string $name
+   *   The name (key) of the current page.
    */
-  protected function assertCurrentPage($title) {
+  protected function assertCurrentPage($title, $name = NULL) {
     $this->assertPattern('|<li class="webform-progress-bar__page webform-progress-bar__page--current">\s+<b>' . $title . '</b>|');
+    if ($name !== NULL) {
+      $this->assertRaw('data-current-page="' . $name . '"');
+    }
   }
 
 }

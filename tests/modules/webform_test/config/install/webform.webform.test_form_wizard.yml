@@ -12,6 +12,7 @@ description: 'Test a multiple step ''wizard'' webform.'
 elements: |
   '#attributes':
     novalidate: novalidate
+    'data-current-page': '[webform-submission:current-page]'
   information:
     '#title': 'Your Information'
     '#type': wizard_page

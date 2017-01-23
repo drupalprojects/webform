@@ -150,6 +150,17 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
+  protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
+    parent::copyFormValuesToEntity($entity, $form, $form_state);
+    // Set current page.
+    if ($current_page = $this->getCurrentPage($form, $form_state)) {
+      $entity->setCurrentPage($current_page);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
@@ -822,11 +833,6 @@ class WebformSubmissionForm extends ContentEntityForm {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $this->getEntity();
 
-    // Set current page.
-    if ($current_page = $this->getCurrentPage($form, $form_state)) {
-      $webform_submission->setCurrentPage($current_page);
-    }
-
     // Make sure the uri and remote addr are set correctly because
     // AJAX requests via 'managed_file' uploads can cause these values to be
     // reset.
@@ -873,6 +879,10 @@ class WebformSubmissionForm extends ContentEntityForm {
         }
         unset($elements[$key]);
       }
+    }
+    // Replace token in #attributes.
+    if (isset($form['#attributes'])) {
+      $form['#attributes'] = $this->tokenManager->replace($form['#attributes'], $this->getEntity());
     }
   }
 

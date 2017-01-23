@@ -37,6 +37,8 @@ elements: |
       IP address: [webform_submission:ip-address]
       Langcode: [webform_submission:langcode]
       Language: [webform_submission:language]
+      In draft: [webform_submission:in-draft]
+      Completed page: [webform_submission:completed-page]
       Source URL: [webform_submission:source-url]
       Submission ID: [webform_submission:sid]
       Submission serial number: [webform_submission:serial]
