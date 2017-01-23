@@ -1025,7 +1025,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /****************************************************************************/
 
   /**
-   * Webform API callback. Validate element #minlength value.
+   * Form API callback. Validate element #minlength value.
    */
   public static function validateMinlength(&$element, FormStateInterface &$form_state) {
     if (!isset($element['#minlength'])) {
@@ -1043,7 +1043,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
-   * Webform API callback. Validate element #unique value.
+   * Form API callback. Validate element #unique value.
    */
   public static function validateUnique(array &$element, FormStateInterface $form_state) {
     if (!isset($element['#unique'])) {

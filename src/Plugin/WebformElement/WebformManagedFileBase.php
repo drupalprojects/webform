@@ -510,7 +510,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   }
 
   /**
-   * Webform API callback. Consolidate the array of fids for this field into a single fids.
+   * Form API callback. Consolidate the array of fids for this field into a single fids.
    */
   public static function validateManagedFile(array &$element, FormStateInterface $form_state, &$complete_form) {
     // Call the default managed_element validation handler, which checks

@@ -57,7 +57,7 @@ class PasswordConfirm extends Password {
   }
 
   /**
-   * Webform API callback. Convert password confirm array to single value.
+   * Form API callback. Convert password confirm array to single value.
    */
   public static function validatePasswordConfirm(array &$element, FormStateInterface $form_state, array &$completed_form) {
     $name = $element['#name'];

@@ -492,7 +492,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function afterBuild(array $form, FormStateInterface $form_state) {
-    // If webform has a custom #action remove Webform API fields.
+    // If webform has a custom #action remove Form API fields.
     // @see \Drupal\Core\Form\FormBuilder::prepareForm
     if (strpos($form['#action'], 'form_action_') === FALSE) {
       // Remove 'op' #name from all action buttons.

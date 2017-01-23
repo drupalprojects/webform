@@ -85,7 +85,7 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
   }
 
   /**
-   * Webform API callback. After build set the #element_validate handler.
+   * Form API callback. After build set the #element_validate handler.
    */
   public static function afterBuildEntityAutocomplete(array $element, FormStateInterface $form_state) {
     $element['#element_validate'][] = ['\Drupal\webform\Plugin\WebformElement\EntityAutocomplete', 'validateEntityAutocomplete'];
@@ -93,7 +93,7 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
   }
 
   /**
-   * Webform API callback. Remove target id property and create an array of entity ids.
+   * Form API callback. Remove target id property and create an array of entity ids.
    */
   public static function validateEntityAutocomplete(array &$element, FormStateInterface $form_state) {
     $name = $element['#name'];

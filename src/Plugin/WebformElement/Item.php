@@ -45,7 +45,7 @@ class Item extends ContainerBase {
   }
 
   /**
-   * Webform API callback. Removes ignored element for $form_state values.
+   * Form API callback. Removes ignored element for $form_state values.
    */
   public static function validateItem(array &$element, FormStateInterface $form_state, array &$completed_form) {
     $name = $element['#name'];

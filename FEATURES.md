@@ -55,7 +55,7 @@ Form settings that can be customized include:
 </a>
 </div>
 
-The Webform module is built directly on top of Drupal 8's Webform API. Every
+The Webform module is built directly on top of Drupal 8's Form API. Every
 [form element](https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/8) 
 available in Drupal 8 is supported by the Webform module.
 
