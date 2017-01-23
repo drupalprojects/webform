@@ -208,7 +208,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * Purge webform submissions.
    *
    * @param int $count
-   *   Amount of webform submissions to purge
+   *   Amount of webform submissions to purge.
    */
   public function purge($count);
 

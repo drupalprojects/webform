@@ -59,7 +59,6 @@ function webform_test_test_element_format(WebformInterface $webform, $multiple =
       continue;
     }
 
-
     if ($multiple) {
       if (!$webform_element->hasMultipleValues($element) && !$webform_element->hasProperty('multiple') && !$webform_element->hasProperty('tags')) {
         continue;
@@ -67,7 +66,7 @@ function webform_test_test_element_format(WebformInterface $webform, $multiple =
 
       // Set element #multiple or #tags property.
       $multiple_properties = ['multiple', 'tags'];
-      foreach ($multiple_properties  as $multiple_property) {
+      foreach ($multiple_properties as $multiple_property) {
         if ($webform_element->hasProperty($multiple_property)) {
           $element["#$multiple_property"] = TRUE;
         }
@@ -133,4 +132,3 @@ function webform_test_test_element_format(WebformInterface $webform, $multiple =
 
   return $data;
 }
-

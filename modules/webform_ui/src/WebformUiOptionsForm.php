@@ -5,7 +5,6 @@ namespace Drupal\webform_ui;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Element\WebformOptions;
 use Drupal\webform\WebformOptionsForm;
 
 /**
@@ -37,7 +36,7 @@ class WebformUiOptionsForm extends WebformOptionsForm {
     // Overriding after \Drupal\Core\Entity\EntityForm::afterBuild because
     // it calls ::buildEntity(), which calls ::copyFormValuesToEntity, which
     // attempts to populate the entity even though the 'options' have not been
-    // validated and set,
+    // validated and set,.
     // @see \Drupal\Core\Entity\EntityForm::afterBuild
     // @eee \Drupal\webform_ui\WebformUiOptionsForm::copyFormValuesToEntity
     // @see \Drupal\webform\Element\WebformOptions

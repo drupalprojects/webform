@@ -50,7 +50,7 @@
   function triggerEventHandlers(input) {
     var $input = $(input);
     var type = input.type;
-    var tag = input.tagName.toLowerCase(); // normalize case
+    var tag = input.tagName.toLowerCase(); // Normalize case.
     if (type == 'checkbox' || type == 'radio') {
       $input
         .trigger('change')
@@ -80,13 +80,13 @@
   function backupValue(input) {
     var $input = $(input);
     var type = input.type;
-    var tag = input.tagName.toLowerCase(); // normalize case
+    var tag = input.tagName.toLowerCase(); // Normalize case.
     if (type == 'checkbox' || type == 'radio') {
       $input.data('webform-value', $input.prop('checked'));
     }
     else if (tag == 'select') {
       var values = [];
-      $input.find('option:selected').each(function(i, option){
+      $input.find('option:selected').each(function (i, option) {
         values[i] = option.value;
       });
       $input.data('webform-value', values);
@@ -110,13 +110,13 @@
     }
 
     var type = input.type;
-    var tag = input.tagName.toLowerCase(); // normalize case
+    var tag = input.tagName.toLowerCase(); // Normalize case.
 
     if (type == 'checkbox' || type == 'radio') {
       $input.prop('checked', value)
     }
     else if (tag == 'select') {
-      $.each(value, function(i, option_value){
+      $.each(value, function (i, option_value) {
         $input.find("option[value='" + option_value + "']").prop("selected", true);
       });
     }
@@ -134,7 +134,7 @@
   function clearValue(input) {
     var $input = $(input);
     var type = input.type;
-    var tag = input.tagName.toLowerCase(); // normalize case
+    var tag = input.tagName.toLowerCase(); // Normalize case.
     if (type == 'checkbox' || type == 'radio') {
       $input.prop('checked', false)
     }

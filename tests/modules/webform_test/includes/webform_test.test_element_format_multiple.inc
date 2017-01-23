@@ -5,9 +5,7 @@
  * Generate test elements with Flexbox wrappers.
  */
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\webform\WebformInterface;
-
 
 module_load_include('inc', 'webform_test', 'includes/webform_test.test_element_format');
 
@@ -45,7 +43,7 @@ function webform_test_test_element_format_multiple(WebformInterface $webform) {
 
     // Set element #multiple or #tags property.
     $multiple_properties = ['multiple', 'tags'];
-    foreach ($multiple_properties  as $multiple_property) {
+    foreach ($multiple_properties as $multiple_property) {
       if ($webform_element->hasProperty($multiple_property)) {
         $element["#$multiple_property"] = TRUE;
       }
@@ -75,4 +73,3 @@ function webform_test_test_element_format_multiple(WebformInterface $webform) {
 
   return $data;
 }
-

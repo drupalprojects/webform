@@ -69,8 +69,7 @@ class WebformConfirmationTest extends WebformTestBase {
     $this->assertUrl('webform/test_confirmation_page/confirmation', ['query' => ['custom' => 'param']]);
 
     // TODO: (TESTING)  Figure out why the inline confirmation link is not including the query string parameters.
-    // $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '?custom=param">Back to form</a>');
-
+    // $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '?custom=param">Back to form</a>');.
     /* Test confirmation page custom (confirmation_type=page) */
 
     $webform_confirmation_page_custom = Webform::load('test_confirmation_page_custom');

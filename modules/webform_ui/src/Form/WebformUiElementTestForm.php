@@ -159,7 +159,6 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
     // Clear all messages including 'Unable to display this webform...' which is
     // generated because we are using a temp webform.
     // drupal_get_messages();
-
     return $form;
   }
 

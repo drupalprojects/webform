@@ -4,7 +4,6 @@ namespace Drupal\webform;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Utility\Token;
 
 /**
  * Webform submission generator.
@@ -113,8 +112,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       $values = [$values];
     }
 
-    // $values = $this->tokenManager->replace($values, $webform);
-
+    // $values = $this->tokenManager->replace($values, $webform);.
     // Elements that use multiple values require an array as the
     // default value.
     if ($element_handler->hasMultipleValues($element)) {

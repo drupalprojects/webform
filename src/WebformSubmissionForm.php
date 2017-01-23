@@ -315,8 +315,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attributes']['class'][] = 'js-webform-autofocus';
     }
 
-
-
     // Details save: Attach details element save open/close library.
     // This ensures that the library will be loaded even if the webform is
     // used as a block or a node.

@@ -41,17 +41,17 @@
    */
   Drupal.behaviors.webformHelpDialog = {
     attach: function (context) {
-      $(context).find('.button-webform-play').once('webform-help-dialog').on('click', function(event) {
+      $(context).find('.button-webform-play').once('webform-help-dialog').on('click', function (event) {
         if ($(window).width() < 768) {
           event.stopImmediatePropagation();
         }
-      }).each(function() {
+      }).each(function () {
         // Must make sure that this click event handler is execute first and
         // before the AJAX dialog handler.
         // @see http://stackoverflow.com/questions/2360655/jquery-event-handlers-always-execute-in-order-they-were-bound-any-way-around-t
         var handlers = $._data(this, 'events')['click'];
         var handler = handlers.pop();
-        // move it at the beginning
+        // Move it at the beginning.
         handlers.splice(0, 0, handler);
       });
     }

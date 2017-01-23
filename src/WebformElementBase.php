@@ -1036,7 +1036,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $t_args = array(
         '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
         '%min' => $element['#minlength'],
-        '%length' => Unicode::strlen($element['#value'])
+        '%length' => Unicode::strlen($element['#value']),
       );
       $form_state->setError($element, t('%name cannot be less than %min characters but is currently %length characters long.', $t_args));
     }

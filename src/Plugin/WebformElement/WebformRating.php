@@ -49,7 +49,6 @@ class WebformRating extends Range {
     parent::prepare($element, $webform_submission);
   }
 
-
   /**
    * {@inheritdoc}
    */

@@ -14,7 +14,6 @@ use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformElementManagerInterface;
-use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -122,7 +121,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Page default settings'),
       '#tree' => TRUE,
     ];
-    $form['page']['default_page_base_path']  = [
+    $form['page']['default_page_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default base path for webform URLs'),
       '#required' => TRUE,
@@ -135,19 +134,19 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Webform default settings'),
       '#tree' => TRUE,
     ];
-    $form['webform']['default_form_closed_message']  = [
+    $form['webform']['default_form_closed_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default closed message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_closed_message'),
     ];
-    $form['webform']['default_form_exception_message']  = [
+    $form['webform']['default_form_exception_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default closed exception message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_exception_message'),
     ];
-    $form['webform']['default_form_confidential_message']  = [
+    $form['webform']['default_form_confidential_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default confidential message'),
       '#required' => TRUE,
@@ -166,28 +165,28 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('If checked, the submit button will be disabled immediately after is is clicked.'),
       '#default_value' => $settings['default_form_submit_once'],
     ];
-    $form['webform']['default_form_disable_back']  = [
+    $form['webform']['default_form_disable_back'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable back button for all webforms'),
       '#description' => $this->t('If checked, users will not be allowed to navigate back to the webform using the browsers back button.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('settings.default_form_disable_back'),
     ];
-    $form['webform']['default_form_unsaved']  = [
+    $form['webform']['default_form_unsaved'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Warn users about unsaved changes'),
       '#description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('settings.default_form_unsaved'),
     ];
-    $form['webform']['default_form_novalidate']  = [
+    $form['webform']['default_form_novalidate'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable client-side validation for all webforms'),
       '#description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to all webforms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
       '#return_value' => TRUE,
       '#default_value' => $config->get('settings.default_form_novalidate'),
     ];
-    $form['webform']['default_form_details_toggle']  = [
+    $form['webform']['default_form_details_toggle'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display collapse/expand all details link'),
       '#description' => $this->t('If checked, an expand/collapse all (details) link will be added to all webforms with two or more details elements.'),
@@ -300,13 +299,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Confirmation default settings'),
       '#tree' => TRUE,
     ];
-    $form['confirmation']['default_confirmation_message']  = [
+    $form['confirmation']['default_confirmation_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default confirmation message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_confirmation_message'),
     ];
-    $form['confirmation']['default_confirmation_back_label']  = [
+    $form['confirmation']['default_confirmation_back_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default confirmation back label'),
       '#required' => TRUE,
@@ -331,13 +330,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Limit default settings'),
       '#tree' => TRUE,
     ];
-    $form['limit']['default_limit_total_message']  = [
+    $form['limit']['default_limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default total submissions limit message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_limit_total_message'),
     ];
-    $form['limit']['default_limit_user_message']  = [
+    $form['limit']['default_limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default per user submission limit message'),
       '#required' => TRUE,
@@ -457,7 +456,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Allow files to be uploaded to public file system.'),
       '#description' => $this->t('Public files upload destination is dangerous for webforms that are available to anonymous and/or untrusted users.') . ' ' .
-        $this->t('For more information see:') . ' <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>',
+      $this->t('For more information see:') . ' <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>',
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_public'),
     ];
@@ -497,16 +496,14 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     foreach ($element_plugins as $element_id => $element_plugin) {
       $items_formats = $element_plugin->getItemsFormats();
 
-//      // Make sure the element has formats.
-//      if (empty($item_formats)) {
-//        continue;
-//      }
-
-//      // Skip if the element just uses the default 'value' format.
-//      if (count($item_formats) == 1 && isset($item_formats['value'])) {
-//        continue;
-//      }
-
+      // // Make sure the element has formats.
+      //      if (empty($item_formats)) {
+      //        continue;
+      //      }
+      //      // Skip if the element just uses the default 'value' format.
+      //      if (count($item_formats) == 1 && isset($item_formats['value'])) {
+      //        continue;
+      //      }
       // Element.
       $element_plugin_definition = $element_plugin->getPluginDefinition();
       $element_plugin_label = $element_plugin_definition['label'];
@@ -526,7 +523,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         '#type' => 'select',
         '#title' => $this->t('Item format'),
         '#description' => $this->t("Select how a @label element's single value is displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
-          $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
+        $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
         '#options' => $item_formats,
         '#default_value' => $config->get("format.$element_id"),
       ];
@@ -543,7 +540,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
           '#type' => 'select',
           '#title' => $this->t('Items format'),
           '#description' => $this->t("Select how a @label element's multiple values are displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
-            $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
+          $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
           '#options' => $items_formats,
           '#default_value' => $config->get("format.$element_id"),
         ];
@@ -556,32 +553,32 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Email default settings'),
       '#tree' => TRUE,
     ];
-    $form['mail']['default_from_mail']  = [
+    $form['mail']['default_from_mail'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default email from address'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_from_mail'),
     ];
-    $form['mail']['default_from_name']  = [
+    $form['mail']['default_from_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default email from name'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_from_name'),
     ];
-    $form['mail']['default_subject']  = [
+    $form['mail']['default_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default email subject'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_subject'),
     ];
-    $form['mail']['default_body_text']  = [
+    $form['mail']['default_body_text'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'text',
       '#title' => $this->t('Default email body (Plain text)'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_body_text'),
     ];
-    $form['mail']['default_body_html']  = [
+    $form['mail']['default_body_html'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'html',
       '#title' => $this->t('Default email body (HTML)'),

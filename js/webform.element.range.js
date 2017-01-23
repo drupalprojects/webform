@@ -27,9 +27,9 @@
         // Display range input's output to the end user.
         var html = '';
         html += '<div class="form-range-output-container">';
-        html += (prefix ? '<span class="field-prefix">' + prefix + '</span>': '');
+        html += (prefix ? '<span class="field-prefix">' + prefix + '</span>' : '');
         html += '<input type="number" min="' + $element.attr('min') + '" max="' + $element.attr('max') + '" step="' + $element.attr('step') + '" class="form-range-output form-number" />';
-        html += (suffix ? '<span class="field-suffix">' + suffix + '</span>': '');
+        html += (suffix ? '<span class="field-suffix">' + suffix + '</span>' : '');
         html += '</div>';
 
         var height = parseInt($element.outerHeight()) || 24;
@@ -38,7 +38,7 @@
         // Set the container element's line height which will vertically
         // align the range widget and the output.
         $outputContainer.find('input, span').css({
-          height: height  + 'px',
+          height: height + 'px',
           lineHeight: height + 'px'
         });
 

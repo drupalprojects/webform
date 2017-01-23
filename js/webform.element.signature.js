@@ -24,10 +24,10 @@
 
         // Set height.
         $canvas.attr('width', $wrapper.width());
-        $canvas.attr('height', $wrapper.width()/3);
+        $canvas.attr('height', $wrapper.width() / 3);
         $(window).resize(function () {
           $canvas.attr('width', $wrapper.width());
-          $canvas.attr('height', $wrapper.width()/3);
+          $canvas.attr('height', $wrapper.width() / 3);
 
           // Resizing clears the canvas so we need to reset the signature pad.
           signaturePad.clear();

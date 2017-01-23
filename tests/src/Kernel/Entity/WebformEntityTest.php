@@ -44,7 +44,7 @@ class WebformEntityTest extends KernelTestBase {
     $elements = [
       'root' => [
         '#type' => 'textfield',
-        '#title' => 'root'
+        '#title' => 'root',
       ],
       'container' => [
         '#type' => 'container',
@@ -52,7 +52,7 @@ class WebformEntityTest extends KernelTestBase {
         'child' => [
           '#type' => 'textfield',
           '#title' => 'child',
-        ]
+        ],
       ],
     ];
     $webform->setElements($elements);
@@ -64,7 +64,7 @@ class WebformEntityTest extends KernelTestBase {
     $flattened_elements = [
       'root' => [
         '#type' => 'textfield',
-        '#title' => 'root'
+        '#title' => 'root',
       ],
       'container' => [
         '#type' => 'container',
@@ -141,7 +141,7 @@ class WebformEntityTest extends KernelTestBase {
       'page_1' => ['#title' => 'Page 1'],
       'page_2' => ['#title' => 'Page 2'],
       'page_3' => ['#title' => 'Page 3'],
-      'complete' => ['#title' => 'Complete']
+      'complete' => ['#title' => 'Complete'],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
@@ -154,7 +154,7 @@ class WebformEntityTest extends KernelTestBase {
   /**
    * Test paths.
    */
-  function testPaths() {
+  public function testPaths() {
     $this->installConfig('webform');
 
     /** @var \Drupal\webform\WebformInterface $webform */
@@ -170,7 +170,7 @@ class WebformEntityTest extends KernelTestBase {
   /**
    * Test elements CRUD operations.
    */
-  function testElementsCrud() {
+  public function testElementsCrud() {
     $this->installEntitySchema('webform_submission');
 
     /** @var \Drupal\webform\WebformInterface $webform */
@@ -182,7 +182,7 @@ class WebformEntityTest extends KernelTestBase {
       'root' => [
         '#type' => 'container',
         '#title' => 'root',
-      ]
+      ],
     ];
     $webform->setElementProperties('root', $elements['root']);
     $this->assertEquals($webform->getElementsRaw(), Yaml::encode($elements));
@@ -208,9 +208,10 @@ class WebformEntityTest extends KernelTestBase {
       'root' => [
         '#type' => 'container',
         '#title' => 'root',
-      ]
+      ],
     ];
     $webform->deleteElement('container');
     $this->assertEquals($webform->getElementsRaw(), Yaml::encode($elements));
   }
+
 }

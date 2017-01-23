@@ -242,7 +242,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
 
     // Sanitize file name.
     // @see http://stackoverflow.com/questions/2021624/string-sanitizer-for-filename
-    $file_name  = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $file_name);
+    $file_name = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $file_name);
     $file_name = preg_replace('/\s+/', '-', $file_name);
     return $file_name;
   }

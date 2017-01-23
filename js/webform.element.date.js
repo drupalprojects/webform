@@ -34,13 +34,13 @@
         // datepicker.
         // @see http://stackoverflow.com/questions/16702398/convert-a-php-date-format-to-a-jqueryui-datepicker-date-format
         datepickerSettings.dateFormat = dateFormat
-          // Year
+          // Year.
           .replace('Y', 'yy')
           // Month.
           .replace('F', 'MM')
           .replace('m', 'mm')
           .replace('n', 'm')
-          // Date
+          // Date.
           .replace('d', 'dd');
 
         // Add min and max date if set on the input.

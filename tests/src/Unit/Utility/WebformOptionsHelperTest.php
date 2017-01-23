@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\webform\Unit\Utility;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\Tests\UnitTestCase;
 
@@ -143,7 +142,7 @@ class WebformOptionsHelperTest extends UnitTestCase {
    * @see testRange()
    */
   public function providerRange() {
-    $tests[] = [['#min' => 1, '#max' => 3], [1 => 1, 2 => 2, 3 => 3],];
+    $tests[] = [['#min' => 1, '#max' => 3], [1 => 1, 2 => 2, 3 => 3]];
     $tests[] = [['#min' => 0, '#max' => 6, '#step' => 2], [0 => 0, 2 => 2, 4 => 4, 6 => 6]];
     $tests[] = [['#min' => 'A', '#max' => 'C'], ['A' => 'A', 'B' => 'B', 'C' => 'C']];
     $tests[] = [['#min' => 'a', '#max' => 'c'], ['a' => 'a', 'b' => 'b', 'c' => 'c']];

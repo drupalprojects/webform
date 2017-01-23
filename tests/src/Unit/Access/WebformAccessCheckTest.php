@@ -4,8 +4,6 @@ namespace Drupal\Tests\webform\Unit\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Tests\UnitTestCase;
-use Drupal\Core\Cache\Context\CacheContextsManager;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Drupal\webform\Access\WebformAccess;
 
 /**
@@ -36,7 +34,6 @@ class PermissionAccessCheckTest extends UnitTestCase {
     parent::setUp();
   }
 
-
   /**
    * Tests the check admin access.
    *
@@ -51,7 +48,7 @@ class PermissionAccessCheckTest extends UnitTestCase {
       ->will($this->returnValueMap([
           ['administer webform', TRUE],
           ['administer webform submission', TRUE],
-        ]
+      ]
       ));
 
     $submission_manager_account = $this->getMock('Drupal\Core\Session\AccountInterface');
@@ -60,7 +57,7 @@ class PermissionAccessCheckTest extends UnitTestCase {
       ->will($this->returnValueMap([
           ['access webform overview', TRUE],
           ['view any webform submission', TRUE],
-        ]
+      ]
       ));
 
     $node = $this->getMockBuilder('Drupal\node\NodeInterface')
@@ -119,6 +116,5 @@ class PermissionAccessCheckTest extends UnitTestCase {
     $this->assertEquals(AccessResult::neutral(), WebformAccess::checkEntityResultsAccess($node, $account));
     $this->assertEquals(AccessResult::allowed(), WebformAccess::checkEntityResultsAccess($webform_node, $submission_manager_account));
   }
-
 
 }

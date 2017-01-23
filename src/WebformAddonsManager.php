@@ -215,7 +215,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'config',
     ];
 
-
     return $projects;
   }
 

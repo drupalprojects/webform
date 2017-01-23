@@ -46,7 +46,7 @@
 
         // Issue #2764443: CodeMirror is not setting submitted value when
         // rendered within a webform UI dialog.
-        editor.on('blur', function (event){
+        editor.on('blur', function (event) {
           editor.save();
         });
 
@@ -79,7 +79,7 @@
     // Delay refreshing CodeMirror for 10 millisecond while the dialog is
     // still being rendered.
     // @see http://stackoverflow.com/questions/8349571/codemirror-editor-is-not-loading-content-until-clicked
-    setTimeout(function() {
+    setTimeout(function () {
       $('.CodeMirror').each(function (index, $element) {
         var $details = $(this).parents('details:not([open])');
         $details.attr('open', 'open');
@@ -91,7 +91,7 @@
   });
 
   // On state:visible refresh CodeMirror elements.
-  $(document).on('state:visible', function(event) {
+  $(document).on('state:visible', function (event) {
     var $element = $(event.target);
     if ($element.hasClass('js-webform-codemirror')) {
       $element.parent().find('.CodeMirror').each(function (index, $element) {

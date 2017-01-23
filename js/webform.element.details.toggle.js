@@ -41,7 +41,7 @@
             // Set the saved states for all the details elements.
             // @see webform.element.details.save.js
             if (Drupal.webformDetailsSaveGetName) {
-              $form.find('details').each(function() {
+              $form.find('details').each(function () {
                 var name = Drupal.webformDetailsSaveGetName($(this));
                 if (name) {
                   localStorage.setItem(name, open);

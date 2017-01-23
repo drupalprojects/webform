@@ -24,7 +24,7 @@
 
           // From: http://stackoverflow.com/questions/5366068/jquery-ui-autocomplete-submit-onclick-result
           $(this).bind('autocompleteselect', function (event, ui) {
-            if(ui.item){
+            if (ui.item) {
               $(this).val(ui.item.value);
               this.form.submit();
             }

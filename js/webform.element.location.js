@@ -22,10 +22,10 @@
           types: ['geocode']
         });
 
-        $geocomplete.on('input', function() {
+        $geocomplete.on('input', function () {
           // Reset attributes on input.
           $element.find('[data-webform-location-attribute]').val('');
-        }).on('blur', function() {
+        }).on('blur', function () {
           // Make sure to get attributes on blur.
           if ($element.find('[data-webform-location-attribute="location"]').val() == '') {
             var value = $geocomplete.val();
@@ -34,7 +34,6 @@
             }
           }
         });
-
 
         // If there is default value look up location's attributes, else see if
         // the default value should be set to the browser's current geolocation.

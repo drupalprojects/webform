@@ -207,13 +207,13 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['webform']['form_closed_message']  = [
+    $form['webform']['form_closed_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform closed message'),
       '#description' => $this->t('A message to be displayed notifying the user that the webform is closed.'),
       '#default_value' => $settings['form_closed_message'],
     ];
-    $form['webform']['form_exception_message']  = [
+    $form['webform']['form_exception_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform exception message'),
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
@@ -249,7 +249,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['form_prepopulate_source_entity'],
     ];
-    $settings_elements = [
+    $settings_elements                                        = [
       'form_submit_once' => [
         'title' => $this->t('Prevent duplicate submissions'),
         'all_description' => $this->t('Submit button is disabled immediately after is is clicked form all webforms.'),
@@ -566,7 +566,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['form_confidential'],
     ];
-    $form['submission']['form_confidential_message']  = [
+    $form['submission']['form_confidential_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform confidential message'),
       '#description' => $this->t('A message to be displayed when authenticated users try to access a confidential webform.'),
@@ -801,7 +801,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'select',
       '#title' => $this->t('Method'),
       '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br/>' .
-        '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, and confirmations.') . '</em>',
+      '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, and confirmations.') . '</em>',
       '#options' => [
         '' => $this->t('POST (Default)'),
         'post' => $this->t('POST (Custom)'),
@@ -846,9 +846,9 @@ class WebformEntitySettingsForm extends EntityForm {
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
       '#description' =>
-        $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
-        '<br/>' .
-        $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
+      $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
+      '<br/>' .
+      $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
 

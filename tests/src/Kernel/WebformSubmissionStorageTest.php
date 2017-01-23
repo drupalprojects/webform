@@ -100,7 +100,7 @@ class WebfromSubmissionStorageTest extends KernelTestBase {
     //    1: (bool) Whether the submission should be created in such time when
     //       that it becomes eligible for purging based on its creation time
     // 2: (array) Array of webform submission sequence IDs that should be purged
-    //    in the test
+    //    in the test.
     $tests = [];
 
     // Test that only drafts are purged.

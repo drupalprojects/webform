@@ -22,6 +22,7 @@
         var effect = $element.attr('data-message-close-effect') || 'hide';
         switch (effect) {
           case 'slide': effect = 'slideUp'; break;
+
           case 'fade': effect = 'fadeOut'; break;
         }
 
@@ -30,7 +31,7 @@
           return;
         }
 
-        $element.show().find('.js-webform-message__link').on('click', function(event) {
+        $element.show().find('.js-webform-message__link').on('click', function (event) {
           $element[effect]();
           setClosed($element, storage, id);
           $element.trigger('close');

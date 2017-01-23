@@ -17,14 +17,14 @@
    */
   Drupal.behaviors.webformSubmitOnce = {
     attach: function (context) {
-      $('.js-webform-submit-once', context).each(function() {
+      $('.js-webform-submit-once', context).each(function () {
         var $form = $(this);
         $form.removeAttr('webform-submitted');
         $form.find('#edit-actions input[type="submit"]').removeAttr('webform-clicked');
 
         // Track which submit button was clicked.
         // @see http://stackoverflow.com/questions/5721724/jquery-how-to-get-which-button-was-clicked-upon-form-submission
-        $form.find('#edit-actions input[type="submit"]').click(function() {
+        $form.find('#edit-actions input[type="submit"]').click(function () {
           $form.find('#edit-actions input[type="submit"]').removeAttr('webform-clicked');
           $(this).attr('webform-clicked', 'true');
         });
@@ -51,4 +51,3 @@
   };
 
 })(jQuery, Drupal);
-

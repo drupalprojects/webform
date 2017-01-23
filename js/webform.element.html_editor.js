@@ -41,7 +41,7 @@
             { name: 'links', items: [ 'Link', 'Unlink'] },
             { name: 'tools', items: [ 'Source', '-', 'Maximize' ] }
           ]
-        }).on('change', function(evt) {
+        }).on('change', function (evt) {
           // Save data onchange since AJAX dialogs don't execute webform.onsubmit.
           $textarea.val(evt.editor.getData().trim());
         });
