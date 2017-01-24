@@ -32,7 +32,7 @@ libraries:
       url: 'https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.3.zip'
 
   rateit:
-    directory_name: rateit
+    directory_name: jquery.rateit
     destination: libraries
     download:
       type: get
