@@ -1,21 +1,36 @@
 /**
  * @file
  * Help styles.
+ *
+ * @see /admin/help/webform
+ * @see /admin/help/webform/introduction
  */
 
-.webform-help-accordion dt {
-  font-weight: bold;
-}
-
+/**
+ * Help block.
+ */
 .block-help {
   margin: 1em 0;
 }
 
+/**
+ * Help play button.
+ */
 .button.button-webform-play:before {
   content: '► ';
   font-size: .8em;
 }
 
+/**
+ * Help accordion.
+ */
+.webform-help-accordion dt {
+  font-weight: bold;
+}
+
+/**
+ * Help video.
+ */
 .webform-help-video-youtube {
   margin: 1.5em 0;
   max-width: 1024px;

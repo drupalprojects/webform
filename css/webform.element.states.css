@@ -1,6 +1,8 @@
 /**
  * @file
  * States element styles.
+ *
+ * @see /webform/test_element_states
  */
 
 .webform-states-table td {
@@ -35,8 +37,7 @@
 .webform-states-table td:last-child {
   padding: 0 2px;
   vertical-align: middle;
-  text-align: center !important;
-  width: 60px !important;
+  text-align: center;
 }
 
 .webform-states-table td:last-child input {
@@ -66,5 +67,5 @@
  */
 .webform-states-table .tabledrag-changed-warning,
 .webform-states-table .tabledrag-changed {
-  display: none !important;
+  display: none !important; /* Must use !important because .tabledrag-changed 'display' is set via JavaScript */
 }

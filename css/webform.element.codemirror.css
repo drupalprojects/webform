@@ -1,8 +1,11 @@
 /**
  * @file
  * CodeMirror styles.
+ *
+ * @see /webform/test_element_codemirror/test
  */
 
+/* Clean up CodeMirror editor */
 form .CodeMirror {
   border: 1px solid #ccc;
   font-size: 13px;
@@ -14,6 +17,7 @@ form .CodeMirror-scroll {
   overflow-x: auto;
 }
 
+/* Clean up CodeMirror viewer */
 pre.webform-codemirror-runmode {
   border: 1px solid #ccc;
   font-size: 13px;

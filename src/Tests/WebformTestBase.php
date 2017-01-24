@@ -19,20 +19,10 @@ abstract class WebformTestBase extends WebTestBase {
   protected static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_test'];
 
   /**
-   * Webform submission storage.
-   *
-   * @var \Drupal\webform\WebformSubmissionStorageInterface
-   */
-  protected $submissionStorage;
-
-  /**
    * {@inheritdoc}
    */
   public function setUp() {
     parent::setUp();
-
-    // Storage.
-    $this->submissionStorage = \Drupal::entityTypeManager()->getStorage('webform_submission');
 
     // Set page.front (aka <front>) to /node instead of /user/login.
     \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/node')->save();

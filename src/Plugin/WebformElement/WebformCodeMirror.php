@@ -71,6 +71,7 @@ class WebformCodeMirror extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    $element += ['#mode' => 'text'];
     switch ($element['#mode']) {
       case 'html':
         return ['<p><b>Hello World!!!</b></p>'];

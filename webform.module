@@ -288,16 +288,18 @@ function webform_page_attachments(&$page) {
   $route_name = Drupal::routeMatch()->getRouteName();
   $url = Url::fromRoute('<current>')->toString();
 
-  // Attach global libraries.
+  // Attach global libraries only to webform specific pages.
   if (preg_match('/^(webform\.|^entity\.([^.]+\.)?webform)/', $route_name) || preg_match('#(/node/add/webform|/admin/help/webform)#', $url)) {
     // Attach theme specific library to webform routers so that we can tweak
-    // the seven.theme.
+    // the bartik.theme and seven.theme.
     $theme = \Drupal::theme()->getActiveTheme()->getName();
     if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$theme.css")) {
       $page['#attached']['library'][] = "webform/webform.theme.$theme";
     }
 
     // Attach details element save open/close library.
+    // This ensures pages without a webform will still be able to save the
+    // details element state.
     if (\Drupal::config('webform.settings')->get('ui.details_save')) {
       $page['#attached']['library'][] = 'webform/webform.element.details.save';
     }

@@ -3,6 +3,7 @@
  * Bartik theme styles.
  */
 
+/* Add background color to table cells so that very wide off-screen tables look okay. */
 table {
   background-color: #fff;
 }

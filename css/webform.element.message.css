@@ -1,8 +1,13 @@
 /**
  * @file
  * Messages element styles.
+ *
+ * @see /webform/test_element_message
  */
 
+/**
+ * Add styles to default (info) message,
+ */
 .messages {
   box-shadow: -8px 0 0 #3b3b3b; /* LTR */
 }
@@ -25,12 +30,15 @@
 }
 
 /**
- * Message close.
+ * Webform message close container.
  */
 .webform-message--close .messages {
   position: relative;
 }
 
+/**
+ * Webform message close link.
+ */
 .webform-message--close .webform-message__link {
   display: none;
 }

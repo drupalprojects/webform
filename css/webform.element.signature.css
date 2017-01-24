@@ -2,6 +2,7 @@
  * @file
  * Signature element styles.
  *
+ * @see /webform/example_elements
  * @see https://css-tricks.com/snippets/sass/maintain-aspect-ratio-mixin/
  */
 
@@ -27,6 +28,7 @@
   cursor: crosshair;
 }
 
+/* Position 'Reset' button in right hand corner of the canvas */
 .webform-signature-pad .button {
   z-index: 100;
   position: absolute;
@@ -34,6 +36,7 @@
   right: 2px;
 }
 
+/* Add border around signature image */
 .webform-signature-pad-image {
   display: block;
   width: 100%;

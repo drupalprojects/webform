@@ -1,10 +1,12 @@
 /**
  * @file
  * Likert element styles.
+ *
+ * @see /webform/test_element_likert
  */
 
 /**
- * Answer widths
+ * Answer column widths.
  */
 [data-likert-answers-count="2"] th {
   width: 30%;
@@ -77,11 +79,17 @@
 
   .form-type-webform-likert td {
     display: block;
-    width: 100% !important;
     border: 0;
     background: transparent;
     padding: 0;
     text-align: inherit;
+  }
+
+  .webform-likert-table th,
+  .webform-likert-table th:first-child,
+  .webform-likert-table td,
+  .webform-likert-table td:first-child {
+    width: 100% !important;
   }
 
   .form-type-webform-likert td label {
