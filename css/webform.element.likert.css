@@ -85,11 +85,11 @@
     text-align: inherit;
   }
 
-  .webform-likert-table th,
-  .webform-likert-table th:first-child,
+  .webform-likert-table[data-likert-answers-count] th,
+  .webform-likert-table[data-likert-answers-count] th:first-child,
   .webform-likert-table td,
   .webform-likert-table td:first-child {
-    width: 100% !important;
+    width: 100%;
   }
 
   .form-type-webform-likert td label {
