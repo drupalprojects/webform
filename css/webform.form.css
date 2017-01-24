@@ -11,6 +11,14 @@
 }
 
 /**
+ * Issue #2731991: Setting required on radios marks all options required.
+ */
+.form-checkboxes .form-required:after,
+.form-radios .form-required:after {
+  display: none;
+}
+
+/**
  * Element inline
  */
 .webform-element--title-inline label {
