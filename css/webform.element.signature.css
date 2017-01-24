@@ -40,6 +40,6 @@
 .webform-signature-pad-image {
   display: block;
   width: 100%;
-  max-width: 600px /* Max width is used to prevent signature pad from getting too wide and tall */;
+  max-width: 600px; /* Max width is used to prevent signature pad from getting too wide and tall */
   border: 1px solid #ccc;
 }
