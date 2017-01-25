@@ -18,7 +18,17 @@ class WebformNodeResultsTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_test', 'webform_node'];
+  public static $modules = ['block', 'webform', 'webform_node', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Place blocks.
+    $this->placeBlocks();
+  }
 
   /**
    * Tests webform node results.

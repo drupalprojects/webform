@@ -13,6 +13,10 @@ use Drupal\webform\WebformInterface;
  */
 trait WebformTestTrait {
 
+  /****************************************************************************/
+  // User.
+  /****************************************************************************/
+
   /**
    * A normal user to submit webforms.
    *
@@ -25,7 +29,7 @@ trait WebformTestTrait {
    *
    * @var \Drupal\user\UserInterface
    */
-  protected $adminFormUser;
+  protected $adminWebformUser;
 
   /**
    * A webform submission administrator.
@@ -39,14 +43,86 @@ trait WebformTestTrait {
    *
    * @var \Drupal\user\UserInterface
    */
-  protected $ownFormUser;
+  protected $ownWebformUser;
 
   /**
    * A webform any access.
    *
    * @var \Drupal\user\UserInterface
    */
-  protected $anyFormUser;
+  protected $anyWebformUser;
+
+  /**
+   * Create webform test users.
+   */
+  protected function createUsers() {
+    // Default user permissions.
+    $default_user_permissions = [];
+    $default_user_permissions[] = 'access user profiles';
+    if (in_array('webform_node', self::$modules)) {
+      $default_user_permissions[] = 'access content';
+    }
+
+    // Normal user.
+    $normal_user_permissions = $default_user_permissions;
+    $this->normalUser = $this->drupalCreateUser($normal_user_permissions);
+
+    // Admin webform user.
+    $admin_form_user_permissions = array_merge($default_user_permissions, [
+      'administer webform',
+      'create webform',
+      'administer users',
+    ]);
+    if (in_array('block', self::$modules)) {
+      $admin_form_user_permissions[] = 'administer blocks';
+    }
+    if (in_array('webform_node', self::$modules)) {
+      $admin_form_user_permissions[] = 'administer nodes';
+    }
+    if (in_array('webform_test_translation', self::$modules)) {
+      $admin_form_user_permissions[] = 'translate configuration';
+    }
+    $this->adminWebformUser = $this->drupalCreateUser($admin_form_user_permissions);
+
+    // Own webform user.
+    $this->ownWebformUser = $this->drupalCreateUser(array_merge($default_user_permissions, [
+      'access webform overview',
+      'create webform',
+      'edit own webform',
+      'delete own webform',
+    ]));
+
+    // Any webform user.
+    $this->anyWebformUser = $this->drupalCreateUser(array_merge($default_user_permissions, [
+      'access webform overview',
+      'create webform',
+      'edit any webform',
+      'delete any webform',
+    ]));
+
+    // Admin submission user.
+    $this->adminSubmissionUser = $this->drupalCreateUser(array_merge($default_user_permissions, [
+      'administer webform submission',
+    ]));
+  }
+
+  /****************************************************************************/
+  // Block.
+  /****************************************************************************/
+
+  /**
+   * Place breadcrumb page, tasks, and actions.
+   */
+  protected function placeBlocks() {
+    $this->drupalPlaceBlock('system_breadcrumb_block');
+    $this->drupalPlaceBlock('page_title_block');
+    $this->drupalPlaceBlock('local_tasks_block');
+    $this->drupalPlaceBlock('local_actions_block');
+  }
+
+  /****************************************************************************/
+  // Filter.
+  /****************************************************************************/
 
   /**
    * Basic HTML filter format.
@@ -61,54 +137,6 @@ trait WebformTestTrait {
    * @var \Drupal\filter\FilterFormatInterface
    */
   protected $fullHtmlFilter;
-
-  /**
-   * Create webform test users.
-   */
-  protected function createUsers() {
-    $this->normalUser = $this->drupalCreateUser([
-      'access user profiles',
-      'access content',
-    ]);
-    $this->adminFormUser = $this->drupalCreateUser([
-      'access user profiles',
-      'access content',
-      'administer webform',
-      'administer blocks',
-      'administer nodes',
-      'administer users',
-      'create webform',
-    ]);
-    $this->ownFormUser = $this->drupalCreateUser([
-      'access content',
-      'access webform overview',
-      'create webform',
-      'edit own webform',
-      'delete own webform',
-    ]);
-    $this->anyFormUser = $this->drupalCreateUser([
-      'access content',
-      'access webform overview',
-      'create webform',
-      'edit any webform',
-      'delete any webform',
-    ]);
-    $this->adminSubmissionUser = $this->drupalCreateUser([
-      'access user profiles',
-      'access content',
-      'administer webform submission',
-    ]);
-  }
-
-  /**
-   * Place breadcrumb page, tasks, and actions.
-   */
-  protected function placeBlocks() {
-    $this->drupalPlaceBlock('system_breadcrumb_block');
-    $this->drupalPlaceBlock('page_title_block');
-    $this->drupalPlaceBlock('local_tasks_block');
-    $this->drupalPlaceBlock('local_actions_block');
-  }
 
   /**
    * Create basic HTML filter format.
@@ -134,6 +162,10 @@ trait WebformTestTrait {
     ]);
     $this->fullHtmlFilter->save();
   }
+
+  /****************************************************************************/
+  // Submission.
+  /****************************************************************************/
 
   /**
    * Purge all submission before the webform.module is uninstalled.
@@ -201,19 +233,9 @@ trait WebformTestTrait {
     }
   }
 
-  /**
-   * Gets that last email sent during the currently running test case.
-   *
-   * @return array
-   *   An array containing the last email message captured during the
-   *   current test.
-   */
-  protected function getLastEmail() {
-    $sent_emails = $this->drupalGetMails();
-    $sent_email = end($sent_emails);
-    $this->debug($sent_email);
-    return $sent_email;
-  }
+  /****************************************************************************/
+  // Export.
+  /****************************************************************************/
 
   /**
    * Request a webform results export CSV.
@@ -250,7 +272,25 @@ trait WebformTestTrait {
   }
 
   /****************************************************************************/
-  // Debug and custom assert methods
+  // Email.
+  /****************************************************************************/
+
+  /**
+   * Gets that last email sent during the currently running test case.
+   *
+   * @return array
+   *   An array containing the last email message captured during the
+   *   current test.
+   */
+  protected function getLastEmail() {
+    $sent_emails = $this->drupalGetMails();
+    $sent_email = end($sent_emails);
+    $this->debug($sent_email);
+    return $sent_email;
+  }
+
+  /****************************************************************************/
+  // Assert.
   /****************************************************************************/
 
   /**
@@ -308,6 +348,10 @@ trait WebformTestTrait {
     $element = $this->cssSelect($selector);
     $this->assertTrue(empty($element), $message);
   }
+
+  /****************************************************************************/
+  // Debug.
+  /****************************************************************************/
 
   /**
    * Logs verbose (debug) message in a text file.

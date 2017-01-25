@@ -17,7 +17,17 @@ class WebformAdminSettingsTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_ui', 'webform_test'];
+  protected static $modules = ['node', 'webform', 'webform_ui', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests webform admin settings.
@@ -25,7 +35,7 @@ class WebformAdminSettingsTest extends WebformTestBase {
   public function testAdminSettings() {
     global $base_path;
 
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     /* Settings Webform */
 

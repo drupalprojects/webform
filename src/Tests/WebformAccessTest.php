@@ -15,11 +15,21 @@ class WebformAccessTest extends WebformTestBase {
   use WebformTestCreationTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Tests webform access rules.
    */
   public function testAccessControlHandler() {
     // Login as user who can access own webform.
-    $this->drupalLogin($this->ownFormUser);
+    $this->drupalLogin($this->ownWebformUser);
 
     // Check create own webform.
     $this->drupalPostForm('admin/structure/webform/add', ['id' => 'test_own', 'title' => 'test_own', 'elements' => "test:\n  '#markup': 'test'"], t('Save'));
@@ -37,7 +47,7 @@ class WebformAccessTest extends WebformTestBase {
     $this->assertResponse(200);
 
     // Login as user who can access any webform.
-    $this->drupalLogin($this->anyFormUser);
+    $this->drupalLogin($this->anyWebformUser);
 
     // Check duplicate any webform.
     $this->drupalGet('admin/structure/webform/manage/test_own/duplicate');
@@ -53,10 +63,10 @@ class WebformAccessTest extends WebformTestBase {
 
     // Change the owner of the webform to 'any' user.
     $own_webform = Webform::load('test_own');
-    $own_webform->setOwner($this->anyFormUser)->save();
+    $own_webform->setOwner($this->anyWebformUser)->save();
 
     // Login as user who can access own webform.
-    $this->drupalLogin($this->ownFormUser);
+    $this->drupalLogin($this->ownWebformUser);
 
     // Check duplicate denied any webform.
     $this->drupalGet('admin/structure/webform/manage/test_own/duplicate');

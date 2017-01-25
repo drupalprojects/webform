@@ -14,13 +14,23 @@ class WebformThirdPartySettingsTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'node', 'user', 'webform'];
+  protected static $modules = ['node', 'webform'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests webform third party settings.
    */
   public function testThirdPartySettings() {
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     // Check 'Webform: Settings: Third party' shows no modules installed.
     $this->drupalGet('admin/structure/webform/settings/third-party');

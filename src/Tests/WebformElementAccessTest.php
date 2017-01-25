@@ -20,6 +20,16 @@ class WebformElementAccessTest extends WebformTestBase {
   protected static $modules = ['webform', 'webform_ui', 'webform_test'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Test element access.
    */
   public function testElementAccess() {
@@ -45,18 +55,18 @@ class WebformElementAccessTest extends WebformTestBase {
     $this->assertNoFieldByName('private', '');
 
     // Check element with #private property visible for admin user.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalGet('webform/test_element_access');
     $this->assertFieldByName('private', '');
 
     // Check admins have 'administer webform element access' permission.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalGet('admin/structure/webform/manage/test_element_access/element/access_create_roles_anonymous/edit');
     $this->assertFieldById('edit-properties-access-create-roles-anonymous');
 
     // Check webform builder don't have 'administer webform element access'
     // permission.
-    $this->drupalLogin($this->ownFormUser);
+    $this->drupalLogin($this->ownWebformUser);
     $this->drupalGet('admin/structure/webform/manage/test_element_access/element/access_create_roles_anonymous/edit');
     $this->assertNoFieldById('edit-properties-access-create-roles-anonymous');
 
@@ -111,7 +121,7 @@ class WebformElementAccessTest extends WebformTestBase {
     // NOTE: Anonymous users can view submissions, so there is nothing to check.
 
     // Check authenticated role access.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalGet("/admin/structure/webform/manage/test_element_access/submission/$sid");
     $this->assertNoRaw('access_view_roles (anonymous)');
     $this->assertRaw('access_view_roles (authenticated)');

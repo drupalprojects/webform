@@ -17,10 +17,7 @@ class WebformDialogHelperTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
-    'system',
-    'webform',
-  ];
+  public static $modules = ['system', 'webform'];
 
   /**
    * {@inheritdoc}

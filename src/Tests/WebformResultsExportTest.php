@@ -21,13 +21,23 @@ class WebformResultsExportTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'block', 'node', 'user', 'locale', 'webform', 'webform_test'];
+  protected static $modules = ['node', 'locale', 'webform', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests download files.
    */
   public function testDownloadFiles() {
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     /** @var \Drupal\webform\WebformInterface $webform_managed_file */
     $webform_managed_file = Webform::load('test_element_managed_file');
@@ -251,13 +261,13 @@ class WebformResultsExportTest extends WebformTestBase {
     $this->assertNoRaw('Hillary,Clinton');
 
     // Check changing default exporter to 'table' settings.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/download', ['export[format][exporter]' => 'table'], t('Download'));
     $this->assertRaw('<body><table border="1"><thead><tr bgcolor="#cccccc" valign="top"><th>Serial number</th>');
     $this->assertPattern('#<td>George</td>\s+<td>Washington</td>\s+<td>Male</td>#ms');
 
     // Check changing default export (delimiter) settings.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalPostForm('admin/structure/webform/settings', ['export[format][delimiter]' => '|'], t('Save configuration'));
     $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"|"Submission URI"');

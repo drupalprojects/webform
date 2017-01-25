@@ -11,7 +11,17 @@ use Drupal\webform\Entity\Webform;
  */
 class WebformHandlerEmailAdvancedTest extends WebformTestBase {
 
-  protected static $modules = ['system', 'block', 'filter', 'node', 'user', 'file', 'webform', 'webform_test'];
+  protected static $modules = ['filter', 'file', 'webform', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Create webform test users.
@@ -22,21 +32,16 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
 
     $this->normalUser = $this->drupalCreateUser([
       'access user profiles',
-      'access content',
       $this->basicHtmlFilter->getPermissionName(),
     ]);
-    $this->adminFormUser = $this->drupalCreateUser([
+    $this->adminWebformUser = $this->drupalCreateUser([
       'access user profiles',
-      'access content',
       'administer webform',
-      'administer blocks',
-      'administer nodes',
       'administer users',
       $this->basicHtmlFilter->getPermissionName(),
     ]);
     $this->adminSubmissionUser = $this->drupalCreateUser([
       'access user profiles',
-      'access content',
       'administer webform submission',
       $this->basicHtmlFilter->getPermissionName(),
     ]);
@@ -56,7 +61,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $webform_email_advanced = Webform::load('test_handler_email_advanced');
 
     // Generate a test submission with a file upload.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     // Post a new submission using test webform which will automatically
     // upload file.txt.

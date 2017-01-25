@@ -17,7 +17,17 @@ class WebformNodeAccessTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_test', 'webform_node'];
+  public static $modules = ['webform', 'webform_node', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests webform node access rules.

@@ -150,8 +150,8 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
     $t_args = [
-      ':node_href' => Url::fromRoute('node.add', ['node_type' => 'webform'])->toString(),
-      ':block_href' => Url::fromRoute('block.admin_display')->toString(),
+      ':node_href' => ($this->moduleHandler->moduleExists('node')) ? Url::fromRoute('node.add', ['node_type' => 'webform'])->toString() : '',
+      ':block_href' => ($this->moduleHandler->moduleExists('block')) ? Url::fromRoute('block.admin_display')->toString() : '',
     ];
     $default_settings['default_page_submit_path'] = $default_page_submit_path;
     $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';

@@ -16,14 +16,27 @@ class WebformConfirmationTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['webform', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+
+    // Set page.front (aka <front>) to /node instead of /user/login.
+    \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/node')->save();
+  }
 
   /**
    * Tests webform confirmation.
    */
   public function testConfirmation() {
     // Login the admin user.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     /* Test confirmation message (confirmation_type=message) */
 

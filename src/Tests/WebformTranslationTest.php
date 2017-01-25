@@ -20,17 +20,22 @@ class WebformTranslationTest extends WebTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'block', 'webform', 'webform_examples', 'webform_test_translation'];
+  protected static $modules = ['block', 'webform', 'webform_examples', 'webform_test_translation'];
 
   /**
    * {@inheritdoc}
    */
   public function setUp() {
     parent::setUp();
+
+    // Place blocks.
     $this->placeBlocks();
 
-    $admin_user = $this->drupalCreateUser(['access content', 'administer webform', 'administer webform submission', 'translate configuration']);
-    $this->drupalLogin($admin_user);
+    // Create users.
+    $this->createUsers();
+
+    // Login admin user.
+    $this->drupalLogin($this->adminWebformUser);
   }
 
   /**

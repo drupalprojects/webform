@@ -18,7 +18,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'block', 'file', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['file', 'webform', 'webform_test'];
 
   /**
    * File usage manager.
@@ -46,6 +46,9 @@ class WebformElementManagedFileTest extends WebformTestBase {
    */
   public function setUp() {
     parent::setUp();
+
+    // Create users.
+    $this->createUsers();
 
     $this->fileUsage = $this->container->get('file.usage');
     $this->webform = Webform::load('test_element_managed_file');
@@ -122,7 +125,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
   /**
    * Test single and multiple file upload.
    */
-  public function _testFileUpload() {
+  public function testFileUpload() {
     $this->checkFileUpload('single', $this->files[0], $this->files[1]);
     $this->checkFileUpload('multiple', $this->files[2], $this->files[3]);
   }
@@ -130,7 +133,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
   /**
    * Test media file upload elements.
    */
-  public function _testMediaFileUpload() {
+  public function testMediaFileUpload() {
     global $base_url;
 
     /* Element processing */
@@ -153,7 +156,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
     /* Element rendering */
 
     // Get test webform preview with test values.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalPostForm('webform/test_element_media_file/test', [], t('Preview'));
 
     // Check audio file preview.

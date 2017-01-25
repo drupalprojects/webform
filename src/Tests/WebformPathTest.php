@@ -12,7 +12,17 @@ use Drupal\webform\Entity\Webform;
  */
 class WebformPathTest extends WebformTestBase {
 
-  protected static $modules = ['system', 'block', 'node', 'user', 'path', 'webform'];
+  protected static $modules = ['path', 'webform'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests YAML page and title.
@@ -49,7 +59,7 @@ class WebformPathTest extends WebformTestBase {
     $this->assertResponse(403, 'Submit URL alias access denied');
 
     // Check hidden page visible to admin.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(200, 'Submit system path access permitted');
     $this->drupalGet('form/' . str_replace('_', '-', $webform->id()));
@@ -65,7 +75,7 @@ class WebformPathTest extends WebformTestBase {
 
     // Check custom base path.
     $webform->setSettings([])->save();
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalPostForm('admin/structure/webform/settings', ['page[default_page_base_path]' => 'base/path'], t('Save configuration'));
     $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()));
     $this->assertResponse(200, 'Submit URL alias with custom base path exists');

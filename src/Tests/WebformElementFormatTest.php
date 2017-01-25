@@ -20,7 +20,7 @@ class WebformElementFormatTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'node', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['node', 'webform', 'webform_test'];
 
   /**
    * Tests element format.

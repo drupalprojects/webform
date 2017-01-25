@@ -13,10 +13,20 @@ use Drupal\webform\Entity\WebformSubmission;
 class WebformElementPluginTest extends WebformTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Tests webform element plugin.
    */
   public function testWebformElement() {
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     // Get the webform test element.
     $webform_plugin_test = Webform::load('test_element_plugin_test');

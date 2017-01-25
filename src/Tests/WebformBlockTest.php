@@ -10,6 +10,13 @@ namespace Drupal\webform\Tests;
 class WebformBlockTest extends WebformTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['block', 'webform', 'webform_test'];
+
+  /**
    * Tests webform block.
    */
   public function testBlock() {
@@ -40,7 +47,6 @@ class WebformBlockTest extends WebformTestBase {
     $block->save();
     $this->drupalPostForm('<front>', [], t('Submit'));
     $this->assertRaw('This is a <b>custom</b> confirmation message.');
-
   }
 
 }

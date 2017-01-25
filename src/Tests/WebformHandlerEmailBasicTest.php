@@ -14,6 +14,16 @@ use Drupal\webform\Entity\WebformSubmission;
 class WebformHandlerEmailBasicTest extends WebformTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Test basic email handler.
    */
   public function testBasicEmailHandler() {
@@ -21,7 +31,6 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $webform_handler_email = Webform::load('test_handler_email');
 
     // Create a submission using the test webform's default values.
-    $this->drupalLogout();
     $this->postSubmission($webform_handler_email);
 
     // Check sending a basic email via a submission.
@@ -43,7 +52,7 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $webform_handler_email->setSetting('results_disabled', FALSE)->save();
 
     // Check sending a custom email using tokens.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $body = implode("\n", [
       'full name: [webform_submission:values:first_name] [webform_submission:values:last_name]',
       'uuid: [webform_submission:uuid]',
@@ -68,7 +77,7 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $this->assertContains($sent_email['body'], 'sid: ' . $sid);
     $this->assertContains($sent_email['body'], 'date: ' . \Drupal::service('date.formatter')->format($webform_submission->created->value, 'medium'));
     $this->assertContains($sent_email['body'], 'ip-address: ' . $webform_submission->remote_addr->value);
-    $this->assertContains($sent_email['body'], 'user: ' . $this->adminFormUser->label());
+    $this->assertContains($sent_email['body'], 'user: ' . $this->adminWebformUser->label());
     $this->assertContains($sent_email['body'], "url:");
     $this->assertContains($sent_email['body'], $webform_submission->toUrl('canonical', ['absolute' => TRUE])->toString());
     $this->assertContains($sent_email['body'], "edit-url:");

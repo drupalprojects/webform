@@ -17,7 +17,17 @@ class WebformTemplatesTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'node', 'user', 'webform', 'webform_test', 'webform_templates'];
+  public static $modules = ['webform', 'webform_test', 'webform_templates'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests webform template setting.
@@ -31,7 +41,7 @@ class WebformTemplatesTest extends WebformTestBase {
     $this->assertTrue($template_webform->isClosed());
 
     // Login the own user.
-    $this->drupalLogin($this->ownFormUser);
+    $this->drupalLogin($this->ownWebformUser);
 
     // Check template is included in the 'Templates' list display.
     $this->drupalGet('admin/structure/webform/templates');
@@ -44,7 +54,7 @@ class WebformTemplatesTest extends WebformTestBase {
     $this->assertRaw('You are previewing the below template,');
 
     // Login the admin user.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
   }
 
 }

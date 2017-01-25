@@ -17,13 +17,18 @@ class WebformUiElementPropertiesTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'filter', 'user', 'webform', 'webform_test', 'webform_examples', 'webform_ui'];
+  public static $modules = ['filter', 'webform', 'webform_test', 'webform_examples', 'webform_ui'];
 
   /**
    * {@inheritdoc}
    */
   public function setUp() {
     parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+    
+    // Create filters.
     $this->createFilters();
   }
 
@@ -31,7 +36,7 @@ class WebformUiElementPropertiesTest extends WebformTestBase {
    * Tests element properties.
    */
   public function testElementProperties() {
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     // Loops through all the elements, edits them via the UI, and check that
     // the element's render array has not be altered.

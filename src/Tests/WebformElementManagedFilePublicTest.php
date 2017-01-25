@@ -16,13 +16,16 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'file', 'webform', 'webform_test', 'webform_ui'];
+  protected static $modules = ['file', 'webform', 'webform_test', 'webform_ui'];
 
   /**
    * {@inheritdoc}
    */
   public function setUp() {
     parent::setUp();
+
+    // Create users.
+    $this->createUsers();
 
     // Set public file upload support for testing.
     $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
@@ -38,7 +41,7 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
     $requirements = webform_requirements('runtime');
     $this->assertEqual($requirements['webform_file_private']['value'], (string) t('Private file system is set.'));
 
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     // Check element webform warning message for public files.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file/element/managed_file_single/edit');

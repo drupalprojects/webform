@@ -10,22 +10,13 @@ use Drupal\node\Entity\Node;
  * @group Webform
  */
 class WebformEntityReferenceItemNormalizerTest extends WebformTestBase {
+
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = [
-    'system',
-    'block',
-    'node',
-    'user',
-    'webform',
-    'webform_node',
-    'webform_test',
-    'hal',
-    'serialization',
-  ];
+  protected static $modules = ['webform', 'webform_node', 'webform_test', 'hal', 'serialization'];
 
   /**
    * Tests the normalization of a node with a webform entity reference.

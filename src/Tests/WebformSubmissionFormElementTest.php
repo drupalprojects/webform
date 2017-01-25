@@ -20,7 +20,17 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'block', 'filter', 'node', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['filter', 'webform', 'webform_test'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests elements.
@@ -30,7 +40,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
 
     /* Test validate element #minlength and #unique property */
 
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     $webform_validate = Webform::load('test_element_validate');
 
@@ -180,7 +190,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
 
     // Check editing webform settings style attributes and custom properties
     // updates the element's root properties.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $edit = [
       'attributes[class][select][]' => ['form--inline clearfix', '_other_'],
       'attributes[class][other]' => 'test-form-properties',

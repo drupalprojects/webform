@@ -17,7 +17,17 @@ class WebformUiElementTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'filter', 'user', 'webform', 'webform_test', 'webform_examples', 'webform_ui'];
+  public static $modules = ['filter', 'webform', 'webform_test', 'webform_examples', 'webform_ui'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
 
   /**
    * Tests element.
@@ -25,7 +35,7 @@ class WebformUiElementTest extends WebformTestBase {
   public function testElements() {
     global $base_path;
 
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     /**************************************************************************/
     // Reordering

@@ -12,10 +12,23 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
   use WebformTestCreationTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Tests results.
    */
   public function testResults() {
     global $base_path;
+
+    // Login the normal user.
+    $this->drupalLogin($this->normalUser);
 
     /** @var \Drupal\webform\WebformInterface $webform */
     /** @var \Drupal\webform\WebformSubmissionInterface[] $submissions */

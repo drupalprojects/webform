@@ -13,10 +13,20 @@ use Drupal\webform\Entity\WebformSubmission;
 class WebformHandlerTest extends WebformTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Tests webform handler plugin.
    */
   public function testWebformHandler() {
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
 
     // Get the webform test handler.
     /** @var \Drupal\webform\WebformInterface $webform_handler_test */
@@ -95,7 +105,7 @@ class WebformHandlerTest extends WebformTestBase {
     $this->assertRaw('Invoked: Drupal\webform_test\Plugin\WebformHandler\TestWebformHandler:alterForm');
 
     // Check admin can still post submission.
-    $this->drupalLogin($this->adminFormUser);
+    $this->drupalLogin($this->adminWebformUser);
     $this->drupalGet('webform/test_handler_test');
     $this->assertFieldByName('op', 'Submit');
     $this->assertRaw('This webform is currently not saving any submitted data.');

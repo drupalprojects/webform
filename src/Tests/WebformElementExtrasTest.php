@@ -16,7 +16,7 @@ class WebformElementExtrasTest extends WebTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'block', 'filter', 'node', 'user', 'webform', 'webform_test'];
+  protected static $modules = ['filter', 'node', 'webform', 'webform_test'];
 
   /**
    * Tests building of custom elements.
