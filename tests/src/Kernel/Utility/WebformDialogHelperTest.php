@@ -20,19 +20,16 @@ class WebformDialogHelperTest extends KernelTestBase {
   public static $modules = ['system', 'webform'];
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-    $this->installConfig('webform');
-  }
-
-  /**
    * Test get modal dialog attributes.
    *
    * @see \Drupal\webform\Utility\WebformDialogHelper::getModalDialogAttributes
    */
   public function testGetModalDialogAttributes() {
+    // Enable dialogs.
+    $this->config('webform.settings')
+      ->set('ui.dialog_disabled', FALSE)
+      ->save();
+
     // Check default attributes.
     $this->assertEquals(WebformDialogHelper::getModalDialogAttributes(), [
       'class' => ['use-ajax'],

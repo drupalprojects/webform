@@ -400,6 +400,13 @@ entity.webform_submission.sticky_toggle:
     _entity_access: 'webform_submission.update'
     _csrf_token: 'TRUE'
 
+webform_submission.multiple_delete_confirm:
+  path: '/admin/structure/webform/results/delete'
+  defaults:
+    _form: '\Drupal\webform\Form\WebformSubmissionDeleteMultiple'
+  requirements:
+    _permission: 'administer webform submission'
+
 # Handlers
 
 webform.handler_plugins:

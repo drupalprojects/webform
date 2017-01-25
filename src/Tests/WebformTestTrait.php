@@ -168,6 +168,22 @@ trait WebformTestTrait {
   /****************************************************************************/
 
   /**
+   * Load the specified webform submission from the storage.
+   *
+   * @param int $sid
+   *   The submission identifier.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface
+   *   The loaded webform submission.
+   */
+  protected function loadSubmission($sid) {
+    /** @var \Drupal\webform\WebformSubmissionStorage $storage */
+    $storage = $this->container->get('entity.manager')->getStorage('webform_submission');
+    $storage->resetCache([$sid]);
+    return $storage->load($sid);
+  }
+
+  /**
    * Purge all submission before the webform.module is uninstalled.
    */
   protected function purgeSubmissions() {

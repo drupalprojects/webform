@@ -9,6 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Url;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformRequestInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -75,6 +76,14 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       return FALSE;
     }
 
+    try {
+      $path = Url::fromRouteMatch($route_match)->toString();
+      $base_path = base_path();
+    }
+    catch (\Exception $exception) {
+      $path = '';
+      $base_path = '/';
+    }
     if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' ||  $args[2] == 'webform_submission')) {
       $this->type = 'webform_source_entity';
     }
@@ -97,6 +106,9 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       /** @var \Drupal\webform\WebformInterface $webform */
       $webform = $route_match->getParameter('webform');
       $this->type = ($webform->isTemplate() && $this->moduleHandler->moduleExists('webform_templates')) ? 'webform_template' : 'webform';
+    }
+    elseif (strpos($path, $base_path . 'admin/structure/webform/test/') === 0) {
+      $this->type = 'webform_test';
     }
     else {
       $this->type = NULL;
@@ -138,6 +150,10 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $breadcrumb->addLink(Link::createFromRoute($this->t('Structure'), 'system.admin_structure'));
       $breadcrumb->addLink(Link::createFromRoute($this->t('Webforms'), 'entity.webform.collection'));
       switch ($this->type) {
+        case 'webform_test':
+          $breadcrumb->addLink(Link::createFromRoute($this->t('Testing'), 'webform_test.index'));
+          break;
+
         case 'webform_template':
           $breadcrumb->addLink(Link::createFromRoute($this->t('Templates'), 'entity.webform.templates'));
           break;

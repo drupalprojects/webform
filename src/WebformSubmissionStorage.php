@@ -816,8 +816,12 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    *   An array of webform submissions.
    */
   protected function deleteData(array $webform_submissions) {
+    $sids = [];
+    foreach ($webform_submissions as $webform_submission) {
+      $sids[$webform_submission->id()] = $webform_submission->id();
+    }
     Database::getConnection()->delete('webform_submission_data')
-      ->condition('sid', array_keys($webform_submissions), 'IN')
+      ->condition('sid', $sids, 'IN')
       ->execute();
   }
 

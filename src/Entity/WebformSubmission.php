@@ -27,7 +27,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   handlers = {
  *     "storage" = "Drupal\webform\WebformSubmissionStorage",
  *     "storage_schema" = "Drupal\webform\WebformSubmissionStorageSchema",
- *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "views_data" = "Drupal\webform\WebformSubmissionViewsData",
  *     "view_builder" = "Drupal\webform\WebformSubmissionViewBuilder",
  *     "list_builder" = "Drupal\webform\WebformSubmissionListBuilder",
  *     "access" = "Drupal\webform\WebformSubmissionAccessControlHandler",

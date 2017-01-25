@@ -9,6 +9,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
+use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 
@@ -190,6 +191,27 @@ function _webform_update_form_settings() {
     $webform_config->setData($data)->save();
   }
 }
+
+/**
+ * Update or install any new system.actions.* config entities.
+ */
+function _webform_update_actions() {
+  $files = file_scan_directory(drupal_get_path('module', 'webform') . '/config', '/^system.action..*\.yml$/');
+  foreach ($files as $path => $file) {
+    $action_id = str_replace('system.action.', '', $file->name);
+    $action = Action::load($action_id);
+    if (!$action) {
+      // Install new action.
+      $data = Yaml::decode(file_get_contents($path));
+      $action = Action::create($data);
+      $action->trustData()->save();
+    }
+  }
+}
+
+/******************************************************************************/
+// Update hooks.
+/******************************************************************************/
 
 /**
  * Issue #2834203: Convert webform field target_id to 32 characters.
@@ -425,4 +447,11 @@ function _webform_update_8011(array &$element) {
  */
 function webform_update_8012() {
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2840858: Create Webform and Webform Submission Action plugins.
+ */
+function webform_update_8013() {
+  _webform_update_actions();
 }

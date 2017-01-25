@@ -560,6 +560,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'youtube_id' => 'xYBW2g0osd4',
     ];
 
+    $videos['translate'] = [
+      'title' => $this->t('Translating Webforms'),
+      'content' => $this->t('This screencast walks through translating a Webform.'),
+      'youtube_id' => 'rF8Bd-0w6Cg',
+    ];
+
     $videos['admin'] = [
       'title' => $this->t('Administering and Extending the Webform module'),
       'content' => $this->t("This screencast walks through administering the Webform module's admin settings, options, and behaviors."),
@@ -882,6 +888,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'title' => $this->t('Translating a webform'),
       'content' => $this->t("The Translation page allows a webform's configuration and elements to be translated into multiple languages."),
+      'video_id' => 'translate',
     ];
 
     /****************************************************************************/
