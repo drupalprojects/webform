@@ -1,6 +1,8 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Element;
+
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Test for webform element managed public file handling (DRUPAL-PSA-2016-003).

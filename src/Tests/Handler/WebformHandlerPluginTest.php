@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Handler;
 
 use Drupal\simpletest\WebTestBase;
 use Drupal\webform\Entity\Webform;

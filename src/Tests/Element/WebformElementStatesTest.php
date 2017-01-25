@@ -1,10 +1,11 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Element;
 
 use Drupal\Core\Form\OptGroup;
 use Drupal\simpletest\WebTestBase;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestTrait;
 
 /**
  * Tests for webform element #states.

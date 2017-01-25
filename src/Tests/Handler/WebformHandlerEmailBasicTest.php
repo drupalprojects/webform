@@ -1,10 +1,11 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Handler;
 
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for basic email webform handler functionality.
