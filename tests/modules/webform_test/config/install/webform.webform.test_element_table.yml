@@ -12,6 +12,42 @@ id: test_element_table
 title: 'Test: Element: Table'
 description: 'Test table elements.'
 elements: |
+  table_elements:
+    '#type': 'details'
+    '#title': 'Table'
+    '#open': true
+    table:
+      '#type': table
+      '#header':
+        - 'First Name'
+        - 'Last Name'
+        - 'Gender'
+      table__1:
+        table__1__first_name:
+          '#type': 'textfield'
+          '#size': 20
+          '#default_value': 'John'
+        table__1__last_name:
+          '#type': 'textfield'
+          '#size': 20
+          '#default_value': 'Smith'
+        table__1__gender:
+          '#type': 'select'
+          '#options': gender
+          '#default_value': 'Male'
+      table__2:
+        table__2__first_name:
+          '#type': 'textfield'
+          '#size': 20
+          '#default_value': 'Jane'
+        table__2__last_name:
+          '#type': 'textfield'
+          '#size': 20
+          '#default_value': 'Doe'
+        table__2__gender:
+          '#type': 'select'
+          '#options': gender
+          '#default_value': 'Female'
   tableselect_sort_elements:
     '#type': details
     '#title': 'Table Select Elements'

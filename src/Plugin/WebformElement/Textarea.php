@@ -68,7 +68,7 @@ class Textarea extends TextBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
-    $form['general']['default_value']['#type'] = 'textarea';
+    $form['element']['default_value']['#type'] = 'textarea';
     return $form;
   }
 

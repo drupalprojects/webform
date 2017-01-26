@@ -160,7 +160,7 @@ abstract class DateBase extends WebformElementBase {
     $properties = $this->getConfigurationFormProperties($form, $form_state);
 
     // Validate #default_value GNU Date Input Format.
-    if ($properties['#default_value'] && strtotime($properties['#default_value']) === FALSE) {
+    if (isset($properties['#default_value']) && strtotime($properties['#default_value']) === FALSE) {
       $this->setInputFormatError($form['properties']['element']['default_value'], $form_state);
     }
 

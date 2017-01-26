@@ -28,7 +28,7 @@ class WebformElement extends WebformElementBase {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    $form['general'] = [
+    $form['element'] = [
       '#type' => 'details',
       '#title' => $this->t('General settings'),
       '#open' => TRUE,

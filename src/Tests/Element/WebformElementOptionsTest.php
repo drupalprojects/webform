@@ -23,10 +23,6 @@ class WebformElementOptionsTest extends WebformTestBase  {
    */
   public function testWebformElementOptions() {
 
-    /**************************************************************************/
-    // Processing.
-    /**************************************************************************/
-
     // Check default value handling.
     $this->drupalPostForm('webform/test_element_options', [], t('Submit'));
     $this->assertRaw("webform_options: {  }

@@ -23,8 +23,6 @@ class WebformElementLikertTest extends WebformTestBase  {
    */
   public function testLikertElement() {
 
-    /* Display */
-
     $this->drupalGet('webform/test_element_likert');
 
     // Check default likert element.
@@ -40,8 +38,6 @@ class WebformElementLikertTest extends WebformTestBase  {
     $this->assertRaw('<td><div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-likert-advanced-q1 form-item-likert-advanced-q1">');
     $this->assertRaw('<input data-drupal-selector="edit-likert-advanced-q1" type="radio" id="edit-likert-advanced-q1--4" name="likert_advanced[q1]" value="N/A" class="form-radio" />');
     $this->assertRaw('<label for="edit-likert-advanced-q1--4" class="option">Not applicable</label>');
-
-    /* Processing */
 
     // Check likert required.
     $this->drupalPostForm('webform/test_element_likert', [], t('Submit'));
