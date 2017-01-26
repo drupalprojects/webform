@@ -135,15 +135,15 @@ class TextFormat extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getItemDefaultFormat() {
-    return filter_default_format();
+    return (function_exists('filter_default_format')) ? filter_default_format() : parent::getItemDefaultFormat();
   }
 
   /**
    * {@inheritdoc}
    */
   public function getItemFormats() {
-    $filters = FilterFormat::loadMultiple();
     $formats = parent::getItemFormats();
+    $filters = (class_exists('\Drupal\filter\Entity\FilterFormat')) ? FilterFormat::loadMultiple() : [];
     foreach ($filters as $filter) {
       $formats[$filter->id()] = $filter->label();
     }

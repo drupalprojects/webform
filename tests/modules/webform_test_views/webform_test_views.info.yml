@@ -4,7 +4,5 @@ description: 'Support module for Webform that provides working examples for View
 package: Testing
 core: 8.x
 dependencies:
-  - node
-  - user
-  - views
   - webform
+  - views

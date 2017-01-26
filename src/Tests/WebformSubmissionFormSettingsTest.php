@@ -20,6 +20,28 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
   protected static $modules = ['filter', 'node', 'webform', 'webform_test'];
 
   /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = [
+    'test_form_assets',
+    'test_form_closed',
+    'test_form_prepopulate',
+    'test_form_submit_once',
+    'test_form_disable_back',
+    'test_form_unsaved',
+    'test_form_novalidate',
+    'test_form_details_toggle',
+    'test_form_autofocus',
+    'test_form_confidential',
+    'test_form_preview',
+    'test_submission_disabled',
+    'test_token_update',
+    'test_submission_limit',
+  ];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {

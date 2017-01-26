@@ -3,25 +3,29 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\Core\Form\OptGroup;
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestTrait;
 
 /**
  * Tests for webform element #states.
  *
  * @group Webform
  */
-class WebformElementStatesTest extends WebTestBase {
-
-  use WebformTestTrait;
+class WebformElementStatesTest extends WebformTestBase  {
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['filter', 'file', 'language', 'node', 'webform', 'webform_examples', 'webform_test'];
+  protected static $modules = ['filter', 'file', 'language', 'node', 'webform'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['example_elements', 'test_element_states'];
 
   /**
    * Tests element #states selectors.

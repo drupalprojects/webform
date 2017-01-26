@@ -3,7 +3,7 @@ status: true
 dependencies:
   enforced:
     module:
-      - webform_test
+      - webform_test_views
   module:
     - node
     - user

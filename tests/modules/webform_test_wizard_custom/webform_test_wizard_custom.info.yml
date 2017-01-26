@@ -1,0 +1,7 @@
+name: 'Webform module wizard custom tests'
+type: module
+description: 'Support module for webform that provides form alter hook for wizard custom tests.'
+package: Testing
+core: 8.x
+dependencies:
+  - webform

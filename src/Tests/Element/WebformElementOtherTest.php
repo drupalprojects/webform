@@ -2,7 +2,7 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -10,14 +10,14 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementOtherTest extends WebTestBase {
+class WebformElementOtherTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_other'];
 
   /**
    * Tests building of other elements.

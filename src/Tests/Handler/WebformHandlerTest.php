@@ -14,6 +14,20 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformHandlerTest extends WebformTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['webform', 'webform_test'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_handler_test'];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {

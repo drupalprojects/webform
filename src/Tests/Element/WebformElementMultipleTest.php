@@ -2,27 +2,26 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform element multiple.
  *
  * @group Webform
  */
-class WebformElementMultipleTest extends WebTestBase {
+class WebformElementMultipleTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_multiple'];
 
   /**
    * Tests building of list elements.
    */
-  public function test() {
-    global $base_path;
+  public function testWebformElementMultiple() {
 
     /**************************************************************************/
     // Processing.

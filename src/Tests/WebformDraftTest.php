@@ -10,31 +10,14 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformDraftTest extends WebTestBase {
-
-  use WebformTestTrait;
+class WebformDraftTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown() {
-    $this->purgeSubmissions();
-    parent::tearDown();
-  }
+  protected static $testWebforms = ['test_form_draft', 'test_form_preview'];
 
   /**
    * Test webform draft with autosave.

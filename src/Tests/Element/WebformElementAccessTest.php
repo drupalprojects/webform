@@ -18,7 +18,14 @@ class WebformElementAccessTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_ui', 'webform_test'];
+  protected static $modules = ['webform', 'webform_ui'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_access'];
 
   /**
    * {@inheritdoc}

@@ -14,6 +14,20 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformElementPluginTest extends WebformTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['webform', 'webform_test'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_plugin_test'];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {

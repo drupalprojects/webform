@@ -20,7 +20,23 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'webform', 'webform_test'];
+  protected static $modules = ['filter', 'node', 'webform'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = [
+    'test_element_validate',
+    'test_element_ignored_properties',
+    'test_element_invalid',
+    'test_element_autocomplete',
+    'test_element_entity_reference',
+    'test_element_text_format',
+    'test_form_properties',
+    'test_form_buttons',
+  ];
 
   /**
    * {@inheritdoc}

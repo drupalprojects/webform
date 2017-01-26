@@ -13,6 +13,20 @@ use Drupal\webform\Entity\WebformOptions;
 class WebformOptionsTest extends WebformTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['webform', 'webform_test'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_options'];
+
+  /**
    * Tests webform options entity.
    */
   public function testWebformOptions() {
@@ -59,6 +73,7 @@ class WebformOptionsTest extends WebformTestBase {
     $webform_test_options = WebformOptions::load('test');
     $webform_test_options->set('options', Yaml::encode($color_options));
     $webform_test_options->save();
+    $this->debug($webform_test_options->getOptions());
 
     $this->drupalGet('webform/test_options');
     $this->assertRaw('<option value="red">Red</option><option value="white">White</option><option value="blue">Blue</option>');

@@ -12,9 +12,7 @@ use Drupal\webform\Entity\WebformSubmission;
  *
  * @group Webform
  */
-class WebformSubmissionStorageTest extends WebTestBase {
-
-  use WebformTestTrait;
+class WebformSubmissionStorageTest extends WebformTestBase {
 
   /**
    * Modules to enable.

@@ -2,26 +2,26 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform element attributes.
  *
  * @group Webform
  */
-class WebformElementAttributesTest extends WebTestBase {
+class WebformElementAttributesTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_attributes'];
 
   /**
    * Tests element attributes.
    */
-  public function test() {
+  public function testWebformElementAttributes() {
     // Check default value handling.
     $this->drupalPostForm('webform/test_element_attributes', [], t('Submit'));
     $this->assertRaw("webform_element_attributes:

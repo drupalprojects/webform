@@ -15,6 +15,13 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformHandlerEmailBasicTest extends WebformTestBase {
 
   /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_handler_email'];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {

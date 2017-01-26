@@ -2,27 +2,26 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform element options.
  *
  * @group Webform
  */
-class WebformElementOptionsTest extends WebTestBase {
+class WebformElementOptionsTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_options'];
 
   /**
    * Tests building of options elements.
    */
-  public function test() {
-    global $base_path;
+  public function testWebformElementOptions() {
 
     /**************************************************************************/
     // Processing.

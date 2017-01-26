@@ -2,14 +2,14 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for the webform element custom properties.
  *
  * @group Webform
  */
-class WebformElementCustomPropertiesTest extends WebTestBase {
+class WebformElementCustomPropertiesTest extends WebformTestBase  {
 
   /**
    * Modules to enable.

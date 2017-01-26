@@ -17,7 +17,14 @@ class WebformUiElementTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'webform', 'webform_test', 'webform_examples', 'webform_ui'];
+  public static $modules = ['filter', 'webform', 'webform_ui'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_dates'];
 
   /**
    * {@inheritdoc}

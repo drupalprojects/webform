@@ -19,7 +19,14 @@ class WebformNodeTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_node', 'webform_test'];
+  public static $modules = ['webform', 'webform_node'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_submission_limit', 'test_confirmation_inline'];
 
   /**
    * {@inheritdoc}

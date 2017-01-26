@@ -21,7 +21,15 @@ class WebformElementFormatTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'webform', 'webform_test'];
+  protected static $modules = ['node', 'webform'];
+
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_format', 'test_element_format_multiple', 'test_element_format_token'];
 
   /**
    * Tests element format.

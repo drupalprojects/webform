@@ -12,7 +12,12 @@ use Drupal\webform\Entity\Webform;
  */
 class WebformAccessTest extends WebformTestBase {
 
-  use WebformTestCreationTrait;
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['node', 'webform'];
 
   /**
    * {@inheritdoc}

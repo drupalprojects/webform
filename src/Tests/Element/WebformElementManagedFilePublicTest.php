@@ -14,11 +14,18 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformElementManagedFilePublicTest extends WebformTestBase {
 
   /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_managed_file'];
+
+  /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['file', 'webform', 'webform_test', 'webform_ui'];
+  protected static $modules = ['file', 'webform', 'webform_ui'];
 
   /**
    * {@inheritdoc}

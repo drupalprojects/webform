@@ -9,7 +9,7 @@ use Drupal\simpletest\WebTestBase;
  *
  * @group Webform
  */
-class WebformStorageTest extends WebTestBase {
+class WebformStorageTest extends WebformTestBase {
 
   /**
    * Modules to enable.

@@ -2,21 +2,21 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform elements.
  *
  * @group Webform
  */
-class WebformElementTest extends WebTestBase {
+class WebformElementTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_allowed_tags'];
 
   /**
    * Test element settings.

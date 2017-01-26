@@ -9,7 +9,19 @@ namespace Drupal\webform\Tests;
  */
 class WebformTest extends WebformTestBase {
 
-  use WebformTestCreationTrait;
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['node', 'webform'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_results'];
 
   /**
    * Webform submission storage.

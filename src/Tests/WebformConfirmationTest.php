@@ -12,11 +12,11 @@ use Drupal\webform\Entity\Webform;
 class WebformConfirmationTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_confirmation_message', 'test_confirmation_inline', 'test_confirmation_page', 'test_confirmation_page_custom', 'test_confirmation_url', 'test_confirmation_url_message'];
 
   /**
    * {@inheritdoc}

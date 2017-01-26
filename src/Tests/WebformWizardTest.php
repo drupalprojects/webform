@@ -11,31 +11,21 @@ use Drupal\Core\Serialization\Yaml;
  *
  * @group Webform
  */
-class WebformWizardTest extends WebTestBase {
-
-  use WebformTestTrait;
+class WebformWizardTest extends WebformTestBase {
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $modules = ['webform', 'webform_test_wizard_custom'];
 
   /**
-   * {@inheritdoc}
+   * Webforms to load.
+   *
+   * @var array
    */
-  public function setUp() {
-    parent::setUp();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown() {
-    $this->purgeSubmissions();
-    parent::tearDown();
-  }
+  protected static $testWebforms = ['test_form_wizard_custom', 'test_form_wizard_advanced'];
 
   /**
    * Test webform custom wizard, advanced wizard, and custom wizard settings.

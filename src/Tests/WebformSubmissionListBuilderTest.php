@@ -9,7 +9,19 @@ namespace Drupal\webform\Tests;
  */
 class WebformSubmissionListBuilderTest extends WebformTestBase {
 
-  use WebformTestCreationTrait;
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['node', 'webform', 'webform_test'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_results'];
 
   /**
    * {@inheritdoc}

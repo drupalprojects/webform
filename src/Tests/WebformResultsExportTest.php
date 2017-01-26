@@ -14,14 +14,19 @@ use Drupal\webform\Entity\WebformSubmission;
  */
 class WebformResultsExportTest extends WebformTestBase {
 
-  use WebformTestCreationTrait;
-
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['node', 'locale', 'webform', 'webform_test'];
+  protected static $modules = ['node', 'locale', 'webform'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element_managed_file', 'test_results'];
 
   /**
    * {@inheritdoc}

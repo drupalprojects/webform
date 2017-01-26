@@ -11,16 +11,14 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformTranslationTest extends WebTestBase {
-
-  use WebformTestTrait;
+class WebformTranslationTest extends WebformTestBase {
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  protected static $modules = ['block', 'webform', 'webform_examples', 'webform_test_translation'];
+  protected static $modules = ['block', 'webform', 'webform_test_translation'];
 
   /**
    * {@inheritdoc}

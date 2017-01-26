@@ -3,7 +3,7 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -11,14 +11,14 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementDateTest extends WebTestBase {
+class WebformElementDateTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_dates'];
 
   /**
    * Test date element.

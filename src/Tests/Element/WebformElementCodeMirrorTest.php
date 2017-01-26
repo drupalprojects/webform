@@ -2,26 +2,26 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform (render) CodeMirror element .
  *
  * @group Webform
  */
-class WebformElementCodeMirrorTest extends WebTestBase {
+class WebformElementCodeMirrorTest extends WebformTestBase  {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_codemirror'];
 
   /**
    * Tests CodeMirror element.
    */
-  public function test() {
+  public function testWebformElementCodeMirror() {
     $this->drupalGet('webform/test_element_codemirror');
 
     /**************************************************************************/

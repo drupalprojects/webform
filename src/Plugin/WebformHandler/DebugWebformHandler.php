@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_test\Plugin\WebformHandler;
+namespace Drupal\webform\Plugin\WebformHandler;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Form\FormStateInterface;
@@ -10,9 +10,6 @@ use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Webform submission debug handler.
- *
- * IMPORTANT: This handler is exactly the same as the one in the
- * webform_devel.module. It does not really matter which one is loaded.
  *
  * @WebformHandler(
  *   id = "debug",

@@ -18,7 +18,7 @@ class WebformNodeResultsTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'webform', 'webform_node', 'webform_test'];
+  public static $modules = ['block', 'webform', 'webform_node'];
 
   /**
    * {@inheritdoc}

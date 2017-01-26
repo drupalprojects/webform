@@ -15,6 +15,13 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
   protected static $modules = ['filter', 'file', 'webform', 'webform_test'];
 
   /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_handler_email_advanced'];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {

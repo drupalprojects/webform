@@ -13,6 +13,20 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformHandlerRemotePostTest extends WebformTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected static $modules = ['webform', 'webform_test'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_handler_remote_post'];
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {

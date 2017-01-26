@@ -13,11 +13,11 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformElementTableTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
+   * Webforms to load.
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $testWebforms = ['test_element_table'];
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,7 @@ class WebformElementTableTest extends WebformTestBase {
   /**
    * Tests building of options elements.
    */
-  public function test() {
+  public function testWebformElementTable() {
 
     $webform = Webform::load('test_element_table');
 

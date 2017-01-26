@@ -17,7 +17,14 @@ class WebformTemplatesTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test', 'webform_templates'];
+  public static $modules = ['webform', 'webform_templates'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_form_template'];
 
   /**
    * {@inheritdoc}
