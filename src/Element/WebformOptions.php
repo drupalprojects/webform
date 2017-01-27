@@ -100,6 +100,7 @@ class WebformOptions extends FormElement {
             '#title' => t('Option text'),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter text'),
+            '#maxlength' => 256,
           ],
         ],
         '#default_value' => (isset($element['#default_value'])) ? self::convertOptionsToValues($element['#default_value']) : [],
