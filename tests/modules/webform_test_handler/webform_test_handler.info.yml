@@ -1,0 +1,7 @@
+name: 'Webform module handler tests'
+type: module
+description: 'Support module for webform that provides handler plugin tests.'
+package: Testing
+core: 8.x
+dependencies:
+  - webform

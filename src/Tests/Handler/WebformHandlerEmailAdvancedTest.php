@@ -12,7 +12,7 @@ use Drupal\webform\Tests\WebformTestBase;
  */
 class WebformHandlerEmailAdvancedTest extends WebformTestBase {
 
-  protected static $modules = ['filter', 'file', 'webform', 'webform_test'];
+  protected static $modules = ['filter', 'file', 'webform'];
 
   /**
    * Webforms to load.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_test\Plugin\WebformElement;
+namespace Drupal\webform_test_element\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformElementBase;
@@ -123,7 +123,7 @@ class WebformTest extends WebformElementBase {
    * Form API callback. Convert password confirm array to single value.
    */
   public static function validate(array &$element, FormStateInterface $form_state) {
-    drupal_set_message(t('Invoked: Drupal\webform_test\Plugin\WebformElement\WebformTest::validate'));
+    drupal_set_message(t('Invoked: Drupal\webform_test_element\Plugin\WebformElement\WebformTest::validate'));
   }
 
 }

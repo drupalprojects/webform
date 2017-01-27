@@ -17,7 +17,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'node', 'webform', 'webform_test'];
+  protected static $modules = ['filter', 'node', 'webform'];
 
   /**
    * Webforms to load.

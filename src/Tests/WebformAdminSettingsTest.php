@@ -17,7 +17,14 @@ class WebformAdminSettingsTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'webform', 'webform_ui', 'webform_test'];
+  protected static $modules = ['node', 'webform', 'webform_ui'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_element', 'test_element_html_editor'];
 
   /**
    * {@inheritdoc}

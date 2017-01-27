@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_test\Controller;
+namespace Drupal\webform_test_handler\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;

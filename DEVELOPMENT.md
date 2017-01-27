@@ -150,8 +150,11 @@ drush features-export -y webform
 drush features-export -y webform_examples
 drush features-export -y webform_templates
 drush features-export -y webform_test
-drush features-export -y webform_test_translation
+drush features-export -y webform_test_element
+drush features-export -y webform_test_handler
+drush features-export -y webform_test_options
 drush features-export -y webform_test_views
+drush features-export -y webform_test_translation
 drush features-export -y webform_node
 
 # Tidy webform configuration from your site.          
@@ -159,8 +162,11 @@ drush webform-tidy -y --dependencies webform
 drush webform-tidy -y --dependencies webform_examples
 drush webform-tidy -y --dependencies webform_templates
 drush webform-tidy -y --dependencies webform_test
-drush webform-tidy -y --dependencies webform_test_translation
+drush webform-tidy -y --dependencies webform_test_element
+drush webform-tidy -y --dependencies webform_test_handler
+drush webform-tidy -y --dependencies webform_test_options
 drush webform-tidy -y --dependencies webform_test_views
+drush webform-tidy -y --dependencies webform_test_translation
 drush webform-tidy -y --dependencies webform_node
 
 # Re-import all webform configuration into your site.      
@@ -168,8 +174,11 @@ drush features-import -y webform
 drush features-import -y webform_examples
 drush features-import -y webform_templates
 drush features-import -y webform_test
-drush features-import -y webform_test_translation
+drush features-import -y webform_test_element
+drush features-import -y webform_test_handler
+drush features-import -y webform_test_options
 drush features-import -y webform_test_views
+drush features-import -y webform_test_translation
 drush features-import -y webform_node
 ```
 

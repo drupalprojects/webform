@@ -17,7 +17,7 @@ class WebformOptionsTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $modules = ['webform', 'webform_test_options'];
 
   /**
    * Webforms to load.
@@ -27,9 +27,21 @@ class WebformOptionsTest extends WebformTestBase {
   protected static $testWebforms = ['test_options'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create users.
+    $this->createUsers();
+  }
+
+  /**
    * Tests webform options entity.
    */
   public function testWebformOptions() {
+    $this->drupalLogin($this->normalUser);
+
     // Check get element options.
     $yes_no_options = ['Yes' => 'Yes', 'No' => 'No'];
     $this->assertEqual(WebformOptions::getElementOptions(['#options' => $yes_no_options]), $yes_no_options);

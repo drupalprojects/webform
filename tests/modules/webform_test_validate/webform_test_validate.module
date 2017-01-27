@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Support module for webform that provides form alter hook for wizard cause tests.
+ * Support module for webform that provides form validate hooks for form validate tests.
  */
 
 use Drupal\Core\Form\FormStateInterface;

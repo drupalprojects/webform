@@ -1,0 +1,7 @@
+name: 'Webform module options tests'
+type: module
+description: 'Support module for webform that provides options tests.'
+package: Testing
+core: 8.x
+dependencies:
+  - webform

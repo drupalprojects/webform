@@ -14,7 +14,7 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'webform', 'webform_test'];
+  protected static $modules = ['node', 'webform'];
 
   /**
    * Webforms to load.

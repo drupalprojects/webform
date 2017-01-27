@@ -17,7 +17,7 @@ class WebformHandlerPluginTest extends WebTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test'];
+  protected static $modules = ['webform', 'webform_test_handler'];
 
   /**
    * Tests webform element plugin.
@@ -41,15 +41,15 @@ class WebformHandlerPluginTest extends WebTestBase {
     $webform->save();
 
     // Check that handler has been added to the dependencies.
-    $this->assertEqual($webform->getDependencies(), ['module' => ['webform_test', 'webform']]);
+    $this->assertEqual($webform->getDependencies(), ['module' => ['webform_test_handler', 'webform']]);
 
     // Uninstall the webform_test.module which will also remove the
     // debug handler.
-    $this->container->get('module_installer')->uninstall(['webform_test']);
+    $this->container->get('module_installer')->uninstall(['webform_test_handler']);
     $webform = Webform::load('contact');
 
     // Check that handler was removed from the dependencies.
-    $this->assertNotEqual($webform->getDependencies(), ['module' => ['webform_test', 'webform']]);
+    $this->assertNotEqual($webform->getDependencies(), ['module' => ['webform_test_handler', 'webform']]);
     $this->assertEqual($webform->getDependencies(), ['module' => ['webform']]);
   }
 

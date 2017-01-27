@@ -9,28 +9,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
 
-/**
- * Implements hook_theme().
- */
-function webform_test_theme() {
-  return [
-    'webform_handler_test_summary' => [
-      'variables' => ['settings' => NULL, 'handler' => []],
-    ],
-  ];
-}
-
-/**
- * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
- */
-function webform_test_webform_options_test_alter(array &$options, array &$element) {
-  $options = [
-    'one' => t('One'),
-    'two' => t('Two'),
-    'three' => t('Three'),
-  ];
-}
-
 
 /******************************************************************************/
 // Generate elements.

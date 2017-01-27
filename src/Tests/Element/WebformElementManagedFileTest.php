@@ -19,14 +19,14 @@ class WebformElementManagedFileTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['file', 'webform', 'webform_test'];
+  protected static $modules = ['file', 'webform'];
 
   /**
    * Webforms to load.
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_managed_file'];
+  protected static $testWebforms = ['test_element_managed_file', 'test_element_media_file'];
 
   /**
    * File usage manager.

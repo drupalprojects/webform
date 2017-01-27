@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_test\Plugin\WebformHandler;
+namespace Drupal\webform_test_handler\Plugin\WebformHandler;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformHandlerBase;

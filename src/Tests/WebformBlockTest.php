@@ -14,7 +14,14 @@ class WebformBlockTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'webform', 'webform_test'];
+  protected static $modules = ['block', 'webform'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_confirmation_inline', 'test_confirmation_message'];
 
   /**
    * Tests webform block.

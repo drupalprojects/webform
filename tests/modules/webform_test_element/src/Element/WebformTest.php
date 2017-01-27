@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_test\Element;
+namespace Drupal\webform_test_element\Element;
 
 use \Drupal\Core\Render\Element\Textfield;
 
