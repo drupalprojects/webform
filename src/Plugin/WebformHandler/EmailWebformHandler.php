@@ -641,12 +641,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Subject'),
       '#default_value' => $message['subject'],
     ];
-    $body_format = ($this->configuration['html']) ? 'html' : 'text';
     $element['body'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => $body_format,
-      '#title' => $this->t('Message (@format)', ['@format' => ($this->configuration['html']) ? $this->t('HTML') : $this->t('Plain text')]),
-      '#rows' => 10,
+      '#type' => ($message['html']) ? 'webform_html_editor' : 'webform_codemirror',
+      '#title' => $this->t('Message'),
       '#required' => TRUE,
       '#default_value' => $message['body'],
     ];
@@ -676,6 +673,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#markup' => \Drupal::service('renderer')->render($file_links),
       ];
     }
+
+    // Preload HTML Editor and CodeMirror so that they can be properly
+    // initialized when loaded via AJAX.
+    $element['#attached']['library'][] = 'webform/webform.element.html_editor';
+    $element['#attached']['library'][] = 'webform/webform.element.codemirror.text';
 
     return $element;
   }
