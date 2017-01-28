@@ -195,6 +195,9 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
+    // Add a reference to the webform's id to the $form render array.
+    $form['#webform_id'] = $this->getWebform()->id();
+
     // Check for a custom webform, track it, and return it.
     if ($custom_form = $this->getCustomForm($form, $form_state)) {
       $custom_form['#custom_form'] = TRUE;
