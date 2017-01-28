@@ -25,4 +25,12 @@ class BrokenWebformHandler extends WebformHandlerBase {
     return FALSE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    // Broken/missing webform handlers do not need a summary.
+    return [];
+  }
+
 }
