@@ -137,9 +137,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
 
     // Integrations: MailChimp.
     $projects['mailchimp'] = [
-      'title' => $this->t('YAML Form MailChimp'),
+      'title' => $this->t('Webform MailChimp'),
       'description' => $this->t('Posts form submissions to MailChimp list.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/yamlform_mailchimp'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_mailchimp'),
       'category' => 'integration',
     ];
 
