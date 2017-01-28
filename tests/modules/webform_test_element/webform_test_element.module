@@ -8,7 +8,7 @@
 /**
  * Implements hook_theme().
  */
-function webform_test_handler_theme() {
+function webform_test_element_handler_theme() {
   return [
     'webform_handler_test_summary' => [
       'variables' => ['settings' => NULL, 'handler' => []],
