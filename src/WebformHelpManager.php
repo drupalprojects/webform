@@ -331,21 +331,26 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         ],
       ],
     ];
-    foreach ($this->help as $id => $help) {
+    foreach ($this->help as $id => $help_info) {
+      // Check that help item should be displated under 'Uses'.
+      if (empty($help_info['uses'])) {
+        continue;
+      }
+
       // Title.
       $build['content']['help'][$id]['title'] = [
         '#prefix' => '<dt>',
         '#suffix' => '</dt>',
       ];
-      if (isset($help['url'])) {
+      if (isset($help_info['url'])) {
         $build['content']['help'][$id]['title']['link'] = [
           '#type' => 'link',
-          '#url' => $help['url'],
-          '#title' => $help['title'],
+          '#url' => $help_info['url'],
+          '#title' => $help_info['title'],
         ];
       }
       else {
-        $build['content']['help'][$id]['title']['#markup'] = $help['title'];
+        $build['content']['help'][$id]['title']['#markup'] = $help_info['title'];
       }
       // Content.
       $build['content']['help'][$id]['content'] = [
@@ -353,7 +358,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#suffix' => '</dd>',
         'content' => [
           '#theme' => 'webform_help',
-          '#info' => $help,
+          '#info' => $help_info,
         ],
       ];
     }
@@ -618,6 +623,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'message_storage' => WebformMessage::STORAGE_STATE,
       'access' => $this->currentUser->hasPermission('administer webform'),
       'video_id' => 'install',
+      'uses' => FALSE,
     ];
 
     // Release.
@@ -644,6 +650,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'message_close' => TRUE,
       'message_storage' => WebformMessage::STORAGE_STATE,
       'access' => $this->currentUser->hasPermission('administer webform'),
+      'uses' => FALSE,
     ];
 
     // Introduction.
@@ -789,6 +796,22 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /****************************************************************************/
 
     // Webform elements.
+    if (!$this->moduleHandler->moduleExists('webform_ui')) {
+      $help['form_elements_warning'] = [
+        'routes' => [
+          // @see /admin/structure/webform/manage/{webform}
+          'entity.webform.edit_form',
+        ],
+        'title' => $this->t('Webform UI is disabled'),
+        'content' => $this->t('Please enable Webform UI module if you would like to add elements from UI.'),
+        'message_type' => 'warning',
+        'message_close' => TRUE,
+        'message_storage' => WebformMessage::STORAGE_STATE,
+        'access' => $this->currentUser->hasPermission('administer webform') && $this->currentUser->hasPermission('administer modules'),
+        'uses' => FALSE,
+      ];
+    }
+
     $help['form_elements'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}
@@ -972,7 +995,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     foreach ($help as $id => &$help_info) {
-      $help_info['id'] = $id;
+      $help_info += [
+        'id' => $id,
+        'uses' => TRUE,
+      ];
     }
 
     return $help;
