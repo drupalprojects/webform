@@ -69,6 +69,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $categories['config'] = [
       'title' => $this->t('Configuration management'),
     ];
+    $categories['element'] = [
+      'title' => $this->t('Elements'),
+    ];
     $categories['integration'] = [
       'title' => $this->t('Integration'),
     ];
@@ -101,6 +104,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
    */
   protected function initProjects() {
     $projects = [];
+
+    // Element: Webform Layout Container
+    $projects['webform_layout_container'] = [
+      'title' => $this->t('Webform Layout Container'),
+      'description' => $this->t("Provides a layout container element to add to a webform, which uses old fashion floats to support legacy browsers that don't support CSS Flexbox (IE9 and IE10)."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_layout_container'),
+      'category' => 'element',
+    ];
 
     // Spam: CAPTCHA.
     $projects['captcha'] = [
@@ -135,14 +146,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'validation',
     ];
 
-    // Integrations: MailChimp.
-    $projects['mailchimp'] = [
-      'title' => $this->t('Webform MailChimp'),
-      'description' => $this->t('Posts form submissions to MailChimp list.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/webform_mailchimp'),
-      'category' => 'integration',
-    ];
-
     // Integrations: Webform Views Integration.
     $projects['webform_views'] = [
       'title' => $this->t('Webform Views Integration'),
@@ -150,6 +153,23 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/webform_views'),
       'category' => 'integration',
     ];
+
+    // Integrations: Webfomr MailChimp.
+    $projects['mailchimp'] = [
+      'title' => $this->t('Webform MailChimp'),
+      'description' => $this->t('Posts form submissions to MailChimp list.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_mailchimp'),
+      'category' => 'integration',
+    ];
+
+    // Integrations: Webform Slack integration
+    $projects['webform_slack'] = [
+      'title' => $this->t('Webform Slack integration'),
+      'description' => $this->t('Provides a Webform handler for posting a message to a slack channel when a submission is saved.'),
+      'url' => Url::fromUri('https://www.drupal.org/sandbox/smaz/2833275'),
+      'category' => 'integration',
+    ];
+
 
     // Handler: YAML Form Queue.
     $projects['yamlform_queue'] = [
@@ -175,7 +195,15 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'mail',
     ];
 
-    // Migrate: Token.
+    // Utility: Webform Encrypt.
+    $projects['wf_encrypt'] = [
+      'title' => $this->t('Webform Encrypt'),
+      'description' => $this->t('Provides encryption for webform elements.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/wf_encrypt'),
+      'category' => 'utility',
+    ];
+
+    // Utility: Token.
     $projects['token'] = [
       'title' => $this->t('Token'),
       'description' => $this->t('Provides a user interface for the Token API and some missing core tokens.'),

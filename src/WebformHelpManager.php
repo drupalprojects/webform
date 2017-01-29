@@ -422,7 +422,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#suffix' => '</h3>',
       ],
       'content' => [
-        '#markup' => $this->t("Below is a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal\'s Form API."),
+        '#markup' => $this->t("Below is a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal's Form API."),
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ],
