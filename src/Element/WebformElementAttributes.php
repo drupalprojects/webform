@@ -45,7 +45,7 @@ class WebformElementAttributes extends FormElement {
   /**
    * Processes element attributes.
    */
-  public static function processWebformElementAttributes(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformElementAttributes(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
     // Determine what type of HTML element the attributes are being applied to.
@@ -157,7 +157,7 @@ class WebformElementAttributes extends FormElement {
   /**
    * Validates element attributes.
    */
-  public static function validateWebformElementAttributes(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformElementAttributes(&$element, FormStateInterface $form_state, &$complete_form) {
     $values = $element['#value'];
 
     $attributes = [];

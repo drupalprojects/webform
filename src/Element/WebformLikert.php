@@ -38,7 +38,7 @@ class WebformLikert extends FormElement {
   /**
    * Processes a likert scale webform element.
    */
-  public static function processWebformLikert(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformLikert(&$element, FormStateInterface $form_state, &$complete_form) {
     // Get answer with optional N/A.
     self::processWebformLikertAnswers($element);
 
@@ -148,7 +148,7 @@ class WebformLikert extends FormElement {
   /**
    * Validates a likert element.
    */
-  public static function validateWebformLikert(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformLikert(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = $element['#value'];
 
     if (!empty($element['#required'])) {

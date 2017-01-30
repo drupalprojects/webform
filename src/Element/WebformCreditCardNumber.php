@@ -47,7 +47,7 @@ class WebformCreditCardNumber extends FormElement {
   /**
    * Webform element validation handler for #type 'creditcard_number'.
    */
-  public static function validateWebformCreditCardNumber(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformCreditCardNumber(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = trim($element['#value']);
     $form_state->setValueForElement($element, $value);
 

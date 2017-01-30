@@ -17,7 +17,7 @@ class WebformEntitySelect extends Select {
   /**
    * {@inheritdoc}
    */
-  public static function processSelect(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processSelect(&$element, FormStateInterface $form_state, &$complete_form) {
     self::setOptions($element);
     $element = parent::processSelect($element, $form_state, $complete_form);
 

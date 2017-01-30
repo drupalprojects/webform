@@ -15,7 +15,7 @@ class WebformFlexbox extends Container {
   /**
    * {@inheritdoc}
    */
-  public static function processContainer(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processContainer(&$element, FormStateInterface $form_state, &$complete_form) {
     $element = parent::processContainer($element, $form_state, $complete_form);
     $element['#attributes']['class'][] = 'webform-flexbox';
     $element['#attributes']['class'][] = 'js-webform-flexbox';

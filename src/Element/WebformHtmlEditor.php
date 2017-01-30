@@ -50,7 +50,7 @@ class WebformHtmlEditor extends Textarea {
   /**
    * Webform element validation handler for #type 'webform_html_editor'.
    */
-  public static function validateWebformHtmlEditor(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformHtmlEditor(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = $element['#value'];
     $form_state->setValueForElement($element, trim($value));
   }

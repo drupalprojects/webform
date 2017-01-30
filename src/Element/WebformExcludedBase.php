@@ -32,7 +32,7 @@ abstract class WebformExcludedBase extends FormElement {
   /**
    * Processes a webform elements webform element.
    */
-  public static function processWebformExcluded(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformExcluded(&$element, FormStateInterface $form_state, &$complete_form) {
     $options = static::getWebformExcludedOptions($element);
 
     $default_value = array_diff(array_keys($options), array_keys($element['#default_value'] ?: []));

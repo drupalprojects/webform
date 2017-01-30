@@ -102,7 +102,7 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public static function processWebformComposite(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformComposite(&$element, FormStateInterface $form_state, &$complete_form) {
     $element = parent::processWebformComposite($element, $form_state, $complete_form);
 
     // Composite elements should always be displayed and rendered so that
@@ -157,7 +157,7 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * Validates location.
    */
-  public static function validateWebformLocation(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformLocation(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = $element['#value'];
 
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);

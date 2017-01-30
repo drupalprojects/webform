@@ -62,7 +62,7 @@ class WebformOptions extends FormElement {
   /**
    * Process options and build options widget.
    */
-  public static function processWebformOptions(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
     // Add validate callback that extracts the associative array of options.
@@ -111,7 +111,7 @@ class WebformOptions extends FormElement {
   /**
    * Validates webform options element.
    */
-  public static function validateWebformOptions(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     $options_value = NestedArray::getValue($form_state->getValues(), $element['options']['#parents']);
 
     if (is_string($options_value)) {

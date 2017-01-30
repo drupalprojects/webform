@@ -62,7 +62,7 @@ class WebformElementStates extends FormElement {
   /**
    * Expand an email confirm field into two HTML5 email elements.
    */
-  public static function processWebformStates(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformStates(&$element, FormStateInterface $form_state, &$complete_form) {
     // Define default #state_options and #trigger_options.
     // There are also defined by \Drupal\webform\WebformElementBase::form.
     $element += [
@@ -473,7 +473,7 @@ class WebformElementStates extends FormElement {
   /**
    * Validates webform states element.
    */
-  public static function validateWebformElementStates(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformElementStates(&$element, FormStateInterface $form_state, &$complete_form) {
     if (isset($element['states']['#value']) && is_string($element['states']['#value'])) {
       $states = Yaml::decode($element['states']['#value']);
     }

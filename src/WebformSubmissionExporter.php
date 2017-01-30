@@ -277,6 +277,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options = []) {
     $default_options = $this->getDefaultExportOptions();
     $export_options = NestedArray::mergeDeep($default_options, $export_options);
+    $this->setExporter($export_options);
+
     $webform = $this->getWebform();
 
     // Get exporter and build #states.
@@ -532,13 +534,13 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
         ],
       ];
       $form['export']['download'][$key]['range_start'] = $range_element + [
-        '#title' => $this->t('From'),
-        '#default_value' => $export_options['range_start'],
-      ];
+          '#title' => $this->t('From'),
+          '#default_value' => $export_options['range_start'],
+        ];
       $form['export']['download'][$key]['range_end'] = $range_element + [
-        '#title' => $this->t('To'),
-        '#default_value' => $export_options['range_end'],
-      ];
+          '#title' => $this->t('To'),
+          '#default_value' => $export_options['range_end'],
+        ];
     }
 
     $form['export']['download']['sticky'] = [

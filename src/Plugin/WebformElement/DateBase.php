@@ -242,7 +242,7 @@ abstract class DateBase extends WebformElementBase {
    *
    * @see \Drupal\Core\Render\Element\Number::validateNumber
    */
-  public static function validateDate(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateDate(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = $element['#value'];
 
     // Convert DrupalDateTime array and object to ISO datetime.

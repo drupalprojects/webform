@@ -23,7 +23,7 @@ class WebformToggles extends Checkboxes {
   /**
    * {@inheritdoc}
    */
-  public static function processCheckboxes(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processCheckboxes(&$element, FormStateInterface $form_state, &$complete_form) {
     $element = parent::processCheckboxes($element, $form_state, $complete_form);
 
     // Convert checkboxes to toggle elements.

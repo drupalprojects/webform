@@ -75,7 +75,7 @@ abstract class WebformOtherBase extends FormElement {
    *
    * @see \Drupal\Core\Render\Element\Select
    */
-  public static function processWebformOther(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processWebformOther(&$element, FormStateInterface $form_state, &$complete_form) {
     // Remove 'webform_' prefix from type.
     $type = str_replace('webform_', '', static::$type);
     $properties = static::$properties;
@@ -167,7 +167,7 @@ abstract class WebformOtherBase extends FormElement {
   /**
    * Validates an other element.
    */
-  public static function validateWebformOther(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformOther(&$element, FormStateInterface $form_state, &$complete_form) {
     // Remove 'webform_' prefix from type.
     $type = str_replace('webform_', '', static::$type);
 

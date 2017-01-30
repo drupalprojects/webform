@@ -78,7 +78,7 @@ class WebformEntityReferenceSelectWidget extends WebformEntityReferenceAutocompl
   /**
    * Webform element validation handler for entity_select elements.
    */
-  public static function validateWebformEntityReferenceSelectWidget(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateWebformEntityReferenceSelectWidget(&$element, FormStateInterface $form_state, &$complete_form) {
     // Below prevents the below error.
     // Fatal error: Call to a member function uuid() on a non-object in
     // core/lib/Drupal/Core/Field/EntityReferenceFieldItemList.php.
