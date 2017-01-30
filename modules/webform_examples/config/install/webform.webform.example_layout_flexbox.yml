@@ -11,10 +11,10 @@ title: 'Example: Layout: Flexbox'
 description: 'Examples of multiple column webform layout using <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Flexbox</a>.'
 elements: |
   name:
-    '#type': flexbox
+    '#type': webform_flexbox
     title:
       '#type': textfield
-      '#title': 'Title'
+      '#title': Title
     first_name:
       '#type': textfield
       '#title': 'First name'
@@ -29,9 +29,9 @@ elements: |
       '#flex': 5
     suffix:
       '#type': textfield
-      '#title': 'Suffix'
+      '#title': Suffix
   personal_information_1:
-    '#type': flexbox
+    '#type': webform_flexbox
     birth_date:
       '#type': datelist
       '#title': 'Birth date'
@@ -41,14 +41,14 @@ elements: |
         - year
     gender:
       '#type': radios
-      '#title': 'Gender'
+      '#title': Gender
       '#options': gender
       '#options_display': two_columns
   personal_information_2:
-    '#type': flexbox
+    '#type': webform_flexbox
     ethnicity:
-      '#type': checkboxes_other
-      '#title': 'Ethnicity'
+      '#type': webform_checkboxes_other
+      '#title': Ethnicity
       '#options': ethnicity
       '#options_display': three_columns
     marital_status:
@@ -57,44 +57,44 @@ elements: |
       '#options': marital_status
       '#options_display': two_columns
   work:
-    '#type': flexbox
+    '#type': webform_flexbox
     employment_status:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'Employment status'
       '#options': employment_status
     industry:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'If employed, industry of employer'
       '#options': industry
   address_line_1:
-    '#type': flexbox
+    '#type': webform_flexbox
     address:
       '#type': textfield
       '#title': 'Street address (Line 1)'
   address_line_2:
-    '#type': flexbox
+    '#type': webform_flexbox
     address_1:
       '#type': textfield
       '#title': 'Street address (Line 2)'
   address_line_3:
-    '#type': flexbox
+    '#type': webform_flexbox
     city:
       '#type': textfield
-      '#title': 'City'
+      '#title': City
     state_province:
-      '#type': select_other
-      '#title': 'State/Province'
+      '#type': webform_select_other
+      '#title': State/Province
       '#options': state_province_names
     zip:
       '#type': textfield
-      '#title': 'Zip'
+      '#title': Zip
   address_line_4:
     country:
       '#type': select
-      '#title': 'Country'
+      '#title': Country
       '#options': country_names
   phone_number:
-    '#type': flexbox
+    '#type': webform_flexbox
     mobile_phone:
       '#type': tel
       '#title': 'Mobile phone'
@@ -105,7 +105,7 @@ elements: |
       '#type': tel
       '#title': 'Home phone'
   web:
-    '#type': flexbox
+    '#type': webform_flexbox
     email:
       '#type': email
       '#title': 'E-mail address'

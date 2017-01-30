@@ -11,7 +11,7 @@ title: 'Test: Wizard: Long - 300 elements'
 description: 'Test wizard with 300 elements'
 elements: |
   wizard_1:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #1'
     element_1:
       '#type': textfield
@@ -44,7 +44,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #10'
   wizard_2:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #2'
     element_11:
       '#type': textfield
@@ -77,7 +77,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #20'
   wizard_3:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #3'
     element_21:
       '#type': textfield
@@ -110,7 +110,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #30'
   wizard_4:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #4'
     element_31:
       '#type': textfield
@@ -143,7 +143,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #40'
   wizard_5:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #5'
     element_41:
       '#type': textfield
@@ -176,7 +176,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #50'
   wizard_6:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #6'
     element_51:
       '#type': textfield
@@ -209,7 +209,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #60'
   wizard_7:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #7'
     element_61:
       '#type': textfield
@@ -242,7 +242,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #70'
   wizard_8:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #8'
     element_71:
       '#type': textfield
@@ -275,7 +275,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #80'
   wizard_9:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #9'
     element_81:
       '#type': textfield
@@ -308,7 +308,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #90'
   wizard_10:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #10'
     element_91:
       '#type': textfield
@@ -341,7 +341,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #100'
   wizard_11:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #11'
     element_101:
       '#type': textfield
@@ -374,7 +374,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #110'
   wizard_12:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #12'
     element_111:
       '#type': textfield
@@ -407,7 +407,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #120'
   wizard_13:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #13'
     element_121:
       '#type': textfield
@@ -440,7 +440,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #130'
   wizard_14:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #14'
     element_131:
       '#type': textfield
@@ -473,7 +473,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #140'
   wizard_15:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #15'
     element_141:
       '#type': textfield
@@ -506,7 +506,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #150'
   wizard_16:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #16'
     element_151:
       '#type': textfield
@@ -539,7 +539,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #160'
   wizard_17:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #17'
     element_161:
       '#type': textfield
@@ -572,7 +572,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #170'
   wizard_18:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #18'
     element_171:
       '#type': textfield
@@ -605,7 +605,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #180'
   wizard_19:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #19'
     element_181:
       '#type': textfield
@@ -638,7 +638,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #190'
   wizard_20:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #20'
     element_191:
       '#type': textfield
@@ -671,7 +671,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #200'
   wizard_21:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #21'
     element_201:
       '#type': textfield
@@ -704,7 +704,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #210'
   wizard_22:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #22'
     element_211:
       '#type': textfield
@@ -737,7 +737,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #220'
   wizard_23:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #23'
     element_221:
       '#type': textfield
@@ -770,7 +770,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #230'
   wizard_24:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #24'
     element_231:
       '#type': textfield
@@ -803,7 +803,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #240'
   wizard_25:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #25'
     element_241:
       '#type': textfield
@@ -836,7 +836,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #250'
   wizard_26:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #26'
     element_251:
       '#type': textfield
@@ -869,7 +869,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #260'
   wizard_27:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #27'
     element_261:
       '#type': textfield
@@ -902,7 +902,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #270'
   wizard_28:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #28'
     element_271:
       '#type': textfield
@@ -935,7 +935,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #280'
   wizard_29:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #29'
     element_281:
       '#type': textfield
@@ -968,7 +968,7 @@ elements: |
       '#type': textfield
       '#title': 'Element #290'
   wizard_30:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #30'
     element_291:
       '#type': textfield

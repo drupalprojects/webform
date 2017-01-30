@@ -40,7 +40,7 @@ elements: |
       white: White
       blue: Blue
   likert:
-    '#type': likert
+    '#type': webform_likert
     '#title': Likert
     '#questions':
       q1: 'Question 1'

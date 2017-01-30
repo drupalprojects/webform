@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_table
@@ -13,41 +11,41 @@ title: 'Test: Element: Table'
 description: 'Test table elements.'
 elements: |
   table_elements:
-    '#type': 'details'
-    '#title': 'Table'
+    '#type': details
+    '#title': Table
     '#open': true
     table:
       '#type': table
       '#header':
         - 'First Name'
         - 'Last Name'
-        - 'Gender'
+        - Gender
       table__1:
         table__1__first_name:
-          '#type': 'textfield'
+          '#type': textfield
           '#size': 20
-          '#default_value': 'John'
+          '#default_value': John
         table__1__last_name:
-          '#type': 'textfield'
+          '#type': textfield
           '#size': 20
-          '#default_value': 'Smith'
+          '#default_value': Smith
         table__1__gender:
-          '#type': 'select'
+          '#type': select
           '#options': gender
-          '#default_value': 'Male'
+          '#default_value': Male
       table__2:
         table__2__first_name:
-          '#type': 'textfield'
+          '#type': textfield
           '#size': 20
-          '#default_value': 'Jane'
+          '#default_value': Jane
         table__2__last_name:
-          '#type': 'textfield'
+          '#type': textfield
           '#size': 20
-          '#default_value': 'Doe'
+          '#default_value': Doe
         table__2__gender:
-          '#type': 'select'
+          '#type': select
           '#options': gender
-          '#default_value': 'Female'
+          '#default_value': Female
   tableselect_sort_elements:
     '#type': details
     '#title': 'Table Select Elements'
@@ -81,19 +79,19 @@ elements: |
       '#options':
         one:
           title: 'One (1)'
-          key: 'one'
+          key: one
         two:
           title: 'Two (2)'
-          key: 'two'
+          key: two
         three:
           title: 'Three (3)'
-          key: 'three'
+          key: three
         four:
           title: 'Four (4)'
-          key: 'four'
+          key: four
         five:
           title: 'Five (5)'
-          key: 'five'
+          key: five
       '#default_value':
         five: five
         three: three
@@ -120,19 +118,19 @@ elements: |
       '#options':
         one:
           title: 'One (1)'
-          key: 'one'
+          key: one
         two:
           title: 'Two (2)'
-          key: 'two'
+          key: two
         three:
           title: 'Three (3)'
-          key: 'three'
+          key: three
         four:
           title: 'Four (4)'
-          key: 'four'
+          key: four
         five:
           title: 'Five (5)'
-          key: 'five'
+          key: five
       '#default_value':
         five: five
         three: three
@@ -159,19 +157,19 @@ elements: |
       '#options':
         one:
           title: 'One (1)'
-          key: 'one'
+          key: one
         two:
           title: 'Two (2)'
-          key: 'two'
+          key: two
         three:
           title: 'Three (3)'
-          key: 'three'
+          key: three
         four:
           title: 'Four (4)'
-          key: 'four'
+          key: four
         five:
           title: 'Five (5)'
-          key: 'five'
+          key: five
       '#default_value':
         five: five
         three: three

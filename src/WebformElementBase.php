@@ -274,7 +274,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function getTypeName() {
-    return str_replace('webform_', '', $this->pluginDefinition['id']);
+    return $this->pluginDefinition['id'];
   }
 
   /**

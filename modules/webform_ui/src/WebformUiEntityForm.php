@@ -285,6 +285,8 @@ class WebformUiEntityForm extends WebformEntityForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
@@ -344,8 +346,6 @@ class WebformUiEntityForm extends WebformEntityForm {
 
     // Update the webform's elements.
     $webform->setElements($elements_updated);
-
-    parent::validateForm($form, $form_state);
   }
 
   /**

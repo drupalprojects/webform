@@ -11,7 +11,7 @@ title: 'Test: Element: Flexbox flex '
 description: 'Test flexbox flex containers.'
 elements: |
   row_0:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_0_col_0:
       '#type': container
       '#flex': 1
@@ -97,7 +97,7 @@ elements: |
       flex:
         '#markup': 1
   row_1:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_1_col_0:
       '#type': container
       '#flex': 1
@@ -113,7 +113,7 @@ elements: |
       flex:
         '#markup': 1
   row_2:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_2_col_0:
       '#type': container
       '#flex': 1
@@ -136,7 +136,7 @@ elements: |
       flex:
         '#markup': 1
   row_3:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_3_col_0:
       '#type': container
       '#flex': 1
@@ -166,7 +166,7 @@ elements: |
       flex:
         '#markup': 1
   row_4:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_4_col_0:
       '#type': container
       '#flex': 1
@@ -210,7 +210,7 @@ elements: |
       flex:
         '#markup': 1
   row_5:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_5_col_0:
       '#type': container
       '#flex': 1
@@ -268,7 +268,7 @@ elements: |
       flex:
         '#markup': 1
   row_6:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_6_col_0:
       '#type': container
       '#flex': 1
@@ -354,7 +354,7 @@ elements: |
       flex:
         '#markup': 1
   row_7:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_7_col_0:
       '#type': container
       '#flex': 2
@@ -370,7 +370,7 @@ elements: |
       flex:
         '#markup': 10
   row_8:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_8_col_0:
       '#type': container
       '#flex': 3
@@ -386,7 +386,7 @@ elements: |
       flex:
         '#markup': 9
   row_9:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_9_col_0:
       '#type': container
       '#flex': 4
@@ -402,7 +402,7 @@ elements: |
       flex:
         '#markup': 8
   row_10:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_10_col_0:
       '#type': container
       '#flex': 5
@@ -418,7 +418,7 @@ elements: |
       flex:
         '#markup': 7
   row_11:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_11_col_0:
       '#type': container
       '#flex': 6
@@ -434,7 +434,7 @@ elements: |
       flex:
         '#markup': 6
   row_12:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_12_col_0:
       '#type': container
       '#flex': 7
@@ -450,7 +450,7 @@ elements: |
       flex:
         '#markup': 5
   row_13:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_13_col_0:
       '#type': container
       '#flex': 8
@@ -466,7 +466,7 @@ elements: |
       flex:
         '#markup': 4
   row_14:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_14_col_0:
       '#type': container
       '#flex': 9
@@ -482,7 +482,7 @@ elements: |
       flex:
         '#markup': 3
   row_15:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_15_col_0:
       '#type': container
       '#flex': 10
@@ -498,7 +498,7 @@ elements: |
       flex:
         '#markup': 2
   row_16:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_16_col_0:
       '#type': container
       '#flex': 1
@@ -584,7 +584,7 @@ elements: |
       flex:
         '#markup': 1
   row_17:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_17_col_0:
       '#type': container
       '#flex': 1
@@ -607,7 +607,7 @@ elements: |
       flex:
         '#markup': 1
   row_18:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_18_col_0:
       '#type': container
       '#flex': 2
@@ -630,7 +630,7 @@ elements: |
       flex:
         '#markup': 2
   row_19:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_19_col_0:
       '#type': container
       '#flex': 3
@@ -653,7 +653,7 @@ elements: |
       flex:
         '#markup': 3
   row_20:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_20_col_0:
       '#type': container
       '#flex': 4
@@ -676,7 +676,7 @@ elements: |
       flex:
         '#markup': 4
   row_21:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_21_col_0:
       '#type': container
       '#flex': 5
@@ -699,7 +699,7 @@ elements: |
       flex:
         '#markup': 5
   row_22:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_22_col_0:
       '#type': container
       '#flex': 6
@@ -715,7 +715,7 @@ elements: |
       flex:
         '#markup': 6
   row_23:
-    '#type': flexbox
+    '#type': webform_flexbox
     row_23_col_0:
       '#type': container
       '#flex': 1

@@ -17,12 +17,12 @@ elements: |
     '#options': likert_quality
     '#required': true
   speaker:
-    '#type': likert
+    '#type': webform_likert
     '#title': 'Please rate the speaker''s...'
     '#questions':
-      mastery: Mastery of this topic
-      presentation: Presentation skills
-      quality: Quality of slides and visual aids
+      mastery: 'Mastery of this topic'
+      presentation: 'Presentation skills'
+      quality: 'Quality of slides and visual aids'
     '#answers': likert_quality
     '#na_answer': true
     '#required': true
@@ -31,13 +31,13 @@ elements: |
     '#title': 'Did you learn something in this session you can use in real life?'
     '#options_display': side_by_side
     '#options':
-      Yes: Yes
-      No: No
+      'Yes': 'Yes'
+      'No': 'No'
       N/A: N/A
     '#required': true
   comments:
     '#type': textarea
-    '#title': 'Comments'
+    '#title': Comments
     '#description': 'What did you like most? What would you change? Advice for the speaker to make this session better?'
 css: ''
 javascript: ''

@@ -11,10 +11,10 @@ title: 'Example: Wizard'
 description: 'Example of a multiple step ''wizard'' webform.'
 elements: |
   '#attributes':
-    'data-current-page': '[webform-submission:current-page]'
+    data-current-page: '[webform-submission:current-page]'
   information:
     '#title': 'Your Information'
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#open': true
     first_name:
       '#title': 'First Name'
@@ -24,11 +24,11 @@ elements: |
       '#type': textfield
     gender:
       '#type': radios
-      '#title': 'Gender'
+      '#title': Gender
       '#options': gender
   contact:
     '#title': 'Contact Information'
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#open': true
     email:
       '#title': Email
@@ -42,7 +42,7 @@ elements: |
       '#options': yes_no
   feedback:
     '#title': 'Your Feedback'
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#open': true
     comments:
       '#type': textarea

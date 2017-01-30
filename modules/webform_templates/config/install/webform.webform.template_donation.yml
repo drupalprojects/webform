@@ -14,7 +14,7 @@ elements: |
     '#title': 'Donation Information'
     '#type': fieldset
     amount:
-      '#type': buttons_other
+      '#type': webform_buttons_other
       '#title': Amount
       '#title_display': invisible
       '#required': true
@@ -35,7 +35,7 @@ elements: |
     '#title': 'Billing Information'
     '#type': fieldset
     name:
-      '#type': name
+      '#type': webform_name
       '#title': Name
       '#title_display': invisible
       '#required': true
@@ -45,7 +45,7 @@ elements: |
       '#degree__access': false
       '#flexbox': '1'
     address:
-      '#type': address
+      '#type': webform_address
       '#title': Address
       '#title_display': invisible
       '#required': true
@@ -66,7 +66,7 @@ elements: |
     '#title': 'Payment Information'
     '#type': fieldset
     credit_card:
-      '#type': creditcard
+      '#type': webform_creditcard
       '#title': 'Credit Card'
       '#title_display': invisible
       '#required': true

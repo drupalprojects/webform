@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_email
@@ -19,10 +17,10 @@ elements: |
     '#title': 'Email multiple (email_multiple)'
     '#open': true
     email_multiple_basic:
-      '#type': email_multiple
+      '#type': webform_email_multiple
       '#title': 'Multiple email addresses (basic)'
     email_multiple_advanced:
-      '#type': email_multiple
+      '#type': webform_email_multiple
       '#title': 'Multiple email addresses (advanced)'
       '#allow_tokens': true
       '#description': 'Allows tokens to be included in the comma delimited list of emails'
@@ -31,10 +29,10 @@ elements: |
     '#title': 'Email confirmation (email_confirm)'
     '#open': true
     email_confirm_basic:
-      '#type': email_confirm
+      '#type': webform_email_confirm
       '#title': 'Email confirm basic'
     email_confirm_advanced:
-      '#type': email_confirm
+      '#type': webform_email_confirm
       '#title': 'Email confirm advanced'
       '#description': 'Please make sure to review your email address'
       '#placeholder': 'Enter email address'

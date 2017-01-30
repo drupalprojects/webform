@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_other
@@ -17,7 +15,7 @@ elements: |
     '#title': 'Select other (select_other)'
     '#open': true
     select_other_basic:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'Select other basic'
       '#options':
         One: One
@@ -26,7 +24,7 @@ elements: |
         Three: Three
       '#default_value': Four
     select_other_advanced:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'Select other advanced'
       '#default_value': Four
       '#options':
@@ -36,14 +34,14 @@ elements: |
         Three: Three
       '#empty_option': Select...
       '#other__option_label': 'Is there another option you wish to enter?'
-      '#other__title': 'Other'
+      '#other__title': Other
       '#other__placeholder': 'What is this other option'
       '#other__description': 'Other select description'
       '#other__size': 20
       '#other__maxlength': 20
       '#required': true
     select_other_multiple:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'Select other multiple'
       '#multiple': true
       '#options':
@@ -60,7 +58,7 @@ elements: |
     '#title': 'Checkboxes other (checkboxes_other)'
     '#open': true
     checkboxes_other_basic:
-      '#type': checkboxes_other
+      '#type': webform_checkboxes_other
       '#title': 'Checkboxes other basic'
       '#options':
         One: One
@@ -71,7 +69,7 @@ elements: |
         - Two
         - Four
     checkboxes_other_advanced:
-      '#type': checkboxes_other
+      '#type': webform_checkboxes_other
       '#title': 'Checkboxes other advanced'
       '#options':
         One: One
@@ -91,7 +89,7 @@ elements: |
     '#title': 'Radios other (radios_other)'
     '#open': true
     radios_other_basic:
-      '#type': radios_other
+      '#type': webform_radios_other
       '#title': 'Radios other basic'
       '#options':
         One: One
@@ -99,7 +97,7 @@ elements: |
         Three: Three
       '#default_value': Four
     radios_other_advanced:
-      '#type': radios_other
+      '#type': webform_radios_other
       '#title': 'Radios other advanced'
       '#options':
         One: One
@@ -116,7 +114,7 @@ elements: |
     '#title': 'Buttons other (buttons_other)'
     '#open': true
     buttons_other_basic:
-      '#type': buttons_other
+      '#type': webform_buttons_other
       '#title': 'Buttons other basic'
       '#options':
         One: One
@@ -124,7 +122,7 @@ elements: |
         Three: Three
       '#default_value': Four
     buttons_other_advanced:
-      '#type': buttons_other
+      '#type': webform_buttons_other
       '#title': 'Buttons other advanced'
       '#options':
         One: One
@@ -132,7 +130,7 @@ elements: |
         Three: Three
       '#default_value': Four
       '#required': true
-      '#other__option_label': 'Other'
+      '#other__option_label': Other
       '#other__placeholder': 'What is this other option'
       '#other__description': 'Other button description'
 css: ''

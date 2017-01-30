@@ -19,7 +19,7 @@ elements: |
       '#title': 'entity_autocomplete (user)'
       '#default_value': '1'
       '#target_type': user
-      '#selection_handler': default:user
+      '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
     entity_autocomplete_user_tags:
@@ -27,7 +27,7 @@ elements: |
       '#title': 'entity_autocomplete (user tags)'
       '#tags': true
       '#target_type': user
-      '#selection_handler': default:user
+      '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
       '#default_value':
@@ -64,7 +64,7 @@ elements: |
       '#title': 'entity_select (user)'
       '#default_value': '1'
       '#target_type': user
-      '#selection_handler': default:user
+      '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
     webform_entity_select_user_multiple:
@@ -72,7 +72,7 @@ elements: |
       '#title': 'entity_select (user multiple)'
       '#multiple': true
       '#target_type': user
-      '#selection_handler': default:user
+      '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
       '#default_value':
@@ -87,7 +87,7 @@ elements: |
       '#title': 'entity_radio (user)'
       '#default_value': '1'
       '#target_type': user
-      '#selection_handler': default:user
+      '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
   webform_entity_checkboxes:
@@ -98,7 +98,7 @@ elements: |
       '#type': webform_entity_checkboxes
       '#title': 'entity_checkboxes (user)'
       '#target_type': user
-      '#selection_handler': default:user
+      '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
       '#default_value':

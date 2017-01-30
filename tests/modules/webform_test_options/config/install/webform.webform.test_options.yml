@@ -115,7 +115,7 @@ elements: |
     '#title': 'Likert options'
     '#open': true
     likert_agreement:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Agreement (likert_agreement)'
       '#questions':
         q1: 'Please answer question 1?'
@@ -123,7 +123,7 @@ elements: |
         q3: 'Finally, here is question 3?'
       '#answers': likert_agreement
     likert_comparison:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Comparison (likert_comparison)'
       '#questions':
         q1: 'Please answer question 1?'
@@ -131,7 +131,7 @@ elements: |
         q3: 'Finally, here is question 3?'
       '#answers': likert_comparison
     likert_importance:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Importance (likert_importance)'
       '#questions':
         q1: 'Please answer question 1?'
@@ -139,7 +139,7 @@ elements: |
         q3: 'Finally, here is question 3?'
       '#answers': likert_importance
     likert_quality:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Quality (likert_quality)'
       '#questions':
         q1: 'Please answer question 1?'
@@ -147,7 +147,7 @@ elements: |
         q3: 'Finally, here is question 3?'
       '#answers': likert_quality
     likert_satisfaction:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Satisfaction (likert_satisfaction)'
       '#questions':
         q1: 'Please answer question 1?'
@@ -155,7 +155,7 @@ elements: |
         q3: 'Finally, here is question 3?'
       '#answers': likert_satisfaction
     likert_ten_scale:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Ten Scale (likert_ten_scale)'
       '#questions':
         q1: 'Please answer question 1?'
@@ -163,7 +163,7 @@ elements: |
         q3: 'Finally, here is question 3?'
       '#answers': likert_ten_scale
     likert_would_you:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'Likert: Would You (likert_would_you)'
       '#questions':
         q1: 'Please answer question 1?'

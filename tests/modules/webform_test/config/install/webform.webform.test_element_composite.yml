@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_composite
@@ -17,19 +15,19 @@ elements: |
     '#title': 'Composite Flexbox'
     '#open': true
     address:
-      '#type': address
-      '#title': 'Address'
+      '#type': webform_address
+      '#title': Address
       '#flexbox': true
     contact:
-      '#type': contact
-      '#title': 'Contact'
+      '#type': webform_contact
+      '#title': Contact
       '#flexbox': true
     name:
-      '#type': name
-      '#title': 'Name'
+      '#type': webform_name
+      '#title': Name
       '#flexbox': true
     creditcard:
-      '#type': creditcard
+      '#type': webform_creditcard
       '#title': 'Credit card'
       '#flexbox': true
   composite_elements:
@@ -37,33 +35,33 @@ elements: |
     '#title': 'Composite Elements'
     '#open': true
     contact_basic:
-      '#type': contact
+      '#type': webform_contact
       '#title': 'Contact basic'
       '#required': true
       '#name__required': true
       '#default_value':
-        name: John Smith
+        name: 'John Smith'
         company: Acme
         address: '100 Main Street'
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
         country: 'United States'
-        postal_code: '11111-1111'
+        postal_code: 11111-1111
         email: example@example.com
         phone: 123-456-7890
     contact_advanced:
-      '#type': contact
+      '#type': webform_contact
       '#title': 'Contact advanced'
       '#default_value':
-        name: John Smith
+        name: 'John Smith'
         company: Acme
         address: '100 Main Street'
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
         country: 'United States'
-        postal_code: '11111-1111'
+        postal_code: 11111-1111
         email: example@example.com
         phone: 123-456-7890
       '#name__required': true
@@ -73,10 +71,10 @@ elements: |
       '#country__required': true
       '#country__access': false
     creditcard_basic:
-      '#type': creditcard
+      '#type': webform_creditcard
       '#title': 'Credit Card'
       '#default_value':
-        name: John Smith
+        name: 'John Smith'
         number: 4111111111111111
         type: VI
         civ: 111

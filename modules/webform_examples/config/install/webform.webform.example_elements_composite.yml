@@ -15,35 +15,35 @@ elements: |
     '#title': Address
     '#open': true
     webform_address:
-      '#type': address
+      '#type': webform_address
       '#title': Address
   webform_contact_example:
     '#type': details
     '#title': Contact
     '#open': true
     webform_contact:
-      '#type': contact
+      '#type': webform_contact
       '#title': Contact
   webform_creditcard_example:
     '#type': details
     '#title': 'Credit card'
     '#open': true
     webform_creditcard:
-      '#type': creditcard
+      '#type': webform_creditcard
       '#title': 'Credit card'
   webform_location_example:
     '#type': details
     '#title': Location
     '#open': true
     webform_location:
-      '#type': location
+      '#type': webform_location
       '#title': Location
   webform_name_example:
     '#type': details
     '#title': Name
     '#open': true
     webform_name:
-      '#type': name
+      '#type': webform_name
       '#title': Name
 css: ''
 javascript: ''

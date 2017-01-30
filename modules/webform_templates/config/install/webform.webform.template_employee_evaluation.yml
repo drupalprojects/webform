@@ -26,7 +26,7 @@ elements: |
       '#title': 'Job Title'
       '#required': true
     evaluator_relationship:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'Relationship with employee'
       '#options':
         Coworker: Coworker
@@ -48,21 +48,21 @@ elements: |
       '#title': 'Job Title'
       '#required': true
     employee_ratings:
-      '#type': likert
+      '#type': webform_likert
       '#title': 'How would you rate the employee''s...'
       '#questions':
         attendance: Attendance
         attire: Attire
         professionalism: Professionalism
-        work_area: Work area
-        ability: Ability to do the job
-        work_with_others: Ability to work with others
-        receive_feedback: Ability to receive feedback/criticism
-        adaptabily: Ability to adapt
-        learning: Willingness to learn
-        participation: Willingness to participate
-        work_ethic: Work ethic
-        quality: Quality of work
+        work_area: 'Work area'
+        ability: 'Ability to do the job'
+        work_with_others: 'Ability to work with others'
+        receive_feedback: 'Ability to receive feedback/criticism'
+        adaptabily: 'Ability to adapt'
+        learning: 'Willingness to learn'
+        participation: 'Willingness to participate'
+        work_ethic: 'Work ethic'
+        quality: 'Quality of work'
       '#answers': likert_quality
       '#required': true
     employee_qualities:

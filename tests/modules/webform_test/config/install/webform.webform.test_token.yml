@@ -11,107 +11,30 @@ title: 'Test: Token'
 description: 'Test Webform and Webform Submission tokens'
 elements: |
   webform_tokens:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': text
     '#title': 'Webform Tokens'
-    '#default_value': |
-      Description: [webform:description]
-      Webform ID: [webform:id]
-      title: [webform:title]
-      URL: [webform:url]
-      Author: [webform:author]
-      Author name: [webform:author:account-name]
-      Author roles: [webform:author:roles]
+    '#default_value': "Description: [webform:description]\nWebform ID: [webform:id]\ntitle: [webform:title]\nURL: [webform:url]\nAuthor: [webform:author]\nAuthor name: [webform:author:account-name]\nAuthor roles: [webform:author:roles]\n"
   webform_submission_tokens:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': text
     '#title': 'Webform Submission Tokens'
-    '#default_value': |
-      Date changed: [webform_submission:changed]
-      Date changed long: [webform_submission:changed:long]
-      Date completed: [webform_submission:completed]
-      Date completed long: [webform_submission:completed:long]
-      Date created: [webform_submission:created]
-      Date created long: [webform_submission:created:long]
-      Webform: [webform_submission:webform]
-      IP address: [webform_submission:ip-address]
-      Langcode: [webform_submission:langcode]
-      Language: [webform_submission:language]
-      In draft: [webform_submission:in-draft]
-      Completed page: [webform_submission:completed-page]
-      Source URL: [webform_submission:source-url]
-      Submission ID: [webform_submission:sid]
-      Submission serial number: [webform_submission:serial]
-      Submitter: [webform_submission:user]
-      Submitter name: [webform_submission:user:account-name]
-      Submitter mail: [webform_submission:user:mail]
-      Token: [webform_submission:token]
-      Update URL: [webform_submission:update-url]
-      URL: [webform_submission:url]
-      URL Edit Webform: [webform_submission:url:edit-form]
-      UUID: [webform_submission:uuid]
+    '#default_value': "Date changed: [webform_submission:changed]\nDate changed long: [webform_submission:changed:long]\nDate completed: [webform_submission:completed]\nDate completed long: [webform_submission:completed:long]\nDate created: [webform_submission:created]\nDate created long: [webform_submission:created:long]\nWebform: [webform_submission:webform]\nIP address: [webform_submission:ip-address]\nLangcode: [webform_submission:langcode]\nLanguage: [webform_submission:language]\nIn draft: [webform_submission:in-draft]\nCompleted page: [webform_submission:completed-page]\nSource URL: [webform_submission:source-url]\nSubmission ID: [webform_submission:sid]\nSubmission serial number: [webform_submission:serial]\nSubmitter: [webform_submission:user]\nSubmitter name: [webform_submission:user:account-name]\nSubmitter mail: [webform_submission:user:mail]\nToken: [webform_submission:token]\nUpdate URL: [webform_submission:update-url]\nURL: [webform_submission:url]\nURL Edit Webform: [webform_submission:url:edit-form]\nUUID: [webform_submission:uuid]\n"
   webform_submission_data_tokens:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': text
     '#title': 'Webform Submission Data Tokens'
-    '#default_value': |
-      Submission values: [webform_submission:values]
+    '#default_value': "Submission values: [webform_submission:values]\n"
   webform_submission_source_entity_tokens:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': text
     '#title': 'Webform Submission Source Entity Tokens'
-    '#default_value': |
-      Author: [webform_submission:source-entity:author]
-      Account cancellation URL: [webform_submission:source-entity:author:cancel-url]
-      Account Name: [webform_submission:source-entity:author:account-name]
-      Created: [webform_submission:source-entity:author:created]
-      Display Name: [webform_submission:source-entity:author:display-name]
-      Edit URL: [webform_submission:source-entity:author:edit-url]
-      Email: [webform_submission:source-entity:author:mail]
-      Last login: [webform_submission:source-entity:author:last-login]
-      Picture: [webform_submission:source-entity:author:user_picture]
-      Roles: [webform_submission:source-entity:author:roles]
-      URL: [webform_submission:source-entity:author:url]
-      User ID: [webform_submission:source-entity:author:uid]
-      Body: [webform_submission:source-entity:body]
-      Content ID: [webform_submission:source-entity:nid]
-      Content type: [webform_submission:source-entity:content-type]
-      Date changed: [webform_submission:source-entity:changed]
-      Date created: [webform_submission:source-entity:created]
-      Image: [webform_submission:source-entity:field_image]
-      Language code: [webform_submission:source-entity:langcode]
-      Revision ID: [webform_submission:source-entity:vid]
-      Summary: [webform_submission:source-entity:summary]
-      Title: [webform_submission:source-entity:title]
-      URL: [webform_submission:source-entity:url]
+    '#default_value': "Author: [webform_submission:source-entity:author]\nAccount cancellation URL: [webform_submission:source-entity:author:cancel-url]\nAccount Name: [webform_submission:source-entity:author:account-name]\nCreated: [webform_submission:source-entity:author:created]\nDisplay Name: [webform_submission:source-entity:author:display-name]\nEdit URL: [webform_submission:source-entity:author:edit-url]\nEmail: [webform_submission:source-entity:author:mail]\nLast login: [webform_submission:source-entity:author:last-login]\nPicture: [webform_submission:source-entity:author:user_picture]\nRoles: [webform_submission:source-entity:author:roles]\nURL: [webform_submission:source-entity:author:url]\nUser ID: [webform_submission:source-entity:author:uid]\nBody: [webform_submission:source-entity:body]\nContent ID: [webform_submission:source-entity:nid]\nContent type: [webform_submission:source-entity:content-type]\nDate changed: [webform_submission:source-entity:changed]\nDate created: [webform_submission:source-entity:created]\nImage: [webform_submission:source-entity:field_image]\nLanguage code: [webform_submission:source-entity:langcode]\nRevision ID: [webform_submission:source-entity:vid]\nSummary: [webform_submission:source-entity:summary]\nTitle: [webform_submission:source-entity:title]\nURL: [webform_submission:source-entity:url]\n"
   webform_submission_node_tokens:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': text
     '#title': 'Webform Submission Node Tokens'
-    '#default_value': |
-      Author: [webform_submission:node:author]
-      Account cancellation URL: [webform_submission:node:author:cancel-url]
-      Account Name: [webform_submission:node:author:account-name]
-      Created: [webform_submission:node:author:created]
-      Display Name: [webform_submission:node:author:display-name]
-      Edit URL: [webform_submission:node:author:edit-url]
-      Email: [webform_submission:node:author:mail]
-      Last login: [webform_submission:node:author:last-login]
-      Picture: [webform_submission:node:author:user_picture]
-      Roles: [webform_submission:node:author:roles]
-      URL: [webform_submission:node:author:url]
-      User ID: [webform_submission:node:author:uid]
-      Body: [webform_submission:node:body]
-      Content ID: [webform_submission:node:nid]
-      Content type: [webform_submission:node:content-type]
-      Date changed: [webform_submission:node:changed]
-      Date created: [webform_submission:node:created]
-      Image: [webform_submission:node:field_image]
-      Language code: [webform_submission:node:langcode]
-      Revision ID: [webform_submission:node:vid]
-      Summary: [webform_submission:node:summary]
-      Title: [webform_submission:node:title]
-      URL: [webform_submission:node:url]
+    '#default_value': "Author: [webform_submission:node:author]\nAccount cancellation URL: [webform_submission:node:author:cancel-url]\nAccount Name: [webform_submission:node:author:account-name]\nCreated: [webform_submission:node:author:created]\nDisplay Name: [webform_submission:node:author:display-name]\nEdit URL: [webform_submission:node:author:edit-url]\nEmail: [webform_submission:node:author:mail]\nLast login: [webform_submission:node:author:last-login]\nPicture: [webform_submission:node:author:user_picture]\nRoles: [webform_submission:node:author:roles]\nURL: [webform_submission:node:author:url]\nUser ID: [webform_submission:node:author:uid]\nBody: [webform_submission:node:body]\nContent ID: [webform_submission:node:nid]\nContent type: [webform_submission:node:content-type]\nDate changed: [webform_submission:node:changed]\nDate created: [webform_submission:node:created]\nImage: [webform_submission:node:field_image]\nLanguage code: [webform_submission:node:langcode]\nRevision ID: [webform_submission:node:vid]\nSummary: [webform_submission:node:summary]\nTitle: [webform_submission:node:title]\nURL: [webform_submission:node:url]\n"
 css: ''
 javascript: ''
 settings:

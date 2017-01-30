@@ -129,7 +129,7 @@ duplicate:
         ],
         'messages' => [
           'The <em class="placeholder">leaf_parent</em> (textfield) is a webform element that can not have any child elements.',
-          'The <em class="placeholder">root</em> (wizard_page) is a root element that can not be used as child to another element',
+          'The <em class="placeholder">root</em> (webform_wizard_page) is a root element that can not be used as child to another element',
         ],
       ],
 /*

@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_rating
@@ -17,10 +15,10 @@ elements: |
     '#title': 'Rating Elements'
     '#open': true
     rating_basic:
-      '#type': rating
+      '#type': webform_rating
       '#title': 'Rating basic'
     rating_advanced:
-      '#type': rating
+      '#type': webform_rating
       '#title': 'Rating advanced'
       '#star_size': large
       '#reset': true

@@ -11,8 +11,8 @@ title: 'Test: Token: Update'
 description: 'Test updating submission using secure token.'
 elements: |
   textfield:
-    '#type': 'textfield'
-    '#title': 'textfield'
+    '#type': textfield
+    '#title': textfield
 css: ''
 javascript: ''
 settings:

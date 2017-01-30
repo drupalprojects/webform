@@ -15,14 +15,14 @@ elements: |
     '#title': 'Location default element'
     '#open': true
     location_default:
-      '#type': location
+      '#type': webform_location
       '#title': 'location default'
   location_attributes_element:
     '#type': details
     '#title': 'Location with visible attributes element'
     '#open': true
     location_attributes:
-      '#type': location
+      '#type': webform_location
       '#title': 'Location with visible attributes'
       '#lat__access': true
       '#lng__access': true
@@ -41,11 +41,11 @@ elements: |
     '#title': 'Location with default value and required element'
     '#open': true
     location_default_value_required:
-      '#type': location
+      '#type': webform_location
       '#title': 'Location with default value and required'
       '#default_value':
         value: '1600 Pennsylvania Ave NW, Washington, DC 20500'
-      '#required': TRUE
+      '#required': true
       '#lat__access': true
       '#lng__access': true
       '#location__access': true
@@ -63,7 +63,7 @@ elements: |
     '#title': 'Location with geolocation element'
     '#open': true
     location_geolocation:
-      '#type': location
+      '#type': webform_location
       '#title': 'Location with geolocation'
       '#geolocation': true
       '#location__access': true
@@ -77,7 +77,7 @@ elements: |
       '#country__access': true
       '#country_short__access': true
   location_geolocation_hidden:
-    '#type': location
+    '#type': webform_location
     '#title': 'Location with geolocation and hidden'
     '#geolocation': true
     '#hidden': true

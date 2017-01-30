@@ -18,7 +18,7 @@ elements: |
     '#title': 'Select (options)'
     '#options': test_translation
   select_custom:
-    '#type': select_other
+    '#type': webform_select_other
     '#title': 'Select (custom)'
     '#options':
       4: Four
@@ -27,8 +27,8 @@ elements: |
     '#other__option_label': 'Custom number...'
   details:
     '#type': details
-    '#title': 'Details'
-    'markup':
+    '#title': Details
+    markup:
       '#markup': 'This is some HTML markup.'
 css: ''
 javascript: ''

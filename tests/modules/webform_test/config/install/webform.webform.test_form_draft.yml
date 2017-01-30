@@ -12,11 +12,11 @@ description: 'Test saving a draft and previewing a submission.'
 elements: |
   name:
     '#type': textfield
-    '#title': 'Name'
+    '#title': Name
     '#required': true
   comment:
     '#type': textarea
-    '#title': 'Comment'
+    '#title': Comment
 css: ''
 javascript: ''
 settings:

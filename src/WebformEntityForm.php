@@ -4,8 +4,11 @@ namespace Drupal\webform;
 
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
+use Drupal\webform\Utility\WebformYamlTidy;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -193,12 +196,22 @@ class WebformEntityForm extends BundleEntityFormBase {
       '#title' => $this->t('Elements (YAML)'),
       '#description' => $this->t('Enter a <a href=":form_api_href">Form API (FAPI)</a> and/or a <a href=":render_api_href">Render Array</a> as <a href=":yaml_href">YAML</a>.', $t_args) . '<br/>' .
       '<em>' . $this->t('Please note that comments are not supported and will be removed.') . '</em>',
-      '#default_value' => $webform->get('elements') ,
+      '#default_value' => $this->getElementsWithoutWebformTypePrefix($webform->get('elements')),
       '#required' => TRUE,
+      '#element_validate' => ['::validateElementsYaml'],
     ];
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     return $form;
+  }
+
+  /**
+   * Element validate callback: Add 'webform_' #type prefix to elements.
+   */
+  public function validateElementsYaml(array &$element, FormStateInterface $form_state) {
+    $elements = $form_state->getValue('elements');
+    $elements = $this->getElementsWithWebformTypePrefix($elements);
+    $form_state->setValueForElement($element, $elements);
   }
 
   /**
@@ -215,7 +228,6 @@ class WebformEntityForm extends BundleEntityFormBase {
       }
     }
   }
-
   /**
    * {@inheritdoc}
    */
@@ -248,6 +260,84 @@ class WebformEntityForm extends BundleEntityFormBase {
     else {
       $this->logger('webform')->notice('Webform @label elements saved.', ['@label' => $webform->label()]);
       drupal_set_message($this->t('Webform %label elements saved.', ['%label' => $webform->label()]));
+    }
+  }
+
+  /****************************************************************************/
+  // Webform type prefix add and remove methods.
+  /****************************************************************************/
+
+  /**
+   * Get elements without 'webform_' #type prefix.
+   *
+   * @return string
+   *   Elements (YAML) without 'webform_' #type prefix.
+   */
+  protected function getElementsWithoutWebformTypePrefix($value) {
+    $elements = Yaml::decode($value);
+    if (!is_array($elements)) {
+      return $value;
+    }
+
+    $this->removeWebformTypePrefixRecursive($elements);
+    return WebformYamlTidy::tidy(Yaml::encode($elements));
+  }
+
+  /**
+   * Remove 'webform_' prefix from #type.
+   *
+   * @param array $element
+   *   A form element.
+   */
+  protected function removeWebformTypePrefixRecursive(array &$element) {
+    if (isset($element['#type']) && strpos($element['#type'], 'webform_') === 0) {
+      $type = str_replace('webform_', '', $element['#type']);
+      if (!$this->elementManager->hasDefinition($type)) {
+        $element['#type'] = $type ;
+      }
+    }
+
+    foreach (Element::children($element) as $key) {
+      if (is_array($element[$key])) {
+        $this->removeWebformTypePrefixRecursive($element[$key]);
+      }
+    }
+  }
+
+  /**
+   * Get elements with 'webform_' #type prefix.
+   *
+   * @return string
+   *   Elements (YAML) with 'webform_' #type prefix.
+   */
+  protected function getElementsWithWebformTypePrefix($value) {
+    $elements = Yaml::decode($value);
+    if (!is_array($elements)) {
+      return $value;
+    }
+
+    $this->addWebformTypePrefixRecursive($elements);
+    return WebformYamlTidy::tidy(Yaml::encode($elements));
+  }
+
+  /**
+   * Remove 'webform_' prefix from #type.
+   *
+   * @param array $element
+   *   A form element.
+   */
+  protected function addWebformTypePrefixRecursive(array &$element) {
+    if (isset($element['#type']) && !$this->elementManager->hasDefinition($element['#type'])) {
+      $type = 'webform_' . $element['#type'];
+      if ($this->elementManager->hasDefinition($type)) {
+        $element['#type'] = $type;
+      }
+    }
+
+    foreach (Element::children($element) as $key) {
+      if (is_array($element[$key])) {
+        $this->addWebformTypePrefixRecursive($element[$key]);
+      }
     }
   }
 

@@ -12,7 +12,7 @@ description: 'Test confidential webforms.'
 elements: |
   name:
     '#type': textfield
-    '#title': 'Name'
+    '#title': Name
 css: ''
 javascript: ''
 settings:

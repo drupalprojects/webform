@@ -139,7 +139,16 @@ drush webform-purge --all -y; drush pmu -y webform_test; drush en -y webform_tes
 
 ```
 # Make sure all modules that are going to be exported are enabled
-drush en -y webform webform_examples webform_templates webform_test webform_test_translation webform_node;
+drush en -y webform\
+  webform_examples\
+  webform_templates\
+  webform_test\
+  webform_test_element\
+  webform_test_handler\
+  webform_test_options\
+  webform_test_views\
+  webform_test_translation\
+  webform_node;
 
 # Show the difference between the active config and the default config.
 drush features-diff webform
@@ -157,6 +166,9 @@ drush features-export -y webform_test_views
 drush features-export -y webform_test_translation
 drush features-export -y webform_node
 
+# Revert all feature update to *.info.yml files.
+git checkout -- "*.info.yml"
+
 # Tidy webform configuration from your site.          
 drush webform-tidy -y --dependencies webform
 drush webform-tidy -y --dependencies webform_examples
@@ -168,6 +180,7 @@ drush webform-tidy -y --dependencies webform_test_options
 drush webform-tidy -y --dependencies webform_test_views
 drush webform-tidy -y --dependencies webform_test_translation
 drush webform-tidy -y --dependencies webform_node
+
 
 # Re-import all webform configuration into your site.      
 drush features-import -y webform

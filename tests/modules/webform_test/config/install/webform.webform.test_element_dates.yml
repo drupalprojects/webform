@@ -21,7 +21,7 @@ elements: |
     date_custom:
       '#type': date
       '#title': 'date custom'
-      '#date_date_format': 'd-M-Y'
+      '#date_date_format': d-M-Y
       '#min': '2008-01-01'
       '#max': '2010-12-31'
       '#default_value': '2009-08-18'
@@ -39,7 +39,7 @@ elements: |
       '#description': '(-1 year to +1 year)'
       '#min': '-1 year'
       '#max': '+1 year'
-      '#default_value': 'now'
+      '#default_value': now
   datetime_elements:
     '#type': details
     '#title': 'Date/Time Elements'
@@ -58,7 +58,7 @@ elements: |
       '#type': datetime
       '#title': 'datetime HTML5 datetime local'
       '#default_value': '2009-08-18T01:00:00-05:00'
-      '#date_date_element': 'datetime-local'
+      '#date_date_element': datetime-local
       '#date_time_element': none
     datetime_html5_time:
       '#type': datetime
@@ -125,31 +125,31 @@ elements: |
     '#title': 'Time Elements'
     '#open': true
     time_default:
-      '#type': time
+      '#type': webform_time
       '#title': 'time default'
       '#default_value': '14:00'
     time_24_hour:
-      '#type': time
+      '#type': webform_time
       '#title': 'time 24 hour'
       '#time_format': 'H:i'
       '#default_value': '14:00'
     time_12_hour:
-      '#type': time
+      '#type': webform_time
       '#title': 'time 12 hour'
       '#time_format': 'g:i A'
       '#default_value': '14:00'
     time_12_hour_plus_6_hours:
-      '#type': time
+      '#type': webform_time
       '#title': 'time 12 hour (+6 hours)'
       '#time_format': 'g:i A'
       '#default_value': '+6 hours'
     time_steps:
-      '#type': time
+      '#type': webform_time
       '#title': 'time (step)'
       '#default_value': '14:00'
       '#step': 900
     time_min_max:
-      '#type': time
+      '#type': webform_time
       '#title': 'time (min/max)'
       '#min': '14:00'
       '#max': '18:00'

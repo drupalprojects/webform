@@ -451,3 +451,49 @@ function webform_update_8012() {
 function webform_update_8013() {
   _webform_update_actions();
 }
+
+/**
+ * Issue #2848042: Rework #type shorthand prefix handling.
+ */
+function webform_update_8014() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    // Get data, get elements, and update elements #type.
+    $data = $webform_config->getRawData();
+    $elements = Yaml::decode($data['elements']);
+    // Make sure $elements has been decoded into an array.
+    if (is_array($elements)) {
+      _webform_update_8014($elements);
+
+      // Set elements, set data, and save data.
+      $data['elements'] = Yaml::encode($elements);
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}
+
+/**
+ * Add 'webform_' prefix to #type.
+ *
+ * @param array $element
+ *   A form element.
+ */
+function _webform_update_8014(array &$element) {
+  /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+  $element_manager = \Drupal::service('plugin.manager.webform.element');
+
+  // Add 'webform_' prefix to #type.
+  if (isset($element['#type']) && !$element_manager->hasDefinition($element['#type']) && $element_manager->hasDefinition('webform_' . $element['#type'])) {
+    $element['#type'] = 'webform_' . $element['#type'];
+  }
+
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      _webform_update_8014($element[$key]);
+    }
+  }
+
+}

@@ -30,7 +30,7 @@ elements: |
     '#title': 'Contact Information'
     '#type': fieldset
     contact:
-      '#type': contact
+      '#type': webform_contact
       '#title': Contact
       '#title_display': invisible
       '#name__access': false
@@ -47,10 +47,9 @@ elements: |
       '#suffix': '</div>'
       '#default_value': attach
     resume_file:
-      '#type': container
+      '#type': managed_file
       '#title': Resume
       '#title_display': invisible
-      '#type': managed_file
       '#states':
         visible:
           ':input[name="resume_method"]':

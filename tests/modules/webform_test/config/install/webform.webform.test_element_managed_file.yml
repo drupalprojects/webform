@@ -13,11 +13,11 @@ elements: |
   managed_file_single:
     '#type': managed_file
     '#title': 'managed_file (single)'
-    '#file_extensions': 'txt'
+    '#file_extensions': txt
   managed_file_multiple:
     '#type': managed_file
     '#title': 'managed_file (multiple)'
-    '#file_extensions': 'txt'
+    '#file_extensions': txt
     '#multiple': true
 css: ''
 javascript: ''

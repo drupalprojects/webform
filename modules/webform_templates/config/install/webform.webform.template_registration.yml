@@ -25,7 +25,7 @@ elements: |
     '#title': 'Your Contact Information'
     '#type': fieldset
     contact:
-      '#type': contact
+      '#type': webform_contact
       '#title': Contact
       '#title_display': invisible
       '#name__access': false
@@ -41,7 +41,7 @@ elements: |
     '#type': fieldset
     '#open': true
     notes:
-      '#title': 'Comments'
+      '#title': Comments
       '#type': textarea
 css: ''
 javascript: ''

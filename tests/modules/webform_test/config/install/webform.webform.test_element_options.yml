@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_options
@@ -18,7 +16,7 @@ elements: |
     '#open': true
     webform_options:
       '#type': webform_options
-      '#title': 'webform_options'
+      '#title': webform_options
     webform_options_default_value:
       '#type': webform_options
       '#title': 'webform_options (default_value)'
@@ -45,7 +43,7 @@ elements: |
       '#type': webform_element_options
       '#title': 'webform_element_options (entity)'
       '#required': true
-      '#default_value': 'yes_no'
+      '#default_value': yes_no
     webform_element_options_custom:
       '#type': webform_element_options
       '#title': 'webform_element_options (custom)'

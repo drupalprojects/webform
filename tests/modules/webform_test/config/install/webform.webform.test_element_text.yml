@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_text
@@ -20,8 +18,8 @@ elements: |
     '#open': true
     text_format:
       '#type': text_format
-      '#title': 'text_format'
-      '#hide_help': TRUE
+      '#title': text_format
+      '#hide_help': true
   counter_elements:
     '#type': details
     '#title': 'Word and character counter'
@@ -42,7 +40,7 @@ elements: |
     '#title': 'Credit card number (creditcard_number)'
     '#open': true
     creditcard_number_basic:
-      '#type': creditcard_number
+      '#type': webform_creditcard_number
       '#title': 'Credit card number basic'
 css: ''
 javascript: ''

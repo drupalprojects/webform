@@ -14,31 +14,31 @@ elements: |
     '#title': 'First name'
     '#type': textfield
     '#required': true
-    '#default_value': 'John'
+    '#default_value': John
   last_name:
     '#title': 'Last name'
     '#type': textfield
     '#required': true
-    '#default_value': 'Smith'
+    '#default_value': Smith
   email:
-    '#title': 'Email'
+    '#title': Email
     '#type': email
     '#required': true
-    '#default_value': 'from@example.com'
+    '#default_value': from@example.com
   subject:
-    '#title': 'Subject'
+    '#title': Subject
     '#type': textfield
     '#required': true
     '#default_value': '{subject}'
   message:
     '#type': text_format
-    '#title': 'Message'
+    '#title': Message
     '#required': true
     '#default_value': '<p><em>Please enter a message.</em></p>'
   file:
-    '#type': 'managed_file'
-    '#title': 'File'
-    '#file_extensions': 'txt'
+    '#type': managed_file
+    '#title': File
+    '#file_extensions': txt
 css: ''
 javascript: ''
 settings:

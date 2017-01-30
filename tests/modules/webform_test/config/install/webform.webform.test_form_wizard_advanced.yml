@@ -12,44 +12,44 @@ description: 'Test a multiple step ''wizard'' webform with save draft, auto save
 elements: |
   '#attributes':
     novalidate: novalidate
-    'data-current-page': '[webform-submission:current-page]'
+    data-current-page: '[webform-submission:current-page]'
   information:
     '#title': 'Your Information'
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#open': true
     first_name:
       '#title': 'First Name'
       '#type': textfield
       '#required': true
-      '#default_value': 'John'
+      '#default_value': John
     last_name:
       '#title': 'Last Name'
       '#type': textfield
       '#required': true
-      '#default_value': 'Smith'
+      '#default_value': Smith
     gender:
       '#type': radios
-      '#title': 'Gender'
+      '#title': Gender
       '#options': gender
       '#required': true
-      '#default_value': 'Male'
+      '#default_value': Male
   contact:
     '#title': 'Contact Information'
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#open': true
     email:
       '#title': Email
       '#type': email
       '#required': true
-      '#default_value': 'johnsmith@example.com'
+      '#default_value': johnsmith@example.com
     phone:
       '#title': Phone
       '#type': tel
       '#required': true
-      '#default_value': '999-999-9999'
+      '#default_value': 999-999-9999
   feedback:
     '#title': 'Your Feedback'
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#open': true
     comments:
       '#type': textarea

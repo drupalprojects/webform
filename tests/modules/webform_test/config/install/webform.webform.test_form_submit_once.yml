@@ -13,13 +13,13 @@ elements: |
   message:
     '#markup': 'The below submit buttons can only be clicked once.'
   wizard_1:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #1'
   wizard_2:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #2'
   wizard_3:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #3'
 css: ''
 javascript: ''

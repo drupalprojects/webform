@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test_handler
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_handler_test

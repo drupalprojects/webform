@@ -11,13 +11,13 @@ title: 'Test: Webform: Buttons'
 description: 'Test custom webform buttons.'
 elements: |
   wizard_page_1:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Page 1'
     text_1:
       '#type': textfield
       '#title': 'Text 1'
   wizard_page_2:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Page 2'
     text_2:
       '#type': textfield

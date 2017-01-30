@@ -13,15 +13,15 @@ elements: |
   markup:
     '#markup': '<p>This is normal markup</p>'
   markup_form:
-    '#type': 'markup'
+    '#type': webform_markup
     '#markup': '<p>This is only displayed on the form view.</p>'
     '#display_on': form
   markup_view:
-    '#type': 'markup'
+    '#type': webform_markup
     '#markup': '<p>This is only displayed on the submission view.</p>'
     '#display_on': view
   markup_both:
-    '#type': 'markup'
+    '#type': webform_markup
     '#markup': '<p>This is displayed on the both the form and submission view.</p>'
     '#display_on': both
 css: ''

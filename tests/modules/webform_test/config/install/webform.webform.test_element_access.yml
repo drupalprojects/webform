@@ -12,15 +12,15 @@ description: 'Test element access controls'
 elements: |
   private_elements:
     '#type': details
-    '#title': 'private'
+    '#title': private
     '#open': true
     private:
       '#type': textfield
-      '#title': 'private'
+      '#title': private
       '#private': true
   access_create:
     '#type': details
-    '#title': 'access_create'
+    '#title': access_create
     '#open': true
     access_create_roles_anonymous:
       '#type': textfield
@@ -42,7 +42,7 @@ elements: |
         - 1
   access_update:
     '#type': details
-    '#title': 'access_update'
+    '#title': access_update
     '#open': true
     access_update_roles_anonymous:
       '#type': textfield
@@ -64,7 +64,7 @@ elements: |
         - 1
   access_view:
     '#type': details
-    '#title': 'access_view'
+    '#title': access_view
     '#open': true
     access_view_roles_anonymous:
       '#type': textfield

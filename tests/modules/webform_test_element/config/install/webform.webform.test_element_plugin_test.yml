@@ -11,10 +11,9 @@ title: 'Test: Element: Test (plugin)'
 description: 'Test the webform element plugin integration and method invoking.'
 elements: |
   description:
-    '#markup': |
-      <p>This webform includes a #test elememt which will trigger all methods associated with a WebformElement plugin.</p>
+    '#markup': "<p>This webform includes a #test elememt which will trigger all methods associated with a WebformElement plugin.</p>\n"
   test:
-    '#type': 'webform_test'
+    '#type': webform_test
     '#title': 'This is a test element'
     '#default_value': '{default_value}'
 css: ''

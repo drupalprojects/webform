@@ -916,12 +916,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
           $this->hasFlexboxLayout = TRUE;
         }
 
-        // Set webform_* prefix to #type that are using alias without webform_
-        // namespace.
-        if (!$element_info->hasDefinition($element['#type']) && $element_info->hasDefinition('webform_' . $element['#type'])) {
-          $element['#type'] = 'webform_' . $element['#type'];
-        }
-
         $element['#webform_multiple'] = $element_handler->hasMultipleValues($element);
         $element['#webform_composite'] = $element_handler->isComposite();
       }

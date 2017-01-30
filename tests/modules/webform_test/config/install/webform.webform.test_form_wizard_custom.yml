@@ -11,21 +11,21 @@ title: 'Test: Webform: Wizard custom'
 description: 'Test a multiple step ''wizard'' webform with custom hide/show pages logic.'
 elements: |
   '#attributes':
-    'data-current-page': '[webform-submission:current-page]'
+    data-current-page: '[webform-submission:current-page]'
   wizard_1:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #1'
     pages:
       '#type': checkboxes
-      '#titke': 'Pages'
+      '#titke': Pages
       '#options':
-        wizard_1: Page 1
-        wizard_2: Page 2
-        wizard_3: Page 3
-        wizard_4: Page 4
-        wizard_5: Page 5
-        wizard_6: Page 6
-        wizard_7: Page 7
+        wizard_1: 'Page 1'
+        wizard_2: 'Page 2'
+        wizard_3: 'Page 3'
+        wizard_4: 'Page 4'
+        wizard_5: 'Page 5'
+        wizard_6: 'Page 6'
+        wizard_7: 'Page 7'
       '#default_value':
         - wizard_1
         - wizard_2
@@ -35,22 +35,22 @@ elements: |
         - wizard_6
         - wizard_7
   wizard_2:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #2'
   wizard_3:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #3'
   wizard_4:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #4'
   wizard_5:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #5'
   wizard_6:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #6'
   wizard_7:
-    '#type': wizard_page
+    '#type': webform_wizard_page
     '#title': 'Wizard page #7'
 css: ''
 javascript: ''

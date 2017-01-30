@@ -19,11 +19,11 @@ elements: |
     '#type': email
     '#required': true
   subject:
-    '#title': 'Subject'
+    '#title': Subject
     '#type': textfield
     '#required': true
   message:
-    '#title': 'Message'
+    '#title': Message
     '#type': textarea
     '#required': true
 css: ''

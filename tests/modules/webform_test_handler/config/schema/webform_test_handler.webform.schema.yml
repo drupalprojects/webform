@@ -1,4 +1,4 @@
-# Schema for the configuration files of the webform test module.
+# Schema for the configuration files of the webform test handler module.
 
 webform.handler.test:
   type: mapping

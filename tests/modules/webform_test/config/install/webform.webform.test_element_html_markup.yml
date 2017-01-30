@@ -34,30 +34,30 @@ elements: |
     '#title': '<u>Advanced elements</u>'
     '#open': true
     webform_autocomplete:
-      '#type': autocomplete
+      '#type': webform_autocomplete
       '#title': '<u>Autocomplete</u>'
       '#autocomplete_items': country_names
     captcha:
       '#type': captcha
       '#title': '<u>CAPTCHA</u>'
     webform_codemirror:
-      '#type': codemirror
+      '#type': webform_codemirror
       '#title': '<u>CodeMirror</u>'
       '#mode': yaml
     color:
       '#type': color
       '#title': '<u>Color</u>'
     webform_creditcard_number:
-      '#type': creditcard_number
+      '#type': webform_creditcard_number
       '#title': '<u>Credit card number</u>'
     email:
       '#type': email
       '#title': '<u>Email</u>'
     webform_email_confirm:
-      '#type': email_confirm
+      '#type': webform_email_confirm
       '#title': '<u>Email confirm</u>'
     webform_email_multiple:
-      '#type': email_multiple
+      '#type': webform_email_multiple
       '#title': '<u>Email multiple</u>'
     number:
       '#type': number
@@ -79,13 +79,13 @@ elements: |
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
     webform_rating:
-      '#type': rating
+      '#type': webform_rating
       '#title': '<u>Rating</u>'
     search:
       '#type': search
       '#title': '<u>Search</u>'
     webform_signature:
-      '#type': signature
+      '#type': webform_signature
       '#title': '<u>Signature</u>'
     tel:
       '#type': tel
@@ -95,7 +95,7 @@ elements: |
       '#title': '<u>Text format</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden webform state</a><br/><a href="https://www.drupal.org/node/1954968">Issue #1954968: Required CKEditor fields always fail HTML5 validation</a>'
     webform_toggle:
-      '#type': toggle
+      '#type': webform_toggle
       '#title': '<u>Toggle</u>'
     url:
       '#type': url
@@ -108,27 +108,27 @@ elements: |
     '#title': '<u>File upload elements</u>'
     '#open': true
     webform_audio_file:
-      '#type': audio_file
+      '#type': webform_audio_file
       '#title': '<u>Audio file</u>'
     webform_document_file:
-      '#type': document_file
+      '#type': webform_document_file
       '#title': '<u>Document file</u>'
     managed_file:
       '#type': managed_file
       '#title': '<u>File</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
     webform_image_file:
-      '#type': image_file
+      '#type': webform_image_file
       '#title': '<u>Image file</u>'
     webform_video_file:
-      '#type': video_file
+      '#type': webform_video_file
       '#title': '<u>Video file</u>'
   options_elements:
     '#type': details
     '#title': '<u>Options elements</u>'
     '#open': true
     webform_buttons:
-      '#type': buttons
+      '#type': webform_buttons
       '#title': '<u>Buttons</u>'
       '#options':
         one: One
@@ -137,7 +137,7 @@ elements: |
         four: Four
         five: Five
     webform_buttons_other:
-      '#type': buttons_other
+      '#type': webform_buttons_other
       '#title': '<u>Buttons other</u>'
       '#options':
         one: One
@@ -156,7 +156,7 @@ elements: |
         four: Four
         five: Five
     webform_checkboxes_other:
-      '#type': checkboxes_other
+      '#type': webform_checkboxes_other
       '#title': '<u>Checkboxes other</u>'
       '#options':
         one: One
@@ -165,7 +165,7 @@ elements: |
         four: Four
         five: Five
     webform_likert:
-      '#type': likert
+      '#type': webform_likert
       '#title': '<u>Likert</u>'
       '#questions':
         q1: 'Please answer question 1?'
@@ -188,7 +188,7 @@ elements: |
         four: Four
         five: Five
     webform_radios_other:
-      '#type': radios_other
+      '#type': webform_radios_other
       '#title': '<u>Radios other</u>'
       '#options':
         one: One
@@ -207,7 +207,7 @@ elements: |
         four: Four
         five: Five
     webform_select_other:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': '<u>Select other</u>'
       '#options':
         one: One
@@ -225,7 +225,7 @@ elements: |
         four: Four
         five: Five
     webform_tableselect_sort:
-      '#type': tableselect_sort
+      '#type': webform_tableselect_sort
       '#title': '<u>Tableselect sort</u>'
       '#options':
         one: One
@@ -234,7 +234,7 @@ elements: |
         four: Four
         five: Five
     webform_table_sort:
-      '#type': table_sort
+      '#type': webform_table_sort
       '#title': '<u>Table sort</u>'
       '#options':
         one: One
@@ -243,7 +243,7 @@ elements: |
         four: Four
         five: Five
     webform_toggles:
-      '#type': toggles
+      '#type': webform_toggles
       '#title': '<u>Toggles</u>'
       '#options':
         one: One
@@ -300,7 +300,7 @@ elements: |
       '#type': datelist
       '#title': '<u>Date list</u>'
     webform_time:
-      '#type': time
+      '#type': webform_time
       '#title': '<u>Time</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1838234">Issue #1838234: Add jQuery Timepicker for the Time element of the datetime field</a>'
   entity_reference_elements:
@@ -316,21 +316,21 @@ elements: |
       '#selection_settings':
         include_anonymous: true
     webform_entity_checkboxes:
-      '#type': entity_checkboxes
+      '#type': webform_entity_checkboxes
       '#title': '<u>Entity checkboxes</u>'
       '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
     webform_entity_radios:
-      '#type': entity_radios
+      '#type': webform_entity_radios
       '#title': '<u>Entity radios</u>'
       '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
     webform_entity_select:
-      '#type': entity_select
+      '#type': webform_entity_select
       '#title': '<u>Entity select</u>'
       '#target_type': user
       '#selection_handler': 'default:user'
@@ -341,13 +341,13 @@ elements: |
     '#title': '<u>Markup elements</u>'
     '#open': true
     webform_markup:
-      '#type': markup
+      '#type': webform_markup
       '#title': '<u>HTML markup</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
       webform_markup_content:
         '#markup': 'This is a HTML markup container.'
     webform_message:
-      '#type': message
+      '#type': webform_message
       '#title': '<u>Message</u>'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
       '#message_type': warning
@@ -364,7 +364,7 @@ elements: |
     '#title': '<u>Other elements</u>'
     '#open': true
     webform_element:
-      '#type': element
+      '#type': webform_element
       '#title': '<u>Generic element</u>'
     language_select:
       '#type': language_select

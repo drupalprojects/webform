@@ -15,23 +15,23 @@ elements: |
     '#title': Minlength
     '#open': true
     minlength_textfield:
-      '#type': 'textfield'
-      '#title': 'minlength_textfield'
+      '#type': textfield
+      '#title': minlength_textfield
       '#minlength': 5
-      '#default_value': 'value'
+      '#default_value': value
   unique:
     '#type': details
     '#title': Unique
     '#open': true
     unique_textfield:
-      '#type': 'textfield'
-      '#title': 'unique_textfield'
+      '#type': textfield
+      '#title': unique_textfield
       '#description': '#unique property is validated by single value elements'
       '#unique': true
-      '#default_value': 'value'
+      '#default_value': value
     unique_checkboxes:
       '#type': checkboxes
-      '#title': 'unique_checkboxes'
+      '#title': unique_checkboxes
       '#description': '#unique property is ignored by multiple value elements'
       '#unique': true
       '#options':

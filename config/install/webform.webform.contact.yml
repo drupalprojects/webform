@@ -21,12 +21,12 @@ elements: |
     '#required': true
     '#default_value': '[webform-authenticated-user:mail]'
   subject:
-    '#title': 'Subject'
+    '#title': Subject
     '#type': textfield
     '#required': true
     '#test': 'Testing contact webform from [site:name]'
   message:
-    '#title': 'Message'
+    '#title': Message
     '#type': textarea
     '#required': true
     '#test': 'Please ignore this email.'

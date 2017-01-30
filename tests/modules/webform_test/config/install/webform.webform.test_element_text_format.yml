@@ -12,8 +12,8 @@ description: 'Test text webform element support.'
 elements: |
   text_format:
     '#type': text_format
-    '#title': 'text_format'
-    '#format': 'plain_text'
+    '#title': text_format
+    '#format': plain_text
     '#default_value': 'The quick brown fox jumped over the lazy dog.'
 css: ''
 javascript: ''

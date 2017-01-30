@@ -38,7 +38,7 @@ elements: |
         1: One
         2: Two
         3: Three
-        other: 'Other...'
+        other: Other...
     select_other:
       '#type': textfield
       '#attributes':
@@ -68,17 +68,25 @@ elements: |
         placeholder: 'Enter other...'
       '#states':
         visible:
-          - ':input[name="select_multiple"]':
-              - value: 1
+          -
+            ':input[name="select_multiple"]':
+              -
+                value: 1
           - or
-          - ':input[name="select_multiple"]':
-              - value: 2
+          -
+            ':input[name="select_multiple"]':
+              -
+                value: 2
         required:
-          - ':input[name="select_multiple"]':
-              - value: 1
+          -
+            ':input[name="select_multiple"]':
+              -
+                value: 1
           - or
-          - ':input[name="select_multiple"]':
-              - value: 2
+          -
+            ':input[name="select_multiple"]':
+              -
+                value: 2
   radios_example:
     '#type': details
     '#title': 'Radio buttons with other example'
@@ -90,7 +98,7 @@ elements: |
         1: One
         2: Two
         3: Three
-        other: 'Other...'
+        other: Other...
     radios_other:
       '#type': textfield
       '#attributes':
@@ -110,7 +118,7 @@ elements: |
       '#type': checkbox
       '#title': 'Please check this box to enter more information'
     checkbox_more_details:
-      '#type': 'details'
+      '#type': details
       '#title': 'More information'
       '#open': true
       '#states':

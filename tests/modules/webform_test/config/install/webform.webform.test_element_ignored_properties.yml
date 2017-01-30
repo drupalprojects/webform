@@ -11,15 +11,11 @@ title: 'Test: Element: Ignore properties'
 description: 'Test ignored element properties and callbacks.'
 elements: |
   test:
-    '#type': 'textfield'
-    '#title': 'test'
-    # Copied from: \Drupal\webform\Utility\WebformElementHelper::$ignoredProperties;
-    # Properties that will break webform data handling.
+    '#type': textfield
+    '#title': test
     '#tree': '#tree'
     '#array_parents': '#array_parents'
-    # Properties that will cause unpredictable rendering.
     '#weight': '#weight'
-    # Callbacks are blocked to prevent unwanted code executions.
     '#after_build': '#after_build'
     '#element_validate': '#element_validate'
     '#post_render': '#post_render'

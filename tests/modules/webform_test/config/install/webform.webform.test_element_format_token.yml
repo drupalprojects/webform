@@ -12,7 +12,7 @@ description: 'Test element formatting using tokens.'
 elements: |
   checkboxes:
     '#type': checkboxes
-    '#title': 'checkboxes'
+    '#title': checkboxes
     '#options':
       1: one
       2: two

@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_signature
@@ -17,7 +15,7 @@ elements: |
     '#title': 'Signature Elements'
     '#open': true
     signature_basic:
-      '#type': signature
+      '#type': webform_signature
       '#title': 'Signature basic'
 css: ''
 javascript: ''

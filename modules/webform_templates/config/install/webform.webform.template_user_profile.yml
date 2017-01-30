@@ -18,7 +18,7 @@ elements: |
       '#title': 'User Name'
     picture:
       '#type': managed_file
-      '#title': 'Picture'
+      '#title': Picture
       '#description': 'Your virtual face or picture. Pictures larger than 1024x1024 pixels will be scaled down.'
       '#max_filesize': '2'
       '#file_extensions': 'gif jpg png svg'
@@ -35,15 +35,15 @@ elements: |
       '#required': true
     country:
       '#type': select
-      '#title': 'Country'
+      '#title': Country
       '#options': country_names
     location:
-      '#type': location
-      '#title': 'Location'
+      '#type': webform_location
+      '#title': Location
       '#title_display': invisible
       '#description': 'Your location will be saved and may be shared.'
       '#geolocation': true
-      '#address__title': 'Locations'
+      '#address__title': Locations
     languages:
       '#type': select
       '#title': 'Languages Spoken'
@@ -53,26 +53,26 @@ elements: |
       '#options': languages
     gender:
       '#type': radios
-      '#title': 'Gender'
+      '#title': Gender
       '#options': gender
     biography:
       '#type': text_format
-      '#title': 'Biography'
+      '#title': Biography
       '#description': 'Please include a short blurb about yourself to let us know who you are outside of Drupal.'
     website:
       '#type': url
-      '#title': 'Website'
+      '#title': Website
     irc:
       '#type': textfield
-      '#title': 'IRC'
+      '#title': IRC
       '#description': 'The nickname you use on various channels of irc.freenode.net'
     twitter:
       '#type': textfield
-      '#title': 'Twitter'
+      '#title': Twitter
       '#description': 'Your Twitter handle.'
     github:
       '#type': textfield
-      '#title': 'GitHub'
+      '#title': GitHub
       '#description': 'Your GitHub user name.'
   work_information:
     '#title': 'Your Work Information'
@@ -88,7 +88,7 @@ elements: |
       '#title': 'Past Organizations'
       '#description': 'List companies or institutions you have worked for.'
     industries:
-      '#type': select_other
+      '#type': webform_select_other
       '#title': 'Industries Worked In'
       '#options': industry
       '#multiple': true
@@ -101,7 +101,7 @@ elements: |
       '#title': 'Primary E-mall Address'
       '#description': 'Enter your primary e-mail addresses, which will be used for all e-mail communications.'
     emails:
-      '#type': email_multiple
+      '#type': webform_email_multiple
       '#title': 'Secondary E-mall Addresses'
       '#description': 'Enter multiple e-mail addresses separated by commas.'
   regional_settings:
@@ -109,7 +109,7 @@ elements: |
     '#type': fieldset
     time_zone:
       '#type': select
-      '#title': 'Timezone'
+      '#title': Timezone
       '#options': time_zones
     language:
       '#type': select

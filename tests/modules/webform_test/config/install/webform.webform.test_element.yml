@@ -12,11 +12,11 @@ description: 'Test instances of all supported webform elements.'
 elements: |
   hidden:
     '#type': hidden
-    '#title': 'hidden'
+    '#title': hidden
     '#value': '{hidden}'
   value:
     '#type': value
-    '#title': 'value'
+    '#title': value
     '#value': '{value}'
   markup_elements:
     '#type': details
@@ -34,12 +34,12 @@ elements: |
     markup:
       '#markup': '<p>{markup}</p>'
     processed_text:
-      '#format': 'plain_text'
+      '#format': plain_text
       '#text': '<p>{processed_text}</p>'
       '#type': processed_text
     label:
       '#type': label
-      '#title': 'label'
+      '#title': label
       '#required': true
     container:
       '#type': container
@@ -51,22 +51,19 @@ elements: |
     '#open': true
     textarea:
       '#type': textarea
-      '#title': 'textarea'
-      '#default_value': |
-        {textarea line 1}
-        {textarea line 2}
-  
+      '#title': textarea
+      '#default_value': "{textarea line 1}\n{textarea line 2}\n"
     textfield:
       '#type': textfield
-      '#title': 'textfield'
+      '#title': textfield
       '#default_value': '{textfield}'
     password:
       '#type': password
-      '#title': 'password'
+      '#title': password
       '#default_value': '{password}'
     select:
       '#type': select
-      '#title': 'select'
+      '#title': select
       '#options':
         1: one
         2: two
@@ -74,7 +71,7 @@ elements: |
       '#default_value': 1
     select_multiple:
       '#type': select
-      '#title': 'select_multiple'
+      '#title': select_multiple
       '#multiple': true
       '#options':
         1: one
@@ -85,11 +82,11 @@ elements: |
         - 2
     checkbox:
       '#type': checkbox
-      '#title': 'checkbox'
+      '#title': checkbox
       '#default_value': 1
     checkboxes:
       '#type': checkboxes
-      '#title': 'checkboxes'
+      '#title': checkboxes
       '#options':
         1: one
         2: two
@@ -99,48 +96,48 @@ elements: |
         - 2
     radios:
       '#type': radios
-      '#title': 'radios'
+      '#title': radios
       '#options':
-        Yes: Yes
-        No: No
-      '#default_value': Yes
+        'Yes': 'Yes'
+        'No': 'No'
+      '#default_value': 'Yes'
   html5_elements:
     '#type': details
     '#title': 'HTML5 Elements'
     '#open': true
     email:
       '#type': email
-      '#title': 'email'
-      '#default_value': 'example@example.com'
+      '#title': email
+      '#default_value': example@example.com
     number:
       '#type': number
-      '#title': 'number'
+      '#title': number
       '#min': 0
       '#max': 10
       '#step': 1
       '#default_value': 1
     range:
       '#type': range
-      '#title': 'range'
+      '#title': range
       '#min': 0
       '#max': 10
       '#step': 1
       '#default_value': 1
     tel:
       '#type': tel
-      '#title': 'tel'
-      '#default_value': '999-999-9999'
+      '#title': tel
+      '#default_value': 999-999-9999
     url:
       '#type': url
-      '#title': 'url'
+      '#title': url
       '#default_value': 'http://example.com'
     color:
       '#type': color
-      '#title': 'color'
+      '#title': color
       '#default_value': '#ffffcc'
     weight:
       '#type': weight
-      '#title': 'weight'
+      '#title': weight
       '#default_value': 0
   date_elements:
     '#type': details
@@ -148,17 +145,17 @@ elements: |
     '#open': true
     date:
       '#type': date
-      '#title': 'date'
+      '#title': date
       '#format': 'l, F j, Y'
       '#default_value': '2009-08-18'
     datetime:
       '#type': datetime
-      '#title': 'datetime'
+      '#title': datetime
       '#format': 'l, F j, Y - g:i A'
       '#default_value': '2009-08-18T01:00:00-05:00'
     datelist:
       '#type': datelist
-      '#title': 'datelist'
+      '#title': datelist
       '#date_part_order':
         - month
         - day
@@ -175,11 +172,11 @@ elements: |
     '#open': true
     dollars:
       '#type': number
-      '#title': 'dollars'
+      '#title': dollars
       '#min': 0
       '#step': 1
       '#default_value': 100
-      '#field_prefix': '$'
+      '#field_prefix': $
       '#field_suffix': '.00'
   drupal_elements:
     '#type': details
@@ -187,22 +184,22 @@ elements: |
     '#open': true
     text_format:
       '#type': text_format
-      '#title': 'text_format'
-      '#format': 'full_html'
+      '#title': text_format
+      '#format': full_html
       '#default_value': '<p>The quick brown fox jumped over the lazy dog.</p>'
     entity_autocomplete_user:
-      '#type': 'entity_autocomplete'
+      '#type': entity_autocomplete
       '#title': 'entity_autocomplete (user)'
-      '#target_type': 'user'
+      '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
       '#default_value': 1
     entity_autocomplete_users:
-      '#type': 'entity_autocomplete'
+      '#type': entity_autocomplete
       '#title': 'entity_autocomplete (user tags)'
       '#tags': true
-      '#target_type': 'user'
+      '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
@@ -211,18 +208,17 @@ elements: |
         - 2
         - 3
     language_select:
-      '#type': 'language_select'
-      '#title': 'language_select'
-      # See: \Drupal\Core\Language\LanguageInterface::STATE_ALL
+      '#type': language_select
+      '#title': language_select
       '#languages': 3
-      '#default_value': 'en'
+      '#default_value': en
     password_confirm:
       '#type': password_confirm
-      '#title': 'password_confirm'
+      '#title': password_confirm
       '#default_value': '{default_value}'
     tableselect:
       '#type': tableselect
-      '#title': 'tableselect'
+      '#title': tableselect
       '#options':
         1: one
         2: two

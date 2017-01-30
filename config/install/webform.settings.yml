@@ -42,7 +42,7 @@ assets:
 export:
   exporter: delimited
   delimiter: ','
-  multiple_delimiter: ';'
+  multiple_delimiter: ;
   excel: false
   file_name: 'submission-[webform_submission:serial]'
   header_format: label

@@ -93,7 +93,7 @@ elements: |
       '#type': details
       '#title': 'Checkboxes other'
       webform_checkboxes_other_comma:
-        '#type': checkboxes_other
+        '#type': webform_checkboxes_other
         '#title': 'Checkboxes other (Comma)'
         '#options':
           one: One
@@ -107,7 +107,7 @@ elements: |
           - three
         '#format_items': comma
       webform_checkboxes_other_semicolon:
-        '#type': checkboxes_other
+        '#type': webform_checkboxes_other
         '#title': 'Checkboxes other (Semicolon)'
         '#options':
           one: One
@@ -121,7 +121,7 @@ elements: |
           - three
         '#format_items': semicolon
       webform_checkboxes_other_and:
-        '#type': checkboxes_other
+        '#type': webform_checkboxes_other
         '#title': 'Checkboxes other (And)'
         '#options':
           one: One
@@ -135,7 +135,7 @@ elements: |
           - three
         '#format_items': and
       webform_checkboxes_other_ol:
-        '#type': checkboxes_other
+        '#type': webform_checkboxes_other
         '#title': 'Checkboxes other (Ordered list)'
         '#options':
           one: One
@@ -149,7 +149,7 @@ elements: |
           - three
         '#format_items': ol
       webform_checkboxes_other_ul:
-        '#type': checkboxes_other
+        '#type': webform_checkboxes_other
         '#title': 'Checkboxes other (Unordered list)'
         '#options':
           one: One
@@ -244,7 +244,7 @@ elements: |
       '#type': details
       '#title': 'Select other'
       webform_select_other_comma:
-        '#type': select_other
+        '#type': webform_select_other
         '#title': 'Select other (Comma)'
         '#options':
           one: One
@@ -259,7 +259,7 @@ elements: |
           - three
         '#format_items': comma
       webform_select_other_semicolon:
-        '#type': select_other
+        '#type': webform_select_other
         '#title': 'Select other (Semicolon)'
         '#options':
           one: One
@@ -274,7 +274,7 @@ elements: |
           - three
         '#format_items': semicolon
       webform_select_other_and:
-        '#type': select_other
+        '#type': webform_select_other
         '#title': 'Select other (And)'
         '#options':
           one: One
@@ -289,7 +289,7 @@ elements: |
           - three
         '#format_items': and
       webform_select_other_ol:
-        '#type': select_other
+        '#type': webform_select_other
         '#title': 'Select other (Ordered list)'
         '#options':
           one: One
@@ -304,7 +304,7 @@ elements: |
           - three
         '#format_items': ol
       webform_select_other_ul:
-        '#type': select_other
+        '#type': webform_select_other
         '#title': 'Select other (Unordered list)'
         '#options':
           one: One
@@ -400,7 +400,7 @@ elements: |
       '#type': details
       '#title': 'Tableselect sort'
       webform_tableselect_sort_comma:
-        '#type': tableselect_sort
+        '#type': webform_tableselect_sort
         '#title': 'Tableselect sort (Comma)'
         '#options':
           one: One
@@ -414,7 +414,7 @@ elements: |
           - three
         '#format_items': comma
       webform_tableselect_sort_semicolon:
-        '#type': tableselect_sort
+        '#type': webform_tableselect_sort
         '#title': 'Tableselect sort (Semicolon)'
         '#options':
           one: One
@@ -428,7 +428,7 @@ elements: |
           - three
         '#format_items': semicolon
       webform_tableselect_sort_and:
-        '#type': tableselect_sort
+        '#type': webform_tableselect_sort
         '#title': 'Tableselect sort (And)'
         '#options':
           one: One
@@ -442,7 +442,7 @@ elements: |
           - three
         '#format_items': and
       webform_tableselect_sort_ol:
-        '#type': tableselect_sort
+        '#type': webform_tableselect_sort
         '#title': 'Tableselect sort (Ordered list)'
         '#options':
           one: One
@@ -456,7 +456,7 @@ elements: |
           - three
         '#format_items': ol
       webform_tableselect_sort_ul:
-        '#type': tableselect_sort
+        '#type': webform_tableselect_sort
         '#title': 'Tableselect sort (Unordered list)'
         '#options':
           one: One
@@ -473,7 +473,7 @@ elements: |
       '#type': details
       '#title': 'Table sort'
       webform_table_sort_comma:
-        '#type': table_sort
+        '#type': webform_table_sort
         '#title': 'Table sort (Comma)'
         '#options':
           one: One
@@ -487,7 +487,7 @@ elements: |
           - three
         '#format_items': comma
       webform_table_sort_semicolon:
-        '#type': table_sort
+        '#type': webform_table_sort
         '#title': 'Table sort (Semicolon)'
         '#options':
           one: One
@@ -501,7 +501,7 @@ elements: |
           - three
         '#format_items': semicolon
       webform_table_sort_and:
-        '#type': table_sort
+        '#type': webform_table_sort
         '#title': 'Table sort (And)'
         '#options':
           one: One
@@ -515,7 +515,7 @@ elements: |
           - three
         '#format_items': and
       webform_table_sort_ol:
-        '#type': table_sort
+        '#type': webform_table_sort
         '#title': 'Table sort (Ordered list)'
         '#options':
           one: One
@@ -529,7 +529,7 @@ elements: |
           - three
         '#format_items': ol
       webform_table_sort_ul:
-        '#type': table_sort
+        '#type': webform_table_sort
         '#title': 'Table sort (Unordered list)'
         '#options':
           one: One
@@ -546,7 +546,7 @@ elements: |
       '#type': details
       '#title': Toggles
       webform_toggles_comma:
-        '#type': toggles
+        '#type': webform_toggles
         '#title': 'Toggles (Comma)'
         '#options':
           one: One
@@ -560,7 +560,7 @@ elements: |
           - three
         '#format_items': comma
       webform_toggles_semicolon:
-        '#type': toggles
+        '#type': webform_toggles
         '#title': 'Toggles (Semicolon)'
         '#options':
           one: One
@@ -574,7 +574,7 @@ elements: |
           - three
         '#format_items': semicolon
       webform_toggles_and:
-        '#type': toggles
+        '#type': webform_toggles
         '#title': 'Toggles (And)'
         '#options':
           one: One
@@ -588,7 +588,7 @@ elements: |
           - three
         '#format_items': and
       webform_toggles_ol:
-        '#type': toggles
+        '#type': webform_toggles
         '#title': 'Toggles (Ordered list)'
         '#options':
           one: One
@@ -602,7 +602,7 @@ elements: |
           - three
         '#format_items': ol
       webform_toggles_ul:
-        '#type': toggles
+        '#type': webform_toggles
         '#title': 'Toggles (Unordered list)'
         '#options':
           one: One
@@ -681,7 +681,7 @@ elements: |
       '#type': details
       '#title': 'Entity checkboxes'
       webform_entity_checkboxes_comma:
-        '#type': entity_checkboxes
+        '#type': webform_entity_checkboxes
         '#title': 'Entity checkboxes (Comma)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -691,7 +691,7 @@ elements: |
           - 1
         '#format_items': comma
       webform_entity_checkboxes_semicolon:
-        '#type': entity_checkboxes
+        '#type': webform_entity_checkboxes
         '#title': 'Entity checkboxes (Semicolon)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -701,7 +701,7 @@ elements: |
           - 1
         '#format_items': semicolon
       webform_entity_checkboxes_and:
-        '#type': entity_checkboxes
+        '#type': webform_entity_checkboxes
         '#title': 'Entity checkboxes (And)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -711,7 +711,7 @@ elements: |
           - 1
         '#format_items': and
       webform_entity_checkboxes_ol:
-        '#type': entity_checkboxes
+        '#type': webform_entity_checkboxes
         '#title': 'Entity checkboxes (Ordered list)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -721,7 +721,7 @@ elements: |
           - 1
         '#format_items': ol
       webform_entity_checkboxes_ul:
-        '#type': entity_checkboxes
+        '#type': webform_entity_checkboxes
         '#title': 'Entity checkboxes (Unordered list)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -734,7 +734,7 @@ elements: |
       '#type': details
       '#title': 'Entity select'
       webform_entity_select_comma:
-        '#type': entity_select
+        '#type': webform_entity_select
         '#title': 'Entity select (Comma)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -745,7 +745,7 @@ elements: |
           - 1
         '#format_items': comma
       webform_entity_select_semicolon:
-        '#type': entity_select
+        '#type': webform_entity_select
         '#title': 'Entity select (Semicolon)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -756,7 +756,7 @@ elements: |
           - 1
         '#format_items': semicolon
       webform_entity_select_and:
-        '#type': entity_select
+        '#type': webform_entity_select
         '#title': 'Entity select (And)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -767,7 +767,7 @@ elements: |
           - 1
         '#format_items': and
       webform_entity_select_ol:
-        '#type': entity_select
+        '#type': webform_entity_select
         '#title': 'Entity select (Ordered list)'
         '#target_type': user
         '#selection_handler': 'default:user'
@@ -778,7 +778,7 @@ elements: |
           - 1
         '#format_items': ol
       webform_entity_select_ul:
-        '#type': entity_select
+        '#type': webform_entity_select
         '#title': 'Entity select (Unordered list)'
         '#target_type': user
         '#selection_handler': 'default:user'

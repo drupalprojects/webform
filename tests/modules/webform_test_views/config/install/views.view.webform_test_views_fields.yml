@@ -1,11 +1,11 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - system.menu.admin
   enforced:
     module:
       - webform_test_views
-  config:
-    - system.menu.admin
   module:
     - user
     - webform

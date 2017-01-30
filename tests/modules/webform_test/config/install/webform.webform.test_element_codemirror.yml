@@ -4,8 +4,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-  module:
-    - webform_test
 uid: null
 template: false
 id: test_element_codemirror
@@ -15,14 +13,14 @@ elements: |
   '#attributes':
     novalidate: novalidate
   text_basic:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#title': 'Text basic'
   yaml_basic:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': yaml
     '#title': 'YAML basic'
   yaml_array:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': yaml
     '#title': 'YAML array'
     '#description': 'Pass an associative array as the default value'
@@ -31,7 +29,7 @@ elements: |
       two: Two
       three: Three
   html_basic:
-    '#type': codemirror
+    '#type': webform_codemirror
     '#mode': html
     '#title': 'HTML basic'
 css: ''

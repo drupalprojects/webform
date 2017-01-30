@@ -17,7 +17,7 @@ elements: |
       '#type': checkbox
       '#title': 'Trigger checked'
     checked_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Checked triggered'
       '#states':
         visible:
@@ -34,13 +34,15 @@ elements: |
         two: 'Two (show)'
         three: 'Three (hide)'
     checked_multiple_and_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Checked multiple triggered using AND operator'
       '#states':
         visible:
-          - ':input[name="checked_multiple_and_trigger[one]"]':
+          -
+            ':input[name="checked_multiple_and_trigger[one]"]':
               checked: true
-          - ':input[name="checked_multiple_and_trigger[two]"]':
+          -
+            ':input[name="checked_multiple_and_trigger[two]"]':
               checked: true
   checked_multiple_or:
     '#type': details
@@ -53,13 +55,15 @@ elements: |
         two: 'Two (show)'
         three: 'Three (hide)'
     checked_multiple_or_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Checked multiple using OR operator triggered'
       '#states':
         visible:
-          - ':input[name="checked_multiple_or_trigger[one]"]':
+          -
+            ':input[name="checked_multiple_or_trigger[one]"]':
               checked: true
-          - ':input[name="checked_multiple_or_trigger[two]"]':
+          -
+            ':input[name="checked_multiple_or_trigger[two]"]':
               checked: true
   checked_multiple_xor:
     '#type': details
@@ -72,14 +76,16 @@ elements: |
         two: 'Two (show)'
         three: 'Three (hide)'
     checked_multiple_xor_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Checked multiple using XOR operator triggered'
       '#states':
         visible:
-          - ':input[name="checked_multiple_xor_trigger[one]"]':
+          -
+            ':input[name="checked_multiple_xor_trigger[one]"]':
               checked: true
           - xor
-          - ':input[name="checked_multiple_xor_trigger[two]"]':
+          -
+            ':input[name="checked_multiple_xor_trigger[two]"]':
               checked: true
   value:
     '#type': details
@@ -92,7 +98,7 @@ elements: |
         hide: hide
         show: show
     value_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Value triggered'
       '#states':
         visible:
@@ -105,7 +111,7 @@ elements: |
       '#type': textfield
       '#title': 'Trigger filled'
     filled_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Filled triggered'
       '#states':
         visible:
@@ -119,7 +125,7 @@ elements: |
       '#type': details
       '#title': 'Trigger collapsed'
     collapsed_markup:
-      '#type': markup
+      '#type': webform_markup
       '#markup': 'Collapsed triggered'
       '#states':
         visible:
