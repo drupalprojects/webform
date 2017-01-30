@@ -41,7 +41,7 @@ function webform_test_test_element_flexbox_flex() {
   $elements = [];
   foreach ($grid as $row_index => $row) {
     $elements["row_$row_index"] = [
-      '#type' => 'flexbox',
+      '#type' => 'webform_flexbox',
     ];
     foreach ($row as $col_index => $flex) {
       $elements["row_$row_index"]["row_{$row_index}_col_{$col_index}"] = [

@@ -553,6 +553,19 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_link:
+      '#type': webform_link
+      '#title': Link
+      '#default_value':
+        title: Loremipsum
+        url: 'http://example.com'
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_webform_location:
       '#type': webform_location
       '#title': Location
@@ -1337,6 +1350,16 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_webform_link:
+      '#type': webform_link
+      '#title': Link
+      '#default_value':
+        title: Loremipsum
+        url: 'http://example.com'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_webform_location:
       '#type': webform_location
       '#title': Location
@@ -1930,6 +1953,16 @@ elements: |
         q1: 1
         q2: 1
         q3: 1
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_webform_link:
+      '#type': webform_link
+      '#title': Link
+      '#default_value':
+        title: Loremipsum
+        url: 'http://example.com'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

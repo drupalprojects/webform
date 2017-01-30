@@ -39,7 +39,14 @@ class WebformAddress extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  protected function formatLines(array $element, array $value) {
+  protected function formatHtmlItemValue(array $element, array $value) {
+    return $this->formatTextItemValue($element, $value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function formatTextItemValue(array $element, array $value) {
     $lines = [];
     if (!empty($value['address'])) {
       $lines['address'] = $value['address'];

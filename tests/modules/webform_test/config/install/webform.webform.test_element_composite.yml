@@ -80,6 +80,12 @@ elements: |
         civ: 111
         expiration_month: 1
         expiration_year: 2025
+    link_basic:
+      '#type': webform_link
+      '#title': 'Link'
+      '#default_value':
+        title: Example
+        url: http://example.com
 css: ''
 javascript: ''
 settings:

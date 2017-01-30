@@ -508,6 +508,30 @@ elements: |
           expiration_month: 1
           expiration_year: 2017
         '#format': list
+    webform_link:
+      '#type': details
+      '#title': Link
+      webform_link_value:
+        '#type': webform_link
+        '#title': 'Link (Value)'
+        '#default_value':
+          title: Loremipsum
+          url: 'http://example.com'
+        '#format': value
+      webform_link_raw:
+        '#type': webform_link
+        '#title': 'Link (Raw value)'
+        '#default_value':
+          title: Loremipsum
+          url: 'http://example.com'
+        '#format': raw
+      webform_link_list:
+        '#type': webform_link
+        '#title': 'Link (List)'
+        '#default_value':
+          title: Loremipsum
+          url: 'http://example.com'
+        '#format': list
     webform_location:
       '#type': details
       '#title': Location

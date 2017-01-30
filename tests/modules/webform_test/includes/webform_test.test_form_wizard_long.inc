@@ -23,7 +23,7 @@ function webform_test_test_form_wizard_long(WebformInterface $webform) {
   for ($i = 1; $i <= $length; $i++) {
     if (!isset($elements["wizard_$wizard_index"])) {
       $elements["wizard_$wizard_index"] = [
-        '#type' => 'wizard_page',
+        '#type' => 'webform_wizard_page',
         '#title' => (string) t('Wizard page #@index', ['@index' => $wizard_index]),
       ];
     }

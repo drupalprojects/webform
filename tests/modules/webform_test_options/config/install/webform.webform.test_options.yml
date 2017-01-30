@@ -34,6 +34,10 @@ elements: |
     '#type': details
     '#title': 'Biographical options'
     '#open': true
+    titles:
+      '#type': select
+      '#title': 'Titles (titles)'
+      '#options': titles
     education:
       '#type': select
       '#title': 'Education (education)'
@@ -66,22 +70,22 @@ elements: |
       '#type': select
       '#title': 'Relationship (relationship)'
       '#options': relationship
-    titles:
-      '#type': select
-      '#title': 'Titles (titles)'
-      '#options': titles
   location:
     '#type': details
     '#title': 'Location options'
     '#open': true
-    country_codes:
-      '#type': select
-      '#title': 'Country codes (country_codes)'
-      '#options': country_codes
     country_names:
       '#type': select
       '#title': 'Country names (country_names)'
       '#options': country_names
+    state_province_names:
+      '#type': select
+      '#title': 'State/Province names (state_province_names)'
+      '#options': state_province_names
+    country_codes:
+      '#type': select
+      '#title': 'Country codes (country_codes)'
+      '#options': country_codes
     state_codes:
       '#type': select
       '#title': 'State codes (state_codes)'
@@ -94,10 +98,6 @@ elements: |
       '#type': select
       '#title': 'State/Province codes (state_province_codes)'
       '#options': state_province_codes
-    state_province_names:
-      '#type': select
-      '#title': 'State/Province names (state_province_names)'
-      '#options': state_province_names
   date:
     '#type': details
     '#title': 'Date options'

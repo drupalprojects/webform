@@ -58,31 +58,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
   }
 
   /**
-   * Format composite element value into lines of text.
-   *
-   * @param array $element
-   *   A composite element.
-   * @param array $value
-   *   Composite element values.
-   *
-   * @return array
-   *   Composite element values converted into lines of text.
-   */
-  protected function formatLines(array $element, array $value) {
-    $items = [];
-    $composite_elements = $this->getInitializedCompositeElement($element);
-    foreach (RenderElement::children($composite_elements) as $composite_key) {
-      if (isset($value[$composite_key]) && $value[$composite_key] != '') {
-        $composite_element = $composite_elements[$composite_key];
-        $composite_title = $composite_element['#title'];
-        $composite_value = $value[$composite_key];
-        $items[$composite_key] = "<b>$composite_title:</b> $composite_value";
-      }
-    }
-    return $items;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
@@ -401,13 +376,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function isMultiline(array $element) {
-    return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function formatHtmlItem(array &$element, $value, array $options = []) {
     // Return empty value.
     if (empty($value) || empty(array_filter($value))) {
@@ -447,17 +415,19 @@ abstract class WebformCompositeBase extends WebformElementBase {
         ];
 
       default:
-        $lines = $this->formatLines($element, $value);
+        $lines = $this->formatHtmlItemValue($element, $value);
         foreach ($lines as $key => $line) {
-          if ($key == 'email') {
-            $lines[$key] = [
-              '#type' => 'link',
-              '#title' => $line,
-              '#url' => \Drupal::pathValidator()->getUrlIfValid('mailto:' . $line),
-            ];
-          }
-          else {
-            $lines[$key] = ['#markup' => $line];
+          if (is_string($line)) {
+            if ($key == 'email') {
+              $lines[$key] = [
+                '#type' => 'link',
+                '#title' => $line,
+                '#url' => \Drupal::pathValidator()->getUrlIfValid('mailto:' . $line),
+              ];
+            }
+            else {
+              $lines[$key] = ['#markup' => $line];
+            }
           }
           $lines[$key]['#suffix'] = '<br/>';
         }
@@ -515,9 +485,59 @@ abstract class WebformCompositeBase extends WebformElementBase {
         return implode("\n", $items);
 
       default:
-        $lines = $this->formatLines($element, $value);
+        $lines = $this->formatTextItemValue($element, $value);
         return implode("\n", $lines);
     }
+  }
+
+  /**
+   * Format composite element value into lines of text.
+   *
+   * @param array $element
+   *   A composite element.
+   * @param array $value
+   *   Composite element values.
+   *
+   * @return array
+   *   Composite element values converted into lines of html.
+   */
+  protected function formatHtmlItemValue(array $element, array $value) {
+    $items = [];
+    $composite_elements = $this->getInitializedCompositeElement($element);
+    foreach (RenderElement::children($composite_elements) as $composite_key) {
+      if (isset($value[$composite_key]) && $value[$composite_key] != '') {
+        $composite_element = $composite_elements[$composite_key];
+        $composite_title = $composite_element['#title'];
+        $composite_value = $value[$composite_key];
+        $items[$composite_key] = "<b>$composite_title:</b> $composite_value";
+      }
+    }
+    return $items;
+  }
+
+  /**
+   * Format composite element value into lines of text.
+   *
+   * @param array $element
+   *   A composite element.
+   * @param array $value
+   *   Composite element values.
+   *
+   * @return array
+   *   Composite element values converted into lines of text.
+   */
+  protected function formatTextItemValue(array $element, array $value) {
+    $items = [];
+    $composite_elements = $this->getInitializedCompositeElement($element);
+    foreach (RenderElement::children($composite_elements) as $composite_key) {
+      if (isset($value[$composite_key]) && $value[$composite_key] != '') {
+        $composite_element = $composite_elements[$composite_key];
+        $composite_title = $composite_element['#title'];
+        $composite_value = $value[$composite_key];
+        $items[$composite_key] = "$composite_title: $composite_value";
+      }
+    }
+    return $items;
   }
 
   /**

@@ -39,7 +39,7 @@ class WebformContact extends WebformAddress {
   /**
    * {@inheritdoc}
    */
-  protected function formatLines(array $element, array $value) {
+  protected function formatTextItemValue(array $element, array $value) {
     $lines = [];
     if (!empty($value['name'])) {
       $lines['name'] = $value['name'];
@@ -47,7 +47,7 @@ class WebformContact extends WebformAddress {
     if (!empty($value['company'])) {
       $lines['company'] = $value['company'];
     }
-    $lines += parent::formatLines($element, $value);
+    $lines += parent::formatTextItemValue($element, $value);
     if (!empty($value['email'])) {
       $lines['email'] = $value['email'];
     }

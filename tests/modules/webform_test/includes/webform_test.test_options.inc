@@ -52,7 +52,7 @@ function webform_test_test_options() {
     $title = $webform_option->label() . ' (' . $id . ')';
     if (strpos($id, 'likert') === 0) {
       $data['likert'][$id] = [
-        '#type' => 'likert',
+        '#type' => 'webform_likert',
         '#title' => $title,
         '#questions' => [
           'q1' => 'Please answer question 1?',

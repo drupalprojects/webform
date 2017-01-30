@@ -31,6 +31,13 @@ elements: |
     webform_creditcard:
       '#type': webform_creditcard
       '#title': 'Credit card'
+  webform_link_example:
+    '#type': details
+    '#title': Link
+    '#open': true
+    webform_link:
+      '#type': webform_link
+      '#title': Link
   webform_location_example:
     '#type': details
     '#title': Location

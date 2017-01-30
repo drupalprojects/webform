@@ -30,5 +30,4 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: webform_entity_reference_entity_view
-hidden:
-  langcode: true
+hidden: {  }

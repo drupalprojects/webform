@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 /**
  * Implements hook_install().
  */
-function webform_test_install() {
+function webform_test_handler_install() {
 
   // Update 'Test: Handler: Remote post' URLs.
   /** @var \Drupal\webform\WebformInterface $remote_post_webform */

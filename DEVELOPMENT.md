@@ -167,7 +167,7 @@ drush features-export -y webform_test_translation
 drush features-export -y webform_node
 
 # Revert all feature update to *.info.yml files.
-git checkout -- "*.info.yml"
+git checkout -- *.info.yml
 
 # Tidy webform configuration from your site.          
 drush webform-tidy -y --dependencies webform

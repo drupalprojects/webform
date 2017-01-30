@@ -82,6 +82,7 @@ class WebformElementFormatTest extends WebformTestBase {
       'Address (Value)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /><br/><br/>',
       'Address (Raw value)' => '<div class="item-list"><ul><li><b>address:</b> 10 Main Street</li><li><b>address_2:</b> 10 Main Street</li><li><b>city:</b> Springfield</li><li><b>state_province:</b> Alabama</li><li><b>postal_code:</b> Loremipsum</li><li><b>country:</b> Afghanistan</li></ul></div><br/><br/>',
       'Address (List)' => '<div class="item-list"><ul><li><b>Address:</b> 10 Main Street</li><li><b>Address 2:</b> 10 Main Street</li><li><b>City/Town:</b> Springfield</li><li><b>State/Province:</b> Alabama</li><li><b>Zip/Postal Code:</b> Loremipsum</li><li><b>Country:</b> Afghanistan</li></ul></div><br/><br/>',
+      'Link (Value)' => '<a href="http://example.com">Loremipsum</a>',
     ];
     foreach ($elements as $label => $value) {
       $this->assertContains($body, '<b>' . $label . '</b><br/>' . $value, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
@@ -118,6 +119,7 @@ City/Town: Springfield
 State/Province: Alabama
 Zip/Postal Code: Loremipsum
 Country: Afghanistan',
+    'Link (Value): Loremipsum (http://example.com)',
     'Likert (Value):
 Please answer question 1?: 1
 How about now answering question 2?: 1

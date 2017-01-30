@@ -474,6 +474,14 @@ elements: |
         3: 3
         4: 4
         5: 5
+  flexbox_webform_link:
+    '#type': webform_flexbox
+    flex_webform_link_left:
+      '#type': webform_link
+      '#title': 'Link 01'
+    flex_webform_link_right:
+      '#type': webform_link
+      '#title': 'Link 02'
   flexbox_webform_location:
     '#type': webform_flexbox
     flex_webform_location_left:
@@ -783,7 +791,7 @@ elements: |
       '#type': webform_video_file
       '#title': 'Video file 02'
   flexbox_properites:
-    '#type': webform_flexbox
+    '#type': flexbox
     properties_number:
       '#type': number
       '#title': currency
@@ -795,17 +803,17 @@ elements: |
       '#title': textfield
       '#description': 'A description'
   flexbox_toggle:
-    '#type': webform_flexbox
+    '#type': flexbox
     '#align_items': flex-end
     toggle:
-      '#type': webform_toggle
+      '#type': toggle
       '#title': toggle
     toggle_textfield:
       '#type': textfield
       '#title': textfield
       '#flex': 5
     toggle_rating:
-      '#type': webform_rating
+      '#type': rating
       '#title': rating
 css: ''
 javascript: ''
