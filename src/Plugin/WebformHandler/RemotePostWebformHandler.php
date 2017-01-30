@@ -290,6 +290,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $message = $request_exception->getMessage();
       $response = $request_exception->getResponse();
 
+      // Encode HTML entities to prevent broken markup from breaking the page.
+      $message = nl2br(htmlentities($message));
+
       // If debugging is enabled, display the error message on screen.
       $this->debug($message, $operation, $request_url, $request_type, $request_post_data, $response, 'error');
 
