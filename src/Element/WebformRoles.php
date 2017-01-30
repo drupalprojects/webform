@@ -28,7 +28,7 @@ class WebformRoles extends Checkboxes {
   /**
    * Processes a checkboxes webform element.
    */
-  public static function processCheckboxes(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processCheckboxes(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $element['#options'] = array_map('\Drupal\Component\Utility\Html::escape', user_role_names());
 
     // Check if anonymous is included.

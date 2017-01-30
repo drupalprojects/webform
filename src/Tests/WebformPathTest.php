@@ -34,7 +34,7 @@ class WebformPathTest extends WebformTestBase {
       'id' => 'test_paths',
       'title' => 'test_paths',
       'elements' => Yaml::encode([
-        'test' => ['#markup' => 'test']
+        'test' => ['#markup' => 'test'],
       ]),
     ]);
     $webform->save();

@@ -15,7 +15,7 @@ class WebformButtons extends Radios {
   /**
    * Expands a radios element into individual radio elements.
    */
-  public static function processRadios(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processRadios(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $element = parent::processRadios($element, $form_state, $complete_form);
     $element['#attached']['library'][] = 'webform/webform.element.buttons';
     $element['#attributes']['class'][] = 'js-webform-buttons';

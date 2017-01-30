@@ -494,16 +494,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#tree' => TRUE,
     ];
     foreach ($element_plugins as $element_id => $element_plugin) {
-      $items_formats = $element_plugin->getItemsFormats();
-
-      // // Make sure the element has formats.
-      //      if (empty($item_formats)) {
-      //        continue;
-      //      }
-      //      // Skip if the element just uses the default 'value' format.
-      //      if (count($item_formats) == 1 && isset($item_formats['value'])) {
-      //        continue;
-      //      }
       // Element.
       $element_plugin_definition = $element_plugin->getPluginDefinition();
       $element_plugin_label = $element_plugin_definition['label'];

@@ -68,7 +68,7 @@ class WebformElementOptions extends FormElement {
   /**
    * Processes a webform element options element.
    */
-  public static function processWebformElementOptions(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformElementOptions(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $element['#tree'] = TRUE;
 
     // Predefined options.
@@ -143,7 +143,7 @@ class WebformElementOptions extends FormElement {
   /**
    * Validates a webform element options element.
    */
-  public static function validateWebformElementOptions(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformElementOptions(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $options_value = NestedArray::getValue($form_state->getValues(), $element['options']['#parents']);
     $custom_value = NestedArray::getValue($form_state->getValues(), $element['custom']['#parents']);
 

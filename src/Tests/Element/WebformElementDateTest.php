@@ -11,7 +11,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementDateTest extends WebformTestBase  {
+class WebformElementDateTest extends WebformTestBase {
 
   /**
    * Webforms to load.

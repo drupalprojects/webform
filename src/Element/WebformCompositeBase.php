@@ -85,7 +85,7 @@ abstract class WebformCompositeBase extends FormElement {
   /**
    * Processes a composite webform element.
    */
-  public static function processWebformComposite(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformComposite(array &$element, FormStateInterface $form_state, array &$complete_form) {
     if (isset($element['#initialize'])) {
       return $element;
     }
@@ -157,7 +157,7 @@ abstract class WebformCompositeBase extends FormElement {
   /**
    * Validates a composite element.
    */
-  public static function validateWebformComposite(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformComposite(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $value = $element['#value'];
 
     // Validate required composite elements.

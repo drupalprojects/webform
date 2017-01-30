@@ -59,7 +59,7 @@ class WebformEmailConfirm extends FormElement {
   /**
    * Expand an email confirm field into two HTML5 email elements.
    */
-  public static function processWebformEmailConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformEmailConfirm(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $element['#tree'] = TRUE;
 
     // Get shared properties.
@@ -116,7 +116,7 @@ class WebformEmailConfirm extends FormElement {
   /**
    * Validates an email confirm element.
    */
-  public static function validateWebformEmailConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformEmailConfirm(array &$element, FormStateInterface $form_state, array &$complete_form) {
 
     $mail_1 = trim($element['mail_1']['#value']);
     $mail_2 = trim($element['mail_2']['#value']);

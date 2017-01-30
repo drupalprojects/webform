@@ -59,7 +59,7 @@ class WebformMultiple extends FormElement {
   /**
    * Process items and build multiple elements widget.
    */
-  public static function processWebformMultiple(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformMultiple(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $element['#tree'] = TRUE;
 
     // Add validate callback that extracts the array of items.
@@ -403,7 +403,7 @@ class WebformMultiple extends FormElement {
   /**
    * Validates webform list element.
    */
-  public static function validateWebformMultiple(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformMultiple(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // IMPORTANT: Must get values from the $form_states since sub-elements
     // may call $form_state->setValueForElement() via their validation hook.
     // @see \Drupal\webform\Element\WebformEmailConfirm::validateWebformEmailConfirm

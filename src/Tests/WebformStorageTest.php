@@ -2,8 +2,6 @@
 
 namespace Drupal\webform\Tests;
 
-use Drupal\simpletest\WebTestBase;
-
 /**
  * Tests for webform storage tests.
  *

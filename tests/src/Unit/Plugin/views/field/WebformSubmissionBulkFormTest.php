@@ -27,7 +27,7 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
    * Tests the constructor assignment of actions.
    */
   public function testConstructor() {
-    $actions = array();
+    $actions = [];
 
     for ($i = 1; $i <= 2; $i++) {
       $action = $this->getMock('\Drupal\system\ActionConfigEntityInterface');
@@ -62,7 +62,7 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
     $views_data->expects($this->any())
       ->method('get')
       ->with('webform_submission')
-      ->will($this->returnValue(array('table' => array('entity type' => 'webform_submission'))));
+      ->will($this->returnValue(['table' => ['entity type' => 'webform_submission']]));
     $container = new ContainerBuilder();
     $container->set('views.views_data', $views_data);
     $container->set('string_translation', $this->getStringTranslationStub());
@@ -84,9 +84,9 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
       ->getMock();
 
     $definition['title'] = '';
-    $options = array();
+    $options = [];
 
-    $webform_submission_bulk_form = new WebformSubmissionBulkForm(array(), 'webform_submission_bulk_form', $definition, $entity_manager, $language_manager);
+    $webform_submission_bulk_form = new WebformSubmissionBulkForm([], 'webform_submission_bulk_form', $definition, $entity_manager, $language_manager);
     $webform_submission_bulk_form->init($executable, $display, $options);
 
     $this->assertAttributeEquals(array_slice($actions, 0, -1, TRUE), 'actions', $webform_submission_bulk_form);

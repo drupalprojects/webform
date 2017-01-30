@@ -714,7 +714,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return array|string
    *   The element's value formatted as plain text or a render array.
    */
-  protected function format($type = 'Html', array &$element, $value, array $options = []) {
+  protected function format($type, array &$element, $value, array $options = []) {
     // Return empty value.
     if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';
@@ -739,7 +739,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   An element.
-   * @param array
+   * @param array $items
    *   An array of items to be displayed as HTML.
    * @param array $options
    *   An array of options.
@@ -772,7 +772,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   An element.
-   * @param array
+   * @param array $items
    *   An array of items to be displayed as text.
    * @param array $options
    *   An array of options.
@@ -983,9 +983,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
-    return;
-  }
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {}
 
   /**
    * {@inheritdoc}
@@ -1052,11 +1050,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     if (Unicode::strlen($element['#value']) < $element['#minlength']) {
-      $t_args = array(
+      $t_args = [
         '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
         '%min' => $element['#minlength'],
         '%length' => Unicode::strlen($element['#value']),
-      );
+      ];
       $form_state->setError($element, t('%name cannot be less than %min characters but is currently %length characters long.', $t_args));
     }
   }

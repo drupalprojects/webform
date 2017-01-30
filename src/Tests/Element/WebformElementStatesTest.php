@@ -11,7 +11,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementStatesTest extends WebformTestBase  {
+class WebformElementStatesTest extends WebformTestBase {
 
   /**
    * Modules to enable.

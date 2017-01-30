@@ -233,9 +233,9 @@ abstract class WebformTestBase extends WebTestBase {
     foreach ($ids as $id) {
       $this->loadWebform($id);
     }
-    $this->pass(new FormattableMarkup('Loaded webforms: %webforms.', array(
+    $this->pass(new FormattableMarkup('Loaded webforms: %webforms.', [
       '%webforms' => implode(', ', $ids),
-    )));
+    ]));
 
   }
 

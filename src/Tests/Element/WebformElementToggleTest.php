@@ -9,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementToggleTest extends WebformTestBase  {
+class WebformElementToggleTest extends WebformTestBase {
 
   /**
    * Webforms to load.

@@ -5,10 +5,8 @@
  * Support module for webform related testing.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
-
 
 /******************************************************************************/
 // Generate elements.
@@ -148,8 +146,9 @@ function _webform_test_issues() {
  *
  * @param string $type
  *   An element type.
- * @parame array $options
+ * @param array $options
  *   Options for generating the example element.
+ *
  * @return array|bool
  *   An example element or FALSE if the element type can't have an example.
  */

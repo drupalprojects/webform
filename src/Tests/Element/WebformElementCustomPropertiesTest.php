@@ -9,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementCustomPropertiesTest extends WebformTestBase  {
+class WebformElementCustomPropertiesTest extends WebformTestBase {
 
   /**
    * Modules to enable.

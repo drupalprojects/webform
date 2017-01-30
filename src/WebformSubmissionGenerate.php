@@ -135,7 +135,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
    *   The name of the element.
    * @param array $element
    *   The FAPI element.
-   * @param array $option
+   * @param array $options
    *   (options) Options for generated value.
    *
    * @return array|int|null

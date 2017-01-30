@@ -34,7 +34,7 @@ class WebformUiElementPropertiesTest extends WebformTestBase {
 
     // Create users.
     $this->createUsers();
-    
+
     // Create filters.
     $this->createFilters();
   }

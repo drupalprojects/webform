@@ -47,7 +47,7 @@ class WebformCreditCardNumber extends FormElement {
   /**
    * Webform element validation handler for #type 'creditcard_number'.
    */
-  public static function validateWebformCreditCardNumber(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformCreditCardNumber(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $value = trim($element['#value']);
     $form_state->setValueForElement($element, $value);
 
@@ -112,7 +112,7 @@ class WebformCreditCardNumber extends FormElement {
    * @return array
    *   The $element with prepared variables ready for theme_element().
    */
-  public static function preRenderWebformCreditCardNumber($element) {
+  public static function preRenderWebformCreditCardNumber(array $element) {
     $element['#attributes']['type'] = 'text';
     Element::setAttributes($element, ['id', 'name', 'value', 'size', 'maxlength', 'placeholder']);
     static::setAttributes($element, ['form-textfield', 'form-creditcard-number']);

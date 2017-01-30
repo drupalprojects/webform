@@ -9,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementSignatureTest extends WebformTestBase  {
+class WebformElementSignatureTest extends WebformTestBase {
 
   /**
    * Webforms to load.

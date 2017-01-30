@@ -105,7 +105,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
   protected function initProjects() {
     $projects = [];
 
-    // Element: Webform Layout Container
+    // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
       'description' => $this->t("Provides a layout container element to add to a webform, which uses old fashion floats to support legacy browsers that don't support CSS Flexbox (IE9 and IE10)."),
@@ -162,14 +162,13 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Integrations: Webform Slack integration
+    // Integrations: Webform Slack integration.
     $projects['webform_slack'] = [
       'title' => $this->t('Webform Slack integration'),
       'description' => $this->t('Provides a Webform handler for posting a message to a slack channel when a submission is saved.'),
       'url' => Url::fromUri('https://www.drupal.org/sandbox/smaz/2833275'),
       'category' => 'integration',
     ];
-
 
     // Handler: YAML Form Queue.
     $projects['yamlform_queue'] = [

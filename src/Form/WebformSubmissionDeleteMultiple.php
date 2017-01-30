@@ -20,7 +20,7 @@ class WebformSubmissionDeleteMultiple extends ConfirmFormBase {
    *
    * @var string[][]
    */
-  protected $webformSubmissionInfo = array();
+  protected $webformSubmissionInfo = [];
 
   /**
    * The tempstore factory.
@@ -97,12 +97,12 @@ class WebformSubmissionDeleteMultiple extends ConfirmFormBase {
       return new RedirectResponse($this->getCancelUrl()->setAbsolute()->toString());
     }
 
-    $form['webform_submissions'] = array(
+    $form['webform_submissions'] = [
       '#theme' => 'item_list',
       '#items' => array_map(function ($webform_submission) {
         return $webform_submission->label();
       }, $webform_submissions),
-    );
+    ];
     $form = parent::buildForm($form, $form_state);
     return $form;
   }
@@ -115,7 +115,7 @@ class WebformSubmissionDeleteMultiple extends ConfirmFormBase {
     $webform_submissions = $this->tempStoreFactory->get('webform_submission_multiple_delete_confirm')->get(\Drupal::currentUser()->id());
     if ($form_state->getValue('confirm') && !empty($webform_submissions)) {
       $this->storage->delete($webform_submissions);
-      $this->logger('content')->notice('Deleted @count submission.', array('@count' => count($webform_submissions)));
+      $this->logger('content')->notice('Deleted @count submission.', ['@count' => count($webform_submissions)]);
       $this->tempStoreFactory->get('webform_submission_multiple_delete_confirm')->delete(\Drupal::currentUser()->id());
     }
 

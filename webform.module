@@ -30,11 +30,6 @@ module_load_include('inc', 'webform', 'includes/webform.options');
 module_load_include('inc', 'webform', 'includes/webform.translation');
 
 /**
- * Return status for saving which deleted an existing item.
- */
-const WEBFORM_SAVED_DRAFT = 4;
-
-/**
  * Implements hook_help().
  */
 function webform_help($route_name, RouteMatchInterface $route_match) {
@@ -612,7 +607,7 @@ function webform_preprocess_file_link(&$variables) {
  *
  * @see drupal_process_states()
  */
-function webform_process_states(&$elements, $key = '#attributes') {
+function webform_process_states(array &$elements, $key = '#attributes') {
   if (empty($elements['#states'])) {
     return;
   }
@@ -624,7 +619,6 @@ function webform_process_states(&$elements, $key = '#attributes') {
     $elements[$key]['class'][] = 'js-form-item';
   }
 }
-
 
 /******************************************************************************/
 // Private functions.

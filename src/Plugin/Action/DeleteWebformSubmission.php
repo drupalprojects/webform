@@ -79,7 +79,7 @@ class DeleteWebformSubmission extends ActionBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function execute($object = NULL) {
-    $this->executeMultiple(array($object));
+    $this->executeMultiple([$object]);
   }
 
   /**

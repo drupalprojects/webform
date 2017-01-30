@@ -2,6 +2,7 @@
 
 namespace Drupal\webform_ui\Form;
 
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -39,6 +40,13 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
+
+  /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
 
   /**
    * Webform element manager.
@@ -94,13 +102,16 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager.
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
    *   Webform element validator.
    */
-  public function __construct(RendererInterface $renderer, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator) {
+  public function __construct(RendererInterface $renderer, EntityFieldManagerInterface $entity_field_manager, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator) {
     $this->renderer = $renderer;
+    $this->entityFieldManager = $entity_field_manager;
     $this->elementManager = $element_manager;
     $this->elementsValidator = $elements_validator;
   }
@@ -111,6 +122,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('renderer'),
+      $container->get('entity_field.manager'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.elements_validator')
     );
@@ -177,7 +189,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     // Set element key reserved word warning message.
     if (!$key) {
       $reserved_keys = ['form_build_id', 'form_token', 'form_id', 'data', 'op'];
-      $reserved_keys = array_merge($reserved_keys, array_keys(\Drupal::service('entity_field.manager')->getBaseFieldDefinitions('webform_submission')));
+      $reserved_keys = array_merge($reserved_keys, array_keys($this->entityFieldManager->getBaseFieldDefinitions('webform_submission')));
       $form['#attached']['drupalSettings']['webform_ui']['reserved_keys'] = $reserved_keys;
       $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
       $form['properties']['element']['key_warning'] = [

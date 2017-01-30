@@ -15,13 +15,13 @@ class WebformSubmissionViewsData extends EntityViewsData {
   public function getViewsData() {
     $data = parent::getViewsData();
 
-    $data['webform_submission']['webform_submission_bulk_form'] = array(
+    $data['webform_submission']['webform_submission_bulk_form'] = [
       'title' => $this->t('Webform submission operations bulk form'),
       'help' => $this->t('Add a form element that lets you run operations on multiple submissions.'),
-      'field' => array(
+      'field' => [
         'id' => 'webform_submission_bulk_form',
-      ),
-    );
+      ],
+    ];
 
     return $data;
   }

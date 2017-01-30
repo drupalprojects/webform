@@ -35,7 +35,7 @@ class WebformHtmlEditor extends Textarea {
    * @return array
    *   The $element with prepared variables ready for input.html.twig.
    */
-  public static function preRenderWebformHtmlEditor($element) {
+  public static function preRenderWebformHtmlEditor(array $element) {
     if (\Drupal::config('webform.settings')->get('ui.html_editor_disabled')) {
       $element['#mode'] = 'html';
       $element = WebformCodeMirror::preRenderWebformCodeMirror($element);
@@ -50,7 +50,7 @@ class WebformHtmlEditor extends Textarea {
   /**
    * Webform element validation handler for #type 'webform_html_editor'.
    */
-  public static function validateWebformHtmlEditor(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformHtmlEditor(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $value = $element['#value'];
     $form_state->setValueForElement($element, trim($value));
   }

@@ -23,7 +23,7 @@ function _webform_test_wizard_custom_form_webform_submission_test_form_wizard_cu
   }
 
   // Ge submitted values.
-  $values  = $form_state->getValues();
+  $values = $form_state->getValues();
 
   // Alter pages based on selected 'pages'.
   $pages = $form_state->get('pages');

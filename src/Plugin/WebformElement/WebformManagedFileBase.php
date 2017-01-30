@@ -208,7 +208,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function formatTextItem(array &$element, $value,  array $options = []) {
+  protected function formatTextItem(array &$element, $value, array $options = []) {
     $file = $this->getFile($element, $value, $options);
     $format = $this->getItemFormat($element);
     switch ($format) {
@@ -222,7 +222,6 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         return file_create_url($file->getFileUri());
     }
   }
-
 
   /**
    * {@inheritdoc}
@@ -286,6 +285,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     }
     return $this->entityTypeManager->getStorage('file')->loadMultiple($value);
   }
+
   /**
    * {@inheritdoc}
    */

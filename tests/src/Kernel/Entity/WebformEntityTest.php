@@ -78,8 +78,8 @@ class WebformEntityTest extends KernelTestBase {
     $this->assertEquals($webform->getElementsDecodedAndFlattened(), $flattened_elements);
 
     // Check elements initialized  and flattened.
-    $elements_initialized_and_flattened = array(
-      'root' => array(
+    $elements_initialized_and_flattened = [
+      'root' => [
         '#type' => 'textfield',
         '#title' => 'root',
         '#webform_id' => 'webform_test--root',
@@ -87,12 +87,12 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_parent_key' => '',
         '#webform_parent_flexbox' => FALSE,
         '#webform_depth' => 0,
-        '#webform_children' => array(),
+        '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
         '#admin_title' => NULL,
-      ),
-      'container' => array(
+      ],
+      'container' => [
         '#type' => 'container',
         '#title' => 'container',
         '#webform_id' => 'webform_test--container',
@@ -100,12 +100,12 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_parent_key' => '',
         '#webform_parent_flexbox' => FALSE,
         '#webform_depth' => 0,
-        '#webform_children' => array(),
+        '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
         '#admin_title' => NULL,
-      ),
-      'child' => array(
+      ],
+      'child' => [
         '#type' => 'textfield',
         '#title' => 'child',
         '#webform_id' => 'webform_test--child',
@@ -113,12 +113,12 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_parent_key' => 'container',
         '#webform_parent_flexbox' => FALSE,
         '#webform_depth' => 1,
-        '#webform_children' => array(),
+        '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
         '#admin_title' => NULL,
-      ),
-    );
+      ],
+    ];
     $this->assertEquals($webform->getElementsInitializedAndFlattened(), $elements_initialized_and_flattened);
 
     // Check elements flattened has value.

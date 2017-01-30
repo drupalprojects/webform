@@ -53,7 +53,7 @@ define('WEBFORM_HONEYPOT_ENABLED_WEBFORM', 3);
  * @param string|\Drupal\Core\StringTranslation\TranslatableMarkup $label
  *   The label to displayed within the checkbox titles.
  */
-function _webform_honeypot_form(&$form, FormStateInterface $form_state, $honeypot, $honeypot_state, $time_restriction, $time_restriction_state, $label) {
+function _webform_honeypot_form(array &$form, FormStateInterface $form_state, $honeypot, $honeypot_state, $time_restriction, $time_restriction_state, $label) {
   $t_args = [
     '%label' => $label,
     ':href_honeypot' => Url::fromRoute('honeypot.config')->toString(),

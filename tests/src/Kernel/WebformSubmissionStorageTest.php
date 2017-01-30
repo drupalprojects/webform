@@ -55,7 +55,7 @@ class WebfromSubmissionStorageTest extends KernelTestBase {
     $webform_no_purging->save();
 
     foreach ($webform_submissions_definition as $definition) {
-      foreach (array($webform, $webform_no_purging) as $v) {
+      foreach ([$webform, $webform_no_purging] as $v) {
         $webform_submission = WebformSubmission::create([
           'webform_id' => $v->id(),
         ]);

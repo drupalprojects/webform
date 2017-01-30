@@ -10,7 +10,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementMessageTest extends WebformTestBase  {
+class WebformElementMessageTest extends WebformTestBase {
 
   /**
    * Webforms to load.

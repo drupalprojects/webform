@@ -9,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementRatingTest extends WebformTestBase  {
+class WebformElementRatingTest extends WebformTestBase {
 
   /**
    * Webforms to load.

@@ -70,7 +70,7 @@ class WebformTime extends FormElement {
    * @return array
    *   The processed element.
    */
-  public static function processWebformTime(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformTime(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Attach JS support for the time field, if we can determine which time
     // format should be used.
     if (!empty($element['#time_format'])) {
@@ -85,7 +85,7 @@ class WebformTime extends FormElement {
    *
    * Note that #required is validated by _form_validate() already.
    */
-  public static function validateWebformTime(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformTime(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
 
     $value = $element['#value'];
@@ -143,7 +143,7 @@ class WebformTime extends FormElement {
    * @return array
    *   The $element with prepared variables ready for #theme 'input__time'.
    */
-  public static function preRenderWebformTime($element) {
+  public static function preRenderWebformTime(array $element) {
     $element['#attributes']['type'] = 'time';
     Element::setAttributes($element, ['id', 'name', 'type', 'value', 'size', 'min', 'max', 'step']);
     static::setAttributes($element, ['form-time']);

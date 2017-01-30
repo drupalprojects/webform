@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests;
 
-use Drupal\simpletest\WebTestBase;
 use Drupal\webform\Entity\Webform;
 use Drupal\Core\Serialization\Yaml;
 

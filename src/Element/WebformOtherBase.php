@@ -75,7 +75,7 @@ abstract class WebformOtherBase extends FormElement {
    *
    * @see \Drupal\Core\Render\Element\Select
    */
-  public static function processWebformOther(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformOther(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Remove 'webform_' prefix from type.
     $type = str_replace('webform_', '', static::$type);
     $properties = static::$properties;
@@ -167,7 +167,7 @@ abstract class WebformOtherBase extends FormElement {
   /**
    * Validates an other element.
    */
-  public static function validateWebformOther(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformOther(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Remove 'webform_' prefix from type.
     $type = str_replace('webform_', '', static::$type);
 
@@ -221,7 +221,7 @@ abstract class WebformOtherBase extends FormElement {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public static function setElementError(&$element, FormStateInterface $form_state) {
+  public static function setElementError(array &$element, FormStateInterface $form_state) {
     if (isset($element['#required_error'])) {
       $form_state->setError($element, $element['#required_error']);
     }
@@ -241,7 +241,7 @@ abstract class WebformOtherBase extends FormElement {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public static function setOtherError(&$element, FormStateInterface $form_state) {
+  public static function setOtherError(array &$element, FormStateInterface $form_state) {
     if (isset($element['#required_error'])) {
       $form_state->setError($element['other'], $element['#required_error']);
     }

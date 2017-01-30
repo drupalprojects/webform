@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\user\Entity\User;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;
@@ -22,7 +21,6 @@ class WebformElementFormatTest extends WebformTestBase {
    * @var array
    */
   protected static $modules = ['node', 'webform'];
-
 
   /**
    * Webforms to load.

@@ -578,7 +578,15 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
 }
 
 if (!function_exists('base_path')) {
+
+  /**
+   * Mock base path function.
+   *
+   * @return string
+   *   A base path.
+   */
   function base_path() {
     return '/';
   }
+
 }

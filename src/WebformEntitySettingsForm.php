@@ -249,7 +249,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['form_prepopulate_source_entity'],
     ];
-    $settings_elements                                        = [
+    $settings_elements = [
       'form_submit_once' => [
         'title' => $this->t('Prevent duplicate submissions'),
         'all_description' => $this->t('Submit button is disabled immediately after is is clicked form all webforms.'),
@@ -553,12 +553,12 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['submission']['form_previous_submissions'] = array(
+    $form['submission']['form_previous_submissions'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show the notification about previous submissions'),
       '#description' => $this->t('Show the previous submissions notification that appears when users have previously submitted this form.'),
       '#default_value' => $settings['form_previous_submissions'],
-    );
+    ];
     $form['submission']['form_confidential'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Confidential submissions'),
@@ -665,10 +665,10 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Days to retain submissions'),
       '#min' => 1,
       '#default_value' => $settings['purge_days'],
-      '#states' => array(
-        'invisible' => array('select[name="purge"]' => array('value' => WebformSubmissionStorageInterface::PURGE_NONE)),
-        'optional' => array('select[name="purge"]' => array('value' => WebformSubmissionStorageInterface::PURGE_NONE)),
-      ),
+      '#states' => [
+        'invisible' => ['select[name="purge"]' => ['value' => WebformSubmissionStorageInterface::PURGE_NONE]],
+        'optional' => ['select[name="purge"]' => ['value' => WebformSubmissionStorageInterface::PURGE_NONE]],
+      ],
       '#field_suffix' => $this->t('days'),
     ];
 

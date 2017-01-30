@@ -157,7 +157,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     if ($route_name == "$base_route_name.webform.results_table") {
       $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
       $this->sort = $webform_submission_storage->getCustomSetting('sort', 'serial', $this->webform, $this->sourceEntity);
-      $this->direction  = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
+      $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
       $this->limit = $webform_submission_storage->getCustomSetting('limit', 50, $this->webform, $this->sourceEntity);
       $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
       $this->customize = TRUE;
@@ -182,7 +182,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         unset($this->columns['sid']);
         $this->sort = 'serial';
       }
-      $this->direction  = 'desc';
+      $this->direction = 'desc';
       $this->limit = 50;
       $this->customize = FALSE;
     }
@@ -436,7 +436,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
           $element = $column['element'];
 
           $key = $column['key'];
-          $value  = (isset($data[$key])) ? $data[$key] : '';
+          $value = (isset($data[$key])) ? $data[$key] : '';
 
           $options = $column;
 

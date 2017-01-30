@@ -121,8 +121,6 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function build(RouteMatchInterface $route_match) {
-    $route_name = $route_match->getRouteName();
-
     if ($this->type == 'webform_source_entity') {
       $source_entity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
       $entity_type = $source_entity->getEntityTypeId();

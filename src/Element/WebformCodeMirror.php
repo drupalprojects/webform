@@ -77,7 +77,7 @@ class WebformCodeMirror extends Textarea {
   /**
    * Processes a 'webform_codemirror' element.
    */
-  public static function processWebformCodeMirror(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformCodeMirror(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Check that mode is defined and valid, if not default to (plain) text.
     if (empty($element['#mode']) || !isset(self::$modes[$element['#mode']])) {
       $element['#mode'] = 'text';
@@ -96,7 +96,7 @@ class WebformCodeMirror extends Textarea {
    * @return array
    *   The $element with prepared variables ready for theme_element().
    */
-  public static function preRenderWebformCodeMirror($element) {
+  public static function preRenderWebformCodeMirror(array $element) {
     static::setAttributes($element, ['js-webform-codemirror', 'webform-codemirror', $element['#mode']]);
     $element['#attributes']['data-webform-codemirror-mode'] = static::getMode($element['#mode']);
     $element['#attached']['library'][] = 'webform/webform.element.codemirror.' . $element['#mode'];
@@ -106,7 +106,7 @@ class WebformCodeMirror extends Textarea {
   /**
    * Webform element validation handler for #type 'webform_codemirror'.
    */
-  public static function validateWebformCodeMirror(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformCodeMirror(array &$element, FormStateInterface $form_state, array &$complete_form) {
     if ($errors = static::getErrors($element, $form_state, $complete_form)) {
       $build = [
         'title' => [
@@ -135,7 +135,7 @@ class WebformCodeMirror extends Textarea {
   /**
    * Get validation errors.
    */
-  protected static function getErrors(&$element, FormStateInterface $form_state, &$complete_form) {
+  protected static function getErrors(array &$element, FormStateInterface $form_state, array &$complete_form) {
     if (!empty($element['#skip_validation'])) {
       return NULL;
     }

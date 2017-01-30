@@ -222,7 +222,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $query->condition('settings.purge_days', 0, '>');
     $webforms_to_purge = array_values($query->execute());
 
-    $webform_submissions_to_purge = array();
+    $webform_submissions_to_purge = [];
 
     if (!empty($webforms_to_purge)) {
       $webforms_to_purge = $this->entityManager->getStorage('webform')->loadMultiple($webforms_to_purge);

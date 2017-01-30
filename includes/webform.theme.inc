@@ -578,7 +578,7 @@ function template_preprocess_webform_progress_bar(array &$variables) {
  *
  * @see template_preprocess_container()
  */
-function template_preprocess_webform_message(&$variables) {
+function template_preprocess_webform_message(array &$variables) {
   $variables['has_parent'] = FALSE;
   $element = $variables['element'];
   // Ensure #attributes is set.

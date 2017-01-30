@@ -146,7 +146,7 @@ class WebformTableSort extends Table {
    * @return array
    *   The processed element.
    */
-  public static function processWebformTableSort(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformTableSort(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $value = is_array($element['#value']) ? $element['#value'] : [];
 
     // Add validate callback that extracts the associative array of options.
@@ -227,7 +227,7 @@ class WebformTableSort extends Table {
   /**
    * Validates webform_table_other.
    */
-  public static function validateWebformTableSelectOrder(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformTableSelectOrder(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Get and sort checked values.
     $checked_values = [];
     foreach (Element::children($element) as $key) {

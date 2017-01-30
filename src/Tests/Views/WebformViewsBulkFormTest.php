@@ -50,30 +50,30 @@ class WebformViewsBulkFormTest extends WebformTestBase {
 
     // Check make sticky action.
     $this->assertFalse($webform_submission->isSticky(), 'Webform submission is not sticky');
-    $edit = array(
+    $edit = [
       'webform_submission_bulk_form[0]' => TRUE,
       'action' => 'webform_submission_make_sticky_action',
-    );
+    ];
     $this->drupalPostForm('admin/structure/webform/test/views_bulk_form', $edit, t('Apply to selected items'));
     $webform_submission = $this->loadSubmission($webform_submission->id());
     $this->assertTrue($webform_submission->isSticky(), 'Webform submission has been made sticky');
 
     // Check make unsticky action.
-    $edit = array(
+    $edit = [
       'webform_submission_bulk_form[0]' => TRUE,
       'action' => 'webform_submission_make_unsticky_action',
-    );
+    ];
     $this->drupalPostForm('admin/structure/webform/test/views_bulk_form', $edit, t('Apply to selected items'));
     $webform_submission = $this->loadSubmission($webform_submission->id());
     $this->assertFalse($webform_submission->isSticky(), 'Webform submission is not sticky anymore');
 
     // Check delete action.
-    $edit = array(
+    $edit = [
       'webform_submission_bulk_form[0]' => TRUE,
       'action' => 'webform_submission_delete_action',
-    );
+    ];
     $this->drupalPostForm('admin/structure/webform/test/views_bulk_form', $edit, t('Apply to selected items'));
-    $this->drupalPostForm(NULL, array(), t('Delete'));
+    $this->drupalPostForm(NULL, [], t('Delete'));
     $webform_submission = $this->loadSubmission($webform_submission->id());
     $this->assertNull($webform_submission, '1: Webform submission has been deleted');
 

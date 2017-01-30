@@ -5,9 +5,20 @@ namespace Drupal\Tests\webform\Unit\Utility;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\Tests\UnitTestCase;
 
+/**
+ * Reflection test parent.
+ */
 class WebformReflectionTestParent {}
-class WebformReflectionTestChild extends WebformReflectionTestParent { }
-class WebformReflectionTestGrandChild extends WebformReflectionTestChild { }
+
+/**
+ * Reflection test child.
+ */
+class WebformReflectionTestChild extends WebformReflectionTestParent {}
+
+/**
+ * Reflection test grandchild.
+ */
+class WebformReflectionTestGrandChild extends WebformReflectionTestChild {}
 
 /**
  * Tests webform reflection utility.

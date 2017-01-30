@@ -9,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementTextTest extends WebformTestBase  {
+class WebformElementTextTest extends WebformTestBase {
 
   /**
    * Modules to enable.
@@ -43,7 +43,7 @@ class WebformElementTextTest extends WebformTestBase  {
     // counter
     /**************************************************************************/
 
-    // Check counters
+    // Check counters.
     $this->drupalGet('webform/test_element_text');
     $this->assertRaw('<input data-counter-type="character" data-counter-limit="10" class="js-webform-counter webform-counter form-text" data-drupal-selector="edit-counter-characters" type="text" id="edit-counter-characters" name="counter_characters" value="" size="60" maxlength="255" />');
     $this->assertRaw('<textarea data-counter-type="word" data-counter-limit="3" data-counter-message="word(s) left. This is a custom message" class="js-webform-counter webform-counter form-textarea resize-vertical" data-drupal-selector="edit-counter-words" id="edit-counter-words" name="counter_words" rows="5" cols="60"></textarea>');

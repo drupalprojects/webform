@@ -278,7 +278,6 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     $default_options = $this->getDefaultExportOptions();
     $export_options = NestedArray::mergeDeep($default_options, $export_options);
     $webform = $this->getWebform();
-    $exporter = $this->setExporter($export_options);
 
     // Get exporter and build #states.
     $exporter_plugins = $this->exporterManager->getInstances($export_options);

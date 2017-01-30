@@ -23,7 +23,7 @@ class WebformButtonsOther extends WebformOtherBase {
    *
    * @see \Drupal\Core\Render\Element\Select
    */
-  public static function processWebformOther(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processWebformOther(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $element = parent::processWebformOther($element, $form_state, $complete_form);
     return $element;
   }

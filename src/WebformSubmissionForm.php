@@ -1168,7 +1168,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param array $elements
    *   An render array representing elements.
    */
-  protected function hideElements(&$elements) {
+  protected function hideElements(array &$elements) {
     foreach ($elements as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;

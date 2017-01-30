@@ -42,7 +42,7 @@ class WebformEmailMultiple extends FormElement {
   /**
    * Webform element validation handler for #type 'email_multiple'.
    */
-  public static function validateWebformEmailMultiple(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateWebformEmailMultiple(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $value = trim($element['#value']);
     $form_state->setValueForElement($element, $value);
 
@@ -73,7 +73,7 @@ class WebformEmailMultiple extends FormElement {
    * @return array
    *   The $element with prepared variables ready for theme_element().
    */
-  public static function preRenderWebformEmailMultiple($element) {
+  public static function preRenderWebformEmailMultiple(array $element) {
     $element['#attributes']['type'] = 'text';
     Element::setAttributes($element, ['id', 'name', 'value', 'size', 'maxlength', 'placeholder']);
     static::setAttributes($element, ['form-textfield', 'form-email-multiple']);

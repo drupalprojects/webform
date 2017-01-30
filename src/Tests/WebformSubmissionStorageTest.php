@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests;
 
 use Drupal\Core\Serialization\Yaml;
-use Drupal\simpletest\WebTestBase;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 

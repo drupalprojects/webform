@@ -80,7 +80,7 @@ class WebformEntityElementsValidator {
     $this->originalElements = Yaml::decode($this->originalElementsRaw);
 
     // Validate elements are an array.
-    if ($message  = $this->validateArray()) {
+    if ($message = $this->validateArray()) {
       return [$message];
     }
 

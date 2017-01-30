@@ -9,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementCodeMirrorTest extends WebformTestBase  {
+class WebformElementCodeMirrorTest extends WebformTestBase {
 
   /**
    * Webforms to load.

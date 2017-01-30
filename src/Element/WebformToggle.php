@@ -44,7 +44,7 @@ class WebformToggle extends Checkbox {
    * @return array
    *   The $element with prepared variables ready for input.html.twig.
    */
-  public static function preRenderCheckbox($element) {
+  public static function preRenderCheckbox(array $element) {
     $element = parent::preRenderCheckbox($element);
 
     $element += [
