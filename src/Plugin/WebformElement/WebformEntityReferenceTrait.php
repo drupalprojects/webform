@@ -251,7 +251,7 @@ trait WebformEntityReferenceTrait {
 
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
     $entity = $this->entityTypeManager->getStorage($element['#target_type'])->load($value);
-    if ($entity && $entity->hasTranslation($langcode)) {
+    if ($entity && method_exists($entity, 'hasTranslation') && $entity->hasTranslation($langcode)) {
       $entity = $entity->getTranslation($langcode);
     }
     return $entity;
