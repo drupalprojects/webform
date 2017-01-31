@@ -3,6 +3,8 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformElementBase;
@@ -18,6 +20,7 @@ abstract class DateBase extends WebformElementBase {
    */
   public function getDefaultProperties() {
     return [
+      'multiple' => FALSE,
       // Form validation.
       'min' => '',
       'max' => '',
@@ -58,7 +61,29 @@ abstract class DateBase extends WebformElementBase {
       $element['#attributes']['max'] = $element['#max'];
     }
 
+    $element['#element_validate'] = array_merge([[get_class($this), 'preValidateDate']], $element['#element_validate']);
     $element['#element_validate'][] = [get_class($this), 'validateDate'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setDefaultValue(array &$element) {
+    if (in_array($element['#type'], ['datelist', 'datetime'])) {
+      if (!empty($element['#default_value'])) {
+        if (is_array($element['#default_value'])) {
+          foreach ($element['#default_value'] as $key => $value) {
+            $element['#default_value'][$key] = ($value) ? DrupalDateTime::createFromTimestamp(strtotime($value)) : NULL;
+          }
+        }
+        elseif (is_string($element['#default_value'])) {
+          $element['#default_value'] = ($element['#default_value']) ? DrupalDateTime::createFromTimestamp(strtotime($element['#default_value'])) : NULL;
+        }
+      }
+    }
+    else {
+      parent::setDefaultValue($element);
+    }
   }
 
   /**
@@ -210,13 +235,15 @@ abstract class DateBase extends WebformElementBase {
     if (!isset($element[$property])) {
       return;
     }
-
-    $timestamp = strtotime($element[$property]);
-    if ($timestamp === FALSE) {
-      $element[$property] = NULL;
+    elseif (is_array($element[$property])) {
+      foreach ($element[$property] as $key => $value) {
+        $timestamp = strtotime($value);
+        $element[$property][$key] = ($timestamp) ? \Drupal::service('date.formatter')->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
+      }
     }
     else {
-      $element[$property] = \Drupal::service('date.formatter')->format($timestamp, 'html_' . $this->getDateType($element));
+      $timestamp = strtotime($element[$property]);
+      $element[$property] = ($timestamp) ? \Drupal::service('date.formatter')->format($timestamp, 'html_' . $this->getDateType($element)) : NULL;
     }
   }
 
@@ -236,7 +263,25 @@ abstract class DateBase extends WebformElementBase {
   }
 
   /**
-   * Webform element validation handler for base elements.
+   * Webform element pre validation handler for Date elements.
+   */
+  public static function preValidateDate(&$element, FormStateInterface $form_state, &$complete_form) {
+    // ISSUE:
+    // When datelist is nested inside a webform_multiple element the $form_state
+    // value is not being properly set.
+    //
+    // WORKAROUND:
+    // Set the $form_state datelist value using $element['#value'].
+    // @todo: Possible move this validation logic to webform_multiple.
+    if (!empty($element['#multiple'])) {
+      $values = $form_state->getValues();
+      NestedArray::setValue($values, $element['#parents'], $element['#value']);
+      $form_state->setValues($values);
+    }
+  }
+
+  /**
+   * Webform element validation handler for date elements.
    *
    * Note that #required is validated by _form_validate() already.
    *

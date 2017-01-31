@@ -129,14 +129,8 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function isMultiline(array $element) {
-    $format = $this->getItemsFormat($element);
-    if (in_array($format, ['ol', 'ul'])) {
-      return TRUE;
-    }
-    else {
-      return parent::isMultiline($element);
-    }
+  protected function prepareMultiple(array &$element) {
+    // Use default #multiple handling.
   }
 
   /**
@@ -321,7 +315,6 @@ abstract class OptionsBase extends WebformElementBase {
     $form = parent::form($form, $form_state);
 
     $form['element']['default_value']['#description'] = $this->t('The default value of the field identified by its key.');
-    $form['element']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
 
     // Issue #2836374: Wrapper attributes are not supported by composite
     // elements, this includes radios, checkboxes, and buttons.
@@ -362,12 +355,6 @@ abstract class OptionsBase extends WebformElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('Empty option value'),
       '#description' => $this->t('The value for the initial option denoting no selection in a select element, which is used to determine whether the user submitted a value or not.'),
-    ];
-    $form['options']['multiple'] = [
-      '#title' => $this->t('Multiple'),
-      '#type' => 'checkbox',
-      '#return_value' => TRUE,
-      '#description' => $this->t('Check this option if the user should be allowed to choose multiple values.'),
     ];
     $form['options']['options_randomize'] = [
       '#type' => 'checkbox',

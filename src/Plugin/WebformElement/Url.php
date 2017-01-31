@@ -18,6 +18,15 @@ class Url extends TextBase {
   /**
    * {@inheritdoc}
    */
+  public function getDefaultProperties() {
+    return parent::getDefaultProperties() + [
+      'multiple' => FALSE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formatHtmlItem(array &$element, $value, array $options = []) {
     if (empty($value)) {
       return '';

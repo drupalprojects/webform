@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -37,15 +36,6 @@ class DateList extends DateBase {
       'date_year_range' => '1900:2050',
       'date_increment' => 1,
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setDefaultValue(array &$element) {
-    if (!empty($element['#default_value']) && is_string($element['#default_value'])) {
-      $element['#default_value'] = ($element['#default_value']) ? DrupalDateTime::createFromTimestamp(strtotime($element['#default_value'])) : NULL;
-    }
   }
 
   /**

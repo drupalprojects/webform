@@ -22,6 +22,7 @@ class WebformAutocomplete extends TextField {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      'multiple' => FALSE,
       // Autocomplete settings.
       'autocomplete_existing' => FALSE,
       'autocomplete_items' => [],

@@ -25,7 +25,7 @@ class ProcessedText extends WebformMarkupBase {
     return parent::getDefaultProperties() + [
       // Markup settings.
       'text' => '',
-      'format' => filter_default_format(\Drupal::currentUser()),
+      'format' => (function_exists('filter_default_format')) ? filter_default_format(\Drupal::currentUser()) : '',
     ];
   }
 

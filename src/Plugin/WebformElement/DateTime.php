@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -66,15 +65,6 @@ class DateTime extends DateBase {
     // Issue #1838234 Add jQuery Timepicker for the Time element of the
     // datetime field.
     $element['#attached']['library'][] = 'webform/webform.element.time';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setDefaultValue(array &$element) {
-    if (is_string($element['#default_value']) && !empty($element['#default_value'])) {
-      $element['#default_value'] = ($element['#default_value']) ? DrupalDateTime::createFromTimestamp(strtotime($element['#default_value'])) : NULL;
-    }
   }
 
   /**

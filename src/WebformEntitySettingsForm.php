@@ -186,12 +186,12 @@ class WebformEntitySettingsForm extends EntityForm {
       ];
     }
 
-    // Webform.
-    $form['webform'] = [
+    // Form.
+    $form['form'] = [
       '#type' => 'details',
       '#title' => $this->t('Webform settings'),
     ];
-    $form['webform']['status'] = [
+    $form['form']['status'] = [
       '#type' => 'radios',
       '#title' => $this->t('Webform status'),
       '#default_value' => ($webform->get('status') == 1) ? 1 : 0,
@@ -207,42 +207,42 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['webform']['form_closed_message'] = [
+    $form['form']['form_closed_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform closed message'),
       '#description' => $this->t('A message to be displayed notifying the user that the webform is closed.'),
       '#default_value' => $settings['form_closed_message'],
     ];
-    $form['webform']['form_exception_message'] = [
+    $form['form']['form_exception_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform exception message'),
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
     ];
-    $form['webform']['form_submit'] = [
+    $form['form']['form_submit'] = [
       '#type' => 'details',
       '#title' => $this->t('Webform submit button'),
     ];
-    $form['webform']['form_submit']['form_submit_label'] = [
+    $form['form']['form_submit']['form_submit_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Webform submit button label'),
       '#size' => 20,
       '#default_value' => $settings['form_submit_label'],
     ];
-    $form['webform']['form_submit']['form_submit_attributes'] = [
+    $form['form']['form_submit']['form_submit_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Webform submit button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['form_submit_attributes'],
     ];
-    $form['webform']['form_prepopulate'] = [
+    $form['form']['form_prepopulate'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow elements to be populated using query string parameters.'),
       '#description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would setting an the 'name' element's default value to 'John Smith'."),
       '#return_value' => TRUE,
       '#default_value' => $settings['form_prepopulate'],
     ];
-    $form['webform']['form_prepopulate_source_entity'] = [
+    $form['form']['form_prepopulate_source_entity'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow source entity to be populated using query string parameters.'),
       '#description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=user&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to '@user.", ['@user' => User::load(1)->label()]),
@@ -278,20 +278,20 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     foreach ($settings_elements as $settings_key => $setting_element) {
       if ($default_settings['default_' . $settings_key]) {
-        $form['webform'][$settings_key . '_disabled'] = [
+        $form['form'][$settings_key . '_disabled'] = [
           '#type' => 'checkbox',
           '#title' => $setting_element['title'],
           '#description' => $setting_element['all_description'],
           '#disabled' => TRUE,
           '#default_value' => TRUE,
         ];
-        $form['webform'][$settings_key] = [
+        $form['form'][$settings_key] = [
           '#type' => 'value',
           '#value' => $settings[$settings_key],
         ];
       }
       else {
-        $form['webform'][$settings_key] = [
+        $form['form'][$settings_key] = [
           '#type' => 'checkbox',
           '#title' => $setting_element['title'],
           '#description' => $setting_element['form_description'],
@@ -300,7 +300,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ];
       }
     }
-    $form['webform']['form_autofocus'] = [
+    $form['form']['form_autofocus'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Autofocus'),
       '#description' => $this->t('If checked, the first visible and enabled input will be focused when adding new submissions.'),

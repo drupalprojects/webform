@@ -152,6 +152,13 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  protected function prepareMultiple(array &$element) {
+    // Use default #multiple handling.
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setDefaultValue(array &$element) {
     if (!empty($element['#default_value']) && !is_array($element['#default_value'])) {
       $element['#default_value'] = [$element['#default_value']];

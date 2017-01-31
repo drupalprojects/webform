@@ -425,7 +425,7 @@ abstract class WebformTestBase extends WebTestBase {
    *   The created submission's sid.
    */
   protected function postSubmission(WebformInterface $webform, array $edit = [], $submit = NULL) {
-    $submit = $submit ?: t('Submit');
+    $submit = $submit ?: $webform->getSetting('form_submit_label') ?: t('Submit');
     $this->drupalPostForm('webform/' . $webform->id(), $edit, $submit);
     return $this->getLastSubmissionId($webform);
   }
@@ -444,7 +444,7 @@ abstract class WebformTestBase extends WebTestBase {
    *   The created test submission's sid.
    */
   protected function postSubmissionTest(WebformInterface $webform, array $edit = [], $submit = NULL) {
-    $submit = $submit ?: t('Submit');
+    $submit = $submit ?: $webform->getSetting('form_submit_label') ?: t('Submit');
     $this->drupalPostForm('webform/' . $webform->id() . '/test', $edit, $submit);
     return $this->getLastSubmissionId($webform);
   }

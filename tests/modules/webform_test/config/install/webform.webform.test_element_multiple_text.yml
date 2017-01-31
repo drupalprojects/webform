@@ -6,40 +6,75 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_element_validate
-title: 'Test: Element: Validate'
-description: 'Test #minlength and #unique element validation support.'
+id: test_element_multiple_text
+title: 'Test: Element: Multiple: Text Based'
+description: 'Test multiple text based elements.'
 elements: |
-  minlength:
+  textfield:
     '#type': details
-    '#title': Minlength
+    '#title': textfield
     '#open': true
-    minlength_textfield:
+    textfield_basic:
       '#type': textfield
-      '#title': minlength_textfield
-      '#minlength': 5
-      '#default_value': value
-  unique:
+      '#title': textfield_basic
+      '#multiple': true
+    textfield_advanced:
+      '#type': textfield
+      '#title': textfield_advanced
+      '#description': '{description}'
+      '#field_prefix': '{prefix}'
+      '#field_suffix': '{suffix}'
+      '#required': true
+      '#placeholder': '{placeholder}'
+      '#size': 10
+      '#counter_type': character
+      '#counter_maximum': 10
+      '#multiple': true
+  email:
     '#type': details
-    '#title': Unique
+    '#title': email
     '#open': true
-    unique_textfield:
-      '#type': textfield
-      '#title': unique_textfield
-      '#description': '#unique property is validated by single value elements'
-      '#unique': true
-      '#default_value': value
-    unique_checkboxes:
-      '#type': checkboxes
-      '#title': unique_checkboxes
-      '#description': '#unique property is ignored by multiple value elements'
-      '#unique': true
-      '#options':
-        1: one
-        2: two
-      '#default_value':
-        - 1
-        - 2
+    email_basic:
+      '#type': email
+      '#title': email_basic
+      '#multiple': true
+    email_advanced:
+      '#type': email
+      '#title': email_advanced
+      '#multiple': true
+  url:
+    '#type': details
+    '#title': url
+    '#open': true
+    url_basic:
+      '#type': url
+      '#title': url_basic
+      '#multiple': true
+  tel:
+    '#type': details
+    '#title': tel
+    '#open': true
+    tel_basic:
+      '#type': tel
+      '#title': tel_basic
+      '#multiple': true
+  autocomplete:
+    '#type': details
+    '#title': autocomplete
+    '#open': true
+    autocomplete_basic:
+      '#type': webform_autocomplete
+      '#title': autocomplete_basic
+      '#autocomplete_items': country_names
+      '#multiple': true
+  number:
+    '#type': details
+    '#title': autocomplete
+    '#open': true
+    number_basic:
+      '#type': number
+      '#title': number_basic
+      '#multiple': true
 css: ''
 javascript: ''
 settings:
@@ -83,7 +118,7 @@ settings:
   draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: page
+  confirmation_type: message
   confirmation_message: ''
   confirmation_url: ''
   confirmation_attributes: {  }
@@ -96,7 +131,7 @@ settings:
   limit_user_message: ''
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: false
+  results_disabled: true
   results_disabled_ignore: false
   token_update: false
 access:
@@ -126,4 +161,11 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-handlers: {  }
+handlers:
+  debug:
+    id: debug
+    label: Debug
+    handler_id: debug
+    status: true
+    weight: 0
+    settings: {  }

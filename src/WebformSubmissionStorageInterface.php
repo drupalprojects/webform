@@ -134,6 +134,23 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function getMaxSubmissionId(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
 
   /**
+   * Determine if a webform element has submission values.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   * @param string $element_key
+   *   An element key.
+   *
+   * @return bool
+   *   TRUE if a webform element has submission values.
+   */
+  public function hasSubmissionValue(WebformInterface $webform, $element_key);
+
+  /****************************************************************************/
+  // Paging methods.
+  /****************************************************************************/
+
+  /**
    * Get a webform's first submission.
    *
    * @param \Drupal\webform\WebformInterface $webform
@@ -204,13 +221,9 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    */
   public function getSourceEntityTypes(WebformInterface $webform);
 
-  /**
-   * Purge webform submissions.
-   *
-   * @param int $count
-   *   Amount of webform submissions to purge.
-   */
-  public function purge($count);
+  /****************************************************************************/
+  // WebformSubmissionEntityList methods.
+  /****************************************************************************/
 
   /**
    * Get customized submission columns used to display custom table.
@@ -274,6 +287,10 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    */
   public function getCustomSetting($name, $default, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL);
 
+  /****************************************************************************/
+  // Invoke methods.
+  /****************************************************************************/
+
   /**
    * Invoke a webform submission's webform's handlers method.
    *
@@ -301,5 +318,17 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) An additional variable that is passed by reference.
    */
   public function invokeWebformElements($method, WebformSubmissionInterface $webform_submission, &$context1 = NULL, &$context2 = NULL);
+
+  /****************************************************************************/
+  // Purge methods.
+  /****************************************************************************/
+
+  /**
+   * Purge webform submissions.
+   *
+   * @param int $count
+   *   Amount of webform submissions to purge.
+   */
+  public function purge($count);
 
 }

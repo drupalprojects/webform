@@ -112,16 +112,27 @@ class WebformMultiple extends FormElement {
     $row_index = 0;
     $weight = 0;
     $rows = [];
+
     if (!$form_state->isProcessingInput() && isset($element['#default_value']) && is_array($element['#default_value'])) {
-      foreach ($element['#default_value'] as $default_value) {
-        $rows[$row_index] = self::buildElementRow($table_id, $row_index, $element, $default_value, $weight++, $ajax_settings);
-        $row_index++;
-      }
+      $default_values = $element['#default_value'];
     }
+    elseif ($form_state->isProcessingInput() && isset($element['#value']) && is_array($element['#value'])) {
+      $default_values = $element['#value'];
+    }
+    else {
+      $default_values = [];
+    }
+
+    foreach ($default_values as $default_value) {
+      $rows[$row_index] = self::buildElementRow($table_id, $row_index, $element, $default_value, $weight++, $ajax_settings);
+      $row_index++;
+    }
+
     while ($row_index < $number_of_items) {
       $rows[$row_index] = self::buildElementRow($table_id, $row_index, $element, NULL, $weight++, $ajax_settings);
       $row_index++;
     }
+
 
     // Build table.
     $element['items'] = [
@@ -426,6 +437,7 @@ class WebformMultiple extends FormElement {
       }
       return;
     }
+
     $form_state->setValueForElement($element, $items);
   }
 

@@ -98,7 +98,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->drupalPostForm('admin/structure/webform/manage/contact/settings', ['next_serial' => 99], t('Save'));
 
     // Check next serial is 99.
-    $sid = $this->postSubmissionTest($webform_contact, [], t('Send message'));
+    $sid = $this->postSubmissionTest($webform_contact);
     $webform_submission = WebformSubmission::load($sid);
     $this->assertEqual($webform_submission->serial(), 99);
 

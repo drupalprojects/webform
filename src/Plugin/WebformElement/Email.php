@@ -22,7 +22,7 @@ class Email extends WebformElementBase {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
-      // Form validation.
+      'multiple' => FALSE,
       'size' => '',
       'minlength' => '',
       'maxlength' => '',

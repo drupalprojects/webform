@@ -44,12 +44,27 @@ class WebformUiElementTest extends WebformTestBase {
 
     $this->drupalLogin($this->adminWebformUser);
 
+    $webform_contact = Webform::load('contact');
+
+    /**************************************************************************/
+    // Multiple
+    /**************************************************************************/
+
+    // Check multiple enabled before submission.
+    $this->drupalGet('admin/structure/webform/manage/contact/element/name/edit');
+    $this->assertRaw('<input data-drupal-selector="edit-properties-multiple" aria-describedby="edit-properties-multiple--description" type="checkbox" id="edit-properties-multiple" name="properties[multiple]" value class="form-checkbox" />');
+    $this->assertNoRaw('<em>There is data for this element in the database. This settings can no longer be changed.</em>');
+
+    // Check multiple disabled after submission.
+    $this->postSubmissionTest($webform_contact);
+    $this->drupalGet('admin/structure/webform/manage/contact/element/name/edit');
+    $this->assertNoRaw('<input data-drupal-selector="edit-properties-multiple" aria-describedby="edit-properties-multiple--description" type="checkbox" id="edit-properties-multiple" name="properties[multiple]" value class="form-checkbox" />');
+    $this->assertRaw('<input data-drupal-selector="edit-properties-multiple" aria-describedby="edit-properties-multiple--description" disabled="disabled" type="checkbox" id="edit-properties-multiple" name="properties[multiple]" value class="form-checkbox" />');
+    $this->assertRaw('<em>There is data for this element in the database. This settings can no longer be changed.</em>');
+
     /**************************************************************************/
     // Reordering
     /**************************************************************************/
-
-    // Check reordered elements.
-    $webform_contact = Webform::load('contact');
 
     // Check original contact element order.
     $this->assertEqual(['name', 'email', 'subject', 'message'], array_keys($webform_contact->getElementsDecodedAndFlattened()));
@@ -178,7 +193,7 @@ class WebformUiElementTest extends WebformTestBase {
   /**
    * Tests permissions.
    */
-  public function testPermissions() {
+  public function _testPermissions() {
     $webform = Webform::load('contact');
 
     // Check source page access not visible to user with 'administer webform'

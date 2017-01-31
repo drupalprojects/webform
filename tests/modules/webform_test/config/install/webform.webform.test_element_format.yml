@@ -205,7 +205,7 @@ elements: |
         '#min': 0
         '#max': 10
         '#step': 1
-        '#default_value': !!float 5
+        '#default_value': 0
         '#format': value
       number_raw:
         '#type': number
@@ -213,7 +213,7 @@ elements: |
         '#min': 0
         '#max': 10
         '#step': 1
-        '#default_value': !!float 5
+        '#default_value': 0
         '#format': raw
     password_confirm:
       '#type': details
@@ -245,7 +245,7 @@ elements: |
         '#range__output': true
         '#range__output_prefix': $
         '#range__output_suffix': '.00'
-        '#default_value': !!float 50
+        '#default_value': 0
         '#format': value
       range_raw:
         '#type': range
@@ -256,7 +256,7 @@ elements: |
         '#range__output': true
         '#range__output_prefix': $
         '#range__output_suffix': '.00'
-        '#default_value': !!float 50
+        '#default_value': 0
         '#format': raw
     webform_rating:
       '#type': details
@@ -264,17 +264,17 @@ elements: |
       webform_rating_value:
         '#type': webform_rating
         '#title': 'Rating (Value)'
-        '#default_value': !!float 3
+        '#default_value': 1
         '#format': value
       webform_rating_raw:
         '#type': webform_rating
         '#title': 'Rating (Raw value)'
-        '#default_value': !!float 3
+        '#default_value': 1
         '#format': raw
       webform_rating_star:
         '#type': webform_rating
         '#title': 'Rating (Star)'
-        '#default_value': !!float 3
+        '#default_value': 1
         '#format': star
     search:
       '#type': details
@@ -835,21 +835,16 @@ elements: |
         '#title': 'Date (Raw value)'
         '#default_value': '1942-06-18'
         '#format': raw
-      date_html_date:
-        '#type': date
-        '#title': 'Date (HTML Date)'
-        '#default_value': '1942-06-18'
-        '#format': html_date
-      date_html_time:
-        '#type': date
-        '#title': 'Date (HTML Time)'
-        '#default_value': '1942-06-18'
-        '#format': html_time
       date_fallback:
         '#type': date
         '#title': 'Date (Fallback date format)'
         '#default_value': '1942-06-18'
         '#format': fallback
+      date_html_date:
+        '#type': date
+        '#title': 'Date (HTML Date)'
+        '#default_value': '1942-06-18'
+        '#format': html_date
       date_html_datetime:
         '#type': date
         '#title': 'Date (HTML Datetime)'
@@ -860,6 +855,11 @@ elements: |
         '#title': 'Date (HTML Month)'
         '#default_value': '1942-06-18'
         '#format': html_month
+      date_html_time:
+        '#type': date
+        '#title': 'Date (HTML Time)'
+        '#default_value': '1942-06-18'
+        '#format': html_time
       date_html_week:
         '#type': date
         '#title': 'Date (HTML Week)'

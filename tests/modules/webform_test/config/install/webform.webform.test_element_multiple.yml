@@ -29,6 +29,11 @@ elements: |
     '#default_value':
       - example@example.com
       - test@test.com
+  webform_multiple_datelist:
+    '#type': webform_multiple
+    '#title': webform_multiple_datelist
+    '#element':
+      '#type': datelist
   webform_multiple_name_composite:
     '#type': webform_multiple
     '#title': webform_multiple_name_composite

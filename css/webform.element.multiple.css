@@ -5,6 +5,12 @@
  * @see /webform/test_element_multiple
  */
 
+.form-type-webform-multiple:after {
+  content:" ";
+  display:table;
+  clear:both;
+}
+
 .webform-multiple-table td {
   white-space: nowrap;
 }
@@ -44,6 +50,11 @@
   width: 95%;
 }
 
+.form-type-webform-multiple.webform-has-field-prefix td input[type="text"],
+.form-type-webform-multiple.webform-has-field-suffix td input[type="text"] {
+  width: auto;
+}
+
 .webform-multiple-table .webform-multiple-sort-weight {
   width: 4em;
 }
@@ -70,5 +81,12 @@
  */
 .webform-multiple-table .tabledrag-changed-warning,
 .webform-multiple-table .tabledrag-changed {
-  display: none;
+  display: none !important; /* Must use !important because .tabledrag-changed 'display' is set via JavaScript */
+}
+
+/**
+ * Tweak tabledrag toggle weight.
+ */
+.webform-multiple-tabledrag-toggle-weight {
+  float: right;
 }

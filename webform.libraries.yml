@@ -313,6 +313,8 @@ webform.element.multiple:
   css:
     component:
       css/webform.element.multiple.css: {}
+  js:
+    js/webform.element.multiple.js: {}
 
 webform.element.likert:
   version: 1.x

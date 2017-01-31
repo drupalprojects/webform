@@ -40,7 +40,7 @@ class WebformElementFormatTest extends WebformTestBase {
 
     /** @var \Drupal\webform\WebformInterface $webform_format_item */
     $webform_format_item = Webform::load('test_element_format');
-    $sid = $this->postSubmission($webform_format_item, [], t('Submit'));
+    $sid = $this->postSubmission($webform_format_item);
     $webform_format_item_submission = WebformSubmission::load($sid);
 
     // Check elements (single) item formatted as HTML.
@@ -162,12 +162,17 @@ Finally, here is question 3?: 1',
 
     /** @var \Drupal\webform\WebformInterface $webform_format_items */
     $webform_format_items = Webform::load('test_element_format_multiple');
-    $sid = $this->postSubmission($webform_format_items, [], t('Submit'));
+    $sid = $this->postSubmission($webform_format_items);
     $webform_format_items_submission = WebformSubmission::load($sid);
 
     // Check elements (single) item formatted as HTML.
     $body = $this->getMessageBody($webform_format_items_submission, 'email_html');
     $elements = [
+      'Text field (Comma)' => 'Loremipsum, Oratione, Dixisset',
+      'Text field (Semicolon)' => 'Loremipsum; Oratione; Dixisset',
+      'Text field (And)' => 'Loremipsum, Oratione, and Dixisset',
+      'Text field (Ordered list)' => '<div class="item-list"><ol><li>Loremipsum</li><li>Oratione</li><li>Dixisset</li></ol></div>',
+      'Text field (Unordered list)' => '<div class="item-list"><ul><li>Loremipsum</li><li>Oratione</li><li>Dixisset</li></ul></div>',
       'Checkboxes (Comma)' => 'One, Two, Three',
       'Checkboxes (Semicolon)' => 'One; Two; Three',
       'Checkboxes (And)' => 'One, Two, and Three',
@@ -181,6 +186,17 @@ Finally, here is question 3?: 1',
     // Check elements formatted as text.
     $body = $this->getMessageBody($webform_format_items_submission, 'email_text');
     $elements = [
+      'Text field (Comma): Loremipsum, Oratione, Dixisset',
+      'Text field (Semicolon): Loremipsum; Oratione; Dixisset',
+      'Text field (And): Loremipsum, Oratione, and Dixisset',
+      'Text field (Ordered list):
+1. Loremipsum
+2. Oratione
+3. Dixisset',
+      'Text field (Unordered list):
+- Loremipsum
+- Oratione
+- Dixisset',
       'Checkboxes (Comma): One, Two, Three',
       'Checkboxes (Semicolon): One; Two; Three',
       'Checkboxes (And): One, Two, and Three',

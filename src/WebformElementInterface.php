@@ -257,6 +257,16 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission);
 
   /**
+   * Finalize an element to be rendered within a webform.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  public function finalize(array &$element, WebformSubmissionInterface $webform_submission);
+
+  /**
    * Check element access (rules).
    *
    * @param string $operation

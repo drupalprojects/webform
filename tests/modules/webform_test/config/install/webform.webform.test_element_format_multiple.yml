@@ -10,8 +10,269 @@ id: test_element_format_multiple
 title: 'Test: Element: Format multiple values'
 description: 'Test element formatting with multiple value.'
 elements: |
-  basic_elements: {  }
-  advanced_elements: {  }
+  basic_elements:
+    '#type': details
+    '#title': 'Basic elements'
+    '#open': true
+    textfield:
+      '#type': details
+      '#title': 'Text field'
+      textfield_comma:
+        '#type': textfield
+        '#title': 'Text field (Comma)'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': comma
+      textfield_semicolon:
+        '#type': textfield
+        '#title': 'Text field (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': semicolon
+      textfield_and:
+        '#type': textfield
+        '#title': 'Text field (And)'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': and
+      textfield_ol:
+        '#type': textfield
+        '#title': 'Text field (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ol
+      textfield_ul:
+        '#type': textfield
+        '#title': 'Text field (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ul
+  advanced_elements:
+    '#type': details
+    '#title': 'Advanced elements'
+    '#open': true
+    webform_autocomplete:
+      '#type': details
+      '#title': Autocomplete
+      webform_autocomplete_comma:
+        '#type': webform_autocomplete
+        '#title': 'Autocomplete (Comma)'
+        '#autocomplete_items': country_names
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': comma
+      webform_autocomplete_semicolon:
+        '#type': webform_autocomplete
+        '#title': 'Autocomplete (Semicolon)'
+        '#autocomplete_items': country_names
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': semicolon
+      webform_autocomplete_and:
+        '#type': webform_autocomplete
+        '#title': 'Autocomplete (And)'
+        '#autocomplete_items': country_names
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': and
+      webform_autocomplete_ol:
+        '#type': webform_autocomplete
+        '#title': 'Autocomplete (Ordered list)'
+        '#autocomplete_items': country_names
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ol
+      webform_autocomplete_ul:
+        '#type': webform_autocomplete
+        '#title': 'Autocomplete (Unordered list)'
+        '#autocomplete_items': country_names
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ul
+    email:
+      '#type': details
+      '#title': Email
+      email_comma:
+        '#type': email
+        '#title': 'Email (Comma)'
+        '#multiple': true
+        '#default_value':
+          - example@example.com
+          - test@test.com
+          - random@random.com
+        '#format_items': comma
+      email_semicolon:
+        '#type': email
+        '#title': 'Email (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - example@example.com
+          - test@test.com
+          - random@random.com
+        '#format_items': semicolon
+      email_and:
+        '#type': email
+        '#title': 'Email (And)'
+        '#multiple': true
+        '#default_value':
+          - example@example.com
+          - test@test.com
+          - random@random.com
+        '#format_items': and
+      email_ol:
+        '#type': email
+        '#title': 'Email (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - example@example.com
+          - test@test.com
+          - random@random.com
+        '#format_items': ol
+      email_ul:
+        '#type': email
+        '#title': 'Email (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - example@example.com
+          - test@test.com
+          - random@random.com
+        '#format_items': ul
+    number:
+      '#type': details
+      '#title': Number
+      number_comma:
+        '#type': number
+        '#title': 'Number (Comma)'
+        '#min': 0
+        '#max': 10
+        '#step': 1
+        '#multiple': true
+        '#default_value':
+          - 0
+          - !!float 5
+          - 10
+        '#format_items': comma
+      number_semicolon:
+        '#type': number
+        '#title': 'Number (Semicolon)'
+        '#min': 0
+        '#max': 10
+        '#step': 1
+        '#multiple': true
+        '#default_value':
+          - 0
+          - !!float 5
+          - 10
+        '#format_items': semicolon
+      number_and:
+        '#type': number
+        '#title': 'Number (And)'
+        '#min': 0
+        '#max': 10
+        '#step': 1
+        '#multiple': true
+        '#default_value':
+          - 0
+          - !!float 5
+          - 10
+        '#format_items': and
+      number_ol:
+        '#type': number
+        '#title': 'Number (Ordered list)'
+        '#min': 0
+        '#max': 10
+        '#step': 1
+        '#multiple': true
+        '#default_value':
+          - 0
+          - !!float 5
+          - 10
+        '#format_items': ol
+      number_ul:
+        '#type': number
+        '#title': 'Number (Unordered list)'
+        '#min': 0
+        '#max': 10
+        '#step': 1
+        '#multiple': true
+        '#default_value':
+          - 0
+          - !!float 5
+          - 10
+        '#format_items': ul
+    url:
+      '#type': details
+      '#title': URL
+      url_comma:
+        '#type': url
+        '#title': 'URL (Comma)'
+        '#multiple': true
+        '#default_value':
+          - 'http://example.com'
+          - 'http://test.com'
+        '#format_items': comma
+      url_semicolon:
+        '#type': url
+        '#title': 'URL (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - 'http://example.com'
+          - 'http://test.com'
+        '#format_items': semicolon
+      url_and:
+        '#type': url
+        '#title': 'URL (And)'
+        '#multiple': true
+        '#default_value':
+          - 'http://example.com'
+          - 'http://test.com'
+        '#format_items': and
+      url_ol:
+        '#type': url
+        '#title': 'URL (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - 'http://example.com'
+          - 'http://test.com'
+        '#format_items': ol
+      url_ul:
+        '#type': url
+        '#title': 'URL (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - 'http://example.com'
+          - 'http://test.com'
+        '#format_items': ul
   options_elements:
     '#type': details
     '#title': 'Options elements'
@@ -614,6 +875,197 @@ elements: |
           - one
           - two
           - three
+        '#format_items': ul
+  date_time_elements:
+    '#type': details
+    '#title': 'Date/time elements'
+    '#open': true
+    date:
+      '#type': details
+      '#title': Date
+      date_comma:
+        '#type': date
+        '#title': 'Date (Comma)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': comma
+      date_semicolon:
+        '#type': date
+        '#title': 'Date (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': semicolon
+      date_and:
+        '#type': date
+        '#title': 'Date (And)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': and
+      date_ol:
+        '#type': date
+        '#title': 'Date (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': ol
+      date_ul:
+        '#type': date
+        '#title': 'Date (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': ul
+    datetime:
+      '#type': details
+      '#title': Date/time
+      datetime_comma:
+        '#type': datetime
+        '#title': 'Date/time (Comma)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': comma
+      datetime_semicolon:
+        '#type': datetime
+        '#title': 'Date/time (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': semicolon
+      datetime_and:
+        '#type': datetime
+        '#title': 'Date/time (And)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': and
+      datetime_ol:
+        '#type': datetime
+        '#title': 'Date/time (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': ol
+      datetime_ul:
+        '#type': datetime
+        '#title': 'Date/time (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': ul
+    datelist:
+      '#type': details
+      '#title': 'Date list'
+      datelist_comma:
+        '#type': datelist
+        '#title': 'Date list (Comma)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': comma
+      datelist_semicolon:
+        '#type': datelist
+        '#title': 'Date list (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': semicolon
+      datelist_and:
+        '#type': datelist
+        '#title': 'Date list (And)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': and
+      datelist_ol:
+        '#type': datelist
+        '#title': 'Date list (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': ol
+      datelist_ul:
+        '#type': datelist
+        '#title': 'Date list (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - '1942-06-18'
+          - '1940-07-07'
+          - '1943-02-25'
+        '#format_items': ul
+    webform_time:
+      '#type': details
+      '#title': Time
+      webform_time_comma:
+        '#type': webform_time
+        '#title': 'Time (Comma)'
+        '#multiple': true
+        '#default_value':
+          - '09:00'
+          - '17:00'
+        '#format_items': comma
+      webform_time_semicolon:
+        '#type': webform_time
+        '#title': 'Time (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - '09:00'
+          - '17:00'
+        '#format_items': semicolon
+      webform_time_and:
+        '#type': webform_time
+        '#title': 'Time (And)'
+        '#multiple': true
+        '#default_value':
+          - '09:00'
+          - '17:00'
+        '#format_items': and
+      webform_time_ol:
+        '#type': webform_time
+        '#title': 'Time (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - '09:00'
+          - '17:00'
+        '#format_items': ol
+      webform_time_ul:
+        '#type': webform_time
+        '#title': 'Time (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - '09:00'
+          - '17:00'
         '#format_items': ul
   entity_reference_elements:
     '#type': details

@@ -40,8 +40,11 @@ abstract class NumericBase extends WebformElementBase {
    */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     $element += ['#min' => 1, '#max' => 10];
-    $value = ($options['random']) ? rand($element['#min'], $element['#max']) : floor((($element['#max'] - $element['#min']) / 2) + $element['#min']);
-    return [$value];
+    return [
+      $element['#min'],
+      floor((($element['#max'] - $element['#min']) / 2) + $element['#min']),
+      $element['#max'],
+    ];
   }
 
   /**

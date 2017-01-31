@@ -1237,13 +1237,14 @@ class WebformSubmissionForm extends ContentEntityForm {
         continue;
       }
 
-      // Replace default_value tokens
       // Invoke WebformElement::prepare.
       $this->elementManager->invokeMethod('prepare', $element, $this->entity);
 
-      // Initialize default values.
       // Invoke WebformElement::setDefaultValue.
       $this->elementManager->invokeMethod('setDefaultValue', $element);
+
+      // Invoke WebformElement::finalize.
+      $this->elementManager->invokeMethod('finalize', $element, $this->entity);
 
       // Allow modules to alter the webform element.
       // @see \Drupal\Core\Field\WidgetBase::formSingleElement()

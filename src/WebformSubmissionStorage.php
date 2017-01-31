@@ -160,6 +160,19 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     return reset($result);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function hasSubmissionValue(WebformInterface $webform, $element_key) {
+    /** @var \Drupal\Core\Database\StatementInterface $result */
+    $result = $this->database->select('webform_submission_data', 'sd')
+      ->fields('sd', ['sid'])
+      ->condition('sd.webform_id', $webform->id())
+      ->condition('sd.name', $element_key)
+      ->execute();
+    return $result->fetchAssoc() ? TRUE : FALSE;
+  }
+
   /****************************************************************************/
   // Paging methods.
   /****************************************************************************/
@@ -209,52 +222,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     ksort($entity_type_labels);
 
     return array_intersect_key($entity_type_labels, array_flip($entity_types));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function purge($count) {
-    $days_to_seconds = 60 * 60 * 24;
-
-    $query = $this->entityManager->getStorage('webform')->getQuery();
-    $query->condition('settings.purge', [self::PURGE_DRAFT, self::PURGE_COMPLETED, self::PURGE_ALL], 'IN');
-    $query->condition('settings.purge_days', 0, '>');
-    $webforms_to_purge = array_values($query->execute());
-
-    $webform_submissions_to_purge = [];
-
-    if (!empty($webforms_to_purge)) {
-      $webforms_to_purge = $this->entityManager->getStorage('webform')->loadMultiple($webforms_to_purge);
-      foreach ($webforms_to_purge as $webform) {
-        $query = $this->getQuery();
-        $query->condition('created', REQUEST_TIME - ($webform->getSetting('purge_days') * $days_to_seconds), '<');
-        $query->condition('webform_id', $webform->id());
-        switch ($webform->getSetting('purge')) {
-          case self::PURGE_DRAFT:
-            $query->condition('in_draft', TRUE);
-            break;
-
-          case self::PURGE_COMPLETED:
-            $query->condition('in_draft', FALSE);
-            break;
-        }
-        $query->range(0, $count - count($webform_submissions_to_purge));
-        $result = array_values($query->execute());
-        if (!empty($result)) {
-          $webform_submissions_to_purge = array_merge($webform_submissions_to_purge, $result);
-        }
-        if (count($webform_submissions_to_purge) == $count) {
-          // We've collected enough webform submissions for purging in this run.
-          break;
-        }
-      }
-    }
-
-    if (!empty($webform_submissions_to_purge)) {
-      $webform_submissions_to_purge = $this->loadMultiple($webform_submissions_to_purge);
-      $this->delete($webform_submissions_to_purge);
-    }
   }
 
   /**
@@ -669,6 +636,10 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     return $return;
   }
 
+  /****************************************************************************/
+  // Invoke methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    */
@@ -686,6 +657,56 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   }
 
   /****************************************************************************/
+  // Purge methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function purge($count) {
+    $days_to_seconds = 60 * 60 * 24;
+
+    $query = $this->entityManager->getStorage('webform')->getQuery();
+    $query->condition('settings.purge', [self::PURGE_DRAFT, self::PURGE_COMPLETED, self::PURGE_ALL], 'IN');
+    $query->condition('settings.purge_days', 0, '>');
+    $webforms_to_purge = array_values($query->execute());
+
+    $webform_submissions_to_purge = [];
+
+    if (!empty($webforms_to_purge)) {
+      $webforms_to_purge = $this->entityManager->getStorage('webform')->loadMultiple($webforms_to_purge);
+      foreach ($webforms_to_purge as $webform) {
+        $query = $this->getQuery();
+        $query->condition('created', REQUEST_TIME - ($webform->getSetting('purge_days') * $days_to_seconds), '<');
+        $query->condition('webform_id', $webform->id());
+        switch ($webform->getSetting('purge')) {
+          case self::PURGE_DRAFT:
+            $query->condition('in_draft', TRUE);
+            break;
+
+          case self::PURGE_COMPLETED:
+            $query->condition('in_draft', FALSE);
+            break;
+        }
+        $query->range(0, $count - count($webform_submissions_to_purge));
+        $result = array_values($query->execute());
+        if (!empty($result)) {
+          $webform_submissions_to_purge = array_merge($webform_submissions_to_purge, $result);
+        }
+        if (count($webform_submissions_to_purge) == $count) {
+          // We've collected enough webform submissions for purging in this run.
+          break;
+        }
+      }
+    }
+
+    if (!empty($webform_submissions_to_purge)) {
+      $webform_submissions_to_purge = $this->loadMultiple($webform_submissions_to_purge);
+      $this->delete($webform_submissions_to_purge);
+    }
+  }
+
+  /****************************************************************************/
   // Data handlers.
   /****************************************************************************/
 
@@ -698,7 +719,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected function loadData(array &$webform_submissions) {
     // Load webform submission data.
     if ($sids = array_keys($webform_submissions)) {
-      $result = Database::getConnection()->select('webform_submission_data', 'sd')
+      /** @var \Drupal\Core\Database\StatementInterface $result */
+      $result = $this->database->select('webform_submission_data', 'sd')
         ->fields('sd', ['webform_id', 'sid', 'name', 'property', 'delta', 'value'])
         ->condition('sd.sid', $sids, 'IN')
         ->orderBy('sd.sid', 'ASC')
@@ -820,7 +842,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     foreach ($webform_submissions as $webform_submission) {
       $sids[$webform_submission->id()] = $webform_submission->id();
     }
-    Database::getConnection()->delete('webform_submission_data')
+    $this->database->delete('webform_submission_data')
       ->condition('sid', $sids, 'IN')
       ->execute();
   }

@@ -22,6 +22,7 @@ class TextField extends TextBase {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      'multiple' => FALSE,
       // Form display.
       'input_mask' => '',
       // Form validation.
@@ -35,8 +36,8 @@ class TextField extends TextBase {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
-    parent::prepare($element, $webform_submission);
     $element['#maxlength'] = (!isset($element['#maxlength'])) ? 255 : $element['#maxlength'];
+    parent::prepare($element, $webform_submission);
   }
 
 }

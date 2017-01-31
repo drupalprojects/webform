@@ -43,7 +43,7 @@ class WebformViewsBulkFormTest extends WebformTestBase {
     // Create a test submission.
     $this->drupalLogin($this->adminWebformUser);
     $webform = Webform::load('contact');
-    $sid = $this->postSubmissionTest($webform, [], t('Send message'));
+    $sid = $this->postSubmissionTest($webform);
     $webform_submission = $this->loadSubmission($sid);
 
     $this->drupalLogin($this->adminSubmissionUser);
