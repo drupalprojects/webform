@@ -1618,7 +1618,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if (isset($custom_properties['type'])) {
       $form['type'] = [
         '#type' => 'value',
-        '#value' => preg_replace('/^webform_/', '', $custom_properties['type']),
+        '#value' => $custom_properties['type'],
         '#parents' => ['properties', 'type'],
       ];
       unset($custom_properties['type']);
