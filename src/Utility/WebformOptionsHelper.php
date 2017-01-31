@@ -88,7 +88,7 @@ class WebformOptionsHelper {
     $string = [];
     foreach ($options as $option_value => $option_text) {
       if (is_array($option_text)) {
-        $string[(string) $option_value] = self::toStringOption($option_text);
+        $string[(string) $option_value] = self::convertOptionsToString($option_text);
       }
       else {
         $string[(string) $option_value] = (string) $option_text;
