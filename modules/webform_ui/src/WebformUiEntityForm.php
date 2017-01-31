@@ -285,8 +285,6 @@ class WebformUiEntityForm extends WebformEntityForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
@@ -295,6 +293,8 @@ class WebformUiEntityForm extends WebformEntityForm {
     if ($webform->isNew()) {
       return;
     }
+
+    parent::validateForm($form, $form_state);
 
     // Get raw flattened elements that will be used to rebuild element's YAML
     // hierarchy.
