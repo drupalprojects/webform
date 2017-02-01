@@ -136,7 +136,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
     $form['delete_url'] = [
       '#type' => 'url',
-      '#title' => $this->t('Save URL'),
+      '#title' => $this->t('Delete URL'),
       '#description' => $this->t('The full URL to POST to call when a webform submission is deleted. E.g. http://www.mycrm.com/form_delete_handler.php'),
       '#default_value' => $this->configuration['delete_url'],
       '#access' => !$results_disabled,
