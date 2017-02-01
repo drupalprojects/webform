@@ -163,7 +163,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       }
 
       $is_route_match = in_array($route_name, $help['routes']);
-      $is_path_match = ($help['paths'] && $this->pathMatcher->matchPath($path, implode("\n", $help['paths'])));
+      $is_path_match = ($help['paths'] && $this->pathMatcher->matchPath($path, implode(PHP_EOL, $help['paths'])));
       $has_help = ($is_route_match || $is_path_match);
       if (!$has_help) {
         continue;

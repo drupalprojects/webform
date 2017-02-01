@@ -187,8 +187,8 @@ function webform_drush_help($section) {
 
     case 'drush:webform-tidy':
       return dt('This command tidies exported YAML configuration files.') . "\n\n" .
-        dt('Changes include...') . "\n" .
-        dt('- Preserving newlines using pipe (|).') . "\n" .
+        dt('Changes include...') . PHP_EOL .
+        dt('- Preserving newlines using pipe (|).') . PHP_EOL .
         dt('- Removing returns after array dashes (-).');
 
     case 'drush:webform-generate':
@@ -384,7 +384,7 @@ function drush_webform_tidy($module = 'webform') {
     }
 
     // Tidy and add new line to the end of the tidied file.
-    $tidied_yaml = WebformYamlTidy::tidy($tidied_yaml) . "\n";
+    $tidied_yaml = WebformYamlTidy::tidy($tidied_yaml) . PHP_EOL;
     if ($tidied_yaml != $original_yaml) {
       drush_print(dt('Tidying @file...', ['@file' => $file->filename]));
       file_put_contents($file->uri, $tidied_yaml);

@@ -219,5 +219,5 @@ function webform_test_elements_states_issues_markdown() {
       $markdown[] = '';
     }
   }
-  return implode("\n", $markdown);
+  return implode(PHP_EOL, $markdown);
 }

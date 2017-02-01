@@ -61,7 +61,7 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
 
     // Check sending a custom email using tokens.
     $this->drupalLogin($this->adminWebformUser);
-    $body = implode("\n", [
+    $body = implode(PHP_EOL, [
       'full name: [webform_submission:values:first_name] [webform_submission:values:last_name]',
       'uuid: [webform_submission:uuid]',
       'sid: [webform_submission:sid]',

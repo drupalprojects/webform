@@ -321,9 +321,9 @@ drush -y pm-enable\
     $help = _webform_help();
     print '<pre>';
     foreach ($help as $name => $info) {
-      print "webform-" . $name . "\n";
-      print 'Webform Help: ' . $info['title'] . "\n";
-      print "\n";
+      print "webform-" . $name . PHP_EOL;
+      print 'Webform Help: ' . $info['title'] . PHP_EOL;
+      print PHP_EOL;
     }
     print '</pre>'; exit;
   

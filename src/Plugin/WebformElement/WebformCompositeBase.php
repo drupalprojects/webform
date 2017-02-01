@@ -471,7 +471,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
             }
           }
         }
-        return implode("\n", $items);
+        return implode(PHP_EOL, $items);
 
       case 'raw':
         $items = [];
@@ -482,11 +482,11 @@ abstract class WebformCompositeBase extends WebformElementBase {
             $items[$composite_key] = "$composite_key: $composite_value";
           }
         }
-        return implode("\n", $items);
+        return implode(PHP_EOL, $items);
 
       default:
         $lines = $this->formatTextItemValue($element, $value);
-        return implode("\n", $lines);
+        return implode(PHP_EOL, $lines);
     }
   }
 

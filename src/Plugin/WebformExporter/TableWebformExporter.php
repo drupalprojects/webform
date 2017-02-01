@@ -82,7 +82,7 @@ class TableWebformExporter extends TabularBaseWebformExporter {
 
     fwrite($file_handle, '<table border="1">');
     fwrite($file_handle, '<thead><tr bgcolor="#cccccc" valign="top">');
-    fwrite($file_handle, implode("\n", $thead));
+    fwrite($file_handle, implode(PHP_EOL, $thead));
     fwrite($file_handle, '</tr></thead>');
     fwrite($file_handle, '<tbody>');
   }
@@ -101,7 +101,7 @@ class TableWebformExporter extends TabularBaseWebformExporter {
     }
 
     fwrite($file_handle, '<tr valign="top">');
-    fwrite($file_handle, implode("\n", $row));
+    fwrite($file_handle, implode(PHP_EOL, $row));
     fwrite($file_handle, '</tr>');
   }
 

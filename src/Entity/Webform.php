@@ -414,8 +414,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $webform_javascript = $this->javascript ?: '';
 
     return [
-      'css' => $shared_css . (($shared_css && $webform_css) ? "\n" : '') . $webform_css,
-      'javascript' => $shared_javascript . (($shared_javascript && $webform_javascript) ? "\n" : '') . $webform_javascript,
+      'css' => $shared_css . (($shared_css && $webform_css) ? PHP_EOL : '') . $webform_css,
+      'javascript' => $shared_javascript . (($shared_javascript && $webform_javascript) ? PHP_EOL : '') . $webform_javascript,
     ];
   }
 

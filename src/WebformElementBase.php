@@ -836,14 +836,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         foreach ($items as $item) {
           $list[] = ($index++) . '. ' . $item;
         }
-        return implode("\n", $list);
+        return implode(PHP_EOL, $list);
 
       case 'ul':
         $list = [];
         foreach ($items as $index => $item) {
           $list[] = '- ' . $item;
         }
-        return implode("\n", $list);
+        return implode(PHP_EOL, $list);
 
       case 'and':
         return WebformArrayHelper::toString($items, t('and'));

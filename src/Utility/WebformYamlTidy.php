@@ -28,7 +28,7 @@ class WebformYamlTidy {
     $yaml = preg_replace('#(\n[ ]+-)\n[ ]+#', '\1 ', $yaml);
 
     // Support YAML newlines preserved syntax via pipe (|).
-    $lines = explode("\n", $yaml);
+    $lines = explode(PHP_EOL, $yaml);
     foreach ($lines as $index => $line) {
       if (empty($line) || strpos($line, '\n') === FALSE) {
         continue;
@@ -49,17 +49,17 @@ class WebformYamlTidy {
         }
 
         if (strpos($value, '<') === FALSE) {
-          $lines[$index] = $prefix . $name . ": |\n$prefix  " . str_replace("\n", "\n$prefix  ", $value);
+          $lines[$index] = $prefix . $name . ": |\n$prefix  " . str_replace(PHP_EOL, "\n$prefix  ", $value);
         }
         else {
-          $value = preg_replace('~\R~u', "\n", $value);
+          $value = preg_replace('~\R~u', PHP_EOL, $value);
           $value = preg_replace('#\s*</p>#', '</p>', $value);
-          $value = str_replace("\n", "\n$indent  ", $value);
+          $value = str_replace(PHP_EOL, "\n$indent  ", $value);
           $lines[$index] = $prefix . $name . ": |\n$indent  " . $value;
         }
       }
     }
-    $yaml = implode("\n", $lines);
+    $yaml = implode(PHP_EOL, $lines);
     return trim($yaml);
   }
 

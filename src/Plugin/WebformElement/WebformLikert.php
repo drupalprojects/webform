@@ -170,7 +170,7 @@ class WebformLikert extends WebformElementBase {
           $answer_value = (isset($value[$question_key])) ? $value[$question_key] : NULL;
           $list[] = "$question_key: $answer_value";
         }
-        return implode("\n", $list);
+        return implode(PHP_EOL, $list);
 
       default:
       case 'value':
@@ -182,7 +182,7 @@ class WebformLikert extends WebformElementBase {
           $answer_text = WebformOptionsHelper::getOptionText($answer_value, $element['#answers']);
           $list[] = "$question_label: $answer_text";
         }
-        return implode("\n", $list);
+        return implode(PHP_EOL, $list);
 
     }
   }
