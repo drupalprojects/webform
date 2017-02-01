@@ -167,3 +167,7 @@ a:focus .webform-icon-notes--off {
 .webform-submission__table td {
   width: 66%;
 }
+
+.webform-horizontal-rule {
+  margin: .5em 0;
+}

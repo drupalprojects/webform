@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeRepositoryInterface;
+use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -123,6 +124,13 @@ class WebformRequest implements WebformRequestInterface {
   /****************************************************************************/
   // Routing helpers
   /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isAjax() {
+    return $this->request->get(AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER) ? TRUE : FALSE;
+  }
 
   /**
    * {@inheritdoc}

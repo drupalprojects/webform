@@ -14,7 +14,7 @@ use Drupal\webform\WebformInterface;
  * @return array
  *   An array containing test elements formats.
  */
-function webform_test_test_element_format(WebformInterface $webform, $multiple = FALSE) {
+function webform_test_test_element_format(WebformInterface $webform, $composite = FALSE, $multiple = FALSE) {
   // Elements to be ignored.
   $skipped_elements = [
     'hidden',
@@ -56,6 +56,10 @@ function webform_test_test_element_format(WebformInterface $webform, $multiple =
     $webform_element = $elements[$element_type];
     $element = _webform_test_get_example_element($element_type, ['issues' => FALSE]);
     if (!$element || !$webform_element->isInput($element)) {
+      continue;
+    }
+
+    if ($webform_element->isComposite() !== $composite) {
       continue;
     }
 
@@ -129,6 +133,9 @@ function webform_test_test_element_format(WebformInterface $webform, $multiple =
     unset($data['other_elements']);
     $data['other_elements'] = $other_elements;
   }
+
+  // Remove empty basic and advanced details.
+  $data = array_filter($data);
 
   return $data;
 }

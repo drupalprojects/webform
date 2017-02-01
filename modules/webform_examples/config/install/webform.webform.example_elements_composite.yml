@@ -17,6 +17,11 @@ elements: |
     webform_address:
       '#type': webform_address
       '#title': Address
+    webform_address_multiple:
+      '#type': webform_address
+      '#title': 'Address multiple'
+      '#multiple': true
+      '#header': true
   webform_contact_example:
     '#type': details
     '#title': Contact
@@ -24,6 +29,10 @@ elements: |
     webform_contact:
       '#type': webform_contact
       '#title': Contact
+    webform_contact_multiple:
+      '#type': webform_contact
+      '#title': 'Contact multiple'
+      '#multiple': true
   webform_creditcard_example:
     '#type': details
     '#title': 'Credit card'
@@ -38,6 +47,11 @@ elements: |
     webform_link:
       '#type': webform_link
       '#title': Link
+    webform_link_multiple:
+      '#type': webform_link
+      '#title': 'Link multiple'
+      '#multiple': true
+      '#header': true
   webform_location_example:
     '#type': details
     '#title': Location
@@ -45,6 +59,10 @@ elements: |
     webform_location:
       '#type': webform_location
       '#title': Location
+    webform_location_multiple:
+      '#type': webform_location
+      '#title': 'Location multiple'
+      '#multiple': true
   webform_name_example:
     '#type': details
     '#title': Name
@@ -52,6 +70,11 @@ elements: |
     webform_name:
       '#type': webform_name
       '#title': Name
+    webform_name_multiple:
+      '#type': webform_name
+      '#title': 'Name multiple'
+      '#multiple': true
+      '#header': true
 css: ''
 javascript: ''
 settings:

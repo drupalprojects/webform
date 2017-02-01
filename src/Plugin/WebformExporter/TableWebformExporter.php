@@ -97,7 +97,7 @@ class TableWebformExporter extends TabularBaseWebformExporter {
 
     $row = [];
     foreach ($record as $item) {
-      $row[] = '<td>' . htmlentities($item) . '</td>';
+      $row[] = '<td>' . nl2br(htmlentities($item)) . '</td>';
     }
 
     fwrite($file_handle, '<tr valign="top">');

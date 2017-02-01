@@ -46,12 +46,17 @@
   background: none;
 }
 
-.webform-multiple-table td input[type="text"] {
-  width: 95%;
+.webform-multiple-table td select,
+.webform-multiple-table td input {
+  width: 100%;
 }
 
-.form-type-webform-multiple.webform-has-field-prefix td input[type="text"],
-.form-type-webform-multiple.webform-has-field-suffix td input[type="text"] {
+.webform-multiple-table td input[type="checkbox"],
+.webform-multiple-table td input[type="radio"],
+.form-type-webform-multiple.webform-has-field-prefix td select,
+.form-type-webform-multiple.webform-has-field-suffix td select,
+.form-type-webform-multiple.webform-has-field-prefix td input,
+.form-type-webform-multiple.webform-has-field-suffix td input {
   width: auto;
 }
 

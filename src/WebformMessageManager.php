@@ -141,7 +141,9 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    * {@inheritdoc}
    */
   public function display($key, $type = 'status') {
-    if ($build = $this->build($key)) {
+    $build = $this->build($key);
+    // Do not display message via Ajax request.
+    if ($build && !$this->requestHandler->isAjax()) {
       drupal_set_message(\Drupal::service('renderer')->renderPlain($build), $type);
       return TRUE;
     }

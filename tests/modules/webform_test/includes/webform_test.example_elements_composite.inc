@@ -40,7 +40,19 @@ function webform_test_example_elements_composite() {
       '#open' => TRUE,
     ];
 
+    // Single value composite.
     $data[$element_type . '_example'][$element_type] = $element;
+
+    // Multiple value composite.
+    if ($webform_element->supportsMultipleValues()) {
+      $element['#title'] = $element['#title'] . ' multiple';
+      $element['#multiple'] = TRUE;
+      if ((!in_array($element_type, ['webform_contact']) && $webform_element->hasProperty('header'))) {
+        $element['#header'] = TRUE;
+      }
+      $data[$element_type . '_example'][$element_type . '_multiple'] = $element;
+    }
+
   }
   return $data;
 }

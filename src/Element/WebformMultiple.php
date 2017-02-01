@@ -81,19 +81,20 @@ class WebformMultiple extends FormElement {
       if ($form_state->get($number_of_items_storage_key) === NULL) {
         if (empty($element['#default_value']) || !is_array($element['#default_value'])) {
           $number_of_default_values = 0;
-          $number_of_empty_items = (int) $element['#empty_items'];
         }
         else {
           $number_of_default_values = count($element['#default_value']);
-          $number_of_empty_items = 1;
         }
-
-        $form_state->set($number_of_items_storage_key, $number_of_default_values + $number_of_empty_items);
+        $number_of_empty_items = (int) $element['#empty_items'];
+        $number_of_items = $number_of_default_values + $number_of_empty_items;
+        if ($number_of_items < 1) {
+          $number_of_items = 1;
+        }
+        $form_state->set($number_of_items_storage_key, $number_of_items);
       }
 
       $number_of_items = $form_state->get($number_of_items_storage_key);
     }
-
     $table_id = implode('_', $element['#parents']) . '_table';
 
     // DEBUG: Disable AJAX callback by commenting out the below callback and
@@ -200,6 +201,9 @@ class WebformMultiple extends FormElement {
     $header['_handle_'] = '';
     if ($element['#child_keys']) {
       foreach ($element['#child_keys'] as $child_key) {
+        if (self::isHidden($element['#element'][$child_key])) {
+          continue;
+        }
         $header[$child_key] = (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '';
       }
     }
@@ -236,7 +240,12 @@ class WebformMultiple extends FormElement {
     if ($element['#child_keys']) {
       foreach ($element['#child_keys'] as $child_key) {
         if (isset($default_value[$child_key])) {
-          $element['#element'][$child_key]['#default_value'] = $default_value[$child_key];
+          if ($element['#element'][$child_key]['#type'] == 'value') {
+            $element['#element'][$child_key]['#value'] = $default_value[$child_key];
+          }
+          else {
+            $element['#element'][$child_key]['#default_value'] = $default_value[$child_key];
+          }
         }
       }
     }
@@ -250,7 +259,18 @@ class WebformMultiple extends FormElement {
 
     if ($element['#child_keys'] && !empty($element['#header'])) {
       foreach ($element['#child_keys'] as $child_key) {
-        $row[$child_key] = $element['#element'][$child_key];
+        // Store hidden element in the '_handle_' column.
+        // @see \Drupal\webform\Element\WebformMultiple::convertValuesToItems
+        if (self::isHidden($element['#element'][$child_key])) {
+          $row['_handle_'][$child_key] = $element['#element'][$child_key];
+          // ISSUE: All elements in _handle_ are losing their value.
+          // WORKAROUND: Convert to element to rendered hidden field.
+          $row['_handle_'][$child_key]['#type'] = 'hidden';
+          unset($row['_handle_'][$child_key]['#access']);
+        }
+        else {
+          $row[$child_key] = $element['#element'][$child_key];
+        }
       }
     }
     else {
@@ -300,6 +320,27 @@ class WebformMultiple extends FormElement {
     $row['#weight'] = $weight;
     $row['#attributes']['class'][] = 'draggable';
     return $row;
+  }
+
+  /**
+   * Determine if an element is hidden.
+   *
+   * @param array $element
+   *   The element.
+   *
+   * @return bool
+   *   TRUE if the element is hidden.
+   */
+  protected static function isHidden(array $element) {
+    if (isset($element['#access']) && $element['#access'] === FALSE) {
+      return TRUE;
+    }
+    elseif (isset($element['#type']) && in_array($element['#type'], ['hidden', 'value'])) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
   /****************************************************************************/
@@ -480,7 +521,13 @@ class WebformMultiple extends FormElement {
         }
       }
       else {
-        unset($value['weight'], $value['_operations_']);
+        // Get hidden (#access: FALSE) elements in the '_handle_' column and
+        // add them to the $value.
+        // @see \Drupal\webform\Element\WebformMultiple::buildElementRow
+        if (isset($value['_handle_']) && is_array($value['_handle_'])) {
+          $value += $value['_handle_'];
+        }
+        unset($value['weight'], $value['_operations_'], $value['_handle_']);
         if (!self::isEmpty($value)) {
           $items[] = $value;
         }

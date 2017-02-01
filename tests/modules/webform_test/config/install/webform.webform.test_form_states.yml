@@ -612,7 +612,6 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
-      '#default_value': !!float 5
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -683,7 +682,6 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': !!float 50
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -694,7 +692,7 @@ elements: |
     visible_webform_rating:
       '#type': webform_rating
       '#title': Rating
-      '#default_value': !!float 3
+      '#default_value': 1
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1397,7 +1395,6 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
-      '#default_value': !!float 5
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1453,7 +1450,6 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': !!float 50
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1461,7 +1457,7 @@ elements: |
     invisible_webform_rating:
       '#type': webform_rating
       '#title': Rating
-      '#default_value': !!float 3
+      '#default_value': 1
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -2004,7 +2000,6 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
-      '#default_value': !!float 5
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2060,7 +2055,6 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': !!float 50
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2068,7 +2062,7 @@ elements: |
     disabled_webform_rating:
       '#type': webform_rating
       '#title': Rating
-      '#default_value': !!float 3
+      '#default_value': 1
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

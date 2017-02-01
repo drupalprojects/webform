@@ -344,7 +344,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function isMultiline(array $element) {
     $format = $this->getItemsFormat($element);
-    if ($this->hasMultipleValues($element) && in_array($format, ['ol', 'ul'])) {
+    if ($this->hasMultipleValues($element) && in_array($format, ['ol', 'ul', 'hr'])) {
       return TRUE;
     }
     else {
@@ -620,6 +620,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Change the element to a multiple element.
     $element['#type'] = 'webform_multiple';
+    $element['#webform_multiple'] = TRUE;
+    $element['#empty_items'] = 0;
+
     // Remove properties that should only be applied to the child element.
     $element = array_diff_key($element, array_flip(['#attributes', '#field_prefix', '#field_suffix', '#pattern', '#placeholder', '#maxlength', '#element_validate']));
   }
@@ -803,6 +806,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         '#list_type' => $format,
       ];
     }
+    elseif ($format == 'hr') {
+      foreach ($items as $index => &$item) {
+        if ($index) {
+          $item['#prefix'] = '<hr class="webform-horizontal-rule" />';
+        }
+      }
+      return $items;
+    }
     else {
       // Render items so that then can be displayed as plain text.
       foreach ($items as $index => $item) {
@@ -834,16 +845,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $list = [];
         $index = 1;
         foreach ($items as $item) {
-          $list[] = ($index++) . '. ' . $item;
+          $prefix = ($index++) . '. ';
+          $list[] = $prefix . str_replace(PHP_EOL, PHP_EOL . str_repeat(' ', strlen($prefix)), $item);
         }
         return implode(PHP_EOL, $list);
 
       case 'ul':
         $list = [];
         foreach ($items as $index => $item) {
-          $list[] = '- ' . $item;
+          $list[] = '- ' . str_replace(PHP_EOL, PHP_EOL . '  ', $item);
         }
         return implode(PHP_EOL, $list);
+
+      case 'hr':
+        return implode(PHP_EOL . '---' . PHP_EOL, $items);
 
       case 'and':
         return WebformArrayHelper::toString($items, t('and'));

@@ -736,11 +736,16 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         $elements = $webform_submissions[$sid]->getWebform()->getElementsInitializedFlattenedAndHasValue();
         $element = (isset($elements[$name])) ? $elements[$name] : ['#webform_multiple' => FALSE, '#webform_composite' => FALSE];
 
-        if ($element['#webform_multiple']) {
-          $submissions_data[$sid][$name][$record['delta']] = $record['value'];
+        if ($element['#webform_composite']) {
+          if ($element['#webform_multiple']) {
+            $submissions_data[$sid][$name][$record['delta']][$record['property']] = $record['value'];
+          }
+          else {
+            $submissions_data[$sid][$name][$record['property']] = $record['value'];
+          }
         }
-        elseif ($element['#webform_composite']) {
-          $submissions_data[$sid][$name][$record['property']] = $record['value'];
+        elseif ($element['#webform_multiple']) {
+          $submissions_data[$sid][$name][$record['delta']] = $record['value'];
         }
         else {
           $submissions_data[$sid][$name] = $record['value'];
@@ -774,7 +779,24 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $rows = [];
     foreach ($data as $name => $item) {
       $element = (isset($elements[$name])) ? $elements[$name] : ['#webform_multiple' => FALSE, '#webform_composite' => FALSE];
-      if ($element['#webform_multiple']) {
+      if ($element['#webform_composite']) {
+        if (is_array($item)) {
+          $composite_items = (empty($element['#webform_multiple'])) ? [$item] : $item;
+          foreach ($composite_items as $delta => $composite_item) {
+            foreach ($composite_item as $property => $value) {
+              $rows[] = [
+                'webform_id' => $webform_id,
+                'sid' => $sid,
+                'name' => $name,
+                'property' => $property,
+                'delta' => $delta,
+                'value' => (string) $value,
+              ];
+            }
+          }
+        }
+      }
+      elseif ($element['#webform_multiple']) {
         if (is_array($item)) {
           foreach ($item as $delta => $value) {
             $rows[] = [
@@ -783,20 +805,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
               'name' => $name,
               'property' => '',
               'delta' => $delta,
-              'value' => (string) $value,
-            ];
-          }
-        }
-      }
-      elseif ($element['#webform_composite']) {
-        if (is_array($item)) {
-          foreach ($item as $property => $value) {
-            $rows[] = [
-              'webform_id' => $webform_id,
-              'sid' => $sid,
-              'name' => $name,
-              'property' => $property,
-              'delta' => 0,
               'value' => (string) $value,
             ];
           }

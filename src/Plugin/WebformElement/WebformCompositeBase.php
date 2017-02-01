@@ -4,6 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element as RenderElement;
+use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -16,6 +17,51 @@ use Drupal\webform\WebformSubmissionInterface;
  * Provides a base for composite elements.
  */
 abstract class WebformCompositeBase extends WebformElementBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultProperties() {
+    $properties = [
+        'title' => '',
+        'multiple' => FALSE,
+        // General settings.
+        'description' => '',
+        'default_value' => [],
+        // Form display.
+        'title_display' => 'invisible',
+        'description_display' => '',
+        'header' => FALSE,
+        // Form validation.
+        'required' => FALSE,
+        // Flex box.
+        'flexbox' => '',
+      ] + $this->getDefaultBaseProperties();
+
+    $composite_elements = $this->getCompositeElements();
+    foreach ($composite_elements as $composite_key => $composite_element) {
+      // Get #type, #title, and #option from composite elements.
+      foreach ($composite_element as $composite_property_key => $composite_property_value) {
+        if (in_array($composite_property_key, ['#type', '#title', '#options'])) {
+          $property_key = str_replace('#', $composite_key . '__', $composite_property_key);
+          if ($composite_property_value instanceof TranslatableMarkup) {
+            $properties[$property_key] = (string) $composite_property_value;
+          }
+          else {
+            $properties[$property_key] = $composite_property_value;
+          }
+        }
+      }
+      if (isset($properties[$composite_key . '__type'])) {
+        $properties['default_value'][$composite_key] = '';
+        $properties[$composite_key . '__description'] = FALSE;
+        $properties[$composite_key . '__required'] = FALSE;
+        $properties[$composite_key . '__placeholder'] = '';
+      }
+      $properties[$composite_key . '__access'] = TRUE;
+    }
+    return $properties;
+  }
 
   /**
    * {@inheritdoc}
@@ -58,46 +104,26 @@ abstract class WebformCompositeBase extends WebformElementBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Set multiple element wrapper.
+   *
+   * @param array $element
+   *   An element.
    */
-  public function getDefaultProperties() {
-    $properties = [
-      'title' => '',
-      // General settings.
-      'description' => '',
-      'default_value' => [],
-      // Form display.
-      'title_display' => 'invisible',
-      'description_display' => '',
-      // Form validation.
-      'required' => FALSE,
-      // Flex box.
-      'flexbox' => '',
-    ] + $this->getDefaultBaseProperties();
-
-    $composite_elements = $this->getCompositeElements();
-    foreach ($composite_elements as $composite_key => $composite_element) {
-      // Get #type, #title, and #option from composite elements.
-      foreach ($composite_element as $composite_property_key => $composite_property_value) {
-        if (in_array($composite_property_key, ['#type', '#title', '#options'])) {
-          $property_key = str_replace('#', $composite_key . '__', $composite_property_key);
-          if ($composite_property_value instanceof TranslatableMarkup) {
-            $properties[$property_key] = (string) $composite_property_value;
-          }
-          else {
-            $properties[$property_key] = $composite_property_value;
-          }
-        }
-      }
-      if (isset($properties[$composite_key . '__type'])) {
-        $properties['default_value'][$composite_key] = '';
-        $properties[$composite_key . '__description'] = FALSE;
-        $properties[$composite_key . '__required'] = FALSE;
-        $properties[$composite_key . '__placeholder'] = '';
-      }
-      $properties[$composite_key . '__access'] = TRUE;
+  protected function prepareMultiple(array &$element) {
+    if (empty($element['#multiple']) || !$this->supportsMultipleValues()) {
+      return;
     }
-    return $properties;
+
+    parent::prepareMultiple($element);
+
+    if (!empty($element['#header'])) {
+      $element = $this->getInitializedCompositeElement($element);
+      foreach (Element::children($element) as $key) {
+        $element['#element'][$key] = $element[$key];
+        $element['#element'][$key]['#title_display'] = 'invisible';
+        unset($element[$key]);
+      }
+    }
   }
 
   /**
@@ -217,7 +243,17 @@ abstract class WebformCompositeBase extends WebformElementBase {
         1 => $this->t('Yes'),
       ],
     ];
-
+    $form['composite']['header'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Table header'),
+      '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
+      '#return_value' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[multiple]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
     return $form;
   }
 
@@ -543,6 +579,24 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function getItemsDefaultFormat() {
+    return 'ul';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getItemsFormats() {
+    return [
+      'ol' => $this->t('Ordered list'),
+      'ul' => $this->t('Unordered list'),
+      'hr' => $this->t('Horizontal rule'),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getExportDefaultOptions() {
     return [
       'composite_element_item_format' => 'label',
@@ -579,6 +633,10 @@ abstract class WebformCompositeBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportHeader(array $element, array $options) {
+    if (!empty($element['#multiple'])) {
+      return parent::buildExportHeader($element, $options);
+    }
+
     $composite_elements = $this->getInitializedCompositeElement($element);
     $header = [];
     foreach (RenderElement::children($composite_elements) as $composite_key) {
@@ -602,6 +660,11 @@ abstract class WebformCompositeBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportRecord(array $element, $value, array $export_options) {
+    if (!empty($element['#multiple'])) {
+      $export_options['multiple_delimiter'] = PHP_EOL . '---' . PHP_EOL;
+      return parent::buildExportRecord($element, $value, $export_options);
+    }
+
     $record = [];
     $composite_elements = $this->getInitializedCompositeElement($element);
     foreach (RenderElement::children($composite_elements) as $composite_key) {
@@ -627,12 +690,16 @@ abstract class WebformCompositeBase extends WebformElementBase {
     /** @var \Drupal\webform\WebformSubmissionGenerateInterface $generate */
     $generate = \Drupal::service('webform_submission.generate');
 
-    $value = [];
+    $values = [];
     $composite_elements = $this->getInitializedCompositeElement($element);
-    foreach (RenderElement::children($composite_elements) as $composite_key) {
-      $value[$composite_key] = $generate->getTestValue($webform, $composite_key, $composite_elements[$composite_key], $options);
+    for ($i = 1; $i <= 3; $i++) {
+      $value = [];
+      foreach (RenderElement::children($composite_elements) as $composite_key) {
+        $value[$composite_key] = $generate->getTestValue($webform, $composite_key, $composite_elements[$composite_key], $options);
+      }
+      $values[] = $value;
     }
-    return [$value];
+    return $values;
   }
 
   /**

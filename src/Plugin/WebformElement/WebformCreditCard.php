@@ -27,7 +27,7 @@ class WebformCreditCard extends WebformCompositeBase {
   public function getDefaultProperties() {
     $properties = parent::getDefaultProperties();
     unset(
-      $properties['type__options'],
+      $properties['multiple'],
       $properties['expiration_month__options'],
       $properties['expiration_year__options']
     );

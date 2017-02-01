@@ -45,6 +45,7 @@ class WebformLocation extends WebformCompositeBase {
    */
   public function getDefaultProperties() {
     $properties = [
+      'multiple' => FALSE,
       'title' => '',
       // General settings.
       'description' => '',

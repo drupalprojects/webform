@@ -50,6 +50,14 @@ interface WebformRequestInterface {
   public function getWebformSubmissionEntities();
 
   /**
+   * Determine if the current request is an Ajax request.
+   *
+   * @return bool
+   *   TRUE if the current request is an Ajax request.
+   */
+  public function isAjax();
+
+    /**
    * Get the route name for a form/submission and source entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $webform_entity

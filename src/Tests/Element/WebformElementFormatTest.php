@@ -27,7 +27,7 @@ class WebformElementFormatTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_format', 'test_element_format_multiple', 'test_element_format_token'];
+  protected static $testWebforms = ['test_element_format', 'test_element_format_composite', 'test_element_format_multiple', 'test_element_format_multi_comp', 'test_element_format_token'];
 
   /**
    * Tests element format.
@@ -35,16 +35,16 @@ class WebformElementFormatTest extends WebformTestBase {
   public function testElementFormat() {
 
     /**************************************************************************/
-    /* Format element (single) item as HTML and text */
+    /* Format (single) element as HTML and text */
     /**************************************************************************/
 
-    /** @var \Drupal\webform\WebformInterface $webform_format_item */
-    $webform_format_item = Webform::load('test_element_format');
-    $sid = $this->postSubmission($webform_format_item);
-    $webform_format_item_submission = WebformSubmission::load($sid);
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_element_format');
+    $sid = $this->postSubmission($webform);
+    $submission = WebformSubmission::load($sid);
 
-    // Check elements (single) item formatted as HTML.
-    $body = $this->getMessageBody($webform_format_item_submission, 'email_html');
+    // Check (single) elements item formatted as HTML.
+    $body = $this->getMessageBody($submission, 'email_html');
     $elements = [
       'Checkbox (Value)' => 'Yes',
       'Color (Color swatch)' => '<span style="display:inline-block; height:1em; width:1em; border:1px solid #000; background-color:#ffffcc"></span> #ffffcc',
@@ -54,12 +54,8 @@ class WebformElementFormatTest extends WebformTestBase {
       'Signature (Status)' => '[signed]',
       'Signature (Image)' => '[signed]',
       'Telephone (Link)' => '<a href="tel:123-456-7890">123-456-7890</a>',
-      'Text format (Plain text)' => '<p>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.&lt;/p&gt;</p>',
       'Toggle (Value)' => 'No',
       'URL (Link)' => '<a href="http://example.com">http://example.com</a>',
-      'Likert (Value)' => '<div class="item-list"><ul><li><b>Please answer question 1?:</b> 1</li><li><b>How about now answering question 2?:</b> 1</li><li><b>Finally, here is question 3?:</b> 1</li></ul></div>',
-      'Likert (Raw value)' => '<div class="item-list"><ul><li><b>q1:</b> 1</li><li><b>q2:</b> 1</li><li><b>q3:</b> 1</li></ul></div>',
-      'Likert (List)' => '<div class="item-list"><ul><li><b>Please answer question 1?:</b> 1</li><li><b>How about now answering question 2?:</b> 1</li><li><b>Finally, here is question 3?:</b> 1</li></ul></div>',
       'Date (Raw value)' => 'Thu, 18 Jun 1942 00:00:00 +1000am4',
       'Date (Fallback date format)' => 'Thu, 06/18/1942 - 00:00',
       'Date (HTML Date)' => '1942-06-18',
@@ -79,10 +75,6 @@ class WebformElementFormatTest extends WebformTestBase {
 //      'Entity autocomplete (Entity ID)' => '1',
 //      'Entity autocomplete (Label)' => 'admin',
 //      'Entity autocomplete (Label (ID))' => 'admin (1)',
-      'Address (Value)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /><br/><br/>',
-      'Address (Raw value)' => '<div class="item-list"><ul><li><b>address:</b> 10 Main Street</li><li><b>address_2:</b> 10 Main Street</li><li><b>city:</b> Springfield</li><li><b>state_province:</b> Alabama</li><li><b>postal_code:</b> Loremipsum</li><li><b>country:</b> Afghanistan</li></ul></div><br/><br/>',
-      'Address (List)' => '<div class="item-list"><ul><li><b>Address:</b> 10 Main Street</li><li><b>Address 2:</b> 10 Main Street</li><li><b>City/Town:</b> Springfield</li><li><b>State/Province:</b> Alabama</li><li><b>Zip/Postal Code:</b> Loremipsum</li><li><b>Country:</b> Afghanistan</li></ul></div><br/><br/>',
-      'Link (Value)' => '<a href="http://example.com">Loremipsum</a>',
     ];
     foreach ($elements as $label => $value) {
       $this->assertContains($body, '<b>' . $label . '</b><br/>' . $value, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
@@ -92,7 +84,7 @@ class WebformElementFormatTest extends WebformTestBase {
     $this->assertContains($body, '<pre class="js-webform-codemirror-runmode webform-codemirror-runmode" data-webform-codemirror-mode="text/x-yaml">message: \'Hello World\'</pre>');
 
     // Check elements formatted as text.
-    $body = $this->getMessageBody($webform_format_item_submission, 'email_text');
+    $body = $this->getMessageBody($submission, 'email_text');
     $elements = [
       'Checkbox (Value): Yes',
       'Color (Color swatch): #ffffcc',
@@ -100,6 +92,55 @@ class WebformElementFormatTest extends WebformTestBase {
       'Email multiple (Link): example@example.com, test@test.com, random@random.com',
       'Toggle (Value): No',
       'URL (Link): http://example.com',
+      'Date (Value): vamThursday000000Australia/Sydney',
+      'Date (Raw value): Thu, 18 Jun 1942 00:00:00 +1000am4',
+      'Date (Fallback date format): Thu, 06/18/1942 - 00:00',
+      'Date (HTML Date): 1942-06-18',
+      'Date (HTML Datetime): 1942-06-18T00:00:00+1000',
+      'Date (HTML Month): 1942-06',
+      'Date (HTML Time): 00:00:00',
+      'Date (HTML Week): 1942-W25',
+      'Date (HTML Year): 1942',
+      'Date (HTML Yearless date): 06-18',
+      'Date (Default long date): Thursday, June 18, 1942 - 00:00',
+      'Date (Default medium date): Thu, 06/18/1942 - 00:00',
+      'Date (Default short date): 06/18/1942 - 00:00',
+      'Time (Value): 09:00',
+      'Time (Raw value): 09:00:00',
+    ];
+    foreach ($elements as $value) {
+      $this->assertContains($body, $value, new FormattableMarkup('Found @value', ['@value' => $value]));
+    }
+
+    /**************************************************************************/
+    /* Format composite element as HTML and text */
+    /**************************************************************************/
+
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_element_format_composite');
+    $sid = $this->postSubmission($webform);
+    $submission = WebformSubmission::load($sid);
+
+    // Check composite elements item formatted as HTML.
+    $body = $this->getMessageBody($submission, 'email_html');
+    $elements = [
+      'Text format (Plain text)' => '<p>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.&lt;/p&gt;</p>',
+      'Likert (Value)' => '<div class="item-list"><ul><li><b>Please answer question 1?:</b> 1</li><li><b>How about now answering question 2?:</b> 1</li><li><b>Finally, here is question 3?:</b> 1</li></ul></div>',
+      'Likert (Raw value)' => '<div class="item-list"><ul><li><b>q1:</b> 1</li><li><b>q2:</b> 1</li><li><b>q3:</b> 1</li></ul></div>',
+      'Likert (List)' => '<div class="item-list"><ul><li><b>Please answer question 1?:</b> 1</li><li><b>How about now answering question 2?:</b> 1</li><li><b>Finally, here is question 3?:</b> 1</li></ul></div>',
+      'Address (Value)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /><br/><br/>',
+      'Address (Raw value)' => '<div class="item-list"><ul><li><b>address:</b> 10 Main Street</li><li><b>address_2:</b> 10 Main Street</li><li><b>city:</b> Springfield</li><li><b>state_province:</b> Alabama</li><li><b>postal_code:</b> Loremipsum</li><li><b>country:</b> Afghanistan</li></ul></div><br/><br/>',
+      'Address (List)' => '<div class="item-list"><ul><li><b>Address:</b> 10 Main Street</li><li><b>Address 2:</b> 10 Main Street</li><li><b>City/Town:</b> Springfield</li><li><b>State/Province:</b> Alabama</li><li><b>Zip/Postal Code:</b> Loremipsum</li><li><b>Country:</b> Afghanistan</li></ul></div><br/><br/>',
+      'Link (Value)' => '<a href="http://example.com">Loremipsum</a>',
+    ];
+    foreach ($elements as $label => $value) {
+      $this->assertContains($body, '<b>' . $label . '</b><br/>' . $value, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
+    }
+
+    // Check composite elements formatted as text.
+    $body = $this->getMessageBody($submission, 'email_text');
+    $elements = [
+      'Link (Value): Loremipsum (http://example.com)',
       'Address (Value):
 10 Main Street
 10 Main Street
@@ -119,54 +160,38 @@ City/Town: Springfield
 State/Province: Alabama
 Zip/Postal Code: Loremipsum
 Country: Afghanistan',
-    'Link (Value): Loremipsum (http://example.com)',
-    'Likert (Value):
+      'Likert (Value):
 Please answer question 1?: 1
 How about now answering question 2?: 1
 Finally, here is question 3?: 1',
-    'Likert (Raw value):
+      'Likert (Raw value):
 q1: 1
 q2: 1
 q3: 1',
-    'Likert (List):
+      'Likert (List):
 Please answer question 1?: 1
 How about now answering question 2?: 1
 Finally, here is question 3?: 1',
-    'Likert (Table):
+      'Likert (Table):
 Please answer question 1?: 1
 How about now answering question 2?: 1
 Finally, here is question 3?: 1',
-    'Date (Value): vamThursday000000Australia/Sydney',
-    'Date (Raw value): Thu, 18 Jun 1942 00:00:00 +1000am4',
-    'Date (Fallback date format): Thu, 06/18/1942 - 00:00',
-    'Date (HTML Date): 1942-06-18',
-    'Date (HTML Datetime): 1942-06-18T00:00:00+1000',
-    'Date (HTML Month): 1942-06',
-    'Date (HTML Time): 00:00:00',
-    'Date (HTML Week): 1942-W25',
-    'Date (HTML Year): 1942',
-    'Date (HTML Yearless date): 06-18',
-    'Date (Default long date): Thursday, June 18, 1942 - 00:00',
-    'Date (Default medium date): Thu, 06/18/1942 - 00:00',
-    'Date (Default short date): 06/18/1942 - 00:00',
-    'Time (Value): 09:00',
-    'Time (Raw value): 09:00:00',
     ];
     foreach ($elements as $value) {
       $this->assertContains($body, $value, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
     /**************************************************************************/
-    /* Format element (multiple) items as HTML and text */
+    /* Format multiple element as HTML and text */
     /**************************************************************************/
 
-    /** @var \Drupal\webform\WebformInterface $webform_format_items */
-    $webform_format_items = Webform::load('test_element_format_multiple');
-    $sid = $this->postSubmission($webform_format_items);
-    $webform_format_items_submission = WebformSubmission::load($sid);
+    /** @var \Drupal\webform\WebformInterface $webforms */
+    $webforms = Webform::load('test_element_format_multiple');
+    $sid = $this->postSubmission($webforms);
+    $webforms_submission = WebformSubmission::load($sid);
 
     // Check elements (single) item formatted as HTML.
-    $body = $this->getMessageBody($webform_format_items_submission, 'email_html');
+    $body = $this->getMessageBody($webforms_submission, 'email_html');
     $elements = [
       'Text field (Comma)' => 'Loremipsum, Oratione, Dixisset',
       'Text field (Semicolon)' => 'Loremipsum; Oratione; Dixisset',
@@ -184,7 +209,7 @@ Finally, here is question 3?: 1',
     }
 
     // Check elements formatted as text.
-    $body = $this->getMessageBody($webform_format_items_submission, 'email_text');
+    $body = $this->getMessageBody($webforms_submission, 'email_text');
     $elements = [
       'Text field (Comma): Loremipsum, Oratione, Dixisset',
       'Text field (Semicolon): Loremipsum; Oratione; Dixisset',
@@ -213,6 +238,75 @@ Finally, here is question 3?: 1',
       $this->assertContains($body, $value, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
 
+    /**************************************************************************/
+    /* Format composite multiple element as HTML and text */
+    /**************************************************************************/
+
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_element_format_multi_comp');
+    $sid = $this->postSubmission($webform);
+    $submission = WebformSubmission::load($sid);
+
+    // Check composite elements item formatted as HTML.
+    $body = $this->getMessageBody($submission, 'email_html');
+    $elements = [
+      'Address (Ordered list)' => '<div class="item-list"><ol><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /></li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /></li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /></li></ol></div>',
+      'Address (Unordered list)' => '<div class="item-list"><ul><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /></li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /></li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /></li></ul></div>',
+      'Address (Horizontal rule)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /><hr class="webform-horizontal-rule" />10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br /><hr class="webform-horizontal-rule" />10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br />',
+    ];
+    foreach ($elements as $label => $value) {
+      $this->assertContains($body, '<b>' . $label . '</b><br/>' . $value, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
+    }
+
+    // Check composite elements formatted as text.
+    $body = $this->getMessageBody($submission, 'email_text');
+    $elements = [
+      'Address (Ordered list):
+1. 10 Main Street
+   10 Main Street
+   Springfield, Alabama. Loremipsum
+   Afghanistan
+2. 10 Main Street
+   10 Main Street
+   Springfield, Alabama. Loremipsum
+   Afghanistan
+3. 10 Main Street
+   10 Main Street
+   Springfield, Alabama. Loremipsum
+   Afghanistan',
+      'Address (Unordered list):
+- 10 Main Street
+  10 Main Street
+  Springfield, Alabama. Loremipsum
+  Afghanistan
+- 10 Main Street
+  10 Main Street
+  Springfield, Alabama. Loremipsum
+  Afghanistan
+- 10 Main Street
+  10 Main Street
+  Springfield, Alabama. Loremipsum
+  Afghanistan',
+      'Address (Horizontal rule):
+10 Main Street
+10 Main Street
+Springfield, Alabama. Loremipsum
+Afghanistan
+---
+10 Main Street
+10 Main Street
+Springfield, Alabama. Loremipsum
+Afghanistan
+---
+10 Main Street
+10 Main Street
+Springfield, Alabama. Loremipsum
+Afghanistan',
+    ];
+    foreach ($elements as $value) {
+      $this->assertContains($body, $value, new FormattableMarkup('Found @value', ['@value' => $value]));
+    }
+    
     /**************************************************************************/
     /* Format element using tokens */
     /**************************************************************************/

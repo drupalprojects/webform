@@ -320,33 +320,6 @@ elements: |
         '#title': 'Telephone (Link)'
         '#default_value': 123-456-7890
         '#format': link
-    text_format:
-      '#type': details
-      '#title': 'Text format'
-      text_format_basic_html:
-        '#type': text_format
-        '#title': 'Text format (Basic HTML)'
-        '#default_value':
-          value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
-        '#format': basic_html
-      text_format_full_html:
-        '#type': text_format
-        '#title': 'Text format (Full HTML)'
-        '#default_value':
-          value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
-        '#format': full_html
-      text_format_plain_text:
-        '#type': text_format
-        '#title': 'Text format (Plain text)'
-        '#default_value':
-          value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
-        '#format': plain_text
-      text_format_restricted_html:
-        '#type': text_format
-        '#title': 'Text format (Restricted HTML)'
-        '#default_value':
-          value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
-        '#format': restricted_html
     webform_toggle:
       '#type': details
       '#title': Toggle
@@ -378,217 +351,6 @@ elements: |
         '#title': 'URL (Link)'
         '#default_value': 'http://example.com'
         '#format': link
-  composite_elements:
-    '#type': details
-    '#title': 'Composite elements'
-    '#open': true
-    webform_address:
-      '#type': details
-      '#title': Address
-      webform_address_value:
-        '#type': webform_address
-        '#title': 'Address (Value)'
-        '#default_value':
-          address: '10 Main Street'
-          address_2: '10 Main Street'
-          city: Springfield
-          state_province: Alabama
-          postal_code: Loremipsum
-          country: Afghanistan
-        '#format': value
-      webform_address_raw:
-        '#type': webform_address
-        '#title': 'Address (Raw value)'
-        '#default_value':
-          address: '10 Main Street'
-          address_2: '10 Main Street'
-          city: Springfield
-          state_province: Alabama
-          postal_code: Loremipsum
-          country: Afghanistan
-        '#format': raw
-      webform_address_list:
-        '#type': webform_address
-        '#title': 'Address (List)'
-        '#default_value':
-          address: '10 Main Street'
-          address_2: '10 Main Street'
-          city: Springfield
-          state_province: Alabama
-          postal_code: Loremipsum
-          country: Afghanistan
-        '#format': list
-    webform_contact:
-      '#type': details
-      '#title': Contact
-      webform_contact_value:
-        '#type': webform_contact
-        '#title': 'Contact (Value)'
-        '#default_value':
-          name: Loremipsum
-          company: Loremipsum
-          email: example@example.com
-          phone: 123-456-7890
-          address: '10 Main Street'
-          address_2: '10 Main Street'
-          city: Springfield
-          state_province: Alabama
-          postal_code: Loremipsum
-          country: Afghanistan
-        '#format': value
-      webform_contact_raw:
-        '#type': webform_contact
-        '#title': 'Contact (Raw value)'
-        '#default_value':
-          name: Loremipsum
-          company: Loremipsum
-          email: example@example.com
-          phone: 123-456-7890
-          address: '10 Main Street'
-          address_2: '10 Main Street'
-          city: Springfield
-          state_province: Alabama
-          postal_code: Loremipsum
-          country: Afghanistan
-        '#format': raw
-      webform_contact_list:
-        '#type': webform_contact
-        '#title': 'Contact (List)'
-        '#default_value':
-          name: Loremipsum
-          company: Loremipsum
-          email: example@example.com
-          phone: 123-456-7890
-          address: '10 Main Street'
-          address_2: '10 Main Street'
-          city: Springfield
-          state_province: Alabama
-          postal_code: Loremipsum
-          country: Afghanistan
-        '#format': list
-    webform_creditcard:
-      '#type': details
-      '#title': 'Credit card'
-      webform_creditcard_value:
-        '#type': webform_creditcard
-        '#title': 'Credit card (Value)'
-        '#default_value':
-          warning: null
-          name: Loremipsum
-          type: VI
-          number: '4111111111111111'
-          civ: 111
-          expiration: null
-          expiration_month: 1
-          expiration_year: 2017
-        '#format': value
-      webform_creditcard_raw:
-        '#type': webform_creditcard
-        '#title': 'Credit card (Raw value)'
-        '#default_value':
-          warning: null
-          name: Loremipsum
-          type: VI
-          number: '4111111111111111'
-          civ: 111
-          expiration: null
-          expiration_month: 1
-          expiration_year: 2017
-        '#format': raw
-      webform_creditcard_list:
-        '#type': webform_creditcard
-        '#title': 'Credit card (List)'
-        '#default_value':
-          warning: null
-          name: Loremipsum
-          type: VI
-          number: '4111111111111111'
-          civ: 111
-          expiration: null
-          expiration_month: 1
-          expiration_year: 2017
-        '#format': list
-    webform_link:
-      '#type': details
-      '#title': Link
-      webform_link_value:
-        '#type': webform_link
-        '#title': 'Link (Value)'
-        '#default_value':
-          title: Loremipsum
-          url: 'http://example.com'
-        '#format': value
-      webform_link_raw:
-        '#type': webform_link
-        '#title': 'Link (Raw value)'
-        '#default_value':
-          title: Loremipsum
-          url: 'http://example.com'
-        '#format': raw
-      webform_link_list:
-        '#type': webform_link
-        '#title': 'Link (List)'
-        '#default_value':
-          title: Loremipsum
-          url: 'http://example.com'
-        '#format': list
-    webform_location:
-      '#type': details
-      '#title': Location
-      webform_location_value:
-        '#type': webform_location
-        '#title': 'Location (Value)'
-        '#default_value':
-          value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
-        '#format': value
-      webform_location_raw:
-        '#type': webform_location
-        '#title': 'Location (Raw value)'
-        '#default_value':
-          value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
-        '#format': raw
-      webform_location_list:
-        '#type': webform_location
-        '#title': 'Location (List)'
-        '#default_value':
-          value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
-        '#format': list
-    webform_name:
-      '#type': details
-      '#title': Name
-      webform_name_value:
-        '#type': webform_name
-        '#title': 'Name (Value)'
-        '#default_value':
-          title: Miss
-          first: Loremipsum
-          middle: Loremipsum
-          last: Loremipsum
-          suffix: Loremipsum
-          degree: Loremipsum
-        '#format': value
-      webform_name_raw:
-        '#type': webform_name
-        '#title': 'Name (Raw value)'
-        '#default_value':
-          title: Miss
-          first: Loremipsum
-          middle: Loremipsum
-          last: Loremipsum
-          suffix: Loremipsum
-          degree: Loremipsum
-        '#format': raw
-      webform_name_list:
-        '#type': webform_name
-        '#title': 'Name (List)'
-        '#default_value':
-          title: Miss
-          first: Loremipsum
-          middle: Loremipsum
-          last: Loremipsum
-          suffix: Loremipsum
-          degree: Loremipsum
-        '#format': list
   options_elements:
     '#type': details
     '#title': 'Options elements'
@@ -643,81 +405,6 @@ elements: |
           five: Five
         '#default_value': one
         '#format': raw
-    webform_likert:
-      '#type': details
-      '#title': Likert
-      webform_likert_value:
-        '#type': webform_likert
-        '#title': 'Likert (Value)'
-        '#questions':
-          q1: 'Please answer question 1?'
-          q2: 'How about now answering question 2?'
-          q3: 'Finally, here is question 3?'
-        '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
-        '#default_value':
-          q1: 1
-          q2: 1
-          q3: 1
-        '#format': value
-      webform_likert_raw:
-        '#type': webform_likert
-        '#title': 'Likert (Raw value)'
-        '#questions':
-          q1: 'Please answer question 1?'
-          q2: 'How about now answering question 2?'
-          q3: 'Finally, here is question 3?'
-        '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
-        '#default_value':
-          q1: 1
-          q2: 1
-          q3: 1
-        '#format': raw
-      webform_likert_list:
-        '#type': webform_likert
-        '#title': 'Likert (List)'
-        '#questions':
-          q1: 'Please answer question 1?'
-          q2: 'How about now answering question 2?'
-          q3: 'Finally, here is question 3?'
-        '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
-        '#default_value':
-          q1: 1
-          q2: 1
-          q3: 1
-        '#format': list
-      webform_likert_table:
-        '#type': webform_likert
-        '#title': 'Likert (Table)'
-        '#questions':
-          q1: 'Please answer question 1?'
-          q2: 'How about now answering question 2?'
-          q3: 'Finally, here is question 3?'
-        '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
-        '#default_value':
-          q1: 1
-          q2: 1
-          q3: 1
-        '#format': table
     radios:
       '#type': details
       '#title': Radios
@@ -835,16 +522,21 @@ elements: |
         '#title': 'Date (Raw value)'
         '#default_value': '1942-06-18'
         '#format': raw
-      date_fallback:
-        '#type': date
-        '#title': 'Date (Fallback date format)'
-        '#default_value': '1942-06-18'
-        '#format': fallback
       date_html_date:
         '#type': date
         '#title': 'Date (HTML Date)'
         '#default_value': '1942-06-18'
         '#format': html_date
+      date_html_time:
+        '#type': date
+        '#title': 'Date (HTML Time)'
+        '#default_value': '1942-06-18'
+        '#format': html_time
+      date_fallback:
+        '#type': date
+        '#title': 'Date (Fallback date format)'
+        '#default_value': '1942-06-18'
+        '#format': fallback
       date_html_datetime:
         '#type': date
         '#title': 'Date (HTML Datetime)'
@@ -855,11 +547,6 @@ elements: |
         '#title': 'Date (HTML Month)'
         '#default_value': '1942-06-18'
         '#format': html_month
-      date_html_time:
-        '#type': date
-        '#title': 'Date (HTML Time)'
-        '#default_value': '1942-06-18'
-        '#format': html_time
       date_html_week:
         '#type': date
         '#title': 'Date (HTML Week)'
