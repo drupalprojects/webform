@@ -25,13 +25,14 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $properties = [
         'title' => '',
         'multiple' => FALSE,
+        'multiple__header' => FALSE,
+        'multiple__header_label' => '',
         // General settings.
         'description' => '',
         'default_value' => [],
         // Form display.
         'title_display' => 'invisible',
         'description_display' => '',
-        'header' => FALSE,
         // Form validation.
         'required' => FALSE,
         // Flex box.
@@ -116,7 +117,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
 
     parent::prepareMultiple($element);
 
-    if (!empty($element['#header'])) {
+    if (!empty($element['#multiple__header'])) {
+      $element['#header'] = TRUE;
       $element = $this->getInitializedCompositeElement($element);
       foreach (Element::children($element) as $key) {
         $element['#element'][$key] = $element[$key];
@@ -228,6 +230,9 @@ abstract class WebformCompositeBase extends WebformElementBase {
     // Update #required label.
     $form['validation']['required']['#description'] .= '<br/>' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
 
+    // Update '#multiple__header_label'.
+    $form['element']['multiple__header_label']['#states']['visible'][':input[name="properties[multiple__header]"]'] = ['checked' => FALSE];
+
     $form['composite'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('@title settings', ['@title' => $this->getPluginLabel()]),
@@ -241,17 +246,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
         '' => $this->t('Automatic'),
         0 => $this->t('No'),
         1 => $this->t('Yes'),
-      ],
-    ];
-    $form['composite']['header'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Table header'),
-      '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
-      '#return_value' => TRUE,
-      '#states' => [
-        'visible' => [
-          ':input[name="properties[multiple]"]' => ['checked' => TRUE],
-        ],
       ],
     ];
     return $form;

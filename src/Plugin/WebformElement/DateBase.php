@@ -21,6 +21,7 @@ abstract class DateBase extends WebformElementBase {
   public function getDefaultProperties() {
     return [
       'multiple' => FALSE,
+      'multiple__header_label' => '',
       // Form validation.
       'min' => '',
       'max' => '',

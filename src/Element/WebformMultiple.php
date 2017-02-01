@@ -193,28 +193,34 @@ class WebformMultiple extends FormElement {
         ['data' => '', 'colspan' => 4],
       ];
     }
-    if (is_array($element['#header'])) {
+    elseif (is_array($element['#header'])) {
       return $element['#header'];
     }
-
-    $header = [];
-    $header['_handle_'] = '';
-    if ($element['#child_keys']) {
-      foreach ($element['#child_keys'] as $child_key) {
-        if (self::isHidden($element['#element'][$child_key])) {
-          continue;
-        }
-        $header[$child_key] = (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '';
-      }
+    elseif (is_string($element['#header'])) {
+      return [
+        ['data' => $element['#header'], 'colspan' => ($element['#child_keys']) ? count($element['#child_keys']) + 3 : 4],
+      ];
     }
     else {
-      $header['item'] = (isset($element['#element']['#title'])) ? $element['#element']['#title'] : '';
+      $header = [];
+      $header['_handle_'] = '';
+      if ($element['#child_keys']) {
+        foreach ($element['#child_keys'] as $child_key) {
+          if (self::isHidden($element['#element'][$child_key])) {
+            continue;
+          }
+          $header[$child_key] = (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '';
+        }
+      }
+      else {
+        $header['item'] = (isset($element['#element']['#title'])) ? $element['#element']['#title'] : '';
+      }
+      $header['weight'] = t('Weight');
+      if (empty($element['#cardinality'])) {
+        $header['_operations_'] = '';
+      }
+      return $header;
     }
-    $header['weight'] = t('Weight');
-    if (empty($element['#cardinality'])) {
-      $header['_operations_'] = '';
-    }
-    return $header;
   }
 
   /**

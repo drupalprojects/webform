@@ -21,7 +21,7 @@ elements: |
       '#type': webform_address
       '#title': 'Address multiple'
       '#multiple': true
-      '#header': true
+      '#multiple__header': true
   webform_contact_example:
     '#type': details
     '#title': Contact
@@ -51,7 +51,7 @@ elements: |
       '#type': webform_link
       '#title': 'Link multiple'
       '#multiple': true
-      '#header': true
+      '#multiple__header': true
   webform_location_example:
     '#type': details
     '#title': Location
@@ -74,7 +74,7 @@ elements: |
       '#type': webform_name
       '#title': 'Name multiple'
       '#multiple': true
-      '#header': true
+      '#multiple__header': true
 css: ''
 javascript: ''
 settings:

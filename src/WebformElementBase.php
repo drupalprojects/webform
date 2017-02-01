@@ -622,6 +622,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $element['#type'] = 'webform_multiple';
     $element['#webform_multiple'] = TRUE;
     $element['#empty_items'] = 0;
+    if (!empty($element['#multiple__header_label'])) {
+      $element['#header'] = $element['#multiple__header_label'];
+    }
 
     // Remove properties that should only be applied to the child element.
     $element = array_diff_key($element, array_flip(['#attributes', '#field_prefix', '#field_suffix', '#pattern', '#placeholder', '#maxlength', '#element_validate']));
@@ -1327,6 +1330,27 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'checkbox',
       '#return_value' => TRUE,
       '#description' => $this->t('Check this option if the user should be allowed to enter multiple values.'),
+    ];
+    $form['element']['multiple__header'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display elements in table columns'),
+      '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
+      '#return_value' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[multiple]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['element']['multiple__header_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Multiple table header label'),
+      '#description' => $this->t('This is used as the table header for this webform element.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[multiple]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
     if ($this->hasProperty('multiple')) {
       $form['element']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');

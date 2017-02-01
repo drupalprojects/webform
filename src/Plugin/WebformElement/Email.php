@@ -23,6 +23,7 @@ class Email extends WebformElementBase {
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
+      'multiple__header_label' => '',
       'size' => '',
       'minlength' => '',
       'maxlength' => '',

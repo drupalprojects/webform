@@ -33,6 +33,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $file_extensions = $this->getFileExtensions();
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
+      'multiple__header_label' => '',
       'max_filesize' => $max_filesize,
       'file_extensions' => $file_extensions,
       'uri_scheme' => 'private',

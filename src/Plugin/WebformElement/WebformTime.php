@@ -24,6 +24,7 @@ class WebformTime extends WebformElementBase {
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
+      'multiple__header_label' => '',
       // Time settings.
       'time_format' => '',
       'min' => '',

@@ -15,7 +15,6 @@
   white-space: nowrap;
 }
 
-.webform-multiple-table th:first-child,
 .webform-multiple-table td:first-child {
   padding: 0 0 0 1em;
   width: 26px;
@@ -23,13 +22,13 @@
   text-align: center;
 }
 
-.webform-multiple-table th:last-child,
 .webform-multiple-table td:last-child {
   padding: 0 2px;
   vertical-align: middle;
   text-align: center;
   width: 60px;
 }
+
 
 .webform-multiple-table td:last-child input {
   margin: 0 2px;

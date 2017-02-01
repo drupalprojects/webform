@@ -21,6 +21,7 @@ class Number extends NumericBase {
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
+      'multiple__header_label' => '',
       // Number settings.
       'min' => '',
       'max' => '',

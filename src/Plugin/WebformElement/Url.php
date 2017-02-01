@@ -21,6 +21,7 @@ class Url extends TextBase {
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
+      'multiple__header_label' => '',
     ];
   }
 
