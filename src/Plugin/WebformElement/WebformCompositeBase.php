@@ -661,6 +661,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
    */
   public function buildExportRecord(array $element, $value, array $export_options) {
     if (!empty($element['#multiple'])) {
+      $element['#format'] = ($export_options['header_format'] == 'label') ? 'list' : 'raw';
       $export_options['multiple_delimiter'] = PHP_EOL . '---' . PHP_EOL;
       return parent::buildExportRecord($element, $value, $export_options);
     }
