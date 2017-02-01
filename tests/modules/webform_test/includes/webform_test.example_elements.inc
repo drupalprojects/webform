@@ -58,6 +58,19 @@ function webform_test_example_elements() {
       ];
     }
     $data[$category_id][$element_type] = $element;
+
+    // Multiple value composite.
+    if ($webform_element->supportsMultipleValues() && !$webform_element->hasMultipleValues($element)) {
+      $element['#title'] = $element['#title'] . ' multiple';
+      unset($element['#description']);
+      $properties = ['multiple', 'tag', 'select2'];
+      foreach ($properties as $property) {
+        if ($webform_element->hasProperty($property)) {
+          $element["#$property"] = TRUE;
+        }
+      }
+      $data[$category_id][$element_type . '_multiple'] = $element;
+    }
   }
 
   // Move other elements last.

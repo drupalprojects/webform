@@ -29,6 +29,10 @@ elements: |
     textfield:
       '#type': textfield
       '#title': 'Text field'
+    textfield_multiple:
+      '#type': textfield
+      '#title': 'Text field multiple'
+      '#multiple': true
   advanced_elements:
     '#type': details
     '#title': 'Advanced elements'
@@ -37,6 +41,11 @@ elements: |
       '#type': webform_autocomplete
       '#title': Autocomplete
       '#autocomplete_items': country_names
+    webform_autocomplete_multiple:
+      '#type': webform_autocomplete
+      '#title': 'Autocomplete multiple'
+      '#autocomplete_items': country_names
+      '#multiple': true
     captcha:
       '#type': captcha
       '#title': CAPTCHA
@@ -53,6 +62,10 @@ elements: |
     email:
       '#type': email
       '#title': Email
+    email_multiple:
+      '#type': email
+      '#title': 'Email multiple'
+      '#multiple': true
     webform_email_confirm:
       '#type': webform_email_confirm
       '#title': 'Email confirm'
@@ -65,6 +78,13 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
+    number_multiple:
+      '#type': number
+      '#title': 'Number multiple'
+      '#min': 0
+      '#max': 10
+      '#step': 1
+      '#multiple': true
     password_confirm:
       '#type': password_confirm
       '#title': 'Password confirm'
@@ -100,6 +120,10 @@ elements: |
     url:
       '#type': url
       '#title': URL
+    url_multiple:
+      '#type': url
+      '#title': 'URL multiple'
+      '#multiple': true
     value:
       '#type': value
       '#title': Value
@@ -110,19 +134,39 @@ elements: |
     webform_audio_file:
       '#type': webform_audio_file
       '#title': 'Audio file'
+    webform_audio_file_multiple:
+      '#type': webform_audio_file
+      '#title': 'Audio file multiple'
+      '#multiple': true
     webform_document_file:
       '#type': webform_document_file
       '#title': 'Document file'
+    webform_document_file_multiple:
+      '#type': webform_document_file
+      '#title': 'Document file multiple'
+      '#multiple': true
     managed_file:
       '#type': managed_file
       '#title': File
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+    managed_file_multiple:
+      '#type': managed_file
+      '#title': 'File multiple'
+      '#multiple': true
     webform_image_file:
       '#type': webform_image_file
       '#title': 'Image file'
+    webform_image_file_multiple:
+      '#type': webform_image_file
+      '#title': 'Image file multiple'
+      '#multiple': true
     webform_video_file:
       '#type': webform_video_file
       '#title': 'Video file'
+    webform_video_file_multiple:
+      '#type': webform_video_file
+      '#title': 'Video file multiple'
+      '#multiple': true
   options_elements:
     '#type': details
     '#title': 'Options elements'
@@ -206,6 +250,17 @@ elements: |
         three: Three
         four: Four
         five: Five
+    select_multiple:
+      '#type': select
+      '#title': 'Select multiple'
+      '#options':
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
+      '#multiple': true
+      '#select2': true
     webform_select_other:
       '#type': webform_select_other
       '#title': 'Select other'
@@ -215,6 +270,17 @@ elements: |
         three: Three
         four: Four
         five: Five
+    webform_select_other_multiple:
+      '#type': webform_select_other
+      '#title': 'Select other multiple'
+      '#options':
+        one: One
+        two: Two
+        three: Three
+        four: Four
+        five: Five
+      '#multiple': true
+      '#select2': true
     tableselect:
       '#type': tableselect
       '#title': 'Table select'
@@ -292,17 +358,33 @@ elements: |
     date:
       '#type': date
       '#title': Date
+    date_multiple:
+      '#type': date
+      '#title': 'Date multiple'
+      '#multiple': true
     datetime:
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
+    datetime_multiple:
+      '#type': datetime
+      '#title': 'Date/time multiple'
+      '#multiple': true
     datelist:
       '#type': datelist
       '#title': 'Date list'
+    datelist_multiple:
+      '#type': datelist
+      '#title': 'Date list multiple'
+      '#multiple': true
     webform_time:
       '#type': webform_time
       '#title': Time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1838234">Issue #1838234: Add jQuery Timepicker for the Time element of the datetime field</a>'
+    webform_time_multiple:
+      '#type': webform_time
+      '#title': 'Time multiple'
+      '#multiple': true
   entity_reference_elements:
     '#type': details
     '#title': 'Entity reference elements'
@@ -311,6 +393,13 @@ elements: |
       '#type': entity_autocomplete
       '#title': 'Entity autocomplete'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
+      '#target_type': user
+      '#selection_handler': 'default:user'
+      '#selection_settings':
+        include_anonymous: true
+    entity_autocomplete_multiple:
+      '#type': entity_autocomplete
+      '#title': 'Entity autocomplete multiple'
       '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
@@ -336,6 +425,15 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+    webform_entity_select_multiple:
+      '#type': webform_entity_select
+      '#title': 'Entity select multiple'
+      '#target_type': user
+      '#selection_handler': 'default:user'
+      '#selection_settings':
+        include_anonymous: true
+      '#multiple': true
+      '#select2': true
   markup_elements:
     '#type': details
     '#title': 'Markup elements'

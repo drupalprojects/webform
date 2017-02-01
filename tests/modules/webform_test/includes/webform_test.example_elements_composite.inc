@@ -52,7 +52,6 @@ function webform_test_example_elements_composite() {
       }
       $data[$element_type . '_example'][$element_type . '_multiple'] = $element;
     }
-
   }
   return $data;
 }

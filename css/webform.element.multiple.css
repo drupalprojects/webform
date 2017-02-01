@@ -45,13 +45,16 @@
   background: none;
 }
 
-.webform-multiple-table td select,
-.webform-multiple-table td input {
+.webform-multiple-table td .form-type-textfield input,
+.webform-multiple-table td .form-type-email input,
+.webform-multiple-table td .form-type-url input,
+.webform-multiple-table td .form-type-tel input,
+.webform-multiple-table td .form-type-entity-autocomplete input,
+
+.webform-multiple-table td .form-type-webform-autocomplete input{
   width: 100%;
 }
 
-.webform-multiple-table td input[type="checkbox"],
-.webform-multiple-table td input[type="radio"],
 .form-type-webform-multiple.webform-has-field-prefix td select,
 .form-type-webform-multiple.webform-has-field-suffix td select,
 .form-type-webform-multiple.webform-has-field-prefix td input,
