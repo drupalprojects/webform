@@ -407,7 +407,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     if ($uri !== NULL && ($url = \Drupal::pathValidator()->getUrlIfValid($uri))) {
       return $url->setOption('absolute', TRUE);
     }
-    elseif ($entity = $this->getSourceEntity()) {
+    elseif (($entity = $this->getSourceEntity()) && $entity->hasLinkTemplate('canonical')) {
       return $entity->toUrl()->setOption('absolute', TRUE);
     }
     else {

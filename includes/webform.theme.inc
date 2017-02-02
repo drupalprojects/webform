@@ -168,7 +168,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
   $options = ($query) ? ['query' => $query] : [];
 
   // Set back_url.
-  if ($source_entity) {
+  if ($source_entity && $source_entity->hasLinkTemplate('canonical')) {
     $variables['back_url'] = $source_entity->toUrl('canonical', $options)->toString();
   }
   elseif ($webform_submission) {
@@ -266,7 +266,7 @@ function template_preprocess_webform_submission_information(array &$variables) {
     $variables['token_update'] = Link::fromTextAndUrl($token_url->setAbsolute(FALSE)->toString(), $token_url);
   }
 
-  if ($source_entity = $webform_submission->getSourceEntity()) {
+  if (($source_entity = $webform_submission->getSourceEntity()) && $source_entity->hasLinkTemplate('canonical')) {
     $variables['submitted_to'] = $source_entity->toLink();
   }
 

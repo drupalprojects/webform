@@ -206,6 +206,7 @@ class WebformRequest implements WebformRequestInterface {
       && $webform_field_name
       && $source_entity->hasField($webform_field_name)
       && $source_entity->$webform_field_name->target_id == $webform->id()
+      && $source_entity->hasLinkTemplate('canonical')
     ) {
       return TRUE;
     }

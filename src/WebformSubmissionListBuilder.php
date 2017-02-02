@@ -368,7 +368,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         if (!$source_entity) {
           return '';
         }
-        return ($is_raw) ? $source_entity->getEntityTypeId . ':' . $source_entity->id() : $source_entity->toLink();
+        return ($is_raw) ? $source_entity->getEntityTypeId . ':' . $source_entity->id() : ($source_entity->hasLinkTemplate('canonical') ? $source_entity->toLink() : '');
 
       case 'langcode':
         return ($is_raw) ? $entity->langcode->value : \Drupal::languageManager()->getLanguage($entity->langcode->value)->getName();
