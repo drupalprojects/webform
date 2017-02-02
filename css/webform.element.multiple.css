@@ -58,7 +58,7 @@
 .webform-multiple-table td .form-type-webform-autocomplete input{
   width: 100%;
 }
-
+.webform-multiple-table td .form-type-datelist select,
 .form-type-webform-multiple.webform-has-field-prefix td select,
 .form-type-webform-multiple.webform-has-field-suffix td select,
 .form-type-webform-multiple.webform-has-field-prefix td input,
