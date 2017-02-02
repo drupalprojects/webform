@@ -45,12 +45,12 @@
   background: none;
 }
 
+.webform-multiple-table td select,
 .webform-multiple-table td .form-type-textfield input,
 .webform-multiple-table td .form-type-email input,
 .webform-multiple-table td .form-type-url input,
 .webform-multiple-table td .form-type-tel input,
 .webform-multiple-table td .form-type-entity-autocomplete input,
-
 .webform-multiple-table td .form-type-webform-autocomplete input{
   width: 100%;
 }
