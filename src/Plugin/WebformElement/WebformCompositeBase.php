@@ -110,12 +110,12 @@ abstract class WebformCompositeBase extends WebformElementBase {
    * @param array $element
    *   An element.
    */
-  protected function prepareMultiple(array &$element) {
+  protected function prepareMultipleWrapper(array &$element) {
     if (empty($element['#multiple']) || !$this->supportsMultipleValues()) {
       return;
     }
 
-    parent::prepareMultiple($element);
+    parent::prepareMultipleWrapper($element);
 
     if (!empty($element['#multiple__header'])) {
       $element['#header'] = TRUE;
@@ -188,6 +188,10 @@ abstract class WebformCompositeBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getElementSelectorOptions(array $element) {
+    if ($this->hasMultipleValues($element)) {
+      return [];
+    }
+
     $title = $this->getAdminLabel($element) . ' [' . $this->getPluginLabel() . ']';
     $name = $element['#webform_key'];
 

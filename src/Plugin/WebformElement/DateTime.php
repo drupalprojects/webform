@@ -73,8 +73,8 @@ class DateTime extends DateBase {
   protected function getElementSelectorInputsOptions(array $element) {
     $t_args = ['@title' => $this->getAdminLabel($element)];
     return [
-      'date' => $this->t('@title [Date]', $t_args),
-      'time' => $this->t('@title [Time]', $t_args),
+      'date' => (string) $this->t('@title [Date]', $t_args),
+      'time' => (string) $this->t('@title [Time]', $t_args),
     ];
   }
 

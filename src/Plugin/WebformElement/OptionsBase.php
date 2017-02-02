@@ -129,8 +129,8 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function prepareMultiple(array &$element) {
-    // Use default #multiple handling.
+  public function hasMultipleWrapper() {
+    return FALSE;
   }
 
   /**
@@ -295,16 +295,45 @@ abstract class OptionsBase extends WebformElementBase {
   protected function getElementSelectorInputsOptions(array $element) {
     $plugin_id = $this->getPluginId();
     if (preg_match('/webform_(select|radios|checkboxes|buttons)_other$/', $plugin_id, $match)) {
+      list($type) = explode(' ', $this->getPluginLabel());
       $title = $this->getAdminLabel($element);
-      list($element_type) = explode(' ', $this->getPluginLabel());
+      $name = $match[1];
 
       $inputs = [];
-      $inputs[$match[1]] = $title . ' [' . $element_type . ']';
+      $inputs[$name] = $title . ' [' . $type . ']';
       $inputs['other'] = $title . ' [' . $this->t('Text field') . ']';
       return $inputs;
     }
     else {
       return [];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @see \Drupal\webform\Entity\Webform::getElementsSelectorOptions
+   */
+  public function getElementSelectorOptions(array $element) {
+    if ($this->hasMultipleValues($element) && $this->hasMultipleWrapper()) {
+      return [];
+    }
+
+    $plugin_id = $this->getPluginId();
+    $title = $this->getAdminLabel($element) . ' [' . $this->getPluginLabel() . ']';
+    $name = $element['#webform_key'];
+
+    if ($inputs = $this->getElementSelectorInputsOptions($element)) {
+      $selectors = [];
+      foreach ($inputs as $input_name => $input_title) {
+        $multiple = ($this->hasMultipleValues($element) && $input_name == 'select') ? '[]' : '';
+        $selectors[":input[name=\"{$name}[{$input_name}]$multiple\"]"] = $input_title;
+      }
+      return [$title => $selectors];
+    }
+    else {
+      $multiple = ($this->hasMultipleValues($element) && strpos($plugin_id, 'select') !== FALSE) ? '[]' : '';
+      return [":input[name=\"$name$multiple\"]" => $title];
     }
   }
 

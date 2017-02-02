@@ -324,6 +324,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasMultipleWrapper() {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasMultipleValues(array $element) {
     if ($this->hasProperty('multiple')) {
       if (isset($element['#multiple'])) {
@@ -553,7 +560,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function finalize(array &$element, WebformSubmissionInterface $webform_submission) {
     // Prepare multiple element.
-    $this->prepareMultiple($element);
+    $this->prepareMultipleWrapper($element);
   }
 
   /**
@@ -606,8 +613,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param array $element
    *   An element.
    */
-  protected function prepareMultiple(array &$element) {
-    if (empty($element['#multiple']) || !$this->supportsMultipleValues()) {
+  protected function prepareMultipleWrapper(array &$element) {
+    if (!$this->hasMultipleValues($element) || !$this->hasMultipleWrapper()) {
       return;
     }
 
@@ -1204,8 +1211,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @see \Drupal\webform\Entity\Webform::getElementsSelectorOptions
    */
   public function getElementSelectorOptions(array $element) {
+    if ($this->hasMultipleValues($element) && $this->hasMultipleWrapper()) {
+      return [];
+    }
+
     $title = $this->getAdminLabel($element) . ' [' . $this->getPluginLabel() . ']';
     $name = $element['#webform_key'];
 

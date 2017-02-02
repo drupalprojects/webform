@@ -46,13 +46,13 @@ class DateList extends DateBase {
 
     $t_args = ['@title' => $this->getAdminLabel($element)];
     $selectors = [
-      'day' => $this->t('@title days', $t_args),
-      'month' => $this->t('@title months', $t_args),
-      'year' => $this->t('@title years', $t_args),
-      'hour' => $this->t('@title hours', $t_args),
-      'minute' => $this->t('@title minutes', $t_args),
-      'second' => $this->t('@title seconds', $t_args),
-      'ampm' => $this->t('@title am/pm', $t_args),
+      'day' => (string) $this->t('@title days', $t_args),
+      'month' => (string) $this->t('@title months', $t_args),
+      'year' => (string) $this->t('@title years', $t_args),
+      'hour' => (string) $this->t('@title hours', $t_args),
+      'minute' => (string) $this->t('@title minutes', $t_args),
+      'second' => (string) $this->t('@title seconds', $t_args),
+      'ampm' => (string) $this->t('@title am/pm', $t_args),
     ];
 
     $selectors = array_intersect_key($selectors, array_combine($date_parts, $date_parts));

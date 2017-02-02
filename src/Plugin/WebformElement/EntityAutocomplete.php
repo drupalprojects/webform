@@ -61,6 +61,13 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
   /**
    * {@inheritdoc}
    */
+  public function hasMultipleWrapper() {
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasMultipleValues(array $element) {
     if ($this->hasProperty('tags')) {
       if (isset($element['#tags'])) {

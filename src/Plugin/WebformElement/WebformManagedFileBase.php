@@ -50,6 +50,13 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function hasMultipleWrapper() {
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isMultiline(array $element) {
     if ($this->hasMultipleValues($element)) {
       return TRUE;
@@ -148,13 +155,6 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $container[$element['#webform_key']] = $element + ['#webform_managed_file_processed' => TRUE];
       $element = $container;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function prepareMultiple(array &$element) {
-    // Use default #multiple handling.
   }
 
   /**
@@ -300,7 +300,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   public function getElementSelectorOptions(array $element) {
     $title = $this->getAdminLabel($element);
     $name = $element['#webform_key'];
-    return [":input[name=\"files[{$name}]\"]" => $title . '  [' . $this->getPluginLabel() . ']'];
+    $input = ($this->hasMultipleValues($element)) ? ":input[name=\"files[{$name}][]\"]" : ":input[name=\"files[{$name}]\"]";
+    return [$input => $title . '  [' . $this->getPluginLabel() . ']'];
   }
 
   /**
