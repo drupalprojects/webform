@@ -11,6 +11,10 @@
   clear:both;
 }
 
+.webform-multiple-table table {
+  margin-bottom: 2px;
+}
+
 .webform-multiple-table td {
   white-space: nowrap;
 }
