@@ -101,6 +101,17 @@ interface WebformRequestInterface {
   public function getBaseRouteName(EntityInterface $webform_entity, EntityInterface $source_entity = NULL);
 
   /**
+   * Check if a source entity has dedicate webform routes.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission's source entity.
+   *
+   * @return bool
+   *   TRUE if a source entity has dedicate webform routes.
+   */
+  public function isValidSourceEntityRoute(EntityInterface $source_entity = NULL);
+
+  /**
    * Check if a source entity is attached to a webform.
    *
    * @param \Drupal\Core\Entity\EntityInterface $webform_entity

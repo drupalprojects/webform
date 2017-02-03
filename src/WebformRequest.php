@@ -147,6 +147,10 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function getRouteName(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name) {
+    if (!$this->isValidSourceEntityRoute($source_entity)) {
+      $source_entity = NULL;
+    }
+
     return $this->getBaseRouteName($webform_entity, $source_entity) . '.' . $route_name;
   }
 
@@ -154,6 +158,10 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function getRouteParameters(EntityInterface $webform_entity, EntityInterface $source_entity = NULL) {
+    if (!$this->isValidSourceEntityRoute($source_entity)) {
+      $source_entity = NULL;
+    }
+
     if (self::isValidSourceEntity($webform_entity, $source_entity)) {
       if ($webform_entity instanceof WebformSubmissionInterface) {
         return [
@@ -201,15 +209,23 @@ class WebformRequest implements WebformRequestInterface {
   /**
    * {@inheritdoc}
    */
-  public function isValidSourceEntity(EntityInterface $webform_entity, EntityInterface $source_entity = NULL) {
-    // Validate that source entity exists and can be linked to.
-    if (!$source_entity
-      || !$source_entity->hasLinkTemplate('canonical')
-      || !$this->routeExists('entity.' . $source_entity->getEntityTypeId() . '.webform_submission.canonical')
-    ) {
+  public function isValidSourceEntityRoute(EntityInterface $source_entity = NULL) {
+    if ($source_entity && $this->routeExists('entity.' . $source_entity->getEntityTypeId() . '.webform_submission.canonical')) {
+      return TRUE;
+    }
+    else {
       return FALSE;
     }
+  }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isValidSourceEntity(EntityInterface $webform_entity, EntityInterface $source_entity = NULL) {
+    // Validate that source entity exists and can be linked to.
+    if (!$source_entity || !$source_entity->hasLinkTemplate('canonical')) {
+      return FALSE;
+    }
 
     // Get the webform.
     if ($webform_entity instanceof WebformSubmissionInterface) {
