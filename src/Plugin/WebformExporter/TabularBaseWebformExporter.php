@@ -135,7 +135,7 @@ abstract class TabularBaseWebformExporter extends WebformExporterBase {
         $entity_id = $webform_submission->entity_id->value;
         $entity = $this->entityTypeManager->getStorage($entity_type)->load($entity_id);
         if ($entity) {
-          $record[] = ($field_type == 'entity_url') ? $entity->toUrl()->setOption('absolute', TRUE)->toString() : $entity->label();
+          $record[] = ($field_type == 'entity_url' && $entity->hasLinkTemplate('canonical')) ? $entity->toUrl()->setOption('absolute', TRUE)->toString() : $entity->label();
         }
         else {
           $record[] = '';
