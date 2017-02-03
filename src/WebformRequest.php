@@ -8,12 +8,20 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Routing\RouteProviderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Handles webform requests.
  */
 class WebformRequest implements WebformRequestInterface {
+
+  /**
+   * The route provider.
+   *
+   * @var \Drupal\Core\Routing\RouteProviderInterface $routeProvider
+   */
+  protected $router;
 
   /**
    * The entity type manager.
@@ -46,6 +54,8 @@ class WebformRequest implements WebformRequestInterface {
   /**
    * Constructs a WebformRequest object.
    *
+   * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
+   *   The route provider.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -55,7 +65,8 @@ class WebformRequest implements WebformRequestInterface {
    * @param \Drupal\Core\Entity\EntityTypeRepositoryInterface $entity_type_repository
    *   The entity type repository.
    */
-  public function __construct(RequestStack $request_stack, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository) {
+  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository) {
+    $this->routeProvider = $route_provider;
     $this->request = $request_stack->getCurrentRequest();
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
@@ -191,6 +202,16 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function isValidSourceEntity(EntityInterface $webform_entity, EntityInterface $source_entity = NULL) {
+    // Validate that source entity exists and can be linked to.
+    if (!$source_entity
+      || !$source_entity->hasLinkTemplate('canonical')
+      || !$this->routeExists('entity.' . $source_entity->getEntityTypeId() . '.webform_submission.canonical')
+    ) {
+      return FALSE;
+    }
+
+
+    // Get the webform.
     if ($webform_entity instanceof WebformSubmissionInterface) {
       $webform = $webform_entity->getWebform();
     }
@@ -201,12 +222,11 @@ class WebformRequest implements WebformRequestInterface {
       throw new \InvalidArgumentException('Webform entity');
     }
 
+    // Validate that source entity's field target id is the correct webform.
     $webform_field_name = self::getSourceEntityWebformFieldName($source_entity);
-    if ($source_entity
-      && $webform_field_name
+    if ($webform_field_name
       && $source_entity->hasField($webform_field_name)
       && $source_entity->$webform_field_name->target_id == $webform->id()
-      && $source_entity->hasLinkTemplate('canonical')
     ) {
       return TRUE;
     }
@@ -285,6 +305,27 @@ class WebformRequest implements WebformRequestInterface {
     }
 
     return $source_entity;
+  }
+
+  /**
+   * Check if route exists.
+   *
+   * @param $name
+   *   Route name.
+   *
+   * @return bool
+   *   TRUE if the route exists.
+   *
+   * @see http://drupal.stackexchange.com/questions/222591/how-do-i-verify-a-route-exists
+   */
+  protected function routeExists($name) {
+    try {
+      $this->routeProvider->getRouteByName($name);
+      return TRUE;
+    }
+    catch (\Exception $exception) {
+      return FALSE;
+    }
   }
 
 }
