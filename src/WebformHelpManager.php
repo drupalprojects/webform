@@ -519,7 +519,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     $videos['introduction'] = [
       'title' => $this->t('Welcome to the Webform module'),
-      'content' => $this->t('Welcome to new Webform module for Drupal 8.'),
+      'content' => $this->t('Welcome to the new Webform module for Drupal 8.'),
       'youtube_id' => 'sQGsfQ_LZJ4',
     ];
 
