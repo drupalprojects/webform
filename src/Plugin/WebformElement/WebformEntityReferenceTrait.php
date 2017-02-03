@@ -351,14 +351,6 @@ trait WebformEntityReferenceTrait {
       '#weight' => -40,
     ];
 
-    // Tags (only applies to 'entity_autocomplete' element).
-    $form['entity_reference']['tags'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Tags'),
-      '#description' => $this->t('Check this option if the user should be allowed to enter multiple entity references.'),
-      '#return_value' => TRUE,
-    ];
-
     // Target type.
     $form['entity_reference']['target_type'] = [
       '#type' => 'select',
@@ -419,6 +411,19 @@ trait WebformEntityReferenceTrait {
           [':input[name="properties[tags]"]' => ['checked' => TRUE]],
         ],
       ];
+    }
+
+    // Tags (only applies to 'entity_autocomplete' element).
+    $form['element']['tags'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Tags'),
+      '#description' => $this->t('Check this option if the user should be allowed to enter multiple entity references using tags.'),
+      '#return_value' => TRUE,
+    ];
+    if ($this->hasProperty('tags') && $this->hasProperty('multiple')) {
+      $form['element']['tags']['#states']['visible'][] = [':input[name="properties[multiple]"]' => ['checked' => FALSE]];
+      $form['element']['multiple']['#states']['visible'][] = [':input[name="properties[tags]"]' => ['checked' => FALSE]];
+      $form['element']['multiple__header_label']['#states']['visible'][] = [':input[name="properties[tags]"]' => ['checked' => FALSE]];
     }
 
     return $form;

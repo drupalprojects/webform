@@ -47,8 +47,8 @@ function webform_test_example_elements_composite() {
     if ($webform_element->supportsMultipleValues()) {
       $element['#title'] = $element['#title'] . ' multiple';
       $element['#multiple'] = TRUE;
-      if ((!in_array($element_type, ['webform_contact']) && $webform_element->hasProperty('header'))) {
-        $element['#header'] = TRUE;
+      if ((!in_array($element_type, ['webform_contact']) && $webform_element->hasProperty('multiple__header'))) {
+        $element['#multiple__header'] = TRUE;
       }
       $data[$element_type . '_example'][$element_type . '_multiple'] = $element;
     }

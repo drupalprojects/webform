@@ -1081,7 +1081,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#tags': true
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': comma
@@ -1092,7 +1092,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#tags': true
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': semicolon
@@ -1103,7 +1103,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#tags': true
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': and
@@ -1114,7 +1114,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#tags': true
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': ol
@@ -1125,7 +1125,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#tags': true
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': ul

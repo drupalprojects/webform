@@ -614,14 +614,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   An element.
    */
   protected function prepareMultipleWrapper(array &$element) {
-    if (!$this->hasMultipleValues($element) || !$this->hasMultipleWrapper()) {
+    if (!$this->hasMultipleValues($element) || !$this->hasMultipleWrapper() || empty($element['#multiple'])) {
       return;
     }
 
     // Set the multiple element.
     $element['#element'] = $element;
     // Remove properties that should only be applied to the parent element.
-    $element['#element'] = array_diff_key($element['#element'], array_flip(['#default_value', '#description', '#description_display', '#required', '#required_error', '#states', '#wrapper_attributes', '#prefix', '#suffix', '#element']));
+    // NOTE: #multiple is not removed because it is used by during validation.
+    // @see \Drupal\webform\Plugin\WebformElement\DateBase::preValidateDate
+    $element['#element'] = array_diff_key($element['#element'], array_flip(['#default_value', '#description', '#description_display', '#required', '#required_error', '#states', '#wrapper_attributes', '#prefix', '#suffix', '#element', '#tags']));
     // Always make the title invisible.
     $element['#element']['#title_display'] = 'invisible';
 

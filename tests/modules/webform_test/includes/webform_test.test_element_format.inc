@@ -73,6 +73,7 @@ function webform_test_test_element_format(WebformInterface $webform, $composite 
       foreach ($multiple_properties as $multiple_property) {
         if ($webform_element->hasProperty($multiple_property)) {
           $element["#$multiple_property"] = TRUE;
+          break;
         }
       }
       $item_formats = [''];

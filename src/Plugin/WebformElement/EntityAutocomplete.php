@@ -26,6 +26,8 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      'multiple' => FALSE,
+      'multiple__header_label' => '',
       // Entity reference settings.
       'target_type' => '',
       'selection_handler' => 'default',
@@ -62,20 +64,15 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
    * {@inheritdoc}
    */
   public function hasMultipleWrapper() {
-    return FALSE;
+    return TRUE;
   }
 
   /**
    * {@inheritdoc}
    */
   public function hasMultipleValues(array $element) {
-    if ($this->hasProperty('tags')) {
-      if (isset($element['#tags'])) {
-        return $element['#tags'];
-      }
-      else {
-        return $this->getDefaultProperty('tags');
-      }
+    if ($this->hasProperty('tags') && isset($element['#tags'])) {
+      return $element['#tags'];
     }
     else {
       return parent::hasMultipleValues($element);

@@ -397,6 +397,14 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+    entity_autocomplete_tags:
+      '#type': entity_autocomplete
+      '#title': 'Entity autocomplete tags'
+      '#target_type': user
+      '#selection_handler': 'default:user'
+      '#selection_settings':
+        include_anonymous: true
+      '#tags': true
     entity_autocomplete_multiple:
       '#type': entity_autocomplete
       '#title': 'Entity autocomplete multiple'
@@ -404,6 +412,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#multiple': true
     webform_entity_checkboxes:
       '#type': webform_entity_checkboxes
       '#title': 'Entity checkboxes'
