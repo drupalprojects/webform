@@ -2,11 +2,10 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the Webform Test module.
+ * Install, update and uninstall functions for the Webform Test Config Performance module.
  */
 
 use Drupal\webform\Entity\Webform;
-use Drupal\Core\Url;
 
 /**
  * Implements hook_install().
