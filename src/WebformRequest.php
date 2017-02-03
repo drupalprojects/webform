@@ -147,7 +147,7 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function getRouteName(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name) {
-    if (!$this->isValidSourceEntityRoute($source_entity)) {
+    if (!$this->hasSourceEntityWebformRoutes($source_entity)) {
       $source_entity = NULL;
     }
 
@@ -158,7 +158,7 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function getRouteParameters(EntityInterface $webform_entity, EntityInterface $source_entity = NULL) {
-    if (!$this->isValidSourceEntityRoute($source_entity)) {
+    if (!$this->hasSourceEntityWebformRoutes($source_entity)) {
       $source_entity = NULL;
     }
 
@@ -209,7 +209,7 @@ class WebformRequest implements WebformRequestInterface {
   /**
    * {@inheritdoc}
    */
-  public function isValidSourceEntityRoute(EntityInterface $source_entity = NULL) {
+  public function hasSourceEntityWebformRoutes(EntityInterface $source_entity = NULL) {
     if ($source_entity && $this->routeExists('entity.' . $source_entity->getEntityTypeId() . '.webform_submission.canonical')) {
       return TRUE;
     }

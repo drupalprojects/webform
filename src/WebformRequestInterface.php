@@ -109,7 +109,7 @@ interface WebformRequestInterface {
    * @return bool
    *   TRUE if a source entity has dedicate webform routes.
    */
-  public function isValidSourceEntityRoute(EntityInterface $source_entity = NULL);
+  public function hasSourceEntityWebformRoutes(EntityInterface $source_entity = NULL);
 
   /**
    * Check if a source entity is attached to a webform.
