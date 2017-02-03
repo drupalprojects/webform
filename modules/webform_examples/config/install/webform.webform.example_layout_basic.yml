@@ -35,14 +35,14 @@ elements: |
       '#message_close': true
   form_inline_example:
     '#type': details
-    '#title': 'Webform inline with warning (.form--inline.message.message--warning)'
+    '#title': 'Webform inline with warning (.form--inline.messages.messages--warning)'
     '#open': true
     form_inline_container:
       '#type': container
       '#attributes':
         class:
           - 'form--inline clearfix'
-          - 'message message--warning'
+          - 'messages messages--warning'
         style: 'padding-top: 0; padding-bottom: 0;'
       form_inline_first_name:
         '#title': 'First Name'
