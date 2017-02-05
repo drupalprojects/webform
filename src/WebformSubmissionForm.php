@@ -142,6 +142,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $entity = $webform_submission_draft;
     }
 
+    $this->messageManager->setWebform($webform);
     $this->messageManager->setWebformSubmission($entity);
     $this->messageManager->setSourceEntity($this->sourceEntity);
     return parent::setEntity($entity);
