@@ -88,8 +88,9 @@ class WebformElementAttributes extends FormElement {
       //
       // WORKAROUND:
       // Manually process the 'webform_select_other' element.
-      $element['class'] = WebformSelectOther::valueCallback($element['class'], FALSE, $form_state);
-      $element['class'] = WebformSelectOther::processWebformOther($element['class'], $form_state, $complete_form);
+      WebformSelectOther::valueCallback($element['class'], FALSE, $form_state);
+      WebformSelectOther::processWebformOther($element['class'], $form_state, $complete_form);
+
       $element['class']['#type'] = 'item';
       unset($element['class']['#element_validate']);
     }
