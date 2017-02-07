@@ -5,6 +5,7 @@ namespace Drupal\webform_node\Access;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -70,8 +71,9 @@ class WebformNodeAccess {
    *   The access result.
    */
   protected static function checkAccess($operation, $entity_access, NodeInterface $node, WebformSubmissionInterface $webform_submission = NULL, AccountInterface $account = NULL) {
+    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($node);
     // Check that the node has a valid webform reference.
-    if (!$node->hasField('webform') || !$node->webform->entity) {
+    if (!$webform_field_name || !$node->$webform_field_name->entity) {
       return AccessResult::forbidden();
     }
 
@@ -89,7 +91,7 @@ class WebformNodeAccess {
     if ($entity_access) {
       // Check entity access for the webform.
       if (strpos($entity_access, 'webform.') === 0
-        && $node->webform->entity->access(str_replace('webform.', '', $entity_access), $account)) {
+        && $node->$webform_field_name->entity->access(str_replace('webform.', '', $entity_access), $account)) {
         return AccessResult::allowed();
       }
       // Check entity access for the webform submission.

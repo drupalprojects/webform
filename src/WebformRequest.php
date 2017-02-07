@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -105,7 +106,7 @@ class WebformRequest implements WebformRequestInterface {
    */
   public function getCurrentWebform() {
     $source_entity = self::getCurrentSourceEntity('webform');
-    $webform_field_name = self::getSourceEntityWebformFieldName($source_entity);
+    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
     if ($source_entity && $webform_field_name && $source_entity->hasField($webform_field_name)) {
       return $source_entity->$webform_field_name->entity;
     }
@@ -239,7 +240,7 @@ class WebformRequest implements WebformRequestInterface {
     }
 
     // Validate that source entity's field target id is the correct webform.
-    $webform_field_name = self::getSourceEntityWebformFieldName($source_entity);
+    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
     if ($webform_field_name
       && $source_entity->hasField($webform_field_name)
       && $source_entity->$webform_field_name->target_id == $webform->id()
@@ -249,24 +250,6 @@ class WebformRequest implements WebformRequestInterface {
     else {
       return FALSE;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSourceEntityWebformFieldName(EntityInterface $source_entity = NULL) {
-    if ($source_entity === NULL || !method_exists($source_entity, 'hasField')) {
-      return '';
-    }
-    if ($source_entity instanceof ContentEntityInterface) {
-      $fields = $source_entity->getFieldDefinitions();
-      foreach ($fields as $field_name => $field_definition) {
-        if ($field_definition->getType() == 'webform') {
-          return $field_name;
-        }
-      }
-    }
-    return '';
   }
 
   /**
@@ -308,7 +291,7 @@ class WebformRequest implements WebformRequestInterface {
     // Check that the webform is referenced by the source entity.
     if (!$webform->getSetting('form_prepopulate_source_entity')) {
       // Get source entity's webform field.
-      $webform_field_name = $this->getSourceEntityWebformFieldName($source_entity);
+      $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
       if (!$webform_field_name) {
         return NULL;
       }
