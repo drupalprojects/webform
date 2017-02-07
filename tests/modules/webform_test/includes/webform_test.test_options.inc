@@ -16,32 +16,32 @@ use Drupal\webform\Entity\WebformOptions;
  */
 function webform_test_test_options() {
   $data = [
-    'general' => [
+    'general_options' => [
       '#type' => 'details',
       '#title' => 'General options',
       '#open' => TRUE,
     ],
-    'bio' => [
+    'bio_options' => [
       '#type' => 'details',
       '#title' => 'Biographical options',
       '#open' => TRUE,
     ],
-    'location' => [
+    'location_options' => [
       '#type' => 'details',
       '#title' => 'Location options',
       '#open' => TRUE,
     ],
-    'date' => [
+    'date_options' => [
       '#type' => 'details',
       '#title' => 'Date options',
       '#open' => TRUE,
     ],
-    'likert' => [
+    'likert_options' => [
       '#type' => 'details',
       '#title' => 'Likert options',
       '#open' => TRUE,
     ],
-    'test' => [
+    'test_options' => [
       '#type' => 'details',
       '#title' => 'Test options',
       '#open' => TRUE,
@@ -51,7 +51,7 @@ function webform_test_test_options() {
   foreach ($webform_options as $id => $webform_option) {
     $title = $webform_option->label() . ' (' . $id . ')';
     if (strpos($id, 'likert') === 0) {
-      $data['likert'][$id] = [
+      $data['likert_options'][$id] = [
         '#type' => 'webform_likert',
         '#title' => $title,
         '#questions' => [
@@ -64,19 +64,19 @@ function webform_test_test_options() {
     }
     else {
       if (preg_match('/(state|country|countries)/', $id)) {
-        $group = 'location';
+        $group = 'location_options';
       }
       elseif (preg_match('/(months|days)/', $id)) {
-        $group = 'date';
+        $group = 'date_options';
       }
       elseif (preg_match('/(time_zones|creditcard|yes_no|days|size)/', $id)) {
-        $group = 'general';
+        $group = 'general_options';
       }
       elseif ($id == 'test') {
-        $group = 'test';
+        $group = 'test_options';
       }
       else {
-        $group = 'bio';
+        $group = 'bio_options';
       }
 
       $data[$group][$id] = [
@@ -87,6 +87,12 @@ function webform_test_test_options() {
 
     }
   }
+
+  $data['test_options']['custom'] = [
+    '#type' => 'select',
+    '#title' => 'Custom (custom)',
+    '#options' => 'custom',
+  ];
 
   $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.test_options.yml');
   $default_elements = Yaml::decode($yaml);

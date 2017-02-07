@@ -84,6 +84,20 @@ function hook_webform_element_ELEMENT_TYPE_form_alter(array &$element, \Drupal\C
 }
 
 /**
+ * Alter form options by id.
+ *
+ * @param array $options
+ *   An associative array of options.
+ * @param array $element
+ *   The form element that the options is for.
+ * @param string $options_id
+ *   The form options id. Set to NULL if the options are custom.
+ */
+function hook_webform_options_alter(array &$options, array &$element, $options_id = NULL) {
+
+}
+
+/**
  * Alter the webform options by id.
  *
  * @param array $options

@@ -139,6 +139,8 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
    */
   public static function getElementOptions(array $element, $property_name = '#options') {
     // If element already has #options return them.
+    // NOTE: Only WebformOptions can be altered. If you need to alter an
+    // element's options, @see hook_webform_element_alter().
     if (is_array($element[$property_name])) {
       return $element[$property_name];
     }
@@ -153,14 +155,16 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
     $id = $element[$property_name];
     if ($webform_options = WebformOptions::load($id)) {
       $options = $webform_options->getOptions();
-      if ($options) {
-        return $options;
-      }
+    }
+    else {
+      $options = [];
     }
 
-    // Get options using alter hook.
-    $options = [];
+    // Alter options using hook_webform_options_alter()
+    // and/or hook_webform_options_WEBFORM_OPTIONS_ID_alter() hook.
+    // @see webform.api.php
     \Drupal::moduleHandler()->alter('webform_options_' . $id, $options, $element);
+    \Drupal::moduleHandler()->alter('webform_options', $options, $element, $id);
 
     // Log empty options.
     if (empty($options)) {
