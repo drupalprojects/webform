@@ -699,11 +699,11 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
-    if ($this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3)) {
+    if (!$this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3)) {
       $form['ui']['offcanvas_message'] = [
         '#type' => 'webform_message',
         '#message_type' => 'info',
-        '#message_message' => $this->t('Enable to experimental <a href=":href">System tray module</a> to improve the Webform module\'s user experience.', [':href' => 'https://www.drupal.org/blog/drupal-82-now-with-more-outside-in']),
+        '#message_message' => $this->t('Enable the experimental <a href=":href">System tray module</a> to improve the Webform module\'s user experience.', [':href' => 'https://www.drupal.org/blog/drupal-82-now-with-more-outside-in']),
         '#states' => [
           'visible' => [
             ':input[name="ui[dialog_disabled]"]' => [
