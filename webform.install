@@ -503,3 +503,22 @@ function _webform_update_8014(array &$element) {
 function webform_update_8015() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2850455: Add lookup_keys to webform config entity. Flush cache entity definitions.
+ */
+function webform_update_8016() {
+  drupal_flush_all_caches();
+}
+
+/**
+ * Issue #2850455: Add lookup_keys to webform config entity. Update Webform lookup keys.
+ */
+function webform_update_8017() {
+  // Must resave all Webform config lookup keys.
+  // @see \Drupal\Core\Config\Entity\Query\QueryFactory::updateConfigKeyStore
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $webform->save();
+  }
+}

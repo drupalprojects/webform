@@ -83,6 +83,10 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "handlers",
  *     "third_party_settings",
  *   },
+ *   lookup_keys = {
+ *     "status",
+ *     "template",
+ *   },
  * )
  */
 class Webform extends ConfigEntityBundleBase implements WebformInterface {
