@@ -14,7 +14,7 @@
    */
   Drupal.behaviors.webformButtons = {
     attach: function (context) {
-      $(context).find('fieldset.js-webform-buttons div.fieldset-wrapper').once('webform-buttons').each(function () {
+      $(context).find('.js-webform-buttons [type="radio"]').commonAncestor().once('webform-buttons').each(function () {
         var $input = $(this);
         // Remove all div and classes around radios and labels.
         $input.html($input.find('input[type="radio"], label').removeClass());
@@ -29,7 +29,6 @@
           $input.buttonset('option', 'disabled', $input.find('input[type="radio"]:disabled').length);
         });
       });
-
     }
   };
 
