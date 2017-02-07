@@ -40,5 +40,10 @@ details details details {
 .ui-resizable-w {
   background-color: #bfbfba;
   border: 1px solid #6b6b6b;
-  border-left-width: 2px;
+  border-width: 1px 2px;
+}
+
+/* System tray title bar */
+.ui-dialog.ui-dialog-offcanvas .ui-dialog-titlebar {
+  border-radius: 0;
 }

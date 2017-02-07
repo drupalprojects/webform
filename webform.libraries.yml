@@ -397,6 +397,9 @@ webform.element.roles:
 
 webform.element.select2:
   version: 1.x
+  css:
+    theme:
+      css/webform.element.select2.css: {}
   js:
     js/webform.element.select2.js: {}
   dependencies:

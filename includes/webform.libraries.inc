@@ -17,7 +17,7 @@ function webform_library_info_alter(&$libraries, $extension) {
   }
 
   // Add off-canvas system tray to dialog dependencies.
-  if (isset($libraries['webform.admin.dialog']) && WebformDialogHelper::useOffCanvas()) {
+  if (isset($libraries['webform.admin.dialog']) && (floatval(\Drupal::VERSION) >= 8.3) && \Drupal::moduleHandler()->moduleExists('outside_in')) {
     $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.off_canvas';
     $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.outside_in';
   }

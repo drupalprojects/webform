@@ -1,0 +1,9 @@
+/**
+ * @file
+ * Select2 styles.
+ */
+
+/* Make sure container is visible. Fixes Select2 not working with outside_in.module. */
+.select2-container {
+  z-index: 10000;
+}
