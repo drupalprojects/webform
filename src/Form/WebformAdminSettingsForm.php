@@ -684,6 +684,35 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.dialog_disabled'),
     ];
+    $form['ui']['offcanvas_disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable off-canvas system tray'),
+      '#description' => $this->t('If checked, off-canvas system tray will be disabled.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('ui.offcanvas_disabled'),
+      '#access' => $this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3),
+      '#states' => [
+        'visible' => [
+          ':input[name="ui[dialog_disabled]"]' => [
+            'checked' => FALSE,
+          ],
+        ],
+      ],
+    ];
+    if ($this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3)) {
+      $form['ui']['offcanvas_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'info',
+        '#message_message' => $this->t('Enable to experimental <a href=":href">System tray module</a> to improve the Webform module\'s user experience.', [':href' => 'https://www.drupal.org/blog/drupal-82-now-with-more-outside-in']),
+        '#states' => [
+          'visible' => [
+            ':input[name="ui[dialog_disabled]"]' => [
+              'checked' => FALSE,
+            ],
+          ],
+        ],
+      ];
+    }
     $form['ui']['html_editor_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable HTML editor'),

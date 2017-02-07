@@ -495,5 +495,11 @@ function _webform_update_8014(array &$element) {
       _webform_update_8014($element[$key]);
     }
   }
+}
 
+/**
+ * Issue #2850247: Experiment with system tray integration.
+ */
+function webform_update_8015() {
+  _webform_update_admin_settings();
 }

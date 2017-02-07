@@ -26,14 +26,36 @@ class WebformDialogHelper {
     }
     else {
       $class[] = 'use-ajax';
-      return [
-        'class' => $class,
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode([
-          'width' => $width,
-        ]),
-      ];
+      if (WebformDialogHelper::useOffCanvas()) {
+        return [
+          'class' => $class,
+          'data-dialog-type' => 'dialog',
+          'data-dialog-renderer' => 'offcanvas',
+          'data-dialog-options' => Json::encode([
+            'width' => ($width > 480) ? 480 : $width,
+          ]),
+        ];
+      }
+      else {
+        return [
+          'class' => $class,
+          'data-dialog-type' => 'modal',
+          'data-dialog-options' => Json::encode([
+            'width' => $width,
+          ]),
+        ];
+      }
     }
+  }
+
+  /**
+   * Use outside-in off-canvas system tray instead of dialogs.
+   *
+   * @return bool
+   *   TRUE if outside_in.module is enabled and system trays are not disabled.
+   */
+  public static function useOffCanvas() {
+    return ((floatval(\Drupal::VERSION) >= 8.3) && \Drupal::moduleHandler()->moduleExists('outside_in') && !\Drupal::config('webform.settings')->get('ui.offcanvas_disabled')) ? TRUE : FALSE;
   }
 
 }

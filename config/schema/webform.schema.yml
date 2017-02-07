@@ -260,6 +260,9 @@ webform.settings:
         dialog_disabled:
           type: boolean
           label: 'Disable dialogs'
+        offcanvas_disabled:
+          type: boolean
+          label: 'Disable system tray'
         html_editor_disabled:
           type: boolean
           label: 'Disable HTML editor'

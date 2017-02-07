@@ -5,6 +5,8 @@
  * Webform libraries.
  */
 
+use Drupal\webform\Utility\WebformDialogHelper;
+
 /**
  * Implements hook_library_info_alter().
  */
@@ -12,6 +14,12 @@ function webform_library_info_alter(&$libraries, $extension) {
   // Only alter webform libraries.
   if ($extension != 'webform') {
     return;
+  }
+
+  // Add off-canvas system tray to dialog dependencies.
+  if (isset($libraries['webform.admin.dialog']) && WebformDialogHelper::useOffCanvas()) {
+    $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.off_canvas';
+    $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.outside_in';
   }
 
   // Map /library/* paths to CDN.

@@ -35,3 +35,10 @@ details details details {
     display: none !important; /* Using !important to ensure with these elements are hidden with getting into a specificity war */
   }
 }
+
+/* System tray divider */
+.ui-resizable-w {
+  background-color: #bfbfba;
+  border: 1px solid #6b6b6b;
+  border-left-width: 2px;
+}

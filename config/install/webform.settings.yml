@@ -200,6 +200,7 @@ ui:
   video_display: dialog
   details_save: true
   dialog_disabled: false
+  offcanvas_disabled: false
   html_editor_disabled: false
 library:
   cdn: false
