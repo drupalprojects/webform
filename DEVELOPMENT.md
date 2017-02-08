@@ -138,6 +138,13 @@ drush webform-purge --all -y; drush pmu -y webform_test; drush en -y webform_tes
 **Manage Webform module configuration using the [Features](https://www.drupal.org/project/features) module**
 
 ```
+# Generate *.features.yml for the webform.module and sub-modules.
+# These files will be ignored. @see .gitignore.
+echo 'true' > webform.features.yml
+echo 'true' > modules/webform_examples/webform_examples.features.yml
+echo 'true' > modules/webform_templates/webform_templates.features.yml
+echo 'true' > modules/webform_node/webform_node.features.yml
+
 # Make sure all modules that are going to be exported are enabled
 drush en -y webform\
   webform_examples\

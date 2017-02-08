@@ -1,2 +1,9 @@
 *.patch
 interdiff-*.txt
+
+# Ignore all *.features.yml in 'modules' directory.
+# NOTE: *.features.yml are not ignored with 'test/modules' directory.
+webform.features.yml
+modules/webform_examples/webform_examples.features.yml
+modules/webform_templates/webform_templates.features.yml
+modules/webform_node/webform_node.features.yml
