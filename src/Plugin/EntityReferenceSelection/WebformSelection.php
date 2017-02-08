@@ -36,7 +36,7 @@ class WebformSelection extends DefaultSelection {
   protected function buildEntityQuery($match = NULL, $match_operator = 'CONTAINS') {
     $query = parent::buildEntityQuery($match, $match_operator);
     // Exclude templates.
-    $query->condition('template', 0);
+    $query->condition('template', FALSE);
     return $query;
   }
 
