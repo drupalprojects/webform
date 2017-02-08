@@ -22,6 +22,7 @@ abstract class NumericBase extends WebformElementBase {
       'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
+      'autocomplete' => 'on',
     ];
   }
 

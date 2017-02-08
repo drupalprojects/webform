@@ -10,6 +10,10 @@ id: test_element_autocomplete
 title: 'Test: Element: Autocomplete'
 description: 'Test element autocompletion.'
 elements: |
+  autocomplete_off:
+    '#type': email
+    '#title': 'email (autocomplete=off)'
+    '#autocomplete': off
   autocomplete_items:
     '#type': webform_autocomplete
     '#title': 'autocomplete (options)'
@@ -44,6 +48,7 @@ settings:
   form_confidential_message: ''
   form_prepopulate: false
   form_prepopulate_source_entity: false
+  form_disable_autocomplete: false
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
@@ -82,6 +87,8 @@ settings:
   limit_total_message: ''
   limit_user: null
   limit_user_message: ''
+  purge: none
+  purge_days: null
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false

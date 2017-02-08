@@ -499,6 +499,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         break;
     }
 
+    // Add autocomplete attribute.
+    if (isset($element['#autocomplete'])) {
+      $element['#attributes']['autocomplete'] = $element['#autocomplete'];
+    }
+
     // Add inline title display support.
     if (isset($element['#title_display']) && $element['#title_display'] == 'inline') {
       unset($element['#title_display']);
@@ -1446,6 +1451,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'textfield',
       '#title' => $this->t('Placeholder'),
       '#description' => $this->t('The placeholder will be shown in the element until the user starts entering a value.'),
+    ];
+    $form['form']['autocomplete'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Autocomplete'),
+      '#options' => [
+        'on' => $this->t('On'),
+        'off' => $this->t('Off'),
+      ],
+      '#description' => $this->t('Setting autocomplete to off will disable autocompletion for this element.'),
     ];
     $form['form']['open'] = [
       '#type' => 'checkbox',

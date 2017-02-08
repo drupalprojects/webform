@@ -70,6 +70,11 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
       $this->assert(!isset($elements['test'][$ignored_property]), new FormattableMarkup('@property ignored.', ['@property' => $ignored_property]));
     }
 
+    /* Test #autocomplete property */
+
+    $this->drupalGet('webform/test_element_autocomplete');
+    $this->assertRaw('<input autocomplete="off" data-drupal-selector="edit-autocomplete-off" type="email" id="edit-autocomplete-off" name="autocomplete_off" value="" size="60" maxlength="254" class="form-email" />');
+
     /* Test #autocomplete_items element property */
 
     // Check routes data-drupal-selector.

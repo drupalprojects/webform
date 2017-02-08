@@ -31,6 +31,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     'test_form_submit_once',
     'test_form_disable_back',
     'test_form_unsaved',
+    'test_form_disable_autocomplete',
     'test_form_novalidate',
     'test_form_details_toggle',
     'test_form_autofocus',
@@ -273,7 +274,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check webform has .js-webform-unsaved class.
     $this->drupalGet('webform/test_form_unsaved');
-    $this->assertCssSelect('form.js-webform-unsaved', t('Webform has .js-webform-unsaved class.'));
+    $this->assertCssSelect('form.js-webform-unsaved', t('Form has .js-webform-unsaved class.'));
 
     // Disable YAML specific webform unsaved setting.
     $webform_form_unsaved->setSetting('form_unsaved', FALSE);
@@ -299,8 +300,16 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check unsaved attribute added to webform.
     $this->drupalGet('webform/test_form_unsaved');
-    $this->assertCssSelect('form.js-webform-unsaved', t('Webform has .js-webform-unsaved class.'));
+    $this->assertCssSelect('form.js-webform-unsaved', t('Form has .js-webform-unsaved class.'));
 
+    /**************************************************************************/
+    /* Test webform disable autocomplete (form_disable_autocomplete) */
+    /**************************************************************************/
+
+    // Check webform has autocomplete=off attribute.
+    $this->drupalGet('webform/test_form_disable_autocomplete');
+    $this->assertCssSelect('form[autocomplete="off"]', t('Form has autocomplete=off attribute.'));
+    
     /**************************************************************************/
     /* Test webform (client-side) novalidate (form_novalidate) */
     /**************************************************************************/
@@ -309,7 +318,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check webform has novalidate attribute.
     $this->drupalGet('webform/test_form_novalidate');
-    $this->assertCssSelect('form[novalidate="novalidate"]', t('Webform has the proper novalidate attribute.'));
+    $this->assertCssSelect('form[novalidate="novalidate"]', t('Form has the proper novalidate attribute.'));
 
     // Disable YAML specific webform client-side validation setting.
     $webform_form_novalidate->setSetting('form_novalidate', FALSE);
@@ -337,7 +346,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check novalidate attribute added to webform.
     $this->drupalGet('webform/test_form_novalidate');
-    $this->assertCssSelect('form[novalidate="novalidate"]', t('Webform has the proper novalidate attribute.'));
+    $this->assertCssSelect('form[novalidate="novalidate"]', t('Form has the proper novalidate attribute.'));
 
     /**************************************************************************/
     /* Test webform details toggle (form_details_toggle) */
@@ -347,7 +356,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check webform has .webform-details-toggle class.
     $this->drupalGet('webform/test_form_details_toggle');
-    $this->assertCssSelect('form.webform-details-toggle', t('Webform has the .webform-details-toggle class.'));
+    $this->assertCssSelect('form.webform-details-toggle', t('Form has the .webform-details-toggle class.'));
 
     // Check details toggle checkbox is disabled.
     $this->drupalGet('admin/structure/webform/manage/test_form_details_toggle/settings');
@@ -361,7 +370,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check .webform-details-toggle class still added to webform.
     $this->drupalGet('webform/test_form_details_toggle');
-    $this->assertCssSelect('form.webform-details-toggle', t('Webform has the .webform-details-toggle class.'));
+    $this->assertCssSelect('form.webform-details-toggle', t('Form has the .webform-details-toggle class.'));
 
     // Check details toggle checkbox is enabled.
     $this->drupalGet('admin/structure/webform/manage/test_form_details_toggle/settings');

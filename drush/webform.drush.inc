@@ -11,6 +11,7 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Form\WebformResultsClearForm;
 use Drupal\webform\Form\WebformSubmissionsPurgeForm;
 use Drupal\webform\Utility\WebformYamlTidy;
+use Psr\Log\LogLevel;
 
 /**
  * Implements hook_drush_command().
@@ -375,11 +376,21 @@ function drush_webform_tidy($module = 'webform') {
 
     // Add module dependency to exporter webform and webform options config entities.
     if ($dependencies && preg_match('/^(webform\.webform\.|webform\.webform_options\.)/', $file->filename)) {
-      $data = Yaml::decode($tidied_yaml);
-      if (empty($data['dependencies']['enforced']['module']) || !in_array($module, $data['dependencies']['enforced']['module'])) {
-        drush_print(dt('Adding module dependency to @file...', ['@file' => $file->filename]));
-        $data['dependencies']['enforced']['module'][] = $module;
-        $tidied_yaml = Yaml::encode($data);
+      try {
+        $data = Yaml::decode($tidied_yaml);
+        if (empty($data['dependencies']['enforced']['module']) || !in_array($module, $data['dependencies']['enforced']['module'])) {
+          drush_print(dt('Adding module dependency to @file...', ['@file' => $file->filename]));
+          $data['dependencies']['enforced']['module'][] = $module;
+          $tidied_yaml = Yaml::encode($data);
+        }
+      }
+      catch (\Exception $exception) {
+        $message = 'Error parsing: ' . $file->filename . PHP_EOL . $exception->getMessage();
+        if (strlen($message) > 255) {
+          $message = substr($message, 0, 255) . '...';
+        }
+        drush_log($message, LogLevel::ERROR);
+        drush_print($message);
       }
     }
 

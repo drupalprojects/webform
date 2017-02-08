@@ -302,7 +302,13 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attached']['library'][] = 'webform/webform.form.submit_once';
     }
 
-    // Novalidate: Add novalidate attribute to webform if client side validation disabled.
+    // Autocomplete: Add autocomplete=off attribute to form if autocompletion is
+    // disabled.
+    if ($this->getWebformSetting('form_disable_autocomplete')) {
+      $form['#attributes']['autocomplete'] = 'off';
+    }
+
+    // Novalidate: Add novalidate attribute to form if client side validation disabled.
     if ($this->getWebformSetting('form_novalidate')) {
       $form['#attributes']['novalidate'] = 'novalidate';
     }

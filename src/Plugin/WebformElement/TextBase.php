@@ -21,6 +21,7 @@ abstract class TextBase extends WebformElementBase {
       'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
+      'autocomplete' => 'on',
       'pattern' => '',
     ];
   }

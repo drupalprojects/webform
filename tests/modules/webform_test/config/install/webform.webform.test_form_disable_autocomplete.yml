@@ -6,25 +6,17 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_form_assets
-title: 'Test: Webform: Assets (CSS/JS)'
-description: 'Test custom CSS and JS webform asssets.'
+id: test_form_disable_autocomplete
+title: 'Test: Webform: Disable autocomplete'
+description: 'Test  disabling autocompletion for all elements.'
 elements: |
+  description:
+    '#markup': 'Form tag should include autocomplete=off attribute.'
   test:
-    '#type': textfield
-    '#title': 'Text field'
-css: |
-  .webform-submission-form {
-    background-color: #cccccc;
-    display: none;
-    padding: 20px;
-  }
-javascript: |
-  (function ($) {
-    $(function() {
-      $('.webform-submission-form').fadeIn(3000);
-    });
-  })(jQuery);
+    '#type': email
+    '#title': 'Test autocompletion is disabled.'
+css: ''
+javascript: ''
 settings:
   page: true
   page_submit_path: ''
@@ -39,7 +31,7 @@ settings:
   form_confidential_message: ''
   form_prepopulate: false
   form_prepopulate_source_entity: false
-  form_disable_autocomplete: false
+  form_disable_autocomplete: true
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false

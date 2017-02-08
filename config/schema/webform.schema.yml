@@ -362,6 +362,9 @@ webform.webform.*:
         form_disable_back:
           type: boolean
           label: 'Disable back button'
+        form_disable_autocomplete:
+          type: boolean
+          label: 'Disable autocompletion'
         form_novalidate:
           type: boolean
           label: 'Disable client-side validation'

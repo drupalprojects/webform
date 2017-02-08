@@ -28,6 +28,7 @@ class Email extends WebformElementBase {
       'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
+      'autocomplete' => 'on',
     ];
   }
 

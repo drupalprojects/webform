@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Controller;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
@@ -95,12 +96,15 @@ class WebformElementController extends ControllerBase {
       $matches += $this->getMatchesFromOptions($q, $options, $element['#autocomplete_match_operator'], $element['#autocomplete_limit']);
     }
 
-    // Sort matches and enforce the limit.
+    // Sort matches by label and enforce the limit.
     if ($matches) {
-      ksort($matches);
+      uasort($matches, function (array $a, array $b) {
+        return $a['label'] > $b['label'];
+      });
       $matches = array_values($matches);
       $matches = array_slice($matches, 0, $element['#autocomplete_limit']);
     }
+
 
     return new JsonResponse($matches);
   }

@@ -265,6 +265,10 @@ class WebformEntitySettingsForm extends EntityForm {
         'all_description' => $this->t('Unsaved warning is enabled for all webforms.'),
         'form_description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
       ],
+      'form_disable_autocomplete' => [
+        'title' => $this->t('Disable autocompletion'),
+        'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),
+      ],
       'form_novalidate' => [
         'title' => $this->t('Disable client-side validation'),
         'all_description' => $this->t('Client-side validation is disabled for all webforms.'),
@@ -277,7 +281,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
     ];
     foreach ($settings_elements as $settings_key => $setting_element) {
-      if ($default_settings['default_' . $settings_key]) {
+      if (!empty($default_settings['default_' . $settings_key])) {
         $form['form'][$settings_key . '_disabled'] = [
           '#type' => 'checkbox',
           '#title' => $setting_element['title'],
