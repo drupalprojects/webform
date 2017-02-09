@@ -47,3 +47,8 @@ details details details {
 .ui-dialog.ui-dialog-offcanvas .ui-dialog-titlebar {
   border-radius: 0;
 }
+
+/* System tray actions */
+.ui-dialog.ui-dialog-offcanvas .ui-dialog-content .form-actions {
+  margin: 1em 0;
+}
