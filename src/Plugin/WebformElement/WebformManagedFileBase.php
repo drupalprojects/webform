@@ -395,7 +395,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
 
     // Look for an existing temp files that have not been uploaded.
     $fids = \Drupal::entityQuery('file')
-      ->condition('status', 0)
+      ->condition('status', FALSE)
       ->condition('uid', \Drupal::currentUser()->id())
       ->condition('uri', $upload_location . '/' . $element['#webform_key'] . '.%', 'LIKE')
       ->execute();

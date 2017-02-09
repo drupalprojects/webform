@@ -61,6 +61,16 @@ entity.node.webform_submission.edit_form:
   route_name: entity.node.webform_submission.edit_form
   base_route: entity.node.webform_submission.canonical
 
+entity.node.webform_submission.edit_form.page:
+  title: 'Pages'
+  route_name: entity.node.webform_submission.edit_form
+  parent_id: entity.node.webform_submission.edit_form
+
+entity.node.webform_submission.edit_form.all:
+  title: 'All'
+  route_name: entity.node.webform_submission.edit_form.all
+  parent_id: entity.node.webform_submission.edit_form
+
 entity.node.webform_submission.notes_form:
   title: 'Notes'
   route_name: entity.node.webform_submission.notes_form

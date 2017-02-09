@@ -1085,7 +1085,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPages() {
+  public function getPages($disable_pages = FALSE) {
     if (isset($this->pages)) {
       return $this->pages;
     }
@@ -1100,7 +1100,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     // Add webform page containers.
     $this->pages = [];
-    if (is_array($elements)) {
+    if (is_array($elements) && !$disable_pages) {
       foreach ($elements as $key => $element) {
         if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
           $this->pages[$key] = array_intersect_key($element, $wizard_properties);

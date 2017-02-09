@@ -6,6 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\WebformHandlerMessageInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -73,7 +74,7 @@ class WebformAccess {
         }
       }
     }
-    return AccessResult::neutral();
+    return AccessResult::forbidden();
   }
 
   /**
@@ -89,6 +90,28 @@ class WebformAccess {
    */
   public static function checkEntityResultsAccess(EntityInterface $entity, AccountInterface $account) {
     return AccessResult::allowedIf($entity->access('update', $account) && $entity->hasField('webform') && $entity->webform->entity);
+  }
+
+  /**
+   * Check whether the webform has wizard pages.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::buildForm
+   * @see \Drupal\webform\Entity\Webform::getPages
+   */
+  public static function checkWebformWizardPagesAccess(WebformInterface $webform) {
+    $elements = $webform->getElementsInitialized();
+    foreach ($elements as $key => $element) {
+      if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
+        return AccessResult::allowed();
+      }
+    }
+    return AccessResult::forbidden();
   }
 
 }

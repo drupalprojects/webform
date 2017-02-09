@@ -375,10 +375,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   /**
    * Get webform wizard pages.
    *
+   * @param bool $disable_pages
+   *   If set to TRUE all wizard page will be ignored only the (optional)
+   *   preview page will be return.
+   *
    * @return array
-   *   An associative array of webform pages.
+   *   An associative array of webform wizard pages.
    */
-  public function getPages();
+  public function getPages($disable_pages = FALSE);
 
   /**
    * Get webform wizard page.

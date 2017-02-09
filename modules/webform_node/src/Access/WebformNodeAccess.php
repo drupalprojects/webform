@@ -5,6 +5,7 @@ namespace Drupal\webform_node\Access;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\webform\Access\WebformAccess;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -45,12 +46,29 @@ class WebformNodeAccess {
    *   A webform submission.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
+   * @param bool $disable_pages
+   *   Flag to disable pages for the current route.
+   * @param bool $resend
+   *   Flag to check resend email access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public static function checkWebformSubmissionAccess($operation, $entity_access, NodeInterface $node, WebformSubmissionInterface $webform_submission, AccountInterface $account) {
-    return self::checkAccess($operation, $entity_access, $node, $webform_submission, $account);
+  public static function checkWebformSubmissionAccess($operation, $entity_access, NodeInterface $node, WebformSubmissionInterface $webform_submission, AccountInterface $account, $disable_pages = FALSE, $resend = FALSE) {
+    $access_result = self::checkAccess($operation, $entity_access, $node, $webform_submission, $account);
+    if ($access_result->isForbidden()) {
+      return $access_result;
+    }
+
+    if ($disable_pages) {
+      return WebformAccess::checkWebformWizardPagesAccess($webform_submission->getWebform());
+    }
+
+    if ($resend) {
+      return WebformAccess::checkEmailAccess($webform_submission, $account);
+    }
+
+    return $access_result;
   }
 
   /**

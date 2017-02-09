@@ -368,6 +368,20 @@ entity.webform_submission.edit_form:
   requirements:
     _entity_access: 'webform_submission.update'
 
+entity.webform_submission.edit_form.all:
+  path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit/all'
+  defaults:
+    _entity_form: 'webform_submission.default'
+    _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
+    disable_pages: true
+  requirements:
+    _entity_access: 'webform_submission.update'
+    _custom_access: '\Drupal\webform\Access\WebformAccess::checkWebformWizardPagesAccess'
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+
 entity.webform_submission.notes_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/notes'
   defaults:
@@ -490,8 +504,7 @@ webform.element.autocomplete:
   requirements:
     _entity_access: 'webform.submission_page'
 
-
-# Autocomplete
+# Message
 
 webform.element.message.close:
   path: '/webform/message/close/{storage}/{id}'

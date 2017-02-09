@@ -24,57 +24,43 @@ class WebformWizardTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_form_wizard_custom', 'test_form_wizard_advanced'];
+  protected static $testWebforms = ['test_form_wizard_basic', 'test_form_wizard_advanced', 'test_form_wizard_custom'];
 
   /**
-   * Test webform custom wizard, advanced wizard, and custom wizard settings.
+   * Test webform advanced wizard.
    */
-  public function testWizard() {
+  public function testBasicWizard() {
+    $this->createUsers();
+    $this->drupalLogin($this->adminWebformUser);
 
-    /* Custom wizard */
+    // Create a wizard submission
+    $wizard_webform = Webform::load('test_form_wizard_basic');
+    $this->drupalPostForm('webform/test_form_wizard_basic', [], t('Next Page >'));
+    $this->drupalPostForm(NULL, [], t('Submit'));
+    $sid = $this->getLastSubmissionId($wizard_webform);
 
-    // Check current page is #1.
-    $this->drupalGet('webform/test_form_wizard_custom');
-    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
+    // Check access to 'Edit: All' tab for wizard.
+    $this->drupalGet("admin/structure/webform/manage/test_form_wizard_basic/submission/$sid/edit/all");
+    $this->assertResponse(200);
 
-    // Check next page is #2.
-    $this->drupalPostForm('webform/test_form_wizard_custom', [], 'Next Page >');
-    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
+    // Check that page 1 and 2 are displayed.
+    $this->assertRaw('<summary role="button" aria-controls="edit-page-1" aria-expanded="false" aria-pressed="false">Page 1</summary>');
+    $this->assertRaw('<summary role="button" aria-controls="edit-page-2" aria-expanded="false" aria-pressed="false">Page 2</summary>');
 
-    // Check previous page is #1.
-    $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
+    // Create a contact form submission.
+    $contact_webform = Webform::load('contact');
+    $sid = $this->postSubmissionTest($contact_webform);
 
-    // Hide pages #3 and #4.
-    $edit = [
-      'pages[wizard_1]' => TRUE,
-      'pages[wizard_2]' => TRUE,
-      'pages[wizard_3]' => FALSE,
-      'pages[wizard_4]' => FALSE,
-      'pages[wizard_5]' => TRUE,
-      'pages[wizard_6]' => TRUE,
-      'pages[wizard_7]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Next Page >');
+    // Check access denied to 'Edit: All' tab for simple form.
+    $this->drupalGet("admin/structure/webform/manage/contact/submission/$sid/edit/all");
+    $this->assertResponse(403);
+  }
 
-    // Check next page is #2.
-    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
-
-    // Check next page is #5.
-    $this->drupalPostForm(NULL, [], 'Next Page >');
-    $this->assertCurrentPage('Wizard page #5', 'wizard_5');
-
-    // Check previous page is #2.
-    $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
-
-    // Check previous page is #1.
-    $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
-
-    /* Advanced wizard */
-
-    $webform_wizard_advanced = Webform::load('test_form_wizard_advanced');
+  /**
+   * Test webform advanced wizard.
+   */
+  public function testAdvancedWizard() {
+    $webform = Webform::load('test_form_wizard_advanced');
 
     // Get initial wizard start page (Your Information).
     $this->drupalGet('webform/test_form_wizard_advanced');
@@ -233,13 +219,13 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertFieldById('edit-next', '{global wizard next}');
 
     // Check webform next and previous button labels.
-    $webform_wizard_advanced->setSettings([
+    $webform->setSettings([
       'wizard_next_button_label' => '{webform wizard next}',
       'wizard_prev_button_label' => '{webform wizard previous}',
       'preview_next_button_label' => '{webform preview next}',
       'preview_prev_button_label' => '{webform preview previous}',
     ]);
-    $webform_wizard_advanced->save();
+    $webform->save();
     $this->drupalPostForm('webform/test_form_wizard_advanced', [], t('{webform wizard next}'));
     // Check previous button.
     $this->assertFieldById('edit-previous', '{webform wizard previous}');
@@ -247,11 +233,11 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertFieldById('edit-next', '{webform wizard next}');
 
     // Check custom next and previous button labels.
-    $elements = Yaml::decode($webform_wizard_advanced->get('elements'));
+    $elements = Yaml::decode($webform->get('elements'));
     $elements['contact']['#next_button_label'] = '{elements wizard next}';
     $elements['contact']['#prev_button_label'] = '{elements wizard previous}';
-    $webform_wizard_advanced->set('elements', Yaml::encode($elements));
-    $webform_wizard_advanced->save();
+    $webform->set('elements', Yaml::encode($elements));
+    $webform->save();
     $this->drupalPostForm('webform/test_form_wizard_advanced', [], t('{webform wizard next}'));
 
     // Check previous button.
@@ -260,12 +246,12 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertFieldById('edit-next', '{elements wizard next}');
 
     // Check webform next and previous button labels.
-    $webform_wizard_advanced->setSettings([
+    $webform->setSettings([
       'wizard_progress_bar' => FALSE,
       'wizard_progress_pages' => TRUE,
       'wizard_progress_percentage' => TRUE,
-    ] + $webform_wizard_advanced->getSettings());
-    $webform_wizard_advanced->save();
+    ] + $webform->getSettings());
+    $webform->save();
     $this->drupalGet('webform/test_form_wizard_advanced');
 
     // Check no progress bar.
@@ -276,10 +262,10 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertRaw('(0%)');
 
     // Check global complete labels.
-    $webform_wizard_advanced->setSettings([
+    $webform->setSettings([
       'wizard_progress_bar' => TRUE,
-    ] + $webform_wizard_advanced->getSettings());
-    $webform_wizard_advanced->save();
+    ] + $webform->getSettings());
+    $webform->save();
     \Drupal::configFactory()->getEditable('webform.settings')
       ->set('settings.default_wizard_complete_label', '{global complete}')
       ->save();
@@ -287,19 +273,19 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertRaw('{global complete}');
 
     // Check webform complete label.
-    $webform_wizard_advanced->setSettings([
+    $webform->setSettings([
       'wizard_progress_bar' => TRUE,
       'wizard_complete_label' => '{webform complete}',
-    ] + $webform_wizard_advanced->getSettings());
-    $webform_wizard_advanced->save();
+    ] + $webform->getSettings());
+    $webform->save();
     $this->drupalGet('webform/test_form_wizard_advanced');
     $this->assertRaw('{webform complete}');
 
     // Check webform exclude complete.
-    $webform_wizard_advanced->setSettings([
+    $webform->setSettings([
       'wizard_complete' => FALSE,
-    ] + $webform_wizard_advanced->getSettings());
-    $webform_wizard_advanced->save();
+    ] + $webform->getSettings());
+    $webform->save();
     $this->drupalGet('webform/test_form_wizard_advanced');
 
     // Check complete label.
@@ -308,6 +294,50 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertNoRaw('{webform complete}');
     $this->drupalGet('webform/test_form_wizard_advanced/confirmation');
     $this->assertNoRaw('class="webform-progress-bar"');
+  }
+
+  /**
+   * Test webform custom wizard.
+   */
+  public function testCustomWizard() {
+    // Check current page is #1.
+    $this->drupalGet('webform/test_form_wizard_custom');
+    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
+
+    // Check next page is #2.
+    $this->drupalPostForm('webform/test_form_wizard_custom', [], 'Next Page >');
+    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
+
+    // Check previous page is #1.
+    $this->drupalPostForm(NULL, [], '< Previous Page');
+    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
+
+    // Hide pages #3 and #4.
+    $edit = [
+      'pages[wizard_1]' => TRUE,
+      'pages[wizard_2]' => TRUE,
+      'pages[wizard_3]' => FALSE,
+      'pages[wizard_4]' => FALSE,
+      'pages[wizard_5]' => TRUE,
+      'pages[wizard_6]' => TRUE,
+      'pages[wizard_7]' => TRUE,
+    ];
+    $this->drupalPostForm(NULL, $edit, 'Next Page >');
+
+    // Check next page is #2.
+    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
+
+    // Check next page is #5.
+    $this->drupalPostForm(NULL, [], 'Next Page >');
+    $this->assertCurrentPage('Wizard page #5', 'wizard_5');
+
+    // Check previous page is #2.
+    $this->drupalPostForm(NULL, [], '< Previous Page');
+    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
+
+    // Check previous page is #1.
+    $this->drupalPostForm(NULL, [], '< Previous Page');
+    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
   }
 
   /**
