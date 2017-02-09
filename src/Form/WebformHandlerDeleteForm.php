@@ -4,12 +4,15 @@ namespace Drupal\webform\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformDialogTrait;
 use Drupal\webform\WebformInterface;
 
 /**
  * Webform for deleting a webform handler.
  */
 class WebformHandlerDeleteForm extends ConfirmFormBase {
+
+  use WebformDialogTrait;
 
   /**
    * The webform containing the webform handler to be deleted.
@@ -60,7 +63,9 @@ class WebformHandlerDeleteForm extends ConfirmFormBase {
     $this->webform = $webform;
     $this->webformHandler = $this->webform->getHandler($webform_handler);
 
-    return parent::buildForm($form, $form_state);
+    $form = parent::buildForm($form, $form_state);
+    $this->buildConfirmFormDialog($form, $form_state);
+    return $form;
   }
 
   /**

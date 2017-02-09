@@ -4,6 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
@@ -30,7 +31,7 @@ trait WebformDialogTrait {
   }
 
   /**
-   * Add modal dialog support to a webform.
+   * Add modal dialog support to a form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -40,7 +41,7 @@ trait WebformDialogTrait {
    * @return array
    *   The webform with modal dialog support.
    */
-  protected function buildDialog(array &$form, FormStateInterface $form_state) {
+  protected function buildFormDialog(array &$form, FormStateInterface $form_state) {
     if ($this->isModalDialog()) {
       $form['actions']['submit']['#ajax'] = [
         'callback' => '::submitForm',
@@ -49,6 +50,33 @@ trait WebformDialogTrait {
       $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
       $form['#prefix'] = '<div id="webform-dialog">';
       $form['#suffix'] = '</div>';
+    }
+    return $form;
+  }
+
+  /**
+   * Add modal dialog support to a confirm form.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The webform with modal dialog support.
+   */
+  protected function buildConfirmFormDialog(array &$form, FormStateInterface $form_state) {
+    // Replace 'Cancel' link button with a close dialog button.
+    if ($this->isModalDialog()) {
+      $form['actions']['cancel'] = array(
+        '#type' => 'submit',
+        '#value' => $this->t('Cancel'),
+        '#submit' => ['::closeDialog'],
+        '#ajax' => [
+          'callback' => '::closeDialog',
+          'event' => 'click',
+        ],
+      );
     }
     return $form;
   }
@@ -79,7 +107,24 @@ trait WebformDialogTrait {
   }
 
   /**
-   * Handler dialog redirect after webform is submitted.
+   * Handler close dialog.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return bool|\Drupal\Core\Ajax\AjaxResponse
+   *   An AJAX response that display validation error messages.
+   */
+  public function closeDialog(array &$form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+    $response->addCommand(new CloseDialogCommand());
+    return $response;
+  }
+
+  /**
+   * Handle dialog redirect after form is submitted.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -103,5 +148,6 @@ trait WebformDialogTrait {
       return NULL;
     }
   }
+
 
 }

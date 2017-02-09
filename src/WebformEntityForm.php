@@ -120,7 +120,7 @@ class WebformEntityForm extends BundleEntityFormBase {
     }
 
     $form = parent::buildForm($form, $form_state);
-    $form = $this->buildDialog($form, $form_state);
+    $form = $this->buildFormDialog($form, $form_state);
     return $form;
   }
 

@@ -6,6 +6,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\webform\WebformDialogTrait;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformEntityElementsValidator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,6 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Webform for deleting a webform element.
  */
 class WebformUiElementDeleteForm extends ConfirmFormBase {
+
+  use WebformDialogTrait;
 
   /**
    * The renderer.
@@ -190,20 +193,16 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
     $plugin_id = $element_manager->getElementPluginId($this->element);
     $this->webformElement = $element_manager->createInstance($plugin_id, $this->element);
 
-    return parent::buildForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $this->webform->deleteElement($this->key);
+    $form = parent::buildForm($form, $form_state);
+    $form = $this->buildConfirmFormDialog($form, $form_state);
+    return $form;
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $this->webform->deleteElement($this->key);
     $this->webform->save();
 
     drupal_set_message($this->t('The webform element %title has been deleted.', ['%title' => $this->getElementTitle()]));

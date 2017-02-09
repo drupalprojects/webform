@@ -94,6 +94,7 @@ class WebformEntityHandlersForm extends EntityForm {
               'webform' => $this->entity->id(),
               'webform_handler' => $key,
             ]),
+            'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
           ],
         ],
       ];

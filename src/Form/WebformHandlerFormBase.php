@@ -140,7 +140,7 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#button_type' => 'primary',
     ];
 
-    $form = $this->buildDialog($form, $form_state);
+    $form = $this->buildFormDialog($form, $form_state);
 
     return $form;
   }

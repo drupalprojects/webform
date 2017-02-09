@@ -26,7 +26,7 @@ class WebformUiEntityForm extends WebformEntityForm {
       return $form;
     }
 
-    $dialog_attributes = WebformDialogHelper::getModalDialogAttributes(800);
+    $element_dialog_attributes = WebformDialogHelper::getModalDialogAttributes(800);
 
     // Build table header.
     $header = [];
@@ -192,7 +192,7 @@ class WebformUiEntityForm extends WebformEntityForm {
         $rows[$key]['operations']['#links']['edit'] = [
           'title' => $this->t('Edit'),
           'url' => new Url('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key]),
-          'attributes' => $dialog_attributes,
+          'attributes' => $element_dialog_attributes,
         ];
         // Issue #2741877 Nested modals don't work: when using CKEditor in a
         // modal, then clicking the image button opens another modal,
@@ -207,7 +207,7 @@ class WebformUiEntityForm extends WebformEntityForm {
             'webform' => $webform->id(),
             'key' => $key,
           ]),
-          'attributes' => $dialog_attributes,
+          'attributes' => $element_dialog_attributes,
         ];
         $rows[$key]['operations']['#links']['delete'] = [
           'title' => $this->t('Delete'),
@@ -215,6 +215,7 @@ class WebformUiEntityForm extends WebformEntityForm {
             'webform' => $webform->id(),
             'key' => $key,
           ]),
+          'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
         ];
       }
     }
