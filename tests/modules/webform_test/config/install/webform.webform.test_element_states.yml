@@ -27,12 +27,10 @@ elements: |
         selector_02:
           checked: true
       disabled:
-        -
-          selector_01:
+        - selector_01:
             checked: true
         - or
-        -
-          selector_02:
+        - selector_02:
             checked: true
   states_custom_selector:
     '#type': webform_element_states
@@ -57,26 +55,22 @@ elements: |
     '#title': 'States unsupport operator'
     '#default_value':
       required:
-        -
-          custom_selector:
+        - custom_selector:
             value: 'Yes'
         - xor
-        -
-          custom_selector:
+        - custom_selector:
             value: 'Yes'
   states_unsupported_nesting:
     '#type': webform_element_states
     '#title': 'States unsupport nested multiple selectors'
     '#default_value':
       required:
-        -
-          selector_01:
+        - selector_01:
             value: 'Yes'
           selector_02:
             value: 'Yes'
         - or
-        -
-          selector_03:
+        - selector_03:
             value: 'Yes'
           selector_04:
             value: 'Yes'

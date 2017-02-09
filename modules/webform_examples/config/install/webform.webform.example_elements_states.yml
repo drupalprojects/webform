@@ -68,25 +68,17 @@ elements: |
         placeholder: 'Enter other...'
       '#states':
         visible:
-          -
-            ':input[name="select_multiple"]':
-              -
-                value: 1
+          - ':input[name="select_multiple"]':
+              - value: 1
           - or
-          -
-            ':input[name="select_multiple"]':
-              -
-                value: 2
+          - ':input[name="select_multiple"]':
+              - value: 2
         required:
-          -
-            ':input[name="select_multiple"]':
-              -
-                value: 1
+          - ':input[name="select_multiple"]':
+              - value: 1
           - or
-          -
-            ':input[name="select_multiple"]':
-              -
-                value: 2
+          - ':input[name="select_multiple"]':
+              - value: 2
   radios_example:
     '#type': details
     '#title': 'Radio buttons with other example'

@@ -38,11 +38,9 @@ elements: |
       '#markup': 'Checked multiple triggered using AND operator'
       '#states':
         visible:
-          -
-            ':input[name="checked_multiple_and_trigger[one]"]':
+          - ':input[name="checked_multiple_and_trigger[one]"]':
               checked: true
-          -
-            ':input[name="checked_multiple_and_trigger[two]"]':
+          - ':input[name="checked_multiple_and_trigger[two]"]':
               checked: true
   checked_multiple_or:
     '#type': details
@@ -59,11 +57,9 @@ elements: |
       '#markup': 'Checked multiple using OR operator triggered'
       '#states':
         visible:
-          -
-            ':input[name="checked_multiple_or_trigger[one]"]':
+          - ':input[name="checked_multiple_or_trigger[one]"]':
               checked: true
-          -
-            ':input[name="checked_multiple_or_trigger[two]"]':
+          - ':input[name="checked_multiple_or_trigger[two]"]':
               checked: true
   checked_multiple_xor:
     '#type': details
@@ -80,12 +76,10 @@ elements: |
       '#markup': 'Checked multiple using XOR operator triggered'
       '#states':
         visible:
-          -
-            ':input[name="checked_multiple_xor_trigger[one]"]':
+          - ':input[name="checked_multiple_xor_trigger[one]"]':
               checked: true
           - xor
-          -
-            ':input[name="checked_multiple_xor_trigger[two]"]':
+          - ':input[name="checked_multiple_xor_trigger[two]"]':
               checked: true
   value:
     '#type': details

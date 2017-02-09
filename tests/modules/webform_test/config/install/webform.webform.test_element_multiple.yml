@@ -41,11 +41,9 @@ elements: |
     '#element':
       '#type': webform_name
     '#default_value':
-      -
-        first: John
+      - first: John
         last: Smith
-      -
-        first: Jane
+      - first: Jane
         last: Doe
   webform_multiple_elements_name_item:
     '#type': webform_multiple
@@ -58,11 +56,9 @@ elements: |
         '#type': textfield
         '#title': last_name
     '#default_value':
-      -
-        first_name: John
+      - first_name: John
         last_name: Smith
-      -
-        first_name: Jane
+      - first_name: Jane
         last_name: Doe
   webform_multiple_elements_name_table:
     '#type': webform_multiple
@@ -80,11 +76,9 @@ elements: |
         '#title_display': invisible
         '#placeholder': 'Enter last name'
     '#default_value':
-      -
-        first_name: John
+      - first_name: John
         last_name: Smith
-      -
-        first_name: Jane
+      - first_name: Jane
         last_name: Doe
   webform_multiple_options:
     '#type': webform_multiple
@@ -104,11 +98,9 @@ elements: |
         '#title_display': invisible
         '#placeholder': 'Enter text'
     '#default_value':
-      -
-        value: one
+      - value: one
         text: One
-      -
-        value: two
+      - value: two
         text: Two
   webform_multiple_elements_hidden_table:
     '#type': webform_multiple
@@ -129,12 +121,10 @@ elements: |
         '#title_display': invisible
         '#placeholder': 'Enter last name'
     '#default_value':
-      -
-        id: john
+      - id: john
         first_name: John
         last_name: Smith
-      -
-        id: jane
+      - id: jane
         first_name: Jane
         last_name: Doe
 css: ''

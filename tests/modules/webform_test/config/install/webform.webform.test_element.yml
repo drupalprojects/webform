@@ -52,7 +52,9 @@ elements: |
     textarea:
       '#type': textarea
       '#title': textarea
-      '#default_value': "{textarea line 1}\n{textarea line 2}\n"
+      '#default_value': |
+        {textarea line 1}
+        {textarea line 2}
     textfield:
       '#type': textfield
       '#title': textfield
