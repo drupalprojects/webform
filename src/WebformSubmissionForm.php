@@ -12,6 +12,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Controller\WebformController;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -1434,10 +1435,16 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   TRUE is the current webform an entity reference from the source entity.
    */
   protected function isWebformEntityReferenceFromSourceEntity() {
-    return $this->sourceEntity
-      && method_exists($this->sourceEntity, 'hasField')
-      && $this->sourceEntity->hasField('webform')
-      && $this->sourceEntity->webform->target_id == $this->getWebform()->id();
+    if (!$this->sourceEntity) {
+      return FALSE;
+    }
+
+    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($this->sourceEntity);
+    if (!$webform_field_name) {
+      return FALSE;
+    }
+
+    return $this->sourceEntity->$webform_field_name->target_id == $this->getWebform()->id();
   }
 
   /****************************************************************************/

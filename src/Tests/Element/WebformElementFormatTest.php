@@ -92,7 +92,6 @@ class WebformElementFormatTest extends WebformTestBase {
       'Email multiple (Link): example@example.com, test@test.com, random@random.com',
       'Toggle (Value): No',
       'URL (Link): http://example.com',
-      'Date (Value): 000amThursday000000Australia/Sydney',
       'Date (Raw value): Thu, 18 Jun 1942 00:00:00 +1000am4',
       'Date (Fallback date format): Thu, 06/18/1942 - 00:00',
       'Date (HTML Date): 1942-06-18',

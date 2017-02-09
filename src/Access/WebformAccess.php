@@ -5,6 +5,7 @@ namespace Drupal\webform\Access;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformHandlerMessageInterface;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -89,7 +90,8 @@ class WebformAccess {
    *   The access result.
    */
   public static function checkEntityResultsAccess(EntityInterface $entity, AccountInterface $account) {
-    return AccessResult::allowedIf($entity->access('update', $account) && $entity->hasField('webform') && $entity->webform->entity);
+    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($entity);
+    return AccessResult::allowedIf($entity->access('update', $account) && $webform_field_name && $entity->$webform_field_name->entity);
   }
 
   /**

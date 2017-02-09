@@ -20,6 +20,7 @@ use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformInterface;
@@ -222,7 +223,7 @@ function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInte
 function webform_entity_delete(EntityInterface $entity) {
   // Delete saved export settings for a webform or source entity with the
   // webform field.
-  if (($entity instanceof WebformInterface)  || (method_exists($entity, 'hasField') && $entity->hasField('webform'))) {
+  if (($entity instanceof WebformInterface) || WebformEntityReferenceItem::getEntityWebformFieldName($entity)) {
     $name = 'webform.export.' . $entity->getEntityTypeId() . '.' . $entity->id();
     \Drupal::state()->delete($name);
   }

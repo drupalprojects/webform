@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\devel_generate\DevelGenerateBase;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformSubmissionGenerateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -375,7 +376,8 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
     }
 
     $dt_args['@title'] = $source_entity->label();
-    if (!method_exists($source_entity, 'hasField') || !$source_entity->hasField('webform')) {
+    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
+    if (!$webform_field_name) {
       return $t("'@title' (@entity_type:@entity_id) does not have a 'webform' field.", $dt_args);
     }
 
