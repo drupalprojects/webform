@@ -101,6 +101,14 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
   /**
    * {@inheritdoc}
    */
+  public function setOptions(array $options) {
+    $this->options = Yaml::encode($options);
+    $this->optionsDecoded = NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasAlterHooks() {
     $hook_name = 'webform_options_' . $this->id() . '_alter';
     $alter_hooks = \Drupal::moduleHandler()->getImplementations($hook_name);

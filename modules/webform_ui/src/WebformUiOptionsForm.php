@@ -48,7 +48,12 @@ class WebformUiOptionsForm extends WebformOptionsForm {
    */
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-    $values['options'] = Yaml::encode($values['options']);
+
+    if (is_array($values['options'])) {
+      $entity->setOptions($values['options']);
+      unset($values['options']);
+    }
+
     foreach ($values as $key => $value) {
       $entity->set($key, $value);
     }

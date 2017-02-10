@@ -10,10 +10,20 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 interface WebformOptionsInterface extends ConfigEntityInterface {
 
   /**
+   * Set options (YAML) value.
+   *
+   * @param array $options
+   *   An renderable array of options.
+   *
+   * @return $this
+   */
+  public function setOptions(array $options);
+
+  /**
    * Get options (YAML) as an associative array.
    *
    * @return array|bool
-   *   Elements as an associative array. Returns FALSE is options YAML is invalid.
+   *   Options as an associative array. Returns FALSE is options YAML is invalid.
    */
   public function getOptions();
 
