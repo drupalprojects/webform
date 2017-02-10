@@ -628,7 +628,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Release.
     $module_info = Yaml::decode(file_get_contents($this->moduleHandler->getModule('webform')->getPathname()));
-    $version = isset($module_info['version']) ? $module_info['version'] : '8.x-1.x-dev';
+    $version = isset($module_info['version']) ? $module_info['version'] : '8.x-5.x-dev';
     $installed_version = $this->state->get('webform.version');
     // Reset storage state if the version has changed.
     if ($installed_version != $version) {
