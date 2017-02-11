@@ -4,6 +4,6 @@
  */
 
 /* Make sure container is visible. Fixes Select2 not working with outside_in.module. */
-.select2-container {
-  z-index: 10000;
+.js-tray-open .select2-container--open {
+  z-index: 1261; /* .ui-dialog z-index is 1260. @see core/themes/seven/css/components/dialog.css */
 }
