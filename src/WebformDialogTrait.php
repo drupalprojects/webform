@@ -27,6 +27,7 @@ trait WebformDialogTrait {
     return (in_array($wrapper_format, [
       'drupal_ajax',
       'drupal_modal',
+      'drupal_dialog_offcanvas',
     ])) ? TRUE : FALSE;
   }
 
