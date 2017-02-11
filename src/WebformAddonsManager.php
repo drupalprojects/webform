@@ -170,11 +170,11 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Handler: YAML Form Queue.
-    $projects['yamlform_queue'] = [
-      'title' => $this->t('YAML Form Queue'),
+    // Handler: Web Form Queue.
+    $projects['webform_queue'] = [
+      'title' => $this->t('Webform Queue'),
       'description' => $this->t('Posts form submissions into a Drupal queue.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/yamlform_queue'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_queue'),
       'category' => 'handler',
     ];
 
