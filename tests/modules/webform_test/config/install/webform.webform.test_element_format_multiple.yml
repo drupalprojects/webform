@@ -230,6 +230,49 @@ elements: |
           - !!float 5
           - 10
         '#format_items': ul
+    tel:
+      '#type': details
+      '#title': Telephone
+      tel_comma:
+        '#type': tel
+        '#title': 'Telephone (Comma)'
+        '#multiple': true
+        '#default_value':
+          - 123-456-7890
+          - 098-765-4321
+        '#format_items': comma
+      tel_semicolon:
+        '#type': tel
+        '#title': 'Telephone (Semicolon)'
+        '#multiple': true
+        '#default_value':
+          - 123-456-7890
+          - 098-765-4321
+        '#format_items': semicolon
+      tel_and:
+        '#type': tel
+        '#title': 'Telephone (And)'
+        '#multiple': true
+        '#default_value':
+          - 123-456-7890
+          - 098-765-4321
+        '#format_items': and
+      tel_ol:
+        '#type': tel
+        '#title': 'Telephone (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          - 123-456-7890
+          - 098-765-4321
+        '#format_items': ol
+      tel_ul:
+        '#type': tel
+        '#title': 'Telephone (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          - 123-456-7890
+          - 098-765-4321
+        '#format_items': ul
     url:
       '#type': details
       '#title': URL

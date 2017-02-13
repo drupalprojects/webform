@@ -48,6 +48,7 @@ function webform_test_test_options() {
     ],
   ];
   $webform_options = WebformOptions::loadMultiple();
+  ksort($webform_options);
   foreach ($webform_options as $id => $webform_option) {
     $title = $webform_option->label() . ' (' . $id . ')';
     if (strpos($id, 'likert') === 0) {

@@ -18,6 +18,15 @@ class Telephone extends TextBase {
   /**
    * {@inheritdoc}
    */
+  public function getDefaultProperties() {
+    return parent::getDefaultProperties() + [
+      'multiple' => FALSE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formatHtmlItem(array &$element, $value, array $options = []) {
     if (empty($value)) {
       return '';
@@ -26,7 +35,7 @@ class Telephone extends TextBase {
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'link':
-        // Issue #2484693: Telephone Link fied formatter breaks Drupal with 5
+        // Issue #2484693: Telephone Link field formatter breaks Drupal with 5
         // digits or less in the number
         // return [
         //  '#type' => 'link',

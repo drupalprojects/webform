@@ -110,6 +110,10 @@ elements: |
     tel:
       '#type': tel
       '#title': '<u>Telephone</u>'
+    tel_multiple:
+      '#type': tel
+      '#title': '<u>Telephone multiple</u>'
+      '#multiple': true
     text_format:
       '#type': text_format
       '#title': '<u>Text format</u>'
