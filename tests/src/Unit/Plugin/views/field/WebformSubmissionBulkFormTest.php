@@ -7,6 +7,8 @@ use Drupal\Tests\UnitTestCase;
 use Drupal\webform\Plugin\views\field\WebformSubmissionBulkForm;
 
 /**
+ * Tests webform submission bulk form actions.
+ *
  * @see \Drupal\Tests\node\Unit\Plugin\views\field\NodeBulkFormTest
  * @see \Drupal\Tests\user\Unit\Plugin\views\field\UserBulkFormTest
  * @coversDefaultClass \Drupal\webform\Plugin\views\field\WebformSubmissionBulkForm

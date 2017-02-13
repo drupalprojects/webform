@@ -134,7 +134,6 @@ class WebformMultiple extends FormElement {
       $row_index++;
     }
 
-
     // Build table.
     $element['items'] = [
       '#prefix' => '<div id="' . $table_id . '" class="webform-multiple-table">',

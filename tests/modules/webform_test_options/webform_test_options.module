@@ -16,7 +16,6 @@ function webform_test_options_webform_options_test_alter(array &$options, array 
   ];
 }
 
-
 /**
  * Implements hook_webform_options_alter().
  */

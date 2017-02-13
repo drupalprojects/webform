@@ -675,7 +675,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
         $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
         $field_definitions = $submission_storage->getFieldDefinitions();
         $field_definitions = $submission_storage->checkFieldDefinitionAccess($this->getWebform(), $field_definitions + ['data' => TRUE]);
-        $values = array_intersect_key($values, $field_definitions );
+        $values = array_intersect_key($values, $field_definitions);
 
         // Check element data access.
         $elements = $this->getWebform()->getElementsInitializedFlattenedAndHasValue('view');

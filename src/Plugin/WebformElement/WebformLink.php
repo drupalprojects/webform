@@ -4,7 +4,6 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormState;
-use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformLink as WebformLinkElement;
 
 /**

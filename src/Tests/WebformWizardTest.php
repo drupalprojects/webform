@@ -33,7 +33,7 @@ class WebformWizardTest extends WebformTestBase {
     $this->createUsers();
     $this->drupalLogin($this->adminWebformUser);
 
-    // Create a wizard submission
+    // Create a wizard submission.
     $wizard_webform = Webform::load('test_form_wizard_basic');
     $this->drupalPostForm('webform/test_form_wizard_basic', [], t('Next Page >'));
     $this->drupalPostForm(NULL, [], t('Submit'));

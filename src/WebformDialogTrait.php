@@ -69,7 +69,7 @@ trait WebformDialogTrait {
   protected function buildConfirmFormDialog(array &$form, FormStateInterface $form_state) {
     // Replace 'Cancel' link button with a close dialog button.
     if ($this->isModalDialog()) {
-      $form['actions']['cancel'] = array(
+      $form['actions']['cancel'] = [
         '#type' => 'submit',
         '#value' => $this->t('Cancel'),
         '#submit' => ['::closeDialog'],
@@ -77,7 +77,7 @@ trait WebformDialogTrait {
           'callback' => '::closeDialog',
           'event' => 'click',
         ],
-      );
+      ];
     }
     return $form;
   }
@@ -149,6 +149,5 @@ trait WebformDialogTrait {
       return NULL;
     }
   }
-
 
 }

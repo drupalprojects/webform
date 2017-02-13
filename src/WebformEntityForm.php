@@ -240,6 +240,7 @@ class WebformEntityForm extends BundleEntityFormBase {
       }
     }
   }
+
   /**
    * {@inheritdoc}
    */

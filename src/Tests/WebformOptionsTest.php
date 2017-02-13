@@ -76,7 +76,6 @@ class WebformOptionsTest extends WebformTestBase {
     // Check invalid options.
     $this->assertFalse($webform_options->getOptions());
 
-
     // Check hook_webform_options_alter() && hook_webform_options_WEBFORM_OPTIONS_ID_alter().
     $this->drupalGet('webform/test_options');
     $this->assertRaw('<select data-drupal-selector="edit-custom" id="edit-custom" name="custom" class="form-select"><option value="" selected="selected">- Select -</option><option value="one">One</option><option value="two">Two</option><option value="three">Three</option></select>');

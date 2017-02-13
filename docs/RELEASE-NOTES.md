@@ -28,28 +28,7 @@ Tidy YAML files
 2. Export configuration
 -----------------------
 
-    # Install all sub-modules.
-    drush en -y webform webform_test webform_test_translation webform_examples webform_templates webform_node
-    
-    # Export webform configuration from your site.
-    drush features-export -y webform
-    drush features-export -y webform_test
-    drush features-export -y webform_test_translation
-    drush features-export -y webform_examples
-    drush features-export -y webform_templates
-    
-    # Tidy webform configuration from your site.
-    drush webform-tidy -y --dependencies webform
-    drush webform-tidy -y --dependencies webform_test
-    drush features-tidy -y --dependencies webform_test_translation
-    drush webform-tidy -y --dependencies webform_examples
-    drush webform-tidy -y --dependencies webform_templates
-    
-    # Reset certain files.
-    cd modules/sandbox/webform
-    git reset HEAD webform.info.yml
-    git reset HEAD tests/modules/webform_test/webform_test.info.yml
-    git reset HEAD tests/modules/webform_test/config/optional
+    @see DEVELOPMENT-CHEATSHEET.md
 
 
 3. Review code
@@ -60,9 +39,6 @@ Tidy YAML files
     http://git.drupal.org/project/webform.git 8.x-5.x
 
 [Commandline](https://www.drupal.org/node/1587138)
-
-    # Make sure to remove the node_modules directory.
-    rm -Rf node_modules
 
     # Check Drupal coding standards
     phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,css,info modules/sandbox/webform

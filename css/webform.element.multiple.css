@@ -6,9 +6,9 @@
  */
 
 .form-type-webform-multiple:after {
-  content:" ";
-  display:table;
-  clear:both;
+  content: " ";
+  display: table;
+  clear: both;
 }
 
 .webform-multiple-table table {
@@ -55,7 +55,7 @@
 .webform-multiple-table td .form-type-url input,
 .webform-multiple-table td .form-type-tel input,
 .webform-multiple-table td .form-type-entity-autocomplete input,
-.webform-multiple-table td .form-type-webform-autocomplete input{
+.webform-multiple-table td .form-type-webform-autocomplete input {
   width: 100%;
 }
 .webform-multiple-table td .form-type-datelist select,

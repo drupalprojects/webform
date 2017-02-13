@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Controller;
 
-use Drupal\Component\Utility\SortArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
@@ -104,7 +103,6 @@ class WebformElementController extends ControllerBase {
       $matches = array_values($matches);
       $matches = array_slice($matches, 0, $element['#autocomplete_limit']);
     }
-
 
     return new JsonResponse($matches);
   }

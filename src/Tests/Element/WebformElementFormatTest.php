@@ -71,7 +71,7 @@ class WebformElementFormatTest extends WebformTestBase {
       'Time (Value)' => '09:00',
       'Time (Raw value)' => '09:00:00',
       'Entity autocomplete (Raw value)' => 'user:1',
-      // 'Entity autocomplete (Link)' => '<a href="http://localhost/webform/user/1" hreflang="en">admin</a>',
+//      'Entity autocomplete (Link)' => '<a href="http://localhost/webform/user/1" hreflang="en">admin</a>',
 //      'Entity autocomplete (Entity ID)' => '1',
 //      'Entity autocomplete (Label)' => 'admin',
 //      'Entity autocomplete (Label (ID))' => 'admin (1)',
@@ -305,7 +305,7 @@ Afghanistan',
     foreach ($elements as $value) {
       $this->assertContains($body, $value, new FormattableMarkup('Found @value', ['@value' => $value]));
     }
-    
+
     /**************************************************************************/
     /* Format element using tokens */
     /**************************************************************************/

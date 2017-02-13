@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;
 
 /**

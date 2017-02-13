@@ -2,7 +2,6 @@
 
 namespace Drupal\webform_ui;
 
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformOptionsForm;

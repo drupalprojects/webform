@@ -5,8 +5,6 @@
  * Webform libraries.
  */
 
-use Drupal\webform\Utility\WebformDialogHelper;
-
 /**
  * Implements hook_library_info_alter().
  */

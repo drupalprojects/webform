@@ -4,7 +4,6 @@ namespace Drupal\Tests\user\Kernel\Entity;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\user\Entity\User;
 use Drupal\webform\Entity\Webform;
 
 /**

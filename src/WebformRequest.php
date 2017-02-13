@@ -3,7 +3,6 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
@@ -22,7 +21,7 @@ class WebformRequest implements WebformRequestInterface {
    *
    * @var \Drupal\Core\Routing\RouteProviderInterface $routeProvider
    */
-  protected $router;
+  protected $routeProvider;
 
   /**
    * The entity type manager.
@@ -309,7 +308,7 @@ class WebformRequest implements WebformRequestInterface {
   /**
    * Check if route exists.
    *
-   * @param $name
+   * @param string $name
    *   Route name.
    *
    * @return bool

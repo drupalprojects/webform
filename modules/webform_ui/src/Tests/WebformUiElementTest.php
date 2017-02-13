@@ -193,7 +193,7 @@ class WebformUiElementTest extends WebformTestBase {
   /**
    * Tests permissions.
    */
-  public function _testPermissions() {
+  public function testPermissions() {
     $webform = Webform::load('contact');
 
     // Check source page access not visible to user with 'administer webform'

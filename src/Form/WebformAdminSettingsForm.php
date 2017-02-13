@@ -456,7 +456,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Allow files to be uploaded to public file system.'),
       '#description' => $this->t('Public files upload destination is dangerous for webforms that are available to anonymous and/or untrusted users.') . ' ' .
-      $this->t('For more information see:') . ' <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>',
+      $this->t('For more information see: <a href="@href">DRUPAL-PSA-2016-003</a>', ['@href' => 'https://www.drupal.org/psa-2016-003']),
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_public'),
     ];
