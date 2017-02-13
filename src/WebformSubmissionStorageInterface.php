@@ -59,6 +59,22 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function getFieldDefinitions();
 
   /**
+   * Check field definition access.
+   *
+   * Access checks include...
+   * - Only allowing user who can update any access to the 'token' field.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   The webform to check field definition access.
+   * @param array $definitions
+   *   Field definitions.
+   *
+   * @return array
+   *   Field definitions with access checked.
+   */
+  public function checkFieldDefinitionAccess(WebformInterface $webform, array $definitions);
+
+  /**
    * Returns a webform's max serial number.
    *
    * @param \Drupal\webform\WebformInterface $webform

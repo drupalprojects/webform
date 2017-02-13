@@ -46,6 +46,16 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
+  public function checkFieldDefinitionAccess(WebformInterface $webform, array $definitions) {
+    if (!$webform->access('submission_upates_any')) {
+      unset($definitions['token']);
+    }
+    return $definitions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function loadDraft(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
     $query = $this->getQuery();
     $query->condition('in_draft', TRUE);
@@ -418,8 +428,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     if ($webform && $include_elements) {
       /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
       $element_manager = \Drupal::service('plugin.manager.webform.element');
-
-      $elements = $webform->getElementsInitializedFlattenedAndHasValue();
+      $elements = $webform->getElementsInitializedFlattenedAndHasValue('view');
       foreach ($elements as $element) {
         /** @var \Drupal\webform\WebformElementInterface $element_handler */
         $element_handler = $element_manager->createInstance($element['#type']);

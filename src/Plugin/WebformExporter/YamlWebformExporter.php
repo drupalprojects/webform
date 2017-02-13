@@ -25,7 +25,7 @@ class YamlWebformExporter extends DocumentBaseWebformExporter {
    */
   public function writeSubmission(WebformSubmissionInterface $webform_submission) {
     $file_name = $this->getSubmissionBaseName($webform_submission) . '.yml';
-    $yaml = Yaml::encode($webform_submission->toArray(TRUE));
+    $yaml = Yaml::encode($webform_submission->toArray(TRUE, TRUE));
     $yaml = WebformYamlTidy::tidy($yaml);
 
     $archiver = new ArchiveTar($this->getArchiveFilePath(), 'gz');

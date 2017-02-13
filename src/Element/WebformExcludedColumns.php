@@ -25,7 +25,7 @@ class WebformExcludedColumns extends WebformExcludedBase {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
     $field_definitions = $submission_storage->getFieldDefinitions();
-
+    $field_definitions = $submission_storage->checkFieldDefinitionAccess($element['#webform'], $field_definitions);
     foreach ($field_definitions as $key => $field_definition) {
       $options[$key] = [
         ['title' => $field_definition['title']],
@@ -34,7 +34,6 @@ class WebformExcludedColumns extends WebformExcludedBase {
       ];
     }
     $options += parent::getWebformExcludedOptions($element);
-
     return $options;
   }
 

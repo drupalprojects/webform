@@ -648,7 +648,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
-  public function toArray($custom = FALSE) {
+  public function toArray($custom = FALSE, $check_access = FALSE) {
     if ($custom === FALSE) {
       return parent::toArray();
     }
@@ -666,7 +666,22 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
           $values[$key] = reset($value);
         }
       }
+
       $values['data'] = $this->getData();
+
+      // Check access.
+      if ($check_access) {
+        // Check field definition access.
+        $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+        $field_definitions = $submission_storage->getFieldDefinitions();
+        $field_definitions = $submission_storage->checkFieldDefinitionAccess($this->getWebform(), $field_definitions + ['data' => TRUE]);
+        $values = array_intersect_key($values, $field_definitions );
+
+        // Check element data access.
+        $elements = $this->getWebform()->getElementsInitializedFlattenedAndHasValue('view');
+        $values['data'] = array_intersect_key($values['data'], $elements);
+      }
+
       return $values;
     }
   }

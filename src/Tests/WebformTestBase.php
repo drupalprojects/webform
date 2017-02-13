@@ -501,10 +501,10 @@ abstract class WebformTestBase extends WebTestBase {
   protected function getExportColumns(WebformInterface $webform) {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
-    $columns = array_merge(
-      array_keys($submission_storage->getFieldDefinitions()),
-      array_keys($webform->getElementsInitializedAndFlattened())
-    );
+    $field_definitions = $submission_storage->getFieldDefinitions();
+    $field_definitions = $submission_storage->checkFieldDefinitionAccess($webform, $field_definitions);
+    $elements = $webform->getElementsInitializedAndFlattened();
+    $columns = array_merge(array_keys($field_definitions), array_keys($elements));
     return array_combine($columns, $columns);
   }
 

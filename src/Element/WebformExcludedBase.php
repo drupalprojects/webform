@@ -91,17 +91,9 @@ abstract class WebformExcludedBase extends FormElement {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $element['#webform'];
 
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
-    $element_manager = \Drupal::service('plugin.manager.webform.element');
-
     $options = [];
-    $elements = $webform->getElementsInitializedAndFlattened();
+    $elements = $webform->getElementsInitializedFlattenedAndHasValue('view');
     foreach ($elements as $key => $element) {
-      $element_handler = $element_manager->getElementInstance($element);
-      if (!$element_handler->isInput($element)) {
-        continue;
-      }
-
       $options[$key] = [
         ['title' => $element['#admin_title'] ?:$element['#title'] ?: $key],
         ['name' => $key],

@@ -4,6 +4,7 @@ namespace Drupal\Tests\user\Kernel\Entity;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\user\Entity\User;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -27,6 +28,10 @@ class WebformEntityTest extends KernelTestBase {
   public function testWebformMethods() {
     $this->installConfig('webform');
 
+    /**************************************************************************/
+    // Create.
+    /**************************************************************************/
+
     // Create webform.
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::create(['id' => 'webform_test']);
@@ -35,10 +40,18 @@ class WebformEntityTest extends KernelTestBase {
     $this->assertFalse($webform->isTemplate());
     $this->assertTrue($webform->isOpen());
 
+    /**************************************************************************/
+    // Templates.
+    /**************************************************************************/
+
     // Check that templates are always closed.
     $webform->set('template', TRUE)->save();
     $this->assertTrue($webform->isTemplate());
     $this->assertFalse($webform->isOpen());
+
+    /**************************************************************************/
+    // Elements.
+    /**************************************************************************/
 
     // Set elements.
     $elements = [
@@ -130,13 +143,22 @@ class WebformEntityTest extends KernelTestBase {
     $webform->set('elements', 'invalid')->save();
     $this->assertFalse($webform->getElementsInitialized());
 
-    // Check get wizard pages.
+    /**************************************************************************/
+    // Wizard pages.
+    /**************************************************************************/
+
+    // Check get no wizard pages.
+    $this->assertEquals($webform->getPages(), []);
+
+    // Set wizard pages.
     $wizard_elements = [
-      'page_1' => ['#type' => 'wizard_page', '#title' => 'Page 1'],
-      'page_2' => ['#type' => 'wizard_page', '#title' => 'Page 2'],
-      'page_3' => ['#type' => 'wizard_page', '#title' => 'Page 3'],
+      'page_1' => ['#type' => 'webform_wizard_page', '#title' => 'Page 1'],
+      'page_2' => ['#type' => 'webform_wizard_page', '#title' => 'Page 2'],
+      'page_3' => ['#type' => 'webform_wizard_page', '#title' => 'Page 3'],
     ];
     $webform->set('elements', $wizard_elements)->save();
+
+    // Check get wizard pages.
     $wizard_pages = [
       'page_1' => ['#title' => 'Page 1'],
       'page_2' => ['#title' => 'Page 2'],
@@ -145,6 +167,26 @@ class WebformEntityTest extends KernelTestBase {
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
+    // Check get wizard pages with preview.
+    $webform->setSetting('preview', TRUE)->save();
+    $wizard_pages = [
+      'page_1' => ['#title' => 'Page 1'],
+      'page_2' => ['#title' => 'Page 2'],
+      'page_3' => ['#title' => 'Page 3'],
+      'preview' => ['#title' => 'Preview'],
+      'complete' => ['#title' => 'Complete'],
+    ];
+    $this->assertEquals($webform->getPages(), $wizard_pages);
+
+    // Check get wizard pages with preview with disable pages.
+    $webform->setSetting('preview', TRUE)->save();
+    $wizard_pages = [
+      'start' => ['#title' => 'Start'],
+      'preview' => ['#title' => 'Preview'],
+      'complete' => ['#title' => 'Complete'],
+    ];
+    $this->assertEquals($webform->getPages(TRUE), $wizard_pages);
+    
     // @todo Add the below assertions.
     // Check access rules.
     // Check get submission form.

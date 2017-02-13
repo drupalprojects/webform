@@ -6,76 +6,18 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_element_access
-title: 'Test: Element: Access'
-description: 'Test element access controls'
+id: test_element_private
+title: 'Test: Element: Private'
+description: 'Test element private properties'
 elements: |
-  access_create:
+  private_elements:
     '#type': details
-    '#title': access_create
+    '#title': private
     '#open': true
-    access_create_roles_anonymous:
+    private:
       '#type': textfield
-      '#title': 'access_create_roles (anonymous)'
-      '#default_value': '{value}'
-      '#access_create_roles':
-        - anonymous
-    access_create_roles_authenticated:
-      '#type': textfield
-      '#title': 'access_create_roles (authenticated)'
-      '#default_value': '{value}'
-      '#access_create_roles':
-        - authenticated
-    access_create_users:
-      '#type': textfield
-      '#title': 'access_create_users (USER:1)'
-      '#default_value': '{value}'
-      '#access_create_users':
-        - 1
-  access_update:
-    '#type': details
-    '#title': access_update
-    '#open': true
-    access_update_roles_anonymous:
-      '#type': textfield
-      '#title': 'access_update_roles (anonymous)'
-      '#default_value': '{value}'
-      '#access_update_roles':
-        - anonymous
-    access_update_roles_authenticated:
-      '#type': textfield
-      '#title': 'access_update_roles (authenticated)'
-      '#default_value': '{value}'
-      '#access_update_roles':
-        - authenticated
-    access_update_users:
-      '#type': textfield
-      '#title': 'access_update_users (USER:1)'
-      '#default_value': '{value}'
-      '#access_view_users':
-        - 1
-  access_view:
-    '#type': details
-    '#title': access_view
-    '#open': true
-    access_view_roles_anonymous:
-      '#type': textfield
-      '#title': 'access_view_roles (anonymous)'
-      '#default_value': '{value}'
-      '#access_view_roles':
-        - anonymous
-    access_view_roles_authenticated:
-      '#type': textfield
-      '#title': 'access_view_roles (authenticated)'
-      '#default_value': '{value}'
-      '#access_view_roles':
-        - authenticated
-    access_view_users:
-      '#type': textfield
-      '#title': 'access_view_users (USER:1)'
-      '#default_value': '{value}'
-      '#access_view_users':
-        - 1
+      '#title': private
+      '#private': true
 css: ''
 javascript: ''
 settings:
@@ -145,9 +87,7 @@ access:
       - authenticated
     users: {  }
   view_any:
-    roles:
-      - anonymous
-      - authenticated
+    roles: {  }
     users: {  }
   update_any:
     roles: {  }
@@ -159,12 +99,10 @@ access:
     roles: {  }
     users: {  }
   view_own:
-    roles:
-      - authenticated
+    roles: {  }
     users: {  }
   update_own:
-    roles:
-      - authenticated
+    roles: {  }
     users: {  }
   delete_own:
     roles: {  }

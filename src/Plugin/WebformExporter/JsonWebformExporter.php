@@ -24,7 +24,7 @@ class JsonWebformExporter extends DocumentBaseWebformExporter {
    */
   public function writeSubmission(WebformSubmissionInterface $webform_submission) {
     $file_name = $this->getSubmissionBaseName($webform_submission) . '.json';
-    $json = Json::encode($webform_submission->toArray(TRUE));
+    $json = Json::encode($webform_submission->toArray(TRUE, TRUE));
 
     $archiver = new ArchiveTar($this->getArchiveFilePath(), 'gz');
     $archiver->addString($file_name, $json);

@@ -29,6 +29,7 @@ class WebfromSubmissionStorageTest extends KernelTestBase {
 
     $this->installConfig('webform');
     $this->installEntitySchema('webform_submission');
+    $this->installEntitySchema('user');
   }
 
   /**

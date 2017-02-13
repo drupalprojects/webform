@@ -392,7 +392,7 @@ function template_preprocess_webform_submission_yaml(array &$variables) {
   /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $variables['webform_submission'];
 
-  $data = $webform_submission->toArray(TRUE);
+  $data = $webform_submission->toArray(TRUE, TRUE);
   $yaml = Yaml::encode($data);
   $yaml = WebformYamlTidy::tidy($yaml);
   $variables['yaml'] = [

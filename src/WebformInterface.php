@@ -309,28 +309,37 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   /**
    * Get webform raw elements decoded and flattened into an associative array.
    *
+   * @param string $operation
+   *   (optional) The operation that is to be performed on the element.
+   *
    * @return array
    *   Webform raw elements decoded and flattened into an associative array
    *   keyed by element name. Returns FALSE is elements YAML is invalid.
    */
-  public function getElementsDecodedAndFlattened();
+  public function getElementsDecodedAndFlattened($operation = NULL);
 
   /**
    * Get webform elements initialized and flattened into an associative array.
+   *
+   * @param string $operation
+   *   (optional) The operation that is to be performed on the element.
    *
    * @return array
    *   Webform elements flattened into an associative array keyed by element name.
    *   Returns FALSE is elements YAML is invalid.
    */
-  public function getElementsInitializedAndFlattened();
+  public function getElementsInitializedAndFlattened($operation = NULL);
 
   /**
    * Get webform flattened list of elements.
    *
+   * @param string $operation
+   *   (optional) The operation that is to be performed on the element.
+   *
    * @return array
    *   Webform elements flattened into an associative array keyed by element name.
    */
-  public function getElementsInitializedFlattenedAndHasValue();
+  public function getElementsInitializedFlattenedAndHasValue($operation = NULL);
 
   /**
    * Get webform elements selectors as options.

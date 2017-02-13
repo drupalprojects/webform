@@ -730,25 +730,53 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getElementsInitializedAndFlattened() {
+  public function getElementsInitializedAndFlattened($operation = NULL) {
     $this->initElements();
-    return $this->elementsInitializedAndFlattened;
+    return $this->checkElementsFlattenedAccess($operation, $this->elementsInitializedAndFlattened);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getElementsDecodedAndFlattened() {
+  public function getElementsDecodedAndFlattened($operation = NULL) {
     $this->initElements();
-    return $this->elementsDecodedAndFlattened;
+    return $this->checkElementsFlattenedAccess($operation, $this->elementsDecodedAndFlattened);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getElementsInitializedFlattenedAndHasValue() {
+  public function getElementsInitializedFlattenedAndHasValue($operation = NULL) {
     $this->initElements();
-    return $this->elementsInitializedFlattenedAndHasValue;
+    return $this->checkElementsFlattenedAccess($operation, $this->elementsInitializedFlattenedAndHasValue);
+  }
+
+  /**
+   * Check operation access for each element.
+   *
+   * @param string $operation
+   *   (optional) The operation that is to be performed on the element.
+   * @param array $elements
+   *   An associative array of flattened form elements.
+   *
+   * @return array
+   *   An associative array of flattened form elements with each element's
+   *   operation access checked.
+   */
+  protected function checkElementsFlattenedAccess($operation = NULL, array $elements) {
+    if ($operation === NULL) {
+      return $elements;
+    }
+
+    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+    foreach ($elements as $key => $element) {
+      $element_handler = $element_manager->getElementInstance($element);
+      if (!$element_handler->checkAccessRules($operation, $element)) {
+        unset($elements[$key]);
+      }
+    }
+    return $elements;
   }
 
   /**
@@ -834,6 +862,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * Reset parsed and cached webform elements.
    */
   protected function resetElements() {
+    $this->pages = NULL;
     $this->hasManagedFile = NULL;
     $this->hasFlexboxLayout = NULL;
     $this->elementsDecoded = NULL;

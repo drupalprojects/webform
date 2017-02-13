@@ -581,10 +581,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $account = $this->currentUser;
     }
 
-    if (!empty($element['#access_' . $operation . '_roles']) && !array_intersect($element['#access_' . $operation . '_roles'], $account->getRoles())) {
+    if (isset($element['#access_' . $operation . '_roles']) && !array_intersect($element['#access_' . $operation . '_roles'], $account->getRoles())) {
       return FALSE;
     }
-    elseif (!empty($element['#access_' . $operation . '_users']) && !in_array($account->id(), $element['#access_' . $operation . '_users'])) {
+    elseif (isset($element['#access_' . $operation . '_users']) && !in_array($account->id(), $element['#access_' . $operation . '_users'])) {
       return FALSE;
     }
 
