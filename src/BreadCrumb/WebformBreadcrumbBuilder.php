@@ -93,14 +93,14 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     elseif (strpos($route_name, 'entity.webform.handler.') === 0) {
       $this->type = 'webform_handler';
     }
-    elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && $route_match->getParameter('webform_submission')->access('admin')) {
-      $this->type = 'webform_submission';
+    elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && strpos($route_name, 'webform.user.submission') !== FALSE) {
+      $this->type = 'webform_user_submission';
     }
     elseif (strpos($route_match->getRouteName(), 'webform.user.submissions') !== FALSE) {
       $this->type = 'webform_user_submissions';
     }
-    elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && strpos($route_name, 'webform.user.submission') !== FALSE) {
-      $this->type = 'webform_user_submission';
+    elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && $route_match->getParameter('webform_submission')->access('admin')) {
+      $this->type = 'webform_submission';
     }
     elseif (($route_match->getParameter('webform') instanceof WebformInterface  && $route_match->getParameter('webform')->access('admin'))) {
       /** @var \Drupal\webform\WebformInterface $webform */
