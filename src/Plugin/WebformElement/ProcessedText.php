@@ -10,9 +10,9 @@ use Drupal\Core\Mail\MailFormatHelper;
  *
  * @WebformElement(
  *   id = "processed_text",
- *   label = @Translation("Processed text"),
+ *   label = @Translation("Advanced HTML/Text"),
  *   category = @Translation("Markup elements"),
- *   description = @Translation("Provides an element to render processed text."),
+ *   description = @Translation("Provides an element to render advanced HTML markup and processed text."),
  *   states_wrapper = TRUE,
  * )
  */

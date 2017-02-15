@@ -55,7 +55,7 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
         '#type' => 'link',
         '#title' => $plugin_definition['label'],
         '#url' => Url::fromRoute('entity.webform_ui.element.add_form', $route_parameters, $route_options),
-        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['webform-tooltip-link', 'js-webform-tooltip-link']) + ['title' => $plugin_definition['description']],
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800),
         '#prefix' => '<div class="webform-form-filter-text-source">',
         '#suffix' => '</div>',
       ];
@@ -75,8 +75,14 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
       // which closes the original modal.
       // @todo Remove the below workaround once this issue is resolved.
       if ($webform_element->getPluginId() == 'processed_text') {
+        unset($row['title']['data']['#attributes']);
         unset($row['operations']['data']['#links']['add']['attributes']);
       }
+
+      $row['title']['data']['#attributes']['class'][] = 'js-webform-tooltip-link';
+      $row['title']['data']['#attributes']['class'][] = 'webform-tooltip-link';
+      $row['title']['data']['#attributes']['title'] = $plugin_definition['description'];
+
       $rows[] = $row;
     }
 
