@@ -2,6 +2,7 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -166,7 +167,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
 
     // Get test values from options.
     if (isset($element['#options'])) {
-      return array_keys($element['#options']);
+      return array_keys(OptGroup::flattenOptions($element['#options']));
     }
 
     // Get test values using #type.
