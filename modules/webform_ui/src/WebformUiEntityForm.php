@@ -238,7 +238,7 @@ class WebformUiEntityForm extends WebformEntityForm {
       $form['local_actions']['add_page'] = [
         '#type' => 'link',
         '#title' => $this->t('Add page'),
-        '#url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'wizard_page']),
+        '#url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
         '#attributes' => $local_action_attributes,
       ];
     }
@@ -246,7 +246,7 @@ class WebformUiEntityForm extends WebformEntityForm {
       $form['local_actions']['add_layout'] = [
         '#type' => 'link',
         '#title' => $this->t('Add layout'),
-        '#url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'flexbox']),
+        '#url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
         '#attributes' => $local_action_attributes,
       ];
     }
