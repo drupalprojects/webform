@@ -172,10 +172,16 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     }
     else {
       $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
-      // Display the sid when show results from all webforms.
       if ($route_name == 'entity.webform_submission.collection') {
+        // Replace serial with sid when showing results from all webforms.
         unset($this->columns['serial']);
-        $this->columns['sid']['title'] = '#';
+        $this->columns = [
+            'sid' => [
+              'title' => $this->t('SID'),
+              'name' => 'sid',
+              'format' => 'value',
+            ],
+          ] + $this->columns;
         $this->sort = 'sid';
       }
       else {
