@@ -102,9 +102,9 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       return NULL;
     }
 
-    // Exit if test values are null.
+    // Exit if test values are null or an empty array.
     $values = $this->getTestValues($webform, $name, $element, $options);
-    if ($values === NULL) {
+    if ($values === NULL || (is_array($values) && empty($values))) {
       return NULL;
     }
     // Make sure value is an array.
