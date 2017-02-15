@@ -48,9 +48,6 @@ class WebformCodeMirror extends Textarea {
         [$class, 'preRenderWebformCodeMirror'],
         [$class, 'preRenderGroup'],
       ],
-      '#element_validate' => [
-        [$class, 'validateWebformCodeMirror'],
-      ],
       '#theme' => 'textarea',
       '#theme_wrappers' => ['form_element'],
     ];
@@ -82,6 +79,15 @@ class WebformCodeMirror extends Textarea {
     if (empty($element['#mode']) || !isset(self::$modes[$element['#mode']])) {
       $element['#mode'] = 'text';
     }
+
+    // Set validation.
+    if (isset($element['#element_validate'])) {
+      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformCodeMirror']], $element['#element_validate']);
+    }
+    else {
+      $element['#element_validate'] = [[get_called_class(), 'validateWebformCodeMirror']];
+    }
+
     return $element;
   }
 

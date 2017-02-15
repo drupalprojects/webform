@@ -221,6 +221,10 @@ class WebformEntityForm extends BundleEntityFormBase {
    * Element validate callback: Add 'webform_' #type prefix to elements.
    */
   public function validateElementsYaml(array &$element, FormStateInterface $form_state) {
+    if ($form_state->getErrors()) {
+      return;
+    }
+
     $elements = $form_state->getValue('elements');
     $elements = $this->getElementsWithWebformTypePrefix($elements);
     $form_state->setValueForElement($element, $elements);
