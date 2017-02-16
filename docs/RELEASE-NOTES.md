@@ -19,10 +19,7 @@ Steps for creating a new release
 
 Tidy YAML files
 
-    drush webform-tidy webform; 
-    drush webform-tidy webform_ui; 
-    drush webform-tidy webform_test;
-    drush webform-tidy webform_test_translation;
+    @see DEVELOPMENT-CHEATSHEET.md
 
 
 2. Export configuration
