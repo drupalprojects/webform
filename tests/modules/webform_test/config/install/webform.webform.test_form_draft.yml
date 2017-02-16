@@ -62,6 +62,7 @@ settings:
   draft_saved_message: 'Your draft has been saved'
   draft_loaded_message: 'You have an existing draft'
   confirmation_type: message
+  confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''
   confirmation_attributes: {  }

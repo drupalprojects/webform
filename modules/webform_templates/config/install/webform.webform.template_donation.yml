@@ -122,6 +122,7 @@ settings:
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: page
+  confirmation_title: ''
   confirmation_message: |
     <h2>Thank you!!!</h2>
     <p>Your donation was processed successfully!</p>

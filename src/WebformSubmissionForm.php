@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Controller\WebformController;
@@ -29,6 +30,13 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @var bool
    */
   protected $disablePages = FALSE;
+
+  /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
 
   /**
    * The webform element (plugin) manager.
@@ -98,6 +106,8 @@ class WebformSubmissionForm extends ContentEntityForm {
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
@@ -109,8 +119,9 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.
    */
-  public function __construct(EntityManagerInterface $entity_manager, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
+  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
     parent::__construct($entity_manager);
+    $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
     $this->elementManager = $element_manager;
     $this->storage = $this->entityManager->getStorage('webform_submission');
@@ -125,6 +136,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity.manager'),
+      $container->get('renderer'),
       $container->get('webform.request'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.third_party_settings_manager'),
@@ -387,7 +399,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Display inline confirmation message with back to link which is rendered
     // via the controller.
     if ($this->getWebformSetting('confirmation_type') == 'inline' && $this->getRequest()->query->get('webform_id') == $webform->id()) {
-      $webform_controller = new WebformController($this->requestHandler, $this->messageManager);
+      $webform_controller = new WebformController($this->renderer, $this->requestHandler, $this->tokenManager);
       $form['confirmation'] = $webform_controller->confirmation($this->getRequest(), $webform);
       return $form;
     }

@@ -449,6 +449,9 @@ webform.webform.*:
         confirmation_url:
           type: string
           label: 'Confirmation URL'
+        confirmation_title:
+          type: text
+          label: 'Confirmation title'
         confirmation_message:
           type: text
           label: 'Confirmation message'

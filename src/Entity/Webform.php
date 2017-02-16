@@ -553,6 +553,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'draft_saved_message' => '',
       'draft_loaded_message' => '',
       'confirmation_type' => 'page',
+      'confirmation_title' => '',
       'confirmation_message' => '',
       'confirmation_url' => '',
       'confirmation_attributes' => [],

@@ -89,6 +89,7 @@ class WebformConfirmationTest extends WebformTestBase {
 
     // Check custom confirmation page.
     $this->drupalPostForm('webform/test_confirmation_page_custom', [], t('Submit'));
+    $this->assertRaw('<h1 class="page-title">Custom confirmation page title</h1>');
     $this->assertRaw('<div style="border: 10px solid red; padding: 1em;" class="webform-confirmation">');
     $this->assertRaw('<a href="' . $webform_confirmation_page_custom->toUrl()->toString() . '" rel="back" title="Custom back to link" class="button">Custom back to link</a>');
 

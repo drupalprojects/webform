@@ -5,8 +5,10 @@ namespace Drupal\webform\Controller;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformRequestInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,6 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
 class WebformController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
@@ -25,13 +34,26 @@ class WebformController extends ControllerBase implements ContainerInjectionInte
   protected $requestHandler;
 
   /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTranslationManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Constructs a WebformController object.
    *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The token manager.
    */
-  public function __construct(WebformRequestInterface $request_handler) {
+  public function __construct(RendererInterface $renderer, WebformRequestInterface $request_handler, WebformTokenManagerInterface $token_manager) {
+    $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -39,7 +61,9 @@ class WebformController extends ControllerBase implements ContainerInjectionInte
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('webform.request')
+      $container->get('renderer'),
+      $container->get('webform.request'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -121,13 +145,22 @@ class WebformController extends ControllerBase implements ContainerInjectionInte
       }
     }
 
-    return [
-      '#title' => ($source_entity) ? $source_entity->label() : $webform->label(),
+    // Get title.
+    $title = $webform->getSetting('confirmation_title') ?: (($source_entity) ? $source_entity->label() : $webform->label());
+
+    // Replace tokens in title.
+    $title = $this->tokenManager->replace($title, $webform_submission ?: $webform);
+
+    $build = [
+      '#title' => $title,
       '#theme' => 'webform_confirmation',
       '#webform' => $webform,
       '#source_entity' => $source_entity,
       '#webform_submission' => $webform_submission,
     ];
+
+    $this->renderer->addCacheableDependency($build, $webform);
+    return $build;
   }
 
   /**

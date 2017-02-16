@@ -56,7 +56,8 @@ settings:
   draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: inline
+  confirmation_type: page
+  confirmation_title: 'Custom confirmation page title'
   confirmation_message: 'This is a custom confirmation page.'
   confirmation_url: ''
   confirmation_attributes:

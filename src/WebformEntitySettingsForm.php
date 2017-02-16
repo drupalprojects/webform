@@ -712,6 +712,17 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
+    $form['confirmation']['confirmation_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Confirmation title'),
+      '#description' => $this->t('Page title to be shown upon successful submission.'),
+      '#default_value' => $settings['confirmation_title'],
+      '#states' => [
+        'visible' => [
+          ':input[name="confirmation_type"]' => ['value' => 'page'],
+        ],
+      ],
+    ];
     $form['confirmation']['confirmation_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Confirmation message'),

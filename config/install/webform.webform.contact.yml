@@ -75,6 +75,7 @@ settings:
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: url_message
+  confirmation_title: ''
   confirmation_message: 'Your message has been sent.'
   confirmation_url: '<front>'
   confirmation_attributes: {  }

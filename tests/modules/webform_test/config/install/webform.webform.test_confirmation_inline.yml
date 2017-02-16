@@ -57,6 +57,7 @@ settings:
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: inline
+  confirmation_title: ''
   confirmation_message: 'This is a custom inline confirmation message.'
   confirmation_url: ''
   confirmation_attributes: {  }
