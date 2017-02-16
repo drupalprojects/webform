@@ -175,6 +175,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'required' => FALSE,
       'required_error' => '',
       'unique' => FALSE,
+      'unique_error' => '',
       // Attributes.
       'wrapper_attributes' => [],
       'attributes' => [],
@@ -223,6 +224,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'field_prefix',
       'field_suffix',
       'required_error',
+      'unique_error',
       'admin_title',
       'placeholder',
       'markup',
@@ -1168,11 +1170,19 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
     $count = $query->execute()->fetchField();
     if ($count) {
-      $t_args = [
-        '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
-        '%value' => $element['#value'],
-      ];
-      $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
+      if (isset($element['#unique_error'])) {
+        $form_state->setError($element, $element['#unique_error']);
+      }
+      elseif (isset($element['#title'])) {
+        $t_args = [
+          '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
+          '%value' => $element['#value'],
+        ];
+        $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
+      }
+      else {
+        $form_state->setError($element);
+      }
     }
   }
 
@@ -1540,6 +1550,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Unique'),
       '#description' => $this->t('Check that all entered values for this element are unique. The same value is not allowed to be used twice.'),
       '#return_value' => TRUE,
+    ];
+    $form['validation']['unique_error'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Custom unique error message'),
+      '#description' => $this->t('If set, this message will be used when a webform element\'s value is not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[unique]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     /* Conditional logic */

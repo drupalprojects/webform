@@ -16,6 +16,13 @@ elements: |
     '#description': '#unique property is validated by single value elements'
     '#unique': true
     '#default_value': value
+  unique_custom:
+    '#type': textfield
+    '#title': unique_textfield
+    '#description': '#unique_error is displayed'
+    '#unique': true
+    '#unique_error': 'This is a custom unique error message.'
+    '#default_value': custom
   unique_checkboxes:
     '#type': checkboxes
     '#title': unique_checkboxes

@@ -39,6 +39,7 @@ class Textarea extends TextBase {
       'required' => FALSE,
       'required_error' => '',
       'unique' => FALSE,
+      'unique_error' => '',
       'counter_type' => '',
       'counter_maximum' => '',
       'counter_message' => '',
