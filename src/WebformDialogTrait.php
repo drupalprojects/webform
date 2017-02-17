@@ -9,6 +9,7 @@ use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Ajax\ScrollTopCommand;
 
 /**
  * Trait class webform dialogs.
@@ -102,6 +103,7 @@ trait WebformDialogTrait {
       ];
       $response = new AjaxResponse();
       $response->addCommand(new HtmlCommand('#webform-dialog', $form));
+      $response->addCommand(new ScrollTopCommand('#webform-dialog'));
       return $response;
     }
     return FALSE;

@@ -27,6 +27,7 @@ webform.admin.dialog:
     - core/drupal
     - core/jquery
     - core/jquery.ui.dialog
+    - views/views.ajax
     - webform/webform.form
     - webform/webform.element.codemirror.yaml
     - webform/webform.element.html_editor
