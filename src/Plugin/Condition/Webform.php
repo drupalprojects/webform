@@ -114,6 +114,16 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
   /**
    * {@inheritdoc}
    */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $values = $form_state->getValues();
+    if (!empty($values['webforms']) && empty(array_filter($values['context_mapping']))) {
+      $form_state->setErrorByName('webforms', $this->t('Please select which entity should be used to determine the current webform.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     $this->configuration['webforms'] = array_filter($form_state->getValue('webforms'));
     parent::submitConfigurationForm($form, $form_state);
