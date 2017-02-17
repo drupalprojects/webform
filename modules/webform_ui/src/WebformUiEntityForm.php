@@ -302,7 +302,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     $elements_flattened = $webform->getElementsDecodedAndFlattened();
 
     // Get the reordered elements and sort them by weight.
-    $elements_reordered = $form_state->getValue('elements_reordered');
+    $elements_reordered = $form_state->getValue('elements_reordered') ?: [];
     uasort($elements_reordered, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
 
     // Make sure the reordered element keys and match the existing element keys.
@@ -337,12 +337,13 @@ class WebformUiEntityForm extends WebformEntityForm {
     // Rebuild elements to reflect new hierarchy.
     $elements_updated = [];
     // Preserve the original elements root properties.
-    $elements_original = Yaml::decode($webform->get('elements'));
+    $elements_original = Yaml::decode($webform->get('elements')) ?: [];
     foreach ($elements_original as $key => $value) {
       if (Element::property($key)) {
         $elements_updated[$key] = $value;
       }
     }
+
     $this->buildUpdatedElementsRecursive($elements_updated, '', $elements_reordered, $elements_flattened);
 
     // Update the webform's elements.
