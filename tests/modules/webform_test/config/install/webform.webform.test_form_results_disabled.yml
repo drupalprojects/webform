@@ -6,8 +6,8 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_submission_disabled
-title: 'Test: Submission: Disabled'
+id: test_form_results_disabled
+title: 'Test: Form: Results Disabled'
 description: 'Test the disabling of saving of results to the database.'
 elements: |
   description:

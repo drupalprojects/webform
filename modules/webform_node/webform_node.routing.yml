@@ -83,7 +83,7 @@ entity.node.webform.results_submissions:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
 entity.node.webform.results_table:
   path: '/node/{node}/webform/results/table'
@@ -97,7 +97,7 @@ entity.node.webform.results_table:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
 entity.node.webform.results_table.custom:
   path: '/node/{node}/webform/results/table/custom'
@@ -111,7 +111,7 @@ entity.node.webform.results_table.custom:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
 entity.node.webform.results_export:
   path: '/node/{node}/webform/results/download'
@@ -125,7 +125,7 @@ entity.node.webform.results_export:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
 entity.node.webform.results_export_file:
   path: '/node/{node}/webform/results/download/file/{filename}'
@@ -139,7 +139,7 @@ entity.node.webform.results_export_file:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
 entity.node.webform.results_clear:
   path: '/node/{node}/webform/results/clear'
@@ -153,7 +153,7 @@ entity.node.webform.results_clear:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
 entity.node.webform_submission.canonical:
   path: '/node/{node}/webform/submission/{webform_submission}'

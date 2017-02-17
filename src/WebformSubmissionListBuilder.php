@@ -38,6 +38,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   protected $requestHandler;
 
   /**
+   * The message manager.
+   *
+   * @var \Drupal\webform\WebformMessageManagerInterface
+   */
+  protected $messageManager;
+
+  /**
    * The webform.
    *
    * @var \Drupal\webform\WebformInterface
@@ -150,6 +157,11 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     $this->elementManager = \Drupal::service('plugin.manager.webform.element');
 
+    /** @var \Drupal\webform\WebformMessageManagerInterface $message_manager */
+    $this->messageManager = \Drupal::service('webform.message_manager');
+    $this->messageManager->setWebform($this->webform);
+    $this->messageManager->setSourceEntity($this->sourceEntity);
+
     /** @var WebformSubmissionStorageInterface $webform_submission_storage */
     $webform_submission_storage = $this->getStorage();
 
@@ -198,13 +210,18 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function render() {
-    if ($this->webform) {
-      if ($this->account) {
-        $build['#title'] = $this->t('Submissions to %webform for %user', [
-          '%webform' => $this->webform->label(),
-          '%user' => $this->account->getDisplayName(),
-        ]);
-      }
+    // Set user specific page title.
+    if ($this->webform && $this->account) {
+      $build['#title'] = $this->t('Submissions to %webform for %user', [
+        '%webform' => $this->webform->label(),
+        '%user' => $this->account->getDisplayName(),
+      ]);
+    }
+
+    // Display warning when the webform has a submission but saving of results.
+    // are disabled.
+    if ($this->webform && $this->webform->getSetting('results_disabled')) {
+      $this->messageManager->display(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'warning');
     }
 
     // Add the filter.

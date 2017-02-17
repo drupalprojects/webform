@@ -6,8 +6,8 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_submission_limit
-title: 'Test: Submission: Limit'
+id: test_form_limit
+title: 'Test: Form: Submission limit'
 description: 'Test submission and user limits.'
 elements: |
   name:

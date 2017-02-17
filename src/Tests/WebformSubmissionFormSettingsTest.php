@@ -37,9 +37,9 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     'test_form_autofocus',
     'test_form_confidential',
     'test_form_preview',
-    'test_submission_disabled',
+    'test_form_results_disabled',
     'test_token_update',
-    'test_submission_limit',
+    'test_form_limit',
   ];
 
   /**
@@ -179,11 +179,11 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     // Check prepopulating source entity.
     $this->drupalPostForm('webform/test_form_prepopulate', [], t('Submit'), ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
     $sid = $this->getLastSubmissionId($webform_prepopulate);
-    $submission = WebformSubmission::load($sid);
-    $this->assertNotNull($submission->getSourceEntity());
-    if ($submission->getSourceEntity()) {
-      $this->assertEqual($submission->getSourceEntity()->getEntityTypeId(), 'webform');
-      $this->assertEqual($submission->getSourceEntity()->id(), 'contact');
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertNotNull($webform_submission->getSourceEntity());
+    if ($webform_submission->getSourceEntity()) {
+      $this->assertEqual($webform_submission->getSourceEntity()->getEntityTypeId(), 'webform');
+      $this->assertEqual($webform_submission->getSourceEntity()->id(), 'contact');
     }
 
     // Check disabling prepopulation source entity.
@@ -191,8 +191,8 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $webform_prepopulate->save();
     $this->drupalPostForm('webform/test_form_prepopulate', [], t('Submit'), ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
     $sid = $this->getLastSubmissionId($webform_prepopulate);
-    $submission = WebformSubmission::load($sid);
-    $this->assert(!$submission->getSourceEntity());
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assert(!$webform_submission->getSourceEntity());
 
     /**************************************************************************/
     /* Test webform submit once (form_submit_once) */
@@ -461,40 +461,80 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     /**************************************************************************/
 
     // Check results disabled.
-    $webform_disabled = Webform::load('test_submission_disabled');
-    $submission = $this->postSubmission($webform_disabled);
-    $this->assertFalse($submission, 'Submission not saved to the database.');
+    $webform_results_disabled = Webform::load('test_form_results_disabled');
+    $webform_submission = $this->postSubmission($webform_results_disabled);
+    $this->assertFalse($webform_submission, 'Submission not saved to the database.');
 
-    // Check error message for admins.
-    $this->drupalGet('webform/test_submission_disabled');
+    // Check that error message is displayed and form is available for admins.
+    $this->drupalGet('webform/test_form_results_disabled');
     $this->assertRaw(t('This webform is currently not saving any submitted data.'));
     $this->assertFieldByName('op', 'Submit');
     $this->assertNoRaw(t('Unable to display this webform. Please contact the site administrator.'));
 
-    // Check webform disable for everyone else.
+    // Check that error message not displayed and form is disabled for everyone.
     $this->drupalLogout();
-    $this->drupalGet('webform/test_submission_disabled');
+    $this->drupalGet('webform/test_form_results_disabled');
     $this->assertNoRaw(t('This webform is currently not saving any submitted data.'));
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw(t('Unable to display this webform. Please contact the site administrator.'));
 
     // Enabled ignore disabled results.
-    $webform_disabled->setSetting('results_disabled_ignore', TRUE);
-    $webform_disabled->save();
+    $webform_results_disabled->setSetting('results_disabled_ignore', TRUE);
+    $webform_results_disabled->save();
     $this->drupalLogin($this->adminWebformUser);
 
-    // Check no error message for admins.
-    $this->drupalGet('webform/test_submission_disabled');
+    // Check that no error message is displayed and form is available for admins.
+    $this->drupalGet('webform/test_form_results_disabled');
     $this->assertNoRaw(t('This webform is currently not saving any submitted data.'));
     $this->assertNoRaw(t('Unable to display this webform. Please contact the site administrator.'));
     $this->assertFieldByName('op', 'Submit');
 
-    // Check webform not disabled and not messages for everyone else.
+    // Check that results tab is not accessible.
+    $this->drupalGet('admin/structure/webform/manage/test_form_results_disabled/results/submissions');
+    $this->assertResponse(403);
+
+    // Check that error message not displayed and form is enabled for everyone.
     $this->drupalLogout();
-    $this->drupalGet('webform/test_submission_disabled');
+    $this->drupalGet('webform/test_form_results_disabled');
     $this->assertNoRaw(t('This webform is currently not saving any submitted data.'));
     $this->assertNoRaw(t('Unable to display this webform. Please contact the site administrator.'));
     $this->assertFieldByName('op', 'Submit');
+
+    // Unset disabled results.
+    $webform_results_disabled->setSetting('results_disabled', FALSE);
+    $webform_results_disabled->save();
+
+    // Login admin.
+    $this->drupalLogin($this->adminWebformUser);
+
+    // Check that results tab is accessible.
+    $this->drupalGet('admin/structure/webform/manage/test_form_results_disabled/results/submissions');
+    $this->assertResponse(200);
+
+    // Post a submission.
+    $sid = $this->postSubmissionTest($webform_results_disabled);
+    $webform_submission = WebformSubmission::load($sid);
+
+    // Check that submission is available.
+    $this->drupalGet('admin/structure/webform/manage/test_form_results_disabled/results/submissions');
+    $this->assertNoRaw('This webform is currently not saving any submitted data');
+    $this->assertRaw('>' . $webform_submission->serial() . '<');
+
+    // Set disabled results.
+    $webform_results_disabled->setSetting('results_disabled', TRUE);
+    $webform_results_disabled->save();
+
+    // Check that submission is still available with warning.
+    $this->drupalGet('admin/structure/webform/manage/test_form_results_disabled/results/submissions');
+    $this->assertRaw('This webform is currently not saving any submitted data');
+    $this->assertRaw('>' . $webform_submission->serial() . '<');
+
+    // Delete the submission.
+    $webform_submission->delete();
+
+    // Check that results tab is not accessible.
+    $this->drupalGet('admin/structure/webform/manage/test_form_results_disabled/results/submissions');
+    $this->assertResponse(403);
 
     /**************************************************************************/
     /* Test token update (form_token_update) */
@@ -522,27 +562,27 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->assertNoFieldByName('textfield', $webform_submission->getData('textfield'));
 
     /**************************************************************************/
-    /* Test limits (test_submission_limit) */
+    /* Test limits (test_form_limit) */
     /**************************************************************************/
 
-    $webform_limit = Webform::load('test_submission_limit');
+    $webform_limit = Webform::load('test_form_limit');
 
     // Check webform available.
-    $this->drupalGet('webform/test_submission_limit');
+    $this->drupalGet('webform/test_form_limit');
     $this->assertFieldByName('op', 'Submit');
 
     $this->drupalLogin($this->normalUser);
 
     // Check that draft does not count toward limit.
     $this->postSubmission($webform_limit, [], t('Save Draft'));
-    $this->drupalGet('webform/test_submission_limit');
+    $this->drupalGet('webform/test_form_limit');
     $this->assertFieldByName('op', 'Submit');
     $this->assertRaw('A partially-completed form was found. Please complete the remaining portions.');
     $this->assertNoRaw('You are only allowed to have 1 submission for this webform.');
 
     // Check limit reached and webform not available for authenticated user.
     $this->postSubmission($webform_limit);
-    $this->drupalGet('webform/test_submission_limit');
+    $this->drupalGet('webform/test_form_limit');
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw('You are only allowed to have 1 submission for this webform.');
 
@@ -551,13 +591,13 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     // Check admin can still edit their submission.
     $this->drupalLogin($this->adminWebformUser);
     $sid = $this->postSubmission($webform_limit);
-    $this->drupalGet("admin/structure/webform/manage/test_submission_limit/submission/$sid/edit");
+    $this->drupalGet("admin/structure/webform/manage/test_form_limit/submission/$sid/edit");
     $this->assertFieldByName('op', 'Save');
     $this->assertNoRaw('No more submissions are permitted.');
     $this->drupalLogout();
 
     // Check webform is still available for anonymous users.
-    $this->drupalGet('webform/test_submission_limit');
+    $this->drupalGet('webform/test_form_limit');
     $this->assertFieldByName('op', 'Submit');
     $this->assertNoRaw('You are only allowed to have 1 submission for this webform.');
 
@@ -571,7 +611,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Check admin can still post submissions.
     $this->drupalLogin($this->adminWebformUser);
-    $this->drupalGet('webform/test_submission_limit');
+    $this->drupalGet('webform/test_form_limit');
     $this->assertFieldByName('op', 'Submit');
     $this->assertRaw('Only 3 submissions are allowed.');
     $this->assertRaw('Only submission administrators are allowed to access this webform and create new submissions.');

@@ -197,6 +197,7 @@ entity.webform.results_user:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_own'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
 entity.webform.results_submissions:
   path: '/admin/structure/webform/manage/{webform}/results/submissions'
@@ -209,6 +210,8 @@ entity.webform.results_submissions:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+
 
 entity.webform.results_table:
   path: '/admin/structure/webform/manage/{webform}/results/table'
@@ -221,6 +224,7 @@ entity.webform.results_table:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
 entity.webform.results_table.custom:
   path: '/admin/structure/webform/manage/{webform}/results/table/custom'
@@ -233,6 +237,7 @@ entity.webform.results_table.custom:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
 entity.webform.results_export:
   path: '/admin/structure/webform/manage/{webform}/results/download'
@@ -245,6 +250,7 @@ entity.webform.results_export:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
 entity.webform.results_export_file:
   path: '/admin/structure/webform/manage/{webform}/results/download/file/{filename}'
@@ -257,6 +263,7 @@ entity.webform.results_export_file:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
 entity.webform.results_clear:
   path: '/admin/structure/webform/manage/{webform}/results/clear'
@@ -269,6 +276,7 @@ entity.webform.results_clear:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_purge_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
 # Webform options
 
