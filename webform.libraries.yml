@@ -39,6 +39,13 @@ webform.admin.translation:
     theme:
       css/webform.admin.translation.css: {}
 
+# Block
+
+webform.block:
+  version: 1.x
+  js:
+    js/webform.block.js:  {}
+
 # Theme
 
 webform.theme.bartik:

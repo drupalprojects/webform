@@ -68,12 +68,7 @@ services:
     class: Drupal\webform\WebformTokenManager
     arguments: ['@module_handler', '@token']
 
-  # Subscribers.
-
-  webform.route_subscriber:
-    class: Drupal\webform\Routing\WebformRouteSubscriber
-    tags:
-      - { name: event_subscriber }
+  # Breadcrumb builder.
 
   webform.breadcrumb:
     class: Drupal\webform\BreadCrumb\WebformBreadcrumbBuilder
@@ -81,3 +76,23 @@ services:
     tags:
       - { name: breadcrumb_builder, priority: 1002 }
 
+  # Route subscriber.
+
+  webform.route_subscriber:
+    class: Drupal\webform\Routing\WebformRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  # Route context.
+
+  webform.webform_route_context:
+    class: Drupal\webform\ContextProvider\WebformRouteContext
+    arguments: ['@current_route_match']
+    tags:
+      - { name: 'context_provider' }
+
+  webform.webform_submission_route_context:
+    class: Drupal\webform\ContextProvider\WebformSubmissionRouteContext
+    arguments: ['@current_route_match']
+    tags:
+      - { name: 'context_provider' }
