@@ -62,7 +62,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       }
       else {
         $value = $this->t('@version (CDN).', $t_args);
-        $description = $this->t('Please download the <a href=":library_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library. (<a href=":settings_href">Disable CDN warning)', $t_args);
+        $description = $this->t('Please download the <a href=":library_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library. (<a href=":settings_href">Disable CDN warning</a>)', $t_args);
         $severity = REQUIREMENT_WARNING;
       }
 
