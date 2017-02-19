@@ -104,9 +104,8 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
       $form['negate']['#access'] = FALSE;
     }
 
-    // Attached libary to summarize configuration settings.
+    // Attached library to summarize configuration settings.
     $form['#attached']['library'][] = 'webform/webform.block';
-
 
     return $form;
   }
@@ -168,7 +167,8 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
   /**
    * Gets the webform for a defined context.
    *
-   * @return NULL|\Drupal\webform\WebformInterface
+   * @return null|\Drupal\webform\WebformInterface
+   *   The current context's webform.
    */
   protected function getContextWebform() {
     if ($webform_submission = $this->getContextValue('webform_submission')) {

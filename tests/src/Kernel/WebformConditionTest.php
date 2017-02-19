@@ -13,8 +13,16 @@ use Drupal\webform\Entity\WebformSubmission;
  */
 class WebformConditionTest extends EntityKernelTestBase {
 
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
   public static $modules = array('webform');
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
   }
@@ -22,7 +30,7 @@ class WebformConditionTest extends EntityKernelTestBase {
   /**
    * Tests conditions.
    */
-  function testConditions() {
+  public function testConditions() {
     $manager = $this->container->get('plugin.manager.condition', $this->container->get('container.namespaces'));
     $this->createUser();
 

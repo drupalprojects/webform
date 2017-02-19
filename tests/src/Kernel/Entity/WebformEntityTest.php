@@ -185,7 +185,7 @@ class WebformEntityTest extends KernelTestBase {
       'complete' => ['#title' => 'Complete'],
     ];
     $this->assertEquals($webform->getPages(TRUE), $wizard_pages);
-    
+
     // @todo Add the below assertions.
     // Check access rules.
     // Check get submission form.

@@ -26,4 +26,3 @@ visibility:
       webform: '@webform.webform_route_context:webform'
       webform_submission: '@webform.webform_submission_route_context:webform_submission'
       node: '@node.node_route_context:node'
-

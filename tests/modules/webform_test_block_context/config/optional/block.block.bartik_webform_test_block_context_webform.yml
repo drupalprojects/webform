@@ -24,4 +24,3 @@ visibility:
     negate: false
     context_mapping:
       webform: '@webform.webform_route_context:webform'
-
