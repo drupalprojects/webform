@@ -16,13 +16,13 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("Containers"),
  * )
  */
-class Item extends WebformMarkup {
+class Item extends ContainerBase {
 
   /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       'title' => '',
       // General settings.
       'description' => '',
@@ -33,7 +33,7 @@ class Item extends WebformMarkup {
       'field_suffix' => '',
       // Form validation.
       'required' => FALSE,
-    ];
+    ] + $this->getDefaultBaseProperties();
   }
 
   /**
