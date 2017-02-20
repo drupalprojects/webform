@@ -9,7 +9,7 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
-use Drupal\webform\Utility\WebformYamlTidy;
+use Drupal\webform\Utility\WebformYaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -297,7 +297,7 @@ class WebformEntityForm extends BundleEntityFormBase {
     }
 
     $this->removeWebformTypePrefixRecursive($elements);
-    return WebformYamlTidy::tidy(Yaml::encode($elements));
+    return WebformYaml::tidy(Yaml::encode($elements));
   }
 
   /**
@@ -334,7 +334,7 @@ class WebformEntityForm extends BundleEntityFormBase {
     }
 
     $this->addWebformTypePrefixRecursive($elements);
-    return WebformYamlTidy::tidy(Yaml::encode($elements));
+    return WebformYaml::tidy(Yaml::encode($elements));
   }
 
   /**

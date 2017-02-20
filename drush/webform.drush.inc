@@ -10,7 +10,7 @@ use Drupal\webform\Controller\WebformResultsExportController;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Form\WebformResultsClearForm;
 use Drupal\webform\Form\WebformSubmissionsPurgeForm;
-use Drupal\webform\Utility\WebformYamlTidy;
+use Drupal\webform\Utility\WebformYaml;
 use Psr\Log\LogLevel;
 
 /**
@@ -395,7 +395,7 @@ function drush_webform_tidy($module = 'webform') {
     }
 
     // Tidy and add new line to the end of the tidied file.
-    $tidied_yaml = WebformYamlTidy::tidy($tidied_yaml) . PHP_EOL;
+    $tidied_yaml = WebformYaml::tidy($tidied_yaml) . PHP_EOL;
     if ($tidied_yaml != $original_yaml) {
       drush_print(dt('Tidying @file...', ['@file' => $file->filename]));
       file_put_contents($file->uri, $tidied_yaml);

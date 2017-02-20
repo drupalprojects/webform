@@ -6,7 +6,7 @@
  */
 
 use Drupal\Core\Serialization\Yaml;
-use Drupal\webform\Utility\WebformYamlTidy;
+use Drupal\webform\Utility\WebformYaml;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -53,7 +53,7 @@ function _webform_form_config_single_export_form_update_export($form, FormStateI
 
   // Tidy all only MSK exported configuration...for now.
   if (strpos($name, 'webform') === 0) {
-    $value = WebformYamlTidy::tidy($value);
+    $value = WebformYaml::tidy($value);
   }
 
   $form['export']['#type'] = 'webform_codemirror';

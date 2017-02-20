@@ -2,12 +2,33 @@
 
 namespace Drupal\webform\Utility;
 
+use Drupal\Core\Serialization\Yaml;
 use Symfony\Component\Yaml\Unescaper;
 
 /**
  * Provides YAML tidy function.
  */
-class WebformYamlTidy {
+class WebformYaml {
+
+  /**
+   * Validate YAML string.
+   *
+   * @param string $yaml
+   *   A YAML string.
+   *
+   * @return null|string
+   *   NULL if the YAML string contains no errors, else the parsing exception
+   *   message is returned.
+   */
+  public static function validate($yaml) {
+    try {
+      Yaml::decode($yaml);
+      return NULL;
+    }
+    catch (\Exception $exception) {
+      return $exception->getMessage();
+    }
+  }
 
   /**
    * Tidy export YAML includes tweaking array layout and multiline strings.

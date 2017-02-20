@@ -8,9 +8,6 @@ webform.admin:
   js:
     js/webform.admin.js:  {}
   dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
     - webform/webform.form
 
 # Used preload libraries required by (modal) dialogs.
@@ -24,8 +21,6 @@ webform.admin.dialog:
     js/webform.admin.js:  {}
     js/webform.dialog.js:  {}
   dependencies:
-    - core/drupal
-    - core/jquery
     - core/jquery.ui.dialog
     - webform/webform.ajax
     - webform/webform.form
@@ -58,6 +53,9 @@ webform.block:
   version: VERSION
   js:
     js/webform.block.js:  {}
+  dependencies:
+    - webform/webform.element.codemirror.yaml
+    - webform/webform.element.select2
 
 # Theme
 

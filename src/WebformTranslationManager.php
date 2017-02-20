@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Defines a class to translate webform elements.
@@ -67,7 +68,17 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
     $this->languageManager->setConfigOverrideLanguage($this->languageManager->getLanguage($langcode));
     $elements = $this->configFactory->get($config_name)->get('elements');
     $this->languageManager->setConfigOverrideLanguage($config_override_language);
-    return $elements ? Yaml::decode($elements) : [];
+
+    if (!$elements) {
+      return [];
+    }
+    elseif ($error = WebformYaml::validate($elements)) {
+      drupal_set_message($error, 'error');
+      return [];
+    }
+    else {
+      return Yaml::decode($elements);
+    }
   }
 
   /**

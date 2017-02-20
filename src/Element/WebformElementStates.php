@@ -8,7 +8,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
-use Drupal\webform\Utility\WebformYamlTidy;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Provides a webform element to edit an element's #states.
@@ -105,7 +105,7 @@ class WebformElementStates extends FormElement {
       $element['states'] = [
         '#type' => 'webform_codemirror',
         '#mode' => 'yaml',
-        '#default_value' => WebformYamlTidy::tidy(Yaml::encode($element['#default_value'])),
+        '#default_value' => WebformYaml::tidy(Yaml::encode($element['#default_value'])),
         '#description' => t('Learn more about Drupal\'s <a href=":href">Form API #states</a>.', [':href' => 'https://www.lullabot.com/articles/form-api-states']),
       ];
       return $element;

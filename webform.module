@@ -301,10 +301,10 @@ function webform_page_attachments(&$page) {
     }
   }
 
-  // Attach codemirror library to block admin to ensure that the library
-  // is loaded by the webform block is placed using AJAX.
-  if (\Drupal::routeMatch()->getRouteName() == 'block.admin_display') {
-    $page['#attached']['library'][] = 'webform/webform.codemirror.yaml';
+  // Attach codemirror and select2 library to block admin to ensure that the
+  // library is loaded by the webform block is placed using AJAX.
+  if (strpos($route_name, 'block.admin_display') === 0) {
+    $page['#attached']['library'][] = 'webform/webform.block';
   }
 }
 

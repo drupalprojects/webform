@@ -13,7 +13,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\Xss;
 use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\WebformMessageManagerInterface;
-use Drupal\webform\Utility\WebformYamlTidy;
+use Drupal\webform\Utility\WebformYaml;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -394,7 +394,7 @@ function template_preprocess_webform_submission_yaml(array &$variables) {
 
   $data = $webform_submission->toArray(TRUE, TRUE);
   $yaml = Yaml::encode($data);
-  $yaml = WebformYamlTidy::tidy($yaml);
+  $yaml = WebformYaml::tidy($yaml);
   $variables['yaml'] = [
     '#markup' => $yaml,
     '#allowed_tags' => Xss::getAdminTagList(),

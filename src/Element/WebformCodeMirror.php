@@ -5,7 +5,7 @@ namespace Drupal\webform\Element;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\Textarea;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Utility\WebformYamlTidy;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Provides a webform element for HTML, YAML, or Plain text using CodeMirror.
@@ -60,7 +60,7 @@ class WebformCodeMirror extends Textarea {
     if ($input === FALSE && $element['#mode'] == 'yaml' && isset($element['#default_value'])) {
       // Convert associative array in default value to YAML.
       if (is_array($element['#default_value'])) {
-        $element['#default_value'] = WebformYamlTidy::tidy(Yaml::encode($element['#default_value']));
+        $element['#default_value'] = WebformYaml::tidy(Yaml::encode($element['#default_value']));
       }
       // Convert empty YAML into an empty string.
       if ($element['#default_value'] == '{  }') {
