@@ -99,6 +99,41 @@ class WebformTranslationTest extends WebformTestBase {
     // custom properties are removed.
     $translation_element = $translation_manager->getConfigElements($webform, 'fr', TRUE);
     $this->assertEqual(['textfield' => ['#title' => 'French']], $translation_element);
+
+    /**************************************************************************/
+    // Site wide language
+    /**************************************************************************/
+
+    // Make sure the site language is English (en).
+    \Drupal::configFactory()->getEditable('system.site')->set('default_langcode', 'en')->save();
+
+    $language_manager = \Drupal::languageManager();
+
+    $this->drupalGet('webform/test_translation', ['language' => $language_manager->getLanguage('en')]);
+    $this->assertRaw('<label for="edit-textfield">Text field</label>');
+
+    // Check Spanish translation.
+    $this->drupalGet('webform/test_translation', ['language' => $language_manager->getLanguage('es')]);
+    $this->assertRaw('<label for="edit-textfield">Campo de texto</label>');
+
+    // Check French translation.
+    $this->drupalGet('webform/test_translation', ['language' => $language_manager->getLanguage('fr')]);
+    $this->assertRaw('<label for="edit-textfield">French</label>');
+
+    // Change site language to French (fr).
+    \Drupal::configFactory()->getEditable('system.site')->set('default_langcode', 'fr')->save();
+
+    // Check English translation.
+    $this->drupalGet('webform/test_translation', ['language' => $language_manager->getLanguage('en')]);
+    $this->assertRaw('<label for="edit-textfield">Text field</label>');
+
+    // Check Spanish translation.
+    $this->drupalGet('webform/test_translation', ['language' => $language_manager->getLanguage('es')]);
+    $this->assertRaw('<label for="edit-textfield">Campo de texto</label>');
+
+    // Check French translation.
+    $this->drupalGet('webform/test_translation', ['language' => $language_manager->getLanguage('fr')]);
+    $this->assertRaw('<label for="edit-textfield">French</label>');
   }
 
 }

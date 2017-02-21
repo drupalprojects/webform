@@ -271,6 +271,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function getLangcode() {
+    return $this->langcode;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getOwner() {
     return $this->uid ? User::load($this->uid) : NULL;
   }
@@ -828,8 +835,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       // If current webform is translated, load the base (default) webform and apply
       // the translation to the elements.
       if ($this->langcode != $language_manager->getCurrentLanguage()->getId()) {
-        $default_langcode = $language_manager->getDefaultLanguage()->getId();
-        $elements = $translation_manager->getConfigElements($this, $default_langcode);
+        $elements = $translation_manager->getConfigElements($this);
         $this->elementsTranslations = Yaml::decode($this->elements);
       }
       else {

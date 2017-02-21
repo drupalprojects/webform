@@ -13,6 +13,14 @@ use Drupal\user\EntityOwnerInterface;
 interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface, EntityOwnerInterface {
 
   /**
+   * Returns the webform's (original) langcode.
+   *
+   * @return string
+   *   The webform's (original) langcode.
+   */
+  public function getLangcode();
+
+  /**
    * Determine if the webform has page or is attached to other entities.
    *
    * @return bool
