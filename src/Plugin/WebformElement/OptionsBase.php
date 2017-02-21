@@ -326,7 +326,7 @@ abstract class OptionsBase extends WebformElementBase {
     if ($inputs = $this->getElementSelectorInputsOptions($element)) {
       $selectors = [];
       foreach ($inputs as $input_name => $input_title) {
-        $multiple = ($this->hasMultipleValues($element) && $input_name == 'select') ? '[]' : '';
+        $multiple = ($this->hasMultipleValues($element) && $input_name === 'select') ? '[]' : '';
         $selectors[":input[name=\"{$name}[{$input_name}]$multiple\"]"] = $input_title;
       }
       return [$title => $selectors];

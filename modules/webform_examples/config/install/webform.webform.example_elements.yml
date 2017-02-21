@@ -131,6 +131,29 @@ elements: |
     value:
       '#type': value
       '#title': Value
+  markup_elements:
+    '#type': details
+    '#title': 'Markup elements'
+    '#open': true
+    processed_text:
+      '#type': processed_text
+      '#title': 'Advanced HTML/Text'
+      processed_text_content:
+        '#markup': 'This is a Advanced HTML/Text container.'
+    webform_markup:
+      '#type': webform_markup
+      '#title': 'Basic HTML'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
+      webform_markup_content:
+        '#markup': 'This is a Basic HTML container.'
+    webform_message:
+      '#type': webform_message
+      '#title': Message
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+      webform_message_content:
+        '#markup': 'This is a Message container.'
   file_upload_elements:
     '#type': details
     '#title': 'File upload elements'
@@ -424,6 +447,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
     webform_entity_radios:
       '#type': webform_entity_radios
       '#title': 'Entity radios'
@@ -431,6 +457,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
     webform_entity_select:
       '#type': webform_entity_select
       '#title': 'Entity select'
@@ -447,29 +476,6 @@ elements: |
         include_anonymous: true
       '#multiple': true
       '#select2': true
-  markup_elements:
-    '#type': details
-    '#title': 'Markup elements'
-    '#open': true
-    webform_markup:
-      '#type': webform_markup
-      '#title': 'HTML markup'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
-      webform_markup_content:
-        '#markup': 'This is a HTML markup container.'
-    webform_message:
-      '#type': webform_message
-      '#title': Message
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
-      '#message_type': warning
-      '#message_message': 'This is a <strong>warning</strong> message.'
-      webform_message_content:
-        '#markup': 'This is a Message container.'
-    processed_text:
-      '#type': processed_text
-      '#title': 'Processed text'
-      processed_text_content:
-        '#markup': 'This is a Processed text container.'
   other_elements:
     '#type': details
     '#title': 'Other elements'

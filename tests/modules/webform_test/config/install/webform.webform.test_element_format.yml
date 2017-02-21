@@ -815,6 +815,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': value
       webform_entity_radios_raw:
@@ -824,6 +827,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': raw
       webform_entity_radios_link:
@@ -833,6 +839,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': link
       webform_entity_radios_id:
@@ -842,6 +851,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': id
       webform_entity_radios_label:
@@ -851,6 +863,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': label
       webform_entity_radios_text:
@@ -860,6 +875,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': text
       webform_entity_radios_teaser:
@@ -869,6 +887,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': teaser
       webform_entity_radios_default:
@@ -878,6 +899,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value': 1
         '#format': default
     webform_entity_select:

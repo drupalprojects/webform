@@ -16,6 +16,31 @@ elements: |
     visible_trigger:
       '#type': checkbox
       '#title': 'Displays and require elements'
+    visible_processed_text:
+      '#type': processed_text
+      '#title': 'Advanced HTML/Text'
+      visible_processed_text_content:
+        '#markup': 'This is a Advanced HTML/Text container.'
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_webform_markup:
+      '#type': webform_markup
+      '#title': 'Basic HTML'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
+      visible_webform_markup_content:
+        '#markup': 'This is a Basic HTML container.'
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_captcha:
       '#type': captcha
       '#title': CAPTCHA
@@ -75,19 +100,6 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
-    visible_webform_markup:
-      '#type': webform_markup
-      '#title': 'HTML markup'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
-      visible_webform_markup_content:
-        '#markup': 'This is a HTML markup container.'
-      '#states':
-        visible:
-          ':input[name="visible_trigger"]':
-            checked: true
-        required:
-          ':input[name="visible_trigger"]':
-            checked: true
     visible_item:
       '#type': item
       '#title': Item
@@ -124,18 +136,6 @@ elements: |
       '#message_message': 'This is a <strong>warning</strong> message.'
       visible_webform_message_content:
         '#markup': 'This is a Message container.'
-      '#states':
-        visible:
-          ':input[name="visible_trigger"]':
-            checked: true
-        required:
-          ':input[name="visible_trigger"]':
-            checked: true
-    visible_processed_text:
-      '#type': processed_text
-      '#title': 'Processed text'
-      visible_processed_text_content:
-        '#markup': 'This is a Processed text container.'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -446,6 +446,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
       '#default_value':
         - 1
       '#states':
@@ -462,6 +465,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
       '#default_value': 1
       '#states':
         visible:
@@ -930,6 +936,25 @@ elements: |
     invisible_trigger:
       '#type': checkbox
       '#title': 'Hide and empty elements'
+    invisible_processed_text:
+      '#type': processed_text
+      '#title': 'Advanced HTML/Text'
+      invisible_processed_text_content:
+        '#markup': 'This is a Advanced HTML/Text container.'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_webform_markup:
+      '#type': webform_markup
+      '#title': 'Basic HTML'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
+      invisible_webform_markup_content:
+        '#markup': 'This is a Basic HTML container.'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_captcha:
       '#type': captcha
       '#title': CAPTCHA
@@ -974,16 +999,6 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
-    invisible_webform_markup:
-      '#type': webform_markup
-      '#title': 'HTML markup'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
-      invisible_webform_markup_content:
-        '#markup': 'This is a HTML markup container.'
-      '#states':
-        invisible:
-          ':input[name="invisible_trigger"]':
-            checked: true
     invisible_item:
       '#type': item
       '#title': Item
@@ -1014,15 +1029,6 @@ elements: |
       '#message_message': 'This is a <strong>warning</strong> message.'
       invisible_webform_message_content:
         '#markup': 'This is a Message container.'
-      '#states':
-        invisible:
-          ':input[name="invisible_trigger"]':
-            checked: true
-    invisible_processed_text:
-      '#type': processed_text
-      '#title': 'Processed text'
-      invisible_processed_text_content:
-        '#markup': 'This is a Processed text container.'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1264,6 +1270,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
       '#default_value':
         - 1
       '#states':
@@ -1277,6 +1286,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
       '#default_value': 1
       '#states':
         invisible:
@@ -1868,6 +1880,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
       '#default_value':
         - 1
       '#states':
@@ -1881,6 +1896,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#options':
+        1: Administrator
+        0: Anonymous
       '#default_value': 1
       '#states':
         disabled:

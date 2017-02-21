@@ -1182,6 +1182,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value':
           - 1
         '#format_items': comma
@@ -1192,6 +1195,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value':
           - 1
         '#format_items': semicolon
@@ -1202,6 +1208,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value':
           - 1
         '#format_items': and
@@ -1212,6 +1221,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value':
           - 1
         '#format_items': ol
@@ -1222,6 +1234,9 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
+        '#options':
+          1: Administrator
+          0: Anonymous
         '#default_value':
           - 1
         '#format_items': ul

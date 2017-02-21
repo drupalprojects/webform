@@ -34,11 +34,17 @@ webform_entity_checkboxes:
   '#selection_handler': 'default:user'
   '#selection_settings':
     include_anonymous: true
+  '#options':
+    1: 'Administrator'
+    0: 'Anonymous'
 webform_entity_radios:
   '#target_type': 'user'
   '#selection_handler': 'default:user'
   '#selection_settings':
     include_anonymous: true
+  '#options':
+    1: 'Administrator'
+    0: 'Anonymous'
 webform_likert:
   '#questions':
     q1: 'Please answer question 1?'
