@@ -52,7 +52,7 @@
    */
   Drupal.behaviors.webformSubmitNoValidate = {
     attach: function (context) {
-      $(context).find(':button.js-webform-novalidate').once('webform-novalidate').on('click', function () {
+      $(context).find('input:submit.js-webform-novalidate').once('webform-novalidate').on('click', function () {
         $(this.form).attr('novalidate', 'novalidate');
       });
     }
