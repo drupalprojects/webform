@@ -27,6 +27,30 @@ elements: |
         required:
           ':input[name="checkbox"]':
             checked: true
+  checkboxes_example:
+    '#type': details
+    '#title': 'Checkboxes example'
+    '#open': true
+    checkboxes:
+      '#type': checkboxes
+      '#title': 'Please check all'
+      '#options':
+        one: One
+        two: Two
+    checkboxes_explain:
+      '#type': textarea
+      '#title': 'Please explain why you checked all the above box'
+      '#states':
+        visible:
+          ':input[name="checkboxes[one]"]':
+            checked: true
+          ':input[name="checkboxes[two]"]':
+            checked: true
+        required:
+          ':input[name="checkboxes[one]"]':
+            checked: true
+          ':input[name="checkboxes[two]"]':
+            checked: true
   select_example:
     '#type': details
     '#title': 'Select with other example'
