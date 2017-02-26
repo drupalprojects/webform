@@ -69,10 +69,10 @@ class WebformElementStatesTest extends WebformTestBase {
     selector_01:
       checked: true
   required:
-    - 'selector_01''':
-        checked: true
-    - selector_02:
-        checked: true
+    'selector_01''':
+      checked: true
+    selector_02:
+      checked: true
   disabled:
     - selector_01:
         checked: true

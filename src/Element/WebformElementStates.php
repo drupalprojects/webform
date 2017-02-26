@@ -583,14 +583,21 @@ class WebformElementStates extends FormElement {
             $trigger = $condition['trigger'];
             $value = $condition['value'] ?: TRUE;
             if ($selector && $trigger) {
-              if ($index !== 0 && $operator == 'or') {
-                $states[$state][] = $operator;
+              if ($operator == 'or') {
+                if ($index !== 0) {
+                  $states[$state][] = $operator;
+                }
+                $states[$state][] = [
+                  $selector => [
+                    $trigger => $value,
+                  ],
+                ];
               }
-              $states[$state][] = [
-                $selector => [
+              else {
+                $states[$state][$selector] = [
                   $trigger => $value,
-                ],
-              ];
+                ];
+              }
             }
           }
         }
