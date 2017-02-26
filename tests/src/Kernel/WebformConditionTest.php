@@ -18,7 +18,7 @@ class WebformConditionTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = array('webform');
+  public static $modules = ['webform'];
 
   /**
    * {@inheritdoc}
@@ -48,23 +48,23 @@ class WebformConditionTest extends EntityKernelTestBase {
     $this->assertEqual('The webform is not_test', $condition->summary());
 
     // Set the webform check to test.
-    $condition->setConfig('webforms', array('test' => 'test'));
+    $condition->setConfig('webforms', ['test' => 'test']);
     $this->assertTrue($condition->execute(), 'Webform test pass webform condition check for test');
     // Check for the proper summary.
     $this->assertEqual('The webform is test', $condition->summary());
 
     // Set the webform check to not_test or test.
-    $condition->setConfig('webforms', array('not_test' => 'not_test', 'test' => 'test'));
+    $condition->setConfig('webforms', ['not_test' => 'not_test', 'test' => 'test']);
     $this->assertTrue($condition->execute(), 'Webform test pass webform condition check for not_test or test');
     // Check for the proper summary.
     $this->assertEqual('The webform is not_test or test', $condition->summary());
 
     // Check a greater than 2 webform summary scenario.
-    $condition->setConfig('webforms', array('not_test' => 'not_test', 'test' => 'test', 'other_test' => 'other_test'));
+    $condition->setConfig('webforms', ['not_test' => 'not_test', 'test' => 'test', 'other_test' => 'other_test']);
     $this->assertEqual('The webform is not_test, test or other_test', $condition->summary());
 
     // Test Constructor injection.
-    $condition = $manager->createInstance('webform', array('webforms' => array('test' => 'test'), 'context' => array('webform' => $webform)));
+    $condition = $manager->createInstance('webform', ['webforms' => ['test' => 'test'], 'context' => ['webform' => $webform]]);
     $this->assertTrue($condition->execute(), 'Constructor injection of context and configuration working as anticipated.');
 
     // Check webform_submission context.

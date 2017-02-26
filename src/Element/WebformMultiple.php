@@ -16,6 +16,11 @@ use Drupal\webform\Utility\WebformElementHelper;
 class WebformMultiple extends FormElement {
 
   /**
+   * Value indicating a element accepts an unlimited number of values.
+   */
+  const CARDINALITY_UNLIMITED = -1;
+
+  /**
    * {@inheritdoc}
    */
   public function getInfo() {

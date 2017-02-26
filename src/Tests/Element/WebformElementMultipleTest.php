@@ -16,7 +16,7 @@ class WebformElementMultipleTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_multiple'];
+  protected static $testWebforms = ['test_element_multiple', 'test_element_multiple_property'];
 
   /**
    * Tests building of list elements.
@@ -83,6 +83,18 @@ class WebformElementMultipleTest extends WebformTestBase {
     $this->assertFieldByName('webform_multiple_default[items][0][_item_]', 'Two');
     $this->assertFieldByName('webform_multiple_default[items][1][_item_]', 'Three');
     $this->assertFieldByName('webform_multiple_default[items][2][_item_]', 'Four');
+
+    /**************************************************************************/
+    // Property (#multiple).
+    /**************************************************************************/
+
+    // Check processing.
+    $this->drupalPostForm('webform/test_element_multiple_property', [], t('Submit'));
+    $this->assertRaw('webform_element_multiple: false
+webform_element_multiple_true: true
+webform_element_multiple_false: false
+webform_element_multiple_custom: 5
+webform_element_multiple_disabled: 5');
   }
 
 }

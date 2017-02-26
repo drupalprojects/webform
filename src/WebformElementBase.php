@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -534,24 +535,34 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element[$attributes_property]['class'][] = 'webform-has-field-suffix';
     }
 
-    // Get and set the element's default #element_validate property so that
-    // it is not skipped when custom callbacks are added to #element_validate.
-    // @see \Drupal\Core\Render\Element\Color
-    // @see \Drupal\Core\Render\Element\Number
-    // @see \Drupal\Core\Render\Element\Email
-    // @see \Drupal\Core\Render\Element\MachineName
-    // @see \Drupal\Core\Render\Element\Url
     if ($this->isInput($element)) {
       $type = $element['#type'];
-      $element['#element_validate'] = $this->elementInfo->getInfoProperty($type, '#element_validate')
-        ?: $this->elementInfo->getInfoProperty("webform_$type", '#element_validate', []);
 
-      // Add webform element #minlength and/or #unique validation handler.
+      // Get and set the element's default #element_validate property so that
+      // it is not skipped when custom callbacks are added to #element_validate.
+      // @see \Drupal\Core\Render\Element\Color
+      // @see \Drupal\Core\Render\Element\Number
+      // @see \Drupal\Core\Render\Element\Email
+      // @see \Drupal\Core\Render\Element\MachineName
+      // @see \Drupal\Core\Render\Element\Url
+      $element_validate = $this->elementInfo->getInfoProperty($type, '#element_validate', [])
+        ?: $this->elementInfo->getInfoProperty("webform_$type", '#element_validate', []);
+      if (!empty($element['#element_validate'])) {
+        $element['#element_validate'] = array_merge($element_validate, $element['#element_validate']);
+      }
+      else {
+        $element['#element_validate'] = $element_validate;
+      }
+
+      // Add webform element #minlength, #unique, and/or #multiple validation handler.
       if (isset($element['#minlength'])) {
         $element['#element_validate'][] = [get_class($this), 'validateMinlength'];
       }
       if (isset($element['#unique'])) {
         $element['#element_validate'][] = [get_class($this), 'validateUnique'];
+      }
+      if (isset($element['#multiple']) && $element['#multiple'] > 1) {
+        $element['#element_validate'][] = [get_class($this), 'validateMultiple'];
       }
     }
 
@@ -637,6 +648,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Change the element to a multiple element.
     $element['#type'] = 'webform_multiple';
     $element['#webform_multiple'] = TRUE;
+    if ($element['#multiple'] > 1) {
+      $element['#cardinality'] = $element['#multiple'];
+    }
     $element['#empty_items'] = 0;
     if (!empty($element['#multiple__header_label'])) {
       $element['#header'] = $element['#multiple__header_label'];
@@ -1186,6 +1200,42 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
   }
 
+  /**
+   * Form API callback. Validate element #multiple > 1 value.
+   */
+  public static function validateMultiple(array &$element, FormStateInterface $form_state) {
+    if (!isset($element['#multiple'])) {
+      return;
+    }
+
+    // IMPORTANT: Must get values from the $form_states since sub-elements
+    // may call $form_state->setValueForElement() via their validation hook.
+    // @see \Drupal\webform\Element\WebformEmailConfirm::validateWebformEmailConfirm
+    // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
+    $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
+
+    // Skip empty values or values that are not an array.
+    if (empty($values) || !is_array($values)) {
+      return;
+    }
+
+    if (count($values) > $element['#multiple']) {
+      if (isset($element['#multiple_error'])) {
+        $form_state->setError($element, $element['#multiple_error']);
+      }
+      elseif (isset($element['#title'])) {
+        $t_args = [
+          '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
+          '@count' => $element['#multiple'],
+        ];
+        $form_state->setError($element, t('%name: this element cannot hold more than @count values.', $t_args));
+      }
+      else {
+        $form_state->setError($element);
+      }
+    }
+  }
+
   /****************************************************************************/
   // #states API methods.
   /****************************************************************************/
@@ -1356,10 +1406,19 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#description' => $this->t('The value of the webform element.'),
     ];
     $form['element']['multiple'] = [
-      '#title' => $this->t('Multiple'),
-      '#type' => 'checkbox',
-      '#return_value' => TRUE,
-      '#description' => $this->t('Check this option if the user should be allowed to enter multiple values.'),
+      '#title' => $this->t('Allowed number of values'),
+      '#type' => 'webform_element_multiple',
+    ];
+    $form['element']['multiple_error'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Custom allowed number of values error message'),
+      '#description' => $this->t('If set, this message will be used when an element\'s allowed number of values is exceeded, instead of the default "@message" message.', ['@message' => $this->t('%name: this element cannot hold more than @count values.')]),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['value' => 'number'],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['!value' => 1],
+        ],
+      ],
     ];
     $form['element']['multiple__header'] = [
       '#type' => 'checkbox',
@@ -1367,18 +1426,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
       '#return_value' => TRUE,
       '#states' => [
-        'visible' => [
-          ':input[name="properties[multiple]"]' => ['checked' => TRUE],
+        'invisible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
         ],
       ],
     ];
     $form['element']['multiple__header_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Multiple table header label'),
-      '#description' => $this->t('This is used as the table header for this webform element.'),
+      '#title' => $this->t('Table header label'),
+      '#description' => $this->t('This is used as the table header for this webform element when display multiple values.'),
       '#states' => [
-        'visible' => [
-          ':input[name="properties[multiple]"]' => ['checked' => TRUE],
+        'invisible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
         ],
       ],
     ];
@@ -1554,7 +1615,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['validation']['unique_error'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Custom unique error message'),
-      '#description' => $this->t('If set, this message will be used when a webform element\'s value is not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
+      '#description' => $this->t('If set, this message will be used when an element\'s value is not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
       '#states' => [
         'visible' => [
           ':input[name="properties[unique]"]' => ['checked' => TRUE],
@@ -1655,7 +1716,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element_key = $form_object->getKey();
       if ($this->submissionStorage->hasSubmissionValue($webform, $element_key)) {
         $form['element']['multiple']['#disabled'] = TRUE;
-        $form['element']['multiple']['#description'] .= '<br/><em>' . $this->t('There is data for this element in the database. This settings can no longer be changed.') . '</em>';
+        $form['element']['multiple']['#description'] = '<em>' . $this->t('There is data for this element in the database. This settings can no longer be changed.') . '</em>';
       }
     }
 

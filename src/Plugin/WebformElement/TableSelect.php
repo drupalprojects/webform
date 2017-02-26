@@ -25,6 +25,7 @@ class TableSelect extends OptionsBase {
     return parent::getDefaultProperties() + [
       // Options settings.
       'multiple' => TRUE,
+      'multiple_error' => '',
       // Table settings.
       'js_select' => TRUE,
     ];

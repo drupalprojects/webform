@@ -67,12 +67,12 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $options = array();
+    $options = [];
     $webforms = $this->entityStorage->loadMultiple();
     foreach ($webforms as $webform) {
       $options[$webform->id()] = $webform->label();
     }
-    $form['webforms'] = array(
+    $form['webforms'] = [
       '#title' => $this->t('Webform'),
       '#description' => $this->t('Select which webforms this block should be displayed on.'),
       '#type' => 'select',
@@ -81,7 +81,7 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
       '#default_value' => $this->configuration['webforms'],
       '#attached' => ['library' => ['webform/webform.element.select2']],
       '#attributes' => ['class' => ['js-webform-select2', 'webform-select2']],
-    );
+    ];
 
     if (empty($this->configuration['context_mapping'])) {
       $form['message'] = [
@@ -136,10 +136,10 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
       $webforms = $this->configuration['webforms'];
       $last = array_pop($webforms);
       $webforms = implode(', ', $webforms);
-      return $this->t('The webform is @webforms or @last', array('@webforms' => $webforms, '@last' => $last));
+      return $this->t('The webform is @webforms or @last', ['@webforms' => $webforms, '@last' => $last]);
     }
     $webform = reset($this->configuration['webforms']);
-    return $this->t('The webform is @webform', array('@webform' => $webform));
+    return $this->t('The webform is @webform', ['@webform' => $webform]);
   }
 
   /**
@@ -161,7 +161,7 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array('webforms' => array()) + parent::defaultConfiguration();
+    return ['webforms' => []] + parent::defaultConfiguration();
   }
 
   /**
