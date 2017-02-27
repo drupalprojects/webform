@@ -46,6 +46,7 @@ echo 'true' > modules/webform_node/webform_node.features.yml
 
 # Make sure all modules that are going to be exported are enabled
 drush en -y webform\
+  webform_demo_application_evaluation\
   webform_examples\
   webform_templates\
   webform_test\
@@ -62,6 +63,7 @@ drush features-diff webform_test
 
 # Export webform configuration from your site.          
 drush features-export -y webform
+drush features-export -y webform_demo_application_evaluation
 drush features-export -y webform_examples
 drush features-export -y webform_templates
 drush features-export -y webform_test
@@ -77,6 +79,7 @@ git checkout -- *.info.yml
 
 # Tidy webform configuration from your site.          
 drush webform-tidy -y --dependencies webform
+drush webform-tidy -y --dependencies webform_demo_application_evaluation
 drush webform-tidy -y --dependencies webform_examples
 drush webform-tidy -y --dependencies webform_templates
 drush webform-tidy -y --dependencies webform_test
@@ -89,6 +92,7 @@ drush webform-tidy -y --dependencies webform_node
 
 # Re-import all webform configuration into your site.      
 drush features-import -y webform
+drush features-import -y webform_demo_application_evaluation
 drush features-import -y webform_examples
 drush features-import -y webform_templates
 drush features-import -y webform_test

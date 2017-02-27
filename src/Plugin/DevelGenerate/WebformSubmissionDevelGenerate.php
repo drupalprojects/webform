@@ -196,7 +196,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    */
   protected function generateSubmissions(array $values) {
     self::$generatingSubmissions = TRUE;
-    if ($values['kill']) {
+    if (!empty($values['kill'])) {
       $this->deleteWebformSubmissions($values['webform_ids'], $values['entity-type'], $values['entity-id']);
       $this->setMessage($this->t('Deleted existing submissions.'));
     }
@@ -241,7 +241,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    *   The element values from the settings webform.
    */
   protected function initializeGenerate(array &$values) {
-    // Set user id.
+    // Set user id.$devel_generate_manager = \Drupal::service('plugin.manager.develgenerate')
     $users = $this->getUsers();
     $users = array_merge($users, ['0']);
     $values['users'] = $users;
@@ -249,6 +249,13 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
     // Set created min and max.
     $values['created_min'] = strtotime('-1 month');
     $values['created_max'] = time();
+
+    // Set entity type and id default value.
+    $values += [
+      'num' => 50,
+      'entity-type' => '',
+      'entity-id' => '',
+    ];
   }
 
   /**
@@ -261,8 +268,8 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
 
     $users = $results['users'];
     $uid = $users[array_rand($users)];
-    $entity_type = $results['entity-type'] ?: '';
-    $entity_id = $results['entity-id'] ?: '';
+    $entity_type = $results['entity-type'];
+    $entity_id = $results['entity-id'];
 
     $timestamp = rand($results['created_min'], $results['created_max']);
     $this->webformSubmissionStorage->create([
