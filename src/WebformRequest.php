@@ -82,19 +82,23 @@ class WebformRequest implements WebformRequestInterface {
       return $source_entity;
     }
 
-    $entity_types = $this->entityTypeRepository->getEntityTypeLabels();
+    // Get the most specific source entity available in the current route's
+    // parameters.
+    $parameters = $this->routeMatch->getParameters()->all();
+    $parameters = array_reverse($parameters);
+
     if ($ignored_types) {
       if (is_array($ignored_types)) {
-        $entity_types = array_diff_key($entity_types, array_flip($ignored_types));
+        $parameters = array_diff_key($parameters, array_flip($ignored_types));
       }
       else {
-        unset($entity_types[$ignored_types]);
+        unset($parameters[$ignored_types]);
       }
     }
-    foreach ($entity_types as $entity_type => $entity_label) {
-      $entity = $this->routeMatch->getParameter($entity_type);
-      if ($entity instanceof EntityInterface) {
-        return $entity;
+
+    foreach ($parameters as $name => $value) {
+      if ($value instanceof EntityInterface) {
+        return $value;
       }
     }
     return NULL;

@@ -204,7 +204,7 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
   // paging through submission.
   $route_name = \Drupal::routeMatch()->getRouteName();
   $route_parameters = \Drupal::routeMatch()->getRawParameters()->all();
-  $source_entity = $request_handler->getCurrentSourceEntity(['webform_submission']);
+  $source_entity = $request_handler->getCurrentSourceEntity('webform_submission');
 
   if (strpos(\Drupal::routeMatch()->getRouteName(), 'webform.user.submission') !== FALSE) {
     $account = \Drupal::currentUser();

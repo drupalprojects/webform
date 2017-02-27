@@ -149,9 +149,16 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function setEntity(EntityInterface $entity) {
-    /** @var \Drupal\webform\WebformInterface $webform */
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $entity;
     $webform = $entity->getWebform();
-    $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
+
+    // Get the source entity and allow webform submission to be used as a source
+    // entity.
+    $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform']);
+    if ($this->sourceEntity == $webform_submission) {
+      $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
+    }
 
     if ($webform->getSetting('token_update') && ($token = $this->getRequest()->query->get('token'))) {
       if ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token])) {
