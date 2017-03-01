@@ -8,7 +8,7 @@ use Drupal\webform\WebformDialogTrait;
 use Drupal\webform\WebformInterface;
 
 /**
- * Webform for deleting a webform handler.
+ * Form for deleting a webform handler.
  */
 class WebformHandlerDeleteForm extends ConfirmFormBase {
 

@@ -77,26 +77,36 @@ class WebformEntityHandlersForm extends EntityForm {
         ],
       ];
 
+      $operations = [];
+      $operations['edit'] = [
+        'title' => $this->t('Edit'),
+        'url' => Url::fromRoute('entity.webform.handler.edit_form', [
+          'webform' => $this->entity->id(),
+          'webform_handler' => $key,
+        ]),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+      ];
+      if ($handler->cardinality() === WebformHandlerInterface::CARDINALITY_UNLIMITED) {
+        $operations['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'url' => Url::fromRoute('entity.webform.handler.duplicate_form', [
+            'webform' => $this->entity->id(),
+            'webform_handler' => $key,
+          ]),
+          'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+        ];
+      }
+      $operations['delete'] = [
+        'title' => $this->t('Delete'),
+        'url' => Url::fromRoute('entity.webform.handler.delete_form', [
+          'webform' => $this->entity->id(),
+          'webform_handler' => $key,
+        ]),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
+      ];
       $rows[$key]['operations'] = [
         '#type' => 'operations',
-        '#links' => [
-          'edit' => [
-            'title' => $this->t('Edit'),
-            'url' => Url::fromRoute('entity.webform.handler.edit_form', [
-              'webform' => $this->entity->id(),
-              'webform_handler' => $key,
-            ]),
-            'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-          ],
-          'delete' => [
-            'title' => $this->t('Delete'),
-            'url' => Url::fromRoute('entity.webform.handler.delete_form', [
-              'webform' => $this->entity->id(),
-              'webform_handler' => $key,
-            ]),
-            'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
-          ],
-        ],
+        '#links' => $operations,
       ];
     }
 

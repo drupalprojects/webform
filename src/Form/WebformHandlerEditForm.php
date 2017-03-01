@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformInterface;
 
 /**
- * Provides an edit webform for webform handlers.
+ * Provides an edit form for webform handlers.
  */
 class WebformHandlerEditForm extends WebformHandlerFormBase {
 

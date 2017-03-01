@@ -8,7 +8,7 @@ use Drupal\webform\WebformInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides an add webform for webform handler.
+ * Provides an add form for webform handler.
  */
 class WebformHandlerAddForm extends WebformHandlerFormBase {
 

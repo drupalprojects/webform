@@ -471,6 +471,14 @@ entity.webform.handler.edit_form:
   requirements:
     _entity_access: 'webform.update'
 
+entity.webform.handler.duplicate_form:
+  path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/duplicate'
+  defaults:
+    _form: '\Drupal\webform\Form\WebformHandlerDuplicateForm'
+    _title: 'Duplicate webform handler'
+  requirements:
+    _entity_access: 'webform.update'
+
 entity.webform.handler.delete_form:
   path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/delete'
   defaults:
