@@ -291,12 +291,22 @@ trait WebformEntityReferenceTrait {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    // Get element properties.
     $element_properties = $form_state->get('element_properties');
 
+    // Alter element properties.
     if ($properties = $form_state->getValue('properties')) {
       $target_type = $properties['target_type'];
       $selection_handler = $properties['selection_handler'];
-      $selection_settings = $properties['selection_settings'];
+      // If the default selection handler has changed  when need to update its
+      // value.
+      if (strpos($selection_handler, 'default:') === 0 && $selection_handler != "default:$target_type") {
+        $selection_handler = "default:$target_type";
+        $selection_settings = [];
+      }
+      else {
+        $selection_settings = $properties['selection_settings'] ?: [];
+      }
     }
     else {
       // Set default #target_type and #selection_handler.
@@ -311,6 +321,10 @@ trait WebformEntityReferenceTrait {
       $selection_settings = $element_properties['selection_settings'];
     }
 
+    // Reset element properties.
+    $element_properties['target_type'] = $target_type;
+    $element_properties['selection_handler'] = $selection_handler;
+    $element_properties['selection_settings'] = $selection_settings;
     $form_state->set('element_properties', $element_properties);
 
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $entity_reference_selection_manager */
