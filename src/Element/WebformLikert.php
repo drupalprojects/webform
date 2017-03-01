@@ -4,6 +4,7 @@ namespace Drupal\webform\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\webform\Utility\WebformArrayHelper;
 
 /**
  * Provides a webform element for a likert scale.
@@ -49,7 +50,7 @@ class WebformLikert extends FormElement {
 
     // Randomize questions.
     if (!empty($element['#questions_randomize'])) {
-      shuffle($element['#questions']);
+      $element['#questions'] = WebformArrayHelper::shuffle($element['#questions']);
     }
 
     // Build rows.

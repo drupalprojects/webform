@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformElementBase;
 use Drupal\webform\WebformSubmissionInterface;
@@ -98,7 +99,7 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Randomize options.
     if (isset($element['#options']) && !empty($element['#options_randomize'])) {
-      shuffle($element['#options']);
+      $element['#options'] = WebformArrayHelper::shuffle($element['#options']);
     }
 
     $is_wrapper_fieldset = in_array($element['#type'], ['checkboxes', 'radios']);

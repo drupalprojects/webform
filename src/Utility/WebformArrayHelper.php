@@ -213,4 +213,25 @@ class WebformArrayHelper {
     return $unprefixed_array;
   }
 
+  /**
+   * Shuffle an associative array while maintaining keys.
+   *
+   * @param array $array
+   *   An associative array.
+   *
+   * @return array
+   *   The associative array with it key/value pairs randomized.
+   *
+   * @see http://stackoverflow.com/questions/4102777/php-random-shuffle-array-maintaining-key-value
+   */
+  public static function shuffle(array $array) {
+    $keys = array_keys($array);
+    shuffle($keys);
+    $random = array();
+    foreach ($keys as $key) {
+      $random[$key] = $array[$key];
+    }
+    return $random;
+  }
+
 }
