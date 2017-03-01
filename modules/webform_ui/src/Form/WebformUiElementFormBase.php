@@ -343,7 +343,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     drupal_set_message($this->t('%title has been @action.', $t_args));
 
     // Redirect.
-    return $this->redirectForm($form, $form_state, $this->webform->toUrl('edit-form'));
+    return $this->redirectForm($form, $form_state, $this->webform->toUrl('edit-form', ['query' => ['element-update' => $form_state->getValue('key')]]));
   }
 
   /**

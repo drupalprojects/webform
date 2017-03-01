@@ -3,6 +3,8 @@ webform_ui:
   css:
     theme:
       css/webform_ui.module.css: {}
+  js:
+    js/webform_ui.js:  {}
 
 webform_ui.element:
   version: 1.x

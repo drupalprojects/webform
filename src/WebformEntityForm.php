@@ -255,9 +255,7 @@ class WebformEntityForm extends BundleEntityFormBase {
 
     parent::submitForm($form, $form_state);
 
-    if ($this->isModalDialog()) {
-      return $this->redirectForm($form, $form_state, Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]));
-    }
+    return $this->redirectForm($form, $form_state, Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]));
   }
 
   /**
