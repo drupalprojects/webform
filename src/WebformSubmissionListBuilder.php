@@ -387,7 +387,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case 'created':
       case 'completed':
       case 'changed':
-        return ($is_raw) ? $entity->created->value : \Drupal::service('date.formatter')->format($entity->created->value);
+        return ($is_raw) ? $entity->created->value : $entity->created->value ? \Drupal::service('date.formatter')->format($entity->created->value) : '';
 
       case 'entity':
         $source_entity = $entity->getSourceEntity();
@@ -517,6 +517,11 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         'title' => $this->t('Resend'),
         'weight' => 22,
         'url' => Url::fromRoute("$base_route_name.webform_submission.resend_form", $route_parameters, $route_options),
+      ];
+      $operations['duplicate'] = [
+        'title' => $this->t('Duplicate'),
+        'weight' => 23,
+        'url' => Url::fromRoute("$base_route_name.webform_submission.duplicate_form", $route_parameters, $route_options),
       ];
     }
 

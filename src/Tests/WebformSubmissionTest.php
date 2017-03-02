@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Tests;
 
+use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 
 /**
@@ -76,6 +77,35 @@ class WebformSubmissionTest extends WebformTestBase {
     // Check submission label.
     $webform_submission->save();
     $this->assertEqual($webform_submission->label(), $webform->label() . ': Submission #' . $webform_submission->serial());
+  }
+
+  /**
+   * Tests duplicating webform submission.
+   */
+  public function testDuplicateWebformSubmission() {
+    $this->createUsers();
+    $this->drupalLogin($this->adminSubmissionUser);
+
+    $webform = Webform::load('contact');
+    $sid = $this->postSubmission($webform, [
+      'subject' => '{Original Subject}',
+      'message' => '{Original Message}',
+    ]);
+
+    // Check duplicate form title.
+    $this->drupalGet("admin/structure/webform/manage/contact/submission/$sid/duplicate");
+    $this->assertRaw('Duplicate Contact: Submission #' . $sid);
+
+    // Duplicate submission.
+    $this->drupalPostForm("admin/structure/webform/manage/contact/submission/$sid/duplicate", ['subject' => '{Duplicate Subject}'], t('Send message'));
+    $duplicate_sid = $this->getLastSubmissionId($webform);
+    /** @var \Drupal\webform\WebformSubmissionInterface $duplicate_submission */
+    $duplicate_submission = WebformSubmission::load($duplicate_sid);
+
+    // Check duplicate submission.
+    $this->assertNotEqual($sid, $duplicate_sid);
+    $this->assertEqual($duplicate_submission->getData('subject'), '{Duplicate Subject}');
+    $this->assertEqual($duplicate_submission->getData('message'), '{Original Message}');
   }
 
 }

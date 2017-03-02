@@ -35,6 +35,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "form" = {
  *       "default" = "Drupal\webform\WebformSubmissionForm",
  *       "notes" = "Drupal\webform\WebformSubmissionNotesForm",
+ *       "duplicate" = "Drupal\webform\WebformSubmissionDuplicateForm",
  *       "delete" = "Drupal\webform\Form\WebformSubmissionDeleteForm",
  *     },
  *   },
@@ -55,6 +56,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "edit-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit",
  *     "notes-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/notes",
  *     "resend-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/resend",
+ *     "duplicate-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/duplicate",
  *     "delete-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/delete",
  *     "collection" = "/admin/structure/webform/results/manage/list"
  *   },
@@ -622,7 +624,15 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
+    // Set created.
+    if (!$this->created->value) {
+      $this->created->value = REQUEST_TIME;
+    }
+
+    // Set changed.
     $this->changed->value = REQUEST_TIME;
+
+    // Set completed.
     if ($this->isDraft()) {
       $this->completed->value = NULL;
     }
