@@ -69,6 +69,8 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *   },
  *   config_export = {
  *     "status",
+ *     "open",
+ *     "close",
  *     "uid",
  *     "template",
  *     "id",
@@ -112,7 +114,21 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    *
    * @var bool
    */
-  protected $status = TRUE;
+  protected $status = WebformInterface::STATUS_OPEN;
+
+  /**
+   * The webform open date/time.
+   *
+   * @var bool
+   */
+  protected $open;
+
+  /**
+   * The webform close date/time.
+   *
+   * @var bool
+   */
+  protected $close;
 
   /**
    * The webform template indicator.
@@ -313,8 +329,57 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function setStatus($status) {
+    if ($status === TRUE || $status === WebformInterface::STATUS_OPEN) {
+      $this->status = WebformInterface::STATUS_OPEN;
+    }
+    elseif ($status === FALSE || $status === WebformInterface::STATUS_CLOSED) {
+      $this->status = WebformInterface::STATUS_CLOSED;
+    }
+    elseif ($status === NULL || $status === WebformInterface::STATUS_SCHEDULED) {
+      $this->status = WebformInterface::STATUS_SCHEDULED;
+    }
+    else {
+      throw new \InvalidArgumentException(sprintf('Invalid "%s" status argument.', $status));
+    }
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function status() {
+    return $this->isOpen();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isOpen() {
-    return $this->status ? TRUE : FALSE;
+    switch ($this->status) {
+      case WebformInterface::STATUS_OPEN:
+        return TRUE;
+
+      case WebformInterface::STATUS_CLOSED:
+        return FALSE;
+
+      case WebformInterface::STATUS_SCHEDULED:
+        $is_opened = TRUE;
+        if ($this->open && strtotime($this->open) > time()) {
+          $is_opened = FALSE;
+        }
+
+        $is_closed = FALSE;
+        if ($this->close && strtotime($this->close) < time()) {
+          $is_closed = TRUE;
+        }
+
+        if ($is_opened && !$is_closed) {
+          return TRUE;
+        }
+        return FALSE;
+    }
+    return FALSE;
   }
 
   /**
@@ -322,6 +387,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function isClosed() {
     return !$this->isOpen();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isScheduled() {
+    return ($this->status === WebformInterface::STATUS_SCHEDULED);
   }
 
   /**
@@ -1181,10 +1253,22 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     $values += [
+      'status' => WebformInterface::STATUS_OPEN,
       'uid' => \Drupal::currentUser()->id(),
       'settings' => self::getDefaultSettings(),
       'access' => self::getDefaultAccessRules(),
     ];
+
+    // Convert boolean status to STATUS constant.
+    if ($values['status'] === TRUE) {
+      $values['status'] = WebformInterface::STATUS_OPEN;
+    }
+    elseif ($values['status'] === FALSE) {
+      $values['status'] = WebformInterface::STATUS_CLOSED;
+    }
+    elseif ($values['status'] === NULL) {
+      $values['status'] = WebformInterface::STATUS_SCHEDULED;
+    }
   }
 
   /**
@@ -1238,7 +1322,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public function preSave(EntityStorageInterface $storage) {
     // Always unpublish templates.
     if ($this->isTemplate()) {
-      $this->setStatus(FALSE);
+      $this->setStatus(WebformInterface::STATUS_CLOSED);
     }
 
     // Serialize elements array to YAML.

@@ -18,16 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class WebformEntityListBuilder extends ConfigEntityListBuilder {
 
   /**
-   * Webform state open.
-   */
-  const STATE_OPEN = 'open';
-
-  /**
-   * Webform state closed.
-   */
-  const STATE_CLOSED = 'closed';
-
-  /**
    * Search keys.
    *
    * @var string
@@ -95,8 +85,9 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     // Add the filter by key(word) and/or state.
     $state_options = [
       '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
-      WebformEntityListBuilder::STATE_OPEN => $this->t('Open [@total]', ['@total' => $this->getTotal(NULL, self::STATE_OPEN)]),
-      WebformEntityListBuilder::STATE_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, self::STATE_CLOSED)]),
+      WebformInterface::STATUS_OPEN => $this->t('Open [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_OPEN)]),
+      WebformInterface::STATUS_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_CLOSED)]),
+      WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_SCHEDULED)]),
     ];
     $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->state, $state_options);
 
@@ -171,7 +162,19 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       $row['title']['data']['template'] = ['#markup' => ' <b>(' . $this->t('Template') . ')</b>'];
     }
     $row['description']['data']['description']['#markup'] = $entity->get('description');
-    $row['status'] = $entity->isOpen() ? $this->t('Open') : $this->t('Closed');
+    switch ($entity->get('status')) {
+      case WebformInterface::STATUS_OPEN:
+        $row['status'] = $this->t('Open');
+        break;
+
+      case WebformInterface::STATUS_CLOSED:
+        $row['status'] = $this->t('Closed');
+        break;
+
+      case WebformInterface::STATUS_SCHEDULED:
+        $row['status'] = $this->t('Scheduled (@state)', ['@state' => $entity->isOpen() ? $this->t('Open') : $this->t('Closed')]);
+        break;
+    }
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
     $row['results_total'] = $this->submissionStorage->getTotal($entity) . (!empty($settings['results_disabled']) ? ' ' . $this->t('(Disabled)') : '');
     $row['results_operations']['data'] = [
@@ -289,8 +292,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     }
 
     // Filter by (form) state.
-    if ($state == self::STATE_OPEN || $state == self::STATE_CLOSED) {
-      $query->condition('status', ($state == self::STATE_OPEN) ? TRUE : FALSE);
+    if ($state) {
+      $query->condition('status', $state);
     }
 
     // Filter out templates if the webform_template.module is enabled.

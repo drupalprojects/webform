@@ -4,6 +4,7 @@ namespace Drupal\webform\Tests;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform submission form settings.
@@ -138,7 +139,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->assertRaw('Only submission administrators are allowed to access this webform and create new submissions.');
 
     // Check webform closed message is not displayed.
-    $webform_closed->set('status', 1);
+    $webform_closed->set('status', WebformInterface::STATUS_OPEN);
     $webform_closed->save();
     $this->assertFalse($webform_closed->isClosed());
     $this->assertTrue($webform_closed->isOpen());

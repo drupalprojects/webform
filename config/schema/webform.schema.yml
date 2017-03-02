@@ -287,8 +287,14 @@ webform.webform.*:
   label: 'Webforms'
   mapping:
     status:
-      type: boolean
+      type: string
       label: 'Status'
+    open:
+      type: string
+      label: 'Open date/time'
+    close:
+      type: string
+      label: 'Close date/time'
     uid:
       type: integer
       label: 'Author'

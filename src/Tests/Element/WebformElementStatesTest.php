@@ -5,6 +5,7 @@ namespace Drupal\webform\Tests\Element;
 use Drupal\Core\Form\OptGroup;
 use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform element #states.
@@ -34,7 +35,7 @@ class WebformElementStatesTest extends WebformTestBase {
     foreach (['example_elements', 'example_elements_composite'] as $weform_id) {
       /** @var \Drupal\webform\WebformInterface $webform */
       $webform = Webform::load($weform_id);
-      $webform->setStatus(TRUE)->save();
+      $webform->setStatus(WebformInterface::STATUS_OPEN)->save();
 
       $this->drupalGet('webform/' . $weform_id);
 

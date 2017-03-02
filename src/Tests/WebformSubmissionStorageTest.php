@@ -5,6 +5,7 @@ namespace Drupal\webform\Tests;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform storage tests.
@@ -46,7 +47,7 @@ class WebformSubmissionStorageTest extends WebformTestBase {
     $id = $this->randomMachineName(8);
     $webform = Webform::create([
       'langcode' => 'en',
-      'status' => TRUE,
+      'status' => WebformInterface::STATUS_OPEN,
       'id' => $id,
       'title' => $id,
       'elements' => Yaml::encode(['test' => ['#markup' => 'test']]),

@@ -4,6 +4,7 @@ namespace Drupal\webform\Tests;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform option entity.
@@ -60,7 +61,7 @@ class WebformOptionsTest extends WebformTestBase {
     /** @var \Drupal\webform\WebformOptionsInterface $webform_options */
     $webform_options = WebformOptions::create([
       'langcode' => 'en',
-      'status' => TRUE,
+      'status' => WebformInterface::STATUS_OPEN,
       'id' => 'test_flag',
       'title' => 'Test flag',
       'options' => Yaml::encode($color_options),

@@ -298,7 +298,7 @@ abstract class WebformTestBase extends WebTestBase {
     $id = $this->randomMachineName(8);
     $webform = Webform::create([
       'langcode' => 'en',
-      'status' => TRUE,
+      'status' => WebformInterface::STATUS_OPEN,
       'id' => $id,
       'title' => $id,
       'elements' => Yaml::encode($elements),

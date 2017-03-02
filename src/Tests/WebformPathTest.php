@@ -4,6 +4,7 @@ namespace Drupal\webform\Tests;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform path and page.
@@ -30,7 +31,7 @@ class WebformPathTest extends WebformTestBase {
   public function testPaths() {
     $webform = Webform::create([
       'langcode' => 'en',
-      'status' => TRUE,
+      'status' => WebformInterface::STATUS_OPEN,
       'id' => 'test_paths',
       'title' => 'test_paths',
       'elements' => Yaml::encode([

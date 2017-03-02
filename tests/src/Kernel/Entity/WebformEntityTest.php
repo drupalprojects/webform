@@ -5,6 +5,7 @@ namespace Drupal\Tests\user\Kernel\Entity;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests the webform entity class.
@@ -38,6 +39,94 @@ class WebformEntityTest extends KernelTestBase {
     $this->assertEquals('webform_test', $webform->id());
     $this->assertFalse($webform->isTemplate());
     $this->assertTrue($webform->isOpen());
+
+    /**************************************************************************/
+    // Status.
+    /**************************************************************************/
+
+    // Check set status to FALSE.
+    $webform->setStatus(FALSE);
+    $this->assertFalse($webform->isOpen());
+    $this->assertEquals($webform->get('status'), WebformInterface::STATUS_CLOSED);
+    $this->assertFalse($webform->isScheduled());
+
+    // Check set status to TRUE.
+    $webform->setStatus(TRUE);
+    $this->assertTrue($webform->isOpen());
+    $this->assertEquals($webform->get('status'), WebformInterface::STATUS_OPEN);
+
+    // Check set status to NULL.
+    $webform->setStatus(NULL);
+    $this->assertTrue($webform->isOpen());
+    $this->assertEquals($webform->get('status'), WebformInterface::STATUS_SCHEDULED);
+
+    // Check set status to WebformInterface::STATUS_CLOSED.
+    $webform->setStatus(WebformInterface::STATUS_CLOSED);
+    $this->assertFalse($webform->isOpen());
+
+    // Check set status to WebformInterface::STATUS_OPEN.
+    $webform->setStatus(WebformInterface::STATUS_OPEN);
+    $this->assertTrue($webform->isOpen());
+
+    // Check set status to WebformInterface::STATUS_SCHEDULED.
+    $webform->setStatus(WebformInterface::STATUS_SCHEDULED);
+    $this->assertTrue($webform->isOpen());
+    $this->assertTrue($webform->isScheduled());
+
+    /**************************************************************************/
+    // Scheduled.
+    /**************************************************************************/
+
+    $webform->setStatus(WebformInterface::STATUS_SCHEDULED);
+
+    // Check set open date to yesterday.
+    $webform->set('open', date('c', strtotime('today -1 days')));
+    $webform->set('close', NULL);
+    $this->assertTrue($webform->isOpen());
+
+    // Check set open date to tomorrow.
+    $webform->set('open', date('c', strtotime('today +1 day')));
+    $webform->set('close', NULL);
+    $this->assertFalse($webform->isOpen());
+
+    // Check set close date to yesterday.
+    $webform->set('open', NULL);
+    $webform->set('close', date('c', strtotime('today -1 day')));
+    $this->assertFalse($webform->isOpen());
+
+    // Check set close date to tomorrow.
+    $webform->set('open', NULL);
+    $webform->set('close', date('c', strtotime('today +1 day')));
+    $this->assertTrue($webform->isOpen());
+
+    // Check set open date to tomorrow with close date in 10 days.
+    $webform->set('open', date('c', strtotime('today +1 day')));
+    $webform->set('close', date('c', strtotime('today +10 days')));
+    $this->assertFalse($webform->isOpen());
+
+    // Check set open date to yesterday with close date in +10 days.
+    $webform->set('open', date('c', strtotime('today -1 day')));
+    $webform->set('close', date('c', strtotime('today +10 days')));
+    $this->assertTrue($webform->isOpen());
+
+    // Check set open date to yesterday with close date -10 days.
+    $webform->set('open', date('c', strtotime('today -1 day')));
+    $webform->set('close', date('c', strtotime('today -10 days')));
+    $this->assertFalse($webform->isOpen());
+
+    // Check that open overridess scheduled.
+    $webform->setStatus(TRUE);
+    $webform->set('open', date('c', strtotime('today -1 day')));
+    $webform->set('close', date('c', strtotime('today -10 days')));
+    $this->assertTrue($webform->isOpen());
+
+    // Check that closed overrides scheduled.
+    $webform->setStatus(FALSE);
+    $webform->set('open', date('c', strtotime('today +1 day')));
+    $webform->set('close', date('c', strtotime('today -10 days')));
+    $this->assertFalse($webform->isOpen());
+
+    $webform->setStatus(TRUE);
 
     /**************************************************************************/
     // Templates.

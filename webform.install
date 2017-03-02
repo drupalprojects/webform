@@ -11,6 +11,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 
 /**
@@ -145,7 +146,9 @@ function _webform_update_admin_settings() {
 function _webform_update_form_settings() {
   $default_properties = [
     'langcode' => 'en',
-    'status' => TRUE,
+    'status' => WebformInterface::STATUS_OPEN,
+    'open' => NULL,
+    'close' => NULL,
     'dependencies' => [],
     'uid' => '',
     'template' => FALSE,
@@ -535,5 +538,17 @@ function webform_update_8018() {
  * Issue #2853302: Allow confirmation page title to be customized.
  */
 function webform_update_8019() {
+  _webform_update_form_settings();
+}
+
+/**
+ * Issue #2845724: Add webform opening and closing date/time.
+ */
+function webform_update_8020() {
+  // Resaved all webforms to update convert status boolean to string.
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $webform->setStatus($webform->get('status'))->save();
+  }
   _webform_update_form_settings();
 }

@@ -4,6 +4,7 @@ namespace Drupal\webform_templates\Tests;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform submission webform settings.
@@ -44,7 +45,7 @@ class WebformTemplatesTest extends WebformTestBase {
 
     // Check the templates always will remain closed.
     $this->assertTrue($template_webform->isClosed());
-    $template_webform->setStatus(TRUE)->save();
+    $template_webform->setStatus(WebformInterface::STATUS_OPEN)->save();
     $this->assertTrue($template_webform->isClosed());
 
     // Login the own user.
