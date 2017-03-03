@@ -52,6 +52,11 @@ class WebformTermSelect extends Select {
       return [];
     }
 
+    if (empty($element['#vocabulary'])) {
+      $element['#options'] = [];
+      return;
+    }
+
     /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
     $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $tree = $taxonomy_storage->loadTree($element['#vocabulary']);

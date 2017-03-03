@@ -43,8 +43,8 @@ webform_entity_radios:
   '#selection_settings':
     include_anonymous: true
   '#options':
-    1: 'Administrator'
-    0: 'Anonymous'
+webform_term_select:
+  '#vocabulary': tags
 webform_likert:
   '#questions':
     q1: 'Please answer question 1?'
