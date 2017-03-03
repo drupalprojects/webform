@@ -581,6 +581,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $element['submit']['#button_type'] = 'primary';
     $element['submit']['#attributes'] = $this->getWebformSetting('form_submit_attributes');
     $element['submit']['#attributes']['class'][] = 'webform-button--submit';
+    $element['submit']['#weight'] = 10;
 
     // Customize the submit button's label for new submissions only.
     if ($webform_submission->isNew() || $webform_submission->isDraft()) {
@@ -629,6 +630,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           '#validate' => ['::noValidate'],
           '#submit' => ['::previous'],
           '#attributes' => $previous_attributes,
+          '#weight' => 0,
         ];
       }
 
@@ -649,6 +651,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           '#validate' => ['::validateForm'],
           '#submit' => ['::next'],
           '#attributes' => $next_attributes,
+          '#weight' => 1,
         ];
       }
     }
@@ -663,8 +666,11 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#validate' => ['::draft'],
         '#submit' => ['::submitForm', '::save', '::rebuild'],
         '#attributes' => $draft_attributes,
+        '#weight' => -10,
       ];
     }
+
+    uasort($element, array('Drupal\Component\Utility\SortArray', 'sortByWeightProperty'));
 
     return $element;
   }
