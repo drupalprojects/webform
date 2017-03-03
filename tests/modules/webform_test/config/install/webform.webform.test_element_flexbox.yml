@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_flexbox
@@ -720,6 +720,16 @@ elements: |
     flex_tel_right:
       '#type': tel
       '#title': 'Telephone 02'
+  flexbox_webform_term_select:
+    '#type': webform_flexbox
+    flex_webform_term_select_left:
+      '#type': webform_term_select
+      '#title': 'Term select 01'
+      '#vocabulary': tags
+    flex_webform_term_select_right:
+      '#type': webform_term_select
+      '#title': 'Term select 02'
+      '#vocabulary': tags
   flexbox_textarea:
     '#type': webform_flexbox
     flex_textarea_left:

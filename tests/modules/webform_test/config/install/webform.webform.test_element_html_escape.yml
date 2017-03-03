@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_html_escape
@@ -476,6 +476,16 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+      '#multiple': true
+      '#select2': true
+    webform_term_select:
+      '#type': webform_term_select
+      '#title': 'Term select | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#vocabulary': tags
+    webform_term_select_multiple:
+      '#type': webform_term_select
+      '#title': 'Term select multiple | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#vocabulary': tags
       '#multiple': true
       '#select2': true
   other_elements:

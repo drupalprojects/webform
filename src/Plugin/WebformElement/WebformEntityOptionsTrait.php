@@ -28,7 +28,7 @@ trait WebformEntityOptionsTrait {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
-    WebformEntityTrait::setOptions($element);
+    $this->setOptions($element);
     parent::prepare($element, $webform_submission);
   }
 
@@ -36,7 +36,7 @@ trait WebformEntityOptionsTrait {
    * {@inheritdoc}
    */
   protected function getElementSelectorInputsOptions(array $element) {
-    WebformEntityTrait::setOptions($element);
+    $this->setOptions($element);
     return parent::getElementSelectorInputsOptions($element);
   }
 

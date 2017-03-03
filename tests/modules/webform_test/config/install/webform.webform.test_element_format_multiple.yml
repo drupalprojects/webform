@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_format_multiple
@@ -334,6 +334,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -348,6 +349,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -362,6 +364,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -376,6 +379,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -390,6 +394,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -407,6 +412,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -421,6 +427,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -435,6 +442,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -449,6 +457,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -463,6 +472,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -714,6 +724,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -728,6 +739,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -742,6 +754,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -756,6 +769,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -770,6 +784,7 @@ elements: |
           three: Three
           four: Four
           five: Five
+        '#multiple': true
         '#default_value':
           - one
           - two
@@ -1187,6 +1202,7 @@ elements: |
         '#options':
           1: Administrator
           0: Anonymous
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': comma
@@ -1200,6 +1216,7 @@ elements: |
         '#options':
           1: Administrator
           0: Anonymous
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': semicolon
@@ -1213,6 +1230,7 @@ elements: |
         '#options':
           1: Administrator
           0: Anonymous
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': and
@@ -1226,6 +1244,7 @@ elements: |
         '#options':
           1: Administrator
           0: Anonymous
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': ol
@@ -1239,6 +1258,7 @@ elements: |
         '#options':
           1: Administrator
           0: Anonymous
+        '#multiple': true
         '#default_value':
           - 1
         '#format_items': ul
@@ -1299,6 +1319,59 @@ elements: |
         '#multiple': true
         '#default_value':
           - 1
+        '#format_items': ul
+    webform_term_select:
+      '#type': details
+      '#title': 'Term select'
+      webform_term_select_comma:
+        '#type': webform_term_select
+        '#title': 'Term select (Comma)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': comma
+      webform_term_select_semicolon:
+        '#type': webform_term_select
+        '#title': 'Term select (Semicolon)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': semicolon
+      webform_term_select_and:
+        '#type': webform_term_select
+        '#title': 'Term select (And)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': and
+      webform_term_select_ol:
+        '#type': webform_term_select
+        '#title': 'Term select (Ordered list)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ol
+      webform_term_select_ul:
+        '#type': webform_term_select
+        '#title': 'Term select (Unordered list)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
         '#format_items': ul
 css: ''
 javascript: ''

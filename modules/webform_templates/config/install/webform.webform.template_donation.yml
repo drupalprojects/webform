@@ -1,11 +1,11 @@
 langcode: en
-status: open
-open: null
-close: null
+status: closed
 dependencies:
   enforced:
     module:
       - webform_templates
+open: null
+close: null
 uid: null
 template: true
 id: template_donation

@@ -8,12 +8,46 @@ open: null
 close: null
 uid: null
 template: false
-id: test_confirmation_page
-title: 'Test: Confirmation: Page'
-description: 'Test redirecting to a confirmation page.'
+id: test_element_term_select
+title: 'Test: Element: Term select'
+description: 'Test term select element.'
 elements: |
-  description:
-    '#markup': 'This webform will redirect to the confirmation page when submitted.'
+  webform_term_select_tree:
+    '#type': details
+    '#title': 'Term select tree'
+    '#open': true
+    webform_term_select_tree_default:
+      '#type': webform_term_select
+      '#title': webform_term_select_tree_default
+      '#vocabulary': tags
+    webform_term_select_tree_advanced:
+      '#type': webform_term_select
+      '#title': webform_term_select_tree_advanced
+      '#vocabulary': tags
+      '#multiple': true
+      '#tree_delimiter': '..'
+      '#format': breadcrumb
+      '#format_items': ul
+  webform_term_select_breadcrumb:
+    '#type': details
+    '#title': 'Term select breadcrumb'
+    '#open': true
+    webform_term_select_breadcrumb_default:
+      '#type': webform_term_select
+      '#title': webform_term_select_breadcrumb_default
+      '#vocabulary': tags
+      '#breadcrumb': true
+      '#format': breadcrumb
+    webform_term_select_breadcrumb_advanced:
+      '#type': webform_term_select
+      '#title': webform_term_select_breadcrumb_advanced
+      '#vocabulary': tags
+      '#multiple': true
+      '#select2': true
+      '#breadcrumb': true
+      '#breadcrumb_delimiter': ' » '
+      '#format': breadcrumb
+      '#format_items': ul
 css: ''
 javascript: ''
 settings:
@@ -46,7 +80,7 @@ settings:
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
-  preview: 0
+  preview: 1
   preview_next_button_label: ''
   preview_next_button_attributes: {  }
   preview_prev_button_label: ''
@@ -60,7 +94,7 @@ settings:
   draft_loaded_message: ''
   confirmation_type: page
   confirmation_title: ''
-  confirmation_message: 'This is a custom confirmation page.'
+  confirmation_message: ''
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -74,8 +108,8 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: true
-  results_disabled_ignore: true
+  results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

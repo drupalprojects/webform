@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_format
@@ -981,6 +981,63 @@ elements: |
           include_anonymous: true
         '#default_value': 1
         '#format': default
+    webform_term_select:
+      '#type': details
+      '#title': 'Term select'
+      webform_term_select_value:
+        '#type': webform_term_select
+        '#title': 'Term select (Value)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': value
+      webform_term_select_raw:
+        '#type': webform_term_select
+        '#title': 'Term select (Raw value)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': raw
+      webform_term_select_link:
+        '#type': webform_term_select
+        '#title': 'Term select (Link)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': link
+      webform_term_select_id:
+        '#type': webform_term_select
+        '#title': 'Term select (Entity ID)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': id
+      webform_term_select_label:
+        '#type': webform_term_select
+        '#title': 'Term select (Label)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': label
+      webform_term_select_text:
+        '#type': webform_term_select
+        '#title': 'Term select (Label (ID))'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': text
+      webform_term_select_teaser:
+        '#type': webform_term_select
+        '#title': 'Term select (Teaser)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': teaser
+      webform_term_select_default:
+        '#type': webform_term_select
+        '#title': 'Term select (Default)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': default
+      webform_term_select_breadcrumb:
+        '#type': webform_term_select
+        '#title': 'Term select (Breadcrumb)'
+        '#vocabulary': tags
+        '#default_value': Loremipsum
+        '#format': breadcrumb
   other_elements:
     '#type': details
     '#title': 'Other elements'

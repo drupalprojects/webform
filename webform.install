@@ -545,7 +545,7 @@ function webform_update_8019() {
  * Issue #2845724: Add webform opening and closing date/time.
  */
 function webform_update_8020() {
-  // Resaved all webforms to update convert status boolean to string.
+  // Resave all webforms to convert status boolean to string.
   $webforms = Webform::loadMultiple();
   foreach ($webforms as $webform) {
     $webform->setStatus($webform->get('status'))->save();

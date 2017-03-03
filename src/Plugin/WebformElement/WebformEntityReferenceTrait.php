@@ -59,6 +59,7 @@ trait WebformEntityReferenceTrait {
       case 'id':
       case 'label':
       case 'text':
+      case 'breadcrumb':
         return $this->formatTextItem($element, $value, $options);
 
       case 'link':
@@ -83,6 +84,20 @@ trait WebformEntityReferenceTrait {
       case 'id':
         return $entity->id();
 
+      case 'breadcrumb':
+        if ($entity->getEntityTypeId() == 'taxonomy_term') {
+          /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
+          $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+          $parents = $taxonomy_storage->loadAllParents($entity->id());
+          $breadcrumb = [];
+          foreach ($parents as $parent) {
+            $breadcrumb[] = $parent->label();
+          }
+          $element += ['#delimiter' => ' › '];
+          return implode($element['#delimiter'], array_reverse($breadcrumb));
+        }
+        return $entity->label();
+
       case 'label':
         return $entity->label();
 
@@ -101,9 +116,10 @@ trait WebformEntityReferenceTrait {
    * {@inheritdoc}
    */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
-    WebformEntityTrait::setOptions($element);
+    $this->setOptions($element);
+    $target_type = $this->getTargetType($element);
     // Exclude 'anonymous' user.
-    if ($element['#target_type'] == 'user') {
+    if ($target_type == 'user') {
       unset($element['#options'][0]);
     }
     return array_keys($element['#options']);
@@ -132,7 +148,7 @@ trait WebformEntityReferenceTrait {
    * {@inheritdoc}
    */
   public function getItemFormats() {
-    return parent::getItemFormats() + [
+    $formats = parent::getItemFormats() + [
       'link' => $this->t('Link'),
       'id' => $this->t('Entity ID'),
       'label' => $this->t('Label'),
@@ -140,6 +156,10 @@ trait WebformEntityReferenceTrait {
       'teaser' => $this->t('Teaser'),
       'default' => $this->t('Default'),
     ];
+    if ($this->hasProperty('breadcrumb')) {
+      $formats['breadcrumb'] = $this->t('Breadcrumb');
+    }
+    return $formats;
   }
 
   /**
@@ -203,7 +223,7 @@ trait WebformEntityReferenceTrait {
    */
   public function buildExportRecord(array $element, $value, array $options) {
     if (!$this->hasMultipleValues($element) && $options['entity_reference_format'] == 'link') {
-      $entity_type = $element['#target_type'];
+      $entity_type = $this->getTargetType($element);
       $entity_storage = $this->entityTypeManager->getStorage($entity_type);
       $entity_id = $value;
 
@@ -229,6 +249,29 @@ trait WebformEntityReferenceTrait {
   }
 
   /**
+   * Get element options.
+   *
+   * @param array $element
+   *   An element.
+   */
+  protected function setOptions(array &$element) {
+    WebformEntityTrait::setOptions($element);
+  }
+
+  /**
+   * Get referenced entity type..
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @return string
+   *   A entity type.
+   */
+  protected function getTargetType(array $element) {
+    return $element['#target_type'];
+  }
+
+  /**
    * Get referenced entity.
    *
    * @param array $element
@@ -249,8 +292,9 @@ trait WebformEntityReferenceTrait {
       return $value;
     }
 
+    $target_type = $this->getTargetType($element);
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $entity = $this->entityTypeManager->getStorage($element['#target_type'])->load($value);
+    $entity = $this->entityTypeManager->getStorage($target_type)->load($value);
     if ($entity && method_exists($entity, 'hasTranslation') && $entity->hasTranslation($langcode)) {
       $entity = $entity->getTranslation($langcode);
     }
@@ -275,8 +319,9 @@ trait WebformEntityReferenceTrait {
       return [];
     }
 
+    $target_type = $this->getTargetType($element);
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $entities = $this->entityTypeManager->getStorage($element['#target_type'])->loadMultiple($value);
+    $entities = $this->entityTypeManager->getStorage($target_type)->loadMultiple($value);
     foreach ($entities as $entity_id => $entity) {
       if ($entity->hasTranslation($langcode)) {
         $entities[$entity_id] = $entity->getTranslation($langcode);
