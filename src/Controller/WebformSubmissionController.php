@@ -130,7 +130,7 @@ class WebformSubmissionController extends ControllerBase implements ContainerInj
    * @return array
    *   The webform submission as a render array.
    */
-  public function title(WebformSubmissionInterface $webform_submission, $duplicate = TRUE) {
+  public function title(WebformSubmissionInterface $webform_submission, $duplicate = FALSE) {
     $source_entity = $this->requestHandler->getCurrentSourceEntity('webform_submission');
     $t_args = [
       '@form' => ($source_entity) ? $source_entity->label() : $webform_submission->getWebform()->label(),
