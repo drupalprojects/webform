@@ -125,6 +125,16 @@ abstract class WebformCompositeBase extends FormElement {
       // Handle #type specific customizations.
       if (isset($composite_element['#type'])) {
         switch ($composite_element['#type']) {
+          case 'tel':
+            // Add international phone library.
+            // Add internation library and classes.
+            if (!empty($composite_element['#international'])) {
+              $composite_element['#attached']['library'][] = 'webform/webform.element.telephone';
+              $composite_element['#attributes']['class'][] = 'js-webform-telephone-international';
+              $composite_element['#attributes']['class'][] = 'webform-webform-telephone-international';
+            }
+            break;
+
           case 'select':
           case 'webform_select_other':
             // Always include an empty option, even if the composite element

@@ -391,6 +391,63 @@ elements: |
             suffix: Loremipsum
             degree: Loremipsum
         '#format_items': hr
+    webform_telephone:
+      '#type': details
+      '#title': 'Telephone advanced'
+      webform_telephone_ol:
+        '#type': webform_telephone
+        '#title': 'Telephone advanced (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+        '#format_items': ol
+      webform_telephone_ul:
+        '#type': webform_telephone
+        '#title': 'Telephone advanced (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+        '#format_items': ul
+      webform_telephone_hr:
+        '#type': webform_telephone
+        '#title': 'Telephone advanced (Horizontal rule)'
+        '#multiple': true
+        '#default_value':
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+          -
+            type: Home
+            phone: 123-456-7890
+            ext: 1
+        '#format_items': hr
 css: ''
 javascript: ''
 settings:

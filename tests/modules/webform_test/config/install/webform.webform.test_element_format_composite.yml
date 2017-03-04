@@ -254,6 +254,33 @@ elements: |
           suffix: Loremipsum
           degree: Loremipsum
         '#format': list
+    webform_telephone:
+      '#type': details
+      '#title': 'Telephone advanced'
+      webform_telephone_value:
+        '#type': webform_telephone
+        '#title': 'Telephone advanced (Value)'
+        '#default_value':
+          type: Home
+          phone: 123-456-7890
+          ext: 1
+        '#format': value
+      webform_telephone_raw:
+        '#type': webform_telephone
+        '#title': 'Telephone advanced (Raw value)'
+        '#default_value':
+          type: Home
+          phone: 123-456-7890
+          ext: 1
+        '#format': raw
+      webform_telephone_list:
+        '#type': webform_telephone
+        '#title': 'Telephone advanced (List)'
+        '#default_value':
+          type: Home
+          phone: 123-456-7890
+          ext: 1
+        '#format': list
   options_elements:
     '#type': details
     '#title': 'Options elements'

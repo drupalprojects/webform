@@ -824,6 +824,20 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_telephone:
+      '#type': webform_telephone
+      '#title': 'Telephone advanced'
+      '#default_value':
+        type: Home
+        phone: 123-456-7890
+        ext: 1
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_webform_term_select:
       '#type': webform_term_select
       '#title': 'Term select'
@@ -1578,6 +1592,17 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_webform_telephone:
+      '#type': webform_telephone
+      '#title': 'Telephone advanced'
+      '#default_value':
+        type: Home
+        phone: 123-456-7890
+        ext: 1
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_webform_term_select:
       '#type': webform_term_select
       '#title': 'Term select'
@@ -2192,6 +2217,17 @@ elements: |
       '#title': Telephone
       '#international': true
       '#default_value': 123-456-7890
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_webform_telephone:
+      '#type': webform_telephone
+      '#title': 'Telephone advanced'
+      '#default_value':
+        type: Home
+        phone: 123-456-7890
+        ext: 1
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

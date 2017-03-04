@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - webform
+id: phone_types
+label: 'Phone type'
+options: |
+  Home: Home
+  Office: Office
+  Cell: Cell

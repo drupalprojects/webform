@@ -7,7 +7,7 @@ use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformName as WebformNameElement;
 
 /**
- * Provides an 'name' element.
+ * Provides a 'name' element.
  *
  * @WebformElement(
  *   id = "webform_name",

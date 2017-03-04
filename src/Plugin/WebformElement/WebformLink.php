@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormState;
 use Drupal\webform\Element\WebformLink as WebformLinkElement;
 
 /**
- * Provides an 'name' element.
+ * Provides a 'link' element.
  *
  * @WebformElement(
  *   id = "webform_link",

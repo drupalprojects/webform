@@ -77,6 +77,18 @@ elements: |
       '#title': 'Name multiple'
       '#multiple': true
       '#multiple__header': true
+  webform_telephone_example:
+    '#type': details
+    '#title': 'Telephone advanced'
+    '#open': true
+    webform_telephone:
+      '#type': webform_telephone
+      '#title': 'Telephone advanced'
+    webform_telephone_multiple:
+      '#type': webform_telephone
+      '#title': 'Telephone advanced multiple'
+      '#multiple': true
+      '#multiple__header': true
 css: ''
 javascript: ''
 settings:

@@ -506,6 +506,9 @@ function webform_theme() {
     'webform_composite_name' => [
       'render element' => 'element',
     ],
+    'webform_composite_telephone' => [
+      'render element' => 'element',
+    ],
 
     'webform_codemirror' => [
       'variables' => ['code' => NULL, 'type' => 'text'],

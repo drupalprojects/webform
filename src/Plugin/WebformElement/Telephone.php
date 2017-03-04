@@ -3,6 +3,10 @@
 namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+<<<<<<< HEAD
+=======
+use Drupal\webform\WebformInterface;
+>>>>>>> 2857587-telephone-composite
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -55,7 +59,11 @@ class Telephone extends TextBase {
       '#title' => $this->t('Enhance support for international phone numbers'),
       '#type' => 'checkbox',
       '#return_value' => TRUE,
+<<<<<<< HEAD
       '#description' => $this->t('Enhance telephone element\'s international support with jQuery <a href=":href">International Telephone Input</a>.', [':href' => 'http://intl-tel-input.com/']),
+=======
+      '#description' => $this->t('Enhance the telephone element\'s international support using the jQuery <a href=":href">International Telephone Input</a> plugin.', [':href' => 'http://intl-tel-input.com/']),
+>>>>>>> 2857587-telephone-composite
     ];
     return $form;
   }
@@ -100,6 +108,19 @@ class Telephone extends TextBase {
   public function getItemFormats() {
     return parent::getItemFormats() + [
       'link' => $this->t('Link'),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    if (empty($element['#international'])) {
+      return FALSE;
+    }
+    return [
+      '+1 212-333-4444',
+      '+1 718-555-6666',
     ];
   }
 

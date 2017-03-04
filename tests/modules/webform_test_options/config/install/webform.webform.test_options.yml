@@ -64,6 +64,10 @@ elements: |
       '#type': select
       '#title': 'Marital status (marital_status)'
       '#options': marital_status
+    phone_types:
+      '#type': select
+      '#title': 'Phone type (phone_types)'
+      '#options': phone_types
     relationship:
       '#type': select
       '#title': 'Relationship (relationship)'

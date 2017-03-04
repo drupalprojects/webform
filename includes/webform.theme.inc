@@ -703,6 +703,27 @@ function template_preprocess_webform_composite_name(array &$variables) {
   $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
 }
 
+/**
+ * Prepares variables for telephone composite element templates.
+ *
+ * Default template: webform-element-telephone.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #options, #description, #required,
+ *     #attributes.
+ */
+function template_preprocess_webform_composite_telephone(array &$variables) {
+  $element = $variables['element'];
+  foreach (Element::children($element) as $key) {
+    if ($element[$key]['#access']) {
+      $variables['content'][$key] = $element[$key];
+    }
+  }
+}
+
+
 /******************************************************************************/
 // Element templates
 /******************************************************************************/

@@ -256,6 +256,12 @@ webform.element.composite:
     component:
       css/webform.element.composite.css: {}
 
+webform.element.composite_telephone:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.composite_telephone.css: {}
+
 webform.element.counter:
   version: VERSION
   js:
