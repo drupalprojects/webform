@@ -57,14 +57,12 @@ class WebformPathTest extends WebformTestBase {
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(403, 'Submit system path access denied');
     $this->drupalGet('form/' . str_replace('_', '-', $webform->id()));
-    $this->assertResponse(403, 'Submit URL alias access denied');
+    $this->assertResponse(404, 'Submit URL alias does not exist');
 
     // Check hidden page visible to admin.
     $this->drupalLogin($this->adminWebformUser);
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(200, 'Submit system path access permitted');
-    $this->drupalGet('form/' . str_replace('_', '-', $webform->id()));
-    $this->assertResponse(200, 'Submit URL alias access permitted');
     $this->drupalLogout();
 
     // Check custom submit and confirm path.
@@ -82,6 +80,13 @@ class WebformPathTest extends WebformTestBase {
     $this->assertResponse(200, 'Submit URL alias with custom base path exists');
     $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()) . '/confirmation');
     $this->assertResponse(200, 'Confirm URL alias with custom base path exists');
+
+    // Check custom base path delete if accessing webform as page is disabled.
+    $webform->setSettings(['page' => FALSE])->save();
+    $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()));
+    $this->assertResponse(404, 'Submit URL alias does not exist.');
+    $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()) . '/confirmation');
+    $this->assertResponse(404, 'Confirm URL alias does not exist.');
   }
 
 }

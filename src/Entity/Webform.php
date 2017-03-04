@@ -1355,6 +1355,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return;
     }
 
+    // If 'Allow users to post submission from a dedicated URL' is disabled,
+    // delete all existing paths.
+    if (empty($this->settings['page'])) {
+      $this->deletePaths();
+      return;
+    }
+
     // Update submit path.
     $submit_path = $this->settings['page_submit_path'] ?: trim(\Drupal::config('webform.settings')->get('settings.default_page_base_path'), '/') . '/' . str_replace('_', '-', $this->id());
     $submit_source = '/webform/' . $this->id();
