@@ -2,10 +2,11 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Path\PathMatcherInterface;
@@ -39,6 +40,13 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * @var \Drupal\Core\Session\AccountInterface
    */
   protected $currentUser;
+
+  /**
+   * The configuration object factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * The module handler.
@@ -87,6 +95,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   Current user.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\State\StateInterface $state
@@ -100,8 +110,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
-  public function __construct(AccountInterface $current_user, ModuleHandlerInterface $module_handler, StateInterface $state, PathMatcherInterface $path_matcher, WebformAddOnsManagerInterface $addons_manager, WebformLibrariesManagerInterface $libraries_manager, WebformElementManagerInterface $element_manager) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, StateInterface $state, PathMatcherInterface $path_matcher, WebformAddOnsManagerInterface $addons_manager, WebformLibrariesManagerInterface $libraries_manager, WebformElementManagerInterface $element_manager) {
     $this->currentUser = $current_user;
+    $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->state = $state;
     $this->pathMatcher = $path_matcher;
@@ -205,7 +216,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       '#suffix' => '</div>',
     ];
     $build['about'] = $this->buildAbout();
-    if (\Drupal::config('webform.settings')->get('ui.video_display') !== 'hidden') {
+    if ($this->configFactory->get('webform.settings')->get('ui.video_display') !== 'hidden') {
       $build['videos'] = $this->buildVideos();
     }
     $build['uses'] = $this->buildUses();

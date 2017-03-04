@@ -4,4 +4,4 @@ description: 'Support module for webform that provides working examples for all 
 package: Testing
 core: 8.x
 dependencies:
-  - webform
+  - 'drupal:webform'

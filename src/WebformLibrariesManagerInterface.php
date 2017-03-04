@@ -11,7 +11,7 @@ interface WebformLibrariesManagerInterface {
    * Get third party libraries status for hook_requirements and drush.
    *
    * @return array
-   *    An associative array of third party libraries keyed by library name.
+   *   An associative array of third party libraries keyed by library name.
    */
   public function requirements();
 

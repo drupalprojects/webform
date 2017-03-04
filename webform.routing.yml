@@ -12,7 +12,7 @@ webform.help:
     _controller: '\Drupal\webform\Controller\WebformHelpController::index'
     _title_callback: '\Drupal\webform\Controller\WebformHelpController::title'
   requirements:
-    _access: 'TRUE'
+    _permission: 'access administration pages'
 
 webform.admin_settings.third_party:
   path: '/admin/structure/webform/settings/third-party'
@@ -537,5 +537,5 @@ webform.element.message.close:
     _controller: '\Drupal\webform\Controller\WebformElementController::close'
     _storage: user
   requirements:
-    _access: 'TRUE'
+    _user_is_logged_in: 'TRUE'
     _csrf_token: 'TRUE'

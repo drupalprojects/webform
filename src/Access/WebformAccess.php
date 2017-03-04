@@ -20,7 +20,7 @@ class WebformAccess {
    *
    * @param \Drupal\webform\WebformInterface $webform
    *   A webform.
-   * @param \Drupal\Core\Entity\EntityInterface|null
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
    *   The source entity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface

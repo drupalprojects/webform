@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Psr\Log\LoggerInterface;
@@ -54,6 +55,13 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   protected $logger;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
@@ -99,16 +107,19 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    *   The entity manager.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.
    */
-  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, WebformRequestInterface $request_handler, WebformTokenManagerInterface $token_manager) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, RendererInterface $renderer, WebformRequestInterface $request_handler, WebformTokenManagerInterface $token_manager) {
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
     $this->entityStorage = $entity_type_manager->getStorage('webform_submission');
     $this->logger = $logger;
+    $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
     $this->tokenManager = $token_manager;
   }
@@ -144,7 +155,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
     $build = $this->build($key);
     // Do not display message via Ajax request.
     if ($build && !$this->requestHandler->isAjax()) {
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($build), $type);
+      drupal_set_message($this->renderer->renderPlain($build), $type);
       return TRUE;
     }
     else {

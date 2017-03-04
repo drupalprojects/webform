@@ -64,9 +64,9 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *
    * @param string|bool|null $status
    *   The status of the configuration entity.
-   *   - TRUE => WebformInterface::STATUS_OPEN
-   *   - FALSE => WebformInterface::STATUS_CLOSED
-   *   - NULL => WebformInterface::STATUS_SCHEDULED
+   *   - TRUE => WebformInterface::STATUS_OPEN.
+   *   - FALSE => WebformInterface::STATUS_CLOSED.
+   *   - NULL => WebformInterface::STATUS_SCHEDULED.
    *
    * @return $this
    */

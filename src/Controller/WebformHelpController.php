@@ -79,6 +79,8 @@ class WebformHelpController extends ControllerBase implements ContainerInjection
   /**
    * Route title callback.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
    * @param string $id
    *   The id of the dedicated help section.
    *

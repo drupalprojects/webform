@@ -40,8 +40,12 @@ abstract class WebformHandlerFormBase extends FormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Form constructor.
    *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    * @param \Drupal\webform\WebformInterface $webform
    *   The webform.
    * @param string $webform_handler
@@ -237,9 +241,9 @@ abstract class WebformHandlerFormBase extends FormBase {
   /**
    * Process handler webform errors in webform.
    *
-   * @param FormStateInterface $handler_state
+   * @param \Drupal\Core\Form\FormStateInterface $handler_state
    *   The webform handler webform state.
-   * @param FormStateInterface &$form_state
+   * @param \Drupal\Core\Form\FormStateInterface  &$form_state
    *   The webform state.
    */
   protected function processHandlerFormErrors(FormStateInterface $handler_state, FormStateInterface &$form_state) {

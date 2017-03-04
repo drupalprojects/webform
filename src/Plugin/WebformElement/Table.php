@@ -71,13 +71,6 @@ class Table extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function build($format, array &$element, $value, array $options = []) {
-    return parent::build($format, $element, $value, $options);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getItemDefaultFormat() {
     return 'table';
   }
