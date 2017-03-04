@@ -390,6 +390,15 @@ webform.element.other:
     - core/jquery
     - core/jquery.once
 
+webform.element.radios:
+  version: VERSION
+  js:
+    js/webform.element.radios.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+
 webform.element.range:
   version: VERSION
   css:

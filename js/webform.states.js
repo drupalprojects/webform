@@ -8,7 +8,7 @@
   'use strict';
 
   // Make absolutely sure the below event handlers are triggered after
-  // the state.js event handlers by attaching them after DOM load.
+  // the /core/misc/states.js event handlers by attaching them after DOM load.
   $(function () {
     var $document = $(document);
     $document.on('state:visible', function (e) {

@@ -587,7 +587,6 @@ function webform_theme_suggestions_alter(array &$suggestions, array $variables, 
     $suggestions[] = $hook . '__' . $webform->id();
   }
 }
-
 /**
  * Prepares variables for checkboxes templates.
  *
@@ -607,6 +606,8 @@ function webform_preprocess_checkboxes(&$variables) {
  */
 function webform_preprocess_radios(&$variables) {
   webform_preprocess_checkboxes($variables);
+  // @see js/webform.element.radios.js
+  $variables['attributes']['class'][] = 'js-webform-radios';
 }
 
 /**
