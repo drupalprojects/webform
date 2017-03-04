@@ -2,7 +2,6 @@
 
 namespace Drupal\webform;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -15,13 +14,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
   use StringTranslationTrait;
 
   /**
-   * The configuration object factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * Libraries that provides additional functionality to the Webform module.
    *
    * @var array
@@ -30,12 +22,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
 
   /**
    * Constructs a WebformLibrariesManager object.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The configuration object factory.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
+  public function __construct() {
     $this->libraries = $this->initLibraries();
   }
 
@@ -43,7 +31,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function requirements() {
-    $cdn = $this->configFactory->get('webform.settings')->get('library.cdn', FALSE);
+    $cdn = \Drupal::config('webform.settings')->get('library.cdn', FALSE);
 
     $status = [];
     $libraries = $this->getLibraries();

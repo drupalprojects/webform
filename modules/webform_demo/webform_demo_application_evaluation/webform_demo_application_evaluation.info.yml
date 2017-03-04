@@ -4,5 +4,5 @@ description: 'Demonstrate how to use the Webform module to build an application/
 package: 'Webform Demo'
 core: 8.x
 dependencies:
-  - 'drupal:block'
-  - 'drupal:webform'
+  - block
+  - webform

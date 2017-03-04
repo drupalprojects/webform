@@ -493,8 +493,6 @@ class WebformElementStates extends FormElement {
    *
    * @param array $element
    *   An element.
-   * @param $name
-   *   The name.
    *
    * @return string
    *   A unique key used to store the number of options for an element.

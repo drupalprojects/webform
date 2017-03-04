@@ -2,8 +2,11 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Serialization\Yaml;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Provides a webform element for element multiple property.

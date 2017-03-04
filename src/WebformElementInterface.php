@@ -569,8 +569,6 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *
    * @param array $element
    *   An element.
-   * @parent string $value
-   *   Value to be exported.
    * @param array $export_options
    *   An associative array of export options.
    *

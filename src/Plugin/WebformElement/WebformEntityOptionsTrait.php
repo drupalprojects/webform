@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Element\WebformEntityTrait;
 
 /**
  * Provides an 'entity_reference' with options trait.

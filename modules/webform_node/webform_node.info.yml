@@ -9,4 +9,9 @@ dependencies:
   - 'drupal:path'
   - 'drupal:text'
   - 'drupal:user'
-  - 'drupal:webform'
+  - field
+  - node
+  - path
+  - text
+  - user
+  - webform

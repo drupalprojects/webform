@@ -957,10 +957,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    *
    * @param array $elements
    *   The webform elements.
-   * @param string $parent
-   *   The parent key.
-   * @param int $depth
-   *   The element's depth.
    */
   protected function initElementsRecursive(array &$elements, $parent = '', $depth = 0) {
     /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */

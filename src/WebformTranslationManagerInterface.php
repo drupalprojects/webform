@@ -50,8 +50,6 @@ interface WebformTranslationManagerInterface {
    *
    * @param \Drupal\webform\WebformInterface $webform
    *   A webform.
-   * @param string $langcode
-   *   The language code for the translated element properties.
    *
    * @return array
    *   A associative array of translated element properties.

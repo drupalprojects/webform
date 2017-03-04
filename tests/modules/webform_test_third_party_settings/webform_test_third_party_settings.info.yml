@@ -4,4 +4,4 @@ description: 'Support module for Webform module that provides example of third p
 package: Testing
 core: 8.x
 dependencies:
-  - 'drupal:webform'
+  - webform

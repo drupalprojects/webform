@@ -29,7 +29,7 @@ function webform_demo_application_evaluation_install() {
       $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate');
 
       /** @var \Drupal\webform\Plugin\DevelGenerate\WebformSubmissionDevelGenerate $webform_submission_devel_generate */
-      $webform_submission_devel_generate = $devel_generate_manager->createInstance('webform_submission', []);
+      $webform_submission_devel_generate = $devel_generate_manager->createInstance('webform_submission', array());
       $webform_submission_devel_generate->generateElements([
         'webform_ids' => [
           'demo_application' => 'demo_application'
@@ -47,7 +47,7 @@ function webform_demo_application_evaluation_install() {
     $devel_generate_manager = \Drupal::service('plugin.manager.develgenerate');
 
     /** @var \Drupal\webform\Plugin\DevelGenerate\WebformSubmissionDevelGenerate $webform_submission_devel_generate */
-    $webform_submission_devel_generate = $devel_generate_manager->createInstance('webform_submission', []);
+    $webform_submission_devel_generate = $devel_generate_manager->createInstance('webform_submission', array());
     $webform_submission_devel_generate->generateElements([
       'webform_ids' => [
         'demo_application' => 'demo_application'

@@ -2,8 +2,10 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Element\WebformOptions;
 use Drupal\webform\Element\WebformTelephone as WebformTelephoneElement;
 
 /**
@@ -29,7 +31,6 @@ class WebformTelephone extends WebformCompositeBase {
     unset($default_properties['flexbox']);
     return $default_properties;
   }
-
   /**
    * {@inheritdoc}
    */
@@ -104,6 +105,7 @@ class WebformTelephone extends WebformCompositeBase {
     }
   }
 
+
   /**
    * {@inheritdoc}
    */
@@ -117,5 +119,4 @@ class WebformTelephone extends WebformCompositeBase {
     ];
     return $form;
   }
-
 }

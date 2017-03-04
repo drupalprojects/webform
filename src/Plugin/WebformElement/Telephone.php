@@ -35,7 +35,7 @@ class Telephone extends TextBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
     parent::prepare($element, $webform_submission);
 
-    // Add international library and classes.
+    // Add internation library and classes.
     if (!empty($element['#international'])) {
       $element['#attached']['library'][] = 'webform/webform.element.telephone';
       $element['#attributes']['class'][] = 'js-webform-telephone-international';
