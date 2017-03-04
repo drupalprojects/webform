@@ -670,7 +670,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
 
-    uasort($element, array('Drupal\Component\Utility\SortArray', 'sortByWeightProperty'));
+    uasort($element, ['Drupal\Component\Utility\SortArray', 'sortByWeightProperty']);
 
     return $element;
   }

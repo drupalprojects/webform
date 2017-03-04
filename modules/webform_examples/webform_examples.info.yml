@@ -4,4 +4,4 @@ description: 'Provides examples of all webform elements and functionality which 
 package: Webform
 core: 8.x
 dependencies:
-  - webform
+  - 'drupal:webform'

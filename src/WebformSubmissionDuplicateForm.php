@@ -4,7 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use \Drupal\Component\Uuid\Php;
+use Drupal\Component\Uuid\Php;
 use Drupal\Core\Url;
 
 /**
@@ -68,4 +68,5 @@ class WebformSubmissionDuplicateForm extends WebformSubmissionForm {
       $form_state->setRedirect($redirect_route_name, $redirect_route_parameters);
     }
   }
+
 }

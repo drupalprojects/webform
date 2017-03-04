@@ -4,4 +4,4 @@ webform_test.index:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'Webforms'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'

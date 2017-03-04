@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
@@ -20,6 +21,13 @@ use Drupal\webform\Entity\WebformSubmission;
 class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The file system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
 
   /**
    * The configuration object factory.
@@ -101,6 +109,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
   /**
    * Constructs a WebformSubmissionExporter object.
    *
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -114,7 +124,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
    * @param \Drupal\webform\WebformExporterManagerInterface $exporter_manager
    *   The results exporter manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, StreamWrapperManagerInterface $stream_wrapper_manager, WebformElementManagerInterface $element_manager, WebformExporterManagerInterface $exporter_manager) {
+  public function __construct(FileSystemInterface $file_system, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, StreamWrapperManagerInterface $stream_wrapper_manager, WebformElementManagerInterface $element_manager, WebformExporterManagerInterface $exporter_manager) {
     $this->configFactory = $config_factory;
     $this->entityStorage = $entity_type_manager->getStorage('webform_submission');
     $this->queryFactory = $query_factory;
@@ -676,7 +686,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       $archiver = new ArchiveTar($this->getArchiveFilePath(), 'gz');
       $stream_wrappers = array_keys($this->streamWrapperManager->getNames(StreamWrapperInterface::WRITE_VISIBLE));
       foreach ($stream_wrappers as $stream_wrapper) {
-        $files_directory = \Drupal::service('file_system')->realpath($stream_wrapper . '://webform/' . $webform->id());
+        $files_directory = $this->fileSystem->realpath($stream_wrapper . '://webform/' . $webform->id());
         $files_directories[] = $files_directory;
       }
     }

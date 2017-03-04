@@ -2,7 +2,7 @@
 
 namespace Drupal\webform\Tests;
 
-use \Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\Webform;
 
 /**
  * Tests for webform block context.
@@ -34,7 +34,7 @@ class WebformBlockContextTest extends WebformTestBase {
       'node' => '@node.node_route_context:node',
     ];
     foreach ($contexts as $type => $context) {
-      $block = $this->placeBlock('webform_test_block_context_block', ['label' => '{' . $type  . ' context}']);
+      $block = $this->placeBlock('webform_test_block_context_block', ['label' => '{' . $type . ' context}']);
       $block->setVisibilityConfig('webform', [
         'id' => 'webform',
         'webforms' => ['contact' => 'contact'],

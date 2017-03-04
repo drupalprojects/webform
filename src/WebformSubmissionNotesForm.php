@@ -3,7 +3,11 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Datetime\TimeInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for webform submission notes.
@@ -13,14 +17,46 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
   use WebformDialogTrait;
 
   /**
+   * Webform request handler.
+   *
+   * @var \Drupal\webform\WebformRequestInterface
+   */
+  protected $requestHandler;
+
+  /**
+   * Constructs a ContentEntityForm object.
+   *
+   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   *   The entity manager.
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+   *   The entity type bundle service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   */
+  public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, WebformRequestInterface $request_handler) {
+    parent::__construct($entity_manager, $entity_type_bundle_info, $time);
+    $this->requestHandler = $request_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity.manager'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('datetime.time'),
+      $container->get('webform.request')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\webform\WebformRequestInterface $request_handler */
-    $request_handler = \Drupal::service('webform.request');
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
-    list($webform_submission, $source_entity) = $request_handler->getWebformSubmissionEntities();
+    list($webform_submission, $source_entity) = $this->requestHandler->getWebformSubmissionEntities();
 
     $form['navigation'] = [
       '#theme' => 'webform_submission_navigation',

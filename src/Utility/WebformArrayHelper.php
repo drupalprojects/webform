@@ -227,7 +227,7 @@ class WebformArrayHelper {
   public static function shuffle(array $array) {
     $keys = array_keys($array);
     shuffle($keys);
-    $random = array();
+    $random = [];
     foreach ($keys as $key) {
       $random[$key] = $array[$key];
     }

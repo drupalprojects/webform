@@ -74,4 +74,5 @@ class Checkboxes extends OptionsBase {
 
     return $form;
   }
+
 }

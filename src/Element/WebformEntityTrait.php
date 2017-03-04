@@ -3,7 +3,6 @@
 namespace Drupal\webform\Element;
 
 use Drupal\Core\Form\OptGroup;
-use Drupal\Component\Utility\Html;
 use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**

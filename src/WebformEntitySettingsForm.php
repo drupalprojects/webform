@@ -225,17 +225,17 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'container',
       '#attributes' => ['class' => 'container-inline'],
     ];
-    $form['form']['scheduled']['dates']['open'] = array(
+    $form['form']['scheduled']['dates']['open'] = [
       '#type' => 'datetime',
       '#title' => $this->t('Open'),
       '#default_value' => $webform->get('open') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('open'))) : NULL,
-    );
+    ];
     $form['form']['scheduled']['dates']['space'] = ['#markup' => ' &nbsp; '];
-    $form['form']['scheduled']['dates']['close'] = array(
+    $form['form']['scheduled']['dates']['close'] = [
       '#type' => 'datetime',
       '#title' => $this->t('Close'),
       '#default_value' => $webform->get('close') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('close'))) : NULL,
-    );
+    ];
     $form['form']['form_closed_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform closed message'),

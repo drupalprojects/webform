@@ -35,6 +35,7 @@ class WebformTermSelect extends Select implements WebformEntityReferenceInterfac
     unset($properties['options_randomize']);
     return $properties;
   }
+
   /**
    * {@inheritdoc}
    */
@@ -95,6 +96,7 @@ class WebformTermSelect extends Select implements WebformEntityReferenceInterfac
    * {@inheritdoc}
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    // Overrides: \Drupal\webform\Plugin\WebformElement\WebformEntityReferenceTrait::validateConfigurationForm.
     parent::validateConfigurationForm($form, $form_state);
   }
 

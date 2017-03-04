@@ -4,4 +4,4 @@ description: 'Test webform config performance by generating a 1000 webforms cont
 package: Testing
 core: 8.x
 dependencies:
-  - webform
+  - 'drupal:webform'

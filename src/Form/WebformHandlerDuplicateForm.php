@@ -3,9 +3,7 @@
 namespace Drupal\webform\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformHandlerManagerInterface;
 use Drupal\webform\WebformInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a duplicate form for webform handler.
