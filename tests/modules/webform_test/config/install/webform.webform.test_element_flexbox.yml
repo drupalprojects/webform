@@ -718,8 +718,6 @@ elements: |
       '#type': tel
       '#title': 'Telephone 02'
       '#international': true
-<<<<<<< HEAD
-=======
   flexbox_webform_telephone:
     '#type': webform_flexbox
     flex_webform_telephone_left:
@@ -728,7 +726,6 @@ elements: |
     flex_webform_telephone_right:
       '#type': webform_telephone
       '#title': 'Telephone advanced 02'
->>>>>>> 2857587-telephone-composite
   flexbox_webform_term_select:
     '#type': webform_flexbox
     flex_webform_term_select_left:
