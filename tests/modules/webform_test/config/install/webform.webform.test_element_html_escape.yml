@@ -112,9 +112,11 @@ elements: |
     tel:
       '#type': tel
       '#title': 'Telephone | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#international': true
     tel_multiple:
       '#type': tel
       '#title': 'Telephone multiple | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#international': true
       '#multiple': true
     text_format:
       '#type': text_format
@@ -459,9 +461,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options':
-        1: Administrator
-        0: 'Anonymous | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#options': null
     webform_entity_select:
       '#type': webform_entity_select
       '#title': 'Entity select | <script>alert(''This markup is not escaped properly!!!'') </script>'

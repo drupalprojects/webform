@@ -467,9 +467,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options':
-        1: Administrator
-        0: Anonymous
+      '#options': null
       '#default_value': 1
       '#states':
         visible:
@@ -817,6 +815,7 @@ elements: |
     visible_tel:
       '#type': tel
       '#title': Telephone
+      '#international': true
       '#default_value': 123-456-7890
       '#states':
         visible:
@@ -1300,9 +1299,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options':
-        1: Administrator
-        0: Anonymous
+      '#options': null
       '#default_value': 1
       '#states':
         invisible:
@@ -1575,6 +1572,7 @@ elements: |
     invisible_tel:
       '#type': tel
       '#title': Telephone
+      '#international': true
       '#default_value': 123-456-7890
       '#states':
         invisible:
@@ -1919,9 +1917,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options':
-        1: Administrator
-        0: Anonymous
+      '#options': null
       '#default_value': 1
       '#states':
         disabled:
@@ -2194,6 +2190,7 @@ elements: |
     disabled_tel:
       '#type': tel
       '#title': Telephone
+      '#international': true
       '#default_value': 123-456-7890
       '#states':
         disabled:

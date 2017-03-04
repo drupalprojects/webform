@@ -31,6 +31,13 @@ libraries:
       type: get
       url: 'https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.3.zip'
 
+  intl-tel-input:
+    directory_name: jquery.intl-tel-input
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/jackocnr/intl-tel-input/archive/v11.0.0.zip'
+
   rateit:
     directory_name: jquery.rateit
     destination: libraries
@@ -67,7 +74,7 @@ libraries:
       url: 'https://github.com/simontabor/jquery-toggles/archive/v4.0.0.zip'
 
   word-and-character-counter:
-    directory_name: word-and-character-counter
+    directory_name: jquery.word-and-character-counter
     destination: libraries
     download:
       type: get

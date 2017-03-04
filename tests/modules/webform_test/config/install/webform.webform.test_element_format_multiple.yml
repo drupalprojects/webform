@@ -238,6 +238,7 @@ elements: |
       tel_comma:
         '#type': tel
         '#title': 'Telephone (Comma)'
+        '#international': true
         '#multiple': true
         '#default_value':
           - 123-456-7890
@@ -246,6 +247,7 @@ elements: |
       tel_semicolon:
         '#type': tel
         '#title': 'Telephone (Semicolon)'
+        '#international': true
         '#multiple': true
         '#default_value':
           - 123-456-7890
@@ -254,6 +256,7 @@ elements: |
       tel_and:
         '#type': tel
         '#title': 'Telephone (And)'
+        '#international': true
         '#multiple': true
         '#default_value':
           - 123-456-7890
@@ -262,6 +265,7 @@ elements: |
       tel_ol:
         '#type': tel
         '#title': 'Telephone (Ordered list)'
+        '#international': true
         '#multiple': true
         '#default_value':
           - 123-456-7890
@@ -270,6 +274,7 @@ elements: |
       tel_ul:
         '#type': tel
         '#title': 'Telephone (Unordered list)'
+        '#international': true
         '#multiple': true
         '#default_value':
           - 123-456-7890

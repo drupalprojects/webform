@@ -137,6 +137,13 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'url' => Url::fromUri('http://robinherbots.github.io/jquery.inputmask/'),
       'version' => '3.3.3',
     ];
+    $libraries['intl-tel-input'] = [
+      'title' => $this->t('International Telephone Input'),
+      'description' => $this->t('A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user\'s country, displays a relevant placeholder and provides formatting/validation methods.'),
+      'notes' => $this->t('International Telephone Input is used by the Telephone element'),
+      'url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
+      'version' => 'v11.0.0',
+    ];
     $libraries['rateit'] = [
       'title' => $this->t('RateIt'),
       'description' => $this->t("Rating plugin for jQuery. Fast, progressive enhancement, touch support, customizable (just swap out the images, or change some CSS), unobtrusive JavaScript (using HTML5 data-* attributes), RTL support. The Rating plugin supports as many stars as you'd like, and also any step size."),

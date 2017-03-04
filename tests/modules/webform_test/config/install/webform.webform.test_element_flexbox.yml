@@ -395,9 +395,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options':
-        1: Administrator
-        0: Anonymous
+      '#options': null
     flex_webform_entity_radios_right:
       '#type': webform_entity_radios
       '#title': 'Entity radios 02'
@@ -405,9 +403,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options':
-        1: Administrator
-        0: Anonymous
+      '#options': null
   flexbox_webform_entity_select:
     '#type': webform_flexbox
     flex_webform_entity_select_left:
@@ -717,9 +713,11 @@ elements: |
     flex_tel_left:
       '#type': tel
       '#title': 'Telephone 01'
+      '#international': true
     flex_tel_right:
       '#type': tel
       '#title': 'Telephone 02'
+      '#international': true
   flexbox_webform_term_select:
     '#type': webform_flexbox
     flex_webform_term_select_left:

@@ -13,6 +13,8 @@ range:
   '#range__output': true
   '#range__output_prefix': '$'
   '#range__output_suffix': '.00'
+tel:
+  '#international': true
 entity_autocomplete:
   '#target_type': 'user'
   '#selection_handler': 'default:user'

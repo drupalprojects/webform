@@ -443,6 +443,16 @@ webform.element.states:
     component:
       css/webform.element.states.css: {}
 
+webform.element.telephone:
+  version: VERSION
+  js:
+    js/webform.element.telephone.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/jquery.intl-tel-input
+
 webform.element.text_format:
   version: VERSION
   js:
@@ -568,9 +578,9 @@ jquery.counter:
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/word-and-character-counter/: https://cdn.rawgit.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/2.3.5/
+    /libraries/jquery.word-and-character-counter/: https://cdn.rawgit.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/2.3.5/
   js:
-    /libraries/word-and-character-counter/word-and-character-counter.min.js: {}
+    /libraries/jquery.word-and-character-counter/word-and-character-counter.min.js: {}
   dependencies:
     - core/jquery
 
@@ -599,6 +609,25 @@ jquery.inputmask:
     /libraries/jquery.inputmask/dist/min/: https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.3/
   js:
     /libraries/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js: {}
+  dependencies:
+    - core/jquery
+
+jquery.intl-tel-input:
+  remote: https://github.com/jackocnr/intl-tel-input
+  version: v11.0.0
+  license:
+    name: MIT
+    url: https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE
+    gpl-compatible: true
+  cdn:
+    /libraries/jquery.intl-tel-input/src/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.0/
+    /libraries/jquery.intl-tel-input/src/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.0/
+  css:
+    theme:
+      /libraries/jquery.intl-tel-input/build/css/intlTelInput.css: {}
+  js:
+    /libraries/jquery.intl-tel-input/build/js/utils.js : {}
+    /libraries/jquery.intl-tel-input/build/js/intlTelInput.min.js : {}
   dependencies:
     - core/jquery
 
