@@ -21,6 +21,7 @@ class WebformTermSelect extends Select {
       '#tree_delimiter' => '-',
       '#breadcrumb' => FALSE,
       '#breadcrumb_delimiter' => ' › ',
+      '#tree_delimiter' => '-',
     ] + parent::getInfo();
   }
 

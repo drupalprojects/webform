@@ -75,6 +75,11 @@ class WebformTermSelect extends Select implements WebformEntityReferenceInterfac
           'or',
           [':input[name="properties[format]"]' => ['value' => 'breadcrumb']],
         ],
+        'required' => [
+          [':input[name="properties[breadcrumb]"]' => ['checked' => TRUE]],
+          'or',
+          [':input[name="properties[format]"]' => ['value' => 'breadcrumb']],
+        ],
       ],
     ];
     $form['term_reference']['tree_delimiter'] = [
@@ -83,6 +88,11 @@ class WebformTermSelect extends Select implements WebformEntityReferenceInterfac
       '#size' => 10,
       '#states' => [
         'visible' => [
+          ':input[name="properties[breadcrumb]"]' => [
+            'checked' => FALSE,
+          ],
+        ],
+        'required' => [
           ':input[name="properties[breadcrumb]"]' => [
             'checked' => FALSE,
           ],
