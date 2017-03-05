@@ -8,7 +8,7 @@ Steps for creating a new release
   4. Run tests
   5. Generate release notes
   6. Tag and create a new release
-
+  7. Upload screencast to YouTube
 
 1. Cleanup code
 ---------------
@@ -99,3 +99,11 @@ Tidy YAML files
     git push origin tag 8.x-5.0-VERSION
 
 [Create new release](https://www.drupal.org/node/add/project-release/2640714)
+
+
+7. Upload screencast to YouTube
+-------------------------------
+
+- Title : Webform 8.x-5.x-betaXX
+- Tags: Drupal 8,Webform,Form Builder
+- Privacy: listed
