@@ -330,17 +330,17 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function setStatus($status) {
-    if ($status === TRUE || $status === WebformInterface::STATUS_OPEN) {
-      $this->status = WebformInterface::STATUS_OPEN;
-    }
-    elseif ($status === FALSE || $status === WebformInterface::STATUS_CLOSED) {
-      $this->status = WebformInterface::STATUS_CLOSED;
-    }
-    elseif ($status === NULL || $status === WebformInterface::STATUS_SCHEDULED) {
+    if ($status === NULL || $status === WebformInterface::STATUS_SCHEDULED) {
       $this->status = WebformInterface::STATUS_SCHEDULED;
     }
+    elseif ($status === WebformInterface::STATUS_OPEN) {
+      $this->status = WebformInterface::STATUS_OPEN;
+    }
+    elseif ($status === WebformInterface::STATUS_CLOSED) {
+      $this->status = WebformInterface::STATUS_CLOSED;
+    }
     else {
-      throw new \InvalidArgumentException(sprintf('Invalid "%s" status argument.', $status));
+      $this->status = ((bool) $status) ? WebformInterface::STATUS_OPEN : WebformInterface::STATUS_CLOSED;
     }
     return $this;
   }
