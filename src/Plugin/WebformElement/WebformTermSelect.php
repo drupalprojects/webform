@@ -71,7 +71,7 @@ class WebformTermSelect extends Select implements WebformEntityReferenceInterfac
       '#size' => 10,
       '#states' => [
         'visible' => [
-          [':input[name="term_reference[breadcrumb]"]' => ['checked' => TRUE]],
+          [':input[name="properties[breadcrumb]"]' => ['checked' => TRUE]],
           'or',
           [':input[name="properties[format]"]' => ['value' => 'breadcrumb']],
         ],
@@ -83,7 +83,7 @@ class WebformTermSelect extends Select implements WebformEntityReferenceInterfac
       '#size' => 10,
       '#states' => [
         'visible' => [
-          ':input[name="term_reference[breadcrumb]"]' => [
+          ':input[name="properties[breadcrumb]"]' => [
             'checked' => FALSE,
           ],
         ],
