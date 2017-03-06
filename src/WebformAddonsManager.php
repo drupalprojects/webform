@@ -113,6 +113,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Score.
+    $projects['webform_score'] = [
+      'title' => $this->t('Webform Score'),
+      'description' => $this->t('Lets you score an individual user\'s answers, then store and display the scores.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_score'),
+      'category' => 'element',
+    ];
+
     // Spam: CAPTCHA.
     $projects['captcha'] = [
       'title' => $this->t('CAPTCHA'),
