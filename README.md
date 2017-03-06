@@ -31,7 +31,9 @@ The primary use case for this module is to:
 
 ### Presentations, Blog Posts, & Articles
 
-- [Webform 8.x-5.x @ NJ DrupalCamp](https://www.drupalcampnj.org/program/sessions/building-webforms-drupal-8)
+- [How to Make a Complex Webform in Drupal 8](https://www.ostraining.com/blog/drupal/how-to-make-a-complex-webform-in-drupal-8/)
+- [Webform and Drupal 8 @ DrupalCamp London 2016](https://www.slideshare.net/philipnorton42/webform-and-drupal-8) \[Slides\]
+- [Webform 8.x-5.x @ NJ DrupalCamp](https://www.drupalcampnj.org/program/sessions/building-webforms-drupal-8) \[Video\]
 - [Getting NYU onto Webform](https://www.fourkitchens.com/blog/article/getting-nyu-yaml-form)
 - [Webforms for Drupal 8](https://www.gaiaresources.com.au/yaml-forms-drupal-8/)
 - [Creating Webform Handlers in Drupal 8](http://fivemilemedia.co.uk/blog/creating-yaml-form-handlers-drupal-8)
