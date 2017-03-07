@@ -251,7 +251,7 @@ abstract class WebformTestBase extends WebTestBase {
    * @see \Drupal\views\Tests\ViewTestData::createTestViews
    */
   protected function loadWebform($id) {
-    $storage = \Drupal::entityManager()->getStorage('webform');
+    $storage = \Drupal::entityTypeManager()->getStorage('webform');
     if ($webform = $storage->load($id)) {
       return $webform;
     }

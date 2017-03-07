@@ -40,7 +40,7 @@ function webform_form_config_single_export_form_alter(&$form, FormStateInterface
 function _webform_form_config_single_export_form_update_export($form, FormStateInterface $form_state) {
   // Determine the full config name for the selected config entity.
   if ($form_state->getValue('config_type') !== 'system.simple') {
-    $definition = \Drupal::entityManager()->getDefinition($form_state->getValue('config_type'));
+    $definition = \Drupal::entityTypeManager()->getDefinition($form_state->getValue('config_type'));
     $name = $definition->getConfigPrefix() . '.' . $form_state->getValue('config_name');
   }
   // The config name is used directly for simple configuration.
