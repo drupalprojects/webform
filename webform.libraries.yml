@@ -187,7 +187,6 @@ webform.element.buttons:
     js/webform.element.buttons.js: {}
   dependencies:
     - core/jquery.ui.button
-    - webform/jquery.common_ancestor
 
 webform.element.codemirror.text:
   version: VERSION
@@ -509,13 +508,6 @@ webform.element.video_file:
   css:
     theme:
       css/webform.element.video_file.css: {}
-
-# jQuery libraries.
-
-jquery.common_ancestor:
-  version: VERSION
-  js:
-    js/jquery.common_ancestor.js:  {}
 
 # External libraries.
 
