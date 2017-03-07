@@ -2,10 +2,11 @@
 
 namespace Drupal\webform\Plugin\DevelGenerate;
 
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\devel_generate\DevelGenerateBase;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -37,6 +38,13 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    * @var bool
    */
   protected static $generatingSubmissions = FALSE;
+
+  /**
+   * The database object.
+   *
+   * @var object
+   */
+  protected $database;
 
   /**
    * The entity type manager.
@@ -75,14 +83,17 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\webform\WebformSubmissionGenerateInterface $webform_submission_generate
    *   The webform submission generator.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionGenerateInterface $webform_submission_generate) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $database, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionGenerateInterface $webform_submission_generate) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
+    $this->database = $database;
     $this->entityTypeManager = $entity_type_manager;
     $this->webformSubmissionGenerate = $webform_submission_generate;
 
@@ -96,6 +107,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration, $plugin_id, $plugin_definition,
+      $container->get('database'),
       $container->get('entity_type.manager'),
       $container->get('webform_submission.generate')
     );
@@ -332,7 +344,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    */
   protected function getUsers() {
     $users = [];
-    $result = db_query_range("SELECT uid FROM {users}", 0, 50);
+    $result = $this->database->queryRange('SELECT uid FROM {users}', 0, 50);
     foreach ($result as $record) {
       $users[] = $record->uid;
     }
