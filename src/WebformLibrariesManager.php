@@ -142,6 +142,13 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'url' => Url::fromUri('http://ubilabs.github.io/geocomplete/'),
       'version' => '1.7.0',
     ];
+    $libraries['icheck'] = [
+      'title' => $this->t('iCheck'),
+      'description' => $this->t('Highly customizable checkboxes and radio buttons for jQuery and Zepto.'),
+      'notes' => $this->t('iCheck is used to optionally enhance checkboxes and radio buttons.'),
+      'url' => Url::fromUri('http://icheck.fronteed.com/'),
+      'version' => '1.0.2 ',
+    ];
     $libraries['inputmask'] = [
       'title' => $this->t('jQuery Input Mask'),
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),

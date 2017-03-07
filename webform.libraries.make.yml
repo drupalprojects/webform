@@ -24,6 +24,13 @@ libraries:
       url: 'https://github.com/ubilabs/geocomplete.git'
       tag: '1.7.0'
 
+  icheck:
+    directory_name: jquery.icheck
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/fronteed/icheck/archive/1.0.2.zip'
+
   inputmask:
     directory_name: jquery.inputmask
     destination: libraries

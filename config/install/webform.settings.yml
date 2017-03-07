@@ -76,6 +76,7 @@ elements:
     messages messages--warning
     messages messages--status
   default_description_display: ''
+  default_icheck: ''
   default_google_maps_api_key: ''
   excluded_types: {  }
 file:

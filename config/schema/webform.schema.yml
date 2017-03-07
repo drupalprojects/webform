@@ -115,6 +115,9 @@ webform.settings:
         classes:
           type: string
           label: 'Element CSS classes'
+        default_icheck:
+          type: string
+          label: 'Default iCheck style'
         default_description_display:
           type: string
           label: 'Default title display'

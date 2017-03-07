@@ -616,3 +616,10 @@ function webform_update_8021() {
     }
   }
 }
+
+/**
+ * Issue #2858246: Enhance checkboxes and radios using iCheck.
+ */
+function webform_update_8022() {
+  _webform_update_admin_settings();
+}

@@ -27,6 +27,8 @@ class Checkboxes extends OptionsBase {
       'multiple_error' => '',
       // Options settings.
       'options_display' => 'one_column',
+      // iCheck settings.
+      'icheck' => '',
     ];
   }
 

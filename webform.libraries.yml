@@ -322,6 +322,19 @@ webform.element.html_editor:
     - core/jquery.once
     - webform/ckeditor
 
+webform.element.icheck:
+  version: VERSION
+  css:
+    theme:
+      css/webform.element.icheck.css: {}
+  js:
+    js/webform.element.icheck.js: { weight: -10 } # iCheck library must be executed before #states.
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/jquery.icheck
+
 webform.element.inputmask:
   version: VERSION
   js:
@@ -514,7 +527,7 @@ webform.element.video_file:
 
 ckeditor:
   remote: http://ckeditor.com/
-  version: 4.5.11
+  version: '4.5.11'
   license:
     name: MIT
     url: http://codemirror.net/LICENSE
@@ -526,7 +539,7 @@ ckeditor:
 
 codemirror.text:
   remote: https://github.com/codemirror/codemirror
-  version: &webform_codemirror_version 5.21.0
+  version: &webform_codemirror_version '5.21.0'
   license: &webform_codemirror_license
     name: MIT
     url: http://codemirror.net/LICENSE
@@ -580,7 +593,7 @@ codemirror.javascript:
 
 jquery.counter:
   remote: https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin
-  version: 2.3.5
+  version: '2.3.5'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
@@ -594,7 +607,7 @@ jquery.counter:
 
 jquery.geocomplete:
   remote: http://ubilabs.github.io/geocomplete/
-  version: 1.7.0
+  version: '1.7.0'
   license:
     name: MIT
     url: https://github.com/ubilabs/geocomplete/blob/master/MIT-LICENSE.txt
@@ -606,9 +619,53 @@ jquery.geocomplete:
   dependencies:
     - core/jquery
 
+jquery.icheck:
+  remote: http://icheck.fronteed.com/
+  version: &webform_icheck_version '1.0.2'
+  license: &webform_icheck_license
+    name: MIT
+    url: https://en.wikipedia.org/wiki/MIT_License
+    gpl-compatible: true
+  cdn: &webform_icheck_cdn
+    /libraries/jquery.icheck//: https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/
+  js:
+    /libraries/jquery.icheck/icheck.js: {}
+  dependencies:
+    - core/jquery
+
+jquery.icheck.flat:
+  version: *webform_icheck_version
+  license: *webform_icheck_license
+  cdn: *webform_icheck_cdn
+  css:
+    theme:
+      /libraries/jquery.icheck/skins/flat/_all.css: {}
+  dependencies:
+    - webform/jquery.icheck
+
+jquery.icheck.minimal:
+  version: *webform_icheck_version
+  license: *webform_icheck_license
+  cdn: *webform_icheck_cdn
+  css:
+    theme:
+      /libraries/jquery.icheck/skins/minimal/_all.css: {}
+  dependencies:
+    - webform/jquery.icheck
+
+jquery.icheck.square:
+  version: *webform_icheck_version
+  license: *webform_icheck_license
+  cdn: *webform_icheck_cdn
+  css:
+    theme:
+      /libraries/jquery.icheck/skins/square/_all.css: {}
+  dependencies:
+    - webform/jquery.icheck
+
 jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask
-  version: 3.3.3
+  version: '3.3.3'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
@@ -622,7 +679,7 @@ jquery.inputmask:
 
 jquery.intl-tel-input:
   remote: https://github.com/jackocnr/intl-tel-input
-  version: v11.0.0
+  version: 'v11.0.0'
   license:
     name: MIT
     url: https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE
@@ -641,7 +698,7 @@ jquery.intl-tel-input:
 
 jquery.rateit:
   remote: https://github.com/gjunge/rateit.js
-  version: 1.1.1
+  version: '1.1.1'
   license:
     name: MIT
     url: https://github.com/gjunge/rateit.js/blob/master/LICENSE.md
@@ -658,7 +715,7 @@ jquery.rateit:
 
 jquery.select2:
   remote: https://select2.github.io/
-  version: 4.0.3
+  version: '4.0.3'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
@@ -675,7 +732,7 @@ jquery.select2:
 
 jquery.timepicker:
   remote: https://github.com/jonthornton/jquery-timepicker
-  version: 1.11.8
+  version: '1.11.8'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
@@ -692,7 +749,7 @@ jquery.timepicker:
 
 jquery.toggles:
   remote: https://github.com/simontabor/jquery-toggles/
-  version: 4.0.0
+  version: '4.0.0'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
@@ -709,7 +766,7 @@ jquery.toggles:
 
 signature_pad:
   remote: https://github.com/szimek/signature_pad
-  version: 1.5.3
+  version: '1.5.3'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php

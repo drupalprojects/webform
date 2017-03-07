@@ -24,6 +24,8 @@ class Radios extends OptionsBase {
     return parent::getDefaultProperties() + [
       // Form display.
       'options_display' => 'one_column',
+      // iCheck settings.
+      'icheck' => '',
     ];
   }
 

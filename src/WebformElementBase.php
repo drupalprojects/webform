@@ -527,6 +527,32 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element['#attached']['library'][] = 'webform/webform.tooltip';
     }
 
+    // Add iCheck support.
+    if ($this->hasProperty('icheck')) {
+      $icheck = NULL;
+      $icheck_skin = NULL;
+      if (isset($element['#icheck'])) {
+        if ($element['#icheck'] != 'none') {
+          $icheck = $element['#icheck'];
+          $icheck_skin = strtok($element['#icheck'], '-');
+        }
+      }
+      elseif ($default_icheck = $this->configFactory->get('webform.settings')->get('elements.default_icheck')) {
+        $icheck = $default_icheck;
+        $icheck_skin = strtok($default_icheck, '-');
+      }
+      if ($icheck) {
+        if ($this->hasProperty('wrapper_attributes')) {
+          $element['#wrapper_attributes']['data-webform-icheck'] = $icheck;
+        }
+        else {
+          $element['#attributes']['data-webform-icheck'] = $icheck;
+        }
+        $element['#attached']['library'][] = 'webform/webform.element.icheck';
+        $element['#attached']['library'][] = 'webform/jquery.icheck.' . $icheck_skin;
+      }
+    }
+
     // Add .webform-has-field-prefix and .webform-has-field-suffix class.
     if (!empty($element['#field_prefix'])) {
       $element[$attributes_property]['class'][] = 'webform-has-field-prefix';
@@ -894,7 +920,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         return implode(PHP_EOL . '---' . PHP_EOL, $items);
 
       case 'and':
-        return WebformArrayHelper::toString($items, t('and'));
+        return WebformArrayHelper::toString($items, $this->t('and'));
 
       case 'semicolon':
         return implode('; ', $items);
@@ -1248,27 +1274,27 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Set default states that apply to the element/container and sub elements.
     $states += [
-      'visible' => t('Visible'),
-      'invisible' => t('Invisible'),
-      'enabled' => t('Enabled'),
-      'disabled' => t('Disabled'),
-      'required' => t('Required'),
-      'optional' => t('Optional'),
+      'visible' => $this->t('Visible'),
+      'invisible' => $this->t('Invisible'),
+      'enabled' => $this->t('Enabled'),
+      'disabled' => $this->t('Disabled'),
+      'required' => $this->t('Required'),
+      'optional' => $this->t('Optional'),
     ];
 
     // Set element type specific states.
     switch ($this->getPluginId()) {
       case 'checkbox':
         $states += [
-          'checked' => t('Checked'),
-          'unchecked' => t('Unchecked'),
+          'checked' => $this->t('Checked'),
+          'unchecked' => $this->t('Unchecked'),
         ];
         break;
 
       case 'details':
         $states += [
-          'expanded' => t('Expanded'),
-          'collapsed' => t('Collapsed'),
+          'expanded' => $this->t('Expanded'),
+          'collapsed' => $this->t('Collapsed'),
         ];
         break;
     }
@@ -1538,6 +1564,57 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#description' => $this->t('Contents should be visible (open) to the user.'),
       '#return_value' => TRUE,
     ];
+    $default_icheck = $this->configFactory->get('webform.settings')->get('elements.default_icheck');
+    $form['form']['icheck'] = [
+      '#type' => 'select',
+      '#title' => 'Enhance using iCheck',
+      '#description' => $this->t('Replaces @type element with jQuery <a href=":href">iCheck</a> boxes.', ['@type' => Unicode::strtolower($this->getPluginLabel()), ':href' => 'http://icheck.fronteed.com/']),
+      '#options' => [
+        '' => '',
+        (string) $this->t('Minimal') => [
+          'minimal' => $this->t('Minimal: Black'),
+          'minimal-grey' => $this->t('Minimal: Grey'),
+          'minimal-yellow' => $this->t('Minimal: Yellow'),
+          'minimal-orange' => $this->t('Minimal: Orange'),
+          'minimal-red' => $this->t('Minimal: Red'),
+          'minimal-pink' => $this->t('Minimal: Pink'),
+          'minimal-purple' => $this->t('Minimal: Purple'),
+          'minimal-blue' => $this->t('Minimal: Blue'),
+          'minimal-green' => $this->t('Minimal: Green'),
+          'minimal-aero' => $this->t('Minimal: Aero'),
+        ],
+        (string) $this->t('Square') => [
+          'square' => $this->t('Square: Black'),
+          'square-grey' => $this->t('Square: Grey'),
+          'square-yellow' => $this->t('Square: Yellow'),
+          'square-orange' => $this->t('Square: Orange'),
+          'square-red' => $this->t('Square: Red'),
+          'square-pink' => $this->t('Square: Pink'),
+          'square-purple' => $this->t('Square: Purple'),
+          'square-blue' => $this->t('Square: Blue'),
+          'square-green' => $this->t('Square: Green'),
+          'square-aero' => $this->t('Square: Aero'),
+        ],
+        (string) $this->t('Flat') => [
+          'flat' => $this->t('Flat: Black'),
+          'flat-grey' => $this->t('Flat: Grey'),
+          'flat-yellow' => $this->t('Flat: Yellow'),
+          'flat-orange' => $this->t('Flat: Orange'),
+          'flat-red' => $this->t('Flat: Red'),
+          'flat-pink' => $this->t('Flat: Pink'),
+          'flat-purple' => $this->t('Flat: Purple'),
+          'flat-blue' => $this->t('Flat: Blue'),
+          'flat-green' => $this->t('Flat: Green'),
+          'flat-aero' => $this->t('Flat: Aero'),
+        ],
+      ],
+    ];
+    if ($default_icheck) {
+      $icheck_options = OptGroup::flattenOptions($form['form']['icheck']['#options']);
+      $form['form']['icheck']['#description'] .= '<br/>' . $this->t("Leave blank to use the default iCheck style. Select 'None' to display the default HTML element.");
+      $form['form']['icheck']['#description'] .= '<br/>' . $this->t('Defaults to: %value', ['%value' => $icheck_options[$default_icheck]]);
+      $form['form']['icheck']['#options']['none'] = $this->t('None');
+    }
 
     /* Flexbox item */
 
@@ -1938,7 +2015,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $t_args = [
         '@properties' => WebformArrayHelper::toString($ignored_properties),
       ];
-      $form_state->setErrorByName('custom', t('Element contains ignored/unsupported properties: @properties.', $t_args));
+      $form_state->setErrorByName('custom', $this->t('Element contains ignored/unsupported properties: @properties.', $t_args));
     }
   }
 

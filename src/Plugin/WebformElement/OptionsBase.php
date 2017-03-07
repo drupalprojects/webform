@@ -30,7 +30,7 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Issue #2836374: Wrapper attributes are not supported by composite
     // elements, this includes radios, checkboxes, and buttons.
-    if (preg_match('/(radios|checkboxes|buttons)/', $this->getPluginId())) {
+    if (preg_match('/(radios|checkboxes|buttons|tableselect|tableselect_sort)$/', $this->getPluginId())) {
       unset($default_properties['wrapper_attributes']);
     }
 

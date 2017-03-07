@@ -28,6 +28,8 @@ class TableSelect extends OptionsBase {
       'multiple_error' => '',
       // Table settings.
       'js_select' => TRUE,
+      // iCheck settings.
+      'icheck' => '',
     ];
   }
 
