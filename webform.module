@@ -27,9 +27,9 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
 
-module_load_include('inc', 'webform', 'includes/webform.libraries');
-module_load_include('inc', 'webform', 'includes/webform.options');
-module_load_include('inc', 'webform', 'includes/webform.translation');
+require_once __DIR__ . '/includes/webform.libraries.inc';
+require_once __DIR__ . '/includes/webform.options.inc';
+require_once __DIR__ . '/includes/webform.translation.inc';
 
 /**
  * Implements hook_help().
