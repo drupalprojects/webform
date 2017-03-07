@@ -86,6 +86,7 @@ class WebformElementStates extends FormElement {
         'expanded' => t('Expanded'),
         'collapsed' => t('Collapsed'),
         'value' => t('Value is'),
+        '!value' => t('Value is not'),
       ],
     ];
 
@@ -296,7 +297,10 @@ class WebformElementStates extends FormElement {
       '#default_value' => $condition['value'],
       '#states' => [
         'visible' => [
-          $trigger_selector => ['value' => 'value'],
+          [$trigger_selector => ['value' => 'value']],
+          'or',
+          [$trigger_selector => ['value' => '!value']],
+
         ],
       ],
     ];
