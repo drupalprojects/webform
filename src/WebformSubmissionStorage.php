@@ -595,7 +595,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * {@inheritdoc}
    */
   public function getMaxSerial(WebformInterface $webform) {
-    $query = db_select('webform_submission');
+    $query = \Drupal::database()->query('webform_submission');
     $query->condition('webform_id', $webform->id());
     $query->addExpression('MAX(serial)');
     return $query->execute()->fetchField() + 1;
