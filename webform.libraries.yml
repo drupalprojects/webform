@@ -502,6 +502,7 @@ webform.element.toggle:
   dependencies:
     - core/drupal
     - webform/jquery.toggles
+    - core/jquery.once
 
 webform.element.video_file:
   version: VERSION
