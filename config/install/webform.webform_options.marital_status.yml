@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: marital_status
 label: 'Marital status'
+category: Demographic
 options: |
   Single: Single
   Married: Married

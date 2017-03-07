@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: likert_ten_scale
 label: 'Likert: Ten Scale'
+category: Likert
 options: |
   1: 1
   2: 2

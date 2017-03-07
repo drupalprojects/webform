@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: state_codes
 label: 'State codes'
+category: 'Geographic'
 options: |
   AL: Alabama
   AK: Alaska

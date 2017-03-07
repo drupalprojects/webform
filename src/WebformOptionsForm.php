@@ -22,6 +22,9 @@ class WebformOptionsForm extends EntityForm {
     /** @var \Drupal\webform\WebformOptionsInterface $webform_options */
     $webform_options = $this->entity;
 
+    /** @var \Drupal\webform\WebformOptionsStorageInterface $webform_options_storage */
+    $webform_options_storage = $this->entityTypeManager->getStorage('webform_options');
+
     $form['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
@@ -38,6 +41,14 @@ class WebformOptionsForm extends EntityForm {
       '#required' => TRUE,
       '#disabled' => !$webform_options->isNew(),
       '#default_value' => $webform_options->id(),
+    ];
+
+    $form['category'] = [
+      '#type' => 'webform_select_other',
+      '#title' => $this->t('Category'),
+      '#options' => $webform_options_storage->getCategories(),
+      '#required' => TRUE,
+      '#default_value' => $webform_options->get('category'),
     ];
 
     // Call the isolated edit webform that can be overridden by the

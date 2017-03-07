@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: state_province_codes
 label: 'State/Province codes'
+category: 'Geographic'
 options: |
   AL: Alabama
   AK: Alaska

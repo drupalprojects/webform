@@ -11,6 +11,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 
@@ -192,6 +193,48 @@ function _webform_update_form_settings() {
 
     // Save data.
     $webform_config->setData($data)->save();
+  }
+}
+
+/**
+ * Update webform options setting to reflect changes in the default settings.
+ *
+ * This function can be used to apply new webform options configuration to
+ * all existing webforms options.
+ *
+ * @see \Drupal\webform\Entity\WebformOptions
+ */
+function _webform_update_options_settings() {
+  $default_properties = [
+    'langcode' => 'en',
+    'status' => true,
+    'dependencies' => [],
+    'id' => '',
+    'label' => '',
+    'category' => '',
+    'options' => '',
+  ];
+
+  $config_factory = \Drupal::configFactory();
+  // Update 'webform.webform_options.*' configuration.
+  foreach ($config_factory->listAll('webform.webform_options.') as $webform_config_name) {
+    $webform_options_config = $config_factory->getEditable($webform_config_name);
+
+    // Get data.
+    $data = $webform_options_config->getRawData();
+
+    // Always apply the default properties.
+    $properties = $default_properties;
+    // Now apply defined properties.
+    foreach ($data as $name => $value) {
+      $properties[$name] = $value;
+    }
+
+    // Set properties.
+    $data = $properties;
+
+    // Save data.
+    $webform_options_config->setData($data)->save();
   }
 }
 
@@ -551,4 +594,25 @@ function webform_update_8020() {
     $webform->setStatus($webform->get('status'))->save();
   }
   _webform_update_form_settings();
+}
+
+/**
+ * Issue #2858139: Add OptGroup support to WebformOption entity.
+ */
+function webform_update_8021() {
+  _webform_update_options_settings();
+
+  // Get WebformOptions category from config/install.
+  $webform_options = WebformOptions::loadMultiple();
+  $config_install_path = drupal_get_path('module', 'webform') . '/config/install';
+  foreach ($webform_options as $id => $webform_option) {
+    if (!$webform_option->get('category')) {
+      if (file_exists("$config_install_path/webform.webform_options.$id.yml")) {
+        $yaml = file_get_contents("$config_install_path/webform.webform_options.$id.yml");
+        $data = Yaml::decode($yaml);
+        $webform_option->set('category', $data['category']);
+        $webform_option->save();
+      }
+    }
+  }
 }

@@ -6,4 +6,5 @@ dependencies:
       - webform
 id: languages
 label: Languages
+category: Language
 options: ''

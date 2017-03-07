@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: likert_agreement
 label: 'Likert: Agreement'
+category: Likert
 options: |
   1: Much Worse
   2: Somewhat Worse

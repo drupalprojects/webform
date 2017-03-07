@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: titles
 label: Titles
+category: Demographic
 options: |
   Miss: Miss
   Ms: Ms

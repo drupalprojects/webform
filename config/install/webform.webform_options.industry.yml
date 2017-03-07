@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: industry
 label: Industry
+category: Demographic
 options: |
   Accounting/Finance: Accounting/Finance
   Advertising/Public Relations: Advertising/Public Relations

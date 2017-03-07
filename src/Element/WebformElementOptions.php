@@ -71,18 +71,9 @@ class WebformElementOptions extends FormElement {
   public static function processWebformElementOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
-    // Predefined options.
-    // @see (/admin/structure/webform/settings/options/manage)
-    $options = [];
-    $webform_options = WebformOptionsEntity::loadMultiple();
-    foreach ($webform_options as $id => $webform_option) {
-      // Filter likert options for answers to the likert element.
-      if ($element['#likert'] && strpos($id, 'likert_') !== 0) {
-        continue;
-      }
-      $options[$id] = $webform_option->label();
-    }
-    asort($options);
+    /** @var \Drupal\webform\WebformOptionsStorageInterface $webform_options_storage */
+    $webform_options_storage = \Drupal::entityTypeManager()->getStorage('webform_options');
+    $options = ($element['#likert']) ? $webform_options_storage->getLikerts() : $webform_options_storage->getOptions();
 
     $t_args = [
       '@type' => ($element['#likert']) ? t('answers') : t('options'),
@@ -96,6 +87,7 @@ class WebformElementOptions extends FormElement {
       '#options' => [
         self::CUSTOM_OPTION => t('Custom...'),
       ] + $options,
+
       '#attributes' => [
         'class' => ['js-' . $element['#id'] . '-options'],
       ],

@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: ethnicity
 label: Ethnicity
+category: Demographic
 options: |
   Caucasian: Caucasian
   'Latino/Hispanic': 'Latino/Hispanic'

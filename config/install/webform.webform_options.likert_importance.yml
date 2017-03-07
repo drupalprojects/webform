@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: likert_importance
 label: 'Likert: Importance'
+category: Likert
 options: |
   1: Not at all Important
   2: Somewhat Important

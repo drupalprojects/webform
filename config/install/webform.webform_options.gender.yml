@@ -6,6 +6,7 @@ dependencies:
       - webform
 id: gender
 label: Gender
+category: Demographic
 options: |
   Male: Male
   Female: Female

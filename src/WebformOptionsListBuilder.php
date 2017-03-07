@@ -20,6 +20,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     $header['label'] = $this->t('Label');
     $header['id'] = $this->t('ID');
+    $header['category'] = $this->t('Category');
     $header['options'] = [
       'data' => $this->t('Options'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
@@ -38,6 +39,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
     /** @var \Drupal\webform\WebformOptionsInterface $entity */
     $row['label'] = $entity->toLink($entity->label(), 'edit-form');
     $row['id'] = $entity->id();
+    $row['category'] = $entity->get('category');
 
     $options = WebformOptions::getElementOptions(['#options' => $entity->id()]);
     $options = OptGroup::flattenOptions($options);
