@@ -408,7 +408,7 @@ abstract class WebformTestBase extends WebTestBase {
    * Purge all submission before the webform.module is uninstalled.
    */
   protected function purgeSubmissions() {
-    \Drupal::database()->query('DELETE FROM {webform_submission}');
+    db_query('DELETE FROM {webform_submission}');
   }
 
   /**

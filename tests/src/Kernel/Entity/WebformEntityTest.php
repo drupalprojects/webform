@@ -290,7 +290,8 @@ class WebformEntityTest extends KernelTestBase {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::create(['id' => 'webform_test']);
     $webform->save();
-    $aliases = \Drupal::database()->query('SELECT source, alias FROM {url_alias}')->fetchAllKeyed();
+
+    $aliases = db_query('SELECT source, alias FROM {url_alias}')->fetchAllKeyed();
     $this->assertEquals($aliases['/webform/webform_test'], '/form/webform-test');
     $this->assertEquals($aliases['/webform/webform_test/confirmation'], '/form/webform-test/confirmation');
     $this->assertEquals($aliases['/webform/webform_test/submissions'], '/form/webform-test/submissions');

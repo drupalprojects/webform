@@ -142,7 +142,7 @@ class WebformUiElementTest extends WebformTestBase {
 
     // Check that 'test' element is being added to the webform_submission_data table.
     $this->drupalPostForm('webform/contact/test', [], t('Send message'));
-    $this->assertEqual(1, \Drupal::database()->query("SELECT COUNT(sid) FROM {webform_submission_data} WHERE webform_id='contact' AND name='test'")->fetchField());
+    $this->assertEqual(1, db_query("SELECT COUNT(sid) FROM {webform_submission_data} WHERE webform_id='contact' AND name='test'")->fetchField());
 
     // Check delete element.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/test/delete', [], t('Delete'));
@@ -151,7 +151,7 @@ class WebformUiElementTest extends WebformTestBase {
     $this->assertNoRaw('<input data-drupal-selector="edit-test" type="text" id="edit-test" name="test" value="This is a default value" size="60" maxlength="255" class="form-text" />');
 
     // Check that 'test' element values were deleted from the webform_submission_data table.
-    $this->assertEqual(0, \Drupal::database()->query("SELECT COUNT(sid) FROM {webform_submission_data} WHERE webform_id='contact' AND name='test'")->fetchField());
+    $this->assertEqual(0, db_query("SELECT COUNT(sid) FROM {webform_submission_data} WHERE webform_id='contact' AND name='test'")->fetchField());
 
     /**************************************************************************/
     // Change type
