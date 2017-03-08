@@ -341,8 +341,8 @@ trait WebformEntityReferenceTrait {
 
     // Alter element properties.
     if ($properties = $form_state->getValue('properties')) {
-      $target_type = $properties['target_type'];
-      $selection_handler = $properties['selection_handler'];
+      $target_type = (isset($properties['target_type'])) ? $properties['target_type'] : 'node';
+      $selection_handler = (isset($properties['selection_handler'])) ? $properties['selection_handler'] : 'default:' . $target_type;
       // If the default selection handler has changed  when need to update its
       // value.
       if (strpos($selection_handler, 'default:') === 0 && $selection_handler != "default:$target_type") {
@@ -350,7 +350,7 @@ trait WebformEntityReferenceTrait {
         $selection_settings = [];
       }
       else {
-        $selection_settings = $properties['selection_settings'] ?: [];
+        $selection_settings = (isset($properties['selection_settings'])) ? $properties['selection_settings'] : [];
       }
     }
     else {
