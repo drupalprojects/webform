@@ -22,18 +22,15 @@ class WebformElementMappingTest extends WebformTestBase {
    * Test mapping element.
    */
   public function testMappingElement() {
-    $this->assertTrue(TRUE);
-    return;
-
     $this->drupalGet('webform/test_element_mapping');
 
     // Check default element.
-    $this->assertRaw('<th width="50%">Source ➡</th>');
+    $this->assertRaw('<th width="50%">Source &rarr;</th>');
     $this->assertRaw('<th width="50%">Destination</th>');
     $this->assertRaw('<select data-drupal-selector="edit-webform-mapping-one" id="edit-webform-mapping-one" name="webform_mapping[one]" class="form-select"><option value="" selected="selected">- None -</option><option value="four">Four</option><option value="five">Five</option><option value="six">Six</option></select>');
 
     // Check custom element.
-    $this->assertRaw('<th width="50%">{Custom source} »</th>');
+    $this->assertRaw('<th width="50%">{Custom source} &raquo;</th>');
     $this->assertRaw('<th width="50%">{Destination source}</th>');
     $this->assertRaw('<select data-drupal-selector="edit-webform-mapping-one" id="edit-webform-mapping-one" name="webform_mapping[one]" class="form-select"><option value="" selected="selected">- None -</option><option value="four">Four</option><option value="five">Five</option><option value="six">Six</option></select>');
 

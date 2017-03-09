@@ -28,7 +28,7 @@ class WebformMapping extends FormElement {
       '#required' => FALSE,
       '#source' => [],
       '#destination' => [],
-      '#arrow' => '➡',
+      '#arrow' => '→',
     ];
   }
 
@@ -40,8 +40,10 @@ class WebformMapping extends FormElement {
     $element += [
       '#source__title' => t('Source'),
       '#destination__title' => t('Destination'),
-      '#arrow' => '➡',
+      '#arrow' => '→',
     ];
+
+    $arrow = htmlentities($element['#arrow']);
 
     // Setup destination__type depending if #destination is defined.
     if (empty($element['#destination__type'])) {
@@ -62,8 +64,8 @@ class WebformMapping extends FormElement {
 
     // Build header.
     $header = [
-      ['data' => $element['#source__title']  . ' ' . $element['#arrow'], 'width' => '50%'],
-      ['data' => $element['#destination__title'], 'width' => '50%'],
+      ['data' => ['#markup' => $element['#source__title']  . ' ' . $arrow], 'width' => '50%'],
+      ['data' => ['#markup' => $element['#destination__title']], 'width' => '50%'],
     ];
 
     // Build rows.
@@ -88,7 +90,7 @@ class WebformMapping extends FormElement {
       }
 
       $rows[$source_key] = [
-        'source' => ['#markup' => $source_title . ' ' . $element['#arrow']],
+        'source' => ['#markup' => $source_title . ' ' . $arrow],
         $source_key => $destination_element,
       ];
     }

@@ -5,7 +5,6 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element as RenderElement;
-use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformMapping as WebformMappingElement;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -44,7 +43,7 @@ class WebformMapping extends WebformElementBase {
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
       // Mapping settings.
-      'arrow' => '➡',
+      'arrow' => '→',
       'source' => [],
       'source__title' => 'Source',
       'destination' => [],
@@ -84,10 +83,10 @@ class WebformMapping extends WebformElementBase {
   public function formatHtmlItem(array &$element, $value, array $options = []) {
     $element += [
       '#destination' => [],
-      '#arrow' => '➡',
+      '#arrow' => '→',
     ];
 
-    $arrow = $element['#arrow'];
+    $arrow = htmlentities($element['#arrow']);
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
@@ -119,7 +118,7 @@ class WebformMapping extends WebformElementBase {
           $destination_title = ($destination_value) ? WebformOptionsHelper::getOptionText($destination_value, $element['#destination']) : $this->t('[blank]');
           $rows[$source_key] = [
             $source_title,
-            "$arrow $destination_title",
+            ['data' => ['#markup' => "$arrow $destination_title"]],
           ];
         }
 
@@ -160,7 +159,7 @@ class WebformMapping extends WebformElementBase {
 
     $element += [
       '#destination' => [],
-      '#arrow' => '➡',
+      '#arrow' => '→',
     ];
 
     $arrow = $element['#arrow'];
