@@ -311,19 +311,19 @@ elements: |
         '#type': tel
         '#title': 'Telephone (Value)'
         '#international': true
-        '#default_value': 123-456-7890
+        '#default_value': '+1 212-333-4444'
         '#format': value
       tel_raw:
         '#type': tel
         '#title': 'Telephone (Raw value)'
         '#international': true
-        '#default_value': 123-456-7890
+        '#default_value': '+1 212-333-4444'
         '#format': raw
       tel_link:
         '#type': tel
         '#title': 'Telephone (Link)'
         '#international': true
-        '#default_value': 123-456-7890
+        '#default_value': '+1 212-333-4444'
         '#format': link
     webform_toggle:
       '#type': details

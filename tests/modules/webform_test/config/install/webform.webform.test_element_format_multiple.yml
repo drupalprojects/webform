@@ -241,8 +241,8 @@ elements: |
         '#international': true
         '#multiple': true
         '#default_value':
-          - 123-456-7890
-          - 098-765-4321
+          - '+1 212-333-4444'
+          - '+1 718-555-6666'
         '#format_items': comma
       tel_semicolon:
         '#type': tel
@@ -250,8 +250,8 @@ elements: |
         '#international': true
         '#multiple': true
         '#default_value':
-          - 123-456-7890
-          - 098-765-4321
+          - '+1 212-333-4444'
+          - '+1 718-555-6666'
         '#format_items': semicolon
       tel_and:
         '#type': tel
@@ -259,8 +259,8 @@ elements: |
         '#international': true
         '#multiple': true
         '#default_value':
-          - 123-456-7890
-          - 098-765-4321
+          - '+1 212-333-4444'
+          - '+1 718-555-6666'
         '#format_items': and
       tel_ol:
         '#type': tel
@@ -268,8 +268,8 @@ elements: |
         '#international': true
         '#multiple': true
         '#default_value':
-          - 123-456-7890
-          - 098-765-4321
+          - '+1 212-333-4444'
+          - '+1 718-555-6666'
         '#format_items': ol
       tel_ul:
         '#type': tel
@@ -277,8 +277,8 @@ elements: |
         '#international': true
         '#multiple': true
         '#default_value':
-          - 123-456-7890
-          - 098-765-4321
+          - '+1 212-333-4444'
+          - '+1 718-555-6666'
         '#format_items': ul
     url:
       '#type': details

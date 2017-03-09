@@ -508,6 +508,30 @@ elements: |
     flex_machine_name_right:
       '#type': machine_name
       '#title': 'Machine name 02'
+  flexbox_webform_mapping:
+    '#type': webform_flexbox
+    flex_webform_mapping_left:
+      '#type': webform_mapping
+      '#title': 'Mapping 01'
+      '#source':
+        one: One
+        two: Two
+        three: Three
+      '#destination':
+        four: Four
+        five: Five
+        six: Six
+    flex_webform_mapping_right:
+      '#type': webform_mapping
+      '#title': 'Mapping 02'
+      '#source':
+        one: One
+        two: Two
+        three: Three
+      '#destination':
+        four: Four
+        five: Five
+        six: Six
   flexbox_webform_name:
     '#type': webform_flexbox
     flex_webform_name_left:

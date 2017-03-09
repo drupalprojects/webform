@@ -16,6 +16,73 @@ elements: |
     '#type': details
     '#title': 'Advanced elements'
     '#open': true
+    webform_mapping:
+      '#type': details
+      '#title': Mapping
+      webform_mapping_value:
+        '#type': webform_mapping
+        '#title': 'Mapping (Value)'
+        '#source':
+          one: One
+          two: Two
+          three: Three
+        '#destination':
+          four: Four
+          five: Five
+          six: Six
+        '#default_value':
+          one: four
+          two: four
+          three: four
+        '#format': value
+      webform_mapping_raw:
+        '#type': webform_mapping
+        '#title': 'Mapping (Raw value)'
+        '#source':
+          one: One
+          two: Two
+          three: Three
+        '#destination':
+          four: Four
+          five: Five
+          six: Six
+        '#default_value':
+          one: four
+          two: four
+          three: four
+        '#format': raw
+      webform_mapping_list:
+        '#type': webform_mapping
+        '#title': 'Mapping (List)'
+        '#source':
+          one: One
+          two: Two
+          three: Three
+        '#destination':
+          four: Four
+          five: Five
+          six: Six
+        '#default_value':
+          one: four
+          two: four
+          three: four
+        '#format': list
+      webform_mapping_table:
+        '#type': webform_mapping
+        '#title': 'Mapping (Table)'
+        '#source':
+          one: One
+          two: Two
+          three: Three
+        '#destination':
+          four: Four
+          five: Five
+          six: Six
+        '#default_value':
+          one: four
+          two: four
+          three: four
+        '#format': table
     text_format:
       '#type': details
       '#title': 'Text format'
@@ -262,24 +329,24 @@ elements: |
         '#title': 'Telephone advanced (Value)'
         '#default_value':
           type: Home
-          phone: 123-456-7890
-          ext: 1
+          phone: '+1 212-333-4444'
+          ext: 0
         '#format': value
       webform_telephone_raw:
         '#type': webform_telephone
         '#title': 'Telephone advanced (Raw value)'
         '#default_value':
           type: Home
-          phone: 123-456-7890
-          ext: 1
+          phone: '+1 212-333-4444'
+          ext: 0
         '#format': raw
       webform_telephone_list:
         '#type': webform_telephone
         '#title': 'Telephone advanced (List)'
         '#default_value':
           type: Home
-          phone: 123-456-7890
-          ext: 1
+          phone: '+1 212-333-4444'
+          ext: 0
         '#format': list
   options_elements:
     '#type': details

@@ -401,16 +401,16 @@ elements: |
         '#default_value':
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
         '#format_items': ol
       webform_telephone_ul:
         '#type': webform_telephone
@@ -419,16 +419,16 @@ elements: |
         '#default_value':
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
         '#format_items': ul
       webform_telephone_hr:
         '#type': webform_telephone
@@ -437,16 +437,16 @@ elements: |
         '#default_value':
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
           -
             type: Home
-            phone: 123-456-7890
-            ext: 1
+            phone: '+1 212-333-4444'
+            ext: 0
         '#format_items': hr
 css: ''
 javascript: ''

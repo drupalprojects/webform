@@ -39,6 +39,10 @@ function webform_test_example_elements() {
       continue;
     }
 
+    if (!empty($definition['composite'])) {
+      continue;
+    }
+
     $webform_element = $elements[$element_type];
     $element = _webform_test_get_example_element($element_type);
     if (!$element) {
@@ -46,9 +50,6 @@ function webform_test_example_elements() {
     }
 
     $category_name = (string) $webform_element->getPluginDefinition()['category'] ?: 'Other elements';
-    if ($category_name == 'Composite elements') {
-      continue;
-    }
     $category_id = preg_replace('/[^a-zA-Z0-9]+/', '_', Unicode::strtolower($category_name));
     if (empty($data[$category_id])) {
       $data[$category_id] = [

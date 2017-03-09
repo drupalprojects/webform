@@ -58,6 +58,17 @@ webform_likert:
     3: 3
     4: 4
     5: 5
+webform_mapping:
+  '#type': webform_mapping
+  '#title': webform_mapping
+  '#source':
+    one: One
+    two: Two
+    three: Three
+  '#destination':
+    four: Four
+    five: Five
+    six: Six
 webform_message:
   '#message_type': 'warning'
   '#message_message': 'This is a <strong>warning</strong> message.'

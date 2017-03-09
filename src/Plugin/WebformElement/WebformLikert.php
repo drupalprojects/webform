@@ -79,7 +79,7 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $answers = []) {
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
@@ -160,7 +160,7 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $answers = []) {
+  public function formatTextItem(array &$element, $value, array $options = []) {
     // Return empty value.
     if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';

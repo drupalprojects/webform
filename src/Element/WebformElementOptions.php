@@ -12,7 +12,8 @@ use Drupal\webform\Entity\WebformOptions as WebformOptionsEntity;
 /**
  * Provides a webform element for managing webform element options.
  *
- * This element is used by select, radios, checkboxes, and likert elements.
+ * This element is used by select, radios, checkboxes, likert, and
+ * mapping elements.
  *
  * @FormElement("webform_element_options")
  */
@@ -128,6 +129,10 @@ class WebformElementOptions extends FormElement {
     }
 
     $element['#element_validate'] = [[get_called_class(), 'validateWebformElementOptions']];
+
+    if (isset($element['#states'])) {
+      webform_process_states($element, '#wrapper_attributes');
+    }
 
     return $element;
   }

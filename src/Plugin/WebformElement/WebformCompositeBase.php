@@ -689,8 +689,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
     /** @var \Drupal\webform\WebformSubmissionGenerateInterface $generate */
     $generate = \Drupal::service('webform_submission.generate');
 
-    $values = [];
     $composite_elements = $this->getInitializedCompositeElement($element);
+    $values = [];
     for ($i = 1; $i <= 3; $i++) {
       $value = [];
       foreach (RenderElement::children($composite_elements) as $composite_key) {

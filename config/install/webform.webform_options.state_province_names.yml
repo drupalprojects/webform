@@ -6,7 +6,7 @@ dependencies:
       - webform
 id: state_province_names
 label: 'State/Province names'
-category: 'Geographic'
+category: Geographic
 options: |
   Alabama: Alabama
   Alaska: Alaska

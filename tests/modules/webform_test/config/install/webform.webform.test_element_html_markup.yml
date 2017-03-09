@@ -118,10 +118,6 @@ elements: |
       '#title': '<u>Telephone multiple</u>'
       '#international': true
       '#multiple': true
-    text_format:
-      '#type': text_format
-      '#title': '<u>Text format</u>'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden webform state</a><br/><a href="https://www.drupal.org/node/1954968">Issue #1954968: Required CKEditor fields always fail HTML5 validation</a>'
     webform_toggle:
       '#type': webform_toggle
       '#title': '<u>Toggle</u>'
@@ -239,19 +235,6 @@ elements: |
         three: Three
         four: Four
         five: Five
-    webform_likert:
-      '#type': webform_likert
-      '#title': '<u>Likert</u>'
-      '#questions':
-        q1: 'Please answer question 1?'
-        q2: 'How about now answering question 2?'
-        q3: 'Finally, here is question 3?'
-      '#answers':
-        1: 1
-        2: 2
-        3: 3
-        4: 4
-        5: 5
     radios:
       '#type': radios
       '#title': '<u>Radios</u>'
