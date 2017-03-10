@@ -90,7 +90,10 @@ class WebformEntityReferenceEntityFormatter extends EntityReferenceFormatterBase
       }
 
       if ($entity->id() && $items[$delta]->status) {
-        $values = [];
+        $values = [
+          'entity_type' => $source_entity->getEntityTypeId(),
+          'entity_id' => $source_entity->id(),
+        ];
         if (!empty($items[$delta]->default_data)) {
           $values['data'] = Yaml::decode($items[$delta]->default_data);
         }
