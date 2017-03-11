@@ -201,11 +201,6 @@ class WebformEntitySettingsForm extends EntityForm {
         WebformInterface::STATUS_CLOSED => $this->t('Closed'),
         WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled'),
       ],
-      '#states' => [
-        'visible' => [
-          ':input[name="template"]' => ['checked' => FALSE],
-        ],
-      ],
     ];
     $form['form']['scheduled'] = [
       '#type' => 'item',
@@ -216,11 +211,20 @@ class WebformEntitySettingsForm extends EntityForm {
       $this->t('If the close date/time is left blank, this webform will never be closed.'),
       '#states' => [
         'visible' => [
-          ':input[name="template"]' => ['checked' => FALSE],
           ':input[name="status"]' => ['value' => WebformInterface::STATUS_SCHEDULED],
         ],
       ],
     ];
+    // If the Webform templates module is enabled, add additional #states.
+    if ($this->moduleHandler->moduleExists('webform_templates')) {
+      $form['form']['status']['#states'] = [
+        'visible' => [
+          ':input[name="template"]' => ['checked' => FALSE],
+        ],
+      ];
+      $form['form']['scheduled']['#states']['visible'][':input[name="template"]'] = ['checked' => FALSE];
+    }
+
     $form['form']['scheduled']['dates'] = [
       '#type' => 'container',
       '#attributes' => ['class' => 'container-inline'],
