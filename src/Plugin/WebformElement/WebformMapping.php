@@ -40,6 +40,7 @@ class WebformMapping extends WebformElementBase {
       'description_display' => '',
       // Form validation.
       'required' => FALSE,
+      'required_error' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
       // Mapping settings.

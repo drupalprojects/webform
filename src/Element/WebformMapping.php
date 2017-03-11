@@ -14,6 +14,11 @@ use Drupal\Core\Render\Element\FormElement;
 class WebformMapping extends FormElement {
 
   /**
+   * Require all.
+   */
+  const REQUIRED_ALL = 'all';
+
+  /**
    * {@inheritdoc}
    */
   public function getInfo() {
@@ -53,8 +58,9 @@ class WebformMapping extends FormElement {
     // Set base destination element.
     $destination_element_base = [
       '#title_display' => 'invisible',
-      '#required' => $element['#required'],
+      '#required' => ($element['#required'] === self::REQUIRED_ALL) ? TRUE : FALSE,
     ];
+
     // Get base #destination__* properties.
     foreach ($element as $element_key => $element_value) {
       if (strpos($element_key, '#destination__') === 0 && !in_array($element_key, ['#destination__title'])) {
@@ -114,8 +120,25 @@ class WebformMapping extends FormElement {
    * Validates a mapping element.
    */
   public static function validateWebformMapping(&$element, FormStateInterface $form_state, &$complete_form) {
-    $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
-    $form_state->setValueForElement($element, array_filter($values));
+    $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
+    $value = array_filter($value);
+
+    $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
+    // Note: Not validating REQUIRED_ALL because each destination element is
+    // already required.
+    if ($element['#required'] && $element['#required'] !== self::REQUIRED_ALL && empty($value) && $has_access) {
+      if (isset($element['#required_error'])) {
+        $form_state->setError($element, $element['#required_error']);
+      }
+      elseif (isset($element['#title'])) {
+        $form_state->setError($element, t('@name field is required.', ['@name' => $element['#title']]));
+      }
+      else {
+        $form_state->setError($element);
+      }
+    }
+
+    $form_state->setValueForElement($element, $value);
   }
 
 }

@@ -40,11 +40,27 @@ class WebformElementMappingTest extends WebformTestBase {
     // Check custom textfield #size property.
     $this->assertRaw('<input data-drupal-selector="edit-webform-mapping-textfield-one" type="text" id="edit-webform-mapping-textfield-one" name="webform_mapping_textfield[one]" value="" size="10" maxlength="128" class="form-text" />');
 
+    // Check required.
+    $this->drupalPostForm('webform/test_element_mapping', [], t('Submit'));
+    $this->assertRaw('webform_mapping_required field is required.');
+    $this->assertRaw('One field is required.');
+    $this->assertRaw('Two field is required.');
+    $this->assertRaw('Three field is required.');
+
+    // Check that required all element does not display error since all the
+    // destination elements are required.
+    // @see \Drupal\webform\Element\WebformMapping::validateWebformMapping
+    $this->assertNoRaw('webform_mapping_required_all field is required.');
+
     // Check processing.
     $edit = [
       'webform_mapping[one]' => 'four',
       'webform_mapping[two]' => '',
       'webform_mapping[three]' => 'six',
+      'webform_mapping_required[one]' => 'four',
+      'webform_mapping_required_all[one]' => 'four',
+      'webform_mapping_required_all[two]' => 'five',
+      'webform_mapping_required_all[three]' => 'six',
       'webform_mapping_custom[Sunday]' => 'four',
       'webform_mapping_custom[Monday]' => 'four',
       'webform_mapping_custom[Tuesday]' => 'four',
@@ -75,6 +91,12 @@ webform_mapping_custom:
   Thursday: four
   Friday: four
   Saturday: four
+webform_mapping_required:
+  one: four
+webform_mapping_required_all:
+  one: four
+  two: five
+  three: six
 webform_mapping_select_other:
   one: five
   two: five

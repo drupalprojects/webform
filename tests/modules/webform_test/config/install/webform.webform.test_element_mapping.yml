@@ -40,6 +40,30 @@ elements: |
         four: Four
         five: Five
         six: Six
+    webform_mapping_required:
+      '#type': webform_mapping
+      '#title': webform_mapping_required
+      '#required': true
+      '#source':
+        one: One
+        two: Two
+        three: Three
+      '#destination':
+        four: Four
+        five: Five
+        six: Six
+    webform_mapping_required_all:
+      '#type': webform_mapping
+      '#title': webform_mapping_required_all
+      '#required': all
+      '#source':
+        one: One
+        two: Two
+        three: Three
+      '#destination':
+        four: Four
+        five: Five
+        six: Six
   webform_mapping_select_other_elements:
     '#type': details
     '#title': webform_mapping_select_other_elements
