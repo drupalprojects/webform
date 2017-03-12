@@ -45,7 +45,6 @@
             }
           }
         }, Drupal.webform.codeMirror.options);
-        console.log(Drupal.webform.codeMirror.options);
 
         var editor = CodeMirror.fromTextArea(this, options);
 
