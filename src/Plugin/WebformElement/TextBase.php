@@ -59,7 +59,7 @@ abstract class TextBase extends WebformElementBase {
         $element['#attributes']['data-inputmask-mask'] = $input_mask;
       }
 
-      $element['#attributes']['class'][] = 'js-webform-element-mask';
+      $element['#attributes']['class'][] = 'js-webform-input-mask';
       $element['#attached']['library'][] = 'webform/webform.element.inputmask';
     }
   }

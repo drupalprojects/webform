@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see https://github.com/jackocnr/intl-tel-input#options
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.intlTelInput = Drupal.webform.intlTelInput || {};
+  Drupal.webform.intlTelInput.options = Drupal.webform.intlTelInput.options || {};
+
   /**
    * Initialize Telephone international element.
    * @see http://intl-tel-input.com/node_modules/intl-tel-input/examples/gen/is-valid-number.html
@@ -23,9 +28,10 @@
 
         // @todo: Figure out how to lazy load utilsScript (build/js/utils.js).
         // @see https://github.com/jackocnr/intl-tel-input#utilities-script
-        $telephone.intlTelInput({
+        var options = $.extend({
           'nationalMode': false
-        });
+        }, Drupal.webform.intlTelInput.options);
+        $telephone.intlTelInput(options);
 
         var reset = function() {
           $telephone.removeClass('error');

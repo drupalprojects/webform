@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see https://github.com/jonthornton/jquery-timepicker#options
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.timePicker = Drupal.webform.timePicker || {};
+  Drupal.webform.timePicker.options = Drupal.webform.timePicker.options || {};
+  
   /**
    * Attach timepicker fallback on time elements.
    *
@@ -48,6 +53,8 @@
         else {
           options.step = 1;
         }
+
+        options = $.extend(options, Drupal.webform.timePicker.options);
 
         $input.timepicker(options);
       });

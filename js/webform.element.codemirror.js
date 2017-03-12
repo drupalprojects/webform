@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see http://codemirror.net/doc/manual.html#config
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.codeMirror = Drupal.webform.codeMirror || {};
+  Drupal.webform.codeMirror.options = Drupal.webform.codeMirror.options|| {};
+
   /**
    * Initialize CodeMirror editor.
    *
@@ -27,7 +32,7 @@
         // https://github.com/marijnh/CodeMirror-old/issues/59
         $(this).removeAttr('required');
 
-        var editor = CodeMirror.fromTextArea(this, {
+        var options = $.extend({
           mode: $(this).attr('data-webform-codemirror-mode'),
           lineNumbers: true,
           viewportMargin: Infinity,
@@ -39,7 +44,10 @@
               cm.replaceSelection(spaces, 'end', '+element');
             }
           }
-        });
+        }, Drupal.webform.codeMirror.options);
+        console.log(Drupal.webform.codeMirror.options);
+
+        var editor = CodeMirror.fromTextArea(this, options);
 
         // Now, close details.
         $details.removeAttr('open');

@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see http://docs.ckeditor.com/#!/api/CKEDITOR.config
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.htmlEditor = Drupal.webform.htmlEditor || {};
+  Drupal.webform.htmlEditor.options = Drupal.webform.htmlEditor.options || {};
+
   /**
    * Initialize HTML Editor.
    *
@@ -17,7 +22,8 @@
       $(context).find('.js-form-type-webform-html-editor textarea').once('webform-html-editor').each(function () {
         var allowedContent = drupalSettings['webform']['html_editor']['allowedContent'];
         var $textarea = $(this);
-        CKEDITOR.replace(this.id, {
+
+        var options = $.extend({
           // Turn off external config and styles.
           customConfig: '',
           stylesSet: false,
@@ -41,7 +47,9 @@
             { name: 'links', items: [ 'Link', 'Unlink'] },
             { name: 'tools', items: [ 'Source', '-', 'Maximize' ] }
           ]
-        }).on('change', function (evt) {
+        }, Drupal.webform.htmlEditor.options);
+
+        CKEDITOR.replace(this.id, options).on('change', function (evt) {
           // Save data onchange since AJAX dialogs don't execute webform.onsubmit.
           $textarea.val(evt.editor.getData().trim());
         });

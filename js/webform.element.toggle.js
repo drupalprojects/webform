@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see https://github.com/simontabor/jquery-toggles
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.toggles = Drupal.webform.toggles || {};
+  Drupal.webform.toggles.options = Drupal.webform.toggles.options || {};
+
   /**
    * Initialize toggle element using Toggles.
    *
@@ -20,7 +25,7 @@
         var $checkbox = $wrapper.find('input[type="checkbox"]');
         var $label = $wrapper.find('label');
 
-        $toggle.toggles({
+        var options = $.extend({
           checkbox: $checkbox,
           on: $checkbox.is(':checked'),
           clicker: $label,
@@ -28,7 +33,9 @@
             on: $toggle.attr('data-toggle-text-on') || '',
             off: $toggle.attr('data-toggle-text-off') || ''
           }
-        });
+        }, Drupal.webform.toggles.options);
+
+        $toggle.toggles(options);
 
         // If checkbox is disabled then add the .disabled class to the toggle.
         if ($checkbox.attr('disabled') || $checkbox.attr('readonly')) {

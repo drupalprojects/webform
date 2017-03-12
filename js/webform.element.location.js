@@ -7,20 +7,28 @@
 
   'use strict';
 
+  // @see https://ubilabs.github.io/geocomplete/
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.locationGeocomplete = Drupal.webform.locationGeocomplete || {};
+  Drupal.webform.locationGeocomplete.options = Drupal.webform.locationGeocomplete.options || {};
+
   /**
    * Initialize location Geocompletion.
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.webformLocation = {
+  Drupal.behaviors.webformLocationGeocomplete = {
     attach: function (context) {
       $(context).find('div.js-webform-location').once('webform-location').each(function () {
         var $element = $(this);
-        var $geocomplete = $element.find('.webform-location-geocomplete').geocomplete({
+
+        var options = $.extend({
           details: $element,
           detailsAttribute: 'data-webform-location-attribute',
           types: ['geocode']
-        });
+        }, Drupal.webform.locationGeocomplete.options);
+
+        var $geocomplete = $element.find('.webform-location-geocomplete').geocomplete(options);
 
         $geocomplete.on('input', function () {
           // Reset attributes on input.

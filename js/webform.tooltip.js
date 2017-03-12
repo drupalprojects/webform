@@ -12,6 +12,11 @@
 
   'use strict';
 
+  // @see http://api.jqueryui.com/tooltip/
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.tooltip = Drupal.webform.tooltip || {};
+  Drupal.webform.tooltip.options = Drupal.webform.tooltip.options || {};
+
   /**
    * Initialize jQuery UI tooltip element support.
    *
@@ -22,10 +27,11 @@
       $(context).find('.js-webform-tooltip-element').once('webform-tooltip-element').each(function () {
         var $element = $(this);
         var $description = $element.children('.description.visually-hidden');
-        $element.tooltip({
+        var options = $.extend({
           items: ':input',
           content: $description.html()
-        });
+        }, Drupal.webform.tooltip.options);
+        $element.tooltip(options);
       });
     }
   };

@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see https://select2.github.io/options.html
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.select2 = Drupal.webform.select2|| {};
+  Drupal.webform.select2.options = Drupal.webform.select2.options || {};
+  
   /**
    * Initialize Select2 support.
    *
@@ -19,7 +24,7 @@
         .once('webform-select2')
         // http://stackoverflow.com/questions/14313001/select2-not-calculating-resolved-width-correctly-if-select-is-hidden
         .css('width', '100%')
-        .select2();
+        .select2(Drupal.webform.select2.options);
     }
   };
 

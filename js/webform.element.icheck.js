@@ -7,6 +7,11 @@
 
   'use strict';
 
+  // @see http://icheck.fronteed.com/#options
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.iCheck = Drupal.webform.iCheck || {};
+  Drupal.webform.iCheck.options = Drupal.webform.iCheck.options || {};
+
   /**
    * Enhance checkboxes and radios using iCheck.
    *
@@ -16,11 +21,14 @@
     attach: function (context) {
       $('[data-webform-icheck]', context).each(function () {
         var icheck = $(this).attr('data-webform-icheck');
+
+        var options = $.extend({
+          checkboxClass: 'icheckbox_' + icheck,
+          radioClass: 'iradio_' + icheck
+        }, Drupal.webform.iCheck.options);
+
         $(this).find('input').addClass('js-webform-icheck')
-          .iCheck({
-            checkboxClass: 'icheckbox_' + icheck,
-            radioClass: 'iradio_' + icheck
-          })
+          .iCheck(options)
           // @see https://github.com/fronteed/iCheck/issues/244
           .on('ifChecked', function (e) {
             $(e.target).attr('checked', 'checked').change();
@@ -45,10 +53,13 @@
         $(this).unbind('DOMNodeInserted');
         $(this).find('input[type="checkbox"]').each(function() {
             var icheck = $(this).closest('table[data-webform-icheck]').attr('data-webform-icheck');
-            $(this).iCheck({
+
+            var options = $.extend({
               checkboxClass: 'icheckbox_' + icheck,
               radioClass: 'iradio_' + icheck
-            })
+            }, Drupal.webform.iCheck.options);
+
+            $(this).iCheck(options)
           })
           .on('ifChanged', function() {
             var _index = $(this).parents('th').index() + 1;
