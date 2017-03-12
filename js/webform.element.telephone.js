@@ -29,7 +29,8 @@
         // @todo: Figure out how to lazy load utilsScript (build/js/utils.js).
         // @see https://github.com/jackocnr/intl-tel-input#utilities-script
         var options = $.extend({
-          'nationalMode': false
+          'nationalMode': false,
+          'initialCountry': $telephone.attr('data-webform-telephone-international-initial-country') || ''
         }, Drupal.webform.intlTelInput.options);
         $telephone.intlTelInput(options);
 

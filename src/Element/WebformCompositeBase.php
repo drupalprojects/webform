@@ -132,6 +132,9 @@ abstract class WebformCompositeBase extends FormElement {
               $composite_element['#attached']['library'][] = 'webform/webform.element.telephone';
               $composite_element['#attributes']['class'][] = 'js-webform-telephone-international';
               $composite_element['#attributes']['class'][] = 'webform-webform-telephone-international';
+              if (!empty($composite_element['#international_initial_country'])) {
+                $composite_element['#attributes']['data-webform-telephone-international-initial-country'] = $composite_element['#international_initial_country'];
+              }
             }
             break;
 

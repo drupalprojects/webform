@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Locale\CountryManager;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -26,6 +27,7 @@ class Telephone extends TextBase {
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
       'international' => FALSE,
+      'international_initial_country' => '',
     ];
   }
 
@@ -40,6 +42,9 @@ class Telephone extends TextBase {
       $element['#attached']['library'][] = 'webform/webform.element.telephone';
       $element['#attributes']['class'][] = 'js-webform-telephone-international';
       $element['#attributes']['class'][] = 'webform-webform-telephone-international';
+      if (!empty($element['#international_initial_country'])) {
+        $element['#attributes']['data-webform-telephone-international-initial-country'] = $element['#international_initial_country'];
+      }
     }
   }
 
@@ -57,6 +62,17 @@ class Telephone extends TextBase {
       '#type' => 'checkbox',
       '#return_value' => TRUE,
       '#description' => $this->t('Enhance the telephone element\'s international support using the jQuery <a href=":href">International Telephone Input</a> plugin.', [':href' => 'http://intl-tel-input.com/']),
+    ];
+    $form['telephone']['international_initial_country'] = [
+      '#title' => $this->t('Initial country'),
+      '#type' => 'select',
+      '#empty_option' => '',
+      '#options' => [
+        'auto' => $this->t('Auto detect'),
+      ] + CountryManager::getStandardList(),
+      '#states' => [
+        'visible' => [':input[name="properties[international]"]' => ['checked' => TRUE]],
+      ],
     ];
     return $form;
   }
