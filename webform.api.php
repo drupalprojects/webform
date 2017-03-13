@@ -13,10 +13,10 @@
 /**
  * Alter the information provided in \Drupal\webform\Annotation\WebformElement.
  *
- * @param array $elements
+ * @param array $definitions
  *   The array of webform handlers, keyed on the machine-readable element name.
  */
-function hook_webform_element_info_alter(array &$elements) {
+function hook_webform_element_info_alter(array &$definitions) {
 
 }
 

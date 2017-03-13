@@ -7,6 +7,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\Core\Render\ElementInfoManagerInterface;
 
 /**
  * Provides a plugin manager for webform element plugins.
@@ -20,6 +21,13 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 class WebformElementManager extends DefaultPluginManager implements FallbackPluginManagerInterface, WebformElementManagerInterface {
 
   use CategorizingPluginManagerTrait;
+
+  /**
+   * A element info manager.
+   *
+   * @var \Drupal\Core\Render\ElementInfoManagerInterface
+   */
+  protected $elementInfo;
 
   /**
    * List of already instantiated webform element plugins.
@@ -38,13 +46,42 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   *   The element info manager.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, ElementInfoManagerInterface $element_info) {
     parent::__construct('Plugin/WebformElement', $namespaces, $module_handler, 'Drupal\webform\WebformElementInterface', 'Drupal\webform\Annotation\WebformElement');
+    $this->elementInfo = $element_info;
 
     $this->alterInfo('webform_element_info');
     $this->setCacheBackend($cache_backend, 'webform_element_plugins');
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function alterDefinitions(&$definitions) {
+    // Unset elements that are missing target element or dependencies.
+    foreach ($definitions as $element_key => $element_definition) {
+
+      // Check that the webform element's target element info exists.
+      if (!$this->elementInfo->getInfo($element_key)) {
+        unset($definitions[$element_key]);
+        continue;
+      }
+
+      // Check element's (module) dependencies exist.
+      foreach ($element_definition['dependencies'] as $dependency) {
+        if (!$this->moduleHandler->moduleExists($dependency)) {
+          unset($definitions[$element_key]);
+          continue;
+        }
+      }
+    }
+
+    parent::alterDefinitions($definitions);
+  }
+
 
   /**
    * {@inheritdoc}

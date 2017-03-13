@@ -13,6 +13,9 @@ use Drupal\webform\Element\WebformTermSelect as TermSelectElement;
  *   label = @Translation("Term select"),
  *   description = @Translation("Provides a form element to select a single or multiple terms displayed as hierarchical tree or as breadcrumbs using a select menu."),
  *   category = @Translation("Entity reference elements"),
+ *   dependencies = {
+ *     "taxonomy",
+ *   }
  * )
  */
 class WebformTermSelect extends Select implements WebformEntityReferenceInterface {

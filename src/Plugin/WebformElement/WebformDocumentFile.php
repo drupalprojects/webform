@@ -11,6 +11,9 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   description = @Translation("Provides a form element for uploading and saving a document."),
  *   category = @Translation("File upload elements"),
  *   states_wrapper = TRUE,
+ *   dependencies = {
+ *     "file",
+ *   }
  * )
  */
 class WebformDocumentFile extends WebformManagedFileBase {}

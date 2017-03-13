@@ -38,6 +38,15 @@ class WebformElement extends Plugin {
   public $api;
 
   /**
+   * The element's module dependencies.
+   *
+   * @var array
+   *
+   * @see webform_webform_element_info_alter()
+   */
+  public $dependencies = [];
+
+  /**
    * The human-readable name of the webform element.
    *
    * @var \Drupal\Core\Annotation\Translation

@@ -135,6 +135,8 @@ class WebformPluginElementController extends ControllerBase implements Container
 
         $related_types = $webform_element->getRelatedTypes($element);
 
+        $dependencies = $webform_element_plugin_definition['dependencies'];
+
         $webform_info_definitions = [
           'input' => $webform_element->isInput($element),
           'container' => $webform_element->isContainer($element),
@@ -198,6 +200,7 @@ class WebformPluginElementController extends ControllerBase implements Container
             ['data' => ['#markup' => implode('<br/>', $properties)]],
             $formats ? ['data' => ['#markup' => '• ' . implode('<br/>• ', $formats)], 'nowrap' => 'nowrap'] : '',
             $related_types ? ['data' => ['#markup' => '• ' . implode('<br/>• ', $related_types)], 'nowrap' => 'nowrap'] : '<' . $this->t('none') . '>',
+            $dependencies ? ['data' => ['#markup' => '• ' . implode('<br/>• ', $dependencies)], 'nowrap' => 'nowrap'] : '',
             $element_plugin_definition['provider'],
             $webform_element_plugin_definition['provider'],
             $operations ? ['data' => ['#type' => 'operations', '#links' => $operations]] : '',
@@ -240,6 +243,7 @@ class WebformPluginElementController extends ControllerBase implements Container
         $this->t('Properties'),
         $this->t('Formats'),
         $this->t('Related'),
+        $this->t('Dependencies'),
         $this->t('Provided by'),
         $this->t('Integrated by'),
         $this->t('Operations'),

@@ -43,6 +43,29 @@ class WebformElementPluginTest extends WebformTestBase {
   public function testWebformElement() {
     $this->drupalLogin($this->adminWebformUser);
 
+    /**************************************************************************/
+    // Dependencies. @see hook_webform_element_info_alter()
+    /**************************************************************************/
+
+    // Check that managed_file and webform_term-select are not available when
+    // dependent modules are not installed.
+    $this->drupalGet('admin/structure/webform/settings/elements');
+    $this->assertNoRaw('<td><div class="webform-form-filter-text-source">managed_file</div></td>');
+    $this->assertNoRaw('<td><div class="webform-form-filter-text-source">webform_term_select</div></td>');
+
+    // Install file and taxonomy module.
+    \Drupal::service('module_installer')->install(['file', 'taxonomy']);
+
+    // Check that managed_file and webform_term-select are available when
+    // dependent modules are installed.
+    $this->drupalGet('admin/structure/webform/settings/elements');
+    $this->assertRaw('<td><div class="webform-form-filter-text-source">managed_file</div></td>');
+    $this->assertRaw('<td><div class="webform-form-filter-text-source">webform_term_select</div></td>');
+
+    /**************************************************************************/
+    // Plugin hooks.
+    /**************************************************************************/
+
     // Get the webform test element.
     $webform_plugin_test = Webform::load('test_element_plugin_test');
 
