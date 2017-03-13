@@ -214,7 +214,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $projects['wf_encrypt'] = [
       'title' => $this->t('Webform Encrypt'),
       'description' => $this->t('Provides encryption for webform elements.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/wf_encrypt'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_encrypt'),
       'category' => 'utility',
     ];
 
