@@ -15,7 +15,7 @@ use Drupal\Tests\UnitTestCase;
 class WebformFormHelperTest extends UnitTestCase {
 
   /**
-   * Tests WebformFormHelper with WebformFormHelper::cleanupFormStateValues().
+   * Tests WebformFormHelper::cleanupFormStateValues().
    *
    * @param array $values
    *   The array to run through WebformFormHelper::cleanupFormStateValues().
@@ -43,6 +43,114 @@ class WebformFormHelperTest extends UnitTestCase {
     $tests[] = [['key' => 'value', 'form_token' => 'ignored'], [], ['key' => 'value']];
     $tests[] = [['key' => 'value', 'form_token' => 'ignored'], ['key'], []];
     return $tests;
+  }
+
+  /**
+   * Tests WebformFormHelper::flattenElements().
+   *
+   * @param array $elements
+   *   The array to run through WebformFormHelper::flattenElements().
+   * @param string $expected
+   *   The expected result from calling the function.
+   *
+   * @see WebformFormHelper::flattenElements()
+   */
+  public function testFlattenElements() {
+    $elements = [
+      'one' => [
+        '#title' => 'one',
+        'two' => [
+          '#title' => 'two',
+        ],
+      ],
+    ];
+    $flattenend_elements = WebformFormHelper::flattenElements($elements);
+
+    // Check flattened elements.
+    $this->assertEquals($flattenend_elements, [
+      'one' => [
+        '#title' => 'one',
+        'two' => [
+          '#title' => 'two',
+        ],
+      ],
+      'two' => [
+        '#title' => 'two',
+      ],
+    ]);
+
+    // Check flattened elements references.
+    $elements['one']['#title'] .= '-UPDATED';
+    $elements['one']['two']['#title'] .= '-UPDATED';
+    $elements['one']['two']['#type'] = 'textfield';
+
+    $this->assertEquals($flattenend_elements, [
+      'one' => [
+        '#title' => 'one-UPDATED',
+        'two' => [
+          '#title' => 'two-UPDATED',
+          '#type' => 'textfield',
+        ],
+      ],
+      'two' => [
+        '#title' => 'two-UPDATED',
+        '#type' => 'textfield',
+      ],
+    ]);
+
+    // Check flattened elements with duplicate keys.
+    $elements = [
+      'one' => [
+        '#title' => 'one',
+        'two' => [
+          '#title' => 'two-FIRST',
+        ],
+      ],
+      'two' => [
+        '#title' => 'two-SECOND',
+      ],
+    ];
+    $flattenend_elements = WebformFormHelper::flattenElements($elements);
+    $this->assertEquals($flattenend_elements, [
+      'one' => [
+        '#title' => 'one',
+        'two' => [
+          '#title' => 'two-FIRST',
+        ],
+      ],
+      'two' => [
+        [
+          '#title' => 'two-FIRST',
+        ],
+        [
+          '#title' => 'two-SECOND',
+        ]
+      ],
+    ]);
+
+    // Check flattened elements references with duplicate keys.
+    $elements['one']['#title'] .= '-UPDATED';
+    $elements['one']['two']['#title'] .= '-UPDATED';
+    $elements['one']['two']['#type'] = 'textfield';
+
+    $this->assertEquals($flattenend_elements, [
+      'one' => [
+        '#title' => 'one-UPDATED',
+        'two' => [
+          '#title' => 'two-FIRST-UPDATED',
+          '#type' => 'textfield',
+        ],
+      ],
+      'two' => [
+        [
+          '#title' => 'two-FIRST-UPDATED',
+          '#type' => 'textfield',
+        ],
+        [
+          '#title' => 'two-SECOND',
+        ]
+      ],
+    ]);
   }
 
 }
