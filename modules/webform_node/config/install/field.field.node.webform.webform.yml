@@ -10,7 +10,7 @@ id: node.webform.webform
 field_name: webform
 entity_type: node
 bundle: webform
-label: Form
+label: Webform
 description: ''
 required: false
 translatable: false
