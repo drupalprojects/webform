@@ -193,6 +193,11 @@ abstract class WebformHandlerFormBase extends FormBase {
     if ($is_new) {
       $this->webform->addWebformHandler($this->webformHandler->getConfiguration());
     }
+    else { // Update an existing handlers config.
+      $id = $this->webformHandler->getHandlerId();
+      $currentConfig = $this->webformHandler->getConfiguration();
+      $this->webform->getHandlers()->setInstanceConfiguration($id, $currentConfig);
+    }
     $this->webform->save();
 
     // Display status message.
