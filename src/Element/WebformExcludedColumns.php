@@ -2,6 +2,8 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\webform\Entity\Webform;
+
 /**
  * Provides a webform element for webform excluded columns (submission field and elements).
  *
@@ -20,12 +22,15 @@ class WebformExcludedColumns extends WebformExcludedBase {
    * {@inheritdoc}
    */
   public static function getWebformExcludedOptions(array $element) {
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load($element['#webform_id']);
+
     $options = [];
 
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
     $field_definitions = $submission_storage->getFieldDefinitions();
-    $field_definitions = $submission_storage->checkFieldDefinitionAccess($element['#webform'], $field_definitions);
+    $field_definitions = $submission_storage->checkFieldDefinitionAccess($webform, $field_definitions);
     foreach ($field_definitions as $key => $field_definition) {
       $options[$key] = [
         ['title' => $field_definition['title']],

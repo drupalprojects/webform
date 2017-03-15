@@ -51,12 +51,11 @@ class TestEntityMappingWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $this->applyFormStateSettingsToConfiguration($form_state);
+
     $entity_type_manager = \Drupal::entityTypeManager();
 
-    if ($settings = $form_state->getValue('settings')) {
-      $this->configuration = $settings;
-    }
-
+    // Define #ajax callback.
     $ajax = [
       'callback' => [get_class($this), 'ajaxCallback'],
       'wrapper' => 'webform-test-ajax-container',

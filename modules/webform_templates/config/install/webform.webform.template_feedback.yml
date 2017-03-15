@@ -8,46 +8,38 @@ open: null
 close: null
 uid: null
 template: true
-id: template_session_evaluation
-title: 'Session Evaluation'
-description: 'A session evaluation webform template.'
+id: template_feedback
+title: Feedback
+description: 'A basic feedback template.'
 elements: |
-  overall:
-    '#type': radios
-    '#title': 'How was the session overall?'
-    '#options_display': side_by_side
-    '#options': likert_quality
+  type:
+    '#title': 'Type of Feedback'
+    '#type': webform_radios_other
     '#required': true
-  speaker:
-    '#type': webform_likert
-    '#title': 'Please rate the speaker''s...'
-    '#questions':
-      mastery: 'Mastery of this topic'
-      presentation: 'Presentation skills'
-      quality: 'Quality of slides and visual aids'
-    '#answers': likert_quality
-    '#na_answer': true
-    '#required': true
-  learn:
-    '#type': radios
-    '#title': 'Did you learn something in this session you can use in real life?'
-    '#options_display': side_by_side
     '#options':
-      'Yes': 'Yes'
-      'No': 'No'
-      N/A: N/A
-    '#required': true
+      Comments: Comments
+      'Report a Bug': 'Report a Bug'
+      Questions: Questions
+    '#options_display': side_by_side
   comments:
+    '#title': 'Your Feedback'
     '#type': textarea
-    '#title': Comments
-    '#description': 'What did you like most? What would you change? Advice for the speaker to make this session better?'
+    '#required': true
+  name:
+    '#title': 'Your Name'
+    '#type': textfield
+    '#required': true
+  email:
+    '#title': 'Your Email'
+    '#type': email
+    '#required': true
 css: ''
 javascript: ''
 settings:
   page: true
   page_submit_path: ''
   page_confirm_path: ''
-  form_submit_label: ''
+  form_submit_label: 'Submit feedback'
   form_submit_once: false
   form_submit_attributes: {  }
   form_exception_message: ''
@@ -63,7 +55,7 @@ settings:
   form_disable_back: false
   form_autofocus: false
   form_details_toggle: false
-  wizard_progress_bar: false
+  wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_next_button_label: ''
@@ -73,7 +65,7 @@ settings:
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
-  preview: 1
+  preview: 0
   preview_next_button_label: ''
   preview_next_button_attributes: {  }
   preview_prev_button_label: ''
@@ -88,7 +80,7 @@ settings:
   confirmation_type: page
   confirmation_title: ''
   confirmation_message: 'Thank you for your feedback.'
-  confirmation_url: ''
+  confirmation_url: '<front>'
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
@@ -132,24 +124,51 @@ access:
     roles: {  }
     users: {  }
 handlers:
+  email_confirmation:
+    id: email
+    label: 'Email confirmation'
+    handler_id: email_confirmation
+    status: true
+    weight: 1
+    settings:
+      to_mail: '[webform_submission:values:email:raw]'
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: default
+      from_options: {  }
+      from_name: default
+      subject: default
+      body: '[webform_submission:values:comments:value]'
+      excluded_elements: {  }
+      html: true
+      attachments: false
+      debug: false
   email_notification:
     id: email
-    label: 'Email Notification'
+    label: 'Email notification'
     handler_id: email_notification
     status: true
     weight: 1
     settings:
-      to_mail: default
-      to_options: {  }
+      to_mail: '[webform_submission:values:type:raw]'
+      to_options:
+        Comments: '[site:mail]'
+        'Report a Bug': '[site:mail]'
+        Questions: '[site:mail]'
+        _other_: '[site:mail]'
+        _default_: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
       from_mail: '[webform_submission:values:email:raw]'
       from_options: {  }
-      from_name: '[webform_submission:values:first_name] [webform_submission:values:last_name]'
+      from_name: '[webform_submission:values:name:value]'
       subject: default
-      body: default
+      body: '[webform_submission:values:comments:value]'
       excluded_elements: {  }
       html: true
       attachments: false

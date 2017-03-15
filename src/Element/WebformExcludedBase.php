@@ -4,6 +4,7 @@ namespace Drupal\webform\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\webform\Entity\Webform;
 
 /**
  * Provides a base webform element for webform excluded elements and columns.
@@ -24,7 +25,7 @@ abstract class WebformExcludedBase extends FormElement {
       '#process' => [
         [$class, 'processWebformExcluded'],
       ],
-      '#webform' => NULL,
+      '#webform_id' => NULL,
       '#theme_wrappers' => ['form_element'],
     ];
   }
@@ -89,7 +90,7 @@ abstract class WebformExcludedBase extends FormElement {
    */
   public static function getWebformExcludedOptions(array $element) {
     /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $element['#webform'];
+    $webform = Webform::load($element['#webform_id']);
 
     $options = [];
     $elements = $webform->getElementsInitializedFlattenedAndHasValue('view');

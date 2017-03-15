@@ -26,7 +26,7 @@ class WebformHandlerDuplicateForm extends WebformHandlerAddForm {
     $webform_handler = clone $this->webform->getHandler($webform_handler);
     $webform_handler->setHandlerId(NULL);
     // Initialize the handler an pass in the webform.
-    $webform_handler->init($this->webform);
+    $webform_handler->setWebform($this->webform);
     // Set the initial weight so this handler comes last.
     $webform_handler->setWeight(count($this->webform->getHandlers()));
     return $webform_handler;

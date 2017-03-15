@@ -82,24 +82,15 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   }
 
   /**
-   * Initialize webform handler.
-   *
-   * @param \Drupal\webform\WebformInterface $webform
-   *   A webform object.
-   *
-   * @return $this
-   *   This webform handler.
+   * {@inheritdoc}
    */
-  public function init(WebformInterface $webform) {
+  public function setWebform(WebformInterface $webform) {
     $this->webform = $webform;
     return $this;
   }
 
   /**
-   * Get the webform that this handler is attached to.
-   *
-   * @return \Drupal\webform\WebformInterface
-   *   A webform.
+   * {@inheritdoc}
    */
   public function getWebform() {
     return $this->webform;
@@ -279,6 +270,24 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {}
+
+  /**
+   * Apply submitted form state settings to configuration.
+   *
+   * This method can used to update configuration when the configuration form
+   * is being rebuilt during an #ajax callback.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  protected function applyFormStateSettingsToConfiguration(FormStateInterface $form_state) {
+    $settings = $form_state->getValue('settings') ?: [];
+    foreach ($settings as $setting_key => $setting_value) {
+      if (isset($this->configuration[$setting_key])) {
+        $this->configuration[$setting_key] = $setting_value;
+      }
+    }
+  }
 
   /**
    * {@inheritdoc}

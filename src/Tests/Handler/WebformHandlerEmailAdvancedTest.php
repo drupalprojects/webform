@@ -65,8 +65,8 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
    * @see \Drupal\Core\Mail\Plugin\Mail\TestMailCollector
    */
   public function testAdvancedEmailHandler() {
-    /** @var \Drupal\webform\WebformInterface $webform_email_advanced */
-    $webform_email_advanced = Webform::load('test_handler_email_advanced');
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_handler_email_advanced');
 
     // Generate a test submission with a file upload.
     $this->drupalLogin($this->adminWebformUser);
@@ -80,8 +80,8 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
       'subject' => 'Subject',
       'message[value]' => '<p><em>Please enter a message.</em> Test that double "quotes" are not encoded.</p>',
     ];
-    $this->drupalPostForm('webform/' . $webform_email_advanced->id() . '/test', $edit, t('Submit'));
-    $sid = $this->getLastSubmissionId($webform_email_advanced);
+    $this->drupalPostForm('webform/' . $webform->id() . '/test', $edit, t('Submit'));
+    $sid = $this->getLastSubmissionId($webform);
     $sent_mail = $this->getLastEmail();
 
     // Check email is HTML.
@@ -113,11 +113,11 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $this->assertEqual($sent_mail['params']['attachments'][0]['filemime'], 'text/plain');
 
     // Check excluding files.
-    $handler = $webform_email_advanced->getHandler('email');
+    $handler = $webform->getHandler('email');
     $handler->setConfiguration(['excluded_elements' => ['file' => 'file']]);
-    $webform_email_advanced->save();
+    $webform->save();
 
-    $this->drupalPostForm('webform/' . $webform_email_advanced->id() . '/test', [], t('Submit'));
+    $this->drupalPostForm('webform/' . $webform->id() . '/test', [], t('Submit'));
     $sent_mail = $this->getLastEmail();
     $this->assertFalse(isset($sent_mail['params']['attachments'][0]['filecontent']));
   }

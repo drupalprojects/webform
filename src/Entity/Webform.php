@@ -1457,7 +1457,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       /** @var \Drupal\webform\WebformHandlerBase $handler */
       foreach ($this->handlersCollection as $handler) {
         // Initialize the handler and pass in the webform.
-        $handler->init($this);
+        $handler->setWebform($this);
       }
       $this->handlersCollection->sort();
     }

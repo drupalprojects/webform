@@ -217,9 +217,13 @@ handlers:
     weight: 1
     settings:
       to_mail: default
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: '[webform_submission:values:email:raw]'
+      from_options: {  }
       from_name: '[webform_submission:values:first_name] [webform_submission:values:last_name]'
       subject: default
       body: default

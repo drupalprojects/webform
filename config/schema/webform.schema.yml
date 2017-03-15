@@ -676,15 +676,27 @@ webform.handler.email:
     to_mail:
       label: 'Email to address'
       type: email
+    to_options:
+      label: 'Email to address options'
+      type: ignore
     bcc_mail:
       label: 'Email Bcc address'
       type: email
+    bcc_options:
+      label: 'Email Bcc address options'
+      type: ignore
     cc_mail:
       label: 'Email Cc address'
       type: email
+    cc_options:
+      label: 'Email Cc address options'
+      type: ignore
     from_mail:
       label: 'Email from address'
       type: email
+    from_options:
+      label: 'Email from address options'
+      type: ignore
     from_name:
       label: 'Email from name'
       type: label

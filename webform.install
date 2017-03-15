@@ -352,16 +352,16 @@ function webform_update_8006() {
   // Fix key_value.collection which was no updated during the migration.
   $module_handler = \Drupal::moduleHandler();
   $database_type = Database::getConnection('default')->databaseType();
-  if ($module_handler->moduleExists('webform') && !$module_handler->moduleExists('yamlform') && $database_type == 'mysql') {
+  if ($module_handler->moduleExists('webform') && !$module_handler->moduleExists('webform') && $database_type == 'mysql') {
     $database = \Drupal::database();
 
     $select = $database->select('key_value', 'kv');
     $select->fields('kv', ['collection', 'name', 'value']);
-    $select->condition('collection', '%yamlform%', 'LIKE');
+    $select->condition('collection', '%webform%', 'LIKE');
     $result = $select->execute();
     while ($record = $result->fetchAssoc()) {
       $old_collection = $record['collection'];
-      $new_collection = str_replace('yamlform', 'webform', $record['collection']);
+      $new_collection = str_replace('webform', 'webform', $record['collection']);
 
       $collection_select = $database->select('key_value', 'kv');
       $collection_select->fields('kv', ['collection', 'name', 'value']);
@@ -622,4 +622,41 @@ function webform_update_8021() {
  */
 function webform_update_8022() {
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2854021: Send email based on element options selection.
+ */
+function webform_update_8023() {
+  // Add *_options: [] to email handler settings.
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_email_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if ($handler['id'] === 'email') {
+        $has_email_handler = TRUE;
+
+        $settings = [];
+        foreach ($handler['settings'] as $settings_key => $setting_value) {
+          $settings[$settings_key] = $setting_value;
+          if (preg_match('/_mail$/', $settings_key)) {
+            $options_name = str_replace('_mail', '', $settings_key) . '_options';
+            if (empty($handler['settings'][$options_name])) {
+              $settings[str_replace('_mail', '', $settings_key) . '_options'] = [];
+            }
+          }
+        }
+
+        $handler['settings'] = $settings;
+      }
+    }
+
+    if ($has_email_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
 }

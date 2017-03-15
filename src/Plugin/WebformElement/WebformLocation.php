@@ -55,6 +55,7 @@ class WebformLocation extends WebformCompositeBase {
       'description_display' => '',
       // Form validation.
       'required' => FALSE,
+      'required_error' => '',
       // Location settings.
       'geolocation' => FALSE,
       'hidden' => FALSE,

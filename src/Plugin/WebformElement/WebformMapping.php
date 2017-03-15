@@ -320,7 +320,6 @@ class WebformMapping extends WebformElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('Arrow character'),
       '#size' => 10,
-      '#required' => TRUE,
     ];
 
     $form['mapping']['mapping_source'] = [

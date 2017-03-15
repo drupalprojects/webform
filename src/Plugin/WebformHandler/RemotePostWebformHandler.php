@@ -162,7 +162,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#type' => 'webform_excluded_columns',
       '#title' => $this->t('Posted data'),
       '#title_display' => 'invisible',
-      '#webform' => $webform,
+      '#webform_id' => $webform->id(),
       '#required' => TRUE,
       '#parents' => ['settings', 'excluded_data'],
       '#default_value' => $this->configuration['excluded_data'],

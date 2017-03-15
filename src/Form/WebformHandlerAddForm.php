@@ -51,9 +51,10 @@ class WebformHandlerAddForm extends WebformHandlerFormBase {
    * {@inheritdoc}
    */
   protected function prepareWebformHandler($webform_handler) {
+    /** @var \Drupal\webform\WebformHandlerInterface $webform_handler */
     $webform_handler = $this->webformHandlerManager->createInstance($webform_handler);
     // Initialize the handler an pass in the webform.
-    $webform_handler->init($this->webform);
+    $webform_handler->setWebform($this->webform);
     // Set the initial weight so this handler comes last.
     $webform_handler->setWeight(count($this->webform->getHandlers()));
     return $webform_handler;

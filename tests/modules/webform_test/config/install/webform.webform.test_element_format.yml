@@ -1141,9 +1141,13 @@ handlers:
     weight: 1
     settings:
       to_mail: default
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: default
+      from_options: {  }
       from_name: default
       subject: default
       body: default
@@ -1159,9 +1163,13 @@ handlers:
     weight: 2
     settings:
       to_mail: default
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: default
+      from_options: {  }
       from_name: default
       subject: default
       body: default

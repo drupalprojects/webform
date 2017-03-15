@@ -38,6 +38,7 @@ class WebformLikert extends WebformElementBase {
       'description_display' => '',
       // Form validation.
       'required' => FALSE,
+      'required_error' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
       // Likert settings.

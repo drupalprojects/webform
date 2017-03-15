@@ -131,9 +131,13 @@ handlers:
     weight: 1
     settings:
       to_mail: '[webform_submission:values:email:raw]'
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: default
+      from_options: {  }
       from_name: default
       subject: '[webform_submission:values:subject:value]'
       body: '[webform_submission:values:message:value]'
@@ -149,9 +153,13 @@ handlers:
     weight: 1
     settings:
       to_mail: default
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: '[webform_submission:values:email:raw]'
+      from_options: {  }
       from_name: '[webform_submission:values:name:value]'
       subject: '[webform_submission:values:subject:value]'
       body: '[webform_submission:values:message:value]'

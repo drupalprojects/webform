@@ -35,11 +35,11 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
    * Test basic email handler.
    */
   public function testBasicEmailHandler() {
-    /** @var \Drupal\webform\WebformInterface $webform_handler_email */
-    $webform_handler_email = Webform::load('test_handler_email');
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_handler_email');
 
     // Create a submission using the test webform's default values.
-    $this->postSubmission($webform_handler_email);
+    $this->postSubmission($webform);
 
     // Check sending a basic email via a submission.
     $sent_email = $this->getLastEmail();
@@ -52,12 +52,12 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $this->assertEqual($sent_email['headers']['Bcc'], 'bcc@example.com');
 
     // Check sending with the saving of results disabled.
-    $webform_handler_email->setSetting('results_disabled', TRUE)->save();
-    $this->postSubmission($webform_handler_email, ['first_name' => 'Jane', 'last_name' => 'Doe']);
+    $webform->setSetting('results_disabled', TRUE)->save();
+    $this->postSubmission($webform, ['first_name' => 'Jane', 'last_name' => 'Doe']);
     $sent_email = $this->getLastEmail();
     $this->assertContains($sent_email['body'], 'First name: Jane');
     $this->assertContains($sent_email['body'], 'Last name: Doe');
-    $webform_handler_email->setSetting('results_disabled', FALSE)->save();
+    $webform->setSetting('results_disabled', FALSE)->save();
 
     // Check sending a custom email using tokens.
     $this->drupalLogin($this->adminWebformUser);
@@ -75,7 +75,7 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
 
     $this->drupalPostForm('admin/structure/webform/manage/test_handler_email/handlers/email/edit', ['settings[body]' => WebformSelectOther::OTHER_OPTION, 'settings[body_custom_text]' => $body], t('Save'));
 
-    $sid = $this->postSubmission($webform_handler_email);
+    $sid = $this->postSubmission($webform);
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = WebformSubmission::load($sid);
 

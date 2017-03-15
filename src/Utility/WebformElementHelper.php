@@ -281,4 +281,28 @@ class WebformElementHelper {
     return $flattened_elements;
   }
 
+  /**
+   * Convert all render(able) markup into strings.
+   *
+   * This method is used to prevent objects from being serialized on form's
+   * that are using #ajax callbacks or rebuilds.
+   *
+   * @param array $elements
+   *   An associative array of elements.
+   *
+   * @return string
+   *   An associative array of elements with render(able) markup converted into
+   *   strings.
+   */
+  public static function convertRenderMarkupToStrings(array &$elements) {
+    foreach ($elements as $key => &$value) {
+      if (is_array($value)) {
+        self::convertRenderMarkupToStrings($value);
+      }
+      elseif ($value instanceof \Drupal\Component\Render\MarkupInterface) {
+        $elements[$key] = (string) $value;
+      }
+    }
+  }
+
 }

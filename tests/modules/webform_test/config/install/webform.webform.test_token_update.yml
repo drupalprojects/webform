@@ -114,9 +114,13 @@ handlers:
     weight: 0
     settings:
       to_mail: default
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: default
+      from_options: {  }
       from_name: default
       subject: default
       body: '<a href="[webform_submission:update-url]">[webform_submission:update-url]</a>'

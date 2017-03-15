@@ -35,6 +35,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         'description_display' => '',
         // Form validation.
         'required' => FALSE,
+        'required_error' => '',
         // Flex box.
         'flexbox' => '',
       ] + $this->getDefaultBaseProperties();
