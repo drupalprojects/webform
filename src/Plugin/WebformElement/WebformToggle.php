@@ -27,6 +27,7 @@ class WebformToggle extends Checkbox {
       'off_text' => '',
     ];
     $properties['title_display'] = 'after';
+    unset($properties['icheck']);
     return $properties;
   }
 
