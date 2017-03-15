@@ -16,6 +16,13 @@ libraries:
       type: get
       url: 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.5.11/ckeditor_4.5.11_standard.zip'
 
+  ckeditor_autogrow:
+    directory_name: ckeditor_autogrow
+    destination: libraries
+    download:
+      type: get
+      url: 'http://download.ckeditor.com/autogrow/releases/autogrow_4.6.2.zip'
+
   geocomplete:
     directory_name: geocomplete
     destination: libraries

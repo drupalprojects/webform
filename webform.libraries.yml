@@ -321,6 +321,7 @@ webform.element.html_editor:
     - core/jquery
     - core/jquery.once
     - webform/ckeditor
+    - webform/ckeditor_autogrow
 
 webform.element.icheck:
   version: VERSION
@@ -536,6 +537,18 @@ ckeditor:
     /libraries/ckeditor/: 'https://cdn.ckeditor.com/4.5.11/standard/'
   js:
     /libraries/ckeditor/ckeditor.js: { preprocess: false, minified: true }
+
+ckeditor_autogrow:
+  remote: http://ckeditor.com/addon/autogrow
+  version: '4.6.2'
+  license:
+    name: MIT
+    url: http://codemirror.net/LICENSE
+    gpl-compatible: true
+  cdn:
+    /libraries/ckeditor_autogrow/: 'https://cdn.rawgit.com/ckeditor/ckeditor-dev/4.6.2/plugins/autogrow/'
+  js:
+    /libraries/ckeditor_autogrow/plugin.js: { preprocess: false, minified: true }
 
 codemirror.text:
   remote: https://github.com/codemirror/codemirror

@@ -121,19 +121,26 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
   protected function initLibraries() {
     $libraries = [];
 
-    $libraries['codemirror'] = [
-      'title' => $this->t('Code Mirror'),
-      'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
-      'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
-      'url' => Url::fromUri('http://codemirror.net/'),
-      'version' => '5.21.0',
-    ];
     $libraries['ckeditor'] = [
       'title' => $this->t('CKEditor'),
       'description' => $this->t('The standard version of the CKEditor.'),
       'notes' => $this->t('Allows the Webform module to implement a basic and simpler CKEditor.'),
       'url' => Url::fromUri('http://ckeditor.com/'),
       'version' => '4.5.11',
+    ];
+    $libraries['ckeditor_autogrow'] = [
+      'title' => $this->t('CKEditor Autogrow'),
+      'description' => $this->t('Allows CKEditor to expand and shrink depending on the amount and size of content.'),
+      'notes' => $this->t('Autogrown make it possible to reduce the size of empty HTML editor while still supporting HTML markup.'),
+      'url' => Url::fromUri('http://ckeditor.com/addon/autogrow'),
+      'version' => '4.6.2',
+    ];
+    $libraries['codemirror'] = [
+      'title' => $this->t('Code Mirror'),
+      'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
+      'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
+      'url' => Url::fromUri('http://codemirror.net/'),
+      'version' => '5.21.0',
     ];
     $libraries['geocomplete'] = [
       'title' => $this->t('jQuery Geocoding and Places Autocomplete Plugin'),

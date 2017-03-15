@@ -32,8 +32,12 @@
           // Use <br> tags instead of <p> tags.
           enterMode: CKEDITOR.ENTER_BR,
           shiftEnterMode: CKEDITOR.ENTER_BR,
-          // Set height, hide the status bar, and remove plugins.
+          // Set auto grow.
+          extraPlugins: 'autogrow',
           height: '100px',
+          autoGrow_minHeight: 100,
+          autoGrow_maxHeight: 300,
+          // Remove status bar.
           resize_enabled: false,
           removePlugins: 'elementspath,magicline',
           // Toolbar settings.
