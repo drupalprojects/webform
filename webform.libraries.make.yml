@@ -2,19 +2,12 @@ core: 8.x
 api: 2
 libraries:
 
-  codemirror:
-    directory_name: codemirror
-    destination: libraries
-    download:
-      type: get
-      url: 'https://github.com/components/codemirror/archive/5.21.0.zip'
-
   ckeditor:
     directory_name: ckeditor
     destination: libraries
     download:
       type: get
-      url: 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.5.11/ckeditor_4.5.11_standard.zip'
+      url: 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.6.2/ckeditor_4.6.2_standard.zip'
 
   ckeditor_autogrow:
     directory_name: ckeditor_autogrow
@@ -22,6 +15,13 @@ libraries:
     download:
       type: get
       url: 'http://download.ckeditor.com/autogrow/releases/autogrow_4.6.2.zip'
+
+  codemirror:
+    directory_name: codemirror
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/codemirror/CodeMirror/archive/5.24.0.zip'
 
   geocomplete:
     directory_name: geocomplete
@@ -31,33 +31,54 @@ libraries:
       url: 'https://github.com/ubilabs/geocomplete.git'
       tag: '1.7.0'
 
-  icheck:
+  jquery.icheck:
     directory_name: jquery.icheck
     destination: libraries
     download:
       type: get
       url: 'https://github.com/fronteed/icheck/archive/1.0.2.zip'
 
-  inputmask:
+  jquery.inputmask:
     directory_name: jquery.inputmask
     destination: libraries
     download:
       type: get
       url: 'https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.3.zip'
 
-  intl-tel-input:
+  jquery.intl-tel-input:
     directory_name: jquery.intl-tel-input
     destination: libraries
     download:
       type: get
       url: 'https://github.com/jackocnr/intl-tel-input/archive/v11.0.0.zip'
 
-  rateit:
+  jquery.rateit:
     directory_name: jquery.rateit
     destination: libraries
     download:
       type: get
       url: 'https://github.com/gjunge/rateit.js/archive/1.1.1.zip'
+
+  jquery.timepicker:
+    directory_name: jquery.timepicker
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/jonthornton/jquery-timepicker/archive/1.11.10.zip'
+
+  jquery.toggles:
+    directory_name: jquery.toggles
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/simontabor/jquery-toggles/archive/v4.0.0.zip'
+
+  jquery.word-and-character-counter:
+    directory_name: jquery.word-and-character-counter
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/archive/2.3.5.zip'
 
   select2:
     directory_name: select2
@@ -73,23 +94,3 @@ libraries:
       type: get
       url: 'https://github.com/szimek/signature_pad/archive/v1.5.3.zip'
 
-  timepicker:
-    directory_name: jquery.timepicker
-    destination: libraries
-    download:
-      type: get
-      url: 'https://github.com/jonthornton/jquery-timepicker/archive/1.11.8.zip'
-
-  toggles:
-    directory_name: jquery.toggles
-    destination: libraries
-    download:
-      type: get
-      url: 'https://github.com/simontabor/jquery-toggles/archive/v4.0.0.zip'
-
-  word-and-character-counter:
-    directory_name: jquery.word-and-character-counter
-    destination: libraries
-    download:
-      type: get
-      url: 'https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/archive/2.3.5.zip'

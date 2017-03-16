@@ -528,13 +528,13 @@ webform.element.video_file:
 
 ckeditor:
   remote: http://ckeditor.com/
-  version: '4.5.11'
+  version: '4.6.2'
   license:
-    name: MIT
-    url: http://codemirror.net/LICENSE
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor-dev/blob/4.6.2/LICENSE.md
     gpl-compatible: true
   cdn:
-    /libraries/ckeditor/: 'https://cdn.ckeditor.com/4.5.11/standard/'
+    /libraries/ckeditor/: 'https://cdn.ckeditor.com/4.6.2/standard/'
   js:
     /libraries/ckeditor/ckeditor.js: { preprocess: false, minified: true }
 
@@ -542,8 +542,8 @@ ckeditor_autogrow:
   remote: http://ckeditor.com/addon/autogrow
   version: '4.6.2'
   license:
-    name: MIT
-    url: http://codemirror.net/LICENSE
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor-dev/blob/4.6.2/LICENSE.md
     gpl-compatible: true
   cdn:
     /libraries/ckeditor_autogrow/: 'https://cdn.rawgit.com/ckeditor/ckeditor-dev/4.6.2/plugins/autogrow/'
@@ -552,14 +552,14 @@ ckeditor_autogrow:
 
 codemirror.text:
   remote: https://github.com/codemirror/codemirror
-  version: &webform_codemirror_version '5.21.0'
+  version: &webform_codemirror_version '5.24.0'
   license: &webform_codemirror_license
     name: MIT
     url: http://codemirror.net/LICENSE
     gpl-compatible: true
   cdn: &webform_codemirror_cdn
-    /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/
-    /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/
+    /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/
+    /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/
   css:
     theme:
       /libraries/codemirror/lib/codemirror.css: {}
@@ -745,13 +745,13 @@ jquery.select2:
 
 jquery.timepicker:
   remote: https://github.com/jonthornton/jquery-timepicker
-  version: '1.11.8'
+  version: '1.11.10'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/jquery.timepicker/: https://cdn.rawgit.com/jonthornton/jquery-timepicker/1.11.8/
+    /libraries/jquery.timepicker/: https://cdn.rawgit.com/jonthornton/jquery-timepicker/1.11.10/
   css:
     theme:
       /libraries/jquery.timepicker/jquery.timepicker.css: {}
