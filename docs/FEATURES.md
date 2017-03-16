@@ -386,7 +386,3 @@ Drush commands are provided to:
 - Purge webform submissions
 - Download and manage third party libraries
 - Tidy YAML configuration files
-
---------------------------------------------------------------------------------
-
-_This file was generated from [FEATURES.md](http://cgit.drupalcode.org/webform/tree/FEATURES.md?h=8.x-5.x)._

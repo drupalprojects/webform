@@ -232,12 +232,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   /****************************************************************************/
 
   /**
-   * Build the about section.
-   *
-   * @return array
-   *   An render array containing the about section.
+   * {@inheritdoc}
    */
-  protected function buildAbout() {
+  public function buildAbout() {
     return [
       'title' => [
         '#markup' => $this->t('About the Webform module'),
@@ -253,12 +250,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   }
 
   /**
-   * Build the eleents section.
-   *
-   * @return array
-   *   An render array containing the elements section.
+   * {@inheritdoc}
    */
-  protected function buildElements() {
+  public function buildElements($docs = FALSE) {
     $build = [
       'title' => [
         '#markup' => $this->t('Form elements'),
@@ -266,7 +260,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#suffix' => '</h3>',
       ],
       'content' => [
-        '#markup' => $this->t('Below is a list of all available form and render elements.'),
+        '#markup' => '<p>' . $this->t('Below is a list of all available form and render elements.') . '</p>',
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ],
@@ -275,6 +269,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $definitions = $this->elementManager->getDefinitions();
     $definitions = $this->elementManager->getSortedDefinitions($definitions, 'category');
     $grouped_definitions = $this->elementManager->getGroupedDefinitions($definitions);
+    unset($grouped_definitions['Other elements']);
     foreach ($grouped_definitions as $category_name => $elements) {
       $build['content'][$category_name]['title'] = [
         '#markup' => $category_name,
@@ -321,12 +316,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   }
 
   /**
-   * Build the uses section.
-   *
-   * @return array
-   *   An render array containing the uses section.
+   * {@inheritdoc}
    */
-  protected function buildUses() {
+  public function buildUses($docs = FALSE) {
     $build = [
       'title' => [
         '#markup' => $this->t('Uses'),
@@ -370,6 +362,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'content' => [
           '#theme' => 'webform_help',
           '#info' => $help_info,
+          '#docs' => TRUE,
         ],
       ];
     }
@@ -377,12 +370,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   }
 
   /**
-   * Build the videos section.
-   *
-   * @return array
-   *   An render array containing the videos section.
+   * {@inheritdoc}
    */
-  protected function buildVideos() {
+  public function buildVideos($docs = FALSE) {
     $build = [
       'title' => [
         '#markup' => $this->t('Watch videos'),
@@ -398,33 +388,50 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         ],
       ],
     ];
-    foreach ($this->videos as $id => $video) {
-      // Title.
-      $build['content']['help'][$id]['title'] = [
-        '#markup' => $video['title'],
-        '#prefix' => '<dt>',
-        '#suffix' => '</dt>',
-      ];
-      // Content.
-      $build['content']['help'][$id]['content'] = [
-        '#prefix' => '<dd>',
-        '#suffix' => '</dd>',
-        'content' => [
-          '#theme' => 'webform_help',
-          '#info' => $video,
-        ],
-      ];
+    if ($docs) {
+      foreach ($this->videos as $id => $video) {
+        // Title.
+        $build['content']['help'][$id]['title'] = [
+          '#type' => 'link',
+          '#title' => $video['title'],
+          '#url' => Url::fromUri('https://www.youtube.com/watch', ['query' => ['v' => $video['youtube_id']]]),
+          '#prefix' => '<dt>',
+          '#suffix' => '</dt>',
+        ];
+        // Content.
+        $build['content']['help'][$id]['content'] = [
+          '#prefix' => '<dd>',
+          '#suffix' => '</dd>',
+          '#markup' => $video['content'],
+        ];
+      }
+    }
+    else {
+      foreach ($this->videos as $id => $video) {
+        // Title.
+        $build['content']['help'][$id]['title'] = [
+          '#markup' => $video['title'],
+          '#prefix' => '<dt>',
+          '#suffix' => '</dt>',
+        ];
+        // Content.
+        $build['content']['help'][$id]['content'] = [
+          '#prefix' => '<dd>',
+          '#suffix' => '</dd>',
+          'content' => [
+            '#theme' => 'webform_help',
+            '#info' => $video,
+          ],
+        ];
+      }
     }
     return $build;
   }
 
   /**
-   * Build the add-ons section.
-   *
-   * @return array
-   *   An render array containing the add-ons section.
+   * {@inheritdoc}
    */
-  protected function buildAddOns() {
+  public function buildAddOns($docs = FALSE) {
     // Libraries.
     $build = [
       'title' => [
@@ -433,7 +440,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#suffix' => '</h3>',
       ],
       'content' => [
-        '#markup' => $this->t("Below is a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal's Form API."),
+        '#markup' => '<p>' . $this->t("Below is a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal's Form API.") . '</p>',
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ],
@@ -472,12 +479,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   }
 
   /**
-   * Build the libraries section.
-   *
-   * @return array
-   *   An render array containing the libraries section.
+   * {@inheritdoc}
    */
-  protected function buildLibraries() {
+  public function buildLibraries($docs = FALSE) {
     // Libraries.
     $build = [
       'title' => [
@@ -520,10 +524,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   }
 
   /**
-   * Initialize videos.
-   *
-   * @return array
-   *   An associative array containing videos.
+   * {@inheritdoc}
    */
   protected function initVideos() {
     $videos = [];
