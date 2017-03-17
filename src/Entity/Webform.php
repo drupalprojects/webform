@@ -342,6 +342,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     else {
       $this->status = ((bool) $status) ? WebformInterface::STATUS_OPEN : WebformInterface::STATUS_CLOSED;
     }
+
+    // Clear open and close is status is not scheduled.
+    if ($this->status !== WebformInterface::STATUS_SCHEDULED) {
+      $this->open = NULL;
+      $this->close = NULL;
+    }
+
     return $this;
   }
 
@@ -394,6 +401,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function isScheduled() {
     return ($this->status === WebformInterface::STATUS_SCHEDULED);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isOpening() {
+    return ($this->isScheduled() && ($this->open && strtotime($this->open) > time())) ? TRUE : FALSE;
   }
 
   /**
@@ -597,7 +611,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_submit_once' => FALSE,
       'form_submit_attributes' => [],
       'form_exception_message' => '',
-      'form_closed_message' => '',
+      'form_open_message' => '',
+      'form_close_message' => '',
       'form_previous_submissions' => TRUE,
       'form_confidential' => FALSE,
       'form_confidential_message' => '',

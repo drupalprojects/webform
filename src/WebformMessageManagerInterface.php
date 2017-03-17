@@ -69,9 +69,14 @@ interface WebformMessageManagerInterface {
   const FORM_PREVIEW_MESSAGE = 'preview_message';
 
   /**
+   * Webform opening.
+   */
+  const FORM_OPEN_MESSAGE = 'form_open_message';
+
+  /**
    * Webform closed.
    */
-  const FORM_CLOSED_MESSAGE = 'form_closed_message';
+  const FORM_CLOSE_MESSAGE = 'form_close_message';
 
   /**
    * Webform confidential.

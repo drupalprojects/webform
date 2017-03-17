@@ -242,11 +242,17 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Close'),
       '#default_value' => $webform->get('close') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('close'))) : NULL,
     ];
-    $form['form']['form_closed_message'] = [
+    $form['form']['form_open_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Webform open message'),
+      '#description' => $this->t('A message to be displayed notifying the user that the webform is going to be opening to submissions. The opening message will only be displayed when a webform is scheduled to be opened.'),
+      '#default_value' => $settings['form_open_message'],
+    ];
+    $form['form']['form_close_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform closed message'),
-      '#description' => $this->t('A message to be displayed notifying the user that the webform is closed.'),
-      '#default_value' => $settings['form_closed_message'],
+      '#description' => $this->t("A message to be displayed notifying the user that the webform is closed. The closed message will be displayed when a webform's status is closed or a submission limit is reached."),
+      '#default_value' => $settings['form_close_message'],
     ];
     $form['form']['form_exception_message'] = [
       '#type' => 'webform_html_editor',
@@ -913,8 +919,15 @@ class WebformEntitySettingsForm extends EntityForm {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-    if ($values['status'] === WebformInterface::STATUS_SCHEDULED && empty($values['open']) && empty($values['close'])) {
-      $form_state->setErrorByName('status', $this->t('Please enter an open or close date'));
+    if ($values['status'] === WebformInterface::STATUS_SCHEDULED) {
+      // Require open or close dates.
+      if(empty($values['open']) && empty($values['close'])) {
+        $form_state->setErrorByName('status', $this->t('Please enter an open or close date'));
+      }
+      // Make sure open date is not after close date.
+      if(!empty($values['open']) && !empty($values['close']) && ($values['open'] > $values['close'])) {
+        $form_state->setErrorByName('open', $this->t("The webform's open date can't be greater than the close date."));
+      }
     }
   }
 

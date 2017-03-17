@@ -101,7 +101,7 @@ class WebformEntityReferenceEntityFormatter extends EntityReferenceFormatterBase
       }
       else {
         $this->messageManager->setWebform($entity);
-        $elements[$delta] = $this->messageManager->build(WebformMessageManagerInterface::FORM_CLOSED_MESSAGE);
+        $elements[$delta] = $this->messageManager->build(WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
       }
     }
 

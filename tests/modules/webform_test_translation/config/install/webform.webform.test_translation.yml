@@ -40,7 +40,8 @@ settings:
   page_confirm_path: ''
   form_submit_label: 'Send message'
   form_exception_message: ''
-  form_closed_message: ''
+  form_open_message: ''
+  form_close_message: ''
   form_confidential: false
   form_confidential_message: ''
   form_prepopulate: false

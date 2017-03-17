@@ -97,6 +97,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function isScheduled();
 
   /**
+   * Determines if the webform is currently closed but scheduled to open.
+   *
+   * @return bool
+   *   TRUE if the webform is currently closed but scheduled to open.
+   */
+  public function isOpening();
+
+  /**
    * Returns the webform template indicator.
    *
    * @return bool

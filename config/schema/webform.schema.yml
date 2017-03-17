@@ -17,9 +17,12 @@ webform.settings:
         default_form_submit_once:
           type: boolean
           label: 'Prevent duplicate submissions'
-        default_form_closed_message:
+        default_form_open_message:
           type: text
-          label: 'Default webform closed message'
+          label: 'Default webform open message'
+        default_form_close_message:
+          type: text
+          label: 'Default webform close message'
         default_form_exception_message:
           type: text
           label: 'Default webform exception message'
@@ -344,7 +347,10 @@ webform.webform.*:
         form_submit_attributes:
           type: ignore
           label: 'Webform submit attributes'
-        form_closed_message:
+        form_open_message:
+          type: text
+          label: 'Webform open message'
+        form_close_message:
           type: text
           label: 'Webform closed message'
         form_exception_message:

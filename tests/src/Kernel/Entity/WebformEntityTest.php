@@ -103,6 +103,7 @@ class WebformEntityTest extends KernelTestBase {
     $webform->set('open', date('c', strtotime('today +1 day')));
     $webform->set('close', date('c', strtotime('today +10 days')));
     $this->assertFalse($webform->isOpen());
+    $this->assertTrue($webform->isOpening());
 
     // Check set open date to yesterday with close date in +10 days.
     $webform->set('open', date('c', strtotime('today -1 day')));
@@ -113,8 +114,9 @@ class WebformEntityTest extends KernelTestBase {
     $webform->set('open', date('c', strtotime('today -1 day')));
     $webform->set('close', date('c', strtotime('today -10 days')));
     $this->assertFalse($webform->isOpen());
+    $this->assertFalse($webform->isOpening());
 
-    // Check that open overridess scheduled.
+    // Check that open overrides scheduled.
     $webform->setStatus(TRUE);
     $webform->set('open', date('c', strtotime('today -1 day')));
     $webform->set('close', date('c', strtotime('today -10 days')));
@@ -126,7 +128,15 @@ class WebformEntityTest extends KernelTestBase {
     $webform->set('close', date('c', strtotime('today -10 days')));
     $this->assertFalse($webform->isOpen());
 
+    // Check that open and close date is set to NULL when status is set to open
+    // or closed.
+    $webform->set('open', date('c', strtotime('today +1 day')));
+    $webform->set('close', date('c', strtotime('today -10 days')));
+    $this->assertNotNull($webform->get('open'));
+    $this->assertNotNull($webform->get('close'));
     $webform->setStatus(TRUE);
+    $this->assertNull($webform->get('open'));
+    $this->assertNull($webform->get('close'));
 
     /**************************************************************************/
     // Templates.

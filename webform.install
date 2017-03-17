@@ -660,3 +660,27 @@ function webform_update_8023() {
     }
   }
 }
+
+/**
+ * Issue #2861651: Add Opened and Closed Messages.
+ */
+function webform_update_8024() {
+  // Change 'default_form_closed_message' to 'default_form_close_message' in
+  // admin settings.
+  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $settings_config->set('default_form_close_message', $settings_config->get('default_form_closed_message'));
+  $settings_config->clear('default_form_closed_message');
+  $settings_config->save();
+  _webform_update_admin_settings();
+
+  // Change 'default_form_closed_message' to 'default_form_close_message' in
+  // webform config.
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $webform_config->set('settings.form_close_message', $webform_config->get('settings.form_closed_message'));
+    $webform_config->clear('settings.form_closed_message');
+    $webform_config->save();
+  }
+  _webform_update_form_settings();
+}

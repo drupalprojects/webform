@@ -49,7 +49,7 @@ class WebformAdminSettingsTest extends WebformTestBase {
     // Get 'webform.settings'.
     $original_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();
 
-    // Update 'settings.default_form_closed_message'.
+    // Update 'settings.default_form_close_message'.
     $this->drupalPostForm('admin/structure/webform/settings', [], t('Save configuration'));
     \Drupal::configFactory()->reset('webform.settings');
     $updated_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();

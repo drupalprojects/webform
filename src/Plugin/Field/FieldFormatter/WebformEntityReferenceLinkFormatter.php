@@ -145,7 +145,7 @@ class WebformEntityReferenceLinkFormatter extends EntityReferenceFormatterBase i
       else {
         /** @var \Drupal\webform\WebformMessageManagerInterface $message_manager */
         $this->messageManager->setWebform($entity);
-        $elements[$delta] = $this->messageManager->build(WebformMessageManagerInterface::FORM_CLOSED_MESSAGE);
+        $elements[$delta] = $this->messageManager->build(WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
       }
     }
 

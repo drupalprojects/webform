@@ -134,15 +134,21 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Form default settings'),
       '#tree' => TRUE,
     ];
-    $form['form']['default_form_closed_message'] = [
+    $form['form']['default_form_open_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default open message'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('settings.default_form_open_message'),
+    ];
+    $form['form']['default_form_close_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default closed message'),
       '#required' => TRUE,
-      '#default_value' => $config->get('settings.default_form_closed_message'),
+      '#default_value' => $config->get('settings.default_form_close_message'),
     ];
     $form['form']['default_form_exception_message'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Default closed exception message'),
+      '#title' => $this->t('Default exception message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_exception_message'),
     ];
