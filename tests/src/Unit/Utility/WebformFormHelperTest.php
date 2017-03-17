@@ -124,7 +124,7 @@ class WebformFormHelperTest extends UnitTestCase {
         ],
         [
           '#title' => 'two-SECOND',
-        ]
+        ],
       ],
     ]);
 
@@ -148,7 +148,7 @@ class WebformFormHelperTest extends UnitTestCase {
         ],
         [
           '#title' => 'two-SECOND',
-        ]
+        ],
       ],
     ]);
   }

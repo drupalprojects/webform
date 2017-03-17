@@ -194,7 +194,8 @@ abstract class WebformHandlerFormBase extends FormBase {
     if ($is_new) {
       $this->webform->addWebformHandler($this->webformHandler->getConfiguration());
     }
-    else { // Update an existing handlers config.
+    else {
+      // Update an existing handlers config.
       $id = $this->webformHandler->getHandlerId();
       $currentConfig = $this->webformHandler->getConfiguration();
       $this->webform->getHandlers()->setInstanceConfiguration($id, $currentConfig);
@@ -249,7 +250,7 @@ abstract class WebformHandlerFormBase extends FormBase {
    *
    * @param \Drupal\Core\Form\FormStateInterface $handler_state
    *   The webform handler webform state.
-   * @param \Drupal\Core\Form\FormStateInterface  &$form_state
+   * @param \Drupal\Core\Form\FormStateInterface &$form_state
    *   The webform state.
    */
   protected function processHandlerFormErrors(FormStateInterface $handler_state, FormStateInterface &$form_state) {

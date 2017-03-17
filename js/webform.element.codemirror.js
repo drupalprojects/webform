@@ -10,7 +10,7 @@
   // @see http://codemirror.net/doc/manual.html#config
   Drupal.webform = Drupal.webform || {};
   Drupal.webform.codeMirror = Drupal.webform.codeMirror || {};
-  Drupal.webform.codeMirror.options = Drupal.webform.codeMirror.options|| {};
+  Drupal.webform.codeMirror.options = Drupal.webform.codeMirror.options || {};
 
   /**
    * Initialize CodeMirror editor.
@@ -66,7 +66,7 @@
         // Set CodeMirror to be readonly when the textarea is disabled.
         // @see webform.states.js
         $input.on('webform:disabled', function () {
-          editor.setOption("readOnly", $input.is(':disabled'));
+          editor.setOption('readOnly', $input.is(':disabled'));
         });
 
       });

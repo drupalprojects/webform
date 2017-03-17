@@ -46,7 +46,7 @@
           var $progress = $('<div class="ajax-progress ajax-progress-throbber"><div class="throbber">&nbsp;</div></div>');
           $clickedButton.after($progress);
         });
-      })
+      });
     }
   };
 

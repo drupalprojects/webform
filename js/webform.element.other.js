@@ -5,7 +5,7 @@
 
 (function ($, Drupal) {
 
-  "use strict";
+  'use strict';
 
   /**
    * Toggle other input (text) field.

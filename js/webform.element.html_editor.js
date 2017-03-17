@@ -43,13 +43,13 @@
           // Toolbar settings.
           format_tags: 'p;h2;h3;h4;h5;h6',
           toolbar: [
-            { name: 'styles', items: ['Format', 'Font', 'FontSize' ] },
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Subscript', 'Superscript' ] },
-            { name: 'insert', items: [ 'SpecialChar' ] },
-            { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'] },
-            { name: 'links', items: [ 'Link', 'Unlink'] },
-            { name: 'tools', items: [ 'Source', '-', 'Maximize' ] }
+            {name: 'styles', items: ['Format', 'Font', 'FontSize' ]},
+            {name: 'basicstyles', items: [ 'Bold', 'Italic', 'Subscript', 'Superscript' ]},
+            {name: 'insert', items: [ 'SpecialChar' ]},
+            {name: 'colors', items: [ 'TextColor', 'BGColor' ]},
+            {name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
+            {name: 'links', items: [ 'Link', 'Unlink']},
+            {name: 'tools', items: [ 'Source', '-', 'Maximize' ]}
           ]
         }, Drupal.webform.htmlEditor.options);
 

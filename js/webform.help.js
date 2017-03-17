@@ -20,7 +20,7 @@
       var $widget = $(context).find('.webform-help-accordion');
       $widget.once('webform-help-accordion').accordion({
         collapsible: true,
-        heightStyle: "content"
+        heightStyle: 'content'
       });
 
       var $container = $('h3' + location.hash, $widget);

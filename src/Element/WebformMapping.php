@@ -115,7 +115,6 @@ class WebformMapping extends FormElement {
     return $element;
   }
 
-
   /**
    * Validates a mapping element.
    */

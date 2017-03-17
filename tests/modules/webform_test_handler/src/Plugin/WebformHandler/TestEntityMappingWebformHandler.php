@@ -6,7 +6,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\WebformHandlerBase;
-use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Webform submission entity mapping test handler.

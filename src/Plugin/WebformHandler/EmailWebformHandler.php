@@ -118,15 +118,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   public function getSummary() {
     $settings = $this->getEmailConfiguration();
     // Simplify the [webform_submission:values:.*] tokens.
-    array_walk($settings, function(&$value, $key) {
+    array_walk($settings, function (&$value, $key) {
       if (is_string($value)) {
         $value = preg_replace('/\[webform_submission:values:([^:]+):(?:raw|value)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_submission:/', '[', $value);
       }
     });
     return [
-        '#settings' => $settings,
-      ] + parent::getSummary();
+      '#settings' => $settings,
+    ] + parent::getSummary();
   }
 
   /**
@@ -247,9 +247,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send to'),
       '#open' => TRUE,
     ];
-    $form['to'] += $this->buildElement($form_state, 'to_mail', $this->t('To email'), $this->t('To email address'), $mail_element_options, $options_element_options, TRUE);
-    $form['to'] += $this->buildElement($form_state, 'cc_mail', $this->t('CC email'), $this->t('CC email address'), $mail_element_options, $options_element_options, FALSE);
-    $form['to'] += $this->buildElement($form_state, 'bcc_mail', $this->t('BCC email'), $this->t('Bcc email address'), $mail_element_options, $options_element_options, FALSE);
+    $form['to'] += $this->buildElement('to_mail', $this->t('To email'), $this->t('To email address'), $mail_element_options, $options_element_options, TRUE);
+    $form['to'] += $this->buildElement('cc_mail', $this->t('CC email'), $this->t('CC email address'), $mail_element_options, $options_element_options, FALSE);
+    $form['to'] += $this->buildElement('bcc_mail', $this->t('BCC email'), $this->t('Bcc email address'), $mail_element_options, $options_element_options, FALSE);
 
     // From.
     $form['from'] = [
@@ -257,8 +257,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send from'),
       '#open' => TRUE,
     ];
-    $form['from'] += $this->buildElement($form_state, 'from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, NULL, TRUE);
-    $form['from'] += $this->buildElement($form_state, 'from_name', $this->t('From name'), $this->t('From name'), $text_element_options);
+    $form['from'] += $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, NULL, TRUE);
+    $form['from'] += $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options);
 
     // Message.
     $form['message'] = [
@@ -266,7 +266,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Message'),
       '#open' => TRUE,
     ];
-    $form['message'] += $this->buildElement($form_state, 'subject', $this->t('Subject'), $this->t('subject'), $text_element_options);
+    $form['message'] += $this->buildElement('subject', $this->t('Subject'), $this->t('subject'), $text_element_options);
 
     // Message: Body.
     // Building a custom select other element that toggles between
@@ -516,7 +516,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   A webform submission.
    * @param string $configuration_name
    *   The email configuration name. (ie to, cc, bcc, or from)
-   * @param $configuration_value
+   * @param string $configuration_value
    *   The email configuration value.
    *
    * @return array
@@ -647,7 +647,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         $t_args = ['%subject' => $message['subject']];
         drupal_set_message($this->t('Message <b>not sent</b> %subject because a <em>To</em>, <em>Cc</em>, or <em>Bcc</em> email was not provided.', $t_args), 'warning');
       }
-      return ;
+      return;
     }
 
     // Send message.
@@ -766,8 +766,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function getMessageSummary(array $message) {
     return [
-        '#settings' => $message,
-      ] + parent::getSummary();
+      '#settings' => $message,
+    ] + parent::getSummary();
   }
 
   /**
@@ -847,7 +847,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * @return array
    *   A select other element.
    */
-  protected function buildElement(FormStateInterface $form_state, $name, $title, $label, array $element_options, array $options_options = NULL, $required = FALSE) {
+  protected function buildElement($name, $title, $label, array $element_options, array $options_options = NULL, $required = FALSE) {
     list($element_name, $element_type) = (strpos($name, '_') !== FALSE) ? explode('_', $name) : [$name, 'text'];
 
     $options = [];
@@ -933,7 +933,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#type' => 'value',
         '#value' => [],
         '#parents' => ['settings', $options_name],
-        '#prefix' => '<div id="' . $options_id  . '">',
+        '#prefix' => '<div id="' . $options_id . '">',
         '#suffix' => '</div>',
       ];
     }
@@ -960,7 +960,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $name = prev($trigger_element['#array_parents']);
     $options_name = strtok($name, '_') . '_options';
 
-    $target_parents =  array_slice($trigger_element['#array_parents'], 0, -2);
+    $target_parents = array_slice($trigger_element['#array_parents'], 0, -2);
     $target_parents[] = $options_name;
 
     $element = NestedArray::getValue($form, $target_parents);

@@ -32,7 +32,7 @@ function webform_demo_application_evaluation_install() {
       $webform_submission_devel_generate = $devel_generate_manager->createInstance('webform_submission', []);
       $webform_submission_devel_generate->generateElements([
         'webform_ids' => [
-          'demo_application' => 'demo_application'
+          'demo_application' => 'demo_application',
         ],
         'entity-type' => 'node',
         'entity-id' => $webform_node->id(),
@@ -66,7 +66,7 @@ function webform_demo_application_evaluation_uninstall() {
     ->condition('webform.target_id', 'demo_application')
     ->execute();
   if ($entity_ids) {
-    /** @var $nodes \Drupal\node\Entity\Node[] */
+    /** @var \Drupal\node\Entity\Node[] $nodes */
     $nodes = Node::loadMultiple($entity_ids);
     foreach ($nodes as $node) {
       $node->delete();

@@ -9,9 +9,9 @@
 
   // @see https://select2.github.io/options.html
   Drupal.webform = Drupal.webform || {};
-  Drupal.webform.select2 = Drupal.webform.select2|| {};
+  Drupal.webform.select2 = Drupal.webform.select2 || {};
   Drupal.webform.select2.options = Drupal.webform.select2.options || {};
-  
+
   /**
    * Initialize Select2 support.
    *

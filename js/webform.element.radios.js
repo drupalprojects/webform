@@ -37,7 +37,7 @@
       }
 
       if (required) {
-        $target.find('input[type="radio"]').attr({'required': 'required', 'aria-required': 'aria-required'})
+        $target.find('input[type="radio"]').attr({'required': 'required', 'aria-required': 'aria-required'});
         $target.find('legend span').addClass('js-form-required form-required');
       }
       else {

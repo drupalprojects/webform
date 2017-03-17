@@ -42,4 +42,3 @@ class Radios extends OptionsBase {
   }
 
 }
-

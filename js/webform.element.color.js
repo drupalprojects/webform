@@ -39,7 +39,7 @@
             $element[0].value = $output[0].value;
           });
         }
-      })
+      });
     }
   };
 

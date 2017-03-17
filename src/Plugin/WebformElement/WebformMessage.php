@@ -4,7 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use \Drupal\webform\Element\WebformMessage as WebformMessageElement;
+use Drupal\webform\Element\WebformMessage as WebformMessageElement;
 
 /**
  * Provides a 'webform_message' element.

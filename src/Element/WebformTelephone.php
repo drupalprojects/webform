@@ -55,4 +55,5 @@ class WebformTelephone extends WebformCompositeBase {
     $element['#attached']['library'][] = 'webform/webform.element.composite_telephone';
     return $element;
   }
+
 }

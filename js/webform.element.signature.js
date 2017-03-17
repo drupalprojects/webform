@@ -44,7 +44,7 @@
 
         // Initialize signature canvas.
         var options = $.extend({
-          'onEnd': function () {
+          onEnd: function () {
             $input.val(signaturePad.toDataURL());
           }
         }, Drupal.webform.signaturePad.options);

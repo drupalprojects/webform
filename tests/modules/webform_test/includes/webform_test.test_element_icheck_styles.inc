@@ -94,7 +94,7 @@ function _webform_test_test_element_icheck_options() {
       'minimal-green' => t('Green'),
       'minimal-aero' => t('Aero'),
     ],
-    [(string) t('Square'),] => [
+    [(string) t('Square')] => [
       'square-square' => t('Black'),
       'square-grey' => t('Grey'),
       'square-yellow' => t('Yellow'),

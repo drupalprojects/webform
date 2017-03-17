@@ -35,7 +35,7 @@
           })
           .on('ifUnchecked', function (e) {
             $(e.target).removeAttr('checked').click();
-          })
+          });
       });
     }
   };
@@ -49,24 +49,24 @@
    */
   Drupal.behaviors.webformICheckTableSelectAll = {
     attach: function(context) {
-      $('table[data-webform-icheck] th.select-all').bind('DOMNodeInserted', function() {
+      $('table[data-webform-icheck] th.select-all').bind('DOMNodeInserted', function () {
         $(this).unbind('DOMNodeInserted');
-        $(this).find('input[type="checkbox"]').each(function() {
-            var icheck = $(this).closest('table[data-webform-icheck]').attr('data-webform-icheck');
+        $(this).find('input[type="checkbox"]').each(function () {
+          var icheck = $(this).closest('table[data-webform-icheck]').attr('data-webform-icheck');
 
-            var options = $.extend({
-              checkboxClass: 'icheckbox_' + icheck,
-              radioClass: 'iradio_' + icheck
-            }, Drupal.webform.iCheck.options);
+          var options = $.extend({
+            checkboxClass: 'icheckbox_' + icheck,
+            radioClass: 'iradio_' + icheck
+          }, Drupal.webform.iCheck.options);
 
-            $(this).iCheck(options)
-          })
-          .on('ifChanged', function() {
-            var _index = $(this).parents('th').index() + 1;
-            $(this).parents('thead').next('tbody').find('tr td:nth-child(' + _index + ') input')
-              .iCheck(!$(this).is(':checked') ? 'check' : 'uncheck')
-              .iCheck($(this).is(':checked') ? 'check' : 'uncheck');
-          });
+          $(this).iCheck(options)
+        })
+        .on('ifChanged', function () {
+          var _index = $(this).parents('th').index() + 1;
+          $(this).parents('thead').next('tbody').find('tr td:nth-child(' + _index + ') input')
+            .iCheck(!$(this).is(':checked') ? 'check' : 'uncheck')
+            .iCheck($(this).is(':checked') ? 'check' : 'uncheck');
+        });
       });
     }
   };

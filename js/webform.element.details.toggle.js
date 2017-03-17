@@ -61,20 +61,20 @@
   /**
    * Determine if a webform's details are all opened.
    *
-   * @param $form
+   * @param {jQuery} $form
    *   A webform.
    *
-   * @returns {boolean}
+   * @return {boolean}
    *   TRUE if a webform's details are all opened.
    */
   function isFormDetailsOpen($form) {
-    return ($form.find('details[open]').length == $form.find('details').length)
+    return ($form.find('details[open]').length === $form.find('details').length)
   }
 
   /**
    * Set a webform's details toggle state widget label.
    *
-   * @param $form
+   * @param {jQuery} $form
    *   A webform.
    */
   function setDetailsToggleLabel($form) {

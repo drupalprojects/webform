@@ -189,7 +189,6 @@ class WebformMapping extends WebformElementBase {
     }
   }
 
-
   /**
    * {@inheritdoc}
    */

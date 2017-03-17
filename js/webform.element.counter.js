@@ -9,7 +9,7 @@
 
   // @see http://qwertypants.github.io/jQuery-Word-and-Character-Counter-Plugin/
   Drupal.webform = Drupal.webform || {};
-  Drupal.webform.counter = Drupal.webform.counter|| {};
+  Drupal.webform.counter = Drupal.webform.counter || {};
   Drupal.webform.counter.options = Drupal.webform.counter.options|| {};
 
   /**
@@ -27,7 +27,7 @@
 
         // Only word type can be defined, otherwise the counter defaults to
         // character counting.
-        if ($(this).attr('data-counter-type') == 'word') {
+        if ($(this).attr('data-counter-type') === 'word') {
           options.type = 'word';
         }
 

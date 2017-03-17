@@ -497,7 +497,7 @@ class WebformElementStates extends FormElement {
    *
    * @param array $element
    *   An element.
-   * @param $name
+   * @param string $name
    *   The name.
    *
    * @return string

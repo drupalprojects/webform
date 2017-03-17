@@ -275,7 +275,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    */
   protected function generateSubmission(&$results) {
     $webform_id = array_rand(array_filter($results['webform_ids']));
-    /** @var \Drupal\webform\WebformInterface  $webform */
+    /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->webformStorage->load($webform_id);
 
     $users = $results['users'];

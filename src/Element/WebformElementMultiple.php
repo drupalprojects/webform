@@ -58,12 +58,12 @@ class WebformElementMultiple extends FormElement {
     $cardinality = $element['#value'];
 
     $element['#tree'] = TRUE;
-    
+
     $element['container'] = [
       '#type' => 'container',
-      '#attributes' => ['class' => [
-        'container-inline',
-      ]],
+      '#attributes' => [
+        'class' => ['container-inline'],
+      ],
     ];
 
     $element['container']['cardinality'] = [

@@ -3,7 +3,6 @@
 namespace Drupal\Tests\webform\Unit\Utility;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Render\Markup;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\Tests\UnitTestCase;
 
@@ -140,7 +139,6 @@ class WebformElementHelperTest extends UnitTestCase {
     ];
     return $tests;
   }
-
 
   /**
    * Tests WebformElementHelper::convertRenderMarkupToStrings().

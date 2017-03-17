@@ -82,4 +82,5 @@ class WebformTermSelect extends Select {
     }
     $element['#options'] = $options;
   }
+
 }

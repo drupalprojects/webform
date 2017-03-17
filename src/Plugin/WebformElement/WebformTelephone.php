@@ -122,8 +122,8 @@ class WebformTelephone extends WebformCompositeBase {
       '#type' => 'select',
       '#empty_option' => '',
       '#options' => [
-          'auto' => $this->t('Auto detect'),
-        ] + CountryManager::getStandardList(),
+        'auto' => $this->t('Auto detect'),
+      ] + CountryManager::getStandardList(),
       '#states' => [
         'visible' => [
           ':input[name="properties[phone__international]"]' => ['checked' => TRUE]

@@ -3,10 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
-// ISSUE: Below import statement is throwing "Error: Cannot use Drupal\Core\Url
-// as Url because the name is already in use in" when executing any drush
-// webform command that loads this file.
-// use Drupal\Core\Url.
+use Drupal\Core\Url as UrlGenerator;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\Link;
 use Drupal\file\Entity\File;
@@ -93,7 +90,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       if (!isset($scheme_options[$uri_scheme]) && $this->currentUser->hasPermission('administer webform')) {
         drupal_set_message($this->t('The \'File\' element is unavailable because a <a href="https://www.drupal.org/documentation/modules/file">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
         $context = [
-          'link' => Link::fromTextAndUrl($this->t('Edit'), \Drupal\Core\Url::fromRoute('<current>'))->toString(),
+          'link' => Link::fromTextAndUrl($this->t('Edit'), UrlGenerator::fromRoute('<current>'))->toString(),
         ];
         $this->logger->notice("The 'File' element is unavailable because no stream wrappers are available", $context);
       }

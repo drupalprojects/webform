@@ -13,7 +13,7 @@
     var $document = $(document);
     $document.on('state:visible', function (e) {
       if (!e.trigger) {
-        return TRUE;
+        return true;
       }
 
       if (!e.value) {
@@ -51,17 +51,17 @@
     var $input = $(input);
     var type = input.type;
     var tag = input.tagName.toLowerCase(); // Normalize case.
-    if (type == 'checkbox' || type == 'radio') {
+    if (type === 'checkbox' || type === 'radio') {
       $input
         .trigger('change')
         .trigger('blur');
     }
-    else if (tag == 'select') {
+    else if (tag === 'select') {
       $input
         .trigger('change')
         .trigger('blur');
     }
-    else if (type != 'submit' && type != 'button') {
+    else if (type !== 'submit' && type !== 'button') {
       $input
         .trigger('input')
         .trigger('change')
@@ -88,10 +88,10 @@
     }
 
     // Backup value.
-    if (type == 'checkbox' || type == 'radio') {
+    if (type === 'checkbox' || type === 'radio') {
       $input.data('webform-value', $input.prop('checked'));
     }
-    else if (tag == 'select') {
+    else if (tag === 'select') {
       var values = [];
       $input.find('option:selected').each(function (i, option) {
         values[i] = option.value;
@@ -119,22 +119,22 @@
       var type = input.type;
       var tag = input.tagName.toLowerCase(); // Normalize case.
 
-      if (type == 'checkbox' || type == 'radio') {
-        $input.prop('checked', value)
+      if (type === 'checkbox' || type === 'radio') {
+        $input.prop('checked', value);
       }
-      else if (tag == 'select') {
+      else if (tag === 'select') {
         $.each(value, function (i, option_value) {
           $input.find("option[value='" + option_value + "']").prop("selected", true);
         });
       }
-      else if (type != 'submit' && type != 'button') {
+      else if (type !== 'submit' && type !== 'button') {
         input.value = value;
       }
     }
 
     // Restore required.
     if ($input.data('webform-required')) {
-      $input.prop('required', TRUE);
+      $input.prop('required', true);
     }
   }
 
@@ -150,10 +150,10 @@
     // Clear value.
     var type = input.type;
     var tag = input.tagName.toLowerCase(); // Normalize case.
-    if (type == 'checkbox' || type == 'radio') {
+    if (type === 'checkbox' || type === 'radio') {
       $input.prop('checked', false);
     }
-    else if (tag == 'select') {
+    else if (tag === 'select') {
       if ($input.find('option[value=""]').length) {
         $input.val('');
       }
@@ -161,8 +161,8 @@
         input.selectedIndex = -1;
       }
     }
-    else if (type != 'submit' && type != 'button') {
-      input.value = (type == 'color') ? '#000000' : '';
+    else if (type !== 'submit' && type != 'button') {
+      input.value = (type === 'color') ? '#000000' : '';
     }
 
     // Clear required.
