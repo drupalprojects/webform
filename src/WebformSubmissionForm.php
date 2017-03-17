@@ -1350,7 +1350,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected function checkTotalLimit() {
     $webform = $this->getWebform();
 
-    // Check per entity total limit.
+    // Check per source entity total limit.
     $entity_limit_total = $this->getWebformSetting('entity_limit_total');
     if ($entity_limit_total && ($source_entity = $this->getLimitSourceEntity())) {
       if ($this->storage->getTotal($webform, $source_entity) >= $entity_limit_total) {
@@ -1382,7 +1382,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       return FALSE;
     }
 
-    // Check per entity user limit.
+    // Check per source entity user limit.
     $entity_limit_user = $this->getWebformSetting('entity_limit_user');
     if ($entity_limit_user && ($source_entity = $this->getLimitSourceEntity())) {
       if ($this->storage->getTotal($webform, $source_entity, $account) >= $entity_limit_user) {

@@ -651,7 +651,7 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $form['limits']['entity_limit_total'] = [
       '#type' => 'number',
-      '#title' => $this->t('Total submissions limit per entity'),
+      '#title' => $this->t('Total submissions limit per source entity'),
       '#min' => 1,
       '#default_value' => $settings['entity_limit_total'],
     ];
@@ -670,7 +670,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['limits']['entity_limit_user'] = [
       '#type' => 'number',
       '#min' => 1,
-      '#title' => $this->t('Per user submission limit per entity'),
+      '#title' => $this->t('Per user submission limit per source entity'),
       '#default_value' => $settings['entity_limit_user'],
     ];
     $form['limits']['limit_user_message'] = [

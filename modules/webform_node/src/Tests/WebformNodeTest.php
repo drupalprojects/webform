@@ -80,7 +80,7 @@ class WebformNodeTest extends WebformTestBase {
 
     /* Submission limit (test_form_limit) */
 
-    // Set per entity total and user limit.
+    // Set per source entity total and user limit.
     // @see \Drupal\webform\Tests\WebformSubmissionFormSettingsTest::testSettings
     $node->webform->target_id = 'test_form_limit';
     $node->webform->default_data = '';
@@ -97,7 +97,7 @@ class WebformNodeTest extends WebformTestBase {
     ]);
     $limit_form->save();
 
-    // Check per entity user limit.
+    // Check per source entity user limit.
     $this->drupalLogin($this->normalUser);
     $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
     $this->drupalGet('node/' . $node->id());
@@ -105,7 +105,7 @@ class WebformNodeTest extends WebformTestBase {
     $this->assertRaw('You are only allowed to have 1 submission for this webform.');
     $this->drupalLogout();
 
-    // Check per entity total limit.
+    // Check per source entity total limit.
     $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
     $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
     $this->drupalGet('node/' . $node->id());
