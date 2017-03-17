@@ -59,7 +59,11 @@ class WebformLocation extends WebformCompositeBase {
       // Location settings.
       'geolocation' => FALSE,
       'hidden' => FALSE,
+      'map' => FALSE,
       'api_key' => '',
+      // Submission display.
+      'format' => $this->getItemDefaultFormat(),
+      'format_items' => $this->getItemsDefaultFormat(),
     ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();
@@ -90,6 +94,60 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
+  public function getItemFormats() {
+    return parent::getItemFormats() + [
+      'map' => $this->t('Map'),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function formatHtmlItem(array &$element, $value, array $options = []) {
+    // Return empty value.
+    if (empty($value) || empty(array_filter($value))) {
+      return '';
+    }
+
+    $format = $this->getItemFormat($element);
+    if ($format == 'map') {
+      $google_map_url = UrlGenerator::fromUri('http://maps.google.com/', ['query' => ['q' => $value['value']]]);
+
+      $location = $value['location'];
+      $key = (isset($element['#api_key'])) ? $element['#api_key'] : $this->configFactory->get('webform.settings')->get('elements.default_google_maps_api_key');
+      $center = urlencode($value['location']);
+      $image_map_uri = "https://maps.googleapis.com/maps/api/staticmap?zoom=14&size=600x338&markers=color:red%7C$location&key=$key&center=$center";
+
+      return [
+        'location' => [
+          '#type' => 'link',
+          '#title' => $value['value'],
+          '#url' => $google_map_url,
+          '#suffix' => '<br />',
+        ],
+        'map' => [
+          '#type' => 'link',
+          '#title' => [
+            '#theme' => 'image',
+            '#uri' => $image_map_uri,
+            '#width' => 600,
+            '#height' => 338,
+            '#alt' => $value['value'],
+            '#attributes' => ['style' => "display: block; max-width: 100%; height: auto; border: 1px solid #ccc;"],
+          ],
+          '#url' => $google_map_url,
+          '#suffix' => '<br />',
+        ],
+      ];
+    }
+    else {
+      return parent::formatHtmlItems($element, $value, $options);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
@@ -100,10 +158,12 @@ class WebformLocation extends WebformCompositeBase {
       '#type' => 'checkbox',
       '#title' => $this->t("Use the browser's Geolocation as the default value."),
       '#description' => $this->t('The <a href="http://www.w3schools.com/html/html5_geolocation.asp">HTML Geolocation API</a> is used to get the geographical position of a user. Since this can compromise privacy, the position is not available unless the user approves it.'),
+      '#return_value' => TRUE,
     ];
     $form['composite']['hidden'] = [
       '#type' => 'checkbox',
       '#title' => $this->t("Hide the location element and collect the browser's Geolocation in the background."),
+      '#return_value' => TRUE,
       '#states' => [
         'visible' => [
           ':input[name="properties[geolocation]"]' => [
@@ -112,6 +172,18 @@ class WebformLocation extends WebformCompositeBase {
         ],
       ],
     ];
+    $form['composite']['map'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display map'),
+      '#description' => $this->t('Display a map for entered location.'),
+      '#return_value' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[hidden]"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
     $form['composite']['api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Google Maps API key'),

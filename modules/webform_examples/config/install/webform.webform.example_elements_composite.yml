@@ -78,9 +78,15 @@ elements: |
     webform_location:
       '#type': webform_location
       '#title': Location
+      '#map': true
+      '#geolocation': true
+      '#format': map
     webform_location_multiple:
       '#type': webform_location
       '#title': 'Location multiple'
+      '#map': true
+      '#geolocation': true
+      '#format': map
       '#multiple': true
   webform_mapping_example:
     '#type': details

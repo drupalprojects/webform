@@ -105,6 +105,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'checkbox',
       '#title' => $this->t('Allow this webform to be used as a template.'),
       '#description' => $this->t('If checked, this webform will be available as a template to all users who can create new webforms.'),
+      '#return_value' => TRUE,
       '#access' => $this->moduleHandler->moduleExists('webform_templates'),
       '#default_value' => $webform->isTemplate(),
     ];
@@ -160,6 +161,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to post submission from a dedicated URL.'),
       '#description' => $this->t('If unchecked, this webform must be attached to a <a href=":node_href">node</a> or a <a href=":block_href">block</a> to receive submissions.', $t_args),
+      '#return_value' => TRUE,
       '#default_value' => $settings['page'],
     ];
     if ($this->moduleHandler->moduleExists('path')) {
@@ -376,14 +378,14 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $form['wizard']['wizard_progress_pages'] = [
       '#type' => 'checkbox',
-      '#return_value' => TRUE,
       '#title' => $this->t('Show wizard progress pages'),
+      '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_pages'],
     ];
     $form['wizard']['wizard_progress_percentage'] = [
       '#type' => 'checkbox',
-      '#return_value' => TRUE,
       '#title' => $this->t('Show wizard progress percentage'),
+      '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_percentage'],
     ];
     $form['wizard']['wizard_prev_button'] = [
@@ -544,9 +546,9 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $form['draft']['settings']['draft_auto_save'] = [
       '#type' => 'checkbox',
-      '#return_value' => TRUE,
       '#title' => $this->t('Automatically save as draft when paging, previewing, and when there are validation errors.'),
       "#description" => $this->t('Automatically save partial submissions when users click the "Preview" button or when validation errors prevent a webform from being submitted.'),
+      '#return_value' => TRUE,
       '#default_value' => $settings['draft_auto_save'],
     ];
     $form['draft']['settings']['draft_button'] = [
@@ -594,6 +596,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'checkbox',
       '#title' => $this->t('Show the notification about previous submissions'),
       '#description' => $this->t('Show the previous submissions notification that appears when users have previously submitted this form.'),
+      '#return_value' => TRUE,
       '#default_value' => $settings['form_previous_submissions'],
     ];
     $form['submission']['form_confidential'] = [

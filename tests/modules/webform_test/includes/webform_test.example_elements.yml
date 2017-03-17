@@ -58,6 +58,10 @@ webform_likert:
     3: 3
     4: 4
     5: 5
+webform_location:
+  '#map': true
+  '#geolocation': true
+  '#format': map
 webform_mapping:
   '#type': webform_mapping
   '#title': webform_mapping

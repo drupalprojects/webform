@@ -274,6 +274,9 @@ elements: |
       webform_location_ol:
         '#type': webform_location
         '#title': 'Location (Ordered list)'
+        '#map': true
+        '#geolocation': true
+        '#format': map
         '#multiple': true
         '#default_value':
           -
@@ -286,6 +289,9 @@ elements: |
       webform_location_ul:
         '#type': webform_location
         '#title': 'Location (Unordered list)'
+        '#map': true
+        '#geolocation': true
+        '#format': map
         '#multiple': true
         '#default_value':
           -
@@ -298,6 +304,9 @@ elements: |
       webform_location_hr:
         '#type': webform_location
         '#title': 'Location (Horizontal rule)'
+        '#map': true
+        '#geolocation': true
+        '#format': map
         '#multiple': true
         '#default_value':
           -

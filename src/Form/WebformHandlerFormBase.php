@@ -94,6 +94,7 @@ abstract class WebformHandlerFormBase extends FormBase {
     $form['status'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable the %name handler.', ['%name' => $this->webformHandler->label()]),
+      '#return_value' => TRUE,
       '#default_value' => $this->webformHandler->isEnabled(),
       // Disable broken plugins.
       '#disabled' => ($this->webformHandler->getPluginId() == 'broken'),

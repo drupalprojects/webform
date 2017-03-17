@@ -8,6 +8,7 @@
   'use strict';
 
   // @see https://ubilabs.github.io/geocomplete/
+  // @see https://developers.google.com/maps/documentation/javascript/reference?csw=1#MapOptions
   Drupal.webform = Drupal.webform || {};
   Drupal.webform.locationGeocomplete = Drupal.webform.locationGeocomplete || {};
   Drupal.webform.locationGeocomplete.options = Drupal.webform.locationGeocomplete.options || {};
@@ -21,14 +22,27 @@
     attach: function (context) {
       $(context).find('div.js-webform-location').once('webform-location').each(function () {
         var $element = $(this);
+        var $input = $element.find('.webform-location-geocomplete');
+
+        if ($input.attr('data-webform-location-map')) {
+          var $map = $('<div class="webform-location-map"><div class="webform-location-map--container"></div></div>').insertAfter($input).find('.webform-location-map--container');
+        }
+        else {
+          var $map = null;
+        }
 
         var options = $.extend({
           details: $element,
           detailsAttribute: 'data-webform-location-attribute',
-          types: ['geocode']
+          types: ['geocode'],
+          map: $map,
+          mapOptions: {
+            disableDefaultUI: true,
+            zoomControl: true,
+          },
         }, Drupal.webform.locationGeocomplete.options);
 
-        var $geocomplete = $element.find('.webform-location-geocomplete').geocomplete(options);
+        var $geocomplete = $input.geocomplete(options);
 
         $geocomplete.on('input', function () {
           // Reset attributes on input.

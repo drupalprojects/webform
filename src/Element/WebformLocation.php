@@ -19,6 +19,7 @@ class WebformLocation extends WebformCompositeBase {
       '#api_key' => '',
       '#hidden' => FALSE,
       '#geolocation' => FALSE,
+      '#map' => FALSE,
     ];
   }
 
@@ -81,6 +82,7 @@ class WebformLocation extends WebformCompositeBase {
         'class' => ['webform-location-geocomplete'],
       ],
     ];
+
     $elements += $attributes;
     return $elements;
   }
@@ -133,6 +135,11 @@ class WebformLocation extends WebformCompositeBase {
     // Set Geolocation detection attribute.
     if (!empty($element['#geolocation'])) {
       $element['value']['#attributes']['data-webform-location-geolocation'] = 'data-webform-location-geolocation';
+    }
+
+    // Set Map attribute.
+    if (!empty($element['#map']) && empty($element['#hidden'])) {
+      $element['value']['#attributes']['data-webform-location-map'] = 'data-webform-location-map';
     }
 
     // Writing script tags (only once) directly into the page's output to ensure

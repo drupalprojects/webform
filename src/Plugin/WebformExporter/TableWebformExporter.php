@@ -37,6 +37,7 @@ class TableWebformExporter extends TabularBaseWebformExporter {
       '#type' => 'checkbox',
       '#title' => $this->t('Open HTML table in Excel'),
       '#description' => $this->t('If checked, the download file extension will be change from .html to .xls.'),
+      '#return_value' => TRUE,
       '#default_value' => $this->configuration['excel'],
       '#states' => [
         'visible' => [

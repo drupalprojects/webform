@@ -19,6 +19,11 @@ elements: |
     location_default:
       '#type': webform_location
       '#title': 'location default'
+    location_map:
+      '#type': webform_location
+      '#title': 'location map'
+      '#geolocation': true
+      '#map': true
   location_attributes_element:
     '#type': details
     '#title': 'Location with visible attributes element'

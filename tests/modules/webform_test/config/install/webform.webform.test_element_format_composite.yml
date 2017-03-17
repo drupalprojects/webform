@@ -270,21 +270,35 @@ elements: |
       webform_location_value:
         '#type': webform_location
         '#title': 'Location (Value)'
+        '#map': true
+        '#geolocation': true
+        '#format': value
         '#default_value':
           value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
-        '#format': value
       webform_location_raw:
         '#type': webform_location
         '#title': 'Location (Raw value)'
+        '#map': true
+        '#geolocation': true
+        '#format': raw
         '#default_value':
           value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
-        '#format': raw
       webform_location_list:
         '#type': webform_location
         '#title': 'Location (List)'
+        '#map': true
+        '#geolocation': true
+        '#format': list
         '#default_value':
           value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
-        '#format': list
+      webform_location_map:
+        '#type': webform_location
+        '#title': 'Location (Map)'
+        '#map': true
+        '#geolocation': true
+        '#format': map
+        '#default_value':
+          value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
     webform_name:
       '#type': details
       '#title': Name

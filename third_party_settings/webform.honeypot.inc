@@ -71,6 +71,7 @@ function _webform_honeypot_form(array &$form, FormStateInterface $form_state, $h
     '#type' => 'checkbox',
     '#title' => t('Protect %label with Honeypot', $t_args),
     '#default_value' => $honeypot,
+    '#return_value' => TRUE,
   ];
 
   if ($honeypot_state != WEBFORM_HONEYPOT_NEUTRAL) {
@@ -91,6 +92,7 @@ function _webform_honeypot_form(array &$form, FormStateInterface $form_state, $h
     '#type' => 'checkbox',
     '#title' => t('Add time restriction to %label', $t_args),
     '#default_value' => $time_restriction,
+    '#return_value' => TRUE,
   ];
 
   if ($time_restriction_state != WEBFORM_HONEYPOT_NEUTRAL) {

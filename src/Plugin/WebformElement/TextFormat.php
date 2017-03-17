@@ -186,6 +186,7 @@ class TextFormat extends WebformElementBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Hide help'),
       '#description' => $this->t("If checked, the 'About text formats' link will be hidden."),
+      '#return_value' => TRUE,
     ];
     return $form;
   }

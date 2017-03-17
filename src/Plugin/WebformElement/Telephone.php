@@ -58,10 +58,10 @@ class Telephone extends TextBase {
       '#title' => $this->t('Telephone settings'),
     ];
     $form['telephone']['international'] = [
-      '#title' => $this->t('Enhance support for international phone numbers'),
       '#type' => 'checkbox',
-      '#return_value' => TRUE,
+      '#title' => $this->t('Enhance support for international phone numbers'),
       '#description' => $this->t('Enhance the telephone element\'s international support using the jQuery <a href=":href">International Telephone Input</a> plugin.', [':href' => 'http://intl-tel-input.com/']),
+      '#return_value' => TRUE,
     ];
     $form['telephone']['international_initial_country'] = [
       '#title' => $this->t('Initial country'),

@@ -575,6 +575,9 @@ elements: |
     visible_webform_location:
       '#type': webform_location
       '#title': Location
+      '#map': true
+      '#geolocation': true
+      '#format': map
       '#default_value':
         value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
       '#states':
@@ -1419,6 +1422,9 @@ elements: |
     invisible_webform_location:
       '#type': webform_location
       '#title': Location
+      '#map': true
+      '#geolocation': true
+      '#format': map
       '#default_value':
         value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
       '#states':
@@ -2067,6 +2073,9 @@ elements: |
     disabled_webform_location:
       '#type': webform_location
       '#title': Location
+      '#map': true
+      '#geolocation': true
+      '#format': map
       '#default_value':
         value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
       '#states':

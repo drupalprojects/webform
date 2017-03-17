@@ -497,9 +497,15 @@ elements: |
     flex_webform_location_left:
       '#type': webform_location
       '#title': 'Location 01'
+      '#map': true
+      '#geolocation': true
+      '#format': map
     flex_webform_location_right:
       '#type': webform_location
       '#title': 'Location 02'
+      '#map': true
+      '#geolocation': true
+      '#format': map
   flexbox_machine_name:
     '#type': webform_flexbox
     flex_machine_name_left:

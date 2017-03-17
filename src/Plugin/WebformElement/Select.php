@@ -71,10 +71,10 @@ class Select extends OptionsBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $form['options']['select2'] = [
-      '#title' => $this->t('Select2'),
       '#type' => 'checkbox',
-      '#return_value' => TRUE,
+      '#title' => $this->t('Select2'),
       '#description' => $this->t('Replace select element with jQuery <a href=":href">Select2</a> box.', [':href' => 'https://select2.github.io/']),
+      '#return_value' => TRUE,
     ];
     return $form;
   }

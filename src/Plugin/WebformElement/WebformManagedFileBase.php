@@ -611,8 +611,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $form['file']['multiple'] = [
       '#title' => $this->t('Multiple'),
       '#type' => 'checkbox',
-      '#return_value' => TRUE,
       '#description' => $this->t('Check this option if the user should be allowed to upload multiple files.'),
+      '#return_value' => TRUE,
     ];
     return $form;
   }

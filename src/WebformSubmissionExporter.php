@@ -440,6 +440,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       '#type' => 'checkbox',
       '#title' => $this->t('Download export file'),
       '#description' => $this->t('If checked, the export file will be automatically download to your local machine. If unchecked, the export file will be displayed as plain text within your browser.'),
+      '#return_value' => TRUE,
       '#default_value' => $export_options['download'],
       '#access' => !$this->requiresBatch(),
       '#states' => $states_archive,
@@ -448,6 +449,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       '#type' => 'checkbox',
       '#title' => $this->t('Download uploaded files'),
       '#description' => $this->t('If checked, the exported file and any submission file uploads will be download in a gzipped tar file.'),
+      '#return_value' => TRUE,
       '#access' => $webform->hasManagedFile(),
       '#states' => [
         'invisible' => [
@@ -547,6 +549,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       '#type' => 'checkbox',
       '#title' => $this->t('Starred/flagged submissions'),
       '#description' => $this->t('If checked, only starred/flagged submissions will be downloaded. If unchecked, all submissions will downloaded.'),
+      '#return_value' => TRUE,
       '#default_value' => $export_options['sticky'],
     ];
 

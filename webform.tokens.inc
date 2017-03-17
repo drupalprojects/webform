@@ -259,8 +259,8 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
             $submission_options,
             $submission_format
           );
-          // Note, tokens can't include CSS and JS libraries since they will
-          // can be included in an email.
+          // Note, tokens can't include CSS and JS libraries since they can be
+          // included in an email.
           $replacements[$original] = \Drupal::service('renderer')->renderPlain($build);
           break;
 
