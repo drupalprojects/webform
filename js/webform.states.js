@@ -7,6 +7,19 @@
 
   'use strict';
 
+  // Issue #2860529: Conditional required File upload field don't work.
+  var $document = $(document);
+  $document.on('state:required', function (e) {
+    if (e.trigger) {
+      if (e.value) {
+        $(e.target).find('input[type="file"]').attr({'required': 'required', 'aria-required': 'aria-required'})
+      }
+      else {
+        $(e.target).find('input[type="file"]').removeAttr('required aria-required');
+      }
+    }
+  });
+
   // Make absolutely sure the below event handlers are triggered after
   // the /core/misc/states.js event handlers by attaching them after DOM load.
   $(function () {
@@ -39,6 +52,7 @@
           .find('select, input, textarea').trigger('webform:disabled');
       }
     });
+
   });
 
   /**
