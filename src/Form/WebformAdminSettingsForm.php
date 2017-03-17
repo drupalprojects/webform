@@ -162,7 +162,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['form']['default_form_submit_once'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Prevent duplicate submissions'),
-      '#description' => $this->t('If checked, the submit button will be disabled immediately after is is clicked.'),
+      '#description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['default_form_submit_once'],
     ];

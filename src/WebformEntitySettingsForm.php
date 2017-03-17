@@ -288,7 +288,7 @@ class WebformEntitySettingsForm extends EntityForm {
       'form_submit_once' => [
         'title' => $this->t('Prevent duplicate submissions'),
         'all_description' => $this->t('Submit button is disabled immediately after is is clicked form all webforms.'),
-        'form_description' => $this->t('If checked, the submit button will be disabled immediately after is is clicked.'),
+        'form_description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
       ],
       'form_disable_back' => [
         'title' => $this->t('Disable back button for all webforms'),
