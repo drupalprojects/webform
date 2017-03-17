@@ -2,7 +2,7 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\Webform as WebformEntity;
 
 /**
  * Provides a webform element for webform excluded columns (submission field and elements).
@@ -23,7 +23,7 @@ class WebformExcludedColumns extends WebformExcludedBase {
    */
   public static function getWebformExcludedOptions(array $element) {
     /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = Webform::load($element['#webform_id']);
+    $webform = WebformEntity::load($element['#webform_id']);
 
     $options = [];
 
