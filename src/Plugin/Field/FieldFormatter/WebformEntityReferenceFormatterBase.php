@@ -187,7 +187,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
     }
 
     if ($max_age) {
-      // $elements['#cache']['max-age'] = $max_age;
+      $elements['#cache']['max-age'] = $max_age;
     }
   }
 
