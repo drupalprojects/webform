@@ -4,6 +4,7 @@ namespace Drupal\webform_node\Tests;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform node access rules.
@@ -39,7 +40,7 @@ class WebformNodeAccessTest extends WebformTestBase {
     $webform = Webform::load('contact');
     $node = $this->drupalCreateNode(['type' => 'webform']);
     $node->webform->target_id = 'contact';
-    $node->webform->status = 1;
+    $node->webform->status = WebformInterface::STATUS_OPEN;
     $node->save();
     $nid = $node->id();
 

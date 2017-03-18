@@ -5,6 +5,7 @@ namespace Drupal\webform_node\Tests;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
+use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform node results.
@@ -53,7 +54,7 @@ class WebformNodeResultsTest extends WebformTestBase {
 
     // Set Node webform to the contact webform.
     $node->webform->target_id = 'contact';
-    $node->webform->status = 1;
+    $node->webform->status = WebformInterface::STATUS_OPEN;
     $node->save();
 
     /* Submission management */

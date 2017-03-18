@@ -6,6 +6,7 @@
  */
 
 use Drupal\node\Entity\Node;
+use Drupal\webform\WebformInterface;
 
 /**
  * Implements hook_install().
@@ -20,7 +21,9 @@ function webform_demo_application_evaluation_install() {
       'status' => 1,
     ]);
     $webform_node->webform->target_id = 'demo_application';
-    $webform_node->webform->status = 1;
+    $webform_node->webform->status = \Drupal\webform\WebformInterface::STATUS_OPEN;
+    $webform_node->webform->open = '';
+    $webform_node->webform->close = '';
     $webform_node->save();
 
     // Generate some initial webform node applications.

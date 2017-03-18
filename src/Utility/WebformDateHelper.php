@@ -2,6 +2,8 @@
 
 namespace Drupal\webform\Utility;
 
+use Drupal\Core\Datetime\DrupalDateTime;
+
 /**
  * Helper class webform date helper methods.
  */
@@ -36,6 +38,19 @@ class WebformDateHelper {
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $date_formatter = \Drupal::service('date.formatter');
     return $timestamp ? $date_formatter->format($timestamp, $type) : '';
+  }
+
+  /**
+   * Format date/time object to be written to the database using 'Y-m-d\TH:i:s'.
+   *
+   * @param \Drupal\Core\Datetime\DrupalDateTime $date
+   *   A DrupalDateTime object.
+   *
+   * @return string
+   *   The date/time object format as 'Y-m-d\TH:i:s'.
+   */
+  public static function formatStorage(DrupalDateTime $date) {
+    return $date->format(DATETIME_DATETIME_STORAGE_FORMAT);
   }
 
 }

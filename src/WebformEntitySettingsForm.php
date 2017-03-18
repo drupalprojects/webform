@@ -4,6 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityForm;
@@ -204,10 +205,11 @@ class WebformEntitySettingsForm extends EntityForm {
         WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled'),
       ],
     ];
+
+    // @see \Drupal\webform\Plugin\Field\FieldWidget\WebformEntityReferenceAutocompleteWidget::formElement
     $form['form']['scheduled'] = [
       '#type' => 'item',
       '#input' => FALSE,
-      '#attributes' => ['class' => 'container-inline'],
       '#description' => $this->t('If the open date/time is left blank, this webform will immediately be opened.') .
       '<br/>' .
       $this->t('If the close date/time is left blank, this webform will never be closed.'),
@@ -216,6 +218,20 @@ class WebformEntitySettingsForm extends EntityForm {
           ':input[name="status"]' => ['value' => WebformInterface::STATUS_SCHEDULED],
         ],
       ],
+    ];
+    $form['form']['scheduled']['open'] = [
+      '#type' => 'datetime',
+      '#title' => $this->t('Open'),
+      '#prefix' => '<div class="container-inline form-item">',
+      '#suffix' => '</div>',
+      '#default_value' => $webform->get('open') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('open'))) : NULL,
+    ];
+    $form['form']['scheduled']['close'] = [
+      '#type' => 'datetime',
+      '#title' => $this->t('Close'),
+      '#prefix' => '<div class="container-inline form-item">',
+      '#suffix' => '</div>',
+      '#default_value' => $webform->get('close') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('close'))) : NULL,
     ];
     // If the Webform templates module is enabled, add additional #states.
     if ($this->moduleHandler->moduleExists('webform_templates')) {
@@ -227,21 +243,6 @@ class WebformEntitySettingsForm extends EntityForm {
       $form['form']['scheduled']['#states']['visible'][':input[name="template"]'] = ['checked' => FALSE];
     }
 
-    $form['form']['scheduled']['dates'] = [
-      '#type' => 'container',
-      '#attributes' => ['class' => 'container-inline'],
-    ];
-    $form['form']['scheduled']['dates']['open'] = [
-      '#type' => 'datetime',
-      '#title' => $this->t('Open'),
-      '#default_value' => $webform->get('open') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('open'))) : NULL,
-    ];
-    $form['form']['scheduled']['dates']['space'] = ['#markup' => ' &nbsp; '];
-    $form['form']['scheduled']['dates']['close'] = [
-      '#type' => 'datetime',
-      '#title' => $this->t('Close'),
-      '#default_value' => $webform->get('close') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('close'))) : NULL,
-    ];
     $form['form']['form_open_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Webform open message'),
@@ -921,12 +922,12 @@ class WebformEntitySettingsForm extends EntityForm {
     $values = $form_state->getValues();
     if ($values['status'] === WebformInterface::STATUS_SCHEDULED) {
       // Require open or close dates.
-      if(empty($values['open']) && empty($values['close'])) {
+      if (empty($values['open']) && empty($values['close'])) {
         $form_state->setErrorByName('status', $this->t('Please enter an open or close date'));
       }
       // Make sure open date is not after close date.
-      if(!empty($values['open']) && !empty($values['close']) && ($values['open'] > $values['close'])) {
-        $form_state->setErrorByName('open', $this->t("The webform's open date can't be greater than the close date."));
+      if (!empty($values['open']) && !empty($values['close']) && ($values['open'] > $values['close'])) {
+        $form_state->setErrorByName('open', $this->t("The webform's close date cannot be before the open date"));
       }
     }
   }
@@ -944,8 +945,15 @@ class WebformEntitySettingsForm extends EntityForm {
     $webform->set('open', NULL);
     $webform->set('close', NULL);
     if ($values['status'] === WebformInterface::STATUS_SCHEDULED) {
-      $webform->set('open', ($values['open']) ? $values['open']->format('c') : NULL);
-      $webform->set('close', ($values['close']) ? $values['close']->format('c') : NULL);
+      // Massage open/close dates.
+      // @see \Drupal\webform\Plugin\Field\FieldWidget\WebformEntityReferenceAutocompleteWidget::massageFormValues
+      // @see \Drupal\datetime\Plugin\Field\FieldWidget\DateTimeWidgetBase::massageFormValues
+      $states = ['open', 'close'];
+      foreach ($states as $state) {
+        if (!empty($values[$state]) && $values[$state] instanceof DrupalDateTime) {
+          $webform->set($state, WebformDateHelper::formatStorage($values[$state]));
+        }
+      }
     }
 
     // Set custom properties, class, and style.

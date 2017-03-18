@@ -18,7 +18,9 @@ default_value: {  }
 default_value_callback: ''
 settings:
   default_data: ''
-  status: true
+  status: open
+  open: ''
+  close: ''
   handler: 'default:webform'
   handler_settings: {  }
 field_type: webform

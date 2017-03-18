@@ -834,8 +834,14 @@ field.field_settings.webform:
       type: string
       label: 'Default webform submission data'
     status:
-      type: boolean
-      label: 'Status of the webform'
+      type: string
+      label: 'Webform status'
+    open:
+      type: string
+      label: 'Webform open date/time'
+    close:
+      type: string
+      label: 'Webform close date/time'
 
 field.widget.settings.webform_entity_reference_autocomplete:
   type: mapping

@@ -7,6 +7,7 @@
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Database\Schema;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\system\Entity\Action;
@@ -207,7 +208,7 @@ function _webform_update_form_settings() {
 function _webform_update_options_settings() {
   $default_properties = [
     'langcode' => 'en',
-    'status' => true,
+    'status' => TRUE,
     'dependencies' => [],
     'id' => '',
     'label' => '',
@@ -683,4 +684,85 @@ function webform_update_8024() {
     $webform_config->save();
   }
   _webform_update_form_settings();
+}
+
+/**
+ * Issue #2857417: Add support for open and close date/time to Webform nodes. Update database scheme.
+ */
+function webform_update_8025() {
+  $database_schema = \Drupal::database()->schema();
+  $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
+  foreach ($schema as $item_name => $item) {
+    foreach ($item as $table_name => $table_schema) {
+      foreach ($table_schema as $schema_key => $schema_data) {
+        if ($schema_key == 'fields') {
+          foreach ($schema_data as $field_name => $field_data) {
+            if (preg_match('/_status$/', $field_name) && $field_data['description'] == 'Flag to control whether this webform should be open or closed to new submissions.') {
+              $temp_field_name = $field_name . '_temp';
+
+              // Add temp status field and copy value.
+              $database_schema->addField($table_name, $temp_field_name, [
+                'type' => 'varchar',
+                'length' => 20,
+              ]);
+              \Drupal::database()
+                ->query("UPDATE {$table_name} SET $temp_field_name = 'open' WHERE $field_name = 1")
+                ->execute();
+              \Drupal::database()
+                ->query("UPDATE {$table_name} SET $temp_field_name = 'closed' WHERE $field_name <> 1")
+                ->execute();
+
+              // Drop, re-create, and restore status field.
+              $schema[$item_name][$table_name]['fields'][$field_name] = [
+                'description' => 'Flag to control whether this webform should be open, closed, or scheduled for new submissions.',
+                'type' => 'varchar',
+                'length' => 20,
+              ];
+              $database_schema->dropField($table_name, $field_name);
+              $database_schema->addField($table_name, $field_name, $schema[$item_name][$table_name]['fields'][$field_name]);
+              \Drupal::database()
+                ->query("UPDATE {$table_name} SET $field_name = $temp_field_name")
+                ->execute();
+
+              // Drop temp field.
+              $database_schema->dropField($table_name, $temp_field_name);
+
+              // Add open and close.
+              $states = ['open', 'close'];
+              foreach ($states as $state) {
+                $state_field_name = preg_replace('/_status$/', '_' . $state, $field_name);
+                $schema[$item_name][$table_name]['fields'][$state_field_name] = [
+                  'description' => "The $state date/time.",
+                  'type' => 'varchar',
+                  'length' => 20,
+                ];
+                $database_schema->addField($table_name, $state_field_name, $schema[$item_name][$table_name]['fields'][$state_field_name]);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  \Drupal::keyValue('entity.storage_schema.sql')->setMultiple($schema);
+}
+
+/**
+ * Issue #2857417: Add support for open and close date/time to Webform nodes. Update entity definitions.
+ */
+function webform_update_8026() {
+  \Drupal::entityDefinitionUpdateManager()->applyUpdates();
+}
+
+/**
+ * Issue #2857417: Add support for open and close date/time to Webform nodes. Update field config settings.
+ */
+function webform_update_8027() {
+  $field_configs = \Drupal::entityTypeManager()->getStorage('field_config')->loadByProperties(array('field_type' => 'webform'));
+  foreach ($field_configs as $field) {
+    $field->setSetting('status', $field->getSetting('status') ? WebformInterface::STATUS_OPEN : WebformInterface::STATUS_CLOSED);
+    $field->setSetting('open', '');
+    $field->setSetting('close', '');
+    $field->save();
+  }
 }

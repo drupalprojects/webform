@@ -381,10 +381,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
           $is_closed = TRUE;
         }
 
-        if ($is_opened && !$is_closed) {
-          return TRUE;
-        }
-        return FALSE;
+        return ($is_opened && !$is_closed) ? TRUE : FALSE;
     }
     return FALSE;
   }
