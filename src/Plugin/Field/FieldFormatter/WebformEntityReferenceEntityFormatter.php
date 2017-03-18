@@ -49,8 +49,9 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
         $message_type = $this->isOpening($entity, $items[$delta]) ? WebformMessageManagerInterface::FORM_OPEN_MESSAGE : WebformMessageManagerInterface::FORM_CLOSE_MESSAGE;
         $elements[$delta] = $this->messageManager->build($message_type);
       }
-    }
 
+      $this->setCacheContext($elements[$delta], $entity, $items[$delta]);
+    }
     return $elements;
   }
 

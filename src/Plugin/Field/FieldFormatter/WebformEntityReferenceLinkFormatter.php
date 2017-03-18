@@ -6,6 +6,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Token;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformMessageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -147,6 +148,8 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
         $message_type = $this->isOpening($entity, $items[$delta]) ? WebformMessageManagerInterface::FORM_OPEN_MESSAGE : WebformMessageManagerInterface::FORM_CLOSE_MESSAGE;
         $elements[$delta] = $this->messageManager->build($message_type);
       }
+
+      $this->setCacheContext($elements[$delta], $entity, $items[$delta]);
     }
 
     return $elements;

@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -140,6 +141,54 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
     $is_scheduled = ($item->status === WebformInterface::STATUS_SCHEDULED);
     $is_opening = ($item->open && strtotime($item->open) > time());
     return ($is_scheduled  && $is_opening) ? TRUE : FALSE;
+  }
+
+  /**
+   * Set cache context.
+   *
+   * @param $elements
+   *   The elements that need cache context.
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   The webform entity reference webform.
+   * @param \Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem $item
+   *   The webform entity reference item.
+   */
+  protected function setCacheContext(&$elements, WebformInterface $webform, WebformEntityReferenceItem $item) {
+    // Track if webform.settings is updated.
+    $config = \Drupal::config('webform.settings');
+    \Drupal::service('renderer')->addCacheableDependency($elements, $config);
+
+    // Track if the webfor is updated.
+    \Drupal::service('renderer')->addCacheableDependency($elements, $webform);
+
+    // Calculate the max-age based on the open/close data/time for the item
+    // and webform.
+    $max_age = 0;
+    $states = ['open', 'close'];
+    foreach ($states as $state) {
+      if ($item->status === WebformInterface::STATUS_SCHEDULED) {
+        $item_state = $item->$state;
+        if ($item_state && strtotime($item_state) > time()) {
+          $item_seconds = strtotime($item_state) - time();
+          if (!$max_age || $item_seconds > $max_age) {
+            $max_age = $item_seconds;
+          }
+        }
+      }
+      if ($webform->status() === WebformInterface::STATUS_SCHEDULED) {
+        $webform_state = $webform->get($state);
+        if ($webform_state && strtotime($webform_state) > time()) {
+          $webform_seconds = strtotime($webform_state) - time();
+          if (!$max_age || $webform_seconds > $max_age) {
+            $max_age = $webform_seconds;
+          }
+        }
+      }
+    }
+
+    if ($max_age) {
+      // $elements['#cache']['max-age'] = $max_age;
+    }
   }
 
 }

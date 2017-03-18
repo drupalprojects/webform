@@ -133,6 +133,21 @@ class WebformNodeTest extends WebformTestBase {
     $this->assertNoRaw('Sorry...This form is closed to new submissions.');
     $this->assertFieldByName('name');
 
+    // Check that changes to global message clear the cache.
+    $node->webform->target_id = 'contact';
+    $node->webform->status = WebformInterface::STATUS_SCHEDULED;
+    $node->webform->open = '';
+    $node->webform->close = date('Y-m-d\TH:i:s', strtotime('today -1 day'));
+    $node->save();
+    $this->drupalGet('node/' . $node->id());
+
+    \Drupal::configFactory()
+      ->getEditable('webform.settings')
+      ->set('settings.default_form_close_message', '{Custom closed message}')
+      ->save();
+    $this->drupalGet('node/' . $node->id());
+    $this->assertRaw('{Custom closed message}');
+
     /**************************************************************************/
     // Submission limit (test_form_limit).
     /**************************************************************************/
