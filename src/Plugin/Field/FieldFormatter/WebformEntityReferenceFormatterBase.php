@@ -85,7 +85,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
       return FALSE;
     }
 
-    // If the webform is closed all implementation of the webform must be closed.
+    // If the webform is closed, all instances of the webform must be closed.
     if (!$webform->isOpen()) {
       return FALSE;
     }
