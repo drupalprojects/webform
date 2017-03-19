@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_format_composite
@@ -555,6 +555,8 @@ handlers:
       html: false
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''
   email_html:
     id: email
     label: 'Email (HTML)'
@@ -577,3 +579,5 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''

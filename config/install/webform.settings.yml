@@ -92,6 +92,8 @@ format: {  }
 mail:
   default_from_mail: '[site:mail]'
   default_from_name: '[site:name]'
+  default_reply_to: ''
+  default_return_path: ''
   default_subject: 'Webform submission from: [webform_submission:source-entity]'
   default_body_text: |
     Submitted on [webform_submission:created]

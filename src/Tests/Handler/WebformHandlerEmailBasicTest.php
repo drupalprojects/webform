@@ -43,11 +43,11 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
 
     // Check sending a basic email via a submission.
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['reply-to'], "from@example.com <John Smith>");
+    $this->assertEqual($sent_email['reply-to'], "John Smith <from@example.com>");
     $this->assertContains($sent_email['body'], 'Submitted by: Anonymous');
     $this->assertContains($sent_email['body'], 'First name: John');
     $this->assertContains($sent_email['body'], 'Last name: Smith');
-    $this->assertEqual($sent_email['headers']['From'], 'from@example.com');
+    $this->assertEqual($sent_email['headers']['From'], 'John Smith <from@example.com>');
     $this->assertEqual($sent_email['headers']['Cc'], 'cc@example.com');
     $this->assertEqual($sent_email['headers']['Bcc'], 'bcc@example.com');
 

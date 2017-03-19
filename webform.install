@@ -766,3 +766,34 @@ function webform_update_8027() {
     $field->save();
   }
 }
+
+/**
+ * Issue #2859528: Add reply-to and return-path to email handler.
+ */
+function webform_update_8028() {
+  // Add reply_to and return_path to Update admin settings.
+  _webform_update_admin_settings();
+
+  // Add reply_to and return_path to email handler settings.
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_email_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if ($handler['id'] === 'email') {
+        $has_email_handler = TRUE;
+        $handler['settings'] += [
+          'reply_to' => '',
+          'return_path' => '',
+        ];
+      }
+    }
+
+    if ($has_email_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}

@@ -164,10 +164,16 @@ webform.settings:
       mapping:
         default_from_mail:
           type: email
-          label: 'Default email from address'
+          label: 'Default from email'
         default_from_name:
           type: label
-          label: 'Default email from name'
+          label: 'Default from name'
+        default_reply_to:
+          type: label
+          label: 'Default reply to email'
+        default_return_path:
+          type: label
+          label: 'Default return path email'
         default_subject:
           type: label
           label: 'Default email subject'
@@ -706,6 +712,12 @@ webform.handler.email:
     from_name:
       label: 'Email from name'
       type: label
+    reply_to:
+      type: label
+      label: 'Reply to email'
+    return_path:
+      type: label
+      label: 'Return path email'
     subject:
       label: 'Email subject'
       type: label

@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_handler_email_mapping
@@ -142,6 +142,8 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''
   empty:
     id: email
     label: 'Select empty'
@@ -165,6 +167,8 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''
   default:
     id: email
     label: 'Select default'
@@ -188,6 +192,8 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''
   checkboxes:
     id: email
     label: 'Checkboxes checked'
@@ -212,6 +218,8 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''
   radios_other:
     id: email
     label: 'Radios other'
@@ -235,3 +243,5 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''

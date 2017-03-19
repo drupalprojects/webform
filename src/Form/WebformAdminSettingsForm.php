@@ -597,15 +597,29 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     ];
     $form['mail']['default_from_mail'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Default email from address'),
+      '#title' => $this->t('Default from email'),
+      '#description' => $this->t('The default sender address for emailed webform results; often the e-mail address of the maintainer of your forms.'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_from_mail'),
     ];
     $form['mail']['default_from_name'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Default email from name'),
+      '#title' => $this->t('Default from name'),
+      '#description' => $this->t('The default sender name which is used along with the default from address.'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_from_name'),
+    ];
+    $form['mail']['default_reply_to'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default reply-to email'),
+      '#description' => $this->t("Enter the email address that a recipient will see when they are replying to an email. Leave blank to automatically use the 'From email' address. Setting the 'Reply-to' to the 'From email' prevent emails from being flagged as spam."),
+      '#default_value' => $config->get('mail.default_reply_to'),
+    ];
+    $form['mail']['default_return_path'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default return path (email)'),
+      '#description' => $this->t("Enter an email address to which bounce messages are delivered. Leave blank to automatically use the 'From email' address."),
+      '#default_value' => $config->get('mail.default_return_path'),
     ];
     $form['mail']['default_subject'] = [
       '#type' => 'textfield',

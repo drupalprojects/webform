@@ -149,6 +149,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'html' => TRUE,
       'attachments' => FALSE,
       'debug' => FALSE,
+      'reply_to' => '',
+      'return_path' => '',
     ];
   }
 
@@ -180,6 +182,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'from_name' => $webform_settings->get('mail.default_from_name') ?: $site_settings->get('name'),
       'subject' => $webform_settings->get('mail.default_subject') ?: 'Webform submission from: [webform_submission:source-entity]',
       'body' => $this->getBodyDefaultValues($body_format),
+      'reply_to' => $webform_settings->get('mail.default_reply_to') ?: '',
+      'return_path' => $webform_settings->get('mail.default_return_path') ?: '',
     ];
 
     return $this->defaultValues;
@@ -363,6 +367,32 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#type' => 'details',
       '#title' => $this->t('Settings'),
     ];
+    $form['settings']['reply_to'] = [
+      '#type' => 'email',
+      '#title' => $this->t('Reply-to email'),
+      '#description' => $this->t('Enter the email address that a  recipient will see when they replying to an email.'),
+      '#parents' => ['settings', 'reply_to'],
+      '#default_value' => $this->configuration['reply_to'],
+    ];
+    if ($default_reply_to = $this->getDefaultConfigurationValue('reply_to') ) {
+      $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Reply to' email.", ['%email' => $default_reply_to]);
+    }
+    else {
+      $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From email' address.");
+    }
+    $form['settings']['return_path'] = [
+      '#type' => 'email',
+      '#title' => $this->t('Return path (email)'),
+      '#description' => $this->t('Enter an email address to which bounce messages are delivered.'),
+      '#parents' => ['settings', 'return_path'],
+      '#default_value' => $this->configuration['return_path'],
+    ];
+    if ($default_return_path = $this->getDefaultConfigurationValue('return_path') ) {
+      $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Return path' email.", ['%email' => $default_return_path]);
+    }
+    else {
+      $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From email' address.");
+    }
     $form['settings']['html'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send email as HTML'),
@@ -725,6 +755,14 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Message'),
       '#required' => TRUE,
       '#default_value' => $message['body'],
+    ];
+    $element['reply_to'] = [
+      '#type' => 'value',
+      '#value' => $message['reply_to'],
+    ];
+    $element['return_path'] = [
+      '#type' => 'value',
+      '#value' => $message['return_path'],
     ];
     $element['html'] = [
       '#type' => 'value',

@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_format_token
@@ -144,6 +144,8 @@ handlers:
       html: true
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''
   email_text:
     id: email
     label: 'Email (Text)'
@@ -186,3 +188,5 @@ handlers:
       html: false
       attachments: false
       debug: true
+      reply_to: ''
+      return_path: ''

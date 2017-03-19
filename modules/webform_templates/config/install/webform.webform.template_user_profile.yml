@@ -1,11 +1,11 @@
 langcode: en
 status: closed
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_templates
+open: null
+close: null
 uid: null
 template: true
 id: template_user_profile
@@ -232,3 +232,5 @@ handlers:
       html: true
       attachments: false
       debug: false
+      reply_to: ''
+      return_path: ''

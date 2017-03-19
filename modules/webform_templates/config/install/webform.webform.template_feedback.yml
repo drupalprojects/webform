@@ -1,11 +1,11 @@
 langcode: en
 status: closed
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_templates
+open: null
+close: null
 uid: null
 template: true
 id: template_feedback
@@ -147,6 +147,8 @@ handlers:
       html: true
       attachments: false
       debug: false
+      reply_to: ''
+      return_path: ''
   email_notification:
     id: email
     label: 'Email notification'
@@ -174,3 +176,5 @@ handlers:
       html: true
       attachments: false
       debug: false
+      reply_to: ''
+      return_path: ''
