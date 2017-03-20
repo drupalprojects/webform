@@ -129,7 +129,7 @@ function _webform_form_config_translate_add_form_alter_yaml_element(array &$elem
   $element['translation']['#type'] = 'webform_codemirror';
   $element['translation']['#mode'] = 'yaml';
   if ($translation_value) {
-    $element['translation']['#default_value'] = $translation_value;
+    $element['translation']['#default_value'] = WebformYaml::tidy($translation_value);
   }
   $element['translation']['#default_value'] = trim($element['translation']['#default_value']);
   $element['#attached']['library'][] = 'webform/webform.admin.translation';

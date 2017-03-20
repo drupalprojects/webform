@@ -38,6 +38,13 @@ libraries:
       type: get
       url: 'https://github.com/fronteed/icheck/archive/1.0.2.zip'
 
+  jquery.image-picker:
+    directory_name: jquery.image-picker
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/rvera/image-picker/archive/0.3.0.zip'
+
   jquery.inputmask:
     directory_name: jquery.inputmask
     destination: libraries

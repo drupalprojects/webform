@@ -103,7 +103,7 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     // Return empty value.
     if (empty($value) || empty(array_filter($value))) {
       return '';

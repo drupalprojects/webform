@@ -58,7 +58,7 @@ class Textarea extends TextBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     return [
       '#markup' => nl2br(new HtmlEscapedText($value)),
     ];

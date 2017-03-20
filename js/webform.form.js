@@ -138,4 +138,11 @@
     }
   };
 
+  if (window.imceInput) {
+    window.imceInput.processUrlInput = function (i, el) {
+      var button = imceInput.createUrlButton(el.id, el.getAttribute('data-imce-type'));
+      el.parentNode.insertAfter(button, el);
+    };
+  }
+
 })(jQuery, Drupal);

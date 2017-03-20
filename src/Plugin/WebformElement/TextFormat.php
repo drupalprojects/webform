@@ -98,7 +98,7 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     $value = (isset($value['value'])) ? $value['value'] : $value;
     $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
     switch ($format) {
@@ -114,7 +114,7 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
     switch ($format) {
       case 'raw':

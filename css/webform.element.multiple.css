@@ -101,3 +101,10 @@
 .webform-multiple-tabledrag-toggle-weight {
   float: right;
 }
+
+/**
+ * IMCE tweaks
+ */
+.webform-multiple-table .imce-url-button {
+  display: block;
+}

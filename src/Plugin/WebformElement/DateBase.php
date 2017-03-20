@@ -90,7 +90,7 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     $timestamp = strtotime($value);
     if (empty($timestamp)) {
       return $value;

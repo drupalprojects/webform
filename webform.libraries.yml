@@ -346,13 +346,18 @@ webform.element.inputmask:
     - core/jquery.once
     - webform/jquery.inputmask
 
-webform.element.multiple:
+webform.element.image_select:
   version: VERSION
   css:
-    component:
-      css/webform.element.multiple.css: {}
+    theme:
+      css/webform.element.image_select.css: {}
   js:
-    js/webform.element.multiple.js: {}
+    js/webform.element.image_select.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/jquery.image-picker
 
 webform.element.likert:
   version: VERSION
@@ -384,6 +389,14 @@ webform.element.message:
     - core/drupal
     - core/jquery
     - core/jquery.once
+
+webform.element.multiple:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.multiple.css: {}
+  js:
+    js/webform.element.multiple.js: {}
 
 webform.element.options:
   version: VERSION
@@ -523,6 +536,15 @@ webform.element.video_file:
   css:
     theme:
       css/webform.element.video_file.css: {}
+
+# Contrib Module.
+
+imce.input:
+  version: VERSION
+  js:
+    js/webform.imce.js:  {}
+  dependencies:
+    - imce/drupal.imce.input
 
 # External libraries.
 
@@ -675,6 +697,23 @@ jquery.icheck.square:
       /libraries/jquery.icheck/skins/square/_all.css: {}
   dependencies:
     - webform/jquery.icheck
+
+jquery.image-picker:
+  remote: https://rvera.github.io/image-picker/
+  version: '0.3.0'
+  license:
+    name: MIT
+    url: https://github.com/rvera/image-picker/blob/master/LICENSE
+    gpl-compatible: true
+  cdn:
+    /libraries/jquery.image-picker/image-picker/: https://cdnjs.cloudflare.com/ajax/libs/image-picker/0.3.0/
+  css:
+    theme:
+      /libraries/jquery.image-picker/image-picker/image-picker.css: {}
+  js:
+    /libraries/jquery.image-picker/image-picker/image-picker.js: {}
+  dependencies:
+    - core/jquery
 
 jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask

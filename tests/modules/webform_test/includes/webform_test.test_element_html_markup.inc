@@ -27,7 +27,7 @@ function webform_test_test_element_html_markup() {
  */
 function _webform_test_test_element_html_markup_recursive(array &$elements) {
   foreach ($elements as $key => &$property) {
-    if (in_array($key, ['#title', '#field_prefix', '#field_suffix'])) {
+    if (is_string($property) && is_string($key) && in_array($key, ['#title', '#field_prefix', '#field_suffix'])) {
       $property = '<u>' . $property . '</u>';
     }
 

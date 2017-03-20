@@ -446,6 +446,36 @@ elements: |
     flex_webform_image_file_right:
       '#type': webform_image_file
       '#title': 'Image file 02'
+  flexbox_webform_image_select:
+    '#type': webform_flexbox
+    flex_webform_image_select_left:
+      '#type': webform_image_select
+      '#title': 'Image select 01'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
+    flex_webform_image_select_right:
+      '#type': webform_image_select
+      '#title': 'Image select 02'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
   flexbox_language_select:
     '#type': webform_flexbox
     flex_language_select_left:

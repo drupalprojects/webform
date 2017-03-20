@@ -80,7 +80,7 @@ class Telephone extends TextBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     if (empty($value)) {
       return '';
     }

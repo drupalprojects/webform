@@ -20,7 +20,7 @@ class LanguageSelect extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     $language = \Drupal::languageManager()->getLanguage($value);
     $format = $this->getItemFormat($element);
     switch ($format) {

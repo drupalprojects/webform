@@ -166,9 +166,16 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $libraries['jquery.intl-tel-input'] = [
       'title' => $this->t('International Telephone Input'),
       'description' => $this->t('A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user\'s country, displays a relevant placeholder and provides formatting/validation methods.'),
-      'notes' => $this->t('International Telephone Input is used by the Telephone element'),
+      'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
       'version' => 'v11.0.0',
+    ];
+    $libraries['jquery.image-picker'] = [
+      'title' => $this->t('Image Picker'),
+      'description' => $this->t('A simple jQuery plugin that transforms a select element into a more user friendly graphical interface.'),
+      'notes' => $this->t('Image Picker is used by the Image select element.'),
+      'url' => Url::fromUri('https://rvera.github.io/image-picker/'),
+      'version' => '0.3.0',
     ];
     $libraries['jquery.rateit'] = [
       'title' => $this->t('RateIt'),

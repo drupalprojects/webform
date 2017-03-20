@@ -359,7 +359,7 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    * @return array
    *   A render array representing an element as HTML.
    */
-  public function buildHtml(array &$element, $value, array $options = []);
+  public function buildHtml(array $element, $value, array $options = []);
 
   /**
    * Build an element as text element.
@@ -374,7 +374,7 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    * @return array
    *   A render array representing an element as text.
    */
-  public function buildText(array &$element, $value, array $options = []);
+  public function buildText(array $element, $value, array $options = []);
 
   /**
    * Format an element's value as HTML.
@@ -389,7 +389,7 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    * @return array|string
    *   The element's value formatted as an HTML string or a render array.
    */
-  public function formatHtml(array &$element, $value, array $options = []);
+  public function formatHtml(array $element, $value, array $options = []);
 
   /**
    * Format an element's value as plain text.
@@ -404,7 +404,7 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    * @return array|string
    *   The element's value formatted as plain text or a render array.
    */
-  public function formatText(array &$element, $value, array $options = []);
+  public function formatText(array $element, $value, array $options = []);
 
   /**
    * Get an element's available single value formats.
@@ -569,7 +569,7 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *
    * @param array $element
    *   An element.
-   * @parent string $value
+   * @param string $value
    *   Value to be exported.
    * @param array $export_options
    *   An associative array of export options.

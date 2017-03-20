@@ -410,6 +410,57 @@ elements: |
           five: Five
         '#default_value': one
         '#format': raw
+    webform_image_select:
+      '#type': details
+      '#title': 'Image select'
+      webform_image_select_value:
+        '#type': webform_image_select
+        '#title': 'Image select (Value)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#default_value': Loremipsum
+        '#format': value
+      webform_image_select_raw:
+        '#type': webform_image_select
+        '#title': 'Image select (Raw value)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#default_value': Loremipsum
+        '#format': raw
+      webform_image_select_image:
+        '#type': webform_image_select
+        '#title': 'Image select (Image)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#default_value': Loremipsum
+        '#format': image
     radios:
       '#type': details
       '#title': Radios

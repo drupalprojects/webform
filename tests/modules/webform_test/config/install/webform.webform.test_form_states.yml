@@ -523,6 +523,28 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_image_select:
+      '#type': webform_image_select
+      '#title': 'Image select'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
+      '#default_value': Loremipsum
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_language_select:
       '#type': language_select
       '#title': 'Language select'
@@ -1379,6 +1401,25 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_webform_image_select:
+      '#type': webform_image_select
+      '#title': 'Image select'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
+      '#default_value': Loremipsum
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_language_select:
       '#type': language_select
       '#title': 'Language select'
@@ -2026,6 +2067,25 @@ elements: |
     disabled_webform_image_file:
       '#type': webform_image_file
       '#title': 'Image file'
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_webform_image_select:
+      '#type': webform_image_select
+      '#title': 'Image select'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

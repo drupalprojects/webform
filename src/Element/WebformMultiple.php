@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
@@ -29,6 +30,7 @@ class WebformMultiple extends FormElement {
       '#input' => TRUE,
       '#label' => t('item'),
       '#labels' => t('items'),
+      '#key' => NULL,
       '#header' => NULL,
       '#element' => [
         '#type' => 'textfield',
@@ -129,7 +131,11 @@ class WebformMultiple extends FormElement {
       $default_values = [];
     }
 
-    foreach ($default_values as $default_value) {
+    foreach ($default_values as $key => $default_value) {
+      // If #key is defined make sure to set default value's key item.
+      if (!empty($element['#key']) && !isset($default_value[$element['#key']])) {
+        $default_value[$element['#key']] = $key;
+      }
       $rows[$row_index] = self::buildElementRow($table_id, $row_index, $element, $default_value, $weight++, $ajax_settings);
       $row_index++;
     }
@@ -198,7 +204,7 @@ class WebformMultiple extends FormElement {
       ];
     }
     elseif (is_array($element['#header'])) {
-      return $element['#header'];
+      return array_merge([''], $element['#header'], ['', '']);
     }
     elseif (is_string($element['#header'])) {
       return [
@@ -472,8 +478,14 @@ class WebformMultiple extends FormElement {
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
-    // Convert values to items.
-    $items = self::convertValuesToItems($values['items']);
+    // Convert values to items and validate duplicate keys.
+    try {
+      $items = self::convertValuesToItems($element, $values['items']);
+    }
+    catch (\Exception $exception) {
+      $form_state->setError($element, new FormattableMarkup($exception->getMessage(), []));
+      return;
+    }
 
     // Validate required items.
     if (!empty($element['#required']) && empty($items)) {
@@ -512,23 +524,27 @@ class WebformMultiple extends FormElement {
   /**
    * Convert an array containing of values (elements or _item_ and weight) to an array of items.
    *
+   * @param array $element
+   *   The multiple element.
    * @param array $values
    *   An array containing of item and weight.
    *
    * @return array
    *   An array of items.
+   *
+   * @throws \Exception
+   *   Throws unique key required validation error message as an exception.
    */
-  public static function convertValuesToItems(array $values = []) {
+  public static function convertValuesToItems(array $element, array $values = []) {
     // Sort the item values.
     uasort($values, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
 
     // Now build the associative array of items.
     $items = [];
-    foreach ($values as $value) {
+    foreach ($values as $index => $value) {
+      $item = NULL;
       if (isset($value['_item_'])) {
-        if (!self::isEmpty($value['_item_'])) {
-          $items[] = $value['_item_'];
-        }
+        $item = $value['_item_'];
       }
       else {
         // Get hidden (#access: FALSE) elements in the '_handle_' column and
@@ -538,9 +554,30 @@ class WebformMultiple extends FormElement {
           $value += $value['_handle_'];
         }
         unset($value['weight'], $value['_operations_'], $value['_handle_']);
-        if (!self::isEmpty($value)) {
-          $items[] = $value;
+        $item = $value;
+      }
+
+      // Never add an empty item.
+      if (self::isEmpty($item)) {
+        continue;
+      }
+
+      // If #key is defined use it as the $items key.
+      if (!empty($element['#key']) && isset($item[$element['#key']])) {
+        $key_name = $element['#key'];
+        $key_value = $item[$key_name];
+        unset($item[$key_name]);
+
+        // Validate unique #key.
+        if (isset($items[$key_value])) {
+          $key_title = isset($element['#element'][$key_name]['#title']) ? $element['#element'][$key_name]['#title'] : $key_name;
+          throw new \Exception(t("The %title '@key' is already in use. It must be unique.", ['@key' => $key_value, '%title' => $key_title]));
         }
+
+        $items[$key_value] = $item;
+      }
+      else {
+        $items[] = $item;
       }
     }
 

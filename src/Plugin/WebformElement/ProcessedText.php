@@ -39,7 +39,7 @@ class ProcessedText extends WebformMarkupBase {
   /**
    * {@inheritdoc}
    */
-  public function buildText(array &$element, $value, array $options = []) {
+  public function buildText(array $element, $value, array $options = []) {
     // Copy to element so that we can render it without altering the actual
     // $element.
     $render_element = $element;

@@ -60,7 +60,7 @@ class WebformRating extends Range {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     $format = $this->getItemFormat($element);
 
     switch ($format) {

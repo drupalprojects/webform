@@ -104,6 +104,36 @@ elements: |
         text: One
       - value: two
         text: Two
+  webform_multiple_key:
+    '#type': webform_multiple
+    '#title': webform_multiple_key
+    '#key': value
+    '#header': true
+    '#label': option
+    '#labels': options
+    '#element':
+      value:
+        '#type': textfield
+        '#title': 'Option value'
+        '#title_display': invisible
+        '#placeholder': 'Enter value'
+      text:
+        '#type': textfield
+        '#title': 'Option text'
+        '#title_display': invisible
+        '#placeholder': 'Enter text'
+      score:
+        '#type': number
+        '#title': 'Option score'
+        '#title_display': invisible
+        '#placeholder': 'Enter score'
+    '#default_value':
+      one:
+        text: One
+        score: 1
+      two:
+        text: Two
+        score: 2
   webform_multiple_elements_hidden_table:
     '#type': webform_multiple
     '#title': webform_multiple_elements_hidden_table

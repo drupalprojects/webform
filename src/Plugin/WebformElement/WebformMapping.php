@@ -81,7 +81,7 @@ class WebformMapping extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     $element += [
       '#destination' => [],
       '#arrow' => '→',
@@ -152,7 +152,7 @@ class WebformMapping extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     // Return empty value.
     if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';

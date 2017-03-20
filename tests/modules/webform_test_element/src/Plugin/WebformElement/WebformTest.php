@@ -35,7 +35,7 @@ class WebformTest extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
+  public function formatHtml(array $element, $value, array $options = []) {
     $this->displayMessage(__FUNCTION__);
     return '<i>' . $this->formatText($element, $value, $options) . '</i>';
   }
@@ -43,7 +43,7 @@ class WebformTest extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
+  public function formatText(array $element, $value, array $options = []) {
     $this->displayMessage(__FUNCTION__);
     return strtoupper($value);
   }

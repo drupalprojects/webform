@@ -50,7 +50,7 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     $entity = $this->getTargetEntity($element, $value, $options);
     $format = $this->getItemFormat($element);
     switch ($format) {
@@ -77,7 +77,7 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     $entity = $this->getTargetEntity($element, $value, $options);
     $format = $this->getItemFormat($element);
     switch ($format) {

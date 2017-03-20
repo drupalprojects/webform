@@ -152,7 +152,7 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function formatTextItem(array &$element, $value, array $options = []) {
+  protected function formatTextItem(array $element, $value, array $options = []) {
     $format = $this->getItemFormat($element);
     if ($format == 'value' && isset($element['#options'])) {
       $flattened_options = OptGroup::flattenOptions($element['#options']);

@@ -20,7 +20,7 @@ class Password extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     // Return empty value.
     if ($value === '' || $value === NULL) {
       return '';

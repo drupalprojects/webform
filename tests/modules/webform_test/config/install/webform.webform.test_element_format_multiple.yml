@@ -483,6 +483,149 @@ elements: |
           - two
           - three
         '#format_items': ul
+    webform_image_select:
+      '#type': details
+      '#title': 'Image select'
+      webform_image_select_comma:
+        '#type': webform_image_select
+        '#title': 'Image select (Comma)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': comma
+      webform_image_select_semicolon:
+        '#type': webform_image_select
+        '#title': 'Image select (Semicolon)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': semicolon
+      webform_image_select_and:
+        '#type': webform_image_select
+        '#title': 'Image select (And)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': and
+      webform_image_select_ol:
+        '#type': webform_image_select
+        '#title': 'Image select (Ordered list)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ol
+      webform_image_select_ul:
+        '#type': webform_image_select
+        '#title': 'Image select (Unordered list)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ul
+      webform_image_select_br:
+        '#type': webform_image_select
+        '#title': 'Image select (Break)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': br
+      webform_image_select_space:
+        '#type': webform_image_select
+        '#title': 'Image select (Space)'
+        '#show_label': true
+        '#images':
+          kitten_1:
+            text: 'Cute Kitten 1'
+            src: 'http://placekitten.com/220/200'
+          kitten_2:
+            text: 'Cute Kitten 2'
+            src: 'http://placekitten.com/180/200'
+          kitten_3:
+            text: 'Cute Kitten 3'
+            src: 'http://placekitten.com/130/200'
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': space
     select:
       '#type': details
       '#title': Select

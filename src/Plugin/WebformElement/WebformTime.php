@@ -36,7 +36,7 @@ class WebformTime extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     if (empty($value)) {
       return '';
     }

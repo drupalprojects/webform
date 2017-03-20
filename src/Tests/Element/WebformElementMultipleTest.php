@@ -27,12 +27,58 @@ class WebformElementMultipleTest extends WebformTestBase {
     // Processing.
     /**************************************************************************/
 
-    // Check default value handling.
+    // Check processing for all elements.
     $this->drupalPostForm('webform/test_element_multiple', [], t('Submit'));
     $this->assertRaw("webform_multiple_default:
   - One
   - Two
-  - Three");
+  - Three
+webform_multiple_email_five:
+  - example@example.com
+  - test@test.com
+webform_multiple_datelist: {  }
+webform_multiple_name_composite:
+  - title: ''
+    first: John
+    middle: ''
+    last: Smith
+    suffix: ''
+    degree: ''
+  - title: ''
+    first: Jane
+    middle: ''
+    last: Doe
+    suffix: ''
+    degree: ''
+webform_multiple_elements_name_item:
+  - first_name: John
+    last_name: Smith
+  - first_name: Jane
+    last_name: Doe
+webform_multiple_elements_name_table:
+  - first_name: John
+    last_name: Smith
+  - first_name: Jane
+    last_name: Doe
+webform_multiple_options:
+  - value: one
+    text: One
+  - value: two
+    text: Two
+webform_multiple_key:
+  one:
+    text: One
+    score: '1'
+  two:
+    text: Two
+    score: '2'
+webform_multiple_elements_hidden_table:
+  - first_name: John
+    id: john
+    last_name: Smith
+  - first_name: Jane
+    id: jane
+    last_name: Doe");
 
     /**************************************************************************/
     // Rendering.
@@ -50,6 +96,17 @@ class WebformElementMultipleTest extends WebformTestBase {
     $this->assertRaw('<input class="webform-multiple-sort-weight form-number" data-drupal-selector="edit-webform-multiple-default-items-0-weight" type="number" id="edit-webform-multiple-default-items-0-weight" name="webform_multiple_default[items][0][weight]" value="0" step="1" size="10" />');
     $this->assertRaw('<td><input data-drupal-selector="edit-webform-multiple-default-items-0-operations-add" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-add" name="webform_multiple_default_table_add_0"');
     $this->assertRaw('<input data-drupal-selector="edit-webform-multiple-default-items-0-operations-remove" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-remove" name="webform_multiple_default_table_remove_0"');
+
+    /**************************************************************************/
+    // Validation.
+    /**************************************************************************/
+
+    // Check unique #key validation.
+    $edit = [
+      'webform_multiple_key[items][1][value]' => 'one',
+    ];
+    $this->drupalPostForm('webform/test_element_multiple', $edit, t('Submit'));
+    $this->assertRaw('The <em class="placeholder">Option value</em> \'one\' is already in use. It must be unique.');
 
     /**************************************************************************/
     // Processing.

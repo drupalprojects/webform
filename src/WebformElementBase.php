@@ -745,14 +745,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildHtml(array &$element, $value, array $options = []) {
+  public function buildHtml(array $element, $value, array $options = []) {
     return $this->build('html', $element, $value, $options);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildText(array &$element, $value, array $options = []) {
+  public function buildText(array $element, $value, array $options = []) {
     return $this->build('text', $element, $value, $options);
   }
 
@@ -797,21 +797,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array &$element, $value, array $options = []) {
+  public function formatHtml(array $element, $value, array $options = []) {
     return $this->format('Html', $element, $value, $options);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formatText(array &$element, $value, array $options = []) {
+  public function formatText(array $element, $value, array $options = []) {
     return $this->format('Text', $element, $value, $options);
   }
 
   /**
    * Format an element's value as HTML or plain text.
    *
-   * @param string $type.
+   * @param string $type
    *   The format type, HTML or Text.
    * @param array $element
    *   An element.
@@ -858,29 +858,63 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   protected function formatHtmlItems(array &$element, array $items, array $options = []) {
     $format = $this->getItemsFormat($element);
-    if (in_array($format, ['ol', 'ul'])) {
-      return [
-        '#theme' => 'item_list',
-        '#items' => $items,
-        '#list_type' => $format,
-      ];
-    }
-    elseif ($format == 'hr') {
-      foreach ($items as $index => &$item) {
-        if ($index) {
-          $item['#prefix'] = '<hr class="webform-horizontal-rule" />';
+    switch ($format) {
+      case 'ol':
+      case 'ul':
+        return [
+          '#theme' => 'item_list',
+          '#items' => $items,
+          '#list_type' => $format,
+        ];
+
+      case 'and':
+        $total = count($items);
+        if ($total === 1) {
+          return $items;
         }
-      }
-      return $items;
-    }
-    else {
-      // Render items so that then can be displayed as plain text.
-      foreach ($items as $index => $item) {
-        if (is_array($item)) {
-          $items[$index] = \Drupal::service('renderer')->renderPlain($item);
+
+        $build = [];
+        foreach ($items as $index => &$item) {
+          $build[] = (is_array($item)) ? $item : ['#markup' => $item];
+          if ($total === 2) {
+            $build[] = ['#markup' => t(' and ')];
+          }
+          elseif ($index !== ($total - 1)) {
+            if ($index === ($total - 2)) {
+              $build[] = ['#markup' => t(', and ')];
+            }
+            else {
+              $build[] = ['#markup' => t(', ')];
+            }
+          }
         }
-      }
-      return $this->formatTextItems($element, $items, $options);
+        return $build;
+
+      default:
+      case 'br':
+      case 'semicolon':
+      case 'comma':
+      case 'space':
+      case 'hr':
+        $delimiters = [
+          'hr' => '<hr class="webform-horizontal-rule" />',
+          'br' => '<br />',
+          'semicolon' => '; ',
+          'comma' => ', ',
+          'space' => ' ',
+        ];
+        $delimiter = (isset($delimiters[$format])) ? $delimiters[$format] : $format;
+
+        $total = count($items);
+
+        $build = [];
+        foreach ($items as $index => &$item) {
+          $build[] = (is_array($item)) ? $item : ['#markup' => $item];
+          if ($index !== ($total - 1)) {
+            $build[] = ['#markup' => $delimiter];
+          }
+        }
+        return $build;
     }
   }
 
@@ -916,20 +950,24 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         }
         return implode(PHP_EOL, $list);
 
-      case 'hr':
-        return implode(PHP_EOL . '---' . PHP_EOL, $items);
-
       case 'and':
-        return WebformArrayHelper::toString($items, $this->t('and'));
-
-      case 'semicolon':
-        return implode('; ', $items);
-
-      case 'comma':
-        return implode(', ', $items);
+        return WebformArrayHelper::toString($items);
 
       default:
-        return implode($format, $items);
+      case 'br':
+      case 'semicolon':
+      case 'comma':
+      case 'space':
+      case 'hr':
+        $delimiters = [
+          'hr' => PHP_EOL . '---' . PHP_EOL,
+          'br' => PHP_EOL,
+          'semicolon' => '; ',
+          'comma' => ', ',
+          'space' => ' ',
+        ];
+        $delimiter = (isset($delimiters[$format])) ? $delimiters[$format] : $format;
+        return implode($delimiter, $items);
     }
   }
 
@@ -946,7 +984,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return array|string
    *   The element's value formatted as HTML or a render array.
    */
-  protected function formatHtmlItem(array &$element, $value, array $options = []) {
+  protected function formatHtmlItem(array $element, $value, array $options = []) {
     return $this->formatTextItem($element, $value, $options);
   }
 
@@ -963,7 +1001,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return string
    *   The element's value formatted as text.
    */
-  protected function formatTextItem(array &$element, $value, array $options = []) {
+  protected function formatTextItem(array $element, $value, array $options = []) {
     // Apply XSS filter to value that contains HTML tags and is not formatted as
     // raw.
     $format = $this->getItemFormat($element);

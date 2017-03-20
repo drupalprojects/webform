@@ -120,7 +120,8 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       if ($options['random']) {
         shuffle($values);
       }
-      return array_slice($values, 0, 3);
+      $limit = (isset($element['#multiple']) && $element['#multiple'] > 1 && $element['#multiple'] < 3) ? $element['#multiple'] : 3;
+      return array_slice($values, 0, $limit);
     }
     else {
       return ($options['random']) ? $values[array_rand($values)] : reset($values);

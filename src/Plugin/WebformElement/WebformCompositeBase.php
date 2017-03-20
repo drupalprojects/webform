@@ -411,7 +411,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     // Return empty value.
     if (empty($value) || empty(array_filter($value))) {
       return '';
@@ -482,7 +482,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     // Return empty value.
     if (empty($value) || (is_array($value) && empty(array_filter($value)))) {
       return '';

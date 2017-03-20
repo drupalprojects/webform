@@ -235,6 +235,35 @@ elements: |
         three: Three
         four: Four
         five: Five
+    webform_image_select:
+      '#type': webform_image_select
+      '#title': '<u>Image select</u>'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
+    webform_image_select_multiple:
+      '#type': webform_image_select
+      '#title': '<u>Image select multiple</u>'
+      '#show_label': true
+      '#images':
+        kitten_1:
+          text: 'Cute Kitten 1'
+          src: 'http://placekitten.com/220/200'
+        kitten_2:
+          text: 'Cute Kitten 2'
+          src: 'http://placekitten.com/180/200'
+        kitten_3:
+          text: 'Cute Kitten 3'
+          src: 'http://placekitten.com/130/200'
+      '#multiple': true
     radios:
       '#type': radios
       '#title': '<u>Radios</u>'
@@ -436,7 +465,7 @@ elements: |
         include_anonymous: true
       '#options':
         1: Administrator
-        0: '<u>Anonymous</u>'
+        0: Anonymous
     webform_entity_radios:
       '#type': webform_entity_radios
       '#title': '<u>Entity radios</u>'

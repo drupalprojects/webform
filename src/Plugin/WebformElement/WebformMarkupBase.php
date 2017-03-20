@@ -50,7 +50,7 @@ abstract class WebformMarkupBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildHtml(array &$element, $value, array $options = []) {
+  public function buildHtml(array $element, $value, array $options = []) {
     // Hide markup element if it should be only displayed on a 'form'.
     if (empty($element['#display_on']) || $element['#display_on'] == 'form') {
       return [];
@@ -69,7 +69,7 @@ abstract class WebformMarkupBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildText(array &$element, $value, array $options = []) {
+  public function buildText(array $element, $value, array $options = []) {
     // Hide markup element if it should be only displayed on a 'form'.
     if (empty($element['#display_on']) || $element['#display_on'] == 'form') {
       return [];

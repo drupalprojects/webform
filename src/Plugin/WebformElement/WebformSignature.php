@@ -42,7 +42,7 @@ class WebformSignature extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array &$element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, $value, array $options = []) {
     $format = $this->getItemFormat($element);
 
     switch ($format) {
@@ -76,7 +76,7 @@ class WebformSignature extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array &$element, $value, array $options = []) {
+  public function formatTextItem(array $element, $value, array $options = []) {
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'image':
