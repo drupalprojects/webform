@@ -290,7 +290,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     ] + $rows;
 
     // Must preload libraries required by (modal) dialogs.
-    $form['#attached']['library'][] = 'webform/webform.admin.dialog';
+    WebformDialogHelper::attachLibraries($form);
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
 
     return $form;

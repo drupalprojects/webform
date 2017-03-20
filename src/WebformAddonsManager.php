@@ -218,11 +218,21 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'utility',
     ];
 
+    // Utility: IMCE.
+    $projects['imce'] = [
+      'title' => $this->t('IMCE'),
+      'description' => $this->t('IMCE is an image/file uploader and browser that supports personal directories and quota.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/imce'),
+      'recommended' => TRUE,
+      'category' => 'utility',
+    ];
+
     // Utility: Token.
     $projects['token'] = [
       'title' => $this->t('Token'),
       'description' => $this->t('Provides a user interface for the Token API and some missing core tokens.'),
       'url' => Url::fromUri('https://www.drupal.org/project/token'),
+      'recommended' => TRUE,
       'category' => 'utility',
     ];
 

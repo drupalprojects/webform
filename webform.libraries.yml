@@ -313,6 +313,9 @@ webform.element.image_file:
 
 webform.element.html_editor:
   version: VERSION
+  css:
+    theme:
+      css/webform.element.html_editor.css: {}
   js:
     js/webform.element.html_editor.js: {}
   dependencies:

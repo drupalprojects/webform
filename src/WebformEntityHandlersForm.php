@@ -150,7 +150,7 @@ class WebformEntityHandlersForm extends EntityForm {
     ] + $rows;
 
     // Must preload libraries required by (modal) dialogs.
-    $form['#attached']['library'][] = 'webform/webform.admin.dialog';
+    WebformDialogHelper::attachLibraries($form);
 
     return parent::form($form, $form_state);
   }

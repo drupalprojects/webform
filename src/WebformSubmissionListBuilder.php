@@ -255,7 +255,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $build['#attached']['library'][] = 'webform/webform.admin';
 
     // Must preload libraries required by (modal) dialogs.
-    $build['#attached']['library'][] = 'webform/webform.admin.dialog';
+    WebformDialogHelper::attachLibraries($build);
 
     return $build;
   }

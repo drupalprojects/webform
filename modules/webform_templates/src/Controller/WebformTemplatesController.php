@@ -140,7 +140,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
     ];
 
     // Must preload libraries required by (modal) dialogs.
-    $build['#attached']['library'][] = 'webform/webform.admin.dialog';
+    WebformDialogHelper::attachLibraries($build);
 
     return $build;
   }

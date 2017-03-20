@@ -23,7 +23,7 @@
         var allowedContent = drupalSettings['webform']['html_editor']['allowedContent'];
         var $textarea = $(this);
 
-        var options = $.extend({
+        var options = {
           // Turn off external config and styles.
           customConfig: '',
           stylesSet: false,
@@ -51,7 +51,16 @@
             {name: 'links', items: [ 'Link', 'Unlink']},
             {name: 'tools', items: [ 'Source', '-', 'Maximize' ]}
           ]
-        }, Drupal.webform.htmlEditor.options);
+        };
+
+        // Add IMCE image button.
+        if (CKEDITOR.imce) {
+          options.extraPlugins += ',imce';
+          options.toolbar[2].items = [ 'ImceImage', 'SpecialChar' ];
+          CKEDITOR.config.ImceImageIcon = drupalSettings['webform']['html_editor']['ImceImageIcon'];
+        }
+
+        options = $.extend(options, Drupal.webform.htmlEditor.options);
 
         CKEDITOR.replace(this.id, options).on('change', function (evt) {
           // Save data onchange since AJAX dialogs don't execute webform.onsubmit.
