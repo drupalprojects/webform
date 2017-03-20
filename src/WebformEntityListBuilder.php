@@ -92,19 +92,18 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->state, $state_options);
 
     // Display info.
-    if ($this->isAdmin()) {
-      if ($total = $this->getTotal($this->keys, $this->state)) {
-        $t_args = [
-          '@total' => $total,
-          '@results' => $this->formatPlural($total, $this->t('webform'), $this->t('webforms')),
-        ];
-        $build['info'] = [
-          '#markup' => $this->t('@total @results', $t_args),
-          '#prefix' => '<div>',
-          '#suffix' => '</div>',
-        ];
-      }
+    if ($total = $this->getTotal($this->keys, $this->state)) {
+      $t_args = [
+        '@total' => $total,
+        '@results' => $this->formatPlural($total, $this->t('webform'), $this->t('webforms')),
+      ];
+      $build['info'] = [
+        '#markup' => $this->t('@total @results', $t_args),
+        '#prefix' => '<div>',
+        '#suffix' => '</div>',
+      ];
     }
+
     $build += parent::render();
 
     // Must preload libraries required by (modal) dialogs.

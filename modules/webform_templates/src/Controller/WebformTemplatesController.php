@@ -128,6 +128,20 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
 
     $build = [];
     $build['filter_form'] = $this->formBuilder->getForm('\Drupal\webform_templates\Form\WebformTemplatesFilterForm', $keys);
+
+    // Display info.
+    if ($total = count($rows)) {
+      $t_args = [
+        '@total' => count($rows),
+        '@results' => $this->formatPlural($total, $this->t('template'), $this->t('templates')),
+      ];
+      $build['info'] = [
+        '#markup' => $this->t('@total @results', $t_args),
+        '#prefix' => '<div>',
+        '#suffix' => '</div>',
+      ];
+    }
+
     $build['table'] = [
       '#type' => 'table',
       '#header' => $header,
