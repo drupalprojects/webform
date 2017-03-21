@@ -103,7 +103,7 @@ trait WebformEntityReferenceTrait {
 
       case 'raw':
         $entity_id = $entity->id();
-        $entity_type = $element['#target_type'];
+        $entity_type = $entity->getEntityTypeId();
         return "$entity_type:$entity_id";
 
       case 'text':
