@@ -193,11 +193,11 @@ class WebformEntitySettingsForm extends EntityForm {
     // Form.
     $form['form'] = [
       '#type' => 'details',
-      '#title' => $this->t('Webform settings'),
+      '#title' => $this->t('Form settings'),
     ];
     $form['form']['status'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Webform status'),
+      '#title' => $this->t('Form status'),
       '#default_value' => $webform->get('status'),
       '#options' => [
         WebformInterface::STATUS_OPEN => $this->t('Open'),
@@ -210,7 +210,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['form']['scheduled'] = [
       '#type' => 'item',
       '#input' => FALSE,
-      '#description' => $this->t('If the open date/time is left blank, this webform will immediately be opened.') .
+      '#description' => $this->t('If the open date/time is left blank, this form will immediately be opened.') .
       '<br/>' .
       $this->t('If the close date/time is left blank, this webform will never be closed.'),
       '#states' => [
@@ -245,67 +245,73 @@ class WebformEntitySettingsForm extends EntityForm {
 
     $form['form']['form_open_message'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Webform open message'),
+      '#title' => $this->t('Form open message'),
       '#description' => $this->t('A message to be displayed notifying the user that the webform is going to be opening to submissions. The opening message will only be displayed when a webform is scheduled to be opened.'),
       '#default_value' => $settings['form_open_message'],
     ];
     $form['form']['form_close_message'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Webform closed message'),
+      '#title' => $this->t('Form closed message'),
       '#description' => $this->t("A message to be displayed notifying the user that the webform is closed. The closed message will be displayed when a webform's status is closed or a submission limit is reached."),
       '#default_value' => $settings['form_close_message'],
     ];
     $form['form']['form_exception_message'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Webform exception message'),
+      '#title' => $this->t('Form exception message'),
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
     ];
     $form['form']['form_submit'] = [
       '#type' => 'details',
-      '#title' => $this->t('Webform submit button'),
+      '#title' => $this->t('Form submit button'),
     ];
     $form['form']['form_submit']['form_submit_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Webform submit button label'),
+      '#title' => $this->t('Form submit button label'),
       '#size' => 20,
       '#default_value' => $settings['form_submit_label'],
     ];
     $form['form']['form_submit']['form_submit_attributes'] = [
       '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Webform submit button'),
+      '#title' => $this->t('Form submit button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['form_submit_attributes'],
     ];
-    $form['form']['form_prepopulate'] = [
+
+    // Behaviors.
+    $form['behaviors'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Form behaviors'),
+    ];
+    $form['behaviors']['form_prepopulate'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow elements to be populated using query string parameters.'),
       '#description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would setting an the 'name' element's default value to 'John Smith'."),
       '#return_value' => TRUE,
       '#default_value' => $settings['form_prepopulate'],
     ];
-    $form['form']['form_prepopulate_source_entity'] = [
+    $form['behaviors']['form_prepopulate_source_entity'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow source entity to be populated using query string parameters.'),
-      '#description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=user&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to '@user.", ['@user' => User::load(1)->label()]),
+      '#description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=user&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to '@user'.", ['@user' => User::load(1)->label()]),
       '#return_value' => TRUE,
       '#default_value' => $settings['form_prepopulate_source_entity'],
     ];
     $settings_elements = [
       'form_submit_once' => [
         'title' => $this->t('Prevent duplicate submissions'),
-        'all_description' => $this->t('Submit button is disabled immediately after is is clicked form all webforms.'),
+        'all_description' => $this->t('Submit button is disabled immediately after it is clicked for all forms.'),
         'form_description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
       ],
       'form_disable_back' => [
-        'title' => $this->t('Disable back button for all webforms'),
-        'all_description' => $this->t('Back button is disabled for all webforms.'),
-        'form_description' => $this->t('If checked, users will not be allowed to navigate back to the webform using the browsers back button.'),
+        'title' => $this->t('Disable back button'),
+        'all_description' => $this->t('Back button is disabled for all forms.'),
+        'form_description' => $this->t('If checked, users will not be allowed to navigate back to the form using the browsers back button.'),
       ],
       'form_unsaved' => [
         'title' => $this->t('Warn users about unsaved changes'),
-        'all_description' => $this->t('Unsaved warning is enabled for all webforms.'),
-        'form_description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
+        'all_description' => $this->t('Unsaved warning is enabled for all forms.'),
+        'form_description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a form with unsaved changes.'),
       ],
       'form_disable_autocomplete' => [
         'title' => $this->t('Disable autocompletion'),
@@ -313,31 +319,31 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
       'form_novalidate' => [
         'title' => $this->t('Disable client-side validation'),
-        'all_description' => $this->t('Client-side validation is disabled for all webforms.'),
-        'form_description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to this webform.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
+        'all_description' => $this->t('Client-side validation is disabled for all forms.'),
+        'form_description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to this form.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
       ],
       'form_details_toggle' => [
         'title' => $this->t('Display collapse/expand all details link'),
-        'all_description' => $this->t('Expand/collapse all (details) link is automatically added to all webforms.'),
+        'all_description' => $this->t('Expand/collapse all (details) link is automatically added to all forms.'),
         'form_description' => $this->t('If checked, an expand/collapse all (details) link will be added to this webform when there are two or more details elements available on the webform.'),
       ],
     ];
     foreach ($settings_elements as $settings_key => $setting_element) {
       if (!empty($default_settings['default_' . $settings_key])) {
-        $form['form'][$settings_key . '_disabled'] = [
+        $form['behaviors'][$settings_key . '_disabled'] = [
           '#type' => 'checkbox',
           '#title' => $setting_element['title'],
           '#description' => $setting_element['all_description'],
           '#disabled' => TRUE,
           '#default_value' => TRUE,
         ];
-        $form['form'][$settings_key] = [
+        $form['behaviors'][$settings_key] = [
           '#type' => 'value',
           '#value' => $settings[$settings_key],
         ];
       }
       else {
-        $form['form'][$settings_key] = [
+        $form['behaviors'][$settings_key] = [
           '#type' => 'checkbox',
           '#title' => $setting_element['title'],
           '#description' => $setting_element['form_description'],
@@ -346,7 +352,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ];
       }
     }
-    $form['form']['form_autofocus'] = [
+    $form['behaviors']['form_autofocus'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Autofocus'),
       '#description' => $this->t('If checked, the first visible and enabled input will be focused when adding new submissions.'),
@@ -362,7 +368,7 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $form['attributes']['attributes'] = [
       '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Webform'),
+      '#title' => $this->t('Form'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.form_classes'),
       '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
@@ -906,7 +912,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' =>
       $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
       '<br/>' .
-      $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
+      $this->t('These properties and callbacks are not allowed: @properties.', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
 

@@ -202,8 +202,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     ];
     $form['form']['form_classes'] = [
       '#type' => 'webform_codemirror',
-      '#title' => $this->t('Webform CSS classes'),
-      '#description' => $this->t('A list of classes that will be provided in the "Webform CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#title' => $this->t('Form CSS classes '),
+      '#description' => $this->t('A list of classes that will be provided in the "Form CSS classes " dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.form_classes'),
     ];
     $form['form']['button_classes'] = [

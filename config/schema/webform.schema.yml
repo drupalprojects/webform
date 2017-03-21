@@ -85,7 +85,7 @@ webform.settings:
           label: 'Default limit user message'
         form_classes:
           type: string
-          label: 'Webform CSS classes'
+          label: 'Form CSS classes '
         button_classes:
           type: string
           label: 'Button CSS classes'
@@ -352,31 +352,31 @@ webform.webform.*:
           label: 'Prevent duplicate submissions'
         form_submit_attributes:
           type: ignore
-          label: 'Webform submit attributes'
+          label: 'Form submit attributes'
         form_open_message:
           type: text
-          label: 'Webform open message'
+          label: 'Form open message'
         form_close_message:
           type: text
-          label: 'Webform closed message'
+          label: 'Form closed message'
         form_exception_message:
           type: text
-          label: 'Webform exception message'
+          label: 'Form exception message'
         form_previous_submissions:
           type: boolean
-          label: 'Webform previous submissions notification'
+          label: 'Form previous submissions notification'
         form_confidential:
           type: boolean
-          label: 'Webform confidential'
+          label: 'Form confidential'
         form_confidential_message:
           type: text
-          label: 'Webform confidential message'
+          label: 'Form confidential message'
         form_prepopulate:
           type: boolean
-          label: 'Webform prepopulate elements'
+          label: 'Form prepopulate elements'
         form_prepopulate_source_entity:
           type: boolean
-          label: 'Webform prepopulate source entity'
+          label: 'Form prepopulate source entity'
         form_unsaved:
           type: boolean
           label: 'Warn users about unsaved changes'
