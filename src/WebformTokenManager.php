@@ -61,9 +61,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     // Set token data based on entity type.
     $this->setTokenData($data, $entity);
 
-    // Set token options.
-    $options += ['clear' => TRUE];
-
     return $this->token->replace($text, $data, $options);
   }
 
