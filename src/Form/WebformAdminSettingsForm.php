@@ -552,6 +552,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $form['format'][$element_id] = [
         '#type' => 'details',
         '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => $element_plugin->getTypeName()]),
+        '#description' => $element_plugin->getPluginDescription(),
       ];
       // Element item format.
       $item_formats = $element_plugin->getItemFormats();
@@ -777,6 +778,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
             ],
           ],
         ],
+        '#weight' => -100,
       ];
     }
     $form['ui']['html_editor_disabled'] = [
