@@ -67,12 +67,12 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildTreeLink() {
+  public function buildTreeLink(array $token_types = ['webform', 'webform_submission']) {
     if ($this->moduleHandler->moduleExists('token')) {
       // @todo Issue #2235581: Make Token Dialog support inserting in WYSIWYGs.
       return [
         '#theme' => 'token_tree_link',
-        '#token_types' => ['webform', 'webform_submission'],
+        '#token_types' => $token_types,
         '#click_insert' => FALSE,
         '#dialog' => TRUE,
       ];

@@ -20,9 +20,9 @@ class WebformHandlerEmailMappingTest extends WebformTestBase {
   protected static $testWebforms = ['test_handler_email_mapping'];
 
   /**
-   * Test basic email handler.
+   * Test email mapping handler.
    */
-  public function testBasicEmailHandler() {
+  public function testEmailMapping() {
     $site_name = \Drupal::config('system.site')->get('name');
     $site_mail = \Drupal::config('system.site')->get('mail');
 
@@ -38,9 +38,9 @@ class WebformHandlerEmailMappingTest extends WebformTestBase {
     $this->assertText("Email mapping handler: Select default triggered sent to default@default.com from $site_name [$site_mail].");
 
     // Check that no email sent.
-    $this->assertText("Message not sent Email mapping handler: Select option triggered because a To, Cc, or Bcc email was not provided.");
-    $this->assertText("Message not sent Email mapping handler: Checkboxes triggered because a To, Cc, or Bcc email was not provided.");
-    $this->assertText("Message not sent Email mapping handler: Radios other triggered because a To, Cc, or Bcc email was not provided.");
+    $this->assertText("Message not sent Email mapping handler: Select option triggered because a To, CC, or BCC email was not provided.");
+    $this->assertText("Message not sent Email mapping handler: Checkboxes triggered because a To, CC, or BCC email was not provided.");
+    $this->assertText("Message not sent Email mapping handler: Radios other triggered because a To, CC, or BCC email was not provided.");
 
     // Check that single select menu option email sent.
     $edit = [
@@ -57,8 +57,8 @@ class WebformHandlerEmailMappingTest extends WebformTestBase {
       'checkboxes[Sunday]' => TRUE,
     ];
     $this->postSubmission($webform, $edit);
-    $this->assertText("Email mapping handler: Checkboxes triggered sent to sunday@example.com,saturday@example.com from $site_name [$site_mail].");
-    $this->assertNoText("Message not sent Email mapping handler: Checkboxes triggered because a To, Cc, or Bcc email was not provided.");
+    $this->assertText("Email mapping handler: Checkboxes triggered sent to saturday@example.com,sunday@example.com from $site_name [$site_mail].");
+    $this->assertNoText("Message not sent Email mapping handler: Checkboxes triggered because a To, CC, or BCC email was not provided.");
 
     // Check that checkbxoes other option email sent.
     $edit = [
@@ -67,7 +67,7 @@ class WebformHandlerEmailMappingTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertText("Email mapping handler: Radios other triggered sent to other@example.com from $site_name [$site_mail].");
-    $this->assertNoText("Message not sent Email mapping handler: Radios other triggered because a To, Cc, or Bcc email was not provided.");
+    $this->assertNoText("Message not sent Email mapping handler: Radios other triggered because a To, CC, or BCC email was not provided.");
   }
 
 }

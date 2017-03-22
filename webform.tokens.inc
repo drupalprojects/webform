@@ -25,6 +25,11 @@ function webform_token_info() {
     'description' => t('Tokens related to webform submission.'),
     'needs-data' => 'webform_submission',
   ];
+  $types['webform_role'] = [
+    'name' => t('Webform roles'),
+    'description' => t("Tokens related to user roles that can receive email. <em>This token is only available to a  Webform email handler's 'To', 'CC', and 'BCC' email recipents.</em>"),
+    'needs-data' => 'webform_role',
+  ];
   $types['webform'] = [
     'name' => t('Webforms'),
     'description' => t('Tokens related to webforms.'),
@@ -147,11 +152,18 @@ function webform_token_info() {
     'type' => 'user',
   ];
 
+  $webform_role = [];
+  $webform_role['name'] = [
+    'name' => t('Role name'),
+    'description' => t('The name of the role followed by the desired user property.') . ' ' .
+      t('Only the [webform_role:{role}:mail] token is supported and will return a comma delimited list of user email addresses assigned to the specified role.'),
+  ];
   return [
     'types' => $types,
     'tokens' => [
-      'webform_submission' => $webform_submission,
       'webform' => $webform,
+      'webform_submission' => $webform_submission,
+      'webform_role' => $webform_role,
     ],
   ];
 }
@@ -184,6 +196,43 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         $replacements[$name] = '';
       }
     }
+  }
+  elseif ($type == 'webform_role' && !empty($data['webform_role'])) {
+    $roles = $data['webform_role'];
+    $any_role = in_array('authenticated', $roles) ? TRUE : FALSE;
+    foreach ($tokens as $name => $original) {
+      list($role_name, $user_property) = explode(':', $name);
+      // Check that the mail property is specified.
+      if ($user_property !== 'mail') {
+        continue;
+      }
+
+      if ($any_role || in_array($role_name, $roles)) {
+        if ($role_name == 'authenticated') {
+          // Get all active authenticated users.
+          $query = db_select('users_field_data', 'u');
+          $query->fields('u', array('mail'));
+          $query->condition('u.status', 1);
+          $query->condition('u.mail', '', '<>');
+          $query->orderBy('mail');
+          $replacements[$original] = implode(',', $query->execute()->fetchCol());
+
+        }
+        else {
+          // Get all authenticated users assigned to a specified role.
+          $query = db_select('user__roles', 'ur');
+          $query->distinct();
+          $query->join('users_field_data', 'u', 'u.uid = ur.entity_id');
+          $query->fields('u',array('mail'));
+          $query->condition('ur.roles_target_id', $role_name);
+          $query->condition('u.status', 1);
+          $query->condition('u.mail', '', '<>');
+          $query->orderBy('mail');
+          $replacements[$original] = implode(',', $query->execute()->fetchCol());
+        }
+      }
+    }
+
   }
   elseif ($type == 'webform_submission' && !empty($data['webform_submission'])) {
 

@@ -29,13 +29,8 @@ class WebformRoles extends Checkboxes {
    * Processes a checkboxes webform element.
    */
   public static function processCheckboxes(&$element, FormStateInterface $form_state, &$complete_form) {
-    $element['#options'] = array_map('\Drupal\Component\Utility\Html::escape', user_role_names());
-
-    // Check if anonymous is included.
-    if (empty($element['#include_anonymous'])) {
-      unset($element['#options']['anonymous']);
-    }
-
+    $membersonly = (empty($element['#include_anonymous'])) ? TRUE : FALSE;
+    $element['#options'] = array_map('\Drupal\Component\Utility\Html::escape', user_role_names($membersonly));
     $element['#attached']['library'][] = 'webform/webform.element.roles';
     $element['#attributes']['class'][] = 'js-webform-roles-role';
     return parent::processCheckboxes($element, $form_state, $complete_form);

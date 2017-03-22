@@ -797,3 +797,10 @@ function webform_update_8028() {
     }
   }
 }
+
+/**
+ * Issue #2856842: Allow emails to be sent to selected roles.
+ */
+function webform_update_8029() {
+  _webform_update_admin_settings();
+}

@@ -596,6 +596,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Email default settings'),
       '#tree' => TRUE,
     ];
+    $form['mail']['roles'] = [
+      '#type' => 'webform_roles',
+      '#title' => $this->t('Recipent roles'),
+      '#description' => $this->t("Select roles that can be assigned to receive a webform's email. <em>Please note: Selected roles will be available to all webforms.</em>"),
+      '#include_anonymous' => FALSE,
+      '#default_value' => $config->get('mail.roles'),
+    ];
     $form['mail']['default_from_mail'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default from email'),

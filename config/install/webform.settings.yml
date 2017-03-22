@@ -106,6 +106,7 @@ mail:
     <p>Submitted by: [webform_submission:user]</p>
     <p>Submitted values are:</p>
     [webform_submission:values]
+  roles: {  }
 test:
   types: |
     checkbox:

@@ -8,8 +8,11 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -51,11 +54,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   const DEFAULT_OPTION = '_default_';
 
   /**
-   * A mail manager for sending email.
+   * The current user.
    *
-   * @var \Drupal\Core\Mail\MailManagerInterface
+   * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $mailManager;
+  protected $currentUser;
 
   /**
    * The configuration object factory.
@@ -63,6 +66,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * A mail manager for sending email.
+   *
+   * @var \Drupal\Core\Mail\MailManagerInterface
+   */
+  protected $mailManager;
 
   /**
    * The token manager.
@@ -88,10 +98,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, MailManagerInterface $mail_manager, ConfigFactoryInterface $config_factory, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, AccountInterface $current_user, ConfigFactoryInterface $config_factory, MailManagerInterface $mail_manager, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
-    $this->mailManager = $mail_manager;
+    $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
+    $this->mailManager = $mail_manager;
     $this->tokenManager = $token_manager;
     $this->elementManager = $element_manager;
   }
@@ -105,8 +116,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory')->get('webform.email'),
-      $container->get('plugin.manager.mail'),
+      $container->get('current_user'),
       $container->get('config.factory'),
+      $container->get('plugin.manager.mail'),
       $container->get('webform.token_manager'),
       $container->get('plugin.manager.webform.element')
     );
@@ -120,8 +132,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Simplify the [webform_submission:values:.*] tokens.
     array_walk($settings, function (&$value, $key) {
       if (is_string($value)) {
-        $value = preg_replace('/\[webform_submission:values:([^:]+):(?:raw|value)\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_submission:values:([^:]+)(?::raw|:value)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_submission:/', '[', $value);
+        $value = preg_replace('/\[webform_role:([^:]+):mail\]/', '[\1]', $value);
       }
     });
     return [
@@ -240,6 +253,18 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
     }
 
+    // Get roles.
+    $roles_element_options = [];
+    if ($roles = $this->configFactory->get('webform.settings')->get('mail.roles')) {
+      $role_names = array_map('\Drupal\Component\Utility\Html::escape', user_role_names(TRUE));
+      if (!in_array('authenticated', $roles)) {
+        $role_names = array_intersect_key($role_names, array_combine($roles, $roles));
+      }
+      foreach ($role_names as $role_name => $role_label) {
+        $roles_element_options["[webform_role:$role_name:mail]"] = new FormattableMarkup('@title (@key)', ['@title' => $role_label, '@key' => $role_name]);
+      }
+    }
+
     // Disable client-side HTML5 validation which is having issues with hidden
     // element validation.
     // @see http://stackoverflow.com/questions/22148080/an-invalid-form-control-with-name-is-not-focusable
@@ -251,9 +276,25 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send to'),
       '#open' => TRUE,
     ];
-    $form['to'] += $this->buildElement('to_mail', $this->t('To email'), $this->t('To email address'), $mail_element_options, $options_element_options, TRUE);
-    $form['to'] += $this->buildElement('cc_mail', $this->t('CC email'), $this->t('CC email address'), $mail_element_options, $options_element_options, FALSE);
-    $form['to'] += $this->buildElement('bcc_mail', $this->t('BCC email'), $this->t('Bcc email address'), $mail_element_options, $options_element_options, FALSE);
+    $form['to'] += $this->buildElement('to_mail', $this->t('To email'), $this->t('To email address'), $mail_element_options, $options_element_options, $roles_element_options, TRUE);
+    $form['to'] += $this->buildElement('cc_mail', $this->t('CC email'), $this->t('CC email address'), $mail_element_options, $options_element_options, $roles_element_options, FALSE);
+    $form['to'] += $this->buildElement('bcc_mail', $this->t('BCC email'), $this->t('BCC email address'), $mail_element_options, $options_element_options, $roles_element_options, FALSE);
+    $token_types = ['webform', 'webform_submission'];
+    // Show webform role tokens if they have been specified.
+    if (!empty($roles_element_options)) {
+      $token_types[] = 'webform_role';
+    }
+    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink($token_types);
+    if (empty($roles_element_options) && $this->currentUser->hasPermission('administer webform')) {
+      $form['to']['roles_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Please note: You can select which user roles can be available to receive webform emails by going to the Webform module\'s <a href=":href">admin settings</a> form.', [':href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-mail'])->toString()]),
+        '#message_close' => TRUE,
+        '#message_id' => 'webform_email_roles_message',
+        '#message_storage' => WebformMessage::STORAGE_USER,
+      ];
+    }
 
     // From.
     $form['from'] = [
@@ -261,7 +302,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send from'),
       '#open' => TRUE,
     ];
-    $form['from'] += $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, NULL, TRUE);
+    $form['from'] += $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, NULL, NULL, TRUE);
     $form['from'] += $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options);
 
     // Message.
@@ -604,12 +645,29 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $emails[] = $configuration_value;
     }
 
-    // Implode and resplit emails to make sure that allow emails are unique.
-    $emails = preg_split('/\s*,\s*/', implode(',', $emails));
+    // Implode unique emails and tokens.
+    $emails = implode(',', array_unique($emails));
 
-    // @todd Add role based email addresses.
+    // Add user role email addresses to 'To', 'CC', and 'BCC'.
+    // IMPORTANT: This is the only place where user email addresses can be
+    // used as tokens.  This prevents the webform module from being used to
+    // spam users or worse...expose user email addresses to malicious users.
+    if (in_array($configuration_name, ['to', 'cc', 'bcc'])) {
+      $roles = $this->configFactory->get('webform.settings')->get('mail.roles');
+      $emails = $this->tokenManager->replace($emails, $webform_submission, ['webform_role' => $roles], ['clear' => TRUE]);
+    }
 
-    return array_unique($emails);
+    // Resplit emails to make sure that emails are unique.
+    $emails = preg_split('/\s*,\s*/', $emails);
+    // Remove all empty email addresses.
+    $emails = array_filter($emails);
+    // Make sure all email addresses are unique.
+    $emails = array_unique($emails);
+    // Sort email addresses to make it easier to debug queuing and/or sending
+    // issues
+    asort($emails);
+
+    return $emails;
   }
 
   /**
@@ -671,11 +729,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $from = $message['from_mail'] . (($message['from_name']) ? ' <' . $message['from_name'] . '>' : '');
     $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-    // Don't send the message if To, Cc, and Bcc and empty.
+    // Don't send the message if To, CC, and BCC is empty.
     if (empty($message['to_mail']) && empty($message['cc_mail']) && empty($message['bcc_mail'])) {
       if ($this->configuration['debug']) {
         $t_args = ['%subject' => $message['subject']];
-        drupal_set_message($this->t('Message <b>not sent</b> %subject because a <em>To</em>, <em>Cc</em>, or <em>Bcc</em> email was not provided.', $t_args), 'warning');
+        drupal_set_message($this->t('Message <b>not sent</b> %subject because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args), 'warning');
       }
       return;
     }
@@ -879,13 +937,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   The element options.
    * @param array $options_options
    *   The options options.
+   * @param array $role_options
+   *   The (user) role options.
    * @param bool $required
    *   TRUE if the element is required.
    *
    * @return array
    *   A select other element.
    */
-  protected function buildElement($name, $title, $label, array $element_options, array $options_options = NULL, $required = FALSE) {
+  protected function buildElement($name, $title, $label, array $element_options, array $options_options = NULL, array $role_options = NULL, $required = FALSE) {
     list($element_name, $element_type) = (strpos($name, '_') !== FALSE) ? explode('_', $name) : [$name, 'text'];
 
     $options = [];
@@ -896,6 +956,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     }
     if ($options_options) {
       $options[(string) $this->t('Options')] = $options_options;
+    }
+    if ($role_options) {
+      $options[(string) $this->t('Roles')] = $role_options;
     }
 
     $element = [];
@@ -944,6 +1007,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
       $mapping_options[self::DEFAULT_OPTION] = $this->t('Default (This email address will always be included)');
 
+      // Set placeholder emails.
+      $destination_placeholde_emails = ['example@example.com', '[site:mail]'];
+      if ($role_options) {
+        $destination_placeholde_emails[] = '[webform_role:{role}:mail]';
+      }
       $element[$options_name] = [
         '#type' => 'webform_mapping',
         '#title' => $this->t('@title options', ['@title' => $title]),
@@ -960,7 +1028,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#destination__allow_tokens' => TRUE,
         '#destination__title' => $this->t('E-mail addresses'),
         '#destination__description' => NULL,
-        '#destination__placeholder' => 'example@example.com, other@other.com, [site:mail]',
+        '#destination__placeholder' => implode(', ', $destination_placeholde_emails),
 
         '#prefix' => '<div id="' . $options_id  . '">',
         '#suffix' => '</div>',

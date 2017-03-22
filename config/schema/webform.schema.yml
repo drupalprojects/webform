@@ -183,6 +183,12 @@ webform.settings:
         default_body_html:
           type: text
           label: 'Default email body (HTML)'
+        roles:
+          type: sequence
+          label: 'Roles'
+          sequence:
+            type: string
+            label: 'Role'
     export:
       type: mapping
       label: 'Export default settings'
@@ -692,16 +698,16 @@ webform.handler.email:
       label: 'Email to address options'
       type: ignore
     bcc_mail:
-      label: 'Email Bcc address'
+      label: 'Email BCC address'
       type: email
     bcc_options:
-      label: 'Email Bcc address options'
+      label: 'Email BCC address options'
       type: ignore
     cc_mail:
-      label: 'Email Cc address'
+      label: 'Email CC address'
       type: email
     cc_options:
-      label: 'Email Cc address options'
+      label: 'Email CC address options'
       type: ignore
     from_mail:
       label: 'Email from address'
