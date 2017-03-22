@@ -1,0 +1,14 @@
+/**
+ * @file
+ * Bootstrap theme styles.
+ *
+ * @see \Drupal\webform\Element\WebformMultiple
+ */
+
+/**
+ * Issue #2862483: Down arrow icon won't display on Select2 drop-down element with Bootstrap theme.
+ */
+.has-glyphicons .form-type-webform-image-select .select-wrapper:after,
+.has-glyphicons .form-type-select--select2 .select-wrapper:after {
+  content: '';
+}

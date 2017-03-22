@@ -24,6 +24,7 @@ use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
 
@@ -332,11 +333,11 @@ function webform_page_attachments(&$page) {
 
   // Attach global libraries only to webform specific pages.
   if (preg_match('/^(webform\.|^entity\.([^.]+\.)?webform)/', $route_name) || preg_match('#(/node/add/webform|/admin/help/webform)#', $url)) {
-    // Attach theme specific library to webform routers so that we can tweak
-    // the bartik.theme and seven.theme.
-    $theme = \Drupal::theme()->getActiveTheme()->getName();
-    if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$theme.css")) {
-      $page['#attached']['library'][] = "webform/webform.theme.$theme";
+    $active_theme_names = WebformThemeHelper::getActiveThemeNames();
+    foreach ($active_theme_names as $active_theme_name) {
+      if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$active_theme_name.css")) {
+        $page['#attached']['library'][] = "webform/webform.theme.$active_theme_name";
+      }
     }
 
     // Attach details element save open/close library.

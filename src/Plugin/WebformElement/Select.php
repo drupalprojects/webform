@@ -62,6 +62,10 @@ class Select extends OptionsBase {
       $element['#attached']['library'][] = 'webform/webform.element.select2';
       $element['#attributes']['class'][] = 'js-webform-select2';
       $element['#attributes']['class'][] = 'webform-select2';
+      // Adding wrapper attributes so that we can fix bootstrap.theme.
+      // @see css/webform.theme.bootstrap.css
+      $element['#wrapper_attributes']['class'][] = 'form-type-select--select2';
+      $element['#wrapper_attributes']['class'][] = 'js-form-type-select--select2';
     }
   }
 
