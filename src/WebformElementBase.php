@@ -1229,10 +1229,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $webform_id = $element['#webform'];
     $sid = $element['#webform_submission'];
     $name = $element['#name'];
-    $value = $element['#value'];
+    $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
     // Skip empty unique fields or arrays (aka #multiple).
-    if ($value === '' || is_array($element['#value'])) {
+    if ($value === '' || is_array($value)) {
       return;
     }
 
@@ -1254,7 +1254,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       elseif (isset($element['#title'])) {
         $t_args = [
           '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
-          '%value' => $element['#value'],
+          '%value' => $value,
         ];
         $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
       }

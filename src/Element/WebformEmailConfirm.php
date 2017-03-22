@@ -33,6 +33,7 @@ class WebformEmailConfirm extends FormElement {
       '#pre_render' => [
         [$class, 'preRenderCompositeFormElement'],
       ],
+      '#element_validate' => [[$class, 'validateWebformEmailConfirm']],
       '#theme_wrappers' => ['container'],
       '#required' => FALSE,
     ];
@@ -95,21 +96,14 @@ class WebformEmailConfirm extends FormElement {
     $element['mail_2']['#attributes']['class'][] = 'webform-email-confirm';
     $element['mail_2']['#value'] = empty($element['#value']) ? NULL : $element['#value']['mail_2'];
 
-    // Remove properties that are being applied to the sub elements.
+    // Don't require the main element.
     $element['#required'] = FALSE;
+
+    // Remove properties that are being applied to the sub elements.
     unset($element['#title']);
     unset($element['#description']);
     unset($element['#maxlength']);
-    unset($element['#atributes']);
-
-    // Set validation.
-    if (isset($element['#element_validate'])) {
-      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformEmailConfirm']], $element['#element_validate']);
-    }
-    else {
-      $element['#element_validate'] = [[get_called_class(), 'validateWebformEmailConfirm']];
-    }
-
+    unset($element['#attributes']);
     return $element;
   }
 
@@ -149,6 +143,12 @@ class WebformEmailConfirm extends FormElement {
           $form_state->setError($element, t('@name cannot be longer than %max characters but is currently %length characters long.', $t_args));
         }
       }
+    }
+
+    // Set #title for other validation callbacks.
+    // @see \Drupal\webform\WebformElementBase::validateUnique
+    if (isset($element['mail_1']['#title'])) {
+      $element['#title'] = $element['mail_1']['#title'];
     }
 
     // Email field must be converted from a two-element array into a single

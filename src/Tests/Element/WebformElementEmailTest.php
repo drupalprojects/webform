@@ -68,7 +68,7 @@ class WebformElementEmailTest extends WebformTestBase {
     $this->drupalGet('webform/test_element_email');
 
     // Check basic email confirm.
-    $this->assertRaw('<div data-drupal-selector="edit-email-confirm-basic" id="edit-email-confirm-basic" class="js-form-wrapper form-wrapper">');
+    $this->assertRaw('<div id="edit-email-confirm-basic" class="js-form-wrapper form-wrapper">');
     $this->assertRaw('<div class="js-form-item form-item js-form-type-email form-type-email js-form-item-email-confirm-basic-mail-1 form-item-email-confirm-basic-mail-1">');
     $this->assertRaw('<label for="edit-email-confirm-basic-mail-1">Email confirm basic</label>');
     $this->assertRaw('<input data-drupal-selector="edit-email-confirm-basic-mail-1" class="webform-email form-email" type="email" id="edit-email-confirm-basic-mail-1" name="email_confirm_basic[mail_1]" value="" size="60" maxlength="254" />');
@@ -77,7 +77,7 @@ class WebformElementEmailTest extends WebformTestBase {
     $this->assertRaw('<input data-drupal-selector="edit-email-confirm-basic-mail-2" class="webform-email-confirm form-email" type="email" id="edit-email-confirm-basic-mail-2" name="email_confirm_basic[mail_2]" value="" size="60" maxlength="254" />');
 
     // Check advanced email confirm w/ custom label.
-    $this->assertRaw('<div data-drupal-selector="edit-email-confirm-advanced" aria-describedby="edit-email-confirm-advanced--description" id="edit-email-confirm-advanced" class="js-form-wrapper form-wrapper">');
+    $this->assertRaw('<div id="edit-email-confirm-advanced" class="js-form-wrapper form-wrapper">');
     $this->assertRaw('<div class="js-form-item form-item js-form-type-email form-type-email js-form-item-email-confirm-advanced-mail-1 form-item-email-confirm-advanced-mail-1">');
     $this->assertRaw('<label for="edit-email-confirm-advanced-mail-1">Email confirm advanced</label>');
     $this->assertRaw('<input data-drupal-selector="edit-email-confirm-advanced-mail-1" aria-describedby="edit-email-confirm-advanced-mail-1--description" class="webform-email form-email" type="email" id="edit-email-confirm-advanced-mail-1" name="email_confirm_advanced[mail_1]" value="" size="60" maxlength="254" placeholder="Enter email address" />');
