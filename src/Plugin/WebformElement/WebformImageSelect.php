@@ -5,7 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Element\WebformImageSelect as WebformImageSelectElement;
-use Drupal\webform\Element\WebformMessage;
+use Drupal\webform\Element\WebformMessage as WebformMessageElement;
 
 /**
  * Provides a 'image_select' element.
@@ -202,7 +202,7 @@ class WebformImageSelect extends Select {
         '#message_message' => $this->t('Install the <a href=":href">IMCE module</a> to manage and uploaded image files.', [':href' => 'https://www.drupal.org/project/imce']),
         '#message_close' => TRUE,
         '#message_id' => 'webform_imce_message',
-        '#message_storage' => WebformMessage::STORAGE_LOCAL,
+        '#message_storage' => WebformMessageElement::STORAGE_LOCAL,
         '#weight' => -100,
         '#access' => TRUE,
       ];
