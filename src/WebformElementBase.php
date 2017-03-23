@@ -230,6 +230,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'placeholder',
       'markup',
       'test',
+      'default_value'
     ];
   }
 
