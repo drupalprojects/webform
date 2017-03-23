@@ -132,7 +132,7 @@ class TestEntityMappingWebformHandler extends WebformHandlerBase {
     }
 
     // Get field options.
-    $fields = \Drupal::entityManager()->getFieldDefinitions($this->configuration['entity_type'], $this->configuration['bundle']);
+    $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions($this->configuration['entity_type'], $this->configuration['bundle']);
     $field_options = [];
     foreach ($fields as $field_name => $field) {
       $field_options[$field_name] = $field->getLabel();

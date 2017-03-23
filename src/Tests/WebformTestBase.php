@@ -399,7 +399,7 @@ abstract class WebformTestBase extends WebTestBase {
    */
   protected function loadSubmission($sid) {
     /** @var \Drupal\webform\WebformSubmissionStorage $storage */
-    $storage = $this->container->get('entity.manager')->getStorage('webform_submission');
+    $storage = $this->container->get('entity_type.manager')->getStorage('webform_submission');
     $storage->resetCache([$sid]);
     return $storage->load($sid);
   }

@@ -56,7 +56,7 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-      $container->get('entity.manager')->getStorage('webform'),
+      $container->get('entity_type.manager')->getStorage('webform'),
       $configuration,
       $plugin_id,
       $plugin_definition

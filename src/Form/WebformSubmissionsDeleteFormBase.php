@@ -68,7 +68,7 @@ abstract class WebformSubmissionsDeleteFormBase extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager')->getStorage('webform_submission'),
+      $container->get('entity_type.manager')->getStorage('webform_submission'),
       $container->get('webform.request')
     );
   }

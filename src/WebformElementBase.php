@@ -143,7 +143,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $container->get('plugin.manager.element_info'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.token_manager'),
-      $container->get('entity.manager')->getStorage('webform_submission')
+      $container->get('entity_type.manager')->getStorage('webform_submission')
     );
   }
 
