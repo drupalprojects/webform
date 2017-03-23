@@ -45,23 +45,23 @@ class WebformConditionTest extends EntityKernelTestBase {
       ->setContextValue('webform', $webform);
     $this->assertFalse($condition->execute(), 'Webform check fails.');
     // Check for the proper summary.
-    $this->assertEqual('The webform is not_test', $condition->summary());
+    $this->assertEquals('The webform is not_test', $condition->summary());
 
     // Set the webform check to test.
     $condition->setConfig('webforms', ['test' => 'test']);
     $this->assertTrue($condition->execute(), 'Webform test pass webform condition check for test');
     // Check for the proper summary.
-    $this->assertEqual('The webform is test', $condition->summary());
+    $this->assertEquals('The webform is test', $condition->summary());
 
     // Set the webform check to not_test or test.
     $condition->setConfig('webforms', ['not_test' => 'not_test', 'test' => 'test']);
     $this->assertTrue($condition->execute(), 'Webform test pass webform condition check for not_test or test');
     // Check for the proper summary.
-    $this->assertEqual('The webform is not_test or test', $condition->summary());
+    $this->assertEquals('The webform is not_test or test', $condition->summary());
 
     // Check a greater than 2 webform summary scenario.
     $condition->setConfig('webforms', ['not_test' => 'not_test', 'test' => 'test', 'other_test' => 'other_test']);
-    $this->assertEqual('The webform is not_test, test or other_test', $condition->summary());
+    $this->assertEquals('The webform is not_test, test or other_test', $condition->summary());
 
     // Test Constructor injection.
     $condition = $manager->createInstance('webform', ['webforms' => ['test' => 'test'], 'context' => ['webform' => $webform]]);
@@ -73,7 +73,7 @@ class WebformConditionTest extends EntityKernelTestBase {
     $condition = $manager->createInstance('webform')
       ->setConfig('webforms', ['test' => 'test'])
       ->setContextValue('webform_submission', $webform_submission);
-    $this->assertEqual('The webform is test', $condition->summary());
+    $this->assertEquals('The webform is test', $condition->summary());
   }
 
 }
