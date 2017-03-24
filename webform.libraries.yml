@@ -71,12 +71,6 @@ webform.theme.seven:
     theme:
       css/webform.theme.seven.css: {}
 
-webform.theme.bootstrap:
-  version: VERSION
-  css:
-    theme:
-      css/webform.theme.bootstrap.css: {}
-
 # Help.
 
 webform.help:
