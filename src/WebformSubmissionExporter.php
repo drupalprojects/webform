@@ -564,7 +564,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
         'completed' => $this->t('Completed submissions only'),
         'draft' => $this->t('Drafts only'),
       ],
-      '#access' => $webform->getSetting('draft'),
+      '#access' => ($webform->getSetting('draft') != WebformInterface::DRAFT_ENABLED_NONE),
     ];
   }
 

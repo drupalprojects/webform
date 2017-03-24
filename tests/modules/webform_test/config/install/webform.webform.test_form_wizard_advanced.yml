@@ -96,7 +96,7 @@ settings:
   preview_prev_button_label: ''
   preview_prev_button_attributes: {  }
   preview_message: ''
-  draft: true
+  draft: authenticated
   draft_auto_save: true
   draft_button_label: ''
   draft_button_attributes: {  }

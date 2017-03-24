@@ -2,9 +2,11 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Defines an interface for webform submission classes.
@@ -101,21 +103,6 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   The number of webform submissions deleted.
    */
   public function deleteAll(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, $limit = NULL, $max_sid = NULL);
-
-  /**
-   * Get webform submission draft.
-   *
-   * @param \Drupal\webform\WebformInterface|null $webform
-   *   A webform.
-   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A webform submission source entity.
-   * @param \Drupal\Core\Session\AccountInterface|null $account
-   *   A user account.
-   *
-   * @return \Drupal\webform\WebformSubmissionInterface
-   *   A webform submission.
-   */
-  public function loadDraft(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
 
   /**
    * Get the total number of submissions.
@@ -346,5 +333,32 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   Amount of webform submissions to purge.
    */
   public function purge($count);
+
+  /****************************************************************************/
+  // Draft methods.
+  /****************************************************************************/
+
+  /**
+   * Get webform submission draft.
+   *
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   A user account.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface
+   *   A webform submission.
+   */
+  public function loadDraft(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+
+  /**
+   * React to an event when a user logs in.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   Account that has just logged in
+   */
+  public function userLogin(UserInterface $account);
 
 }

@@ -453,7 +453,7 @@ webform.webform.*:
           type: text
           label: 'Preview message'
         draft:
-          type: boolean
+          type: string
           label: 'Allow your users to save and finish the webform later.'
         draft_auto_save:
           type: boolean

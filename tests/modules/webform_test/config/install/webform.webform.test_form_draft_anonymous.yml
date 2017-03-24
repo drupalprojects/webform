@@ -8,9 +8,9 @@ open: null
 close: null
 uid: null
 template: false
-id: test_form_draft
-title: 'Test: Webform: Draft'
-description: 'Test saving a draft and previewing a submission.'
+id: test_form_draft_anonymous
+title: 'Test: Webform: Draft anonymous'
+description: 'Test saving a draft and previewing a submission for anonymous (and authenticated users).'
 elements: |
   name:
     '#type': textfield
@@ -58,7 +58,7 @@ settings:
   preview_prev_button_label: ''
   preview_prev_button_attributes: {  }
   preview_message: ''
-  draft: true
+  draft: all
   draft_auto_save: true
   draft_button_label: 'Save a draft'
   draft_button_attributes: {  }

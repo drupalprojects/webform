@@ -1,20 +1,22 @@
 langcode: en
-status: open
+status: true
 dependencies:
   enforced:
     module:
       - webform_test
-open: null
-close: null
 uid: null
 template: false
-id: test_form_limit
-title: 'Test: Form: Submission limit'
-description: 'Test submission and user limits.'
+id: test_form_draft_authenticated
+title: 'Test: Webform: Draft authenticated'
+description: 'Test saving a draft and previewing a submission for authenticated users.'
 elements: |
   name:
     '#type': textfield
     '#title': Name
+    '#required': true
+  comment:
+    '#type': textarea
+    '#title': Comment
 css: ''
 javascript: ''
 settings:
@@ -25,7 +27,6 @@ settings:
   form_submit_once: false
   form_submit_attributes: {  }
   form_exception_message: ''
-  form_open_message: ''
   form_close_message: ''
   form_previous_submissions: true
   form_confidential: false
@@ -48,34 +49,33 @@ settings:
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
-  preview: 0
+  preview: 1
   preview_next_button_label: ''
   preview_next_button_attributes: {  }
   preview_prev_button_label: ''
   preview_prev_button_attributes: {  }
   preview_message: ''
   draft: authenticated
-  draft_auto_save: false
-  draft_button_label: ''
+  draft_auto_save: true
+  draft_button_label: 'Save a draft'
   draft_button_attributes: {  }
-  draft_saved_message: ''
-  draft_loaded_message: ''
+  draft_saved_message: 'Your draft has been saved'
+  draft_loaded_message: 'You have an existing draft'
   confirmation_type: message
-  confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
-  limit_total: 3
-  limit_total_message: 'Only 3 submissions are allowed.'
-  limit_user: 1
-  limit_user_message: 'You are only allowed to have 1 submission for this webform.'
+  limit_total: null
+  limit_total_message: ''
+  limit_user: null
+  limit_user_message: ''
   purge: none
   purge_days: null
-  entity_limit_total: 2
-  entity_limit_user: 1
+  entity_limit_total: null
+  entity_limit_user: null
   results_disabled: false
   results_disabled_ignore: true
   token_update: false

@@ -196,15 +196,23 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = $this->getEntity();
     $webform = $this->getWebform();
 
+    // Add this webform and the webform settings to the cache tags.
+    $form['#cache']['tags'][] = 'config:webform.settings';
+
     // This submission webform is based on the current URL, and hence it depends
     // on the 'url' cache context.
     $form['#cache']['contexts'][] = 'url';
 
-    // Add this webform and the webform settings to the cache tags.
-    $form['#cache']['tags'][] = 'config:webform.settings';
+    // If drafts enabled for anonymous users.
+    // We must add $SESSION to the form's cache context.
+    // @see \Drupal\webform\WebformSubmissionStorage::loadDraft
+    // @todo Add support for 'view own submission' permission.
+    if ($this->draftEnabled() && $this->currentUser()->isAnonymous()) {
+      $form['#cache']['contexts'][] = 'session';
+    }
 
     // Add the webform as a cacheable dependency.
-    \Drupal::service('renderer')->addCacheableDependency($form, $this->getWebform());
+    \Drupal::service('renderer')->addCacheableDependency($form, $webform);
 
     // Display status messages.
     $this->displayMessages($form, $form_state);
@@ -1411,8 +1419,23 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   TRUE if drafts are enabled.
    */
   protected function draftEnabled() {
-    $account = $this->currentUser();
-    return ($account->isAuthenticated() && $this->getWebformSetting('draft') && !$this->getWebformSetting('results_disabled')) ? TRUE : FALSE;
+    if ($this->getWebformSetting('results_disabled')) {
+      return FALSE;
+    }
+
+    switch ($this->getWebformSetting('draft')) {
+      case WebformInterface::DRAFT_ENABLED_ALL:
+        return TRUE;
+
+      case WebformInterface::DRAFT_ENABLED_AUTHENTICATED:
+        /** @var WebformSubmissionInterface $webform_submission */
+        $webform_submission = $this->getEntity();
+        return $webform_submission->getOwner()->isAuthenticated();
+
+      case WebformInterface::DRAFT_ENABLED_NONE:
+      default:
+        return FALSE;
+    }
   }
 
   /**

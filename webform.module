@@ -101,6 +101,14 @@ function webform_modules_uninstalled($modules) {
 }
 
 /**
+ * Implements hook_user_login().
+ */
+function webform_user_login($account) {
+  // Notify the storage of this log in.
+  \Drupal::entityTypeManager()->getStorage('webform_submission')->userLogin($account);
+}
+
+/**
  * Implements hook_cron().
  */
 function webform_cron() {

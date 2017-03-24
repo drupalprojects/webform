@@ -543,17 +543,34 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
     ];
     $form['draft']['draft'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Allow your users to save and finish the webform later.'),
-      "#description" => $this->t('This option is available only for authenticated users.'),
-      '#return_value' => TRUE,
+      '#type' => 'radios',
+      '#title' => $this->t('Allow your users to save and finish the webform later'),
       '#default_value' => $settings['draft'],
+      '#options' => [
+        WebformInterface::DRAFT_ENABLED_NONE => $this->t('Disabled'),
+        WebformInterface::DRAFT_ENABLED_AUTHENTICATED => $this->t('Authenticated users'),
+        WebformInterface::DRAFT_ENABLED_ALL => $this->t('Authenticated and anonymous users'),
+      ],
+    ];
+    $form['draft']['draft_message'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('Please make sure to enable the <a href=":href">automatic purging of draft submissions</a>, to ensure that your database is not filled with abandoned anonymous submissions in draft.', [':href' => Url::fromRoute('<none>', [], ['fragment' => 'edit-purge'])->toString()]),
+      '#states' => [
+        'visible' => [
+          ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_ENABLED_ALL],
+          ':input[name="purge"]' => [
+            ['value' => WebformSubmissionStorageInterface::PURGE_NONE],
+            ['value' => WebformSubmissionStorageInterface::PURGE_COMPLETED],
+          ],
+        ],
+      ],
     ];
     $form['draft']['settings'] = [
       '#type' => 'container',
       '#states' => [
-        'visible' => [
-          ':input[name="draft"]' => ['checked' => TRUE],
+        'invisible' => [
+          ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_ENABLED_NONE],
         ],
       ],
     ];

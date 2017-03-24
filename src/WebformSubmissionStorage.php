@@ -2,11 +2,19 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the webform submission storage.
@@ -19,6 +27,36 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * @var array
    */
   protected $elementDataSchema = [];
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
+   * WebformSubmissionStorage constructor.
+   */
+  public function __construct(EntityTypeInterface $entity_type, Connection $database, EntityManagerInterface $entity_manager, CacheBackendInterface $cache, LanguageManagerInterface $language_manager, AccountProxyInterface $current_user) {
+    parent::__construct($entity_type, $database, $entity_manager, $cache, $language_manager);
+
+    $this->currentUser = $current_user;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
+    return new static(
+      $entity_type,
+      $container->get('database'),
+      $container->get('entity.manager'),
+      $container->get('cache.entity'),
+      $container->get('language_manager'),
+      $container->get('current_user')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -51,30 +89,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       unset($definitions['token']);
     }
     return $definitions;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function loadDraft(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    $query = $this->getQuery();
-    $query->condition('in_draft', TRUE);
-    $query->condition('webform_id', $webform->id());
-    $query->condition('uid', $account->id());
-    if ($source_entity) {
-      $query->condition('entity_type', $source_entity->getEntityTypeId());
-      $query->condition('entity_id', $source_entity->id());
-    }
-    else {
-      $query->notExists('entity_type');
-      $query->notExists('entity_id');
-    }
-    if ($entity_ids = $query->execute()) {
-      return $this->load(reset($entity_ids));
-    }
-    else {
-      return NULL;
-    }
   }
 
   /**
@@ -508,6 +522,14 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     foreach ($entities as $entity) {
       $this->invokeWebformElements('postLoad', $entity);
       $this->invokeWebformHandlers('postLoad', $entity);
+
+      // If this is an anonymous draft..
+      // We must add $SESSION to the submission's cache context.
+      // @see \Drupal\webform\WebformSubmissionStorage::loadDraft
+      // @todo Add support for 'view own submission' permission.
+      if ($entity->isDraft() && $entity->getOwner()->isAnonymous()) {
+        $entity->addCacheContexts(['session']);
+      }
     }
     return $return;
   }
@@ -542,6 +564,12 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     // Save data.
     $this->saveData($entity, !$is_new);
+
+    // Set anonymous draft token.
+    // This only needs to be called for new anonymous submissions.
+    if ($is_new) {
+      $this->setAnonymousSubmission($entity);
+    }
 
     // DEBUG: dsm($entity->getState());
     // Log transaction.
@@ -863,6 +891,154 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $this->database->delete('webform_submission_data')
       ->condition('sid', $sids, 'IN')
       ->execute();
+  }
+
+  /****************************************************************************/
+  // Draft methods.
+  /****************************************************************************/
+
+  /**
+   * We use session for storing draft tokens. So we can only do it for the
+   * current user.
+   *
+   * We do not use PrivateTempStore because it utilizes session ID as the key in
+   * key-value hash map where it stores its data. During user login the session
+   * ID is regenerated (see user_login_finalize()) so it is not suitable for us
+   * since we need to "carry" the draft tokens from anonymous session to the
+   * logged in one.
+   *
+   * @see WebformSubmissionStorage::loadDraft
+   * @see WebformSubmissionStorage::setAnonymousSubmission
+   * @see WebformSubmissionStorage::userLogin
+   */
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadDraft(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
+    $query = $this->getQuery();
+    $query->condition('in_draft', TRUE);
+    $query->condition('webform_id', $webform->id());
+    $query->condition('uid', $account->id());
+
+    // Add anonymous submission ids to query conditions.
+    if ($account->isAnonymous()) {
+      $sids = $this->getAnonymousSubmissionIds($account);
+      if (empty($sids)) {
+        return NULL;
+      }
+      $query->condition('sid', $sids, 'IN');
+    }
+
+    if ($source_entity) {
+      $query->condition('entity_type', $source_entity->getEntityTypeId());
+      $query->condition('entity_id', $source_entity->id());
+    }
+    else {
+      $query->notExists('entity_type');
+      $query->notExists('entity_id');
+    }
+
+    if ($sids = $query->execute()) {
+      return $this->load(reset($sids));
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function userLogin(UserInterface $account) {
+    if (empty($_SESSION['webform_submissions'])) {
+      return;
+    }
+
+    // Move all anonymous submissions to UID of this account.
+    $query = $this->getQuery();
+    $query->condition('uid', 0);
+    // @todo Remove once 'view own submission' permission is implmented.
+    $query->condition('in_draft', 1);
+    $query->condition('sid', $_SESSION['webform_submissions'], 'IN');
+    if ($sids = $query->execute()) {
+      $webform_submissions = $this->loadMultiple($sids);
+      foreach ($webform_submissions as $webform_submission) {
+        $webform_submission->setOwner($account);
+        $webform_submission->save();
+      }
+    }
+
+    // Now that the user has logged in, we can purge all webform submission
+    // tokens.
+    unset($_SESSION['webform_submissions']);
+  }
+
+  /****************************************************************************/
+  // Anonymous submission methods.
+  /****************************************************************************/
+
+  /**
+   * Track anonymous submissions used for drafts.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  protected function setAnonymousSubmission(WebformSubmissionInterface $webform_submission) {
+    // Make sure the account and current user are identical.
+    if ($webform_submission->getOwnerId() !== $this->currentUser->id()) {
+      return;
+    }
+
+    // Make sure the submission is anonymous.
+    if (!$webform_submission->getOwner()->isAnonymous()) {
+      return;
+    }
+
+    // @todo Check 'view own submission' permission.
+    // Check that submission is a draft.
+    // @see \Drupal\webform\WebformSubmissionForm::actions
+    if (!$webform_submission->isDraft()) {
+      return;
+    }
+
+    // Finally add the submission's token to the anonymous user's
+    // session draft tokens.
+    $_SESSION['webform_submissions'][$webform_submission->id()] = $webform_submission->id();
+  }
+
+  /**
+   * Get anonymous users sumbmission ids.
+   *
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   A user account.
+   *
+   * @return array|
+   *   A array of submission ids or NULL if the user us not anonymous or has
+   *   not saved submissions.
+   */
+  protected function getAnonymousSubmissionIds(AccountInterface $account) {
+    // Make sure the account and current user are identical.
+    if ($account->id() !== $this->currentUser->id()) {
+      return NULL;
+    }
+
+    if (empty($_SESSION['webform_submissions'])) {
+      return NULL;
+    }
+
+    // Cleanup sids because drafts could have been purged or the webform
+    // submission could have been deleted.
+    $_SESSION['webform_submissions'] = $this->getQuery()
+      ->condition('sid', $_SESSION['webform_submissions'], 'IN')
+      ->sort('sid')
+      ->execute();
+    if (empty($_SESSION['webform_submissions'])) {
+      unset($_SESSION['webform_submissions']);
+      return NULL;
+    }
+
+    return $_SESSION['webform_submissions'];
   }
 
 }

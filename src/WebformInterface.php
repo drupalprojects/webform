@@ -13,6 +13,27 @@ use Drupal\user\EntityOwnerInterface;
 interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface, EntityOwnerInterface {
 
   /**
+   * Denote drafts are not allowed.
+   *
+   * @var string
+   */
+  const DRAFT_ENABLED_NONE = 'none';
+
+  /**
+   * Denote drafts are allowed for authenticated users only.
+   *
+   * @var string
+   */
+  const DRAFT_ENABLED_AUTHENTICATED = 'authenticated';
+
+  /**
+   * Denote drafts are allowed for authenticated and anonymous users.
+   *
+   * @var string
+   */
+  const DRAFT_ENABLED_ALL = 'all';
+
+  /**
    * Webform status open.
    */
   const STATUS_OPEN = 'open';

@@ -63,7 +63,7 @@ settings:
   preview_next_button_label: ''
   preview_prev_button_label: ''
   preview_message: ''
-  draft: false
+  draft: none
   draft_auto_save: false
   draft_button_label: ''
   draft_saved_message: ''
