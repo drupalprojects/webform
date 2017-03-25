@@ -123,3 +123,13 @@ because Drupal's YAML utility is not a service.](https://www.drupal.org/node/192
 
 > Makes it impossible to open an action in a dialog.  
 > Workaround: Add local action to a controller's response.
+
+### CKEditor
+
+**[Issue #2741877 by jrockowitz: Nested modals don't work: when using CKEditor in a modal, then clicking the image button opens another modal, which closes the original modal](https://www.drupal.org/node/2741877)**
+
+- Prevent core's CKEditor from being used inside modal dialog.
+
+**[Issue #2852346: Switch Enter <p> and Shift+Enter<br>](option https://www.drupal.org/node/2852346)**
+
+> CKEditor does not include basic link and image plugin.
