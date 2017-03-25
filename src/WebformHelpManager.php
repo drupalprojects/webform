@@ -529,9 +529,15 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   protected function initVideos() {
     $videos = [];
 
-    $videos['introduction'] = [
+    $videos['introduction_short'] = [
       'title' => $this->t('Welcome to the Webform module'),
       'content' => $this->t('Welcome to the Webform module for Drupal 8.'),
+      'youtube_id' => 'rJ-Hcg5WtSU',
+    ];
+
+    $videos['introduction'] = [
+      'title' => $this->t('Overview of the Webform module'),
+      'content' => $this->t('This screencast provides a complete introduction to the Webform module for Drupal 8.'),
       'youtube_id' => 'AgaD041BTxU',
     ];
 
