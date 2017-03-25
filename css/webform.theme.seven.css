@@ -24,6 +24,10 @@ details details details {
 
 /* Hide tabs and elements from printing. */
 @media print {
+  body {
+    padding-top: 0 !important; /* Using !import to ensure that <body style="padding-top: *"> set via the toolbar.module is overridden. */
+  }
+
   .shortcut-action,
   .dropbutton-wrapper,
   .block-system-breadcrumb-block,
