@@ -28,11 +28,22 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
    * {@inheritdoc}
    */
   public function getOptions() {
+    $other_group = (string) $this->t('Other');
+
     $webform_options = $this->loadMultiple();
     @uasort($webform_options, array($this->entityType->getClass(), 'sort'));
+    $options = [];
     foreach ($webform_options as $id => $webform_option) {
-      $options[$webform_option->get('category')][$id] = $webform_option->label();
+      $options[$webform_option->get('category') ?: $other_group][$id] = $webform_option->label();
     }
+
+    // Move 'Other' options last.
+    if (isset($options[$other_group])) {
+      $other_options = $options[$other_group];
+      unset($options[$other_group]);
+      $options[$other_group] = $other_options;
+    }
+
     return $options;
   }
 
