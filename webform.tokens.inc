@@ -192,8 +192,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       $replacements += $token_service->generate('user', $tokens, ['user' => $account], $options, $bubbleable_metadata);
     }
     else {
-      foreach ($replacements as $name => $token) {
-        $replacements[$name] = '';
+      // For anonymous user we are going to always return empty string.
+      foreach ($tokens as $name => $original) {
+        $replacements[$original] = '';
       }
     }
   }
