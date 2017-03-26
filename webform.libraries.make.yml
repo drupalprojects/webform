@@ -21,7 +21,7 @@ libraries:
     destination: libraries
     download:
       type: get
-      url: 'https://github.com/codemirror/CodeMirror/archive/5.24.0.zip'
+      url: 'https://github.com/components/codemirror/archive/5.21.0.zip'
 
   geocomplete:
     directory_name: geocomplete

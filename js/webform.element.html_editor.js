@@ -30,7 +30,7 @@
           contentsCss: [],
           allowedContent: allowedContent,
           // Use <br> tags instead of <p> tags.
-          : CKEDITOR.ENTER_BR,
+          enterMode: CKEDITOR.ENTER_BR,
           shiftEnterMode: CKEDITOR.ENTER_BR,
           // Set auto grow.
           extraPlugins: 'autogrow',
