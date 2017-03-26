@@ -510,7 +510,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    * Track the state of a submission.
    *
    * @return int
-   *   Either STATE_NEW, STATE_DRAFT, STATE_COMPLETED, or STATE_UPDATED,
+   *   Either STATE_UNSAVED, STATE_DRAFT, STATE_COMPLETED, or STATE_UPDATED,
    *   depending on the last save operation performed.
    */
   public function getState() {
