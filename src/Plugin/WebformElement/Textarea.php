@@ -43,6 +43,9 @@ class Textarea extends TextBase {
       'counter_type' => '',
       'counter_maximum' => '',
       'counter_message' => '',
+      // Attributes.
+      'wrapper_attributes' => [],
+      'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
     ] + $this->getDefaultBaseProperties();

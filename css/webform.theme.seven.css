@@ -41,7 +41,7 @@ details details details {
 }
 
 /* System tray divider */
-.ui-resizable-w {
+.ui-dialog.ui-dialog-offcanvas .ui-resizable-w {
   background-color: #bfbfba;
   border: 1px solid #6b6b6b;
   border-width: 1px 2px;

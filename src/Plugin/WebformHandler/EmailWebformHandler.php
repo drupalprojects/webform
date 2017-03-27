@@ -134,7 +134,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       if (is_string($value)) {
         $value = preg_replace('/\[webform_submission:values:([^:]+)(?::raw|:value)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_submission:/', '[', $value);
-        $value = preg_replace('/\[webform_role:([^:]+):mail\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_role:([^:]+)\]/', '[\1]', $value);
       }
     });
     return [
@@ -261,7 +261,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         $role_names = array_intersect_key($role_names, array_combine($roles, $roles));
       }
       foreach ($role_names as $role_name => $role_label) {
-        $roles_element_options["[webform_role:$role_name:mail]"] = new FormattableMarkup('@title (@key)', ['@title' => $role_label, '@key' => $role_name]);
+        $roles_element_options["[webform_role:$role_name]"] = new FormattableMarkup('@title (@key)', ['@title' => $role_label, '@key' => $role_name]);
       }
     }
 
@@ -1010,7 +1010,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       // Set placeholder emails.
       $destination_placeholde_emails = ['example@example.com', '[site:mail]'];
       if ($role_options) {
-        $destination_placeholde_emails[] = '[webform_role:{role}:mail]';
+        $role_names = array_keys($role_options);
+        $destination_placeholde_emails[] = ($role_names[0] === '[webform_role:authenticated]' && isset($role_names[1])) ? $role_names[1] : $role_names[0];
       }
       $element[$options_name] = [
         '#type' => 'webform_mapping',

@@ -14,6 +14,8 @@ use Drupal\webform\Utility\WebformDateHelper;
  * Implements hook_token_info().
  */
 function webform_token_info() {
+  $roles = \Drupal::config('webform.settings')->get('mail.roles');
+
   $types = [];
   $types['webform-authenticated-user'] = [
     'name' => t('Webform authenticated user'),
@@ -25,11 +27,13 @@ function webform_token_info() {
     'description' => t('Tokens related to webform submission.'),
     'needs-data' => 'webform_submission',
   ];
-  $types['webform_role'] = [
-    'name' => t('Webform roles'),
-    'description' => t("Tokens related to user roles that can receive email. <em>This token is only available to a  Webform email handler's 'To', 'CC', and 'BCC' email recipents.</em>"),
-    'needs-data' => 'webform_role',
-  ];
+  if ($roles) {
+    $types['webform_role'] = [
+      'name' => t('Webform roles'),
+      'description' => t("Tokens related to user roles that can receive email. <em>This token is only available to a  Webform email handler's 'To', 'CC', and 'BCC' email recipents.</em>"),
+      'needs-data' => 'webform_role',
+    ];
+  }
   $types['webform'] = [
     'name' => t('Webforms'),
     'description' => t('Tokens related to webforms.'),
@@ -153,11 +157,18 @@ function webform_token_info() {
   ];
 
   $webform_role = [];
-  $webform_role['name'] = [
-    'name' => t('Role name'),
-    'description' => t('The name of the role followed by the desired user property.') . ' ' .
-      t('Only the [webform_role:{role}:mail] token is supported and will return a comma delimited list of user email addresses assigned to the specified role.'),
-  ];
+  if ($roles = \Drupal::config('webform.settings')->get('mail.roles')) {
+    $role_names = array_map('\Drupal\Component\Utility\Html::escape', user_role_names(TRUE));
+    if (!in_array('authenticated', $roles)) {
+      $role_names = array_intersect_key($role_names, array_combine($roles, $roles));
+    }
+    foreach ($role_names as $role_name => $role_label) {
+      $webform_role[$role_name] = [
+        'name' => $role_label,
+        'description' => t('The email addresses of all users assigned to the %title role.', ['%title' => $role_label]),
+      ];
+    }
+  }
   return [
     'types' => $types,
     'tokens' => [
@@ -201,13 +212,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   elseif ($type == 'webform_role' && !empty($data['webform_role'])) {
     $roles = $data['webform_role'];
     $any_role = in_array('authenticated', $roles) ? TRUE : FALSE;
-    foreach ($tokens as $name => $original) {
-      list($role_name, $user_property) = explode(':', $name);
-      // Check that the mail property is specified.
-      if ($user_property !== 'mail') {
-        continue;
-      }
-
+    foreach ($tokens as $role_name => $original) {
       if ($any_role || in_array($role_name, $roles)) {
         if ($role_name == 'authenticated') {
           // Get all active authenticated users.

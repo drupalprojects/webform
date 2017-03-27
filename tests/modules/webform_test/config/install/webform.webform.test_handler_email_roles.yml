@@ -120,9 +120,9 @@ handlers:
     settings:
       to_mail: '[webform_submission:values:role:raw]'
       to_options:
-        authenticated: '[webform_role:authenticated:mail]'
-        administrator: '[webform_role:administrator:mail]'
-        other: '[webform_role:other:mail]'
+        authenticated: '[webform_role:authenticated]'
+        administrator: '[webform_role:administrator]'
+        other: '[webform_role:other]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
