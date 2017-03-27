@@ -4,7 +4,6 @@ namespace Drupal\webform;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Database\Database;
-use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -639,15 +638,17 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    *   An entity query.
    */
   protected function getQuery($keys = '', $state = '') {
-    $query = $this->getStorage()->getQuery();
-    $this->addQueryConditions($query);
+    /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
+    $submission_storage = $this->getStorage();
+    $query = $submission_storage->getQuery();
+    $submission_storage->addQueryConditions($query, $this->webform, $this->sourceEntity, $this->account);
 
     // Filter by key(word).
     if ($keys) {
       $sub_query = Database::getConnection()->select('webform_submission_data', 'sd')
         ->fields('sd', ['sid'])
         ->condition('value', '%' . $keys . '%', 'LIKE');
-      $this->addQueryConditions($sub_query);
+      $submission_storage->addQueryConditions($sub_query, $this->webform, $this->sourceEntity, $this->account);
 
       $or = $query->orConditionGroup()
         ->condition('sid', $sub_query, 'IN')
@@ -662,30 +663,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     }
 
     return $query;
-  }
-
-  /**
-   * Add webform, account, and source entity conditions to a query.
-   *
-   * @param \Drupal\Core\Database\Query\AlterableInterface $query
-   *   The query to execute.
-   */
-  protected function addQueryConditions(AlterableInterface $query) {
-    // Limit submission to the current webform.
-    if ($this->webform) {
-      $query->condition('webform_id', $this->webform->id());
-    }
-
-    // Limit submission to the current user.
-    if ($this->account) {
-      $query->condition('uid', $this->account->id());
-    }
-
-    // Filter entity type and id. (Currently only applies to webform_node.module)
-    if ($this->sourceEntity) {
-      $query->condition('entity_type', $this->sourceEntity->getEntityTypeId());
-      $query->condition('entity_id', $this->sourceEntity->id());
-    }
   }
 
 }

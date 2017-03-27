@@ -37,7 +37,7 @@ class WebformEntityAccessForm extends EntityForm {
       $form['access'][$name]['roles'] = [
         '#type' => 'webform_roles',
         '#title' => $this->t('Roles'),
-        '#include_anonymous' => (in_array($name, ['create', 'view_any'])) ? TRUE : FALSE,
+        '#include_anonymous' => (!in_array($name, ['update_any', 'delete_any', 'purge_any'])) ? TRUE : FALSE,
         '#default_value' => $access[$name]['roles'],
       ];
       $form['access'][$name]['users'] = [

@@ -88,7 +88,6 @@ entity.webform.user.submissions:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_own'
-    _user_is_logged_in: 'TRUE'
 
 entity.webform.user.submission:
   path: '/webform/{webform}/submissions/{webform_submission}'
@@ -106,6 +105,14 @@ entity.webform.user.submission.edit:
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
   requirements:
     _entity_access: 'webform_submission.update'
+
+entity.webform.user.submission.delete:
+  path: '/webform/{webform}/submissions/{webform_submission}/delete'
+  defaults:
+    _entity_form: 'webform_submission.delete'
+    _title: 'Delete webform submission'
+  requirements:
+    _entity_access: 'webform_submission.delete'
 
 entity.webform.test:
   path: '/webform/{webform}/test'
@@ -211,7 +218,6 @@ entity.webform.results_submissions:
   requirements:
     _entity_access: 'webform.submission_view_any'
     _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
-
 
 entity.webform.results_table:
   path: '/admin/structure/webform/manage/{webform}/results/table'

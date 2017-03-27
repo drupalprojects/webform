@@ -3,7 +3,6 @@
 namespace Drupal\webform_node\Tests;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -11,7 +10,7 @@ use Drupal\webform\WebformInterface;
  *
  * @group WebformNode
  */
-class WebformNodeAccessTest extends WebformTestBase {
+class WebformNodeAccessTest extends WebformNodeTestBase {
 
   /**
    * Modules to enable.
@@ -28,6 +27,84 @@ class WebformNodeAccessTest extends WebformTestBase {
 
     // Create users.
     $this->createUsers();
+  }
+
+  /**
+   * Tests webform node access perimissions.
+   *
+   * @see \Drupal\webform\Tests\WebformSubmissionAccessTest::testWebformSubmissionAccessPermissions
+   */
+  public function testAccessPermissions() {
+    global $base_path;
+
+    // Create webform node that references the contact webform.
+    $webform_id = 'contact';
+    $webform = Webform::load($webform_id);
+    $node = $this->drupalCreateNode(['type' => 'webform']);
+    $node->webform->target_id = $webform_id;
+    $node->webform->status = WebformInterface::STATUS_OPEN;
+    $node->save();
+    $nid = $node->id();
+
+    /**************************************************************************/
+    // Own submission permissions (authenticated).
+    /**************************************************************************/
+
+    $this->drupalLogin($this->ownWebformSubmissionUser);
+
+    $edit = ['subject' => '{subject}', 'message' => '{message}'];
+    $sid_1 = $this->postNodeSubmission($node, $edit);
+
+    // Check view own previous submission message.
+    $this->drupalGet("node/{$nid}");
+    $this->assertRaw('You have already submitted this webform.');
+    $this->assertRaw("<a href=\"{$base_path}node/{$nid}/webform/submissions/{$sid_1}\">View your previous submission</a>.");
+
+    // Check 'view own submission' permission.
+    $this->drupalGet("node/{$nid}/webform/submissions/{$sid_1}");
+    $this->assertResponse(200);
+
+    // Check 'edit own submission' permission.
+    $this->drupalGet("node/{$nid}/webform/submissions/{$sid_1}/edit");
+    $this->assertResponse(200);
+
+    // Check 'delete own submission' permission.
+    $this->drupalGet("node/{$nid}/webform/submissions/{$sid_1}/delete");
+    $this->assertResponse(200);
+
+    $sid_2 = $this->postNodeSubmission($node, $edit);
+
+    // Check view own previous submissions message.
+    $this->drupalGet("node/{$nid}");
+    $this->assertRaw('You have already submitted this webform.');
+    $this->assertRaw("<a href=\"{$base_path}node/{$nid}/webform/submissions\">View your previous submissions</a>");
+
+    // Check view own previous submissions.
+    $this->drupalGet("node/{$nid}/webform/submissions");
+    $this->assertResponse(200);
+    $this->assertLinkByHref("{$base_path}node/{$nid}/webform/submissions/{$sid_1}");
+    $this->assertLinkByHref("{$base_path}node/{$nid}/webform/submissions/{$sid_2}");
+
+    // Check webform results access denied.
+    $this->drupalGet("node/{$nid}/webform/results/submissions");
+    $this->assertResponse(403);
+
+    /**************************************************************************/
+    // Any submission permissions.
+    /**************************************************************************/
+
+    // Login as any user
+    $this->drupalLogin($this->anyWebformSubmissionUser);
+
+    // Check webform results access allowed.
+    $this->drupalGet("node/{$nid}/webform/results/submissions");
+    $this->assertResponse(200);
+    $this->assertLinkByHref("{$base_path}node/{$nid}/webform/submission/{$sid_1}");
+    $this->assertLinkByHref("{$base_path}node/{$nid}/webform/submission/{$sid_2}");
+
+    // Check webform submission access allowed.
+    $this->drupalGet("node/{$nid}/webform/submission/{$sid_1}");
+    $this->assertResponse(200);
   }
 
   /**
@@ -57,8 +134,7 @@ class WebformNodeAccessTest extends WebformTestBase {
       'subject' => '{subject}',
       'message' => '{message',
     ];
-    $this->drupalPostForm('node/' . $node->id(), $edit, t('Send message'));
-    $sid = $this->getLastSubmissionId($webform);
+    $sid = $this->postNodeSubmission($node, $edit);
 
     // Check create authenticated/anonymous access.
     $webform->setAccessRules(Webform::getDefaultAccessRules())->save();

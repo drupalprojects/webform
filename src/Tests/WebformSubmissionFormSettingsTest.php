@@ -37,7 +37,6 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     'test_form_novalidate',
     'test_form_details_toggle',
     'test_form_autofocus',
-    'test_form_confidential',
     'test_form_preview',
     'test_form_results_disabled',
     'test_token_update',
@@ -434,28 +433,6 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     // Check webform has autofocus class.
     $this->drupalGet('webform/test_form_autofocus');
     $this->assertCssSelect('.js-webform-autofocus');
-
-    /**************************************************************************/
-    /* Test confidential submissions (form_confidential)*/
-    /**************************************************************************/
-
-    // Check logout warning.
-    $webform_confidential = Webform::load('test_form_confidential');
-    $this->drupalLogin($this->adminWebformUser);
-    $this->drupalGet('webform/test_form_confidential');
-    $this->assertNoFieldById('edit-name');
-    $this->assertRaw('This form is confidential.');
-
-    // Check anonymous access to webform.
-    $this->drupalLogout();
-    $this->drupalGet('webform/test_form_confidential');
-    $this->assertFieldById('edit-name');
-    $this->assertNoRaw('This form is confidential.');
-
-    // Check that submission does not track the requests IP address.
-    $sid = $this->postSubmission($webform_confidential, ['name' => 'John']);
-    $webform_submission = WebformSubmission::load($sid);
-    $this->assertEqual($webform_submission->getRemoteAddr(), t('(unknown)'));
 
     /**************************************************************************/
     /* Test webform preview (form_preview) */

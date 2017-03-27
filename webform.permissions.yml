@@ -1,6 +1,7 @@
 'access webform overview':
   title: 'Access the webform overview page'
   description: 'Get an overview of all webforms.'
+
 'administer webform':
   title: 'Administer webforms'
   description: 'Allows administration of global YAML configuration and options.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
@@ -9,10 +10,12 @@
   description: 'Allows accessing, updating, and deleting <em>all</em> webform submissions.<br/><em>Note: To allow users to administer an individual webform''s submissions, please go to the webform''s ''Access'' tab.</em>'
 'administer webform element access':
   title: 'Administer webform element access'
-  description: 'Restrict webform element access use to certain roles and users.'
-'view any webform submission':
-  title: 'View any webform submissions'
-  description: 'Allows viewing <em>all</em> webforms and submissions.<br/><em>Note: To allow users to view an individual webform''s submissions, please go to the webform''s ''Access'' tab.</em>'
+  description: 'Restrict webform element access to certain roles and users.'
+
+'edit webform assets':
+  title: 'Edit CSS/JS webform assets'
+  description: 'Allows administrators to attach custom CSS and JavaScript to a webform.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+
 'create webform':
   title: 'Create webforms'
 'edit any webform':
@@ -25,8 +28,22 @@
   title: 'Delete any webform'
 'delete own webform':
   title: 'Delete own webform'
-'delete own webform':
-  title: 'Delete own webform'
-'edit webform assets':
-  title: 'Edit CSS/JS webform assets'
-  description: 'Allows administrators to attach custom CSS and JavaScript to a webform.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+
+'view any webform submission':
+  title: 'View any webform submission'
+  description: 'Allows viewing <em>all</em> submissions.'
+'view own webform submission':
+  title: 'View own webform submission'
+  description: 'Allows viewing <em>own/em> submissions.'
+'edit any webform submission':
+  title: 'Edit any webform submission'
+  description: 'Allows updating <em>all</em> submissions.'
+'edit own webform submission':
+  title: 'View own webform submission'
+  description: 'Allows updating <em>own/em> submissions.'
+'delete any webform submission':
+  title: 'Deleting any webform submission'
+  description: 'Allows deleting <em>all</em> submissions.'
+'delete own webform submission':
+  title: 'Delete own webform submission'
+  description: 'Allows deleting <em>own/em> submissions.'

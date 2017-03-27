@@ -2,7 +2,7 @@
 
 namespace Drupal\webform;
 
-use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -150,6 +150,26 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function hasSubmissionValue(WebformInterface $webform, $element_key);
 
   /****************************************************************************/
+  // Query methods.
+  /****************************************************************************/
+
+  /**
+   * Add condition to submission query.
+   *
+   * @param \Drupal\Core\Database\Query\AlterableInterface $query
+   *   The query instance.
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   (optional) A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   * @param array $options
+   *   Additional options and query conditions.
+   */
+  public function addQueryConditions(AlterableInterface $query, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
+
+  /****************************************************************************/
   // Paging methods.
   /****************************************************************************/
 
@@ -237,6 +257,8 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
    *
    * @return array|mixed
    *   An associative array of columns keyed by name.
@@ -252,6 +274,8 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
    *
    * @return array|mixed
    *   An associative array of columns keyed by name.
@@ -267,6 +291,8 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
    *
    * @return array|mixed
    *   An associative array of columns keyed by name.

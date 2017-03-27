@@ -97,3 +97,8 @@ entity.node.webform.user.submission.edit:
   title: 'Edit'
   route_name: entity.node.webform.user.submission.edit
   base_route: entity.node.webform.user.submission
+
+entity.node.webform.user.submission.delete:
+  title: 'Delete'
+  route_name: entity.node.webform.user.submission.delete
+  base_route: entity.node.webform.user.submission

@@ -114,39 +114,70 @@ drush en -y webform captcha image_captcha honeypot validators;
 **Create test roles and users.**
 
 ```bash
+# developer
 drush role-create developer
-drush role-add-perm developer 'view the administration theme,access toolbar,access administration pages,access content overview,access webform overview,administer webform,edit webform assets,administer blocks,administer nodes'
+drush role-add-perm developer '
+  view the administration theme,access toolbar,access administration pages,access content overview,administer blocks,administer nodes,
+  access webform overview,administer webform,edit webform assets'
 drush user-create developer --password="developer"
 drush user-add-role developer developer
 
+# admin
 drush role-create admin
-drush role-add-perm admin 'view the administration theme,access toolbar,access administration pages,access content overview,access webform overview,administer webform submission'
+drush role-add-perm admin '
+  view the administration theme,access toolbar,access administration pages,access content overview,
+  access webform overview,
+  administer webform submission'
 drush user-create admin --password="admin"
 drush user-add-role admin admin
 
+# manager
 drush role-create manager
-drush role-add-perm manager 'view the administration theme,access toolbar,access administration pages,access content overview,access webform overview'
+drush role-add-perm manager '
+  view the administration theme,access toolbar,access administration pages,access content overview,
+  access webform overview'
 drush user-create manager --password="manager"
 drush user-add-role manager manager
 
+# viewer
 drush role-create viewer
-drush role-add-perm viewer 'view the administration theme,access toolbar,access administration pages,access content overview,access webform overview,view any webform submission'
+drush role-add-perm viewer '
+  view the administration theme,access toolbar,access administration pages,access content overview,
+  access webform overview,
+  view any webform submission'
 drush user-create viewer --password="viewer"
 drush user-add-role viewer viewer
 
+# user
 drush role-create user
 drush user-create user --password="user"
 drush user-add-role user user
 
+# any
 drush role-create any
 drush user-create any --password="any"
-drush role-add-perm any 'view the administration theme,access administration pages,access toolbar,access webform overview,edit webform assets,create webform,edit any webform,delete any webform,view webform submissions any node,edit webform submissions any node,delete webform submissions any node'
+drush role-add-perm any '
+  view the administration theme,access toolbar,access administration pages,
+  access webform overview,edit webform assets,
+  create webform,edit any webform,delete any webform,
+  view any webform submission, edit any webform submission, delete any webform submission,
+  view webform submissions any node,edit webform submissions any node,delete webform submissions any node'
 drush user-add-role any any
 
+# own
 drush role-create own
 drush user-create own --password="own"
-drush role-add-perm own 'view the administration theme,access administration pages,access toolbar,access webform overview,edit webform assets,create webform,edit own webform,delete own webform,view webform submissions own node,edit webform submissions own node,delete webform submissions own node'
+drush role-add-perm own '
+  view the administration theme,,access toolbaraccess administration pages,
+   access webform overview,edit webform assets,
+  create webform,edit own webform,delete own webform,
+  view own webform submission, edit own webform submission, delete own webform submission,
+  view webform submissions own node,edit webform submissions own node,delete webform submissions own node'
 drush user-add-role own own
+
+# anonymous
+drush role-add-perm anonymous '
+  view own webform submission, edit own webform submission, delete own webform submission'
 ```
 
 **Create test submissions for 'Contact' and 'Example: Elements' webform.**

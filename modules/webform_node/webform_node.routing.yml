@@ -25,7 +25,6 @@ entity.node.webform.user.submissions:
         type: 'entity:node'
   requirements:
     _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
-    _user_is_logged_in: 'TRUE'
 
 entity.node.webform.user.submission:
   path: '/node/{node}/webform/submissions/{webform_submission}'
@@ -40,8 +39,7 @@ entity.node.webform.user.submission:
       node:
         type: 'entity:node'
   requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
-    _user_is_logged_in: 'TRUE'
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformSubmissionAccess'
 
 entity.node.webform.user.submission.edit:
   path: '/node/{node}/webform/submissions/{webform_submission}/edit'
@@ -50,6 +48,20 @@ entity.node.webform.user.submission.edit:
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
     operation: webform_submission_edit
     entity_access: 'webform_submission.update'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+  requirements:
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformSubmissionAccess'
+
+entity.node.webform.user.submission.delete:
+  path: '/node/{node}/webform/submissions/{webform_submission}/delete'
+  defaults:
+    _entity_form: 'webform_submission.delete'
+    _title: 'Delete webform submission'
+    operation: webform_submission_delete
+    entity_access: 'webform_submission.delete'
   options:
     parameters:
       node:

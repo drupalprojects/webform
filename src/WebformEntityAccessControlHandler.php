@@ -69,6 +69,11 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowed();
       }
 
+      // Allow users with 'view own webform submission' to view own submissions.
+      if ($operation == 'submission_view_own' && $account->hasPermission('view own webform submission')) {
+        return AccessResult::allowed();
+      }
+
       // Completely block access to a template if the user can't create new
       // Webforms.
       if ($operation == 'submission_page' && $entity->isTemplate() && !$entity->access('create')) {

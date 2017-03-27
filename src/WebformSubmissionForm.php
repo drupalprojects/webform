@@ -203,11 +203,9 @@ class WebformSubmissionForm extends ContentEntityForm {
     // on the 'url' cache context.
     $form['#cache']['contexts'][] = 'url';
 
-    // If drafts enabled for anonymous users.
-    // We must add $SESSION to the form's cache context.
-    // @see \Drupal\webform\WebformSubmissionStorage::loadDraft
-    // @todo Add support for 'view own submission' permission.
-    if ($this->draftEnabled() && $this->currentUser()->isAnonymous()) {
+    // All anonymous submissions are tracked in the $_SESSION.
+    // @see \Drupal\webform\WebformSubmissionStorage::setAnonymousSubmission
+    if ($this->currentUser()->isAnonymous()) {
       $form['#cache']['contexts'][] = 'session';
     }
 
@@ -522,7 +520,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->isGet()
       && $this->getWebformSetting('form_previous_submissions', FALSE)
       && ($this->isRoute('entity.webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
-      && $webform->access('submission_view_own')
+      && ($webform->access('submission_view_own') || $this->currentUser()->hasPermission('view own webform submission'))
       && ($previous_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
     ) {
       if ($previous_total > 1) {

@@ -221,6 +221,10 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
   }
 
   $variables['#attached']['library'][] = 'webform/webform.navigation';
+
+  // Never cache navigation because previous and next submission will change
+  // as submissions are added and deleted.
+  $variables['#cache'] = ['max-age' => 0];
 }
 
 /**

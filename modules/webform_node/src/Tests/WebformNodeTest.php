@@ -5,7 +5,6 @@ namespace Drupal\webform_node\Tests;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -13,7 +12,7 @@ use Drupal\webform\WebformInterface;
  *
  * @group WebformNode
  */
-class WebformNodeTest extends WebformTestBase {
+class WebformNodeTest extends WebformNodeTestBase {
 
   /**
    * Modules to enable.
@@ -86,7 +85,7 @@ class WebformNodeTest extends WebformTestBase {
     $node->webform->open = '';
     $node->webform->close = '';
     $node->save();
-    $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
+    $this->postNodeSubmission($node);
     $this->assertRaw('This is a custom inline confirmation message.');
 
     /**************************************************************************/
@@ -173,15 +172,15 @@ class WebformNodeTest extends WebformTestBase {
 
     // Check per source entity user limit.
     $this->drupalLogin($this->normalUser);
-    $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
+    $this->postNodeSubmission($node);
     $this->drupalGet('node/' . $node->id());
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw('You are only allowed to have 1 submission for this webform.');
     $this->drupalLogout();
 
     // Check per source entity total limit.
-    $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
-    $this->drupalPostForm('node/' . $node->id(), [], t('Submit'));
+    $this->postNodeSubmission($node);
+    $this->postNodeSubmission($node);
     $this->drupalGet('node/' . $node->id());
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw('Only 3 submissions are allowed.');

@@ -1832,7 +1832,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element_key = $form_object->getKey();
       if ($this->submissionStorage->hasSubmissionValue($webform, $element_key)) {
         $form['element']['multiple']['#disabled'] = TRUE;
-        $form['element']['multiple']['#description'] = '<em>' . $this->t('There is data for this element in the database. This settings can no longer be changed.') . '</em>';
+        $form['element']['multiple']['#description'] = '<em>' . $this->t('There is data for this element in the database. This setting can no longer be changed.') . '</em>';
       }
     }
 

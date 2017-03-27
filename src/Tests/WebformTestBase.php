@@ -9,6 +9,7 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\simpletest\WebTestBase;
+use Drupal\user\Entity\Role;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
@@ -88,6 +89,20 @@ abstract class WebformTestBase extends WebTestBase {
   protected $anyWebformUser;
 
   /**
+   * A webform submission own access.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $ownWebformSubmissionUser;
+
+  /**
+   * A webform submission any access.
+   *
+   * @var \Drupal\user\UserInterface
+   */
+  protected $anyWebformSubmissionUser;
+
+  /**
    * Create webform test users.
    */
   protected function createUsers() {
@@ -125,6 +140,9 @@ abstract class WebformTestBase extends WebTestBase {
       'create webform',
       'edit own webform',
       'delete own webform',
+      'view own webform submission',
+      'edit own webform submission',
+      'delete own webform submission',
     ]));
 
     // Any webform user.
@@ -135,10 +153,36 @@ abstract class WebformTestBase extends WebTestBase {
       'delete any webform',
     ]));
 
+    // Own webform submission user.
+    $this->ownWebformSubmissionUser = $this->drupalCreateUser(array_merge($default_user_permissions, [
+      'view own webform submission',
+      'edit own webform submission',
+      'delete own webform submission',
+    ]));
+
+    // Any webform submission user.
+    $this->anyWebformSubmissionUser = $this->drupalCreateUser(array_merge($default_user_permissions, [
+      'view any webform submission',
+      'edit any webform submission',
+      'delete any webform submission',
+    ]));
+
     // Admin submission user.
     $this->adminSubmissionUser = $this->drupalCreateUser(array_merge($default_user_permissions, [
       'administer webform submission',
     ]));
+  }
+
+  /**
+   * Add webform submission own permissions to anonymous role.
+   */
+  protected function addWebformSubmissionOwnPermissionsToAnonymous() {
+    /** @var \Drupal\user\RoleInterface $anonymous_role */
+    $anonymous_role = Role::load('anonymous');
+    $anonymous_role->grantPermission('view own webform submission')
+      ->grantPermission('edit own webform submission')
+      ->grantPermission('delete own webform submission')
+      ->save();
   }
 
   /****************************************************************************/

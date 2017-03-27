@@ -4,6 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -118,20 +119,14 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * {@inheritdoc}
    */
   public function deleteAll(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, $limit = NULL, $max_sid = NULL) {
-    $query = $this->getQuery()
-      ->sort('sid');
-    if ($webform) {
-      $query->condition('webform_id', $webform->id());
-    }
-    if ($source_entity) {
-      $query->condition('entity_type', $source_entity->getEntityTypeId());
-      $query->condition('entity_id', $source_entity->id());
-    }
-    if ($limit) {
-      $query->range(0, $limit);
-    }
+    $query = $this->getQuery();
+    $this->addQueryConditions($query, $webform, $source_entity, NULL);
     if ($max_sid) {
       $query->condition('sid', $max_sid, '<=');
+    }
+    $query->sort('sid');
+    if ($limit) {
+      $query->range(0, $limit);
     }
 
     $entity_ids = $query->execute();
@@ -145,17 +140,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    */
   public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
     $query = $this->getQuery();
-    $query->condition('in_draft', FALSE);
-    if ($webform) {
-      $query->condition('webform_id', $webform->id());
-    }
-    if ($source_entity) {
-      $query->condition('entity_type', $source_entity->getEntityTypeId());
-      $query->condition('entity_id', $source_entity->id());
-    }
-    if ($account) {
-      $query->condition('uid', $account->id());
-    }
+    $this->addQueryConditions($query, $webform, $source_entity, $account, ['in_draft' => FALSE]);
 
     // Issue: Query count method is not working for SQL Lite.
     // return $query->count()->execute();
@@ -168,18 +153,10 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    */
   public function getMaxSubmissionId(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
     $query = $this->getQuery();
+    $this->addQueryConditions($query, $webform, $source_entity, $account);
     $query->sort('sid', 'DESC');
-    if ($webform) {
-      $query->condition('webform_id', $webform->id());
-    }
-    if ($source_entity) {
-      $query->condition('entity_type', $source_entity->getEntityTypeId());
-      $query->condition('entity_id', $source_entity->id());
-    }
-    if ($account) {
-      $query->condition('uid', $account->id());
-    }
     $query->range(0, 1);
+
     $result = $query->execute();
     return reset($result);
   }
@@ -195,6 +172,53 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       ->condition('sd.name', $element_key)
       ->execute();
     return $result->fetchAssoc() ? TRUE : FALSE;
+  }
+
+  /****************************************************************************/
+  // Query methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addQueryConditions(AlterableInterface $query, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+    // Set default options/conditions.
+    $options += [
+      'check_source_entity' => FALSE,
+      'in_draft' => NULL,
+    ];
+
+    if ($webform) {
+      $query->condition('webform_id', $webform->id());
+    }
+
+    if ($source_entity) {
+      $query->condition('entity_type', $source_entity->getEntityTypeId());
+      $query->condition('entity_id', $source_entity->id());
+    }
+    elseif ($options['check_source_entity']) {
+      $query->notExists('entity_type');
+      $query->notExists('entity_id');
+    }
+
+    if ($account) {
+      $query->condition('uid', $account->id());
+      // Add anonymous submission ids stored in $_SESSION.
+      if ($account->isAnonymous() && $account->id() == $this->currentUser->id()) {
+        $sids = $this->getAnonymousSubmissionIds($account);
+        if (empty($sids)) {
+          // Look for NULL sid to force returning no results.
+          $query->condition('sid', NULL);
+        }
+        else {
+          $query->condition('sid', $sids, 'IN');
+        }
+      }
+    }
+
+    if ($options['in_draft'] !== NULL) {
+      $query->condition('in_draft', $options['in_draft']);
+    }
   }
 
   /****************************************************************************/
@@ -253,38 +277,20 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    */
   protected function getTerminusSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $sort = 'DESC') {
     $query = $this->getQuery();
-    $query->condition('webform_id', $webform->id());
-    $query->condition('in_draft', FALSE);
-    $query->range(0, 1);
-    if ($source_entity) {
-      $query->condition('entity_type', $source_entity->getEntityTypeId());
-      $query->condition('entity_id', $source_entity->id());
-    }
-    if ($account) {
-      $query->condition('uid', $account->id());
-    }
+    $this->addQueryConditions($query, $webform, $source_entity, $account, ['in_draft' => FALSE]);
     $query->sort('sid', $sort);
+    $query->range(0, 1);
     return ($entity_ids = $query->execute()) ? $this->load(reset($entity_ids)) : NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function getSiblingSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $entity = NULL, AccountInterface $account = NULL, $direction = 'previous') {
+  protected function getSiblingSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $direction = 'previous') {
     $webform = $webform_submission->getWebform();
 
     $query = $this->getQuery();
-    $query->condition('webform_id', $webform->id());
-    $query->range(0, 1);
-
-    if ($entity) {
-      $query->condition('entity_type', $entity->getEntityTypeId());
-      $query->condition('entity_id', $entity->id());
-    }
-
-    if ($account) {
-      $query->condition('uid', $account->id());
-    }
+    $this->addQueryConditions($query, $webform, $source_entity, $account);
 
     if ($direction == 'previous') {
       $query->condition('sid', $webform_submission->id(), '<');
@@ -294,6 +300,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $query->condition('sid', $webform_submission->id(), '>');
       $query->sort('sid', 'ASC');
     }
+
+    $query->range(0, 1);
 
     return ($entity_ids = $query->execute()) ? $this->load(reset($entity_ids)) : NULL;
   }
@@ -898,54 +906,23 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /****************************************************************************/
 
   /**
-   * We use session for storing draft tokens. So we can only do it for the
-   * current user.
-   *
-   * We do not use PrivateTempStore because it utilizes session ID as the key in
-   * key-value hash map where it stores its data. During user login the session
-   * ID is regenerated (see user_login_finalize()) so it is not suitable for us
-   * since we need to "carry" the draft tokens from anonymous session to the
-   * logged in one.
-   *
-   * @see WebformSubmissionStorage::loadDraft
-   * @see WebformSubmissionStorage::setAnonymousSubmission
-   * @see WebformSubmissionStorage::userLogin
-   */
-
-  /**
    * {@inheritdoc}
    */
   public function loadDraft(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
+    $options = [
+      'check_source_entity' => TRUE,
+      'in_draft' => TRUE,
+    ];
+
     $query = $this->getQuery();
-    $query->condition('in_draft', TRUE);
-    $query->condition('webform_id', $webform->id());
-    $query->condition('uid', $account->id());
+    $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
 
-    // Add anonymous submission ids to query conditions.
-    if ($account->isAnonymous()) {
-      $sids = $this->getAnonymousSubmissionIds($account);
-      if (empty($sids)) {
-        return NULL;
-      }
-      $query->condition('sid', $sids, 'IN');
-    }
-
-    if ($source_entity) {
-      $query->condition('entity_type', $source_entity->getEntityTypeId());
-      $query->condition('entity_id', $source_entity->id());
-    }
-    else {
-      $query->notExists('entity_type');
-      $query->notExists('entity_id');
-    }
-
-    if ($sids = $query->execute()) {
-      return $this->load(reset($sids));
-    }
-    else {
-      return NULL;
-    }
+    return ($sids = $query->execute()) ? $this->load(reset($sids)) : NULL;
   }
+
+  /****************************************************************************/
+  // Anonymous submission methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -958,31 +935,47 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     // Move all anonymous submissions to UID of this account.
     $query = $this->getQuery();
     $query->condition('uid', 0);
-    // @todo Remove once 'view own submission' permission is implmented.
-    $query->condition('in_draft', 1);
     $query->condition('sid', $_SESSION['webform_submissions'], 'IN');
     if ($sids = $query->execute()) {
       $webform_submissions = $this->loadMultiple($sids);
-      foreach ($webform_submissions as $webform_submission) {
+      foreach ($webform_submissions as $sid => $webform_submission) {
+        // Do not convert anonymous confidential submission to authenticated
+        // submissions.
+        if ($webform_submission->getWebform()->isConfidential()) {
+          continue;
+        }
+
+        unset($_SESSION['webform_submissions'][$sid]);
         $webform_submission->setOwner($account);
         $webform_submission->save();
       }
     }
 
-    // Now that the user has logged in, we can purge all webform submission
-    // tokens.
+    // Now that the user has logged in because when the log out $_SESSION is
+    // completely reset.
     unset($_SESSION['webform_submissions']);
   }
 
-  /****************************************************************************/
-  // Anonymous submission methods.
-  /****************************************************************************/
-
   /**
-   * Track anonymous submissions used for drafts.
+   * Track anonymous submissions.
+   *
+   * Anonymous submission are tracked so that they can be assigned to the user
+   * if they login.
+   *
+   * We use session for storing draft tokens. So we can only do it for the
+   * current user.
+   *
+   * We do not use PrivateTempStore because it utilizes session ID as the key in
+   * key-value hash map where it stores its data. During user login the session
+   * ID is regenerated (see user_login_finalize()) so it is not suitable for us
+   * since we need to "carry" the draft tokens from anonymous session to the
+   * logged in one.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
+   *
+   * @see WebformSubmissionStorage::loadDraft
+   * @see WebformSubmissionStorage::userLogin
    */
   protected function setAnonymousSubmission(WebformSubmissionInterface $webform_submission) {
     // Make sure the account and current user are identical.
@@ -995,15 +988,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       return;
     }
 
-    // @todo Check 'view own submission' permission.
-    // Check that submission is a draft.
-    // @see \Drupal\webform\WebformSubmissionForm::actions
-    if (!$webform_submission->isDraft()) {
-      return;
-    }
-
-    // Finally add the submission's token to the anonymous user's
-    // session draft tokens.
     $_SESSION['webform_submissions'][$webform_submission->id()] = $webform_submission->id();
   }
 

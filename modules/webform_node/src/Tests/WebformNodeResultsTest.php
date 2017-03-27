@@ -4,7 +4,6 @@ namespace Drupal\webform_node\Tests;
 
 use Drupal\Core\Url;
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -12,7 +11,7 @@ use Drupal\webform\WebformInterface;
  *
  * @group WebformNode
  */
-class WebformNodeResultsTest extends WebformTestBase {
+class WebformNodeResultsTest extends WebformNodeTestBase {
 
   /**
    * Modules to enable.
@@ -70,16 +69,14 @@ class WebformNodeResultsTest extends WebformTestBase {
         'subject' => "Node $i subject",
         'message' => "Node $i message",
       ];
-      $this->drupalPostForm('node/' . $node->id(), $edit, t('Send message'));
-      $node_sids[$i] = $this->getLastSubmissionId($webform);
+      $node_sids[$i] = $this->postNodeSubmission($node, $edit);
       $edit = [
         'name' => "webform$i",
         'email' => "webform$i@example.com",
         'subject' => "Webform $i subject",
         'message' => "Webform $i message",
       ];
-      $this->drupalPostForm('webform/contact', $edit, t('Send message'));
-      $webform_sids[$i] = $this->getLastSubmissionId($webform);
+      $webform_sids[$i] = $this->postSubmission($webform, $edit);
     }
 
     // Check that 6 submission were created.
