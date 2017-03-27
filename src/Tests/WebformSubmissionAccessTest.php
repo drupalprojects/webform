@@ -116,7 +116,7 @@ class WebformSubmissionAccessTest extends WebformTestBase {
     $this->addWebformSubmissionOwnPermissionsToAnonymous();
     $this->drupalLogout();
 
-    $edit = ['email' => 'example@example.com', 'subject' => '{subject}', 'message' => '{message}'];
+    $edit = ['name' => '{name}', 'email' => 'example@example.com', 'subject' => '{subject}', 'message' => '{message}'];
     $sid_1 = $this->postSubmission($webform, $edit);
 
     // Check view own previous submission message.
