@@ -55,6 +55,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return $text;
     }
 
+    // Set token options.
+    $options += ['clear' => TRUE];
+
     // Replace @deprecated [webform-submission] with [webform_submission].
     $text = str_replace('[webform-submission:', '[webform_submission:', $text);
 
