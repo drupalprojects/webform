@@ -19,6 +19,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformElementManagerInterface;
 use Drupal\webform\WebformHandlerBase;
 use Drupal\webform\WebformHandlerMessageInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -137,6 +138,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         $value = preg_replace('/\[webform_role:([^:]+)\]/', '[\1]', $value);
       }
     });
+
+    $states = [
+      WebformSubmissionInterface::STATE_DRAFT => $this->t('Draft'),
+      WebformSubmissionInterface::STATE_COMPLETED => $this->t('Completed'),
+      WebformSubmissionInterface::STATE_UPDATED => $this->t('Updated'),
+      WebformSubmissionInterface::STATE_DELETED => $this->t('Deleted'),
+    ];
+    $settings['states'] = array_intersect_key($states, array_combine($settings['states'], $settings['states']));
+
     return [
       '#settings' => $settings,
     ] + parent::getSummary();
@@ -147,6 +157,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function defaultConfiguration() {
     return [
+      'states' => [WebformSubmissionInterface::STATE_COMPLETED],
       'to_mail' => 'default',
       'to_options' => [],
       'cc_mail' => '',
@@ -184,6 +195,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $default_mail = $webform_settings->get('mail.default_to_mail') ?: $site_settings->get('mail') ?: ini_get('sendmail_from');
 
     $this->defaultValues = [
+      'states' => [WebformSubmissionInterface::STATE_COMPLETED],
       'to_mail' => $default_mail,
       'to_options' => [],
       'cc_mail' => $default_mail,
@@ -404,10 +416,26 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
 
     // Settings.
+    $results_disabled = $this->getWebform()->getSetting('results_disabled');
     $form['settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Settings'),
     ];
+    $form['settings']['states'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Send email'),
+      '#options' => [
+        WebformSubmissionInterface::STATE_DRAFT => $this->t('...when <b>draft</b> is saved.'),
+        WebformSubmissionInterface::STATE_COMPLETED => $this->t('...when submission is <b>completed</b>.'),
+        WebformSubmissionInterface::STATE_UPDATED => $this->t('...when submission is <b>updated</b>.'),
+        WebformSubmissionInterface::STATE_DELETED => $this->t('...when submission is <b>deleted</b>.'),
+      ],
+      '#required' => TRUE,
+      '#access' => $results_disabled ? FALSE : TRUE,
+      '#parents' => ['settings', 'states'],
+      '#default_value' => $results_disabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $this->configuration['states'],
+    ];
+
     $form['settings']['reply_to'] = [
       '#type' => 'email',
       '#title' => $this->t('Reply-to email'),
@@ -505,9 +533,18 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * {@inheritdoc}
    */
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
-    $is_results_disabled = $webform_submission->getWebform()->getSetting('results_disabled');
-    $is_completed = ($webform_submission->getState() == WebformSubmissionInterface::STATE_COMPLETED);
-    if ($is_results_disabled || $is_completed) {
+    $state = $webform_submission->getWebform()->getSetting('results_disabled') ? WebformSubmissionInterface::STATE_COMPLETED : $webform_submission->getState();
+    if (in_array($state, $this->configuration['states'])) {
+      $message = $this->getMessage($webform_submission);
+      $this->sendMessage($message);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postDelete(WebformSubmissionInterface $webform_submission) {
+    if (in_array(WebformSubmissionInterface::STATE_DELETED, $this->configuration['states'])) {
       $message = $this->getMessage($webform_submission);
       $this->sendMessage($message);
     }

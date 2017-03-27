@@ -122,6 +122,8 @@ handlers:
     status: false
     weight: -9
     settings:
+      states:
+        - completed
       to_mail: default
       to_options: {  }
       cc_mail: ''
@@ -153,6 +155,8 @@ handlers:
     status: false
     weight: -10
     settings:
+      states:
+        - completed
       to_mail: default
       to_options: {  }
       cc_mail: ''

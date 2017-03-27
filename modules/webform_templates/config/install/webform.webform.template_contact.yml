@@ -127,6 +127,8 @@ handlers:
     status: true
     weight: 1
     settings:
+      states:
+        - completed
       to_mail: '[webform_submission:values:email:raw]'
       to_options: {  }
       cc_mail: ''
@@ -151,6 +153,8 @@ handlers:
     status: true
     weight: 1
     settings:
+      states:
+        - completed
       to_mail: default
       to_options: {  }
       cc_mail: ''

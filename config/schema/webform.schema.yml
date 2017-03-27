@@ -691,6 +691,12 @@ webform.handler.email:
   type: mapping
   label: 'Email'
   mapping:
+    states:
+      type: sequence
+      label: 'States'
+      sequence:
+        type: string
+        label: 'State'
     to_mail:
       label: 'Email to address'
       type: email

@@ -1417,7 +1417,16 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   TRUE if drafts are enabled.
    */
   protected function draftEnabled() {
+    // Can't saved drafts when saving results is disabled.
     if ($this->getWebformSetting('results_disabled')) {
+      return FALSE;
+    }
+
+    /** @var WebformSubmissionInterface $webform_submission */
+    $webform_submission = $this->getEntity();
+
+    // Once a form is completed drafts are no longer applicable.
+    if ($webform_submission->isCompleted()) {
       return FALSE;
     }
 
@@ -1426,8 +1435,6 @@ class WebformSubmissionForm extends ContentEntityForm {
         return TRUE;
 
       case WebformInterface::DRAFT_ENABLED_AUTHENTICATED:
-        /** @var WebformSubmissionInterface $webform_submission */
-        $webform_submission = $this->getEntity();
         return $webform_submission->getOwner()->isAuthenticated();
 
       case WebformInterface::DRAFT_ENABLED_NONE:

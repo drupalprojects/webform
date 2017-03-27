@@ -126,6 +126,8 @@ handlers:
     status: true
     weight: 0
     settings:
+      states:
+        - completed
       to_mail: '[webform_submission:values:select:raw]'
       to_options:
         'Yes': yes@example.com
@@ -151,6 +153,8 @@ handlers:
     status: true
     weight: 0
     settings:
+      states:
+        - completed
       to_mail: '[webform_submission:values:select:raw]'
       to_options:
         _empty_: empty@example.com
@@ -176,6 +180,8 @@ handlers:
     status: true
     weight: 0
     settings:
+      states:
+        - completed
       to_mail: '[webform_submission:values:select:raw]'
       to_options:
         _default_: default@default.com
@@ -201,6 +207,8 @@ handlers:
     status: true
     weight: 1
     settings:
+      states:
+        - completed
       to_mail: '[webform_submission:values:checkboxes:raw]'
       to_options:
         Sunday: sunday@example.com
@@ -227,6 +235,8 @@ handlers:
     status: true
     weight: 2
     settings:
+      states:
+        - completed
       to_mail: '[webform_submission:values:radios_other:raw]'
       to_options:
         _other_: other@example.com

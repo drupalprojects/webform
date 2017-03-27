@@ -531,7 +531,7 @@ function drush_webform_repair() {
   _webform_update_admin_settings();
 
   drush_print('Repairing webform settings...');
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /******************************************************************************/

@@ -145,7 +145,7 @@ function _webform_update_admin_settings() {
  *
  * @see \Drupal\webform\Entity\Webform::setSettings
  */
-function _webform_update_form_settings() {
+function _webform_update_webform_settings() {
   $default_properties = [
     'langcode' => 'en',
     'status' => WebformInterface::STATUS_OPEN,
@@ -194,6 +194,48 @@ function _webform_update_form_settings() {
 
     // Save data.
     $webform_config->setData($data)->save();
+  }
+}
+
+/**
+ * Update webform handler setting to reflect changes in a handler's default configuration.
+ *
+ * @param $handler_id
+ *   A webform handler id.
+ *
+ * @see \Drupal\webform\WebformHandlerInterface
+ */
+function _webform_update_webform_handler_settings($handler_id) {
+  /** @var \Drupal\webform\WebformHandlerManagerInterface $handler_manager */
+  $handler_manager = \Drupal::service('plugin.manager.webform.handler');
+  /** @var \Drupal\webform\WebformHandlerInterface $handler */
+  $handler = $handler_manager->createInstance($handler_id);
+
+  $default_settings = $handler->defaultConfiguration();
+
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if ($handler['id'] === $handler_id) {
+        $has_handler = TRUE;
+
+        $settings = $default_settings;
+        foreach ($handler['settings'] as $settings_key => $setting_value) {
+          $settings[$settings_key] = $setting_value;
+        }
+
+        $handler['settings'] = $settings;
+      }
+    }
+
+    if ($has_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
   }
 }
 
@@ -397,7 +439,7 @@ function webform_update_8007() {
  * Issue #2839615: Disabling message about viewing user's previous submissions.
  */
 function webform_update_8008() {
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
@@ -405,7 +447,7 @@ function webform_update_8008() {
  */
 function webform_update_8009() {
   _webform_update_admin_settings();
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
@@ -413,7 +455,7 @@ function webform_update_8009() {
  */
 function webform_update_8010() {
   _webform_update_admin_settings();
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
@@ -575,14 +617,14 @@ function webform_update_8017() {
  */
 function webform_update_8018() {
   _webform_update_admin_settings();
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
  * Issue #2853302: Allow confirmation page title to be customized.
  */
 function webform_update_8019() {
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
@@ -594,7 +636,7 @@ function webform_update_8020() {
   foreach ($webforms as $webform) {
     $webform->setStatus($webform->get('status'))->save();
   }
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
@@ -683,7 +725,7 @@ function webform_update_8024() {
     $webform_config->clear('settings.form_closed_message');
     $webform_config->save();
   }
-  _webform_update_form_settings();
+  _webform_update_webform_settings();
 }
 
 /**
@@ -816,4 +858,11 @@ function webform_update_8030() {
     $data['settings']['draft'] = ($data['settings']['draft'] == TRUE) ? WebformInterface::DRAFT_ENABLED_AUTHENTICATED : WebformInterface::DRAFT_ENABLED_NONE;
     $webform_config->setData($data)->save();
   }
+}
+
+/**
+ * Issue #2854021: Send email based on element options selection.
+ */
+function webform_update_8031() {
+  _webform_update_webform_handler_settings('email');
 }

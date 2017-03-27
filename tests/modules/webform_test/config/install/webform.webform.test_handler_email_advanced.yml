@@ -140,6 +140,8 @@ handlers:
     status: true
     weight: 1
     settings:
+      states:
+        - completed
       to_mail: to@example.com
       to_options: {  }
       cc_mail: ''

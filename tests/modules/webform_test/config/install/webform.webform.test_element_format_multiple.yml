@@ -1620,6 +1620,8 @@ handlers:
     status: true
     weight: 1
     settings:
+      states:
+        - completed
       to_mail: default
       to_options: {  }
       cc_mail: ''
@@ -1644,6 +1646,8 @@ handlers:
     status: true
     weight: 2
     settings:
+      states:
+        - completed
       to_mail: default
       to_options: {  }
       cc_mail: ''

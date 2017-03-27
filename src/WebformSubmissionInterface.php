@@ -31,6 +31,11 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
   const STATE_UPDATED = 'updated';
 
   /**
+   * Return status for submission that has been deleted.
+   */
+  const STATE_DELETED = 'deleted';
+
+  /**
    * Gets the serial number.
    *
    * @return int
