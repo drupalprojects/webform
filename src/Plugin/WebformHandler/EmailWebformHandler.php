@@ -765,7 +765,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function sendMessage(array $message) {
     $to = $message['to_mail'];
-    $from = $message['from_mail'] . (($message['from_name']) ? ' <' . $message['from_name'] . '>' : '');
+    $from = $message['from_mail'];
+    if (!empty($message['from_name'])) {
+      $from = $message['from_name'] . ' <'  . $from . '>';
+    }
+
     $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     // Don't send the message if To, CC, and BCC is empty.
