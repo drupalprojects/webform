@@ -64,6 +64,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "results-submissions" = "/admin/structure/webform/manage/{webform}/results/submissions",
  *     "results-table" = "/admin/structure/webform/manage/{webform}/results/table",
  *     "results-export" = "/admin/structure/webform/manage/{webform}/results/download",
+ *     "results-log" = "/admin/structure/webform/manage/{webform}/results/log",
  *     "results-clear" = "/admin/structure/webform/manage/{webform}/results/clear",
  *     "collection" = "/admin/structure/webform",
  *   },

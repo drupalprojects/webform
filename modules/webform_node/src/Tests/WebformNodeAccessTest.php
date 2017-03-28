@@ -38,12 +38,7 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
     global $base_path;
 
     // Create webform node that references the contact webform.
-    $webform_id = 'contact';
-    $webform = Webform::load($webform_id);
-    $node = $this->drupalCreateNode(['type' => 'webform']);
-    $node->webform->target_id = $webform_id;
-    $node->webform->status = WebformInterface::STATUS_OPEN;
-    $node->save();
+    $node = $this->createWebformNode('contact');
     $nid = $node->id();
 
     /**************************************************************************/
@@ -113,12 +108,8 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
    * @see \Drupal\webform\Tests\WebformAccessTest::testAccessRules
    */
   public function testAccessRules() {
-    // Create webform node that references the contact webform.
     $webform = Webform::load('contact');
-    $node = $this->drupalCreateNode(['type' => 'webform']);
-    $node->webform->target_id = 'contact';
-    $node->webform->status = WebformInterface::STATUS_OPEN;
-    $node->save();
+    $node = $this->createWebformNode('contact');
     $nid = $node->id();
 
     // Log in normal user and get their rid.

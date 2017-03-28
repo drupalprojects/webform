@@ -687,6 +687,11 @@ webform.handler.*:
   type: mapping
   label: 'Handler settings'
 
+webform.handler.log:
+  type: mapping
+  label: 'Log'
+  mapping: {  }
+
 webform.handler.email:
   type: mapping
   label: 'Email'

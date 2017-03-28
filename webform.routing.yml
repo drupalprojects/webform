@@ -284,6 +284,20 @@ entity.webform.results_clear:
     _entity_access: 'webform.submission_purge_any'
     _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
+entity.webform.results_log:
+  path: '/admin/structure/webform/manage/{webform}/results/log'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformSubmissionLogController::overview'
+    _title_callback: 'Drupal\webform\Controller\WebformController::title'
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _permission: 'access webform submission log'
+    _entity_access: 'webform.submission_view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+
 # Webform options
 
 entity.webform_options.collection:
@@ -328,13 +342,24 @@ entity.webform_submission.collection:
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccess:checkSubmissionAccess'
 
-entity.webform_submission.purge:
+entity.webform_submission.results_purge:
   path: '/admin/structure/webform/results/purge'
   defaults:
     _form: 'Drupal\webform\Form\WebformSubmissionsPurgeForm'
     _title: 'Webforms: Results purge'
   requirements:
     _permission: 'administer webform'
+
+# Webform log (submissions)
+
+entity.webform_submission.results_log:
+  path: '/admin/structure/webform/log'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformSubmissionLogController::overview'
+    _title: 'Webforms'
+  requirements:
+    _permission: 'access webform submission log'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkSubmissionAccess'
 
 # Webform submissions
 
@@ -372,6 +397,15 @@ entity.webform_submission.yaml:
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
     type: 'yaml'
   requirements:
+    _entity_access: 'webform_submission.view_any'
+
+entity.webform_submission.log:
+  path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/log'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformSubmissionLogController::overview'
+    _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
+  requirements:
+    _permission: 'access webform submission log'
     _entity_access: 'webform_submission.view_any'
 
 entity.webform_submission.edit_form:

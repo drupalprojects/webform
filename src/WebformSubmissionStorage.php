@@ -664,6 +664,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     $return = parent::delete($entities);
     $this->deleteData($entities);
+    $this->deleteLog($entities);
 
     foreach ($entities as $entity) {
       $this->invokeWebformElements('postDelete', $entity);
@@ -886,7 +887,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   }
 
   /**
-   * Delete webform submission data fromthe 'webform_submission_data' table.
+   * Delete webform submission data from the 'webform_submission_data' table.
    *
    * @param array $webform_submissions
    *   An array of webform submissions.
@@ -897,6 +898,45 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $sids[$webform_submission->id()] = $webform_submission->id();
     }
     $this->database->delete('webform_submission_data')
+      ->condition('sid', $sids, 'IN')
+      ->execute();
+  }
+
+  /****************************************************************************/
+  // Log methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function log(WebformSubmissionInterface $webform_submission, array $values = []) {
+    $values += [
+      'uid' => $this->currentUser->id(),
+      'sid' => $webform_submission->id(),
+      'handler_id' => NULL,
+      'data' => [],
+      'timestamp' => time(),
+    ];
+    $values['data'] = serialize($values['data']);
+
+    \Drupal::database()
+      ->insert('webform_submission_log')
+      ->fields($values)
+      ->execute();
+  }
+
+  /**
+   * Delete webform submission events from the 'webform_submission_log' table.
+   *
+   * @param array $webform_submissions
+   *   An array of webform submissions.
+   */
+  protected function deleteLog(array $webform_submissions) {
+    $sids = [];
+    foreach ($webform_submissions as $webform_submission) {
+      $sids[$webform_submission->id()] = $webform_submission->id();
+    }
+    $this->database->delete('webform_submission_log')
       ->condition('sid', $sids, 'IN')
       ->execute();
   }
@@ -936,6 +976,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $query = $this->getQuery();
     $query->condition('uid', 0);
     $query->condition('sid', $_SESSION['webform_submissions'], 'IN');
+    $query->sort('sid');
     if ($sids = $query->execute()) {
       $webform_submissions = $this->loadMultiple($sids);
       foreach ($webform_submissions as $sid => $webform_submission) {
@@ -946,8 +987,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         }
 
         unset($_SESSION['webform_submissions'][$sid]);
-        $webform_submission->setOwner($account);
-        $webform_submission->save();
+        $webform_submission->convert($account);
       }
     }
 

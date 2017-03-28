@@ -22,21 +22,6 @@ class WebformSubmissionStorageTest extends WebformTestBase {
   protected static $modules = ['webform'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown() {
-    $this->purgeSubmissions();
-    parent::tearDown();
-  }
-
-  /**
    * Test webform submission storage.
    */
   public function testSubmissionStorage() {

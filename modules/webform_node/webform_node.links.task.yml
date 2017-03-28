@@ -29,6 +29,11 @@ entity.node.webform.results_clear:
   route_name: entity.node.webform.results_clear
   parent_id: entity.node.webform.results
 
+entity.node.webform.results_log:
+  title: 'Log'
+  route_name: entity.node.webform.results_log
+  parent_id: entity.node.webform.results
+
 # Submission
 
 entity.node.webform_submission.canonical:
@@ -84,6 +89,11 @@ entity.node.webform_submission.resend_form:
 entity.node.webform_submission.delete_form:
   title: 'Delete'
   route_name: entity.node.webform_submission.delete_form
+  base_route: entity.node.webform_submission.canonical
+
+entity.node.webform_submission.log:
+  title: 'Log'
+  route_name: entity.node.webform_submission.log
   base_route: entity.node.webform_submission.canonical
 
 # User Submission

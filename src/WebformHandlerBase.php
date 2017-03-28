@@ -2,6 +2,7 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Psr\Log\LoggerInterface;
@@ -60,13 +61,22 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $logger;
 
   /**
+   * Webform submission storage.
+   *
+   * @var \Drupal\webform\WebformSubmissionStorageInterface
+   */
+  protected $submissionStorage;
+
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->setConfiguration($configuration);
     $this->logger = $logger;
+    $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
   }
 
   /**
@@ -77,7 +87,8 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')->get('webform')
+      $container->get('logger.factory')->get('webform'),
+      $container->get('entity_type.manager')
     );
   }
 

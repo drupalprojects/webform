@@ -361,6 +361,20 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function purge($count);
 
   /****************************************************************************/
+  // Log methods.
+  /****************************************************************************/
+
+  /**
+   * Write an event to the webform submission log.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $values
+   *   The value to be logged includes 'handler_id', 'operation', and 'data'.
+   */
+  public function log(WebformSubmissionInterface $webform_submission, array $values = []);
+
+  /****************************************************************************/
   // Draft methods.
   /****************************************************************************/
 

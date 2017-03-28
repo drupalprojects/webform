@@ -6,6 +6,7 @@ use Drupal\node\NodeInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
+use Drupal\webform\WebformInterface;
 
 /**
  * Base tests for webform node.
@@ -41,6 +42,25 @@ abstract class WebformNodeTestBase extends WebformTestBase {
     $submit = $submit ?: $webform->getSetting('form_submit_label') ?: t('Submit');
     $this->drupalPostForm('node/' . $node->id(), $edit, $submit);
     return $this->getLastSubmissionId($webform);
+  }
+
+  /**
+   * Create a webform node.
+   *
+   * @param string $webform_id
+   *   A webform id.
+   *
+   * @return \Drupal\node\NodeInterface
+   *   A webform node.
+   */
+  protected function createWebformNode($webform_id) {
+    $node = $this->drupalCreateNode(['type' => 'webform']);
+    $node->webform->target_id = $webform_id;
+    $node->webform->status = WebformInterface::STATUS_OPEN;
+    $node->webform->open = '';
+    $node->webform->close = '';
+    $node->save();
+    return $node;
   }
 
 }

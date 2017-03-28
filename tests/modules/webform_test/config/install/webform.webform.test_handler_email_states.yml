@@ -132,6 +132,32 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+  email_converted:
+    id: email
+    label: 'Submission converted'
+    handler_id: email_converted
+    status: true
+    weight: 0
+    settings:
+      states:
+        - converted
+      to_mail: converted@example.com
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: default
+      from_options: {  }
+      from_name: default
+      subject: 'Submission converted'
+      body: default
+      excluded_elements: {  }
+      html: true
+      attachments: false
+      debug: true
+      reply_to: ''
+      return_path: ''
   email_completed:
     id: email
     label: 'Submission completed'

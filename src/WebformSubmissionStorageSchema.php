@@ -65,6 +65,68 @@ class WebformSubmissionStorageSchema extends SqlContentEntityStorageSchema {
       ],
     ];
 
+    $schema['webform_submission_log'] = [
+      'description' => 'Table that contains logs of all webform submission events.',
+      'fields' => [
+        'lid' => [
+          'type' => 'serial',
+          'not null' => TRUE,
+          'description' => 'Primary Key: Unique log event ID.',
+        ],
+        'sid' => [
+          'description' => 'The unique identifier for this submission.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'handler_id' => [
+          'description' => 'The webform handler id.',
+          'type' => 'varchar',
+          'length' => 64,
+          'not null' => TRUE,
+        ],
+        'uid' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'The {users}.uid of the user who triggered the event.',
+        ],
+        'operation' => [
+          'type' => 'varchar_ascii',
+          'length' => 64,
+          'not null' => TRUE,
+          'default' => '',
+          'description' => 'Type of operation, for example "save", "sent", or "update."',
+        ],
+        'message' => [
+          'type' => 'text',
+          'not null' => TRUE,
+          'size' => 'big',
+          'description' => 'Text of log message.',
+        ],
+        'data' => [
+          'type' => 'blob',
+          'not null' => TRUE,
+          'size' => 'big',
+          'description' => 'Serialized array of data.',
+        ],
+        'timestamp' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Unix timestamp of when event occurred.',
+        ],
+      ],
+      'primary key' => ['lid'],
+      'indexes' => [
+        'sid' => ['sid'],
+        'uid' => ['uid'],
+        'handler_id' => ['handler_id'],
+        'handler_id_operation' => ['handler_id', 'operation'],
+      ],
+    ];
+
     return $schema;
   }
 

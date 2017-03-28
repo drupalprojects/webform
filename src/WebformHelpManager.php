@@ -815,7 +815,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Webform elements.
     if (!$this->moduleHandler->moduleExists('webform_ui')) {
-      $help['form_elements_warning'] = [
+      $help['webform_elements_warning'] = [
         'routes' => [
           // @see /admin/structure/webform/manage/{webform}
           'entity.webform.edit_form',
@@ -830,7 +830,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ];
     }
 
-    $help['form_elements'] = [
+    $help['webform_elements'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}
         'entity.webform.edit_form',
@@ -841,7 +841,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform source.
-    $help['form_source'] = [
+    $help['webform_source'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/source
         'entity.webform.source_form',
@@ -853,7 +853,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform test.
-    $help['form_test'] = [
+    $help['webform_test'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/test
         'entity.webform.test',
@@ -866,7 +866,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform settings.
-    $help['form_settings'] = [
+    $help['webform_settings'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/settings
         'entity.webform.settings_form',
@@ -878,7 +878,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform assets.
-    $help['form_assets'] = [
+    $help['webform_assets'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/assets
         'entity.webform.assets_form',
@@ -888,7 +888,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform access controls.
-    $help['form_access'] = [
+    $help['webform_access'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/access
         'entity.webform.access_form',
@@ -899,7 +899,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform handlers.
-    $help['form_handlers'] = [
+    $help['webform_handlers'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/handlers
         'entity.webform.handlers_form',
@@ -912,7 +912,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform third party settings.
-    $help['form_third_party'] = [
+    $help['webform_third_party'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/third_party
         'entity.webform.third_party_settings_form',
@@ -922,7 +922,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform translations.
-    $help['form_translations'] = [
+    $help['webform_translations'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/translate
         'entity.webform.config_translation_overview',
@@ -937,7 +937,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /****************************************************************************/
 
     // Webform results.
-    $help['form_results'] = [
+    $help['webform_results'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/results/submissions
         'entity.webform.results_submissions',
@@ -951,7 +951,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform results.
-    $help['form_table'] = [
+    $help['webform_table'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/results/table
         'entity.webform.results_table',
@@ -962,8 +962,20 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'content' => $this->t("The Table page provides a customizable table of a webform's submissions. This page can be used to generate a customized report."),
     ];
 
+    // Webform log.
+    $help['webform_log'] = [
+      'routes' => [
+        // @see /admin/structure/webform/manage/{webform}/results/log
+        'entity.webform.results_log',
+        // @see /node/{node}/webform/results/log
+        'entity.node.webform.results_log',
+      ],
+      'title' => $this->t('Results log'),
+      'content' => $this->t('The Results log lists all logged webform submission events for the current webform.'),
+    ];
+
     // Webform download.
-    $help['form_download'] = [
+    $help['webform_download'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/results/download
         'entity.webform.results_export',
@@ -976,7 +988,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     if ($this->moduleHandler->moduleExists('webform_devel')) {
       // Webform Export.
-      $help['form_export'] = [
+      $help['webform_export'] = [
         'routes' => [
           // @see /admin/structure/webform/manage/{webform}/export
           'entity.webform.export_form',
@@ -987,6 +999,23 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'video_id' => 'help',
       ];
     }
+
+    /****************************************************************************/
+    // Submission
+    /****************************************************************************/
+
+    // Log.
+    $help['submission_log'] = [
+      'routes' => [
+        // @see /admin/structure/webform/manage/{webform}/submission/{webform_submission}/log
+        'entity.webform_submission.log',
+        // @see /node/{node}/webform/submission/{webform_submission}/log
+        'entity.node.webform_submission.log',
+      ],
+      'title' => $this->t('Submission log'),
+      'url' => Url::fromRoute('entity.webform_submission.results_log'),
+      'content' => $this->t('The Submission log lists all events logged for this submission.'),
+    ];
 
     /****************************************************************************/
     // Modules

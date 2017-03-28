@@ -42,19 +42,13 @@ class WebformNodeTest extends WebformNodeTestBase {
    * Tests webform node.
    */
   public function testNode() {
-    // Create node.
-    $node = $this->drupalCreateNode(['type' => 'webform']);
+    $node = $this->createWebformNode('contact');
 
     /**************************************************************************/
     // Webform node basic.
     /**************************************************************************/
 
     // Check contact webform.
-    $node->webform->target_id = 'contact';
-    $node->webform->status = WebformInterface::STATUS_OPEN;
-    $node->webform->open = '';
-    $node->webform->close = '';
-    $node->save();
     $this->drupalGet('node/' . $node->id());
     $this->assertRaw('webform-submission-contact-form');
     $this->assertNoFieldByName('name', 'John Smith');
