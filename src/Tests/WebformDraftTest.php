@@ -134,6 +134,18 @@ class WebformDraftTest extends WebformTestBase {
     $webform_submission = WebformSubmission::load($sid);
     $this->assertEqual($webform_submission->getOwnerId(), $this->normalUser->id());
 
+    // Check that drafts are not convert when form_convert_anonymous = FALSE.
+    $this->drupalLogout();
+    $webform->setSetting('form_convert_anonymous', FALSE)->save();
+
+    $sid = $this->postSubmission($webform, ['name' => 'John Smith']);
+    $this->drupalLogin($this->normalUser);
+
+    // Check that submission is still owned by anonymous user.
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual($webform_submission->getOwnerId(), 0);
+
     /**************************************************************************/
     // Export.
     /**************************************************************************/

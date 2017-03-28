@@ -1,11 +1,11 @@
 langcode: en
 status: scheduled
+open: '2020-01-01T00:00:00-05:00'
+close: null
 dependencies:
   enforced:
     module:
       - webform_test
-open: '2020-01-01T00:00:00-05:00'
-close: null
 uid: null
 template: false
 id: test_form_opening
@@ -29,6 +29,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
+  form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
   form_disable_autocomplete: false

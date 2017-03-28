@@ -1,11 +1,11 @@
 langcode: en
 status: closed
+open: null
+close: null
 dependencies:
   enforced:
     module:
       - webform_templates
-open: null
-close: null
 uid: null
 template: true
 id: template_subscribe
@@ -39,6 +39,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
+  form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
   form_disable_autocomplete: false

@@ -647,6 +647,18 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
+    $form['submission']['form_convert_anonymous'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Convert anonymous user drafts and submissions to authenticated user.'),
+      '#description' => $this->t('If checked, drafts and submissions created by an anonymous user will be reassigned to their user account when they login.'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['form_convert_anonymous'],
+      '#states' => [
+        'visible' => [
+          ':input[name="form_confidential"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
     $form['submission']['token_update'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to update a submission using a secure token.'),

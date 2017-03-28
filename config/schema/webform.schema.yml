@@ -377,6 +377,9 @@ webform.webform.*:
         form_confidential_message:
           type: text
           label: 'Form confidential message'
+        form_convert_anonymous:
+          type: boolean
+          label: 'Convert anonymous drafts and submissions to authenticated.'
         form_prepopulate:
           type: boolean
           label: 'Form prepopulate elements'

@@ -980,9 +980,10 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     if ($sids = $query->execute()) {
       $webform_submissions = $this->loadMultiple($sids);
       foreach ($webform_submissions as $sid => $webform_submission) {
-        // Do not convert anonymous confidential submission to authenticated
-        // submissions.
-        if ($webform_submission->getWebform()->isConfidential()) {
+        $webform = $webform_submission->getWebform();
+        // Do not convert confidential submissions and check for convert
+        // anonymous setting.
+        if ($webform->isConfidential() || empty($webform->getSetting('form_convert_anonymous'))) {
           continue;
         }
 

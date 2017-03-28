@@ -936,3 +936,10 @@ function webform_update_8032() {
 
   \Drupal::database()->schema()->createTable('webform_submission_log', $schema);
 }
+
+/**
+ * Issue #2864851: Allow form builder to opt-in to converting anonymous drafts/submissions to authenticated drafts/submissions.
+ */
+function webform_update_8033() {
+  _webform_update_webform_settings();
+}
