@@ -2,10 +2,8 @@
 
 namespace Drupal\webform\Tests;
 
-use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform storage tests.
@@ -54,7 +52,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->uid, 0);
     $this->assertEqual($log->handler_id, 'test_log');
     $this->assertEqual($log->operation, 'submission created');
-    $this->assertEqual($log->message,  'Test: Handler: Logging: Submission #1 created.');
+    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #1 created.');
     $this->assertEqual($log->webform_id, 'test_handler_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
@@ -80,7 +78,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->uid, 0);
     $this->assertEqual($log->handler_id, 'test_log');
     $this->assertEqual($log->operation, 'draft updated');
-    $this->assertEqual($log->message,  'Test: Handler: Logging: Submission #2 draft updated.');
+    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 draft updated.');
     $this->assertEqual($log->webform_id, 'test_handler_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
@@ -93,7 +91,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->uid, 0);
     $this->assertEqual($log->handler_id, 'test_log');
     $this->assertEqual($log->operation, 'submission completed');
-    $this->assertEqual($log->message,  'Test: Handler: Logging: Submission #2 completed using saved draft.');
+    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 completed using saved draft.');
     $this->assertEqual($log->webform_id, 'test_handler_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
@@ -107,7 +105,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $log = $submission_log[0];
     $this->assertEqual($log->lid, 6);
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
-    $this->assertEqual($log->sid,  2);
+    $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->operation, 'submission converted');
     $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 converted from anonymous to ' . $this->adminWebformUser->label() . '.');
 
@@ -115,7 +113,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $log = $submission_log[1];
     $this->assertEqual($log->lid, 5);
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
-    $this->assertEqual($log->sid,  1);
+    $this->assertEqual($log->sid, 1);
     $this->assertEqual($log->operation, 'submission converted');
     $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #1 converted from anonymous to ' . $this->adminWebformUser->label() . '.');
 
@@ -127,7 +125,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
     $this->assertEqual($log->handler_id, 'test_log');
     // $this->assertEqual($log->operation, 'submission completed');
-    // $this->assertEqual($log->message,  'Test: Handler: Logging: Submission #2 completed using saved draft.');
+    // $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 completed using saved draft.');
     $this->assertEqual($log->webform_id, 'test_handler_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);

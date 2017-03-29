@@ -289,10 +289,6 @@ class WebformElementHelper {
    *
    * @param array $elements
    *   An associative array of elements.
-   *
-   * @return string
-   *   An associative array of elements with render(able) markup converted into
-   *   strings.
    */
   public static function convertRenderMarkupToStrings(array &$elements) {
     foreach ($elements as $key => &$value) {

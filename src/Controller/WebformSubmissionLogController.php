@@ -94,14 +94,12 @@ class WebformSubmissionLogController extends ControllerBase {
   /**
    * Displays a listing of webform submission log messages.
    *
-   * @param \Drupal\webform\WebformInterface|NULL $webform
+   * @param \Drupal\webform\WebformInterface|null $webform
    *   A webform.
-   * @param \Drupal\webform\WebformInterface|NULL $webform_submission
+   * @param \Drupal\webform\WebformInterface|null $webform_submission
    *   A webform submission.
-   * @param \Drupal\Core\Entity\EntityInterface|NULL $source_entity
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
    *   A source entity.
-   *
-   * @param null $sid
    *
    * @return array
    *   A render array as expected by drupal_render().
@@ -113,7 +111,6 @@ class WebformSubmissionLogController extends ControllerBase {
     if (empty($source_entity) && !empty($webform_submission)) {
       $source_entity = $webform_submission->getSourceEntity();
     }
-
 
     // Header.
     $header = [];
@@ -201,7 +198,7 @@ class WebformSubmissionLogController extends ControllerBase {
           'data' => [
             '#type' => 'link',
             '#title' => $log->sid,
-            '#url' => Url::fromRoute($route_name, $route_parameters ),
+            '#url' => Url::fromRoute($route_name, $route_parameters),
           ],
         ];
       }

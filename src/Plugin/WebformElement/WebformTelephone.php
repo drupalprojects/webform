@@ -126,7 +126,7 @@ class WebformTelephone extends WebformCompositeBase {
       ] + CountryManager::getStandardList(),
       '#states' => [
         'visible' => [
-          ':input[name="properties[phone__international]"]' => ['checked' => TRUE]
+          ':input[name="properties[phone__international]"]' => ['checked' => TRUE],
         ],
       ],
     ];

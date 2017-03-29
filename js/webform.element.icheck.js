@@ -48,7 +48,7 @@
    * @type {Drupal~behavior}
    */
   Drupal.behaviors.webformICheckTableSelectAll = {
-    attach: function(context) {
+    attach: function (context) {
       $('table[data-webform-icheck] th.select-all').bind('DOMNodeInserted', function () {
         $(this).unbind('DOMNodeInserted');
         $(this).find('input[type="checkbox"]').each(function () {
@@ -59,7 +59,7 @@
             radioClass: 'iradio_' + icheck
           }, Drupal.webform.iCheck.options);
 
-          $(this).iCheck(options)
+          $(this).iCheck(options);
         })
         .on('ifChanged', function () {
           var _index = $(this).parents('th').index() + 1;

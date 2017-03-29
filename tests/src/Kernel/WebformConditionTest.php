@@ -19,14 +19,7 @@ class WebformConditionTest extends EntityKernelTestBase {
    * @var array
    */
   public static $modules = ['webform'];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-  }
-
+  
   /**
    * Tests conditions.
    */

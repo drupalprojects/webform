@@ -445,7 +445,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', 'reply_to'],
       '#default_value' => $this->configuration['reply_to'],
     ];
-    if ($default_reply_to = $this->getDefaultConfigurationValue('reply_to') ) {
+    if ($default_reply_to = $this->getDefaultConfigurationValue('reply_to')) {
       $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Reply to' email.", ['%email' => $default_reply_to]);
     }
     else {
@@ -458,7 +458,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', 'return_path'],
       '#default_value' => $this->configuration['return_path'],
     ];
-    if ($default_return_path = $this->getDefaultConfigurationValue('return_path') ) {
+    if ($default_return_path = $this->getDefaultConfigurationValue('return_path')) {
       $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Return path' email.", ['%email' => $default_return_path]);
     }
     else {
@@ -703,7 +703,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Make sure all email addresses are unique.
     $emails = array_unique($emails);
     // Sort email addresses to make it easier to debug queuing and/or sending
-    // issues
+    // issues.
     asort($emails);
 
     return $emails;
@@ -971,11 +971,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * Build A select other element for email addresss and names.
    *
    * @param string $name
-   *   The element's key
-   * @param $title
-   *   The element's title
-   * @param $label
-   *   The element's label
+   *   The element's key.
+   * @param string $title
+   *   The element's title.
+   * @param string $label
+   *   The element's label.
    * @param array $element_options
    *   The element options.
    * @param array $options_options
@@ -1014,7 +1014,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#other__placeholder' => $this->t('Enter @label...', ['@label' => $label]),
       '#other__type' => ($element_type == 'mail') ? 'webform_email_multiple' : 'textfield',
       '#other__allow_tokens' => TRUE,
-      '#required' =>  $required,
+      '#required' => $required,
       '#parents' => ['settings', $name],
       '#default_value' => $this->configuration[$name],
     ];
@@ -1039,7 +1039,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
       // Set mapping options.
       $mapping_options = $options_element['#options'];
-      array_walk($mapping_options, function(&$value, $key) {
+      array_walk($mapping_options, function (&$value, $key) {
         $value = '<b>' . $value . '</b>';
       });
       if (preg_match('/_other$/', $options_element['#type'])) {
@@ -1074,7 +1074,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#destination__description' => NULL,
         '#destination__placeholder' => implode(', ', $destination_placeholde_emails),
 
-        '#prefix' => '<div id="' . $options_id  . '">',
+        '#prefix' => '<div id="' . $options_id . '">',
         '#suffix' => '</div>',
       ];
     }

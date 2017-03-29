@@ -73,7 +73,7 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
    * @var string
    */
   protected $category;
-  
+
   /**
    * The webform options options.
    *

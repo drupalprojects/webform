@@ -27,7 +27,7 @@
           return;
         }
 
-        var open = ($details.attr('open') != 'open') ? 1 : 0;
+        var open = ($details.attr('open') !== 'open') ? '1' : '0';
         localStorage.setItem(name, open);
       });
 
@@ -45,7 +45,7 @@
           return;
         }
 
-        if (open == 1) {
+        if (open === '1') {
           $details.attr('open', 'open');
         }
         else {
@@ -59,10 +59,10 @@
   /**
    * Get the name used to store the state of details element.
    *
-   * @param $details
+   * @param {jQuery} $details
    *   A details element.
    *
-   * @returns string
+   * @return string
    *   The name used to store the state of details element.
    */
   Drupal.webformDetailsSaveGetName = function ($details) {

@@ -217,7 +217,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         if ($role_name == 'authenticated') {
           // Get all active authenticated users.
           $query = db_select('users_field_data', 'u');
-          $query->fields('u', array('mail'));
+          $query->fields('u', ['mail']);
           $query->condition('u.status', 1);
           $query->condition('u.mail', '', '<>');
           $query->orderBy('mail');
@@ -229,7 +229,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $query = db_select('user__roles', 'ur');
           $query->distinct();
           $query->join('users_field_data', 'u', 'u.uid = ur.entity_id');
-          $query->fields('u',array('mail'));
+          $query->fields('u', ['mail']);
           $query->condition('ur.roles_target_id', $role_name);
           $query->condition('u.status', 1);
           $query->condition('u.mail', '', '<>');

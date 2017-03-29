@@ -43,20 +43,20 @@
           // Toolbar settings.
           format_tags: 'p;h2;h3;h4;h5;h6',
           toolbar: [
-            {name: 'styles', items: ['Format', 'Font', 'FontSize' ]},
-            {name: 'basicstyles', items: [ 'Bold', 'Italic', 'Subscript', 'Superscript' ]},
-            {name: 'insert', items: [ 'SpecialChar' ]},
-            {name: 'colors', items: [ 'TextColor', 'BGColor' ]},
-            {name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
-            {name: 'links', items: [ 'Link', 'Unlink']},
-            {name: 'tools', items: [ 'Source', '-', 'Maximize' ]}
+            {name: 'styles', items: ['Format', 'Font', 'FontSize']},
+            {name: 'basicstyles', items: ['Bold', 'Italic', 'Subscript', 'Superscript']},
+            {name: 'insert', items: ['SpecialChar']},
+            {name: 'colors', items: ['TextColor', 'BGColor']},
+            {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
+            {name: 'links', items: ['Link', 'Unlink']},
+            {name: 'tools', items: ['Source', '-', 'Maximize']}
           ]
         };
 
         // Add IMCE image button.
         if (CKEDITOR.imce) {
           options.extraPlugins += ',imce';
-          options.toolbar[2].items = [ 'ImceImage', 'SpecialChar' ];
+          options.toolbar[2].items = ['ImceImage', 'SpecialChar'];
           CKEDITOR.config.ImceImageIcon = drupalSettings['webform']['html_editor']['ImceImageIcon'];
         }
 
@@ -66,7 +66,7 @@
           // Save data onchange since AJAX dialogs don't execute webform.onsubmit.
           $textarea.val(evt.editor.getData().trim());
         });
-      })
+      });
     }
   };
 

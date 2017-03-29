@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -146,14 +145,14 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
   /**
    * Set cache context.
    *
-   * @param $elements
+   * @param array $elements
    *   The elements that need cache context.
    * @param \Drupal\webform\WebformInterface|null $webform
    *   The webform entity reference webform.
    * @param \Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem $item
    *   The webform entity reference item.
    */
-  protected function setCacheContext(&$elements, WebformInterface $webform, WebformEntityReferenceItem $item) {
+  protected function setCacheContext(array &$elements, WebformInterface $webform, WebformEntityReferenceItem $item) {
     // Track if webform.settings is updated.
     $config = \Drupal::config('webform.settings');
     \Drupal::service('renderer')->addCacheableDependency($elements, $config);

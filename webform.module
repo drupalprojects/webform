@@ -618,6 +618,7 @@ function webform_theme_suggestions_alter(array &$suggestions, array $variables, 
     $suggestions[] = $hook . '__' . $webform->id();
   }
 }
+
 /**
  * Prepares variables for checkboxes templates.
  *

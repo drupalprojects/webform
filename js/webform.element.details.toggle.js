@@ -68,7 +68,7 @@
    *   TRUE if a webform's details are all opened.
    */
   function isFormDetailsOpen($form) {
-    return ($form.find('details[open]').length === $form.find('details').length)
+    return ($form.find('details[open]').length === $form.find('details').length);
   }
 
   /**

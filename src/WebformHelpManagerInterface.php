@@ -65,7 +65,7 @@ interface WebformHelpManagerInterface {
    *
    * @param bool $docs
    *   Set to TRUE to build exportable HTML documentation.
-   * 
+   *
    * @return array
    *   An render array containing the elements section.
    */
@@ -76,7 +76,7 @@ interface WebformHelpManagerInterface {
    *
    * @param bool $docs
    *   Set to TRUE to build exportable HTML documentation.
-   * 
+   *
    * @return array
    *   An render array containing the uses section.
    */

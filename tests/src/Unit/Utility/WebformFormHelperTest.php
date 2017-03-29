@@ -48,11 +48,6 @@ class WebformFormHelperTest extends UnitTestCase {
   /**
    * Tests WebformFormHelper::flattenElements().
    *
-   * @param array $elements
-   *   The array to run through WebformFormHelper::flattenElements().
-   * @param string $expected
-   *   The expected result from calling the function.
-   *
    * @see WebformFormHelper::flattenElements()
    */
   public function testFlattenElements() {

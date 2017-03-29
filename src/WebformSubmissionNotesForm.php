@@ -32,6 +32,8 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
    *   The entity type bundle service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
+   * @param \Drupal\webform\WebformRequestInterface $request_handler
+   *   The Webform request handler.
    */
   public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, WebformRequestInterface $request_handler) {
     parent::__construct($entity_manager, $entity_type_bundle_info, $time);

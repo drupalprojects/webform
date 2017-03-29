@@ -23,12 +23,9 @@
       $(context).find('div.js-webform-location').once('webform-location').each(function () {
         var $element = $(this);
         var $input = $element.find('.webform-location-geocomplete');
-
+        var $map = null;
         if ($input.attr('data-webform-location-map')) {
-          var $map = $('<div class="webform-location-map"><div class="webform-location-map--container"></div></div>').insertAfter($input).find('.webform-location-map--container');
-        }
-        else {
-          var $map = null;
+          $map = $('<div class="webform-location-map"><div class="webform-location-map--container"></div></div>').insertAfter($input).find('.webform-location-map--container');
         }
 
         var options = $.extend({
@@ -38,8 +35,8 @@
           map: $map,
           mapOptions: {
             disableDefaultUI: true,
-            zoomControl: true,
-          },
+            zoomControl: true
+          }
         }, Drupal.webform.locationGeocomplete.options);
 
         var $geocomplete = $input.geocomplete(options);
@@ -49,7 +46,7 @@
           $element.find('[data-webform-location-attribute]').val('');
         }).on('blur', function () {
           // Make sure to get attributes on blur.
-          if ($element.find('[data-webform-location-attribute="location"]').val() == '') {
+          if ($element.find('[data-webform-location-attribute="location"]').val() === '') {
             var value = $geocomplete.val();
             if (value) {
               $geocomplete.geocomplete('find', value);
@@ -68,7 +65,7 @@
             $geocomplete.geocomplete('find', position.coords.latitude + ', ' + position.coords.longitude);
           });
         }
-      })
+      });
     }
   };
 

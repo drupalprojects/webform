@@ -101,6 +101,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Psr\Log\LoggerInterface $logger
+   *    A logger instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    * @param \Drupal\Core\Session\AccountInterface $current_user
@@ -230,7 +232,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'placeholder',
       'markup',
       'test',
-      'default_value'
+      'default_value',
     ];
   }
 

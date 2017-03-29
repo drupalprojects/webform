@@ -15,10 +15,12 @@
   Drupal.behaviors.webformMultiple = {
     attach: function (context, settings) {
       for (var base in settings.tableDrag) {
-        var $tableDrag = $(context).find('#' + base);
-        var $toggleWeight = $tableDrag.parent().find('.tabledrag-toggle-weight');
-        $toggleWeight.addClass('webform-multiple-tabledrag-toggle-weight');
-        $tableDrag.after($toggleWeight);
+        if (settings.tableDrag.hasOwnProperty(base)) {
+          var $tableDrag = $(context).find('#' + base);
+          var $toggleWeight = $tableDrag.parent().find('.tabledrag-toggle-weight');
+          $toggleWeight.addClass('webform-multiple-tabledrag-toggle-weight');
+          $tableDrag.after($toggleWeight);
+        }
       }
     }
   };

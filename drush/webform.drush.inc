@@ -595,7 +595,6 @@ function drush_webform_docs() {
   }
 }
 
-
 /**
  * Tidy an HTML string.
  *
@@ -623,7 +622,7 @@ function _drush_webform_docs_tidy($html) {
   // Remove space after <br> tags.
   $html = preg_replace('/(<br[^>]*>)\s+/', '\1', $html);
 
-  // Convert <pre> to <code>
+  // Convert <pre> to <code>.
   $html = preg_replace('#<hr>\s*<pre>([^<]+)</pre>\s+<hr>\s*<br>#s', '<p><code>\1</code></p>' . PHP_EOL, $html);
 
   // Append footer to HTML document.

@@ -12,7 +12,7 @@
   $document.on('state:required', function (e) {
     if (e.trigger) {
       if (e.value) {
-        $(e.target).find('input[type="file"]').attr({'required': 'required', 'aria-required': 'aria-required'})
+        $(e.target).find('input[type="file"]').attr({'required': 'required', 'aria-required': 'aria-required'});
       }
       else {
         $(e.target).find('input[type="file"]').removeAttr('required aria-required');
@@ -32,7 +32,6 @@
       if (!e.value) {
         // @see https://www.sitepoint.com/jquery-function-clear-form-data/
         $(':input', e.target).andSelf().each(function () {
-          var $input = $(this);
           backupValueAndRequired(this);
           clearValueAndRequired(this);
           triggerEventHandlers(this);
@@ -138,7 +137,7 @@
       }
       else if (tag === 'select') {
         $.each(value, function (i, option_value) {
-          $input.find("option[value='" + option_value + "']").prop("selected", true);
+          $input.find("option[value='" + option_value + "']").prop('selected', true);
         });
       }
       else if (type !== 'submit' && type !== 'button') {

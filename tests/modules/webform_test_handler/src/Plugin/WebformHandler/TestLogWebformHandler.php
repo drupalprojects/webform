@@ -2,9 +2,7 @@
 
 namespace Drupal\webform_test_handler\Plugin\WebformHandler;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformHandlerBase;
-use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -43,6 +41,16 @@ class TestLogWebformHandler extends WebformHandlerBase {
     $this->log($webform_submission, $operation, []);
   }
 
+  /**
+   * Log a submission's event.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param string $operation
+   *   The operation to be logged.
+   * @param array $data
+   *   Data to be logged.
+   */
   protected function log(WebformSubmissionInterface $webform_submission, $operation, array $data = []) {
     \Drupal::database()
       ->insert('webform_submission_log')

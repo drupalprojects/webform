@@ -70,7 +70,7 @@ class WebformMapping extends FormElement {
 
     // Build header.
     $header = [
-      ['data' => ['#markup' => $element['#source__title']  . ' ' . $arrow], 'width' => '50%'],
+      ['data' => ['#markup' => $element['#source__title'] . ' ' . $arrow], 'width' => '50%'],
       ['data' => ['#markup' => $element['#destination__title']], 'width' => '50%'],
     ];
 

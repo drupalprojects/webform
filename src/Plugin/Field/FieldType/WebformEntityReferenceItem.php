@@ -74,11 +74,11 @@ class WebformEntityReferenceItem extends EntityReferenceItem {
           'type' => 'varchar',
           'length' => 20,
         ],
-        'close' => array(
+        'close' => [
           'description' => 'The open date/time.',
           'type' => 'varchar',
           'length' => 20,
-        ),
+        ],
       ],
       'indexes' => [
         'target_id' => ['target_id'],

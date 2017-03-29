@@ -29,7 +29,6 @@ class WebformDraftTest extends WebformTestBase {
     $this->createUsers();
   }
 
-
   /**
    * Test webform draft with autosave.
    */

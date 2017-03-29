@@ -165,7 +165,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $webform_submission_storage = $this->getStorage();
 
     $route_name = \Drupal::routeMatch()->getRouteName();
-
     if ($route_name == "$base_route_name.webform.results_submissions") {
       // Display submission properties and elements.
       // @see /admin/structure/webform/manage/{webform}/results/submissions

@@ -66,8 +66,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * @var \Drupal\webform\WebformSubmissionStorageInterface
    */
   protected $submissionStorage;
-
-
+  
   /**
    * {@inheritdoc}
    */

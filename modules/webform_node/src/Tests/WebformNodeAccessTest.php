@@ -3,7 +3,6 @@
 namespace Drupal\webform_node\Tests;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform node access rules.
@@ -88,7 +87,7 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
     // Any submission permissions.
     /**************************************************************************/
 
-    // Login as any user
+    // Login as any user.
     $this->drupalLogin($this->anyWebformSubmissionUser);
 
     // Check webform results access allowed.

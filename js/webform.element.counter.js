@@ -10,7 +10,7 @@
   // @see http://qwertypants.github.io/jQuery-Word-and-Character-Counter-Plugin/
   Drupal.webform = Drupal.webform || {};
   Drupal.webform.counter = Drupal.webform.counter || {};
-  Drupal.webform.counter.options = Drupal.webform.counter.options|| {};
+  Drupal.webform.counter.options = Drupal.webform.counter.options || {};
 
   /**
    * Initialize text field and textarea word and character counter.
@@ -38,7 +38,7 @@
         $(this).parent().append(options.target);
 
         $(this).counter(options);
-      })
+      });
 
     }
   };

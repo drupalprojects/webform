@@ -800,7 +800,7 @@ function webform_update_8026() {
  * Issue #2857417: Add support for open and close date/time to Webform nodes. Update field config settings.
  */
 function webform_update_8027() {
-  $field_configs = \Drupal::entityTypeManager()->getStorage('field_config')->loadByProperties(array('field_type' => 'webform'));
+  $field_configs = \Drupal::entityTypeManager()->getStorage('field_config')->loadByProperties(['field_type' => 'webform']);
   foreach ($field_configs as $field) {
     $field->setSetting('status', $field->getSetting('status') ? WebformInterface::STATUS_OPEN : WebformInterface::STATUS_CLOSED);
     $field->setSetting('open', '');

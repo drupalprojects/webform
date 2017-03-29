@@ -79,8 +79,6 @@ class WebformHandlerEmailRolesTest extends WebformTestBase {
       ->save();
     $this->postSubmission($webform, ['role' => 'authenticated']);
     $this->assertRaw('Message <b>not sent</b> <em class="placeholder">Webform submission from: </em> because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.');
-
   }
-
 
 }

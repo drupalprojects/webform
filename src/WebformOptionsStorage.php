@@ -31,7 +31,7 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
     $other_group = (string) $this->t('Other');
 
     $webform_options = $this->loadMultiple();
-    @uasort($webform_options, array($this->entityType->getClass(), 'sort'));
+    @uasort($webform_options, [$this->entityType->getClass(), 'sort']);
     $options = [];
     foreach ($webform_options as $id => $webform_option) {
       $options[$webform_option->get('category') ?: $other_group][$id] = $webform_option->label();
@@ -52,7 +52,7 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
    */
   public function getLikerts() {
     $webform_options = $this->loadMultiple();
-    @uasort($webform_options, array($this->entityType->getClass(), 'sort'));
+    @uasort($webform_options, [$this->entityType->getClass(), 'sort']);
     foreach ($webform_options as $id => $webform_option) {
       if (strpos($id, 'likert_') === 0) {
         $options[$id] = str_replace(t('Likert') . ': ', '', $webform_option->label());

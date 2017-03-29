@@ -43,7 +43,7 @@
         }
 
         // Add .clearfix to the wrapper.
-        $wrapper.addClass('clearfix')
+        $wrapper.addClass('clearfix');
 
       });
     }

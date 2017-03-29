@@ -6,7 +6,6 @@
  */
 
 use Drupal\node\Entity\Node;
-use Drupal\webform\WebformInterface;
 
 /**
  * Implements hook_install().
@@ -53,7 +52,7 @@ function webform_demo_application_evaluation_install() {
     $webform_submission_devel_generate = $devel_generate_manager->createInstance('webform_submission', []);
     $webform_submission_devel_generate->generateElements([
       'webform_ids' => [
-        'demo_application' => 'demo_application'
+        'demo_application' => 'demo_application',
       ],
       'num' => 50,
     ]);

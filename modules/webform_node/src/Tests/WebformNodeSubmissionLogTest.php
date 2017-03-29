@@ -2,10 +2,6 @@
 
 namespace Drupal\webform_node\Tests;
 
-use Drupal\Core\Url;
-use Drupal\webform\Entity\Webform;
-use Drupal\webform\WebformInterface;
-
 /**
  * Tests for webform node submission log.
  *
@@ -52,7 +48,7 @@ class WebformNodeSubmissionLogTest extends WebformNodeTestBase {
     $this->assertEqual($log->uid, 0);
     $this->assertEqual($log->handler_id, 'test_log');
     $this->assertEqual($log->operation, 'submission created');
-    $this->assertEqual($log->message,  t('@title: Submission #1 created.', ['@title' => $node->label()]));
+    $this->assertEqual($log->message, t('@title: Submission #1 created.', ['@title' => $node->label()]));
     $this->assertEqual($log->webform_id, 'test_handler_log');
     $this->assertEqual($log->entity_type, 'node');
     $this->assertEqual($log->entity_id, $node->id());
@@ -64,7 +60,7 @@ class WebformNodeSubmissionLogTest extends WebformNodeTestBase {
     $this->drupalGet("node/$nid/webform/results/log");
     $this->assertResponse(200);
     $this->assertNoRaw('No log messages available.');
-    $this->assertRaw('<a href="' . $base_path . 'node/' . $nid . '/webform/submission/'  . $sid . '/log">' . $sid . '</a>');
+    $this->assertRaw('<a href="' . $base_path . 'node/' . $nid . '/webform/submission/' . $sid . '/log">' . $sid . '</a>');
     $this->assertRaw(t('@title: Submission #1 created.', ['@title' => $node->label()]));
 
     // Check webform node submission log tab.
