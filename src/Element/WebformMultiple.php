@@ -494,7 +494,6 @@ class WebformMultiple extends FormElement {
     // @see \Drupal\webform\Element\WebformEmailConfirm::validateWebformEmailConfirm
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
-
     // Convert values to items and validate duplicate keys.
     try {
       $items = self::convertValuesToItems($element, $values['items']);
@@ -515,7 +514,6 @@ class WebformMultiple extends FormElement {
       else {
         $form_state->setError($element);
       }
-      return;
     }
 
     $form_state->setValueForElement($element, $items);
