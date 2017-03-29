@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_email
@@ -33,6 +33,10 @@ elements: |
     email_confirm_basic:
       '#type': webform_email_confirm
       '#title': 'Email confirm basic'
+    email_confirm_pattern:
+      '#type': webform_email_confirm
+      '#title': 'Email confirm pattern'
+      '#pattern': '/^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/'
     email_confirm_advanced:
       '#type': webform_email_confirm
       '#title': 'Email confirm advanced'
