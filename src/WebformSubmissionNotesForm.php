@@ -83,6 +83,18 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
       '#return_value' => TRUE,
       '#access' => $this->isModalDialog() ? FALSE : TRUE,
     ];
+    $form['uid'] = [
+      '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Submitted by'),
+      '#description' => $this->t('The username of the user that submitted the webform.'),
+      '#target_type' => 'user',
+      '#selection_setttings' => [
+        'include_anonymous' => FALSE,
+      ],
+      '#required' => TRUE,
+      '#default_value' => $webform_submission->getOwner(),
+    ];
+
     $form['#attached']['library'][] = 'webform/webform.admin';
     return parent::form($form, $form_state);
   }

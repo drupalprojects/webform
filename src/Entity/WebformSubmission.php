@@ -159,8 +159,9 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Submitted by'))
-      ->setDescription(t('The submitter.'))
-      ->setSetting('target_type', 'user');
+      ->setDescription(t('The username of the user that submitted the webform.'))
+      ->setSetting('target_type', 'user')
+      ->setDefaultValueCallback('Drupal\webform\Entity\WebformSubmission::getCurrentUserId');
 
     $fields['langcode'] = BaseFieldDefinition::create('language')
       ->setLabel(t('Language'))
@@ -722,6 +723,19 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
 
       return $values;
     }
+  }
+
+
+  /**
+   * Default value callback for 'uid' base field definition.
+   *
+   * @see ::baseFieldDefinitions()
+   *
+   * @return array
+   *   An array of default values.
+   */
+  public static function getCurrentUserId() {
+    return [\Drupal::currentUser()->id()];
   }
 
 }
