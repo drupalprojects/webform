@@ -96,7 +96,7 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = [];
+    $summary = parent::settingsSummary();
     $summary[] = $this->t('Label: @label', ['@label' => $this->getSetting('label')]);
     return $summary;
   }
@@ -105,13 +105,14 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $element['label'] = [
+    $form = parent::settingsForm($form, $form_state);
+    $form['label'] = [
       '#title' => $this->t('Label'),
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('label'),
       '#required' => TRUE,
     ];
-    return $element;
+    return $form;
   }
 
   /**
