@@ -131,7 +131,7 @@ class WebformNodeResultsTest extends WebformNodeTestBase {
     $this->drupalLogin($this->adminSubmissionUser);
 
     // Check default node results table.
-    $this->drupalGet('node/' . $node->id() . '/webform/results/table');
+    $this->drupalGet('node/' . $node->id() . '/webform/results/submissions');
     $this->assertRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
     $this->assertRaw('sort by Created');
     $this->assertNoRaw('sort by Changed');
@@ -144,11 +144,11 @@ class WebformNodeResultsTest extends WebformNodeTestBase {
       'limit' => 20,
       'default' => TRUE,
     ];
-    $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/table/custom', $edit, t('Save'));
+    $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/submissions/custom', $edit, t('Save'));
     $this->assertRaw('The customized table has been saved.');
 
     // Check that the webform node's results table is now customized.
-    $this->drupalGet('node/' . $node->id() . '/webform/results/table');
+    $this->drupalGet('node/' . $node->id() . '/webform/results/submissions');
     $this->assertRaw('<th specifier="serial" aria-sort="ascending" class="is-active">');
     $this->assertNoRaw('sort by Created');
     $this->assertRaw('sort by Changed');

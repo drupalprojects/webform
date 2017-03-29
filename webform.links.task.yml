@@ -130,11 +130,6 @@ entity.webform.results_submissions:
   route_name: entity.webform.results_submissions
   parent_id: entity.webform.results
 
-entity.webform.results_table:
-  title: 'Table'
-  route_name: entity.webform.results_table
-  parent_id: entity.webform.results
-
 entity.webform.results_export:
   title: 'Download'
   route_name: entity.webform.results_export

@@ -148,7 +148,6 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
 
     $any_tests = [
       'node/{node}/webform/results/submissions' => 'view_any',
-      'node/{node}/webform/results/table' => 'view_any',
       'node/{node}/webform/results/download' => 'view_any',
       'node/{node}/webform/results/clear' => 'purge_any',
       'node/{node}/webform/submission/{webform_submission}' => 'view_any',

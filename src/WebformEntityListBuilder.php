@@ -196,10 +196,6 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           'title' => $this->t('Submissions'),
           'url' => Url::fromRoute('entity.webform.results_submissions', $route_parameters),
         ];
-        $operations['table'] = [
-          'title' => $this->t('Table'),
-          'url' => Url::fromRoute('entity.webform.results_table', $route_parameters),
-        ];
         $operations['export'] = [
           'title' => $this->t('Download'),
           'url' => Url::fromRoute('entity.webform.results_export', $route_parameters),

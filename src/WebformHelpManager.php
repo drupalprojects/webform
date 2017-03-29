@@ -945,21 +945,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'entity.node.webform.results_submissions',
       ],
       'title' => $this->t('Managing results'),
-      'content' => $this->t("The Results page displays an overview of a webform's submissions.") . ' ' .
+      'content' => $this->t("The Results page displays an overview of a webform's submissions. This page can be used to generate a customized report.") . ' ' .
       $this->t("Submissions can be reviewed, updated, flagged, annotated, and downloaded."),
       'video_id' => 'submissions',
-    ];
-
-    // Webform results.
-    $help['webform_table'] = [
-      'routes' => [
-        // @see /admin/structure/webform/manage/{webform}/results/table
-        'entity.webform.results_table',
-        // @see /node/{node}/webform/results/table
-        'entity.node.webform.results_table',
-      ],
-      'title' => $this->t('Building a custom report'),
-      'content' => $this->t("The Table page provides a customizable table of a webform's submissions. This page can be used to generate a customized report."),
     ];
 
     // Webform log.

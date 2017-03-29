@@ -12,7 +12,7 @@
 
 /**
  * Webform setting button displays a gear icon.
- * @see /admin/structure/webform/manage/contact/results/table
+ * @see /admin/structure/webform/manage/contact/results/submissions
  */
 .button.button-webform-setting {
   margin: 0 0 1em 0;
@@ -56,7 +56,6 @@
  * Results table.
  * @see /admin/structure/webform/results/manage
  * @see /admin/structure/webform/manage/contact/results/submissions
- * @see /admin/structure/webform/manage/contact/results/table
  */
 .webform-results__table th,
 .webform-results__table td {

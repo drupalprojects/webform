@@ -97,22 +97,8 @@ entity.node.webform.results_submissions:
   requirements:
     _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
 
-entity.node.webform.results_table:
-  path: '/node/{node}/webform/results/table'
-  defaults:
-    _entity_list: 'webform_submission'
-    _title_callback: '\Drupal\Core\Entity\Controller\EntityController::title'
-    operation: webform_submission_view
-    entity_access: 'webform.submission_view_any'
-  options:
-    parameters:
-      node:
-        type: 'entity:node'
-  requirements:
-    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformResultsAccess'
-
-entity.node.webform.results_table.custom:
-  path: '/node/{node}/webform/results/table/custom'
+entity.node.webform.results_submissions.custom:
+  path: '/node/{node}/webform/results/submissions/custom'
   defaults:
     _form: 'Drupal\webform\Form\WebformResultsCustomForm'
     _title: 'Customize table'

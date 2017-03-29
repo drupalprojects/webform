@@ -14,11 +14,6 @@ entity.node.webform.results_submissions:
   route_name: entity.node.webform.results_submissions
   parent_id: entity.node.webform.results
 
-entity.node.webform.results_table:
-  title: 'Table'
-  route_name: entity.node.webform.results_table
-  parent_id: entity.node.webform.results
-
 entity.node.webform.results_export:
   title: 'Download'
   route_name: entity.node.webform.results_export

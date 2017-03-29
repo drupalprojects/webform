@@ -165,7 +165,11 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     $webform_submission_storage = $this->getStorage();
 
     $route_name = \Drupal::routeMatch()->getRouteName();
-    if ($route_name == "$base_route_name.webform.results_table") {
+
+    if ($route_name == "$base_route_name.webform.results_submissions") {
+      // Display submission properties and elements.
+      // @see /admin/structure/webform/manage/{webform}/results/submissions
+      // @see /node/{node}/webform/results/submissions
       $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
       $this->sort = $webform_submission_storage->getCustomSetting('sort', 'serial', $this->webform, $this->sourceEntity);
       $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
@@ -182,6 +186,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
     else {
+      // Display only submission properties.
+      // @see /admin/structure/webform/results/manage
       $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
       if ($route_name == 'entity.webform_submission.collection') {
         // Replace serial with sid when showing results from all webforms.
@@ -236,7 +242,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     // Customize.
     if ($this->customize) {
-      $route_name = $this->requestHandler->getRouteName($this->webform, $this->sourceEntity, 'webform.results_table.custom');
+      $route_name = $this->requestHandler->getRouteName($this->webform, $this->sourceEntity, 'webform.results_submissions.custom');
       $route_parameters = $this->requestHandler->getRouteParameters($this->webform, $this->sourceEntity) + ['webform' => $this->webform->id()];
       $route_options = ['query' => \Drupal::destination()->getAsArray()];
       $build['custom'] = [

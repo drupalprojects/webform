@@ -293,7 +293,7 @@ class WebformResultsCustomForm extends FormBase {
     drupal_set_message($this->t('The customized table has been saved.'));
 
     // Set redirect.
-    $route_name = $this->requestHandler->getRouteName($this->webform, $this->sourceEntity, 'webform.results_table');
+    $route_name = $this->requestHandler->getRouteName($this->webform, $this->sourceEntity, 'webform.results_submissions');
     $route_parameters = $this->requestHandler->getRouteParameters($this->webform, $this->sourceEntity);
     $form_state->setRedirect($route_name, $route_parameters);
   }

@@ -116,8 +116,8 @@ class WebformElementAccessTest extends WebformTestBase {
 
     $urls = [
       ['path' => "/admin/structure/webform/manage/test_element_access/submission/$sid"],
-      ['path' => '/admin/structure/webform/manage/test_element_access/results/table'],
-      ['path' => '/admin/structure/webform/manage/test_element_access/results/table/custom'],
+      ['path' => '/admin/structure/webform/manage/test_element_access/results/submissions'],
+      ['path' => '/admin/structure/webform/manage/test_element_access/results/submissions/custom'],
       ['path' => '/admin/structure/webform/manage/test_element_access/results/download'],
       ['path' => '/admin/structure/webform/manage/test_element_access/results/download', 'options' => ['query' => ['download' => 1]]],
     ];

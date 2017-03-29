@@ -219,21 +219,8 @@ entity.webform.results_submissions:
     _entity_access: 'webform.submission_view_any'
     _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
 
-entity.webform.results_table:
-  path: '/admin/structure/webform/manage/{webform}/results/table'
-  defaults:
-    _entity_list: 'webform_submission'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
-  options:
-    parameters:
-      webform:
-        type: 'entity:webform'
-  requirements:
-    _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
-
-entity.webform.results_table.custom:
-  path: '/admin/structure/webform/manage/{webform}/results/table/custom'
+entity.webform.results_submissions.custom:
+  path: '/admin/structure/webform/manage/{webform}/results/submissions/custom'
   defaults:
     _form: 'Drupal\webform\Form\WebformResultsCustomForm'
     _title: 'Customize table'
