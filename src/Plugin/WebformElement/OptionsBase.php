@@ -125,6 +125,13 @@ abstract class OptionsBase extends WebformElementBase {
         }
       }
     }
+
+    // If the element is #required and the #default_value is an empty string
+    // we need to unset the #default_value to prevent the below error.
+    // 'An illegal choice has been detected.'
+    if (!empty($element['#required']) && isset($element['#default_value']) && $element['#default_value'] === '') {
+      unset($element['#default_value']);
+    }
   }
 
   /**
