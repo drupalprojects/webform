@@ -537,6 +537,14 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       ];
     }
 
+    if ($entity->access('view_any') && \Drupal::currentUser()->hasPermission('access webform submission log')) {
+      $operations['log'] = [
+        'title' => $this->t('Log'),
+        'weight' => 100,
+        'url' => Url::fromRoute("$base_route_name.webform_submission.log", $route_parameters, $route_options),
+      ];
+    }
+
     return $operations;
   }
 

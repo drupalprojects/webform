@@ -1,11 +1,11 @@
 langcode: en
 status: open
+open: null
+close: null
 dependencies:
   enforced:
     module:
       - webform_test
-open: null
-close: null
 uid: null
 template: false
 id: test_element_email
@@ -69,6 +69,7 @@ settings:
   form_disable_back: false
   form_autofocus: false
   form_details_toggle: false
+  submission_log: false
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false

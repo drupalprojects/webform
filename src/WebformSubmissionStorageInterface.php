@@ -370,7 +370,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    * @param array $values
-   *   The value to be logged includes 'handler_id', 'operation', and 'data'.
+   *   The value to be logged includes 'handler_id', 'operation', 'message', and 'data'.
    */
   public function log(WebformSubmissionInterface $webform_submission, array $values = []);
 

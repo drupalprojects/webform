@@ -150,6 +150,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function hasSubmissions();
 
   /**
+   * Determine if submissions are being logged.
+   *
+   * @return bool
+   *   TRUE if submissions are being logged.
+   */
+  public function hasSubmissionLog();
+
+  /**
    * Determine if the current webform is translated.
    *
    * @return bool

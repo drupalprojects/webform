@@ -73,17 +73,23 @@ class WebformSubmissionStorageSchema extends SqlContentEntityStorageSchema {
           'not null' => TRUE,
           'description' => 'Primary Key: Unique log event ID.',
         ],
+        'webform_id' => [
+          'description' => 'The webform id.',
+          'type' => 'varchar',
+          'length' => 32,
+          'not null' => TRUE,
+        ],
         'sid' => [
-          'description' => 'The unique identifier for this submission.',
+          'description' => 'The webform submission id.',
           'type' => 'int',
           'unsigned' => TRUE,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
         'handler_id' => [
           'description' => 'The webform handler id.',
           'type' => 'varchar',
           'length' => 64,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
         'uid' => [
           'type' => 'int',
@@ -120,6 +126,7 @@ class WebformSubmissionStorageSchema extends SqlContentEntityStorageSchema {
       ],
       'primary key' => ['lid'],
       'indexes' => [
+        'webform_id' => ['webform_id'],
         'sid' => ['sid'],
         'uid' => ['uid'],
         'handler_id' => ['handler_id'],

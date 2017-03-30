@@ -43,6 +43,27 @@ class WebformAccess {
   }
 
   /**
+   * Check whether the webform has log.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   The source entity.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public static function checkLogAccess(WebformInterface $webform, EntityInterface $source_entity = NULL) {
+    if (!$webform->hasSubmissionLog()) {
+      $access_result = AccessResult::forbidden()->addCacheableDependency($webform);
+    }
+    else {
+      $access_result = self::checkResultsAccess($webform, $source_entity);
+    }
+    return $access_result->addCacheTags(['config:webform.settings']);
+  }
+
+  /**
    * Check whether the user has 'administer webform' or 'administer webform submission' permission.
    *
    * @param \Drupal\Core\Session\AccountInterface $account

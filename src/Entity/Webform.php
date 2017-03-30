@@ -433,6 +433,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasSubmissionLog() {
+    return \Drupal::config('webform.settings')->get('settings.default_submission_log') ?: $this->getSetting('submission_log') ?: FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasTranslations() {
     if (isset($this->hasTranslations)) {
       return $this->hasTranslations;
@@ -622,6 +629,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_disable_back' => FALSE,
       'form_autofocus' => FALSE,
       'form_details_toggle' => FALSE,
+      'submission_log' => FALSE,
       'wizard_progress_bar' => TRUE,
       'wizard_progress_pages' => FALSE,
       'wizard_progress_percentage' => FALSE,

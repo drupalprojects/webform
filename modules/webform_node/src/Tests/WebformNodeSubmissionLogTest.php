@@ -21,7 +21,7 @@ class WebformNodeSubmissionLogTest extends WebformNodeTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_handler_log'];
+  protected static $testWebforms = ['test_submission_log'];
 
   /**
    * {@inheritdoc}
@@ -38,7 +38,7 @@ class WebformNodeSubmissionLogTest extends WebformNodeTestBase {
    */
   public function testSubmissionLog() {
     global $base_path;
-    $node = $this->createWebformNode('test_handler_log');
+    $node = $this->createWebformNode('test_submission_log');
     $nid = $node->id();
 
     $sid = $this->postNodeSubmission($node);
@@ -46,10 +46,10 @@ class WebformNodeSubmissionLogTest extends WebformNodeTestBase {
     $this->assertEqual($log->lid, 1);
     $this->assertEqual($log->sid, 1);
     $this->assertEqual($log->uid, 0);
-    $this->assertEqual($log->handler_id, 'test_log');
+    $this->assertEqual($log->handler_id, '');
     $this->assertEqual($log->operation, 'submission created');
     $this->assertEqual($log->message, t('@title: Submission #1 created.', ['@title' => $node->label()]));
-    $this->assertEqual($log->webform_id, 'test_handler_log');
+    $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertEqual($log->entity_type, 'node');
     $this->assertEqual($log->entity_id, $node->id());
 

@@ -8,9 +8,9 @@ dependencies:
       - webform_test
 uid: null
 template: false
-id: test_handler_log
-title: 'Test: Handler: Logging'
-description: 'Test logging of webform handler operations.'
+id: test_submission_log
+title: 'Test: Submission: Logging'
+description: 'Test submission event logging.'
 elements: |
   value:
     '#type': textfield
@@ -39,6 +39,7 @@ settings:
   form_disable_back: false
   form_autofocus: false
   form_details_toggle: false
+  submission_log: true
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -107,11 +108,4 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-handlers:
-  log:
-    id: log
-    label: 'Test log'
-    handler_id: test_log
-    status: true
-    weight: 1
-    settings: {  }
+handlers: {  }

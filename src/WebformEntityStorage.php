@@ -2,12 +2,51 @@
 
 namespace Drupal\webform;
 
+use Drupal\Component\Uuid\UuidInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorage;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Storage controller class for "webform" configuration entities.
  */
 class WebformEntityStorage extends ConfigEntityStorage {
+
+  /**
+   * Active database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * Constructs a WebformEntityStorage object.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type definition.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection to be used.
+   */
+  public function __construct(EntityTypeInterface $entity_type, ConfigFactoryInterface $config_factory, UuidInterface $uuid_service, LanguageManagerInterface $language_manager, Connection $database) {
+    parent::__construct($entity_type, $config_factory, $uuid_service, $language_manager);
+    $this->database = $database;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
+    return new static(
+      $entity_type,
+      $container->get('config.factory'),
+      $container->get('uuid'),
+      $container->get('language_manager'),
+      $container->get('database')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -37,4 +76,22 @@ class WebformEntityStorage extends ConfigEntityStorage {
     return $this->entities[$id];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function delete(array $entities) {
+    parent::delete($entities);
+    if ($entities) {
+      return;
+    }
+
+    // Delete all webform submission log entries.
+    $webform_ids = [];
+    foreach ($entities as $entity) {
+      $webform_ids[$entity->id()] = $entity;
+    }
+    $this->database->delete('webform_submission_log')
+      ->condition('webform_ids', $webform_ids, 'IN')
+      ->execute();
+  }
 }

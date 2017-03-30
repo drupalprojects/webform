@@ -83,6 +83,9 @@ webform.settings:
         default_limit_user_message:
           type: text
           label: 'Default limit user message'
+        default_submission_log:
+          type: boolean
+          label: 'Default submission logging'
         form_classes:
           type: string
           label: 'Form CSS classes '
@@ -404,6 +407,9 @@ webform.webform.*:
         form_details_toggle:
           type: boolean
           label: 'Display collapse/expand all details link'
+        submission_log:
+          type: boolean
+          label: 'Submission logging'
         wizard_progress_bar:
           type: boolean
           label: 'Show wizard progress bar'

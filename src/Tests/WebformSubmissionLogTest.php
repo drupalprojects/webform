@@ -24,7 +24,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_handler_log'];
+  protected static $testWebforms = ['test_submission_log'];
 
   /**
    * {@inheritdoc}
@@ -42,7 +42,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
   public function testSubmissionLog() {
     global $base_path;
 
-    $webform = Webform::load('test_handler_log');
+    $webform = Webform::load('test_submission_log');
 
     // Check submission created.
     $sid_1 = $this->postSubmission($webform);
@@ -50,10 +50,10 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->lid, 1);
     $this->assertEqual($log->sid, 1);
     $this->assertEqual($log->uid, 0);
-    $this->assertEqual($log->handler_id, 'test_log');
+    $this->assertEqual($log->handler_id, '');
     $this->assertEqual($log->operation, 'submission created');
-    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #1 created.');
-    $this->assertEqual($log->webform_id, 'test_handler_log');
+    $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #1 created.');
+    $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
 
@@ -63,10 +63,10 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->lid, 2);
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->uid, 0);
-    $this->assertEqual($log->handler_id, 'test_log');
+    $this->assertEqual($log->handler_id, '');
     $this->assertEqual($log->operation, 'draft created');
-    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 draft created.');
-    $this->assertEqual($log->webform_id, 'test_handler_log');
+    $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 draft created.');
+    $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
 
@@ -76,10 +76,10 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->lid, 3);
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->uid, 0);
-    $this->assertEqual($log->handler_id, 'test_log');
+    $this->assertEqual($log->handler_id, '');
     $this->assertEqual($log->operation, 'draft updated');
-    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 draft updated.');
-    $this->assertEqual($log->webform_id, 'test_handler_log');
+    $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 draft updated.');
+    $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
 
@@ -89,10 +89,10 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->lid, 4);
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->uid, 0);
-    $this->assertEqual($log->handler_id, 'test_log');
+    $this->assertEqual($log->handler_id, '');
     $this->assertEqual($log->operation, 'submission completed');
-    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 completed using saved draft.');
-    $this->assertEqual($log->webform_id, 'test_handler_log');
+    $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 completed using saved draft.');
+    $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
 
@@ -107,7 +107,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->operation, 'submission converted');
-    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 converted from anonymous to ' . $this->adminWebformUser->label() . '.');
+    $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 converted from anonymous to ' . $this->adminWebformUser->label() . '.');
 
     // Check submission #1 converted.
     $log = $submission_log[1];
@@ -115,24 +115,24 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
     $this->assertEqual($log->sid, 1);
     $this->assertEqual($log->operation, 'submission converted');
-    $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #1 converted from anonymous to ' . $this->adminWebformUser->label() . '.');
+    $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #1 converted from anonymous to ' . $this->adminWebformUser->label() . '.');
 
     // Check submission updated.
-    $this->drupalPostForm("admin/structure/webform/manage/test_handler_log/submission/$sid_2/edit", [], t('Save'));
+    $this->drupalPostForm("admin/structure/webform/manage/test_submission_log/submission/$sid_2/edit", [], t('Save'));
     $log = $this->getLastSubmissionLog();
     $this->assertEqual($log->lid, 7);
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
-    $this->assertEqual($log->handler_id, 'test_log');
+    $this->assertEqual($log->handler_id, '');
     // $this->assertEqual($log->operation, 'submission completed');
-    // $this->assertEqual($log->message, 'Test: Handler: Logging: Submission #2 completed using saved draft.');
-    $this->assertEqual($log->webform_id, 'test_handler_log');
+    // $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 completed using saved draft.');
+    $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
 
     // Check submission deleted removes all log entries for this sid.
-    $this->drupalPostForm("admin/structure/webform/manage/test_handler_log/submission/$sid_1/delete", [], t('Delete'));
-    $this->drupalPostForm("admin/structure/webform/manage/test_handler_log/submission/$sid_2/delete", [], t('Delete'));
+    $this->drupalPostForm("admin/structure/webform/manage/test_submission_log/submission/$sid_1/delete", [], t('Delete'));
+    $this->drupalPostForm("admin/structure/webform/manage/test_submission_log/submission/$sid_2/delete", [], t('Delete'));
     $log = $this->getLastSubmissionLog();
     $this->assertFalse($log);
 
@@ -141,7 +141,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertRaw('No log messages available.');
 
     // Check webform results log table is empty.
-    $this->drupalGet('admin/structure/webform/manage/test_handler_log/results/log');
+    $this->drupalGet('admin/structure/webform/manage/test_submission_log/results/log');
     $this->assertRaw('No log messages available.');
 
     $sid_3 = $this->postSubmission($webform);
@@ -150,16 +150,16 @@ class WebformSubmissionLogTest extends WebformTestBase {
     // Check all results log table has record.
     $this->drupalGet('admin/structure/webform/log');
     $this->assertNoRaw('No log messages available.');
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_handler_log/results/log">Test: Handler: Logging</a>');
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_handler_log/submission/3/log">3</a></td>');
-    $this->assertRaw('Test: Handler: Logging: Submission #3 created.');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_submission_log/results/log">Test: Submission: Logging</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_submission_log/submission/3/log">3</a></td>');
+    $this->assertRaw('Test: Submission: Logging: Submission #3 created.');
 
     // Check webform results log table has record.
-    $this->drupalGet('admin/structure/webform/manage/test_handler_log/results/log');
+    $this->drupalGet('admin/structure/webform/manage/test_submission_log/results/log');
     $this->assertNoRaw('No log messages available.');
-    $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_handler_log/results/log">Test: Handler: Logging</a>');
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_handler_log/submission/3/log">3</a></td>');
-    $this->assertRaw('Test: Handler: Logging: Submission #3 created.');
+    $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_submission_log/results/log">Test: Submission: Logging</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/test_submission_log/submission/3/log">3</a></td>');
+    $this->assertRaw('Test: Submission: Logging: Submission #3 created.');
   }
 
 }

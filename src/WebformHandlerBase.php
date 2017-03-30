@@ -359,4 +359,27 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    */
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {}
 
+  /**
+   * Log a webform handler's submission operation.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param string $operation
+   *   The operation to be logged.
+   * @param string $message
+   *   The message to be logged.
+   * @param array $data
+   *   The data to be saved with log record.
+   */
+  protected function log(WebformSubmissionInterface $webform_submission, $operation, $message, array $data = []) {
+    if ($webform_submission->getWebform()->hasSubmissionLog()) {
+      $this->submissionStorage->log($webform_submission, [
+        'handler_id' => $this->getHandlerId(),
+        'operation' => $operation,
+        'message' => $message,
+        'data' => $data,
+      ]);
+    }
+  }
+
 }

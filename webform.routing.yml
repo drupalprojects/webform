@@ -283,7 +283,7 @@ entity.webform.results_log:
   requirements:
     _permission: 'access webform submission log'
     _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkLogAccess'
 
 # Webform options
 
@@ -394,6 +394,7 @@ entity.webform_submission.log:
   requirements:
     _permission: 'access webform submission log'
     _entity_access: 'webform_submission.view_any'
+    _custom_access: '\Drupal\webform\Access\WebformAccess::checkLogAccess'
 
 entity.webform_submission.edit_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit'

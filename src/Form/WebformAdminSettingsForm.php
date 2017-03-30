@@ -165,41 +165,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#size' => 20,
       '#default_value' => $settings['default_form_submit_label'],
     ];
-    $form['form']['default_form_submit_once'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Prevent duplicate submissions'),
-      '#description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
-      '#return_value' => TRUE,
-      '#default_value' => $settings['default_form_submit_once'],
-    ];
-    $form['form']['default_form_disable_back'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Disable back button for all webforms'),
-      '#description' => $this->t('If checked, users will not be allowed to navigate back to the webform using the browsers back button.'),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('settings.default_form_disable_back'),
-    ];
-    $form['form']['default_form_unsaved'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Warn users about unsaved changes'),
-      '#description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('settings.default_form_unsaved'),
-    ];
-    $form['form']['default_form_novalidate'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Disable client-side validation for all webforms'),
-      '#description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to all webforms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('settings.default_form_novalidate'),
-    ];
-    $form['form']['default_form_details_toggle'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Display collapse/expand all details link'),
-      '#description' => $this->t('If checked, an expand/collapse all (details) link will be added to all webforms with two or more details elements.'),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('settings.default_form_details_toggle'),
-    ];
     $form['form']['form_classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Form CSS classes '),
@@ -212,6 +177,66 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('A list of classes that will be provided in "Button CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.button_classes'),
     ];
+
+    // Form Behaviors.
+    $form['form_behaviors'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Form default behaviors'),
+      '#tree' => TRUE,
+    ];
+    $behavior_elements = [
+      'default_form_submit_once' => [
+        'title' => $this->t('Prevent duplicate submissions'),
+        'description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
+      ],
+      'default_form_disable_back' => [
+        'title' => $this->t('Disable back button for all webforms'),
+        'description' => $this->t('If checked, users will not be allowed to navigate back to the webform using the browsers back button.'),
+      ],
+      'default_form_unsaved' => [
+        'title' => $this->t('Warn users about unsaved changes'),
+        'description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
+      ],
+      'default_form_novalidate' => [
+        'title' => $this->t('Disable client-side validation for all webforms'),
+        'description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to all webforms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
+      ],
+      'default_form_details_toggle' => [
+        'title' => $this->t('Display collapse/expand all details link'),
+        'description' => $this->t('If checked, an expand/collapse all (details) link will be added to all webforms with two or more details elements.'),
+      ],
+    ];
+    foreach ($behavior_elements as $behavior_key => $behavior_element) {
+      $form['form_behaviors'][$behavior_key] = [
+        '#type' => 'checkbox',
+        '#title' => $behavior_element['title'],
+        '#description' => $behavior_element['description'],
+        '#return_value' => TRUE,
+        '#default_value' => $settings[$behavior_key],
+      ];
+    }
+
+    // Submission Behaviors.
+    $form['submission_behaviors'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission default behaviors'),
+      '#tree' => TRUE,
+    ];
+    $behavior_elements = [
+      'default_submission_log' => [
+        'title' => $this->t('Log all submission events for all webforms.'),
+        'description' => $this->t('If checked, all submission events will be logged to dedicated submission log available to all webforms and submissions.'),
+      ],
+    ];
+    foreach ($behavior_elements as $behavior_key => $behavior_element) {
+      $form['submission_behaviors'][$behavior_key] = [
+        '#type' => 'checkbox',
+        '#title' => $behavior_element['title'],
+        '#description' => $behavior_element['description'],
+        '#return_value' => TRUE,
+        '#default_value' => $settings[$behavior_key],
+      ];
+    }
 
     // Wizard.
     $form['wizard'] = [
@@ -833,6 +858,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
 
     $settings = $form_state->getValue('page')
       + $form_state->getValue('form')
+      + $form_state->getValue('form_behaviors')
+      + $form_state->getValue('submission_behaviors')
       + $form_state->getValue('wizard')
       + $form_state->getValue('preview')
       + $form_state->getValue('draft')

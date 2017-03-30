@@ -538,7 +538,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $state = $webform_submission->getWebform()->getSetting('results_disabled') ? WebformSubmissionInterface::STATE_COMPLETED : $webform_submission->getState();
     if (in_array($state, $this->configuration['states'])) {
       $message = $this->getMessage($webform_submission);
-      $this->sendMessage($message);
+      $this->sendMessage($webform_submission, $message);
     }
   }
 
@@ -548,7 +548,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   public function postDelete(WebformSubmissionInterface $webform_submission) {
     if (in_array(WebformSubmissionInterface::STATE_DELETED, $this->configuration['states'])) {
       $message = $this->getMessage($webform_submission);
-      $this->sendMessage($message);
+      $this->sendMessage($webform_submission, $message);
     }
   }
 
@@ -763,7 +763,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
-  public function sendMessage(array $message) {
+  public function sendMessage(WebformSubmissionInterface $webform_submission, array $message) {
     $to = $message['to_mail'];
     $from = $message['from_mail'];
     if (!empty($message['from_name'])) {
@@ -784,12 +784,21 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Send message.
     $this->mailManager->mail('webform', 'email.' . $this->getHandlerId(), $to, $current_langcode, $message, $from);
 
-    // Log message.
+    // Log message in Drupal's log.
     $context = [
       '@form' => $this->getWebform()->label(),
       '@title' => $this->label(),
     ];
     $this->logger->notice('@form webform sent @title email.', $context);
+
+    // Log message in Webform's submission log.
+    $t_args = [
+      '@from_name' => $message['from_name'],
+      '@from_mail' => $message['from_mail'],
+      '@to_mail' => $message['to_mail'],
+      '@subject' => $message['subject'],
+    ];
+    $this->log($webform_submission, 'sent email', $this->t("'@subject' sent to '@to_mail' from '@from_name' [@from_mail]'.", $t_args));
 
     // Debug by displaying send email onscreen.
     if ($this->configuration['debug']) {

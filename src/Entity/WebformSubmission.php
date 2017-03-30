@@ -665,6 +665,13 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function save() {
     // Clear the remote_addr for confidential submissions.
     if ($this->getWebform()->isConfidential()) {

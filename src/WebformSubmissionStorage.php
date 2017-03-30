@@ -643,8 +643,62 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected function doPostSave(EntityInterface $entity, $update) {
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     parent::doPostSave($entity, $update);
+
     $this->invokeWebformElements('postSave', $entity, $update);
     $this->invokeWebformHandlers('postSave', $entity, $update);
+
+    // Log submission events.
+    if ($entity->getWebform()->hasSubmissionLog()) {
+      $t_args = ['@title' => $entity->label()];
+      switch ($entity->getState()) {
+        case WebformSubmissionInterface::STATE_DRAFT:
+          if ($update) {
+            $operation = 'draft updated';
+            $message = $this->t('@title draft updated.', $t_args);
+          }
+          else {
+            $operation = 'draft created';
+            $message = $this->t('@title draft created.', $t_args);
+          }
+          break;
+
+        case WebformSubmissionInterface::STATE_COMPLETED:
+          if ($update) {
+            $operation = 'submission completed';
+            $message = $this->t('@title completed using saved draft.', $t_args);
+          }
+          else {
+            $operation = 'submission created';
+            $message = $this->t('@title created.', $t_args);
+          }
+          break;
+
+        case WebformSubmissionInterface::STATE_CONVERTED:
+          $operation = 'submission converted';
+          $message = $this->t('@title converted from anonymous to @user.', $t_args + ['@user' => $entity->getOwner()->label()]);
+          break;
+
+        case WebformSubmissionInterface::STATE_UPDATED:
+          $operation = 'submission updated';
+          $message = $this->t('@title updated.', $t_args);
+          break;
+
+        case WebformSubmissionInterface::STATE_UNSAVED:
+          $operation = 'submission submitted';
+          $message = $this->t('@title submitted.', $t_args);
+          break;
+
+        default:
+          throw new \Exception('Unexpected webform submission state');
+          break;
+      }
+
+      $this->log($entity, [
+        'handler_id' => '',
+        'operation' => $operation,
+        'message' => $message,
+      ]);
+    }
   }
 
   /**
@@ -910,15 +964,21 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * {@inheritdoc}
    */
   public function log(WebformSubmissionInterface $webform_submission, array $values = []) {
+    // Submission ID is required for logging.
+    // @todo Enable logging for submissions not saved to the database.
+    if (empty($webform_submission->id())) {
+      return;
+    }
+
     $values += [
       'uid' => $this->currentUser->id(),
-      'sid' => $webform_submission->id(),
+      'webform_id' => $webform_submission->getWebform()->id(),
+      'sid' => $webform_submission->id() ?: NULL,
       'handler_id' => NULL,
       'data' => [],
       'timestamp' => time(),
     ];
     $values['data'] = serialize($values['data']);
-
     \Drupal::database()
       ->insert('webform_submission_log')
       ->fields($values)

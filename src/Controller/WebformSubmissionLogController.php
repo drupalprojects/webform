@@ -116,9 +116,9 @@ class WebformSubmissionLogController extends ControllerBase {
     $header = [];
     $header['lid'] = ['data' => $this->t('#'), 'field' => 'l.lid', 'sort' => 'desc'];
     if (empty($webform)) {
-      $header['webform_id'] = ['data' => $this->t('Webform'), 'field' => 'ws.webform_id', 'class' => [RESPONSIVE_PRIORITY_MEDIUM]];
+      $header['webform_id'] = ['data' => $this->t('Webform'), 'field' => 'l.webform_id', 'class' => [RESPONSIVE_PRIORITY_MEDIUM]];
     }
-    if (empty($source_entity)) {
+    if (empty($source_entity) && empty($webform_submission)) {
       $header['entity'] = ['data' => $this->t('Submitted to'), 'class' => [RESPONSIVE_PRIORITY_LOW]];
     }
     if (empty($webform_submission)) {
@@ -139,6 +139,7 @@ class WebformSubmissionLogController extends ControllerBase {
     $query->fields('l', [
       'lid',
       'uid',
+      'webform_id',
       'sid',
       'handler_id',
       'operation',
@@ -146,12 +147,11 @@ class WebformSubmissionLogController extends ControllerBase {
       'timestamp',
     ]);
     $query->fields('ws', [
-      'webform_id',
       'entity_type',
       'entity_id',
     ]);
     if ($webform) {
-      $query->condition('ws.webform_id', $webform->id());
+      $query->condition('l.webform_id', $webform->id());
     }
     if ($webform_submission) {
       $query->condition('l.sid', $webform_submission->id());
@@ -174,7 +174,7 @@ class WebformSubmissionLogController extends ControllerBase {
         $log_webform = $this->webformStorage->load($log->webform_id);
         $row['webform_id'] = $log_webform->toLink($log_webform->label(), 'results-log');
       }
-      if (empty($source_entity)) {
+      if (empty($source_entity) && empty($webform_submission)) {
         $entity = NULL;
         if ($log->entity_type && $log->entity_id) {
           $entity_type = $log->entity_type;
@@ -191,16 +191,21 @@ class WebformSubmissionLogController extends ControllerBase {
         }
       }
       if (empty($webform_submission)) {
-        $log_webform_submission = $this->webformSubmissionStorage->load($log->sid);
-        $route_name = $this->requestHandler->getRouteName($log_webform_submission, $source_entity, 'webform_submission.log');
-        $route_parameters = $this->requestHandler->getRouteParameters($log_webform_submission, $source_entity);
-        $row['sid'] = [
-          'data' => [
-            '#type' => 'link',
-            '#title' => $log->sid,
-            '#url' => Url::fromRoute($route_name, $route_parameters),
-          ],
-        ];
+        if ($log->sid) {
+          $log_webform_submission = $this->webformSubmissionStorage->load($log->sid);
+          $route_name = $this->requestHandler->getRouteName($log_webform_submission, $source_entity, 'webform_submission.log');
+          $route_parameters = $this->requestHandler->getRouteParameters($log_webform_submission, $source_entity);
+          $row['sid'] = [
+            'data' => [
+              '#type' => 'link',
+              '#title' => $log->sid,
+              '#url' => Url::fromRoute($route_name, $route_parameters),
+            ],
+          ];
+        }
+        else {
+          $row['sid'] = '';
+        }
       }
       $row['handler_id'] = $log->handler_id;
       $row['operation'] = $log->operation;
