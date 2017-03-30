@@ -28,16 +28,11 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\webform\WebformRequestInterface $request_handler
-   *   The Webform request handler.
    */
-  public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, WebformRequestInterface $request_handler) {
-    parent::__construct($entity_manager, $entity_type_bundle_info, $time);
-    $this->requestHandler = $request_handler;
+  public function __construct(EntityManagerInterface $entity_manager) {
+    parent::__construct($entity_manager);
+    // @todo Update constructor once Webform is only support Drupal 8.3.x.
+    $this->requestHandler = \Drupal::service('webform.request');
   }
 
   /**
@@ -45,10 +40,7 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time'),
-      $container->get('webform.request')
+      $container->get('entity.manager')
     );
   }
 
