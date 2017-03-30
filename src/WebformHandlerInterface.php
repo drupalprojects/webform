@@ -298,4 +298,19 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
    */
   public function postDelete(WebformSubmissionInterface $webform_submission);
 
+  /**
+   * Acts on handler after it has been created and added to webform.
+   */
+  public function createHandler();
+
+  /**
+   * Acts on handler after it has been updated.
+   */
+  public function updateHandler();
+
+  /**
+   * Acts on handler after it has been removed.
+   */
+  public function deleteHandler();
+
 }

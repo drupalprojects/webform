@@ -28,6 +28,9 @@ class WebformHandlerPluginTest extends WebTestBase {
     // Check initial dependencies.
     $this->assertEqual($webform->getDependencies(), ['module' => ['webform']]);
 
+    /** @var \Drupal\webform\WebformHandlerManagerInterface $handler_manager */
+    $handler_manager = $this->container->get('plugin.manager.webform.handler');
+
     // Add 'test' handler provided by the webform_test.module.
     $webform_handler_configuration = [
       'id' => 'test',
@@ -37,7 +40,8 @@ class WebformHandlerPluginTest extends WebTestBase {
       'weight' => 2,
       'settings' => [],
     ];
-    $webform->addWebformHandler($webform_handler_configuration);
+    $webform_handler = $handler_manager->createInstance('test', $webform_handler_configuration);
+    $webform->addWebformHandler($webform_handler);
     $webform->save();
 
     // Check that handler has been added to the dependencies.

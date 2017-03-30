@@ -38,32 +38,7 @@ class TestLogWebformHandler extends WebformHandlerBase {
    */
   protected function invokeLog(WebformSubmissionInterface $webform_submission, $operation) {
     drupal_set_message($this->t('Logged: @operation', ['@operation' => $operation]));
-    $this->log($webform_submission, $operation, []);
-  }
-
-  /**
-   * Log a submission's event.
-   *
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
-   * @param string $operation
-   *   The operation to be logged.
-   * @param array $data
-   *   Data to be logged.
-   */
-  protected function log(WebformSubmissionInterface $webform_submission, $operation, array $data = []) {
-    \Drupal::database()
-      ->insert('webform_submission_log')
-      ->fields([
-        'uid' => \Drupal::currentUser()->id(),
-        'webform_id' => $webform_submission->getWebform()->id(),
-        'sid' => $webform_submission->id(),
-        'handler_id' => $this->getHandlerId(),
-        'operation' => $operation,
-        'data' => serialize($data),
-        'timestamp' => time(),
-      ])
-      ->execute();
+    $this->log($webform_submission, $operation, $this->t('Logged: @operation', ['@operation' => $operation]));
   }
 
 }

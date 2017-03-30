@@ -145,6 +145,23 @@ class WebformHandlerTest extends WebformTestBase {
     $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:postSave insert');
     // Check that post load is not executed when saving results is disabled.
     $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:postLoad');
+
+    // Check update handler.
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test/handlers/test/edit', [], t('Save'));
+    $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:updateHandler');
+    $this->assertRaw('The webform handler was successfully updated.');
+
+    // Check delete handler.
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test/handlers/test/delete', [], t('Delete'));
+    $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:deleteHandler');
+
+    // Check create handler.
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test/handlers/add/test_log', ['handler_id' => 'test'], t('Save'));
+    $this->assertRaw('The webform handler was successfully added.');
+    // @todo Determine why create message is not being displayed.
+    // Ajax machine name callback could be causing the issue.
+    // $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createHandler');
+
   }
 
 }

@@ -185,25 +185,19 @@ abstract class WebformHandlerFormBase extends FormBase {
     // Update the original webform values.
     $form_state->setValue('settings', $handler_data->getValues());
 
-    $is_new = ($this->webformHandler->getHandlerId()) ? FALSE : TRUE;
-
     $this->webformHandler->setHandlerId($form_state->getValue('handler_id'));
     $this->webformHandler->setLabel($form_state->getValue('label'));
     $this->webformHandler->setStatus($form_state->getValue('status'));
     $this->webformHandler->setWeight($form_state->getValue('weight'));
-    if ($is_new) {
-      $this->webform->addWebformHandler($this->webformHandler->getConfiguration());
+
+    if ($this instanceof WebformHandlerAddForm) {
+      $this->webform->addWebformHandler($this->webformHandler);
+      drupal_set_message($this->t('The webform handler was successfully added.'));
     }
     else {
-      // Update an existing handlers config.
-      $id = $this->webformHandler->getHandlerId();
-      $currentConfig = $this->webformHandler->getConfiguration();
-      $this->webform->getHandlers()->setInstanceConfiguration($id, $currentConfig);
+      $this->webform->updateWebformHandler($this->webformHandler);
+      drupal_set_message($this->t('The webform handler was successfully updated.'));
     }
-    $this->webform->save();
-
-    // Display status message.
-    drupal_set_message($this->t('The webform handler was successfully applied.'));
 
     // Redirect.
     return $this->redirectForm($form, $form_state, $this->webform->toUrl('handlers-form'));

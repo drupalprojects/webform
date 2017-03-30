@@ -45,6 +45,7 @@ trait WebformDialogTrait {
    */
   protected function buildFormDialog(array &$form, FormStateInterface $form_state) {
     if ($this->isModalDialog()) {
+      $form['actions']['submit']['#submit'] = ['::noSubmit'];
       $form['actions']['submit']['#ajax'] = [
         'callback' => '::submitForm',
         'event' => 'click',
@@ -73,7 +74,7 @@ trait WebformDialogTrait {
       $form['actions']['cancel'] = [
         '#type' => 'submit',
         '#value' => $this->t('Cancel'),
-        '#submit' => ['::closeDialog'],
+        '#submit' => ['::noSubmit'],
         '#ajax' => [
           'callback' => '::closeDialog',
           'event' => 'click',
@@ -82,6 +83,31 @@ trait WebformDialogTrait {
     }
     return $form;
   }
+
+  /**
+   * Close dialog #ajax callback.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return bool|\Drupal\Core\Ajax\AjaxResponse
+   *   An AJAX response that display validation error messages.
+   */
+  public function closeDialog(array &$form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+    $response->addCommand(new CloseDialogCommand());
+    return $response;
+  }
+
+  /**
+   * Empty submit callback used to only have the submit button to use an #ajax submit callback.
+   *
+   * This allows modal dialog to using ::submitCallback to validate and submit
+   * the form via one ajax required.
+   */
+  public function noSubmit(array &$form, FormStateInterface $form_state) {}
 
   /**
    * Display validation error messages in modal dialog.
@@ -109,22 +135,6 @@ trait WebformDialogTrait {
     return FALSE;
   }
 
-  /**
-   * Handler close dialog.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return bool|\Drupal\Core\Ajax\AjaxResponse
-   *   An AJAX response that display validation error messages.
-   */
-  public function closeDialog(array &$form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-    $response->addCommand(new CloseDialogCommand());
-    return $response;
-  }
 
   /**
    * Handle dialog redirect after form is submitted.

@@ -527,23 +527,33 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   /**
    * Saves a webform handler for this webform.
    *
-   * @param array $configuration
-   *   An array of webform handler configuration.
+   * @param \Drupal\webform\WebformHandlerInterface $handler
+   *   The webform handler object.
    *
    * @return string
    *   The webform handler ID.
    */
-  public function addWebformHandler(array $configuration);
+  public function addWebformHandler(WebformHandlerInterface $handler);
 
   /**
-   * Deletes a webform handler from this style.
+   * Update a webform handler for this webform.
    *
-   * @param \Drupal\webform\WebformHandlerInterface $effect
+   * @param \Drupal\webform\WebformHandlerInterface $handler
    *   The webform handler object.
    *
    * @return $this
    */
-  public function deleteWebformHandler(WebformHandlerInterface $effect);
+  public function updateWebformHandler(WebformHandlerInterface $handler);
+
+  /**
+   * Deletes a webform handler from this webform.
+   *
+   * @param \Drupal\webform\WebformHandlerInterface $handler
+   *   The webform handler object.
+   *
+   * @return $this
+   */
+  public function deleteWebformHandler(WebformHandlerInterface $handler);
 
   /**
    * Invoke a handlers method.

@@ -1445,15 +1445,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function deleteWebformHandler(WebformHandlerInterface $handler) {
-    $this->getHandlers()->removeInstanceId($handler->getHandlerId());
-    $this->save();
-    return $this;
-  }
-
-  /**
    * Returns the webform handler plugin manager.
    *
    * @return \Drupal\Component\Plugin\PluginManagerInterface
@@ -1537,9 +1528,38 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function addWebformHandler(array $configuration) {
-    $this->getHandlers()->addInstanceId($configuration['handler_id'], $configuration);
-    return $configuration['handler_id'];
+  public function addWebformHandler(WebformHandlerInterface $handler) {
+    $handler->setWebform($this);
+    $handler_id = $handler->getHandlerId();
+    $configuration = $handler->getConfiguration();
+    $this->getHandlers()->addInstanceId($handler_id, $configuration);
+    $this->save();
+    $handler->createHandler();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateWebformHandler(WebformHandlerInterface $handler) {
+    $handler->setWebform($this);
+    $handler_id = $handler->getHandlerId();
+    $configuration = $handler->getConfiguration();
+    $this->getHandlers()->setInstanceConfiguration($handler_id, $configuration);
+    $this->save();
+    $handler->updateHandler();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteWebformHandler(WebformHandlerInterface $handler) {
+    $handler->setWebform($this);
+    $this->getHandlers()->removeInstanceId($handler->getHandlerId());
+    $handler->deleteHandler();
+    $this->save();
+    return $this;
   }
 
   /**

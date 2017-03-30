@@ -141,6 +141,27 @@ class TestWebformHandler extends WebformHandlerBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function createHandler() {
+    $this->displayMessage(__FUNCTION__);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateHandler() {
+    $this->displayMessage(__FUNCTION__);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteHandler() {
+    $this->displayMessage(__FUNCTION__);
+  }
+
+  /**
    * Display the invoked plugin method to end user.
    *
    * @param string $method_name
