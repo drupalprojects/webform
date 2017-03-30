@@ -17,7 +17,7 @@ function webform_node_requirements($phase) {
   // @see https://www.drupal.org/node/2856599
   if ($phase == 'install') {
     // We have to put the check in a try catch.. otherwise it raise a
-    // NoCorrespondingEntityClassException if this modul is a
+    // NoCorrespondingEntityClassException if this module is a
     // dependency in a installation profile.
     try {
       $node_type = NodeType::load('webform');
