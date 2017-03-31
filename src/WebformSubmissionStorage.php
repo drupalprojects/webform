@@ -644,9 +644,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     parent::doPostSave($entity, $update);
 
-    $this->invokeWebformElements('postSave', $entity, $update);
-    $this->invokeWebformHandlers('postSave', $entity, $update);
-
     // Log submission events.
     if ($entity->getWebform()->hasSubmissionLog()) {
       $t_args = ['@title' => $entity->label()];
@@ -699,6 +696,9 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         'message' => $message,
       ]);
     }
+
+    $this->invokeWebformElements('postSave', $entity, $update);
+    $this->invokeWebformHandlers('postSave', $entity, $update);
   }
 
   /**
