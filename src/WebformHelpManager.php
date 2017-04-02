@@ -734,7 +734,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'entity.webform_submission.results_log',
       ],
       'title' => $this->t('Log'),
-      'url' => Url::fromRoute('entity.webform_submission.results_Log'),
+      'url' => Url::fromRoute('entity.webform_submission.results_log'),
       'content' => $this->t('The Log page lists all submission events for all webforms.'),
     ];
 
