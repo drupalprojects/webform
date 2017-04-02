@@ -34,7 +34,7 @@
             $(e.target).attr('checked', 'checked').change();
           })
           .on('ifUnchecked', function (e) {
-            $(e.target).removeAttr('checked').click();
+            $(e.target).removeAttr('checked').change();
           });
       });
     }
