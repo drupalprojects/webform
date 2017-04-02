@@ -236,6 +236,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'utility',
     ];
 
+    // Migrate: Webform Migrate.
+    $projects['webform_migrate'] = [
+      'title' => $this->t('Webform Migrate'),
+      'description' => $this->t('Provides migration routines from d6, d7 webform to d8 webform.'),
+      'url' => Url::fromUri('https://github.com/heshanlk/webform_migrate'),
+      'category' => 'migrate',
+    ];
+
     // Migrate: YAML Form Migrate.
     $projects['yamlform_migrate'] = [
       'title' => $this->t('YAML Form Migrate'),
