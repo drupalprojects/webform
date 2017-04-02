@@ -233,7 +233,7 @@ class WebformUiEntityForm extends WebformEntityForm {
             'webform' => $webform->id(),
             'key' => $key,
           ]),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
+          'attributes' => WebformDialogHelper::getModalDialogAttributes(700),
         ];
       }
     }

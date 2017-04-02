@@ -102,7 +102,7 @@ class WebformEntityHandlersForm extends EntityForm {
           'webform' => $this->entity->id(),
           'webform_handler' => $key,
         ]),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(700),
       ];
       $rows[$key]['operations'] = [
         '#type' => 'operations',
