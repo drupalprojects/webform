@@ -37,13 +37,13 @@
   description: 'Allows viewing <em>all</em> submissions.'
 'view own webform submission':
   title: 'View own webform submission'
-  description: 'Allows viewing <em>own/em> submissions.'
+  description: 'Allows viewing <em>own</em> submissions.'
 'edit any webform submission':
   title: 'Edit any webform submission'
   description: 'Allows updating <em>all</em> submissions.'
 'edit own webform submission':
-  title: 'View own webform submission'
-  description: 'Allows updating <em>own/em> submissions.'
+  title: 'Edit own webform submission'
+  description: 'Allows updating <em>own</em> submissions.'
 'delete any webform submission':
   title: 'Deleting any webform submission'
   description: 'Allows deleting <em>all</em> submissions.'
