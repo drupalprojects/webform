@@ -60,14 +60,14 @@ entity.webform.assets.javascript:
   defaults:
     _controller: '\Drupal\webform\Controller\WebformController::javascript'
   requirements:
-    _entity_access: 'webform.submission_page'
+    _entity_access: 'webform.view'
 
 entity.webform.assets.css:
   path: '/webform/{webform}/assets/css'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformController::css'
   requirements:
-    _entity_access: 'webform.submission_page'
+    _entity_access: 'webform.view'
 
 entity.webform.confirmation:
   path: '/webform/{webform}/confirmation'
