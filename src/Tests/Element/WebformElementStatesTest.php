@@ -19,7 +19,7 @@ class WebformElementStatesTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'file', 'language', 'node', 'webform'];
+  protected static $modules = ['filter', 'file', 'language', 'taxonomy', 'node', 'webform'];
 
   /**
    * Webforms to load.
@@ -27,6 +27,16 @@ class WebformElementStatesTest extends WebformTestBase {
    * @var array
    */
   protected static $testWebforms = ['example_elements', 'example_elements_composite', 'test_element_states'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create 'tags' vocabulary.
+    $this->createTags();
+  }
 
   /**
    * Tests element #states selectors for basic and composite elements.

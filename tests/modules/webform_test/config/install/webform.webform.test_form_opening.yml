@@ -1,11 +1,11 @@
 langcode: en
 status: scheduled
-open: '2020-01-01T00:00:00-05:00'
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: '2020-01-01T00:00:00-05:00'
+close: null
 uid: null
 template: false
 id: test_form_opening

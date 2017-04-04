@@ -6,9 +6,12 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\simpletest\WebTestBase;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\Role;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Entity\Webform;
@@ -263,6 +266,39 @@ abstract class WebformTestBase extends WebTestBase {
       }
     }
     return $this->nodes;
+  }
+
+  /****************************************************************************/
+  // Taxonomy.
+  /****************************************************************************/
+
+  /**
+   * Create the 'tags' taxonomy vocabulary.
+   */
+  protected function createTags() {
+    $vocabulary = Vocabulary::create([
+      'name' => 'Tags',
+      'vid' => 'tags',
+      'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
+    ]);
+    $vocabulary->save();
+    for ($i = 1; $i <= 3; $i++) {
+      $parent_term = Term::create([
+        'name' => "Parent $i",
+        'vid' => 'tags',
+        'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      ]);
+      $parent_term->save();
+      for ($x = 1; $x <= 3; $x++) {
+        $child_term = Term::create([
+          'name' => "Parent $i: Child $x",
+          'parent' => $parent_term->id(),
+          'vid' => 'tags',
+          'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
+        ]);
+        $child_term->save();
+      }
+    }
   }
 
   /****************************************************************************/

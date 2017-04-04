@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_element_format_multiple
@@ -1467,6 +1467,59 @@ elements: |
         '#multiple': true
         '#default_value':
           - 1
+        '#format_items': ul
+    webform_term_checkboxes:
+      '#type': details
+      '#title': 'Term checkboxes'
+      webform_term_checkboxes_comma:
+        '#type': webform_term_checkboxes
+        '#title': 'Term checkboxes (Comma)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': comma
+      webform_term_checkboxes_semicolon:
+        '#type': webform_term_checkboxes
+        '#title': 'Term checkboxes (Semicolon)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': semicolon
+      webform_term_checkboxes_and:
+        '#type': webform_term_checkboxes
+        '#title': 'Term checkboxes (And)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': and
+      webform_term_checkboxes_ol:
+        '#type': webform_term_checkboxes
+        '#title': 'Term checkboxes (Ordered list)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
+        '#format_items': ol
+      webform_term_checkboxes_ul:
+        '#type': webform_term_checkboxes
+        '#title': 'Term checkboxes (Unordered list)'
+        '#vocabulary': tags
+        '#multiple': true
+        '#default_value':
+          - Loremipsum
+          - Oratione
+          - Dixisset
         '#format_items': ul
     webform_term_select:
       '#type': details

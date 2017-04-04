@@ -1,11 +1,11 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test
+open: null
+close: null
 uid: null
 template: false
 id: test_handler_email

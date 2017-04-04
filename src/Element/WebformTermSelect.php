@@ -12,6 +12,8 @@ use Drupal\Core\Render\Element\Select;
  */
 class WebformTermSelect extends Select {
 
+  use WebformTermReferenceTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -38,55 +40,6 @@ class WebformTermSelect extends Select {
     $element['#type'] = 'select';
 
     return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function setOptions(array &$element) {
-    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    if (!empty($element['#options'])) {
-      return;
-    }
-
-    if (!\Drupal::moduleHandler()->moduleExists('taxonomy')) {
-      return [];
-    }
-
-    if (empty($element['#vocabulary'])) {
-      $element['#options'] = [];
-      return;
-    }
-
-    /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
-    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $tree = $taxonomy_storage->loadTree($element['#vocabulary'], 0, NULL, TRUE);
-
-    $options = [];
-    if (!empty($element['#breadcrumb'])) {
-      // Build term breadcrumbs.
-      $element += ['#breadcrumb_delimiter' => ' › '];
-      $breadcrumb = [];
-      foreach ($tree as $item) {
-        if ($item->isTranslatable() && $item->hasTranslation($language)) {
-          $item = $item->getTranslation($language);
-        }
-        $breadcrumb[$item->depth] = $item->getName();
-        $breadcrumb = array_slice($breadcrumb, 0, $item->depth + 1);
-        $options[$item->id()] = implode($element['#breadcrumb_delimiter'], $breadcrumb);
-      }
-    }
-    else {
-      $element += ['#tree_delimiter' => '-'];
-      // Build hierarchical term tree.
-      foreach ($tree as $item) {
-        if ($item->isTranslatable() && $item->hasTranslation($language)) {
-          $item = $item->getTranslation($language);
-        }
-        $options[$item->id()] = str_repeat($element['#tree_delimiter'], $item->depth) . $item->getName();
-      }
-    }
-    $element['#options'] = $options;
   }
 
 }

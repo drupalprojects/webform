@@ -42,7 +42,7 @@ function hook_webform_handler_info_alter(array &$handlers) {
  *   - webform: The webform structure to which elements is being attached.
  *
  * @see \Drupal\webform\WebformSubmissionForm::prepareElements()
- * @see hook_webform_element_ELEMENT_TYPE_form_alter()
+ * @see hook_webform_element_ELEMENT_TYPE_alter()
  */
 function hook_webform_element_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
   // Code here acts on all elements included in a webform.
@@ -60,7 +60,7 @@ function hook_webform_element_alter(array &$element, \Drupal\Core\Form\FormState
 /**
  * Alter webform elements for a specific type.
  *
- * Modules can implement hook_webform_element_ELEMENT_TYPE_form_alter() to
+ * Modules can implement hook_webform_element_ELEMENT_TYPE_alter() to
  * modify a specific webform element, rather than using
  * hook_webform_element_alter() and checking the element type.
  *
@@ -69,13 +69,13 @@ function hook_webform_element_alter(array &$element, \Drupal\Core\Form\FormState
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
  * @param array $context
- *   An associative array. See hook_field_widget_form_alter() for the structure
+ *   An associative array. See hook_field_widget_alter() for the structure
  *   and content of the array.
  *
  * @see \Drupal\webform\WebformSubmissionForm::prepareElements()
  * @see hook_webform_element_alter(()
  */
-function hook_webform_element_ELEMENT_TYPE_form_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
+function hook_webform_element_ELEMENT_TYPE_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
   // Add custom data attributes to a specific element type.
   $element['#attributes']['data-custom'] = '{custom data goes here}';
 

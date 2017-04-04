@@ -86,5 +86,7 @@ webform_mapping:
 webform_message:
   '#message_type': 'warning'
   '#message_message': 'This is a <strong>warning</strong> message.'
+webform_term_checkboxes:
+  '#vocabulary': tags
 webform_term_select:
   '#vocabulary': tags

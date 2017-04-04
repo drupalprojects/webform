@@ -149,9 +149,9 @@ function _webform_update_webform_settings() {
   $default_properties = [
     'langcode' => 'en',
     'status' => WebformInterface::STATUS_OPEN,
+    'dependencies' => [],
     'open' => NULL,
     'close' => NULL,
-    'dependencies' => [],
     'uid' => '',
     'template' => FALSE,
     'id' => '',

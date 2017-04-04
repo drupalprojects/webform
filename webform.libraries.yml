@@ -498,6 +498,12 @@ webform.element.telephone:
     - core/jquery.once
     - webform/jquery.intl-tel-input
 
+webform.element.term_checkboxes:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.term_checkboxes.css: {}
+
 webform.element.text_format:
   version: VERSION
   js:
