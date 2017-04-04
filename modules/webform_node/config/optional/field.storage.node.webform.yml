@@ -4,6 +4,9 @@ dependencies:
   module:
     - node
     - webform
+  enforced:
+    module:
+      - webform_node
 id: node.webform
 field_name: webform
 entity_type: node
