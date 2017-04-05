@@ -4,11 +4,14 @@ namespace Drupal\webform;
 
 use Drupal\Core\Entity\EntityDeleteForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides a delete webform.
  */
 class WebformEntityDeleteForm extends EntityDeleteForm {
+
+  use WebformDialogTrait;
 
   /**
    * {@inheritdoc}
@@ -21,7 +24,15 @@ class WebformEntityDeleteForm extends EntityDeleteForm {
       '#required' => TRUE,
       '#weight' => 10,
     ];
-    return $form;
+
+    return $this->buildConfirmFormDialog($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRedirectUrl() {
+    return Url::fromRoute('entity.webform.collection');
   }
 
 }

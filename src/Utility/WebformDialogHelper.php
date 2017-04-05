@@ -3,6 +3,7 @@
 namespace Drupal\webform\Utility;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 
 /**
  * Helper class for dialog methods.

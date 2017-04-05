@@ -206,7 +206,14 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
     $this->webform->save();
 
     drupal_set_message($this->t('The webform element %title has been deleted.', ['%title' => $this->getElementTitle()]));
-    $form_state->setRedirectUrl($this->webform->toUrl('edit-form'));
+    $form_state->setRedirectUrl($this->getRedirectUrl());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectUrl() {
+    return $this->webform->toUrl('edit-form');
   }
 
   /**

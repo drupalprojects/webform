@@ -257,9 +257,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#_validate_form' => TRUE,
     ];
 
-    $form = $this->buildFormDialog($form, $form_state);
-
-    return $form;
+    return $this->buildFormDialog($form, $form_state);
   }
 
   /**
@@ -297,6 +295,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     $parent_key = $form_state->getValue('parent_key');
     $key = $form_state->getValue('key');
     if ($key) {
+      $this->key = $key;
       $this->webform->setElementProperties($key, $properties, $parent_key);
 
       // Validate elements.
@@ -315,10 +314,6 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $webform_element = $this->getWebformElement();
-
-    if ($response = $this->validateDialog($form, $form_state)) {
-      return $response;
-    }
 
     // The webform element configuration is stored in the 'properties' key in
     // the webform, pass that through for submission.
@@ -342,8 +337,14 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     ];
     drupal_set_message($this->t('%title has been @action.', $t_args));
 
-    // Redirect.
-    return $this->redirectForm($form, $form_state, $this->webform->toUrl('edit-form', ['query' => ['element-update' => $form_state->getValue('key')]]));
+    $form_state->setRedirectUrl($this->getRedirectUrl());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectUrl() {
+    return $this->webform->toUrl('edit-form', ['query' => ['element-update' => $this->key]]);
   }
 
   /**

@@ -90,7 +90,16 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
     ];
 
     $form['#attached']['library'][] = 'webform/webform.admin';
+
     return parent::form($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildForm($form, $form_state);
+    return $this->buildFormDialog($form, $form_state);
   }
 
   /**
@@ -108,6 +117,13 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
     drupal_set_message($this->t('Submission @sid notes saved.', ['@sid' => '#' . $this->entity->id()]));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectUrl() {
+    return $this->entity->toUrl('edit-notes-form');
   }
 
 }

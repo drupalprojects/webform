@@ -145,9 +145,7 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#button_type' => 'primary',
     ];
 
-    $form = $this->buildFormDialog($form, $form_state);
-
-    return $form;
+    return $this->buildFormDialog($form, $form_state);
   }
 
   /**
@@ -171,10 +169,6 @@ abstract class WebformHandlerFormBase extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    if ($response = $this->validateDialog($form, $form_state)) {
-      return $response;
-    }
-
     $form_state->cleanValues();
 
     // The webform handler configuration is stored in the 'settings' key in
@@ -199,8 +193,14 @@ abstract class WebformHandlerFormBase extends FormBase {
       drupal_set_message($this->t('The webform handler was successfully updated.'));
     }
 
-    // Redirect.
-    return $this->redirectForm($form, $form_state, $this->webform->toUrl('handlers-form'));
+    $form_state->setRedirectUrl($this->getRedirectUrl());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectUrl() {
+    return $this->webform->toUrl('handlers-form');
   }
 
   /**
