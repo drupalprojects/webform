@@ -216,7 +216,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       if ($any_role || in_array($role_name, $roles)) {
         if ($role_name == 'authenticated') {
           // Get all active authenticated users.
-          $query = db_select('users_field_data', 'u');
+          $query = \Drupal::database()->select('users_field_data', 'u');
           $query->fields('u', ['mail']);
           $query->condition('u.status', 1);
           $query->condition('u.mail', '', '<>');
@@ -226,7 +226,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         }
         else {
           // Get all authenticated users assigned to a specified role.
-          $query = db_select('user__roles', 'ur');
+          $query = \Drupal::database()->select('user__roles', 'ur');
           $query->distinct();
           $query->join('users_field_data', 'u', 'u.uid = ur.entity_id');
           $query->fields('u', ['mail']);
