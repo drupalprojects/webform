@@ -298,6 +298,34 @@ function _webform_update_actions() {
   }
 }
 
+/**
+ * Update webform field storage definitions.
+ *
+ * @see \Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem::schema
+ */
+function _webform_update_field_storage_definitions() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  /** @var \Drupal\field\FieldStorageConfigInterface[] $fields */
+  $fields = \Drupal::entityTypeManager()
+    ->getStorage('field_storage_config')
+    ->loadByProperties(['type' => 'webform']);
+  foreach ($fields as $field) {
+    $field_name = $field->getName();
+    $entity_type = $field->getTargetEntityTypeId();
+    $manager->updateFieldStorageDefinition($manager->getFieldStorageDefinition($field_name, $entity_type));
+  }
+}
+
+/**
+ * Update webform submission storage schema.
+ *
+ * @see \Drupal\webform\WebformSubmissionStorageSchema
+ */
+function _webform_update_webform_submission_storage_schema() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  $manager->updateEntityType($manager->getEntityType('webform_submission'));
+}
+
 /******************************************************************************/
 // Update hooks.
 /******************************************************************************/
@@ -793,7 +821,7 @@ function webform_update_8025() {
  * Issue #2857417: Add support for open and close date/time to Webform nodes. Update entity definitions.
  */
 function webform_update_8026() {
-  \Drupal::entityDefinitionUpdateManager()->applyUpdates();
+  _webform_update_field_storage_definitions();
 }
 
 /**
@@ -871,77 +899,81 @@ function webform_update_8031() {
  * Issue #2854020: Provide a mechanism to log submission transactions.
  */
 function webform_update_8032() {
-  // Copied from: \Drupal\webform\WebformSubmissionStorageSchema::getEntitySchema
-  $schema = [
-    'description' => 'Table that contains logs of all webform submission events.',
-    'fields' => [
-      'lid' => [
-        'type' => 'serial',
-        'not null' => TRUE,
-        'description' => 'Primary Key: Unique log event ID.',
-      ],
-      'webform_id' => [
-        'description' => 'The webform id.',
-        'type' => 'varchar',
-        'length' => 32,
-        'not null' => TRUE,
-      ],
-      'sid' => [
-        'description' => 'The webform submission id.',
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => FALSE,
-      ],
-      'handler_id' => [
-        'description' => 'The webform handler id.',
-        'type' => 'varchar',
-        'length' => 64,
-        'not null' => FALSE,
-      ],
-      'uid' => [
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => 'The {users}.uid of the user who triggered the event.',
-      ],
-      'operation' => [
-        'type' => 'varchar_ascii',
-        'length' => 64,
-        'not null' => TRUE,
-        'default' => '',
-        'description' => 'Type of operation, for example "save", "sent", or "update."',
-      ],
-      'message' => [
-        'type' => 'text',
-        'not null' => TRUE,
-        'size' => 'big',
-        'description' => 'Text of log message.',
-      ],
-      'data' => [
-        'type' => 'blob',
-        'not null' => TRUE,
-        'size' => 'big',
-        'description' => 'Serialized array of data.',
-      ],
-      'timestamp' => [
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => 'Unix timestamp of when event occurred.',
-      ],
-    ],
-    'primary key' => ['lid'],
-    'indexes' => [
-      'webform_id' => ['webform_id'],
-      'sid' => ['sid'],
-      'uid' => ['uid'],
-      'handler_id' => ['handler_id'],
-      'handler_id_operation' => ['handler_id', 'operation'],
-    ],
-  ];
+  _webform_update_webform_submission_storage_schema();
 
-  \Drupal::database()->schema()->createTable('webform_submission_log', $schema);
+  if (!\Drupal::database()->schema()->tableExists('webform_submission_log')) {
+    // Copied from: \Drupal\webform\WebformSubmissionStorageSchema::getEntitySchema
+    $schema = [
+      'description' => 'Table that contains logs of all webform submission events.',
+      'fields' => [
+        'lid' => [
+          'type' => 'serial',
+          'not null' => TRUE,
+          'description' => 'Primary Key: Unique log event ID.',
+        ],
+        'webform_id' => [
+          'description' => 'The webform id.',
+          'type' => 'varchar',
+          'length' => 32,
+          'not null' => TRUE,
+        ],
+        'sid' => [
+          'description' => 'The webform submission id.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => FALSE,
+        ],
+        'handler_id' => [
+          'description' => 'The webform handler id.',
+          'type' => 'varchar',
+          'length' => 64,
+          'not null' => FALSE,
+        ],
+        'uid' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'The {users}.uid of the user who triggered the event.',
+        ],
+        'operation' => [
+          'type' => 'varchar_ascii',
+          'length' => 64,
+          'not null' => TRUE,
+          'default' => '',
+          'description' => 'Type of operation, for example "save", "sent", or "update."',
+        ],
+        'message' => [
+          'type' => 'text',
+          'not null' => TRUE,
+          'size' => 'big',
+          'description' => 'Text of log message.',
+        ],
+        'data' => [
+          'type' => 'blob',
+          'not null' => TRUE,
+          'size' => 'big',
+          'description' => 'Serialized array of data.',
+        ],
+        'timestamp' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Unix timestamp of when event occurred.',
+        ],
+      ],
+      'primary key' => ['lid'],
+      'indexes' => [
+        'webform_id' => ['webform_id'],
+        'sid' => ['sid'],
+        'uid' => ['uid'],
+        'handler_id' => ['handler_id'],
+        'handler_id_operation' => ['handler_id', 'operation'],
+      ],
+    ];
+
+    \Drupal::database()->schema()->createTable('webform_submission_log', $schema);
+  }
 }
 
 /**
