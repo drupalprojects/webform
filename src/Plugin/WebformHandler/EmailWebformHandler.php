@@ -524,6 +524,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     parent::submitConfigurationForm($form, $form_state);
 
     $values = $form_state->getValues();
+
+    // Cleanup states.
+    $values['states'] = array_values(array_filter($values['states']));
+
     foreach ($this->configuration as $name => $value) {
       if (isset($values[$name])) {
         $this->configuration[$name] = $values[$name];

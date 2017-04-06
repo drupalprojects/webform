@@ -990,3 +990,28 @@ function webform_update_8034() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2867529: Email handler states setting should be index array.
+ */
+function webform_update_8035() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if ($handler['id'] == 'email') {
+        if (isset($handler['settings']['states']) && is_array($handler['settings']['states'])) {
+          $handler['settings']['states'] = array_values(array_filter($handler['settings']['states']));
+        }
+      }
+    }
+
+    if ($has_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}
