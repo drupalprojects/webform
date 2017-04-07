@@ -11,6 +11,7 @@ template: false
 id: test_form_draft_authenticated
 title: 'Test: Webform: Draft authenticated'
 description: 'Test saving a draft and previewing a submission for authenticated users.'
+category: 'Test: Webform'
 elements: |
   name:
     '#type': textfield

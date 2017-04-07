@@ -11,6 +11,7 @@ template: false
 id: test_results
 title: 'Test: Results'
 description: 'Test webform submission results.'
+category: 'Test: Results'
 elements: |
   first_name:
     '#type': textfield

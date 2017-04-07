@@ -54,6 +54,10 @@ class WebformEntityReferenceSelectWidget extends WebformEntityReferenceAutocompl
     // Convert 'entity_autocomplete' to 'webform_entity_select' element.
     $element['target_id']['#type'] = 'webform_entity_select';
 
+    /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
+    $webform_storage = \Drupal::service('entity_type.manager')->getStorage('webform');
+    $element['target_id']['#options'] = $webform_storage->getOptions(FALSE);
+
     // Set empty option.
     if (empty($element['#required'])) {
       $element['target_id']['#empty_option'] = $this->t('- Select -');

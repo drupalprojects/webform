@@ -11,6 +11,7 @@ template: false
 id: test_element_likert
 title: 'Test: Element: Likert'
 description: 'Test the likert element.'
+category: 'Test: Element'
 elements: |
   likert_elements:
     '#type': details

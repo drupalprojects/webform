@@ -11,6 +11,7 @@ template: false
 id: test_element_flexbox_flex
 title: 'Test: Element: Flexbox flex '
 description: 'Test flexbox flex containers.'
+category: 'Test: Element'
 elements: |
   row_0:
     '#type': webform_flexbox

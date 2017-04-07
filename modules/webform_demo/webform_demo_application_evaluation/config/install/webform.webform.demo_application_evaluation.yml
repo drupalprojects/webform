@@ -11,6 +11,7 @@ template: false
 id: demo_application_evaluation
 title: 'Demo: Application Evaluation'
 description: 'A demonstration of a very basic application evaluation form. This form is attached to the ''Demo: Application'' using a Webform block.'
+category: Demo
 elements: |
   application_evaluation:
     '#type': fieldset

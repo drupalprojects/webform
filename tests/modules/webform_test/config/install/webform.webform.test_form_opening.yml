@@ -11,6 +11,7 @@ template: false
 id: test_form_opening
 title: 'Test: Webform: Opening'
 description: 'Test message being displayed when a webform is scheduled to open.'
+category: 'Test: Webform'
 elements: |
   description:
     '#markup': 'This message should not be displayed'

@@ -25,6 +25,13 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
   protected $keys;
 
   /**
+   * Search category.
+   *
+   * @var string
+   */
+  protected $category;
+
+  /**
    * Search state.
    *
    * @var string
@@ -44,6 +51,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
   public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage) {
     parent::__construct($entity_type, $storage);
     $this->keys = \Drupal::request()->query->get('search');
+    $this->category = \Drupal::request()->query->get('category');
     $this->state = \Drupal::request()->query->get('state');
     $this->submissionStorage = \Drupal::entityTypeManager()->getStorage('webform_submission');
   }
@@ -89,10 +97,10 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       WebformInterface::STATUS_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_CLOSED)]),
       WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_SCHEDULED)]),
     ];
-    $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->state, $state_options);
+    $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->category, $this->state, $state_options);
 
     // Display info.
-    if ($total = $this->getTotal($this->keys, $this->state)) {
+    if ($total = $this->getTotal($this->keys, $this->category, $this->state)) {
       $t_args = [
         '@total' => $total,
         '@results' => $this->formatPlural($total, $this->t('webform'), $this->t('webforms')),
@@ -121,6 +129,10 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     ];
     $header['description'] = [
       'data' => $this->t('Description'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    $header['category'] = [
+      'data' => $this->t('Category'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
     ];
     $header['status'] = [
@@ -160,7 +172,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     if ($entity->isTemplate()) {
       $row['title']['data']['template'] = ['#markup' => ' <b>(' . $this->t('Template') . ')</b>'];
     }
-    $row['description']['data']['description']['#markup'] = $entity->get('description');
+    $row['description']['data']['#markup'] = $entity->get('description');
+    $row['category']['data']['#markup'] = $entity->get('category');
     switch ($entity->get('status')) {
       case WebformInterface::STATUS_OPEN:
         $row['status'] = $this->t('Open');
@@ -244,7 +257,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   protected function getEntityIds() {
-    return $this->getQuery($this->keys, $this->state)
+    return $this->getQuery($this->keys, $this->category, $this->state)
       ->sort('title')
       ->pager($this->getLimit())
       ->execute();
@@ -255,14 +268,16 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    *
    * @param string $keys
    *   (optional) Search key.
+   * @param string $category
+   *   (optional) Category.
    * @param string $state
    *   (optional) Webform state. Can be 'open' or 'closed'.
    *
    * @return int
    *   The total number of submissions.
    */
-  protected function getTotal($keys = '', $state = '') {
-    return $this->getQuery($keys, $state)
+  protected function getTotal($keys = '', $category = '', $state = '') {
+    return $this->getQuery($keys, $category, $state)
       ->count()
       ->execute();
   }
@@ -272,13 +287,15 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    *
    * @param string $keys
    *   (optional) Search key.
+   * @param string $category
+   *   (optional) Category.
    * @param string $state
    *   (optional) Webform state. Can be 'open' or 'closed'.
    *
    * @return \Drupal\Core\Entity\Query\QueryInterface
    *   An entity query.
    */
-  protected function getQuery($keys = '', $state = '') {
+  protected function getQuery($keys = '', $category = '', $state = '') {
     $query = $this->getStorage()->getQuery();
 
     // Filter by key(word).
@@ -286,8 +303,14 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       $or = $query->orConditionGroup()
         ->condition('title', $this->keys, 'CONTAINS')
         ->condition('description', $this->keys, 'CONTAINS')
+        ->condition('category', $this->keys, 'CONTAINS')
         ->condition('elements', $this->keys, 'CONTAINS');
       $query->condition($or);
+    }
+
+    // Filter by category.
+    if ($category) {
+      $query->condition('category', $category);
     }
 
     // Filter by (form) state.

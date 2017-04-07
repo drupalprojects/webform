@@ -11,6 +11,7 @@ template: false
 id: test_token_update
 title: 'Test: Token: Update'
 description: 'Test updating submission using secure token.'
+category: 'Test: Token'
 elements: |
   textfield:
     '#type': textfield

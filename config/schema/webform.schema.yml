@@ -331,6 +331,9 @@ webform.webform.*:
     description:
       type: label
       label: 'Administrative description'
+    category:
+      type: label
+      label: 'Category'
     elements:
       type: text
       label: 'Elements (YAML)'

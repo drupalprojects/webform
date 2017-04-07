@@ -13,6 +13,7 @@ template: false
 id: test_handler_test
 title: 'Test: Handler: Test invoke methods'
 description: 'Test invoking of webform handler methods.'
+category: 'Test: Handler'
 elements: |
   element:
     '#type': textfield

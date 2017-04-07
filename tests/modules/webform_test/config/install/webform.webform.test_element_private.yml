@@ -11,6 +11,7 @@ template: false
 id: test_element_private
 title: 'Test: Element: Private'
 description: 'Test element private properties'
+category: 'Test: Element'
 elements: |
   private_elements:
     '#type': details

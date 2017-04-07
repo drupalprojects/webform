@@ -11,6 +11,7 @@ template: false
 id: test_form_disable_back
 title: 'Test: Webform: Disabled back button'
 description: 'Test disabling the ability to navigate back using the back button.'
+category: 'Test: Webform'
 elements: |
   wizard_1:
     '#type': webform_wizard_page

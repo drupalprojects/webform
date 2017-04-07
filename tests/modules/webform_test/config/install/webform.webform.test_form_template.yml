@@ -11,6 +11,7 @@ template: true
 id: test_form_template
 title: 'Test: Webform: Template'
 description: 'Test using a webform as a template.'
+category: 'Test: Webform'
 elements: |
   description:
     '#markup': 'This webform is a template'

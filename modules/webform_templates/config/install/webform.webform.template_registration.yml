@@ -11,6 +11,7 @@ template: true
 id: template_registration
 title: Registration
 description: 'A registration webform template.'
+category: ''
 elements: |
   personal_information:
     '#title': 'Your Personal Information'

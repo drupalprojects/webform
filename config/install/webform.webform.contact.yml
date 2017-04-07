@@ -11,6 +11,7 @@ template: false
 id: contact
 title: Contact
 description: 'Basic email contact webform.'
+category: ''
 elements: |
   name:
     '#title': 'Your Name'

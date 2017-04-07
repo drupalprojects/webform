@@ -11,6 +11,7 @@ template: false
 id: test_element_multiple_date
 title: 'Test: Element: Multiple: Date'
 description: 'Test multiple text Date elements.'
+category: 'Test: Element'
 elements: |
   time:
     '#type': details

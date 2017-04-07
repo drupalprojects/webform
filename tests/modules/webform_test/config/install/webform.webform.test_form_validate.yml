@@ -11,6 +11,7 @@ template: false
 id: test_form_validate
 title: 'Test: Webform: Validate'
 description: 'Test executing $form["#validate"] handlers.'
+category: 'Test: Webform'
 elements: |
   custom:
     '#title': 'Custom Field'

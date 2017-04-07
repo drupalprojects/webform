@@ -11,6 +11,7 @@ template: false
 id: test_form_wizard_custom
 title: 'Test: Webform: Wizard custom'
 description: 'Test a multiple step ''wizard'' webform with custom hide/show pages logic.'
+category: 'Test: Webform'
 elements: |
   '#attributes':
     data-current-page: '[webform-submission:current-page]'

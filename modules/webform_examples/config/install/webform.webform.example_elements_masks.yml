@@ -11,6 +11,7 @@ template: false
 id: example_elements_masks
 title: 'Example: Elements: Input Masks'
 description: 'Examples of elements with <a href="https://github.com/RobinHerbots/jquery.inputmask">input masks</a>.'
+category: Example
 elements: |
   masks:
     '#type': details

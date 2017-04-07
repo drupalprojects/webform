@@ -11,6 +11,7 @@ template: true
 id: template_issue
 title: Issue
 description: 'An issue webform template.'
+category: ''
 elements: |
   meta_data_details:
     '#title': 'Issue Meta Data'

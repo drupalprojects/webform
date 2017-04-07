@@ -11,6 +11,7 @@ template: false
 id: test_element_location
 title: 'Test: Element: Location'
 description: 'Test (geo)location elements.'
+category: 'Test: Element'
 elements: |
   location_default_element:
     '#type': details

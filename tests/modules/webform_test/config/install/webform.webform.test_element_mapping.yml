@@ -11,6 +11,7 @@ template: false
 id: test_element_mapping
 title: 'Test: Element: Mapping'
 description: 'Test the mapping  element.'
+category: 'Test: Element'
 elements: |
   webform_mapping_elements:
     '#type': details

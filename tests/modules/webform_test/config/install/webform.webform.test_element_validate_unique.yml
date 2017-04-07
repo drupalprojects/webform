@@ -11,6 +11,7 @@ template: false
 id: test_element_validate_unique
 title: 'Test: Element: Validate Unique'
 description: 'Test #unique element validation support.'
+category: 'Test: Element'
 elements: |
   unique_textfield:
     '#type': textfield

@@ -11,6 +11,7 @@ template: false
 id: test_form_unsaved
 title: 'Test: Webform: Unsaved'
 description: 'Test displaying unsaved data warning.'
+category: 'Test: Webform'
 elements: |
   test:
     '#type': textfield

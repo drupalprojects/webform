@@ -11,6 +11,7 @@ template: false
 id: example_wizard
 title: 'Example: Wizard'
 description: 'Example of a multiple step ''wizard'' webform.'
+category: Example
 elements: |
   '#attributes':
     data-current-page: '[webform-submission:current-page]'

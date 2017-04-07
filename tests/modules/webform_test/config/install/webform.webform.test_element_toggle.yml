@@ -11,6 +11,7 @@ template: false
 id: test_element_toggle
 title: 'Test: Element: Toggle'
 description: 'Test the toggle element.'
+category: 'Test: Element'
 elements: |
   toggle_elements:
     '#type': details

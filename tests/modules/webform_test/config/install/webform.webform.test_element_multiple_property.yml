@@ -11,6 +11,7 @@ template: false
 id: test_element_multiple_property
 title: 'Test: Element: Multiple property'
 description: 'Test #multiple element property.'
+category: 'Test: Element'
 elements: |
   webform_element_multiple:
     '#type': webform_element_multiple

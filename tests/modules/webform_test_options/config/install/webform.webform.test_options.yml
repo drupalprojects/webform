@@ -11,6 +11,7 @@ template: false
 id: test_options
 title: 'Test: Options'
 description: 'Test webform options.'
+category: 'Test: Options'
 elements: |
   general_options:
     '#type': details

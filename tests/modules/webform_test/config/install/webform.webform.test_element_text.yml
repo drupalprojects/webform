@@ -11,6 +11,7 @@ template: false
 id: test_element_text
 title: 'Test: Element: Text'
 description: 'Tests text field and text area based elements.'
+category: 'Test: Element'
 elements: |
   '#attributes':
     novalidate: novalidate

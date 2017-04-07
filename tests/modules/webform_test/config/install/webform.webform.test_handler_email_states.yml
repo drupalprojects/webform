@@ -11,6 +11,7 @@ template: false
 id: test_handler_email_states
 title: 'Test: Handler: Email states'
 description: 'Test sending email during each submission state.'
+category: 'Test: Handler'
 elements: |
   message:
     '#markup': 'Click ''Save Draft'' and ''Submit''  to send emails triggered by submissions  state.'

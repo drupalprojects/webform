@@ -11,6 +11,7 @@ template: false
 id: test_form_long_100
 title: 'Test: Webform: Long - 100 elements'
 description: 'Test webform with 100 elements'
+category: 'Test: Webform'
 elements: |
   element_1:
     '#type': textfield

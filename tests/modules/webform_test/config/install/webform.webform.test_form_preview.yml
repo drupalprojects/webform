@@ -11,6 +11,7 @@ template: false
 id: test_form_preview
 title: 'Test: Webform: Preview'
 description: 'Test submission preview.'
+category: 'Test: Webform'
 elements: |
   name:
     '#type': textfield

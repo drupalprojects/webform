@@ -11,6 +11,7 @@ template: false
 id: test_element_other
 title: 'Test: Element: Other'
 description: 'Test the webform other elements, includes select_other, checkboxes_other, radios_other, and buttons_other.'
+category: 'Test: Element'
 elements: |
   select_other:
     '#type': details

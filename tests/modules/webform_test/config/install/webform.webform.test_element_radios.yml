@@ -11,6 +11,7 @@ template: false
 id: test_element_radios
 title: 'Test: Element: Radios'
 description: 'Test the radios.'
+category: 'Test: Element'
 elements: |
   radios_required_example:
     '#type': details

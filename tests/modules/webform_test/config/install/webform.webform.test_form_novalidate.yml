@@ -11,6 +11,7 @@ template: false
 id: test_form_novalidate
 title: 'Test: Webform: Novalidate'
 description: 'Test disabling client-side validation.'
+category: 'Test: Webform'
 elements: |
   description:
     '#markup': 'Form tag should include novalidate attribute.'

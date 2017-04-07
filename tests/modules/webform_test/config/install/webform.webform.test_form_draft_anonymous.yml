@@ -11,6 +11,7 @@ template: false
 id: test_form_draft_anonymous
 title: 'Test: Webform: Draft anonymous'
 description: 'Test saving a draft and previewing a submission for anonymous (and authenticated users).'
+category: 'Test: Webform'
 elements: |
   name:
     '#type': textfield

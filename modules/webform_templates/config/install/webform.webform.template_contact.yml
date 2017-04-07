@@ -11,6 +11,7 @@ template: true
 id: template_contact
 title: 'Contact Us'
 description: 'A basic contact webform template.'
+category: ''
 elements: |
   name:
     '#title': 'Your Name'

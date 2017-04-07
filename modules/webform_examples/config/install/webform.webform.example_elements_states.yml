@@ -11,6 +11,7 @@ template: false
 id: example_elements_states
 title: 'Example: Elements: Condition Logic'
 description: 'Examples of elements using conditional logic.'
+category: Example
 elements: |
   checkbox_example:
     '#type': details

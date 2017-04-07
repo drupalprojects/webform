@@ -11,6 +11,7 @@ template: false
 id: test_element_autocomplete
 title: 'Test: Element: Autocomplete'
 description: 'Test element autocompletion.'
+category: 'Test: Element'
 elements: |
   autocomplete_off:
     '#type': email

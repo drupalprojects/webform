@@ -11,6 +11,7 @@ template: false
 id: test_element_markup
 title: 'Test: Element: Markup'
 description: 'Test the markup element.'
+category: 'Test: Element'
 elements: |
   markup:
     '#markup': '<p>This is normal markup</p>'

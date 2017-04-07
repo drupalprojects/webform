@@ -11,6 +11,7 @@ template: false
 id: test_submission_log
 title: 'Test: Submission: Logging'
 description: 'Test submission event logging.'
+category: 'Test: Submission'
 elements: |
   value:
     '#type': textfield

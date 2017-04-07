@@ -11,6 +11,7 @@ template: false
 id: test_form_closed
 title: 'Test: Webform: Closed'
 description: 'Test warning messages being displayed when a webform is closed.'
+category: 'Test: Webform'
 elements: |
   description:
     '#markup': 'This message should not be displayed'

@@ -11,6 +11,7 @@ template: false
 id: test_element_term_reference
 title: 'Test: Element: Term reference'
 description: 'Test term reference element.'
+category: 'Test: Element'
 elements: |
   webform_term_checkboxes:
     '#type': details

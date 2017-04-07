@@ -11,6 +11,7 @@ template: false
 id: test_confirmation_inline
 title: 'Test: Confirmation: Inline'
 description: 'Test inline confirmation message.'
+category: 'Test: Confirmation'
 elements: |
   description:
     '#markup': 'This webform will display the confirmation inline when submitted.'

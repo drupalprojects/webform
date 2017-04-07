@@ -11,6 +11,7 @@ template: false
 id: example_elements
 title: 'Example: Elements'
 description: 'Examples of every supported <a href="https://api.drupal.org/api/drupal/elements">webform element</a>.'
+category: Example
 elements: |
   basic_elements:
     '#type': details

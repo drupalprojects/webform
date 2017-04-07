@@ -11,6 +11,7 @@ template: true
 id: template_job_application
 title: 'Job Application'
 description: 'A job application webform template.'
+category: ''
 elements: |
   information:
     '#title': 'Your Information'

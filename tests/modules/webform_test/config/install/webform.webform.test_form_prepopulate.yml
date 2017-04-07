@@ -11,6 +11,7 @@ template: false
 id: test_form_prepopulate
 title: 'Test: Webform: Prepopulate'
 description: 'Test prepopulating elements using query string parameters.'
+category: 'Test: Webform'
 elements: |
   name:
     '#type': textfield

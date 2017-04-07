@@ -20,7 +20,7 @@ class WebformtemplatesFilterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $search = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $search = NULL, $category = NULL) {
     $form['#attributes'] = ['class' => ['webform-filter-form']];
     $form['filter'] = [
       '#type' => 'details',
@@ -37,6 +37,16 @@ class WebformtemplatesFilterForm extends FormBase {
       '#size' => 40,
       '#autocomplete_route_name' => 'entity.webform.templates.autocomplete',
       '#default_value' => $search,
+    ];
+    /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
+    $webform_storage = \Drupal::service('entity_type.manager')->getStorage('webform');
+    $form['filter']['category'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Category'),
+      '#title_display' => 'invisible',
+      '#options' => $webform_storage->getCategories(TRUE),
+      '#empty_option' => ($category) ? $this->t('Show all webforms') : $this->t('Filter by category'),
+      '#default_value' => $category,
     ];
     $form['filter']['submit'] = [
       '#type' => 'submit',
@@ -59,6 +69,7 @@ class WebformtemplatesFilterForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $query = [
       'search' => trim($form_state->getValue('search')),
+      'category' => trim($form_state->getValue('category')),
     ];
     $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all(), [
       'query' => $query ,

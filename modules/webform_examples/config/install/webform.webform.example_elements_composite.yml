@@ -11,6 +11,7 @@ template: false
 id: example_elements_composite
 title: 'Example: Elements: Composite'
 description: 'Examples of composite elements, includes address, contact, and credit card.'
+category: Example
 elements: |
   webform_address_example:
     '#type': details

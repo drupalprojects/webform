@@ -11,6 +11,7 @@ template: false
 id: test_element_multiple
 title: 'Test: Element: Multiple'
 description: 'Test multiple element.'
+category: 'Test: Element'
 elements: |
   webform_multiple_default:
     '#type': webform_multiple

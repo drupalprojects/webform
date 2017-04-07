@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Entity;
 
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -77,6 +78,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "uuid",
  *     "title",
  *     "description",
+ *     "category",
  *     "elements",
  *     "css",
  *     "javascript",
@@ -88,6 +90,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *   lookup_keys = {
  *     "status",
  *     "template",
+ *     "category",
  *   },
  * )
  */
@@ -150,6 +153,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * @var string
    */
   protected $description;
+
+  /**
+   * The webform options category.
+   *
+   * @var string
+   */
+  protected $category;
 
   /**
    * The owner's uid.
@@ -1703,6 +1713,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       }
     }
     return $changed;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function sort(ConfigEntityInterface $a, ConfigEntityInterface $b) {
+    $a_label = $a->get('category') . $a->label();
+    $b_label = $b->get('category') . $b->label();
+    return strnatcasecmp($a_label, $b_label);
   }
 
   /**

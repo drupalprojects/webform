@@ -11,6 +11,7 @@ template: false
 id: test_form_limit
 title: 'Test: Form: Submission limit'
 description: 'Test submission and user limits.'
+category: 'Test: Form'
 elements: |
   name:
     '#type': textfield

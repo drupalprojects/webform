@@ -11,6 +11,7 @@ template: true
 id: template_job_seeker_profile
 title: 'Job Seeker Profile'
 description: 'A job seeker profile webform template.'
+category: ''
 elements: |
   introduction:
     '#markup': |

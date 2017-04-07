@@ -42,7 +42,6 @@ class WebformOptionsForm extends EntityForm {
       '#disabled' => !$webform_options->isNew(),
       '#default_value' => $webform_options->id(),
     ];
-
     $form['category'] = [
       '#type' => 'webform_select_other',
       '#title' => $this->t('Category'),

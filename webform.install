@@ -6,8 +6,8 @@
  */
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Database\Database;
-use Drupal\Core\Database\Schema;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\system\Entity\Action;
@@ -157,6 +157,7 @@ function _webform_update_webform_settings() {
     'id' => '',
     'title' => '',
     'description' => '',
+    'category' => '',
     'elements' => '',
     'css' => '',
     'javascript' => '',
@@ -1013,5 +1014,34 @@ function webform_update_8035() {
       $webform_config->setData($data);
       $webform_config->save();
     }
+  }
+}
+
+/**
+ * Issue #2867855: Add category support to webform config entity.
+ */
+function webform_update_8036() {
+  // Add an empty category to all webforms.
+  _webform_update_webform_settings();
+
+  // Must resave all Webform config lookup keys.
+  // @see \Drupal\Core\Config\Entity\Query\QueryFactory::updateConfigKeyStore
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $title = $webform->get('title');
+    if (preg_match('/^(Test: ([^:]+))/', $title, $match)) {
+      $webform->set('category', $match[1]);
+    }
+    elseif (preg_match('/^Example:/', $title)) {
+      $webform->set('category', 'Example');
+    }
+    elseif (preg_match('/^Demo:/', $title)) {
+      $webform->set('category', 'Demo');
+    }
+    else {
+      $webform->set('category', '');
+    }
+    $webform->save();
   }
 }

@@ -11,6 +11,7 @@ template: false
 id: test_confirmation_message
 title: 'Test: Confirmation: Message'
 description: 'Test basic confirmation message.'
+category: 'Test: Confirmation'
 elements: |
   description:
     '#markup': 'This webform will display a confirmation message when submitted.'

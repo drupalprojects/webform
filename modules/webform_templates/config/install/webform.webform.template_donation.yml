@@ -11,6 +11,7 @@ template: true
 id: template_donation
 title: Donation
 description: 'A donation webform template.'
+category: ''
 elements: |
   donation:
     '#title': 'Donation Information'

@@ -11,6 +11,7 @@ template: true
 id: template_feedback
 title: Feedback
 description: 'A basic feedback template.'
+category: ''
 elements: |
   type:
     '#title': 'Type of Feedback'

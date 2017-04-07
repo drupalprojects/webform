@@ -11,6 +11,7 @@ template: false
 id: test_form_wizard_basic
 title: 'Test: Webform: Wizard basic'
 description: 'Test a basic multiple step ''wizard'' webform.'
+category: 'Test: Webform'
 elements: |
   page_1:
     '#title': 'Page 1'

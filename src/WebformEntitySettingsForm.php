@@ -102,6 +102,15 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Administrative description'),
       '#default_value' => $webform->get('description'),
     ];
+    /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
+    $webform_storage = $this->entityTypeManager->getStorage('webform');
+    $form['general']['category'] = [
+      '#type' => 'webform_select_other',
+      '#title' => $this->t('Category'),
+      '#options' => $webform_storage->getCategories(),
+      '#empty_option' => '<' . $this->t('None') . '>',
+      '#default_value' => $webform->get('category'),
+    ];
     $form['general']['template'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow this webform to be used as a template.'),
@@ -1023,6 +1032,7 @@ class WebformEntitySettingsForm extends EntityForm {
       $values['id'],
       $values['title'],
       $values['description'],
+      $values['category'],
       $values['template'],
       $values['status'],
       $values['open'],

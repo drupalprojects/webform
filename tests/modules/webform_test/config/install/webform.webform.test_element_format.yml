@@ -11,6 +11,7 @@ template: false
 id: test_element_format
 title: 'Test: Element: Format'
 description: 'Test element formatting.'
+category: 'Test: Element'
 elements: |
   basic_elements:
     '#type': details

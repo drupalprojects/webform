@@ -11,6 +11,7 @@ template: true
 id: template_subscribe
 title: Subscribe
 description: 'A subscribe to mailing list webform template.'
+category: ''
 elements: |
   first_name:
     '#title': 'First Name'

@@ -11,6 +11,7 @@ template: false
 id: test_form_details_toggle
 title: 'Test: Webform: Details toggle'
 description: 'Test details expand/collapse all toggle link.'
+category: 'Test: Webform'
 elements: |
   details_01:
     '#type': details

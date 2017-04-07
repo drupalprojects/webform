@@ -11,6 +11,7 @@ template: false
 id: test_element_users_roles
 title: 'Test: Element: Users & Roles'
 description: 'Test users and roles element.'
+category: 'Test: Element'
 elements: |
   webform_users:
     '#type': webform_users

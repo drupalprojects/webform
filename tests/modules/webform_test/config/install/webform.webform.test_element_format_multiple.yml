@@ -11,6 +11,7 @@ template: false
 id: test_element_format_multiple
 title: 'Test: Element: Format multiple values'
 description: 'Test element formatting with multiple value.'
+category: 'Test: Element'
 elements: |
   basic_elements:
     '#type': details

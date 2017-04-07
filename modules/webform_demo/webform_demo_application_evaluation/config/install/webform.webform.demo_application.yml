@@ -11,6 +11,7 @@ template: false
 id: demo_application
 title: 'Demo: Application'
 description: 'A demonstration of a very basic application form.'
+category: Demo
 elements: |
   contact:
     '#type': webform_contact

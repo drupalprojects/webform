@@ -9,8 +9,9 @@ close: null
 uid: null
 template: false
 id: test_element_states
-title: 'Test: Elements #states API: States'
+title: 'Test: Element: #States API'
 description: 'Test Drupal''s #states API states (visible, required, disabled, checked, and expanded).'
+category: 'Test: Element'
 elements: |
   states_basic:
     '#type': webform_element_states

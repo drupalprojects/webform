@@ -11,6 +11,7 @@ template: false
 id: test_form_disable_autocomplete
 title: 'Test: Webform: Disable autocomplete'
 description: 'Test  disabling autocompletion for all elements.'
+category: 'Test: Webform'
 elements: |
   description:
     '#markup': 'Form tag should include autocomplete=off attribute.'

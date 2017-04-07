@@ -11,6 +11,7 @@ template: false
 id: test_form_states_triggers
 title: 'Test: Form API #states: Triggers and Operators'
 description: 'Test Drupal''s #states API triggers (empty, checked, value, and collapsed).'
+category: 'Test: Form API #states'
 elements: |
   checked:
     '#type': details

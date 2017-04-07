@@ -9,8 +9,9 @@ close: null
 uid: null
 template: false
 id: test_element
-title: 'Test: Elements'
-description: 'Test instances of all supported webform elements.'
+title: 'Test: Element'
+description: 'Test instances of common webform elements.'
+category: 'Test: Element'
 elements: |
   hidden:
     '#type': hidden

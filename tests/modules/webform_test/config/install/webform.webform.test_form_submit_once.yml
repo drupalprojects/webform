@@ -11,6 +11,7 @@ template: false
 id: test_form_submit_once
 title: 'Test: Webform: Submit once'
 description: 'Test submit once.'
+category: 'Test: Webform'
 elements: |
   message:
     '#markup': 'The below submit buttons can only be clicked once.'

@@ -11,6 +11,7 @@ template: false
 id: example_layout_flexbox
 title: 'Example: Layout: Flexbox'
 description: 'Examples of multiple column webform layout using <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Flexbox</a>.'
+category: Example
 elements: |
   name:
     '#type': webform_flexbox

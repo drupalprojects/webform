@@ -11,6 +11,7 @@ template: false
 id: test_element_multiple_text
 title: 'Test: Element: Multiple: Text Based'
 description: 'Test multiple text based elements.'
+category: 'Test: Element'
 elements: |
   textfield:
     '#type': details

@@ -11,6 +11,7 @@ template: false
 id: example_layout_basic
 title: 'Example: Layout: Basic'
 description: 'Examples of basic element layout and enhancements using messages, CSS classes, custom attributes, and tables.'
+category: Example
 elements: |
   message_example:
     '#type': details

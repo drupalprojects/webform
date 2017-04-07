@@ -146,7 +146,6 @@ class WebformEntityForm extends BundleEntityFormBase {
         '#disabled' => (bool) $webform->id() && $this->operation != 'duplicate',
         '#required' => TRUE,
       ];
-
       $form['title'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Title'),
@@ -162,6 +161,15 @@ class WebformEntityForm extends BundleEntityFormBase {
         '#type' => 'webform_html_editor',
         '#title' => $this->t('Administrative description'),
         '#default_value' => $webform->get('description'),
+      ];
+      /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
+      $webform_storage = $this->entityTypeManager->getStorage('webform');
+      $form['category'] = [
+        '#type' => 'webform_select_other',
+        '#title' => $this->t('Category'),
+        '#options' => $webform_storage->getCategories(),
+        '#empty_option' => '<' . $this->t('None') . '>',
+        '#default_value' => $webform->get('category'),
       ];
       $form = $this->protectBundleIdElement($form);
     }
