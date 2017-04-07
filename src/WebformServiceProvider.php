@@ -4,6 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
+use Drupal\webform\Normalizer\WebformEntityReferenceItemNormalizer;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -19,8 +20,10 @@ class WebformServiceProvider extends ServiceProviderBase {
     $modules = $container->getParameter('container.modules');
     if (isset($modules['hal'])) {
       // Hal module is enabled, add our new normalizer for webform items.
-      $service_definition = new Definition('Drupal\webform\Normalizer\WebformEntityReferenceItemNormalizer', [
-        new Reference('rest.link_manager'),
+      // Core 8.3 and above use hal module https://www.drupal.org/node/2830467.
+      $manager = $container->has('hal.link_manager') ? 'hal.link_manager' : 'rest.link_manager';
+      $service_definition = new Definition(WebformEntityReferenceItemNormalizer::class, [
+        new Reference($manager),
         new Reference('serializer.entity_resolver'),
       ]);
       // The priority must be higher than that of
