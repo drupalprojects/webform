@@ -46,7 +46,7 @@ class WebformOptionsForm extends EntityForm {
       '#type' => 'webform_select_other',
       '#title' => $this->t('Category'),
       '#options' => $webform_options_storage->getCategories(),
-      '#required' => TRUE,
+      '#empty_option' => '<' . $this->t('None') . '>',
       '#default_value' => $webform_options->get('category'),
     ];
 

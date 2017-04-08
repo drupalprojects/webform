@@ -231,6 +231,13 @@ class WebformPluginElementController extends ControllerBase implements Container
       ],
     ];
 
+    // Display info.
+    $build['info'] = [
+      '#markup' => $this->t('@total elements', ['@total' => count($webform_form_element_rows)]),
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+    ];
+
     ksort($webform_form_element_rows);
     $build['webform_elements'] = [
       '#type' => 'table',

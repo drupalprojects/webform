@@ -28,23 +28,20 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
    * {@inheritdoc}
    */
   public function getOptions() {
-    $other_group = (string) $this->t('Other');
-
     $webform_options = $this->loadMultiple();
     @uasort($webform_options, [$this->entityType->getClass(), 'sort']);
-    $options = [];
+
+    $uncategorized_options = [];
+    $categorized_options = [];
     foreach ($webform_options as $id => $webform_option) {
-      $options[$webform_option->get('category') ?: $other_group][$id] = $webform_option->label();
+      if ($category = $webform_option->get('category')) {
+        $categorized_options[$category][$id] = $webform_option->label();
+      }
+      else {
+        $uncategorized_options[$id] = $webform_option->label();
+      }
     }
-
-    // Move 'Other' options last.
-    if (isset($options[$other_group])) {
-      $other_options = $options[$other_group];
-      unset($options[$other_group]);
-      $options[$other_group] = $other_options;
-    }
-
-    return $options;
+    return $uncategorized_options + $categorized_options;
   }
 
   /**
@@ -53,12 +50,14 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
   public function getLikerts() {
     $webform_options = $this->loadMultiple();
     @uasort($webform_options, [$this->entityType->getClass(), 'sort']);
+
+    $likert_options = [];
     foreach ($webform_options as $id => $webform_option) {
       if (strpos($id, 'likert_') === 0) {
-        $options[$id] = str_replace(t('Likert') . ': ', '', $webform_option->label());
+        $likert_options[$id] = str_replace(t('Likert') . ': ', '', $webform_option->label());
       }
     }
-    return $options;
+    return $likert_options;
   }
 
 }

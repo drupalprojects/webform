@@ -17,6 +17,30 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
+  public function render() {
+    $build = [];
+
+    // Display info.
+    if ($total = $this->getStorage()->getQuery()->count()->execute()) {
+      $t_args = [
+        '@total' => $total,
+        '@results' => $this->formatPlural($total, $this->t('option'), $this->t('options')),
+      ];
+      $build['info'] = [
+        '#markup' => $this->t('@total @results', $t_args),
+        '#prefix' => '<div>',
+        '#suffix' => '</div>',
+      ];
+    }
+
+    $build += parent::render();
+
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildHeader() {
     $header['label'] = $this->t('Label');
     $header['id'] = $this->t('ID');
