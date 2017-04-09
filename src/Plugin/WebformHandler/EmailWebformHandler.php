@@ -422,6 +422,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#type' => 'details',
       '#title' => $this->t('Settings'),
     ];
+    // Settings: States.
     $form['settings']['states'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Send email'),
@@ -437,33 +438,27 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', 'states'],
       '#default_value' => $results_disabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $this->configuration['states'],
     ];
-
-    $form['settings']['reply_to'] = [
-      '#type' => 'email',
-      '#title' => $this->t('Reply-to email'),
-      '#description' => $this->t('Enter the email address that a  recipient will see when they replying to an email.'),
-      '#parents' => ['settings', 'reply_to'],
-      '#default_value' => $this->configuration['reply_to'],
-    ];
+    // Settings: Reply-to.
+    $form['settings'] += $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['settings']['reply_to']['#other__type'] = 'email';
+    $form['settings']['reply_to']['#description'] = $this->t('The email address that a recipient will see when they replying to an email.');
     if ($default_reply_to = $this->getDefaultConfigurationValue('reply_to')) {
       $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Reply to' email.", ['%email' => $default_reply_to]);
     }
     else {
       $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From email' address.");
     }
-    $form['settings']['return_path'] = [
-      '#type' => 'email',
-      '#title' => $this->t('Return path (email)'),
-      '#description' => $this->t('Enter an email address to which bounce messages are delivered.'),
-      '#parents' => ['settings', 'return_path'],
-      '#default_value' => $this->configuration['return_path'],
-    ];
+    // Settings: Return path.
+    $form['settings'] += $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path  email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['settings']['return_path']['#description'] = $this->t('The email address to which bounce messages are delivered.');
+    $form['settings']['reply_to']['#other__type'] = 'email';
     if ($default_return_path = $this->getDefaultConfigurationValue('return_path')) {
       $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Return path' email.", ['%email' => $default_return_path]);
     }
     else {
       $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From email' address.");
     }
+    // Settings: HTML.
     $form['settings']['html'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send email as HTML'),
@@ -472,6 +467,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', 'html'],
       '#default_value' => $this->configuration['html'],
     ];
+    // Settings: Attachments.
     $form['settings']['attachments'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include files as attachments'),
@@ -480,6 +476,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', 'attachments'],
       '#default_value' => $this->configuration['attachments'],
     ];
+    // Settings: Debug.
     $form['settings']['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debugging'),
@@ -1006,7 +1003,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     $options = [];
     $options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom @label...', ['@label' => $label]);
-    $options[(string) $this->t('Default')] = ['default' => $this->getDefaultConfigurationValue($name)];
+    if ($default_option = $this->getDefaultConfigurationValue($name)) {
+      $options[(string) $this->t('Default')] = ['default' => $default_option];
+    }
     if ($element_options) {
       $options[(string) $this->t('Elements')] = $element_options;
     }
