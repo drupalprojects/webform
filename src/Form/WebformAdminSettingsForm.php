@@ -911,6 +911,9 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       }
     }
 
+    // Reset token cache to make 'webform_role' tokens are available.
+    \Drupal::token()->resetInfo();
+
     parent::submitForm($form, $form_state);
   }
 

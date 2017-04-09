@@ -1045,3 +1045,10 @@ function webform_update_8036() {
     $webform->save();
   }
 }
+
+/**
+ * Issue #2868075 by Enaj: Token types are not defined but have tokens.
+ */
+function webform_update_8037() {
+  \Drupal::token()->resetInfo();
+}
