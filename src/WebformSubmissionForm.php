@@ -619,11 +619,12 @@ class WebformSubmissionForm extends ContentEntityForm {
       $is_last_page = (in_array($current_page, ['preview', 'complete', $this->getLastPage($form, $form_state)])) ? TRUE : FALSE;
       $is_preview_page = ($current_page == 'preview');
       $is_next_page_preview = ($this->getNextPage($form, $form_state) == 'preview') ? TRUE : FALSE;
+      $is_next_page_complete = ($this->getNextPage($form, $form_state) == 'complete') ? TRUE : FALSE;
       $is_next_page_optional_preview = ($is_next_page_preview && $preview_mode != DRUPAL_REQUIRED);
 
       // Only show that save button if this is the last page of the wizard or
       // on preview page or right before the optional preview.
-      $element['submit']['#access'] = $is_last_page || $is_preview_page || $is_next_page_optional_preview;
+      $element['submit']['#access'] = $is_last_page || $is_preview_page || $is_next_page_optional_preview || $is_next_page_complete;
 
       if (!$is_first_page) {
         if ($is_preview_page) {
@@ -646,7 +647,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         ];
       }
 
-      if (!$is_last_page) {
+      if (!$is_last_page && !$is_next_page_complete) {
         if ($is_next_page_preview) {
           $next_attributes = $this->getWebformSetting('preview_next_button_attributes');
           $next_label = $this->getWebformSetting('preview_next_button_label');
