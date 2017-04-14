@@ -566,8 +566,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       $html
     );
 
-    // Convert groups to <th> that space 5 columns.
-    $html = preg_replace('#<tr><td>([^<]+)</td>(<td></td>){2}</tr>#', '<tr><th colspan="3" bgcolor="' . $group_color . '">\1</th></tr>', $html);
+    // Convert groups.
+    $html = preg_replace('#<tr><td>([^<]+)</td>(<td></td>){2}</tr>#', '<tr><th bgcolor="' . $group_color . '">\1</th><th bgcolor="' . $group_color . '">Webform Module</th><th bgcolor="' . $group_color . '">Contact Module</th></tr>', $html);
 
     // Add cell colors
     $html = preg_replace('#<tr><td>([^<]+)</td>#', '<tr><td bgcolor="' . $feature_color. '">\1</td>', $html);
