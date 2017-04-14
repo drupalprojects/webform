@@ -530,9 +530,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     // @see core/themes/seven/css/components/colors.css
     $group_color = '#dcdcdc';
     $feature_color = '#f5f5f5';
-    $yes_color = '#f3faef';
-    $no_color = '#fdf8ed';
-    $castom_color = '#fcf4f2';
+    $yes_color = '#d7ffd8';
+    $no_color = '#ffffdd';
+    $custom_color = '#ffece8';
 
     $content = file_get_contents('https://docs.google.com/spreadsheets/d/1zNt3WsKxDq2ZmMHeYAorNUUIx5_yiDtDVUIKXtXaq4s/pubhtml?gid=0&single=true');
     if (preg_match('#<table[^>]+>.*</table>#', $content, $match)) {
@@ -561,19 +561,19 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Convert first row into <thead> with <th>.
     $html = preg_replace(
-      '#<tbody><tr><td>(.+?)</td><td>(.+?)</td><td>(.+?)</td><td>(.+?)</td><td>(.+?)</td></tr>#',
-      '<thead><tr><th width="25%">\1</th><th width="15%">\2</th><th width="15%">\3</th><th width="22%">\4</th><th width="22%">\5</th></tr></thead><tbody>',
+      '#<tbody><tr><td>(.+?)</td><td>(.+?)</td><td>(.+?)</td></tr>#',
+      '<thead><tr><th width="30%">\1</th><th width="35%">\2</th><th width="35%">\3</th></thead><tbody>',
       $html
     );
 
     // Convert groups to <th> that space 5 columns.
-    $html = preg_replace('#<tr><td>([^<]+)</td>(<td></td>){4}</tr>#', '<tr><th colspan="5" bgcolor="' . $group_color . '">\1</th></tr>', $html);
+    $html = preg_replace('#<tr><td>([^<]+)</td>(<td></td>){2}</tr>#', '<tr><th colspan="3" bgcolor="' . $group_color . '">\1</th></tr>', $html);
 
     // Add cell colors
     $html = preg_replace('#<tr><td>([^<]+)</td>#', '<tr><td bgcolor="' . $feature_color. '">\1</td>', $html);
-    $html = str_replace('<td>Yes</td>', '<td align="center" bgcolor="' . $yes_color . '"><img src="https://www.drupal.org/misc/watchdog-ok.png" alt="Yes"></td>', $html);
-    $html = str_replace('<td>No</td>', '<td align="center" bgcolor="' . $castom_color . '"><img src="https://www.drupal.org/misc/watchdog-error.png" alt="No"></td>', $html);
-    $html = preg_replace('#<td>(Custom[^<]*)</td>#', '<td align="center" bgcolor="' . $no_color . '"><img src="https://www.drupal.org/misc/watchdog-warning.png" alt="Warnig"> \1</td>', $html);
+    $html = preg_replace('#<td>Yes([^<]*)</td>#', '<td bgcolor="' . $yes_color . '"><img src="https://www.drupal.org/misc/watchdog-ok.png" alt="Yes"> \1</td>', $html);
+    $html = preg_replace('#<td>No([^<]*)</td>#', '<td bgcolor="' . $custom_color . '"><img src="https://www.drupal.org/misc/watchdog-error.png" alt="No"> \1</td>', $html);
+    $html = preg_replace('#<td>([^<]*)</td>#', '<td bgcolor="' . $no_color . '"><img src="https://www.drupal.org/misc/watchdog-warning.png" alt="Warning"> \1</td>', $html);
 
     // Convert URLs to links with titles.
     $links = [
@@ -593,9 +593,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Link *,module.
     $html = preg_replace('/([a-z0-9_]+)\.module/', '<a href="https://www.drupal.org/project/\1">\1.module</a>', $html);
-
-    // Link issue number.
-    $html = preg_replace('/#(\d{4,})/', '<a href="https://www.drupal.org/node/\1">#\1</a>', $html);
 
     // Tidy
     if (class_exists('\tidy')) {
