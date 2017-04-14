@@ -115,4 +115,14 @@ interface WebformHelpManagerInterface {
    */
   public function buildLibraries($docs = FALSE);
 
+  /**
+   * Build the comparison section.
+   *
+   * @param bool $docs
+   *   Set to TRUE to build exportable HTML documentation.
+   *
+   * @return array
+   *   An render array containing the comparison section.
+   */
+  public function buildComparison($docs = FALSE);
 }

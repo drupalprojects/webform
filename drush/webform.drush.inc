@@ -588,7 +588,9 @@ function drush_webform_docs() {
     'elements' => $help_manager->buildElements(TRUE),
     'addons' => $help_manager->buildAddOns(TRUE),
     'libraries' => $help_manager->buildLibraries(TRUE),
+    'comparison' => $help_manager->buildComparison(TRUE),
   ];
+  $index_html = '<h1>Webform Help</h1><ul>';
   foreach ($help as $help_name => $help_section) {
     unset(
       $help_section['title'],
@@ -598,7 +600,12 @@ function drush_webform_docs() {
     $help_html = \Drupal::service('renderer')->renderPlain($help_section);
     $help_html = _drush_webform_docs_tidy($help_html);
     file_put_contents("$html_directory_path/webform-$help_name.html", $help_html);
+    $index_html .= "<li><a href=\"webform-$help_name.html\">webform-$help_name.html</a></li>";
   }
+  $index_html .= '</ul>';
+  file_put_contents("$html_directory_path/index.html", _drush_webform_docs_tidy($index_html));
+
+  drush_print("Documents generated to '/$html_directory_path'.");
 }
 
 /**
@@ -620,6 +627,9 @@ function _drush_webform_docs_tidy($html) {
   $tidy->parseString($html, $config, 'utf8');
   $tidy->cleanRepair();
   $html = tidy_get_output($tidy);
+
+  // Convert URLs.
+  $html = str_replace('"https://www.drupal.org/', '"/', $html);
 
   // Remove <code> tag nested within <pre> tag.
   $html = preg_replace('#<pre><code>\s*#', "<code>\n", $html);
