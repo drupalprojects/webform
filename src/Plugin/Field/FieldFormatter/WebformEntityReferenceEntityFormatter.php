@@ -43,7 +43,8 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $entity_type_definition = \Drupal::entityTypeManager()->getDefinition($form['#entity_type']);
+    $entity_type_definition = \Drupal::entityTypeManager()->getDefinition(
+      $this->fieldDefinition->getTargetEntityTypeId());
     $form = parent::settingsForm($form, $form_state);
     $form['source_entity'] = [
       '#title' => $this->t("Use this field's %entity_type entity as the webform submission's source entity.", ['%entity_type' => $entity_type_definition->getLabel()]),
