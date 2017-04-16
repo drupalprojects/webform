@@ -19,7 +19,7 @@ class WebformSubmissionStorageTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform'];
+  public static $modules = ['webform'];
 
   /**
    * Test webform submission storage.

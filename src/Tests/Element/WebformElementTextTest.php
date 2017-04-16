@@ -16,7 +16,7 @@ class WebformElementTextTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['filter', 'webform'];
+  public static $modules = ['filter', 'webform'];
 
   /**
    * Webforms to load.

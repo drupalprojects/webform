@@ -17,7 +17,7 @@ class WebformSubmissionFormAnonymousTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform'];
+  public static $modules = ['webform'];
 
   /**
    * Webforms to load.

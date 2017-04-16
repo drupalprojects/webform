@@ -16,7 +16,7 @@ class WebformSubmissionFormTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test_validate'];
+  public static $modules = ['webform', 'webform_test_validate'];
 
   /**
    * Webforms to load.

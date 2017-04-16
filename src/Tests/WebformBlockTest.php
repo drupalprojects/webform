@@ -14,7 +14,7 @@ class WebformBlockTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['block', 'webform'];
+  public static $modules = ['block', 'webform'];
 
   /**
    * Webforms to load.

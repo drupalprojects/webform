@@ -13,7 +13,7 @@ use Drupal\webform\WebformInterface;
  */
 class WebformPathTest extends WebformTestBase {
 
-  protected static $modules = ['path', 'webform'];
+  public static $modules = ['path', 'webform'];
 
   /**
    * {@inheritdoc}

@@ -27,7 +27,7 @@ abstract class WebformTestBase extends WebTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform'];
+  public static $modules = ['webform'];
 
   /**
    * Webforms to load.

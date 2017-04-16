@@ -17,7 +17,7 @@ class WebformElementTermReferenceTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['taxonomy'];
+  public static $modules = ['taxonomy'];
 
   /**
    * Webforms to load.

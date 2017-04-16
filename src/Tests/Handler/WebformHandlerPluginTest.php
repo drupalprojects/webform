@@ -17,7 +17,7 @@ class WebformHandlerPluginTest extends WebTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform', 'webform_test_handler'];
+  public static $modules = ['webform', 'webform_test_handler'];
 
   /**
    * Tests webform element plugin.

@@ -14,7 +14,7 @@ class WebformThirdPartySettingsTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'webform'];
+  public static $modules = ['node', 'webform'];
 
   /**
    * {@inheritdoc}

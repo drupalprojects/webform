@@ -19,7 +19,7 @@ class WebformResultsExportTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'locale', 'webform'];
+  public static $modules = ['node', 'locale', 'webform'];
 
   /**
    * Webforms to load.

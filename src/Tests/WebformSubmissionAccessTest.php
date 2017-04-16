@@ -16,7 +16,7 @@ class WebformSubmissionAccessTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['webform'];
+  public static $modules = ['webform'];
 
   /**
    * {@inheritdoc}

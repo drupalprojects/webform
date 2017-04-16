@@ -14,7 +14,7 @@ class WebformTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'webform'];
+  public static $modules = ['node', 'webform'];
 
   /**
    * Webforms to load.

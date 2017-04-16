@@ -165,6 +165,17 @@ function webform_menu_local_tasks_alter(&$data, $route_name) {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function webform_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $implementation = $implementations['webform'];
+    unset($implementations['webform']);
+    $implementations['webform'] = $implementation;
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -196,14 +207,32 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   }
 
   // Don't include details toggle all for submission forms.
-  $is_submission_form = ($form_state->getFormObject() instanceof WebformSubmissionForm);
+  $form_object  = $form_state->getFormObject();
+  if ($form_object instanceof WebformSubmissionForm) {
+    $is_submission_form = TRUE;
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $form_object->getEntity();
+  }
+  else {
+    $is_submission_form = FALSE;
+    $webform_submission = NULL;
+  }
   if (!$is_submission_form) {
     $form['#attributes']['class'][] = 'js-webform-details-toggle';
     $form['#attributes']['class'][] = 'webform-details-toggle';
     $form['#attached']['library'][] = 'webform/webform.element.details.toggle';
   }
+  else {
+    // Since webform's with sourec entities generate unique form IDs,
+    // we need to still call hook_form_webform_submission_WEBFORM_ID_form_alter().
+    if ($webform_submission->getSourceEntity()) {
+      $form_id = 'webform_submission_' . $webform_submission->getWebform()->id() .'_form';
+      $hooks = ['form_' . $form_id];
+      \Drupal::service('module_handler')->alter($hooks, $form, $form_state, $form_id);
+      \Drupal::service('theme.manager')->alter($hooks, $form, $form_state, $form_id);
+    }
 
-  if ($is_submission_form) {
+    // After build.
     $form['#after_build'][] = '_webform_form_after_build';
   }
 }
