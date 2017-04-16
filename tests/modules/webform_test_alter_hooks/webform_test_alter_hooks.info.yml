@@ -1,0 +1,7 @@
+name: 'Webform module alter hooks tests'
+type: module
+description: 'Support module for webform that tests form and element alter hooks.'
+package: Testing
+core: 8.x
+dependencies:
+  - 'drupal:webform'
