@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Entity\Element\EntityAutocomplete as EntityAutocompleteElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformElementBase;
 use Drupal\webform\WebformSubmissionInterface;
@@ -40,12 +41,28 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
    * {@inheritdoc}
    */
   public function setDefaultValue(array &$element) {
+    // To support #multiple and #tags needs manually set the #default_value to
+    // the entity label(s).
+    // @see \Drupal\Core\Entity\Element\EntityAutocomplete::valueCallback.
+    $element['#process_default_value'] = FALSE;
     if (isset($element['#default_value']) && (!empty($element['#default_value']) || $element['#default_value'] === 0)) {
       if ($this->hasMultipleValues($element)) {
-        $element['#default_value'] = $this->getTargetEntities($element, $element['#default_value']);
+        $entities = $this->getTargetEntities($element, $element['#default_value']);
+        $element['#default_value'] = [];
+        if ($entities) {
+          if (!empty($element['#multiple'])) { // #multiple requires an array.
+            foreach ($entities as $entity) {
+              $element['#default_value'][] = EntityAutocompleteElement::getEntityLabels([$entity]);
+            }
+          }
+          else { // #tags requires comma delimited entity labels.
+            $element['#default_value'] = EntityAutocompleteElement::getEntityLabels($entities);
+          }
+        }
       }
       else {
-        $element['#default_value'] = $this->getTargetEntity($element, $element['#default_value']);
+        $entity = $this->getTargetEntity($element, $element['#default_value']);
+        $element['#default_value'] = ($entity) ? EntityAutocompleteElement::getEntityLabels([$entity]) : NULL;
       }
     }
     else {
@@ -127,6 +144,9 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
           $entity = $item['entity'];
           $entity->save();
           $entity_ids[] = $entity->id();
+        }
+        else {
+          $entity_ids[] = $item;
         }
       }
       $form_state->setValueForElement($element, $entity_ids);

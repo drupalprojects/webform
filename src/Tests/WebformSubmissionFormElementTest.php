@@ -3,8 +3,6 @@
 namespace Drupal\webform\Tests;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\user\Entity\User;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformElementHelper;
 
@@ -20,7 +18,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'node', 'webform'];
+  public static $modules = ['filter', 'webform'];
 
   /**
    * Webforms to load.
@@ -31,7 +29,6 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
     'test_element_ignored_properties',
     'test_element_invalid',
     'test_element_autocomplete',
-    'test_element_entity_reference',
     'test_element_text_format',
     'test_form_properties',
     'test_form_buttons',
@@ -131,36 +128,6 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
     $this->drupalGet('webform/test_element_autocomplete/autocomplete/autocomplete_both', ['query' => ['q' => 'Item']]);
     $this->assertNoRaw('[]');
     $this->assertRaw('[{"value":"Example Item","label":"Example Item"},{"value":"Existing Item","label":"Existing Item"}]');
-
-    /* Test entity_autocomplete element */
-
-    // Check 'entity_autocomplete' #default_value.
-    $webform_entity_autocomplete = Webform::load('test_element_entity_reference');
-
-    $this->drupalGet('webform/test_element_entity_reference');
-    $this->assertFieldByName('entity_autocomplete_user_default', 'admin (1)');
-
-    // Issue #2471154 Anonymous user label can't be viewed and auth user labels
-    // are only accessible with 'access user profiles' permission.
-    // https://www.drupal.org/node/2471154
-    // Check if 'view label' access for accounts is supported (8.2.x+).
-    if (User::load(0)->access('view label')) {
-      $this->assertFieldByName('entity_autocomplete_user_tags', 'Anonymous (0), admin (1)');
-    }
-    else {
-      $this->assertFieldByName('entity_autocomplete_user_tags', '- Restricted access - (0), admin (1)');
-    }
-
-    $form = $webform_entity_autocomplete->getSubmissionForm();
-
-    // Single entity (w/o #tags).
-    // TODO: (TESTING) Figure out why the below #default_value is an array when it should be the entity.
-    // @see \Drupal\webform\WebformSubmissionForm::prepareElements()
-    $this->assert($form['elements']['entity_autocomplete']['entity_autocomplete_user_default']['#default_value'][0] instanceof AccountInterface, 'user #default_value instance of \Drupal\Core\Session\AccountInterface.');
-
-    // Multiple entities (w #tags).
-    $this->assert($form['elements']['entity_autocomplete']['entity_autocomplete_user_tags']['#default_value'][0] instanceof AccountInterface, 'users #default_value instance of \Drupal\Core\Session\AccountInterface.');
-    $this->assert($form['elements']['entity_autocomplete']['entity_autocomplete_user_tags']['#default_value'][1] instanceof AccountInterface, 'users #default_value instance of \Drupal\Core\Session\AccountInterface.');
 
     /* Test text format element */
 

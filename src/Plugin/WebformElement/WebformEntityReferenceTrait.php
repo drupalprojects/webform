@@ -288,17 +288,12 @@ trait WebformEntityReferenceTrait {
     if (empty($value)) {
       return NULL;
     }
-    if ($value instanceof EntityInterface) {
+    elseif ($value instanceof EntityInterface) {
       return $value;
     }
 
-    $target_type = $this->getTargetType($element);
-    $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $entity = $this->entityTypeManager->getStorage($target_type)->load($value);
-    if ($entity && method_exists($entity, 'hasTranslation') && $entity->hasTranslation($langcode)) {
-      $entity = $entity->getTranslation($langcode);
-    }
-    return $entity;
+    $entities = $this->getTargetEntities($element, [$value], $options);
+    return reset($entities);
   }
 
   /**
