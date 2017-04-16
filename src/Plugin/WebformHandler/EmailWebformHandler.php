@@ -440,24 +440,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     // Settings: Reply-to.
     $form['settings'] += $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
-    $form['settings']['reply_to']['#other__type'] = 'email';
-    $form['settings']['reply_to']['#description'] = $this->t('The email address that a recipient will see when they replying to an email.');
-    if ($default_reply_to = $this->getDefaultConfigurationValue('reply_to')) {
-      $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Reply to' email.", ['%email' => $default_reply_to]);
-    }
-    else {
-      $form['settings']['reply_to']['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From email' address.");
-    }
     // Settings: Return path.
     $form['settings'] += $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path  email address'), $mail_element_options, NULL, NULL, FALSE);
-    $form['settings']['return_path']['#description'] = $this->t('The email address to which bounce messages are delivered.');
-    $form['settings']['reply_to']['#other__type'] = 'email';
-    if ($default_return_path = $this->getDefaultConfigurationValue('return_path')) {
-      $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to use %email as the 'Return path' email.", ['%email' => $default_return_path]);
-    }
-    else {
-      $form['settings']['return_path']['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From email' address.");
-    }
     // Settings: HTML.
     $form['settings']['html'] = [
       '#type' => 'checkbox',
@@ -1023,6 +1007,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $title,
       '#options' => $options,
       '#empty_option' => (!$required) ? '' : NULL,
+      '#other__title' => $title,
+      '#other__title_display' => 'hidden',
       '#other__placeholder' => $this->t('Enter @label...', ['@label' => $label]),
       '#other__type' => ($element_type == 'mail') ? 'webform_email_multiple' : 'textfield',
       '#other__allow_tokens' => TRUE,
@@ -1030,6 +1016,28 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', $name],
       '#default_value' => $this->configuration[$name],
     ];
+
+    // Use multiple email for reply_to and return_path because it supports
+    // tokens.
+    if (in_array($name, ['reply_to', 'return_path'])) {
+      $element[$name]['#other__type'] = 'webform_email_multiple';
+      $element[$name]['#other__cardinality'] = 1;
+      $element[$name]['#other__description'] = '';
+      if ($name == 'reply_to') {
+        $element[$name]['#description'] = $this->t('The email address that a recipient will see when they replying to an email.');
+      }
+      else {
+        $element[$name]['#description'] = $this->t('The email address to which bounce messages are delivered.');
+      }
+      $t_args = ['@title' => $title];
+      if ($default_email = $this->getDefaultConfigurationValue($name)) {
+        $t_arg['%email'] = $default_email;
+        $element[$name]['#description'] .= ' ' . $this->t("Leave blank to use %email as the '@title' email.", $t_args);
+      }
+      else {
+        $element[$name]['#description'] .= ' ' . $this->t("Leave blank to automatically use the 'From' address.", $t_args);
+      }
+    }
 
     // If no options options are defined return the element.
     if (!$options_options) {

@@ -22,6 +22,7 @@ class WebformEmailMultiple extends FormElement {
       '#input' => TRUE,
       '#description' => $this->t('Multiple email addresses may be separated by commas.'),
       '#size' => 60,
+      '#cardinality' => NULL,
       '#allow_tokens' => FALSE,
       '#process' => [
         [$class, 'processAutocomplete'],
@@ -48,6 +49,7 @@ class WebformEmailMultiple extends FormElement {
 
     if ($value) {
       $values = preg_split('/\s*,\s*/', $value);
+      // Validate email.
       foreach ($values as $value) {
         // Allow tokens to be be include in multiple email list.
         if (!empty($element['#allow_tokens'] && preg_match('/^\[.*\]$/', $value))) {
@@ -57,6 +59,24 @@ class WebformEmailMultiple extends FormElement {
         if (!\Drupal::service('email.validator')->isValid($value)) {
           $form_state->setError($element, t('The email address %mail is not valid.', ['%mail' => $value]));
           return;
+        }
+      }
+
+      // Validate cardinality.
+      if ($element['#cardinality'] && count($values) > $element['#cardinality']) {
+        if (isset($element['#cardinality_error'])) {
+          $form_state->setError($element, $element['#cardinality_error']);
+        }
+        elseif (isset($element['#title'])) {
+          $t_args = [
+            '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
+            '@values' => \Drupal::translation()->formatPlural($element['#cardinality'], t('value'), t('values')),
+            '@count' => $element['#cardinality'],
+          ];
+          $form_state->setError($element, t('%name: this element cannot hold more than @count @values.', $t_args));
+        }
+        else {
+          $form_state->setError($element);
         }
       }
     }

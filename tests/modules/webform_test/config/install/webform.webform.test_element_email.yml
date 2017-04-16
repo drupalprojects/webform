@@ -27,6 +27,10 @@ elements: |
       '#title': 'Multiple email addresses (advanced)'
       '#allow_tokens': true
       '#description': 'Allows tokens to be included in the comma delimited list of emails'
+    email_multiple_three:
+      '#type': webform_email_multiple
+      '#title': 'Multiple email addresses (three)'
+      '#cardinality': 3
   email_confirm:
     '#type': details
     '#title': 'Email confirmation (email_confirm)'
