@@ -7,14 +7,14 @@ libraries:
     destination: libraries
     download:
       type: get
-      url: 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.6.2/ckeditor_4.6.2_standard.zip'
+      url: 'https://download.cksource.com/CKEditor/CKEditor/CKEditor%204.6.2/ckeditor_4.6.2_standard.zip'
 
   ckeditor_autogrow:
     directory_name: ckeditor_autogrow
     destination: libraries
     download:
       type: get
-      url: 'http://download.ckeditor.com/autogrow/releases/autogrow_4.6.2.zip'
+      url: 'https://cdn.rawgit.com/ckeditor/ckeditor-dev/4.6.2/plugins/autogrow/plugin.js'
 
   codemirror:
     directory_name: codemirror
