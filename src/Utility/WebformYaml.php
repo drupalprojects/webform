@@ -70,7 +70,7 @@ class WebformYaml {
         }
 
         if (strpos($value, '<') === FALSE) {
-          $lines[$index] = $prefix . $name . ": |\n$prefix  " . str_replace(PHP_EOL, "\n$prefix  ", $value);
+          $lines[$index] = $prefix . $name . ": |\n$indent  " . str_replace(PHP_EOL, "\n$indent  ", $value);
         }
         else {
           $value = preg_replace('~\R~u', PHP_EOL, $value);
