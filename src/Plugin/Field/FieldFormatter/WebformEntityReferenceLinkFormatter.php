@@ -137,9 +137,9 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
         ];
         $elements[$delta] = [
           '#type' => 'link',
-          '#title' => $this->token->replace($this->getSetting('label'), [
+          '#title' => $this->t($this->token->replace($this->getSetting('label'), [
             'webform' => $entity,
-          ]),
+          ])),
           '#url' => $entity->toUrl('canonical', $link_options),
         ];
       }
