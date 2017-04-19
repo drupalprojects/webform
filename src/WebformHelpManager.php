@@ -494,9 +494,17 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#prefix' => '<div>',
         '#suffix' => '</div>',
         'description' => [
-          '#markup' => '<p>' . $this->t('The Webform module utilizes the third-party Open Source libraries listed below to enhance webform elements and to provide additional functionality. It is recommended that these libraries be installed in your Drupal installations /libraries directory. If these libraries are not installed, they are automatically loaded from a CDN.') . '</p>' .
-          '<p>' . $this->t('Currently the best way to download all the needed third party libraries is to either add <a href=":href">webform.libraries.make.yml</a> to your drush make file or execute the below drush command from the root of your Drupal installation.', [':href' => 'http://cgit.drupalcode.org/webform/tree/webform.libraries.make.yml?h=8.x-5.x']) . '</p>' .
-          '<hr/><pre>drush webform-libraries-download</pre><hr/><br/>',
+          '#markup' => '<p>' . $this->t('The Webform module utilizes the third-party Open Source libraries listed below to enhance webform elements and to provide additional functionality.') . ' ' .
+            $this->t('It is recommended that these libraries be installed in your Drupal installations /libraries directory.') . ' ' .
+            $this->t('If these libraries are not installed, they are automatically loaded from a CDN.') . ' ' .
+            $this->t('All libraries are optional and can be excluded via the admin settings form.') .
+            '</p>' .
+            '<p>' . $this->t('There are twos ways to download the needed third party libraries.') . '</p>' .
+            '<ul>' .
+              '<li>' . $this->t('Generate a *.make.yml or composer.json file using <code>drush webform-libraries-make</code> or <code>drush webform-libraries-composer</code>.') . '</li>' .
+              '<li>' . $this->t('Execute <code>drush webform-libraries-download</code> which will download all included libraries.') . '</li>' .
+            '</ul>' .
+            '<hr/>',
         ],
         'libraries' => [
           '#prefix' => '<dl>',
@@ -543,6 +551,11 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           '#suffix' => '</dd>',
         ],
       ];
+      if ($docs) {
+        $build['content']['libraries'][$library_name]['title']['#suffix'] = '</dt>';
+        unset($build['content']['libraries'][$library_name]['description']['download']);
+      }
+
     }
     return $build;
   }
