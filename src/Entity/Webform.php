@@ -1287,6 +1287,30 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function createDuplicate() {
+    /** @var \Drupal\webform\WebformInterface $duplicate */
+    $duplicate = parent::createDuplicate();
+
+    // If template, clear the  description, remove template flag,
+    // and remove webform_templates.module dependency.
+    if ($duplicate->isTemplate()) {
+      $duplicate->set('description', '');
+      $duplicate->set('template', FALSE);
+
+      if (isset($duplicate->dependencies['enforced']['module']) && $duplicate->dependencies['enforced']['module'] == ['webform_templates']) {
+        unset($duplicate->dependencies['enforced']['module']);
+        if (empty($duplicate->dependencies['enforced'])) {
+          unset($duplicate->dependencies['enforced']);
+        }
+      }
+    }
+
+    return $duplicate;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     $values += [
       'status' => WebformInterface::STATUS_OPEN,

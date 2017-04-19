@@ -112,11 +112,6 @@ class WebformEntityForm extends BundleEntityFormBase {
     if ($this->operation == 'duplicate') {
       // Display custom title.
       $form['#title'] = $this->t("Duplicate '@label' form", ['@label' => $webform->label()]);
-      // If template, clear template's description and remove template flag.
-      if ($webform->isTemplate()) {
-        $webform->set('description', '');
-        $webform->set('template', FALSE);
-      }
     }
 
     $form = parent::buildForm($form, $form_state);

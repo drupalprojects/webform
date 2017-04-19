@@ -400,3 +400,30 @@ function webform_update_8037() {
 function webform_update_8038() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2871215: Copied webform templates should not have dependencies.
+ */
+function webform_update_8039() {
+  if (!\Drupal::moduleHandler()->moduleExists('webform_templates')) {
+    return;
+  }
+
+  // Remove 'webform_templates' dependency copied to new forms.
+  $config_install_directory = drupal_get_path('module', 'webform_templates') . '/config/install';
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    if (isset($data['dependencies']['enforced']['module']) && $data['dependencies']['enforced']['module'] == ['webform_templates']) {
+      if (!file_exists("$config_install_directory/$webform_config_name.yml")) {
+        unset($data['dependencies']['enforced']['module']);
+        if (empty($data['dependencies']['enforced'])) {
+          unset($data['dependencies']['enforced']);
+        }
+        $webform_config->setData($data);
+        $webform_config->save();
+      }
+    }
+  }
+}
