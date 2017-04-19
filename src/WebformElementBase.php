@@ -884,13 +884,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       case 'and':
         $total = count($items);
         if ($total === 1) {
-          return $items;
+          $item = current($items);
+          return is_array($item) ? $item : ['#markup' => $item];
         }
 
         $build = [];
         foreach ($items as $index => &$item) {
           $build[] = (is_array($item)) ? $item : ['#markup' => $item];
-          if ($total === 2) {
+          if ($total === 2 && $index === 0) {
             $build[] = ['#markup' => t(' and ')];
           }
           elseif ($index !== ($total - 1)) {
