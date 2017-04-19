@@ -37,11 +37,11 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
 
     // Check draft saved email.
     $this->drupalPostForm('webform/test_handler_email_states', [], t('Save Draft'));
-    $this->assertRaw('<em class="placeholder">Draft saved</em>');
+    $this->assertRaw('Debug: Email: Draft saved');
 
     // Check completed email.
     $sid = $this->postSubmission($webform);
-    $this->assertRaw('<em class="placeholder">Submission completed</em>');
+    $this->assertRaw('Debug: Email: Submission completed');
 
     $this->drupalLogin($this->adminWebformUser);
 
@@ -51,12 +51,11 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
 
     // Check updated email.
     $this->drupalPostForm("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/edit", [], t('Save'));
-    // @todo Determine why the below assertion is randomly failing.
-    // $this->assertRaw('<em class="placeholder">Submission updated</em>');
+    $this->assertRaw('Debug: Email: Submission updated');
 
     // Check deleted email.
     $this->drupalPostForm("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/delete", [], t('Delete'));
-    $this->assertRaw('<em class="placeholder">Submission deleted</em>');
+    $this->assertRaw('Debug: Email: Submission deleted');
 
     // Check that 'Send when...' is visible.
     $this->drupalGet('admin/structure/webform/manage/test_handler_email_states/handlers/email_draft/edit');
@@ -69,19 +68,19 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
 
     // Check that only completed email is triggered when states are disabled.
     $this->postSubmission($webform);
-    $this->assertNoRaw('<em class="placeholder">Draft saved</em>');
-    $this->assertRaw('<em class="placeholder">Submission completed</em>');
-    $this->assertNoRaw('<em class="placeholder">Submission updated</em>');
-    $this->assertNoRaw('<em class="placeholder">Submission deleted</em>');
+    $this->assertNoRaw('Debug: Email: Draft saved');
+    $this->assertRaw('Debug: Email: Submission completed');
+    $this->assertNoRaw('Debug: Email: Submission updated');
+    $this->assertNoRaw('Debug: Email: Submission deleted');
 
     // Check that resave draft handler automatically switches
     // states to completed.
     $this->drupalPostForm('admin/structure/webform/manage/test_handler_email_states/handlers/email_draft/edit', [], t('Save'));
     $this->postSubmission($webform);
-    $this->assertRaw('<em class="placeholder">Draft saved</em>');
-    $this->assertRaw('<em class="placeholder">Submission completed</em>');
-    $this->assertNoRaw('<em class="placeholder">Submission updated</em>');
-    $this->assertNoRaw('<em class="placeholder">Submission deleted</em>');
+    $this->assertRaw('Debug: Email: Draft saved');
+    $this->assertRaw('Debug: Email: Submission completed');
+    $this->assertNoRaw('Debug: Email: Submission updated');
+    $this->assertNoRaw('Debug: Email: Submission deleted');
 
   }
 

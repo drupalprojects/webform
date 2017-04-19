@@ -252,6 +252,19 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       ];
     }
 
+    // Display info.
+    if ($total = $this->getTotal($this->keys, $this->state)) {
+      $t_args = [
+        '@total' => $total,
+        '@results' => $this->formatPlural($total, $this->t('submission'), $this->t('submissions')),
+      ];
+      $build['info'] = [
+        '#markup' => $this->t('@total @results', $t_args),
+        '#prefix' => '<div>',
+        '#suffix' => '</div>',
+      ];
+    }
+
     $build += parent::render();
 
     $build['table']['#attributes']['class'][] = 'webform-results__table';
@@ -355,12 +368,10 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $route_name = $this->requestHandler->getRouteName($entity, $this->sourceEntity, $this->getSubmissionRouteName());
-    $route_parameters = $this->requestHandler->getRouteParameters($entity, $this->sourceEntity);
-
+    $url = $this->requestHandler->getUrl($entity, $this->sourceEntity, $this->getSubmissionRouteName());
     $row = [
       'data' => [],
-      'data-webform-href' => Url::fromRoute($route_name, $route_parameters)->toString(),
+      'data-webform-href' => $url->toString(),
     ];
     foreach ($this->columns as $column_name => $column) {
       $row['data'][$column_name] = $this->buildRowColumn($column, $entity);
@@ -404,15 +415,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return ($is_raw) ? $entity->langcode->value : \Drupal::languageManager()->getLanguage($entity->langcode->value)->getName();
 
       case 'notes':
-        $route_name = $this->requestHandler->getRouteName($entity, $entity->getSourceEntity(), 'webform_submission.notes_form');
-        $route_parameters = $this->requestHandler->getRouteParameters($entity, $entity->getSourceEntity());
-        $route_options = ['query' => \Drupal::destination()->getAsArray()];
+        $notes_url =$this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form', ['query' => \Drupal::destination()->getAsArray()]);
         $state = $entity->get('notes')->value ? 'on' : 'off';
         return [
           'data' => [
             '#type' => 'link',
             '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-notes webform-icon-notes--@state"></span>', ['@state' => $state]),
-            '#url' => Url::fromRoute($route_name, $route_parameters, $route_options),
+            '#url' => $notes_url,
             '#attributes' => WebformDialogHelper::getModalDialogAttributes(700),
           ],
           'class' => ['webform-results__icon'],
@@ -428,10 +437,9 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return $entity->id();
 
       case 'serial':
-        $route_name = $this->requestHandler->getRouteName($entity, $this->sourceEntity, $this->getSubmissionRouteName());
-        $route_parameters = $this->requestHandler->getRouteParameters($entity, $this->sourceEntity);
+        $link_url = $this->requestHandler->getUrl($entity, $this->sourceEntity, $this->getSubmissionRouteName());
         $link_text = $entity->serial() . ($entity->isDraft() ? ' (' . $this->t('draft') . ')' : '');
-        return Link::createFromRoute($link_text, $route_name, $route_parameters);
+        return Link::fromTextAndUrl($link_text, $link_url);
 
       case 'sticky':
         $route_name = 'entity.webform_submission.sticky_toggle';
@@ -489,8 +497,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function getDefaultOperations(EntityInterface $entity) {
-    $base_route_name = $this->requestHandler->getBaseRouteName($entity, $this->sourceEntity);
-    $route_parameters = $this->requestHandler->getRouteParameters($entity, $this->sourceEntity);
     $route_options = ['query' => \Drupal::destination()->getAsArray()];
 
     $operations = [];
@@ -499,7 +505,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['edit'] = [
         'title' => $this->t('Edit'),
         'weight' => 10,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.edit_form", $route_parameters, $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form', $route_options),
       ];
     }
 
@@ -507,7 +513,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['view'] = [
         'title' => $this->t('View'),
         'weight' => 20,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.canonical", $route_parameters),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical', $route_options),
       ];
     }
 
@@ -515,17 +521,17 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['notes'] = [
         'title' => $this->t('Notes'),
         'weight' => 21,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.notes_form", $route_parameters, $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form', $route_options),
       ];
       $operations['resend'] = [
         'title' => $this->t('Resend'),
         'weight' => 22,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.resend_form", $route_parameters, $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form', $route_options),
       ];
       $operations['duplicate'] = [
         'title' => $this->t('Duplicate'),
         'weight' => 23,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.duplicate_form", $route_parameters, $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form', $route_options),
       ];
     }
 
@@ -533,7 +539,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['delete'] = [
         'title' => $this->t('Delete'),
         'weight' => 100,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.delete_form", $route_parameters, $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form', $route_options),
       ];
     }
 
@@ -541,7 +547,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['log'] = [
         'title' => $this->t('Log'),
         'weight' => 100,
-        'url' => Url::fromRoute("$base_route_name.webform_submission.log", $route_parameters, $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log', $route_options),
       ];
     }
 

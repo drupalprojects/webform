@@ -35,6 +35,16 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   const RESULTS_IGNORED = 0;
 
   /**
+   * Value indicating webform submissions must be stored in the database.
+   */
+  const SUBMISSION_REQUIRED = 1;
+
+  /**
+   * Value indicating webform submissions do not have to be stored in the database.
+   */
+  const SUBMISSION_OPTIONAL = 0;
+
+  /**
    * Value indicating webform submissions are processed (ie email or saved) by the handler.
    */
   const RESULTS_PROCESSED = 1;
@@ -158,6 +168,24 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
    *   TRUE if the webform handler is disabled.
    */
   public function isDisabled();
+
+  /**
+   * Returns the webform submission is optional indicator.
+   *
+   * @return bool
+   *   TRUE if the webform handler does not require the webform submission to
+   *   be saved to the database.
+   */
+  public function isSubmissionOptional();
+
+  /**
+   * Returns the webform submission is required indicator.
+   *
+   * @return bool
+   *   TRUE if the webform handler requires the webform submission to be saved
+   *   to the database.
+   */
+  public function isSubmissionRequired();
 
   /**
    * Initialize webform handler.

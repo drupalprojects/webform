@@ -134,6 +134,24 @@ class WebformEntityReferenceItem extends EntityReferenceItem {
   }
 
   /**
+   * Get an entity's target webform.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   A fieldable content entity.
+   *
+   * @return \Drupal\webform\WebformInterface|null
+   *   The entity's target webform or NULL.
+   */
+  public static function getEntityWebformTarget(EntityInterface $entity = NULL) {
+    if ($field_name = self::getEntityWebformFieldName($entity)) {
+      return $entity->$field_name->entity;
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {

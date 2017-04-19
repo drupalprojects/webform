@@ -1,0 +1,10 @@
+name: 'Webform Demo: Event Registration System'
+type: module
+description: 'Demonstrate how to use the Webform module to build an event registration system with email reminders.'
+package: 'Webform Demo'
+core: 8.x
+dependencies:
+  - 'drupal:datetime'
+  - 'drupal:webform'
+  - 'drupal:webform_node'
+  - 'drupal:webform_scheduled_email'

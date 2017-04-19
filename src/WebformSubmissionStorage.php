@@ -585,7 +585,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $context = [
       '@id' => $entity->id(),
       '@form' => $webform->label(),
-      'link' => $entity->toLink(t('Edit'), 'edit-form')->toString(),
+      'link' => $entity->toLink($this->t('Edit'), 'edit-form')->toString(),
     ];
     switch ($entity->getState()) {
       case WebformSubmissionInterface::STATE_DRAFT:
@@ -718,12 +718,14 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     $return = parent::delete($entities);
     $this->deleteData($entities);
-    $this->deleteLog($entities);
 
     foreach ($entities as $entity) {
       $this->invokeWebformElements('postDelete', $entity);
       $this->invokeWebformHandlers('postDelete', $entity);
     }
+
+    // Delete submission log after all pre and post delete hooks are called.
+    $this->deleteLog($entities);
 
     // Log deleted.
     foreach ($entities as $entity) {

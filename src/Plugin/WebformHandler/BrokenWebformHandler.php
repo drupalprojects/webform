@@ -14,6 +14,7 @@ use Drupal\webform\WebformHandlerBase;
  *   description = @Translation("Broken/missing webform handler plugin."),
  *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_UNLIMITED,
  *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_IGNORED,
+ *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_OPTIONAL,
  * )
  */
 class BrokenWebformHandler extends WebformHandlerBase {

@@ -278,13 +278,18 @@ class WebformEntityForm extends BundleEntityFormBase {
     $is_new = $webform->isNew();
     $webform->save();
 
+    $context = [
+      '@label' => $webform->label(),
+      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString()
+    ];
+    $t_args = ['%label' => $webform->label()];
     if ($is_new) {
-      $this->logger('webform')->notice('Webform @label created.', ['@label' => $webform->label()]);
-      drupal_set_message($this->t('Webform %label created.', ['%label' => $webform->label()]));
+      $this->logger('webform')->notice('Webform @label created.', $context);
+      drupal_set_message($this->t('Webform %label created.', $t_args));
     }
     else {
-      $this->logger('webform')->notice('Webform @label elements saved.', ['@label' => $webform->label()]);
-      drupal_set_message($this->t('Webform %label elements saved.', ['%label' => $webform->label()]));
+      $this->logger('webform')->notice('Webform @label elements saved.', $context);
+      drupal_set_message($this->t('Webform %label elements saved.', $t_args));
     }
   }
 

@@ -120,9 +120,7 @@ class WebformResultsExportController extends ControllerBase implements Container
       $this->submissionExporter->setExporter($export_options);
       if ($this->submissionExporter->isBatch()) {
         self::batchSet($webform, $source_entity, $export_options);
-        $route_name = $this->requestHandler->getRouteName($webform, $source_entity, 'webform.results_export');
-        $route_parameters = $this->requestHandler->getRouteParameters($webform, $source_entity);
-        return batch_process(Url::fromRoute($route_name, $route_parameters));
+        return batch_process($this->requestHandler->getUrl($webform, $source_entity, 'webform.results_export'));
       }
       else {
         $this->submissionExporter->generate();
@@ -154,10 +152,8 @@ class WebformResultsExportController extends ControllerBase implements Container
 
     $file_path = $this->submissionExporter->getFileTempDirectory() . '/' . $filename;
     if (!file_exists($file_path)) {
-      $route_name = $this->requestHandler->getRouteName($webform, $source_entity, 'webform.results_export');
-      $route_parameters = $this->requestHandler->getRouteParameters($webform, $source_entity);
       $t_args = [
-        ':href' => Url::fromRoute($route_name, $route_parameters)->toString(),
+        ':href' => $this->requestHandler->getUrl($webform, $source_entity, 'webform.results_export')->toString(),
       ];
       $build = [
         '#markup' => $this->t('No export file ready for download. The file may have already been downloaded by your browser. Visit the <a href=":href">download export webform</a> to create a new export.', $t_args),
@@ -358,9 +354,7 @@ class WebformResultsExportController extends ControllerBase implements Container
 
       /** @var \Drupal\webform\WebformRequestInterface $request_handler */
       $request_handler = \Drupal::service('webform.request');
-      $route_name = $request_handler->getRouteName($webform, $source_entity, 'webform.results_export');
-      $route_parameters = $request_handler->getRouteParameters($webform, $source_entity);
-      $redirect_url = Url::fromRoute($route_name, $route_parameters, ['query' => ['filename' => $filename], 'absolute' => TRUE]);
+      $redirect_url = $request_handler->getUrl($webform, $source_entity, 'webform.results_export', ['query' => ['filename' => $filename], 'absolute' => TRUE]);
       return new RedirectResponse($redirect_url->toString());
     }
   }

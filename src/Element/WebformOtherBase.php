@@ -114,8 +114,15 @@ abstract class WebformOtherBase extends FormElement {
       '#type' => 'textfield',
       '#placeholder' => t('Enter other...'),
     ];
+
     $element['other']['#wrapper_attributes']['class'][] = "js-webform-$type-other-input";
     $element['other']['#wrapper_attributes']['class'][] = "webform-$type-other-input";
+
+    if ($element['other']['#type'] == 'datetime') {
+      $element['other']['#prefix'] = '<div class="' . implode(' ', $element['other']['#wrapper_attributes']['class']) . '">';
+      $element['other']['#suffix'] = '</div>';
+      unset($element['other']['#wrapper_attributes']['class']);
+    }
 
     // Remove options.
     unset($element['#options']);

@@ -17,6 +17,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   description = @Translation("Tests webform submission handler behaviors."),
  *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_SINGLE,
  *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_IGNORED,
+ *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_REQUIRED,
  * )
  */
 class TestWebformHandler extends WebformHandlerBase {

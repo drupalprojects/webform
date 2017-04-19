@@ -70,7 +70,12 @@ class WebformEntityThirdPartySettingsForm extends EntityForm {
     }
     $webform->save();
 
-    $this->logger('webform')->notice('Webform settings @label saved.', ['@label' => $webform->label()]);
+    $context = [
+      '@label' => $webform->label(),
+      'link' => $webform->toLink($this->t('Edit'), 'third-party-settings-form')->toString()
+    ];
+    $this->logger('webform')->notice('Webform settings @label saved.', $context);
+
     drupal_set_message($this->t('Webform settings %label saved.', ['%label' => $webform->label()]));
   }
 

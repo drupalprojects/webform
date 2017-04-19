@@ -213,19 +213,16 @@ class WebformMessageManager implements WebformMessageManagerInterface {
       case WebformMessageManagerInterface::FORM_SAVE_EXCEPTION:
         return $this->t('This webform is currently not saving any submitted data. Please enable the <a href=":settings_href">saving of results</a> or add a <a href=":handlers_href">submission handler</a> to the webform.', $t_args);
 
+      case WebformMessageManagerInterface::HANDLER_SUBMISSION_REQUIRED:
+        return $this->t('This webform\'s <a href=":handlers_href">submission handlers</a> requires submissions to be saved to the database.', $t_args);
+
       case WebformMessageManagerInterface::SUBMISSION_PREVIOUS:
         $webform_submission = $this->entityStorage->getLastSubmission($webform, $source_entity, $this->currentUser);
-        $submission_route_name = $this->requestHandler->getRouteName($webform_submission, $source_entity, 'webform.user.submission');
-        $submission_route_parameters = $this->requestHandler->getRouteParameters($webform_submission, $source_entity);
-        $t_args[':submission_href'] = Url::fromRoute($submission_route_name, $submission_route_parameters)->toString();
-
+        $t_args[':submission_href'] = $this->requestHandler->getUrl($webform_submission, $source_entity, 'webform.user.submission')->toString();
         return $this->t('You have already submitted this webform.') . ' ' . $this->t('<a href=":submission_href">View your previous submission</a>.', $t_args);
 
       case WebformMessageManagerInterface::SUBMISSIONS_PREVIOUS:
-        $submissions_route_name = $this->requestHandler->getRouteName($webform, $source_entity, 'webform.user.submissions');
-        $submissions_route_parameters = $this->requestHandler->getRouteParameters($webform, $source_entity);
-        $t_args[':submissions_href'] = Url::fromRoute($submissions_route_name, $submissions_route_parameters)->toString();
-
+        $t_args[':submissions_href'] = $this->requestHandler->getUrl($webform, $source_entity, 'webform.user.submissions')->toString();
         return $this->t('You have already submitted this webform.') . ' ' . $this->t('<a href=":submissions_href">View your previous submissions</a>.', $t_args);
 
       case WebformMessageManagerInterface::SUBMISSION_UPDATED:

@@ -124,7 +124,7 @@ access:
 handlers:
   select:
     id: email
-    label: 'Select ''Yes'''
+    label: 'Select yes option'
     handler_id: select
     status: true
     weight: 0
@@ -141,7 +141,7 @@ handlers:
       from_mail: default
       from_options: {  }
       from_name: default
-      subject: 'Email mapping handler: Select option triggered'
+      subject: 'Email mapping handler: Select yes option'
       body: default
       excluded_elements: {  }
       html: true
@@ -168,7 +168,7 @@ handlers:
       from_mail: default
       from_options: {  }
       from_name: default
-      subject: 'Email mapping handler: Select empty triggered'
+      subject: 'Email mapping handler: Select empty'
       body: default
       excluded_elements: {  }
       html: true
@@ -195,7 +195,7 @@ handlers:
       from_mail: default
       from_options: {  }
       from_name: default
-      subject: 'Email mapping handler: Select default triggered'
+      subject: 'Email mapping handler: Select default'
       body: default
       excluded_elements: {  }
       html: true
@@ -205,7 +205,7 @@ handlers:
       return_path: ''
   checkboxes:
     id: email
-    label: 'Checkboxes checked'
+    label: 'Checkboxes'
     handler_id: checkboxes
     status: true
     weight: 1
@@ -223,7 +223,7 @@ handlers:
       from_mail: default
       from_options: {  }
       from_name: default
-      subject: 'Email mapping handler: Checkboxes triggered'
+      subject: 'Email mapping handler: Checkboxes'
       body: default
       excluded_elements: {  }
       html: true
@@ -250,7 +250,7 @@ handlers:
       from_mail: default
       from_options: {  }
       from_name: default
-      subject: 'Email mapping handler: Radios other triggered'
+      subject: 'Email mapping handler: Radios other'
       body: default
       excluded_elements: {  }
       html: true

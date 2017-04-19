@@ -18,6 +18,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   description = @Translation("Debug webform submission."),
  *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_SINGLE,
  *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_PROCESSED,
+ *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_OPTIONAL,
  * )
  */
 class DebugWebformHandler extends WebformHandlerBase {
@@ -27,7 +28,7 @@ class DebugWebformHandler extends WebformHandlerBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
     $build = ['#markup' => 'Submitted values are:<pre>' . WebformYaml::tidy(Yaml::encode($webform_submission->getData())) . '</pre>'];
-    drupal_set_message(\Drupal::service('renderer')->render($build), 'warning');
+    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), 'warning');
   }
 
 }

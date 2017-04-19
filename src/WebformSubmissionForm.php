@@ -517,9 +517,30 @@ class WebformSubmissionForm extends ContentEntityForm {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
     $webform = $this->getWebform();
+    $source_entity = $this->getSourceEntity();
+
     // Display test message.
-    if ($this->isGet() && $this->isRoute('entity.webform.test')) {
+    if ($this->isGet() && $this->isRoute('webform.test')) {
       $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_TEST, 'warning');
+
+      // Display devel generate link for webform or source entity.
+      if ($this->moduleHandler->moduleExists('devel_generate') && $this->currentUser()->hasPermission('administer webform')) {
+        $query = ['webform_id' => $webform->id()];
+        if ($source_entity) {
+          $query += [
+            'entity_type' => $source_entity->getEntityTypeId(),
+            'entity_id' => $source_entity->id(),
+          ];
+        }
+        $query['destination'] = $this->requestHandler->getUrl($webform, $source_entity, 'webform.results_submissions')->toString();
+        $build = [
+          '#type' => 'link',
+          '#title' => $this->t('Generate webform submissions'),
+          '#url' => Url::fromRoute('devel_generate.webform_submission', [], ['query' => $query]),
+          '#attributes' => ['class' => ['button', 'button--small']],
+        ];
+        drupal_set_message($this->renderer->renderPlain($build), 'warning');
+      }
     }
 
     // Display loaded or saved draft message.
@@ -537,7 +558,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // submission.
     if ($this->isGet()
       && $this->getWebformSetting('form_previous_submissions', FALSE)
-      && ($this->isRoute('entity.webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
+      && ($this->isRoute('webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
       && ($webform->access('submission_view_own') || $this->currentUser()->hasPermission('view own webform submission'))
       && ($previous_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
     ) {
@@ -1185,9 +1206,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     $confirmation_type = $this->getWebformSetting('confirmation_type');
     switch ($confirmation_type) {
       case 'page':
-        $redirect_route_name = $this->requestHandler->getRouteName($webform, $this->sourceEntity, 'webform.confirmation');
-        $redirect_route_parameters = $this->requestHandler->getRouteParameters($webform, $this->sourceEntity);
-        $form_state->setRedirect($redirect_route_name, $redirect_route_parameters, $route_options);
+        $redirect_url = $this->requestHandler->getUrl($webform, $this->sourceEntity, 'webform.confirmation', $route_options);
+        $form_state->setRedirectUrl($redirect_url);
         return;
 
       case 'url':
@@ -1502,7 +1522,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   TRUE if the current request is a specific route (name).
    */
   protected function isRoute($route_name) {
-    return ($route_name == $this->getRouteMatch()->getRouteName()) ? TRUE : FALSE;
+    return ($this->requestHandler->getRouteName($this->getEntity(), $this->getSourceEntity(), $route_name) == $this->getRouteMatch()->getRouteName()) ? TRUE : FALSE;
   }
 
   /**

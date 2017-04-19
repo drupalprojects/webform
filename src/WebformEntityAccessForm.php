@@ -71,7 +71,12 @@ class WebformEntityAccessForm extends EntityForm {
     $webform->setAccessRules($access);
     $webform->save();
 
-    $this->logger('webform')->notice('Webform access @label saved.', ['@label' => $webform->label()]);
+    $context = [
+      '@label' => $webform->label(),
+      'link' => $webform->toLink($this->t('Edit'), 'access-form')->toString()
+    ];
+    $this->logger('webform')->notice('Webform access @label saved.', $context);
+
     drupal_set_message($this->t('Webform access %label saved.', ['%label' => $webform->label()]));
   }
 

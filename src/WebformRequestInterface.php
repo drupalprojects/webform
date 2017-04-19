@@ -58,6 +58,23 @@ interface WebformRequestInterface {
   public function isAjax();
 
   /**
+   * Get the URL for a form/submission and source entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $webform_entity
+   *   A webform or webform submission.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission's source entity.
+   * @param string $route_name
+   *   The route name.
+   * @param array $route_options
+   *   The route options.
+   *
+   * @return \Drupal\Core\Url
+   *   The URL for a form/submission and source entity.
+   */
+  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, $route_options = []);
+
+  /**
    * Get the route name for a form/submission and source entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $webform_entity

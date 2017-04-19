@@ -720,8 +720,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $context = [
       '@title' => $this->getLabel($element),
       '@type' => $this->getPluginLabel(),
-      'link' => Link::fromTextAndUrl(t('Edit'), Url::fromRoute('<current>'))
-        ->toString(),
+      'link' => Link::fromTextAndUrl($this->t('Edit'), Url::fromRoute('<current>'))->toString(),
     ];
     $this->logger->notice("'@title' is a '@type' element, which has been disabled and will not be rendered.", $context);
   }

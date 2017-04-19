@@ -951,7 +951,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       $this->elementsDecoded = $elements;
     }
     catch (\Exception $exception) {
-      $link = $this->link(t('Edit'), 'edit-form');
+      $link = $this->link($this->t('Edit'), 'edit-form');
       \Drupal::logger('webform')
         ->notice('%title elements are not valid. @message', [
           '%title' => $this->label(),
@@ -1467,14 +1467,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getHandler($handler) {
-    return $this->getHandlers()->get($handler);
+  public function getHandler($handler_id) {
+    return $this->getHandlers()->get($handler_id);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getHandlers($plugin_id = NULL, $status = NULL, $results = NULL) {
+  public function getHandlers($plugin_id = NULL, $status = NULL, $results = NULL, $submission = NULL) {
     if (!$this->handlersCollection) {
       $this->handlersCollection = new WebformHandlerPluginCollection($this->getWebformHandlerPluginManager(), $this->handlers);
       /** @var \Drupal\webform\WebformHandlerBase $handler */
@@ -1520,6 +1520,17 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       foreach ($handlers as $instance_id => $handler) {
         $plugin_definition = $handler->getPluginDefinition();
         if ($plugin_definition['results'] != $results) {
+          $handlers->removeInstanceId($instance_id);
+        }
+      }
+    }
+
+    // Filter the handlers by submission.
+    // This is used to track is submissions must be saved to the database.
+    if (isset($submission)) {
+      foreach ($handlers as $instance_id => $handler) {
+        $plugin_definition = $handler->getPluginDefinition();
+        if ($plugin_definition['submission'] != $submission) {
           $handlers->removeInstanceId($instance_id);
         }
       }

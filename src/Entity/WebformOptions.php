@@ -99,7 +99,7 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
         $options = (is_array($options)) ? $options : [];
       }
       catch (\Exception $exception) {
-        $link = $this->link(t('Edit'), 'edit-form');
+        $link = $this->link($this->t('Edit'), 'edit-form');
         \Drupal::logger('webform')->notice('%title options are not valid. @message', ['%title' => $this->label(), '@message' => $exception->getMessage(), 'link' => $link]);
         $options = FALSE;
       }

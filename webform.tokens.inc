@@ -163,6 +163,16 @@ function webform_token_info() {
     'name' => t('Author'),
     'type' => 'user',
   ];
+  $webform['open'] = [
+    'name' => t('Open date '),
+    'description' => t('The date the webform is open to new submissions.'),
+    'type' => 'date',
+  ];
+  $webform['close'] = [
+    'name' => t('Close date '),
+    'description' => t('The date the webform is closed to new submissions.'),
+    'type' => 'date',
+  ];
 
   $tokens['webform'] = $webform;
 
@@ -447,6 +457,12 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform->getDescription();
           break;
 
+        case 'open':
+        case 'close':
+          $datetime = $webform->get($name);
+          $replacements[$original] = $datetime ? WebformDateHelper::format(strtotime($datetime), 'medium', '', NULL, $langcode) : '';
+          break;
+
         /* Default values for the dynamic tokens handled below. */
 
         case 'url':
@@ -477,6 +493,12 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 
     if ($author_tokens = $token_service->findWithPrefix($tokens, 'author')) {
       $replacements += $token_service->generate('user', $author_tokens, ['user' => $webform->getOwner()], $options, $bubbleable_metadata);
+    }
+    if (($open_tokens = $token_service->findWithPrefix($tokens, 'open')) && ($open_time = $webform->get('open'))) {
+      $replacements += $token_service->generate('date', $open_tokens, ['date' => strtotime($open_time)], $options, $bubbleable_metadata);
+    }
+    if (($close_tokens = $token_service->findWithPrefix($tokens, 'close')) && ($close_time = $webform->get('close'))) {
+      $replacements += $token_service->generate('date', $close_tokens, ['date' => strtotime($close_time)], $options, $bubbleable_metadata);
     }
 
   }

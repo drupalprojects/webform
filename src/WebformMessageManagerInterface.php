@@ -53,6 +53,11 @@ interface WebformMessageManagerInterface {
    */
   const FORM_FILE_UPLOAD_EXCEPTION = 8;
 
+  /**
+   * Handler submission test.
+   */
+  const HANDLER_SUBMISSION_REQUIRED = 9;
+
   /****************************************************************************/
   // Configurable message constants.
   // Values corresponds to admin config and webform settings.

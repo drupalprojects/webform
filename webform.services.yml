@@ -17,7 +17,7 @@ services:
   # Logger.
 
   logger.channel.webform:
-    class: Drupal\Core\Logger\LoggerChannel√
+    class: Drupal\Core\Logger\LoggerChannel
     factory: logger.factory:get
     arguments: ['webform']
 

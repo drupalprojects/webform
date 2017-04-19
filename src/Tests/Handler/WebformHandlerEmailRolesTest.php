@@ -69,7 +69,7 @@ class WebformHandlerEmailRolesTest extends WebformTestBase {
 
     // Check that missing 'other' role does not send any emails.
     $this->postSubmission($webform, ['role' => 'other']);
-    $this->assertRaw('Message <b>not sent</b> <em class="placeholder">Webform submission from: </em> because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.');
+    $this->assertRaw('<em class="placeholder">Test: Handler: Email roles</em>: Email not sent for <em class="placeholder">Email</em> handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.');
 
     // Check that authenticated role is no longer available.
     // Enable only administrator role.
@@ -78,7 +78,7 @@ class WebformHandlerEmailRolesTest extends WebformTestBase {
       ->set('mail.roles', ['administrator'])
       ->save();
     $this->postSubmission($webform, ['role' => 'authenticated']);
-    $this->assertRaw('Message <b>not sent</b> <em class="placeholder">Webform submission from: </em> because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.');
+    $this->assertRaw('<em class="placeholder">Test: Handler: Email roles</em>: Email not sent for <em class="placeholder">Email</em> handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.');
   }
 
 }

@@ -8,6 +8,11 @@ table td {
   vertical-align: top;
 }
 
+/* Add margin around HR tags */
+table hr {
+  margin: .5em 0;
+}
+
 /* Add background to nested details */
 details details {
   background-color: #f8f8f8;

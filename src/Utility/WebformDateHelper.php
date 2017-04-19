@@ -53,4 +53,22 @@ class WebformDateHelper {
     return $date->format(DATETIME_DATETIME_STORAGE_FORMAT);
   }
 
+  /**
+   * Check if date/time string is using a valid date/time format.
+   *
+   * @param string $time
+   *   A date/time string.
+   * @param string $format
+   *   Format accepted by date().
+   *
+   * @return bool
+   *   TRUE is $time is in the accepted format.
+   *
+   * @see http://stackoverflow.com/questions/19271381/correctly-determine-if-date-string-is-a-valid-date-in-that-format
+   */
+  public static function isValidDateFormat($time, $format = 'Y-m-d') {
+    $datetime = \DateTime::createFromFormat($format, $time);
+    return ($datetime && $datetime->format($format) === $time);
+  }
+
 }

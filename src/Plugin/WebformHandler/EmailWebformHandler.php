@@ -35,6 +35,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   description = @Translation("Sends a webform submission via an email."),
  *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_UNLIMITED,
  *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_PROCESSED,
+ *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_OPTIONAL,
  * )
  */
 class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMessageInterface {
@@ -134,9 +135,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Simplify the [webform_submission:values:.*] tokens.
     array_walk($settings, function (&$value, $key) {
       if (is_string($value)) {
-        $value = preg_replace('/\[webform_submission:values:([^:]+)(?::raw|:value)\]/', '[\1]', $value);
-        $value = preg_replace('/\[webform_submission:/', '[', $value);
+        $value = preg_replace('/\[webform_submission:(?:node|source_entity):([^:]+)[^]]*\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_submission:values:([^:]+)[^]]*\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_submission:([^:\]]+)[^]]*\]/', '[\1]', $value);
         $value = preg_replace('/\[webform_role:([^:]+)\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform:([^:]+)\]/', '[\1]', $value);
       }
     });
 
@@ -758,10 +761,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     // Don't send the message if To, CC, and BCC is empty.
-    if (empty($message['to_mail']) && empty($message['cc_mail']) && empty($message['bcc_mail'])) {
+    if (!$this->hasRecipient($webform_submission, $message)) {
       if ($this->configuration['debug']) {
-        $t_args = ['%subject' => $message['subject']];
-        drupal_set_message($this->t('Message <b>not sent</b> %subject because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args), 'warning');
+        $t_args = [
+          '%form' => $this->getWebform()->label(),
+          '%handler' => $this->label(),
+        ];
+        drupal_set_message($this->t('%form: Email not sent for %handler handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args), 'warning', TRUE);
       }
       return;
     }
@@ -773,6 +779,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $context = [
       '@form' => $this->getWebform()->label(),
       '@title' => $this->label(),
+      'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers-form')->toString(),
     ];
     $this->logger->notice('@form webform sent @title email.', $context);
 
@@ -793,28 +800,22 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '%to_mail' => $message['to_mail'],
         '%subject' => $message['subject'],
       ];
-      $build = [];
-      $build['message'] = [
-        '#markup' => $this->t('%subject sent to %to_mail from %from_name [%from_mail].', $t_args),
-        '#prefix' => '<b>',
-        '#suffix' => '</b>',
-      ];
-      if ($message['html']) {
-        $build['body'] = [
-          '#markup' => $message['body'],
-          '#allowed_tags' => Xss::getAdminTagList(),
-          '#prefix' => '<div>',
-          '#suffix' => '</div>',
-        ];
-      }
-      else {
-        $build['body'] = [
-          '#markup' => $message['body'],
-          '#prefix' => '<pre>',
-          '#suffix' => '</pre>',
-        ];
-      }
-      drupal_set_message(\Drupal::service('renderer')->render($build), 'warning');
+      drupal_set_message($this->t("%subject sent to %to_mail from %from_name [%from_mail].", $t_args), 'warning', TRUE);
+      $debug_message = $this->buildDebugMessage($webform_submission, $message);
+      drupal_set_message(\Drupal::service('renderer')->renderPlain($debug_message), 'warning', TRUE);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasRecipient(WebformSubmissionInterface $webform_submission, array $message) {
+    // Don't send the message if To, CC, and BCC is empty.
+    if (empty($message['to_mail']) && empty($message['cc_mail']) && empty($message['bcc_mail'])) {
+      return FALSE;
+    }
+    else {
+      return TRUE;
     }
   }
 
@@ -882,7 +883,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $element['files'] = [
         '#type' => 'item',
         '#title' => $this->t('Attachments'),
-        '#markup' => \Drupal::service('renderer')->render($file_links),
+        '#markup' => \Drupal::service('renderer')->renderPlain($file_links),
       ];
     }
 
@@ -926,6 +927,58 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       return TRUE;
     }
     return \Drupal::moduleHandler()->moduleExists('mailsystem');
+  }
+
+  /**
+   * Build debug message.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   *
+   * @param array $message
+   *   An email message.
+   */
+  protected function buildDebugMessage(WebformSubmissionInterface $webform_submission, array $message) {
+    // Title.
+    $build = [
+      '#type' => 'details',
+      '#title' => $this->t('Debug: Email: @title', ['@title' => $this->label()]),
+    ];
+
+    // Values.
+    $values = [
+      'from_name' => $this->t('From name'),
+      'from_mail' => $this->t('From mail'),
+      'to_mail' => $this->t('To mail'),
+      'cc_mail' => $this->t('Cc mail'),
+      'bcc_mail' => $this->t('Bcc mail'),
+      'reply_to' => $this->t('Reply-to'),
+      'return_path' => $this->t('Return path'),
+      '',
+      'subject' => $this->t('Subject'),
+    ];
+    foreach ($values as $name => $title) {
+      if ($title == '') {
+        $build[$name] = ['#markup' => '<hr/>'];
+      }
+      elseif (!empty($message[$name])) {
+        $build[$name] = [
+          '#type' => 'item',
+          '#title' => $title,
+          '#markup' => $message[$name],
+          '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+        ];
+      }
+    }
+    // Body.
+    $build['body'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Body'),
+      '#markup' => ($message['html']) ? $message['body'] : '<pre>' . htmlentities($message['body']) . '</pre>',
+      '#allowed_tags' => Xss::getAdminTagList(),
+      '#wrapper_attributes' => ['style' => 'margin: 0'],
+    ];
+    return $build;
   }
 
   /**

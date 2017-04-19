@@ -4,9 +4,9 @@ dependencies:
   enforced:
     module:
       - webform_test
-open: null
-close: null
-uid: 1
+open: '2000-01-01T00:00:00-05:00'
+close: '2020-01-01T00:00:00-05:00'
+uid: null
 template: false
 id: test_token
 title: 'Test: Token'
@@ -25,6 +25,10 @@ elements: |
       Author: [webform:author]
       Author name: [webform:author:account-name]
       Author roles: [webform:author:roles]
+      Open: [webform:open]
+      Open long: [webform:open:long]
+      Close: [webform:close]
+      Close long: [webform:close:long]
   webform_submission_tokens:
     '#type': webform_codemirror
     '#mode': text

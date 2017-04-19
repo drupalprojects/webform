@@ -13,7 +13,7 @@ use Drupal\node\Entity\Node;
 function webform_demo_application_evaluation_install() {
   // Create a webform:demo_application node with some submissions.
   if (\Drupal::moduleHandler()->moduleExists('webform_node')) {
-    // Create a webfrom node.
+    // Create a webform node.
     $webform_node = Node::create([
       'type' => 'webform',
       'title' => 'Demo: Application',

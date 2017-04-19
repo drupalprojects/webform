@@ -58,6 +58,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
         $definition['description'],
         $definition['category'],
         ($definition['cardinality'] == -1) ? $this->t('Unlimited') : $definition['cardinality'],
+        $definition['submission'] ? $this->t('Required') : $this->t('Optional'),
         $definition['results'] ? $this->t('Processed') : $this->t('Ignored'),
         $definition['provider'],
       ];
@@ -72,6 +73,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
         $this->t('Description'),
         $this->t('Category'),
         $this->t('Cardinality'),
+        $this->t('Database'),
         $this->t('Results'),
         $this->t('Provided by'),
       ],
@@ -111,13 +113,14 @@ class WebformPluginHandlerController extends ControllerBase implements Container
 
       // Check cardinality.
       $cardinality = $definition['cardinality'];
-      $is_cardinality_unlimited = ($cardinality == WebformHandlerInterface::CARDINALITY_UNLIMITED);
+      $is_cardinality_unlimited = ($cardinality === WebformHandlerInterface::CARDINALITY_UNLIMITED);
       $is_cardinality_reached = ($webform->getHandlers($plugin_id)->count() >= $cardinality);
       if (!$is_cardinality_unlimited && $is_cardinality_reached) {
         continue;
       }
 
       $row = [];
+
       $row['title']['data'] = [
         '#type' => 'inline_template',
         '#template' => '<div class="webform-form-filter-text-source">{{ label }}</div>',
@@ -125,21 +128,39 @@ class WebformPluginHandlerController extends ControllerBase implements Container
           'label' => $definition['label'],
         ],
       ];
+
       $row['description'] = [
         'data' => [
           '#markup' => $definition['description'],
         ],
       ];
+
       $row['category'] = $definition['category'];
-      $links['add'] = [
-        'title' => $this->t('Add handler'),
-        'url' => Url::fromRoute('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => $plugin_id]),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-      ];
-      $row['operations']['data'] = [
-        '#type' => 'operations',
-        '#links' => $links,
-      ];
+
+      // Check submission required.
+      $is_submission_required = ($definition['submission'] === WebformHandlerInterface::SUBMISSION_REQUIRED);
+      $is_results_disabled = $webform->getSetting('results_disabled');
+      if ($is_submission_required && $is_results_disabled) {
+        $row_class[] = 'color-warning';
+        $row['operations']['data'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#value' => $this->t('Requires saving of submissions.'),
+          '#attributes' => ['class' => ['color-warning']],
+        ];
+      }
+      else {
+        $links['add'] = [
+          'title' => $this->t('Add handler'),
+          'url' => Url::fromRoute('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => $plugin_id]),
+          'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+        ];
+        $row['operations']['data'] = [
+          '#type' => 'operations',
+          '#links' => $links,
+        ];
+      }
+
       $rows[] = $row;
     }
 

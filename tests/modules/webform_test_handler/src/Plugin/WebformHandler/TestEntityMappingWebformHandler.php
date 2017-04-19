@@ -20,6 +20,7 @@ use Drupal\webform\WebformHandlerBase;
  *   description = @Translation("Tests mapping webform element's to entity fields."),
  *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_UNLIMITED,
  *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_IGNORED,
+ *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_OPTIONAL,
  * )
  */
 class TestEntityMappingWebformHandler extends WebformHandlerBase {

@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
+use Drupal\Core\Url;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -147,6 +148,15 @@ class WebformRequest implements WebformRequestInterface {
     return $this->request->get(AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER) ? TRUE : FALSE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, $route_options = []) {
+    $route_name = $this->getRouteName($webform_entity, $source_entity, $route_name);
+    $route_parameters = $this->getRouteParameters($webform_entity, $source_entity);
+    return Url::fromRoute($route_name, $route_parameters, $route_options);
+
+  }
   /**
    * {@inheritdoc}
    */

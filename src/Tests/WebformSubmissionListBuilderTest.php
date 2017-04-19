@@ -165,7 +165,7 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
 
     // Check date of birth.
     $this->assertRaw('<th specifier="element__dob"><a href="' . $base_path . 'admin/structure/webform/manage/' . $webform->id() . '/results/submissions?sort=asc&amp;order=dob" title="sort by dob">dob</a></th>');
-    $this->assertRaw('<td>Sun, 26 Oct 1947 00:00:00 +1000am0</td>');
+    $this->assertRaw('<td>1947-10-26</td>');
   }
 
 }

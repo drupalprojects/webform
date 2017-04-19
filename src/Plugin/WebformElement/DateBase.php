@@ -97,7 +97,10 @@ abstract class DateBase extends WebformElementBase {
     }
 
     $format = $this->getItemFormat($element) ?: 'html_' . $this->getDateType($element);
-    if (DateFormat::load($format)) {
+    if ($format == 'raw') {
+      return $value;
+    }
+    elseif (DateFormat::load($format)) {
       return \Drupal::service('date.formatter')->format($timestamp, $format);
     }
     else {

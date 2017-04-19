@@ -63,9 +63,8 @@ class WebformSubmissionDuplicateForm extends WebformSubmissionForm {
       $webform = $webform_submission->getWebform();
       $source_entity = $webform_submission->getSourceEntity();
 
-      $redirect_route_name = $this->requestHandler->getRouteName($webform_submission, $source_entity, 'webform_submission.canonical');
-      $redirect_route_parameters = $this->requestHandler->getRouteParameters($webform_submission, $source_entity);
-      $form_state->setRedirect($redirect_route_name, $redirect_route_parameters);
+      $redirect_url= $this->requestHandler->getUrl($webform_submission, $source_entity, 'webform_submission.canonical');
+      $form_state->setRedirectUrl($redirect_url);
     }
   }
 

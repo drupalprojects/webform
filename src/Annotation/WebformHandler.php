@@ -79,4 +79,12 @@ class WebformHandler extends Plugin {
    */
   public $results = WebformHandlerInterface::RESULTS_IGNORED;
 
+
+  /**
+   * Indicated whether submission must be stored in the database for this handler processes results.
+   *
+   * @var bool
+   */
+  public $submission = WebformHandlerInterface::SUBMISSION_OPTIONAL;
+
 }
