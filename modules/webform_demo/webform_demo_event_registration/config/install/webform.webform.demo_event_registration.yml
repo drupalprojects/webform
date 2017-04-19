@@ -3,7 +3,7 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_templates
+      - webform_demo_event_registration
   module:
     - webform_scheduled_email
 open: null
@@ -14,11 +14,26 @@ id: demo_event_registration
 title: 'Demo: Event Registration'
 description: 'A demonstration of an event registration form.'
 category: Demo
-elements: "information:\n  '#title': 'Your Information'\n  '#type': fieldset\n  first_name:\n    '#title': 'First Name'\n    '#type': textfield\n    '#required': true\n  last_name:\n    '#title': 'Last Name'\n    '#type': textfield\n    '#required': true\n  email:\n    '#type': email\n    '#title': Email\n    '#required': true\n"
+elements: |
+  information:
+    '#title': 'Your Information'
+    '#type': fieldset
+    first_name:
+      '#title': 'First Name'
+      '#type': textfield
+      '#required': true
+    last_name:
+      '#title': 'Last Name'
+      '#type': textfield
+      '#required': true
+    email:
+      '#type': email
+      '#title': Email
+      '#required': true
 css: ''
 javascript: ''
 settings:
-  page: true
+  page: false
   page_submit_path: ''
   page_confirm_path: ''
   form_submit_label: Register
