@@ -1780,8 +1780,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['display']['format_items'] = [
       '#type' => 'select',
       '#title' => $this->t('Items format'),
-      '#description' => $this->t('Select how multiple values are grouped displayed.'),
+      '#description' => $this->t('Select how multiple values are displayed.'),
       '#options' => $this->getItemsFormats(),
+      '#states' => [
+        'visible' => [
+          [':input[name="properties[multiple][container][cardinality]"]' => ['value' => '-1']],
+          'or',
+          [':input[name="properties[multiple][container][cardinality_number]"]' => ['!value' => 1]],
+        ],
+      ],
     ];
 
     /* Element access */
