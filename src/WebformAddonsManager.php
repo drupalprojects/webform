@@ -121,6 +121,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Crafty Clicks.
+    $projects['webform_craftyclicks'] = [
+      'title' => $this->t('Webform Crafty Clicks'),
+      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+      'category' => 'element',
+    ];
+
     // Spam: CAPTCHA.
     $projects['captcha'] = [
       'title' => $this->t('CAPTCHA'),
@@ -162,6 +170,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integration: Webform REST.
+    $projects['webform_rest'] = [
+      'title' => $this->t('Webform REST'),
+      'description' => $this->t('Retrieve and submit webforms via REST. '),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_rest'),
+      'category' => 'integration',
+    ];
+
     // Integration: Webform iContact.
     $projects['webform_icontact'] = [
       'title' => $this->t('Webform iContact'),
@@ -170,7 +186,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Integrations: Webfomr MailChimp.
+    // Integrations: Webform MailChimp.
     $projects['webform_mailchimp'] = [
       'title' => $this->t('Webform MailChimp'),
       'description' => $this->t('Posts form submissions to MailChimp list.'),
