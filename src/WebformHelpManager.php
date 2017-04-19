@@ -12,6 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformMessage;
+use Drupal\webform\Utility\WebformArrayHelper;
 
 /**
  * Webform help manager.
@@ -505,6 +506,15 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
     $libraries = $this->librariesManager->getLibraries();
     foreach ($libraries as $library_name => $library) {
+      // Get required elements.
+      $elements = [];
+      if (!empty($library['elements'])) {
+        foreach ($library['elements'] as $element_name) {
+          $element = $this->elementManager->getDefinition($element_name);
+          $elements[] = $element['label'];
+        }
+      }
+
       $build['content']['libraries'][$library_name] = [
         'title' => [
           '#type' => 'link',
@@ -514,8 +524,16 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           '#suffix' => ' (' . $library['version'] . ')</dt>',
         ],
         'description' => [
-          'content' => ['#markup' => $library['description'], '#suffix' => '<br/>'],
-          'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br/>'],
+          'content' => [
+            '#markup' => $library['description'],
+            '#suffix' => '<br/>'
+          ],
+          'notes' => [
+            '#markup' => $library['notes'] .
+              ($elements ? ' <strong>' . $this->t('Required by @type @elements.', ['@type' => WebformArrayHelper::toString($elements), '@elements' => $this->formatPlural(count($elements), $this->t('element'), $this->t('elements'))]) . '</strong>': ''),
+            '#prefix' => '<em>(',
+            '#suffix' => ')</em><br/>'
+          ],
           'download' => [
             '#type' => 'link',
             '#title' => $library['download_url']->toString(),

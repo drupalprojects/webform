@@ -29,10 +29,12 @@ interface WebformLibrariesManagerInterface {
   /**
    * Get libraries.
    *
+   * @param boolean|NULL $included
+   *   Optionally filter by include (TRUE) or excluded (FALSE)
    * @return array
    *   An associative array of libraries.
    */
-  public function getLibraries();
+  public function getLibraries($included = NULL);
 
   /**
    * Get excluded libraries.

@@ -122,6 +122,8 @@ abstract class WebformTestBase extends WebTestBase {
 
     // Admin webform user.
     $admin_form_user_permissions = array_merge($default_user_permissions, [
+      'access site reports',
+      'administer site configuration',
       'administer webform',
       'access webform submission log',
       'create webform',

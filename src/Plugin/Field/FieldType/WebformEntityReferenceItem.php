@@ -75,7 +75,7 @@ class WebformEntityReferenceItem extends EntityReferenceItem {
           'length' => 20,
         ],
         'close' => [
-          'description' => 'The open date/time.',
+          'description' => 'The close date/time.',
           'type' => 'varchar',
           'length' => 20,
         ],

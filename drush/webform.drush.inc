@@ -485,7 +485,8 @@ function drush_webform_libraries_status() {
 function drush_webform_libraries_make() {
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
-  $libraries = $libraries_manager->getLibraries();
+  $libraries = $libraries_manager->getLibraries(TRUE);
+
   $data = [
     'core' => '8.x',
     'api' => 2,
@@ -502,8 +503,34 @@ function drush_webform_libraries_make() {
       ],
     ];
   }
+
   drush_print('# This file was generated using the `drush webform-libraries-make` command');
-  drush_print(Yaml::encode($data));
+  drush_print(_drush_webform_libraries_make());
+}
+
+function _drush_webform_libraries_make() {
+  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
+  $libraries_manager = \Drupal::service('webform.libraries_manager');
+  $libraries = $libraries_manager->getLibraries(TRUE);
+
+  $data = [
+    'core' => '8.x',
+    'api' => 2,
+    'libraries' => [],
+  ];
+  foreach ($libraries as $library_name => $library) {
+    $url = $library['download_url']->toString();
+    $data['libraries'][$library_name] = [
+      'directory_name' => $library_name,
+      'destination' => 'libraries',
+      'download' => [
+        'type' => 'get',
+        'url' => $url,
+      ],
+    ];
+  }
+
+  return Yaml::encode($data);
 }
 
 /**
@@ -515,7 +542,7 @@ function drush_webform_libraries_make() {
 function drush_webform_libraries_composer() {
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
-  $libraries = $libraries_manager->getLibraries();
+  $libraries = $libraries_manager->getLibraries(TRUE);
 
   // Load existing composer.json file.
   $data = json_decode('{
@@ -589,15 +616,19 @@ function drush_webform_libraries_download() {
     drush_print(dt('Removing existing libraries...'));
   }
 
-  // Download libraries using drush.
-  $commandline_args = [
-    DRUPAL_ROOT . '/' . drupal_get_path('module', 'webform') . '/webform.libraries.make.yml',
-    DRUPAL_ROOT,
-  ];
+  // Create the makefile.
+  $makefile = file_directory_temp() . '/webform.libraries.make.yml';
+  file_put_contents($makefile, _drush_webform_libraries_make());
+
+  // Download libraries using `drush make`.
+  $commandline_args = [$makefile, DRUPAL_ROOT];
   $commandline_options = ['no-core' => 'no-core'];
   drush_invoke_process('@self', 'make', $commandline_args, $commandline_options);
 
   drupal_flush_all_caches();
+
+  // Remove the makefile.
+  file_unmanaged_delete($makefile);
 }
 
 /**

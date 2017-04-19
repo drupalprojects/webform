@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\webform\Utility\WebformArrayHelper;
 
 /**
  * Webform libraries manager.
@@ -43,9 +44,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
   public function __construct(ConfigFactoryInterface $config_factory) {
     $this->configFactory = $config_factory;
     $this->libraries = $this->initLibraries();
-    if ($excluded_libraries = $this->configFactory->get('webform.settings')->get('libraries.excluded_libraries')) {
-      $this->excludedLibraries = array_combine($excluded_libraries, $excluded_libraries);
-    }
+    $this->excludedLibraries = $this->initExcludedLibraries();
   }
 
   /**
@@ -68,10 +67,22 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         ':homepage_href' => $library['homepage_url']->toString(),
         ':install_href' => 'http://cgit.drupalcode.org/webform/tree/INSTALL.md?h=8.x-5.x',
         ':external_href' => 'https://www.drupal.org/docs/8/theming-drupal-8/adding-stylesheets-css-and-javascript-js-to-a-drupal-8-theme#external',
-        ':settings_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-library'])->toString(),
+        ':settings_libraries_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-libraries'])->toString(),
+        ':settings_elements_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-elements'])->toString(),
       ];
 
-      if ($library_exists) {
+      if ($this->isExcluded($library_name)) {
+        $value = $this->t('Excluded', $t_args);
+        if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
+          $t_args['@element_type'] = implode('; ', $library['elements']);
+          $description = $this->t('The <a href=":homepage_href">@title</a> library is excluded because required element types (@element_type) are <a href=":settings_elements_href">excluded</a>.', $t_args);
+        }
+        else {
+          $description = $this->t('The <a href=":homepage_href">@title</a> library is <a href=":settings_libraries_href">excluded</a>.', $t_args);
+        }
+        $severity = REQUIREMENT_OK;
+      }
+      elseif ($library_exists) {
         $value = $this->t('@version (Installed)', $t_args);
         $description = $this->t('The <a href=":homepage_href">@title</a> library is installed in <b>@path</b>.', $t_args);
         $severity = REQUIREMENT_OK;
@@ -85,7 +96,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         $value = $this->t('@version (CDN).', $t_args);
         $description = $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.',  $t_args);
         if (!$cli) {
-          $description .= ' ' . $this->t('(<a href=":settings_href">Disable CDN warning</a>)', $t_args);
+          $description .= ' ' . $this->t('(<a href=":settings_libraries_href">Disable CDN warning</a>)', $t_args);
         }
         $severity = REQUIREMENT_WARNING;
       }
@@ -112,12 +123,12 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLibraries($category = NULL) {
+  public function getLibraries($included = NULL) {
     $libraries = $this->libraries;
-    if ($category) {
-      foreach ($libraries as $project_name => $project) {
-        if ($project['category'] != $category) {
-          unset($libraries[$project_name]);
+    if ($included !== NULL) {
+      foreach ($libraries as $library_name => $library) {
+        if ($this->isIncluded($library_name) !== $included) {
+          unset($libraries[$library_name]);
         }
       }
     }
@@ -207,6 +218,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('http://ubilabs.github.io/geocomplete/'),
       'download_url' => Url::fromUri('https://github.com/ubilabs/geocomplete/archive/1.7.0.zip'),
       'version' => '1.7.0',
+      'elements' => ['webform_location'],
     ];
     $libraries['jquery.icheck'] = [
       'title' => $this->t('jQuery: iCheck'),
@@ -224,6 +236,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://rvera.github.io/image-picker/'),
       'download_url' => Url::fromUri('https://github.com/rvera/image-picker/archive/0.3.0.zip'),
       'version' => '0.3.0',
+      'elements' => ['webform_image_select'],
     ];
     $libraries['jquery.inputmask'] = [
       'title' => $this->t('jQuery: Input Mask'),
@@ -250,6 +263,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://github.com/gjunge/rateit.js'),
       'download_url' => Url::fromUri('https://github.com/gjunge/rateit.js/archive/1.1.1.zip'),
       'version' => '1.1.1',
+      'elements' => ['webform_rating'],
     ];
     $libraries['jquery.select2'] = [
       'title' => $this->t('jQuery: Select2'),
@@ -267,6 +281,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker'),
       'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.10.zip'),
       'version' => '1.11.10',
+      'optional' => TRUE,
     ];
     $libraries['jquery.toggles'] = [
       'title' => $this->t('jQuery: Toggles'),
@@ -275,6 +290,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://github.com/simontabor/jquery-toggles/'),
       'download_url' => Url::fromUri('https://github.com/simontabor/jquery-toggles/archive/v4.0.0.zip'),
       'version' => 'v4.0.0',
+      'elements' => ['webform_toggle', 'webform_toggles'],
     ];
     $libraries['jquery.word-and-character-counter'] = [
       'title' => $this->t('jQuery: Word and character counter plug-in!'),
@@ -292,8 +308,50 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'homepage_url' => Url::fromUri('https://github.com/szimek/signature_pad'),
       'download_url' => Url::fromUri('https://github.com/szimek/signature_pad/archive/v1.5.3.zip'),
       'version' => '1.5.3',
+      'elements' => ['webform_signature'],
     ];
     return $libraries;
   }
 
+  /**
+   * Initialize excluded libraries.
+   *
+   * @return array
+   *   A key array containing excluded libraries.
+   */
+  protected function initExcludedLibraries() {
+    // Get excluded optional libraries.
+    if ($excluded_libraries = $this->configFactory->get('webform.settings')->get('libraries.excluded_libraries')) {
+      $excluded_libraries = array_combine($excluded_libraries, $excluded_libraries);
+    }
+    else {
+      $excluded_libraries = [];
+    }
+
+    // Get excluded libraries based on excluded (element) types.
+    foreach($this->libraries as $library_name => $library) {
+      if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
+        $excluded_libraries[$library_name] = $library_name;
+      }
+    }
+
+    return $excluded_libraries;
+  }
+
+  /**
+   * Determine if a library's elements are excluded.
+   *
+   * @param array $elements
+   *   An array of element types.
+   *
+   * @return bool
+   *   TRUE if a library's elements are excluded.
+   */
+  protected function areElementsExcluded(array $elements) {
+    $excluded_types = $this->configFactory->get('webform.settings')->get('elements.excluded_types');
+    if (!$excluded_types) {
+      return FALSE;
+    }
+    return WebformArrayHelper::keysExist($excluded_types, $elements);
+  }
 }

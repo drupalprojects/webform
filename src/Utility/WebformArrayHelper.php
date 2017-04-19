@@ -234,4 +234,28 @@ class WebformArrayHelper {
     return $random;
   }
 
+  /**
+   * Checks if multiple keys exist in an array.
+   *
+   * @param array $array
+   *   An associative array.
+   * @param array $keys
+   *   Keys.
+   *
+   * @return bool
+   *  TRUE if multiple keys exist in an array.
+   *
+   * @see https://wpscholar.com/blog/check-multiple-array-keys-exist-php/.
+   */
+  public static function keysExist(array $array, array $keys) {
+    $count = 0;
+    foreach ($keys as $key) {
+      if (array_key_exists($key, $array)) {
+        $count ++;
+      }
+    }
+
+    return count($keys) === $count;
+  }
+
 }

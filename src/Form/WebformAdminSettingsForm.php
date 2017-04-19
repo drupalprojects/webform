@@ -837,7 +837,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['libraries'] = [
       '#type' => 'details',
       '#title' => $this->t('Libraries settings'),
-      '#description' => $this->t('Uncheck the below optional libraries to not have them attached to webform form elements.'),
+      '#description' => $this->t('Uncheck the below optional libraries that you do not want to be used by webform elements.') . '</br>' .
+        '<em>' . $this->t('Please note, you can also exclude element types that are dependant on specific libraries.') . '</em>',
       '#tree' => TRUE,
     ];
     $libraries_header = [
@@ -867,7 +868,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['libraries']['excluded_libraries'] = [
       '#type' => 'tableselect',
       '#title' => $this->t('Libraries'),
-      '#description' => $this->t('Uncheck libraries that you do not want to be used by Webform elements.'),
       '#header' => $libraries_header,
       '#options' => $libraries_options,
       '#default_value' => array_diff($this->libraries, array_combine($config->get('libraries.excluded_libraries'), $config->get('libraries.excluded_libraries'))),
