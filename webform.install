@@ -393,3 +393,18 @@ function webform_update_8036() {
 function webform_update_8037() {
   \Drupal::token()->resetInfo();
 }
+
+/**
+ * Issue #2870218: Improve External Library Management.
+ */
+function webform_update_8038() {
+  $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $data = $admin_config->getRawData();
+  $data['libraries'] = [
+    'excluded_libraries' => [],
+  ] + $data['library'];
+  unset($data['library']);
+  $admin_config->setData($data)->save();
+
+  _webform_update_admin_settings();
+}

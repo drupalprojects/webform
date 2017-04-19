@@ -208,7 +208,8 @@ ui:
   dialog_disabled: false
   offcanvas_disabled: false
   html_editor_disabled: false
-library:
+libraries:
+  excluded_libraries: {  }
   cdn: false
 langcode: en
 third_party_settings: {  }

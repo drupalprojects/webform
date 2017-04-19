@@ -364,7 +364,7 @@ function webform_mail_alter(&$message) {
 /**
  * Implements hook_page_attachments().
  */
-function webform_page_attachments(&$page) {
+function webform_page_attachments(array &$attachments) {
   $route_name = Drupal::routeMatch()->getRouteName();
   $url = Url::fromRoute('<current>')->toString();
 
@@ -373,7 +373,7 @@ function webform_page_attachments(&$page) {
     $active_theme_names = WebformThemeHelper::getActiveThemeNames();
     foreach ($active_theme_names as $active_theme_name) {
       if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$active_theme_name.css")) {
-        $page['#attached']['library'][] = "webform/webform.theme.$active_theme_name";
+        $attachments['#attached']['library'][] = "webform/webform.theme.$active_theme_name";
       }
     }
 
@@ -381,14 +381,14 @@ function webform_page_attachments(&$page) {
     // This ensures pages without a webform will still be able to save the
     // details element state.
     if (\Drupal::config('webform.settings')->get('ui.details_save')) {
-      $page['#attached']['library'][] = 'webform/webform.element.details.save';
+      $attachments['#attached']['library'][] = 'webform/webform.element.details.save';
     }
   }
 
   // Attach codemirror and select2 library to block admin to ensure that the
   // library is loaded by the webform block is placed using AJAX.
   if (strpos($route_name, 'block.admin_display') === 0) {
-    $page['#attached']['library'][] = 'webform/webform.block';
+    $attachments['#attached']['library'][] = 'webform/webform.block';
   }
 }
 

@@ -52,7 +52,9 @@ class WebformTelephone extends WebformCompositeBase {
    */
   public static function processWebformComposite(&$element, FormStateInterface $form_state, &$complete_form) {
     $element = parent::processWebformComposite($element, $form_state, $complete_form);
-    $element['#attached']['library'][] = 'webform/webform.element.composite_telephone';
+    if (!empty($element['#phone__international']) && \Drupal::service('webform.libraries_manager')->isIncluded('jquery.intl-tel-input')) {
+      $element['#attached']['library'][] = 'webform/webform.element.composite_telephone';
+    }
     return $element;
   }
 

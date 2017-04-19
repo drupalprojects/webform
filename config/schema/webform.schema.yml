@@ -290,10 +290,13 @@ webform.settings:
         details_save:
           type: boolean
           label: 'Save details open/close state'
-    library:
+    libraries:
       type: mapping
       label: 'Library settings'
       mapping:
+        excluded_libraries:
+          type: ignore
+          label: 'Excluded libraries'
         cdn:
           type: boolean
           label: 'Use CDN'

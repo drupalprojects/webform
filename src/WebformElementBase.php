@@ -86,6 +86,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   protected $tokenManager;
 
   /**
+   * The libraries manager.
+   *
+   * @var \Drupal\webform\WebformLibrariesManagerInterface
+   */
+  protected $librariesManager;
+
+  /**
    * The webform submission storage.
    *
    * @var \Drupal\webform\WebformSubmissionStorageInterface
@@ -118,7 +125,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage
    *   The webform submission storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionStorageInterface $webform_submission_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, WebformSubmissionStorageInterface $webform_submission_storage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->logger = $logger;
     $this->configFactory = $config_factory;
@@ -127,6 +134,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $this->elementInfo = $element_info;
     $this->elementManager = $element_manager;
     $this->tokenManager = $token_manager;
+    $this->librariesManager = $libraries_manager;
     $this->submissionStorage = $webform_submission_storage;
   }
 
@@ -145,6 +153,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $container->get('plugin.manager.element_info'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.token_manager'),
+      $container->get('webform.libraries_manager'),
       $container->get('entity_type.manager')->getStorage('webform_submission')
     );
   }
@@ -531,7 +540,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     // Add iCheck support.
-    if ($this->hasProperty('icheck')) {
+    if ($this->hasProperty('icheck') && $this->librariesManager->isIncluded('jquery.icheck')) {
       $icheck = NULL;
       $icheck_skin = NULL;
       if (isset($element['#icheck'])) {
@@ -552,7 +561,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           $element['#attributes']['data-webform-icheck'] = $icheck;
         }
         $element['#attached']['library'][] = 'webform/webform.element.icheck';
-        $element['#attached']['library'][] = 'webform/jquery.icheck.' . $icheck_skin;
+        $element['#attached']['library'][] = 'webform/libraries.jquery.icheck.' . $icheck_skin;
       }
     }
 
@@ -1649,6 +1658,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           'flat-aero' => $this->t('Flat: Aero'),
         ],
       ],
+      '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
     if ($default_icheck) {
       $icheck_options = OptGroup::flattenOptions($form['form']['icheck']['#options']);

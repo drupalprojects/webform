@@ -14,6 +14,9 @@ function webform_library_info_alter(&$libraries, $extension) {
     return;
   }
 
+  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
+  $libraries_manager = \Drupal::service('webform.libraries_manager');
+
   // Add off-canvas system tray to dialog dependencies.
   if (isset($libraries['webform.admin.dialog']) && (floatval(\Drupal::VERSION) >= 8.3) && \Drupal::moduleHandler()->moduleExists('outside_in')) {
     $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.off_canvas';
@@ -22,7 +25,23 @@ function webform_library_info_alter(&$libraries, $extension) {
 
   // Map /library/* paths to CDN.
   // @see webform.libraries.yml.
-  foreach ($libraries as &$library) {
+  foreach ($libraries as $library_name => &$library) {
+    // Remove excluded libraries.
+    if ($libraries_manager->isExcluded($library_name)) {
+      unset($libraries[$library_name]);
+      continue;
+    }
+
+    if (!empty($library['dependencies'])) {
+      // Remove excluded libraries from dependencies.
+      foreach ($library['dependencies'] as $dependency_index => $dependency_name) {
+        if ($libraries_manager->isExcluded($dependency_name)) {
+          $library['dependencies'][$dependency_index] = NULL;
+          $library['dependencies'] = array_filter($library['dependencies']);
+        }
+      }
+    }
+
     // Check CDN setting exists.
     if (!isset($library['cdn'])) {
       continue;

@@ -20,6 +20,10 @@
    */
   Drupal.behaviors.webformLocationGeocomplete = {
     attach: function (context) {
+      if (!$.fn.geocomplete) {
+        return;
+      }
+
       $(context).find('div.js-webform-location').once('webform-location').each(function () {
         var $element = $(this);
         var $input = $element.find('.webform-location-geocomplete');

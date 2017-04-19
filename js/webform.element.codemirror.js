@@ -19,6 +19,9 @@
    */
   Drupal.behaviors.webformCodeMirror = {
     attach: function (context) {
+      if (!window.CodeMirror) {
+        return;
+      }
 
       // Webform CodeMirror editor.
       $(context).find('textarea.js-webform-codemirror').once('webform-codemirror').each(function () {

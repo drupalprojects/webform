@@ -15,11 +15,11 @@
   Drupal.behaviors.webformTextFormat = {
     attach: function (context) {
       $(context).find('.js-text-format-wrapper textarea').once('webform-text-format').each(function () {
-        var $textarea = $(this);
         if (!window.CKEDITOR) {
           return;
         }
 
+        var $textarea = $(this);
         // Update the CKEDITOR when the textarea's value has changed.
         // @see webform.states.js
         $textarea.on('change', function () {

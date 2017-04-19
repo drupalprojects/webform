@@ -197,7 +197,7 @@ webform.element.codemirror.text:
   js:
     js/webform.element.codemirror.js: {}
   dependencies:
-    - webform/codemirror.text
+    - webform/libraries.codemirror.text
 
 webform.element.codemirror.yaml:
   version: VERSION
@@ -207,7 +207,7 @@ webform.element.codemirror.yaml:
   js:
     js/webform.element.codemirror.js: {}
   dependencies:
-    - webform/codemirror.yaml
+    - webform/libraries.codemirror.yaml
 
 webform.element.codemirror.html:
   version: VERSION
@@ -217,7 +217,7 @@ webform.element.codemirror.html:
   js:
     js/webform.element.codemirror.js: {}
   dependencies:
-    - webform/codemirror.html
+    - webform/libraries.codemirror.html
 
 webform.element.codemirror.css:
   version: VERSION
@@ -227,7 +227,7 @@ webform.element.codemirror.css:
   js:
     js/webform.element.codemirror.js: {}
   dependencies:
-    - webform/codemirror.css
+    - webform/libraries.codemirror.css
 
 webform.element.codemirror.javascript:
   version: VERSION
@@ -237,7 +237,7 @@ webform.element.codemirror.javascript:
   js:
     js/webform.element.codemirror.js: {}
   dependencies:
-    - webform/codemirror.javascript
+    - webform/libraries.codemirror.javascript
 
 webform.element.color:
   version: VERSION
@@ -270,7 +270,7 @@ webform.element.counter:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.counter
+    - webform/libraries.jquery.word-and-character-counter
 
 webform.element.date:
   version: VERSION
@@ -324,8 +324,8 @@ webform.element.html_editor:
     - core/drupalSettings
     - core/jquery
     - core/jquery.once
-    - webform/ckeditor
-    - webform/ckeditor_autogrow
+    - webform/libraries.ckeditor
+    - webform/libraries.ckeditor_autogrow
 
 webform.element.icheck:
   version: VERSION
@@ -338,7 +338,7 @@ webform.element.icheck:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.icheck
+    - webform/libraries.jquery.icheck
 
 webform.element.inputmask:
   version: VERSION
@@ -348,7 +348,7 @@ webform.element.inputmask:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.inputmask
+    - webform/libraries.jquery.inputmask
 
 webform.element.image_select:
   version: VERSION
@@ -361,7 +361,7 @@ webform.element.image_select:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.image-picker
+    - webform/libraries.jquery.image-picker
 
 webform.element.likert:
   version: VERSION
@@ -380,7 +380,7 @@ webform.element.location:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.geocomplete
+    - webform/libraries.jquery.geocomplete
 
 webform.element.message:
   version: VERSION
@@ -447,7 +447,7 @@ webform.element.rating:
   js:
     js/webform.element.rating.js: {}
   dependencies:
-    - webform/jquery.rateit
+    - webform/libraries.jquery.rateit
 
 webform.element.roles:
   version: VERSION
@@ -469,7 +469,7 @@ webform.element.select2:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.select2
+    - webform/libraries.jquery.select2
 
 webform.element.signature:
   version: VERSION
@@ -480,7 +480,7 @@ webform.element.signature:
     js/webform.element.signature.js: {}
   dependencies:
     - core/drupal
-    - webform/signature_pad
+    - webform/libraries.signature_pad
 
 webform.element.states:
   version: VERSION
@@ -496,7 +496,7 @@ webform.element.telephone:
     - core/drupal
     - core/jquery
     - core/jquery.once
-    - webform/jquery.intl-tel-input
+    - webform/libraries.jquery.intl-tel-input
 
 webform.element.term_checkboxes:
   version: VERSION
@@ -527,7 +527,7 @@ webform.element.time:
     js/webform.element.time.js: {}
   dependencies:
     - core/drupal
-    - webform/jquery.timepicker
+    - webform/libraries.jquery.timepicker
 
 webform.element.toggle:
   version: VERSION
@@ -538,7 +538,7 @@ webform.element.toggle:
     js/webform.element.toggle.js: {}
   dependencies:
     - core/drupal
-    - webform/jquery.toggles
+    - webform/libraries.jquery.toggles
     - core/jquery.once
 
 webform.element.video_file:
@@ -558,7 +558,7 @@ imce.input:
 
 # External libraries.
 
-ckeditor:
+libraries.ckeditor:
   remote: http://ckeditor.com/
   version: '4.6.2'
   license:
@@ -570,7 +570,7 @@ ckeditor:
   js:
     /libraries/ckeditor/ckeditor.js: { preprocess: false, minified: true }
 
-ckeditor_autogrow:
+libraries.ckeditor_autogrow:
   remote: http://ckeditor.com/addon/autogrow
   version: '4.6.2'
   license:
@@ -582,7 +582,7 @@ ckeditor_autogrow:
   js:
     /libraries/ckeditor_autogrow/plugin.js: { preprocess: false, minified: true }
 
-codemirror.text:
+libraries.codemirror.text:
   remote: https://github.com/codemirror/codemirror
   version: &webform_codemirror_version '5.24.0'
   license: &webform_codemirror_license
@@ -599,16 +599,16 @@ codemirror.text:
     /libraries/codemirror/lib/codemirror.js: {}
     /libraries/codemirror/addon/runmode/runmode.js: {}
 
-codemirror.yaml:
+libraries.codemirror.yaml:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/yaml/yaml.js: {}
   dependencies:
-    - webform/codemirror.text
+    - webform/libraries.codemirror.text
 
-codemirror.html:
+libraries.codemirror.html:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
   cdn: *webform_codemirror_cdn
@@ -616,27 +616,27 @@ codemirror.html:
     /libraries/codemirror/mode/xml/xml.js: {}
     /libraries/codemirror/mode/htmlmixed/htmlmixed.js: {}
   dependencies:
-    - webform/codemirror.text
+    - webform/libraries.codemirror.text
 
-codemirror.css:
+libraries.codemirror.css:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/css/css.js: {}
   dependencies:
-    - webform/codemirror.text
+    - webform/libraries.codemirror.text
 
-codemirror.javascript:
+libraries.codemirror.javascript:
   version: *webform_codemirror_version
   license: *webform_codemirror_license
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/javascript/javascript.js: {}
   dependencies:
-    - webform/codemirror.text
+    - webform/libraries.codemirror.text
 
-jquery.counter:
+libraries.jquery.word-and-character-counter:
   remote: https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin
   version: '2.3.5'
   license:
@@ -650,7 +650,7 @@ jquery.counter:
   dependencies:
     - core/jquery
 
-jquery.geocomplete:
+libraries.jquery.geocomplete:
   remote: http://ubilabs.github.io/geocomplete/
   version: '1.7.0'
   license:
@@ -664,7 +664,7 @@ jquery.geocomplete:
   dependencies:
     - core/jquery
 
-jquery.icheck:
+libraries.jquery.icheck:
   remote: http://icheck.fronteed.com/
   version: &webform_icheck_version '1.0.2'
   license: &webform_icheck_license
@@ -678,7 +678,7 @@ jquery.icheck:
   dependencies:
     - core/jquery
 
-jquery.icheck.flat:
+libraries.jquery.icheck.flat:
   version: *webform_icheck_version
   license: *webform_icheck_license
   cdn: *webform_icheck_cdn
@@ -686,9 +686,9 @@ jquery.icheck.flat:
     theme:
       /libraries/jquery.icheck/skins/flat/_all.css: {}
   dependencies:
-    - webform/jquery.icheck
+    - webform/libraries.jquery.icheck
 
-jquery.icheck.minimal:
+libraries.jquery.icheck.minimal:
   version: *webform_icheck_version
   license: *webform_icheck_license
   cdn: *webform_icheck_cdn
@@ -696,9 +696,9 @@ jquery.icheck.minimal:
     theme:
       /libraries/jquery.icheck/skins/minimal/_all.css: {}
   dependencies:
-    - webform/jquery.icheck
+    - webform/libraries.jquery.icheck
 
-jquery.icheck.square:
+libraries.jquery.icheck.square:
   version: *webform_icheck_version
   license: *webform_icheck_license
   cdn: *webform_icheck_cdn
@@ -706,9 +706,9 @@ jquery.icheck.square:
     theme:
       /libraries/jquery.icheck/skins/square/_all.css: {}
   dependencies:
-    - webform/jquery.icheck
+    - webform/libraries.jquery.icheck
 
-jquery.image-picker:
+libraries.jquery.image-picker:
   remote: https://rvera.github.io/image-picker/
   version: '0.3.0'
   license:
@@ -725,7 +725,7 @@ jquery.image-picker:
   dependencies:
     - core/jquery
 
-jquery.inputmask:
+libraries.jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask
   version: '3.3.3'
   license:
@@ -739,7 +739,7 @@ jquery.inputmask:
   dependencies:
     - core/jquery
 
-jquery.intl-tel-input:
+libraries.jquery.intl-tel-input:
   remote: https://github.com/jackocnr/intl-tel-input
   version: 'v11.0.0'
   license:
@@ -758,7 +758,7 @@ jquery.intl-tel-input:
   dependencies:
     - core/jquery
 
-jquery.rateit:
+libraries.jquery.rateit:
   remote: https://github.com/gjunge/rateit.js
   version: '1.1.1'
   license:
@@ -775,7 +775,7 @@ jquery.rateit:
   dependencies:
     - core/jquery
 
-jquery.select2:
+libraries.jquery.select2:
   remote: https://select2.github.io/
   version: '4.0.3'
   license:
@@ -783,16 +783,16 @@ jquery.select2:
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/select2/dist/: https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/
+    /libraries/jquery.select2/dist/: https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/
   css:
     theme:
-      /libraries/select2/dist/css/select2.min.css: {}
+      /libraries/jquery.select2/dist/css/select2.min.css: {}
   js:
-    /libraries/select2/dist/js/select2.min.js: {}
+    /libraries/jquery.select2/dist/js/select2.min.js: {}
   dependencies:
     - core/jquery
 
-jquery.timepicker:
+libraries.jquery.timepicker:
   remote: https://github.com/jonthornton/jquery-timepicker
   version: '1.11.10'
   license:
@@ -809,7 +809,7 @@ jquery.timepicker:
   dependencies:
     - core/jquery
 
-jquery.toggles:
+libraries.jquery.toggles:
   remote: https://github.com/simontabor/jquery-toggles/
   version: '4.0.0'
   license:
@@ -826,7 +826,7 @@ jquery.toggles:
   dependencies:
     - core/jquery
 
-signature_pad:
+libraries.signature_pad:
   remote: https://github.com/szimek/signature_pad
   version: '1.5.3'
   license:

@@ -38,7 +38,7 @@ class Telephone extends TextBase {
     parent::prepare($element, $webform_submission);
 
     // Add international library and classes.
-    if (!empty($element['#international'])) {
+    if (!empty($element['#international']) && $this->librariesManager->isIncluded('jquery.intl-tel-input')) {
       $element['#attached']['library'][] = 'webform/webform.element.telephone';
       $element['#attributes']['class'][] = 'js-webform-telephone-international';
       $element['#attributes']['class'][] = 'webform-webform-telephone-international';
@@ -56,12 +56,14 @@ class Telephone extends TextBase {
     $form['telephone'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Telephone settings'),
+      '#access' => $this->librariesManager->isIncluded('jquery.intl-tel-input'),
     ];
     $form['telephone']['international'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enhance support for international phone numbers'),
       '#description' => $this->t('Enhance the telephone element\'s international support using the jQuery <a href=":href">International Telephone Input</a> plugin.', [':href' => 'http://intl-tel-input.com/']),
       '#return_value' => TRUE,
+      '#access' => $this->librariesManager->isIncluded('jquery.intl-tel-input'),
     ];
     $form['telephone']['international_initial_country'] = [
       '#title' => $this->t('Initial country'),
@@ -73,6 +75,7 @@ class Telephone extends TextBase {
       '#states' => [
         'visible' => [':input[name="properties[international]"]' => ['checked' => TRUE]],
       ],
+      '#access' => $this->librariesManager->isIncluded('jquery.intl-tel-input'),
     ];
     return $form;
   }

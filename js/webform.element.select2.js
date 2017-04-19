@@ -19,6 +19,10 @@
    */
   Drupal.behaviors.webformSelect2 = {
     attach: function (context) {
+      if (!$.fn.select2) {
+        return;
+      }
+
       $(context)
         .find('select.js-webform-select2, .js-webform-select2 select')
         .once('webform-select2')

@@ -14,6 +14,10 @@
    */
   Drupal.behaviors.webformInputMask = {
     attach: function (context) {
+      if (!$.fn.inputmask) {
+        return;
+      }
+
       $(context).find('input.js-webform-input-mask').once('webform-input-mask').inputmask();
     }
   };

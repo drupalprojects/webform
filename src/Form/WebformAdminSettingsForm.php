@@ -14,6 +14,7 @@ use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\WebformLibrariesManagerInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,6 +53,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
   protected $tokenManager;
 
   /**
+   * The libraries manager.
+   *
+   * @var \Drupal\webform\WebformLibrariesManagerInterface
+   */
+  protected $librariesManager;
+
+  /**
    * An array of element types.
    *
    * @var array
@@ -85,13 +93,16 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    *   The webform submission exporter.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.
+   * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
+   *   The libraries manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $third_party_settings_manager, WebformElementManagerInterface $element_manager, WebformSubmissionExporterInterface $submission_exporter, WebformTokenManagerInterface $token_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $third_party_settings_manager, WebformElementManagerInterface $element_manager, WebformSubmissionExporterInterface $submission_exporter, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager) {
     parent::__construct($config_factory);
     $this->moduleHandler = $third_party_settings_manager;
     $this->elementManager = $element_manager;
     $this->submissionExporter = $submission_exporter;
     $this->tokenManager = $token_manager;
+    $this->librariesManager = $libraries_manager;
   }
 
   /**
@@ -103,7 +114,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $container->get('module_handler'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform_submission.exporter'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('webform.libraries_manager')
     );
   }
 
@@ -821,32 +833,64 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('ui.html_editor_disabled'),
     ];
 
-    // Library.
-    $form['library'] = [
+    // Libraries.
+    $form['libraries'] = [
       '#type' => 'details',
-      '#title' => $this->t('Library settings'),
+      '#title' => $this->t('Libraries settings'),
+      '#description' => $this->t('Uncheck the below optional libraries to not have them attached to webform form elements.'),
       '#tree' => TRUE,
     ];
-    $form['library']['cdn'] = [
+    $libraries_header = [
+      'title' => ['data' => $this->t('Title')],
+      'description' => ['data' => $this->t('Description/Notes'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
+    ];
+    $this->libraries = [];
+    $libraries_options = [];
+    $libraries = $this->librariesManager->getLibraries();
+    foreach ($libraries  as $library_name => $library) {
+      // Only optional libraries can be excluded.
+      if (empty($library['optional'])) {
+        continue;
+      }
+
+      $this->libraries[$library_name] = $library_name;
+      $libraries_options[$library_name] = [
+        'title' => $library['title'],
+        'description' => [
+          'data' => [
+            'content' => ['#markup' => $library['description'], '#suffix' => '<br/>'],
+            'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br/>'],
+          ],
+        ],
+      ];
+    }
+    $form['libraries']['excluded_libraries'] = [
+      '#type' => 'tableselect',
+      '#title' => $this->t('Libraries'),
+      '#description' => $this->t('Uncheck libraries that you do not want to be used by Webform elements.'),
+      '#header' => $libraries_header,
+      '#options' => $libraries_options,
+      '#default_value' => array_diff($this->libraries, array_combine($config->get('libraries.excluded_libraries'), $config->get('libraries.excluded_libraries'))),
+    ];
+    $form['libraries']['cdn'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use CDN'),
       '#description' => $this->t('If checked, all warnings about missing libraries will be disabled.'),
       '#return_value' => TRUE,
-      '#default_value' => $config->get('library.cdn'),
+      '#default_value' => $config->get('libraries.cdn'),
     ];
-    $form['library']['cdn_message'] = [
+    $form['libraries']['cdn_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('Note that it is in general not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and these external assets are usually not in the browser cache anyway.'),
+      '#message_message' => $this->t('Note that it is in generally not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and these external assets are usually not in the browser cache anyway.'),
       '#states' => [
         'visible' => [
-          ':input[name="library[cdn]"]' => [
+          ':input[name="libraries[cdn]"]' => [
             'checked' => TRUE,
           ],
         ],
       ],
     ];
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -870,11 +914,16 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     // because the 'default_page_base_path' changed.
     $update_paths = ($settings['default_page_base_path'] != $this->config('webform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
 
-    /* Excluded types */
+    /* Libraries */
 
     // Convert list of included types to excluded types.
-    $excluded_types = array_diff($this->elementTypes, array_filter($form_state->getValue('excluded_types')));
-    ksort($excluded_types);
+    $libraries = $form_state->getValue('libraries');
+    $libraries['excluded_libraries'] = array_diff($this->libraries, array_filter($libraries['excluded_libraries']));
+    ksort($libraries['excluded_libraries']);
+    // Note: Must store a simple array of libraries because library names
+    // may contain periods, which is not supported by Drupal's
+    // config management.
+    $libraries['excluded_libraries'] = array_keys($libraries['excluded_libraries']);
 
     /* Format */
 
@@ -883,6 +932,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $format[$element_id] = array_filter($element_format);
     }
     $format = array_filter($format);
+
+    /* Excluded types */
+
+    // Convert list of included types to excluded types.
+    $excluded_types = array_diff($this->elementTypes, array_filter($form_state->getValue('excluded_types')));
+    ksort($excluded_types);
 
     /* Config save */
 
@@ -898,7 +953,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $config->set('purge_settings', $form_state->getValue('purge_settings'));
     $config->set('test', $form_state->getValue('test'));
     $config->set('ui', $form_state->getValue('ui'));
-    $config->set('library', $form_state->getValue('library'));
+    $config->set('libraries', $libraries);
     $config->save();
 
     /* Update paths */
@@ -913,6 +968,9 @@ class WebformAdminSettingsForm extends ConfigFormBase {
 
     // Reset token cache to make 'webform_role' tokens are available.
     \Drupal::token()->resetInfo();
+
+    // Reset libraries cached.
+    \Drupal::service('library.discovery')->clearCachedDefinitions();
 
     parent::submitForm($form, $form_state);
   }

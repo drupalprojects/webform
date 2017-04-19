@@ -509,12 +509,18 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'title' => [
           '#type' => 'link',
           '#title' => $library['title'],
-          '#url' => $library['url'],
+          '#url' => $library['homepage_url'],
           '#prefix' => '<dt>',
-          '#suffix' => '</dt>',
+          '#suffix' => ' (' . $library['version'] . ')</dt>',
         ],
         'description' => [
-          '#markup' => $library['description'] . '<br/><em>(' . $library['notes'] . ')</em>',
+          'content' => ['#markup' => $library['description'], '#suffix' => '<br/>'],
+          'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br/>'],
+          'download' => [
+            '#type' => 'link',
+            '#title' => $library['download_url']->toString(),
+            '#url' => $library['download_url'],
+          ],
           '#prefix' => '<dd>',
           '#suffix' => '</dd>',
         ],

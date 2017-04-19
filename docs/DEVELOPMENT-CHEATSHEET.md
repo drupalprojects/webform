@@ -34,6 +34,13 @@ git branch -D [issue-number]-[issue-description]
 git push origin :[issue-number]-[issue-description]
 ```
 
+**Generate Drush Make and Composer Files**
+
+```bash
+drush webform-libraries-make > webform.libraries.make.yml
+drush webform-libraries-composer > composer.json
+```
+
 **Import and Export Configuration**
 
 ```bash

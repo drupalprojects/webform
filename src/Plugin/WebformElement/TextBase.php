@@ -33,7 +33,7 @@ abstract class TextBase extends WebformElementBase {
     parent::prepare($element, $webform_submission);
 
     // Counter.
-    if (!empty($element['#counter_type']) && !empty($element['#counter_maximum'])) {
+    if (!empty($element['#counter_type']) && !empty($element['#counter_maximum']) && $this->librariesManager->isIncluded('jquery.word-and-character-counter')) {
       $element['#attributes']['data-counter-type'] = $element['#counter_type'];
       $element['#attributes']['data-counter-limit'] = $element['#counter_maximum'];
       if (!empty($element['#counter_message'])) {
@@ -48,7 +48,7 @@ abstract class TextBase extends WebformElementBase {
     }
 
     // Input mask.
-    if (!empty($element['#input_mask'])) {
+    if (!empty($element['#input_mask']) && $this->librariesManager->isIncluded('jquery.inputmask')) {
       // See if the element mask is JSON by looking for 'name':, else assume it
       // is a mask pattern.
       $input_mask = $element['#input_mask'];
@@ -96,6 +96,7 @@ abstract class TextBase extends WebformElementBase {
           "'alias': 'vin'" => 'VIN (Vehicle identification number)',
         ],
       ],
+      '#access' => $this->librariesManager->isIncluded('jquery.inputmask'),
     ];
 
     // Pattern.
@@ -115,6 +116,7 @@ abstract class TextBase extends WebformElementBase {
         'character' => $this->t('Characters'),
         'word' => $this->t('Words'),
       ],
+      '#access' => $this->librariesManager->isIncluded('jquery.word-and-character-counter'),
     ];
     $form['validation']['counter_maximum'] = [
       '#type' => 'number',
@@ -128,6 +130,7 @@ abstract class TextBase extends WebformElementBase {
           ':input[name="properties[counter_type]"]' => ['value' => ''],
         ],
       ],
+      '#access' => $this->librariesManager->isIncluded('jquery.word-and-character-counter'),
     ];
     $form['validation']['counter_message'] = [
       '#type' => 'textfield',
@@ -138,6 +141,7 @@ abstract class TextBase extends WebformElementBase {
           ':input[name="properties[counter_type]"]' => ['value' => ''],
         ],
       ],
+      '#access' => $this->librariesManager->isIncluded('jquery.word-and-character-counter'),
     ];
 
     return $form;

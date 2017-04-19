@@ -19,6 +19,10 @@
    */
   Drupal.behaviors.webformTelephoneInternational = {
     attach: function (context) {
+      if (!$.fn.intlTelInput) {
+        return;
+      }
+
       $(context).find('input.js-webform-telephone-international').once('webform-telephone-international').each(function () {
         var $telephone = $(this);
 

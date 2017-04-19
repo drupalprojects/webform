@@ -58,7 +58,7 @@ class Select extends OptionsBase {
     parent::prepare($element, $webform_submission);
 
     // Add select2 library and classes.
-    if (!empty($element['#select2'])) {
+    if (!empty($element['#select2']) && $this->librariesManager->isIncluded('jquery.select2')) {
       $element['#attached']['library'][] = 'webform/webform.element.select2';
       $element['#attributes']['class'][] = 'js-webform-select2';
       $element['#attributes']['class'][] = 'webform-select2';
@@ -79,6 +79,7 @@ class Select extends OptionsBase {
       '#title' => $this->t('Select2'),
       '#description' => $this->t('Replace select element with jQuery <a href=":href">Select2</a> box.', [':href' => 'https://select2.github.io/']),
       '#return_value' => TRUE,
+      '#access' => $this->librariesManager->isIncluded('jquery.select2'),
     ];
     return $form;
   }

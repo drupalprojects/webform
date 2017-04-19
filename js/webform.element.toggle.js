@@ -19,6 +19,10 @@
    */
   Drupal.behaviors.webformToggle = {
     attach: function (context) {
+      if (!$.fn.toggles) {
+        return;
+      }
+
       $(context).find('.js-webform-toggle').once('webform-toggle').each(function () {
         var $toggle = $(this);
         var $wrapper = $toggle.parent();
@@ -50,14 +54,16 @@
   };
 
   // Track the disabling of a toggle's checkbox using states.
-  $(document).on('state:disabled', function (event) {
-    $('.js-webform-toggle').each(function () {
-      var $toggle = $(this);
-      var $wrapper = $toggle.parent();
-      var $checkbox = $wrapper.find('input[type="checkbox"]');
-      var isDisabled = ($checkbox.attr('disabled') || $checkbox.attr('readonly'));
-      (isDisabled) ? $toggle.addClass('disabled') : $toggle.removeClass('disabled');
+  if ($.fn.toggles) {
+    $(document).on('state:disabled', function (event) {
+      $('.js-webform-toggle').each(function () {
+        var $toggle = $(this);
+        var $wrapper = $toggle.parent();
+        var $checkbox = $wrapper.find('input[type="checkbox"]');
+        var isDisabled = ($checkbox.attr('disabled') || $checkbox.attr('readonly'));
+        (isDisabled) ? $toggle.addClass('disabled') : $toggle.removeClass('disabled');
+      });
     });
-  });
+  }
 
 })(jQuery, Drupal);

@@ -34,4 +34,34 @@ interface WebformLibrariesManagerInterface {
    */
   public function getLibraries();
 
+  /**
+   * Get excluded libraries.
+   *
+   * @return array
+   *   A keyey array of excluded libraries.
+   */
+  public function getExcludedLibraries();
+
+  /**
+ * Determine if library is excluded.
+ *
+ * @param string $name
+ *   The name of the library.
+ *
+ * @return boolean
+ *   TRUE if library is excluded.
+ */
+  public function isExcluded($name);
+
+  /**
+   * Determine if library is included.
+   *
+   * @param string $name
+   *   The name of the library.
+   *
+   * @return boolean
+   *   TRUE if library is included.
+   */
+  public function isIncluded($name);
+
 }

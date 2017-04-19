@@ -22,6 +22,10 @@
    */
   Drupal.behaviors.webformTime = {
     attach: function (context, settings) {
+      if (!$.fn.timepicker) {
+        return;
+      }
+
       var $context = $(context);
       // Skip if time inputs are supported by the browser.
       if (Modernizr.inputtypes.time === true) {

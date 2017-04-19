@@ -19,6 +19,10 @@
    */
   Drupal.behaviors.webformICheck = {
     attach: function (context) {
+      if (!$.fn.iCheck) {
+        return;
+      }
+
       $('[data-webform-icheck]', context).each(function () {
         var icheck = $(this).attr('data-webform-icheck');
 
@@ -49,6 +53,10 @@
    */
   Drupal.behaviors.webformICheckTableSelectAll = {
     attach: function (context) {
+      if (!$.fn.iCheck) {
+        return;
+      }
+
       $('table[data-webform-icheck] th.select-all').bind('DOMNodeInserted', function () {
         $(this).unbind('DOMNodeInserted');
         $(this).find('input[type="checkbox"]').each(function () {
@@ -76,12 +84,15 @@
    *
    * @see core/misc/states.js
    */
-  $(document).on('state:disabled', function (e) {
-    if ($(e.target).hasClass('.js-webform-icheck')) {
-      $(e.target).iCheck(e.value ? 'disable' : 'enable');
-    }
+  if ($.fn.iCheck) {
+    $(document).on('state:disabled', function (e) {
+      if ($(e.target).hasClass('.js-webform-icheck')) {
+        $(e.target).iCheck(e.value ? 'disable' : 'enable');
+      }
 
-    $(e.target).iCheck(e.value ? 'disable' : 'enable');
-  });
+      $(e.target).iCheck(e.value ? 'disable' : 'enable');
+    });
+  }
+
 
 })(jQuery, Drupal);

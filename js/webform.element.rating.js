@@ -17,6 +17,10 @@
    */
   Drupal.behaviors.webformRating = {
     attach: function (context) {
+      if (!$.fn.rateit) {
+        return;
+      }
+
       $(context)
         .find('[data-rateit-backingfld]')
         .once('webform-rating')

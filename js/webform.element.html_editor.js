@@ -19,6 +19,10 @@
    */
   Drupal.behaviors.webformHtmlEditor = {
     attach: function (context) {
+      if (!window.CKEDITOR) {
+        return;
+      }
+
       $(context).find('.js-form-type-webform-html-editor textarea').once('webform-html-editor').each(function () {
         var allowedContent = drupalSettings['webform']['html_editor']['allowedContent'];
         var $textarea = $(this);
@@ -32,11 +36,8 @@
           // Use <br> tags instead of <p> tags.
           enterMode: CKEDITOR.ENTER_BR,
           shiftEnterMode: CKEDITOR.ENTER_BR,
-          // Set auto grow.
-          extraPlugins: 'autogrow',
+          // Set height.
           height: '100px',
-          autoGrow_minHeight: 100,
-          autoGrow_maxHeight: 300,
           // Remove status bar.
           resize_enabled: false,
           removePlugins: 'elementspath,magicline',
@@ -50,12 +51,21 @@
             {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
             {name: 'links', items: ['Link', 'Unlink']},
             {name: 'tools', items: ['Source', '-', 'Maximize']}
-          ]
+          ],
+          // Extra plugins
+          extraPlugins: ''
         };
 
+        // Add auto grow plugin.
+        if (CKEDITOR.plugins.get('autogrow')) {
+          options.extraPlugins += (options.extraPlugins ? ',' : '') + 'autogrow';
+          options.autoGrow_minHeight = 100;
+          options.autoGrow_maxHeight = 300;
+        }
+
         // Add IMCE image button.
-        if (CKEDITOR.imce) {
-          options.extraPlugins += ',imce';
+        if (CKEDITOR.plugins.get('imce')) {
+          options.extraPlugins += (options.extraPlugins ? ',' : '') + 'imce';
           options.toolbar[2].items = ['ImceImage', 'SpecialChar'];
           CKEDITOR.config.ImceImageIcon = drupalSettings['webform']['html_editor']['ImceImageIcon'];
         }
