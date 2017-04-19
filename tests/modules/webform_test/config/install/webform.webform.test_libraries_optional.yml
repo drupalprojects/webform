@@ -1,6 +1,9 @@
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - webform_test
 open: null
 close: null
 uid: 1
