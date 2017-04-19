@@ -13,7 +13,7 @@ interface WebformEntityStorageInterface extends ConfigEntityStorageInterface, Im
   /**
    * Gets the names of all categories.
    *
-   * @param null|boolean $template
+   * @param null|bool $template
    *   If TRUE only template categories will be returned.
    *   If FALSE only webform categories will be returned.
    *   If NULL all categories will be returned.
@@ -26,7 +26,7 @@ interface WebformEntityStorageInterface extends ConfigEntityStorageInterface, Im
   /**
    * Get all webforms grouped by category.
    *
-   * @param null|boolean $template
+   * @param null|bool $template
    *   If TRUE only template categories will be returned.
    *   If FALSE only webform categories will be returned.
    *   If NULL all categories will be returned.

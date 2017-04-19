@@ -528,6 +528,8 @@ class WebformMultiple extends FormElement {
    *
    * @param array $element
    *   An element.
+   * @param string $name
+   *   The storage key's name.
    *
    * @return string
    *   A unique key used to store the number of items for an element.

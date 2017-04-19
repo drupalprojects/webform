@@ -109,7 +109,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Psr\Log\LoggerInterface $logger
-   *    A logger instance.
+   *   A logger instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    * @param \Drupal\Core\Session\AccountInterface $current_user
@@ -122,6 +122,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The webform element manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.
+   * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
+   *   The libraries manager.
    * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage
    *   The webform submission storage.
    */

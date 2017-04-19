@@ -2,8 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\webform\WebformElementBase;
-
 /**
  * Provides a 'email' element.
  *

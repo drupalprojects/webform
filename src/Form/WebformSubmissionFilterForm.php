@@ -70,7 +70,6 @@ class WebformSubmissionFilterForm extends FormBase {
     $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all(), [
       'query' => $query ,
     ]);
-
   }
 
   /**
@@ -84,4 +83,5 @@ class WebformSubmissionFilterForm extends FormBase {
   public function resetForm(array &$form, FormStateInterface $form_state) {
     $form_state->setRedirect($this->getRouteMatch()->getRouteName(), $this->getRouteMatch()->getRawParameters()->all());
   }
+
 }

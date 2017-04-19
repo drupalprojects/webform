@@ -2,8 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\Core\Session\AccountInterface;
-use Drupal\user\Entity\User;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
 

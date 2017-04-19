@@ -34,7 +34,7 @@ class WebformAlterHooksTest extends WebformNodeTestBase {
     $this->assertRaw("hook_webform_element_ELEMENT_TYPE_alter(): 'email' executed.");
     $this->assertRaw("hook_webform_element_alter(): 'subject' executed.");
     $this->assertRaw("hook_webform_element_alter(): 'message' executed.");
-    
+
     // Check webform node alter hooks.
     $webform_node = $this->createWebformNode('contact');
     $nid = $webform_node->id();

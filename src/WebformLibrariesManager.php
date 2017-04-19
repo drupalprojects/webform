@@ -3,7 +3,6 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
@@ -86,7 +85,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         $value = $this->t('@version (CDN).', $t_args);
         $description = $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.',  $t_args);
         if (!$cli) {
-          $description .= ' (' . $this->t('<a href=":settings_href">Disable CDN warning</a>)', $t_args);
+          $description .= ' ' . $this->t('(<a href=":settings_href">Disable CDN warning</a>)', $t_args);
         }
         $severity = REQUIREMENT_WARNING;
       }
@@ -237,7 +236,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     ];
     $libraries['jquery.intl-tel-input'] = [
       'title' => $this->t('jQuery: International Telephone Input'),
-      'description' => $this->t('A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user\'s country, displays a relevant placeholder and provides formatting/validation methods.'),
+      'description' => $this->t("A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user's country, displays a relevant placeholder and provides formatting/validation methods."),
       'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'homepage_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
       'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v11.0.0.zip'),

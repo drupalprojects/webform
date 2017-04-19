@@ -397,7 +397,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * React to an event when a user logs in.
    *
    * @param \Drupal\user\UserInterface $account
-   *   Account that has just logged in
+   *   Account that has just logged in.
    */
   public function userLogin(UserInterface $account);
 

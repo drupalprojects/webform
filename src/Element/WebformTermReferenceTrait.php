@@ -12,8 +12,6 @@ trait WebformTermReferenceTrait {
    *
    * @param array $element
    *   An element.
-   *
-   * @return void
    */
   public static function setOptions(array &$element) {
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -32,7 +30,6 @@ trait WebformTermReferenceTrait {
     else {
       $element['#options'] = self::getOptionsTree($element, $language);
     }
-    return;
   }
 
   /**

@@ -8,7 +8,6 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\webform\Ajax\ScrollTopCommand;
 
 /**
@@ -157,18 +156,14 @@ trait WebformDialogTrait {
    * This allows modal dialog to using ::submitCallback to validate and submit
    * the form via one ajax required.
    */
-  public function noSubmit(array &$form, FormStateInterface $form_state) {}
+  public function noSubmit(array &$form, FormStateInterface $form_state) {
+  }
 
   /**
    * Get the form's redirect URL.
    *
    * Isolate a form's redirect URL/destination so that it can be used by
    * ::submitFormDialog or ::submitForm.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
    *
    * @return \Drupal\Core\Url|NULL
    *   The redirect URL or NULL if dialog should just be closed.

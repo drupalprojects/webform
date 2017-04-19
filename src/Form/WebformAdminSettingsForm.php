@@ -847,7 +847,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $this->libraries = [];
     $libraries_options = [];
     $libraries = $this->librariesManager->getLibraries();
-    foreach ($libraries  as $library_name => $library) {
+    foreach ($libraries as $library_name => $library) {
       // Only optional libraries can be excluded.
       if (empty($library['optional'])) {
         continue;
