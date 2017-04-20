@@ -500,12 +500,14 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         ],
       ],
       '#default_value' => $config->get('elements.default_icheck'),
+      '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
     $form['elements']['default_google_maps_api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Google Maps API key'),
       '#description' => $this->t('Google requires users to use a valid API key. Using the <a href="https://console.developers.google.com/apis">Google API Manager</a>, you can enable the <em>Google Maps JavaScript API</em>. That will create (or reuse) a <em>Browser key</em> which you can paste here.'),
       '#default_value' => $config->get('elements.default_google_maps_api_key'),
+      '#access' => $this->librariesManager->isIncluded('jquery.geocomplete'),
     ];
 
     // (Excluded) Types.
