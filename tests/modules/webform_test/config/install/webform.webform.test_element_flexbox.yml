@@ -396,7 +396,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options': null
+      '#options':
+        1: Administrator
+        0: Anonymous
     flex_webform_entity_radios_right:
       '#type': webform_entity_radios
       '#title': 'Entity radios 02'
@@ -404,7 +406,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options': null
+      '#options':
+        1: Administrator
+        0: Anonymous
   flexbox_webform_entity_select:
     '#type': webform_flexbox
     flex_webform_entity_select_left:

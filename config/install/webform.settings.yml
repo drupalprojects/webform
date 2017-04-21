@@ -210,7 +210,7 @@ ui:
   html_editor_disabled: false
 libraries:
   excluded_libraries:
-    - 'jquery.chosen'
+    - jquery.chosen
   cdn: false
 langcode: en
 third_party_settings: {  }

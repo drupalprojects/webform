@@ -45,6 +45,8 @@ webform_entity_radios:
   '#selection_settings':
     include_anonymous: true
   '#options':
+    1: 'Administrator'
+    0: 'Anonymous'
 webform_image_select:
   '#show_label': true
   '#images':

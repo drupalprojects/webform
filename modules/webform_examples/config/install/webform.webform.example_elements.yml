@@ -474,7 +474,9 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#options': null
+      '#options':
+        1: Administrator
+        0: Anonymous
     webform_entity_select:
       '#type': webform_entity_select
       '#title': 'Entity select'
