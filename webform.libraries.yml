@@ -190,6 +190,16 @@ webform.element.buttons:
   dependencies:
     - core/jquery.ui.button
 
+webform.element.chosen:
+  version: VERSION
+  js:
+    js/webform.element.chosen.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/libraries.jquery.chosen
+
 webform.element.codemirror.text:
   version: VERSION
   css:
@@ -790,6 +800,23 @@ libraries.jquery.select2:
       /libraries/jquery.select2/dist/css/select2.min.css: {}
   js:
     /libraries/jquery.select2/dist/js/select2.min.js: {}
+  dependencies:
+    - core/jquery
+
+libraries.jquery.chosen:
+  remote: https://harvesthq.github.io/chosen/
+  version: 'v1.7.0'
+  license:
+    name: MIT
+    url: https://github.com/harvesthq/chosen/blob/master/LICENSE.md
+    gpl-compatible: true
+  cdn:
+    /libraries/jquery.chosen/: https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/
+  css:
+    theme:
+      /libraries/jquery.chosen/chosen.css: {}
+  js:
+    /libraries/jquery.chosen/chosen.jquery.js: {}
   dependencies:
     - core/jquery
 

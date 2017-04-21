@@ -268,10 +268,19 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $libraries['jquery.select2'] = [
       'title' => $this->t('jQuery: Select2'),
       'description' => $this->t('Select2 gives you a customizable select box with support for searching and tagging.'),
-      'notes' => $this->t('Select2 is used to improve the user experience for select menus.'),
+      'notes' => $this->t('Select2 is used to improve the user experience for select menus. Select2 is the recommended select menu enhancement library.'),
       'homepage_url' => Url::fromUri('https://select2.github.io/'),
       'download_url' => Url::fromUri('https://github.com/select2/select2/archive/4.0.3.zip'),
       'version' => '4.0.3',
+      'optional' => TRUE,
+    ];
+    $libraries['jquery.chosen'] = [
+      'title' => $this->t('jQuery: Chosen'),
+      'description' => $this->t('A jQuery plugin that makes long, unwieldy select boxes much more user-friendly.'),
+      'notes' => $this->t('Chosen is used to improve the user experience for select menus. Chosen is an alternative to Select2.'),
+      'homepage_url' => Url::fromUri('https://harvesthq.github.io/chosen/'),
+      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.7.0/chosen_v1.7.0.zip'),
+      'version' => 'v1.7.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.timepicker'] = [

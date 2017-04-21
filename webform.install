@@ -437,3 +437,14 @@ function webform_update_8040() {
   Cache::invalidateTags(['rendered']);
   \Drupal::service('cache.discovery')->deleteAll();
 }
+
+/**
+ * Issue #2871606: Add (optional) support for Chosen.
+ */
+function webform_update_8041() {
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $data = $config->getRawData();
+  $data['libraries']['excluded_libraries'][] = 'jquery.chosen';
+  $config->setData($data);
+  $config->save();
+}

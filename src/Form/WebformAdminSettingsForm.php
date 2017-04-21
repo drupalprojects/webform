@@ -871,8 +871,24 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#type' => 'tableselect',
       '#title' => $this->t('Libraries'),
       '#header' => $libraries_header,
+      '#js_select' => FALSE,
       '#options' => $libraries_options,
       '#default_value' => array_diff($this->libraries, array_combine($config->get('libraries.excluded_libraries'), $config->get('libraries.excluded_libraries'))),
+    ];
+    $t_args = [
+      ':select2_href' => $libraries['jquery.select2']['homepage_url']->toString(),
+      ':chosen_href' => $libraries['jquery.chosen']['homepage_url']->toString(),
+    ];
+    $form['libraries']['select_message'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('<a href=":select2_href">Select2</a> and <a href=":chosen_href">Chosen</a> provide very similar functionality, Most websites should only have one of these libraries enabled.', $t_args),
+      '#states' => [
+        'visible' => [
+          ':input[name="libraries[excluded_libraries][jquery.select2]"]' => ['checked' => TRUE],
+          ':input[name="libraries[excluded_libraries][jquery.chosen]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
     $form['libraries']['cdn'] = [
       '#type' => 'checkbox',

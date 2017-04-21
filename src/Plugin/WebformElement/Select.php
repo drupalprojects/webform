@@ -29,6 +29,7 @@ class Select extends OptionsBase {
       'empty_option' => '',
       'empty_value' => '',
       'select2' => FALSE,
+      'chosen' => FALSE,
     ];
   }
 
@@ -62,10 +63,12 @@ class Select extends OptionsBase {
       $element['#attached']['library'][] = 'webform/webform.element.select2';
       $element['#attributes']['class'][] = 'js-webform-select2';
       $element['#attributes']['class'][] = 'webform-select2';
-      // Adding wrapper attributes so that we can fix bootstrap.theme.
-      // @see css/webform.theme.bootstrap.css
-      $element['#wrapper_attributes']['class'][] = 'form-type-select--select2';
-      $element['#wrapper_attributes']['class'][] = 'js-form-type-select--select2';
+    }
+    // Add chosen library and classes.
+    elseif (!empty($element['#chosen']) && $this->librariesManager->isIncluded('jquery.chosen')) {
+      $element['#attached']['library'][] = 'webform/webform.element.chosen';
+      $element['#attributes']['class'][] = 'js-webform-chosen';
+      $element['#attributes']['class'][] = 'webform-chosen';
     }
   }
 
@@ -79,8 +82,33 @@ class Select extends OptionsBase {
       '#title' => $this->t('Select2'),
       '#description' => $this->t('Replace select element with jQuery <a href=":href">Select2</a> box.', [':href' => 'https://select2.github.io/']),
       '#return_value' => TRUE,
+      '#states' => [
+        'disabled' => [
+          ':input[name="properties[chosen]"]' => ['checked' => TRUE],
+        ],
+      ],
       '#access' => $this->librariesManager->isIncluded('jquery.select2'),
     ];
+    $form['options']['chosen'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Chosen'),
+      '#description' => $this->t('Replace select element with jQuery <a href=":href">Chosen</a> box.', [':href' => 'https://harvesthq.github.io/chosen/']),
+      '#return_value' => TRUE,
+      '#states' => [
+        'disabled' => [
+          ':input[name="properties[select2]"]' => ['checked' => TRUE],
+        ],
+      ],
+      '#access' => $this->librariesManager->isIncluded('jquery.chosen'),
+    ];
+    if ($this->librariesManager->isIncluded('jquery.select2') && $this->librariesManager->isIncluded('jquery.chosen')) {
+      $form['options']['select_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Select2 and Chosen provide very similar functionality, only one can enabled.'),
+        '#access' => TRUE,
+      ];
+    }
     return $form;
   }
 

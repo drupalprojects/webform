@@ -47,6 +47,11 @@ elements: |
       '#title': Select2
       '#options': industry
       '#select2': true
+    chosen:
+      '#type': select
+      '#title': Chosen
+      '#options': industry
+      '#chosen': true
     time:
       '#type': webform_time
       '#title': Time

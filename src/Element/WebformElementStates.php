@@ -192,7 +192,6 @@ class WebformElementStates extends FormElement {
     ];
 
     $element['#attached']['library'][] = 'webform/webform.element.states';
-    // $element['#attached']['library'][] = 'webform/webform.element.select2';
 
     return $element;
   }
@@ -227,7 +226,6 @@ class WebformElementStates extends FormElement {
       '#default_value' => $state['state'],
       '#empty_option' => '',
       '#empty_value' => '',
-      // '#attributes' => ['class' => ['js-webform-select2', 'webform-select2']],
     ];
     $row['operator'] = [
       '#type' => 'select',
@@ -279,7 +277,6 @@ class WebformElementStates extends FormElement {
       '#default_value' => $condition['selector'],
       '#empty_option' => '',
       '#empty_value' => '',
-      // '#attributes' => ['class' => ['js-webform-select2', 'webform-select2']],
     ];
     $row['trigger'] = [
       '#type' => 'select',
@@ -287,7 +284,6 @@ class WebformElementStates extends FormElement {
       '#default_value' => $condition['trigger'],
       '#empty_option' => '',
       '#empty_value' => '',
-      // '#attributes' => ['class' => ['js-webform-select2', 'webform-select2']],
     ];
     $row['value'] = [
       '#type' => 'textfield',

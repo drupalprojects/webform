@@ -48,9 +48,13 @@ class WebformLibrariesTest extends WebformTestBase {
 
     $this->drupalLogin($this->adminWebformUser);
 
+    // Enable jquery.chosen.
+    $this->drupalPostForm('admin/structure/webform/settings', ['libraries[excluded_libraries][jquery.chosen]' => TRUE], t('Save configuration'));
+
     // Check optional libraries are included.
     $this->drupalGet('webform/test_libraries_optional');
     $this->assertRaw('/select2.min.js');
+    $this->assertRaw('/chosen.jquery.js');
     $this->assertRaw('/word-and-character-counter.min.js');
     $this->assertRaw('/intlTelInput.min.js');
     $this->assertRaw('/jquery.inputmask.bundle.min.js');
@@ -73,6 +77,7 @@ class WebformLibrariesTest extends WebformTestBase {
       'libraries[excluded_libraries][jquery.inputmask]' => FALSE,
       'libraries[excluded_libraries][jquery.intl-tel-input]' => FALSE,
       'libraries[excluded_libraries][jquery.select2]' => FALSE,
+      'libraries[excluded_libraries][jquery.chosen]' => FALSE,
       'libraries[excluded_libraries][jquery.timepicker]' => FALSE,
       'libraries[excluded_libraries][jquery.word-and-character-counter]' => FALSE,
     ];
@@ -81,6 +86,7 @@ class WebformLibrariesTest extends WebformTestBase {
     // Check optional libraries are excluded.
     $this->drupalGet('webform/test_libraries_optional');
     $this->assertNoRaw('/select2.min.js');
+    $this->assertNoRaw('/chosen.jquery.js');
     $this->assertNoRaw('/word-and-character-counter.min.js');
     $this->assertNoRaw('/intlTelInput.min.js');
     $this->assertNoRaw('/jquery.inputmask.bundle.min.js');
@@ -102,6 +108,7 @@ class WebformLibrariesTest extends WebformTestBase {
     $this->assertText('The jQuery: iCheck library is excluded.');
     $this->assertText('The jQuery: Input Mask library is excluded.');
     $this->assertText('The jQuery: Select2 library is excluded.');
+    $this->assertText('The jQuery: Chosen library is excluded.');
     $this->assertText('The jQuery: Timepicker library is excluded.');
     $this->assertText('The jQuery: Word and character counter plug-in! library is excluded.');
 
