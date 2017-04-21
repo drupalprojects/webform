@@ -29,7 +29,6 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $file_extensions = $this->getFileExtensions();
     return parent::getDefaultProperties() + [
       'multiple' => FALSE,
-      'multiple__header_label' => '',
       'max_filesize' => $max_filesize,
       'file_extensions' => $file_extensions,
       'uri_scheme' => 'private',
@@ -139,7 +138,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#theme' => 'file_upload_help',
       '#description' => '',
       '#upload_validators' => $element['#upload_validators'],
-      '#cardinality' => (empty($element['#multiple'])) ? 1 : -1,
+      '#cardinality' => (empty($element['#multiple'])) ? 1 : $element['#multiple'],
       '#prefix' => '<div class="description">',
       '#suffix' => '</div>',
     ];
