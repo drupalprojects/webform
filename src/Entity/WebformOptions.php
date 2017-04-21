@@ -6,6 +6,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformOptionsInterface;
 
@@ -45,6 +46,8 @@ use Drupal\webform\WebformOptionsInterface;
  * )
  */
 class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The webform options ID.

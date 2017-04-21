@@ -140,10 +140,8 @@ class WebformElementManagedFileTest extends WebformTestBase {
 
   /**
    * Test media file upload elements.
-   *
-   * @todo Fix random test failure that can't be reproduced locally.
    */
-  public function _testMediaFileUpload() {
+  public function testMediaFileUpload() {
     global $base_url;
 
     /* Element processing */
