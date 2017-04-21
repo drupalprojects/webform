@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
@@ -426,4 +427,13 @@ function webform_update_8039() {
       }
     }
   }
+}
+
+/**
+ * Issue #286655: Add Quick Edit off canvas form.
+ */
+function webform_update_8040() {
+  // Copied from: outside_in_install()
+  Cache::invalidateTags(['rendered']);
+  \Drupal::service('cache.discovery')->deleteAll();
 }

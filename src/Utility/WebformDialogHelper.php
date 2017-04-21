@@ -3,12 +3,54 @@
 namespace Drupal\webform\Utility;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 
 /**
  * Helper class for dialog methods.
  */
 class WebformDialogHelper {
+
+  /**
+   * Off canvas trigger name.
+   *
+   * @var string
+   */
+  protected static $offCanvasTriggerName;
+
+  /**
+   * Get Off canvas trigger name.
+   *
+   * @return string
+   *   The off canvas trigger name.
+   *
+   * @see Issue #2862625: Rename offcanvas to two words in code and comments.
+   * @see https://www.drupal.org/node/2862625
+   */
+  public static function getOffCanvasTriggerName() {
+    if (isset(self::$offCanvasTriggerName)) {
+      return self::$offCanvasTriggerName;
+    }
+
+    $main_content_renderers = \Drupal::getContainer()->getParameter('main_content_renderers');
+
+    if (isset($main_content_renderers['drupal_dialog_offcanvas'])) {
+      self::$offCanvasTriggerName = 'offcanvas';
+    }
+    else {
+      self::$offCanvasTriggerName = 'off_canvas';
+    }
+
+    return self::$offCanvasTriggerName;
+  }
+
+  /**
+   * Use outside-in off-canvas system tray instead of dialogs.
+   *
+   * @return bool
+   *   TRUE if outside_in.module is enabled and system trays are not disabled.
+   */
+  public static function useOffCanvas() {
+    return ((floatval(\Drupal::VERSION) >= 8.3) && \Drupal::moduleHandler()->moduleExists('outside_in') && !\Drupal::config('webform.settings')->get('ui.offcanvas_disabled')) ? TRUE : FALSE;
+  }
 
   /**
    * Attach libraries required by (modal) dialogs.
@@ -46,9 +88,11 @@ class WebformDialogHelper {
         return [
           'class' => $class,
           'data-dialog-type' => 'dialog',
-          'data-dialog-renderer' => 'offcanvas',
+          'data-dialog-renderer' => self::getOffCanvasTriggerName(),
           'data-dialog-options' => Json::encode([
             'width' => ($width > 480) ? 480 : $width,
+            // @todo Decide if we want to use 'Outside In' custom system tray styling.
+            // 'dialogClass' => 'ui-dialog-outside-in',
           ]),
         ];
       }
@@ -62,16 +106,6 @@ class WebformDialogHelper {
         ];
       }
     }
-  }
-
-  /**
-   * Use outside-in off-canvas system tray instead of dialogs.
-   *
-   * @return bool
-   *   TRUE if outside_in.module is enabled and system trays are not disabled.
-   */
-  public static function useOffCanvas() {
-    return ((floatval(\Drupal::VERSION) >= 8.3) && \Drupal::moduleHandler()->moduleExists('outside_in') && !\Drupal::config('webform.settings')->get('ui.offcanvas_disabled')) ? TRUE : FALSE;
   }
 
 }

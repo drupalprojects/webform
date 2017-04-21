@@ -4,6 +4,7 @@ namespace Drupal\webform_ui\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformDialogTrait;
 use Drupal\webform\WebformElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -11,6 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a abstract element type webform for a webform element.
  */
 abstract class WebformUiElementTypeFormBase extends FormBase {
+
+  use WebformDialogTrait;
 
   /**
    * The webform element manager.

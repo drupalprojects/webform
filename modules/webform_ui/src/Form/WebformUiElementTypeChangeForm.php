@@ -34,11 +34,12 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
       throw new NotFoundHttpException();
     }
 
-    $headers = [
-      ['data' => $this->t('Element')],
-      ['data' => $this->t('Category')],
-      ['data' => $this->t('Operations')],
-    ];
+    $headers = [];
+    $headers[] = ['data' => $this->t('Element')];
+    $headers[] = ['data' => $this->t('Category')];
+    if (!$this->isOffCanvasDialog()) {
+      $headers[] = ['data' => $this->t('Operations')];
+    }
 
     $definitions = $this->getDefinitions();
     $rows = [];
@@ -53,25 +54,29 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
         '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['webform-tooltip-link', 'js-webform-tooltip-link']) + ['title' => $plugin_definition['description']],
       ];
       $row['category']['data'] = (isset($plugin_definition['category'])) ? $plugin_definition['category'] : $this->t('Other');
-      $row['operations']['data'] = [
-        '#type' => 'operations',
-        '#links' => [
-          'change' => [
-            'title' => $this->t('Change'),
-            'url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
-            'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+      if (!$this->isOffCanvasDialog()) {
+        $row['operations']['data'] = [
+          '#type' => 'operations',
+          '#links' => [
+            'change' => [
+              'title' => $this->t('Change'),
+              'url' => Url::fromRoute('entity.webform_ui.element.edit_form', [
+                'webform' => $webform->id(),
+                'key' => $key
+              ], ['query' => ['type' => $related_type_name]]),
+              'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+            ],
           ],
-        ],
-      ];
+        ];
 
-      // Issue #2741877 Nested modals don't work: when using CKEditor in a
-      // modal, then clicking the image button opens another modal,
-      // which closes the original modal.
-      // @todo Remove the below workaround once this issue is resolved.
-      if ($related_type_name == 'processed_text') {
-        unset($row['operations']['data']['#links']['change']['attributes']);
+        // Issue #2741877 Nested modals don't work: when using CKEditor in a
+        // modal, then clicking the image button opens another modal,
+        // which closes the original modal.
+        // @todo Remove the below workaround once this issue is resolved.
+        if ($related_type_name == 'processed_text') {
+          unset($row['operations']['data']['#links']['change']['attributes']);
+        }
       }
-
       $rows[] = $row;
     }
 

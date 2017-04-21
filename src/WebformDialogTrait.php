@@ -8,10 +8,15 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\webform\Ajax\ScrollTopCommand;
+use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
  * Trait class webform dialogs.
+ *
+ * @todo Issue #2785047: In Outside In mode, messages should appear in the off-canvas tray, not the main page.
+ * @see https://www.drupal.org/node/2785047
  */
 trait WebformDialogTrait {
 
@@ -19,7 +24,7 @@ trait WebformDialogTrait {
    * Is the current request for an AJAX modal dialog.
    *
    * @return bool
-   *   TRUE is the current request if for an AJAX modal dialog.
+   *   TRUE if the current request is for an AJAX modal dialog.
    */
   protected function isModalDialog() {
     $wrapper_format = $this->getRequest()
@@ -27,7 +32,22 @@ trait WebformDialogTrait {
     return (in_array($wrapper_format, [
       'drupal_ajax',
       'drupal_modal',
-      'drupal_dialog_offcanvas',
+      'drupal_dialog',
+      'drupal_dialog_' . WebformDialogHelper::getOffCanvasTriggerName(),
+    ])) ? TRUE : FALSE;
+  }
+
+  /**
+   * Is the current request for an off canvas dialog.
+   *
+   * @return bool
+   *   TRUE if the current request is for an off canvas dialog.
+   */
+  protected function isOffCanvasDialog() {
+    $wrapper_format = $this->getRequest()
+      ->get(MainContentViewSubscriber::WRAPPER_FORMAT);
+    return (in_array($wrapper_format, [
+      'drupal_dialog_' . WebformDialogHelper::getOffCanvasTriggerName(),
     ])) ? TRUE : FALSE;
   }
 
@@ -69,7 +89,7 @@ trait WebformDialogTrait {
    *   The webform with modal dialog support.
    */
   protected function buildConfirmFormDialog(array &$form, FormStateInterface $form_state) {
-    if (!$this->isModalDialog()) {
+    if (!$this->isModalDialog() || $this->isOffCanvasDialog()) {
       return $form;
     }
 
@@ -120,8 +140,8 @@ trait WebformDialogTrait {
     }
     else {
       $response = new AjaxResponse();
-      if ($this->requestStack->getCurrentRequest()->get('destination')) {
-        $response->addCommand(new RedirectCommand($this->getRedirectDestination()->get()));
+      if ($path = $this->getRedirectDestinationPath()) {
+        $response->addCommand(new RedirectCommand(base_path() . $path));
       }
       elseif ($redirect_url = $this->getRedirectUrl()) {
         $response->addCommand(new RedirectCommand($redirect_url->toString()));
@@ -169,6 +189,33 @@ trait WebformDialogTrait {
    *   The redirect URL or NULL if dialog should just be closed.
    */
   protected function getRedirectUrl() {
+    return getDestinationUrl();
+  }
+
+  /**
+   * Get the current request's redirect destination URL.
+   *
+   * @return \Drupal\Core\Url|null
+   *   The current request's redirect destination or NULL if no
+   *   destination available.
+   */
+  protected function getRedirectDestinationUrl() {
+    if ($destination = $this->getRedirectDestinationPath()) {
+      return Url::fromUserInput(base_path() . $destination);
+    }
+    return NULL;
+  }
+
+  /**
+   * Get the redirect destination path if specified in request.
+   *
+   * @return string|null
+   *   The redirect path or NULL if it is not specified.
+   */
+  protected function getRedirectDestinationPath() {
+    if ($this->requestStack->getCurrentRequest()->get('destination')) {
+      return $this->getRedirectDestination()->get();
+    }
     return NULL;
   }
 

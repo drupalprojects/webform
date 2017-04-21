@@ -344,6 +344,9 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    * {@inheritdoc}
    */
   protected function getRedirectUrl() {
+    if ($url = $this->getRedirectDestinationUrl()) {
+      return $url;
+    }
     return $this->webform->toUrl('edit-form', ['query' => ['element-update' => $this->key]]);
   }
 

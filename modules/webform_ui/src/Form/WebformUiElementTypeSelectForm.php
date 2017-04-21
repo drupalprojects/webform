@@ -25,11 +25,12 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL) {
     $parent = $this->getRequest()->query->get('parent');
 
-    $headers = [
-      ['data' => $this->t('Element')],
-      ['data' => $this->t('Category')],
-      ['data' => $this->t('Operations')],
-    ];
+    $headers = [];
+    $headers[] = ['data' => $this->t('Element')];
+    $headers[] = ['data' => $this->t('Category')];
+    if (!$this->isOffCanvasDialog()) {
+      $headers[] = ['data' => $this->t('Operations')];
+    }
 
     $elements = $this->elementManager->getInstances();
     $definitions = $this->getDefinitions();
@@ -60,16 +61,18 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
         '#suffix' => '</div>',
       ];
       $row['category']['data'] = $plugin_definition['category'];
-      $row['operations']['data'] = [
-        '#type' => 'operations',
-        '#links' => [
-          'add' => [
-            'title' => $this->t('Add element'),
-            'url' => Url::fromRoute('entity.webform_ui.element.add_form', $route_parameters, $route_options),
-            'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+      if (!$this->isOffCanvasDialog()) {
+        $row['operations']['data'] = [
+          '#type' => 'operations',
+          '#links' => [
+            'add' => [
+              'title' => $this->t('Add element'),
+              'url' => Url::fromRoute('entity.webform_ui.element.add_form', $route_parameters, $route_options),
+              'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+            ],
           ],
-        ],
-      ];
+        ];
+      }
       // Issue #2741877 Nested modals don't work: when using CKEditor in a
       // modal, then clicking the image button opens another modal,
       // which closes the original modal.

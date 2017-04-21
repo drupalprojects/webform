@@ -254,6 +254,14 @@ function _webform_form_after_build($form, FormStateInterface $form_state) {
 }
 
 /**
+ * Implements hook_webform_submission_form_alter().
+ */
+function webform_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Make webform libraries are always attached to submission form.
+  _webform_page_attachments($form);
+}
+
+/**
  * Implements hook_system_breadcrumb_alter().
  */
 function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
@@ -370,25 +378,29 @@ function webform_page_attachments(array &$attachments) {
 
   // Attach global libraries only to webform specific pages.
   if (preg_match('/^(webform\.|^entity\.([^.]+\.)?webform)/', $route_name) || preg_match('#(/node/add/webform|/admin/help/webform)#', $url)) {
-    $active_theme_names = WebformThemeHelper::getActiveThemeNames();
-    foreach ($active_theme_names as $active_theme_name) {
-      if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$active_theme_name.css")) {
-        $attachments['#attached']['library'][] = "webform/webform.theme.$active_theme_name";
-      }
-    }
-
-    // Attach details element save open/close library.
-    // This ensures pages without a webform will still be able to save the
-    // details element state.
-    if (\Drupal::config('webform.settings')->get('ui.details_save')) {
-      $attachments['#attached']['library'][] = 'webform/webform.element.details.save';
-    }
+    _webform_page_attachments($attachments);
   }
 
   // Attach codemirror and select2 library to block admin to ensure that the
   // library is loaded by the webform block is placed using AJAX.
   if (strpos($route_name, 'block.admin_display') === 0) {
     $attachments['#attached']['library'][] = 'webform/webform.block';
+  }
+}
+
+function _webform_page_attachments(array &$attachments) {
+  $active_theme_names = WebformThemeHelper::getActiveThemeNames();
+  foreach ($active_theme_names as $active_theme_name) {
+    if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$active_theme_name.css")) {
+      $attachments['#attached']['library'][] = "webform/webform.theme.$active_theme_name";
+    }
+  }
+
+  // Attach details element save open/close library.
+  // This ensures pages without a webform will still be able to save the
+  // details element state.
+  if (\Drupal::config('webform.settings')->get('ui.details_save')) {
+    $attachments['#attached']['library'][] = 'webform/webform.element.details.save';
   }
 }
 

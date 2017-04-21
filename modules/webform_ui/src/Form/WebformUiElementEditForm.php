@@ -5,6 +5,8 @@ namespace Drupal\webform_ui\Form;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -40,7 +42,25 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
     ]);
 
     $this->action = $this->t('updated');
-    return parent::buildForm($form, $form_state, $webform, $key);
+
+    $form = parent::buildForm($form, $form_state, $webform, $key);
+
+    if ($this->isModalDialog()) {
+      $form['actions']['delete'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Delete'),
+        '#url' => new Url(
+          'entity.webform_ui.element.delete_form',
+          [
+            'webform' => $webform->id(),
+            'key' => $key,
+          ]
+        ),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button--danger']),
+      ];
+    }
+
+    return $form;
   }
 
 }

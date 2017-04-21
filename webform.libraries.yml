@@ -22,6 +22,7 @@ webform.admin.dialog:
     js/webform.dialog.js:  {}
   dependencies:
     - core/jquery.ui.dialog
+    - core/drupal.dialog.ajax
     - webform/webform.ajax
     - webform/webform.form
     - webform/webform.element.codemirror.yaml

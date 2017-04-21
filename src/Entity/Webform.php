@@ -288,6 +288,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $hasFlexboxLayout = FALSE;
 
   /**
+   * Track if the webform has container.
+   *
+   * @var bool
+   */
+  protected $hasContainer = FALSE;
+
+  /**
    * Track if the webform has translations.
    *
    * @var bool
@@ -497,6 +504,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public function hasFlexboxLayout() {
     $this->initElements();
     return $this->hasFlexboxLayout;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasContainer() {
+    $this->initElements();
+    return $this->hasContainer;
   }
 
   /**
@@ -925,6 +940,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     $this->hasManagedFile = FALSE;
     $this->hasFlexboxLayout = FALSE;
+    $this->hasContainer = FALSE;
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
     $this->elementsInitializedFlattenedAndHasValue = [];
@@ -976,6 +992,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->pages = NULL;
     $this->hasManagedFile = NULL;
     $this->hasFlexboxLayout = NULL;
+    $this->hasContainer = NULL;
     $this->elementsDecoded = NULL;
     $this->elementsInitialized = NULL;
     $this->elementsDecodedAndFlattened = NULL;
@@ -1063,6 +1080,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         // Track flexbox.
         if ($element['#type'] == 'flexbox' || $element['#type'] == 'webform_flexbox') {
           $this->hasFlexboxLayout = TRUE;
+        }
+
+        // Track container.
+        if ($element_handler->isContainer($element)) {
+          $this->hasContainer = TRUE;
         }
 
         $element['#webform_multiple'] = $element_handler->hasMultipleValues($element);

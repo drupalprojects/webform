@@ -260,6 +260,9 @@ class WebformEntityForm extends BundleEntityFormBase {
    * {@inheritdoc}
    */
   public function getRedirectUrl() {
+    if ($url = $this->getRedirectDestinationUrl()) {
+      return $url;
+    }
     return Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]);
   }
 

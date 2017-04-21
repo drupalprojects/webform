@@ -76,9 +76,17 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * Determine if the webform is using a Flexbox layout.
    *
    * @return bool
-   *   TRUE if if the webform is using a Flexbox layout.
+   *   TRUE if the webform is using a Flexbox layout.
    */
   public function hasFlexboxLayout();
+
+  /**
+   * Determine if the webform has any containers.
+   *
+   * @return bool
+   *   TRUE if the webform has any containers.
+   */
+  public function hasContainer();
 
   /**
    * Sets the status of the configuration entity.

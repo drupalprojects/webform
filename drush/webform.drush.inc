@@ -690,6 +690,13 @@ function drush_webform_repair() {
 
   drush_print('Repairing webform submission storage schema...');
    _webform_update_webform_submission_storage_schema();
+
+  // Copied from: outside_in_install().
+  drush_print('Repairing quick links...');
+  // @todo Remove in https://www.drupal.org/node/2783791.
+  Cache::invalidateTags(['rendered']);
+  // @todo Remove when that is fixed in https://www.drupal.org/node/2773591.
+  \Drupal::service('cache.discovery')->deleteAll();
 }
 
 /******************************************************************************/
