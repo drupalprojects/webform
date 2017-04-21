@@ -94,10 +94,12 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       }
       else {
         $value = $this->t('@version (CDN).', $t_args);
-        $description = $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.',  $t_args);
+        $build = [];
+        $build['download'] = ['#markup' => $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.',  $t_args)];
         if (!$cli) {
-          $description .= ' ' . $this->t('(<a href=":settings_libraries_href">Disable CDN warning</a>)', $t_args);
+          $build['cdn'] = ['#prefix' => ' ', '#markup' => $this->t('(<a href=":settings_libraries_href">Disable CDN warning</a>)', $t_args)];
         }
+        $description = \Drupal::service('renderer')->renderPlain($build);
         $severity = REQUIREMENT_WARNING;
       }
 
