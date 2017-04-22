@@ -244,7 +244,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'title' => $this->t('jQuery: Input Mask'),
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
       'notes' => $this->t('Input masks are used to ensure predefined and custom formats for text fields.'),
-      'homepage_url' => Url::fromUri('http://robinherbots.github.io/jquery.inputmask/'),
+      'homepage_url' => Url::fromUri('https://robinherbots.github.io/Inputmask/'),
       'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.3.zip'),
       'version' => '3.3.3',
       'optional' => TRUE,

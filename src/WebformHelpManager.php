@@ -502,9 +502,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
             '<p>' . $this->t('There are twos ways to download the needed third party libraries.') . '</p>' .
             '<ul>' .
               '<li>' . $this->t('Generate a *.make.yml or composer.json file using <code>drush webform-libraries-make</code> or <code>drush webform-libraries-composer</code>.') . '</li>' .
-              '<li>' . $this->t('Execute <code>drush webform-libraries-download</code> which will download all included libraries.') . '</li>' .
+              '<li>' . $this->t('Execute <code>drush webform-libraries-download</code>, which will download all included libraries.') . '</li>' .
             '</ul>' .
-            '<hr/>',
+            '<br/><hr/><br/>',
         ],
         'libraries' => [
           '#prefix' => '<dl>',

@@ -79,7 +79,6 @@ class WebformTestController extends ControllerBase implements ContainerInjection
 
     // Generate date.
     $values['data'] = $this->generate->getData($webform);
-
     return $webform->getSubmissionForm($values);
   }
 

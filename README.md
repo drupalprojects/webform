@@ -29,10 +29,10 @@ The primary use case for this module is to:
 > Evaluate this project online using [simplytest.me](https://simplytest.me/project/drupal/8.2.x?add[]=webform).
 
 
-### Presentations, Blog Posts, & Articles
+### Blog Posts, Articles, & Presentations
 
-- [Webform and Drupal 8 @ DrupalCamp London 2016](https://www.slideshare.net/philipnorton42/webform-and-drupal-8) \[Slides\]
-- [Webform 8.x-5.x @ NJ DrupalCamp](https://www.drupalcampnj.org/program/sessions/building-webforms-drupal-8) \[Video\]
+Blog Posts & Articles
+
 - [https://dev.acquia.com/blog/drupal-8-module-of-the-week--webform-formerly-known-as-yaml-form/07/03/2017/17741](https://dev.acquia.com/blog/drupal-8-module-of-the-week--webform-formerly-known-as-yaml-form/07/03/2017/17741)
 - [Drupal 8 Module Webform picks up speed](https://internetdevels.com/blog/drupal-8-module-webform)
 - [How to Make a Complex Webform in Drupal 8](https://www.ostraining.com/blog/drupal/how-to-make-a-complex-webform-in-drupal-8/)
@@ -41,6 +41,13 @@ The primary use case for this module is to:
 - [Webforms for Drupal 8](https://www.gaiaresources.com.au/yaml-forms-drupal-8/)
 - [Creating Webform Handlers in Drupal 8](http://fivemilemedia.co.uk/blog/creating-yaml-form-handlers-drupal-8)
 - [Les formulaires en Drupal 8](https://makina-corpus.com/blog/metier/2016/les-formulaires-en-drupal-8)
+
+Presentations
+
+- [Webform and Drupal 8 @ DrupalCamp London 2016](https://www.youtube.com/watch?v=xrWEizVqAR4&t=1333s) \[Video\]
+- [Webform and Drupal 8 @ DrupalCamp London 2016](https://www.slideshare.net/philipnorton42/webform-and-drupal-8) \[Slides\]
+- [Drupal 8 Webform: When Contact Form Isn't Enough](http://pnwdrupalsummit.org/sites/default/files/slides/PNWDS%202017%20Catherine%20Winters%20webforms.pdf)  \[Slides\]
+- [Webform 8.x-5.x @ NJ DrupalCamp](https://www.drupalcampnj.org/program/sessions/building-webforms-drupal-8) \[Video\]
 
 ### Installing the Webform Module
 
