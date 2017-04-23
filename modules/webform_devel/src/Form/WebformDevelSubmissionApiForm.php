@@ -161,6 +161,11 @@ if ($is_open === TRUE) {
 
     // Check if the webform is open to new submissions.
     $webform = Webform::load($values['webform_id']);
+    if (!$webform) {
+      $form_state->setErrorByName('values', $this->t('Webform %webform_id not found.', ['%webform_id' => $values['webform_id']]));
+      return;
+    }
+
     $is_open = WebformSubmissionForm::isOpen($webform);
     if ($is_open !== TRUE) {
       $form_state->setErrorByName('values', $is_open);
