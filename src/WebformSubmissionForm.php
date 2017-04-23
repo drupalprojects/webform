@@ -7,12 +7,14 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Controller\WebformController;
+use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -1616,6 +1618,115 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
     else {
       return $default_value;
+    }
+  }
+
+  /****************************************************************************/
+  // API helper functions.
+  /****************************************************************************/
+
+  /**
+   * Programmatically check that a webform is open to new submissions.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   *
+   * @return array|boolean
+   *   Return TRUE if the webform is open to new submissions else returns
+   *   an error message.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::getCustomForm
+   */
+  public static function isOpen(WebformInterface $webform) {
+    $webform_submission = WebformSubmission::create(['webform_id' => $webform->id()]);
+
+    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+    $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'default');
+    $form_object->setEntity($webform_submission);
+
+    /** @var \Drupal\webform\WebformMessageManagerInterface $message_manager */
+    $message_manager = \Drupal::service('webform.message_manager');
+    $message_manager->setWebformSubmission($webform_submission);
+
+    // Check form is open.
+    if ($webform->isClosed()) {
+      if ($webform->isOpening()) {
+        return $message_manager->get(WebformMessageManagerInterface::FORM_OPEN_MESSAGE);
+      }
+      else {
+        return $message_manager->get(WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
+      }
+    }
+
+    // Check total limit.
+    if ($form_object->checkTotalLimit()) {
+      return $message_manager->get(WebformMessageManagerInterface::LIMIT_TOTAL_MESSAGE);
+    }
+
+    // Check user limit.
+    if ($form_object->checkUserLimit()) {
+      return $message_manager->get(WebformMessageManagerInterface::LIMIT_USER_MESSAGE);
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Programmatically validate values and submit a webform submission.
+   *
+   * @param array $values
+   *   An array of submission values and data.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface|null
+   *   An array of error messages if validation fails or
+   *   A webform submission is there are no validation errors.
+   */
+  public static function validateValues(array $values) {
+    return self::submitValues($values, TRUE);
+  }
+
+  /**
+   * Programmatically validate values and submit a webform submission.
+   *
+   * @param array $values
+   *   An array of submission values and data.
+   * @param bool $validate_only
+   *   Flag to trigger only webform validation.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface|null
+   *   An array of error messages if validation fails or
+   *   A webform submission is there are no validation errors.
+   */
+  public static function submitValues(array $values, $validate_only = FALSE) {
+    $webform_submission = WebformSubmission::create($values);
+
+    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+    $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'default');
+    $form_object->setEntity($webform_submission);
+
+    // Create an empty form state which will be populated when the submission
+    // form is submitted.
+    $form_state = new FormState();
+
+    // Set disabled pages flag to make sure that validation is triggered for
+    // all elements.
+    $disable_pages = TRUE;
+
+    // Submit the form.
+    \Drupal::formBuilder()->submitForm($form_object, $form_state, $disable_pages);
+
+    // Get the errors.
+    $errors = $form_state->getErrors();
+
+    if ($errors) {
+      return $errors;
+    }
+    elseif ($validate_only) {
+      return NULL;
+    }
+    else {
+      $webform_submission->save();
+      return $webform_submission;
     }
   }
 

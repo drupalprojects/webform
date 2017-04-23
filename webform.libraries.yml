@@ -250,6 +250,16 @@ webform.element.codemirror.javascript:
   dependencies:
     - webform/libraries.codemirror.javascript
 
+webform.element.codemirror.php:
+  version: VERSION
+  css:
+    theme:
+      css/webform.element.codemirror.css: {}
+  js:
+    js/webform.element.codemirror.js: {}
+  dependencies:
+    - webform/libraries.codemirror.php
+
 webform.element.color:
   version: VERSION
   css:
@@ -644,6 +654,17 @@ libraries.codemirror.javascript:
   cdn: *webform_codemirror_cdn
   js:
     /libraries/codemirror/mode/javascript/javascript.js: {}
+  dependencies:
+    - webform/libraries.codemirror.text
+
+libraries.codemirror.php:
+  version: *webform_codemirror_version
+  license: *webform_codemirror_license
+  cdn: *webform_codemirror_cdn
+  js:
+    /libraries/codemirror/mode/php/php.js: {}
+    /libraries/codemirror/mode/clike/clike.js: {}
+
   dependencies:
     - webform/libraries.codemirror.text
 

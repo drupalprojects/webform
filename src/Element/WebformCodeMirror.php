@@ -25,6 +25,7 @@ class WebformCodeMirror extends Textarea {
     'javascript' => 'text/javascript',
     'text' => 'text/plain',
     'yaml' => 'text/x-yaml',
+    'php' => 'text/x-php',
   ];
 
   /**

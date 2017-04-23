@@ -1004,8 +1004,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'video_id' => 'source',
     ];
 
-    // Webform test.
-    $help['webform_test'] = [
+    // Webform test form.
+    $help['webform_test_form'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/test
         'entity.webform.test',
@@ -1013,8 +1013,20 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'entity.node.webform.test',
       ],
       'title' => $this->t('Testing a webform'),
-      'content' => $this->t("The Webform test page allows a webform to be tested using a customizable test dataset.") . ' ' .
+      'content' => $this->t("The Webform test form allows a webform to be tested using a customizable test dataset.") . ' ' .
       $this->t('Multiple test submissions can be created using the devel_generate module.'),
+    ];
+
+    // Webform test API.
+    $help['webform_test_api'] = [
+      'routes' => [
+        // @see /admin/structure/webform/manage/{webform}/api
+        'entity.webform.api',
+        // @see /node/{node}/webform/api
+        'entity.node.webform.api',
+      ],
+      'title' => $this->t('Testing a webform API'),
+      'content' => $this->t("The Webform test API form allows a webform's API to be tested using raw webform submission values and data."),
     ];
 
     // Webform settings.
