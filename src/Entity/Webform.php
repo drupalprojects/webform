@@ -360,7 +360,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       $this->status = ((bool) $status) ? WebformInterface::STATUS_OPEN : WebformInterface::STATUS_CLOSED;
     }
 
-    // Clear open and close is status is not scheduled.
+    // Clear open and close if status is not scheduled.
     if ($this->status !== WebformInterface::STATUS_SCHEDULED) {
       $this->open = NULL;
       $this->close = NULL;
