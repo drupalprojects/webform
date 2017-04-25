@@ -185,7 +185,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'description_display' => '',
       'field_prefix' => '',
       'field_suffix' => '',
-      'disabled' => TRUE,
+      'disabled' => FALSE,
       // Form validation.
       'required' => FALSE,
       'required_error' => '',
