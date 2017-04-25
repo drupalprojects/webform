@@ -38,6 +38,7 @@ class WebformMapping extends WebformElementBase {
       // Form display.
       'title_display' => '',
       'description_display' => '',
+      'disabled' => FALSE,
       // Form validation.
       'required' => FALSE,
       'required_error' => '',

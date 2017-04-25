@@ -185,6 +185,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'description_display' => '',
       'field_prefix' => '',
       'field_suffix' => '',
+      'disabled' => TRUE,
       // Form validation.
       'required' => FALSE,
       'required_error' => '',
@@ -1609,6 +1610,12 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         'off' => $this->t('Off'),
       ],
       '#description' => $this->t('Setting autocomplete to off will disable autocompletion for this element.'),
+    ];
+    $form['form']['disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disabled'),
+      '#description' => $this->t('Make this field non-editable. Useful for displaying default value. Changeable via JavaScript or developer tools.'),
+      '#return_value' => TRUE,
     ];
     $form['form']['open'] = [
       '#type' => 'checkbox',

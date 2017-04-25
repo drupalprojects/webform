@@ -50,9 +50,10 @@ class WebformLocation extends WebformCompositeBase {
       // General settings.
       'description' => '',
       'default_value' => [],
-      // For display.
+      // Form display.
       'title_display' => '',
       'description_display' => '',
+      'disabled' => FALSE,
       // Form validation.
       'required' => FALSE,
       'required_error' => '',

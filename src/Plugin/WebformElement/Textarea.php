@@ -34,6 +34,7 @@ class Textarea extends TextBase {
       'field_prefix' => '',
       'field_suffix' => '',
       'placeholder' => '',
+      'disabled' => FALSE,
       'rows' => '',
       // Form validation.
       'required' => FALSE,

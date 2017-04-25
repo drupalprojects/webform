@@ -33,6 +33,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         // Form display.
         'title_display' => 'invisible',
         'description_display' => '',
+        'disabled' => FALSE,
         // Form validation.
         'required' => FALSE,
         'required_error' => '',

@@ -27,11 +27,13 @@ class TextFormat extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    $default_properties = parent::getDefaultProperties() + [
       // Text format settings.
       'allowed_formats' => [],
       'hide_help' => FALSE,
     ];
+    unset($default_properties['disabled']);
+    return $default_properties;
   }
 
   /**

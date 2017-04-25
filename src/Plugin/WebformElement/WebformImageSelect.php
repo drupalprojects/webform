@@ -29,6 +29,7 @@ class WebformImageSelect extends Select {
       $default_properties['options_randomize'],
       $default_properties['field_prefix'],
       $default_properties['field_suffix'],
+      $default_properties['disabled'],
       $default_properties['select2']
     );
 
