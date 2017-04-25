@@ -83,6 +83,7 @@ function _webform_library_info_alter_recursive(array &$library, array $cdn) {
       if (strpos($key, $source) === 0) {
         $uri = str_replace($source, $destination, $key);
         $library[$uri] = $value;
+        $library[$uri]['type'] = 'external';
         unset($library[$key]);
         break;
       }
