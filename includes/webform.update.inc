@@ -10,6 +10,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformInterface;
 
 /******************************************************************************/
@@ -482,6 +483,7 @@ function webform_update_8024() {
  * Issue #2857417: Add support for open and close date/time to Webform nodes. Update database scheme.
  */
 function webform_update_8025() {
+  $webform_tables = WebformEntityReferenceItem::getTableNames();
   $database_schema = \Drupal::database()->schema();
   $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
   foreach ($schema as $item_name => $item) {
@@ -489,7 +491,9 @@ function webform_update_8025() {
       foreach ($table_schema as $schema_key => $schema_data) {
         if ($schema_key == 'fields') {
           foreach ($schema_data as $field_name => $field_data) {
-            if (preg_match('/_status$/', $field_name) && $field_data['description'] == 'Flag to control whether this webform should be open or closed to new submissions.') {
+            $is_webform_field_status = (isset($webform_tables[$table_name]) && $field_name === $webform_tables[$table_name] . '_status');
+            $is_webform_field_integer = ($field_data['type'] == 'int');
+            if ($is_webform_field_status && $is_webform_field_integer) {
               $temp_field_name = $field_name . '_temp';
 
               // Add temp status field and copy value.

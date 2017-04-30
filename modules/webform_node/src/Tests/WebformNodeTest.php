@@ -5,6 +5,7 @@ namespace Drupal\webform_node\Tests;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -43,6 +44,12 @@ class WebformNodeTest extends WebformNodeTestBase {
    */
   public function testNode() {
     $node = $this->createWebformNode('contact');
+
+    // Check table names.
+    $this->assertEqual(WebformEntityReferenceItem::getTableNames(), [
+      "{$this->databasePrefix}node__webform" => 'webform',
+      "{$this->databasePrefix}node_revision__webform" => 'webform',
+    ]);
 
     /**************************************************************************/
     // Webform node basic.
