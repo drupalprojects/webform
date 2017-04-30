@@ -35,6 +35,7 @@ Blog Posts & Articles
 
 - [https://dev.acquia.com/blog/drupal-8-module-of-the-week--webform-formerly-known-as-yaml-form/07/03/2017/17741](https://dev.acquia.com/blog/drupal-8-module-of-the-week--webform-formerly-known-as-yaml-form/07/03/2017/17741)
 - [Drupal 8 Module Webform picks up speed](https://internetdevels.com/blog/drupal-8-module-webform)
+- [Check Out: The Benefits of Drupal 8 Webform](http://www.capitalnumbers.com/blog/check-out-the-benefits-of-drupal-8-webform/)
 - [How to Make a Complex Webform in Drupal 8](https://www.ostraining.com/blog/drupal/how-to-make-a-complex-webform-in-drupal-8/)
 - [3 Reasons We Love the Webform Module in Drupal 8](https://www.unleashed-technologies.com/blog/2017/04/07/3-reasons-we-love-webform-module-drupal-8)
 - [Getting NYU onto Webform](https://www.fourkitchens.com/blog/article/getting-nyu-yaml-form)
