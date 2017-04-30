@@ -5,6 +5,7 @@
  * Webform module drush commands.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Controller\WebformResultsExportController;
 use Drupal\webform\Entity\Webform;
@@ -694,6 +695,7 @@ function drush_webform_repair() {
   // Copied from: outside_in_install().
   drush_print('Repairing quick links...');
   // @todo Remove in https://www.drupal.org/node/2783791.
+
   Cache::invalidateTags(['rendered']);
   // @todo Remove when that is fixed in https://www.drupal.org/node/2773591.
   \Drupal::service('cache.discovery')->deleteAll();
