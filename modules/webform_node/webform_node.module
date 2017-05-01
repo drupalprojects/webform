@@ -9,7 +9,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
-use Drupal\Core\Extension\Extension;
 
 /**
  * Implements hook_node_access().

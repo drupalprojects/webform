@@ -9,6 +9,7 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\node\NodeInterface;
 use Drupal\simpletest\WebTestBase;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
@@ -263,7 +264,7 @@ abstract class WebformTestBase extends WebTestBase {
     if (empty($this->nodes)) {
       $this->drupalCreateContentType(['type' => 'page']);
       for ($i = 0; $i < 3; $i++) {
-        $this->nodes[$i] = $this->drupalCreateNode(['type' => 'page', 'title' => 'Node ' . $i, 'status' => NODE_PUBLISHED]);
+        $this->nodes[$i] = $this->drupalCreateNode(['type' => 'page', 'title' => 'Node ' . $i, 'status' => NodeInterface::PUBLISHED]);
         $this->drupalGet('node/' . $this->nodes[$i]->id());
       }
     }

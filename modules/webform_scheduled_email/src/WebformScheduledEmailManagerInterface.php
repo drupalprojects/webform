@@ -3,7 +3,6 @@
 namespace Drupal\webform_scheduled_email;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
