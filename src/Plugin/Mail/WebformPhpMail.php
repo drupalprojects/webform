@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\Mail;
 
 use Drupal\Core\Mail\Plugin\Mail\PhpMail;
+use Drupal\Core\Mail\MailFormatHelper;
 
 /**
  * Extend's the default Drupal mail backend to support HTML email.
@@ -19,12 +20,16 @@ class WebformPhpMail extends PhpMail {
    * {@inheritdoc}
    */
   public function format(array $message) {
+    // Join the body array into one string.
+    $message['body'] = implode("\n\n", $message['body']);
+
     if (!empty($message['params']['html'])) {
-      $message['body'] = implode("\n\n", $message['body']);
       return $message;
     }
     else {
-      return parent::format($message);
+      // Wrap the mail body for sending.
+      $message['body'] = MailFormatHelper::wrapMail($message['body']);
+      return $message;
     }
   }
 
