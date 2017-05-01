@@ -612,6 +612,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $html = preg_replace('#<td>No([^<]*)</td>#', '<td bgcolor="' . $custom_color . '"><img src="https://www.drupal.org/misc/watchdog-error.png" alt="No"> \1</td>', $html);
     $html = preg_replace('#<td>([^<]*)</td>#', '<td bgcolor="' . $no_color . '"><img src="https://www.drupal.org/misc/watchdog-warning.png" alt="Warning"> \1</td>', $html);
 
+    // Link *.module.
+    $html = preg_replace('/([a-z0-9_]+)\.module/', '<a href="https://www.drupal.org/project/\1">\1.module</a>', $html);
+
     // Convert URLs to links with titles.
     $links = [
       'https://www.drupal.org/docs/8/modules/webform' => $this->t('Webform Documentation'),
@@ -619,6 +622,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'https://www.drupal.org/docs/8/modules/webform/webform-videos' => $this->t('Webform Videos'),
       'https://www.drupal.org/docs/8/modules/webform/webform-cookbook' => $this->t('Webform Cookbook'),
       'https://www.drupal.org/project/project_module?text=signature' => $this->t('Signature related-projects'),
+      'https://www.drupal.org/sandbox/smaz/2833275' => $this->t('webform_slack.module'),
     ];
     foreach ($links as $link_url => $link_title) {
       $html = preg_replace('#([^"/])' . preg_quote($link_url, '#') . '([^"/])#', '\1<a href="' . $link_url . '">' . $link_title . '</a>\2', $html);
@@ -627,9 +631,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     // Create fake filter object with settings.
     $filter = (object) ['settings' => ['filter_url_length' => 255]];
     $html = _filter_url($html, $filter);
-
-    // Link *,module.
-    $html = preg_replace('/([a-z0-9_]+)\.module/', '<a href="https://www.drupal.org/project/\1">\1.module</a>', $html);
 
     // Tidy
     if (class_exists('\tidy')) {
