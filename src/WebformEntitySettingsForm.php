@@ -132,7 +132,7 @@ class WebformEntitySettingsForm extends EntityForm {
 
     // Display warning when submission handler requires submissions to be saved
     // to the database.
-    $is_submission_required = $webform->getHandlers(NULL, TRUE, WebformHandlerInterface::SUBMISSION_REQUIRED)->count();
+    $is_submission_required = $webform->getHandlers(NULL, TRUE, NULL, WebformHandlerInterface::SUBMISSION_REQUIRED)->count();
     if ($is_submission_required) {
       $form['general']['results_disabled']['#default_value'] = FALSE;
       $form['general']['results_disabled']['#disabled'] = TRUE;
