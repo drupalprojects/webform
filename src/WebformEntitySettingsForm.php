@@ -322,7 +322,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
       'form_prepopulate_source_entity' => [
         'title' => $this->t('Allow source entity to be populated using query string parameters.'),
-        'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=user&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to '@user'.", ['@user' => User::load(1)->label()]),
+        'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=user&source_entity_id=".\Drupal::currentUser()->id()." to a webform's URL would set a submission's 'Submitted to' value to '@user'.", ['@user' => User::load(\Drupal::currentUser()->id())->label()]),
       ],
       // Global behaviors.
       // @see \Drupal\webform\Form\WebformAdminSettingsForm
