@@ -31,13 +31,13 @@ class WebformElementLikertTest extends WebformTestBase {
     $this->assertRaw('<label for="edit-likert-default-table-q1-likert-question">Question 1</label>');
     $this->assertRaw('<td><div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-likert-default-q1 form-item-likert-default-q1">');
     $this->assertRaw('<input data-drupal-selector="edit-likert-default-q1" type="radio" id="edit-likert-default-q1" name="likert_default[q1]" value="1" class="form-radio" />');
-    $this->assertRaw('<label for="edit-likert-default-q1" class="option">Option 1</label>');
+    $this->assertRaw('<label for="edit-likert-default-q1" class="option"><span>Option 1</span></label>');
 
     // Check advanced likert element with N/A.
     $this->assertPattern('#<tr>\s+<th></th>\s+<th>Option 1</th>\s+<th>Option 2</th>\s+<th>Option 3</th>\s+<th>Not applicable</th>\s+</tr>#');
     $this->assertRaw('<td><div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-likert-advanced-q1 form-item-likert-advanced-q1">');
     $this->assertRaw('<input data-drupal-selector="edit-likert-advanced-q1" type="radio" id="edit-likert-advanced-q1--4" name="likert_advanced[q1]" value="N/A" class="form-radio" />');
-    $this->assertRaw('<label for="edit-likert-advanced-q1--4" class="option">Not applicable</label>');
+    $this->assertRaw('<label for="edit-likert-advanced-q1--4" class="option"><span>Not applicable</span></label>');
 
     // Check likert required.
     $this->drupalPostForm('webform/test_element_likert', [], t('Submit'));

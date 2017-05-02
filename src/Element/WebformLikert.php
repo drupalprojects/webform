@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -72,7 +73,7 @@ class WebformLikert extends FormElement {
         $row[$answer_key] = [
           '#parents' => [$element['#name'], $question_key],
           '#type' => 'radio',
-          '#title' => $answer_title,
+          '#title' => new FormattableMarkup('<span>@title</span>', ['@title' => $answer_title]),
           '#title_display' => 'after',
           // Must cast values as strings to prevent NULL and empty strings.
           // from being evaluated as 0.

@@ -44,7 +44,7 @@
   text-align: center;
 }
 
-.form-type-webform-likert td label {
+.form-type-webform-likert td span {
   display: none;
 }
 
@@ -92,7 +92,7 @@
     width: 100%;
   }
 
-  .form-type-webform-likert td label {
+  .form-type-webform-likert td span {
     display: inline;
   }
 
