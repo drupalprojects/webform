@@ -44,7 +44,11 @@
   text-align: center;
 }
 
-.form-type-webform-likert td span {
+/**
+ * Hide radio title when Likert is displayed within a grid on desktop.
+ * @see \Drupal\webform\Element\WebformLikert::processWebformLikert
+ */
+.webform-likert-label {
   display: none;
 }
 
@@ -59,7 +63,8 @@
 }
 
 /**
- * Mobile support to likert webform element table.
+ * Mobile support to likert webform element that converts radios in table
+ * grid to inline vertical radios.
  */
 @media (max-width: 768px) {
   .form-type-webform-likert table {
@@ -92,7 +97,11 @@
     width: 100%;
   }
 
-  .form-type-webform-likert td span {
+  /**
+   * Show radio title when Likert is displayed inline on mobile.
+   * @see \Drupal\webform\Element\WebformLikert::processWebformLikert
+   */
+  .webform-likert-label {
     display: inline;
   }
 

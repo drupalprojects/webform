@@ -73,7 +73,10 @@ class WebformLikert extends FormElement {
         $row[$answer_key] = [
           '#parents' => [$element['#name'], $question_key],
           '#type' => 'radio',
-          '#title' => new FormattableMarkup('<span>@title</span>', ['@title' => $answer_title]),
+          // Wrap title in span.webform-likert-label so that it can hidden when
+          // Likert is displayed in grid on desktop.
+          // @see webform.element.likert.css
+          '#title' => new FormattableMarkup('<span class="webform-likert-label">@title</span>', ['@title' => $answer_title]),
           '#title_display' => 'after',
           // Must cast values as strings to prevent NULL and empty strings.
           // from being evaluated as 0.
