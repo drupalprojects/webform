@@ -37,6 +37,7 @@ function webform_ui_entity_type_alter(array &$entity_types) {
     $handlers = $webform_options_entity_type->getHandlerClasses();
     $handlers['form']['source'] = $handlers['form']['default'];
     $handlers['form']['default'] = 'Drupal\webform_ui\WebformUiOptionsForm';
+    $handlers['form']['duplicate'] = 'Drupal\webform_ui\WebformUiOptionsForm';
     $webform_options_entity_type->setHandlerClass('form', $handlers['form']);
   }
 }

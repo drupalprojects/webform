@@ -311,6 +311,14 @@ entity.webform_options.edit_form:
   requirements:
     _entity_access: 'webform_options.update'
 
+entity.webform_options.duplicate_form:
+  path: '/admin/structure/webform/settings/options/{webform_options}/duplicate'
+  defaults:
+    _entity_form: 'webform_options.duplicate'
+    _title: 'Duplicate webform options'
+  requirements:
+    _entity_access: 'webform_options.duplicate'
+
 entity.webform_options.delete_form:
   path: '/admin/structure/webform/settings/options/{webform_options}/delete'
   defaults:

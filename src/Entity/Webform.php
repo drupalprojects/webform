@@ -38,8 +38,8 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *       "assets" = "Drupal\webform\WebformEntityAssetsForm",
  *       "access" = "Drupal\webform\WebformEntityAccessForm",
  *       "handlers" = "Drupal\webform\WebformEntityHandlersForm",
- *       "delete" = "Drupal\webform\WebformEntityDeleteForm",
  *       "duplicate" = "Drupal\webform\WebformEntityForm",
+ *       "delete" = "Drupal\webform\WebformEntityDeleteForm",
  *     }
  *   },
  *   admin_permission = "administer webform",
