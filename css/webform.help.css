@@ -14,11 +14,75 @@
 }
 
 /**
+ * Help page.
+ */
+.webform-help h4 {
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.webform-help .button.button--primary {
+  width: 100%;
+  max-width: 600px;
+  margin: 0;
+}
+
+.webform-help img {
+  width: 100%;
+  height: auto;
+}
+
+.webform-help .webform-help-video-youtube {
+  max-width: 600px;
+}
+
+/**
  * Help play button.
  */
 .button.button-webform-play:before {
   content: '► ';
   font-size: .8em;
+}
+
+/**
+ * Help menu.
+ *
+ * @see /core/themes/stable/css/core/dropbutton/dropbutton.css
+ */
+.webform-help-menu {
+  display: none;
+}
+
+.js .webform-help-menu {
+  display: block;
+  width: 250px;
+  float: right;
+}
+
+.js .webform-help-menu .dropbutton-wrapper {
+  min-height: 2em;
+}
+
+.js .webform-help-menu .dropbutton-wrapper {
+  display: block;
+  position: relative;
+}
+
+.js .webform-help-menu .dropbutton-widget {
+  position: absolute;
+}
+
+/**
+ * Hide throbber which causes layout issue in dropbutton
+ */
+.webform-help-menu .dropbutton-multiple .ajax-progress-throbber {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .js .webform-help-menu {
+    display: none;
+  }
 }
 
 /**

@@ -6,11 +6,19 @@ webform.settings:
   requirements:
     _permission: 'administer webform'
 
-webform.help:
-  path: '/admin/help/webform/{id}'
+webform.help.video:
+  path: '/admin/help/webform/video/{id}'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformHelpController::index'
-    _title_callback: '\Drupal\webform\Controller\WebformHelpController::title'
+    _controller: '\Drupal\webform\Controller\WebformHelpController::video'
+    _title_callback: '\Drupal\webform\Controller\WebformHelpController::videoTitle'
+  requirements:
+    _permission: 'access administration pages'
+
+webform.help.about:
+  path: '/admin/help/webform/about'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformHelpController::about'
+    _title: 'How can we help you?'
   requirements:
     _permission: 'access administration pages'
 

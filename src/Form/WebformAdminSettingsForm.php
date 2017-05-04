@@ -797,6 +797,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.dialog_disabled'),
     ];
+    $form['ui']['help_menu_disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable help menu'),
+      '#description' => $this->t("If checked, 'How can we help you?' menu will be disabled."),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('ui.help_menu_disabled'),
+    ];
     $form['ui']['offcanvas_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable off-canvas system tray'),

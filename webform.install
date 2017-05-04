@@ -479,3 +479,10 @@ function webform_update_8042() {
     }
   }
 }
+
+/**
+ * Issue #2874555: Add "How can we help you?" link to the Webform module admin pages.
+ */
+function webform_update_8043() {
+  _webform_update_admin_settings();
+}

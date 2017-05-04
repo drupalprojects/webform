@@ -280,7 +280,7 @@ function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInte
   }
 
   // Fix 'Help' breadcrumb text.
-  if ($route_match->getRouteName() == 'webform.help') {
+  if ($route_match->getRouteName() == 'webform.help.video') {
     $links = $breadcrumb->getLinks();
     $link = end($links);
     $link->setText(t('Webforms'));
@@ -486,7 +486,7 @@ function webform_theme() {
       'variables' => ['info' => []],
     ],
     'webform_help_video_youtube' => [
-      'variables' => ['youtube_id' => NULL],
+      'variables' => ['youtube_id' => NULL, 'autoplay' => TRUE],
     ],
 
     'webform' => [

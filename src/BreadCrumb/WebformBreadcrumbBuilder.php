@@ -87,6 +87,9 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' ||  $args[2] == 'webform_submission')) {
       $this->type = 'webform_source_entity';
     }
+    elseif (strpos($route_name, 'webform.help.') === 0) {
+      $this->type = 'webform_help';
+    }
     elseif (strpos($route_name, 'entity.webform_ui.element') === 0) {
       $this->type = 'webform_element';
     }
@@ -140,6 +143,13 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           $breadcrumb->addLink(Link::createFromRoute($this->t('Results'), "entity.$entity_type.webform.user.submissions", [$entity_type => $entity_id]));
         }
       }
+    }
+    elseif ($this->type == 'webform_help') {
+      $breadcrumb = new Breadcrumb();
+      $breadcrumb->addLink(Link::createFromRoute($this->t('Home'), '<front>'));
+      $breadcrumb->addLink(Link::createFromRoute($this->t('Administration'), 'system.admin'));
+      $breadcrumb->addLink(Link::createFromRoute($this->t('Help'), 'help.main'));
+      $breadcrumb->addLink(Link::createFromRoute($this->t('Webform'), 'help.page', ['name' => 'webform']));
     }
     else {
       $breadcrumb = new Breadcrumb();

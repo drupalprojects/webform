@@ -19,14 +19,17 @@
     attach: function (context) {
       var $widget = $(context).find('.webform-help-accordion');
       $widget.once('webform-help-accordion').accordion({
+        header: 'h2',
         collapsible: true,
         heightStyle: 'content'
       });
 
-      var $container = $('h3' + location.hash, $widget);
-      if ($container.length) {
-        var active = $widget.find($widget.accordion('option', 'header')).index($container);
-        $widget.accordion('option', 'active', active);
+      if (location.hash) {
+        var $container = $('h2' + location.hash, $widget);
+        if ($container.length) {
+          var active = $widget.find($widget.accordion('option', 'header')).index($container);
+          $widget.accordion('option', 'active', active);
+        }
       }
     }
   };

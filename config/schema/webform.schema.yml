@@ -281,6 +281,9 @@ webform.settings:
         dialog_disabled:
           type: boolean
           label: 'Disable dialogs'
+        help_menu_disabled:
+          type: boolean
+          label: 'Disable help menu'
         offcanvas_disabled:
           type: boolean
           label: 'Disable system tray'

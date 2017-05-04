@@ -29,11 +29,17 @@ use Drupal\webform\Utility\WebformElementHelper;
  *   - content: Help content.
  */
 function template_preprocess_webform_help(array &$variables) {
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+
   $help_info = $variables['info'];
 
   $variables += $help_info;
 
   $help = [];
+  if (!empty($help_info['menu']) && !\Drupal::config('webform.settings')->get('ui.help_menu_disabled')) {
+    $help['menu'] = $help_manager->buildHelpMenu();
+  }
   if (is_array($help_info['content'])) {
     $help['content'] = $help_info['content'];
   }
@@ -44,9 +50,6 @@ function template_preprocess_webform_help(array &$variables) {
   }
 
   // Build watch video link.
-  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
-  $help_manager = \Drupal::service('webform.help_manager');
-
   // If help info load the video else this is the video info.
   $video_info = (isset($help_info['video_id'])) ? $help_manager->getVideo($help_info['video_id']) : $help_info;
   if (!empty($video_info['youtube_id'])) {
@@ -58,7 +61,7 @@ function template_preprocess_webform_help(array &$variables) {
         $help['link'] = [
           '#type' => 'link',
           '#title' => t('Watch video'),
-          '#url' => Url::fromRoute('webform.help', ['id' => str_replace('_', '-', $video_info['id'])]),
+          '#url' => Url::fromRoute('webform.help.video', ['id' => str_replace('_', '-', $video_info['id'])]),
           '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, $classes),
           '#prefix' => ' ',
         ];

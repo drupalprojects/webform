@@ -2,8 +2,12 @@
 
 namespace Drupal\webform;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
@@ -212,20 +216,126 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * {@inheritdoc}
    */
   public function buildIndex() {
-    $build = [
-      '#prefix' => '<div class="webform-help-accordion">',
+    $build['intro'] = [
+      '#markup' => $this->t('The Webform module is a form builder and submission manager for Drupal 8.'),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    ];
+
+    $build['sections'] = [
+      '#prefix' => '<div class="webform-help webform-help-accordion">',
       '#suffix' => '</div>',
     ];
-    $build['about'] = $this->buildAbout();
+    $build['sections']['about'] = $this->buildAbout();
     if ($this->configFactory->get('webform.settings')->get('ui.video_display') !== 'hidden') {
-      $build['videos'] = $this->buildVideos();
+      $build['sections']['videos'] = $this->buildVideos();
     }
-    $build['uses'] = $this->buildUses();
-    $build['elements'] = $this->buildElements();
-    $build['addons'] = $this->buildAddOns();
-    $build['libraries'] = $this->buildLibraries();
-    $build['#attached']['library'][] = 'webform/webform.help';
+    $build['sections']['uses'] = $this->buildUses();
+    $build['sections']['elements'] = $this->buildElements();
+    $build['sections']['addons'] = $this->buildAddOns();
+    $build['sections']['libraries'] = $this->buildLibraries();
+    $build['sections']['#attached']['library'][] = 'webform/webform.help';
     return $build;
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildHelpMenu() {
+    // Collect very basic but useful system information.
+    // @see system_requirements().
+    $class = Database::getConnection()->getDriverClass('Install\\Tasks');
+    $tasks = new $class();
+    $requirements = [
+      'Drupal version' => \Drupal::VERSION,
+      'Server software' => \Drupal::request()->server->get('SERVER_SOFTWARE'),
+      'PHP version' => phpversion(),
+      'Database system'=> $tasks->name(),
+      'Database system version' => Database::getConnection()->version(),
+    ];
+    $status_report = [];
+    foreach ($requirements as $name => $value) {
+      $status_report[$name] = $name . ': ' . $value;
+    }
+    $status_report = implode(PHP_EOL, $status_report);
+
+    $default_query = [
+      'version' => $this->state->get('webform.version'),
+    ];
+    $issue_query = $default_query + [
+        'title' => '{Your title should be descriptive and concise}',
+        'body' => "REMOVE LINE THIS AFTER YOU READ https://www.drupal.org/issue-queue/how-to
+-------------------------------------------------------------------------
+
+<h2>Problem/Issue</h2>
+
+<h2>Error Message</h2>
+
+<h2>System Information</h2>
+
+$status_report
+",
+      ];
+    $feature_query = $default_query + [
+        'title' => '{Your title should be descriptive and concise}',
+        'body' => "REMOVE LINE THIS AFTER YOU READ https://www.drupal.org/issue-queue/how-to
+-------------------------------------------------------------------------
+
+<h2>Problem/Motivation</h2>
+
+<h2>Proposed resolution</h2>
+
+<h2>Remaining tasks</h2>
+
+<h2>User interface changes</h2>
+
+<h2>API changes</h2>
+
+<h2>Data model changes</h2>",
+      ];
+    return [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['webform-help-menu']],
+      'operations' => [
+        '#type' => 'operations',
+        '#links' => [
+          'index' => [
+            'title' => $this->t('How can we help you?'),
+            'url' => Url::fromRoute('webform.help.about'),
+            'attributes' => [
+              'class' => ['use-ajax'],
+              'data-dialog-type' => 'modal',
+              'data-dialog-options' => Json::encode(['width' => 640]),
+            ]
+          ],
+          'community' => [
+            'title' => $this->t('Join the Drupal Community'),
+            'url' => Url::fromUri('https://register.drupal.org/user/register', ['query' => ['destination' => '/project/webform']]),
+          ],
+          'association' => [
+            'title' => $this->t('Support the Drupal Association'),
+            'url' => Url::fromUri('https://www.drupal.org/association/campaign/value-2017'),
+          ],
+          'documentation' => [
+            'title' => $this->t('Read Webform Documentaion'),
+            'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform'),
+          ],
+          'issue' => [
+            'title' => $this->t('Report a Bug/Issue'),
+            'url' => Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $issue_query]),
+          ],
+          'request' => [
+            'title' => $this->t('Request Feature'),
+            'url' => Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $feature_query]),
+          ],
+          'support' => [
+            'title' => $this->t('Additional Support'),
+            'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform/webform-support'),
+          ],
+        ],
+      ],
+    ];
   }
 
   /****************************************************************************/
@@ -236,18 +346,123 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * {@inheritdoc}
    */
   public function buildAbout() {
-    return [
+    $menu = $this->buildHelpMenu();
+    $links = $menu['operations']['#links'];
+
+    $link_base = [
+      '#type' => 'link',
+      '#attributes' => ['class' => ['button', 'button--primary']],
+      '#suffix' => '<br/><br/><hr/>',
+    ];
+    
+    $build = [
       'title' => [
-        '#markup' => $this->t('About the Webform module'),
-        '#prefix' => '<h3 id="about">',
-        '#suffix' => '</h3>',
+        '#markup' => $this->t('How can we help you?'),
+        '#prefix' => '<h2 id="about">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
-        '#markup' => '<p>' . $this->t('The Webform module is a webform builder and submission manager for Drupal 8.') . '</p>',
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ],
     ];
+
+
+    $build['content']['quote'] = [];
+    $build['content']['quote']['image'] = [
+      '#theme' => 'image',
+      '#uri' => 'https://pbs.twimg.com/media/C-RXmp7XsAEgMN2.jpg',
+      '#alt' => $this->t('DrupalCon Baltimore'),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    ];
+    $build['content']['quote']['content']['#markup'] = '<blockquote><strong>' . $this->t('It’s really the Drupal community and not so much the software that makes the Drupal project what it is. So fostering the Drupal community is actually more important than just managing the code base.') . '</strong><address>' . $this->t('- Dries Buytaert') . '</address></blockquote><hr/>';
+
+    // Community.
+    $build['content']['community'] = [];
+    $build['content']['community']['title']['#markup'] = '<h3>' . $this->t('Are you new to Drupal?') . '</h3>';
+    $build['content']['community']['content']['#markup'] = '<p>' . $this->t('As an open source project, we don’t have employees to provide Drupal improvements and support. We depend on our diverse community of passionate volunteers to move the project forward. Volunteers work not just on web development and user support but also on many other contributions and interests such as marketing, organising user groups and camps, speaking at events, maintaining documentation, and helping to review issues.') . '</p>';
+    $build['content']['community']['link'] = $link_base + [
+      '#url' => Url::fromUri('https://www.drupal.org/getting-involved'),
+      '#title' => $this->t('Get involved in the Drupal community'),
+    ];
+
+    // Register.
+    $build['content']['register'] = [];
+    $build['content']['register']['title']['#markup'] = '<h3>' . $this->t('Start by creating your Drupal.org user account') . '</h3>';
+    $build['content']['register']['content']['#markup'] = '<p>' . $this->t('When you create a Drupal.org account, you gain access to a whole ecosystem of Drupal.org sites and services. Your account works on Drupal.org and any of its subsites including Drupal Groups, Drupal Jobs, Drupal Association and more.') . '</p>';
+    $build['content']['register']['link'] = $link_base + [
+      '#url' => $links['community']['url'],
+      '#title' => $this->t('Become a member of the Drupal community'),
+    ];
+
+    // Association.
+    $build['content']['association'] = [];
+    $build['content']['association']['title']['#markup'] = '<h3>' . $this->t('Join the Drupal Association') . '</h3>';
+    $build['content']['association']['content'] = [
+      'content' => ['#markup' => $this->t('The Drupal Association is dedicated to fostering and supporting the Drupal software project, the community, and its growth. We help the Drupal community with funding, infrastructure, education, promotion, distribution, and online collaboration at Drupal.org.')],
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    ];
+    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
+    switch ($video_display) {
+      case 'dialog':
+        $build['content']['association']['video'] = [
+          '#theme' => 'webform_help_video_youtube',
+          '#youtube_id' => 'LZWqFSMul84',
+          '#autoplay' => FALSE,
+        ];
+        break;
+
+      case 'link':
+        // Place play video link inline.
+        $build['content']['association']['content']['video'] = [
+          '#type' => 'link',
+          '#title' => t('Watch video'),
+          '#url' => Url::fromUri('https://youtu.be/LZWqFSMul84'),
+          '#attributes' => ['class' => ['button', 'button-action', 'button--small', 'button-webform-play']],
+          '#prefix' => ' ',
+        ];
+        break;
+
+      case 'hidden':
+      default:
+        break;
+    }
+    $build['content']['association']['link'] = $link_base + [
+      '#url' => $links['association']['url'],
+      '#title' => $this->t('Learn more about the Drupal Association'),
+    ];
+
+    // Webform.
+    $build['content']['webform'] = [];
+    $build['content']['webform']['title']['#markup'] = '<h3>' . $this->t('Need help with the Webform module?') . '</h3>';
+    $build['content']['webform']['content']['#markup'] = '<p>' . $this->t('The best place to start is by reading the documentation, watching the help videos, and looking at the examples and templates included in the Webform module. It is also worth exploring the <a href="https://www.drupal.org/docs/8/modules/webform/webform-cookbook">Webform Cookbook</a>, which contains recipes that provide tips and tricks.') . '</p>';
+    $build['content']['webform']['link'] = $link_base + [
+      '#url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform/webform-support'),
+      '#title' => $this->t('Get help with the Webform module'),
+    ];
+
+    // Issue.
+    $build['content']['issue'] = [];
+    $build['content']['issue']['title']['#markup'] = '<h3>' . $this->t('How can you report bugs and issues?') . '</h3>';
+    $build['content']['issue']['content']['#markup'] = '<p>' . $this->t('The first step is to review the Webform module’s issue queue for similar issues. You may be able to find a patch or other solution there. You may also be able to contribute to an existing issue with your additional details.') . '</p>' .
+      '<p>' . $this->t('If you need to create a new issue, please make and export an example of the broken form configuration. This will help guarantee that your issue is reproducible. To get the best response, it’s helpful to craft a good issue report. You can find advice and tips on the <a href="https://www.drupal.org/node/73179">How to create a good issue page</a>. Please use the issue summary template when creating new issues.') . '</p>';
+    $build['content']['issue']['link'] = $link_base + [
+      '#url' => $links['issue']['url'],
+      '#title' => $this->t('Report a bug/issue with the Webform module'),
+    ];
+
+    // Request.
+    $build['content']['request'] = [];
+    $build['content']['request']['title']['#markup'] = '<h3>' . $this->t('How can you request a feature?') . '</h3>';
+    $build['content']['request']['content']['#markup'] = '<p>' . $this->t('Feature requests can be added to the Webform module\'s issue queue. Use the same tips provided for creating issue reports to help you author a feature request. The better you can define your needs and ideas, the easier it will be for people to help you.') . '</p>';
+    $build['content']['request']['link'] = $link_base + [
+      '#url' => $links['request']['url'],
+      '#title' => $this->t('Help improve the Webform module'),
+    ];
+
+    return $build;
   }
 
   /**
@@ -257,8 +472,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $build = [
       'title' => [
         '#markup' => $this->t('Form elements'),
-        '#prefix' => '<h3 id="elements">',
-        '#suffix' => '</h3>',
+        '#prefix' => '<h2 id="elements">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
         '#markup' => '<p>' . $this->t('Below is a list of all available form and render elements.') . '</p>',
@@ -274,8 +489,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     foreach ($grouped_definitions as $category_name => $elements) {
       $build['content'][$category_name]['title'] = [
         '#markup' => $category_name,
-        '#prefix' => '<h2>',
-        '#suffix' => '</h2>',
+        '#prefix' => '<h3>',
+        '#suffix' => '</h3>',
       ];
       $build['content'][$category_name]['elements'] = [
         '#prefix' => '<dl>',
@@ -323,8 +538,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $build = [
       'title' => [
         '#markup' => $this->t('Uses'),
-        '#prefix' => '<h3 id="uses">',
-        '#suffix' => '</h3>',
+        '#prefix' => '<h2 id="uses">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
         '#prefix' => '<div>',
@@ -340,6 +555,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       if (empty($help_info['uses'])) {
         continue;
       }
+
+      // Never include the 'How can we help you?' help menu.
+      unset($help_info['menu']);
 
       // Title.
       $build['content']['help'][$id]['title'] = [
@@ -377,8 +595,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $build = [
       'title' => [
         '#markup' => $this->t('Watch videos'),
-        '#prefix' => '<h3 id="videos">',
-        '#suffix' => '</h3>',
+        '#prefix' => '<h2 id="videos">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
         '#prefix' => '<div>',
@@ -437,8 +655,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $build = [
       'title' => [
         '#markup' => $this->t('Add-ons'),
-        '#prefix' => '<h3 id="addons">',
-        '#suffix' => '</h3>',
+        '#prefix' => '<h2 id="addons">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
         '#markup' => '<p>' . $this->t("Below is a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal's Form API.") . '</p>',
@@ -451,8 +669,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     foreach ($categories as $category_name => $category) {
       $build['content'][$category_name]['title'] = [
         '#markup' => $category['title'],
-        '#prefix' => '<h2>',
-        '#suffix' => '</h2>',
+        '#prefix' => '<h3>',
+        '#suffix' => '</h3>',
       ];
       $build['content'][$category_name]['projects'] = [
         '#prefix' => '<dl>',
@@ -487,8 +705,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $build = [
       'title' => [
         '#markup' => $this->t('External Libraries'),
-        '#prefix' => '<h3 id="libraries">',
-        '#suffix' => '</h3>',
+        '#prefix' => '<h2 id="libraries">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
         '#prefix' => '<div>',
@@ -643,8 +861,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     return [
       'title' => [
         '#markup' => $this->t('Form builder comparison'),
-        '#prefix' => '<h3 id="comparison">',
-        '#suffix' => '</h3>',
+        '#prefix' => '<h2 id="comparison">',
+        '#suffix' => '</h2>',
       ],
       'content' => [
         '#prefix' => '<div>',
@@ -687,6 +905,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Installing the Webform module and third party libraries'),
       'content' => $this->t('This screencast walks through installing the core Webform module, sub-module, required libraries, and add-ons.'),
       'youtube_id' => 'IMfFTrsjg5k',
+    ];
+
+    $videos['association'] = [
+      'title' => $this->t('Join the Drupal Association'),
+      'content' => $this->t('The Drupal Association is dedicated to fostering and supporting the Drupal software project, the community and its growth. We help the Drupal community with funding, infrastructure, education, promotion, distribution and online collaboration at Drupal.org.'),
+      'youtube_id' => 'LZWqFSMul84',
     ];
 
     $videos['forms'] = [
@@ -783,6 +1007,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'message_storage' => WebformMessage::STORAGE_STATE,
       'access' => $this->currentUser->hasPermission('administer webform'),
       'video_id' => 'install',
+      'menu' => TRUE,
       'uses' => FALSE,
     ];
 
@@ -842,6 +1067,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'url' => Url::fromRoute('entity.webform.collection'),
       'content' => $this->t('The Forms page lists all available webforms, which can be filtered by title, description, and/or elements.'),
       'video_id' => 'forms',
+      'menu' => TRUE,
     ];
 
     // Templates.

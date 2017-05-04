@@ -207,6 +207,7 @@ ui:
   details_save: true
   dialog_disabled: false
   offcanvas_disabled: false
+  help_menu_disabled: false
   html_editor_disabled: false
 libraries:
   excluded_libraries:
