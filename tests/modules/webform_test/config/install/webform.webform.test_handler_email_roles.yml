@@ -125,9 +125,12 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:role:raw]'
       to_options:
-        authenticated: '[webform_role:authenticated]'
-        administrator: '[webform_role:administrator]'
-        other: '[webform_role:other]'
+        - value: authenticated
+          text: '[webform_role:authenticated]'
+        - value: administrator
+          text: '[webform_role:administrator]'
+        - value: other
+          text: '[webform_role:other]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''

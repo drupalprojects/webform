@@ -154,4 +154,41 @@ class WebformOptionsHelper {
     return array_combine($range, $range);
   }
 
+  /**
+   * Convert options to array that can serialized to Drupal's configuration management system.
+   *
+   * @param array $options
+   *   An associative array containing options value and text.
+   *
+   * @return array
+   *   An array contain option text and value.
+   */
+  public static function encodeConfig(array $options) {
+    $config = [];
+    foreach ($options as $value => $text) {
+      $config[] = [
+        'value' => $value,
+        'text' => $text,
+      ];
+    }
+    return $config;
+  }
+
+  /**
+   * Convert config from Drupal's configuration management system to options array.
+   *
+   * @param array $config
+   *   An array contain option text and value.
+   *
+   * @return array
+   *   An associative array containing options value and text.
+   */
+  public static function decodeConfig(array $config) {
+    $options = [];
+    foreach ($config as $option) {
+      $options[$option['value']] = $option['text'];
+    }
+    return $options;
+  }
+
 }

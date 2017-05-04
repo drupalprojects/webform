@@ -11,6 +11,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
+use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
 
 include_once 'includes/webform.update.inc';
@@ -447,4 +448,34 @@ function webform_update_8041() {
   $data['libraries']['excluded_libraries'][] = 'jquery.chosen';
   $config->setData($data);
   $config->save();
+}
+
+
+/**
+ * Issue #2875371: Can't Add Email Handler w/Select "Send To".
+ */
+function webform_update_8042() {
+  $settings = ['to_options', 'cc_options', 'bcc_options', 'from_options'];
+
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_email_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if (in_array($handler['id'], ['email', 'scheduled_email'])) {
+        foreach ($settings as $setting_name) {
+          if (!empty($handler['settings'][$setting_name])) {
+            $has_email_handler = TRUE;
+            $handler['settings'][$setting_name] = WebformOptionsHelper::encodeConfig($handler['settings'][$setting_name]);
+          }
+        }
+      }
+    }
+    if ($has_email_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
 }

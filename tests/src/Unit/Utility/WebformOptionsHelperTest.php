@@ -150,4 +150,72 @@ class WebformOptionsHelperTest extends UnitTestCase {
     return $tests;
   }
 
+  /**
+   * Tests WebformOptionsHelper::encodeConfig().
+   *
+   * @param array $options
+   *   The options array to run through WebformOptionsHelper::encodeConfig().
+   * @param string $expected
+   *   The expected result from calling the function.
+   *
+   * @see WebformOptionsHelper::encodeConfig()
+   *
+   * @dataProvider providerEncodeConfig
+   */
+  public function testEncodeConfig(array $options, $expected) {
+    $result = WebformOptionsHelper::encodeConfig($options);
+    $this->assertEquals($expected, $result);
+  }
+
+  /**
+   * Data provider for testEncodeConfig().
+   *
+   * @see testEncodeConfig()
+   */
+  public function providerEncodeConfig() {
+    $tests[] = [
+      ['one' => 1, 'two' => 2, 'with.period' => 'with period'],
+      [
+        ['value' => 'one', 'text' => 1],
+        ['value' => 'two', 'text' => 2],
+        ['value' => 'with.period', 'text' => 'with period'],
+      ],
+    ];
+    return $tests;
+  }
+
+  /**
+   * Tests WebformOptionsHelper::decodeConfig().
+   *
+   * @param array $options
+   *   The options array to run through WebformOptionsHelper::decodeConfig().
+   * @param string $expected
+   *   The expected result from calling the function.
+   *
+   * @see WebformOptionsHelper::decodeConfig()
+   *
+   * @dataProvider providerDecodeConfig
+   */
+  public function testDecodeConfig(array $options, $expected) {
+    $result = WebformOptionsHelper::decodeConfig($options);
+    $this->assertEquals($expected, $result);
+  }
+
+  /**
+   * Data provider for testDecodeConfig().
+   *
+   * @see testDecodeConfig()
+   */
+  public function providerDecodeConfig() {
+    $tests[] = [
+      [
+        ['value' => 'one', 'text' => 1],
+        ['value' => 'two', 'text' => 2],
+        ['value' => 'with.period', 'text' => 'with period'],
+      ],
+      ['one' => 1, 'two' => 2, 'with.period' => 'with period'],
+    ];
+    return $tests;
+  }
+
 }

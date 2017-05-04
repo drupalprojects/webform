@@ -165,11 +165,16 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:type:raw]'
       to_options:
-        Comments: '[site:mail]'
-        'Report a Bug': '[site:mail]'
-        Questions: '[site:mail]'
-        _other_: '[site:mail]'
-        _default_: '[site:mail]'
+        - value: Comments
+          text: '[site:mail]'
+        - value: 'Report a Bug'
+          text: '[site:mail]'
+        - value: Questions
+          text: '[site:mail]'
+        - value: _other_
+          text: '[site:mail]'
+        - value: _default_
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''

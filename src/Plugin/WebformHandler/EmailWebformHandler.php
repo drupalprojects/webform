@@ -17,6 +17,7 @@ use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformElementManagerInterface;
 use Drupal\webform\WebformHandlerBase;
 use Drupal\webform\WebformHandlerMessageInterface;
@@ -514,7 +515,14 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     foreach ($this->configuration as $name => $value) {
       if (isset($values[$name])) {
-        $this->configuration[$name] = $values[$name];
+        // Convert options array to safe config array to prevent errors.
+        // @see https://www.drupal.org/node/2297311
+        if (preg_match('/_options$/', $name)) {
+          $this->configuration[$name] = WebformOptionsHelper::encodeConfig($values[$name]);
+        }
+        else {
+          $this->configuration[$name] = $values[$name];
+        }
       }
     }
   }
@@ -633,7 +641,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     // Get emails from options.
     if ($element_has_options && $email_has_options) {
-      $email_options = $this->configuration[$configuration_name . '_options'];
+      $email_options = WebformOptionsHelper::decodeConfig($this->configuration[$configuration_name . '_options']);
 
       // Set default email address.
       if (!empty($email_options[self::DEFAULT_OPTION])) {
@@ -1136,7 +1144,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#description_display' => 'before',
         '#required' => TRUE,
         '#parents' => ['settings', $options_name],
-        '#default_value' => $this->configuration[$options_name],
+        '#default_value' => WebformOptionsHelper::decodeConfig($this->configuration[$options_name]),
 
         '#source' => $mapping_options,
         '#source__title' => $this->t('Option'),

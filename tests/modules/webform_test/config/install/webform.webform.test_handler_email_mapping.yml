@@ -133,7 +133,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:select:raw]'
       to_options:
-        'Yes': yes@example.com
+        - value: 'Yes'
+          text: yes@example.com
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -160,7 +161,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:select:raw]'
       to_options:
-        _empty_: empty@example.com
+        - value: _empty_
+          text: empty@example.com
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -187,7 +189,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:select:raw]'
       to_options:
-        _default_: default@default.com
+        - value: _default_
+          text: default@default.com
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -214,8 +217,10 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:checkboxes:raw]'
       to_options:
-        Sunday: sunday@example.com
-        Saturday: saturday@example.com
+        - value: Sunday
+          text: sunday@example.com
+        - value: Saturday
+          text: saturday@example.com
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -242,7 +247,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:radios_other:raw]'
       to_options:
-        _other_: other@example.com
+        - value: _other_
+          text: other@example.com
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''

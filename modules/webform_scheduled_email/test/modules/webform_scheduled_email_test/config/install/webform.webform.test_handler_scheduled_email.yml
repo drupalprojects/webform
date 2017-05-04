@@ -139,7 +139,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:send:raw]'
       to_options:
-        tomorrow: '[site:mail]'
+        - value: tomorrow
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -169,7 +170,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:send:raw]'
       to_options:
-        yesterday: '[site:mail]'
+        - value: yesterday
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -199,7 +201,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:send:raw]'
       to_options:
-        last_year: '[site:mail]'
+        - value: last_year
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -229,7 +232,8 @@ handlers:
         - completed
       to_mail: '[webform_submission:values:send:raw]'
       to_options:
-        broken: '[site:mail]'
+        - value: broken
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -261,7 +265,8 @@ handlers:
         - updated
       to_mail: '[webform_submission:values:send:raw]'
       to_options:
-        other: '[site:mail]'
+        - value: other
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
@@ -291,7 +296,8 @@ handlers:
         - draft
       to_mail: '[webform_submission:values:send:raw]'
       to_options:
-        draft_reminder: '[site:mail]'
+        - value: draft_reminder
+          text: '[site:mail]'
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
