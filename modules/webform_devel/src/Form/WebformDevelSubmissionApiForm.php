@@ -133,7 +133,7 @@ $values = ' . Variable::export($values) . ';
 
 // Check that the webform is open.
 $webform = \Drupal\webform\entity\Webform::load(\'' . $webform->id() . '\'); 
-$is_open = \Drupal\webform\WebformSubmissionForm::isOpen($values);
+$is_open = \Drupal\webform\WebformSubmissionForm::isOpen($webform);
 if ($is_open === TRUE) {
   // Validate webform submission values.
   $errors = \Drupal\webform\WebformSubmissionForm::validateValues($values);
