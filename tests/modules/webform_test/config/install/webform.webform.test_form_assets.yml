@@ -10,7 +10,7 @@ uid: null
 template: false
 id: test_form_assets
 title: 'Test: Webform: Assets (CSS/JS)'
-description: 'Test custom CSS and JS webform asssets.'
+description: 'Test custom CSS and JS webform assets.'
 category: 'Test: Webform'
 elements: |
   test:
