@@ -450,6 +450,8 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     // Check default preview.
     $this->drupalPostForm('webform/test_form_preview', ['name' => 'test'], t('Preview'));
 
+    $this->assertRaw('<h1 class="page-title">Test: Webform: Preview: Preview</h1>');
+    $this->assertRaw('<b>Preview</b></li>');
     $this->assertRaw('Please review your submission. Your submission is not complete until you press the "Submit" button!');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '< Previous');
@@ -460,12 +462,16 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
       'preview' => DRUPAL_REQUIRED,
       'preview_next_button_label' => '{Preview}',
       'preview_prev_button_label' => '{Back}',
+      'preview_label' => '{Label}',
+      'preview_title' => '{Title}',
       'preview_message' => '{Message}',
     ]);
     $webform_preview->save();
 
     // Check custom preview.
     $this->drupalPostForm('webform/test_form_preview', ['name' => 'test'], t('{Preview}'));
+    $this->assertRaw('<h1 class="page-title">{Title}</h1>');
+    $this->assertRaw('<b>{Label}</b></li>');
     $this->assertRaw('{Message}');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '{Back}');

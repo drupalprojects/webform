@@ -80,6 +80,8 @@ settings:
     class:
       - preview_prev_button_attributes
     style: 'color: orange'
+  preview_label: ''
+  preview_title: ''
   preview_message: ''
   draft: authenticated
   draft_auto_save: false

@@ -23,6 +23,8 @@ settings:
   default_wizard_complete_label: Complete
   default_preview_next_button_label: Preview
   default_preview_prev_button_label: '< Previous'
+  default_preview_label: Preview
+  default_preview_title: '[webform:title]: Preview'
   default_preview_message: 'Please review your submission. Your submission is not complete until you press the "Submit" button!'
   default_draft_button_label: 'Save Draft'
   default_draft_saved_message: 'Submission saved. You may return to this form later and it will restore the current values.'

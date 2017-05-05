@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.storage.node.webform
     - node.type.webform_demo_event
-    - webform.webform.demo_event_registration
   module:
     - webform
 id: node.webform_demo_event.webform

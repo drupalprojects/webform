@@ -486,3 +486,11 @@ function webform_update_8042() {
 function webform_update_8043() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2872464: MultiStep Preview Page - change the Page Title and Progress Bar Title
+ */
+function webform_update_8044() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

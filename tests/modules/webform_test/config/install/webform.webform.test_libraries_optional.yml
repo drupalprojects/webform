@@ -131,6 +131,8 @@ settings:
   preview_next_button_attributes: {  }
   preview_prev_button_label: ''
   preview_prev_button_attributes: {  }
+  preview_label: ''
+  preview_title: ''
   preview_message: ''
   draft: none
   draft_auto_save: false

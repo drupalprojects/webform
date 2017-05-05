@@ -258,11 +258,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *
    * @param string $key
    *   The key of the setting to retrieve.
+   * @param bool $default
+   *   Flag to lookup the default settings from 'webform.settings' config.
+   *   Only used when rendering webform.
    *
    * @return mixed
    *   The settings value, or NULL if no settings exists.
    */
-  public function getSetting($key);
+  public function getSetting($key, $default = FALSE);
 
   /**
    * Saves a webform setting for a given key.

@@ -59,6 +59,12 @@ webform.settings:
         default_preview_prev_button_label:
           type: label
           label: 'Default preview previous page button label'
+        default_preview_label:
+          type: text
+          label: 'Default preview label'
+        default_preview_title:
+          type: text
+          label: 'Default preview page title'
         default_preview_message:
           type: text
           label: 'Default preview message'
@@ -467,6 +473,12 @@ webform.webform.*:
         preview_prev_button_attributes:
           type: ignore
           label: 'Previous page button attributes'
+        preview_label:
+          type: text
+          label: 'Preview label'
+        preview_title:
+          type: text
+          label: 'Preview page title'
         preview_message:
           type: text
           label: 'Preview message'

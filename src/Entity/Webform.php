@@ -451,7 +451,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function hasSubmissionLog() {
-    return \Drupal::config('webform.settings')->get('settings.default_submission_log') ?: $this->getSetting('submission_log') ?: FALSE;
+    return $this->getSetting('submission_log', TRUE) ?: FALSE;
   }
 
   /**
@@ -598,9 +598,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSetting($key) {
+  public function getSetting($key, $default = FALSE) {
     $settings = $this->getSettings();
-    return (isset($settings[$key])) ? $settings[$key] : NULL;
+    $value = (isset($settings[$key])) ? $settings[$key] : NULL;
+    if ($default) {
+      return $value ?: \Drupal::config('webform.settings')->get('settings.default_' . $key);
+    }
+    else {
+      return $value;
+    }
   }
 
   /**
@@ -670,6 +676,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'preview_next_button_attributes' => [],
       'preview_prev_button_label' => '',
       'preview_prev_button_attributes' => [],
+      'preview_label' => '',
+      'preview_title' => '',
       'preview_message' => '',
       'draft' => self::DRAFT_ENABLED_NONE,
       'draft_auto_save' => FALSE,
@@ -1280,18 +1288,18 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       // If there is no start page, we must define one.
       if (empty($this->pages)) {
         $this->pages['start'] = [
-          '#title' => $this->getSetting('wizard_start_label') ?: \Drupal::config('webform.settings')->get('settings.default_wizard_start_label'),
+          '#title' => $this->getSetting('wizard_start_label', TRUE),
         ];
       }
       $this->pages['preview'] = [
-        '#title' => $this->t('Preview'),
+        '#title' => $this->getSetting('preview_label', TRUE),
       ];
     }
 
     // Only add complete page, if there are some pages.
     if ($this->pages && $this->getSetting('wizard_complete')) {
       $this->pages['complete'] = [
-        '#title' => $this->getSetting('wizard_complete_label') ?: \Drupal::config('webform.settings')->get('settings.default_wizard_complete_label'),
+        '#title' => $this->getSetting('wizard_complete_label', TRUE),
       ];
     }
 

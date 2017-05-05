@@ -1134,6 +1134,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->messageManager->display(WebformMessageManagerInterface::FORM_PREVIEW_MESSAGE, 'warning');
 
       // Build preview.
+      $form['#title'] = $this->getWebformSetting('preview_title');
       $form['preview'] = [
         '#theme' => 'webform_submission_html',
         '#webform_submission' => $this->entity,

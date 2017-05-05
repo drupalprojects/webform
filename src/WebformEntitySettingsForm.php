@@ -522,6 +522,18 @@ class WebformEntitySettingsForm extends EntityForm {
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['preview_prev_button_attributes'],
     ];
+    $form['preview']['settings']['preview_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Preview label'),
+      '#description' => $this->t('A text displayed within a wizard progress bar.'),
+      '#default_value' => $settings['preview_label'],
+    ];
+    $form['preview']['settings']['preview_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Preview page title'),
+      '#description' => $this->t('A title displayed on the preview page.'),
+      '#default_value' => $settings['preview_title'],
+    ];
     $form['preview']['settings']['preview_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Preview message'),
