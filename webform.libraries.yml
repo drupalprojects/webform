@@ -583,14 +583,14 @@ imce.input:
 
 libraries.codemirror.text:
   remote: https://github.com/codemirror/codemirror
-  version: &webform_codemirror_version '5.24.0'
+  version: &webform_codemirror_version '5.25.2'
   license: &webform_codemirror_license
     name: MIT
     url: http://codemirror.net/LICENSE
     gpl-compatible: true
   cdn: &webform_codemirror_cdn
-    /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/
-    /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/
+    /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.2/
+    /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.2/
   css:
     theme:
       /libraries/codemirror/lib/codemirror.css: {}
@@ -737,13 +737,13 @@ libraries.jquery.image-picker:
 
 libraries.jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask
-  version: '3.3.3'
+  version: '3.3.4 '
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/jquery.inputmask/dist/min/: https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.3/
+    /libraries/jquery.inputmask/dist/min/: https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/
   js:
     /libraries/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js: {}
   dependencies:
@@ -751,14 +751,13 @@ libraries.jquery.inputmask:
 
 libraries.jquery.intl-tel-input:
   remote: https://github.com/jackocnr/intl-tel-input
-  version: 'v11.0.0'
+  version: 'v11.0.12'
   license:
     name: MIT
     url: https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE
     gpl-compatible: true
   cdn:
-    /libraries/jquery.intl-tel-input/src/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.0/
-    /libraries/jquery.intl-tel-input/src/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.0/
+    /libraries/jquery.intl-tel-input/build/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.12/
   css:
     theme:
       /libraries/jquery.intl-tel-input/build/css/intlTelInput.css: {}
@@ -864,3 +863,4 @@ libraries.signature_pad:
     /libraries/signature_pad/: https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/
   js:
     /libraries/signature_pad/signature_pad.js: {}
+

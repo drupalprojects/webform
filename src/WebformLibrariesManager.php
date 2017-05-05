@@ -232,8 +232,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
-      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.21.0.zip'),
-      'version' => '5.24.0',
+      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.25.2.zip'),
+      'version' => '5.25.2',
       'optional' => TRUE,
     ];
     $libraries['jquery.geocomplete'] = [
@@ -268,8 +268,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
       'notes' => $this->t('Input masks are used to ensure predefined and custom formats for text fields.'),
       'homepage_url' => Url::fromUri('https://robinherbots.github.io/Inputmask/'),
-      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.3.zip'),
-      'version' => '3.3.3',
+      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.4.zip'),
+      'version' => '3.3.4',
       'optional' => TRUE,
     ];
     $libraries['jquery.intl-tel-input'] = [
@@ -277,8 +277,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user's country, displays a relevant placeholder and provides formatting/validation methods."),
       'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'homepage_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
-      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v11.0.0.zip'),
-      'version' => 'v11.0.0',
+      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v11.0.12.zip'),
+      'version' => '11.0.12',
       'optional' => TRUE,
     ];
     $libraries['jquery.rateit'] = [
@@ -305,7 +305,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'notes' => $this->t('Chosen is used to improve the user experience for select menus. Chosen is an alternative to Select2.'),
       'homepage_url' => Url::fromUri('https://harvesthq.github.io/chosen/'),
       'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.7.0/chosen_v1.7.0.zip'),
-      'version' => 'v1.7.0',
+      'version' => '1.7.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.timepicker'] = [
@@ -323,7 +323,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'notes' => $this->t('Toggles is used to provide a toggle element.'),
       'homepage_url' => Url::fromUri('https://github.com/simontabor/jquery-toggles/'),
       'download_url' => Url::fromUri('https://github.com/simontabor/jquery-toggles/archive/v4.0.0.zip'),
-      'version' => 'v4.0.0',
+      'version' => '4.0.0',
       'elements' => ['webform_toggle', 'webform_toggles'],
     ];
     $libraries['jquery.word-and-character-counter'] = [
@@ -332,7 +332,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'notes' => $this->t('Word or character counting, with server-side validation, is available for text fields and text areas.'),
       'homepage_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin'),
       'download_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/archive/2.3.5.zip'),
-      'version' => '1.6.0',
+      'version' => '2.3.5',
       'optional' => TRUE,
     ];
     $libraries['signature_pad'] = [
