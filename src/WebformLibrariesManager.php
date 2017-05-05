@@ -186,21 +186,39 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    */
   protected function initLibraries() {
     $libraries = [];
-    $libraries['ckeditor'] = [
-      'title' => $this->t('CKEditor'),
-      'description' => $this->t('The standard version of the CKEditor.'),
-      'notes' => $this->t("Allows the Webform module to implement a basic and simpler CKEditor which included CKEditor's default image and link dialogs."),
-      'homepage_url' => Url::fromUri('http://ckeditor.com/'),
-      'download_url' => Url::fromUri('https://download.cksource.com/CKEditor/CKEditor/CKEditor%204.6.2/ckeditor_4.6.2_standard.zip'),
+    $libraries['ckeditor.autogrow'] = [
+      'title' => $this->t('CKEditor: Autogrow'),
+      'description' => $this->t('Allows CKEditor to expand and shrink depending on the amount and size of content.'),
+      'notes' => $this->t('Autogrow makes it possible to reduce the size of empty HTML editor while still supporting HTML markup.'),
+      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/autogrow'),
+      'download_url' => Url::fromUri('http://download.ckeditor.com/autogrow/releases/autogrow_4.6.2.zip'),
       'version' => '4.6.2',
       'optional' => TRUE,
     ];
-    $libraries['ckeditor_autogrow'] = [
-      'title' => $this->t('CKEditor: Autogrow'),
-      'description' => $this->t('Allows CKEditor to expand and shrink depending on the amount and size of content.'),
-      'notes' => $this->t('Autogrown make it possible to reduce the size of empty HTML editor while still supporting HTML markup.'),
-      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/autogrow'),
-      'download_url' => Url::fromUri('https://cdn.rawgit.com/ckeditor/ckeditor-dev/4.6.2/plugins/autogrow/plugin.js'),
+    $libraries['ckeditor.fakeobjects'] = [
+      'title' => $this->t('CKEditor: Fakeobjects'),
+      'description' => $this->t('Utility required by CKEditor link plugin.'),
+      'notes' => $this->t('Allows CKEditor to use basic image and link dialog'),
+      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/fakeobjects'),
+      'download_url' => Url::fromUri('http://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.6.2.zip'),
+      'version' => '4.6.2',
+      'optional' => TRUE,
+    ];
+    $libraries['ckeditor.image'] = [
+      'title' => $this->t('CKEditor: Image'),
+      'description' => $this->t('Provides a basic image dialog for CKEditor.'),
+      'notes' => $this->t('Allows CKEditor to use basic image dialog, which is not included in Drupal core.'),
+      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/image'),
+      'download_url' => Url::fromUri('http://download.ckeditor.com/image/releases/image_4.6.2.zip'),
+      'version' => '4.6.2',
+      'optional' => TRUE,
+    ];
+    $libraries['ckeditor.link'] = [
+      'title' => $this->t('CKEditor: Link'),
+      'description' => $this->t('Provides a basic link dialog for CKEditor.'),
+      'notes' => $this->t('Allows CKEditor to use basic link dialog, which is not included in Drupal core.'),
+      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/link'),
+      'download_url' => Url::fromUri('http://download.ckeditor.com/link/releases/link_4.6.2.zip'),
       'version' => '4.6.2',
       'optional' => TRUE,
     ];

@@ -24,8 +24,19 @@
       }
 
       $(context).find('.js-form-type-webform-html-editor textarea').once('webform-html-editor').each(function () {
-        var allowedContent = drupalSettings['webform']['html_editor']['allowedContent'];
         var $textarea = $(this);
+
+        var allowedContent = drupalSettings['webform']['html_editor']['allowedContent'];
+
+        // Load additional CKEditor plugins used by the Webform HTML editor.
+        // @see \Drupal\webform\Element\WebformHtmlEditor::preRenderWebformHtmlEditor
+        // @see \Drupal\webform\WebformLibrariesManager::initLibraries
+        var plugins = drupalSettings['webform']['html_editor']['plugins'];
+        for (var plugin_name in plugins) {
+          if(plugins.hasOwnProperty(plugin_name)) {
+            CKEDITOR.plugins.addExternal(plugin_name , plugins[plugin_name]);
+          }
+        }
 
         var options = {
           // Turn off external config and styles.
@@ -43,31 +54,39 @@
           removePlugins: 'elementspath,magicline',
           // Toolbar settings.
           format_tags: 'p;h2;h3;h4;h5;h6',
-          toolbar: [
-            {name: 'styles', items: ['Format', 'Font', 'FontSize']},
-            {name: 'basicstyles', items: ['Bold', 'Italic', 'Subscript', 'Superscript']},
-            {name: 'insert', items: ['SpecialChar']},
-            {name: 'colors', items: ['TextColor', 'BGColor']},
-            {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
-            {name: 'links', items: ['Link', 'Unlink']},
-            {name: 'tools', items: ['Source', '-', 'Maximize']}
-          ],
-          // Extra plugins
+          // Extra plugins.
           extraPlugins: ''
         };
 
+        // Add toolbar.
+        if (!options.toolbar) {
+          options.toolbar = [];
+          options.toolbar.push({name: 'styles', items: ['Format', 'Font', 'FontSize']});
+          options.toolbar.push({name: 'basicstyles', items: ['Bold', 'Italic', 'Subscript', 'Superscript']});
+          // Add IMCE image button.
+          if (CKEDITOR.plugins.get('imce')) {
+            CKEDITOR.config.ImceImageIcon = drupalSettings['webform']['html_editor']['ImceImageIcon'];
+            options.extraPlugins += (options.extraPlugins ? ',' : '') + 'imce';
+            options.toolbar.push({name: 'insert', items: ['ImceImage', 'SpecialChar']});
+          }
+          else {
+            options.toolbar.push({name: 'insert', items: ['SpecialChar']});
+          }
+          // Add link plugin.
+          if (plugins['link']) {
+            options.extraPlugins += (options.extraPlugins ? ',' : '') + 'link';
+            options.toolbar.push({name: 'links', items: ['Link', 'Unlink']});
+          }
+          options.toolbar.push({name: 'colors', items: ['TextColor', 'BGColor']});
+          options.toolbar.push({name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']});
+          options.toolbar.push({name: 'tools', items: ['Source', '-', 'Maximize']});
+        }
+
         // Add auto grow plugin.
-        if (CKEDITOR.plugins.get('autogrow')) {
+        if (plugins['autogrow'] && CKEDITOR.plugins.get('autogrow')) {
           options.extraPlugins += (options.extraPlugins ? ',' : '') + 'autogrow';
           options.autoGrow_minHeight = 100;
           options.autoGrow_maxHeight = 300;
-        }
-
-        // Add IMCE image button.
-        if (CKEDITOR.plugins.get('imce')) {
-          options.extraPlugins += (options.extraPlugins ? ',' : '') + 'imce';
-          options.toolbar[2].items = ['ImceImage', 'SpecialChar'];
-          CKEDITOR.config.ImceImageIcon = drupalSettings['webform']['html_editor']['ImceImageIcon'];
         }
 
         options = $.extend(options, Drupal.webform.htmlEditor.options);

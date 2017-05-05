@@ -345,8 +345,7 @@ webform.element.html_editor:
     - core/drupalSettings
     - core/jquery
     - core/jquery.once
-    - webform/libraries.ckeditor
-    - webform/libraries.ckeditor_autogrow
+    - core/ckeditor
 
 webform.element.icheck:
   version: VERSION
@@ -581,30 +580,6 @@ imce.input:
     - imce/drupal.imce.input
 
 # External libraries.
-
-libraries.ckeditor:
-  remote: http://ckeditor.com/
-  version: '4.6.2'
-  license:
-    name: GNU-GPL-2.0-or-later
-    url: https://github.com/ckeditor/ckeditor-dev/blob/4.6.2/LICENSE.md
-    gpl-compatible: true
-  cdn:
-    /libraries/ckeditor/: 'https://cdn.ckeditor.com/4.6.2/standard/'
-  js:
-    /libraries/ckeditor/ckeditor.js: { preprocess: false, minified: true }
-
-libraries.ckeditor_autogrow:
-  remote: http://ckeditor.com/addon/autogrow
-  version: '4.6.2'
-  license:
-    name: GNU-GPL-2.0-or-later
-    url: https://github.com/ckeditor/ckeditor-dev/blob/4.6.2/LICENSE.md
-    gpl-compatible: true
-  cdn:
-    /libraries/ckeditor_autogrow/: 'https://cdn.rawgit.com/ckeditor/ckeditor-dev/4.6.2/plugins/autogrow/'
-  js:
-    /libraries/ckeditor_autogrow/plugin.js: { preprocess: false, minified: true }
 
 libraries.codemirror.text:
   remote: https://github.com/codemirror/codemirror
