@@ -116,8 +116,12 @@ class WebformThirdPartySettingsManager implements WebformThirdPartySettingsManag
       // Hide all actions including the 'Save configuration' button.
       $form['actions']['#access'] = FALSE;
 
-      // Display a warning.
-      drupal_set_message($this->t('There are no third party settings available. Please install a contributed module that integrates with the Webform module.'), 'warning');
+      // Display info message.
+      $form['message'] = [
+        '#type' => 'webform_message',
+        '#message_message' => $this->t('There are no third party settings available. Please install a contributed module that integrates with the Webform module.'),
+        '#message_type' => 'info',
+      ];
 
       // Link to supported Third party settings modules.
       $form['supported'] = [
