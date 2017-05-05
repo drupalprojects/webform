@@ -527,6 +527,9 @@ webform.element.term_checkboxes:
 
 webform.element.text_format:
   version: VERSION
+  css:
+    component:
+      css/webform.element.text_format.css: {}
   js:
     js/webform.element.text_format.js: {}
 

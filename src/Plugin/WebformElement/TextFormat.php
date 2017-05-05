@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\filter\Entity\FilterFormat;
@@ -71,6 +72,17 @@ class TextFormat extends WebformElementBase {
     // Hide tips.
     if (!empty($element['#hide_help']) && isset($element['format']['help'])) {
       $element['format']['help']['#attributes']['style'] = 'display: none';
+    }
+    else {
+      // Display tips in a modal.
+      $element['format']['help']['about']['#attributes']['class'][] = 'use-ajax';
+      $element['format']['help']['about']['#attributes'] += [
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'dialogClass' => 'webform-text-format-help-dialog',
+          'width' => 800,
+        ]),
+      ];
     }
 
     // Hide filter format if the select menu and help is hidden.
