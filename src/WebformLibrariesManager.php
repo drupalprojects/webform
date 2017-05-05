@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -185,14 +186,18 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *   An associative array containing libraries.
    */
   protected function initLibraries() {
+    // Get Drupal core's CKEditor version number.
+    $core_libraries = Yaml::decode(file_get_contents('core/core.libraries.yml'));
+    $ckeditor_version = $core_libraries['ckeditor']['version'];
+
     $libraries = [];
     $libraries['ckeditor.autogrow'] = [
       'title' => $this->t('CKEditor: Autogrow'),
       'description' => $this->t('Allows CKEditor to expand and shrink depending on the amount and size of content.'),
       'notes' => $this->t('Autogrow makes it possible to reduce the size of empty HTML editor while still supporting HTML markup.'),
       'homepage_url' => Url::fromUri('http://ckeditor.com/addon/autogrow'),
-      'download_url' => Url::fromUri('http://download.ckeditor.com/autogrow/releases/autogrow_4.6.2.zip'),
-      'version' => '4.6.2',
+      'download_url' => Url::fromUri("http://download.ckeditor.com/autogrow/releases/autogrow_$ckeditor_version.zip"),
+      'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
     $libraries['ckeditor.fakeobjects'] = [
@@ -200,8 +205,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Utility required by CKEditor link plugin.'),
       'notes' => $this->t('Allows CKEditor to use basic image and link dialog'),
       'homepage_url' => Url::fromUri('http://ckeditor.com/addon/fakeobjects'),
-      'download_url' => Url::fromUri('http://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.6.2.zip'),
-      'version' => '4.6.2',
+      'download_url' => Url::fromUri("http://download.ckeditor.com/fakeobjects/releases/fakeobjects_$ckeditor_version.zip"),
+      'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
     $libraries['ckeditor.image'] = [
@@ -209,8 +214,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Provides a basic image dialog for CKEditor.'),
       'notes' => $this->t('Allows CKEditor to use basic image dialog, which is not included in Drupal core.'),
       'homepage_url' => Url::fromUri('http://ckeditor.com/addon/image'),
-      'download_url' => Url::fromUri('http://download.ckeditor.com/image/releases/image_4.6.2.zip'),
-      'version' => '4.6.2',
+      'download_url' => Url::fromUri("http://download.ckeditor.com/image/releases/image_$ckeditor_version.zip"),
+      'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
     $libraries['ckeditor.link'] = [
