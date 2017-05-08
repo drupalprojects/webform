@@ -129,6 +129,15 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Spam: Antibot.
+    $projects['antibot'] = [
+      'title' => $this->t('Antibot'),
+      'description' => $this->t('Prevent forms from being submitted without Javascript enabled.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/antibot'),
+      'category' => 'spam',
+      'third_party_settings' => TRUE,
+    ];
+
     // Spam: CAPTCHA.
     $projects['captcha'] = [
       'title' => $this->t('CAPTCHA'),
