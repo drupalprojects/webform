@@ -66,8 +66,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         '@path' => $library_path,
         ':download_href' => $library['download_url']->toString(),
         ':homepage_href' => $library['homepage_url']->toString(),
-        ':install_href' => 'http://cgit.drupalcode.org/webform/tree/INSTALL.md?h=8.x-5.x',
         ':external_href' => 'https://www.drupal.org/docs/8/theming-drupal-8/adding-stylesheets-css-and-javascript-js-to-a-drupal-8-theme#external',
+        ':install_href' => (\Drupal::moduleHandler()->moduleExists('help')) ? Url::fromRoute('help.page', ['name' => 'webform'], ['fragment' => 'libraries'])->toString() : 'https://www.drupal.org/docs/8/modules/webform/webform-libraries',
         ':settings_libraries_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-libraries'])->toString(),
         ':settings_elements_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-elements'])->toString(),
       ];
