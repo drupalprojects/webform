@@ -255,7 +255,7 @@ entity.node.webform_submission.edit_form.all:
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
     operation: webform_submission_edit
     entity_access: 'webform_submission.update'
-    disable_pages: true
+    mode: disable_pages
   options:
     _admin_route: TRUE
     parameters:

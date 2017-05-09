@@ -109,9 +109,28 @@ class WebformSubmissionApiTest extends WebformTestBase {
     ];
     $errors = WebformSubmissionForm::validateValues($values);
     WebformElementHelper::convertRenderMarkupToStrings($errors);
-    $this->debug($errors);
+    // $this->debug($errors);
     $this->assertEqual($errors, [
       'email' => 'The email address <em class="placeholder">invalid</em> is not valid.',
+    ]);
+
+    // Check validating a multistep form with invalid #options.
+    $values = array(
+      'webform_id' => 'test_form_wizard_advanced',
+      'data' => array(
+        'first_name' => 'Ringo',
+        'last_name' => 'Starr',
+        'gender' => 'INVALID',
+        'email' => 'example@example.com',
+        'phone' => '123-456-7890',
+        'comments' => 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;',
+      ),
+    );
+    $errors = WebformSubmissionForm::validateValues($values);
+    WebformElementHelper::convertRenderMarkupToStrings($errors);
+    // $this->debug($errors);
+    $this->assertEqual($errors, [
+        'gender' => 'An illegal choice has been detected. Please contact the site administrator.',
     ]);
 
     /**************************************************************************/

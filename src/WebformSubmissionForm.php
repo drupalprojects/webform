@@ -27,11 +27,25 @@ class WebformSubmissionForm extends ContentEntityForm {
   use WebformDialogTrait;
 
   /**
-   * Flag when set to TRUE displays all wizard pages in one single form.
+   * Denote wizard page should be disabled.
    *
-   * @var bool
+   * @var string
    */
-  protected $disablePages = FALSE;
+  const DISABLE_PAGES = 'disable_pages';
+
+  /**
+   * Denote form is being submitted via API, which trigger validation.
+   *
+   * @var string
+   */
+  const API_SUBMISSION = 'api_submission';
+
+  /**
+   * Determines how a webform should displayed and or processed.
+   *
+   * @var string
+   */
+  protected $mode = NULL;
 
   /**
    * The renderer service.
@@ -208,8 +222,8 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $disable_pages = FALSE) {
-    $this->disablePages = $disable_pages;
+  public function buildForm(array $form, FormStateInterface $form_state, $mode = NULL) {
+    $this->mode = $mode;
 
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
@@ -1002,7 +1016,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function getPages(array &$form, FormStateInterface $form_state) {
     if ($form_state->get('pages') === NULL) {
-      $pages = $this->getWebform()->getPages($this->disablePages);
+      $pages = $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
       foreach ($pages as &$page) {
         $page['#access'] = TRUE;
       }
@@ -1142,7 +1156,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
     else {
       // Get all pages so that we can also hide skipped pages.
-      $pages = $this->getWebform()->getPages($this->disablePages);
+      $pages = $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
       foreach ($pages as $page_key => $page) {
         if (isset($form['elements'][$page_key])) {
           if ($page_key != $current_page) {
@@ -1384,6 +1398,9 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Populate element if value exists.
       if (isset($element['#type']) && isset($values[$key])) {
         $element['#default_value'] = $values[$key];
+        if ($this->mode == self::API_SUBMISSION) {
+          $element['#needs_validation'] = TRUE;
+        }
       }
 
       $this->populateElements($element, $values);
@@ -1709,12 +1726,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     // form is submitted.
     $form_state = new FormState();
 
-    // Set disabled pages flag to make sure that validation is triggered for
-    // all elements.
-    $disable_pages = TRUE;
-
     // Submit the form.
-    \Drupal::formBuilder()->submitForm($form_object, $form_state, $disable_pages);
+    \Drupal::formBuilder()->submitForm($form_object, $form_state, self::API_SUBMISSION);
 
     // Get the errors.
     $errors = $form_state->getErrors();

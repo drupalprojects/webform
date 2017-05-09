@@ -425,7 +425,7 @@ entity.webform_submission.edit_form.all:
   defaults:
     _entity_form: 'webform_submission.default'
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
-    disable_pages: true
+    mode: disable_pages
   requirements:
     _entity_access: 'webform_submission.update'
     _custom_access: '\Drupal\webform\Access\WebformAccess::checkWebformWizardPagesAccess'
