@@ -26,7 +26,7 @@ The primary use case for this module is to:
 
 > [Watch a demo](http://youtu.be/sQGsfQ_LZJ4) of the Webform module.
 
-> Evaluate this project online using [simplytest.me](https://simplytest.me/project/drupal/8.2.x?add[]=webform).
+> Evaluate this project online using [simplytest.me](https://simplytest.me/project/webform).
 
 
 ### Blog Posts, Articles, & Presentations
@@ -42,6 +42,9 @@ Blog Posts & Articles
 - [Webforms for Drupal 8](https://www.gaiaresources.com.au/yaml-forms-drupal-8/)
 - [Creating Webform Handlers in Drupal 8](http://fivemilemedia.co.uk/blog/creating-yaml-form-handlers-drupal-8)
 - [Les formulaires en Drupal 8](https://makina-corpus.com/blog/metier/2016/les-formulaires-en-drupal-8)
+
+Videos
+- [3 Reasons We Love the Webform Module in Drupal 8</a></li>](https://www.unleashed-technologies.com/blog/2017/04/07/3-reasons-we-love-webform-module-drupal-8)
 
 Presentations
 
