@@ -107,6 +107,7 @@ function _webform_test_issues() {
       '2705471' => 'Webform states managed file fields',
       '2113931' => 'File Field design update',
       '2346893' => 'Duplicate AJAX wrapper around a file field',
+      '2482783' => 'File upload errors not set or shown correctly',
     ],
     'password_confirm' => [
       '1427838' => 'password and password_confirm children do not pick up #states or #attributes',
