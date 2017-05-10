@@ -190,7 +190,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $elements;
 
   /**
-   * The CSS stylesheet.
+   * The CSS style sheet.
    *
    * @var string
    */

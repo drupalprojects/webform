@@ -1,6 +1,6 @@
 /**
  * @file
- * JavaScript behaviors for AJAX.
+ * JavaScript behaviors for Ajax.
  */
 
 (function ($, Drupal) {

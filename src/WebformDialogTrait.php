@@ -21,10 +21,10 @@ use Drupal\webform\Utility\WebformDialogHelper;
 trait WebformDialogTrait {
 
   /**
-   * Is the current request for an AJAX modal dialog.
+   * Is the current request for an Ajax modal dialog.
    *
    * @return bool
-   *   TRUE if the current request is for an AJAX modal dialog.
+   *   TRUE if the current request is for an Ajax modal dialog.
    */
   protected function isModalDialog() {
     $wrapper_format = $this->getRequest()
@@ -123,7 +123,7 @@ trait WebformDialogTrait {
    *   The current state of the form.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An AJAX response that display validation error messages or redirects
+   *   An Ajax response that display validation error messages or redirects
    *   to a URL
    */
   public function submitFormDialog(array &$form, FormStateInterface $form_state) {
@@ -162,7 +162,7 @@ trait WebformDialogTrait {
    *   The current state of the form.
    *
    * @return bool|\Drupal\Core\Ajax\AjaxResponse
-   *   An AJAX response that display validation error messages.
+   *   An Ajax response that display validation error messages.
    */
   public function closeDialog(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();

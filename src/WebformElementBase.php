@@ -1983,7 +1983,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
       // Skip Entity reference element 'selection_settings'.
       // @see \Drupal\webform\Plugin\WebformElement\WebformEntityReferenceTrait::form
-      // @todo Fix entity reference AJAX and move code WebformEntityReferenceTrait.
+      // @todo Fix entity reference Ajax and move code WebformEntityReferenceTrait.
       if (!empty($property_element['#tree']) && $property_name == 'selection_settings') {
         unset($element_properties[$property_name]);
         $property_element['#parents'] = ['properties', $property_name];

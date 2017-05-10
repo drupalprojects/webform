@@ -896,7 +896,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     }
 
     // Preload HTML Editor and CodeMirror so that they can be properly
-    // initialized when loaded via AJAX.
+    // initialized when loaded via Ajax.
     $element['#attached']['library'][] = 'webform/webform.element.html_editor';
     $element['#attached']['library'][] = 'webform/webform.element.codemirror.text';
 
@@ -1140,7 +1140,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $element[$options_name] = [
         '#type' => 'webform_mapping',
         '#title' => $this->t('@title options', ['@title' => $title]),
-        '#description' => $this->t('The selected element has multiple options. You may enter e-mail addresses for each choice. When that choice is selected, an e-mail will be sent to the corresponding addresses. If a field is left blank, no e-mail will be sent for that option. You may use tokens.') . '<br/><br/>',
+        '#description' => $this->t('The selected element has multiple options. You may enter email addresses for each choice. When that choice is selected, an email will be sent to the corresponding addresses. If a field is left blank, no email will be sent for that option. You may use tokens.') . '<br/><br/>',
         '#description_display' => 'before',
         '#required' => TRUE,
         '#parents' => ['settings', $options_name],
@@ -1151,7 +1151,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
         '#destination__type' => 'webform_email_multiple',
         '#destination__allow_tokens' => TRUE,
-        '#destination__title' => $this->t('E-mail addresses'),
+        '#destination__title' => $this->t('Email addresses'),
         '#destination__description' => NULL,
         '#destination__placeholder' => implode(', ', $destination_placeholde_emails),
 
@@ -1173,7 +1173,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   }
 
   /**
-   * AJAX callback.
+   * Ajax callback.
    *
    * @param array $form
    *   An associative array containing the structure of the form.

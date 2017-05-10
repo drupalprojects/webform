@@ -92,7 +92,7 @@
         options = $.extend(options, Drupal.webform.htmlEditor.options);
 
         CKEDITOR.replace(this.id, options).on('change', function (evt) {
-          // Save data onchange since AJAX dialogs don't execute webform.onsubmit.
+          // Save data onchange since Ajax dialogs don't execute webform.onsubmit.
           $textarea.val(evt.editor.getData().trim());
         });
       });

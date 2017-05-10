@@ -56,7 +56,7 @@
 }
 
 /**
- * Hide AJAX throbber.
+ * Hide Ajax throbber.
  */
 .form-type-webform-element-states .ajax-progress-throbber {
   display: none;

@@ -682,7 +682,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['mail']['default_from_mail'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default from email'),
-      '#description' => $this->t('The default sender address for emailed webform results; often the e-mail address of the maintainer of your forms.'),
+      '#description' => $this->t('The default sender address for emailed webform results; often the email address of the maintainer of your forms.'),
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_from_mail'),
     ];

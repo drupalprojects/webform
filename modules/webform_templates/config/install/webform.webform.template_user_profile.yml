@@ -97,16 +97,16 @@ elements: |
       '#multiple': true
       '#select2': true
   email_settings:
-    '#title': 'E-mail addresses'
+    '#title': 'Email addresses'
     '#type': fieldset
     email:
       '#type': email
       '#title': 'Primary E-mall Address'
-      '#description': 'Enter your primary e-mail addresses, which will be used for all e-mail communications.'
+      '#description': 'Enter your primary email addresses, which will be used for all email communications.'
     emails:
       '#type': webform_email_multiple
       '#title': 'Secondary E-mall Addresses'
-      '#description': 'Enter multiple e-mail addresses separated by commas.'
+      '#description': 'Enter multiple email addresses separated by commas.'
   regional_settings:
     '#title': 'Regional Settings'
     '#type': fieldset
@@ -117,7 +117,7 @@ elements: |
     language:
       '#type': select
       '#title': 'Preferred Language'
-      '#description': 'This account''s default language for e-mails, and preferred language for site presentation.'
+      '#description': 'This account''s default language for emails, and preferred language for site presentation.'
       '#options': languages
 css: ''
 javascript: ''

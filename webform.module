@@ -382,7 +382,7 @@ function webform_page_attachments(array &$attachments) {
   }
 
   // Attach codemirror and select2 library to block admin to ensure that the
-  // library is loaded by the webform block is placed using AJAX.
+  // library is loaded by the webform block is placed using Ajax.
   if (strpos($route_name, 'block.admin_display') === 0) {
     $attachments['#attached']['library'][] = 'webform/webform.block';
   }

@@ -26,7 +26,7 @@ class WebformElementController extends ControllerBase {
    *   The unique id of the message.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An empty AJAX response.
+   *   An empty Ajax response.
    *
    * @throws \Exception
    *   Throws exception is storage is not set to 'user' or 'state'.

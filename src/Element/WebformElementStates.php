@@ -127,7 +127,7 @@ class WebformElementStates extends FormElement {
     }
     $number_of_rows = $form_state->get($storage_key);
 
-    // DEBUG: Disable AJAX callback by commenting out the below callback and
+    // DEBUG: Disable Ajax callback by commenting out the below callback and
     // wrapper.
     $ajax_settings = [
       'callback' => [get_called_class(), 'ajaxCallback'],
@@ -208,7 +208,7 @@ class WebformElementStates extends FormElement {
    * @param int $row_index
    *   The row index.
    * @param array $ajax_settings
-   *   An array containing AJAX callback settings.
+   *   An array containing Ajax callback settings.
    *
    * @return array
    *   A render array containing a state table row.
@@ -254,7 +254,7 @@ class WebformElementStates extends FormElement {
    * @param int $row_index
    *   The row index.
    * @param array $ajax_settings
-   *   An array containing AJAX callback settings.
+   *   An array containing Ajax callback settings.
    *
    * @return array
    *   A render array containing a condition table row.
@@ -312,7 +312,7 @@ class WebformElementStates extends FormElement {
    * @param int $row_index
    *   The option's row index.
    * @param array $ajax_settings
-   *   An array containing AJAX callback settings.
+   *   An array containing Ajax callback settings.
    *
    * @return array
    *   A render array containing state operations..
@@ -461,7 +461,7 @@ class WebformElementStates extends FormElement {
   }
 
   /**
-   * Webform submission AJAX callback the returns the states table.
+   * Webform submission Ajax callback the returns the states table.
    */
   public static function ajaxCallback(array &$form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();

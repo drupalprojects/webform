@@ -102,7 +102,7 @@ class WebformSubmissionController extends ControllerBase implements ContainerInj
    *   A webform submission.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An AJAX response that toggle the sticky icon.
+   *   An Ajax response that toggle the sticky icon.
    */
   public function sticky(WebformSubmissionInterface $webform_submission) {
     // Toggle sticky.

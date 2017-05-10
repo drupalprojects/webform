@@ -5,7 +5,7 @@ namespace Drupal\webform\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 /**
- * Provides an AJAX command for scrolling to the top of an element.
+ * Provides an Ajax command for scrolling to the top of an element.
  *
  * This command is implemented in Drupal.AjaxCommands.prototype.webformScrollTop.
  */

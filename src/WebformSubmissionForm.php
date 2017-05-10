@@ -944,7 +944,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = $this->getEntity();
 
     // Make sure the uri and remote addr are set correctly because
-    // AJAX requests via 'managed_file' uploads can cause these values to be
+    // Ajax requests via 'managed_file' uploads can cause these values to be
     // reset.
     if ($webform_submission->isNew()) {
       $webform_submission->set('uri', preg_replace('#^' . base_path() . '#', '/', $this->getRequest()->getRequestUri()));

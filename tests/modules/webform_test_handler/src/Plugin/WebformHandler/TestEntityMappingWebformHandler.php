@@ -165,7 +165,7 @@ class TestEntityMappingWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * AJAX callback.
+   * Ajax callback.
    *
    * @param array $form
    *   An associative array containing the structure of the form.

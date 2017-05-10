@@ -31,13 +31,13 @@ function maillog_webform_submission_form_alter(array &$form, FormStateInterface 
   // Build warning message base on maillog settings and permissions.
   $build = [];
 
-  // Display warning that all e-mails will be logged.
+  // Display warning that all emails will be logged.
   if ($config->get('log')) {
     if (\Drupal::currentUser()->hasPermission('administer maillog')) {
-      $build[] = ['#markup' => t('The <a href=":href">Maillog</a> module is logging all e-mails.', [':href' => Url::fromRoute('maillog.settings')->toString()])];
+      $build[] = ['#markup' => t('The <a href=":href">Maillog</a> module is logging all emails.', [':href' => Url::fromRoute('maillog.settings')->toString()])];
     }
     else {
-      $build[] = ['#markup' => t('The Maillog module is logging all e-mails.')];
+      $build[] = ['#markup' => t('The Maillog module is logging all emails.')];
     }
   }
   else {
@@ -52,18 +52,18 @@ function maillog_webform_submission_form_alter(array &$form, FormStateInterface 
   if (\Drupal::currentUser()->hasPermission('view maillog')) {
     // Display warning if the user can view maillog.
     if ($config->get('log') && $url = \Drupal::pathValidator()->getUrlIfValid('/admin/reports/maillog')){
-      $build[] = ['#prefix' => ' ', '#markup' => t('E-mails will be <a href=":href">logged</a>.', [':href' => $url->toString()])];
+      $build[] = ['#prefix' => ' ', '#markup' => t('Emails will be <a href=":href">logged</a>.', [':href' => $url->toString()])];
     }
-    // Display warning if the user can view e-mail on page.
+    // Display warning if the user can view email on page.
     if ($config->get('verbose')) {
-      $build[] = ['#prefix' => ' ', '#markup' => t('E-mails will displayed on this page.')];
+      $build[] = ['#prefix' => ' ', '#markup' => t('Emails will displayed on this page.')];
     }
   }
 
   // Display warning if the Maillog module is not sending email.
   if (!$config->get('send')) {
     // Display warning that all emails will be logged.
-    $build[] = ['#prefix' => ' <b>', '#markup' => t('No e-mails will be sent.') .'</b>'];
+    $build[] = ['#prefix' => ' <b>', '#markup' => t('No emails will be sent.') .'</b>'];
   }
 
   drupal_set_message( \Drupal::service('renderer')->renderPlain($build), 'warning');

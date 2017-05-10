@@ -14,7 +14,7 @@ description: 'Test redirecting to an internal URL with a confirmation message.'
 category: 'Test: Confirmation'
 elements: |
   description:
-    '#markup': 'This webform will redirect to the home page when submitted an display a custom confirmation message.'
+    '#markup': 'This webform will redirect to the homepage when submitted an display a custom confirmation message.'
 css: ''
 javascript: ''
 settings:

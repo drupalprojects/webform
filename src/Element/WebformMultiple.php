@@ -105,7 +105,7 @@ class WebformMultiple extends FormElement {
     }
     $table_id = implode('_', $element['#parents']) . '_table';
 
-    // DEBUG: Disable AJAX callback by commenting out the below callback and
+    // DEBUG: Disable Ajax callback by commenting out the below callback and
     // wrapper.
     $ajax_settings = [
       'callback' => [get_called_class(), 'ajaxCallback'],
@@ -248,7 +248,7 @@ class WebformMultiple extends FormElement {
    * @param int $weight
    *   The weight.
    * @param array $ajax_settings
-   *   An array containing AJAX callback settings.
+   *   An array containing Ajax callback settings.
    *
    * @return array
    *   A render array containing inputs for an element's value and weight.
@@ -476,7 +476,7 @@ class WebformMultiple extends FormElement {
   }
 
   /**
-   * Webform submission AJAX callback the returns the list table.
+   * Webform submission Ajax callback the returns the list table.
    */
   public static function ajaxCallback(array &$form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();

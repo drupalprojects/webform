@@ -50,7 +50,7 @@
         }
       }).each(function () {
         // Must make sure that this click event handler is execute first and
-        // before the AJAX dialog handler.
+        // before the Ajax dialog handler.
         // @see http://stackoverflow.com/questions/2360655/jquery-event-handlers-always-execute-in-order-they-were-bound-any-way-around-t
         var handlers = $._data(this, 'events')['click'];
         var handler = handlers.pop();

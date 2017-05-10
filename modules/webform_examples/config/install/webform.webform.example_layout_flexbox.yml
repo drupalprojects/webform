@@ -111,7 +111,7 @@ elements: |
     '#type': webform_flexbox
     email:
       '#type': email
-      '#title': 'E-mail address'
+      '#title': 'Email address'
     url:
       '#type': url
       '#title': 'Home page (URL)'

@@ -14,7 +14,7 @@ description: 'Test redirecting to an internal URL.'
 category: 'Test: Confirmation'
 elements: |
   description:
-    '#markup': 'This webform will redirect to the home page when submitted.'
+    '#markup': 'This webform will redirect to the homepage when submitted.'
 css: ''
 javascript: ''
 settings:
