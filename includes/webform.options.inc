@@ -36,32 +36,40 @@ function webform_webform_options_range_alter(array &$options, array $element = [
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  */
 function webform_webform_options_time_zones_alter(array &$options, array $element = []) {
-  $options = system_time_zones();
+  if (empty($options)) {
+    $options = system_time_zones();
+  }
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  */
 function webform_webform_options_country_codes_alter(array &$options, array $element = []) {
-  $options = CountryManager::getStandardList();
+  if (empty($options)) {
+    $options = CountryManager::getStandardList();
+  }
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  */
 function webform_webform_options_country_names_alter(array &$options, array $element = []) {
-  $countries = CountryManager::getStandardList();
-  $options = array_combine($countries, $countries);
+  if (empty($options)) {
+    $countries = CountryManager::getStandardList();
+    $options = array_combine($countries, $countries);
+  }
 }
 
 /**
  * Implements hook_webform_options_WEBFORM_OPTIONS_ID_alter().
  */
 function webform_webform_options_languages_alter(array &$options, array $element = []) {
-  $languages = LanguageManager::getStandardLanguageList();
-  unset($languages['en-x-simple']);
-  $options = [];
-  foreach ($languages as $language) {
-    $options[$language[0]] = $language[0];
+  if (empty($options)) {
+    $languages = LanguageManager::getStandardLanguageList();
+    unset($languages['en-x-simple']);
+    $options = [];
+    foreach ($languages as $language) {
+      $options[$language[0]] = $language[0];
+    }
   }
 }
