@@ -7,28 +7,34 @@
 
 'administer webform':
   title: 'Administer webforms'
-  description: 'Allows administration of global YAML configuration and options.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+  description: 'Allows administration of global YAML configuration and options.'
+  restrict access: true
 'administer webform submission':
   title: 'Administer webform submissions'
-  description: 'Allows accessing, updating, and deleting <em>all</em> webform submissions.<br/><em>Note: To allow users to administer an individual webform''s submissions, please go to the webform''s ''Access'' tab.</em>'
+  description: 'Allows accessing, updating, and deleting <em>all</em> webform submissions.'
+  restrict access: true
+  warning: 'Warning: Give to trusted roles only; this permission has security implications. Note: To allow users to administer an individual webform''s submissions, please go to the webform''s ''Access'' tab.'
 'administer webform element access':
   title: 'Administer webform element access'
   description: 'Restrict webform element access to certain roles and users.'
 
 'edit webform assets':
   title: 'Edit CSS/JS webform assets'
-  description: 'Allows administrators to attach custom CSS and JavaScript to a webform.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+  description: 'Allows administrators to attach custom CSS and JavaScript to a webform.'
+  restrict access: true
 
 'create webform':
   title: 'Create webforms'
 'edit any webform':
   title: 'Edit any webform'
-  description: 'Allows managing any webform and its results.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+  description: 'Allows managing any webform and its results.'
+  restrict access: true
 'edit own webform':
   title: 'Edit own webform'
-  description: 'Allows managing of webform created by the user and its results.<br/><em>Warning: Give to trusted roles only; this permission has security implications.</em>'
+  description: 'Allows managing of webform created by the user and its results.'
 'delete any webform':
   title: 'Delete any webform'
+  restrict access: true
 'delete own webform':
   title: 'Delete own webform'
 
