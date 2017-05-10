@@ -89,19 +89,19 @@ class WebformEntitySettingsForm extends EntityForm {
     $default_settings = $this->config('webform.settings')->get('settings');
     $settings = $webform->getSettings();
 
-    // General.
-    $form['general'] = [
+    // General settings.
+    $form['general_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('General settings'),
       '#open' => TRUE,
     ];
-    $form['general']['id'] = [
+    $form['general_settings']['id'] = [
       '#type' => 'item',
       '#title' => $this->t('ID'),
       '#markup' => $webform->id(),
       '#value' => $webform->id(),
     ];
-    $form['general']['title'] = [
+    $form['general_settings']['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
       '#maxlength' => 255,
@@ -109,21 +109,21 @@ class WebformEntitySettingsForm extends EntityForm {
       '#required' => TRUE,
       '#id' => 'title',
     ];
-    $form['general']['description'] = [
+    $form['general_settings']['description'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Administrative description'),
       '#default_value' => $webform->get('description'),
     ];
     /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
     $webform_storage = $this->entityTypeManager->getStorage('webform');
-    $form['general']['category'] = [
+    $form['general_settings']['category'] = [
       '#type' => 'webform_select_other',
       '#title' => $this->t('Category'),
       '#options' => $webform_storage->getCategories(),
       '#empty_option' => '<' . $this->t('None') . '>',
       '#default_value' => $webform->get('category'),
     ];
-    $form['general']['template'] = [
+    $form['general_settings']['template'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow this webform to be used as a template.'),
       '#description' => $this->t('If checked, this webform will be available as a template to all users who can create new webforms.'),
@@ -131,7 +131,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#access' => $this->moduleHandler->moduleExists('webform_templates'),
       '#default_value' => $webform->isTemplate(),
     ];
-    $form['general']['results_disabled'] = [
+    $form['general_settings']['results_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable saving of submissions.'),
       '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts will be disabled. Submissions must be sent via an email or handled using a custom <a href=":href">webform handler</a>.', [':href' => Url::fromRoute('entity.webform.handlers_form', ['webform' => $webform->id()])->toString()]),
@@ -143,10 +143,10 @@ class WebformEntitySettingsForm extends EntityForm {
     // to the database.
     $is_submission_required = $webform->getHandlers(NULL, TRUE, NULL, WebformHandlerInterface::SUBMISSION_REQUIRED)->count();
     if ($is_submission_required) {
-      $form['general']['results_disabled']['#default_value'] = FALSE;
-      $form['general']['results_disabled']['#disabled'] = TRUE;
-      unset($form['general']['results_disabled']['#description']);
-      $form['general']['results_disabled_required'] = [
+      $form['general_settings']['results_disabled']['#default_value'] = FALSE;
+      $form['general_settings']['results_disabled']['#disabled'] = TRUE;
+      unset($form['general_settings']['results_disabled']['#description']);
+      $form['general_settings']['results_disabled_required'] = [
         '#type' => 'webform_message',
         '#message_type' => 'warning',
         '#message_message' => $this->messageManager->get(WebformMessageManagerInterface::HANDLER_SUBMISSION_REQUIRED),
@@ -157,7 +157,7 @@ class WebformEntitySettingsForm extends EntityForm {
     // handlers.
     $is_results_processed = $webform->getHandlers(NULL, TRUE, WebformHandlerInterface::RESULTS_PROCESSED)->count();
     if (!$is_results_processed) {
-      $form['general']['results_disabled_error'] = [
+      $form['general_settings']['results_disabled_error'] = [
         '#type' => 'webform_message',
         '#message_type' => 'warning',
         '#message_message' => $this->messageManager->get(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION),
@@ -168,7 +168,7 @@ class WebformEntitySettingsForm extends EntityForm {
           ],
         ],
       ];
-      $form['general']['results_disabled_ignore'] = [
+      $form['general_settings']['results_disabled_ignore'] = [
         '#type' => 'checkbox',
         '#title' => $this->t('Ignore disabled results warning'),
         '#description' => $this->t("If checked, all warnings and log messages about 'This webform is currently not saving any submitted data.' will be suppressed."),
@@ -182,8 +182,8 @@ class WebformEntitySettingsForm extends EntityForm {
       ];
     }
 
-    // Page.
-    $form['page'] = [
+    // Page settings.
+    $form['page_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('URL path settings'),
     ];
@@ -194,7 +194,7 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $default_settings['default_page_submit_path'] = $default_page_submit_path;
     $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
-    $form['page']['page'] = [
+    $form['page_settings']['page'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to post submission from a dedicated URL.'),
       '#description' => $this->t('If unchecked, this webform must be attached to a <a href=":node_href">node</a> or a <a href=":block_href">block</a> to receive submissions.', $t_args),
@@ -202,7 +202,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $settings['page'],
     ];
     if ($this->moduleHandler->moduleExists('path')) {
-      $form['page']['page_submit_path'] = [
+      $form['page_settings']['page_submit_path'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Webform URL alias'),
         '#description' => $this->t('Optionally specify an alternative URL by which the webform submit page can be accessed.', $t_args),
@@ -213,7 +213,7 @@ class WebformEntitySettingsForm extends EntityForm {
           ],
         ],
       ];
-      $form['page']['page_confirm_path'] = [
+      $form['page_settings']['page_confirm_path'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Confirmation page URL alias'),
         '#description' => $this->t('Optionally specify an alternative URL by which the webform confirmation page can be accessed.', $t_args),
@@ -226,12 +226,12 @@ class WebformEntitySettingsForm extends EntityForm {
       ];
     }
 
-    // Form.
-    $form['form'] = [
+    // Form settings.
+    $form['form_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Form settings'),
     ];
-    $form['form']['status'] = [
+    $form['form_settings']['status'] = [
       '#type' => 'radios',
       '#title' => $this->t('Form status'),
       '#default_value' => $webform->get('status'),
@@ -243,7 +243,7 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
 
     // @see \Drupal\webform\Plugin\Field\FieldWidget\WebformEntityReferenceAutocompleteWidget::formElement
-    $form['form']['scheduled'] = [
+    $form['form_settings']['scheduled'] = [
       '#type' => 'item',
       '#input' => FALSE,
       '#description' => $this->t('If the open date/time is left blank, this form will immediately be opened.') .
@@ -255,14 +255,14 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['form']['scheduled']['open'] = [
+    $form['form_settings']['scheduled']['open'] = [
       '#type' => 'datetime',
       '#title' => $this->t('Open'),
       '#prefix' => '<div class="container-inline form-item">',
       '#suffix' => '</div>',
       '#default_value' => $webform->get('open') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('open'))) : NULL,
     ];
-    $form['form']['scheduled']['close'] = [
+    $form['form_settings']['scheduled']['close'] = [
       '#type' => 'datetime',
       '#title' => $this->t('Close'),
       '#prefix' => '<div class="container-inline form-item">',
@@ -271,50 +271,50 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     // If the Webform templates module is enabled, add additional #states.
     if ($this->moduleHandler->moduleExists('webform_templates')) {
-      $form['form']['status']['#states'] = [
+      $form['form_settings']['status']['#states'] = [
         'visible' => [
           ':input[name="template"]' => ['checked' => FALSE],
         ],
       ];
-      $form['form']['scheduled']['#states']['visible'][':input[name="template"]'] = ['checked' => FALSE];
+      $form['form_settings']['scheduled']['#states']['visible'][':input[name="template"]'] = ['checked' => FALSE];
     }
 
-    $form['form']['form_open_message'] = [
+    $form['form_settings']['form_open_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Form open message'),
       '#description' => $this->t('A message to be displayed notifying the user that the webform is going to be opening to submissions. The opening message will only be displayed when a webform is scheduled to be opened.'),
       '#default_value' => $settings['form_open_message'],
     ];
-    $form['form']['form_close_message'] = [
+    $form['form_settings']['form_close_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Form closed message'),
       '#description' => $this->t("A message to be displayed notifying the user that the webform is closed. The closed message will be displayed when a webform's status is closed or a submission limit is reached."),
       '#default_value' => $settings['form_close_message'],
     ];
-    $form['form']['form_exception_message'] = [
+    $form['form_settings']['form_exception_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Form exception message'),
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
     ];
-    $form['form']['form_submit'] = [
+    $form['form_settings']['form_submit'] = [
       '#type' => 'details',
       '#title' => $this->t('Form submit button'),
     ];
-    $form['form']['form_submit']['form_submit_label'] = [
+    $form['form_settings']['form_submit']['form_submit_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Form submit button label'),
       '#size' => 20,
       '#default_value' => $settings['form_submit_label'],
     ];
-    $form['form']['form_submit']['form_submit_attributes'] = [
+    $form['form_settings']['form_submit']['form_submit_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Form submit button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['form_submit_attributes'],
     ];
 
-    // Form Behaviors.
+    // Form behaviors.
     $behavior_elements = [
       // Form specific behaviors.
       'form_disable_autocomplete' => [
@@ -367,21 +367,21 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $this->appendBehaviors($form['form_behaviors'], $behavior_elements, $settings, $default_settings);
 
-    // Attributes.
+    // Form attributes.
     $elements = $webform->getElementsDecoded();
-    $form['attributes'] = [
+    $form['form_attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Form attributes'),
     ];
-    $form['attributes']['attributes'] = [
+    $form['form_attributes']['attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Form'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.form_classes'),
       '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
 
-    // Wizard.
-    $form['wizard'] = [
+    // Wizard settings.
+    $form['wizard_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Wizard settings'),
       '#states' => [
@@ -390,71 +390,71 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['wizard']['wizard_progress_bar'] = [
+    $form['wizard_settings']['wizard_progress_bar'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show wizard progress bar'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_bar'],
     ];
-    $form['wizard']['wizard_progress_pages'] = [
+    $form['wizard_settings']['wizard_progress_pages'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show wizard progress pages'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_pages'],
     ];
-    $form['wizard']['wizard_progress_percentage'] = [
+    $form['wizard_settings']['wizard_progress_percentage'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show wizard progress percentage'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_percentage'],
     ];
-    $form['wizard']['wizard_prev_button'] = [
+    $form['wizard_settings']['wizard_prev_button'] = [
       '#type' => 'details',
       '#title' => $this->t('Previous wizard page button'),
       '#description' => $this->t('This is used for the previous page button within a wizard.'),
     ];
-    $form['wizard']['wizard_prev_button']['wizard_prev_button_label'] = [
+    $form['wizard_settings']['wizard_prev_button']['wizard_prev_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Previous wizard page button label'),
       '#size' => 20,
       '#default_value' => $settings['wizard_prev_button_label'],
     ];
-    $form['wizard']['wizard_prev_button']['wizard_prev_button_attributes'] = [
+    $form['wizard_settings']['wizard_prev_button']['wizard_prev_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Previous wizard page button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['wizard_prev_button_attributes'],
     ];
-    $form['wizard']['wizard_next_button'] = [
+    $form['wizard_settings']['wizard_next_button'] = [
       '#type' => 'details',
       '#title' => $this->t('Next wizard page button'),
       '#description' => $this->t('This is used for the next page button within a wizard.'),
     ];
-    $form['wizard']['wizard_next_button']['wizard_next_button_label'] = [
+    $form['wizard_settings']['wizard_next_button']['wizard_next_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Next wizard page button label'),
       '#size' => 20,
       '#default_value' => $settings['wizard_next_button_label'],
     ];
-    $form['wizard']['wizard_next_button']['wizard_next_button_attributes'] = [
+    $form['wizard_settings']['wizard_next_button']['wizard_next_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Next wizard page button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['wizard_next_button_attributes'],
     ];
-    $form['wizard']['wizard_complete'] = [
+    $form['wizard_settings']['wizard_complete'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include confirmation page in progress'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_complete'],
     ];
-    $form['wizard']['wizard_start_label'] = [
+    $form['wizard_settings']['wizard_start_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wizard start label'),
       '#size' => 20,
       '#default_value' => $settings['wizard_start_label'],
     ];
-    $form['wizard']['wizard_complete_label'] = [
+    $form['wizard_settings']['wizard_complete_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wizard end label'),
       '#size' => 20,
@@ -466,8 +466,8 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
     ];
 
-    // Preview.
-    $form['preview'] = [
+    // Preview settings.
+    $form['preview_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Preview settings'),
       '#states' => [
@@ -476,7 +476,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['preview']['preview'] = [
+    $form['preview_settings']['preview'] = [
       '#type' => 'radios',
       '#title' => $this->t('Enable preview page'),
       '#options' => [
@@ -487,7 +487,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' => $this->t('Add a page for previewing the webform before submitting.'),
       '#default_value' => $settings['preview'],
     ];
-    $form['preview']['settings'] = [
+    $form['preview_settings']['preview_container'] = [
       '#type' => 'container',
       '#states' => [
         'invisible' => [
@@ -496,62 +496,62 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
     ];
     // Preview next button.
-    $form['preview']['settings']['preview_next_button'] = [
+    $form['preview_settings']['preview_container']['preview_next_button'] = [
       '#type' => 'details',
       '#title' => $this->t('Preview button'),
     ];
-    $form['preview']['settings']['preview_next_button']['preview_next_button_label'] = [
+    $form['preview_settings']['preview_container']['preview_next_button']['preview_next_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview button label'),
       '#description' => $this->t('The text for the button that will proceed to the preview page.'),
       '#size' => 20,
       '#default_value' => $settings['preview_next_button_label'],
     ];
-    $form['preview']['settings']['preview_next_button']['preview_next_button_attributes'] = [
+    $form['preview_settings']['preview_container']['preview_next_button']['preview_next_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Preview button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['preview_next_button_attributes'],
     ];
     // Preview previous button.
-    $form['preview']['settings']['preview_prev_button'] = [
+    $form['preview_settings']['preview_container']['preview_prev_button'] = [
       '#type' => 'details',
       '#title' => $this->t('Previous page button'),
     ];
-    $form['preview']['settings']['preview_prev_button']['preview_prev_button_label'] = [
+    $form['preview_settings']['preview_container']['preview_prev_button']['preview_prev_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Previous page button label'),
       '#description' => $this->t('The text for the button to go backwards from the preview page.'),
       '#size' => 20,
       '#default_value' => $settings['preview_prev_button_label'],
     ];
-    $form['preview']['settings']['preview_prev_button']['preview_prev_button_attributes'] = [
+    $form['preview_settings']['preview_container']['preview_prev_button']['preview_prev_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Previous page button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['preview_prev_button_attributes'],
     ];
-    $form['preview']['settings']['preview_label'] = [
+    $form['preview_settings']['preview_container']['preview_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview label'),
       '#description' => $this->t('A text displayed within a wizard progress bar.'),
       '#default_value' => $settings['preview_label'],
     ];
-    $form['preview']['settings']['preview_title'] = [
+    $form['preview_settings']['preview_container']['preview_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview page title'),
       '#description' => $this->t('A title displayed on the preview page.'),
       '#default_value' => $settings['preview_title'],
     ];
-    $form['preview']['settings']['preview_message'] = [
+    $form['preview_settings']['preview_container']['preview_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Preview message'),
       '#description' => $this->t('A message to be displayed on the preview page.'),
       '#default_value' => $settings['preview_message'],
     ];
 
-    // Draft.
-    $form['draft'] = [
+    // Draft settings.
+    $form['draft_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Draft settings'),
       '#states' => [
@@ -561,7 +561,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['draft']['draft'] = [
+    $form['draft_settings']['draft'] = [
       '#type' => 'radios',
       '#title' => $this->t('Allow your users to save and finish the webform later'),
       '#default_value' => $settings['draft'],
@@ -571,7 +571,7 @@ class WebformEntitySettingsForm extends EntityForm {
         WebformInterface::DRAFT_ENABLED_ALL => $this->t('Authenticated and anonymous users'),
       ],
     ];
-    $form['draft']['draft_message'] = [
+    $form['draft_settings']['draft_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
       '#message_message' => $this->t('Please make sure to enable the <a href=":href">automatic purging of draft submissions</a>, to ensure that your database is not filled with abandoned anonymous submissions in draft.', [':href' => Url::fromRoute('<none>', [], ['fragment' => 'edit-purge'])->toString()]),
@@ -585,7 +585,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['draft']['settings'] = [
+    $form['draft_settings']['draft_container'] = [
       '#type' => 'container',
       '#states' => [
         'invisible' => [
@@ -593,45 +593,45 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['draft']['settings']['draft_auto_save'] = [
+    $form['draft_settings']['draft_container']['draft_auto_save'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Automatically save as draft when paging, previewing, and when there are validation errors.'),
       "#description" => $this->t('Automatically save partial submissions when users click the "Preview" button or when validation errors prevent a webform from being submitted.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['draft_auto_save'],
     ];
-    $form['draft']['settings']['draft_button'] = [
+    $form['draft_settings']['draft_container']['draft_button'] = [
       '#type' => 'details',
       '#title' => $this->t('Draft button'),
     ];
-    $form['draft']['settings']['draft_button']['draft_button_label'] = [
+    $form['draft_settings']['draft_container']['draft_button']['draft_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Draft button label'),
       '#description' => $this->t('The text for the button that will save a draft.'),
       '#size' => 20,
       '#default_value' => $settings['draft_button_label'],
     ];
-    $form['draft']['settings']['draft_button']['draft_button_attributes'] = [
+    $form['draft_settings']['draft_container']['draft_button']['draft_button_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Draft button'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
       '#default_value' => $settings['draft_button_attributes'],
     ];
-    $form['draft']['settings']['draft_saved_message'] = [
+    $form['draft_settings']['draft_container']['draft_saved_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Draft saved message'),
       '#description' => $this->t('Message to be displayed when a draft is saved.'),
       '#default_value' => $settings['draft_saved_message'],
     ];
-    $form['draft']['settings']['draft_loaded_message'] = [
+    $form['draft_settings']['draft_container']['draft_loaded_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Draft loaded message'),
       '#description' => $this->t('Message to be displayed when a draft is loaded.'),
       '#default_value' => $settings['draft_loaded_message'],
     ];
 
-    // Submission.
-    $form['submission'] = [
+    // Submission settings.
+    $form['submission_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission settings'),
       '#states' => [
@@ -641,7 +641,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['submission']['next_serial'] = [
+    $form['submission_settings']['next_serial'] = [
       '#type' => 'number',
       '#title' => $this->t('Next submission number'),
       '#description' => $this->t('The value of the next submission number. This is usually 1 when you start and will go up with each webform submission.'),
@@ -649,7 +649,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $webform->getState('next_serial') ?: 1,
     ];
 
-    // Submission Behaviors.
+    // Submission behaviors.
     $form['submission_behaviors'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission behaviors'),
@@ -710,8 +710,8 @@ class WebformEntitySettingsForm extends EntityForm {
     ];
     $this->appendBehaviors($form['submission_behaviors'], $behavior_elements, $settings, $default_settings);
 
-    // Limits.
-    $form['limits'] = [
+    // Submission limits.
+    $form['submission_limits'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission limits'),
       '#states' => [
@@ -721,43 +721,44 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['limits']['limit_total'] = [
+    $form['submission_limits']['limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit'),
       '#min' => 1,
       '#default_value' => $settings['limit_total'],
     ];
-    $form['limits']['entity_limit_total'] = [
+    $form['submission_limits']['entity_limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit per source entity'),
       '#min' => 1,
       '#default_value' => $settings['entity_limit_total'],
     ];
-    $form['limits']['limit_total_message'] = [
+    $form['submission_limits']['limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Total submissions limit message'),
       '#min' => 1,
       '#default_value' => $settings['limit_total_message'],
     ];
-    $form['limits']['limit_user'] = [
+    $form['submission_limits']['limit_user'] = [
       '#type' => 'number',
       '#title' => $this->t('Per user submission limit'),
       '#min' => 1,
       '#default_value' => $settings['limit_user'],
     ];
-    $form['limits']['entity_limit_user'] = [
+    $form['submission_limits']['entity_limit_user'] = [
       '#type' => 'number',
       '#min' => 1,
       '#title' => $this->t('Per user submission limit per source entity'),
       '#default_value' => $settings['entity_limit_user'],
     ];
-    $form['limits']['limit_user_message'] = [
+    $form['submission_limits']['limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Per user submission limit message'),
       '#default_value' => $settings['limit_user_message'],
     ];
 
-    $form['purge'] = [
+    // Purge settings.
+    $form['purge_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission purging'),
       '#states' => [
@@ -767,7 +768,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['purge']['purge'] = [
+    $form['purge_settings']['purge'] = [
       '#type' => 'select',
       '#title' => $this->t('Automatically purge'),
       '#options' => [
@@ -778,7 +779,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
       '#default_value' => $settings['purge'],
     ];
-    $form['purge']['purge_days'] = [
+    $form['purge_settings']['purge_days'] = [
       '#type' => 'number',
       '#title' => $this->t('Days to retain submissions'),
       '#min' => 1,
@@ -790,8 +791,8 @@ class WebformEntitySettingsForm extends EntityForm {
       '#field_suffix' => $this->t('days'),
     ];
 
-    // Confirmation.
-    $form['confirmation'] = [
+    // Confirmation settings.
+    $form['confirmation_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Confirmation settings'),
       '#states' => [
@@ -800,7 +801,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['confirmation_type'] = [
+    $form['confirmation_settings']['confirmation_type'] = [
       '#title' => $this->t('Confirmation type'),
       '#type' => 'radios',
       '#options' => [
@@ -812,7 +813,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
       '#default_value' => $settings['confirmation_type'],
     ];
-    $form['confirmation']['confirmation_url'] = [
+    $form['confirmation_settings']['confirmation_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Confirmation URL'),
       '#description' => $this->t('URL to redirect the user to upon successful submission.'),
@@ -826,7 +827,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['confirmation_title'] = [
+    $form['confirmation_settings']['confirmation_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Confirmation title'),
       '#description' => $this->t('Page title to be shown upon successful submission.'),
@@ -837,7 +838,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['confirmation_message'] = [
+    $form['confirmation_settings']['confirmation_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Confirmation message'),
       '#description' => $this->t('Message to be shown upon successful submission.'),
@@ -848,7 +849,7 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['page'] = [
+    $form['confirmation_settings']['confirmation_page'] = [
       '#type' => 'container',
       '#states' => [
         'visible' => [
@@ -858,19 +859,19 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['page']['confirmation_attributes'] = [
+    $form['confirmation_settings']['confirmation_page']['confirmation_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Confirmation'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.confirmation_classes'),
       '#default_value' => $settings['confirmation_attributes'],
     ];
-    $form['confirmation']['page']['confirmation_back'] = [
+    $form['confirmation_settings']['confirmation_page']['confirmation_back'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display back to webform link'),
       '#return_value' => TRUE,
       '#default_value' => $settings['confirmation_back'],
     ];
-    $form['confirmation']['page']['back'] = [
+    $form['confirmation_settings']['confirmation_page']['back'] = [
       '#type' => 'details',
       '#title' => $this->t('Confirmation back link'),
       '#states' => [
@@ -879,27 +880,27 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['page']['back']['confirmation_back_label'] = [
+    $form['confirmation_settings']['confirmation_page']['back']['confirmation_back_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Confirmation back link label'),
       '#size' => 20,
       '#default_value' => $settings['confirmation_back_label'],
     ];
-    $form['confirmation']['page']['back']['confirmation_back_attributes'] = [
+    $form['confirmation_settings']['confirmation_page']['back']['confirmation_back_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Confirmation back link'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.confirmation_back_classes'),
       '#default_value' => $settings['confirmation_back_attributes'],
     ];
-    $form['confirmation']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
-    // Author.
-    $form['author'] = [
+    // Author information.
+    $form['author_information'] = [
       '#type' => 'details',
       '#title' => $this->t('Author information'),
       '#access' => $this->currentUser()->hasPermission('administer webform'),
     ];
-    $form['author']['uid'] = [
+    $form['author_information']['uid'] = [
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Authored by'),
       '#description' => $this->t("The username of the webform author/owner."),
@@ -928,20 +929,20 @@ class WebformEntitySettingsForm extends EntityForm {
       ksort($form['third_party_settings']);
     }
 
-    // Custom.
+    // Custom settings.
     $properties = WebformElementHelper::getProperties($webform->getElementsDecoded());
     // Set default properties.
     $properties += [
       '#method' => '',
       '#action' => '',
     ];
-    $form['custom'] = [
+    $form['custom_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Custom settings'),
       '#open' => array_filter($properties) ? TRUE : FALSE,
       '#access' => !$this->moduleHandler->moduleExists('webform_ui') || $this->currentUser()->hasPermission('edit webform source'),
     ];
-    $form['custom']['method'] = [
+    $form['custom_settings']['method'] = [
       '#type' => 'select',
       '#title' => $this->t('Method'),
       '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br/>' .
@@ -953,7 +954,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
       '#default_value' => $properties['#method'],
     ];
-    $form['custom']['method_message'] = [
+    $form['custom_settings']['method_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
       '#message_message' => $this->t("Please make sure this webform's action URL or path is setup to handle the webform's submission."),
@@ -964,7 +965,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
     ];
 
-    $form['custom']['action'] = [
+    $form['custom_settings']['action'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Action'),
       '#description' => $this->t('The URL or path to which the webform will be submitted.'),
@@ -985,7 +986,7 @@ class WebformEntitySettingsForm extends EntityForm {
       $properties['#novalidate'],
       $properties['#attributes']
     );
-    $form['custom']['custom'] = [
+    $form['custom_settings']['custom'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
@@ -1193,4 +1194,5 @@ class WebformEntitySettingsForm extends EntityForm {
       }
     }
   }
+
 }
