@@ -137,5 +137,45 @@ function hook_webform_submission_form_alter(array &$form, \Drupal\Core\Form\Form
 }
 
 /**
+ * Perform alterations on webform admin third party settings form.
+ *
+ * This hook is identical to hook_form_alter() but allows contrib and custom
+ * modules to define third party settings.
+ *
+ * @param array $form
+ *   Nested array of form elements that comprise the webform.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ *
+ * @see \Drupal\webform\Form\WebformAdminSettingsForm
+ * @see webform.honeypot.inc
+ *
+ * @ingroup form_api
+ */
+function hook_webform_admin_third_party_settings_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+
+}
+
+/**
+ * Perform alterations on webform third party settings form.
+ *
+ * This hook is identical to hook_form_alter() but allows contrib and custom
+ * modules to define third party settings.
+ *
+ * @param array $form
+ *   Nested array of form elements that comprise the webform.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ *
+ * @see \Drupal\webform\WebformEntitySettingsForm
+ * @see webform.honeypot.inc
+ *
+ * @ingroup form_api
+ */
+function hook_webform_third_party_settings_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

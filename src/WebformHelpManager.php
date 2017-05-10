@@ -1166,17 +1166,6 @@ $status_report
       $this->t('Exporters are used to export results into a downloadable format that can be used by MS Excel, Google Sheets, and other spreadsheet applications.'),
     ];
 
-    // Third party settings.
-    $help['third_party'] = [
-      'routes' => [
-        // @see /admin/structure/webform/settings/third-party
-        'webform.admin_settings.third_party',
-      ],
-      'title' => $this->t('Configuring global third party settings'),
-      'url' => Url::fromRoute('webform.admin_settings.third_party'),
-      'content' => $this->t('The Third party settings page allows contrib and custom modules to define global settings that are applied to all webforms and submissions.'),
-    ];
-
     // Addons.
     $help['addons'] = [
       'routes' => [
@@ -1300,16 +1289,6 @@ $status_report
       $this->t('Handlers are <a href=":href">plugins</a> that act on a webform submission.', [':href' => 'https://www.drupal.org/developing/api/8/plugins']) . ' ' .
       $this->t('For example, sending email confirmations and notifications is done using the Email handler which is provided by the Webform module.'),
       'video_id' => 'submissions',
-    ];
-
-    // Webform third party settings.
-    $help['webform_third_party'] = [
-      'routes' => [
-        // @see /admin/structure/webform/manage/{webform}/third_party
-        'entity.webform.third_party_settings_form',
-      ],
-      'title' => $this->t('Configuring third party settings'),
-      'content' => $this->t('The Third party settings page allows contrib and custom modules to define webform specific customization settings.'),
     ];
 
     // Webform translations.

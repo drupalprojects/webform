@@ -84,9 +84,9 @@ function _webform_antibot_form_validate(&$form, FormStateInterface $form_state) 
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_webform_admin_third_party_settings_form_alter().
  */
-function antibot_form_webform_admin_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+function antibot_webform_admin_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
   $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
 
@@ -103,9 +103,9 @@ function antibot_form_webform_admin_third_party_settings_form_alter(&$form, Form
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_webform_third_party_settings_form_alter().
  */
-function antibot_form_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+function antibot_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
   $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
 

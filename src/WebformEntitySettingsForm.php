@@ -41,6 +41,13 @@ class WebformEntitySettingsForm extends EntityForm {
   protected $tokenManager;
 
   /**
+   * The webform third party settings manager.
+   *
+   * @var \Drupal\webform\WebformThirdPartySettingsManagerInterface
+   */
+  protected $thirdPartySettingsManager;
+
+  /**
    * Constructs a WebformEntitySettingsForm.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
@@ -50,10 +57,11 @@ class WebformEntitySettingsForm extends EntityForm {
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.
    */
-  public function __construct(AccountInterface $current_user, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
+  public function __construct(AccountInterface $current_user, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager) {
     $this->currentUser = $current_user;
     $this->messageManager = $message_manager;
     $this->tokenManager = $token_manager;
+    $this->thirdPartySettingsManager = $third_party_settings_manager;
   }
 
   /**
@@ -63,7 +71,8 @@ class WebformEntitySettingsForm extends EntityForm {
     return new static(
       $container->get('current_user'),
       $container->get('webform.message_manager'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('webform.third_party_settings_manager')
     );
   }
 
@@ -904,6 +913,21 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $webform->getOwner(),
     ];
 
+    // Third party settings.
+    $form['third_party_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Third party settings'),
+      '#description' => $this->t('Third party settings allow contrib and custom modules to define webform specific customization settings.'),
+      '#tree' => TRUE,
+    ];
+    $this->thirdPartySettingsManager->alter('webform_third_party_settings_form', $form, $form_state);
+    if (!Element::children($form['third_party_settings'])) {
+      $form['third_party_settings']['#access'] = FALSE;
+    }
+    else {
+      ksort($form['third_party_settings']);
+    }
+
     // Custom.
     $properties = WebformElementHelper::getProperties($webform->getElementsDecoded());
     // Set default properties.
@@ -1045,10 +1069,21 @@ class WebformEntitySettingsForm extends EntityForm {
       $values['custom']
     );
 
-    /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
-    $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
+    // Set third party settings.
+    if (isset($values['third_party_settings'])) {
+      $third_party_settings = $values['third_party_settings'];
+      foreach ($third_party_settings as $module => $third_party_setting) {
+        foreach ($third_party_setting as $key => $value) {
+          $webform->setThirdPartySetting($module, $key, $value);
+        }
+      }
+      // Remove third party settings.
+      unset($values['third_party_settings']);
+    }
 
     // Set next serial number.
+    /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
+    $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
     $next_serial = (int) $values['next_serial'];
     $max_serial = $submission_storage->getMaxSerial($webform);
     if ($next_serial < $max_serial) {

@@ -8,9 +8,9 @@
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_webform_admin_third_party_settings_form_alter().
  */
-function webform_test_third_party_settings_form_webform_admin_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+function webform_test_third_party_settings_webform_admin_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
   /** @var \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager */
   $third_party_settings_manager = \Drupal::service('webform.third_party_settings_manager');
 
@@ -27,9 +27,9 @@ function webform_test_third_party_settings_form_webform_admin_third_party_settin
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_webform_third_party_settings_form_alter().
  */
-function webform_test_third_party_settings_form_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
+function webform_test_third_party_settings_webform_third_party_settings_form_alter(&$form, FormStateInterface $form_state) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $form_state->getFormObject()->getEntity();
 

@@ -74,6 +74,13 @@ class WebformThirdPartySettingsManager implements WebformThirdPartySettingsManag
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function alter($type, &$data, &$context1 = NULL, &$context2 = NULL) {
+    $this->moduleHandler->alter($type, $data, $context1, $context2);
+  }
+
+  /**
    * Load all third party settings includes.
    *
    * @see {module}/{module}.webform.inc
@@ -87,60 +94,6 @@ class WebformThirdPartySettingsManager implements WebformThirdPartySettingsManag
       $this->moduleHandler->loadInclude($module, 'webform.inc', "webform/$module");
       $this->moduleHandler->loadInclude('webform', "inc", "third_party_settings/webform.$module");
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function alter($type, &$data, &$context1 = NULL, &$context2 = NULL) {
-    $this->moduleHandler->alter($type, $data, $context1, $context2);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['third_party_settings'] = [
-      '#tree' => TRUE,
-    ];
-    $form['#after_build'] = [[$this, 'afterBuild']];
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function afterBuild(array $form, FormStateInterface $form_state) {
-    // If third party settings are empty.
-    if (!isset($form['third_party_settings']) || !Element::children($form['third_party_settings'])) {
-      // Hide all actions including the 'Save configuration' button.
-      $form['actions']['#access'] = FALSE;
-
-      // Display info message.
-      $form['message'] = [
-        '#type' => 'webform_message',
-        '#message_message' => $this->t('There are no third party settings available. Please install a contributed module that integrates with the Webform module.'),
-        '#message_type' => 'info',
-      ];
-
-      // Link to supported Third party settings modules.
-      $form['supported'] = [
-        'title' => [
-          '#markup' => $this->t('Supported modules.'),
-          '#prefix' => '<h3>',
-          '#suffix' => '</h3>',
-        ],
-        'modules' => [
-          '#theme' => 'admin_block_content',
-          '#content' => $this->addonsManager->getThirdPartySettings(),
-        ],
-      ];
-    }
-    else {
-      ksort($form['third_party_settings']);
-    }
-
-    return $form;
   }
 
   /**

@@ -56,11 +56,6 @@ webform.settings.exporters:
   route_name: webform.exporter_plugins
   parent_id: webform.settings
 
-webform.admin_settings.third_party:
-  title: 'Third Party'
-  route_name: webform.admin_settings.third_party
-  parent_id: webform.settings
-
 webform.addons:
   title: 'Add-ons'
   route_name: webform.addons
@@ -113,12 +108,6 @@ entity.webform.edit_form_handlers:
   route_name: entity.webform.handlers_form
   parent_id: entity.webform.edit_form
   weight: 13
-
-entity.webform.edit_form_third_party_settings:
-  title: 'Third party'
-  route_name: entity.webform.third_party_settings_form
-  parent_id: entity.webform.edit_form
-  weight: 14
 
 entity.webform.results:
   title: 'Results'
