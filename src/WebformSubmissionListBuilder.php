@@ -667,7 +667,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $sub_query = Database::getConnection()->select('webform_submission_data', 'sd')
         ->fields('sd', ['sid'])
         ->condition('value', '%' . $keys . '%', 'LIKE');
-      $submission_storage->addQueryConditions($sub_query, $this->webform, $this->sourceEntity, $this->account);
+      $submission_storage->addQueryConditions($sub_query, $this->webform);
 
       $or = $query->orConditionGroup()
         ->condition('sid', $sub_query, 'IN')
