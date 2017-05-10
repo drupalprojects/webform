@@ -846,10 +846,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $item_function = 'format' . $type . 'Item';
     $items_function = 'format' . $type . 'Items';
     if ($this->hasMultipleValues($element)) {
+      // Return #delta which is used by tokens.
+      // @see _webform_token_get_submission_value()
+      if (isset($element['#delta']) && isset($value[$element['#delta']])) {
+        return $this->$item_function($element, $value[$element['#delta']], $options);
+      }
+
       $items = [];
       foreach ($value as $item) {
         $items[] = $this->$item_function($element, $item, $options);
       }
+
       return $this->$items_function($element, $items, $options);
     }
     else {

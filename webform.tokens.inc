@@ -5,10 +5,12 @@
  * Builds placeholder replacement tokens for webforms and submissions.
  */
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
 use Drupal\webform\Utility\WebformDateHelper;
+use Drupal\webform\WebformElementManagerInterface;
 
 /**
  * Implements hook_token_info().
@@ -92,10 +94,25 @@ function webform_token_info() {
   ];
   $webform_submission['values'] = [
     'name' => t('Submission values'),
-    'description' => t("Webform tokens from submitted data. Replace the '?' with the 'element_key', 'element_key:format' or 'element_key:format:items'.") . ' ' .
-      t("The 'format' can be 'value', 'raw', or custom format specifically associated with the element") . ' ' .
-      t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . ' ' .
-      t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token."),
+    'description' => new FormattableMarkup((string) t('Webform tokens from submitted data.') .
+      t("Replace the '?' with...") . '<br/>' .
+      '<ul>' .
+      '<li>element_key</li>' .
+      '<li>element_key:format:items</li>' .
+      '<li>element_key:delta</li>' .
+      '<li>element_key:sub_element_key</li>' .
+      '<li>element_key:delta:sub_element_key</li>' .
+      '<li>element_key:delta:format</li>' .
+      '<li>element_key:delta:format:html</li>' .
+      '</ul>' .
+      t("All items after the 'element_key' are optional.") . '<br/>' .
+      t("The 'delta' is the numeric index for specific value") . '<br/>' .
+      t("The 'sub_element_key' is a composite element's sub element key.") . '<br/>' .
+      t("The 'format' can be 'value', 'raw', or custom format specifically associated with the element") . '<br/>' .
+      t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . '<br/>' .
+      t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br/>' .
+      t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token.")
+    , []),
     'dynamic' => TRUE,
   ];
   // Chained tokens for webform submissions.
@@ -394,25 +411,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
     if ($value_tokens = $token_service->findWithPrefix($tokens, 'values')) {
       foreach ($value_tokens as $value_token => $original) {
-        // Parse [values:{name}:{format}] token with optional format.
-        $keys = explode(':', $value_token);
-        $key = $keys[0];
-        $format_item = (isset($keys[1])) ? $keys[1] : NULL;
-        $format_items = (isset($keys[2])) ? $keys[2] : NULL;
-        if (isset($submission_data[$key]) && isset($form_elements[$key])) {
-          $element = $form_elements[$key];
-          // Apply #format to the element.
-          if (isset($format_item)) {
-            $element['#format'] = $format_item;
-          }
-          if (isset($format_items)) {
-            $element['#format_items'] = $format_items;
-          }
-          $format_method = (empty($submission_options['html'])) ? 'formatText' : 'formatHtml';
-          $value = $element_manager->invokeMethod($format_method, $element, $submission_data[$key], $submission_options);
-          // Note, tokens can't include CSS and JS libraries since they will
-          // can be included in an email.
-          $replacements[$original] = (is_array($value)) ? \Drupal::service('renderer')->renderPlain($value) : (string) $value;
+        $value = _webform_token_get_submission_value($value_token, $submission_options, $submission_data, $form_elements, $element_manager);
+        if ($value !== NULL) {
+          $replacements[$original] = $value;
         }
       }
     }
@@ -504,4 +505,73 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   }
 
   return $replacements;
+}
+
+function _webform_token_get_submission_value($value_token, array $submission_options, array $submission_data, array $form_elements, WebformElementManagerInterface $element_manager) {
+  // Formats:
+  // [values:{element_key}:{format}]
+  // [values:{element_key}:{format}:{items}]
+  // [values:{element_key}:{format}:html]
+  // [values:{element_key}:{format}:{items}:html]
+  // [values:{element_key}:{delta}:{format}]
+  // [values:{element_key}:{delta}:{sub-element}]
+
+  $keys = explode(':', $value_token);
+
+  $element_key = array_shift($keys);
+
+  // Exit is submission value or form element does not exit.
+  if (!isset($submission_data[$element_key]) || !isset($form_elements[$element_key])) {
+    return NULL;
+  }
+
+  $element = $form_elements[$element_key];
+  $element_handler = $element_manager->getElementInstance($element);
+
+  // Look for :html which indicates the tokens should be formatted as HTML
+  // instead of plain text.
+  if ($keys && in_array('html', $keys)) {
+    $keys = array_diff($keys, ['html']);
+    $submission_options['html'] = TRUE;
+  }
+
+  // If multiple value element look for delta.
+  if ($keys && $element_handler->hasMultipleValues($element) && is_numeric($keys[0])) {
+    $delta = array_shift($keys);
+    if (!isset($submission_data[$element_key][$delta])) {
+      return NULL;
+    }
+
+    $element['#delta'] = $delta;
+  }
+  else {
+    $delta = NULL;
+  }
+
+  // If composite element look for sub-element key.
+  if ($keys && $element_handler->isComposite()) {
+    // Return sub-element value without any formatting.
+    // @todo: Add support for formatting sub-elements,
+    if (!is_null($delta) && isset($submission_data[$element_key][$delta]) && isset($submission_data[$element_key][$delta][$keys[0]])) {
+      return $submission_data[$element_key][$delta][$keys[0]];
+    }
+    elseif (isset($submission_data[$element_key][$keys[0]])) {
+      return $submission_data[$element_key][$keys[0]];
+    }
+  }
+
+  // Set format and items format.
+  if ($keys) {
+    $element['#format'] = array_shift($keys);
+  }
+  if ($keys) {
+    $element['#format_items'] = array_shift($keys);
+  }
+
+  $format_method = (empty($submission_options['html'])) ? 'formatText' : 'formatHtml';
+  $value = $element_manager->invokeMethod($format_method, $element, $submission_data[$element_key], $submission_options);
+
+  // Note, tokens can't include CSS and JS libraries since they will
+  // can be included in an email.
+  return (is_array($value)) ? \Drupal::service('renderer')->renderPlain($value) : (string) $value;
 }
