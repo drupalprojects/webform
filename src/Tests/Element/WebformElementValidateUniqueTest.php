@@ -20,20 +20,10 @@ class WebformElementValidateUniqueTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_validate_unique'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests element validate unique.
    */
   public function testElementValidateUnique() {
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     $webform = Webform::load('test_element_validate_unique');
 

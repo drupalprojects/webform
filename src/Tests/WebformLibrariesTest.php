@@ -46,7 +46,7 @@ class WebformLibrariesTest extends WebformTestBase {
       'select2' => 'properties[select2]',
     ];
 
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     // Enable jquery.chosen.
     $this->drupalPostForm('admin/structure/webform/settings', ['libraries[excluded_libraries][jquery.chosen]' => TRUE], t('Save configuration'));

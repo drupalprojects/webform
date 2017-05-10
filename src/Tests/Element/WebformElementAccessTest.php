@@ -56,7 +56,7 @@ class WebformElementAccessTest extends WebformTestBase {
     $webform_submission = WebformSubmission::load($sid);
 
     // Check admins have 'administer webform element access' permission.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $this->drupalGet('admin/structure/webform/manage/test_element_access/element/access_create_roles_anonymous/edit');
     $this->assertFieldById('edit-properties-access-create-roles-anonymous');
 
@@ -132,7 +132,7 @@ class WebformElementAccessTest extends WebformTestBase {
       $this->assertNoRaw('access_view_users (USER:' . $this->adminSubmissionUser->id() . ')');
 
       // Check authenticated role access.
-      $this->drupalLogin($this->adminWebformUser);
+      $this->drupalLogin($this->rootUser);
       $this->drupalGet($url['path'], $url['options']);
       $this->assertNoRaw('access_view_roles (anonymous)');
       $this->assertRaw('access_view_roles (authenticated)');
@@ -170,7 +170,7 @@ class WebformElementAccessTest extends WebformTestBase {
       $this->assertNoRaw($raw, 'Authenticated user can not access token');
 
       // Check admin webform access.
-      $this->drupalLogin($this->adminWebformUser);
+      $this->drupalLogin($this->rootUser);
       $this->drupalGet($url['path'], $url['options']);
       $this->assertRaw($raw, 'Admin webform user can access token');
 

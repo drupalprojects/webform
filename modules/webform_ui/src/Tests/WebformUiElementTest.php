@@ -27,22 +27,12 @@ class WebformUiElementTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_dates'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests element.
    */
   public function testElements() {
     global $base_path;
 
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     $webform_contact = Webform::load('contact');
 

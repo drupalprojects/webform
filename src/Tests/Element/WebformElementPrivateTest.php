@@ -45,7 +45,7 @@ class WebformElementPrivateTest extends WebformTestBase {
     $this->assertNoFieldByName('private', '');
 
     // Check element with #private property visible for admin user.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $this->drupalGet('webform/test_element_private');
     $this->assertFieldByName('private', '');
   }

@@ -34,22 +34,12 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
   ];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests elements.
    */
   public function testElements() {
     global $base_path;
 
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     /* Test invalid elements */
 
@@ -93,7 +83,7 @@ class WebformSubmissionFormElementTest extends WebformTestBase {
 
     // Check editing webform settings style attributes and custom properties
     // updates the element's root properties.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $edit = [
       'attributes[class][select][]' => ['form--inline clearfix', '_other_'],
       'attributes[class][other]' => 'test-form-properties',

@@ -16,16 +16,6 @@ class WebformPathTest extends WebformTestBase {
   public static $modules = ['path', 'webform'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests YAML page and title.
    */
   public function testPaths() {
@@ -60,7 +50,7 @@ class WebformPathTest extends WebformTestBase {
     $this->assertResponse(404, 'Submit URL alias does not exist');
 
     // Check hidden page visible to admin.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(200, 'Submit system path access permitted');
     $this->drupalLogout();
@@ -74,7 +64,7 @@ class WebformPathTest extends WebformTestBase {
 
     // Check custom base path.
     $webform->setSettings([])->save();
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $this->drupalPostForm('admin/structure/webform/settings', ['page[default_page_base_path]' => 'base/path'], t('Save configuration'));
     $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()));
     $this->assertResponse(200, 'Submit URL alias with custom base path exists');

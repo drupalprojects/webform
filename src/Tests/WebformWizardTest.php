@@ -30,8 +30,7 @@ class WebformWizardTest extends WebformTestBase {
    * Test webform advanced wizard.
    */
   public function testBasicWizard() {
-    $this->createUsers();
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     // Create a wizard submission.
     $wizard_webform = Webform::load('test_form_wizard_basic');

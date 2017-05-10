@@ -27,22 +27,12 @@ class WebformAdminSettingsTest extends WebformTestBase {
   protected static $testWebforms = ['test_element', 'test_element_html_editor'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests webform admin settings.
    */
   public function testAdminSettings() {
     global $base_path;
 
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     /* Settings Webform */
 

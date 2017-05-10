@@ -27,23 +27,13 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
   protected static $testWebforms = ['test_handler_remote_post'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Test remote post handler.
    */
   public function testRemotePostHandler() {
     /** @var \Drupal\webform\WebformInterface $webform_handler_remote */
     $webform_handler_remote = Webform::load('test_handler_remote_post');
 
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     // Check remote post 'create' operation.
     $sid = $this->postSubmission($webform_handler_remote);

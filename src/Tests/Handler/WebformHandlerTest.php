@@ -28,20 +28,10 @@ class WebformHandlerTest extends WebformTestBase {
   protected static $testWebforms = ['test_handler_test'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests webform handler plugin.
    */
   public function testWebformHandler() {
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     // Get the webform test handler.
     /** @var \Drupal\webform\WebformInterface $webform_handler_test */
@@ -120,7 +110,7 @@ class WebformHandlerTest extends WebformTestBase {
     $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:alterForm');
 
     // Check admin can still post submission.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $this->drupalGet('webform/test_handler_test');
     $this->assertFieldByName('op', 'Submit');
     $this->assertRaw('This webform is currently not saving any submitted data.');

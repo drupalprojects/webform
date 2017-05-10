@@ -24,9 +24,6 @@ class WebformBlockContextTest extends WebformTestBase {
   public function setUp() {
     parent::setUp();
 
-    // Create users.
-    $this->createUsers();
-
     // Manually install blocks.
     $contexts = [
       'webform' => '@webform.webform_route_context:webform',
@@ -59,7 +56,7 @@ class WebformBlockContextTest extends WebformTestBase {
    * Tests webform block context.
    */
   public function testBlockcontext() {
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $webform = Webform::load('contact');
 
     // Check webform context.

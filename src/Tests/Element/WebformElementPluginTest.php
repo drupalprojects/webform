@@ -28,20 +28,10 @@ class WebformElementPluginTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_plugin_test'];
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Tests webform element plugin.
    */
   public function testWebformElement() {
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     /**************************************************************************/
     // Dependencies. @see hook_webform_element_info_alter()

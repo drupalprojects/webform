@@ -62,7 +62,7 @@ class WebformTemplatesTest extends WebformTestBase {
     $this->assertRaw('You are previewing the below template,');
 
     // Login the admin user.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
   }
 
 }

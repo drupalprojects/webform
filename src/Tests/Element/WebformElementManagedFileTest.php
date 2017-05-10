@@ -166,7 +166,7 @@ class WebformElementManagedFileTest extends WebformTestBase {
     return;
 
     // Get test webform preview with test values.
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
     $this->drupalPostForm('webform/test_element_media_file/test', [], t('Preview'));
 
     // Check audio file preview.

@@ -13,16 +13,6 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformHandlerEmailStatesTest extends WebformTestBase {
 
   /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Create users.
-    $this->createUsers();
-  }
-
-  /**
    * Webforms to load.
    *
    * @var array
@@ -43,7 +33,7 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
     $sid = $this->postSubmission($webform);
     $this->assertRaw('Debug: Email: Submission completed');
 
-    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalLogin($this->rootUser);
 
     // Check converted email.
     $email = $this->getLastEmail();
