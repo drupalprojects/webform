@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for Chosen integration.
+ * JavaScript behaviors for Chosen integration.
  */
 
 (function ($, Drupal) {

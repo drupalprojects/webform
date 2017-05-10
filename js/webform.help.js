@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for help.
+ * JavaScript behaviors for help.
  */
 
 (function ($, Drupal) {

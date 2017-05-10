@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for range element integration.
+ * JavaScript behaviors for range element integration.
  */
 
 (function ($, Drupal) {

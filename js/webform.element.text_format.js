@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for Text format integration.
+ * JavaScript behaviors for Text format integration.
  */
 
 (function ($, Drupal) {

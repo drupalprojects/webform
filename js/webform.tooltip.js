@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for jQuery UI tooltip integration.
+ * JavaScript behaviors for jQuery UI tooltip integration.
  *
  * Please Note:
  * jQuery UI's tooltip implementation is not very responsive or adaptive.

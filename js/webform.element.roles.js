@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for roles element integration.
+ * JavaScript behaviors for roles element integration.
  */
 
 (function ($, Drupal) {

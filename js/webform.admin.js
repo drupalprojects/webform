@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for admin pages.
+ * JavaScript behaviors for admin pages.
  */
 
 (function ($, Drupal) {

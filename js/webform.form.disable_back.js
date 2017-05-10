@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript to disable back button.
+ * JavaScript to disable back button.
  */
 
 (function () {

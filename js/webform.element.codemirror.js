@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for CodeMirror integration.
+ * JavaScript behaviors for CodeMirror integration.
  */
 
 (function ($, Drupal) {

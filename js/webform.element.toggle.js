@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for toggle integration.
+ * JavaScript behaviors for toggle integration.
  */
 
 (function ($, Drupal) {

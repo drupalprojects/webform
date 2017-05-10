@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for webform_image_select and jQuery Image Picker integration.
+ * JavaScript behaviors for webform_image_select and jQuery Image Picker integration.
  */
 
 (function ($, Drupal) {

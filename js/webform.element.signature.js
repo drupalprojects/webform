@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for signature pad integration.
+ * JavaScript behaviors for signature pad integration.
  */
 
 (function ($, Drupal) {

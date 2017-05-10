@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for custom webform #states.
+ * JavaScript behaviors for custom webform #states.
  */
 
 (function ($, Drupal) {

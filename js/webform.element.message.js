@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for message element integration.
+ * JavaScript behaviors for message element integration.
  */
 
 (function ($, Drupal) {

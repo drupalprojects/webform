@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for Select2 integration.
+ * JavaScript behaviors for Select2 integration.
  */
 
 (function ($, Drupal) {

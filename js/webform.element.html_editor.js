@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for HTML editor integration.
+ * JavaScript behaviors for HTML editor integration.
  */
 
 (function ($, Drupal, drupalSettings) {

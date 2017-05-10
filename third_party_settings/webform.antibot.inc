@@ -50,7 +50,7 @@ function _webform_antibot_form(array &$form, FormStateInterface $form_state, $an
     '#type' => 'details',
     '#title' => t('Antibot'),
     '#open' => TRUE,
-    '#description' => t('Prevent SPAM webform submissions from being submitted without Javascript enabled using the <a href=":href_antibot">antibot</a> method.', $t_args),
+    '#description' => t('Prevent SPAM webform submissions from being submitted without JavaScript enabled using the <a href=":href_antibot">antibot</a> method.', $t_args),
   ];
   $form['third_party_settings']['antibot']['antibot'] = [
     '#type' => 'checkbox',

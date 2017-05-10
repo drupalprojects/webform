@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for Telephone element.
+ * JavaScript behaviors for Telephone element.
  */
 
 (function ($, Drupal, drupalSettings) {

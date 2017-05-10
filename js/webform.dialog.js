@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors to fix dialogs.
+ * JavaScript behaviors to fix dialogs.
  */
 
 (function ($, Drupal) {

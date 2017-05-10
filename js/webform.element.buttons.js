@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for jQuery UI buttons element integration.
+ * JavaScript behaviors for jQuery UI buttons element integration.
  */
 
 (function ($, Drupal) {
