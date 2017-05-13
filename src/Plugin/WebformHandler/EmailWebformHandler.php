@@ -136,11 +136,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Simplify the [webform_submission:values:.*] tokens.
     array_walk($settings, function (&$value, $key) {
       if (is_string($value)) {
-        $value = preg_replace('/\[webform_submission:(?:node|source_entity):([^:]+)[^]]*\]/', '[\1]', $value);
-        $value = preg_replace('/\[webform_submission:values:([^:]+)[^]]*\]/', '[\1]', $value);
-        $value = preg_replace('/\[webform_submission:([^:\]]+)[^]]*\]/', '[\1]', $value);
-        $value = preg_replace('/\[webform_role:([^:]+)\]/', '[\1]', $value);
         $value = preg_replace('/\[webform:([^:]+)\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_role:([^:]+)\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_submission:(?:node|source_entity|values):([^]]+)\]/', '[\1]', $value);
+        $value = preg_replace('/\[webform_submission:([^]]+)\]/', '[\1]', $value);
+        $value = preg_replace('/(:raw|:value)(:html)?\]/', ']', $value);
       }
     });
 
