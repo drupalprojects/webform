@@ -1608,6 +1608,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'textfield',
       '#title' => $this->t('Placeholder'),
       '#description' => $this->t('The placeholder will be shown in the element until the user starts entering a value.'),
+      '#maxlength' => 255,
     ];
     $form['form']['autocomplete'] = [
       '#type' => 'select',
