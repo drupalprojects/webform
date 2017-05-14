@@ -12,6 +12,7 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Utility\WebformOptionsHelper;
+use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
 
 /******************************************************************************/
