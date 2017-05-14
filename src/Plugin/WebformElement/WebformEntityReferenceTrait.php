@@ -52,6 +52,10 @@ trait WebformEntityReferenceTrait {
    */
   public function formatHtmlItem(array $element, $value, array $options = []) {
     $entity = $this->getTargetEntity($element, $value, $options);
+    if (!$entity) {
+      return '';
+    }
+
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
@@ -79,6 +83,10 @@ trait WebformEntityReferenceTrait {
    */
   public function formatTextItem(array $element, $value, array $options = []) {
     $entity = $this->getTargetEntity($element, $value, $options);
+    if (!$entity) {
+      return '';
+    }
+
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'id':
