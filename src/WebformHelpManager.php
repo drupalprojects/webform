@@ -243,56 +243,36 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * {@inheritdoc}
    */
   public function buildHelpMenu() {
-    // Collect very basic but useful system information.
-    // @see system_requirements().
-    $class = Database::getConnection()->getDriverClass('Install\\Tasks');
-    $tasks = new $class();
-    $requirements = [
-      'Drupal version' => \Drupal::VERSION,
-      'Server software' => \Drupal::request()->server->get('SERVER_SOFTWARE'),
-      'PHP version' => phpversion(),
-      'Database system'=> $tasks->name(),
-      'Database system version' => Database::getConnection()->version(),
-    ];
-    $status_report = [];
-    foreach ($requirements as $name => $value) {
-      $status_report[$name] = $name . ': ' . $value;
-    }
-    $status_report = implode(PHP_EOL, $status_report);
-
     $default_query = [
+      'title' => '{Your title should be descriptive and concise}',
       'version' => $this->state->get('webform.version'),
     ];
+
     $issue_query = $default_query + [
-        'title' => '{Your title should be descriptive and concise}',
-        'body' => "REMOVE LINE THIS AFTER YOU READ https://www.drupal.org/issue-queue/how-to
--------------------------------------------------------------------------
+        'body' => "@see http://cgit.drupalcode.org/webform/tree/ISSUE_TEMPLATE.html
 
-<h2>Problem/Issue</h2>
+<h3>Problem/Motivation</h3>
+(Why the issue was filed, steps to reproduce the problem, etc.)
 
-<h2>Error Message</h2>
+SUGGESTIONS
 
-<h2>System Information</h2>
+* Search existing issues.
+* Try Simplytest.me
+* Export and attach an example webform.
 
-$status_report
-",
+<h3>Proposed resolution</h3>
+(Description of the proposed solution, the rationale behind it, and workarounds for people who cannot use the patch.)",
       ];
+
     $feature_query = $default_query + [
-        'title' => '{Your title should be descriptive and concise}',
-        'body' => "REMOVE LINE THIS AFTER YOU READ https://www.drupal.org/issue-queue/how-to
--------------------------------------------------------------------------
+        'body' => "
+@see http://cgit.drupalcode.org/webform/tree/FEATURE_REQUEST_TEMPLATE.html
 
-<h2>Problem/Motivation</h2>
+<h3>Problem/Motivation</h3>
+(Explain why this new feature or functionality is important or useful.)
 
-<h2>Proposed resolution</h2>
-
-<h2>Remaining tasks</h2>
-
-<h2>User interface changes</h2>
-
-<h2>API changes</h2>
-
-<h2>Data model changes</h2>",
+<h3>Proposed resolution</h3>
+(Description of the proposed solution, the rationale behind it, and workarounds for people who cannot use the patch.)",
       ];
     return [
       '#type' => 'container',
