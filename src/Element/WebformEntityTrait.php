@@ -55,6 +55,19 @@ trait WebformEntityTrait {
       $options += $bundle_options;
     }
 
+    // Issue #2878842 Entity Radios label not translated
+    // Related to Drupal Core issue #2144377:
+    // Entity reference autocomplete lists
+    // entity labels only in current content language.
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    foreach ($options as $key => $value) {
+      $option = \Drupal::entityTypeManager()->getStorage($element['#target_type'])->load($key);
+      if ($option->hasTranslation($langcode)) {
+        $translation = $option->getTranslation($langcode);
+        $options[$key] = $translation->label();
+      }
+    }
+
     // Only select menu can support optgroups.
     if ($element['#type'] !== 'webform_entity_select') {
       $options = OptGroup::flattenOptions($options);
