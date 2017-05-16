@@ -13,6 +13,19 @@
 }
 
 /**
+ * Custom actions (aka submit buttons).
+ */
+.webform-ui-custom-actions {
+  float: right;
+}
+
+@media screen and (max-width: 600px) {
+  .webform-ui-custom-actions {
+    display: none;
+  }
+}
+
+/**
  * Tables
  */
 table .ajax-progress-throbber {
@@ -45,6 +58,7 @@ thead th .dropbutton {
 .webform-ui-elements-table tr:first-child {
   border-top: inherit !important;
 }
+
 .webform-ui-elements-table tr.webform-ui-element-type-webform_wizard_page {
   border-top: 2px solid #a6a6a6;
 }
@@ -59,3 +73,11 @@ thead th .dropbutton {
   border-top: 2px dashed #a6a6a6;
   font-weight: bold;
 }
+
+.webform-ui-elements-table tr.webform-ui-element-type-webform_actions td {
+  border-top: 1px solid #a6a6a6;
+  border-bottom: 1px solid #a6a6a6;
+  background-color: #f5f5f2;
+  font-weight: bold;
+}
+

@@ -30,15 +30,17 @@ elements: |
       '#type': email
       '#title': Email
       '#required': true
+    actions:
+      '#type': webform_actions
+      '#title': 'Submit button(s)'
+      '#submit__label': 'Register'
 css: ''
 javascript: ''
 settings:
   page: false
   page_submit_path: ''
   page_confirm_path: ''
-  form_submit_label: Register
   form_submit_once: false
-  form_submit_attributes: {  }
   form_exception_message: ''
   form_open_message: ''
   form_close_message: ''
@@ -58,23 +60,13 @@ settings:
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
-  wizard_next_button_label: ''
-  wizard_next_button_attributes: {  }
-  wizard_prev_button_label: ''
-  wizard_prev_button_attributes: {  }
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
   preview: 0
-  preview_next_button_label: ''
-  preview_next_button_attributes: {  }
-  preview_prev_button_label: ''
-  preview_prev_button_attributes: {  }
   preview_message: ''
   draft: none
   draft_auto_save: false
-  draft_button_label: ''
-  draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: page

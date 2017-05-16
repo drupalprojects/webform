@@ -12,7 +12,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
+use Drupal\webform\Plugin\WebformElement\WebformActions;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
+use Drupal\webform\Plugin\WebformElement\WebformWizardPage;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformHandlerInterface;
@@ -268,6 +270,20 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $elementsTranslations;
 
   /**
+   * Track the elements that are 'webform_actions' (aka submit buttons).
+   *
+   * @var array
+   */
+  protected $elementsActions = [];
+
+  /**
+   * Track the elements that are 'webform_pages' (aka Wizard pages).
+   *
+   * @var array
+   */
+  protected $elementsWizardPages = [];
+
+  /**
    * The webform pages.
    *
    * @var array
@@ -518,6 +534,36 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasActions() {
+    return $this->getNumberOfActions() ? TRUE : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNumberOfActions() {
+    $this->initElements();
+    return count($this->elementsActions);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasWizardPages() {
+    return $this->getNumberOfWizardPages() ? TRUE : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNumberOfWizardPages() {
+    $this->initElements();
+    return count($this->elementsWizardPages);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getDescription() {
     return $this->description;
   }
@@ -643,9 +689,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'page' => TRUE,
       'page_submit_path' => '',
       'page_confirm_path' => '',
-      'form_submit_label' => '',
       'form_submit_once' => FALSE,
-      'form_submit_attributes' => [],
       'form_exception_message' => '',
       'form_open_message' => '',
       'form_close_message' => '',
@@ -665,25 +709,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'wizard_progress_bar' => TRUE,
       'wizard_progress_pages' => FALSE,
       'wizard_progress_percentage' => FALSE,
-      'wizard_next_button_label' => '',
-      'wizard_next_button_attributes' => [],
-      'wizard_prev_button_label' => '',
-      'wizard_prev_button_attributes' => [],
       'wizard_start_label' => '',
       'wizard_complete' => TRUE,
       'wizard_complete_label' => '',
       'preview' => DRUPAL_DISABLED,
-      'preview_next_button_label' => '',
-      'preview_next_button_attributes' => [],
-      'preview_prev_button_label' => '',
-      'preview_prev_button_attributes' => [],
       'preview_label' => '',
       'preview_title' => '',
       'preview_message' => '',
       'draft' => self::DRAFT_ENABLED_NONE,
       'draft_auto_save' => FALSE,
-      'draft_button_label' => '',
-      'draft_button_attributes' => [],
       'draft_saved_message' => '',
       'draft_loaded_message' => '',
       'confirmation_type' => 'page',
@@ -950,6 +984,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasManagedFile = FALSE;
     $this->hasFlexboxLayout = FALSE;
     $this->hasContainer = FALSE;
+    $this->elementsActions = [];
+    $this->numberOfWizardPages = [];
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
     $this->elementsInitializedFlattenedAndHasValue = [];
@@ -1002,6 +1038,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasManagedFile = NULL;
     $this->hasFlexboxLayout = NULL;
     $this->hasContainer = NULL;
+    $this->elementsActions = [];
+    $this->numberOfWizardPages = [];
     $this->elementsDecoded = NULL;
     $this->elementsInitialized = NULL;
     $this->elementsDecodedAndFlattened = NULL;
@@ -1096,6 +1134,16 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
           $this->hasContainer = TRUE;
         }
 
+        // Track actions.
+        if ($element_handler instanceof WebformActions) {
+          $this->elementsActions[$key] = $key;
+        }
+
+        // Track wizard.
+        if ($element_handler instanceof WebformWizardPage) {
+          $this->elementsWizardPages[$key] = $key;
+        }
+
         $element['#webform_multiple'] = $element_handler->hasMultipleValues($element);
         $element['#webform_composite'] = $element_handler->isComposite();
       }
@@ -1144,7 +1192,21 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $elements = $this->getElementsDecoded();
     // If element is was not added to elements, add it as the last element.
     if (!$this->setElementPropertiesRecursive($elements, $key, $properties, $parent_key)) {
-      $elements[$key] = $properties;
+      if ($this->hasActions()) {
+        // Add element before the last 'webform_actions' element.
+        $last_action_key = end($this->elementsActions);
+        $updated_elements = [];
+        foreach ($elements as $element_key => $element) {
+          if ($element_key == $last_action_key) {
+            $updated_elements[$key] = $properties;
+          }
+          $updated_elements[$element_key] = $element;
+        }
+        $elements = $updated_elements;
+      }
+      else {
+        $elements[$key] = $properties;
+      }
     }
     $this->setElements($elements);
     return $this;

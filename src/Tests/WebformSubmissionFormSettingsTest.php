@@ -460,11 +460,15 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     // Check required preview with custom settings.
     $webform_preview->setSettings([
       'preview' => DRUPAL_REQUIRED,
-      'preview_next_button_label' => '{Preview}',
-      'preview_prev_button_label' => '{Back}',
       'preview_label' => '{Label}',
       'preview_title' => '{Title}',
       'preview_message' => '{Message}',
+    ]);
+    // Add 'webform_actions' element.
+    $webform_preview->setElementProperties('actions', [
+      '#type' => 'webform_actions',
+      '#preview_next__label' => '{Preview}',
+      '#preview_prev__label' => '{Back}',
     ]);
     $webform_preview->save();
 

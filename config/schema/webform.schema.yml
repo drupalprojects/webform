@@ -11,9 +11,9 @@ webform.settings:
         default_page_base_path:
           type: string
           label: 'Default base path'
-        default_form_submit_label:
+        default_submit_button_label:
           type: label
-          label: 'Default webform submit text'
+          label: 'Default webform submit button label'
         default_form_submit_once:
           type: boolean
           label: 'Prevent duplicate submissions'
@@ -368,15 +368,9 @@ webform.webform.*:
         page_confirm_path:
           type: string
           label: 'Page confirm URL alias'
-        form_submit_label:
-          type: label
-          label: 'Webform submit text'
         form_submit_once:
           type: boolean
           label: 'Prevent duplicate submissions'
-        form_submit_attributes:
-          type: ignore
-          label: 'Form submit attributes'
         form_open_message:
           type: text
           label: 'Form open message'
@@ -446,33 +440,9 @@ webform.webform.*:
         wizard_complete_label:
           type: label
           label: 'Wizard complete label'
-        wizard_prev_button_label:
-          type: label
-          label: 'Wizard previous page button label'
-        wizard_prev_button_attributes:
-          type: ignore
-          label: 'Wizard previous page button attributes'
-        wizard_next_button_label:
-          type: label
-          label: 'Wizard next page button label'
-        wizard_next_button_attributes:
-          type: ignore
-          label: 'Wizard next page button attributes'
         preview:
           type: integer
           label: 'Enable preview page'
-        preview_next_button_label:
-          type: label
-          label: 'Preview button label'
-        preview_next_button_attributes:
-          type: ignore
-          label: 'Preview button attributes'
-        preview_prev_button_label:
-          type: label
-          label: 'Previous page button label'
-        preview_prev_button_attributes:
-          type: ignore
-          label: 'Previous page button attributes'
         preview_label:
           type: text
           label: 'Preview label'
@@ -488,12 +458,6 @@ webform.webform.*:
         draft_auto_save:
           type: boolean
           label: 'Automatically save as draft when previewing and when there are validation errors.'
-        draft_button_label:
-          type: label
-          label: 'Draft button label'
-        draft_button_attributes:
-          type: ignore
-          label: 'Draft button attributes'
         draft_saved_message:
           type: text
           label: 'Draft saved message'

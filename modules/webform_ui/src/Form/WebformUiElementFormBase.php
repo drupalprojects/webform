@@ -229,7 +229,10 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#required' => TRUE,
       '#parents' => ['key'],
       '#disabled' => ($key) ? TRUE : FALSE,
-      '#default_value' => $key,
+      // Allow key to populated using query string parameter.
+      // Use by 'Edit submit button(s)'.
+      // @see \Drupal\webform_ui\WebformUiEntityForm::editForm
+      '#default_value' => ($this->getRequest()->get('key')) ? $this->getRequest()->get('key') : $key,
       '#weight' => -98,
     ];
     // Remove the key's help text (aka description) once it has been set.

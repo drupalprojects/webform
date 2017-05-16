@@ -8,9 +8,9 @@ open: null
 close: null
 uid: null
 template: false
-id: test_form_buttons
-title: 'Test: Webform: Buttons'
-description: 'Test custom webform buttons.'
+id: test_element_actions_buttons
+title: 'Test: Element: Actions buttons'
+description: 'Test element actions buttons.'
 category: 'Test: Webform'
 elements: |
   wizard_page_1:
@@ -25,18 +25,40 @@ elements: |
     text_2:
       '#type': textfield
       '#title': 'Text 2'
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+    '#submit__attributes':
+      class:
+        - form_submit_attributes
+      style: 'color: green'
+    '#draft__attributes':
+      class:
+        - draft_button_attributes
+      style: 'color: blue'
+    '#wizard_prev__attributes':
+      class:
+        - wizard_prev_button_attributes
+      style: 'color: yellow'
+    '#wizard_next__attributes':
+      class:
+        - wizard_next_button_attributes
+      style: 'color: yellow'
+    '#preview_prev__attributes':
+      class:
+        - preview_prev_button_attributes
+      style: 'color: orange'
+    '#preview_next__attributes':
+      class:
+        - preview_next_button_attributes
+      style: 'color: orange'
 css: ''
 javascript: ''
 settings:
   page: true
   page_submit_path: ''
   page_confirm_path: ''
-  form_submit_label: ''
   form_submit_once: false
-  form_submit_attributes:
-    class:
-      - form_submit_attributes
-    style: 'color: green'
   form_exception_message: ''
   form_open_message: ''
   form_close_message: ''
@@ -56,40 +78,15 @@ settings:
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
-  wizard_next_button_label: ''
-  wizard_next_button_attributes:
-    class:
-      - wizard_next_button_attributes
-    style: 'color: yellow'
-  wizard_prev_button_label: ''
-  wizard_prev_button_attributes:
-    class:
-      - wizard_prev_button_attributes
-    style: 'color: yellow'
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
   preview: 1
-  preview_next_button_label: ''
-  preview_next_button_attributes:
-    class:
-      - preview_next_button_attributes
-    style: 'color: orange'
-  preview_prev_button_label: ''
-  preview_prev_button_attributes:
-    class:
-      - preview_prev_button_attributes
-    style: 'color: orange'
   preview_label: ''
   preview_title: ''
   preview_message: ''
   draft: authenticated
   draft_auto_save: false
-  draft_button_label: ''
-  draft_button_attributes:
-    class:
-      - draft_button_attributes
-    style: 'color: blue'
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: page

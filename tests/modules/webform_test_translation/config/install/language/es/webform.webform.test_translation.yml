@@ -16,8 +16,11 @@ elements: |
     '#title': Detalles
   markup:
     '#markup': 'Esto es un poco de marcado HTML.'
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+    '#submit__label': 'Enviar mensaje'
 settings:
-  form_submit_label: 'Enviar mensaje'
   confirmation_message: 'Tu mensaje ha sido enviado.'
 handlers:
   email_confirmation:

@@ -100,6 +100,7 @@ function _webform_test_form_states($type, array $default_properties = []) {
   // Elements to be ignored.
   $skipped_elements = [
     'hidden',
+    'webform_actions',
     'webform_test',
     'webform_wizard_page',
   ];

@@ -297,22 +297,6 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
     ];
-    $form['form_settings']['form_submit'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Form submit button'),
-    ];
-    $form['form_settings']['form_submit']['form_submit_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Form submit button label'),
-      '#size' => 20,
-      '#default_value' => $settings['form_submit_label'],
-    ];
-    $form['form_settings']['form_submit']['form_submit_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Form submit button'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
-      '#default_value' => $settings['form_submit_attributes'],
-    ];
 
     // Form behaviors.
     $behavior_elements = [
@@ -408,40 +392,6 @@ class WebformEntitySettingsForm extends EntityForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_percentage'],
     ];
-    $form['wizard_settings']['wizard_prev_button'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Previous wizard page button'),
-      '#description' => $this->t('This is used for the previous page button within a wizard.'),
-    ];
-    $form['wizard_settings']['wizard_prev_button']['wizard_prev_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Previous wizard page button label'),
-      '#size' => 20,
-      '#default_value' => $settings['wizard_prev_button_label'],
-    ];
-    $form['wizard_settings']['wizard_prev_button']['wizard_prev_button_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Previous wizard page button'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
-      '#default_value' => $settings['wizard_prev_button_attributes'],
-    ];
-    $form['wizard_settings']['wizard_next_button'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Next wizard page button'),
-      '#description' => $this->t('This is used for the next page button within a wizard.'),
-    ];
-    $form['wizard_settings']['wizard_next_button']['wizard_next_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Next wizard page button label'),
-      '#size' => 20,
-      '#default_value' => $settings['wizard_next_button_label'],
-    ];
-    $form['wizard_settings']['wizard_next_button']['wizard_next_button_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Next wizard page button'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
-      '#default_value' => $settings['wizard_next_button_attributes'],
-    ];
     $form['wizard_settings']['wizard_complete'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include confirmation page in progress'),
@@ -494,42 +444,6 @@ class WebformEntitySettingsForm extends EntityForm {
           ':input[name="preview"]' => ['value' => DRUPAL_DISABLED],
         ],
       ],
-    ];
-    // Preview next button.
-    $form['preview_settings']['preview_container']['preview_next_button'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Preview button'),
-    ];
-    $form['preview_settings']['preview_container']['preview_next_button']['preview_next_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Preview button label'),
-      '#description' => $this->t('The text for the button that will proceed to the preview page.'),
-      '#size' => 20,
-      '#default_value' => $settings['preview_next_button_label'],
-    ];
-    $form['preview_settings']['preview_container']['preview_next_button']['preview_next_button_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Preview button'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
-      '#default_value' => $settings['preview_next_button_attributes'],
-    ];
-    // Preview previous button.
-    $form['preview_settings']['preview_container']['preview_prev_button'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Previous page button'),
-    ];
-    $form['preview_settings']['preview_container']['preview_prev_button']['preview_prev_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Previous page button label'),
-      '#description' => $this->t('The text for the button to go backwards from the preview page.'),
-      '#size' => 20,
-      '#default_value' => $settings['preview_prev_button_label'],
-    ];
-    $form['preview_settings']['preview_container']['preview_prev_button']['preview_prev_button_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Previous page button'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
-      '#default_value' => $settings['preview_prev_button_attributes'],
     ];
     $form['preview_settings']['preview_container']['preview_label'] = [
       '#type' => 'textfield',
@@ -599,23 +513,6 @@ class WebformEntitySettingsForm extends EntityForm {
       "#description" => $this->t('Automatically save partial submissions when users click the "Preview" button or when validation errors prevent a webform from being submitted.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['draft_auto_save'],
-    ];
-    $form['draft_settings']['draft_container']['draft_button'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Draft button'),
-    ];
-    $form['draft_settings']['draft_container']['draft_button']['draft_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Draft button label'),
-      '#description' => $this->t('The text for the button that will save a draft.'),
-      '#size' => 20,
-      '#default_value' => $settings['draft_button_label'],
-    ];
-    $form['draft_settings']['draft_container']['draft_button']['draft_button_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Draft button'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.button_classes'),
-      '#default_value' => $settings['draft_button_attributes'],
     ];
     $form['draft_settings']['draft_container']['draft_saved_message'] = [
       '#type' => 'webform_html_editor',

@@ -39,7 +39,7 @@ abstract class WebformNodeTestBase extends WebformTestBase {
     $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($node);
     $webform_id = $node->$webform_field_name->target_id;
     $webform = Webform::load($webform_id);
-    $submit = $submit ?: $webform->getSetting('form_submit_label') ?: t('Submit');
+    $submit = $this->getWebformSubmitButtonLabel($webform, $submit);
     $this->drupalPostForm('node/' . $node->id(), $edit, $submit);
     return $this->getLastSubmissionId($webform);
   }

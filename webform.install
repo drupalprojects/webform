@@ -546,3 +546,106 @@ function _webform_update_8045_is_submodule_config($webform_config_name) {
   }
   return FALSE;
 }
+
+/**
+ * Issue #2878193: Allow actions (aka submit buttons) to be placed anywhere on a webform.
+ */
+function webform_update_8046() {
+  // Change 'default_submit_button_label' to 'default_form_submit_label'.
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $data = $config->getRawData();
+  if (!isset($data['settings']['default_submit_button_label']) && isset($data['settings']['default_form_submit_label'])) {
+    $data['settings']['default_submit_button_label'] = $data['settings']['default_form_submit_label'];
+    unset($data['settings']['default_submit_button_label']);
+  }
+  $config->setData($data);
+  $config->save();
+  _webform_update_admin_settings();
+
+  // Update default (source) webform configuration.
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    $data = _webform_update_8046_convert_data($data);
+    $webform_config->setData($data)->save();
+  }
+
+  // Update translated webform configuration.
+  // ISSUE: Can't figure out the right way to update translated webform config.
+  // WORKAROUND: Directly update config data stored in the database.
+  $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+  $collections = [];
+  foreach ($langcodes as $langcode) {
+    $collections[] = "language.$langcode";
+  }
+  foreach (['config', 'config_snapshot'] as $table_name) {
+    if (!\Drupal::database()->schema()->tableExists($table_name)) {
+      continue;
+    }
+    $query = \Drupal::database()->select($table_name, 'c')
+      ->fields('c', ['name', 'collection', 'data'])
+      ->orderBy('name')
+      ->orderBy('collection')
+      ->condition('name', 'webform.webform.%', 'LIKE')
+      ->condition('collection', $collections, 'IN');
+    $result = $query->execute();
+    while ($record = $result->fetchAssoc()) {
+      $data = unserialize($record['data']);
+      $data = _webform_update_8046_convert_data($data);
+      \Drupal::database()->update($table_name)
+        ->fields(['data' => serialize($data)])
+        ->condition('collection', $record['collection'])
+        ->condition('name', $record['name'])
+        ->execute();
+    }
+  }
+}
+
+/**
+ * Convert webform config data from settings.buttons to use the 'webform_actions' element.
+ *
+ * @param array $data
+ *   Webform config data.
+ *
+ * @return array
+ *   Webform config data with 'webfor_actions' element.
+ */
+function _webform_update_8046_convert_data(array $data) {
+  $button_names = [
+    'submit',
+    'draft',
+    'wizard_prev',
+    'wizard_next',
+    'preview_prev',
+    'preview_next',
+  ];
+
+  // Build actions element from webform's settings.
+  $actions_element = [];
+  $settings = $data['settings'];
+  foreach ($button_names as $button_name) {
+    $settings_prefix = ($button_name == 'submit') ? 'form_' . $button_name : $button_name .'_button';
+    if (!empty($settings[$settings_prefix .'_label'])) {
+      $actions_element['#' . $button_name . '__label'] = $settings[$settings_prefix .'_label'];
+    }
+    if (!empty($settings[$settings_prefix .'_attributes'])) {
+      $actions_element['#' . $button_name . '__attributes'] = $settings[$settings_prefix .'_attributes'];
+    }
+    unset($settings[$settings_prefix .'_label']);
+    unset($settings[$settings_prefix .'_attributes']);
+  }
+  $data['settings'] = $settings;
+
+  // Append actions element to elements.
+  if ($actions_element) {
+    $elements = Yaml::decode($data['elements']);
+    $elements['actions'] = [
+        '#type' => 'webform_actions',
+        '#title' => (string) t('Submit button(s)'),
+      ] + $actions_element;
+    $data['elements'] = Yaml::encode($elements);
+  }
+
+  return $data;
+}

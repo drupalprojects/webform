@@ -22,6 +22,7 @@ function webform_test_test_element_format(WebformInterface $webform, $composite 
     'text_format_raw',
     'text_format_value',
     'value',
+    'webform_actions',
     'webform_element',
     'webform_test',
     // @todo Fix file display

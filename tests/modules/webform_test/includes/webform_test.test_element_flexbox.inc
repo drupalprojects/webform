@@ -20,6 +20,7 @@ function webform_test_test_element_flexbox() {
   // Elements to be ignored.
   $skipped_elements = [
     'hidden',
+    'webform_actions',
     'webform_flexbox',
     'webform_test',
     'webform_wizard_page',

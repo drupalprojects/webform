@@ -195,12 +195,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_confidential_message'),
     ];
-    $form['form']['default_form_submit_label'] = [
+    $form['form']['default_submit_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default submit button label'),
       '#required' => TRUE,
       '#size' => 20,
-      '#default_value' => $settings['default_form_submit_label'],
+      '#default_value' => $settings['default_submit_button_label'],
     ];
     $form['form']['form_classes'] = [
       '#type' => 'webform_codemirror',

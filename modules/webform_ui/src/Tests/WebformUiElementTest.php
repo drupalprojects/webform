@@ -57,7 +57,7 @@ class WebformUiElementTest extends WebformTestBase {
     /**************************************************************************/
 
     // Check original contact element order.
-    $this->assertEqual(['name', 'email', 'subject', 'message'], array_keys($webform_contact->getElementsDecodedAndFlattened()));
+    $this->assertEqual(['name', 'email', 'subject', 'message', 'actions'], array_keys($webform_contact->getElementsDecodedAndFlattened()));
 
     // Check updated (reverse) contact element order.
     /** @var \Drupal\webform\WebformInterface $webform_contact */
@@ -72,7 +72,7 @@ class WebformUiElementTest extends WebformTestBase {
     \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
     \Drupal::entityTypeManager()->getStorage('webform')->resetCache();
     $webform_contact = Webform::load('contact');
-    $this->assertEqual(['message', 'subject', 'email', 'name'], array_keys($webform_contact->getElementsDecodedAndFlattened()));
+    $this->assertEqual(['message', 'subject', 'email', 'name', 'actions'], array_keys($webform_contact->getElementsDecodedAndFlattened()));
 
     /**************************************************************************/
     // Required.

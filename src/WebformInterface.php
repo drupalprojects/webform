@@ -89,6 +89,39 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function hasContainer();
 
   /**
+   * Determine if the webform has any custom actions (aka submit buttons).
+   *
+   * @return bool
+   *   TRUE if the webform has any custom actions (aka submit buttons).
+   */
+  public function hasActions();
+
+  /**
+   * Get the number of actions (aka submit buttons).
+   *
+   * @return int
+   *   The number of actions (aka submit buttons).
+   */
+  public function getNumberOfActions();
+
+  /**
+   * Determine if the webform has multistep form wizard pages.
+   *
+   * @return bool
+   *   TRUE if the webform has multistep form wizard pages.
+   */
+  public function hasWizardPages();
+
+  /**
+   * Get the number of wizard pages.
+   *
+   * @return int
+   *   The number of wizard pages.
+   */
+  public function getNumberOfWizardPages();
+
+
+  /**
    * Sets the status of the configuration entity.
    *
    * @param string|bool|null $status

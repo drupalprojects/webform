@@ -31,6 +31,10 @@
 /**
  * Webform message close link.
  */
+.webform-message--close .messages {
+  padding-right: 35px;
+}
+
 .webform-message--close .webform-message__link {
   display: none;
 }

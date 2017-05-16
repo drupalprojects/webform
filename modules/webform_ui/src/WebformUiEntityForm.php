@@ -99,6 +99,19 @@ class WebformUiEntityForm extends WebformEntityForm {
       ],
     ] + $rows;
 
+    if (!$webform->hasActions()) {
+      $form['custom_actions'] = [
+        '#prefix' => '<div class="webform-ui-custom-actions">',
+        '#suffix' => '</div>',
+      ];
+      $form['custom_actions']['add_actions'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Edit submit button(s)'),
+        '#url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_actions'], ['query' => ['key' => 'actions']]),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button--small']),
+      ];
+    }
+
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($form);
     $form['#attached']['library'][] = 'webform_ui/webform_ui';

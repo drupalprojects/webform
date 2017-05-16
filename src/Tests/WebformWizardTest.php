@@ -72,7 +72,7 @@ class WebformWizardTest extends WebformTestBase {
     // Check draft button does not exist.
     $this->assertNoFieldById('edit-draft', 'Save Draft');
     // Check next button does exist.
-    $this->assertFieldById('edit-next', 'Next Page >');
+    $this->assertFieldById('edit-wizard-next', 'Next Page >');
     // Check first name field does exist.
     $this->assertFieldById('edit-first-name', 'John');
 
@@ -96,9 +96,9 @@ class WebformWizardTest extends WebformTestBase {
     // Check draft button does exist.
     $this->assertFieldById('edit-draft', 'Save Draft');
     // Check previous button does exist.
-    $this->assertFieldById('edit-previous', '< Previous Page');
+    $this->assertFieldById('edit-wizard-prev', '< Previous Page');
     // Check next button does exist.
-    $this->assertFieldById('edit-next', 'Next Page >');
+    $this->assertFieldById('edit-wizard-next', 'Next Page >');
     // Check email field does exist.
     $this->assertFieldById('edit-email', 'johnsmith@example.com');
 
@@ -165,9 +165,9 @@ class WebformWizardTest extends WebformTestBase {
     // Check progress bar is set to 'Your Feedback'.
     $this->assertCurrentPage('Your Feedback', 'feedback');
     // Check previous button does exist.
-    $this->assertFieldById('edit-previous', '< Previous Page');
+    $this->assertFieldById('edit-wizard-prev', '< Previous Page');
     // Check next button is labeled 'Preview'.
-    $this->assertFieldById('edit-next', 'Preview');
+    $this->assertFieldById('edit-preview-next', 'Preview');
     // Check submit button does exist.
     $this->assertFieldById('edit-submit', 'Submit');
 
@@ -213,23 +213,26 @@ class WebformWizardTest extends WebformTestBase {
     // Check progress bar.
     $this->assertRaw('class="webform-progress-bar"');
     // Check previous button.
-    $this->assertFieldById('edit-previous', '{global wizard previous}');
+    $this->assertFieldById('edit-wizard-prev', '{global wizard previous}');
     // Check next button.
-    $this->assertFieldById('edit-next', '{global wizard next}');
+    $this->assertFieldById('edit-wizard-next', '{global wizard next}');
 
-    // Check webform next and previous button labels.
-    $webform->setSettings([
-      'wizard_next_button_label' => '{webform wizard next}',
-      'wizard_prev_button_label' => '{webform wizard previous}',
-      'preview_next_button_label' => '{webform preview next}',
-      'preview_prev_button_label' => '{webform preview previous}',
+    // Add 'webform_actions' element.
+    $webform->setElementProperties('actions', [
+      '#type' => 'webform_actions',
+      '#wizard_next__label' => '{webform wizard next}',
+      '#wizard_prev__label' => '{webform wizard previous}',
+      '#preview_next__label' => '{webform preview next}',
+      '#preview_prev__label' => '{webform preview previous}',
     ]);
     $webform->save();
+
+    // Check webform next and previous button labels.
     $this->drupalPostForm('webform/test_form_wizard_advanced', [], t('{webform wizard next}'));
     // Check previous button.
-    $this->assertFieldById('edit-previous', '{webform wizard previous}');
+    $this->assertFieldById('edit-actions-wizard-prev', '{webform wizard previous}');
     // Check next button.
-    $this->assertFieldById('edit-next', '{webform wizard next}');
+    $this->assertFieldById('edit-actions-wizard-next', '{webform wizard next}');
 
     // Check custom next and previous button labels.
     $elements = Yaml::decode($webform->get('elements'));
@@ -240,9 +243,9 @@ class WebformWizardTest extends WebformTestBase {
     $this->drupalPostForm('webform/test_form_wizard_advanced', [], t('{webform wizard next}'));
 
     // Check previous button.
-    $this->assertFieldById('edit-previous', '{elements wizard previous}');
+    $this->assertFieldById('edit-actions-wizard-prev', '{elements wizard previous}');
     // Check next button.
-    $this->assertFieldById('edit-next', '{elements wizard next}');
+    $this->assertFieldById('edit-actions-wizard-next', '{elements wizard next}');
 
     // Check webform next and previous button labels.
     $webform->setSettings([
@@ -256,7 +259,7 @@ class WebformWizardTest extends WebformTestBase {
     // Check no progress bar.
     $this->assertNoRaw('class="webform-progress-bar"');
     // Check progress pages.
-    $this->assertRaw('Page 1 of 4');
+    $this->assertRaw('Page 1 of 5');
     // Check progress percentage.
     $this->assertRaw('(0%)');
 
