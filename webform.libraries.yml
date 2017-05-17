@@ -9,6 +9,7 @@ webform.admin:
     js/webform.admin.js:  {}
   dependencies:
     - webform/webform.form
+    - webform/webform.admin.dropbutton
 
 # Used preload libraries required by (modal) dialogs.
 # @see js/webform.element.codemirror.js
@@ -25,11 +26,22 @@ webform.admin.dialog:
     - core/drupal.dialog.ajax
     - webform/webform.ajax
     - webform/webform.form
+    - webform/webform.admin.dropbutton
     - webform/webform.element.codemirror.yaml
     - webform/webform.element.html_editor
     - webform/webform.element.other
     - webform/webform.element.message
     - webform/webform.element.select2
+
+webform.admin.dropbutton:
+  version: VERSION
+  css:
+    theme:
+      css/webform.admin.dropbutton.css: {}
+  js:
+    js/webform.admin.dropbutton.js:  {}
+  dependencies:
+    - core/drupal.dropbutton
 
 webform.admin.translation:
   version: VERSION
