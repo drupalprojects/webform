@@ -46,10 +46,10 @@ class WebformOptions extends FormElement {
       }
 
       $options = (is_string($element['#default_value'])) ? Yaml::decode($element['#default_value']) : $element['#default_value'];
-      if (self::hasOptGroup($options)) {
+      if (static::hasOptGroup($options)) {
         return $options;
       }
-      return self::convertOptionsToValues($options);
+      return static::convertOptionsToValues($options);
     }
     elseif (is_array($input) && isset($input['options'])) {
       return (is_string($input['options'])) ? Yaml::decode($input['options']) : $input['options'];
@@ -72,7 +72,7 @@ class WebformOptions extends FormElement {
     WebformElementHelper::fixStatesWrapper($element);
 
     // For options with optgroup display a CodeMirror YAML editor.
-    if (isset($element['#default_value']) && is_array($element['#default_value']) && self::hasOptGroup($element['#default_value'])) {
+    if (isset($element['#default_value']) && is_array($element['#default_value']) && static::hasOptGroup($element['#default_value'])) {
       // Build table.
       $element['options'] = [
         '#type' => 'webform_codemirror',
@@ -104,7 +104,7 @@ class WebformOptions extends FormElement {
             '#maxlength' => 255,
           ],
         ],
-        '#default_value' => (isset($element['#default_value'])) ? self::convertOptionsToValues($element['#default_value']) : [],
+        '#default_value' => (isset($element['#default_value'])) ? static::convertOptionsToValues($element['#default_value']) : [],
       ];
       return $element;
     }
@@ -120,7 +120,7 @@ class WebformOptions extends FormElement {
       $options = Yaml::decode($options_value);
     }
     else {
-      $options = self::convertValuesToOptions($options_value);
+      $options = static::convertValuesToOptions($options_value);
     }
 
     // Validate required options.

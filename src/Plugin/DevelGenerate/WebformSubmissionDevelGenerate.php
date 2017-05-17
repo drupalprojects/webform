@@ -257,7 +257,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    *   The element values from the settings webform.
    */
   protected function generateSubmissions(array $values) {
-    self::$generatingSubmissions = TRUE;
+    static::$generatingSubmissions = TRUE;
     if (!empty($values['kill'])) {
       $this->deleteWebformSubmissions($values['webform_ids'], $values['entity-type'], $values['entity-id']);
       $this->setMessage($this->t('Deleted existing submissions.'));
@@ -275,7 +275,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
       }
     }
     $this->setMessage($this->formatPlural($values['num'], '1 submissions created.', 'Finished creating @count submissions'));
-    self::$generatingSubmissions = FALSE;
+    static::$generatingSubmissions = FALSE;
   }
 
   /**
@@ -410,7 +410,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    *   TRUE if webform submissions are being generated.
    */
   public static function isGeneratingSubmissions() {
-    return self::$generatingSubmissions;
+    return static::$generatingSubmissions;
   }
 
   /**

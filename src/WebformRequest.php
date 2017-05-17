@@ -109,7 +109,7 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function getCurrentWebform() {
-    $source_entity = self::getCurrentSourceEntity('webform');
+    $source_entity = static::getCurrentSourceEntity('webform');
     $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
     if ($source_entity && $webform_field_name && $source_entity->hasField($webform_field_name)) {
       return $source_entity->$webform_field_name->entity;
@@ -176,7 +176,7 @@ class WebformRequest implements WebformRequestInterface {
       $source_entity = NULL;
     }
 
-    if (self::isValidSourceEntity($webform_entity, $source_entity)) {
+    if (static::isValidSourceEntity($webform_entity, $source_entity)) {
       if ($webform_entity instanceof WebformSubmissionInterface) {
         return [
           'webform_submission' => $webform_entity->id(),
@@ -212,7 +212,7 @@ class WebformRequest implements WebformRequestInterface {
       throw new \InvalidArgumentException('Webform entity');
     }
 
-    if (self::isValidSourceEntity($webform, $source_entity)) {
+    if (static::isValidSourceEntity($webform, $source_entity)) {
       return 'entity.' . $source_entity->getEntityTypeId();
     }
     else {

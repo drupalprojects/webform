@@ -56,7 +56,7 @@ class WebformFormHelper {
   public static function &flattenElements(array &$build) {
     $elements = [];
     $duplicate_element_keys = [];
-    static::flattenElementsRecursive($build, $elements, $duplicate_element_keys);
+    self::flattenElementsRecursive($build, $elements, $duplicate_element_keys);
     return $elements;
   }
 
@@ -97,7 +97,7 @@ class WebformFormHelper {
           $elements[$key] =& $build[$key];
         }
 
-        static::flattenElementsRecursive($element, $elements, $duplicate_element_keys);
+        self::flattenElementsRecursive($element, $elements, $duplicate_element_keys);
       }
     }
   }

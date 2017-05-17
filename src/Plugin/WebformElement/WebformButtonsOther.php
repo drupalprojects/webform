@@ -18,7 +18,7 @@ class WebformButtonsOther extends OptionsBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + self::getOtherProperties();
+    return parent::getDefaultProperties() + static::getOtherProperties();
   }
 
 }

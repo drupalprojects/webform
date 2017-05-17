@@ -20,17 +20,17 @@ class WebformReflectionHelper {
    *   A list of Webform submodules.
    */
   public static function getSubModules() {
-    if (isset(static::$modules)) {
-      return static::$modules;
+    if (isset(self::$modules)) {
+      return self::$modules;
     }
 
-    static::$modules = [];
+    self::$modules = [];
     $files = file_scan_directory(drupal_get_path('module', 'webform') . '/modules', '/.*\.info\.yml/');
     foreach ($files as $file) {
       $module_name = str_replace('.info.yml', '', $file->filename);
-      static::$modules[$module_name] = $module_name;
+      self::$modules[$module_name] = $module_name;
     }
-    return static::$modules;
+    return self::$modules;
   }
 
   /**

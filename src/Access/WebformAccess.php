@@ -70,7 +70,7 @@ class WebformAccess {
       $access_result = AccessResult::forbidden()->addCacheableDependency($webform);
     }
     else {
-      $access_result = self::checkResultsAccess($webform, $source_entity);
+      $access_result = static::checkResultsAccess($webform, $source_entity);
     }
     return $access_result->addCacheTags(['config:webform.settings']);
   }

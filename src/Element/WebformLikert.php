@@ -42,7 +42,7 @@ class WebformLikert extends FormElement {
    */
   public static function processWebformLikert(&$element, FormStateInterface $form_state, &$complete_form) {
     // Get answer with optional N/A.
-    self::processWebformLikertAnswers($element);
+    static::processWebformLikertAnswers($element);
 
     // Build header.
     $header = [

@@ -64,7 +64,7 @@ abstract class WebformOtherBase extends FormElement {
     $type = str_replace('webform_', '', static::$type);
 
     if ($input === FALSE) {
-      $value = self::convertDefaultValueToElementValue($element);
+      $value = static::convertDefaultValueToElementValue($element);
       $element[$type]['#default_value'] = $value[$type];
       if ($value['other'] !== NULL) {
         $element['other']['#default_value'] = $value['other'];

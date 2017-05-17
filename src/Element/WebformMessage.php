@@ -120,7 +120,7 @@ class WebformMessage extends RenderElement {
         $element['#attributes']['data-message-id'] = $message_id;
         $element['#attributes']['data-message-storage'] = $message_storage;
         $element['#attributes']['class'][] = 'js-webform-message--close-storage';
-        if (self::isClosed($message_storage, $message_id)) {
+        if (static::isClosed($message_storage, $message_id)) {
           $element['#closed'] = TRUE;
         }
       }

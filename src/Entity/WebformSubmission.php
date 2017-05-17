@@ -393,7 +393,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       return $this->webform_id->entity;
     }
     else {
-      return self::$webform;
+      return static::$webform;
     }
   }
 
@@ -578,13 +578,13 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     // @see \Drupal\webform_ui\Form\WebformUiElementTestForm::buildForm()
     if (isset($values['webform']) && ($values['webform'] instanceof WebformInterface)) {
       $webform = $values['webform'];
-      self::$webform = $values['webform'];
+      static::$webform = $values['webform'];
       $values['webform_id'] = 'temp';
     }
     else {
       /** @var \Drupal\webform\WebformInterface $webform */
       $webform = Webform::load($values['webform_id']);
-      self::$webform = NULL;
+      static::$webform = NULL;
     }
 
     // Get request's source entity parameter.

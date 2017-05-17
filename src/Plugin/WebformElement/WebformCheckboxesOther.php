@@ -20,7 +20,7 @@ class WebformCheckboxesOther extends Checkboxes {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + self::getOtherProperties();
+    return parent::getDefaultProperties() + static::getOtherProperties();
   }
 
   /**

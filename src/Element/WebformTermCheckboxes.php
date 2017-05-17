@@ -31,7 +31,7 @@ class WebformTermCheckboxes extends Checkboxes {
    * {@inheritdoc}
    */
   public static function processCheckboxes(&$element, FormStateInterface $form_state, &$complete_form) {
-    self::setOptions($element);
+    static::setOptions($element);
     $element = parent::processCheckboxes($element, $form_state, $complete_form);
 
     if (!\Drupal::moduleHandler()->moduleExists('taxonomy')) {

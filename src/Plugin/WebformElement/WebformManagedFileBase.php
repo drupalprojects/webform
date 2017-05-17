@@ -70,7 +70,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     }
 
     // Disable File element is there are no visible stream wrappers.
-    $scheme_options = self::getVisibleStreamWrappers();
+    $scheme_options = static::getVisibleStreamWrappers();
     return (empty($scheme_options)) ? FALSE : TRUE;
   }
 
@@ -84,7 +84,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     }
     else {
       // Display 'managed_file' stream wrappers warning.
-      $scheme_options = self::getVisibleStreamWrappers();
+      $scheme_options = static::getVisibleStreamWrappers();
       $uri_scheme = $this->getUriScheme($element);
       if (!isset($scheme_options[$uri_scheme]) && $this->currentUser->hasPermission('administer webform')) {
         drupal_set_message($this->t('The \'File\' element is unavailable because a <a href="https://www.drupal.org/documentation/modules/file">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
@@ -113,7 +113,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     parent::prepare($element, $webform_submission);
 
     // Check if the URI scheme exists and can be used the upload location.
-    $scheme_options = self::getVisibleStreamWrappers();
+    $scheme_options = static::getVisibleStreamWrappers();
     $uri_scheme = $this->getUriScheme($element);
     if (!isset($scheme_options[$uri_scheme])) {
       $element['#access'] = FALSE;
@@ -505,7 +505,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     if (isset($element['#uri_scheme'])) {
       return $element['#uri_scheme'];
     }
-    $scheme_options = self::getVisibleStreamWrappers();
+    $scheme_options = static::getVisibleStreamWrappers();
     if (isset($scheme_options['private'])) {
       return 'private';
     }
@@ -557,7 +557,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#type' => 'fieldset',
       '#title' => $this->t('File settings'),
     ];
-    $scheme_options = self::getVisibleStreamWrappers();
+    $scheme_options = static::getVisibleStreamWrappers();
 
     $form['file']['uri_scheme'] = [
       '#type' => 'radios',

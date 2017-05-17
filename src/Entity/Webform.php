@@ -626,7 +626,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getSettings() {
-    return $this->settings + self::getDefaultSettings();
+    return $this->settings + static::getDefaultSettings();
   }
 
   /**
@@ -634,7 +634,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function setSettings(array $settings) {
     // Always apply the default settings.
-    $this->settings = self::getDefaultSettings();
+    $this->settings = static::getDefaultSettings();
     // Now apply custom settings.
     foreach ($settings as $name => $value) {
       $this->settings[$name] = $value;
@@ -1413,8 +1413,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $values += [
       'status' => WebformInterface::STATUS_OPEN,
       'uid' => \Drupal::currentUser()->id(),
-      'settings' => self::getDefaultSettings(),
-      'access' => self::getDefaultAccessRules(),
+      'settings' => static::getDefaultSettings(),
+      'access' => static::getDefaultAccessRules(),
     ];
 
     // Convert boolean status to STATUS constant.

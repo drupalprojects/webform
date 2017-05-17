@@ -144,7 +144,7 @@ class WebformEntityReferenceItem extends EntityReferenceItem {
    *   The entity's target webform or NULL.
    */
   public static function getEntityWebformTarget(EntityInterface $entity = NULL) {
-    if ($field_name = self::getEntityWebformFieldName($entity)) {
+    if ($field_name = static::getEntityWebformFieldName($entity)) {
       return $entity->$field_name->entity;
     }
     else {

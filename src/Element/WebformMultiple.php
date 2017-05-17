@@ -82,7 +82,7 @@ class WebformMultiple extends FormElement {
     }
     else {
       // Get unique key used to store the current number of items.
-      $number_of_items_storage_key = self::getStorageKey($element, 'number_of_items');
+      $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
 
       // Store the number of items which is the number of
       // #default_values + number of empty_items.
@@ -115,7 +115,7 @@ class WebformMultiple extends FormElement {
     $element['#child_keys'] = Element::children($element['#element']);
 
     // Build (single) element header.
-    $header = self::buildElementHeader($element);
+    $header = static::buildElementHeader($element);
 
     // Build (single) element rows.
     $row_index = 0;
@@ -137,12 +137,12 @@ class WebformMultiple extends FormElement {
       if (!empty($element['#key']) && !isset($default_value[$element['#key']])) {
         $default_value[$element['#key']] = $key;
       }
-      $rows[$row_index] = self::buildElementRow($table_id, $row_index, $element, $default_value, $weight++, $ajax_settings);
+      $rows[$row_index] = static::buildElementRow($table_id, $row_index, $element, $default_value, $weight++, $ajax_settings);
       $row_index++;
     }
 
     while ($row_index < $number_of_items) {
-      $rows[$row_index] = self::buildElementRow($table_id, $row_index, $element, NULL, $weight++, $ajax_settings);
+      $rows[$row_index] = static::buildElementRow($table_id, $row_index, $element, NULL, $weight++, $ajax_settings);
       $row_index++;
     }
 
@@ -217,7 +217,7 @@ class WebformMultiple extends FormElement {
       $header['_handle_'] = '';
       if ($element['#child_keys']) {
         foreach ($element['#child_keys'] as $child_key) {
-          if (self::isHidden($element['#element'][$child_key])) {
+          if (static::isHidden($element['#element'][$child_key])) {
             continue;
           }
           $header[$child_key] = (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '';
@@ -278,7 +278,7 @@ class WebformMultiple extends FormElement {
       foreach ($element['#child_keys'] as $child_key) {
         // Store hidden element in the '_handle_' column.
         // @see \Drupal\webform\Element\WebformMultiple::convertValuesToItems
-        if (self::isHidden($element['#element'][$child_key])) {
+        if (static::isHidden($element['#element'][$child_key])) {
           $row['_handle_'][$child_key] = $element['#element'][$child_key];
           // ISSUE: All elements in _handle_ are losing their value.
           // WORKAROUND: Convert to element to rendered hidden field.
@@ -394,7 +394,7 @@ class WebformMultiple extends FormElement {
     $element =& NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -2));
 
     // Add more items to the number of items.
-    $number_of_items_storage_key = self::getStorageKey($element, 'number_of_items');
+    $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
     $number_of_items = $form_state->get($number_of_items_storage_key);
     $more_items = (int) $element['add']['more_items']['#value'];
     $form_state->set($number_of_items_storage_key, $number_of_items + $more_items);
@@ -430,7 +430,7 @@ class WebformMultiple extends FormElement {
     }
 
     // Add one item to the 'number of items'.
-    $number_of_items_storage_key = self::getStorageKey($element, 'number_of_items');
+    $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
     $number_of_items = $form_state->get($number_of_items_storage_key);
     $form_state->set($number_of_items_storage_key, $number_of_items + 1);
 
@@ -460,7 +460,7 @@ class WebformMultiple extends FormElement {
     $values = array_values($values);
 
     // Remove one item from the 'number of items'.
-    $number_of_items_storage_key = self::getStorageKey($element, 'number_of_items');
+    $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
     $number_of_items = $form_state->get($number_of_items_storage_key);
     // Never allow the number of items to be less than 1.
     if ($number_of_items != 1) {
@@ -496,7 +496,7 @@ class WebformMultiple extends FormElement {
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
     // Convert values to items and validate duplicate keys.
     try {
-      $items = self::convertValuesToItems($element, $values['items']);
+      $items = static::convertValuesToItems($element, $values['items']);
     }
     catch (\Exception $exception) {
       $form_state->setError($element, new FormattableMarkup($exception->getMessage(), []));
@@ -575,7 +575,7 @@ class WebformMultiple extends FormElement {
       }
 
       // Never add an empty item.
-      if (self::isEmpty($item)) {
+      if (static::isEmpty($item)) {
         continue;
       }
 
@@ -619,7 +619,7 @@ class WebformMultiple extends FormElement {
     }
     elseif (is_array($value)) {
       return !array_filter($value, function ($item) {
-        return !self::isEmpty($item);
+        return !static::isEmpty($item);
       });
     }
     else {

@@ -51,7 +51,7 @@ class WebformCreditCardNumber extends FormElement {
     $value = trim($element['#value']);
     $form_state->setValueForElement($element, $value);
 
-    if ($value !== '' && !self::validCreditCardNumber($value)) {
+    if ($value !== '' && !static::validCreditCardNumber($value)) {
       $form_state->setError($element, t('The credit card number is not valid.'));
     }
   }

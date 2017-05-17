@@ -44,7 +44,7 @@ class WebformHtmlEditor extends Textarea {
 
       $element['#attached']['library'][] = 'webform/webform.element.html_editor';
 
-      $element['#attached']['drupalSettings']['webform']['html_editor']['allowedContent'] = self::getAllowedContent();
+      $element['#attached']['drupalSettings']['webform']['html_editor']['allowedContent'] = static::getAllowedContent();
 
       /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
       $base_path = base_path();

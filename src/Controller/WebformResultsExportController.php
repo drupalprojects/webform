@@ -119,7 +119,7 @@ class WebformResultsExportController extends ControllerBase implements Container
       $export_options = $query + $this->submissionExporter->getDefaultExportOptions();
       $this->submissionExporter->setExporter($export_options);
       if ($this->submissionExporter->isBatch()) {
-        self::batchSet($webform, $source_entity, $export_options);
+        static::batchSet($webform, $source_entity, $export_options);
         return batch_process($this->requestHandler->getUrl($webform, $source_entity, 'webform.results_export'));
       }
       else {

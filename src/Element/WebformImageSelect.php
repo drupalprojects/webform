@@ -31,7 +31,7 @@ class WebformImageSelect extends Select {
    */
   public static function processSelect(&$element, FormStateInterface $form_state, &$complete_form) {
     // Convert #images to #options.
-    self::setOptions($element);
+    static::setOptions($element);
 
     // Set show label.
     if ($element['#show_label']) {

@@ -31,7 +31,7 @@ class WebformNodeAccess {
    *   The access result.
    */
   public static function checkWebformResultsAccess($operation, $entity_access, NodeInterface $node, AccountInterface $account) {
-    $access_result = self::checkAccess($operation, $entity_access, $node, NULL, $account);
+    $access_result = static::checkAccess($operation, $entity_access, $node, NULL, $account);
     if ($access_result->isAllowed()) {
       $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($node);
       return WebformAccess::checkResultsAccess($node->$webform_field_name->entity, $node);
@@ -57,7 +57,7 @@ class WebformNodeAccess {
    *   The access result.
    */
   public static function checkWebformLogAccess($operation, $entity_access, NodeInterface $node, AccountInterface $account) {
-    $access_result = self::checkWebformResultsAccess($operation, $entity_access, $node, $account);
+    $access_result = static::checkWebformResultsAccess($operation, $entity_access, $node, $account);
     if (!$access_result->isAllowed()) {
       return $access_result;
     }
@@ -88,7 +88,7 @@ class WebformNodeAccess {
    *   The access result.
    */
   public static function checkWebformAccess($operation, $entity_access, NodeInterface $node, AccountInterface $account) {
-    return self::checkAccess($operation, $entity_access, $node, NULL, $account);
+    return static::checkAccess($operation, $entity_access, $node, NULL, $account);
   }
 
   /**
@@ -113,7 +113,7 @@ class WebformNodeAccess {
    *   The access result.
    */
   public static function checkWebformSubmissionAccess($operation, $entity_access, NodeInterface $node, WebformSubmissionInterface $webform_submission, AccountInterface $account, $mode = NULL, $resend = FALSE) {
-    $access_result = self::checkAccess($operation, $entity_access, $node, $webform_submission, $account);
+    $access_result = static::checkAccess($operation, $entity_access, $node, $webform_submission, $account);
     if ($access_result->isForbidden()) {
       return $access_result;
     }

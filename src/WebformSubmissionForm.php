@@ -1726,7 +1726,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   A webform submission is there are no validation errors.
    */
   public static function validateValues(array $values) {
-    return self::submitValues($values, TRUE);
+    return static::submitValues($values, TRUE);
   }
 
   /**

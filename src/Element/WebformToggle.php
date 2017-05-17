@@ -15,7 +15,7 @@ class WebformToggle extends Checkbox {
    * {@inheritdoc}
    */
   public function getInfo() {
-    return self::getDefaultProperties() + parent::getInfo();
+    return static::getDefaultProperties() + parent::getInfo();
   }
 
   /**
