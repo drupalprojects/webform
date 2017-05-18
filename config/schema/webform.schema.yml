@@ -247,6 +247,16 @@ webform.settings:
         composite_element_item_format:
           type: string
           label: 'Composite element item format'
+        excluded_exporters:
+          type: ignore
+          label: 'Excluded submission exporters'
+    handler:
+      type: mapping
+      label: 'Handler settings'
+      mapping:
+        excluded_handlers:
+          type: ignore
+          label: 'Excluded submission handlers'
     batch:
       type: mapping
       label: 'Batch settings'
@@ -262,7 +272,7 @@ webform.settings:
           label: 'Batch delete size'
     purge_settings:
       type: mapping
-      label: 'Automated purging settings'
+      label: 'Purging settings'
       mapping:
         cron_size:
           type: integer

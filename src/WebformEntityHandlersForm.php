@@ -117,20 +117,32 @@ class WebformEntityHandlersForm extends EntityForm {
       800,
       ['button', 'button-action', 'button--primary', 'button--small']
     );
-    $form['local_actions'] = [
-      'add_element' => [
+
+    // Filter add handler by excluded_handlers.
+    /** @var \Drupal\webform\WebformHandlerManagerInterface $handler_manager */
+    $handler_manager = \Drupal::service('plugin.manager.webform.handler');
+    $handler_definitions = $handler_manager->getDefinitions();
+    $handler_definitions = $handler_manager->removeExcludeDefinitions($handler_definitions);
+    unset($handler_definitions['broken']);
+
+    $form['local_actions'] = [];
+    if (isset($handler_definitions['email'])) {
+      $form['local_actions']['add_email'] = [
         '#type' => 'link',
         '#title' => $this->t('Add email'),
         '#url' => new Url('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => 'email']),
         '#attributes' => $dialog_attributes,
-        'add_page' => [
-          '#type' => 'link',
-          '#title' => $this->t('Add handler'),
-          '#url' => new Url('entity.webform.handlers', ['webform' => $webform->id()]),
-          '#attributes' => $dialog_attributes,
-        ],
-      ],
-    ];
+      ];
+    }
+    unset($handler_definitions['email']);
+    if ($handler_definitions) {
+      $form['local_actions']['add_handler'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Add handler'),
+        '#url' => new Url('entity.webform.handlers', ['webform' => $webform->id()]),
+        '#attributes' => $dialog_attributes,
+      ];
+    }
 
     // Build the list of existing webform handlers for this webform.
     $form['handlers'] = [

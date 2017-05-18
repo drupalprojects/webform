@@ -4,15 +4,15 @@ services:
 
   plugin.manager.webform.element:
     class: Drupal\webform\WebformElementManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@plugin.manager.element_info']
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@config.factory', '@plugin.manager.element_info']
 
   plugin.manager.webform.handler:
     class: Drupal\webform\WebformHandlerManager
-    parent: default_plugin_manager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@config.factory']
 
   plugin.manager.webform.exporter:
     class: Drupal\webform\WebformExporterManager
-    parent: default_plugin_manager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@config.factory']
 
   # Logger.
 

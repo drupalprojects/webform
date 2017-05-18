@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Form;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Xss;
@@ -16,6 +17,8 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformAddonsManagerInterface;
 use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\WebformExporterManagerInterface;
+use Drupal\webform\WebformHandlerManagerInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -40,6 +43,20 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    * @var \Drupal\webform\WebformElementManagerInterface
    */
   protected $elementManager;
+
+  /**
+   * The webform handler manager.
+   *
+   * @var \Drupal\webform\WebformHandlerManagerInterface
+   */
+  protected $handlerManager;
+
+  /**
+   * The webform exporter manager.
+   *
+   * @var \Drupal\webform\WebformExporterManagerInterface
+   */
+  protected $exporterManager;
 
   /**
    * The webform submission exporter.
@@ -81,7 +98,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    *
    * @var array
    */
-  protected $elementTypes;
+  protected $elementIds;
 
   /**
    * {@inheritdoc}
@@ -106,6 +123,10 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    *   The module handler.
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.
+   * @param \Drupal\webform\WebformHandlerManagerInterface $handler_manager
+   *   The webform handler manager.
+   * @param \Drupal\webform\WebformExporterManagerInterface $exporter_manager
+   *   The webform exporter manager.
    * @param \Drupal\webform\WebformSubmissionExporterInterface $submission_exporter
    *   The webform submission exporter.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
@@ -117,10 +138,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    * @param \Drupal\webform\WebformAddonsManagerInterface $addons_manager
    *   The add-ons manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, WebformElementManagerInterface $element_manager, WebformSubmissionExporterInterface $submission_exporter, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformAddonsManagerInterface $addons_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, WebformElementManagerInterface $element_manager, WebformHandlerManagerInterface $handler_manager, WebformExporterManagerInterface $exporter_manager, WebformSubmissionExporterInterface $submission_exporter, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformAddonsManagerInterface $addons_manager) {
     parent::__construct($config_factory);
     $this->moduleHandler = $module_handler;
     $this->elementManager = $element_manager;
+    $this->handlerManager = $handler_manager;
+    $this->exporterManager = $exporter_manager;
     $this->submissionExporter = $submission_exporter;
     $this->tokenManager = $token_manager;
     $this->librariesManager = $libraries_manager;
@@ -136,6 +159,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('module_handler'),
       $container->get('plugin.manager.webform.element'),
+      $container->get('plugin.manager.webform.handler'),
+      $container->get('plugin.manager.webform.exporter'),
       $container->get('webform_submission.exporter'),
       $container->get('webform.token_manager'),
       $container->get('webform.libraries_manager'),
@@ -150,7 +175,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('webform.settings');
     $settings = $config->get('settings');
-    $element_plugins = $this->elementManager->getInstances();
 
     // Page.
     $form['page'] = [
@@ -548,31 +572,15 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     ];
 
     // (Excluded) Types.
-    $types_header = [
-      'title' => ['data' => $this->t('Title')],
-      'type' => ['data' => $this->t('Type')],
-    ];
-    $this->elementTypes = [];
-    $types_options = [];
-    foreach ($element_plugins as $element_id => $element_plugin) {
-      $this->elementTypes[$element_id] = $element_id;
-      $types_options[$element_id] = [
-        'title' => $element_plugin->getPluginLabel(),
-        'type' => $element_plugin->getTypeName(),
-      ];
-    }
     $form['types'] = [
       '#type' => 'details',
       '#title' => $this->t('Element types'),
       '#description' => $this->t('Select available element types'),
     ];
-    $form['types']['excluded_types'] = [
-      '#type' => 'tableselect',
-      '#header' => $types_header,
-      '#options' => $types_options,
-      '#required' => TRUE,
-      '#default_value' => array_diff($this->elementTypes, $config->get('elements.excluded_types')),
-    ];
+    $form['types']['excluded_types'] = $this->buildExcludedPlugins(
+      $this->elementManager,
+      $config->get('elements.excluded_types')
+    );
 
     // File.
     $form['file'] = [
@@ -621,6 +629,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Format default settings'),
       '#tree' => TRUE,
     ];
+    $element_plugins = $this->elementManager->getInstances();
     foreach ($element_plugins as $element_id => $element_plugin) {
       // Element.
       $element_plugin_definition = $element_plugin->getPluginDefinition();
@@ -665,6 +674,32 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         ];
       }
     }
+
+    // (Excluded) Handlers.
+    $form['handler'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission handlers'),
+      '#description' => $this->t('Select available submission handlers'),
+    ];
+    $form['handler']['excluded_handlers'] = $this->buildExcludedPlugins(
+      $this->handlerManager,
+      $config->get('handler.excluded_handlers')
+    );
+    $excluded_handler_checkboxes = [];
+    foreach ($form['handler']['excluded_handlers']['#options'] as $handler_id => $option) {
+      if ($excluded_handler_checkboxes) {
+        $excluded_handler_checkboxes[] = 'or';
+      }
+      $excluded_handler_checkboxes[] = [':input[name="excluded_handlers[' . $handler_id . ']"]' => ['checked' => FALSE]];
+    }
+    $form['handler']['excluded_handlers_message'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t('All excluded handlers must be manually removed from existing webforms.'),
+      '#message_type' => 'warning',
+      '#states' => [
+        'visible' => $excluded_handler_checkboxes,
+      ],
+    ];
 
     // Mail.
     $form['mail'] = [
@@ -737,6 +772,17 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     );
     $export_form_state = new FormState();
     $this->submissionExporter->buildExportOptionsForm($form, $export_form_state, $export_options);
+
+    // (Excluded) Exporters.
+    $form['exporters'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission exporters'),
+      '#description' => $this->t('Select available submission exporters'),
+    ];
+    $form['exporters']['excluded_exporters'] = $this->buildExcludedPlugins(
+      $this->exporterManager,
+      $config->get('export.excluded_exporters') ?: [] ?: []
+    );
 
     // Batch.
     $form['batch'] = [
@@ -1030,19 +1076,21 @@ class WebformAdminSettingsForm extends ConfigFormBase {
 
     /* Excluded types */
 
-    // Convert list of included types to excluded types.
-    $excluded_types = array_diff($this->elementTypes, array_filter($form_state->getValue('excluded_types')));
-    ksort($excluded_types);
+    // Convert list of included elements, handlers, exporters to excluded.
+    $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_types'));
+    $excluded_handlers = $this->convertIncludedToExcludedPluginIds($this->handlerManager, $form_state->getValue('excluded_handlers'));
+    $excluded_exporters = $this->convertIncludedToExcludedPluginIds($this->exporterManager, $form_state->getValue('excluded_exporters'));
 
     /* Config save */
     $config = $this->config('webform.settings');
     $config->set('settings', $settings);
     $config->set('assets', $form_state->getValue('assets'));
-    $config->set('elements', $form_state->getValue('elements') + ['excluded_types' => $excluded_types]);
+    $config->set('elements', $form_state->getValue('elements') + ['excluded_types' => $excluded_elements]);
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
+    $config->set('handler', ['excluded_handlers' => $excluded_handlers]);
     $config->set('mail', $form_state->getValue('mail'));
-    $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()));
+    $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()) + ['excluded_exporters' => $excluded_exporters]);
     $config->set('batch', $form_state->getValue('batch'));
     $config->set('purge_settings', $form_state->getValue('purge_settings'));
     $config->set('test', $form_state->getValue('test'));
@@ -1086,6 +1134,78 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     if (class_exists('\Drupal\file\Plugin\Field\FieldType\FileItem')) {
       FileItem::validateMaxFilesize($element, $form_state);
     }
+  }
+
+  /****************************************************************************/
+  // Exclude plugins
+  /****************************************************************************/
+
+  /**
+   * Build excluded plugins element.
+   *
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   A webform element, handler, or exporter plugin manager.
+   * @param array $excluded_ids
+   *   An array of excluded ids.
+   *
+   * @return array
+   *   A table select element used to excluded plugins by id.
+   */
+  protected function buildExcludedPlugins(PluginManagerInterface $plugin_manager, array $excluded_ids) {
+    $plugins = $plugin_manager->getDefinitions();
+    $plugins = $plugin_manager->getSortedDefinitions($plugins);
+
+    $header = [
+      'title' => ['data' => $this->t('Title')],
+      'id' => ['data' => $this->t('Name'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
+      'description' => ['data' => $this->t('Description'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
+    ];
+
+    $ids = [];
+    $options = [];
+    foreach ($plugins as $id => $plugin_definition) {
+      $ids[$id] = $id;
+      $options[$id] = [
+        'title' => $plugin_definition['label'],
+        'id' => $plugin_definition['id'],
+        'description' => $plugin_definition['description'],
+      ];
+    }
+
+    return [
+      '#type' => 'tableselect',
+      '#header' => $header,
+      '#options' => $options,
+      '#required' => TRUE,
+      '#default_value' => array_diff($ids, $excluded_ids),
+    ];
+  }
+
+  /**
+   * Convert included ids returned from table select element to excluded ids.
+   *
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   A webform element, handler, or exporter plugin manager.
+   * @param array $included_ids
+   *   An array of included_ids.
+   *
+   * @return array
+   *   An array of excluded ids.
+   *
+   * @see \Drupal\webform\Form\WebformAdminSettingsForm::buildExcludedPlugins
+   */
+  protected function convertIncludedToExcludedPluginIds(PluginManagerInterface $plugin_manager, array $included_ids) {
+    $plugins = $plugin_manager->getDefinitions();
+    $plugins = $plugin_manager->getSortedDefinitions($plugins);
+
+    $ids = [];
+    foreach ($plugins as $id => $plugin) {
+      $ids[$id] = $id;
+    }
+
+    $excluded_ids = array_diff($ids, array_filter($included_ids));
+    ksort($excluded_ids);
+    return $excluded_ids;
   }
 
 }

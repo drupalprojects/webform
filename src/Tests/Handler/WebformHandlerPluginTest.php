@@ -2,15 +2,15 @@
 
 namespace Drupal\webform\Tests\Handler;
 
-use Drupal\simpletest\WebTestBase;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for the webform handler plugin.
  *
  * @group Webform
  */
-class WebformHandlerPluginTest extends WebTestBase {
+class WebformHandlerPluginTest extends WebformTestBase {
 
   /**
    * Modules to enable.

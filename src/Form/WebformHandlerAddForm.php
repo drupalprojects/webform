@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformHandlerManagerInterface;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Provides an add form for webform handler.
@@ -43,6 +44,11 @@ class WebformHandlerAddForm extends WebformHandlerFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL, $webform_handler = NULL) {
     $form = parent::buildForm($form, $form_state, $webform, $webform_handler);
+    // Throw access denied is handler is excluded.
+    if ($this->webformHandler->isExcluded()) {
+      throw new AccessDeniedHttpException();
+    }
+
     $form['#title'] = $this->t('Add @label handler', ['@label' => $this->webformHandler->label()]);
     return $form;
   }

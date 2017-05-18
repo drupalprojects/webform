@@ -4,6 +4,7 @@ namespace Drupal\webform;
 
 use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
@@ -21,6 +22,13 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
 class WebformElementManager extends DefaultPluginManager implements FallbackPluginManagerInterface, WebformElementManagerInterface {
 
   use CategorizingPluginManagerTrait;
+
+  /**
+   * The configuration object factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * A element info manager.
@@ -46,11 +54,14 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration object factory.
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   The element info manager.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, ElementInfoManagerInterface $element_info) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory, ElementInfoManagerInterface $element_info) {
     parent::__construct('Plugin/WebformElement', $namespaces, $module_handler, 'Drupal\webform\WebformElementInterface', 'Drupal\webform\Annotation\WebformElement');
+    $this->configFactory = $config_factory;
     $this->elementInfo = $element_info;
 
     $this->alterInfo('webform_element_info');
@@ -112,12 +123,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
   public function getInstances() {
     $plugin_definitions = $this->getDefinitions();
     $plugin_definitions = $this->getSortedDefinitions($plugin_definitions);
-
-    // If all the plugin definitions are initialize returned the cached
-    // instances.
-    if (count($plugin_definitions) == count($this->instances)) {
-      return $this->instances;
-    }
+    $plugin_definitions = $this->removeExcludeDefinitions($plugin_definitions);
 
     // Initialize and return all plugin instances.
     foreach ($plugin_definitions as $plugin_id => $plugin_definition) {
@@ -213,6 +219,15 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
       $grouped_definitions += [$other_category => $no_category];
     }
     return $grouped_definitions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function removeExcludeDefinitions(array $definitions) {
+    $definitions = isset($definitions) ? $definitions : $this->getDefinitions();
+    $excluded = $this->configFactory->get('webform.settings')->get('element.excluded_types');
+    return $excluded ? array_diff_key($definitions, $excluded) : $definitions;
   }
 
   /**

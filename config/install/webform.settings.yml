@@ -43,6 +43,8 @@ settings:
 assets:
   css: ''
   javascript: ''
+handler:
+  excluded_handlers: {  }
 export:
   exporter: delimited
   delimiter: ','
@@ -59,6 +61,7 @@ export:
   entity_reference_format: link
   likert_answers_format: label
   signature_format: status
+  excluded_exporters: {  }
 batch:
   default_batch_export_size: 500
   default_batch_update_size: 500

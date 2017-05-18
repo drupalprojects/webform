@@ -175,6 +175,14 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function isHidden();
 
   /**
+   * Checks if the element is excluded via webform.settings.
+   *
+   * @return bool
+   *   TRUE if the element is excluded.
+   */
+  public function isExcluded();
+
+  /**
    * Checks if the element is enabled.
    *
    * @return bool

@@ -2,6 +2,7 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
@@ -61,6 +62,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $logger;
 
   /**
+   * The configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Webform submission storage.
    *
    * @var \Drupal\webform\WebformSubmissionStorageInterface
@@ -70,11 +78,28 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager) {
+  /**
+   * Constructs a WebformElementBast object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->setConfiguration($configuration);
     $this->logger = $logger;
+    $this->configFactory = $config_factory;
     $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
   }
 
@@ -87,6 +112,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory')->get('webform'),
+      $container->get('config.factory'),
       $container->get('entity_type.manager')
     );
   }
@@ -201,6 +227,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    */
   public function getWeight() {
     return $this->weight;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isExcluded() {
+    return $this->configFactory->get('webform.settings')->get('handler.excluded_handlers.' . $this->pluginDefinition['id']) ? TRUE : FALSE;
   }
 
   /**

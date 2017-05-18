@@ -101,10 +101,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, ConfigFactoryInterface $config_factory, MailManagerInterface $mail_manager, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $entity_type_manager);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, MailManagerInterface $mail_manager, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $config_factory, $entity_type_manager);
     $this->currentUser = $current_user;
-    $this->configFactory = $config_factory;
     $this->mailManager = $mail_manager;
     $this->tokenManager = $token_manager;
     $this->elementManager = $element_manager;
@@ -119,9 +118,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory')->get('webform.email'),
+      $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('config.factory'),
       $container->get('plugin.manager.mail'),
       $container->get('webform.token_manager'),
       $container->get('plugin.manager.webform.element')

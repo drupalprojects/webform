@@ -154,6 +154,14 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function setStatus($status);
 
   /**
+   * Checks if the handler is excluded via webform.settings.
+   *
+   * @return bool
+   *   TRUE if the handler is excluded.
+   */
+  public function isExcluded();
+
+  /**
    * Returns the webform handler enabled indicator.
    *
    * @return bool

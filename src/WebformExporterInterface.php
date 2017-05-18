@@ -35,6 +35,14 @@ interface WebformExporterInterface extends PluginInspectionInterface, Configurab
   public function description();
 
   /**
+   * Checks if the exporter is excluded via webform.settings.
+   *
+   * @return bool
+   *   TRUE if the exporter is excluded.
+   */
+  public function isExcluded();
+
+  /**
    * Determine if exporter generates an archive.
    *
    * @return bool

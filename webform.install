@@ -666,3 +666,10 @@ function _webform_update_8046_convert_data(array $data) {
 
   return $data;
 }
+
+/**
+ * Issue #2879217: Allow WebformHandlers and WebformExporters to be excluded.
+ */
+function webform_update_8047() {
+  _webform_update_admin_settings();
+}

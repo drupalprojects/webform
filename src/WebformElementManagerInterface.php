@@ -79,6 +79,16 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
   public function getSortedDefinitions(array $definitions = NULL, $sort_by = 'label');
 
   /**
+   * Remove excluded plugin definitions.
+   *
+   * @param array $definitions
+   *   The plugin definitions to filter
+   * @return array
+   *   An array of plugin definitions with excluded plugins removed.
+   */
+  public function removeExcludeDefinitions(array $definitions);
+
+  /**
    * Get all translatable properties from all elements.
    *
    * @return array

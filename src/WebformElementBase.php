@@ -124,10 +124,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The token manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The libraries manager.
-   * @param \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage
-   *   The webform submission storage.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, WebformSubmissionStorageInterface $webform_submission_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->logger = $logger;
     $this->configFactory = $config_factory;
@@ -137,7 +135,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $this->elementManager = $element_manager;
     $this->tokenManager = $token_manager;
     $this->librariesManager = $libraries_manager;
-    $this->submissionStorage = $webform_submission_storage;
+    $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
   }
 
   /**
@@ -155,8 +153,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $container->get('plugin.manager.element_info'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.token_manager'),
-      $container->get('webform.libraries_manager'),
-      $container->get('entity_type.manager')->getStorage('webform_submission')
+      $container->get('webform.libraries_manager')
     );
   }
 
@@ -394,8 +391,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
+  public function isExcluded() {
+    return $this->configFactory->get('webform.settings')->get('elements.excluded_types.' . $this->pluginDefinition['id']) ? TRUE : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isEnabled() {
-    return \Drupal::config('webform.settings')->get('elements.excluded_types.' . $this->pluginDefinition['id']) ? FALSE : TRUE;
+    return !$this->isExcluded();
   }
 
   /**
@@ -1608,7 +1612,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'textfield',
       '#title' => $this->t('Placeholder'),
       '#description' => $this->t('The placeholder will be shown in the element until the user starts entering a value.'),
-      '#maxlength' => 255,
     ];
     $form['form']['autocomplete'] = [
       '#type' => 'select',
