@@ -71,7 +71,7 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
 
     // Disable managed file element.
     \Drupal::configFactory()->getEditable('webform.settings')
-      ->set('elements.excluded_types.managed_file', 'managed_file')
+      ->set('element.excluded_elements.managed_file', 'managed_file')
       ->save();
 
     // Check disabled managed_file element remove from add element dialog.

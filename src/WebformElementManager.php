@@ -226,7 +226,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
    */
   public function removeExcludeDefinitions(array $definitions) {
     $definitions = isset($definitions) ? $definitions : $this->getDefinitions();
-    $excluded = $this->configFactory->get('webform.settings')->get('element.excluded_types');
+    $excluded = $this->configFactory->get('webform.settings')->get('element.excluded_elements');
     return $excluded ? array_diff_key($definitions, $excluded) : $definitions;
   }
 

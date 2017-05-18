@@ -39,8 +39,8 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
       /** @var \Drupal\webform\WebformElementInterface $webform_element */
       $webform_element = $elements[$plugin_id];
 
-      // Skip disabled or hidden plugins.
-      if ($webform_element->isDisabled() || $webform_element->isHidden()) {
+      // Skip hidden plugins.
+      if ($webform_element->isHidden()) {
         continue;
       }
 

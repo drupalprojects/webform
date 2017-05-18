@@ -114,9 +114,9 @@ webform.settings:
         javascript:
           type: string
           label: 'JavaScript'
-    elements:
+    element:
       type: mapping
-      label: 'Elements default settings'
+      label: 'Element default settings'
       mapping:
         allowed_tags:
           type: string
@@ -136,7 +136,7 @@ webform.settings:
         default_google_maps_api_key:
           type: string
           label: 'Default Google Maps API key'
-        excluded_types:
+        excluded_elements:
           type: ignore
           label: 'Excluded types'
     file:
@@ -270,7 +270,7 @@ webform.settings:
         default_batch_delete_size:
           type: integer
           label: 'Batch delete size'
-    purge_settings:
+    purge:
       type: mapping
       label: 'Purging settings'
       mapping:

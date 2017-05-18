@@ -113,7 +113,7 @@ function webform_user_login($account) {
  */
 function webform_cron() {
   $config = \Drupal::config('webform.settings');
-  \Drupal::entityTypeManager()->getStorage('webform_submission')->purge($config->get('purge_settings.cron_size'));
+  \Drupal::entityTypeManager()->getStorage('webform_submission')->purge($config->get('purge.cron_size'));
 }
 
 /**

@@ -33,14 +33,14 @@ class WebformElementTest extends WebformTestBase {
 
     // Check custom <ignored> <tag> is allowed and <b> tag removed.
     \Drupal::configFactory()->getEditable('webform.settings')
-      ->set('elements.allowed_tags', 'ignored tag')
+      ->set('element.allowed_tags', 'ignored tag')
       ->save();
     $this->drupalGet('webform/test_element_allowed_tags');
     $this->assertRaw('Hello <ignored></tag>...Goodbye');
 
     // Restore admin tags.
     \Drupal::configFactory()->getEditable('webform.settings')
-      ->set('elements.allowed_tags', 'admin')
+      ->set('element.allowed_tags', 'admin')
       ->save();
   }
 

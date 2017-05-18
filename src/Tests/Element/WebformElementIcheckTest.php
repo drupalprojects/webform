@@ -39,7 +39,7 @@ class WebformElementIcheckTest extends WebformTestBase {
 
     // Enable default icheck style.
     \Drupal::configFactory()->getEditable('webform.settings')
-      ->set('elements.default_icheck', 'minimal')
+      ->set('element.default_icheck', 'minimal')
       ->save();
 
     // Check custom iCheck style still set to 'flat'.

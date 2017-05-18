@@ -118,12 +118,12 @@ class WebformLibrariesTest extends WebformTestBase {
 
     // Exclude element types that require libraries.
     $edit = [
-      'excluded_types[webform_image_select]' => FALSE,
-      'excluded_types[webform_location]' => FALSE,
-      'excluded_types[webform_rating]' => FALSE,
-      'excluded_types[webform_signature]' => FALSE,
-      'excluded_types[webform_toggle]' => FALSE,
-      'excluded_types[webform_toggles]' => FALSE,
+      'excluded_elements[webform_image_select]' => FALSE,
+      'excluded_elements[webform_location]' => FALSE,
+      'excluded_elements[webform_rating]' => FALSE,
+      'excluded_elements[webform_signature]' => FALSE,
+      'excluded_elements[webform_toggle]' => FALSE,
+      'excluded_elements[webform_toggles]' => FALSE,
     ];
     $this->drupalPostForm('admin/structure/webform/settings', $edit, t('Save configuration'));
 

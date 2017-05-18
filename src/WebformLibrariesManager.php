@@ -382,10 +382,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *   TRUE if a library's elements are excluded.
    */
   protected function areElementsExcluded(array $elements) {
-    $excluded_types = $this->configFactory->get('webform.settings')->get('elements.excluded_types');
-    if (!$excluded_types) {
+    $excluded_elements = $this->configFactory->get('webform.settings')->get('element.excluded_elements');
+    if (!$excluded_elements) {
       return FALSE;
     }
-    return WebformArrayHelper::keysExist($excluded_types, $elements);
+    return WebformArrayHelper::keysExist($excluded_elements, $elements);
   }
 }

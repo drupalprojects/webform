@@ -84,7 +84,7 @@ class WebformPluginElementController extends ControllerBase implements Container
     $webform_form_element_rows = [];
     $element_rows = [];
 
-    $excluded_types = $this->config('webform.settings')->get('elements.excluded_types');
+    $excluded_elements = $this->config('webform.settings')->get('element.excluded_elements');
 
     $default_properties = [
       // Element settings.
@@ -152,7 +152,7 @@ class WebformPluginElementController extends ControllerBase implements Container
         $dependencies = $webform_element_plugin_definition['dependencies'];
 
         $webform_info_definitions = [
-          'excluded' => isset($excluded_types[$element_plugin_id]),
+          'excluded' => isset($excluded_elements[$element_plugin_id]),
           'input' => $webform_element->isInput($element),
           'container' => $webform_element->isContainer($element),
           'root' => $webform_element->isRoot(),
@@ -222,7 +222,7 @@ class WebformPluginElementController extends ControllerBase implements Container
             $operations ? ['data' => ['#type' => 'operations', '#links' => $operations]] : '',
           ],
         ];
-        if (isset($excluded_types[$element_plugin_id])) {
+        if (isset($excluded_elements[$element_plugin_id])) {
           $webform_form_element_rows[$element_plugin_id]['class'] = ['color-warning'];
         }
       }

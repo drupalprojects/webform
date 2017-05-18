@@ -469,13 +469,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('assets.javascript'),
     ];
 
-    // Elements.
-    $form['elements'] = [
+    // Element.
+    $form['element'] = [
       '#type' => 'details',
       '#title' => $this->t('Element default settings'),
       '#tree' => TRUE,
     ];
-    $form['elements']['allowed_tags'] = [
+    $form['element']['allowed_tags'] = [
       '#type' => 'webform_radios_other',
       '#title' => $this->t('Allowed tags'),
       '#options' => [
@@ -488,23 +488,23 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#other__maxlength' => 1000,
       '#required' => TRUE,
       '#description' => $this->t('Allowed tags are applied to any element property that may contain HTML markup. This properties include #title, #description, #field_prefix, and #field_suffix'),
-      '#default_value' => $config->get('elements.allowed_tags'),
+      '#default_value' => $config->get('element.allowed_tags'),
     ];
-    $form['elements']['wrapper_classes'] = [
+    $form['element']['wrapper_classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Wrapper CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Wrapper CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#required' => TRUE,
-      '#default_value' => $config->get('elements.wrapper_classes'),
+      '#default_value' => $config->get('element.wrapper_classes'),
     ];
-    $form['elements']['classes'] = [
+    $form['element']['classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Element CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Element CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#required' => TRUE,
-      '#default_value' => $config->get('elements.classes'),
+      '#default_value' => $config->get('element.classes'),
     ];
-    $form['elements']['default_description_display'] = [
+    $form['element']['default_description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Default description display'),
       '#options' => [
@@ -515,9 +515,9 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         'tooltip' => $this->t('Tooltip'),
       ],
       '#description' => $this->t('Determines the default placement of the description for all webform elements.'),
-      '#default_value' => $config->get('elements.default_description_display'),
+      '#default_value' => $config->get('element.default_description_display'),
     ];
-    $form['elements']['default_icheck'] = [
+    $form['element']['default_icheck'] = [
       '#type' => 'select',
       '#title' => $this->t('Enhance checkboxes/radio buttons using iCheck'),
       '#description' => $this->t('Replaces checkboxes/radio buttons with jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
@@ -560,14 +560,14 @@ class WebformAdminSettingsForm extends ConfigFormBase {
           'flat-aero' => $this->t('Flat: Aero'),
         ],
       ],
-      '#default_value' => $config->get('elements.default_icheck'),
+      '#default_value' => $config->get('element.default_icheck'),
       '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
-    $form['elements']['default_google_maps_api_key'] = [
+    $form['element']['default_google_maps_api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Google Maps API key'),
       '#description' => $this->t('Google requires users to use a valid API key. Using the <a href="https://console.developers.google.com/apis">Google API Manager</a>, you can enable the <em>Google Maps JavaScript API</em>. That will create (or reuse) a <em>Browser key</em> which you can paste here.'),
-      '#default_value' => $config->get('elements.default_google_maps_api_key'),
+      '#default_value' => $config->get('element.default_google_maps_api_key'),
       '#access' => $this->librariesManager->isIncluded('jquery.geocomplete'),
     ];
 
@@ -577,9 +577,9 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Element types'),
       '#description' => $this->t('Select available element types'),
     ];
-    $form['types']['excluded_types'] = $this->buildExcludedPlugins(
+    $form['types']['excluded_elements'] = $this->buildExcludedPlugins(
       $this->elementManager,
-      $config->get('elements.excluded_types')
+      $config->get('element.excluded_elements')
     );
 
     // File.
@@ -812,16 +812,16 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('batch.default_batch_delete_size'),
     ];
 
-    $form['purge_settings'] = [
+    $form['purge'] = [
       '#type' => 'details',
       '#title' => $this->t('Automated purging settings'),
       '#tree' => TRUE,
     ];
-    $form['purge_settings']['cron_size'] = [
+    $form['purge']['cron_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Amount of submissions to process'),
       '#min' => 1,
-      '#default_value' => $config->get('purge_settings.cron_size'),
+      '#default_value' => $config->get('purge.cron_size'),
       '#description' => $this->t('Amount of submissions to purge during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
     ];
 
@@ -1077,7 +1077,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     /* Excluded types */
 
     // Convert list of included elements, handlers, exporters to excluded.
-    $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_types'));
+    $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_elements'));
     $excluded_handlers = $this->convertIncludedToExcludedPluginIds($this->handlerManager, $form_state->getValue('excluded_handlers'));
     $excluded_exporters = $this->convertIncludedToExcludedPluginIds($this->exporterManager, $form_state->getValue('excluded_exporters'));
 
@@ -1085,14 +1085,14 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $config = $this->config('webform.settings');
     $config->set('settings', $settings);
     $config->set('assets', $form_state->getValue('assets'));
-    $config->set('elements', $form_state->getValue('elements') + ['excluded_types' => $excluded_elements]);
+    $config->set('element', $form_state->getValue('element') + ['excluded_elements' => $excluded_elements]);
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
     $config->set('handler', ['excluded_handlers' => $excluded_handlers]);
     $config->set('mail', $form_state->getValue('mail'));
     $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()) + ['excluded_exporters' => $excluded_exporters]);
     $config->set('batch', $form_state->getValue('batch'));
-    $config->set('purge_settings', $form_state->getValue('purge_settings'));
+    $config->set('purge', $form_state->getValue('purge'));
     $config->set('test', $form_state->getValue('test'));
     $config->set('ui', $form_state->getValue('ui'));
     $config->set('libraries', $libraries);

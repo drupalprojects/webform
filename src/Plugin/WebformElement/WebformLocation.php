@@ -115,7 +115,7 @@ class WebformLocation extends WebformCompositeBase {
       $google_map_url = UrlGenerator::fromUri('http://maps.google.com/', ['query' => ['q' => $value['value']]]);
 
       $location = $value['location'];
-      $key = (isset($element['#api_key'])) ? $element['#api_key'] : $this->configFactory->get('webform.settings')->get('elements.default_google_maps_api_key');
+      $key = (isset($element['#api_key'])) ? $element['#api_key'] : $this->configFactory->get('webform.settings')->get('element.default_google_maps_api_key');
       $center = urlencode($value['location']);
       $image_map_uri = "https://maps.googleapis.com/maps/api/staticmap?zoom=14&size=600x338&markers=color:red%7C$location&key=$key&center=$center";
 
@@ -190,7 +190,7 @@ class WebformLocation extends WebformCompositeBase {
       '#title' => $this->t('Google Maps API key'),
       '#description' => $this->t('Google requires users to use a valid API key. Using the <a href="https://console.developers.google.com/apis">Google API Manager</a>, you can enable the <em>Google Maps JavaScript API</em>. That will create (or reuse) a <em>Browser key</em> which you can paste here.'),
     ];
-    $default_api_key = \Drupal::config('webform.settings')->get('elements.default_google_maps_api_key');
+    $default_api_key = \Drupal::config('webform.settings')->get('element.default_google_maps_api_key');
     if ($default_api_key) {
       $form['composite']['api_key']['#description'] .= '<br/>' . $this->t('Defaults to: %value', ['%value' => $default_api_key]);
     }

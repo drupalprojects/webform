@@ -673,3 +673,34 @@ function _webform_update_8046_convert_data(array $data) {
 function webform_update_8047() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2879421: Cleanup webform.settings
+ */
+function webform_update_8048() {
+  _webform_update_admin_settings();
+
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+
+  // Change webform.settings.purge_settings to webform.settings.purge.
+  if ($config->get('purge_settings')) {
+    $config->set('purge', $config->get('purge_settings'));
+    $config->clear('purge_settings');
+  }
+
+  // Change webform.settings.elements to webform.settings.element.
+  if ($config->get('elements')) {
+    $config->set('element', $config->get('element'));
+    $config->clear('elements');
+  }
+
+  // Change webform.settings.element.exclude_types to
+  // webform.settings.element..exclude_elements.
+  if (($element = $config->get('element')) && isset($element['excluded_types'])) {
+    $element['excluded_elements'] = $element['excluded_types'];
+    unset($element['excluded_types']);
+    $config->set('element', $element);
+  }
+
+  $config->save();
+}

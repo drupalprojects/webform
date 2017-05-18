@@ -146,7 +146,7 @@ class WebformLocation extends WebformCompositeBase {
     // that Google Maps APi script is loaded using the proper API key.
     static $google_api;
     if (empty($google_api)) {
-      $api_key = (!empty($element['#api_key'])) ? $element['#api_key'] : \Drupal::config('webform.settings')->get('elements.default_google_maps_api_key');
+      $api_key = (!empty($element['#api_key'])) ? $element['#api_key'] : \Drupal::config('webform.settings')->get('element.default_google_maps_api_key');
       $element['script'] = [
         '#markup' => '<script src="https://maps.googleapis.com/maps/api/js?key=' . $api_key . '&libraries=places"></script>',
         '#allowed_tags' => ['script'],

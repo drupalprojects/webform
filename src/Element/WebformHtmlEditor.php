@@ -87,7 +87,7 @@ class WebformHtmlEditor extends Textarea {
    *   Allowed content (tags) for CKEditor.
    */
   public static function getAllowedContent() {
-    $allowed_tags = \Drupal::config('webform.settings')->get('elements.allowed_tags');
+    $allowed_tags = \Drupal::config('webform.settings')->get('element.allowed_tags');
     switch ($allowed_tags) {
       case 'admin':
         $allowed_tags = Xss::getAdminTagList();

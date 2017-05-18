@@ -57,6 +57,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
   protected function getDefinitions() {
     $definitions = $this->elementManager->getDefinitions();
     $definitions = $this->elementManager->getSortedDefinitions($definitions, 'category');
+    $definitions = $this->elementManager->removeExcludeDefinitions($definitions);
     $grouped_definitions = $this->elementManager->getGroupedDefinitions($definitions);
 
     $sorted_definitions = [];
