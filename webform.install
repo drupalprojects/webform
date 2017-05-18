@@ -102,11 +102,15 @@ function webform_requirements($phase) {
 /**
  * Update admin settings to reflect changes in the default settings.
  *
- * This function is used to apply new admin settings (in webform.settings.yml).
+ * @param bool $reset
+ *  If set TRUE old admin settings will be completly deleted.
+ *
  * If you are moving or updating any admin settings this must be explicitly
  * done via an update hook.
+ *
+ * @see drush_webform_repair().
  */
-function _webform_update_admin_settings() {
+function _webform_update_admin_settings($reset = FALSE) {
   $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
 
   $current_settings = $admin_config->getRawData();
@@ -125,16 +129,29 @@ function _webform_update_admin_settings() {
         $admin_settings[$group] = $current_settings[$group];
       }
     }
-    else {
-      // Loop through the group's settings and apply all existing settings to
-      // the default admin settings.
+    elseif ($reset) {
+      // Copy only group's settings that are defined in admin settings.
+      // This will cause old settings to be completely deleted.
       foreach ($settings as $name => $value) {
         if (isset($current_settings[$group][$name])) {
           $admin_settings[$group][$name] = $current_settings[$group][$name];
         }
       }
     }
+    else {
+      // Loop through the group's settings and apply all existing settings to
+      // the default admin settings.
+      foreach ($current_settings[$group] as $name => $value) {
+        $admin_settings[$group][$name] = $value;
+      }
+    }
   }
+
+  // If not reset, make sure all the current settings are preserved.
+  if (!$reset) {
+    $admin_settings += $current_settings;
+  }
+
   $admin_config->setData($admin_settings)->save();
 }
 

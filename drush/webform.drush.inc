@@ -681,7 +681,7 @@ function drush_webform_repair() {
   module_load_include('install', 'webform');
 
   drush_print('Repairing admin settings...');
-  _webform_update_admin_settings();
+  _webform_update_admin_settings(TRUE);
 
   drush_print('Repairing webform settings...');
   _webform_update_webform_settings();
