@@ -45,6 +45,12 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
 
     $form = parent::buildForm($form, $form_state, $webform, $key);
 
+    // ISSUE:
+    // The below delete link with .use-ajax is throwing errors because the modal
+    // dialog code is creating a <button> without any parent form.
+    // Issue #2879304: Editing Select Other elements produces JavaScript errors
+    // @see Drupal.Ajax
+    /*
     if ($this->isModalDialog()) {
       $form['actions']['delete'] = [
         '#type' => 'link',
@@ -57,6 +63,26 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
           ]
         ),
         '#attributes' => WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button--danger']),
+      ];
+    }
+    */
+
+    // WORKAROUND:
+    // Create a hidden link that is click using jQuery.
+    if ($this->isModalDialog()) {
+      $form['delete'] = [
+        '#type' => 'link',
+        '#url' => new Url('entity.webform_ui.element.delete_form', ['webform' => $webform->id(), 'key' => $key]),
+        '#attributes' => ['style' => 'display:none'] + WebformDialogHelper::getModalDialogAttributes(700, ['webform-ui-element-delete-link']),
+      ];
+      $form['actions']['delete'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Delete'),
+        '#url' => new Url('<none>'),
+        '#attributes' => [
+          'class' => ['button', 'button--danger'],
+          'onclick' => "jQuery('.webform-ui-element-delete-link').click(); return false;",
+        ],
       ];
     }
 
