@@ -985,7 +985,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasFlexboxLayout = FALSE;
     $this->hasContainer = FALSE;
     $this->elementsActions = [];
-    $this->numberOfWizardPages = [];
+    $this->elementsWizardPages = [];
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
     $this->elementsInitializedFlattenedAndHasValue = [];
@@ -1039,7 +1039,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasFlexboxLayout = NULL;
     $this->hasContainer = NULL;
     $this->elementsActions = [];
-    $this->numberOfWizardPages = [];
+    $this->elementsWizardPages = [];
     $this->elementsDecoded = NULL;
     $this->elementsInitialized = NULL;
     $this->elementsDecodedAndFlattened = NULL;
