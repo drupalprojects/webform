@@ -17,6 +17,7 @@ use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
  * Webform help manager.
@@ -274,46 +275,54 @@ SUGGESTIONS
 <h3>Proposed resolution</h3>
 (Description of the proposed solution, the rationale behind it, and workarounds for people who cannot use the patch.)",
       ];
+    
+    $links = [];
+    $links['index'] = [
+      'title' => $this->t('How can we help you?'),
+      'url' => Url::fromRoute('webform.help.about'),
+      'attributes' => [
+        'class' => ['use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode(['width' => 640]),
+      ],
+    ];
+    $links['community'] = [
+      'title' => $this->t('Join the Drupal Community'),
+      'url' => Url::fromUri('https://register.drupal.org/user/register', ['query' => ['destination' => '/project/webform']]),
+    ];
+    $links['association'] = [
+      'title' => $this->t('Support the Drupal Association'),
+      'url' => Url::fromUri('https://www.drupal.org/association/campaign/value-2017'),
+    ];
+    $links['documentation'] = [
+      'title' => $this->t('Read Webform Documentaion'),
+      'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform'),
+    ];
+    if (\Drupal::config('webform.settings')->get('ui.video_display') == 'dialog') {
+      $links['help'] = [
+        'title' => t('Help Us Help You'),
+        'url' => Url::fromRoute('webform.help.video', ['id' => 'help']),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(1000),
+      ];
+    }
+    $links['issue'] = [
+      'title' => $this->t('Report a Bug/Issue'),
+      'url' => Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $issue_query]),
+    ];
+    $links['request'] = [
+      'title' => $this->t('Request Feature'),
+      'url' => Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $feature_query]),
+    ];
+    $links['support'] = [
+      'title' => $this->t('Additional Support'),
+      'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform/webform-support'),
+    ];
     return [
       '#type' => 'container',
       '#attributes' => ['class' => ['webform-help-menu']],
       'operations' => [
         '#type' => 'operations',
-        '#links' => [
-          'index' => [
-            'title' => $this->t('How can we help you?'),
-            'url' => Url::fromRoute('webform.help.about'),
-            'attributes' => [
-              'class' => ['use-ajax'],
-              'data-dialog-type' => 'modal',
-              'data-dialog-options' => Json::encode(['width' => 640]),
-            ]
-          ],
-          'community' => [
-            'title' => $this->t('Join the Drupal Community'),
-            'url' => Url::fromUri('https://register.drupal.org/user/register', ['query' => ['destination' => '/project/webform']]),
-          ],
-          'association' => [
-            'title' => $this->t('Support the Drupal Association'),
-            'url' => Url::fromUri('https://www.drupal.org/association/campaign/value-2017'),
-          ],
-          'documentation' => [
-            'title' => $this->t('Read Webform Documentaion'),
-            'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform'),
-          ],
-          'issue' => [
-            'title' => $this->t('Report a Bug/Issue'),
-            'url' => Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $issue_query]),
-          ],
-          'request' => [
-            'title' => $this->t('Request Feature'),
-            'url' => Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $feature_query]),
-          ],
-          'support' => [
-            'title' => $this->t('Additional Support'),
-            'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform/webform-support'),
-          ],
-        ],
+        '#links' => $links
       ],
     ];
   }
@@ -384,31 +393,7 @@ SUGGESTIONS
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];
-    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
-    switch ($video_display) {
-      case 'dialog':
-        $build['content']['association']['video'] = [
-          '#theme' => 'webform_help_video_youtube',
-          '#youtube_id' => 'LZWqFSMul84',
-          '#autoplay' => FALSE,
-        ];
-        break;
-
-      case 'link':
-        // Place play video link inline.
-        $build['content']['association']['content']['video'] = [
-          '#type' => 'link',
-          '#title' => t('Watch video'),
-          '#url' => Url::fromUri('https://youtu.be/LZWqFSMul84'),
-          '#attributes' => ['class' => ['button', 'button-action', 'button--small', 'button-webform-play']],
-          '#prefix' => ' ',
-        ];
-        break;
-
-      case 'hidden':
-      default:
-        break;
-    }
+    $build['content']['association']['video'] = $this->buildAboutVideo('LZWqFSMul84');
     $build['content']['association']['link'] = $link_base + [
       '#url' => $links['association']['url'],
       '#title' => $this->t('Learn more about the Drupal Association'),
@@ -422,6 +407,14 @@ SUGGESTIONS
       '#url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform/webform-support'),
       '#title' => $this->t('Get help with the Webform module'),
     ];
+
+    // Help.
+    if ($help_video = $this->buildAboutVideo('uQo-1s2h06E')) {
+      $build['content']['help'] = [];
+      $build['content']['help']['title']['#markup'] = '<h3>' . $this->t('Help us help you') . '</h3>';
+      $build['content']['help']['video'] = $this->buildAboutVideo('uQo-1s2h06E');
+      $build['content']['help']['#suffix'] = '<hr/>';
+    }
 
     // Issue.
     $build['content']['issue'] = [];
@@ -443,6 +436,43 @@ SUGGESTIONS
     ];
 
     return $build;
+  }
+
+  /**
+   * Build about video player or linked button.
+   *
+   * @param string $youtube_id
+   *   A YouTube id.
+   *
+   * @return array
+   *   A video player, linked button, or an empty array if videos are disabled.
+   */
+  protected function buildAboutVideo($youtube_id) {
+    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
+    switch ($video_display) {
+      case 'dialog':
+        return [
+          '#theme' => 'webform_help_video_youtube',
+          '#youtube_id' => $youtube_id,
+          '#autoplay' => FALSE,
+        ];
+        break;
+
+      case 'link':
+        return [
+          '#type' => 'link',
+          '#title' => t('Watch video'),
+          '#url' => Url::fromUri('https://youtu.be/' . $youtube_id),
+          '#attributes' => ['class' => ['button', 'button-action', 'button--small', 'button-webform-play']],
+          '#prefix' => ' ',
+        ];
+        break;
+
+      case 'hidden':
+      default:
+        return [];
+        break;
+    }
   }
 
   /**
@@ -948,9 +978,9 @@ SUGGESTIONS
     ];
 
     $videos['help'] = [
-      'title' => $this->t('Getting Help'),
-      'content' => $this->t('This screencast walks through getting help with the Webform module.'),
-      'youtube_id' => 'sRXUR2c2brA',
+      'title' => $this->t('Help Us Help You'),
+      'content' => $this->t('This screencast is going to show you how to “help us help you” with issues related to the Webform module.'),
+      'youtube_id' => 'uQo-1s2h06E',
     ];
 
     foreach ($videos as $id => &$video_info) {
