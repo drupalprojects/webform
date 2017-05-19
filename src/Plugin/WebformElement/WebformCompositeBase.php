@@ -346,7 +346,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
           '#states' => $state_disabled,
         ];
       }
-      elseif ($type == 'select' && ($composite_options = $this->getCompositeElementOptions($composite_key))) {
+      elseif (in_array($type, ['select', 'webform_select_other']) && ($composite_options = $this->getCompositeElementOptions($composite_key))) {
         $row['type_and_options']['data'][$composite_key . '__type'] = [
           '#type' => 'select',
           '#required' => TRUE,

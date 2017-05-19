@@ -1500,8 +1500,63 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Update paths.
     $this->updatePaths();
 
+    // Invoke handler element CRUD methods.
+    // Note: Comparing parsed YAML since the actual YAML formatting could be
+    // different.
+    $elements_original = $this->decodeElements($this->elementsOriginal);
+    $elements = $this->decodeElements($this->elements);
+    if ($elements_original != $elements) {
+      $elements_original = WebformElementHelper::getFlattened($elements_original);
+      $elements = WebformElementHelper::getFlattened($elements);
+
+      // Handle create element.
+      if ($created_elements = array_diff_key($elements, $elements_original)) {
+        foreach ($created_elements as $element_key => $element) {
+          $this->invokeHandlers('createElement', $element_key, $element);
+        }
+      }
+
+      // Handle delete element.
+      if ($deleted_elements = array_diff_key($elements_original, $elements)) {
+        foreach ($deleted_elements as $element_key => $element) {
+          $this->invokeHandlers('deleteElement', $element_key, $element);
+        }
+      }
+
+      // Handle update element.
+      foreach ($elements as $element_key => $element) {
+        if (isset($elements_original[$element_key]) && $elements_original[$element_key] != $element) {
+          $this->invokeHandlers('updateElement', $element_key, $element, $elements_original[$element_key]);
+        }
+      }
+    }
+
     // Reset elements.
     $this->resetElements();
+    $this->elementsOriginal = $this->elements;
+  }
+
+  /**
+   * Decode elements YAML and always return an array.
+   *
+   * @param $yaml
+   *   A YAML string
+   *
+   * @return array
+   *   An array of elements.
+   * An empty array will be returned in YAML is not valid.
+   */
+  protected function decodeElements($yaml) {
+    try {
+      $data = Yaml::decode($yaml) ?: [];
+    }
+    catch (\Exception $exception) {
+      $data = [];
+    }
+    if (!is_array($data)) {
+      $data = [];
+    }
+    return $data;
   }
 
   /**

@@ -136,6 +136,10 @@ class WebformHandlerTest extends WebformTestBase {
     // Check that post load is not executed when saving results is disabled.
     $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:postLoad');
 
+    /**************************************************************************/
+    // Handler.
+    /**************************************************************************/
+
     // Check update handler.
     $this->drupalPostForm('admin/structure/webform/manage/test_handler_test/handlers/test/edit', [], t('Save'));
     $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:updateHandler');
@@ -151,7 +155,66 @@ class WebformHandlerTest extends WebformTestBase {
     // @todo Determine why create message is not being displayed.
     // Ajax machine name callback could be causing the issue.
     // $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createHandler');
+  }
 
+  /**
+   * Tests webform handler element plugin.
+   */
+  public function testWebformHandlerElement() {
+    $this->drupalLogin($this->rootUser);
+
+    // Check CRUD methods invoked.
+    $edit = [
+      'elements' => "element:
+  '#type': textfield
+  '#title': 'Empty element'
+  '#description': 'Entering any value will throw an error'",
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test', $edit, t('Save'));
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createElement');
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:updateElement');
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:deleteElement');
+
+    // Check create element.
+    $edit = [
+      'elements' => "element:
+  '#type': textfield
+  '#title': 'Empty element'
+  '#description': 'Entering any value will throw an error'
+test:
+  '#type': textfield",
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test', $edit, t('Save'));
+    $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createElement');
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:updateElement');
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:deleteElement');
+
+    // Check update element.
+    $edit = [
+      'elements' => "element:
+  '#type': textfield
+  '#title': 'Empty element'
+  '#description': 'Entering any value will throw an error'
+test:
+  '#type': textfield
+  '#title': Test",
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test', $edit, t('Save'));
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createElement');
+    $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:updateElement');
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:deleteElement');
+
+    // Check delete element.
+    $edit = [
+      'elements' => "element:
+  '#type': textfield
+  '#title': 'Empty element'
+  '#description': 'Entering any value will throw an error'",
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test', $edit, t('Save'));
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createElement');
+    $this->assertNoRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:updateElement');
+    $this->assertRaw('Invoked: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:deleteElement');
   }
 
 }

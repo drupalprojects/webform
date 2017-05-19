@@ -346,10 +346,18 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
     }
   }
 
+  /****************************************************************************/
+  // Webform methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    */
   public function alterElements(array &$elements, WebformInterface $webform) {}
+
+  /****************************************************************************/
+  // Submission form methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -370,6 +378,10 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * {@inheritdoc}
    */
   public function confirmForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {}
+
+  /****************************************************************************/
+  // Submission methods.
+  /****************************************************************************/
 
   /**
    * {@inheritdoc}
@@ -406,6 +418,10 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    */
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {}
 
+  /****************************************************************************/
+  // Handler methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    */
@@ -420,6 +436,25 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * {@inheritdoc}
    */
   public function deleteHandler() {}
+
+  /****************************************************************************/
+  // Element methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createElement($key, array $element) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateElement($key, array $element, array $original_element) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteElement($key, array $element) {}
 
   /**
    * Log a webform handler's submission operation.
