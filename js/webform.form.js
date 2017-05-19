@@ -59,6 +59,31 @@
   };
 
   /**
+   * Custom required error message.
+   *
+   * @type {Drupal~behavior}
+   *
+   * @prop {Drupal~behaviorAttach} attach
+   *   Attaches the behavior for the webform custom required error message.
+   *
+   * @see http://stackoverflow.com/questions/5272433/html5-form-required-attribute-set-custom-validation-message
+   */
+  Drupal.behaviors.webformRequiredError = {
+    attach: function (context) {
+      $(context).find(':input[data-webform-required-error]').once('webform-required-error')
+        .on('invalid', function() {
+          this.setCustomValidity('');
+          if (!this.valid) {
+            this.setCustomValidity($(this).attr('data-webform-required-error'));
+          }
+        })
+        .on('input', function() {
+          this.setCustomValidity('');
+        });
+    }
+  };
+
+  /**
    * Disable validate when save draft submit button is clicked.
    *
    * @type {Drupal~behavior}

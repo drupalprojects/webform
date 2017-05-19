@@ -581,6 +581,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     if ($this->isInput($element)) {
+      // Set custom required error message as 'data-required-error' attribute.
+      // @see Drupal.behaviors.webformRequiredError
+      // @see webform.form.js
+      if (!empty($element['#required_error'])) {
+        $element['#attributes']['data-webform-required-error'] = $element['#required_error'];
+      }
+
       $type = $element['#type'];
 
       // Get and set the element's default #element_validate property so that
