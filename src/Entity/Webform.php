@@ -866,18 +866,33 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       ->getForm($webform_submission, $operation);
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getElementsRaw() {
-    return $this->elements;
-  }
 
   /**
    * {@inheritdoc}
    */
   public function getElementsOriginalRaw() {
     return $this->elementsOriginal;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementsOriginalDecoded() {
+    $this->elementsOriginal;
+    try {
+      $elements = Yaml::decode($this->elementsOriginal);
+      return (is_array($elements)) ? $elements : [];
+    }
+    catch (\Exception $exception) {
+      return FALSE;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementsRaw() {
+    return $this->elements;
   }
 
   /**
@@ -1503,8 +1518,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Invoke handler element CRUD methods.
     // Note: Comparing parsed YAML since the actual YAML formatting could be
     // different.
-    $elements_original = $this->decodeElements($this->elementsOriginal);
-    $elements = $this->decodeElements($this->elements);
+    $elements_original = $this->getElementsOriginalDecoded() ?: [];
+    $elements = $this->getElementsDecoded() ?: [];
     if ($elements_original != $elements) {
       $elements_original = WebformElementHelper::getFlattened($elements_original);
       $elements = WebformElementHelper::getFlattened($elements);
@@ -1534,29 +1549,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Reset elements.
     $this->resetElements();
     $this->elementsOriginal = $this->elements;
-  }
-
-  /**
-   * Decode elements YAML and always return an array.
-   *
-   * @param $yaml
-   *   A YAML string
-   *
-   * @return array
-   *   An array of elements.
-   * An empty array will be returned in YAML is not valid.
-   */
-  protected function decodeElements($yaml) {
-    try {
-      $data = Yaml::decode($yaml) ?: [];
-    }
-    catch (\Exception $exception) {
-      $data = [];
-    }
-    if (!is_array($data)) {
-      $data = [];
-    }
-    return $data;
   }
 
   /**

@@ -377,14 +377,6 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function getSubmissionForm(array $values = [], $operation = 'default');
 
   /**
-   * Get elements (YAML) value.
-   *
-   * @return string
-   *   The elements raw value.
-   */
-  public function getElementsRaw();
-
-  /**
    * Get original elements (YAML) value.
    *
    * @return string|null
@@ -392,6 +384,22 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   webforms.
    */
   public function getElementsOriginalRaw();
+
+  /**
+   * Get original elements decoded as an associative array.
+   *
+   * @return array|bool
+   *   Elements as an associative array. Returns FALSE is elements YAML is invalid.
+   */
+  public function getElementsOriginalDecoded();
+
+  /**
+   * Get elements (YAML) value.
+   *
+   * @return string
+   *   The elements raw value.
+   */
+  public function getElementsRaw();
 
   /**
    * Get webform elements decoded as an associative array.
