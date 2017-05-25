@@ -893,6 +893,10 @@ field.widget.settings.webform_entity_reference_autocomplete:
 field.formatter.settings.webform_entity_reference_entity_view:
   type: mapping
   label: 'Display the referenced webform with default submission data.'
+  mapping:
+    source_entity:
+      type: boolean
+      label: 'Source entity'
 
 field.formatter.settings.webform_entity_reference_link:
   type: mapping
