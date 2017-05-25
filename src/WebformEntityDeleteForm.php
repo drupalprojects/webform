@@ -20,7 +20,7 @@ class WebformEntityDeleteForm extends EntityDeleteForm {
     $form = parent::buildForm($form, $form_state);
     $form['confirm'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Yes, I want to the delete this webform.'),
+      '#title' => $this->t('Yes, I want to delete this webform.'),
       '#required' => TRUE,
       '#weight' => 10,
     ];
