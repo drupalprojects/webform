@@ -626,7 +626,10 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getSettings() {
-    return $this->settings + static::getDefaultSettings();
+    // Settings should not be empty even.
+    // https://www.drupal.org/node/2880392.
+    return (isset($this->settings)) ? $this->settings +
+      self::getDefaultSettings() : self::getDefaultSettings();
   }
 
   /**
