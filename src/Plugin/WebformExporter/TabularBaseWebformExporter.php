@@ -87,10 +87,9 @@ abstract class TabularBaseWebformExporter extends WebformExporterBase {
     }
 
     // Build record element columns.
-    $data = $webform_submission->getData();
     foreach ($elements as $column_name => $element) {
-      $value = (isset($data[$column_name])) ? $data[$column_name] : '';
-      $record = array_merge($record, $this->elementManager->invokeMethod('buildExportRecord', $element, $value, $export_options));
+      $element['#webform_key'] = $column_name;
+      $record = array_merge($record, $this->elementManager->invokeMethod('buildExportRecord', $element, $webform_submission, $export_options));
     }
     return $record;
   }
@@ -120,9 +119,9 @@ abstract class TabularBaseWebformExporter extends WebformExporterBase {
         $element = [
           '#type' => 'entity_autocomplete',
           '#target_type' => $field_definition['target_type'],
+          '#value' => $webform_submission->get($field_name)->target_id,
         ];
-        $value = $webform_submission->get($field_name)->target_id;
-        $record = array_merge($record, $this->elementManager->invokeMethod('buildExportRecord', $element, $value, $export_options));
+        $record = array_merge($record, $this->elementManager->invokeMethod('buildExportRecord', $element, $webform_submission, $export_options));
         break;
 
       case 'entity_url':

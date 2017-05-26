@@ -490,18 +490,12 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
       default:
         if (strpos($name, 'element__') === 0) {
-          $data = $entity->getData();
-
           $element = $column['element'];
-
-          $key = $column['key'];
-          $value = (isset($data[$key])) ? $data[$key] : '';
-
           $options = $column;
 
           /** @var \Drupal\webform\WebformElementInterface $element_handler */
           $element_handler = $column['plugin'];
-          $html = $element_handler->formatTableColumn($element, $value, $options);
+          $html = $element_handler->formatTableColumn($element, $entity, $options);
           return (is_array($html)) ? ['data' => $html] : $html;
         }
         else {

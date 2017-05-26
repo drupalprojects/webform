@@ -4,6 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_markup' element.
@@ -31,9 +32,9 @@ class WebformMarkup extends WebformMarkupBase {
   /**
    * {@inheritdoc}
    */
-  public function buildText(array $element, $value, array $options = []) {
+  public function buildText(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $element['#markup'] = MailFormatHelper::htmlToText($element['#markup']);
-    return parent::buildText($element, $value, $options);
+    return parent::buildText($element, $webform_submission, $options);
   }
 
   /**

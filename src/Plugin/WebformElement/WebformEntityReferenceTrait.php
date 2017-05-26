@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformEntityTrait;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides an 'entity_reference' trait.
@@ -37,20 +38,9 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function format($type, array &$element, $value, array $options = []) {
-    if ($this->hasMultipleValues($element)) {
-      $value = $this->getTargetEntities($element, $value, $options);
-    }
-    else {
-      $value = $this->getTargetEntity($element, $value, $options);
-    }
-    return parent::format($type, $element, $value, $options);
-  }
+  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
 
-  /**
-   * {@inheritdoc}
-   */
-  public function formatHtmlItem(array $element, $value, array $options = []) {
     $entity = $this->getTargetEntity($element, $value, $options);
     if (!$entity) {
       return '';
@@ -64,7 +54,7 @@ trait WebformEntityReferenceTrait {
       case 'label':
       case 'text':
       case 'breadcrumb':
-        return $this->formatTextItem($element, $value, $options);
+        return $this->formatTextItem($element, $webform_submission, $options);
 
       case 'link':
         return [
@@ -81,7 +71,9 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, $value, array $options = []) {
+  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $entity = $this->getTargetEntity($element, $value, $options);
     if (!$entity) {
       return '';
@@ -229,8 +221,10 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $options) {
-    if (!$this->hasMultipleValues($element) && $options['entity_reference_format'] == 'link') {
+  public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
+    $value = $this->getValue($element, $webform_submission);
+
+    if (!$this->hasMultipleValues($element) && $export_options['entity_reference_format'] == 'link') {
       $entity_type = $this->getTargetType($element);
       $entity_storage = $this->entityTypeManager->getStorage($entity_type);
       $entity_id = $value;
@@ -249,10 +243,10 @@ trait WebformEntityReferenceTrait {
       return $record;
     }
     else {
-      if ($options['entity_reference_format'] == 'id') {
+      if ($export_options['entity_reference_format'] == 'id') {
         $element['#format'] = 'raw';
       }
-      return parent::buildExportRecord($element, $value, $options);
+      return parent::buildExportRecord($element, $webform_submission, $export_options);
     }
   }
 

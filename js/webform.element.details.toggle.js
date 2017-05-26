@@ -16,7 +16,13 @@
     attach: function (context) {
       $('.js-webform-details-toggle', context).once('webform-details-toggle').each(function () {
         var $form = $(this);
-        var $details = $form.find('details');
+
+        // Get only the main details elements and ingnore all nested details.
+        var $details = $form.find('details').filter(function() {
+          // @todo Figure out how to optimize the below code.
+          var $parents = $(this).parentsUntil('form');
+          return ($parents.find('details').length === 0);
+        });
 
         // Toggle is only useful when there are two or more details elements.
         if ($details.length < 2) {

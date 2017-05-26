@@ -17,6 +17,9 @@ function webform_test_example_elements() {
   // Elements to be ignored.
   $skipped_elements = [
     'table',
+    'webform_computed_token',
+    'webform_computed_twig',
+    'webform_flexbox',
     'webform_actions',
     'webform_flexbox',
     'webform_test',

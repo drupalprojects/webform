@@ -551,12 +551,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * {@inheritdoc}
    */
   public function getMessage(WebformSubmissionInterface $webform_submission) {
-    $token_data = [
-      'webform-submission-options' => [
-        'email' => TRUE,
-        'excluded_elements' => $this->configuration['excluded_elements'],
-        'html' => ($this->configuration['html'] && $this->supportsHtml()),
-      ],
+    $token_data = [];
+    $token_options = [
+      'email' => TRUE,
+      'excluded_elements' => $this->configuration['excluded_elements'],
+      'html' => ($this->configuration['html'] && $this->supportsHtml()),
     ];
 
     $message = [];
@@ -584,7 +583,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
 
       // Set message key.
-      $message[$configuration_key] = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data);
+      $message[$configuration_key] = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data, $token_options);
     }
 
     // Trim the message body.

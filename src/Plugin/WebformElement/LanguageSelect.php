@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\webform\WebformElementBase;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'language_select' element.
@@ -20,7 +21,9 @@ class LanguageSelect extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, $value, array $options = []) {
+  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $language = \Drupal::languageManager()->getLanguage($value);
     $format = $this->getItemFormat($element);
     switch ($format) {

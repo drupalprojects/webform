@@ -265,6 +265,26 @@ elements: |
     flex_color_right:
       '#type': color
       '#title': 'Color 02'
+  flexbox_webform_computed_twig:
+    '#type': webform_flexbox
+    flex_webform_computed_twig_left:
+      '#type': webform_computed_twig
+      '#title': 'Computed token 01'
+      '#markup': 'Computed twig example'
+    flex_webform_computed_twig_right:
+      '#type': webform_computed_twig
+      '#title': 'Computed token 02'
+      '#markup': 'Computed twig example'
+  flexbox_webform_computed_token:
+    '#type': webform_flexbox
+    flex_webform_computed_token_left:
+      '#type': webform_computed_token
+      '#title': 'Computed token 01'
+      '#markup': 'Computed token example'
+    flex_webform_computed_token_right:
+      '#type': webform_computed_token
+      '#title': 'Computed token 02'
+      '#markup': 'Computed token example'
   flexbox_webform_contact:
     '#type': webform_flexbox
     flex_webform_contact_left:
@@ -430,11 +450,11 @@ elements: |
     flex_managed_file_left:
       '#type': managed_file
       '#title': 'File 01'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br/><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br/><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
     flex_managed_file_right:
       '#type': managed_file
       '#title': 'File 02'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br/><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br/><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
   flexbox_webform_element:
     '#type': webform_flexbox
     flex_webform_element_left:

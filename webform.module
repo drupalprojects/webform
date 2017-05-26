@@ -527,37 +527,37 @@ function webform_theme() {
     ],
 
     'webform_element_base_html' => [
-      'variables' => ['element' => [], 'value' => NULL, 'options' => []],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
     ],
     'webform_element_base_text' => [
-      'variables' => ['element' => [], 'value' => NULL, 'options' => []],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
     ],
 
     'webform_container_base_html' => [
-      'variables' => ['element' => [], 'value' => NULL, 'options' => []],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
     ],
     'webform_container_base_text' => [
-      'variables' => ['element' => [], 'value' => NULL, 'options' => []],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
     ],
 
     'webform_element_color_value_swatch' => [
-      'variables' => ['element' => NULL, 'value' => NULL, 'options' => []],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
     ],
 
     'webform_element_managed_file' => [
-      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
     'webform_element_audio_file' => [
-      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
     'webform_element_document_file' => [
-      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
     'webform_element_image_file' => [
-      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
     'webform_element_video_file' => [
-      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
 
     'webform_message' => [

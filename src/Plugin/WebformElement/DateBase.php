@@ -90,7 +90,9 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, $value, array $options = []) {
+  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $timestamp = strtotime($value);
     if (empty($timestamp)) {
       return $value;
@@ -142,9 +144,9 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $export_options) {
+  public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
     $element['#format'] = ($this->getDateType($element) === 'datetime') ? 'Y-m-d H:i:s' : 'Y-m-d';
-    return [$this->formatText($element, $value, $export_options)];
+    return [$this->formatText($element, $webform_submission, $export_options)];
   }
 
   /**

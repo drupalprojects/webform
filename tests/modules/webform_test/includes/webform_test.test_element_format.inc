@@ -23,6 +23,8 @@ function webform_test_test_element_format(WebformInterface $webform, $composite 
     'text_format_value',
     'value',
     'webform_actions',
+    'webform_computed_token',
+    'webform_computed_twig',
     'webform_element',
     'webform_test',
     // @todo Fix file display

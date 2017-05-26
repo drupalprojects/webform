@@ -60,7 +60,9 @@ class WebformRating extends Range {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array $element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $format = $this->getItemFormat($element);
 
     switch ($format) {
@@ -68,7 +70,7 @@ class WebformRating extends Range {
         // Always return the raw value when the rating widget is included in an
         // email.
         if (!empty($options['email'])) {
-          return parent::formatTextItem($element, $value, $options);
+          return parent::formatTextItem($element, $webform_submission, $options);
         }
 
         $build = [
@@ -78,7 +80,7 @@ class WebformRating extends Range {
         return WebformRatingElement::buildRateIt($build);
 
       default:
-        return parent::formatHtmlItem($element, $value, $options);
+        return parent::formatHtmlItem($element, $webform_submission, $options);
     }
   }
 

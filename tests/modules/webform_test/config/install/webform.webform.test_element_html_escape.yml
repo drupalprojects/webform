@@ -176,7 +176,7 @@ elements: |
     managed_file:
       '#type': managed_file
       '#title': 'File | <script>alert(''This markup is not escaped properly!!!'') </script>'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br/><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br/><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
     managed_file_multiple:
       '#type': managed_file
       '#title': 'File multiple | <script>alert(''This markup is not escaped properly!!!'') </script>'

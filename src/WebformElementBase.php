@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
@@ -622,7 +623,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $this->prepareWrapper($element);
 
     // Replace tokens for all properties.
-    $element = $this->tokenManager->replace($element, $webform_submission);
+    $this->replaceTokens($element, $webform_submission);
   }
 
   /**
@@ -654,6 +655,22 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Replace tokens for all element properties.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  protected function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission) {
+    foreach ($element as $key => $value) {
+      if (!Element::child($key)) {
+        $element[$key] = $this->tokenManager->replace($value, $webform_submission);
+      }
+    }
   }
 
   /**
@@ -770,15 +787,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildHtml(array $element, $value, array $options = []) {
-    return $this->build('html', $element, $value, $options);
+  public function buildHtml(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    return $this->build('html', $element, $webform_submission, $options);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildText(array $element, $value, array $options = []) {
-    return $this->build('text', $element, $value, $options);
+  public function buildText(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    return $this->build('text', $element, $webform_submission, $options);
   }
 
   /**
@@ -790,16 +807,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   An element.
    * @param array|mixed $value
    *   A value.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission
    * @param array $options
    *   An array of options.
-   *
    * @return array
    *   A render array representing an element as text or HTML.
    */
-  protected function build($format, array &$element, $value, array $options = []) {
+  protected function build($format, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $options['multiline'] = $this->isMultiline($element);
     $format_function = 'format' . ucfirst($format);
-    $formatted_value = $this->$format_function($element, $value, $options);
+    $formatted_value = $this->$format_function($element, $webform_submission, $options);
 
     // Return NULL for empty formatted value.
     if ($formatted_value === '') {
@@ -815,6 +833,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#theme' => 'webform_element_base_' . $format,
       '#element' => $element,
       '#value' => $formatted_value,
+      '#webform_submission' => $webform_submission,
       '#options' => $options,
     ];
   }
@@ -822,15 +841,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function formatHtml(array $element, $value, array $options = []) {
-    return $this->format('Html', $element, $value, $options);
+  public function formatHtml(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    return $this->format('Html', $element, $webform_submission, $options);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formatText(array $element, $value, array $options = []) {
-    return $this->format('Text', $element, $value, $options);
+  public function formatText(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    return $this->format('Text', $element, $webform_submission, $options);
   }
 
   /**
@@ -840,15 +859,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The format type, HTML or Text.
    * @param array $element
    *   An element.
-   * @param array|mixed $value
-   *   A value.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    * @param array $options
    *   An array of options.
    *
    * @return array|string
    *   The element's value formatted as plain text or a render array.
    */
-  protected function format($type, array &$element, $value, array $options = []) {
+  protected function format($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     // Return empty value.
     if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';
@@ -857,21 +878,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $item_function = 'format' . $type . 'Item';
     $items_function = 'format' . $type . 'Items';
     if ($this->hasMultipleValues($element)) {
-      // Return #delta which is used by tokens.
+      // Return $options['delta'] which is used by tokens.
       // @see _webform_token_get_submission_value()
-      if (isset($element['#delta']) && isset($value[$element['#delta']])) {
-        return $this->$item_function($element, $value[$element['#delta']], $options);
+      if (isset($options['delta'])) {
+        return $this->$item_function($element, $webform_submission, $options);
       }
 
       $items = [];
-      foreach ($value as $item) {
-        $items[] = $this->$item_function($element, $item, $options);
+      foreach ($value as $delta => $item) {
+        $items[] = $this->$item_function($element, $webform_submission, ['delta' => $delta] + $options);
       }
 
       return $this->$items_function($element, $items, $options);
     }
     else {
-      return $this->$item_function($element, $value, $options);
+      return $this->$item_function($element, $webform_submission, $options);
     }
   }
 
@@ -1009,16 +1030,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   An element.
-   * @param array|mixed $value
-   *   A value.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    * @param array $options
    *   An array of options.
    *
    * @return array|string
    *   The element's value formatted as HTML or a render array.
    */
-  protected function formatHtmlItem(array $element, $value, array $options = []) {
-    return $this->formatTextItem($element, $value, $options);
+  protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    return $this->formatTextItem($element, $webform_submission, $options);
   }
 
   /**
@@ -1026,20 +1047,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   An element.
-   * @param array|mixed $value
-   *   A value.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    * @param array $options
    *   An array of options.
    *
-   * @return string
+   * @return
    *   The element's value formatted as text.
    */
-  protected function formatTextItem(array $element, $value, array $options = []) {
-    // Apply XSS filter to value that contains HTML tags and is not formatted as
-    // raw.
+  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
+    // Escape all HTML entities.
     $format = $this->getItemFormat($element);
-    if ($format != 'raw' && is_string($value) && strpos($value, '<') !== FALSE) {
-      $value = Xss::filter($value);
+    if ($format != 'raw' && is_string($value)) {
+      $value = Html::escape($value);
     }
 
     // Apply #field prefix and #field_suffix to value.
@@ -1053,6 +1075,36 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     return $value;
+  }
+
+  /**
+   * Get an element's submission value.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's submission value.
+   */
+  protected function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    if (!isset($element['#webform_key']) && isset($element['#value'])) {
+      return $element['#value'];
+    }
+
+    $value = $webform_submission->getData($element['#webform_key']);
+
+    // Return $options['delta'] which is used by tokens.
+    // @see _webform_token_get_submission_value()
+    if (is_array($value) && isset($options['delta']) && isset($value[$options['delta']])) {
+      return $value[$options['delta']];
+    }
+    else {
+      return $value;
+    }
   }
 
   /**
@@ -1157,8 +1209,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function formatTableColumn(array $element, $value, array $options = []) {
-    return $this->formatHtml($element, $value);
+  public function formatTableColumn(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    return $this->formatHtml($element, $webform_submission);
   }
 
   /****************************************************************************/
@@ -1224,9 +1276,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $export_options) {
+  public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
     $element['#format_items'] = $export_options['multiple_delimiter'];
-    return [$this->formatText($element, $value, $export_options)];
+    return [$this->formatText($element, $webform_submission, $export_options)];
   }
 
   /****************************************************************************/

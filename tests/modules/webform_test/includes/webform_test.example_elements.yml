@@ -26,6 +26,10 @@ webform_autocomplete:
   '#autocomplete_items': country_names
 webform_codemirror:
   '#mode': yaml
+webform_computed_token:
+  '#markup': 'Computed token example'
+webform_computed_twig:
+  '#markup': 'Computed twig example'
 webform_entity_select:
   '#target_type': 'user'
   '#selection_handler': 'default:user'

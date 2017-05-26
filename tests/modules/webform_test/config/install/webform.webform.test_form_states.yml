@@ -298,6 +298,30 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_computed_twig:
+      '#type': webform_computed_twig
+      '#title': 'Computed token'
+      '#markup': 'Computed twig example'
+      '#default_value': Loremipsum
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_webform_computed_token:
+      '#type': webform_computed_token
+      '#title': 'Computed token'
+      '#markup': 'Computed token example'
+      '#default_value': Loremipsum
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_webform_contact:
       '#type': webform_contact
       '#title': Contact
@@ -497,7 +521,7 @@ elements: |
     visible_managed_file:
       '#type': managed_file
       '#title': File
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br/><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br/><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1244,6 +1268,24 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_webform_computed_twig:
+      '#type': webform_computed_twig
+      '#title': 'Computed token'
+      '#markup': 'Computed twig example'
+      '#default_value': Loremipsum
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_webform_computed_token:
+      '#type': webform_computed_token
+      '#title': 'Computed token'
+      '#markup': 'Computed token example'
+      '#default_value': Loremipsum
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_webform_contact:
       '#type': webform_contact
       '#title': Contact
@@ -1401,7 +1443,7 @@ elements: |
     invisible_managed_file:
       '#type': managed_file
       '#title': File
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br/><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br/><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1928,6 +1970,24 @@ elements: |
         disabled:
           ':input[name="disabled_trigger"]':
             checked: true
+    disabled_webform_computed_twig:
+      '#type': webform_computed_twig
+      '#title': 'Computed token'
+      '#markup': 'Computed twig example'
+      '#default_value': Loremipsum
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_webform_computed_token:
+      '#type': webform_computed_token
+      '#title': 'Computed token'
+      '#markup': 'Computed token example'
+      '#default_value': Loremipsum
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
     disabled_webform_contact:
       '#type': webform_contact
       '#title': Contact
@@ -2085,7 +2145,7 @@ elements: |
     disabled_managed_file:
       '#type': managed_file
       '#title': File
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br/><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br/><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br/><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

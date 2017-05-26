@@ -11,6 +11,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_token_info().
@@ -298,9 +299,6 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
     $form_elements = $webform_submission->getWebform()->getElementsInitializedAndFlattened();
-    $submission_data = $webform_submission->getData();
-
-    $submission_options = isset($data['webform-submission-options']) ? $data['webform-submission-options'] : [];
 
     foreach ($tokens as $name => $original) {
       switch ($name) {
@@ -353,13 +351,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           break;
 
         case 'values':
-          $submission_format = (!empty($submission_options['html'])) ? 'html' : 'text';
-          $build = $view_builder->buildElements(
-            $webform_submission->getWebform()->getElementsInitialized(),
-            $submission_data,
-            $submission_options,
-            $submission_format
-          );
+          $elements = $webform_submission->getWebform()->getElementsInitialized();
+          $submission_format = (!empty($options['html'])) ? 'html' : 'text';
+          $build = $view_builder->buildElements($elements, $webform_submission, $options, $submission_format);
           // Note, tokens can't include CSS and JS libraries since they can be
           // included in an email.
           $replacements[$original] = \Drupal::service('renderer')->renderPlain($build);
@@ -411,7 +405,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
     if ($value_tokens = $token_service->findWithPrefix($tokens, 'values')) {
       foreach ($value_tokens as $value_token => $original) {
-        $value = _webform_token_get_submission_value($value_token, $submission_options, $submission_data, $form_elements, $element_manager);
+        $value = _webform_token_get_submission_value($value_token, $options, $webform_submission, $form_elements, $element_manager);
         if ($value !== NULL) {
           $replacements[$original] = $value;
         }
@@ -507,7 +501,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   return $replacements;
 }
 
-function _webform_token_get_submission_value($value_token, array $submission_options, array $submission_data, array $form_elements, WebformElementManagerInterface $element_manager) {
+function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, array $form_elements, WebformElementManagerInterface $element_manager) {
+  $submission_data = $webform_submission->getData();
+
   // Formats:
   // [values:{element_key}:{format}]
   // [values:{element_key}:{format}:{items}]
@@ -532,7 +528,7 @@ function _webform_token_get_submission_value($value_token, array $submission_opt
   // instead of plain text.
   if ($keys && in_array('html', $keys)) {
     $keys = array_diff($keys, ['html']);
-    $submission_options['html'] = TRUE;
+    $options['html'] = TRUE;
   }
 
   // If multiple value element look for delta.
@@ -542,7 +538,7 @@ function _webform_token_get_submission_value($value_token, array $submission_opt
       return NULL;
     }
 
-    $element['#delta'] = $delta;
+    $options['delta'] = $delta;
   }
   else {
     $delta = NULL;
@@ -568,10 +564,10 @@ function _webform_token_get_submission_value($value_token, array $submission_opt
     $element['#format_items'] = array_shift($keys);
   }
 
-  $format_method = (empty($submission_options['html'])) ? 'formatText' : 'formatHtml';
-  $value = $element_manager->invokeMethod($format_method, $element, $submission_data[$element_key], $submission_options);
+  $format_method = (empty($options['html'])) ? 'formatText' : 'formatHtml';
+  $token_value = $element_manager->invokeMethod($format_method, $element, $webform_submission, $options);
 
   // Note, tokens can't include CSS and JS libraries since they will
   // can be included in an email.
-  return (is_array($value)) ? \Drupal::service('renderer')->renderPlain($value) : (string) $value;
+  return (is_array($token_value)) ? \Drupal::service('renderer')->renderPlain($token_value) : (string) $token_value;;
 }

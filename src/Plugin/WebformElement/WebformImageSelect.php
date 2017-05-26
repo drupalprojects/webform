@@ -6,6 +6,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Element\WebformImageSelect as WebformImageSelectElement;
 use Drupal\webform\Element\WebformMessage as WebformMessageElement;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'image_select' element.
@@ -63,7 +64,9 @@ class WebformImageSelect extends Select {
   /**
    * {@inheritdoc}
    */
-  protected function formatHtmlItem(array $element, $value, array $options = []) {
+  protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $format = $this->getItemFormat($element);
     if ($format === 'image') {
       if (isset($element['#images'][$value]) && isset($element['#images'][$value]['src'])) {
@@ -116,18 +119,18 @@ class WebformImageSelect extends Select {
       }
     }
     else {
-      return parent::formatHtmlItem($element, $value, $options);
+      return parent::formatHtmlItem($element, $webform_submission, $options);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function formatTextItem(array $element, $value, array $options = []) {
+  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     if ($this->getItemFormat($element) == 'image') {
       $element['#format'] = 'value';
     }
-    return parent::formatTextItem($element, $value, $options);
+    return parent::formatTextItem($element, $webform_submission, $options);
   }
 
   /**

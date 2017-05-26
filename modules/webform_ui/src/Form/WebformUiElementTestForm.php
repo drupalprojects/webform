@@ -53,11 +53,11 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
       throw new NotFoundHttpException();
     }
 
-    if ($test_element = \Drupal::request()->getSession()->get('webform_ui_test_element_' . $type)) {
-      $this->element = $test_element;
+    if ($element = \Drupal::request()->getSession()->get('webform_ui_test_element_' . $type)) {
+      $this->element = $element;
     }
-    elseif (function_exists('_webform_test_get_example_element') && ($test_element = _webform_test_get_example_element($type))) {
-      $this->element = $test_element;
+    elseif (function_exists('_webform_test_get_example_element') && ($element = _webform_test_get_example_element($type))) {
+      $this->element = $element;
     }
     $this->element['#type'] = $type;
 
@@ -65,9 +65,9 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
 
     $form['#title'] = $this->t('Test %type element', ['%type' => $type]);
 
-    if ($test_element) {
+    if ($element) {
       $webform_submission = WebformSubmission::create(['webform' => $this->webform]);
-      $this->webformElement->initialize($test_element);
+      $this->webformElement->initialize($element);
       $this->webformElement->initialize($this->element);
       $this->webformElement->prepare($this->element, $webform_submission);
 
@@ -82,8 +82,8 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
         'hr' => ['#markup' => '<hr/>'],
       ];
 
-      if (isset($test_element['#default_value'])) {
-        $html = $this->webformElement->formatHtml($test_element, $test_element['#default_value']);
+      if (isset($element['#default_value'])) {
+        $html = $this->webformElement->formatHtml($element + ['#value' => $element['#default_value']], $webform_submission);
         $form['test']['html'] = [
           '#type' => 'item',
           '#title' => $this->t('HTML'),
@@ -93,7 +93,7 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
         $form['test']['text'] = [
           '#type' => 'item',
           '#title' => $this->t('Plain text'),
-          '#markup' => '<pre>' . $this->webformElement->formatText($test_element, $test_element['#default_value']) . '</pre>',
+          '#markup' => '<pre>' . $this->webformElement->formatText($element + ['#value' => $element['#default_value']], $webform_submission) . '</pre>',
           '#allowed_tag' => Xss::getAdminTagList(),
         ];
       }
@@ -104,7 +104,7 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
         'source' => [
           '#theme' => 'webform_codemirror',
           '#type' => 'yaml',
-          '#code' => Yaml::encode($this->convertTranslatableMarkupToStringRecursive($test_element)),
+          '#code' => Yaml::encode($this->convertTranslatableMarkupToStringRecursive($element)),
         ],
       ];
 

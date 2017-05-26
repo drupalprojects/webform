@@ -9,6 +9,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformElementBase;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'likert' element.
@@ -81,7 +82,9 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array $element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
@@ -162,7 +165,9 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, $value, array $options = []) {
+  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     // Return empty value.
     if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
       return '';
@@ -242,7 +247,9 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $export_options) {
+  public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
+    $value = $this->getValue($element, $webform_submission);
+
     $record = [];
     foreach ($element['#questions'] as $question_key => $question_label) {
       $answer_value = (isset($value[$question_key])) ? $value[$question_key] : NULL;
@@ -305,14 +312,14 @@ class WebformLikert extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTableColumn(array $element, $value, array $options = []) {
+  public function formatTableColumn(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     if (isset($options['question_key'])) {
       $question_key = $options['question_key'];
       $question_value = (isset($value[$question_key])) ? $value[$question_key] : '';
       return WebformOptionsHelper::getOptionText($question_value, $element['#answers']);
     }
     else {
-      return $this->formatHtml($element, $value);
+      return $this->formatHtml($element, $webform_submission);
     }
   }
 

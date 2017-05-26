@@ -112,7 +112,9 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array $element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $value = (isset($value['value'])) ? $value['value'] : $value;
     $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
     switch ($format) {
@@ -128,7 +130,9 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, $value, array $options = []) {
+  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
     switch ($format) {
       case 'raw':
@@ -136,7 +140,7 @@ class TextFormat extends WebformElementBase {
 
       case 'value':
       default:
-        $html = $this->formatHtml($element, $value);
+        $html = $this->formatHtml($element, $webform_submission);
         // Convert any HTML to plain-text.
         $html = MailFormatHelper::htmlToText($html);
         // Wrap the mail body for sending.

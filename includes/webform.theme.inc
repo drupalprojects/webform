@@ -312,9 +312,8 @@ function template_preprocess_webform_submission_html(array &$variables) {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
 
   $webform = $webform_submission->getWebform();
-  $data = $webform_submission->getData();
   $elements = $webform->getElementsInitialized();
-  $variables['data'] = $view_builder->buildElements($elements, $data);
+  $variables['data'] = $view_builder->buildElements($elements, $webform_submission);
 }
 
 /**
@@ -334,10 +333,8 @@ function template_preprocess_webform_submission_table(array &$variables) {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
 
   $webform = $webform_submission->getWebform();
-  $data = $webform_submission->getData();
   $elements = $webform->getElementsInitializedFlattenedAndHasValue();
-
-  $variables['table'] = $view_builder->buildTable($elements, $data);
+  $variables['table'] = $view_builder->buildTable($elements, $webform_submission);
 }
 
 /**
@@ -381,9 +378,8 @@ function template_preprocess_webform_submission_text(array &$variables) {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
 
   $webform = $webform_submission->getWebform();
-  $data = $webform_submission->getData();
   $elements = $webform->getElementsInitialized();
-  $variables['data'] = $view_builder->buildElements($elements, $data, [], 'text');
+  $variables['data'] = $view_builder->buildElements($elements, $webform_submission, [], 'text');
 }
 
 /**

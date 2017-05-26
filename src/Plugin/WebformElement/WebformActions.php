@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Element\WebformActions as WebformActionsElement;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_actions' element.
@@ -32,7 +33,7 @@ class WebformActions extends ContainerBase {
     ];
     foreach (WebformActionsElement::$buttons as $button) {
       $properties[$button . '_hide'] = FALSE;
-      $properties[$button . '__label'] = $this->configFactory->get('webform.settings')->get('settings.default_' . $button . '_button_label');
+      $properties[$button . '__label'] = '';
       $properties[$button . '__attributes'] = [];
     }
     return $properties;
@@ -62,7 +63,7 @@ class WebformActions extends ContainerBase {
   /**
    * {@inheritdoc}
    */
-  protected function build($format, array &$element, $value, array $options = []) {
+  protected function build($format, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     return [];
   }
 
@@ -158,7 +159,7 @@ class WebformActions extends ContainerBase {
         $form[$name . '_settings'][$name . '_hide_message'] = [
           '#type' => 'webform_message',
           '#access' => TRUE,
-          '#message_message' => $this->t('Hiding the %label button can cause unexpected issues, please make sure to include the %label button using another element.', $t_args),
+          '#message_message' => $this->t('Hiding the %label button can cause unexpected issues, please make sure to include the %label button using another actions element.', $t_args),
           '#message_type' => 'warning',
           '#states' => [
             'visible' => [':input[name="properties[' . $name . '_hide]"]' => ['checked' => TRUE]],
@@ -177,7 +178,6 @@ class WebformActions extends ContainerBase {
         ],
         '#states' => [
           'visible' => [':input[name="properties[' . $name . '_hide]"]' => ['checked' => FALSE]],
-          'required' => [':input[name="properties[' . $name . '_hide]"]' => ['checked' => FALSE]],
         ],
       ];
       $form[$name . '_settings'][$name . '__attributes'] = [
@@ -207,6 +207,5 @@ class WebformActions extends ContainerBase {
     }
     return $form;
   }
-
 
 }

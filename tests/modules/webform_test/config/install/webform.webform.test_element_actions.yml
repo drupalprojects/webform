@@ -6,10 +6,6 @@ dependencies:
   enforced:
     module:
       - webform_test
-third_party_settings:
-  honeypot:
-    honeypot: false
-    time_restriction: false
 open: null
 close: null
 uid: 1

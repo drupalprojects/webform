@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'flexbox' element.
@@ -31,8 +32,10 @@ class WebformFlexbox extends Container {
   /**
    * {@inheritdoc}
    */
-  protected function build($format, array &$element, $value, array $options = []) {
-    return $value;
+  protected function build($format, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
+    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
+    return $view_builder->buildElements($element, $webform_submission, $options, $format);
   }
 
   /**

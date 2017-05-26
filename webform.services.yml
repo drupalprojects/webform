@@ -97,3 +97,10 @@ services:
     arguments: ['@current_route_match']
     tags:
       - { name: 'context_provider' }
+
+  # Twig extension.
+
+  webform.twig_extension:
+    class: Drupal\webform\Twig\TwigExtension
+    tags:
+      - { name: twig.extension }

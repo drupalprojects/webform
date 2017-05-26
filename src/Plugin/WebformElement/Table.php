@@ -94,7 +94,9 @@ class Table extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array $element, $value, array $options = []) {
+  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     // Undo webform submission elements and convert rows back into a simple
     // render array.
     $rows = [];
@@ -124,9 +126,11 @@ class Table extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, $value, array $options = []) {
+  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
     // Render the HTML table.
-    $build = $this->formatHtml($element, $value, $options);
+    $build = $this->formatHtml($element, $webform_submission, $options);
     $html = \Drupal::service('renderer')->renderPlain($build);
 
     // Convert table in pipe delimited plain text.

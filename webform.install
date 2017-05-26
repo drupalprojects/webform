@@ -704,3 +704,19 @@ function webform_update_8048() {
 
   $config->save();
 }
+
+/**
+ * Issue #2864843: Create a new computed_value element.
+ */
+function webform_update_8049() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $elements = $webform_config->get('elements');
+    if (strpos($elements, '#display_on') !== FALSE) {
+      $elements = str_replace('#display_on: display', '#display_on: view', $elements);
+      $webform_config->set('elements', $elements);
+      $webform_config->save(TRUE);
+    }
+  }
+}
