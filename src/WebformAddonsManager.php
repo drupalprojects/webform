@@ -206,19 +206,27 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Integrations: Salesforce Web-to-Lead Webform Data Integration.
-    $projects['sfweb2lead_webform'] = [
-      'title' => $this->t('Salesforce Web-to-Lead Webform Data Integration'),
-      'description' => $this->t('Integrates Salesforce Web-to-Lead Form feature with various webforms.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/sfweb2lead_webform'),
-      'category' => 'integration',
-    ];
-
     // Integrations: Webform Slack integration.
     $projects['webform_slack'] = [
       'title' => $this->t('Webform Slack integration'),
       'description' => $this->t('Provides a Webform handler for posting a message to a slack channel when a submission is saved.'),
       'url' => Url::fromUri('https://www.drupal.org/sandbox/smaz/2833275'),
+      'category' => 'integration',
+    ];
+
+    // Integrations: OpenInbound for Drupal.
+    $projects['openinbound'] = [
+      'title' => $this->t('OpenInbound for Drupal'),
+      'description' => $this->t('OpenInbound tracks contacts and their interactions on websites.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/openinbound'),
+      'category' => 'integration',
+    ];
+
+    // Integrations: Salesforce Web-to-Lead Webform Data Integration.
+    $projects['sfweb2lead_webform'] = [
+      'title' => $this->t('Salesforce Web-to-Lead Webform Data Integration'),
+      'description' => $this->t('Integrates Salesforce Web-to-Lead Form feature with various webforms.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/sfweb2lead_webform'),
       'category' => 'integration',
     ];
 
