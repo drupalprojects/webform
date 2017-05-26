@@ -166,10 +166,14 @@ class WebformEntityElementsValidator {
         $line_numbers = $this->getLineNumbers('/^\s*(["\']?)' . preg_quote($duplicate_name, '/') . '\1\s*:/');
         $t_args = [
           '%name' => $duplicate_name,
-          '@lines' => $this->formatPlural(count($line_numbers), $this->t('line'), $this->t('lines')),
           '@line_numbers' => WebformArrayHelper::toString($line_numbers),
         ];
-        $messages[] = $this->t('Elements contain a duplicate element name %name found on @lines @line_numbers.', $t_args);
+        $messages[] = $this->formatPlural(
+          count($line_numbers),
+          'Elements contain a duplicate element name %name found on line @line_numbers.',
+          'Elements contain a duplicate element name %name found on lines @line_numbers.',
+          $t_args
+        );
       }
       return $messages;
     }
@@ -215,10 +219,14 @@ class WebformEntityElementsValidator {
         $line_numbers = $this->getLineNumbers('/^\s*(["\']?)' . preg_quote($ignored_property, '/') . '\1\s*:/');
         $t_args = [
           '%property' => $ignored_property,
-          '@lines' => $this->formatPlural(count($line_numbers), $this->t('line'), $this->t('lines')),
-          '@line_numbers' => WebformArrayHelper::toString($line_numbers),
+          '@line_number' => WebformArrayHelper::toString($line_numbers),
         ];
-        $messages[] = $this->t('Elements contain an unsupported %property property found on @lines @line_numbers.', $t_args);
+        $messages[] = $this->formatPlural(
+          count($line_numbers),
+          'Elements contain an unsupported %property property found on line @line_number.',
+          'Elements contain an unsupported %property property found on lines @line_number.',
+          $t_args
+        );
       }
       return $messages;
     }

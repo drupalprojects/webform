@@ -23,12 +23,8 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
 
     // Display info.
     if ($total = $this->getStorage()->getQuery()->count()->execute()) {
-      $t_args = [
-        '@total' => $total,
-        '@results' => $this->formatPlural($total, $this->t('option'), $this->t('options')),
-      ];
       $build['info'] = [
-        '#markup' => $this->t('@total @results', $t_args),
+        '#markup' => $this->formatPlural($total, '@total option', '@total options', ['@total' => $total]),
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ];

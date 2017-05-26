@@ -766,7 +766,7 @@ SUGGESTIONS
           ],
           'notes' => [
             '#markup' => $library['notes'] .
-              ($elements ? ' <strong>' . $this->t('Required by @type @elements.', ['@type' => WebformArrayHelper::toString($elements), '@elements' => $this->formatPlural(count($elements), $this->t('element'), $this->t('elements'))]) . '</strong>': ''),
+              ($elements ? ' <strong>' . $this->formatPlural(count($elements), 'Required by @type element.', 'Required by @type elements.', ['@type' => WebformArrayHelper::toString($elements)]) . '</strong>': ''),
             '#prefix' => '<em>(',
             '#suffix' => ')</em><br/>'
           ],

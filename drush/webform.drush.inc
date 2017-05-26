@@ -346,15 +346,17 @@ function drush_webform_purge($webform_id = NULL) {
   if (!$webform) {
     $submission_total = \Drupal::entityQuery('webform_submission')->count()->execute();
     $form_total = \Drupal::entityQuery('webform')->count()->execute();
+
     $t_args = [
       '@submission_total' => $submission_total,
-      '@submissions' => \Drupal::translation()->formatPlural($submission_total, t('submission'), t('submissions')),
+      '@submissions' => \Drupal::translation()->formatPlural($submission_total, 'submission', 'submissions'),
       '@form_total' => $form_total,
-      '@forms' => \Drupal::translation()->formatPlural($form_total, t('webform'), t('webforms')),
+      '@forms' => \Drupal::translation()->formatPlural($form_total, 'webform', 'webforms'),
     ];
     if (!drush_confirm(dt('Are you sure you want to delete @submission_total @submissions in @form_total @forms?', $t_args))) {
       return drush_user_abort();
     }
+
     $form = new WebformResultsClearForm($submission_storage, $request_handler);
     $form->batchSet();
     drush_backend_batch_process();
@@ -371,6 +373,7 @@ function drush_webform_purge($webform_id = NULL) {
     if (!drush_confirm(dt("Are you sure you want to delete all submissions from '@title' webform?", $t_args))) {
       return drush_user_abort();
     }
+
     $form = new WebformSubmissionsPurgeForm($submission_storage, $request_handler);
     $form->batchSet($webform, $source_entity);
     drush_backend_batch_process();

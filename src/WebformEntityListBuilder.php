@@ -101,12 +101,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
 
     // Display info.
     if ($total = $this->getTotal($this->keys, $this->category, $this->state)) {
-      $t_args = [
-        '@total' => $total,
-        '@results' => $this->formatPlural($total, $this->t('webform'), $this->t('webforms')),
-      ];
       $build['info'] = [
-        '#markup' => $this->t('@total @results', $t_args),
+        '#markup' => $this->formatPlural($total, '@total webform', '@total webforms', ['@total' => $total]),
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ];

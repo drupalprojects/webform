@@ -134,12 +134,8 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
 
     // Display info.
     if ($total = count($rows)) {
-      $t_args = [
-        '@total' => count($rows),
-        '@results' => $this->formatPlural($total, $this->t('template'), $this->t('templates')),
-      ];
       $build['info'] = [
-        '#markup' => $this->t('@total @results', $t_args),
+        '#markup' => $this->formatPlural($total, '@total template', '@total templates', ['@total' => $total]),
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ];

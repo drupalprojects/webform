@@ -70,9 +70,12 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       }
       $build[$type] = [
         '#type' => 'webform_message',
-        '#message_message' => $total .
-          ' ' . $this->formatPlural($total, $this->t('email'), $this->t('emails')) .
-          ' ' . $status_messages[$type]['message'],
+        '#message_message' => $this->formatPlural(
+          $total,
+          '@total email @message',
+          '@total emails @message',
+          ['@total' => $total, '@message' => $status_messages[$type]['message']]
+        ),
         '#message_type' => $status_messages[$type]['type'],
       ];
 

@@ -53,11 +53,12 @@ class WebformSubmissionsPurgeForm extends WebformSubmissionsDeleteFormBase {
 
     $submission_total = \Drupal::entityQuery('webform_submission')->count()->execute();
     $form_total = \Drupal::entityQuery('webform')->count()->execute();
+
     $t_args = [
       '@submission_total' => $submission_total,
-      '@submissions' => $this->formatPlural($submission_total, $this->t('submission'), $this->t('submissions')),
+      '@submissions' => $this->formatPlural($submission_total, 'submission', 'submissions'),
       '@form_total' => $form_total,
-      '@forms' => $this->formatPlural($form_total, $this->t('webform'), $this->t('webforms')),
+      '@forms' => $this->formatPlural($form_total, 'webform', 'webforms'),
     ];
 
     $form['confirm'] = [

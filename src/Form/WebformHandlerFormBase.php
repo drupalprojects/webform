@@ -73,8 +73,14 @@ abstract class WebformHandlerFormBase extends FormBase {
       $cardinality = $this->webformHandler->cardinality();
       $number_of_instances = $webform->getHandlers($plugin_id)->count();
       if ($cardinality !== WebformHandlerInterface::CARDINALITY_UNLIMITED && $cardinality <= $number_of_instances) {
-        $t_args = ['@number' => $cardinality, '@instances' => $this->formatPlural($cardinality, $this->t('instance is'), $this->t('instances are'))];
-        throw new NotFoundHttpException($this->t('Only @number @instance permitted', $t_args));
+        throw new NotFoundHttpException(
+          $this->formatPlural(
+            $cardinality,
+            'Only @number instance is permitted',
+            'Only @number instances are permitted',
+            ['@number' => $cardinality]
+          )
+        );
       }
     }
 

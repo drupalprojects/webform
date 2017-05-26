@@ -246,12 +246,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     // Display info.
     if ($total = $this->getTotal($this->keys, $this->state)) {
-      $t_args = [
-        '@total' => $total,
-        '@results' => $this->formatPlural($total, $this->t('submission'), $this->t('submissions')),
-      ];
       $build['info'] = [
-        '#markup' => $this->t('@total @results', $t_args),
+        '#markup' => $this->formatPlural($total, '@total submission', '@total submissions', ['@total' => $total]),
         '#prefix' => '<div>',
         '#suffix' => '</div>',
       ];
