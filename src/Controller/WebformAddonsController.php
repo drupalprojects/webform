@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Controller;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\webform\Element\WebformMessage;
@@ -54,12 +55,14 @@ class WebformAddonsController extends ControllerBase implements ContainerInjecti
     ];
     $build['#attached']['library'][] = 'webform/webform.admin';
     $build['#attached']['library'][] = 'webform/webform.element.details.toggle';
+    $build['#attached']['library'][] = 'webform/webform.element.details.save';
 
     $categories = $this->addons->getCategories();
     foreach ($categories as $category_name => $category) {
       $build[$category_name] = [
         '#type' => 'details',
         '#title' => $category['title'],
+        '#attributes' => ['data-webform-element-id' => 'webform-addons-' . $category_name],
         '#open' => TRUE,
       ];
       $projects = $this->addons->getProjects($category_name);

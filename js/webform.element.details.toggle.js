@@ -20,7 +20,7 @@
         // Get only the main details elements and ingnore all nested details.
         var $details = $form.find('details').filter(function() {
           // @todo Figure out how to optimize the below code.
-          var $parents = $(this).parentsUntil('form');
+          var $parents = $(this).parentsUntil('.js-webform-details-toggle');
           return ($parents.find('details').length === 0);
         });
 
