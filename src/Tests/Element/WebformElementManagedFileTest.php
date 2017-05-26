@@ -142,8 +142,6 @@ class WebformElementManagedFileTest extends WebformTestBase {
    * Test media file upload elements.
    */
   public function testMediaFileUpload() {
-    global $base_url;
-
     /* Element processing */
 
     // Get test webform.
@@ -170,13 +168,13 @@ class WebformElementManagedFileTest extends WebformTestBase {
     $this->drupalPostForm('webform/test_element_media_file/test', [], t('Preview'));
 
     // Check audio file preview.
-    $this->assertRaw('<source src="' . $base_url . '/system/files/webform/test_element_media_file/_sid_/audio_file_mp3.mp3" type="audio/mpeg">');
+    $this->assertRaw('<source src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/audio_file_mp3.mp3') . '" type="audio/mpeg">');
 
     // Check image file preview.
-    $this->assertRaw('<img src="' . $base_url . '/system/files/webform/test_element_media_file/_sid_/image_file_jpg.jpg" class="webform-image-file" />');
+    $this->assertRaw('<img src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/image_file_jpg.jpg') . '" class="webform-image-file" />');
 
     // Check video file preview.
-    $this->assertRaw('<source src="' . $base_url . '/system/files/webform/test_element_media_file/_sid_/video_file_mp4.mp4" type="video/mp4">');
+    $this->assertRaw('<source src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/video_file_mp4.mp4') . '" type="video/mp4">');
   }
 
   /****************************************************************************/
