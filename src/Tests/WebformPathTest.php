@@ -65,7 +65,7 @@ class WebformPathTest extends WebformTestBase {
     // Check custom base path.
     $webform->setSettings([])->save();
     $this->drupalLogin($this->rootUser);
-    $this->drupalPostForm('admin/structure/webform/settings', ['page[default_page_base_path]' => 'base/path'], t('Save configuration'));
+    $this->drupalPostForm('admin/structure/webform/settings', ['page_settings[default_page_base_path]' => 'base/path'], t('Save configuration'));
     $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()));
     $this->assertResponse(200, 'Submit URL alias with custom base path exists');
     $this->drupalGet('base/path/' . str_replace('_', '-', $webform->id()) . '/confirmation');

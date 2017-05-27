@@ -176,78 +176,88 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $config = $this->config('webform.settings');
     $settings = $config->get('settings');
 
-    // Page.
-    $form['page'] = [
+    /**************************************************************************/
+    // Webform.
+    /**************************************************************************/
+
+    // Webform.
+    $form['webform'] = [
       '#type' => 'details',
-      '#title' => $this->t('Page default settings'),
+      '#title' => $this->t('Webform settings'),
+    ];
+
+    // Webform: Page settings.
+    $form['webform']['page_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('URL path settings'),
       '#tree' => TRUE,
     ];
-    $form['page']['default_page_base_path'] = [
+    $form['webform']['page_settings']['default_page_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default base path for webform URLs'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_page_base_path'),
     ];
 
-    // Form.
-    $form['form'] = [
+    // Webform: Form settings.
+    $form['webform']['form_settings'] = [
       '#type' => 'details',
-      '#title' => $this->t('Form default settings'),
+      '#title' => $this->t('Form settings'),
       '#tree' => TRUE,
     ];
-    $form['form']['default_form_open_message'] = [
+    $form['webform']['form_settings']['default_form_open_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default open message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_open_message'),
     ];
-    $form['form']['default_form_close_message'] = [
+    $form['webform']['form_settings']['default_form_close_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default closed message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_close_message'),
     ];
-    $form['form']['default_form_exception_message'] = [
+    $form['webform']['form_settings']['default_form_exception_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default exception message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_exception_message'),
     ];
-    $form['form']['default_form_confidential_message'] = [
+    $form['webform']['form_settings']['default_form_confidential_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default confidential message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_form_confidential_message'),
     ];
-    $form['form']['default_submit_button_label'] = [
+    $form['webform']['form_settings']['default_submit_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default submit button label'),
       '#required' => TRUE,
       '#size' => 20,
       '#default_value' => $settings['default_submit_button_label'],
     ];
-    $form['form']['form_classes'] = [
+    $form['webform']['form_settings']['form_classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Form CSS classes '),
       '#description' => $this->t('A list of classes that will be provided in the "Form CSS classes " dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.form_classes'),
     ];
-    $form['form']['button_classes'] = [
+    $form['webform']['form_settings']['button_classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Button CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in "Button CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.button_classes'),
     ];
 
-    // Form Behaviors.
-    $form['form_behaviors'] = [
+    // Webform: Form Behaviors.
+    $form['webform']['form_behaviors'] = [
       '#type' => 'details',
-      '#title' => $this->t('Form default behaviors'),
+      '#title' => $this->t('Form behaviors'),
       '#tree' => TRUE,
     ];
     $behavior_elements = [
       'default_form_submit_once' => [
-        'title' => $this->t('Prevent duplicate submissions'),
+        'title' => $this->t('Prevent duplicate submissions for all webforms'),
         'description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
       ],
       'default_form_disable_back' => [
@@ -255,7 +265,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         'description' => $this->t('If checked, users will not be allowed to navigate back to the webform using the browsers back button.'),
       ],
       'default_form_unsaved' => [
-        'title' => $this->t('Warn users about unsaved changes'),
+        'title' => $this->t('Warn users about unsaved changes for all webforms'),
         'description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
       ],
       'default_form_novalidate' => [
@@ -263,12 +273,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         'description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to all webforms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
       ],
       'default_form_details_toggle' => [
-        'title' => $this->t('Display collapse/expand all details link'),
+        'title' => $this->t('Display collapse/expand all details link for all webforms'),
         'description' => $this->t('If checked, an expand/collapse all (details) link will be added to all webforms with two or more details elements.'),
       ],
     ];
     foreach ($behavior_elements as $behavior_key => $behavior_element) {
-      $form['form_behaviors'][$behavior_key] = [
+      $form['webform']['form_behaviors'][$behavior_key] = [
         '#type' => 'checkbox',
         '#title' => $behavior_element['title'],
         '#description' => $behavior_element['description'],
@@ -277,10 +287,110 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       ];
     }
 
-    // Submission Behaviors.
-    $form['submission_behaviors'] = [
+    // Webform: Wizard settings.
+    $form['webform']['wizard_settings'] = [
       '#type' => 'details',
-      '#title' => $this->t('Submission default behaviors'),
+      '#title' => $this->t('Wizard settings'),
+      '#tree' => TRUE,
+    ];
+    $form['webform']['wizard_settings']['default_wizard_prev_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default wizard previous page button label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_wizard_prev_button_label'],
+    ];
+    $form['webform']['wizard_settings']['default_wizard_next_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default wizard next page button label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_wizard_next_button_label'],
+    ];
+    $form['webform']['wizard_settings']['default_wizard_start_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default wizard start label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_wizard_start_label'],
+    ];
+    $form['webform']['wizard_settings']['default_wizard_complete_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default wizard end label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_wizard_complete_label'],
+    ];
+
+    // Webform: Preview settings.
+    $form['webform']['preview_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Preview settings'),
+      '#tree' => TRUE,
+    ];
+    $form['webform']['preview_settings']['default_preview_next_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default preview button label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_preview_next_button_label'],
+    ];
+    $form['webform']['preview_settings']['default_preview_prev_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default preview previous page button label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_preview_prev_button_label'],
+    ];
+    $form['webform']['preview_settings']['default_preview_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default preview label'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_preview_label'],
+    ];
+    $form['webform']['preview_settings']['default_preview_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default preview page title'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_preview_title'],
+    ];
+    $form['webform']['preview_settings']['default_preview_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default preview message'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_preview_message'],
+    ];
+
+    // Webform: Draft settings.
+    $form['webform']['draft_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Draft settings'),
+      '#tree' => TRUE,
+    ];
+    $form['webform']['draft_settings']['default_draft_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default draft button label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_draft_button_label'],
+    ];
+    $form['webform']['draft_settings']['default_draft_saved_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default draft save message'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_draft_saved_message'],
+    ];
+    $form['webform']['draft_settings']['default_draft_loaded_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default draft load message'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_draft_loaded_message'],
+    ];
+
+    // Submission Behaviors.
+    $form['webform']['submission_behaviors'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission behaviors'),
       '#tree' => TRUE,
     ];
     $behavior_elements = [
@@ -290,7 +400,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       ],
     ];
     foreach ($behavior_elements as $behavior_key => $behavior_element) {
-      $form['submission_behaviors'][$behavior_key] = [
+      $form['webform']['submission_behaviors'][$behavior_key] = [
         '#type' => 'checkbox',
         '#title' => $behavior_element['title'],
         '#description' => $behavior_element['description'],
@@ -299,183 +409,140 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       ];
     }
 
-    // Wizard.
-    $form['wizard'] = [
+    // Webform: Submission limits.
+    $form['webform']['submission_limits'] = [
       '#type' => 'details',
-      '#title' => $this->t('Wizard default settings'),
+      '#title' => $this->t('Submission limits'),
       '#tree' => TRUE,
     ];
-    $form['wizard']['default_wizard_prev_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default wizard previous page button label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_wizard_prev_button_label'],
-    ];
-    $form['wizard']['default_wizard_next_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default wizard next page button label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_wizard_next_button_label'],
-    ];
-    $form['wizard']['default_wizard_start_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default wizard start label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_wizard_start_label'],
-    ];
-    $form['wizard']['default_wizard_complete_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default wizard end label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_wizard_complete_label'],
-    ];
-
-    // Preview.
-    $form['preview'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Preview default settings'),
-      '#tree' => TRUE,
-    ];
-    $form['preview']['default_preview_next_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default preview button label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_preview_next_button_label'],
-    ];
-    $form['preview']['default_preview_prev_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default preview previous page button label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_preview_prev_button_label'],
-    ];
-    $form['preview']['default_preview_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default preview label'),
-      '#required' => TRUE,
-      '#default_value' => $settings['default_preview_label'],
-    ];
-    $form['preview']['default_preview_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default preview page title'),
-      '#required' => TRUE,
-      '#default_value' => $settings['default_preview_title'],
-    ];
-    $form['preview']['default_preview_message'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Default preview message'),
-      '#required' => TRUE,
-      '#default_value' => $settings['default_preview_message'],
-    ];
-
-    // Draft.
-    $form['draft'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Draft default settings'),
-      '#tree' => TRUE,
-    ];
-    $form['draft']['default_draft_button_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default draft button label'),
-      '#required' => TRUE,
-      '#size' => 20,
-      '#default_value' => $settings['default_draft_button_label'],
-    ];
-    $form['draft']['default_draft_saved_message'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Default draft save message'),
-      '#required' => TRUE,
-      '#default_value' => $settings['default_draft_saved_message'],
-    ];
-    $form['draft']['default_draft_loaded_message'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Default draft load message'),
-      '#required' => TRUE,
-      '#default_value' => $settings['default_draft_loaded_message'],
-    ];
-
-    $form['confirmation'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Confirmation default settings'),
-      '#tree' => TRUE,
-    ];
-    $form['confirmation']['default_confirmation_message'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Default confirmation message'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('settings.default_confirmation_message'),
-    ];
-    $form['confirmation']['default_confirmation_back_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default confirmation back label'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('settings.default_confirmation_back_label'),
-    ];
-    $form['confirmation']['confirmation_classes'] = [
-      '#type' => 'webform_codemirror',
-      '#title' => $this->t('Confirmation CSS classes'),
-      '#description' => $this->t('A list of classes that will be provided in the "Confirmation CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
-      '#default_value' => $config->get('settings.confirmation_classes'),
-    ];
-    $form['confirmation']['confirmation_back_classes'] = [
-      '#type' => 'webform_codemirror',
-      '#title' => $this->t('Confirmation back link CSS classes'),
-      '#description' => $this->t('A list of classes that will be provided in the "Confirmation back link CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
-      '#default_value' => $config->get('settings.confirmation_back_classes'),
-    ];
-
-    // Limit.
-    $form['limit'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Limit default settings'),
-      '#tree' => TRUE,
-    ];
-    $form['limit']['default_limit_total_message'] = [
+    $form['webform']['submission_limits']['default_limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default total submissions limit message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_limit_total_message'),
     ];
-    $form['limit']['default_limit_user_message'] = [
+    $form['webform']['submission_limits']['default_limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default per user submission limit message'),
       '#required' => TRUE,
       '#default_value' => $config->get('settings.default_limit_user_message'),
     ];
 
-    // Assets.
-    $form['assets'] = [
+    // Webform: Submission purging.
+    $form['webform']['purge'] = [
       '#type' => 'details',
-      '#title' => $this->t('Global Assets (CSS/JavaScript)'),
+      '#title' => $this->t('Submission purging'),
       '#tree' => TRUE,
     ];
-    $form['assets']['css'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'css',
-      '#title' => $this->t('CSS'),
-      '#description' => $this->t('Enter custom CSS to be attached to all webforms.'),
-      '#default_value' => $config->get('assets.css'),
-    ];
-    $form['assets']['javascript'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'javascript',
-      '#title' => $this->t('JavaScript'),
-      '#description' => $this->t('Enter custom JavaScript to be attached to all webforms.'),
-      '#default_value' => $config->get('assets.javascript'),
+    $form['webform']['purge']['cron_size'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Amount of submissions to process'),
+      '#min' => 1,
+      '#default_value' => $config->get('purge.cron_size'),
+      '#description' => $this->t('Amount of submissions to purge during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
     ];
 
-    // Element.
-    $form['element'] = [
+    // Webform: Confirmation settings.
+    $form['webform']['confirmation_settings'] = [
       '#type' => 'details',
-      '#title' => $this->t('Element default settings'),
+      '#title' => $this->t('Confirmation settings'),
       '#tree' => TRUE,
     ];
-    $form['element']['allowed_tags'] = [
+    $form['webform']['confirmation_settings']['default_confirmation_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default confirmation message'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('settings.default_confirmation_message'),
+    ];
+    $form['webform']['confirmation_settings']['default_confirmation_back_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default confirmation back label'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('settings.default_confirmation_back_label'),
+    ];
+    $form['webform']['confirmation_settings']['confirmation_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Confirmation CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Confirmation CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#default_value' => $config->get('settings.confirmation_classes'),
+    ];
+    $form['webform']['confirmation_settings']['confirmation_back_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Confirmation back link CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Confirmation back link CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#default_value' => $config->get('settings.confirmation_back_classes'),
+    ];
+
+    // Webform: Third party settings.
+    $form['webform']['third_party_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Third party settings'),
+      '#description' => $this->t('Third party settings allow contrib and custom modules to define global settings that are applied to all webforms and submissions.'),
+      '#tree' => TRUE,
+    ];
+    $this->thirdPartySettingsManager->alter('webform_admin_third_party_settings_form', $form['webform'], $form_state);
+    if (!Element::children($form['webform']['third_party_settings'])) {
+      $form['webform']['third_party_settings']['message'] = [
+        '#type' => 'webform_message',
+        '#message_message' => $this->t('There are no third party settings available. Please install a contributed module that integrates with the Webform module.'),
+        '#message_type' => 'info',
+      ];
+      $form['webform']['third_party_settings']['supported'] = [
+        'title' => [
+          '#markup' => $this->t('Supported modules'),
+          '#prefix' => '<h3>',
+          '#suffix' => '</h3>',
+        ],
+        'modules' => [
+          '#theme' => 'admin_block_content',
+          '#content' => $this->addonsManager->getThirdPartySettings(),
+        ],
+      ];
+    }
+    else {
+      ksort($form['webform']['third_party_settings']);
+    }
+
+    // Webform: Test.
+    $form['webform']['test'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Test settings'),
+      '#tree' => TRUE,
+    ];
+    $form['webform']['test']['types'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'yaml',
+      '#title' => $this->t('Test data by element type'),
+      '#description' => $this->t("Above test data is keyed by FAPI element #type."),
+      '#default_value' => $config->get('test.types'),
+    ];
+    $form['webform']['test']['names'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'yaml',
+      '#title' => $this->t('Test data by element name'),
+      '#description' => $this->t("Above test data is keyed by full or partial element names. For example, Using 'zip' will populate fields that are named 'zip' and 'zip_code' but not 'zipcode' or 'zipline'."),
+      '#default_value' => $config->get('test.names'),
+    ];
+
+    $form['webform']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
+    /**************************************************************************/
+    // Element.
+    /**************************************************************************/
+
+    // Element.
+    $form['element_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Element settings'),
+    ];
+
+    // Element: Settings.
+    $form['element_settings']['element'] = [
+      '#type' => 'details',
+      '#title' => $this->t('General settings'),
+      '#tree' => TRUE,
+    ];
+    $form['element_settings']['element']['allowed_tags'] = [
       '#type' => 'webform_radios_other',
       '#title' => $this->t('Allowed tags'),
       '#options' => [
@@ -490,21 +557,21 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Allowed tags are applied to any element property that may contain HTML markup. This properties include #title, #description, #field_prefix, and #field_suffix'),
       '#default_value' => $config->get('element.allowed_tags'),
     ];
-    $form['element']['wrapper_classes'] = [
+    $form['element_settings']['element']['wrapper_classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Wrapper CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Wrapper CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#required' => TRUE,
       '#default_value' => $config->get('element.wrapper_classes'),
     ];
-    $form['element']['classes'] = [
+    $form['element_settings']['element']['classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Element CSS classes'),
       '#description' => $this->t('A list of classes that will be provided in the "Element CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#required' => TRUE,
       '#default_value' => $config->get('element.classes'),
     ];
-    $form['element']['default_description_display'] = [
+    $form['element_settings']['element']['default_description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Default description display'),
       '#options' => [
@@ -517,7 +584,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Determines the default placement of the description for all webform elements.'),
       '#default_value' => $config->get('element.default_description_display'),
     ];
-    $form['element']['default_icheck'] = [
+    $form['element_settings']['element']['default_icheck'] = [
       '#type' => 'select',
       '#title' => $this->t('Enhance checkboxes/radio buttons using iCheck'),
       '#description' => $this->t('Replaces checkboxes/radio buttons with jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
@@ -563,7 +630,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('element.default_icheck'),
       '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
-    $form['element']['default_google_maps_api_key'] = [
+    $form['element_settings']['element']['default_google_maps_api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Google Maps API key'),
       '#description' => $this->t('Google requires users to use a valid API key. Using the <a href="https://console.developers.google.com/apis">Google API Manager</a>, you can enable the <em>Google Maps JavaScript API</em>. That will create (or reuse) a <em>Browser key</em> which you can paste here.'),
@@ -571,24 +638,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#access' => $this->librariesManager->isIncluded('jquery.geocomplete'),
     ];
 
-    // (Excluded) Types.
-    $form['types'] = [
+    // Element: File.
+    $form['element_settings']['file'] = [
       '#type' => 'details',
-      '#title' => $this->t('Element types'),
-      '#description' => $this->t('Select available element types'),
-    ];
-    $form['types']['excluded_elements'] = $this->buildExcludedPlugins(
-      $this->elementManager,
-      $config->get('element.excluded_elements')
-    );
-
-    // File.
-    $form['file'] = [
-      '#type' => 'details',
-      '#title' => $this->t('File upload default settings'),
+      '#title' => $this->t('File upload settings'),
       '#tree' => TRUE,
     ];
-    $form['file']['file_public'] = [
+    $form['element_settings']['file']['file_public'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow files to be uploaded to public file system.'),
       '#description' => $this->t('Public files upload destination is dangerous for webforms that are available to anonymous and/or untrusted users.') . ' ' .
@@ -596,7 +652,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_public'),
     ];
-    $form['file']['default_max_filesize'] = [
+    $form['element_settings']['file']['default_max_filesize'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default maximum upload size'),
       '#description' => $this->t('Enter a value like "512" (bytes), "80 KB" (kilobytes) or "50 MB" (megabytes) in order to restrict the allowed file size. If left empty the file sizes will be limited only by PHP\'s maximum post and file upload sizes (current limit <strong>%limit</strong>).', ['%limit' => function_exists('file_upload_max_size') ? format_size(file_upload_max_size()) : $this->t('N/A')]),
@@ -612,7 +668,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       'video_file' => 'video file',
     ];
     foreach ($file_types as $file_type_name => $file_type_title) {
-      $form['file']["default_{$file_type_name}_extensions"] = [
+      $form['element_settings']['file']["default_{$file_type_name}_extensions"] = [
         '#type' => 'textfield',
         '#title' => $this->t('Default allowed @title extensions', ['@title' => $file_type_title]),
         '#description' => $this->t('Separate extensions with a space and do not include the leading dot.'),
@@ -623,10 +679,22 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       ];
     }
 
-    // Format.
-    $form['format'] = [
+    // Element: (Excluded) Types.
+    $form['element_settings']['types'] = [
       '#type' => 'details',
-      '#title' => $this->t('Format default settings'),
+      '#title' => $this->t('Element types'),
+      '#description' => $this->t('Select available element types'),
+    ];
+    $form['element_settings']['types']['excluded_elements'] = $this->buildExcludedPlugins(
+      $this->elementManager,
+      $config->get('element.excluded_elements')
+    );
+
+    // Element: Format.
+    $form['element_settings']['format'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Element formats'),
+      '#description' => $this->t('Select default element formats.'),
       '#tree' => TRUE,
     ];
     $element_plugins = $this->elementManager->getInstances();
@@ -634,7 +702,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       // Element.
       $element_plugin_definition = $element_plugin->getPluginDefinition();
       $element_plugin_label = $element_plugin_definition['label'];
-      $form['format'][$element_id] = [
+      $form['element_settings']['format'][$element_id] = [
         '#type' => 'details',
         '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => $element_plugin->getTypeName()]),
         '#description' => $element_plugin->getPluginDescription(),
@@ -647,7 +715,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $item_formats = ['' => '<' . $this->t('Default') . '>'] + $item_formats;
       $item_default_format = $element_plugin->getItemDefaultFormat();
       $item_default_format_label = (isset($item_formats[$item_default_format])) ? $item_formats[$item_default_format] : $item_default_format;
-      $form['format'][$element_id]['item'] = [
+      $form['element_settings']['format'][$element_id]['item'] = [
         '#type' => 'select',
         '#title' => $this->t('Item format'),
         '#description' => $this->t("Select how a @label element's single value is displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
@@ -664,7 +732,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         $items_formats = ['' => '<' . $this->t('Default') . '>'] + $items_formats;
         $items_default_format = $element_plugin->getItemsDefaultFormat();
         $items_default_format_label = (isset($item_formats[$items_default_format])) ? $items_formats[$items_default_format] : $items_default_format;
-        $form['format'][$element_id]['items'] = [
+        $form['element_settings']['format'][$element_id]['items'] = [
           '#type' => 'select',
           '#title' => $this->t('Items format'),
           '#description' => $this->t("Select how a @label element's multiple values are displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
@@ -675,24 +743,201 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       }
     }
 
-    // (Excluded) Handlers.
+    /**************************************************************************/
+    // Assets.
+    /**************************************************************************/
+
+    // Assets & Libraries.
+    $form['assets_libraries'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Assets & Libraries'),
+    ];
+
+    // Assets & Libraries: Assets.
+    $form['assets_libraries']['assets'] = [
+      '#type' => 'details',
+      '#title' => $this->t('CSS / JavaScript'),
+      '#tree' => TRUE,
+    ];
+    $form['assets_libraries']['assets']['css'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'css',
+      '#title' => $this->t('CSS'),
+      '#description' => $this->t('Enter custom CSS to be attached to all webforms.'),
+      '#default_value' => $config->get('assets.css'),
+    ];
+    $form['assets_libraries']['assets']['javascript'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'javascript',
+      '#title' => $this->t('JavaScript'),
+      '#description' => $this->t('Enter custom JavaScript to be attached to all webforms.'),
+      '#default_value' => $config->get('assets.javascript'),
+    ];
+
+    // Assets & Libraries: Libraries.
+    $form['assets_libraries']['libraries'] = [
+      '#type' => 'details',
+      '#title' => $this->t('External libraries'),
+      '#description' => $this->t('Uncheck the below optional external libraries that you do not want to be used by any webforms.') . '</br>' .
+        '<em>' . $this->t('Please note, you can also exclude element types that are dependant on specific libraries.') . '</em>',
+      '#tree' => TRUE,
+    ];
+    $libraries_header = [
+      'title' => ['data' => $this->t('Title')],
+      'description' => ['data' => $this->t('Description/Notes'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
+    ];
+    $this->libraries = [];
+    $libraries_options = [];
+    $libraries = $this->librariesManager->getLibraries();
+    foreach ($libraries as $library_name => $library) {
+      // Only optional libraries can be excluded.
+      if (empty($library['optional'])) {
+        continue;
+      }
+
+      $this->libraries[$library_name] = $library_name;
+      $libraries_options[$library_name] = [
+        'title' => $library['title'],
+        'description' => [
+          'data' => [
+            'content' => ['#markup' => $library['description'], '#suffix' => '<br/>'],
+            'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br/>'],
+          ],
+        ],
+      ];
+    }
+    $form['assets_libraries']['libraries']['excluded_libraries'] = [
+      '#type' => 'tableselect',
+      '#title' => $this->t('Libraries'),
+      '#header' => $libraries_header,
+      '#js_select' => FALSE,
+      '#options' => $libraries_options,
+      '#default_value' => array_diff($this->libraries, array_combine($config->get('libraries.excluded_libraries'), $config->get('libraries.excluded_libraries'))),
+    ];
+    $t_args = [
+      ':select2_href' => $libraries['jquery.select2']['homepage_url']->toString(),
+      ':chosen_href' => $libraries['jquery.chosen']['homepage_url']->toString(),
+    ];
+    $form['assets_libraries']['libraries']['select_message'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('<a href=":select2_href">Select2</a> and <a href=":chosen_href">Chosen</a> provide very similar functionality, Most websites should only have one of these libraries enabled.', $t_args),
+      '#states' => [
+        'visible' => [
+          ':input[name="libraries[excluded_libraries][jquery.select2]"]' => ['checked' => TRUE],
+          ':input[name="libraries[excluded_libraries][jquery.chosen]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['assets_libraries']['libraries']['cdn'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use CDN'),
+      '#description' => $this->t('If checked, all warnings about missing libraries will be disabled.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('libraries.cdn'),
+    ];
+    $form['assets_libraries']['libraries']['cdn_message'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('Note that it is in generally not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and these external assets are usually not in the browser cache anyway.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="libraries[cdn]"]' => [
+            'checked' => TRUE,
+          ],
+        ],
+      ],
+    ];
+
+    /**************************************************************************/
+    // Email / Handler.
+    /**************************************************************************/
+
+    // Email / Handler.
     $form['handler'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Email / handler settings'),
+    ];
+
+    // Email / Handler: Mail.
+    $form['handler']['mail'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Email settings'),
+      '#tree' => TRUE,
+    ];
+    $form['handler']['mail']['roles'] = [
+      '#type' => 'webform_roles',
+      '#title' => $this->t('Recipent roles'),
+      '#description' => $this->t("Select roles that can be assigned to receive a webform's email. <em>Please note: Selected roles will be available to all webforms.</em>"),
+      '#include_anonymous' => FALSE,
+      '#default_value' => $config->get('mail.roles'),
+    ];
+    $form['handler']['mail']['default_from_mail'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default from email'),
+      '#description' => $this->t('The default sender address for emailed webform results; often the email address of the maintainer of your forms.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('mail.default_from_mail'),
+    ];
+    $form['handler']['mail']['default_from_name'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default from name'),
+      '#description' => $this->t('The default sender name which is used along with the default from address.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('mail.default_from_name'),
+    ];
+    $form['handler']['mail']['default_reply_to'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default reply-to email'),
+      '#description' => $this->t("Enter the email address that a recipient will see when they are replying to an email. Leave blank to automatically use the 'From email' address. Setting the 'Reply-to' to the 'From email' prevent emails from being flagged as spam."),
+      '#default_value' => $config->get('mail.default_reply_to'),
+    ];
+    $form['handler']['mail']['default_return_path'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default return path (email)'),
+      '#description' => $this->t("Enter an email address to which bounce messages are delivered. Leave blank to automatically use the 'From email' address."),
+      '#default_value' => $config->get('mail.default_return_path'),
+    ];
+    $form['handler']['mail']['default_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default email subject'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('mail.default_subject'),
+    ];
+    $form['handler']['mail']['default_body_text'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'text',
+      '#title' => $this->t('Default email body (Plain text)'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('mail.default_body_text'),
+    ];
+    $form['handler']['mail']['default_body_html'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'html',
+      '#title' => $this->t('Default email body (HTML)'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('mail.default_body_html'),
+    ];
+    $form['handler']['mail']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
+    // Email / Handler: Types.
+    $form['handler']['handler_types'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission handlers'),
       '#description' => $this->t('Select available submission handlers'),
     ];
-    $form['handler']['excluded_handlers'] = $this->buildExcludedPlugins(
+    $form['handler']['handler_types']['excluded_handlers'] = $this->buildExcludedPlugins(
       $this->handlerManager,
       $config->get('handler.excluded_handlers')
     );
     $excluded_handler_checkboxes = [];
-    foreach ($form['handler']['excluded_handlers']['#options'] as $handler_id => $option) {
+    foreach ($form['handler']['handler_types']['excluded_handlers']['#options'] as $handler_id => $option) {
       if ($excluded_handler_checkboxes) {
         $excluded_handler_checkboxes[] = 'or';
       }
       $excluded_handler_checkboxes[] = [':input[name="excluded_handlers[' . $handler_id . ']"]' => ['checked' => FALSE]];
     }
-    $form['handler']['excluded_handlers_message'] = [
+    $form['handler']['handler_types']['excluded_handlers_message'] = [
       '#type' => 'webform_message',
       '#message_message' => $this->t('All excluded handlers must be manually removed from existing webforms.'),
       '#message_type' => 'warning',
@@ -701,85 +946,37 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       ],
     ];
 
-    // Mail.
-    $form['mail'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Email default settings'),
-      '#tree' => TRUE,
-    ];
-    $form['mail']['roles'] = [
-      '#type' => 'webform_roles',
-      '#title' => $this->t('Recipent roles'),
-      '#description' => $this->t("Select roles that can be assigned to receive a webform's email. <em>Please note: Selected roles will be available to all webforms.</em>"),
-      '#include_anonymous' => FALSE,
-      '#default_value' => $config->get('mail.roles'),
-    ];
-    $form['mail']['default_from_mail'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default from email'),
-      '#description' => $this->t('The default sender address for emailed webform results; often the email address of the maintainer of your forms.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('mail.default_from_mail'),
-    ];
-    $form['mail']['default_from_name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default from name'),
-      '#description' => $this->t('The default sender name which is used along with the default from address.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('mail.default_from_name'),
-    ];
-    $form['mail']['default_reply_to'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default reply-to email'),
-      '#description' => $this->t("Enter the email address that a recipient will see when they are replying to an email. Leave blank to automatically use the 'From email' address. Setting the 'Reply-to' to the 'From email' prevent emails from being flagged as spam."),
-      '#default_value' => $config->get('mail.default_reply_to'),
-    ];
-    $form['mail']['default_return_path'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default return path (email)'),
-      '#description' => $this->t("Enter an email address to which bounce messages are delivered. Leave blank to automatically use the 'From email' address."),
-      '#default_value' => $config->get('mail.default_return_path'),
-    ];
-    $form['mail']['default_subject'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Default email subject'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('mail.default_subject'),
-    ];
-    $form['mail']['default_body_text'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'text',
-      '#title' => $this->t('Default email body (Plain text)'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('mail.default_body_text'),
-    ];
-    $form['mail']['default_body_html'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'html',
-      '#title' => $this->t('Default email body (HTML)'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('mail.default_body_html'),
-    ];
-    $form['mail']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['handler']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
-    // Export.
-    $form['export'] = [
+    /**************************************************************************/
+    // Exporter.
+    /**************************************************************************/
+
+    // Exporter.
+    $form['exporter'] = [
       '#type' => 'details',
-      '#title' => $this->t('Export default settings'),
+      '#title' => $this->t('Export settings'),
+    ];
+
+    // Exporter: Export.
+    $form['exporter']['export_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Export settings'),
+      '#description' => $this->t('Enter default export settings to be used by all webforms.'),
     ];
     $export_options = NestedArray::mergeDeep($config->get('export') ?: [],
       $this->submissionExporter->getValuesFromInput($form_state->getUserInput())
     );
     $export_form_state = new FormState();
-    $this->submissionExporter->buildExportOptionsForm($form, $export_form_state, $export_options);
+    $this->submissionExporter->buildExportOptionsForm($form['exporter']['export_settings'], $export_form_state, $export_options);
 
     // (Excluded) Exporters.
-    $form['exporters'] = [
+    $form['exporter']['exporter_types'] = [
       '#type' => 'details',
       '#title' => $this->t('Submission exporters'),
       '#description' => $this->t('Select available submission exporters'),
     ];
-    $form['exporters']['excluded_exporters'] = $this->buildExcludedPlugins(
+    $form['exporter']['exporter_types']['excluded_exporters'] = $this->buildExcludedPlugins(
       $this->exporterManager,
       $config->get('export.excluded_exporters') ?: [] ?: []
     );
@@ -810,40 +1007,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#min' => 1,
       '#required' => TRUE,
       '#default_value' => $config->get('batch.default_batch_delete_size'),
-    ];
-
-    $form['purge'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Automated purging settings'),
-      '#tree' => TRUE,
-    ];
-    $form['purge']['cron_size'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Amount of submissions to process'),
-      '#min' => 1,
-      '#default_value' => $config->get('purge.cron_size'),
-      '#description' => $this->t('Amount of submissions to purge during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
-    ];
-
-    // Test.
-    $form['test'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Test settings'),
-      '#tree' => TRUE,
-    ];
-    $form['test']['types'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'yaml',
-      '#title' => $this->t('Test data by element type'),
-      '#description' => $this->t("Above test data is keyed by FAPI element #type."),
-      '#default_value' => $config->get('test.types'),
-    ];
-    $form['test']['names'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'yaml',
-      '#title' => $this->t('Test data by element name'),
-      '#description' => $this->t("Above test data is keyed by full or partial element names. For example, Using 'zip' will populate fields that are named 'zip' and 'zip_code' but not 'zipcode' or 'zipline'."),
-      '#default_value' => $config->get('test.names'),
     ];
 
     // UI.
@@ -925,113 +1088,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('ui.html_editor_disabled'),
     ];
 
-    // Libraries.
-    $form['libraries'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Libraries settings'),
-      '#description' => $this->t('Uncheck the below optional libraries that you do not want to be used by webform elements.') . '</br>' .
-        '<em>' . $this->t('Please note, you can also exclude element types that are dependant on specific libraries.') . '</em>',
-      '#tree' => TRUE,
-    ];
-    $libraries_header = [
-      'title' => ['data' => $this->t('Title')],
-      'description' => ['data' => $this->t('Description/Notes'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
-    ];
-    $this->libraries = [];
-    $libraries_options = [];
-    $libraries = $this->librariesManager->getLibraries();
-    foreach ($libraries as $library_name => $library) {
-      // Only optional libraries can be excluded.
-      if (empty($library['optional'])) {
-        continue;
-      }
-
-      $this->libraries[$library_name] = $library_name;
-      $libraries_options[$library_name] = [
-        'title' => $library['title'],
-        'description' => [
-          'data' => [
-            'content' => ['#markup' => $library['description'], '#suffix' => '<br/>'],
-            'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br/>'],
-          ],
-        ],
-      ];
-    }
-    $form['libraries']['excluded_libraries'] = [
-      '#type' => 'tableselect',
-      '#title' => $this->t('Libraries'),
-      '#header' => $libraries_header,
-      '#js_select' => FALSE,
-      '#options' => $libraries_options,
-      '#default_value' => array_diff($this->libraries, array_combine($config->get('libraries.excluded_libraries'), $config->get('libraries.excluded_libraries'))),
-    ];
-    $t_args = [
-      ':select2_href' => $libraries['jquery.select2']['homepage_url']->toString(),
-      ':chosen_href' => $libraries['jquery.chosen']['homepage_url']->toString(),
-    ];
-    $form['libraries']['select_message'] = [
-      '#type' => 'webform_message',
-      '#message_type' => 'warning',
-      '#message_message' => $this->t('<a href=":select2_href">Select2</a> and <a href=":chosen_href">Chosen</a> provide very similar functionality, Most websites should only have one of these libraries enabled.', $t_args),
-      '#states' => [
-        'visible' => [
-          ':input[name="libraries[excluded_libraries][jquery.select2]"]' => ['checked' => TRUE],
-          ':input[name="libraries[excluded_libraries][jquery.chosen]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
-    $form['libraries']['cdn'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Use CDN'),
-      '#description' => $this->t('If checked, all warnings about missing libraries will be disabled.'),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('libraries.cdn'),
-    ];
-    $form['libraries']['cdn_message'] = [
-      '#type' => 'webform_message',
-      '#message_type' => 'warning',
-      '#message_message' => $this->t('Note that it is in generally not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and these external assets are usually not in the browser cache anyway.'),
-      '#states' => [
-        'visible' => [
-          ':input[name="libraries[cdn]"]' => [
-            'checked' => TRUE,
-          ],
-        ],
-      ],
-    ];
-
-    // Third party settings.
-    $form['third_party_settings'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Third party settings'),
-      '#description' => $this->t('Third party settings allow contrib and custom modules to define global settings that are applied to all webforms and submissions.'),
-      '#tree' => TRUE,
-    ];
-    $this->thirdPartySettingsManager->alter('webform_admin_third_party_settings_form', $form, $form_state);
-    if (!Element::children($form['third_party_settings'])) {
-      $form['third_party_settings']['message'] = [
-        '#type' => 'webform_message',
-        '#message_message' => $this->t('There are no third party settings available. Please install a contributed module that integrates with the Webform module.'),
-        '#message_type' => 'info',
-      ];
-      $form['third_party_settings']['supported'] = [
-        'title' => [
-          '#markup' => $this->t('Supported modules'),
-          '#prefix' => '<h3>',
-          '#suffix' => '</h3>',
-        ],
-        'modules' => [
-          '#theme' => 'admin_block_content',
-          '#content' => $this->addonsManager->getThirdPartySettings(),
-        ],
-      ];
-    }
-    else {
-      ksort($form['third_party_settings']);
-    }
-
-    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -1039,21 +1095,37 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    /* Settings */
 
-    $settings = $form_state->getValue('page')
-      + $form_state->getValue('form')
+    /* Webform: Settings */
+
+    $settings = $form_state->getValue('page_settings')
+      + $form_state->getValue('form_settings')
       + $form_state->getValue('form_behaviors')
+      + $form_state->getValue('wizard_settings')
+      + $form_state->getValue('preview_settings')
+      + $form_state->getValue('draft_settings')
       + $form_state->getValue('submission_behaviors')
-      + $form_state->getValue('wizard')
-      + $form_state->getValue('preview')
-      + $form_state->getValue('draft')
-      + $form_state->getValue('confirmation')
-      + $form_state->getValue('limit');
+      + $form_state->getValue('confirmation_settings')
+      + $form_state->getValue('submission_limits');
 
     // Track if we need to trigger an update of all webform paths
     // because the 'default_page_base_path' changed.
     $update_paths = ($settings['default_page_base_path'] != $this->config('webform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
+
+    /* Element: Format */
+
+    $format = $form_state->getValue('format');
+    foreach ($format as $element_id => $element_format) {
+      $format[$element_id] = array_filter($element_format);
+    }
+    $format = array_filter($format);
+
+    /* Element: Excluded types */
+
+    // Convert list of included elements, handlers, exporters to excluded.
+    $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_elements'));
+    $excluded_handlers = $this->convertIncludedToExcludedPluginIds($this->handlerManager, $form_state->getValue('excluded_handlers'));
+    $excluded_exporters = $this->convertIncludedToExcludedPluginIds($this->exporterManager, $form_state->getValue('excluded_exporters'));
 
     /* Libraries */
 
@@ -1066,37 +1138,29 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     // config management.
     $libraries['excluded_libraries'] = array_keys($libraries['excluded_libraries']);
 
-    /* Format */
-
-    $format = $form_state->getValue('format');
-    foreach ($format as $element_id => $element_format) {
-      $format[$element_id] = array_filter($element_format);
-    }
-    $format = array_filter($format);
-
-    /* Excluded types */
-
-    // Convert list of included elements, handlers, exporters to excluded.
-    $excluded_elements = $this->convertIncludedToExcludedPluginIds($this->elementManager, $form_state->getValue('excluded_elements'));
-    $excluded_handlers = $this->convertIncludedToExcludedPluginIds($this->handlerManager, $form_state->getValue('excluded_handlers'));
-    $excluded_exporters = $this->convertIncludedToExcludedPluginIds($this->exporterManager, $form_state->getValue('excluded_exporters'));
-
     /* Config save */
+
     $config = $this->config('webform.settings');
+    // Webform.
     $config->set('settings', $settings);
-    $config->set('assets', $form_state->getValue('assets'));
+    $config->set('purge', $form_state->getValue('purge'));
+    $config->set('third_party_settings', $form_state->getValue('third_party_settings') ?: []);
+    $config->set('test', $form_state->getValue('test'));
+    // Element.
     $config->set('element', $form_state->getValue('element') + ['excluded_elements' => $excluded_elements]);
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
+    // Assets.
+    $config->set('assets', $form_state->getValue('assets'));
+    $config->set('libraries', $libraries);
+    // Handler.
     $config->set('handler', ['excluded_handlers' => $excluded_handlers]);
     $config->set('mail', $form_state->getValue('mail'));
+    // Exporter.
     $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()) + ['excluded_exporters' => $excluded_exporters]);
+    // General.
     $config->set('batch', $form_state->getValue('batch'));
-    $config->set('purge', $form_state->getValue('purge'));
-    $config->set('test', $form_state->getValue('test'));
     $config->set('ui', $form_state->getValue('ui'));
-    $config->set('libraries', $libraries);
-    $config->set('third_party_settings', $form_state->getValue('third_party_settings') ?: []);
     $config->save();
 
     /* Update paths */
