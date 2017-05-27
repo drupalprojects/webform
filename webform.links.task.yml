@@ -32,7 +32,7 @@ webform.settings:
   base_route: entity.webform.collection
 
 webform.settings.default:
-  title: 'Defaults'
+  title: 'General'
   route_name: webform.settings
   parent_id: webform.settings
 
