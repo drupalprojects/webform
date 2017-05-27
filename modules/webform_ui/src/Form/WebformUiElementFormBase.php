@@ -88,7 +88,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    *
    * @var string
    */
-  protected $parent_key;
+  protected $parentKey;
 
   /**
    * The webform element's original element type.
@@ -148,7 +148,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL, $key = NULL, $parent_key = '') {
     $this->webform = $webform;
     $this->key = $key;
-    $this->parent_key = $parent_key;
+    $this->parentKey = $parent_key;
 
     $webform_element = $this->getWebformElement();
 
@@ -406,7 +406,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    * {@inheritdoc}
    */
   public function getParentKey() {
-    return $this->parent_key;
+    return $this->parentKey;
   }
 
   /**

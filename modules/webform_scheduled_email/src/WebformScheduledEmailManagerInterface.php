@@ -161,7 +161,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    * @param string $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    *
    * @return string|bool
    *   A send date using ISO date format (YYYY-MM-DD) or FALSE if the send date
@@ -225,7 +225,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform or webform submission.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    * @param int $schedule_limit
    *   The maximum number of emails to be scheduled.
    *   If set to 0 no emails will be scheduled.
@@ -254,7 +254,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform, webform submission, or source entity.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    *
    * @return array
    *   An array containing the handler waiting, queued, ready, and total submissions.
@@ -267,7 +267,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform, webform submission, or source entity.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    *
    * @return int
    *   The number of emails waiting to be queued.
@@ -280,7 +280,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform, webform submission, or source entity.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    *
    * @return int
    *   The number of emails queued but not ready to be sent.
@@ -293,7 +293,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform, webform submission, or source entity.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    *
    * @return int
    *   The number of emails ready to be sent.
@@ -306,7 +306,7 @@ interface WebformScheduledEmailManagerInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform, webform submission, or source entity.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    * @param string|null $state
    *   The state of the scheduled emails.
    *

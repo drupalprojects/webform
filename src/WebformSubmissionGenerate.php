@@ -24,7 +24,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
   /**
    * The webform token manager.
    *
-   * @var \Drupal\webform\WebformTokenManager
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -54,12 +54,12 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
-   * @param \Drupal\webform\WebformTokenManager $token_manager
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    * @param \Drupal\webform\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, WebformTokenManager $token_manager, WebformElementManagerInterface $element_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
     $this->configFactory = $config_factory;
     $this->tokenManager = $token_manager;
     $this->elementManager = $element_manager;

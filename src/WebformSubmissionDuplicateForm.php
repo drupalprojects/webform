@@ -60,7 +60,6 @@ class WebformSubmissionDuplicateForm extends WebformSubmissionForm {
     if ($redirect instanceof Url && $redirect->getRouteName() === $route_name) {
       /** @var \Drupal\webform\WebformSubmissionInterface $entity */
       $webform_submission = $this->entity;
-      $webform = $webform_submission->getWebform();
       $source_entity = $webform_submission->getSourceEntity();
 
       $redirect_url= $this->requestHandler->getUrl($webform_submission, $source_entity, 'webform_submission.canonical');

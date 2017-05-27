@@ -136,7 +136,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
         '#message_type' => 'error',
         '#message_message' => $this->t('It is strongly recommended that <a href=":href">submission logging</a> is enable to track scheduled emails.', [':href' => $webform->toUrl('settings-form')->toString()]),
         '#message_close' => TRUE,
-        '#message_id' => 'webform_scheduled_email-' . $webform ->id(),
+        '#message_id' => 'webform_scheduled_email-' . $webform->id(),
         '#message_storage' => WebformMessage::STORAGE_LOCAL,
       ];
     }
@@ -260,7 +260,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
 
     $values = $form_state->getValues();
 
-    // Cast days string to in
+    // Cast days string to int.
     $values['days'] = (int) $values['days'];
 
     // If token skip validation.
@@ -330,7 +330,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    *
-   * @return boolean|string
+   * @return bool|string
    *   The status of scheduled email. FALSE is email was not scheduled.
    */
   protected function scheduleMessage(WebformSubmissionInterface $webform_submission) {

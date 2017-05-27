@@ -51,7 +51,7 @@ class WebformHandlerEmailMappingTest extends WebformTestBase {
     $this->assertText("Select default sent to default@default.com from $site_name [$site_mail].");
     $this->assertNoText("'Select empty' sent to empty@example.com from $site_name [$site_mail].");
 
-    // Check that mulitple radios checked email sent.
+    // Check that multiple radios checked email sent.
     $edit = [
       'checkboxes[Saturday]' => TRUE,
       'checkboxes[Sunday]' => TRUE,

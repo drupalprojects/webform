@@ -1090,7 +1090,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
       $t_args = ['@title' => $title];
       if ($default_email = $this->getDefaultConfigurationValue($name)) {
-        $t_arg['%email'] = $default_email;
+        $t_args['%email'] = $default_email;
         $element[$name]['#description'] .= ' ' . $this->t("Leave blank to use %email as the '@title' email.", $t_args);
       }
       else {

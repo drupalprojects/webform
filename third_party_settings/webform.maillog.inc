@@ -51,7 +51,7 @@ function maillog_webform_submission_form_alter(array &$form, FormStateInterface 
 
   if (\Drupal::currentUser()->hasPermission('view maillog')) {
     // Display warning if the user can view maillog.
-    if ($config->get('log') && $url = \Drupal::pathValidator()->getUrlIfValid('/admin/reports/maillog')){
+    if ($config->get('log') && $url = \Drupal::pathValidator()->getUrlIfValid('/admin/reports/maillog')) {
       $build[] = ['#prefix' => ' ', '#markup' => t('Emails will be <a href=":href">logged</a>.', [':href' => $url->toString()])];
     }
     // Display warning if the user can view email on page.
@@ -63,8 +63,8 @@ function maillog_webform_submission_form_alter(array &$form, FormStateInterface 
   // Display warning if the Maillog module is not sending email.
   if (!$config->get('send')) {
     // Display warning that all emails will be logged.
-    $build[] = ['#prefix' => ' <b>', '#markup' => t('No emails will be sent.') .'</b>'];
+    $build[] = ['#markup' => t('No emails will be sent.'), '#prefix' => ' <b>', '#suffix' => '</b>'];
   }
 
-  drupal_set_message( \Drupal::service('renderer')->renderPlain($build), 'warning');
+  drupal_set_message(\Drupal::service('renderer')->renderPlain($build), 'warning');
 }

@@ -875,4 +875,3 @@ libraries.signature_pad:
     /libraries/signature_pad/: https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/
   js:
     /libraries/signature_pad/signature_pad.js: {}
-

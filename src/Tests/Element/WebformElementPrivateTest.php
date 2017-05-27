@@ -37,7 +37,7 @@ class WebformElementPrivateTest extends WebformTestBase {
 
     // Create a webform submission.
     $this->drupalLogin($this->normalUser);
-    $sid = $this->postSubmission($webform);
+    $this->postSubmission($webform);
 
     // Check element with #private property hidden for normal user.
     $this->drupalLogin($this->normalUser);

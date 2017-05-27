@@ -127,7 +127,7 @@ abstract class WebformCompositeBase extends FormElement {
         switch ($composite_element['#type']) {
           case 'tel':
             // Add international phone library.
-            // Add internation library and classes.
+            // Add international library and classes.
             if (!empty($composite_element['#international'])) {
               $composite_element['#attached']['library'][] = 'webform/webform.element.telephone';
               $composite_element['#attributes']['class'][] = 'js-webform-telephone-international';

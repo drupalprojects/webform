@@ -58,7 +58,7 @@ function webform_test_test_element_disabled() {
       ];
     }
 
-    // Set disabled
+    // Set disabled.
     $element['#disabled'] = TRUE;
 
     $data[$element_type] = $element;

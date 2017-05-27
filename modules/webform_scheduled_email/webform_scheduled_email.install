@@ -28,7 +28,7 @@ function webform_scheduled_email_schema() {
       'entity_type' => [
         'description' => 'The entity type to which this submission was submitted from.',
         'type' => 'varchar',
-        'length' =>  EntityTypeInterface::ID_MAX_LENGTH,
+        'length' => EntityTypeInterface::ID_MAX_LENGTH,
         'not null' => FALSE,
       ],
       'entity_id' => [

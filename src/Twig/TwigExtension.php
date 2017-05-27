@@ -10,12 +10,32 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\webform\Utility\WebformHtmlHelper;
+use Drupal\webform\WebformTokenManager;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 /**
  * Twig extension with some useful functions and filters.
  */
 class TwigExtension extends \Twig_Extension {
+
+  /**
+   * The webform token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
+   * Constructs a TwigExtension object.
+   *
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The webform token manager.
+   */
+  public function __construct(WebformTokenManagerInterface $token_manager) {
+    $this->tokenManager = $token_manager;
+  }
+
 
   /**
    * {@inheritdoc}
@@ -58,10 +78,7 @@ class TwigExtension extends \Twig_Extension {
       return $token;
     }
 
-    /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
-    $token_manager = \Drupal::service('webform.token_manager');
-
-    $value = $token_manager->replace($token, $entity, $data, $options);
+    $value = $this->tokenManager->replace($token, $entity, $data, $options);
 
     // Must decode HTML entities which are going to re-encoded.
     $value = Html::decodeEntities($value);

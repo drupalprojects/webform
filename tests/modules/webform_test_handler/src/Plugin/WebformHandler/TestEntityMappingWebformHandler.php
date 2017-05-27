@@ -105,13 +105,13 @@ class TestEntityMappingWebformHandler extends WebformHandlerBase {
       $access = TRUE;
     }
 
-    $form['container']  = [
+    $form['container'] = [
       '#type' => 'container',
       '#attributes' => ['id' => 'webform-test-ajax-container'],
     ];
 
     $this->configuration['bundle'] = isset($bundle_options[$this->configuration['bundle']]) ? $this->configuration['bundle'] : reset(array_keys($bundle_options));
-    $form['container']['bundle']  = [
+    $form['container']['bundle'] = [
       '#type' => 'select',
       '#title' => $this->t('Bundles'),
       '#parents' => ['settings', 'bundle'],

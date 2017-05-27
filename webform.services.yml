@@ -39,7 +39,7 @@ services:
 
   webform.libraries_manager:
     class: Drupal\webform\WebformLibrariesManager
-    arguments: ['@config.factory']
+    arguments: ['@config.factory', '@module_handler', '@renderer']
 
   webform.message_manager:
     class: Drupal\webform\WebformMessageManager
@@ -102,5 +102,6 @@ services:
 
   webform.twig_extension:
     class: Drupal\webform\Twig\TwigExtension
+    arguments: ['@webform.token_manager']
     tags:
       - { name: twig.extension }

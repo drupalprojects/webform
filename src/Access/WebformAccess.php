@@ -168,7 +168,7 @@ class WebformAccess {
    */
   public static function checkWebformWizardPagesAccess(WebformInterface $webform) {
     $elements = $webform->getElementsInitialized();
-    foreach ($elements as $key => $element) {
+    foreach ($elements as $element) {
       if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
         return AccessResult::allowed();
       }

@@ -779,7 +779,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('External libraries'),
       '#description' => $this->t('Uncheck the below optional external libraries that you do not want to be used by any webforms.') . '</br>' .
-        '<em>' . $this->t('Please note, you can also exclude element types that are dependant on specific libraries.') . '</em>',
+        '<em>' . $this->t('Please note, you can also exclude element types that are dependent on specific libraries.') . '</em>',
       '#tree' => TRUE,
     ];
     $libraries_header = [

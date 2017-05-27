@@ -195,7 +195,7 @@ class WebformElementController extends ControllerBase {
    *   Match operator either CONTAINS or STARTS_WITH.
    */
   protected function getMatchesFromOptionsRecursive($q, array $options, array &$matches, $operator = 'CONTAINS') {
-    foreach ($options as $value => $label) {
+    foreach ($options as $label) {
       if (is_array($label)) {
         $this->getMatchesFromOptionsRecursive($q, $label, $matches, $operator);
         continue;

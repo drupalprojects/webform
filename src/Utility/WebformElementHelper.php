@@ -108,10 +108,6 @@ class WebformElementHelper {
    * @return array
    *   A render element with with a property set on all elements.
    */
-  /**
-   * @param array $element
-   * @return array
-   */
   public static function setPropertyRecursive(array &$element, $property_key, $property_value) {
     $element[$property_key] = $property_value;
     foreach (Element::children($element) as $key) {

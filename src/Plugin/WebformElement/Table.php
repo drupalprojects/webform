@@ -127,8 +127,6 @@ class Table extends WebformElementBase {
    * {@inheritdoc}
    */
   public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
-
     // Render the HTML table.
     $build = $this->formatHtml($element, $webform_submission, $options);
     $html = \Drupal::service('renderer')->renderPlain($build);

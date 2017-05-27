@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Support module for webform that tests form and element alter hooks
+ * Support module for webform that tests form and element alter hooks.
  */
 
 use Drupal\Core\Form\FormStateInterface;

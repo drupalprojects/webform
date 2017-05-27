@@ -314,6 +314,7 @@ class WebformLikert extends WebformElementBase {
    */
   public function formatTableColumn(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     if (isset($options['question_key'])) {
+      $value = $this->getValue($element, $webform_submission);
       $question_key = $options['question_key'];
       $question_value = (isset($value[$question_key])) ? $value[$question_key] : '';
       return WebformOptionsHelper::getOptionText($question_value, $element['#answers']);

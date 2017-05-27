@@ -163,7 +163,6 @@ class WebformPluginHandlerController extends ControllerBase implements Container
       $is_submission_required = ($definition['submission'] === WebformHandlerInterface::SUBMISSION_REQUIRED);
       $is_results_disabled = $webform->getSetting('results_disabled');
       if ($is_submission_required && $is_results_disabled) {
-        $row_class[] = 'color-warning';
         $row['operations']['data'] = [
           '#type' => 'html_tag',
           '#tag' => 'span',

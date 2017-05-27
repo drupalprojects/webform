@@ -165,21 +165,21 @@ class TestWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public function createElement($key, array $element){
+  public function createElement($key, array $element) {
     $this->displayMessage(__FUNCTION__);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function updateElement($key, array $element, array $original_element){
+  public function updateElement($key, array $element, array $original_element) {
     $this->displayMessage(__FUNCTION__);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function deleteElement($key, array $element){
+  public function deleteElement($key, array $element) {
     $this->displayMessage(__FUNCTION__);
   }
 

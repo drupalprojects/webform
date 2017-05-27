@@ -487,27 +487,6 @@ function drush_webform_libraries_status() {
  * Implements drush_hook_COMMAND().
  */
 function drush_webform_libraries_make() {
-  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
-  $libraries_manager = \Drupal::service('webform.libraries_manager');
-  $libraries = $libraries_manager->getLibraries(TRUE);
-
-  $data = [
-    'core' => '8.x',
-    'api' => 2,
-    'libraries' => [],
-  ];
-  foreach ($libraries as $library_name => $library) {
-    $url = $library['download_url']->toString();
-    $data['libraries'][$library_name] = [
-      'directory_name' => $library_name,
-      'destination' => 'libraries',
-      'download' => [
-        'type' => 'get',
-        'url' => $url,
-      ],
-    ];
-  }
-
   drush_print('# This file was generated using the `drush webform-libraries-make` command');
   drush_print(_drush_webform_libraries_make());
 }

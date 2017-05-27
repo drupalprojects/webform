@@ -97,7 +97,7 @@ class WebformRequest implements WebformRequestInterface {
       }
     }
 
-    foreach ($parameters as $name => $value) {
+    foreach ($parameters as $value) {
       if ($value instanceof EntityInterface) {
         return $value;
       }

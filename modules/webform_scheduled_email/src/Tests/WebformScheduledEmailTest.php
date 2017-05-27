@@ -88,13 +88,13 @@ class WebformScheduledEmailTest extends WebformNodeTestBase {
     $this->assertText("Test: Handler: Test scheduled email: Submission #$sid: Email unscheduled for Draft reminder handler.");
     $this->assertEqual($scheduled_manager->total(), 0);
 
-    // Check broken/invalid date
+    // Check broken/invalid date.
     $sid = $this->postSubmission($webform_schedule, ['send' => 'broken']);
     $this->assertText("Test: Handler: Test scheduled email: Submission #$sid: Email not scheduled for Broken handler because [broken] is not a valid date/token.");
     $this->assertEqual($scheduled_manager->total($webform_schedule), 0);
 
     // Check deleting handler removes scheduled emails.
-    // @todo Figure out why the below exception is occuring during tests only.
+    // @todo Figure out why the below exception is occurring during tests only.
     // "Drupal\Component\Plugin\Exception\PluginNotFoundException: Plugin ID 'tomorrow' was not found. "
     // $handler = $webform->getHandler('yesterday');
     // $webform->deleteWebformHandler($handler);
@@ -127,7 +127,7 @@ class WebformScheduledEmailTest extends WebformNodeTestBase {
     // Check on tomorrow scheduled emails remain.
     $this->assertEqual($scheduled_manager->total($webform_schedule), 3);
 
-    // Reschedule yesterday submissions which includes all submissions
+    // Reschedule yesterday submissions which includes all submissions.
     $scheduled_manager->schedule($webform_schedule, 'yesterday');
     $this->assertEqual($scheduled_manager->stats($webform_schedule), [
       'total' => 9,
@@ -136,7 +136,7 @@ class WebformScheduledEmailTest extends WebformNodeTestBase {
       'ready' => 0,
     ]);
 
-    // Runs Reschedule yesterday submissions which includes all submissions
+    // Runs Reschedule yesterday submissions which includes all submissions.
     $stats = $scheduled_manager->cron();
     $this->assertNotEqual($stats['sent'], 6);$this->assertEqual($stats['sent'], 3);
     $this->assertEqual($scheduled_manager->stats($webform_schedule), [

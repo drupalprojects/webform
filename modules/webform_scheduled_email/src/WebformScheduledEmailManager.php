@@ -134,7 +134,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
 
     $date = new \DateTime();
     $date->setTimestamp($time);
-    if ($days)  {
+    if ($days) {
       date_add($date, date_interval_create_from_date_string("$days days"));
     }
     return date_format($date, 'Y-m-d');
@@ -179,7 +179,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
       // See if there is already a scheduled email.
       $scheduled_email = $this->load($webform_submission, $handler_id);
 
-      // Get update or insert $query, reschedule or schedule $action, or skip
+      // Get update or insert $query, reschedule or schedule $action, or skip.
       if (!$scheduled_email) {
         $query = $this->database->insert('webform_scheduled_email');
         $action = $this->t('scheduled');
@@ -258,7 +258,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
       $query->condition('handler_id', $handler_id);
       $sids = $query->execute()->fetchCol();
 
-      // Get webform submissions that need to be scheduled
+      // Get webform submissions that need to be scheduled.
       $query = $this->database->select('webform_submission', 'w');
       $query->fields('w', ['webform_id', 'entity_type', 'entity_id', 'sid']);
       $query->addExpression("'$handler_id'", 'handler_id');
@@ -540,7 +540,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform or webform submission.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    * @param int $limit
    *   The maximum number of schedule emails to be sent per request.
    *
@@ -720,16 +720,16 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
   /**
    * Add condition to scheduled email query.
    *
-   * @param \Drupal\Core\Database\Query\AlterableInterface $query
+   * @param \Drupal\Core\Database\Query\AlterableInterface|\Drupal\Core\Database\Query\Delete $query
    *   The query instance.
-   * @param \Drupal\webform\WebformInterface|NULL $webform
+   * @param \Drupal\webform\WebformInterface|null $webform
    *   A webform.
-   * @param \Drupal\webform\WebformSubmissionInterface|NULL $webform_submission
+   * @param \Drupal\webform\WebformSubmissionInterface|null $webform_submission
    *   A webform submission.
-   * @param \Drupal\Core\Entity\EntityInterface|NULL $source_entity
-   *   A source entity
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A source entity.
    * @param null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    * @param string|null $state
    *   The state of the scheduled emails.
    */
@@ -749,7 +749,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
       $query->condition($prefix . 'entity_id', $source_entity->id());
     }
 
-    if ($handler_id && ($webform || $webform_submission)){
+    if ($handler_id && ($webform || $webform_submission)) {
       $query->condition($prefix . 'handler_id', $handler_id);
     }
 

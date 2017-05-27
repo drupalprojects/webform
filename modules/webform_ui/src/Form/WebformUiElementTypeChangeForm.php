@@ -62,7 +62,7 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
               'title' => $this->t('Change'),
               'url' => Url::fromRoute('entity.webform_ui.element.edit_form', [
                 'webform' => $webform->id(),
-                'key' => $key
+                'key' => $key,
               ], ['query' => ['type' => $related_type_name]]),
               'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
             ],

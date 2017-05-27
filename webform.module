@@ -207,7 +207,7 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   }
 
   // Don't include details toggle all for submission forms.
-  $form_object  = $form_state->getFormObject();
+  $form_object = $form_state->getFormObject();
   if ($form_object instanceof WebformSubmissionForm) {
     $is_submission_form = TRUE;
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
@@ -226,7 +226,7 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     // Since webform's with sourec entities generate unique form IDs,
     // we need to still call hook_form_webform_submission_WEBFORM_ID_form_alter().
     if ($webform_submission->getSourceEntity()) {
-      $form_id = 'webform_submission_' . $webform_submission->getWebform()->id() .'_form';
+      $form_id = 'webform_submission_' . $webform_submission->getWebform()->id() . '_form';
       $hooks = ['form_' . $form_id];
       \Drupal::service('module_handler')->alter($hooks, $form, $form_state, $form_id);
       \Drupal::service('theme.manager')->alter($hooks, $form, $form_state, $form_id);
@@ -388,6 +388,12 @@ function webform_page_attachments(array &$attachments) {
   }
 }
 
+/**
+ * Add webform libraries to page attachments.
+ *
+ * @param array $attachments
+ *   An array of page attachments.
+ */
 function _webform_page_attachments(array &$attachments) {
   $active_theme_names = WebformThemeHelper::getActiveThemeNames();
   foreach ($active_theme_names as $active_theme_name) {

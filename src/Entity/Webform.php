@@ -1080,9 +1080,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
-    /** @var \Drupal\Core\Render\ElementInfoManagerInterface $element_info */
-    $element_info = \Drupal::service('plugin.manager.element_info');
-
     // Remove ignored properties.
     $elements = WebformElementHelper::removeIgnoredProperties($elements);
 

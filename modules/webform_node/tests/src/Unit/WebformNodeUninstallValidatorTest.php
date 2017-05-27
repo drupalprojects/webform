@@ -14,6 +14,8 @@ class WebformNodeUninstallValidatorTest extends UnitTestCase {
   use AssertHelperTrait;
 
   /**
+   * A mock webform node uninstall validator.
+   *
    * @var \Drupal\webform_node\WebformNodeUninstallValidator|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $webformNodeUninstallValidator;

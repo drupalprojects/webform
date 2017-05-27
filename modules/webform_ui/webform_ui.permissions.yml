@@ -2,4 +2,3 @@
   title: 'Edit webform source code'
   description: 'Editing webform source code allows users alter and possibly break a webform''s render array.'
   restrict access: true
-

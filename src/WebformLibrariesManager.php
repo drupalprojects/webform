@@ -2,7 +2,9 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -23,6 +25,20 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
   protected $configFactory;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Libraries that provides additional functionality to the Webform module.
    *
    * @var array
@@ -41,9 +57,16 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, RendererInterface $renderer) {
     $this->configFactory = $config_factory;
+    $this->moduleHandler = $module_handler;
+    $this->renderer = $renderer;
+
     $this->libraries = $this->initLibraries();
     $this->excludedLibraries = $this->initExcludedLibraries();
   }
@@ -67,7 +90,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         ':download_href' => $library['download_url']->toString(),
         ':homepage_href' => $library['homepage_url']->toString(),
         ':external_href' => 'https://www.drupal.org/docs/8/theming-drupal-8/adding-stylesheets-css-and-javascript-js-to-a-drupal-8-theme#external',
-        ':install_href' => (\Drupal::moduleHandler()->moduleExists('help')) ? Url::fromRoute('help.page', ['name' => 'webform'], ['fragment' => 'libraries'])->toString() : 'https://www.drupal.org/docs/8/modules/webform/webform-libraries',
+        ':install_href' => ($this->moduleHandler->moduleExists('help')) ? Url::fromRoute('help.page', ['name' => 'webform'], ['fragment' => 'libraries'])->toString() : 'https://www.drupal.org/docs/8/modules/webform/webform-libraries',
         ':settings_libraries_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-libraries'])->toString(),
         ':settings_elements_href' => Url::fromRoute('webform.settings', [], ['fragment' => 'edit-elements'])->toString(),
       ];
@@ -100,7 +123,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         if (!$cli) {
           $build['cdn'] = ['#prefix' => ' ', '#markup' => $this->t('(<a href=":settings_libraries_href">Disable CDN warning</a>)', $t_args)];
         }
-        $description = \Drupal::service('renderer')->renderPlain($build);
+        $description = $this->renderer->renderPlain($build);
         $severity = REQUIREMENT_WARNING;
       }
 

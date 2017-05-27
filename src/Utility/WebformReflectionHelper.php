@@ -9,6 +9,7 @@ class WebformReflectionHelper {
 
   /**
    * A list of Webform submodules.
+   *
    * @var array
    */
   protected static $modules;

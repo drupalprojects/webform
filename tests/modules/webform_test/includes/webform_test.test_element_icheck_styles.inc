@@ -80,45 +80,10 @@ function webform_test_test_element_icheck_styles() {
   return $elements;
 }
 
+/**
+ * Generate test elements #icheck options.
+ */
 function _webform_test_test_element_icheck_options() {
-  $options = [
-    [(string) t('Minimal')] => [
-      'minimal-square' => t('Black'),
-      'minimal-grey' => t('Grey'),
-      'minimal-yellow' => t('Yellow'),
-      'minimal-orange' => t('Orange'),
-      'minimal-red' => t('Red'),
-      'minimal-pink' => t('Pink'),
-      'minimal-purple' => t('Purple'),
-      'minimal-blue' => t('Blue'),
-      'minimal-green' => t('Green'),
-      'minimal-aero' => t('Aero'),
-    ],
-    [(string) t('Square')] => [
-      'square-square' => t('Black'),
-      'square-grey' => t('Grey'),
-      'square-yellow' => t('Yellow'),
-      'square-orange' => t('Orange'),
-      'square-red' => t('Red'),
-      'square-pink' => t('Pink'),
-      'square-purple' => t('Purple'),
-      'square-blue' => t('Blue'),
-      'square-green' => t('Green'),
-      'square-aero' => t('Aero'),
-    ],
-    [(string) t('Flat')] => [
-      'flat-square' => t('Black'),
-      'flat-grey' => t('Grey'),
-      'flat-yellow' => t('Yellow'),
-      'flat-orange' => t('Orange'),
-      'flat-red' => t('Red'),
-      'flat-pink' => t('Pink'),
-      'flat-purple' => t('Purple'),
-      'flat-blue' => t('Blue'),
-      'flat-green' => t('Green'),
-      'flat-aero' => t('Aero'),
-    ],
-  ];
   $skins = [
     'minimal' => t('Minimal'),
     'flat' => t('Flat'),

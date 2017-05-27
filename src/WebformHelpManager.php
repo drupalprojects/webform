@@ -3,8 +3,6 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Database\Database;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
@@ -298,9 +296,9 @@ SUGGESTIONS
       'title' => $this->t('Read Webform Documentaion'),
       'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform'),
     ];
-    if (\Drupal::config('webform.settings')->get('ui.video_display') == 'dialog') {
+    if ($this->configFactory->get('webform.settings')->get('ui.video_display') == 'dialog') {
       $links['help'] = [
-        'title' => t('Help Us Help You'),
+        'title' => $this->t('Help Us Help You'),
         'url' => Url::fromRoute('webform.help.video', ['id' => 'help']),
         'attributes' => WebformDialogHelper::getModalDialogAttributes(1000),
       ];
@@ -412,7 +410,7 @@ SUGGESTIONS
     if ($help_video = $this->buildAboutVideo('uQo-1s2h06E')) {
       $build['content']['help'] = [];
       $build['content']['help']['title']['#markup'] = '<h3>' . $this->t('Help us help you') . '</h3>';
-      $build['content']['help']['video'] = $this->buildAboutVideo('uQo-1s2h06E');
+      $build['content']['help']['video'] = $help_video;
       $build['content']['help']['#suffix'] = '<hr/>';
     }
 
@@ -448,7 +446,7 @@ SUGGESTIONS
    *   A video player, linked button, or an empty array if videos are disabled.
    */
   protected function buildAboutVideo($youtube_id) {
-    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
+    $video_display = $this->configFactory->get('webform.settings')->get('ui.video_display');
     switch ($video_display) {
       case 'dialog':
         return [
@@ -461,7 +459,7 @@ SUGGESTIONS
       case 'link':
         return [
           '#type' => 'link',
-          '#title' => t('Watch video'),
+          '#title' => $this->t('Watch video'),
           '#url' => Url::fromUri('https://youtu.be/' . $youtube_id),
           '#attributes' => ['class' => ['button', 'button-action', 'button--small', 'button-webform-play']],
           '#prefix' => ' ',

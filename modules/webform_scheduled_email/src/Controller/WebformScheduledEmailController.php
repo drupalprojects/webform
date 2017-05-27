@@ -46,7 +46,7 @@ class WebformScheduledEmailController extends ControllerBase implements Containe
    * @param \Drupal\webform\WebformInterface $webform
    *   The webform containg a scheduled email handler.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   A redirection to the webform handlers page.

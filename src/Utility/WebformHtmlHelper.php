@@ -10,13 +10,13 @@ class WebformHtmlHelper {
   /**
    * Determine if a string value contains HTML markup or entities.
    *
-   * @param $string
+   * @param string $string
    *   A string.
    *
    * @return bool
    *   TRUE if the string value contains HTML markup or entities.
    */
-  static function containsHtml($string) {
+  static public function containsHtml($string) {
     return (preg_match('/(<[a-z][^>]*>|&(?:[a-z]+|#\d+);)/i', $string)) ? TRUE : FALSE;
   }
 

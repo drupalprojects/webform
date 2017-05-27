@@ -35,7 +35,6 @@ class WebformUiEntityForm extends WebformEntityForm {
 
     $header = $this->getTableHeader();
 
-
     // Build table rows for elements.
     $rows = [];
     $elements = $this->getOrderableElements();
@@ -328,7 +327,7 @@ class WebformUiEntityForm extends WebformEntityForm {
    * @return array
    *   The row for the element.
    */
-  protected function getElementRow($element, $element_update, $delta) {
+  protected function getElementRow(array $element, $element_update, $delta) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
@@ -388,7 +387,7 @@ class WebformUiEntityForm extends WebformEntityForm {
       '#title' => $element['#admin_title'] ?: $element['#title'],
       '#url' => new Url('entity.webform_ui.element.edit_form', [
           'webform' => $webform->id(),
-          'key' => $key
+          'key' => $key,
         ]),
       '#attributes' => $element_dialog_attributes,
       '#prefix' => !empty($indentation) ? $this->renderer->render($indentation) : '',
@@ -404,12 +403,7 @@ class WebformUiEntityForm extends WebformEntityForm {
           '#type' => 'link',
           '#title' => $this->t('Add element'),
           '#url' => new Url('entity.webform_ui.element', $route_parameters, $route_options),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, [
-            'button',
-            'button-action',
-            'button--primary',
-            'button--small'
-          ]),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--primary', 'button--small']),
         ];
       }
       else {

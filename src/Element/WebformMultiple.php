@@ -558,7 +558,7 @@ class WebformMultiple extends FormElement {
 
     // Now build the associative array of items.
     $items = [];
-    foreach ($values as $index => $value) {
+    foreach ($values as $value) {
       $item = NULL;
       if (isset($value['_item_'])) {
         $item = $value['_item_'];

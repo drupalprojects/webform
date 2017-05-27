@@ -67,7 +67,7 @@ class WebformEntityAssetsForm extends EntityForm {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'assets-form')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'assets-form')->toString(),
     ];
     $this->logger('webform')->notice('Webform assets for @label saved.', $context);
 

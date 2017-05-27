@@ -243,7 +243,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Add the webform as a cacheable dependency.
-    \Drupal::service('renderer')->addCacheableDependency($form, $webform);
+    $this->renderer->addCacheableDependency($form, $webform);
 
     // Display status messages.
     $this->displayMessages($form, $form_state);
@@ -634,7 +634,6 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->entity;
-    $webform = $this->getWebform();
 
     $element = parent::actions($form, $form_state);
 

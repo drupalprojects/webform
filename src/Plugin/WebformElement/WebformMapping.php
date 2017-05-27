@@ -271,8 +271,9 @@ class WebformMapping extends WebformElementBase {
   public function formatTableColumn(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     if (isset($options['source_key'])) {
       $source_key = $options['source_key'];
+      $value = $this->getValue($element, $webform_submission);
       $question_value = (isset($value[$source_key])) ? $value[$source_key] : '';
-      return (isset($element['#destination'])) ? WebformOptionsHelper::getOptionText($question_value, $element['#destination']) : $value;
+      return (isset($element['#destination'])) ? WebformOptionsHelper::getOptionText($question_value, $element['#destination']) : NULL;
     }
     else {
       return $this->formatHtml($element, $webform_submission);
