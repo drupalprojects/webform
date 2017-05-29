@@ -288,15 +288,24 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       $form_state->setErrorByName(NULL, $element_error);
     }
 
-    // Stop validation is the element properties has any errors.
+    // Stop validation if the element properties has any errors.
     if ($form_state->hasAnyErrors()) {
       return;
     }
 
-    // Set element properties.
-    $properties = $webform_element->getConfigurationFormProperties($form, $element_form_state);
     $parent_key = $form_state->getValue('parent_key');
     $key = $form_state->getValue('key');
+
+    // Make sure element key is unique for new elements.
+    if ($this instanceof  WebformUiElementAddForm || $this instanceof WebformUiElementDuplicateForm) {
+      $element_flattened = $this->getWebform()->getElementsDecodedAndFlattened();
+      if (isset($element_flattened[$key])) {
+        $form_state->setErrorByName('key', $this->t('The element key is already in use. It must be unique.'));
+      }
+    }
+
+    // Set element properties.
+    $properties = $webform_element->getConfigurationFormProperties($form, $element_form_state);
     if ($key) {
       $this->key = $key;
       $this->webform->setElementProperties($key, $properties, $parent_key);
