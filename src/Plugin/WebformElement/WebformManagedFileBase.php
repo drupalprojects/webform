@@ -20,6 +20,18 @@ use Drupal\webform\WebformSubmissionInterface;
 abstract class WebformManagedFileBase extends WebformElementBase {
 
   /**
+   * List of blacklisted mime types that must be downloaded.
+   *
+   * @var array
+   */
+  static protected $blacklistedMimeTypes = [
+    'application/pdf',
+    'application/xml',
+    'image/svg+xml',
+    'text/html',
+  ];
+
+  /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
@@ -659,7 +671,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         }
 
         // Return file content headers.
-        return file_get_content_headers($file);
+
+        $headers = file_get_content_headers($file);
+
+        // Force blacklisted files to be downloaded.
+        if (in_array($headers['Content-Type'], static::$blacklistedMimeTypes)) {
+          $headers['Content-Disposition'] = 'attachment';
+        }
+
+        return $headers;
       }
     }
     return NULL;
