@@ -78,12 +78,17 @@ class WebformMapping extends FormElement {
     $rows = [];
     foreach ($element['#source'] as $source_key => $source_title) {
       $default_value = (isset($element['#default_value'][$source_key])) ? $element['#default_value'][$source_key] : NULL;
+
       $destination_element = $destination_element_base + [
         '#title' => $source_title,
         '#required' => $element['#required'],
         '#default_value' => $default_value,
-        '#parents' => [$element['#name'], $source_key],
       ];
+
+      // Apply #parents to destination element.
+      if (isset($element['#parents'])) {
+        $destination_element['#parents'] = array_merge($element['#parents'], [$source_key]);
+      }
 
       switch ($element['#destination__type']) {
         case 'select':

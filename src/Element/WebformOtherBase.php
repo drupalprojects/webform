@@ -124,6 +124,12 @@ abstract class WebformOtherBase extends FormElement {
       unset($element['other']['#wrapper_attributes']['class']);
     }
 
+    // Apply #parents to $type and other element.
+    if (isset($element['#parents'])) {
+      $element[$type]['#parents'] = array_merge($element['#parents'], [$type]);
+      $element['other']['#parents'] = array_merge($element['#parents'], ['other']);
+    }
+
     // Remove options.
     unset($element['#options']);
 
