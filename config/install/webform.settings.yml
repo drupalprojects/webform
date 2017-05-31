@@ -196,6 +196,9 @@ test:
     phone:
       - '123-456-7890'
       - '098-765-4321'
+    fax:
+      - '123-456-7890'
+      - '098-765-4321'
     city:
       - 'Springfield'
       - 'Pleasantville'
