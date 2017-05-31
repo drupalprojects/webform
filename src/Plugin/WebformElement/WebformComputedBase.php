@@ -145,6 +145,10 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
+
+    // Remove value element so that it appears under computed fieldset.
+    unset($form['element']['value']);
+
     $form['computed'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Computed settings'),
