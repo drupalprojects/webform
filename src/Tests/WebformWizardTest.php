@@ -177,7 +177,7 @@ class WebformWizardTest extends WebformTestBase {
     ];
     $this->drupalPostForm(NULL, $edit, t('Preview'));
     // Check progress bar is set to 'Preview'.
-    $this->assertCurrentPage('Preview', 'preview');
+    $this->assertCurrentPage('Preview', 'webform_preview');
     // Check progress pages.
     $this->assertRaw('Page 4 of 5');
     // Check progress percentage.

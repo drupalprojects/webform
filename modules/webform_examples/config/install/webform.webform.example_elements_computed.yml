@@ -30,7 +30,7 @@ elements: |
     color:
       '#type': color
       '#title': 'Favorite Color'
-  preview_information:
+  preview:
     '#title': Preview
     '#type': webform_wizard_page
     '#open': true

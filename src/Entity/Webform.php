@@ -1365,18 +1365,18 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     if ($settings['preview'] != DRUPAL_DISABLED) {
       // If there is no start page, we must define one.
       if (empty($this->pages)) {
-        $this->pages['start'] = [
+        $this->pages['webform_start'] = [
           '#title' => $this->getSetting('wizard_start_label', TRUE),
         ];
       }
-      $this->pages['preview'] = [
+      $this->pages['webform_preview'] = [
         '#title' => $this->getSetting('preview_label', TRUE),
       ];
     }
 
     // Only add complete page, if there are some pages.
     if ($this->pages && $this->getSetting('wizard_complete')) {
-      $this->pages['complete'] = [
+      $this->pages['webform_complete'] = [
         '#title' => $this->getSetting('wizard_complete_label', TRUE),
       ];
     }

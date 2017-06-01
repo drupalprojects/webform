@@ -669,10 +669,10 @@ class WebformSubmissionForm extends ContentEntityForm {
       $current_page_element = $this->getWebform()->getPage($current_page);
 
       $is_first_page = ($current_page == $this->getFirstPage($form, $form_state)) ? TRUE : FALSE;
-      $is_last_page = (in_array($current_page, ['preview', 'complete', $this->getLastPage($form, $form_state)])) ? TRUE : FALSE;
-      $is_preview_page = ($current_page == 'preview');
-      $is_next_page_preview = ($this->getNextPage($form, $form_state) == 'preview') ? TRUE : FALSE;
-      $is_next_page_complete = ($this->getNextPage($form, $form_state) == 'complete') ? TRUE : FALSE;
+      $is_last_page = (in_array($current_page, ['webform_preview', 'webform_complete', $this->getLastPage($form, $form_state)])) ? TRUE : FALSE;
+      $is_preview_page = ($current_page == 'webform_preview');
+      $is_next_page_preview = ($this->getNextPage($form, $form_state) == 'webform_preview') ? TRUE : FALSE;
+      $is_next_page_complete = ($this->getNextPage($form, $form_state) == 'webform_complete') ? TRUE : FALSE;
       $is_next_page_optional_preview = ($is_next_page_preview && $preview_mode != DRUPAL_REQUIRED);
 
       // Only show that save button if this is the last page of the wizard or
@@ -1159,7 +1159,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function displayCurrentPage(array &$form, FormStateInterface $form_state) {
     $current_page = $this->getCurrentPage($form, $form_state);
-    if ($current_page == 'preview') {
+    if ($current_page == 'webform_preview') {
       // Hide all elements except 'webform_actions'.
       foreach ($form['elements'] as $element_key => $element) {
         if (isset($element['#type']) && $element['#type'] == 'webform_actions') {

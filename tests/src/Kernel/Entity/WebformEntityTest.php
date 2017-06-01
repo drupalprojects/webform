@@ -271,17 +271,17 @@ class WebformEntityTest extends KernelTestBase {
       'page_1' => ['#title' => 'Page 1'],
       'page_2' => ['#title' => 'Page 2'],
       'page_3' => ['#title' => 'Page 3'],
-      'preview' => ['#title' => 'Preview'],
-      'complete' => ['#title' => 'Complete'],
+      'webform_preview' => ['#title' => 'Preview'],
+      'webform_complete' => ['#title' => 'Complete'],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
     // Check get wizard pages with preview with disable pages.
     $webform->setSetting('preview', TRUE)->save();
     $wizard_pages = [
-      'start' => ['#title' => 'Start'],
-      'preview' => ['#title' => 'Preview'],
-      'complete' => ['#title' => 'Complete'],
+      'webform_start' => ['#title' => 'Start'],
+      'webform_preview' => ['#title' => 'Preview'],
+      'webform_complete' => ['#title' => 'Complete'],
     ];
     $this->assertEquals($webform->getPages(TRUE), $wizard_pages);
 

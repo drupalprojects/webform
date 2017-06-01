@@ -150,7 +150,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
     $variables['progress'] = [
       '#theme' => 'webform_progress',
       '#webform' => $webform,
-      '#current_page' => 'complete',
+      '#current_page' => 'webform_complete',
     ];
   }
 
