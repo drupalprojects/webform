@@ -233,6 +233,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   public function getTranslatableProperties() {
     return [
       'title',
+      'label',
       'description',
       'field_prefix',
       'field_suffix',
