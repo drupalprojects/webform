@@ -62,7 +62,7 @@ trait WebformEntityTrait {
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     foreach ($options as $key => $value) {
       $option = \Drupal::entityTypeManager()->getStorage($element['#target_type'])->load($key);
-      if ($option->hasTranslation($langcode)) {
+      if (method_exists($option, 'hasTranslation') && $option->hasTranslation($langcode)) {
         $translation = $option->getTranslation($langcode);
         $options[$key] = $translation->label();
       }
