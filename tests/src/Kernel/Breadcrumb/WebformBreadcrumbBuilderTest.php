@@ -147,6 +147,12 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
    * @covers ::__construct
    */
   public function testConstructor() {
+    // Make an object to test.
+    $breadcrumb_builder = $this->getMockForAbstractClass(
+      'Drupal\webform\Breadcrumb\WebformBreadcrumbBuilder',
+      [$this->moduleHandler, $this->requestHandler, $this->translationManager]
+    );
+
     // Reflect upon our properties, except for config which is a special case.
     $property_names = [
       'moduleHandler' => $this->moduleHandler,
@@ -154,7 +160,7 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
       'stringTranslation' => $this->translationManager,
     ];
     foreach ($property_names as $property_name => $property_value) {
-      $this->assertAttributeEquals($property_value, $property_name, $this->breadcrumbBuilder);
+      $this->assertAttributeEquals($property_value, $property_name, $breadcrumb_builder);
     }
   }
 
