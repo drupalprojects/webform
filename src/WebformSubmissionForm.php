@@ -1754,8 +1754,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Submit the form.
     \Drupal::formBuilder()->submitForm($form_object, $form_state, self::API_SUBMISSION);
 
-    // Get the errors.
-    $errors = $form_state->getErrors();
+    // Get the errors but skip drafts.
+    $errors = ($webform_submission->isDraft() && !$validate_only) ? [] : $form_state->getErrors();
 
     if ($errors) {
       return $errors;

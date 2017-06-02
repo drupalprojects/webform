@@ -6,6 +6,7 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformSubmissionForm;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Tests for webform submission API.
@@ -78,6 +79,32 @@ class WebformSubmissionApiTest extends WebformTestBase {
       'subject' => 'Subject field is required.',
       'message' => 'Message field is required.',
     ]);
+
+    // Check validation occurs for drafts simple webform.
+    $values = [
+      'webform_id' => 'contact',
+      'in_draft' => TRUE,
+      'data' => []
+    ];
+    $errors = WebformSubmissionForm::validateValues($values);
+    if ($errors) {
+      WebformElementHelper::convertRenderMarkupToStrings($errors);
+    }
+    $this->assertEqual($errors, [
+      'name' => 'Your Name field is required.',
+      'email' => 'Your Email field is required.',
+      'subject' => 'Subject field is required.',
+      'message' => 'Message field is required.',
+    ]);
+
+    // Check validation is skipped when saving drafts simple webform.
+    $values = [
+      'webform_id' => 'contact',
+      'in_draft' => TRUE,
+      'data' => [],
+    ];
+    $webform_submission = WebformSubmissionForm::submitValues($values);
+    $this->assert($webform_submission instanceof WebformSubmissionInterface);
 
     /**************************************************************************/
     // Multistep form.
