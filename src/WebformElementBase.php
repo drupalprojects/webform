@@ -1098,14 +1098,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     $value = $webform_submission->getData($element['#webform_key']);
 
-    // Return $options['delta'] which is used by tokens.
-    // @see _webform_token_get_submission_value()
-    if (is_array($value) && isset($options['delta']) && isset($value[$options['delta']])) {
-      return $value[$options['delta']];
+    // Return multiple (delta) value or composite (composite_key) value.
+    if (is_array($value)) {
+      // Return $options['delta'] which is used by tokens.
+      // @see _webform_token_get_submission_value()
+      if (isset($options['delta']) && isset($value[$options['delta']])) {
+        return $value[$options['delta']];
+      }
+      // Return $options['composite_key'] which is used by composite elements.
+      // @see \Drupal\webform\Plugin\WebformElement\WebformCompositeBase::formatTableColumn
+      elseif (isset($options['composite_key']) && isset($value[$options['composite_key']])) {
+        return $value[$options['composite_key']];
+      }
     }
-    else {
-      return $value;
-    }
+
+    return $value;
   }
 
   /**

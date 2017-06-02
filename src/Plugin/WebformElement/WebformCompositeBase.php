@@ -580,20 +580,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = parent::getValue($element, $webform_submission, $options);
-
-    if (isset($options['composite_key'])) {
-      return (is_array($value) && isset($value[$options['composite_key']])) ? $value[$options['composite_key']] : NULL;
-    }
-    else {
-      return $value;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getItemsDefaultFormat() {
     return 'ul';
   }
