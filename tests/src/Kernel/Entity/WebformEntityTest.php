@@ -261,7 +261,7 @@ class WebformEntityTest extends KernelTestBase {
       'page_1' => ['#title' => 'Page 1'],
       'page_2' => ['#title' => 'Page 2'],
       'page_3' => ['#title' => 'Page 3'],
-      'complete' => ['#title' => 'Complete'],
+      'webform_complete' => ['#title' => 'Complete'],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
