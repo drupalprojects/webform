@@ -34,7 +34,7 @@ class WebformEmailConfirm extends FormElement {
         [$class, 'preRenderCompositeFormElement'],
       ],
       '#element_validate' => [[$class, 'validateWebformEmailConfirm']],
-      '#theme_wrappers' => ['container'],
+      '#theme_wrappers' => ['form_element'],
       '#required' => FALSE,
     ];
   }

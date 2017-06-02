@@ -76,8 +76,7 @@ abstract class WebformCompositeBase extends FormElement {
 
     // Add class name to wrapper attributes.
     $class_name = str_replace('_', '-', $element['#type']);
-    $element['#attributes']['class'][] = 'js-' . $class_name;
-    $element['#attributes']['class'][] = $class_name;
+    static::setAttributes($element, ['js-' . $class_name, $class_name]);
 
     return $element;
   }
