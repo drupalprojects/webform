@@ -28,6 +28,7 @@ use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
 
+require_once __DIR__ . '/includes/webform.date.inc';
 require_once __DIR__ . '/includes/webform.libraries.inc';
 require_once __DIR__ . '/includes/webform.options.inc';
 require_once __DIR__ . '/includes/webform.translation.inc';

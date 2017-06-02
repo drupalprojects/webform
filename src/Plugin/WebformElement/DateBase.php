@@ -50,16 +50,14 @@ abstract class DateBase extends WebformElementBase {
     // Parse #default_value date input format.
     $this->parseInputFormat($element, '#default_value');
 
-    // Parse #min and #max date input format.
-    $this->parseInputFormat($element, '#min');
-    $this->parseInputFormat($element, '#max');
-
     // Override min/max attributes.
-    if (!empty($element['#min'])) {
-      $element['#attributes']['min'] = $element['#min'];
-    }
-    if (!empty($element['#max'])) {
-      $element['#attributes']['max'] = $element['#max'];
+    if (isset($element['#date_date_format'])) {
+      if (!empty($element['#min'])) {
+        $element['#attributes']['min'] = date($element['#date_date_format'], strtotime($element['#min']));
+      }
+      if (!empty($element['#max'])) {
+        $element['#attributes']['max'] = date($element['#date_date_format'], strtotime($element['#max']));
+      }
     }
 
     $element['#element_validate'] = array_merge([[get_class($this), 'preValidateDate']], $element['#element_validate']);
@@ -70,6 +68,7 @@ abstract class DateBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function setDefaultValue(array &$element) {
+    // Datelist and Datetime require #default_value to be DrupalDateTime.
     if (in_array($element['#type'], ['datelist', 'datetime'])) {
       if (!empty($element['#default_value'])) {
         if (is_array($element['#default_value'])) {

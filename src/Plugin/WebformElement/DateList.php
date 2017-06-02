@@ -67,10 +67,7 @@ class DateList extends DateBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
-    $form['date'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Date list settings'),
-    ];
+    $form['date']['#title'] = $this->t('Date list settings');
     $form['date']['date_part_order_label'] = [
       '#type' => 'item',
       '#title' => $this->t('Date part and order'),

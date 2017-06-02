@@ -24,7 +24,7 @@ class WebformUiElementTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_dates'];
+  protected static $testWebforms = ['test_element_date'];
 
   /**
    * Tests element.
@@ -203,7 +203,7 @@ class WebformUiElementTest extends WebformTestBase {
     $edit = [
       'properties[default_value]' => 'not a valid date',
     ];
-    $this->drupalPostForm('admin/structure/webform/manage/test_element_dates/element/date_min_max_dynamic/edit', $edit, t('Save'));
+    $this->drupalPostForm('admin/structure/webform/manage/test_element_date/element/date_min_max_dynamic/edit', $edit, t('Save'));
     $this->assertRaw('The Default value could not be interpreted in <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>.');
   }
 
