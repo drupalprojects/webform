@@ -110,7 +110,7 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
       $build['elements']['#title'] = t('The below nested elements will be also deleted.');
     }
 
-    return $this->renderer->render($build);
+    return $this->renderer->renderPlain($build);
   }
 
   /**

@@ -390,7 +390,7 @@ class WebformUiEntityForm extends WebformEntityForm {
           'key' => $key,
         ]),
       '#attributes' => $element_dialog_attributes,
-      '#prefix' => !empty($indentation) ? $this->renderer->render($indentation) : '',
+      '#prefix' => !empty($indentation) ? $this->renderer->renderPlain($indentation) : '',
     ];
 
     if ($webform->hasContainer()) {
