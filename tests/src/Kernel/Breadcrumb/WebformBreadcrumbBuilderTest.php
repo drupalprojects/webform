@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Container;
  * @see: \Drupal\Tests\forum\Unit\Breadcrumb\ForumBreadcrumbBuilderBaseTest
  * @see: \Drupal\Tests\forum\Unit\Breadcrumb\ForumNodeBreadcrumbBuilderTest
  *
- * @coversDefaultClass \Drupal\webform\BreadCrumb\WebformBreadcrumbBuilder
+ * @coversDefaultClass \Drupal\webform\Breadcrumb\WebformBreadcrumbBuilder
  *
  * @group webform
  */
@@ -141,24 +141,22 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
     \Drupal::setContainer($container);
   }
 
-// ISSUE: ReflectionException: Class Mock_WebformBreadcrumbBuilder_0348bdfb
-// does not have a constructor, so you cannot pass any constructor arguments
-//  /**
-//   * Tests WebformBreadcrumbBuilder::__construct().
-//   *
-//   * @covers ::__construct
-//   */
-//  public function testConstructor() {
-//    // Reflect upon our properties, except for config which is a special case.
-//    $property_names = [
-//      'moduleHandler' => $this->moduleHandler,
-//      'requestHandler' => $this->requestHandler,
-//      'stringTranslation' => $this->translationManager,
-//    ];
-//    foreach ($property_names as $property_name => $property_value) {
-//      $this->assertAttributeEquals($property_value, $property_name, $this->breadcrumbBuilder);
-//    }
-//  }
+  /**
+   * Tests WebformBreadcrumbBuilder::__construct().
+   *
+   * @covers ::__construct
+   */
+  public function testConstructor() {
+    // Reflect upon our properties, except for config which is a special case.
+    $property_names = [
+      'moduleHandler' => $this->moduleHandler,
+      'requestHandler' => $this->requestHandler,
+      'stringTranslation' => $this->translationManager,
+    ];
+    foreach ($property_names as $property_name => $property_value) {
+      $this->assertAttributeEquals($property_value, $property_name, $this->breadcrumbBuilder);
+    }
+  }
 
   /**
    * Tests WebformBreadcrumbBuilder::applies().

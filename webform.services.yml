@@ -72,7 +72,7 @@ services:
   # Breadcrumb builder.
 
   webform.breadcrumb:
-    class: Drupal\webform\BreadCrumb\WebformBreadcrumbBuilder
+    class: Drupal\webform\Breadcrumb\WebformBreadcrumbBuilder
     arguments: ['@module_handler', '@webform.request', '@string_translation']
     tags:
       - { name: breadcrumb_builder, priority: 1002 }
