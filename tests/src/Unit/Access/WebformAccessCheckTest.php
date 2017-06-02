@@ -11,7 +11,7 @@ use Drupal\webform\Access\WebformAccess;
  *
  * @group webform
  */
-class PermissionAccessCheckTest extends UnitTestCase {
+class WebformAccessCheckTest extends UnitTestCase {
 
   /**
    * The tested access checker.

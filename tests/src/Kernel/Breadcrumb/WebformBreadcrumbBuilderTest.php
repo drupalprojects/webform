@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\webform\Unit\Breadcrumb;
+namespace Drupal\Tests\webform\Kernel\Breadcrumb;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;

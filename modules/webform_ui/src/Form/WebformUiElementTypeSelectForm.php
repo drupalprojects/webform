@@ -63,14 +63,10 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
       $row['category']['data'] = $plugin_definition['category'];
       if (!$this->isOffCanvasDialog()) {
         $row['operations']['data'] = [
-          '#type' => 'operations',
-          '#links' => [
-            'add' => [
-              'title' => $this->t('Add element'),
-              'url' => Url::fromRoute('entity.webform_ui.element.add_form', $route_parameters, $route_options),
-              'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-            ],
-          ],
+          '#type' => 'link',
+          '#title' => $this->t('Add element'),
+          '#url' => Url::fromRoute('entity.webform_ui.element.add_form', $route_parameters, $route_options),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--primary', 'button--small']),
         ];
       }
       // Issue #2741877 Nested modals don't work: when using CKEditor in a
@@ -79,7 +75,7 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
       // @todo Remove the below workaround once this issue is resolved.
       if ($webform_element->getPluginId() == 'processed_text') {
         unset($row['title']['data']['#attributes']);
-        unset($row['operations']['data']['#links']['add']['attributes']);
+        unset($row['operations']['data']['#attributes']);
       }
 
       $row['title']['data']['#attributes']['class'][] = 'js-webform-tooltip-link';

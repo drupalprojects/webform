@@ -12,7 +12,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *
  * @group webform
  */
-class WebfromSubmissionStorageTest extends KernelTestBase {
+class WebformSubmissionStorageTest extends KernelTestBase {
 
   /**
    * Modules to enable.

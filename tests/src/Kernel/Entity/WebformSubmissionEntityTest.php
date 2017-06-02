@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\user\Kernel;
+namespace Drupal\Tests\webform\Kernel\Entity;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\webform\Entity\Webform;

@@ -332,22 +332,6 @@ class WebformMultiple extends FormElement {
         '#row_index' => $row_index,
         '#name' => $table_id . '_remove_' . $row_index,
       ];
-
-      // Bootstrap theme does not support image buttons so we are going to use
-      // Boostrap's icon buttons.
-      // @see themes/bootstrap/templates/input/input--button.html.twig
-      if (WebformThemeHelper::isActiveTheme('bootstrap')) {
-        $row['_operations_']['add'] += [
-          '#title' => t('Add'),
-          '#icon_only' => TRUE,
-          '#icon' => \Drupal\bootstrap\Bootstrap::glyphicon('plus-sign'),
-        ];
-        $row['_operations_']['remove'] += [
-          '#title' => t('Remove'),
-          '#icon_only' => TRUE,
-          '#icon' => \Drupal\bootstrap\Bootstrap::glyphicon('minus-sign'),
-        ];
-      }
     }
 
     $row['#weight'] = $weight;

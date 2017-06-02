@@ -164,15 +164,15 @@ class WebformUiElementTest extends WebformTestBase {
     // Check change element types.
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/change');
     $this->assertRaw(t('Hidden'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=hidden" class="use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=hidden" class="button button--primary button--small use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
     $this->assertRaw(t('value'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=value" class="use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=value" class="button button--primary button--small use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
     $this->assertRaw(t('Search'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=search" class="use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=search" class="button button--primary button--small use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
     $this->assertRaw(t('Telephone'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=tel" class="use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=tel" class="button button--primary button--small use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
     $this->assertRaw(t('URL'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=url" class="use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=url" class="button button--primary button--small use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Change</a>');
 
     // Check change element type.
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/edit', ['query' => ['type' => 'value']]);

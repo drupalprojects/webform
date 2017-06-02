@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\webform\Utility\WebformYaml;
 
 /**
