@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\BreadCrumb;
+namespace Drupal\webform\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
