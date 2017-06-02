@@ -37,7 +37,6 @@ if (class_exists('\Drupal\file\Element\ManagedFile')) {
       // Set accept and capture attributes.
       if (isset($element['upload']) && static::$accept) {
         $element['upload']['#attributes']['accept'] = static::$accept;;
-        $element['upload']['#attributes']['capture'] = TRUE;
       }
 
       // Add class name to wrapper attributes.

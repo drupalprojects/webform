@@ -151,13 +151,13 @@ class WebformElementManagedFileTest extends WebformTestBase {
     $this->assertRaw('<input data-drupal-selector="edit-document-file-upload" type="file" id="edit-document-file-upload" name="files[document_file]" size="22" class="js-form-file form-file" />');
 
     // Check audio file.
-    $this->assertRaw('<input data-drupal-selector="edit-audio-file-upload" accept="audio/*" capture type="file" id="edit-audio-file-upload" name="files[audio_file]" size="22" class="js-form-file form-file" />');
+    $this->assertRaw('<input data-drupal-selector="edit-audio-file-upload" accept="audio/*" type="file" id="edit-audio-file-upload" name="files[audio_file]" size="22" class="js-form-file form-file" />');
 
     // Check image file.
-    $this->assertRaw('<input data-drupal-selector="edit-image-file-upload" accept="image/*" capture type="file" id="edit-image-file-upload" name="files[image_file]" size="22" class="js-form-file form-file" />');
+    $this->assertRaw('<input data-drupal-selector="edit-image-file-upload" accept="image/*" type="file" id="edit-image-file-upload" name="files[image_file]" size="22" class="js-form-file form-file" />');
 
     // Check video file.
-    $this->assertRaw('<input data-drupal-selector="edit-video-file-upload" accept="video/*" capture type="file" id="edit-video-file-upload" name="files[video_file]" size="22" class="js-form-file form-file" />');
+    $this->assertRaw('<input data-drupal-selector="edit-video-file-upload" accept="video/*" type="file" id="edit-video-file-upload" name="files[video_file]" size="22" class="js-form-file form-file" />');
 
     /* Element rendering */
     // @todo determine why D.O tesbot is throwning "Segmentation fault (core dumped)" exception.
