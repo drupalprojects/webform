@@ -109,15 +109,32 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
     $source_entity = $this->requestManager->getCurrentSourceEntity('webform_submission');
     parent::buildComponents($build, $entities, $displays, $view_mode);
 
-    // If the view mode is default then display the HTML version.
-    if ($view_mode == 'default') {
-      $view_mode = 'html';
+    // Make sure $view_mode is supported, else use the HTML template and
+    // display submission information because the submission is most likely
+    // being rendered without context.
+    // @see webform_theme()
+    // @see \Drupal\webform\Controller\WebformSubmissionController::index
+    if (in_array($view_mode, ['html', 'table', 'text', 'yaml'])) {
+      $submission_template = 'webform_submission_' . $view_mode;
+      $display_submission_information = FALSE;
+    }
+    else {
+      $submission_template = 'webform_submission_html';
+      $display_submission_information  = TRUE;
     }
 
     // Build submission display.
     foreach ($entities as $id => $webform_submission) {
+      if ($display_submission_information ) {
+        $build[$id]['information'] = [
+          '#theme' => 'webform_submission_information',
+          '#webform_submission' => $webform_submission,
+          '#source_entity' => $source_entity,
+          '#open' => TRUE,
+        ];
+      }
       $build[$id]['submission'] = [
-        '#theme' => 'webform_submission_' . $view_mode,
+        '#theme' => $submission_template,
         '#webform_submission' => $webform_submission,
         '#source_entity' => $source_entity,
       ];
