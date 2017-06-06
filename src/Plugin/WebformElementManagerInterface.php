@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\CategorizingPluginManagerInterface;
 use Drupal\Component\Plugin\FallbackPluginManagerInterface;
@@ -15,7 +15,7 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
   /**
    * Get all available webform element plugin instances.
    *
-   * @return \Drupal\webform\WebformElementInterface[]
+   * @return \Drupal\webform\Plugin\WebformElementInterface[]
    *   An array of all available webform element plugin instances.
    */
   public function getInstances();
@@ -58,7 +58,7 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
    * @param array $element
    *   An associative array containing an element with a #type property.
    *
-   * @return \Drupal\webform\WebformElementInterface
+   * @return \Drupal\webform\Plugin\WebformElementInterface
    *   A webform element plugin instance
    */
   public function getElementInstance(array $element);

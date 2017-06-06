@@ -15,7 +15,10 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Controller\WebformController;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -24,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class WebformSubmissionForm extends ContentEntityForm {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * Denote wizard page should be disabled.
@@ -57,7 +60,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * The webform element (plugin) manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -126,7 +129,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The renderer service.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager
    *   The webform third party settings manager.

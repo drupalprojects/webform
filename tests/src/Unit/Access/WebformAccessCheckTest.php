@@ -78,7 +78,7 @@ class WebformAccessCheckTest extends UnitTestCase {
     $webform = $this->getMock('Drupal\webform\WebformInterface');
 
     $email_webform = $this->getMock('Drupal\webform\WebformInterface');
-    $handler = $this->getMock('\Drupal\webform\WebformHandlerMessageInterface');
+    $handler = $this->getMock('\Drupal\webform\Plugin\WebformHandlerMessageInterface');
     $email_webform->expects($this->any())
       ->method('getHandlers')
       ->will($this->returnValue([$handler]));

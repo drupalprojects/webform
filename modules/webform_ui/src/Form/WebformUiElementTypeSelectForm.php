@@ -36,7 +36,7 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
     $definitions = $this->getDefinitions();
     $rows = [];
     foreach ($definitions as $plugin_id => $plugin_definition) {
-      /** @var \Drupal\webform\WebformElementInterface $webform_element */
+      /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
       $webform_element = $elements[$plugin_id];
 
       // Skip hidden plugins.

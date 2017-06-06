@@ -372,7 +372,7 @@ Afghanistan',
    *   The webform email message body for a webform submission.
    */
   protected function getMessageBody(WebformSubmissionInterface $submission, $handler_id = 'email_html') {
-    /** @var \Drupal\webform\WebformHandlerMessageInterface $message_handler */
+    /** @var \Drupal\webform\Plugin\WebformHandlerMessageInterface $message_handler */
     $message_handler = $submission->getWebform()->getHandler($handler_id);
     $message = $message_handler->getMessage($submission);
     $body = (string) $message['body'];

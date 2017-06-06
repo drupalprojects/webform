@@ -8,7 +8,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
-use Drupal\webform\Utility\WebformThemeHelper;
+
 
 /**
  * Provides a webform element to assist in creation of multiple elements.

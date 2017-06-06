@@ -17,8 +17,8 @@ use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Plugin\WebformElement\WebformWizardPage;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
-use Drupal\webform\WebformHandlerInterface;
-use Drupal\webform\WebformHandlerPluginCollection;
+use Drupal\webform\Plugin\WebformHandlerInterface;
+use Drupal\webform\Plugin\WebformHandlerPluginCollection;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformSubmissionStorageInterface;
@@ -216,7 +216,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * Holds the collection of webform handlers that are used by this webform.
    *
-   * @var \Drupal\webform\WebformHandlerPluginCollection
+   * @var \Drupal\webform\Plugin\WebformHandlerPluginCollection
    */
   protected $handlersCollection;
 
@@ -956,7 +956,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return $elements;
     }
 
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
     foreach ($elements as $key => $element) {
       $element_handler = $element_manager->getElementInstance($element);
@@ -971,7 +971,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getElementsSelectorOptions() {
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
     $selectors = [];
@@ -1078,7 +1078,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    *   The element's depth.
    */
   protected function initElementsRecursive(array &$elements, $parent = '', $depth = 0) {
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
     // Remove ignored properties.
@@ -1649,7 +1649,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public function getHandlers($plugin_id = NULL, $status = NULL, $results = NULL, $submission = NULL) {
     if (!$this->handlersCollection) {
       $this->handlersCollection = new WebformHandlerPluginCollection($this->getWebformHandlerPluginManager(), $this->handlers);
-      /** @var \Drupal\webform\WebformHandlerBase $handler */
+      /** @var \Drupal\webform\Plugin\WebformHandlerBase $handler */
       foreach ($this->handlersCollection as $handler) {
         // Initialize the handler and pass in the webform.
         $handler->setWebform($this);
@@ -1657,12 +1657,12 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       $this->handlersCollection->sort();
     }
 
-    /** @var \Drupal\webform\WebformHandlerPluginCollection $handlers */
+    /** @var \Drupal\webform\Plugin\WebformHandlerPluginCollection $handlers */
     $handlers = $this->handlersCollection;
 
     // Clone the handlers if they are being filtered.
     if (isset($plugin_id) || isset($status) || isset($results)) {
-      /** @var \Drupal\webform\WebformHandlerPluginCollection $handlers */
+      /** @var \Drupal\webform\Plugin\WebformHandlerPluginCollection $handlers */
       $handlers = clone $this->handlersCollection;
     }
 
@@ -1771,7 +1771,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function invokeElements($method, &$data, &$context1 = NULL, &$context2 = NULL) {
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
     $elements = $this->getElementsInitializedAndFlattened();

@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Form\WebformDialogFormTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class WebformSubmissionNotesForm extends ContentEntityForm {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * Webform request handler.

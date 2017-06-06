@@ -10,7 +10,7 @@ use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
 use Drupal\webform\Utility\WebformDateHelper;
-use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -295,7 +295,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
     $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
 
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
     $form_elements = $webform_submission->getWebform()->getElementsInitializedAndFlattened();

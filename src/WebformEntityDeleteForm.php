@@ -5,13 +5,14 @@ namespace Drupal\webform;
 use Drupal\Core\Entity\EntityDeleteForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Form\WebformDialogFormTrait;
 
 /**
  * Provides a delete webform.
  */
 class WebformEntityDeleteForm extends EntityDeleteForm {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * {@inheritdoc}

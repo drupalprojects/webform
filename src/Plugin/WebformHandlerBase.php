@@ -1,20 +1,22 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for a webform handler.
  *
- * @see \Drupal\webform\WebformHandlerInterface
- * @see \Drupal\webform\WebformHandlerManager
- * @see \Drupal\webform\WebformHandlerManagerInterface
+ * @see \Drupal\webform\Plugin\WebformHandlerInterface
+ * @see \Drupal\webform\Plugin\WebformHandlerManager
+ * @see \Drupal\webform\Plugin\WebformHandlerManagerInterface
  * @see plugin_api
  */
 abstract class WebformHandlerBase extends PluginBase implements WebformHandlerInterface {

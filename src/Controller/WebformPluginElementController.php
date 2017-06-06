@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformReflectionHelper;
-use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -42,7 +42,7 @@ class WebformPluginElementController extends ControllerBase implements Container
   /**
    * A webform element plugin manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -55,7 +55,7 @@ class WebformPluginElementController extends ControllerBase implements Container
    *   The module handler.
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   A element info plugin manager.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   A webform element plugin manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager) {
@@ -133,7 +133,7 @@ class WebformPluginElementController extends ControllerBase implements Container
     foreach ($element_plugin_definitions as $element_plugin_id => $element_plugin_definition) {
       if ($this->elementManager->hasDefinition($element_plugin_id)) {
 
-        /** @var \Drupal\webform\WebformElementInterface $webform_element */
+        /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
         $webform_element = $this->elementManager->createInstance($element_plugin_id);
         $webform_element_plugin_definition = $this->elementManager->getDefinition($element_plugin_id);
         $webform_element_info = $webform_element->getInfo();

@@ -8,7 +8,6 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
-use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\webform\Utility\WebformYaml;
 
 /**
@@ -65,7 +64,7 @@ class WebformElementStates extends FormElement {
    */
   public static function processWebformStates(&$element, FormStateInterface $form_state, &$complete_form) {
     // Define default #state_options and #trigger_options.
-    // There are also defined by \Drupal\webform\WebformElementBase::form.
+    // There are also defined by \Drupal\webform\Plugin\WebformElementBase::form.
     $element += [
       '#state_options' => [
         'enabled' => t('Enabled'),

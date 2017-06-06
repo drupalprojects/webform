@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Component\Utility\Html;
@@ -22,15 +22,19 @@ use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
+use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformLibrariesManagerInterface;
+use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for a webform element.
  *
- * @see \Drupal\webform\WebformElementInterface
- * @see \Drupal\webform\WebformElementManager
- * @see \Drupal\webform\WebformElementManagerInterface
+ * @see \Drupal\webform\Plugin\WebformElementInterface
+ * @see \Drupal\webform\Plugin\WebformElementManager
+ * @see \Drupal\webform\Plugin\WebformElementManagerInterface
  * @see plugin_api
  */
 class WebformElementBase extends PluginBase implements WebformElementInterface {
@@ -75,7 +79,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * The webform element manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -119,7 +123,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The entity type manager.
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   The element info manager.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.

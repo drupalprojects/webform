@@ -1,19 +1,20 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Defines the interface for results exporters.
  *
  * @see \Drupal\webform\Annotation\WebformExporter
- * @see \Drupal\webform\WebformExporterBase
- * @see \Drupal\webform\WebformExporterManager
- * @see \Drupal\webform\WebformExporterManagerInterface
+ * @see \Drupal\webform\Plugin\WebformExporterBase
+ * @see \Drupal\webform\Plugin\WebformExporterManager
+ * @see \Drupal\webform\Plugin\WebformExporterManagerInterface
  * @see plugin_api
  */
 interface WebformExporterInterface extends PluginInspectionInterface, ConfigurablePluginInterface, PluginFormInterface, ContainerFactoryPluginInterface {

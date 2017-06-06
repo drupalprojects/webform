@@ -4,7 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformElementBase;
+use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**

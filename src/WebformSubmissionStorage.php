@@ -466,11 +466,11 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     // Webform elements.
     if ($webform && $include_elements) {
-      /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+      /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
       $element_manager = \Drupal::service('plugin.manager.webform.element');
       $elements = $webform->getElementsInitializedFlattenedAndHasValue('view');
       foreach ($elements as $element) {
-        /** @var \Drupal\webform\WebformElementInterface $element_handler */
+        /** @var \Drupal\webform\Plugin\WebformElementInterface $element_handler */
         $element_handler = $element_manager->createInstance($element['#type']);
         $columns += $element_handler->getTableColumn($element);
       }

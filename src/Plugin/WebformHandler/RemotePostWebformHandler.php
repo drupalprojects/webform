@@ -7,7 +7,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformHandlerBase;
+use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use GuzzleHttp\ClientInterface;
@@ -24,9 +24,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("Remote post"),
  *   category = @Translation("External"),
  *   description = @Translation("Posts webform submissions to a URL."),
- *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_UNLIMITED,
- *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_PROCESSED,
- *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_OPTIONAL,
+ *   cardinality = \Drupal\webform\Plugin\WebformHandlerInterface::CARDINALITY_UNLIMITED,
+ *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
+ *   submission = \Drupal\webform\Plugin\WebformHandlerInterface::SUBMISSION_OPTIONAL,
  * )
  */
 class RemotePostWebformHandler extends WebformHandlerBase {

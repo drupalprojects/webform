@@ -9,7 +9,7 @@ use Drupal\Core\Link;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\WebformElementBase;
+use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\Component\Utility\Bytes;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;

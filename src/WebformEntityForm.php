@@ -9,6 +9,8 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
+use Drupal\webform\Form\WebformDialogFormTrait;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class WebformEntityForm extends BundleEntityFormBase {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * The renderer.
@@ -36,7 +38,7 @@ class WebformEntityForm extends BundleEntityFormBase {
   /**
    * Webform element manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -61,7 +63,7 @@ class WebformEntityForm extends BundleEntityFormBase {
    *   The renderer.
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   The element manager.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
    *   Webform element validator.

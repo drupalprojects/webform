@@ -126,7 +126,7 @@ function _webform_test_form_states($type, array $default_properties = []) {
   /** @var \Drupal\webform\WebformSubmissionGenerateInterface $generate */
   $generate = \Drupal::service('webform_submission.generate');
 
-  /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+  /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
   $element_manager = \Drupal::service('plugin.manager.webform.element');
   $elements = $element_manager->getInstances();
   foreach ($elements as $element_type => $webform_element) {
@@ -207,7 +207,7 @@ function _webform_test_form_states($type, array $default_properties = []) {
 function webform_test_elements_states_issues_markdown() {
   $issues = _webform_test_issues();
 
-  /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+  /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
   $element_manager = \Drupal::service('plugin.manager.webform.element');
 
   $markdown = [];

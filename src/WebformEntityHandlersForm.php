@@ -5,6 +5,8 @@ namespace Drupal\webform;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Plugin\WebformHandlerInterface;
+use Drupal\webform\Plugin\WebformHandlerManagerInterface;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,14 +25,14 @@ class WebformEntityHandlersForm extends EntityForm {
   /**
    * Webform handler manager.
    *
-   * @var \Drupal\webform\WebformHandlerManagerInterface
+   * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
    */
   protected $handlerManager;
 
   /**
    * Constructs a WebformEntityHandlersForm.
    *
-   * @param \Drupal\webform\WebformHandlerManagerInterface $handler_manager
+   * @param \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager
    *   The webform handler manager.
    */
   public function __construct(WebformHandlerManagerInterface $handler_manager) {

@@ -17,7 +17,7 @@ class WebformHandlerExcludedTest extends WebformTestBase {
   function testExcludeHandlers() {
     $this->drupalLogin($this->rootUser);
 
-    /** @var \Drupal\webform\WebformHandlerManagerInterface $handler_manager */
+    /** @var \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager */
     $handler_manager = $this->container->get('plugin.manager.webform.handler');
 
     // Check add mail and handler plugin.

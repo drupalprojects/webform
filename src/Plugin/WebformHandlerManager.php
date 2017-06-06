@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,8 +13,8 @@ use Drupal\Core\Plugin\DefaultPluginManager;
  *
  * @see hook_webform_handler_info_alter()
  * @see \Drupal\webform\Annotation\WebformHandler
- * @see \Drupal\webform\WebformHandlerInterface
- * @see \Drupal\webform\WebformHandlerBase
+ * @see \Drupal\webform\Plugin\WebformHandlerInterface
+ * @see \Drupal\webform\Plugin\WebformHandlerBase
  * @see plugin_api
  */
 class WebformHandlerManager extends DefaultPluginManager implements WebformHandlerManagerInterface {
@@ -45,7 +45,7 @@ class WebformHandlerManager extends DefaultPluginManager implements WebformHandl
    *   The configuration object factory.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory) {
-    parent::__construct('Plugin/WebformHandler', $namespaces, $module_handler, 'Drupal\webform\WebformHandlerInterface', 'Drupal\webform\Annotation\WebformHandler');
+    parent::__construct('Plugin/WebformHandler', $namespaces, $module_handler, 'Drupal\webform\Plugin\WebformHandlerInterface', 'Drupal\webform\Annotation\WebformHandler');
     $this->configFactory = $config_factory;
 
     $this->alterInfo('webform_handler_info');

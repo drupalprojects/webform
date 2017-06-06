@@ -10,6 +10,8 @@ use Drupal\Core\Entity\EntityViewBuilder;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Utility\Token;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformHandlerManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,14 +43,14 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
   /**
    * The webform handler manager service.
    *
-   * @var \Drupal\webform\WebformHandlerManagerInterface
+   * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
    */
   protected $handlerManager;
 
   /**
    * The webform element manager service.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -67,9 +69,9 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
    *   The token handler.
    * @param \Drupal\webform\WebformRequestInterface $webform_request
    *   The webform request handler.
-   * @param \Drupal\webform\WebformHandlerManagerInterface $handler_manager
+   * @param \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager
    *   The webform handler manager service.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager service.
    */
   public function __construct(EntityTypeInterface $entity_type, EntityManagerInterface $entity_manager, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, Token $token, WebformRequestInterface $webform_request, WebformHandlerManagerInterface $handler_manager, WebformElementManagerInterface $element_manager) {
@@ -154,7 +156,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
       }
 
       $plugin_id = $this->elementManager->getElementPluginId($element);
-      /** @var \Drupal\webform\WebformElementInterface $webform_element */
+      /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
       $webform_element = $this->elementManager->createInstance($plugin_id);
 
       // Check element view access.
@@ -180,7 +182,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
       }
 
       $plugin_id = $this->elementManager->getElementPluginId($element);
-      /** @var \Drupal\webform\WebformElementInterface $webform_element */
+      /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
       $webform_element = $this->elementManager->createInstance($plugin_id);
 
       // Check element view access.

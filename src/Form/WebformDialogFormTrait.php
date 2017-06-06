@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -13,12 +13,12 @@ use Drupal\webform\Ajax\ScrollTopCommand;
 use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
- * Trait class webform dialogs.
+ * Trait class for dialogs.
  *
  * @todo Issue #2785047: In Outside In mode, messages should appear in the off-canvas tray, not the main page.
  * @see https://www.drupal.org/node/2785047
  */
-trait WebformDialogTrait {
+trait WebformDialogFormTrait {
 
   /**
    * Is the current request for an Ajax modal dialog.

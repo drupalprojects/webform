@@ -5,7 +5,6 @@
  * Helps support Webform to Bootstrap integration.
  */
 
-use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -19,7 +18,7 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
   }
 
   // Remove jQuery Tooltip and use Bootstrap Tooltip.
-  // @see \Drupal\webform\WebformElementBase::prepare
+  // @see \Drupal\webform\Plugin\WebformElementBase::prepare
   if (isset($element['#attached']['library'][0]) && $element['#attached']['library'][0] === 'webform/webform.tooltip') {
     unset($element['#attached']['library'][0]);
     $element['#attached']['library'] = array_values($element['#attached']['library']);

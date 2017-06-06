@@ -29,7 +29,7 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
   /**
    * A webform element.
    *
-   * @var \Drupal\webform\WebformElementInterface
+   * @var \Drupal\webform\Plugin\WebformElementInterface
    */
   protected $webformElement;
 

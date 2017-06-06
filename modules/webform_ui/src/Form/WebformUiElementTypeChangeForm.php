@@ -26,7 +26,7 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL, $key = NULL) {
     $element = $webform->getElement($key);
 
-    /** @var \Drupal\webform\WebformElementInterface $webform_element */
+    /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
     $webform_element = $this->elementManager->getElementInstance($element);
 
     $related_types = $webform_element->getRelatedTypes($element);

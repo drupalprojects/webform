@@ -42,7 +42,7 @@ function webform_test_test_element_flexbox() {
     'elements' => [],
   ];
 
-  /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+  /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
   $element_manager = \Drupal::service('plugin.manager.webform.element');
   $elements = $element_manager->getInstances();
   foreach ($elements as $element_type => $webform_element) {

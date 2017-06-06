@@ -1,6 +1,8 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
+
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Defines the interface for webform handlers that send messages.

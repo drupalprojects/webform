@@ -6,8 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\webform\WebformDialogTrait;
-use Drupal\webform\WebformHandlerInterface;
+use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -16,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 abstract class WebformHandlerFormBase extends FormBase {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * The webform.
@@ -28,7 +27,7 @@ abstract class WebformHandlerFormBase extends FormBase {
   /**
    * The webform handler.
    *
-   * @var \Drupal\webform\WebformHandlerInterface
+   * @var \Drupal\webform\Plugin\WebformHandlerInterface
    */
   protected $webformHandler;
 
@@ -212,7 +211,7 @@ abstract class WebformHandlerFormBase extends FormBase {
   /**
    * Generates a unique machine name for a webform handler instance.
    *
-   * @param \Drupal\webform\WebformHandlerInterface $handler
+   * @param \Drupal\webform\Plugin\WebformHandlerInterface $handler
    *   The webform handler.
    *
    * @return string

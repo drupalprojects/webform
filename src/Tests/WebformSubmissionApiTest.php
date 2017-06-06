@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformSubmissionForm;
 use Drupal\webform\WebformSubmissionInterface;

@@ -3,7 +3,7 @@
 namespace Drupal\webform\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformHandlerManagerInterface;
+use Drupal\webform\Plugin\WebformHandlerManagerInterface;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,14 +16,14 @@ class WebformHandlerAddForm extends WebformHandlerFormBase {
   /**
    * The webform handler manager.
    *
-   * @var \Drupal\webform\WebformHandlerManagerInterface
+   * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
    */
   protected $webformHandlerManager;
 
   /**
    * Constructs a WebformHandlerAddForm.
    *
-   * @param \Drupal\webform\WebformHandlerManagerInterface $webform_handler
+   * @param \Drupal\webform\Plugin\WebformHandlerManagerInterface $webform_handler
    *   The webform handler manager.
    */
   public function __construct(WebformHandlerManagerInterface $webform_handler) {
@@ -57,7 +57,7 @@ class WebformHandlerAddForm extends WebformHandlerFormBase {
    * {@inheritdoc}
    */
   protected function prepareWebformHandler($webform_handler) {
-    /** @var \Drupal\webform\WebformHandlerInterface $webform_handler */
+    /** @var \Drupal\webform\Plugin\WebformHandlerInterface $webform_handler */
     $webform_handler = $this->webformHandlerManager->createInstance($webform_handler);
     // Initialize the handler an pass in the webform.
     $webform_handler->setWebform($this->webform);

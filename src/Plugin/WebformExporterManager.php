@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,8 +13,8 @@ use Drupal\Core\Plugin\DefaultPluginManager;
  *
  * @see hook_webform_exporter_info_alter()
  * @see \Drupal\webform\Annotation\WebformExporter
- * @see \Drupal\webform\WebformExporterInterface
- * @see \Drupal\webform\WebformExporterBase
+ * @see \Drupal\webform\Plugin\WebformExporterInterface
+ * @see \Drupal\webform\Plugin\WebformExporterBase
  * @see plugin_api
  */
 class WebformExporterManager extends DefaultPluginManager implements WebformExporterManagerInterface {
@@ -44,7 +44,7 @@ class WebformExporterManager extends DefaultPluginManager implements WebformExpo
    *   The configuration object factory.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_exporter, ConfigFactoryInterface $config_factory) {
-    parent::__construct('Plugin/WebformExporter', $namespaces, $module_exporter, 'Drupal\webform\WebformExporterInterface', 'Drupal\webform\Annotation\WebformExporter');
+    parent::__construct('Plugin/WebformExporter', $namespaces, $module_exporter, 'Drupal\webform\Plugin\WebformExporterInterface', 'Drupal\webform\Annotation\WebformExporter');
     $this->configFactory = $config_factory;
 
     $this->alterInfo('webform_exporter_info');

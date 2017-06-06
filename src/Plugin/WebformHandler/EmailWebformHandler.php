@@ -18,9 +18,9 @@ use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
-use Drupal\webform\WebformElementManagerInterface;
-use Drupal\webform\WebformHandlerBase;
-use Drupal\webform\WebformHandlerMessageInterface;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformHandlerBase;
+use Drupal\webform\Plugin\WebformHandlerMessageInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -34,9 +34,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("Email"),
  *   category = @Translation("Notification"),
  *   description = @Translation("Sends a webform submission via an email."),
- *   cardinality = \Drupal\webform\WebformHandlerInterface::CARDINALITY_UNLIMITED,
- *   results = \Drupal\webform\WebformHandlerInterface::RESULTS_PROCESSED,
- *   submission = \Drupal\webform\WebformHandlerInterface::SUBMISSION_OPTIONAL,
+ *   cardinality = \Drupal\webform\Plugin\WebformHandlerInterface::CARDINALITY_UNLIMITED,
+ *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
+ *   submission = \Drupal\webform\Plugin\WebformHandlerInterface::SUBMISSION_OPTIONAL,
  * )
  */
 class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMessageInterface {
@@ -87,7 +87,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * A webform element plugin manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -940,9 +940,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
-   *
    * @param array $message
    *   An email message.
+   *
+   * @return array
+   *   Debug message.
    */
   protected function buildDebugMessage(WebformSubmissionInterface $webform_submission, array $message) {
     // Title.

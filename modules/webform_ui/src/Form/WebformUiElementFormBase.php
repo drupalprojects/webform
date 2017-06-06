@@ -8,8 +8,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
-use Drupal\webform\WebformDialogTrait;
-use Drupal\webform\WebformElementManagerInterface;
+use Drupal\webform\Form\WebformDialogFormTrait;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\WebformEntityElementsValidator;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class WebformUiElementFormBase extends FormBase implements WebformUiElementFormInterface {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * The renderer.
@@ -51,7 +51,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   /**
    * Webform element manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -118,7 +118,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    *   The renderer.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
    *   Webform element validator.

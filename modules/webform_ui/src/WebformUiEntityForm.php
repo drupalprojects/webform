@@ -337,7 +337,7 @@ class WebformUiEntityForm extends WebformEntityForm {
 
     $plugin_id = $this->elementManager->getElementPluginId($element);
 
-    /** @var \Drupal\webform\WebformElementInterface $webform_element */
+    /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
     $webform_element = $this->elementManager->createInstance($plugin_id);
 
     $is_container = $webform_element->isContainer($element);

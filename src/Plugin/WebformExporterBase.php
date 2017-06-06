@@ -1,20 +1,21 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\webform\WebformSubmissionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for a results exporter.
  *
- * @see \Drupal\webform\WebformExporterInterface
- * @see \Drupal\webform\WebformExporterManager
- * @see \Drupal\webform\WebformExporterManagerInterface
+ * @see \Drupal\webform\Plugin\WebformExporterInterface
+ * @see \Drupal\webform\Plugin\WebformExporterManager
+ * @see \Drupal\webform\Plugin\WebformExporterManagerInterface
  * @see plugin_api
  */
 abstract class WebformExporterBase extends PluginBase implements WebformExporterInterface {
@@ -50,7 +51,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
   /**
    * The webform element manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -69,7 +70,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
    *   The configuration factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformElementManagerInterface $element_manager) {

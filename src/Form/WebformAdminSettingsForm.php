@@ -16,9 +16,9 @@ use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformAddonsManagerInterface;
-use Drupal\webform\WebformElementManagerInterface;
-use Drupal\webform\WebformExporterManagerInterface;
-use Drupal\webform\WebformHandlerManagerInterface;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformExporterManagerInterface;
+use Drupal\webform\Plugin\WebformHandlerManagerInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -40,21 +40,21 @@ class WebformAdminSettingsForm extends ConfigFormBase {
   /**
    * The webform element manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
   /**
    * The webform handler manager.
    *
-   * @var \Drupal\webform\WebformHandlerManagerInterface
+   * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
    */
   protected $handlerManager;
 
   /**
    * The webform exporter manager.
    *
-   * @var \Drupal\webform\WebformExporterManagerInterface
+   * @var \Drupal\webform\Plugin\WebformExporterManagerInterface
    */
   protected $exporterManager;
 
@@ -121,11 +121,11 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
-   * @param \Drupal\webform\WebformHandlerManagerInterface $handler_manager
+   * @param \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager
    *   The webform handler manager.
-   * @param \Drupal\webform\WebformExporterManagerInterface $exporter_manager
+   * @param \Drupal\webform\Plugin\WebformExporterManagerInterface $exporter_manager
    *   The webform exporter manager.
    * @param \Drupal\webform\WebformSubmissionExporterInterface $submission_exporter
    *   The webform submission exporter.

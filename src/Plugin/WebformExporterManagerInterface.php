@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\Discovery\CachedDiscoveryInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
@@ -28,7 +28,7 @@ interface WebformExporterManagerInterface extends PluginManagerInterface, Cached
    * @param array $configuration
    *   Export configuration (aka export options).
    *
-   * @return \Drupal\webform\WebformExporterInterface[]
+   * @return \Drupal\webform\Plugin\WebformExporterInterface[]
    *   An array of all available webform exporter plugin instances.
    */
   public function getInstances(array $configuration = []);

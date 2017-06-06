@@ -5,7 +5,7 @@ namespace Drupal\webform_templates;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
-use Drupal\webform\WebformDialogTrait;
+use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\WebformSubmissionForm;
 
 /**
@@ -13,7 +13,7 @@ use Drupal\webform\WebformSubmissionForm;
  */
 class WebformTemplatesSubmissionPreviewForm extends WebformSubmissionForm {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * {@inheritdoc}

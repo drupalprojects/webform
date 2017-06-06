@@ -222,12 +222,12 @@ function _webform_update_webform_settings() {
  * @param $handler_id
  *   A webform handler id.
  *
- * @see \Drupal\webform\WebformHandlerInterface
+ * @see \Drupal\webform\Plugin\WebformHandlerInterface
  */
 function _webform_update_webform_handler_settings($handler_id) {
-  /** @var \Drupal\webform\WebformHandlerManagerInterface $handler_manager */
+  /** @var \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager */
   $handler_manager = \Drupal::service('plugin.manager.webform.handler');
-  /** @var \Drupal\webform\WebformHandlerInterface $handler */
+  /** @var \Drupal\webform\Plugin\WebformHandlerInterface $handler */
   $handler = $handler_manager->createInstance($handler_id);
 
   $default_settings = $handler->defaultConfiguration();

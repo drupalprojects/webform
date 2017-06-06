@@ -146,7 +146,7 @@ class WebformEmailConfirm extends FormElement {
     }
 
     // Set #title for other validation callbacks.
-    // @see \Drupal\webform\WebformElementBase::validateUnique
+    // @see \Drupal\webform\Plugin\WebformElementBase::validateUnique
     if (isset($element['mail_1']['#title'])) {
       $element['#title'] = $element['mail_1']['#title'];
     }

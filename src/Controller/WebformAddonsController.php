@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Controller;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\webform\Element\WebformMessage;

@@ -6,7 +6,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\webform\WebformDialogTrait;
+use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformEntityElementsValidator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class WebformUiElementDeleteForm extends ConfirmFormBase {
 
-  use WebformDialogTrait;
+  use WebformDialogFormTrait;
 
   /**
    * The renderer.
@@ -43,7 +43,7 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
   /**
    * A webform element.
    *
-   * @var \Drupal\webform\WebformElementInterface
+   * @var \Drupal\webform\Plugin\WebformElementInterface
    */
   protected $webformElement;
 
@@ -188,7 +188,7 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
       throw new NotFoundHttpException();
     }
 
-    /** @var \Drupal\webform\WebformElementManagerInterface $element_manager */
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
     $plugin_id = $element_manager->getElementPluginId($this->element);
     $this->webformElement = $element_manager->createInstance($plugin_id, $this->element);

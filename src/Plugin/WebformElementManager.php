@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -15,8 +15,8 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
  *
  * @see hook_webform_element_info_alter()
  * @see \Drupal\webform\Annotation\WebformElement
- * @see \Drupal\webform\WebformElementInterface
- * @see \Drupal\webform\WebformElementBase
+ * @see \Drupal\webform\Plugin\WebformElementInterface
+ * @see \Drupal\webform\Plugin\WebformElementBase
  * @see plugin_api
  */
 class WebformElementManager extends DefaultPluginManager implements FallbackPluginManagerInterface, WebformElementManagerInterface {
@@ -60,7 +60,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
    *   The element info manager.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory, ElementInfoManagerInterface $element_info) {
-    parent::__construct('Plugin/WebformElement', $namespaces, $module_handler, 'Drupal\webform\WebformElementInterface', 'Drupal\webform\Annotation\WebformElement');
+    parent::__construct('Plugin/WebformElement', $namespaces, $module_handler, 'Drupal\webform\Plugin\WebformElementInterface', 'Drupal\webform\Annotation\WebformElement');
     $this->configFactory = $config_factory;
     $this->elementInfo = $element_info;
 
@@ -144,7 +144,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
 
     $plugin_id = $this->getElementPluginId($element);
 
-    /** @var \Drupal\webform\WebformElementInterface $webform_element */
+    /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
     $webform_element = $this->createInstance($plugin_id);
     return $webform_element->$method($element, $context1, $context2);
   }

@@ -1,20 +1,22 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Defines the interface for webform handlers.
  *
  * @see \Drupal\webform\Annotation\WebformHandler
- * @see \Drupal\webform\WebformHandlerBase
- * @see \Drupal\webform\WebformHandlerManager
- * @see \Drupal\webform\WebformHandlerManagerInterface
+ * @see \Drupal\webform\Plugin\WebformHandlerBase
+ * @see \Drupal\webform\Plugin\WebformHandlerManager
+ * @see \Drupal\webform\Plugin\WebformHandlerManagerInterface
  * @see plugin_api
  */
 interface WebformHandlerInterface extends PluginInspectionInterface, ConfigurablePluginInterface, ContainerFactoryPluginInterface, PluginFormInterface {

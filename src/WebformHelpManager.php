@@ -5,7 +5,6 @@ namespace Drupal\webform;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
@@ -14,6 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformMessage;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 
@@ -90,7 +90,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   /**
    * Webform element manager.
    *
-   * @var \Drupal\webform\WebformElementManagerInterface
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
    */
   protected $elementManager;
 
@@ -111,7 +111,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    *   The Webform add-ons manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The Webform libraries manager.
-   * @param \Drupal\webform\WebformElementManagerInterface $element_manager
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
   public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, StateInterface $state, PathMatcherInterface $path_matcher, WebformAddOnsManagerInterface $addons_manager, WebformLibrariesManagerInterface $libraries_manager, WebformElementManagerInterface $element_manager) {
@@ -505,7 +505,7 @@ SUGGESTIONS
         '#suffix' => '</dl>',
       ];
       foreach ($elements as $element_name => $element) {
-        /** @var \Drupal\webform\WebformElementInterface $webform_element */
+        /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
         $webform_element = $this->elementManager->createInstance($element_name);
 
         if ($webform_element->isHidden()) {
