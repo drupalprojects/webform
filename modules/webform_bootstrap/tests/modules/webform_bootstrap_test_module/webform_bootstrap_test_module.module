@@ -5,6 +5,8 @@
  * Installs and integrates the Webform Test Bootstrap theme.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\webform\Utility\WebformThemeHelper;
 
 /**
@@ -18,5 +20,57 @@ function webform_bootstrap_test_module_preprocess_page(&$variables) {
   // Remove sidebar second from admin route.
   if (\Drupal::routeMatch()->getRouteObject()->getOption('_admin_route')) {
     $variables['page']['sidebar_second'] = NULL;
+  }
+}
+
+/**
+ * Implements hook_webform_submission_form_alter().
+ */
+function webform_bootstrap_test_module_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Add .btn-lg to all 'submit' button in $form['actions'].
+  foreach (Element::children($form['actions']) as $key) {
+    $form['actions'][$key]['#attributes']['class'][] = 'btn-lg';
+  }
+}
+
+/**
+ * Implements hook_webform_element_alter().
+ */
+function webform_bootstrap_test_module_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if (!isset($element['#type'])) {
+    return;
+  }
+
+  // Add 'input-lg' to elements generate input's that support #attribute.
+  switch ($element['#type']) {
+    case 'webform_checkboxes_other':
+    case 'webform_radios_other':
+    case 'webform_buttons_other':
+      $element['#other__attributes']['class'][] = 'input-lg';
+      break;
+
+    case 'webform_select_other':
+      $element['#attributes']['class'][] = 'input-lg';
+      $element['#other__attributes']['class'][] = 'input-lg';
+      break;
+
+    case 'textfield':
+    case 'textarea':
+    case 'email':
+    case 'entity_autocomplete':
+    case 'password':
+    case 'select':
+    case 'date':
+    case 'datelist':
+    case 'tel':
+    case 'url':
+    case 'webform_autocomplete':
+    case 'webform_email_multiple':
+    case 'webform_time':
+    case 'webform_term_select':
+    case 'webform_creditcard_number':
+    case 'webform_entity_select':
+      $element['#attributes']['class'][] = 'input-lg';
+      break;
   }
 }
