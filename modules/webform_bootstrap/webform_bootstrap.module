@@ -6,8 +6,8 @@
  */
 
 use Drupal\webform\Utility\WebformThemeHelper;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Form\FormStateInterface;
-
 
 /**
  * Implement hook_webform_element_alter().
@@ -24,6 +24,19 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
     $element['#attached']['library'] = array_values($element['#attached']['library']);
   }
 }
+
+/**
+ * Implements hook_js_alter().
+ */
+function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+    return;
+  }
+
+  // Make sure jQuery tooltip is never loaded.
+  unset($javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js']);
+}
+
 
 /**
  * Implements hook_link_alter().
