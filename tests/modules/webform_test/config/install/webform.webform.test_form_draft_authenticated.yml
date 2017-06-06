@@ -20,10 +20,6 @@ elements: |
   comment:
     '#type': textarea
     '#title': Comment
-  actions:
-    '#type': webform_actions
-    '#title': 'Submit button(s)'
-    '#draft__label': 'Save a draft'
 css: ''
 javascript: ''
 settings:
@@ -58,6 +54,7 @@ settings:
   preview_title: ''
   preview_message: ''
   draft: authenticated
+  draft_multiple: false
   draft_auto_save: true
   draft_saved_message: 'Your draft has been saved'
   draft_loaded_message: 'You have an existing draft'

@@ -1,8 +1,6 @@
 langcode: en
 status: open
 dependencies:
-  module:
-    - honeypot
   enforced:
     module:
       - webform_test
@@ -146,6 +144,7 @@ settings:
   preview_title: ''
   preview_message: ''
   draft: all
+  draft_multiple: false
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''

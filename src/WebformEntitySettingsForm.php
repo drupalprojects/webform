@@ -480,9 +480,9 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Allow your users to save and finish the webform later'),
       '#default_value' => $settings['draft'],
       '#options' => [
-        WebformInterface::DRAFT_ENABLED_NONE => $this->t('Disabled'),
-        WebformInterface::DRAFT_ENABLED_AUTHENTICATED => $this->t('Authenticated users'),
-        WebformInterface::DRAFT_ENABLED_ALL => $this->t('Authenticated and anonymous users'),
+        WebformInterface::DRAFT_NONE => $this->t('Disabled'),
+        WebformInterface::DRAFT_AUTHENTICATED => $this->t('Authenticated users'),
+        WebformInterface::DRAFT_ALL => $this->t('Authenticated and anonymous users'),
       ],
     ];
     $form['draft_settings']['draft_message'] = [
@@ -491,7 +491,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#message_message' => $this->t('Please make sure to enable the <a href=":href">automatic purging of draft submissions</a>, to ensure that your database is not filled with abandoned anonymous submissions in draft.', [':href' => Url::fromRoute('<none>', [], ['fragment' => 'edit-purge'])->toString()]),
       '#states' => [
         'visible' => [
-          ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_ENABLED_ALL],
+          ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_ALL],
           ':input[name="purge"]' => [
             ['value' => WebformSubmissionStorageInterface::PURGE_NONE],
             ['value' => WebformSubmissionStorageInterface::PURGE_COMPLETED],
@@ -503,9 +503,16 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'container',
       '#states' => [
         'invisible' => [
-          ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_ENABLED_NONE],
+          ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_NONE],
         ],
       ],
+    ];
+    $form['draft_settings']['draft_container']['draft_multiple'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to save multiple drafts.'),
+      "#description" => $this->t('If checked, users will be able saved and resume multiple drafts.'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['draft_multiple'],
     ];
     $form['draft_settings']['draft_container']['draft_auto_save'] = [
       '#type' => 'checkbox',

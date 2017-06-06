@@ -92,6 +92,7 @@ settings:
   preview_title: ''
   preview_message: ''
   draft: authenticated
+  draft_multiple: false
   draft_auto_save: true
   draft_saved_message: ''
   draft_loaded_message: ''

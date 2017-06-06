@@ -114,6 +114,9 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   (optional) A user account.
+   * @param bool $in_draft
+   *   (optional) Look for submissions in draft. Defaults to FALSE.
+   *   Setting to NULL will return all saved submissions and drafts.
    *
    * @return int
    *   Total number of submissions.
@@ -159,13 +162,13 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param \Drupal\Core\Database\Query\AlterableInterface $query
    *   The query instance.
    * @param \Drupal\webform\WebformInterface $webform
-   *   A webform.
+   *   (optional) A webform.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account
-   *   The current user account.
+   *   (optional) The current user account.
    * @param array $options
-   *   Additional options and query conditions.
+   *   (optional) Additional options and query conditions.
    */
   public function addQueryConditions(AlterableInterface $query, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 

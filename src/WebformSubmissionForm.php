@@ -184,7 +184,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   public function setEntity(EntityInterface $entity) {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $entity;
-    $webform = $entity->getWebform();
+    $webform = $webform_submission->getWebform();
 
     // Get the source entity and allow webform submission to be used as a source
     // entity.
@@ -193,13 +193,31 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
     }
 
-    if ($webform->getSetting('token_update') && ($token = $this->getRequest()->query->get('token'))) {
+    $token = $this->getRequest()->query->get('token');
+    if ($webform->getSetting('token_update') && $token) {
       if ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token])) {
         $entity = reset($webform_submissions_token);
       }
     }
-    elseif ($webform_submission_draft = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser())) {
-      $entity = $webform_submission_draft;
+    elseif ($webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
+      if ($webform->getSetting('draft_multiple')) {
+        // Allow multiple drafts to be restored using token.
+        // This allows the webform's public facing URL to be used instead of
+        // the admin URL of the webform.
+        if ($token && ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token, 'uid' => $this->currentUser()->id()]))) {
+          /** @var \Drupal\webform\WebformSubmissionInterface $draft_submission */
+          $draft_submission = reset($webform_submissions_token);
+          if ($draft_submission->isDraft()) {
+            $entity = $draft_submission;
+          }
+        }
+      }
+      else {
+        // Else load the most recent draft.
+        if ($webform_submission_draft = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser())) {
+          $entity = $webform_submission_draft;
+        }
+      }
     }
 
     $this->messageManager->setWebform($webform);
@@ -566,8 +584,27 @@ class WebformSubmissionForm extends ContentEntityForm {
         $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_SAVED);
         $form_state->set('draft_saved', FALSE);
       }
-      elseif ($this->isGet()) {
+      elseif ($this->isGet() && !$webform->getSetting('draft_multiple')) {
         $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_LOADED);
+      }
+    }
+
+    // Display link to multiple drafts message when user is adding a new
+    // submission.
+    if ($this->isGet()
+      && $this->getWebformSetting('draft') !== WebformInterface::DRAFT_NONE
+      && $this->getWebformSetting('draft_multiple', FALSE)
+      && ($this->isRoute('webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
+      && ($previous_draft_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser(), TRUE))
+    ) {
+      if ($previous_draft_total > 1) {
+        $this->messageManager->display(WebformMessageManagerInterface::DRAFTS_PREVIOUS);
+      }
+      else {
+        $draft_submission = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser());
+        if (!$draft_submission || $webform_submission->id() != $draft_submission->id()) {
+          $this->messageManager->display(WebformMessageManagerInterface::DRAFT_PREVIOUS);
+        }
       }
     }
 
@@ -577,9 +614,9 @@ class WebformSubmissionForm extends ContentEntityForm {
       && $this->getWebformSetting('form_previous_submissions', FALSE)
       && ($this->isRoute('webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
       && ($webform->access('submission_view_own') || $this->currentUser()->hasPermission('view own webform submission'))
-      && ($previous_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
+      && ($previous_submission_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
     ) {
-      if ($previous_total > 1) {
+      if ($previous_submission_total > 1) {
         $this->messageManager->display(WebformMessageManagerInterface::SUBMISSIONS_PREVIOUS);
       }
       elseif ($webform_submission->id() != $this->storage->getLastSubmission($webform, $this->sourceEntity, $this->currentUser())->id()) {
@@ -1283,6 +1320,8 @@ class WebformSubmissionForm extends ContentEntityForm {
 
       case 'message':
       default:
+        // Unset token if we are just reloading the current webform.
+        unset($route_options['query']['token']);
         if (!$this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION)) {
           $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
         }
@@ -1515,13 +1554,13 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     switch ($this->getWebformSetting('draft')) {
-      case WebformInterface::DRAFT_ENABLED_ALL:
+      case WebformInterface::DRAFT_ALL:
         return TRUE;
 
-      case WebformInterface::DRAFT_ENABLED_AUTHENTICATED:
+      case WebformInterface::DRAFT_AUTHENTICATED:
         return $webform_submission->getOwner()->isAuthenticated();
 
-      case WebformInterface::DRAFT_ENABLED_NONE:
+      case WebformInterface::DRAFT_NONE:
       default:
         return FALSE;
     }

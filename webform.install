@@ -720,3 +720,10 @@ function webform_update_8049() {
     }
   }
 }
+
+/**
+ * Issue #2856472: Allow multiple drafts per users.
+ */
+function webform_update_8050() {
+  _webform_update_webform_settings();
+}

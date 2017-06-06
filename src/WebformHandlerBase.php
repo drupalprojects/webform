@@ -76,10 +76,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $submissionStorage;
 
   /**
-   * {@inheritdoc}
-   */
-  /**
-   * Constructs a WebformElementBast object.
+   * Constructs a WebformElementHandlerBase object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

@@ -464,7 +464,10 @@ webform.webform.*:
           label: 'Preview message'
         draft:
           type: string
-          label: 'Allow your users to save and finish the webform later.'
+          label: 'Allow users to save and finish the webform later.'
+        draft_multiple:
+          type: boolean
+          label: 'Allow users to save multiple drafts.'
         draft_auto_save:
           type: boolean
           label: 'Automatically save as draft when previewing and when there are validation errors.'

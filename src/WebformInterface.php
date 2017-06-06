@@ -17,21 +17,21 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *
    * @var string
    */
-  const DRAFT_ENABLED_NONE = 'none';
+  const DRAFT_NONE = 'none';
 
   /**
    * Denote drafts are allowed for authenticated users only.
    *
    * @var string
    */
-  const DRAFT_ENABLED_AUTHENTICATED = 'authenticated';
+  const DRAFT_AUTHENTICATED = 'authenticated';
 
   /**
    * Denote drafts are allowed for authenticated and anonymous users.
    *
    * @var string
    */
-  const DRAFT_ENABLED_ALL = 'all';
+  const DRAFT_ALL = 'all';
 
   /**
    * Webform status open.

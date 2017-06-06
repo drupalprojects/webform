@@ -102,6 +102,9 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     elseif (strpos($route_match->getRouteName(), 'webform.user.submissions') !== FALSE) {
       $this->type = 'webform_user_submissions';
     }
+    elseif (strpos($route_match->getRouteName(), 'webform.user.drafts') !== FALSE) {
+      $this->type = 'webform_user_drafts';
+    }
     elseif ($route_match->getParameter('webform_submission') instanceof WebformSubmissionInterface && $route_match->getParameter('webform_submission')->access('admin')) {
       $this->type = 'webform_submission';
     }
@@ -189,6 +192,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           break;
 
         case 'webform_user_submissions':
+        case 'webform_user_drafts':
           /** @var \Drupal\webform\WebformInterface $webform */
           $webform = $route_match->getParameter('webform');
           $breadcrumb = new Breadcrumb();

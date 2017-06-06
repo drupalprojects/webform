@@ -7,6 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Database\Database;
@@ -14,6 +15,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -118,6 +120,21 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
+  protected function buildPropertyQuery(QueryInterface $entity_query, array $values) {
+    // Add account query wheneven filter by uid.
+    if (isset($values['uid'])) {
+      $account = User::load($values['uid']);
+      $this->addQueryConditions($entity_query, NULL, NULL, $account);
+      unset($values['uid']);
+    }
+
+    parent::buildPropertyQuery($entity_query, $values);
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function deleteAll(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, $limit = NULL, $max_sid = NULL) {
     $query = $this->getQuery();
     $this->addQueryConditions($query, $webform, $source_entity, NULL);
@@ -138,9 +155,9 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
+  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $in_draft = FALSE) {
     $query = $this->getQuery();
-    $this->addQueryConditions($query, $webform, $source_entity, $account, ['in_draft' => FALSE]);
+    $this->addQueryConditions($query, $webform, $source_entity, $account, ['in_draft' => $in_draft]);
 
     // Issue: Query count method is not working for SQL Lite.
     // return $query->count()->execute();
@@ -1018,6 +1035,9 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     $query = $this->getQuery();
     $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
+
+    // Only load the most recent draft.
+    $query->sort('sid', 'DESC');
 
     return ($sids = $query->execute()) ? $this->load(reset($sids)) : NULL;
   }

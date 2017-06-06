@@ -58,6 +58,16 @@ interface WebformMessageManagerInterface {
    */
   const HANDLER_SUBMISSION_REQUIRED = 9;
 
+  /**
+   * Draft previous.
+   */
+  const DRAFT_PREVIOUS = 10;
+
+  /**
+   * Drafts previous.
+   */
+  const DRAFTS_PREVIOUS = 11;
+
   /****************************************************************************/
   // Configurable message constants.
   // Values corresponds to admin config and webform settings.

@@ -719,7 +719,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'preview_label' => '',
       'preview_title' => '',
       'preview_message' => '',
-      'draft' => self::DRAFT_ENABLED_NONE,
+      'draft' => self::DRAFT_NONE,
+      'draft_multiple' => FALSE,
       'draft_auto_save' => FALSE,
       'draft_saved_message' => '',
       'draft_loaded_message' => '',
@@ -1567,26 +1568,28 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return;
     }
 
+    $submit_base_path = $this->settings['page_submit_path'] ?: trim(\Drupal::config('webform.settings')->get('settings.default_page_base_path'), '/') . '/' . str_replace('_', '-', $this->id());
+    $submit_base_path = '/' . trim($submit_base_path, '/');
+
     // Update submit path.
-    $submit_path = $this->settings['page_submit_path'] ?: trim(\Drupal::config('webform.settings')->get('settings.default_page_base_path'), '/') . '/' . str_replace('_', '-', $this->id());
-    $submit_source = '/webform/' . $this->id();
-    $submit_alias = '/' . trim($submit_path, '/');
-    $this->updatePath($submit_source, $submit_alias, $this->langcode);
-    $this->updatePath($submit_source, $submit_alias, LanguageInterface::LANGCODE_NOT_SPECIFIED);
+    $submit_suffixes = [
+      '',
+      '/submissions',
+      '/drafts',
+    ];
+    foreach ($submit_suffixes as $submit_suffix) {
+      $submit_source = '/webform/' . $this->id() . $submit_suffix;
+      $submit_alias = $submit_base_path . $submit_suffix;
+      $this->updatePath($submit_source, $submit_alias, $this->langcode);
+      $this->updatePath($submit_source, $submit_alias, LanguageInterface::LANGCODE_NOT_SPECIFIED);
+    }
 
     // Update confirm path.
-    $confirm_path = $this->settings['page_confirm_path'] ?:  $submit_path . '/confirmation';
     $confirm_source = '/webform/' . $this->id() . '/confirmation';
-    $confirm_alias = '/' . trim($confirm_path, '/');
+    $confirm_alias = $this->settings['page_confirm_path'] ?:  $submit_base_path . '/confirmation';
+    $confirm_alias = '/' . trim($confirm_alias, '/');
     $this->updatePath($confirm_source, $confirm_alias, $this->langcode);
     $this->updatePath($confirm_source, $confirm_alias, LanguageInterface::LANGCODE_NOT_SPECIFIED);
-
-    // Update submissions path.
-    $submissions_path = $submit_path . '/submissions';
-    $submissions_source = '/webform/' . $this->id() . '/submissions';
-    $submissions_alias = '/' . trim($submissions_path, '/');
-    $this->updatePath($submissions_source, $submissions_alias, $this->langcode);
-    $this->updatePath($submissions_source, $submissions_alias, LanguageInterface::LANGCODE_NOT_SPECIFIED);
   }
 
   /**

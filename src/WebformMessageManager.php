@@ -224,6 +224,20 @@ class WebformMessageManager implements WebformMessageManagerInterface {
         $t_args[':submissions_href'] = $this->requestHandler->getUrl($webform, $source_entity, 'webform.user.submissions')->toString();
         return $this->t('You have already submitted this webform.') . ' ' . $this->t('<a href=":submissions_href">View your previous submissions</a>.', $t_args);
 
+      case WebformMessageManagerInterface::DRAFT_PREVIOUS:
+        $webform_draft = $this->entityStorage->loadDraft($webform, $source_entity, $this->currentUser);
+        if ($source_entity && $source_entity->hasLinkTemplate('canonical')) {
+          $t_args[':draft_href'] = $source_entity->toUrl('canonical', ['query' => ['token' => $webform_draft->getToken()]])->toString();
+        }
+        else {
+          $t_args[':draft_href'] = $webform->toUrl('canonical', ['query' => ['token' => $webform_draft->getToken()]])->toString();
+        }
+        return $this->t('You have a pending draft for this webform.') . ' ' . $this->t('<a href=":draft_href">Load your pending draft</a>.', $t_args);
+
+      case WebformMessageManagerInterface::DRAFTS_PREVIOUS:
+        $t_args[':drafts_href'] = $this->requestHandler->getUrl($webform, $source_entity, 'webform.user.drafts')->toString();
+        return $this->t('You have pending drafts for this webform.') . ' ' . $this->t('<a href=":drafts_href">View your pending drafts</a>.', $t_args);
+
       case WebformMessageManagerInterface::SUBMISSION_UPDATED:
         return $this->t('Submission updated in %form.', $t_args);
 

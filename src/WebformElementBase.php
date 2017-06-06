@@ -101,7 +101,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   protected $submissionStorage;
 
   /**
-   * Constructs a WebformElementBast object.
+   * Constructs a WebformElementBase object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

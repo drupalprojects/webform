@@ -611,7 +611,7 @@ function webform_update_8030() {
   foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
     $webform_config = $config_factory->getEditable($webform_config_name);
     $data = $webform_config->getRawData();
-    $data['settings']['draft'] = ($data['settings']['draft'] == TRUE) ? WebformInterface::DRAFT_ENABLED_AUTHENTICATED : WebformInterface::DRAFT_ENABLED_NONE;
+    $data['settings']['draft'] = ($data['settings']['draft'] == TRUE) ? WebformInterface::DRAFT_AUTHENTICATED : WebformInterface::DRAFT_NONE;
     $webform_config->setData($data)->save();
   }
 }
