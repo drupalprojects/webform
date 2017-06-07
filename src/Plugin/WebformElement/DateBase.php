@@ -294,34 +294,39 @@ abstract class DateBase extends WebformElementBase {
    */
   public static function validateDate(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = $element['#value'];
+    $name = empty($element['#title']) ? $element['#parents'][0] : $element['#title'];
+    $date_date_format = (!empty($element['#date_date_format'])) ? $element['#date_date_format'] : DateFormat::load('html_date')->getPattern();
 
     // Convert DrupalDateTime array and object to ISO datetime.
     if (is_array($value)) {
-      /** @var \Drupal\Core\Datetime\DrupalDateTime $datetime */
-      if ($datetime = $value['object']) {
-        $value = $datetime->format('c');
-      }
-      else {
+      $value = ($value['object']) ? $value['object']->format(DateFormat::load('html_datetime')->getPattern()) : '';
+    }
+    elseif ($value) {
+      // Ensure the input is valid date by creating a date object and comparing
+      // formatted date object to the submitted date value.
+      $datetime = date_create_from_format($date_date_format, $value);
+      if ($datetime === FALSE || date_format($datetime, $date_date_format) != $value) {
+        $form_state->setError($element, t('%name must be a valid date.', ['%name' => $name]));
         $value = '';
       }
-      $form_state->setValueForElement($element, $value);
+      else {
+        // Clear timestamp to date elements.
+        if ($element['#type'] === 'date') {
+          $datetime->setTime(0, 0, 0);
+          $value = $datetime->format(DateFormat::load('html_date')->getPattern());
+        }
+        else {
+          $value = $datetime->format(DateFormat::load('html_datetime')->getPattern());
+        }
+      }
     }
 
+    $form_state->setValueForElement($element, $value);
     if ($value === '') {
       return;
     }
-
-    $name = empty($element['#title']) ? $element['#parents'][0] : $element['#title'];
-
-    // Ensure the input is valid date.
-    // @see http://stackoverflow.com/questions/10691949/check-if-variable-is-a-valid-date-with-php
-    $date = date_parse($value);
-    if ($date["error_count"] || !checkdate($date["month"], $date["day"], $date["year"])) {
-      $form_state->setError($element, t('%name must be a valid date.', ['%name' => $name]));
-    }
-
+    
     $time = strtotime($value);
-    $date_date_format = (!empty($element['#date_date_format'])) ? $element['#date_date_format'] : DateFormat::load('html_date')->getPattern();
 
     // Ensure that the input is greater than the #min property, if set.
     if (isset($element['#min'])) {
