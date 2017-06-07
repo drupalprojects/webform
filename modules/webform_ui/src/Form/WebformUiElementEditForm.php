@@ -72,6 +72,7 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
     if ($this->isModalDialog()) {
       $form['delete'] = [
         '#type' => 'link',
+        '#title' => $this->t('Delete'),
         '#url' => new Url('entity.webform_ui.element.delete_form', ['webform' => $webform->id(), 'key' => $key]),
         '#attributes' => ['style' => 'display:none'] + WebformDialogHelper::getModalDialogAttributes(700, ['webform-ui-element-delete-link']),
       ];
