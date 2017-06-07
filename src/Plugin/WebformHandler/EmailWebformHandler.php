@@ -779,7 +779,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     }
 
     // Send message.
-    $this->mailManager->mail('webform', 'email.' . $this->getHandlerId(), $to, $current_langcode, $message, $from);
+    $this->mailManager->mail('webform', 'email_' . $this->getHandlerId(), $to, $current_langcode, $message, $from);
 
     // Log message in Drupal's log.
     $context = [
@@ -997,7 +997,14 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   protected function getMailSystemSender() {
     $mailsystem_config = $this->configFactory->get('mailsystem.settings');
-    $mailsystem_sender = $mailsystem_config->get('webform.sender') ?: $mailsystem_config->get('defaults.sender');
+    // Get the default sender
+    $mailsystem_sender = $mailsystem_config->get('defaults.sender');
+    // Look for a global setting for the webform module
+    $mailsystem_sender = $mailsystem_config->get('modules.webform.none.sender') ?: $mailsystem_sender;
+    // Look for a specific setting for this webform module's email
+    $key ='email_' . $this->getHandlerId();
+    $mailsystem_sender = $mailsystem_config->get("modules.webform.$key.sender") ?: $mailsystem_sender;
+
     return $mailsystem_sender;
   }
 
