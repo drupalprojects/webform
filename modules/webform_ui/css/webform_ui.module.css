@@ -13,19 +13,6 @@
 }
 
 /**
- * Custom actions (aka submit buttons).
- */
-.webform-ui-custom-actions {
-  float: right;
-}
-
-@media screen and (max-width: 600px) {
-  .webform-ui-custom-actions {
-    display: none;
-  }
-}
-
-/**
  * Tables
  */
 table .ajax-progress-throbber {
