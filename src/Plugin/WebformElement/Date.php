@@ -77,7 +77,9 @@ class Date extends DateBase {
       $element['#attributes']['data-drupal-date-format'] = [$element['#date_date_format']];
 
       // Format default value.
-      $element['#default_value'] = date($element['#date_date_format'], strtotime($element['#default_value']));
+      if (isset($element['#default_value'])) {
+        $element['#default_value'] = date($element['#date_date_format'], strtotime($element['#default_value']));
+      }
     }
   }
 
