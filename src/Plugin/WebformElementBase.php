@@ -1562,7 +1562,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ];
     }
     $form['element']['value'] = [
-      '#type' => 'textfield',
+      '#type' => 'textarea',
       '#title' => $this->t('Value'),
       '#description' => $this->t('The value of the webform element.'),
     ];
