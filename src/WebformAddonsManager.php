@@ -111,6 +111,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
   protected function initProjects() {
     $projects = [];
 
+    // Element: Webform Crosspage Conditions.
+    $projects['webform_crosspage_conditions'] = [
+      'title' => $this->t('Webform Crosspage Conditions'),
+      'description' => $this->t('Provides the handler that evaluates the field state conditions with the fields from other than current page'),
+      'url' => Url::fromUri('https://github.com/artemvd/webform_crosspage_conditions'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
