@@ -608,6 +608,23 @@ function template_preprocess_webform_message(array &$variables) {
 /******************************************************************************/
 
 /**
+ * Prepares variables for composite element templates.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ */
+function _template_preprocess_webform_composite(array &$variables) {
+  $element = $variables['element'];
+  foreach (Element::children($element) as $key) {
+    if (!isset($element[$key]['#access']) || $element[$key]['#access']) {
+      $variables['content'][$key] = $element[$key];
+    }
+  }
+  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+}
+
+/**
  * Prepares variables for address composite element templates.
  *
  * Default template: webform-element-address.html.twig.
@@ -615,17 +632,9 @@ function template_preprocess_webform_message(array &$variables) {
  * @param array $variables
  *   An associative array containing:
  *   - element: An associative array containing the properties of the element.
- *     Properties used: #title, #value, #options, #description, #required,
- *     #attributes.
  */
 function template_preprocess_webform_composite_address(array &$variables) {
-  $element = $variables['element'];
-  foreach (Element::children($element) as $key) {
-    if ($element[$key]['#access']) {
-      $variables['content'][$key] = $element[$key];
-    }
-  }
-  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+  _template_preprocess_webform_composite($variables);
 }
 
 /**
@@ -636,17 +645,9 @@ function template_preprocess_webform_composite_address(array &$variables) {
  * @param array $variables
  *   An associative array containing:
  *   - element: An associative array containing the properties of the element.
- *     Properties used: #title, #value, #options, #description, #required,
- *     #attributes.
  */
 function template_preprocess_webform_composite_contact(array &$variables) {
-  $element = $variables['element'];
-  foreach (Element::children($element) as $key) {
-    if ($element[$key]['#access']) {
-      $variables['content'][$key] = $element[$key];
-    }
-  }
-  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+  _template_preprocess_webform_composite($variables);
 }
 
 /**
@@ -657,17 +658,22 @@ function template_preprocess_webform_composite_contact(array &$variables) {
  * @param array $variables
  *   An associative array containing:
  *   - element: An associative array containing the properties of the element.
- *     Properties used: #title, #value, #options, #description, #required,
- *     #attributes.
  */
 function template_preprocess_webform_composite_creditcard(array &$variables) {
-  $element = $variables['element'];
-  foreach (Element::children($element) as $key) {
-    if ($element[$key]['#access']) {
-      $variables['content'][$key] = $element[$key];
-    }
-  }
-  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+  _template_preprocess_webform_composite($variables);
+}
+
+/**
+ * Prepares variables for link composite element templates.
+ *
+ * Default template: webform-element-link.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ */
+function template_preprocess_webform_composite_link(array &$variables) {
+  $variables['content'] = $variables['element'];
 }
 
 /**
@@ -678,8 +684,6 @@ function template_preprocess_webform_composite_creditcard(array &$variables) {
  * @param array $variables
  *   An associative array containing:
  *   - element: An associative array containing the properties of the element.
- *     Properties used: #title, #value, #options, #description, #required,
- *     #attributes.
  */
 function template_preprocess_webform_composite_location(array &$variables) {
   $variables['content'] = $variables['element'];
@@ -693,17 +697,9 @@ function template_preprocess_webform_composite_location(array &$variables) {
  * @param array $variables
  *   An associative array containing:
  *   - element: An associative array containing the properties of the element.
- *     Properties used: #title, #value, #options, #description, #required,
- *     #attributes.
  */
 function template_preprocess_webform_composite_name(array &$variables) {
-  $element = $variables['element'];
-  foreach (Element::children($element) as $key) {
-    if ($element[$key]['#access']) {
-      $variables['content'][$key] = $element[$key];
-    }
-  }
-  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+  _template_preprocess_webform_composite($variables);
 }
 
 /**
@@ -714,16 +710,9 @@ function template_preprocess_webform_composite_name(array &$variables) {
  * @param array $variables
  *   An associative array containing:
  *   - element: An associative array containing the properties of the element.
- *     Properties used: #title, #value, #options, #description, #required,
- *     #attributes.
  */
 function template_preprocess_webform_composite_telephone(array &$variables) {
-  $element = $variables['element'];
-  foreach (Element::children($element) as $key) {
-    if ($element[$key]['#access']) {
-      $variables['content'][$key] = $element[$key];
-    }
-  }
+  _template_preprocess_webform_composite($variables);
 }
 
 /******************************************************************************/

@@ -25,6 +25,25 @@ elements: |
       - 'one@example.com'
       - 'two@example.com'
       - 'three@example.com'
+  user:
+    '#type': webform_entity_select
+    '#title': 'user'
+    '#target_type': user
+    '#selection_handler': 'default:user'
+    '#selection_settings':
+      include_anonymous: true
+    '#default_value': 1
+  users:
+    '#type': webform_entity_select
+    '#title': 'user'
+    '#multiple': true
+    '#target_type': user
+    '#selection_handler': 'default:user'
+    '#selection_settings':
+      include_anonymous: true
+    '#default_value':
+      - 0
+      - 1
   name:
     '#type': webform_name
     '#title': name
@@ -112,29 +131,49 @@ settings:
   confirmation_type: page
   confirmation_title: ''
   confirmation_message: |
+    <h3>emails</h3>
     <table class="table">
-    <tr><th>webform_submission:values:email</th><td>[webform_submission:values:email]</td></tr>
-    <tr><th>webform_submission:values:emails</th><td>[webform_submission:values:emails]</td></tr>
-    <tr><th>webform_submission:values:emails:0</th><td>[webform_submission:values:emails:0]</td></tr>
-    <tr><th>webform_submission:values:emails:1</th><td>[webform_submission:values:emails:1]</td></tr>
-    <tr><th>webform_submission:values:emails:2</th><td>[webform_submission:values:emails:2]</td></tr>
-    <tr><th>webform_submission:values:emails:value:comma</th><td>[webform_submission:values:emails:value:comma]</td></tr>
-    <tr><th>webform_submission:values:emails:html</th><td>[webform_submission:values:emails:html]</td></tr>
-    <tr><th>webform_submission:values:emails:0:html</th><td>[webform_submission:values:emails:0:html]</td></tr>
-    <tr><th>webform_submission:values:emails:1:html</th><td>[webform_submission:values:emails:1:html]</td></tr>
-    <tr><th>webform_submission:values:emails:2:html</th><td>[webform_submission:values:emails:2:html]</td></tr>
-    <tr><th>webform_submission:values:emails:99:html</th><td>[webform_submission:values:emails:99]</td></tr>
-    <tr><th>webform_submission:values:name</th><td>[webform_submission:values:name]</td></tr>
-    <tr><th>webform_submission:values:names</th><td>[webform_submission:values:names]</td></tr>
-    <tr><th>webform_submission:values:names:0</th><td>[webform_submission:values:names:0]</td></tr>
-    <tr><th>webform_submission:values:names:1</th><td>[webform_submission:values:names:1]</td></tr>
-    <tr><th>webform_submission:values:names:99</th><td>[webform_submission:values:names:99]</td></tr>
-    <tr><th>webform_submission:values:contact</th><td>[webform_submission:values:contact]</td></tr>
-    <tr><th>webform_submission:values:contacts</th><td>[webform_submission:values:contacts]</td></tr>
-    <tr><th>webform_submission:values:contacts:html</th><td>[webform_submission:values:contacts:html]</td></tr>
-    <tr><th>webform_submission:values:contacts:0:html</th><td>[webform_submission:values:contacts:0:html]</td></tr>
-    <tr><th>webform_submission:values:contacts:0:name</th><td>[webform_submission:values:contacts:0:name]</td></tr>
-    <tr><th>webform_submission:values:contacts:1:name</th><td>[webform_submission:values:contacts:1:name]</td></tr>
+    <tr><th width="50%">webform_submission:values:email</th><td width="50%">[webform_submission:values:email]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails</th><td width="50%">[webform_submission:values:emails]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:0</th><td width="50%">[webform_submission:values:emails:0]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:1</th><td width="50%">[webform_submission:values:emails:1]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:2</th><td width="50%">[webform_submission:values:emails:2]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:value:comma</th><td width="50%">[webform_submission:values:emails:value:comma]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:html</th><td width="50%">[webform_submission:values:emails:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:0:html</th><td width="50%">[webform_submission:values:emails:0:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:1:html</th><td width="50%">[webform_submission:values:emails:1:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:2:html</th><td width="50%">[webform_submission:values:emails:2:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:emails:99:html</th><td width="50%">[webform_submission:values:emails:99]</td></tr>
+    </table>
+
+    <h3>users</h3>
+    <table class="table">
+    <tr><th width="50%">webform_submission:values:user</th><td width="50%">[webform_submission:values:user]</td></tr>
+    <tr><th width="50%">webform_submission:values:users</th><td width="50%">[webform_submission:values:users]</td></tr>
+    <tr><th width="50%">webform_submission:values:user:entity:mail</th><td width="50%">[webform_submission:values:user:entity:mail]</td></tr>
+    <tr><th width="50%">webform_submission:values:users:0:entity:account-name</th><td width="50%">[webform_submission:values:users:0:entity:account-name]</td></tr>
+    <tr><th width="50%">webform_submission:values:users:99:entity:account-name</th><td width="50%">[webform_submission:values:users:99:entity:account-name]</td></tr>
+    </table>
+
+    <h3>names</h3>
+    <table class="table">
+    <tr><th width="50%">webform_submission:values:name</th><td width="50%">[webform_submission:values:name]</td></tr>
+    <tr><th width="50%">webform_submission:values:names</th><td width="50%">[webform_submission:values:names]</td></tr>
+    <tr><th width="50%">webform_submission:values:names:0</th><td width="50%">[webform_submission:values:names:0]</td></tr>
+    <tr><th width="50%">webform_submission:values:names:1</th><td width="50%">[webform_submission:values:names:1]</td></tr>
+    <tr><th width="50%">webform_submission:values:names:99</th><td width="50%">[webform_submission:values:names:99]</td></tr>
+    </table>
+
+    <h3>contacts</h3>
+    <table class="table">
+    <tr><th width="50%">webform_submission:values:contact</th><td width="50%">[webform_submission:values:contact]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts</th><td width="50%">[webform_submission:values:contacts]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:html</th><td width="50%">[webform_submission:values:contacts:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:0:html</th><td width="50%">[webform_submission:values:contacts:0:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:0:name</th><td width="50%">[webform_submission:values:contacts:0:name]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:1:name</th><td width="50%">[webform_submission:values:contacts:1:name]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:0:email:html</th><td width="50%">[webform_submission:values:contacts:0:email:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:1:email:raw:html</th><td width="50%">[webform_submission:values:contacts:1:email:raw:html]</td></tr>
     </table>
   confirmation_url: ''
   confirmation_attributes: {  }

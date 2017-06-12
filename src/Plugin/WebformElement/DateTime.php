@@ -53,7 +53,7 @@ class DateTime extends DateBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Must define a '#default_value' for Datetime element to prevent the
     // below error.
     // Notice: Undefined index: #default_value in Drupal\Core\Datetime\Element\Datetime::valueCallback().

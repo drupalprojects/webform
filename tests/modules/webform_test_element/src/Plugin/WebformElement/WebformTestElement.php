@@ -7,20 +7,20 @@ use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
- * Provides a 'webform_test' element.
+ * Provides a 'webform_test_element' element.
  *
  * @WebformElement(
- *   id = "webform_test",
+ *   id = "webform_test_element",
  *   label = @Translation("Test element"),
  *   description = @Translation("Provides a form element for testing.")
  * )
  */
-class WebformTest extends WebformElementBase {
+class WebformTestElement extends WebformElementBase {
 
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     $this->displayMessage(__FUNCTION__);
     $element['#element_validate'][] = [get_class($this), 'validate'];
   }
@@ -124,7 +124,7 @@ class WebformTest extends WebformElementBase {
    * Form API callback. Convert password confirm array to single value.
    */
   public static function validate(array &$element, FormStateInterface $form_state) {
-    drupal_set_message(t('Invoked: Drupal\webform_test_element\Plugin\WebformElement\WebformTest::validate'));
+    drupal_set_message(t('Invoked: Drupal\webform_test_element\Plugin\WebformElement\WebformTestElement::validate'));
   }
 
 }

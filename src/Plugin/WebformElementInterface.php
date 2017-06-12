@@ -270,9 +270,12 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    * @param array $element
    *   An element.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
+   *   A webform submission. Webform submission is optional
+   *   since it is not used by composite sub elements.
+   *
+   * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComposite
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission);
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL);
 
   /**
    * Finalize an element to be rendered within a webform.
@@ -280,9 +283,12 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    * @param array $element
    *   An element.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
+   *   A webform submission. Webform submission is optional
+   *   since it is not used by composite sub elements.
+   *
+   * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComposite
    */
-  public function finalize(array &$element, WebformSubmissionInterface $webform_submission);
+  public function finalize(array &$element, WebformSubmissionInterface $webform_submission = NULL);
 
   /**
    * Check element access (rules).
@@ -417,6 +423,21 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function formatText(array $element, WebformSubmissionInterface $webform_submission, array $options = []);
 
   /**
+   * Get an element's submission value.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's submission value.
+   */
+  public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []);
+
+    /**
    * Get an element's available single value formats.
    *
    * @return array

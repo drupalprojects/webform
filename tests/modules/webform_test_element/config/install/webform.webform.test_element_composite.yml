@@ -8,18 +8,18 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_plugin_test
-title: 'Test: Element: Test (plugin)'
-description: 'Test the webform element plugin integration and method invoking.'
+id: test_element_composite
+title: 'Test: Element: Composite'
+description: 'Test the webform composite element.'
 category: 'Test: Element'
 elements: |
-  description:
-    '#markup': |
-      <p>This webform includes a #test elememt which will trigger all methods associated with a WebformElement plugin.</p>
-  test:
-    '#type': webform_test
-    '#title': 'This is a test element'
-    '#default_value': '{default_value}'
+  webform_test_composite:
+    '#type': webform_test_composite
+    '#title': webform_test_composite
+  webform_test_composite_multiple:
+    '#type': webform_test_composite
+    '#title': webform_test_composite_multiple
+    '#multiple': true
 css: ''
 javascript: ''
 settings:
@@ -42,7 +42,6 @@ settings:
   form_disable_back: false
   form_autofocus: false
   form_details_toggle: false
-  submission_label: ''
   submission_log: false
   wizard_progress_bar: true
   wizard_progress_pages: false

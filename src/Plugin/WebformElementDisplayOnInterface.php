@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\webform\Plugin\WebformElement;
+namespace Drupal\webform\Plugin;
 
 /**
  * Provides a 'display_on' interface hide/show element on form and/or view display.
  */
-interface WebformDisplayOnInterface {
+interface WebformElementDisplayOnInterface {
 
   /**
    * Denotes display on both form and view displays.

@@ -272,6 +272,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /****************************************************************************/
 
   /**
+   * Get the Webform element's form element class definition.
+   *
+   * @return string
+   *   A form element class definition.
+   */
+  protected function getFormElementClassDefinition() {
+    $definition = $this->elementInfo->getDefinition($this->getPluginId());
+    return $definition['class'];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getPluginApiUrl() {
@@ -492,24 +503,26 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
-    // Add webform and webform_submission IDs to every element.
-    $element['#webform'] = $webform_submission->getWebform()->id();
-    $element['#webform_submission'] = $webform_submission->id();
-
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     $attributes_property = ($this->hasWrapper($element)) ? '#wrapper_attributes' : '#attributes';
 
-    // Check is the element is disabled and hide it.
-    if ($this->isDisabled()) {
-      if ($webform_submission->getWebform()->access('edit')) {
-        $this->displayDisabledWarning($element);
-      }
-      $element['#access'] = FALSE;
-    }
+    if ($webform_submission) {
+      // Add webform and webform_submission IDs to every element.
+      $element['#webform'] = $webform_submission->getWebform()->id();
+      $element['#webform_submission'] = $webform_submission->id();
 
-    // Apply element specific access rules.
-    $operation = ($webform_submission->isCompleted()) ? 'update' : 'create';
-    $element['#access'] = $this->checkAccessRules($operation, $element);
+      // Check is the element is disabled and hide it.
+      if ($this->isDisabled()) {
+        if ($webform_submission->getWebform()->access('edit')) {
+          $this->displayDisabledWarning($element);
+        }
+        $element['#access'] = FALSE;
+      }
+
+      // Apply element specific access rules.
+      $operation = ($webform_submission->isCompleted()) ? 'update' : 'create';
+      $element['#access'] = $this->checkAccessRules($operation, $element);
+    }
 
     // Add #allowed_tags.
     $allowed_tags = $this->configFactory->get('webform.settings')->get('element.allowed_tags');
@@ -628,13 +641,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $this->prepareWrapper($element);
 
     // Replace tokens for all properties.
-    $this->replaceTokens($element, $webform_submission);
+    if ($webform_submission) {
+      $this->replaceTokens($element, $webform_submission);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function finalize(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function finalize(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Prepare multiple element.
     $this->prepareMultipleWrapper($element);
   }
@@ -1083,36 +1098,28 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
-   * Get an element's submission value.
-   *
-   * @param array $element
-   *   An element.
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return array|string
-   *   The element's submission value.
+   * {@inheritdoc}
    */
-  protected function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     if (!isset($element['#webform_key']) && isset($element['#value'])) {
       return $element['#value'];
     }
 
-    $value = $webform_submission->getData($element['#webform_key']);
+    $webform_key = (isset($options['webform_key'])) ? $options['webform_key'] : $element['#webform_key'];
+    $value = $webform_submission->getData($webform_key);
 
     // Return multiple (delta) value or composite (composite_key) value.
     if (is_array($value)) {
       // Return $options['delta'] which is used by tokens.
       // @see _webform_token_get_submission_value()
-      if (isset($options['delta']) && isset($value[$options['delta']])) {
-        return $value[$options['delta']];
+      if (isset($options['delta'])) {
+        $value = (isset($value[$options['delta']])) ? $value[$options['delta']] : NULL;
       }
+
       // Return $options['composite_key'] which is used by composite elements.
       // @see \Drupal\webform\Plugin\WebformElement\WebformCompositeBase::formatTableColumn
-      elseif (isset($options['composite_key']) && isset($value[$options['composite_key']])) {
-        return $value[$options['composite_key']];
+      if ($value && isset($options['composite_key'])) {
+        $value = (isset($value[$options['composite_key']])) ? $value[$options['composite_key']] : NULL;
       }
     }
 

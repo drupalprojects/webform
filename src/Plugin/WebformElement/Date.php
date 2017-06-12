@@ -44,7 +44,7 @@ class Date extends DateBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Unset unsupported date format for date elements that are not using a
     // datepicker.
     if (empty($element['#datepicker'])) {

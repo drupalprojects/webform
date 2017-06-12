@@ -76,7 +76,7 @@ drush features-export -y webform_demo_application_evaluation
 drush features-export -y webform_demo_event_registration
 drush features-export -y webform_examples
 drush features-export -y webform_templates
-drush features-export -y webform_test
+drush features-export -y webform_testdrush cr
 drush features-export -y webform_test_element
 drush features-export -y webform_test_handler
 drush features-export -y webform_test_options

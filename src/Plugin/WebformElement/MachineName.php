@@ -21,7 +21,7 @@ class MachineName extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
     // Since all elements are place under the $form['elements'] we need to
     // prepend the 'element' container to the #machine_name source.

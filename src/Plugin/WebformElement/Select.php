@@ -43,7 +43,7 @@ class Select extends OptionsBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     if (empty($element['#multiple'])) {
       if (!isset($element['#empty_option'])) {
         $element['#empty_option'] = empty($element['#required']) ? $this->t('- Select -') : $this->t('- None -');

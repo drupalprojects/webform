@@ -8,6 +8,7 @@ use Drupal\Core\Form\OptGroup;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementBase;
+use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -84,7 +85,7 @@ abstract class OptionsBase extends WebformElementBase {
     $elements = $this->elementManager->getInstances();
     foreach ($related_types as $type => $related_type) {
       $element_instance = $elements[$type];
-      if ($element_instance instanceof WebformEntityReferenceInterface) {
+      if ($element_instance instanceof WebformElementEntityReferenceInterface) {
         unset($related_types[$type]);
       }
     }
@@ -94,7 +95,7 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
     // Randomize options.
@@ -159,7 +160,7 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = parent::getValue($element, $webform_submission, $options);
 
     $format = $this->getItemFormat($element);

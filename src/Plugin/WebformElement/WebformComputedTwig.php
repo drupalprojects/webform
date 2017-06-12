@@ -101,11 +101,4 @@ class WebformComputedTwig extends WebformComputedBase {
     }
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function processValue(array $element, WebformSubmissionInterface $webform_submission) {
-    return WebformComputedTwigElement::processValue($element, $webform_submission);
-  }
-
 }

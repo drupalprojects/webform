@@ -1134,6 +1134,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         $element_handler = $element_manager->getElementInstance($element);
 
         // Initialize the element.
+        // Note: Composite sub elements are initialized via
+        // \Drupal\webform\Plugin\WebformElement\WebformCompositeBase::initialize
+        // and stored in the '#webform_composite_elements' property.
         $element_handler->initialize($element);
 
         // Track managed file upload.

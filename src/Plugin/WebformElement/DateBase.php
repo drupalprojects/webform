@@ -31,7 +31,7 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Don't used 'datetime_wrapper', instead use 'form_element' wrapper.
     // Note: Below code must be executed before parent::prepare().
     // @see \Drupal\Core\Datetime\Element\Datelist
@@ -271,6 +271,24 @@ abstract class DateBase extends WebformElementBase {
    * Webform element pre validation handler for Date elements.
    */
   public static function preValidateDate(&$element, FormStateInterface $form_state, &$complete_form) {
+    // ISSUE:
+    // Date list in composite element is missing the date object.
+    // WORKAROUND:
+    // Manually set the date object,
+    $date_element_types = [
+      'datelist' => '\Drupal\Core\Datetime\Element\Datelist',
+      'datetime' => '\Drupal\Core\Datetime\Element\Datetime',
+    ];
+    if (isset($date_element_types[$element['#type']])) {
+      $date_class =  $date_element_types[$element['#type']];
+      $input_exists = FALSE;
+      $input = NestedArray::getValue($form_state->getValues(), $element['#parents'], $input_exists);
+      if (!isset($input['object'])) {
+        $input = $date_class::valueCallback($element, $input, $form_state);
+        $form_state->setValueForElement($element, $input);
+      }
+    }
+
     // ISSUE:
     // When datelist is nested inside a webform_multiple element the $form_state
     // value is not being properly set.

@@ -4,12 +4,13 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
+use Drupal\webform\Plugin\WebformElementDisplayOnInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a base 'markup' element.
  */
-abstract class WebformMarkupBase extends WebformElementBase implements WebformDisplayOnInterface {
+abstract class WebformMarkupBase extends WebformElementBase implements WebformElementDisplayOnInterface {
 
   use WebformDisplayOnTrait;
 
@@ -40,7 +41,7 @@ abstract class WebformMarkupBase extends WebformElementBase implements WebformDi
   /**
  * {@inheritdoc}
  */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
     // Hide element if it should not be displayed on 'form'.

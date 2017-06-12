@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Entity\Element\EntityAutocomplete as EntityAutocompleteElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
+use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -18,7 +19,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("Entity reference elements"),
  * )
  */
-class EntityAutocomplete extends WebformElementBase implements WebformEntityReferenceInterface {
+class EntityAutocomplete extends WebformElementBase implements WebformElementEntityReferenceInterface {
 
   use WebformEntityReferenceTrait;
 
@@ -46,8 +47,10 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
     // @see \Drupal\Core\Entity\Element\EntityAutocomplete::valueCallback.
     $element['#process_default_value'] = FALSE;
     if (isset($element['#default_value']) && (!empty($element['#default_value']) || $element['#default_value'] === 0)) {
+      $target_type = $this->getTargetType($element);
+      $entity_storage = $this->entityTypeManager->getStorage($target_type);
       if ($this->hasMultipleValues($element)) {
-        $entities = $this->getTargetEntities($element, $element['#default_value']);
+        $entities = $entity_storage->loadMultiple($element['#default_value']);
         $element['#default_value'] = [];
         if ($entities) {
           if (!empty($element['#multiple'])) { // #multiple requires an array.
@@ -61,8 +64,8 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
         }
       }
       else {
-        $entity = $this->getTargetEntity($element, $element['#default_value']);
-        $element['#default_value'] = ($entity) ? EntityAutocompleteElement::getEntityLabels([$entity]) : NULL;
+        $entities = $entity_storage->loadMultiple([$element['#default_value']]);
+        $element['#default_value'] = ($entities) ? EntityAutocompleteElement::getEntityLabels($entities) : NULL;
       }
     }
     else {
@@ -99,7 +102,7 @@ class EntityAutocomplete extends WebformElementBase implements WebformEntityRefe
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission) {
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
     // If #tags (aka multiple entities) use #after_builder to set #element_value
     // which must be executed after

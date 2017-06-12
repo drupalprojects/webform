@@ -11,6 +11,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -103,14 +104,21 @@ function webform_token_info() {
       '<li>element_key:delta</li>' .
       '<li>element_key:sub_element_key</li>' .
       '<li>element_key:delta:sub_element_key</li>' .
+      '<li>element_key:sub_element_key:format</li>' .
+      '<li>element_key:delta:sub_element_key:format</li>' .
       '<li>element_key:delta:format</li>' .
       '<li>element_key:delta:format:html</li>' .
+      '<li>element_key:entity:*</li>' .
+      '<li>element_key:delta:entity:*</li>' .
+      '<li>element_key:sub_element_key:entity:*</li>' .
+      '<li>element_key:delta:sub_element_key:entity:*</li>' .
       '</ul>' .
       t("All items after the 'element_key' are optional.") . '<br/>' .
       t("The 'delta' is the numeric index for specific value") . '<br/>' .
       t("The 'sub_element_key' is a composite element's sub element key.") . '<br/>' .
       t("The 'format' can be 'value', 'raw', or custom format specifically associated with the element") . '<br/>' .
       t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . '<br/>' .
+      t("The 'entity:*' applies to the referenced entity") . '<br/>' .
       t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br/>' .
       t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token.")
     , []),
@@ -417,7 +425,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
     if ($value_tokens = $token_service->findWithPrefix($tokens, 'values')) {
       foreach ($value_tokens as $value_token => $original) {
-        $value = _webform_token_get_submission_value($value_token, $options, $webform_submission, $form_elements, $element_manager);
+        $value = _webform_token_get_submission_value($value_token, $options, $webform_submission, $form_elements, $element_manager, $bubbleable_metadata);
         if ($value !== NULL) {
           $replacements[$original] = $value;
         }
@@ -516,7 +524,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   return $replacements;
 }
 
-function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, array $form_elements, WebformElementManagerInterface $element_manager) {
+function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, array $form_elements, WebformElementManagerInterface $element_manager, BubbleableMetadata $bubbleable_metadata) {
   $submission_data = $webform_submission->getData();
 
   // Formats:
@@ -549,10 +557,6 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   // If multiple value element look for delta.
   if ($keys && $element_handler->hasMultipleValues($element) && is_numeric($keys[0])) {
     $delta = array_shift($keys);
-    if (!isset($submission_data[$element_key][$delta])) {
-      return NULL;
-    }
-
     $options['delta'] = $delta;
   }
   else {
@@ -560,20 +564,48 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // If composite element look for sub-element key.
-  if ($keys && $element_handler->isComposite()) {
-    // Return sub-element value without any formatting.
-    // @todo: Add support for formatting sub-elements,
-    if (!is_null($delta) && isset($submission_data[$element_key][$delta]) && isset($submission_data[$element_key][$delta][$keys[0]])) {
-      return $submission_data[$element_key][$delta][$keys[0]];
+  if ($keys && $element_handler->isComposite() && $element_handler->getCompositeElements($keys[0])) {
+    $composite_key = array_shift($keys);
+    $options['composite_key'] = $composite_key;
+  }
+  else {
+    $composite_key = NULL;
+  }
+
+  // Set entity reference chaining.
+  if ($keys && $keys[0] == 'entity' && $element_handler instanceof WebformElementEntityReferenceInterface) {
+    // Remove entity from keys.
+    array_shift($keys);
+
+    // Get entity value, type, instance, and token.
+    if ($entity = $element_handler->getTargetEntity($element, $webform_submission, $options)) {
+      $entity_type = $entity->getEntityTypeId();
+      $entity_token = implode(':', $keys);
+      $replacements = \Drupal::token()->generate(
+        $entity_type,
+        [$entity_token => "[$entity_type:$entity_token]"],
+        [$entity_type => $entity],
+        $options,
+        $bubbleable_metadata
+      );
+      return ($replacements) ? reset($replacements) : '';
     }
-    elseif (isset($submission_data[$element_key][$keys[0]])) {
-      return $submission_data[$element_key][$keys[0]];
+    else {
+      return '';
     }
   }
 
   // Set format and items format.
   if ($keys) {
-    $element['#format'] = array_shift($keys);
+    if ($composite_key) {
+      // Must set '#webform_composite_elements' format.
+      // @see \Drupal\webform\Plugin\WebformElement\WebformCompositeBase::initialize
+      // @see \Drupal\webform\Plugin\WebformElement\WebformCompositeBase::getInitializedCompositeElement
+      $element['#webform_composite_elements'][$composite_key]['#format'] = array_shift($keys);
+    }
+    else {
+      $element['#format'] = array_shift($keys);
+    }
   }
   if ($keys) {
     $element['#format_items'] = array_shift($keys);

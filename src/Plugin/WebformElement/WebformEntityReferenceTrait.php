@@ -27,7 +27,7 @@ trait WebformEntityReferenceTrait {
       if ($plugin_id == $element_instance->getPluginId()) {
         continue;
       }
-      if ($element_instance instanceof WebformEntityReferenceInterface) {
+      if ($element_instance instanceof WebformElementEntityReferenceInterface) {
         $types[$element_name] = $element_instance->getPluginLabel();
       }
     }
@@ -39,9 +39,7 @@ trait WebformEntityReferenceTrait {
    * {@inheritdoc}
    */
   public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
-
-    $entity = $this->getTargetEntity($element, $value, $options);
+    $entity = $this->getTargetEntity($element, $webform_submission, $options);
     if (!$entity) {
       return '';
     }
@@ -72,9 +70,7 @@ trait WebformEntityReferenceTrait {
    * {@inheritdoc}
    */
   public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
-
-    $entity = $this->getTargetEntity($element, $value, $options);
+    $entity = $this->getTargetEntity($element, $webform_submission, $options);
     if (!$entity) {
       return '';
     }
@@ -261,61 +257,41 @@ trait WebformEntityReferenceTrait {
   }
 
   /**
-   * Get referenced entity type..
-   *
-   * @param array $element
-   *   An element.
-   *
-   * @return string
-   *   A entity type.
+   * {@inheritdoc}
    */
-  protected function getTargetType(array $element) {
+  public function getTargetType(array $element) {
     return $element['#target_type'];
   }
 
   /**
-   * Get referenced entity.
-   *
-   * @param array $element
-   *   An element.
-   * @param array|mixed $value
-   *   A value.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   The referenced entity.
+   * {@inheritdoc}
    */
-  protected function getTargetEntity(array $element, $value, array $options = []) {
+  public function getTargetEntity(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
     if (empty($value)) {
       return NULL;
     }
-    elseif ($value instanceof EntityInterface) {
-      return $value;
-    }
-
-    $entities = $this->getTargetEntities($element, [$value], $options);
+    $entities = $this->getTargetEntities($element, $webform_submission, $options);
     return reset($entities);
   }
 
   /**
-   * Get referenced entities.
-   *
-   * @param array $element
-   *   An element.
-   * @param array|mixed $value
-   *   A value.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return array
-   *   An associative array containing entities keyed by entity_id.
+   * {@inheritdoc}
    */
-  protected function getTargetEntities(array $element, $value, array $options = []) {
+  public function getTargetEntities(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
     if (empty($value)) {
       return [];
     }
 
+    if (!is_array($value)) {
+      $value = [$value];
+    }
+
+    // Get translated target entities.
+    // Related to Drupal Core issue #2144377:
+    // Entity reference autocomplete lists
+    // entity labels only in current content language.
     $target_type = $this->getTargetType($element);
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
     $entities = $this->entityTypeManager->getStorage($target_type)->loadMultiple($value);

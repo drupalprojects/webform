@@ -17,11 +17,4 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class WebformComputedToken extends WebformComputedBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function processValue(array $element, WebformSubmissionInterface $webform_submission) {
-    return WebformComputedTokenElement::processValue($element, $webform_submission);
-  }
-
 }

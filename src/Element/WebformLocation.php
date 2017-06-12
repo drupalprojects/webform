@@ -16,6 +16,7 @@ class WebformLocation extends WebformCompositeBase {
    */
   public function getInfo() {
     return parent::getInfo() + [
+      '#theme' => 'webform_composite_location',
       '#api_key' => '',
       '#hidden' => FALSE,
       '#geolocation' => FALSE,
