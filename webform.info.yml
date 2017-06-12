@@ -6,5 +6,5 @@ core: 8.x
 configure: entity.webform.collection
 dependencies:
   - 'drupal:field'
-  - 'drupal:system (>= 8.2)'
+  - 'drupal:system (>= 8.3)'
   - 'drupal:user'
