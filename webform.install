@@ -727,3 +727,11 @@ function webform_update_8049() {
 function webform_update_8050() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2885183: Add support for customized webform submission labels.
+ */
+function webform_update_8051() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

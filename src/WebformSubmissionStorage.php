@@ -395,9 +395,22 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'default' => FALSE,
     ];
 
+    // Submission label.
+    $columns['label'] = [
+      'title' => $this->t('Submission title'),
+      'default' => FALSE,
+      'sort' => FALSE,
+    ];
+
     // UUID.
     $columns['uuid'] = [
       'title' => $this->t('UUID'),
+      'default' => FALSE,
+    ];
+
+    // Draft
+    $columns['in_draft'] = [
+      'title' => $this->t('In draft'),
       'default' => FALSE,
     ];
 

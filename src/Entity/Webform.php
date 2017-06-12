@@ -708,6 +708,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_disable_back' => FALSE,
       'form_autofocus' => FALSE,
       'form_details_toggle' => FALSE,
+      'submission_label' => '',
       'submission_log' => FALSE,
       'wizard_progress_bar' => TRUE,
       'wizard_progress_pages' => FALSE,

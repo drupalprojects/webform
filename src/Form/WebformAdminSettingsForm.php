@@ -387,6 +387,19 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $settings['default_draft_loaded_message'],
     ];
 
+    // Submission settings.
+    $form['webform']['submission_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission settings'),
+      '#tree' => TRUE,
+    ];
+    $form['webform']['submission_settings']['default_submission_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default submission label'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_submission_label'],
+    ];
+
     // Submission Behaviors.
     $form['webform']['submission_behaviors'] = [
       '#type' => 'details',
@@ -501,6 +514,10 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     }
     else {
       ksort($form['webform']['third_party_settings']);
+    }
+    // Move #validate from webform details element to the main form object.
+    if (!empty($form['webform']['#validate'])) {
+      $form['#validate'] = $form['webform']['#validate'];
     }
 
     // Webform: Test.
@@ -1104,6 +1121,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       + $form_state->getValue('wizard_settings')
       + $form_state->getValue('preview_settings')
       + $form_state->getValue('draft_settings')
+      + $form_state->getValue('submission_settings')
       + $form_state->getValue('submission_behaviors')
       + $form_state->getValue('confirmation_settings')
       + $form_state->getValue('submission_limits');

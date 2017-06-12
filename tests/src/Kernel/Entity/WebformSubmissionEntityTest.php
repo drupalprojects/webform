@@ -22,30 +22,60 @@ class WebformSubmissionEntityTest extends KernelTestBase {
   public static $modules = ['system', 'webform', 'user', 'field'];
 
   /**
-   * Test missing webform id exception.
-   *
-   * @expectedException \Exception
+   * {@inheritdoc}
    */
-  public function testMissingWebformIdException() {
-    WebformSubmission::create();
+  public function setUp() {
+    parent::setUp();
+
+    $this->installConfig('webform');
+    $this->installEntitySchema('webform_submission');
+    $this->installEntitySchema('user');
   }
 
   /**
    * Tests some of the methods.
    */
   public function testWebformMethods() {
+    $this->installConfig('webform');
+
     /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = Webform::create(['id' => 'webform_test']);
+    $webform = Webform::create(['id' => 'webform_test', 'title' => 'Test']);
+    $elements = [
+      'name' => [
+        '#type' => 'textfield',
+        '#title' => 'name',
+      ],
+    ];
+    $webform->setElements($elements);
+    $webform->save();
     $webform->save();
 
     // Create webform submission.
     $values = [
       'id' => 'webform_submission_test',
       'webform_id' => $webform->id(),
+      'data' => ['name' => 'John Smith'],
     ];
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = WebformSubmission::create($values);
+    $webform_submission->save();
     $this->assertEquals($webform->uuid(), $webform_submission->getWebform()->uuid());
+
+    // Check default submission label.
+    $this->assertEquals($webform_submission->label(), 'Test: Submission #1');
+
+    // Check customizing admin settings submission label.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('settings.default_submission_label', 'Submission #[webform_submission:serial]')
+      ->save();
+    $this->assertEquals($webform_submission->label(), 'Submission #1');
+
+    // Check customizing webform specific submission label.
+    $webform = $webform_submission->getWebform();
+    $webform->setSetting('submission_label', 'Submitted by [webform_submission:values:name]')
+      ->save();
+    $this->assertEquals($webform->getSetting('submission_label'), 'Submitted by [webform_submission:values:name]');
+    $this->assertEquals($webform_submission->label(), 'Submitted by John Smith');
 
     // @todo Add the below assertions.
     // Check source entity.

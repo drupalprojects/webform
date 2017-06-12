@@ -490,6 +490,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return $entity->id();
 
       case 'serial':
+      case 'label':
         // Note: Using source entity associate with the submission and not
         // the current webform.
         if ($entity->isDraft()) {
@@ -503,8 +504,16 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         else {
           $link_url = $this->requestHandler->getUrl($entity, $entity->getSourceEntity(), $this->getSubmissionRouteName());
         }
-        $link_text = $entity->serial() . ($entity->isDraft() ? ' (' . $this->t('draft') . ')' : '');
+        if ($name == 'serial') {
+          $link_text = $entity->serial() . ($entity->isDraft() ? ' (' . $this->t('draft') . ')' : '');
+        }
+        else {
+          $link_text = $entity->label();
+        }
         return Link::fromTextAndUrl($link_text, $link_url);
+
+      case 'in_draft':
+        return ($entity->isDraft()) ? $this->t('Yes') : $this->t('No');
 
       case 'sticky':
         $route_name = 'entity.webform_submission.sticky_toggle';
@@ -681,7 +690,23 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $query->addMetaData('webform_submission_element_direction', $direction);
     }
     else {
-      $query->tableSort($header);
+      $order = \Drupal::request()->query->get('order', '');
+      if ($order) {
+        $query->tableSort($header);
+      }
+      else {
+        // If no order is specified, make sure the first column is sortable,
+        // else default sorting to the sid.
+        // @see \Drupal\Core\Entity\Query\QueryBase::tableSort
+        // @see tablesort_get_order()
+        $default = reset($header);
+        if (isset($default['specified'])) {
+          $query->tableSort($header);
+        }
+        else {
+          $query->sort('sid', 'DESC');
+        }
+      }
     }
 
     return $query->execute();

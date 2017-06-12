@@ -211,14 +211,9 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    * {@inheritdoc}
    */
   public function label() {
-    $t_args = ['@id' => $this->serial()];
-    if ($source_entity = $this->getSourceEntity()) {
-      $t_args['@form'] = $source_entity->label();
-    }
-    else {
-      $t_args['@form'] = $this->getWebform()->label();
-    }
-    return $this->t('@form: Submission #@id', $t_args);
+    $submission_label = $this->getWebform()->getSetting('submission_label')
+      ?: \Drupal::config('webform.settings')->get('settings.default_submission_label');
+    return \Drupal::service('webform.token_manager')->replace($submission_label, $this);
   }
 
   /**

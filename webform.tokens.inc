@@ -147,6 +147,11 @@ function webform_token_info() {
     'description' => t('The source entity that the webform submission was submitted from.'),
     'type' => 'entity',
   ];
+  $webform_submission['submitted-to'] = [
+    'name' => t('Submitted to'),
+    'description' => t('The source entity or webform that the webform submission was submitted from.'),
+    'type' => 'entity',
+  ];
 
   $tokens['webform_submission'] = $webform_submission;
 
@@ -166,7 +171,7 @@ function webform_token_info() {
     'description' => t('The ID of the webform.'),
   ];
   $webform['title'] = [
-    'name' => t('title'),
+    'name' => t('Title'),
     'description' => t('The title of the webform.'),
   ];
   $webform['description'] = [
@@ -391,6 +396,13 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
             $replacements[$original] = '';
           }
           break;
+
+        case 'submitted-to':
+          $submitted_to = $webform_submission->getSourceEntity() ?: $webform_submission->getWebform();
+          $bubbleable_metadata->addCacheableDependency($submitted_to);
+          $replacements[$original] = $submitted_to->label();
+          break;
+
       }
     }
 
@@ -431,6 +443,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
     if (($source_entity_tokens = $token_service->findWithPrefix($tokens, 'source-entity')) && ($source_entity = $webform_submission->getSourceEntity())) {
       $replacements += $token_service->generate($source_entity->getEntityTypeId(), $source_entity_tokens, [$source_entity->getEntityTypeId() => $source_entity], $options, $bubbleable_metadata);
+    }
+    if (($submitted_to_tokens = $token_service->findWithPrefix($tokens, 'submitted-to')) && ($submitted_to = $webform_submission->getSourceEntity() ?: $webform_submission->getWebform())) {
+      $replacements += $token_service->generate($submitted_to->getEntityTypeId(), $submitted_to_tokens, [$submitted_to->getEntityTypeId() => $submitted_to], $options, $bubbleable_metadata);
     }
 
   }

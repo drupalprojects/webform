@@ -546,6 +546,11 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
+    $form['submission_settings']['submission_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Submission label'),
+      '#default_value' => $settings['submission_label'],
+    ];
     $form['submission_settings']['next_serial'] = [
       '#type' => 'number',
       '#title' => $this->t('Next submission number'),
@@ -553,6 +558,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#min' => 1,
       '#default_value' => $webform->getState('next_serial') ?: 1,
     ];
+    $form['submission_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Submission behaviors.
     $form['submission_behaviors'] = [

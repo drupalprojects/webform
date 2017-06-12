@@ -365,6 +365,7 @@ settings:
   form_disable_back: true
   form_autofocus: false
   form_details_toggle: false
+  submission_label: ''
   submission_log: false
   wizard_progress_bar: true
   wizard_progress_pages: true
