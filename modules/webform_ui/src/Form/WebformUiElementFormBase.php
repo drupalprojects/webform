@@ -5,6 +5,7 @@ namespace Drupal\webform_ui\Form;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\SubformState;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
@@ -152,7 +153,10 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
 
     $webform_element = $this->getWebformElement();
 
-    $form['properties'] = $webform_element->buildConfigurationForm([], $form_state);
+    $form['#parents'] = [];
+    $form['properties'] = ['#parents' => ['properties']];
+    $subform_state = SubformState::createForSubform($form['properties'], $form, $form_state);
+    $form['properties'] = $webform_element->buildConfigurationForm($form['properties'], $subform_state);
 
     // Move messages to the top of the webform.
     if (isset($form['properties']['messages'])) {
@@ -273,23 +277,20 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       return;
     }
 
-    // The webform element configuration is stored in the 'properties' key in
-    // the webform, pass that through for validation.
-    $element_form_state = clone $form_state;
-    $element_form_state->setValues($form_state->getValue('properties'));
+    $subform_state = SubformState::createForSubform($form['properties'], $form, $form_state);
 
     // Validate configuration webform.
     $webform_element = $this->getWebformElement();
-    $webform_element->validateConfigurationForm($form, $element_form_state);
+    $webform_element->validateConfigurationForm($form, $subform_state);
 
     // Get errors for element validation.
-    $element_errors = $element_form_state->getErrors();
+    $element_errors = $subform_state->getErrors();
     foreach ($element_errors as $element_error) {
       $form_state->setErrorByName(NULL, $element_error);
     }
 
     // Stop validation if the element properties has any errors.
-    if ($form_state->hasAnyErrors()) {
+    if ($subform_state->hasAnyErrors()) {
       return;
     }
 
@@ -305,7 +306,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     }
 
     // Set element properties.
-    $properties = $webform_element->getConfigurationFormProperties($form, $element_form_state);
+    $properties = $webform_element->getConfigurationFormProperties($form, $subform_state);
     if ($key) {
       $this->key = $key;
       $this->webform->setElementProperties($key, $properties, $parent_key);
@@ -329,14 +330,13 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
 
     // The webform element configuration is stored in the 'properties' key in
     // the webform, pass that through for submission.
-    $element_form_state = clone $form_state;
-    $element_form_state->setValues($form_state->getValue('properties'));
+    $subform_state = SubformState::createForSubform($form['properties'], $form, $form_state);
 
     // Submit element configuration.
     // Generally, elements will not be processing any submitted properties.
     // It is possible that a custom element might need to call a third-party API
     // to 'register' the element.
-    $webform_element->submitConfigurationForm($form, $element_form_state);
+    $webform_element->submitConfigurationForm($form, $subform_state);
 
     // Save the webform with its updated element.
     $this->webform->save();

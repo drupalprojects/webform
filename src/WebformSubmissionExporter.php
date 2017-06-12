@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\SubformState;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -320,7 +321,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       '#attributes' => ['class' => ['js-webform-exporter']],
     ];
     foreach ($exporter_plugins as $plugin_id => $exporter) {
-      $form['export']['format'] = $exporter->buildConfigurationForm($form['export']['format'], $form_state);
+      $subform_state = SubformState::createForSubform($form['export']['format'], $form, $form_state);
+      $form['export']['format'] = $exporter->buildConfigurationForm($form['export']['format'], $subform_state);
     }
 
     // Element.
@@ -409,7 +411,8 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     $element_handlers = $this->elementManager->getInstances();
     foreach ($element_handlers as $element_type => $element_handler) {
       if (empty($element_types) || isset($element_types[$element_type])) {
-        $element_handler->buildExportOptionsForm($form['export']['elements'], $form_state, $export_options);
+        $subform_state = SubformState::createForSubform($form['export']['elements'], $form, $form_state);
+        $element_handler->buildExportOptionsForm($form['export']['elements'], $subform_state, $export_options);
       }
     }
 
