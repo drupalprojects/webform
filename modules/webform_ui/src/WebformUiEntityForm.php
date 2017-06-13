@@ -237,9 +237,6 @@ class WebformUiEntityForm extends WebformEntityForm {
         if (isset($element['#theme'])) {
           $element['#type'] = $element['#theme'];
         }
-        elseif (isset($element['#markup'])) {
-          $element['#type'] = 'markup';
-        }
         else {
           $element['#type'] = '';
         }
