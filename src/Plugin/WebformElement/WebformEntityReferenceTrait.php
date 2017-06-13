@@ -3,7 +3,6 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\TypedData\TranslatableInterface;

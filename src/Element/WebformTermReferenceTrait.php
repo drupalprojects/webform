@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\webform\Element;
+
 use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
