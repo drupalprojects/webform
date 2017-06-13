@@ -426,6 +426,16 @@ function webform_css_alter(&$css, AttachedAssetsInterface $assets) {
  * @see \Drupal\webform\WebformSubmissionForm::form
  */
 function webform_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  // Add Google API key required by webform/libraries.jquery.geocomplete
+  // which is dependency for webform/webform.element.location.
+  // @see \Drupal\webform\Element\WebformLocation::processWebformComposite
+  // @see webform.libraries.yml
+  $settings = $assets->getSettings();
+  if (!empty($settings['webform']['location']['google_maps_api_key'])) {
+    $api_key = $settings['webform']['location']['google_maps_api_key'];
+    $javascript['https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places']['data'] = "https://maps.googleapis.com/maps/api/js?key=$api_key&libraries=places";
+  }
+
   _webform_asset_alter($javascript, $assets, 'javascript', 'js');
 }
 
