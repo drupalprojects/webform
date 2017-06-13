@@ -6,6 +6,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\webform\Element\WebformEntityTrait;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -296,7 +297,7 @@ trait WebformEntityReferenceTrait {
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
     $entities = $this->entityTypeManager->getStorage($target_type)->loadMultiple($value);
     foreach ($entities as $entity_id => $entity) {
-      if ($entity->hasTranslation($langcode)) {
+      if ($entity instanceof TranslatableInterface && $entity->isTranslatable() && $entity->hasTranslation($langcode)) {
         $entities[$entity_id] = $entity->getTranslation($langcode);
       }
     }

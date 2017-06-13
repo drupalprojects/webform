@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\webform\Element;
+use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
  * Trait for term reference elements.
@@ -53,7 +54,7 @@ trait WebformTermReferenceTrait {
     $options = [];
     $breadcrumb = [];
     foreach ($tree as $item) {
-      if ($item->isTranslatable() && $item->hasTranslation($language)) {
+      if ($item instanceof TranslatableInterface && $item->isTranslatable() && $item->hasTranslation($language)) {
         $item = $item->getTranslation($language);
       }
       $breadcrumb[$item->depth] = $item->getName();
@@ -83,7 +84,7 @@ trait WebformTermReferenceTrait {
 
     $options = [];
     foreach ($tree as $item) {
-      if ($item->isTranslatable() && $item->hasTranslation($language)) {
+      if ($item instanceof TranslatableInterface && $item->isTranslatable() && $item->hasTranslation($language)) {
         $item = $item->getTranslation($language);
       }
       $options[$item->id()] = str_repeat($element['#tree_delimiter'], $item->depth) . $item->getName();

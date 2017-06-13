@@ -4,6 +4,7 @@ namespace Drupal\webform\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Checkboxes;
+use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
  * Provides a webform element for term checkboxes.
@@ -71,7 +72,7 @@ class WebformTermCheckboxes extends Checkboxes {
 
     $options = [];
     foreach ($tree as $item) {
-      if ($item->isTranslatable() && $item->hasTranslation($language)) {
+      if ($item instanceof TranslatableInterface && $item->isTranslatable() && $item->hasTranslation($language)) {
         $item = $item->getTranslation($language);
       }
       $options[$item->id()] = $item->getName();
