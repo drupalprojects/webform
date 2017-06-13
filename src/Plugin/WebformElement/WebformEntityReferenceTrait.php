@@ -288,17 +288,14 @@ trait WebformEntityReferenceTrait {
       $value = [$value];
     }
 
-    // Get translated target entities.
-    // Related to Drupal Core issue #2144377:
-    // Entity reference autocomplete lists
-    // entity labels only in current content language.
+    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+    $entity_repository = \Drupal::service('entity.repository');
+
     $target_type = $this->getTargetType($element);
-    $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
     $entities = $this->entityTypeManager->getStorage($target_type)->loadMultiple($value);
     foreach ($entities as $entity_id => $entity) {
-      if ($entity instanceof TranslatableInterface && $entity->isTranslatable() && $entity->hasTranslation($langcode)) {
-        $entities[$entity_id] = $entity->getTranslation($langcode);
-      }
+      // Set the entity in the correct language for display.
+      $entities[$entity_id] = $entity_repository->getTranslationFromContext($entity);
     }
     return $entities;
   }
