@@ -171,29 +171,32 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $columns['element__' . $key]['sort'] = FALSE;
 
     // Get individual composite elements.
-    $composite_elements = $this->getInitializedCompositeElement($element);
-    foreach (RenderElement::children($composite_elements) as $composite_key) {
-      $composite_element = $composite_elements[$composite_key];
-      // Make sure the composite element is visible.
-      $access_key = '#' . $composite_key . '__access';
-      if (isset($element[$access_key]) && $element[$access_key] === FALSE) {
-        continue;
-      }
+    if (!$this->hasMultipleValues($element)) {
+      $composite_elements = $this->getInitializedCompositeElement($element);
+      foreach (RenderElement::children($composite_elements) as $composite_key) {
+        $composite_element = $composite_elements[$composite_key];
+        // Make sure the composite element is visible.
+        $access_key = '#' . $composite_key . '__access';
+        if (isset($element[$access_key]) && $element[$access_key] === FALSE) {
+          continue;
+        }
 
-      // Add reference to initialized composite element so that it can be
-      // used by ::formatTableColumn().
-      $columns['element__' . $key . '__' . $composite_key] = [
-        'title' => ($is_title_displayed ? $title . ': ' : '') . (!empty($composite_element['#title']) ? $composite_element['#title'] : $composite_key),
-        'sort' => TRUE,
-        'default' => FALSE,
-        'key' => $key,
-        'element' => $element,
-        'property_name' => $composite_key,
-        'composite_key' => $composite_key,
-        'composite_element' => $composite_element,
-        'plugin' => $this,
-      ];
+        // Add reference to initialized composite element so that it can be
+        // used by ::formatTableColumn().
+        $columns['element__' . $key . '__' . $composite_key] = [
+          'title' => ($is_title_displayed ? $title . ': ' : '') . (!empty($composite_element['#title']) ? $composite_element['#title'] : $composite_key),
+          'sort' => TRUE,
+          'default' => FALSE,
+          'key' => $key,
+          'element' => $element,
+          'property_name' => $composite_key,
+          'composite_key' => $composite_key,
+          'composite_element' => $composite_element,
+          'plugin' => $this,
+        ];
+      }
     }
+
     return $columns;
   }
 
