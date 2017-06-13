@@ -1128,6 +1128,12 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         $element['#access'] = $this->access('submission_view_any');
       }
 
+      // Set #markup type to 'webform_markup' to trigger #display_on behavior.
+      // @see https://www.drupal.org/node/2036237
+      if (empty($element['#type']) && empty($element['#theme']) && isset($element['#markup'])) {
+        $element['#type'] = 'webform_markup';
+      }
+
       $element_handler = NULL;
       if (isset($element['#type'])) {
         // Load the element's handler.
