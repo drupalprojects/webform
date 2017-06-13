@@ -44,6 +44,13 @@ class Captcha extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function isContainer(array $element) {
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getItemDefaultFormat() {
     return NULL;
   }
