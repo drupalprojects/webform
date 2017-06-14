@@ -6,8 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Render\Element\CompositeFormElementTrait;
-use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
-use Drupal\webform\WebformSubmissionForm;
+use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase as WebformManagedFileBasePlugin;
 
 /**
  * Provides an base composite webform element.
@@ -109,7 +108,7 @@ abstract class WebformCompositeBase extends FormElement {
       // destination save and delete callbacks are not setup.
       // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::postSave
       // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::postDelete
-      if ($element_plugin instanceof WebformManagedFileBase) {
+      if ($element_plugin instanceof WebformManagedFileBasePlugin) {
         throw new \Exception('File upload element is not supported within composite elements.');
       }
       if ($element_plugin->hasMultipleValues($composite_element)) {
