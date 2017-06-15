@@ -214,15 +214,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $ckeditor_version = $core_libraries['ckeditor']['version'];
 
     $libraries = [];
-    $libraries['ckeditor.autogrow'] = [
-      'title' => $this->t('CKEditor: Autogrow'),
-      'description' => $this->t('Allows CKEditor to expand and shrink depending on the amount and size of content.'),
-      'notes' => $this->t('Autogrow makes it possible to reduce the size of empty HTML editor while still supporting HTML markup.'),
-      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/autogrow'),
-      'download_url' => Url::fromUri("http://download.ckeditor.com/autogrow/releases/autogrow_$ckeditor_version.zip"),
-      'version' => $ckeditor_version,
-      'optional' => TRUE,
-    ];
     $libraries['ckeditor.fakeobjects'] = [
       'title' => $this->t('CKEditor: Fakeobjects'),
       'description' => $this->t('Utility required by CKEditor link plugin.'),

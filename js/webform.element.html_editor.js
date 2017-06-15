@@ -54,8 +54,10 @@
           removePlugins: 'elementspath,magicline',
           // Toolbar settings.
           format_tags: 'p;h2;h3;h4;h5;h6',
-          // Extra plugins.
-          extraPlugins: ''
+          // Autogrow.
+          extraPlugins: 'autogrow',
+          autoGrow_minHeight: 100,
+          autoGrow_maxHeight: 300
         };
 
         // Add toolbar.
@@ -72,6 +74,7 @@
           else {
             options.toolbar.push({name: 'insert', items: ['SpecialChar']});
           }
+
           // Add link plugin.
           if (plugins['link']) {
             options.extraPlugins += (options.extraPlugins ? ',' : '') + 'link';
@@ -80,13 +83,6 @@
           options.toolbar.push({name: 'colors', items: ['TextColor', 'BGColor']});
           options.toolbar.push({name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']});
           options.toolbar.push({name: 'tools', items: ['Source', '-', 'Maximize']});
-        }
-
-        // Add auto grow plugin.
-        if (plugins['autogrow'] && CKEDITOR.plugins.get('autogrow')) {
-          options.extraPlugins += (options.extraPlugins ? ',' : '') + 'autogrow';
-          options.autoGrow_minHeight = 100;
-          options.autoGrow_maxHeight = 300;
         }
 
         options = $.extend(options, Drupal.webform.htmlEditor.options);

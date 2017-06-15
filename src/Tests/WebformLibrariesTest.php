@@ -70,7 +70,6 @@ class WebformLibrariesTest extends WebformTestBase {
 
     // Exclude optional libraries.
     $edit = [
-      'libraries[excluded_libraries][ckeditor.autogrow]' => FALSE,
       'libraries[excluded_libraries][ckeditor.fakeobjects]' => FALSE,
       'libraries[excluded_libraries][ckeditor.image]' => FALSE,
       'libraries[excluded_libraries][ckeditor.link]' => FALSE,
@@ -104,7 +103,6 @@ class WebformLibrariesTest extends WebformTestBase {
 
     // Check that status report excludes optional libraries
     $this->drupalGet('admin/reports/status');
-    $this->assertText('The CKEditor: Autogrow library is excluded.');
     $this->assertText('The CKEditor: Fakeobjects library is excluded.');
     $this->assertText('The CKEditor: Image library is excluded.');
     $this->assertText('The CKEditor: Link library is excluded.');
