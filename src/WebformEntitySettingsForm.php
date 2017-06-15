@@ -702,6 +702,24 @@ class WebformEntitySettingsForm extends EntityForm {
       '#field_suffix' => $this->t('days'),
     ];
 
+    // Ajax settings.
+    $form['ajax_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Ajax settings'),
+      '#states' => [
+        'visible' => [
+          ':input[name="method"]' => ['value' => ''],
+        ],
+      ],
+    ];
+    $form['ajax_settings']['ajax'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use Ajax'),
+      '#description' => $this->t('If checked, paging, saving of drafts, previews, submissions, and confirmations will not initiate a page refresh.'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['ajax'],
+    ];
+
     // Confirmation settings.
     $form['confirmation_settings'] = [
       '#type' => 'details',
@@ -710,6 +728,14 @@ class WebformEntitySettingsForm extends EntityForm {
         'visible' => [
           ':input[name="method"]' => ['value' => ''],
         ],
+      ],
+    ];
+    $form['confirmation_settings']['ajax_confirmation'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t("Only 'Inline' and 'Message' confirmation types are fully supported by Ajax."),
+      '#states' => [
+        'visible' => [':input[name="ajax"]' => ['checked' => TRUE]],
       ],
     ];
     $form['confirmation_settings']['confirmation_type'] = [

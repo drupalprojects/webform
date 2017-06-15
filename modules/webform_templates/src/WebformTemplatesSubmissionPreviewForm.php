@@ -20,7 +20,7 @@ class WebformTemplatesSubmissionPreviewForm extends WebformSubmissionForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    if ($this->isModalDialog()) {
+    if ($this->isDialog()) {
       // Disable validation.
       $form['#attributes']['novalidate'] = 'novalidate';
 
@@ -57,7 +57,7 @@ class WebformTemplatesSubmissionPreviewForm extends WebformSubmissionForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    if ($this->isModalDialog()) {
+    if ($this->isDialog()) {
       $form_state->clearErrors();
     }
     else {

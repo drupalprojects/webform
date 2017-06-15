@@ -13,8 +13,8 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
-use Drupal\webform\Controller\WebformController;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Form\WebformAjaxFormTrait;
 use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
@@ -279,6 +279,9 @@ class WebformSubmissionForm extends ContentEntityForm {
     $form_id = $this->getFormId();
     $this->thirdPartySettingsManager->alter('webform_submission_form', $form, $form_state, $form_id);
 
+    // Add Ajax callback to form.
+    $this->buildAjaxForm($form, $form_state);
+
     return $form;
   }
 
@@ -465,11 +468,26 @@ class WebformSubmissionForm extends ContentEntityForm {
       return $form;
     }
 
-    // Display inline confirmation message with back to link which is rendered
-    // via the controller.
-    if ($this->getWebformSetting('confirmation_type') == 'inline' && $this->getRequest()->query->get('webform_id') == $webform->id()) {
-      $webform_controller = new WebformController($this->renderer, $this->requestHandler, $this->tokenManager);
-      $form['confirmation'] = $webform_controller->confirmation($this->getRequest(), $webform);
+    // Display inline confirmation message with back to link.
+    if ($form_state->get('current_page') === 'webform_confirmation') {
+      $form['confirmation'] = [
+        '#theme' => 'webform_confirmation',
+        '#webform' => $webform,
+        '#source_entity' => $webform_submission->getSourceEntity(),
+        '#webform_submission' => $webform_submission,
+      ];
+
+      // Add hidden submit button which is used as the Ajax callback.
+      // @see \Drupal\webform\Form\WebformAjaxFormTrait::buildAjaxForm
+      // @see Drupal.behaviors.webformConfirmationBackAjax (js/webform.ajax.js)
+      $form['actions']['submit'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Back'),
+        '#attributes' => [
+          'style' => 'display:none',
+          'class' => ['js-webform-confirmation-back-submit-ajax'],
+        ],
+      ];
       return $form;
     }
 
@@ -478,7 +496,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       // If the current user can update any submission just display the closed
       // message and still allow them to create new submissions.
       if ($webform->isTemplate() && $webform->access('duplicate')) {
-        if (!$this->isModalDialog()) {
+        if (!$this->isDialog()) {
           $this->messageManager->display(WebformMessageManagerInterface::TEMPLATE_PREVIEW, 'warning');
         }
       }
@@ -1003,11 +1021,16 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = $this->getEntity();
 
     // Make sure the uri and remote addr are set correctly because
-    // Ajax requests via 'managed_file' uploads can cause these values to be
-    // reset.
+    // Ajax requests can cause these values to be reset.
     if ($webform_submission->isNew()) {
-      $webform_submission->set('uri', preg_replace('#^' . base_path() . '#', '/', $this->getRequest()->getRequestUri()));
-      $webform_submission->set('remote_addr', ($this->isConfidential()) ? '' : $this->getRequest()->getClientIp());
+      $uri = preg_replace('#^' . base_path() . '#', '/', $this->getRequest()->getRequestUri());
+      // Remove Ajax query string parameters.
+      $uri = preg_replace('/(ajax_form=1|_wrapper_format=drupal_ajax)(&|$)/', '', $uri);
+      // Remove empty query string.
+      $uri = preg_replace('/\?$/', '', $uri);
+      $remote_addr = ($this->isConfidential()) ? '' : $this->getRequest()->getClientIp();
+      $webform_submission->set('uri', $uri);
+      $webform_submission->set('remote_addr', $remote_addr);
     }
 
     // Block users from submitting templates that they can't update.
@@ -1267,7 +1290,12 @@ class WebformSubmissionForm extends ContentEntityForm {
     $route_name = $this->getRouteMatch()->getRouteName();
     $route_parameters = $this->getRouteMatch()->getRawParameters()->all();
     $route_options = [];
-    if ($query = $this->getRequest()->query->all()) {
+
+    // Add current query to route options.
+    $query = $this->getRequest()->query->all();
+    // Remove Ajax parameters from query.
+    unset($query['ajax_form'], $query['_wrapper_format']);
+    if ($query) {
       $route_options['query'] = $query;
     }
 
@@ -1315,23 +1343,22 @@ class WebformSubmissionForm extends ContentEntityForm {
         // If confirmation URL is invalid display message.
         $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
         $route_options['query']['webform_id'] = $webform->id();
-        break;
+        $form_state->setRedirect($route_name, $route_parameters, $route_options);
+        return;
 
       case 'inline':
-        $route_options['query']['webform_id'] = $webform->id();
-        break;
+        $form_state->set('current_page', 'webform_confirmation');
+        $form_state->setRebuild();
+        return;
 
       case 'message':
       default:
-        // Unset token if we are just reloading the current webform.
-        unset($route_options['query']['token']);
         if (!$this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION)) {
           $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
         }
-        break;
+        return;
     }
 
-    $form_state->setRedirect($route_name, $route_parameters, $route_options);
   }
 
   /****************************************************************************/
@@ -1573,7 +1600,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * Returns the webform confidential indicator.
    *
    * @return bool
-   *   TRUE if the webform is confidential .
+   *   TRUE if the webform is confidential.
    */
   protected function isConfidential() {
     return $this->getWebformSetting('form_confidential', FALSE);
@@ -1704,6 +1731,43 @@ class WebformSubmissionForm extends ContentEntityForm {
     else {
       return $default_value;
     }
+  }
+
+  /****************************************************************************/
+  // Ajax functions.
+  // @see \Drupal\webform\Form\WebformAjaxFormTrait
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isAjax() {
+    return $this->getWebformSetting('ajax', FALSE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function cancelAjaxForm(array &$form, FormStateInterface $form_state) {
+    // Get form object.
+    $form_object = $this->entityManager->getFormObject('webform_submission', 'default');
+
+    // Set form entity.
+    $webform_submission = $this->storage->create(['webform_id' => $this->getWebform()->id()]);
+    $form_object->setEntity($webform_submission);
+
+    // Set form state.
+    $form_state = new FormState();
+    $form_state->setFormState([]);
+    $form_state->setUserInput([]);
+
+    // Build form.
+    /** @var \Drupal\Core\Form\FormBuilderInterface $form_builder */
+    $form_builder = \Drupal::service('form_builder');
+    $form = $form_builder->buildForm($form_object, $form_state);
+
+    // Return replace form as response.
+    return $this->replaceForm($form);
   }
 
   /****************************************************************************/

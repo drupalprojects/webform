@@ -158,7 +158,7 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#button_type' => 'primary',
     ];
 
-    return $this->buildFormDialog($form, $form_state);
+    return $this->buildDialogForm($form, $form_state);
   }
 
   /**
@@ -205,14 +205,7 @@ abstract class WebformHandlerFormBase extends FormBase {
       drupal_set_message($this->t('The webform handler was successfully updated.'));
     }
 
-    $form_state->setRedirectUrl($this->getRedirectUrl());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getRedirectUrl() {
-    return $this->webform->toUrl('handlers-form');
+    $form_state->setRedirectUrl($this->webform->toUrl('handlers-form'));
   }
 
   /**

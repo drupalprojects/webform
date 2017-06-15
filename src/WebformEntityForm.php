@@ -118,7 +118,7 @@ class WebformEntityForm extends BundleEntityFormBase {
 
     $form = parent::buildForm($form, $form_state);
 
-    return $this->buildFormDialog($form, $form_state);
+    return $this->buildDialogForm($form, $form_state);
   }
 
   /**
@@ -255,17 +255,7 @@ class WebformEntityForm extends BundleEntityFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
-    $form_state->setRedirectUrl($this->getRedirectUrl());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRedirectUrl() {
-    if ($url = $this->getRedirectDestinationUrl()) {
-      return $url;
-    }
-    return Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]);
+    $form_state->setRedirectUrl(Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]));
   }
 
   /**

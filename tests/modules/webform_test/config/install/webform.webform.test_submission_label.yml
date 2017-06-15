@@ -1,6 +1,9 @@
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - webform_test
 open: null
 close: null
 uid: 1
@@ -17,6 +20,7 @@ elements: |
 css: ''
 javascript: ''
 settings:
+  ajax: false
   page: true
   page_submit_path: ''
   page_confirm_path: ''

@@ -26,7 +26,7 @@ class WebformEntityDeleteForm extends EntityDeleteForm {
       '#weight' => 10,
     ];
 
-    return $this->buildConfirmFormDialog($form, $form_state);
+    return $this->buildDialogConfirmForm($form, $form_state);
   }
 
   /**

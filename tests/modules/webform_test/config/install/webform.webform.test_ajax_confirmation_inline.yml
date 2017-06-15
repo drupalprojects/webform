@@ -3,26 +3,22 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_test_element
+      - webform_test
 open: null
 close: null
 uid: null
 template: false
-id: test_element_composite
-title: 'Test: Element: Composite'
-description: 'Test the webform composite element.'
-category: 'Test: Element'
+id: test_ajax_confirmation_inline
+title: 'Test: Ajax: Confirmation: Inline'
+description: 'Test Ajax inline confirmation message.'
+category: 'Test: Ajax'
 elements: |
-  webform_test_composite:
-    '#type': webform_test_composite
-    '#title': webform_test_composite
-  webform_test_composite_multiple:
-    '#type': webform_test_composite
-    '#title': webform_test_composite_multiple
-    '#multiple': true
+  description:
+    '#markup': 'This webform will display the confirmation inline when submitted.'
 css: ''
 javascript: ''
 settings:
+  ajax: true
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -42,6 +38,7 @@ settings:
   form_disable_back: false
   form_autofocus: false
   form_details_toggle: false
+  submission_label: ''
   submission_log: false
   wizard_progress_bar: true
   wizard_progress_pages: false
@@ -58,9 +55,9 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: page
+  confirmation_type: inline
   confirmation_title: ''
-  confirmation_message: ''
+  confirmation_message: 'This is a custom inline confirmation message.'
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -74,8 +71,8 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: false
-  results_disabled_ignore: false
+  results_disabled: true
+  results_disabled_ignore: true
   token_update: false
 access:
   create:

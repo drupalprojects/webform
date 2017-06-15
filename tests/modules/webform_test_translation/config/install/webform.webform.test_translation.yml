@@ -1,16 +1,17 @@
 langcode: en
 status: open
-open: null
-close: null
 dependencies:
   enforced:
     module:
       - webform_test_translation
+open: null
+close: null
 uid: null
 template: false
 id: test_translation
 title: 'Test: Translations'
 description: 'Test translating a webform.'
+category: null
 elements: |
   textfield:
     '#type': textfield
@@ -124,3 +125,11 @@ handlers:
       html: true
       attachments: false
       debug: false
+      states:
+        - completed
+      to_options: {  }
+      cc_options: {  }
+      bcc_options: {  }
+      from_options: {  }
+      reply_to: ''
+      return_path: ''

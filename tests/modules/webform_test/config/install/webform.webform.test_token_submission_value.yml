@@ -92,6 +92,7 @@ elements: |
 css: ''
 javascript: ''
 settings:
+  ajax: false
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -145,7 +146,7 @@ settings:
     <tr><th width="50%">webform_submission:values:emails:2:html</th><td width="50%">[webform_submission:values:emails:2:html]</td></tr>
     <tr><th width="50%">webform_submission:values:emails:99:html</th><td width="50%">[webform_submission:values:emails:99]</td></tr>
     </table>
-
+    
     <h3>users</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:user</th><td width="50%">[webform_submission:values:user]</td></tr>
@@ -154,7 +155,7 @@ settings:
     <tr><th width="50%">webform_submission:values:users:0:entity:account-name</th><td width="50%">[webform_submission:values:users:0:entity:account-name]</td></tr>
     <tr><th width="50%">webform_submission:values:users:99:entity:account-name</th><td width="50%">[webform_submission:values:users:99:entity:account-name]</td></tr>
     </table>
-
+    
     <h3>names</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:name</th><td width="50%">[webform_submission:values:name]</td></tr>
@@ -163,7 +164,7 @@ settings:
     <tr><th width="50%">webform_submission:values:names:1</th><td width="50%">[webform_submission:values:names:1]</td></tr>
     <tr><th width="50%">webform_submission:values:names:99</th><td width="50%">[webform_submission:values:names:99]</td></tr>
     </table>
-
+    
     <h3>contacts</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:contact</th><td width="50%">[webform_submission:values:contact]</td></tr>

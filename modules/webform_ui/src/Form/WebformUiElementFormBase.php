@@ -264,7 +264,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#_validate_form' => TRUE,
     ];
 
-    return $this->buildFormDialog($form, $form_state);
+    return $this->buildDialogForm($form, $form_state);
   }
 
   /**
@@ -349,18 +349,9 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     ];
     drupal_set_message($this->t('%title has been @action.', $t_args));
 
-    $form_state->setRedirectUrl($this->getRedirectUrl());
+    $form_state->setRedirectUrl($this->webform->toUrl('edit-form', ['query' => ['element-update' => $this->key]]));
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getRedirectUrl() {
-    if ($url = $this->getRedirectDestinationUrl()) {
-      return $url;
-    }
-    return $this->webform->toUrl('edit-form', ['query' => ['element-update' => $this->key]]);
-  }
 
   /**
    * Determines if the webform element key already exists.

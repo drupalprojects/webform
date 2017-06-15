@@ -689,6 +689,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public static function getDefaultSettings() {
     return [
+      'ajax' => FALSE,
       'page' => TRUE,
       'page_submit_path' => '',
       'page_confirm_path' => '',

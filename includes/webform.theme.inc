@@ -165,9 +165,19 @@ function template_preprocess_webform_confirmation(array &$variables) {
   $variables['back_label'] = $settings['confirmation_back_label'] ?: \Drupal::config('webform.settings')->get('settings.default_confirmation_back_label');
   $variables['back_attributes'] = new Attribute($settings['confirmation_back_attributes']);
 
-  // Apply all passed query string parameters to the 'Back to form' link.
+  // Get query string parameters.
   $query = \Drupal::request()->query->all();
-  unset($query['webform_id']);
+
+  // Add Ajax trigger to back link.
+  // @see \Drupal\webform\WebformSubmissionForm::getCustomForm
+  // @see Drupal.behaviors.webformConfirmationBackAjax (js/webform.ajax.js)
+  $is_ajax = (!empty($query['ajax_form'])) ? TRUE : FALSE;
+  if (!empty($is_ajax)) {
+    $variables['back_attributes']->addClass('js-webform-confirmation-back-link-ajax');
+  }
+
+  // Apply all passed query string parameters to the 'Back to form' link.
+  unset($query['webform_id'], $query['ajax_form'], $query['_wrapper_format']);
   $options = ($query) ? ['query' => $query] : [];
 
   // Set back_url.

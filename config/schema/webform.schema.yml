@@ -381,6 +381,9 @@ webform.webform.*:
       type: mapping
       label: 'Settings'
       mapping:
+        ajax:
+          type: boolean
+          label: 'Use Ajax'
         page:
           type: boolean
           label: 'Enable page'

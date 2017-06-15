@@ -742,3 +742,10 @@ function webform_update_8051() {
 function webform_update_8052() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2757491: Allow Webforms to be submitted using AJAX.
+ */
+function webform_update_8053() {
+  _webform_update_webform_settings();
+}

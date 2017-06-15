@@ -271,7 +271,7 @@ class WebformUiEntityForm extends WebformEntityForm {
         'class' => [RESPONSIVE_PRIORITY_MEDIUM, 'webform-ui-element-operations'],
       ];
     }
-    if (!$this->isModalDialog()) {
+    if (!$this->isDialog()) {
       $header['key'] = [
         'data' => $this->t('Key'),
         'class' => [RESPONSIVE_PRIORITY_LOW],
@@ -293,7 +293,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     }
     $header['weight'] = $this->t('Weight');
     $header['parent'] = $this->t('Parent');
-    if (!$this->isModalDialog()) {
+    if (!$this->isDialog()) {
       $header['operations'] = [
         'data' => $this->t('Operations'),
         'class' => ['webform-ui-element-operations'],
@@ -400,7 +400,7 @@ class WebformUiEntityForm extends WebformEntityForm {
         $row['add'] = ['#markup' => ''];
       }
     }
-    if (!$this->isModalDialog()) {
+    if (!$this->isDialog()) {
       $row['name'] = [
         '#markup' => $element['#webform_key'],
       ];
@@ -458,7 +458,7 @@ class WebformUiEntityForm extends WebformEntityForm {
       ],
     ];
 
-    if (!$this->isModalDialog()) {
+    if (!$this->isDialog()) {
       $row['operations'] = [
         '#type' => 'operations',
       ];
@@ -528,7 +528,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     if ($webform->hasContainer()) {
       $row['add'] = ['#markup' => ''];
     }
-    if (!$this->isModalDialog()) {
+    if (!$this->isDialog()) {
       $row['name'] = ['#markup' => 'actions'];
       $row['type'] = [
         '#markup' => $this->t('Submit button(s)'),
@@ -542,7 +542,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     }
     $row['weight'] = ['#markup' => ''];
     $row['parent'] = ['#markup' => ''];
-    if (!$this->isModalDialog()) {
+    if (!$this->isDialog()) {
       $row['operations'] = [
         '#type' => 'operations',
       ];
