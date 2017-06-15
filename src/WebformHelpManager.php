@@ -725,12 +725,13 @@ SUGGESTIONS
             $this->t('If these libraries are not installed, they are automatically loaded from a CDN.') . ' ' .
             $this->t('All libraries are optional and can be excluded via the admin settings form.') .
             '</p>' .
-            '<p>' . $this->t('There are twos ways to download the needed third party libraries.') . '</p>' .
+            '<p>' . $this->t('There are three ways to download the needed third party libraries.') . '</p>' .
             '<ul>' .
               '<li>' . $this->t('Generate a *.make.yml or composer.json file using <code>drush webform-libraries-make</code> or <code>drush webform-libraries-composer</code>.') . '</li>' .
-              '<li>' . $this->t('Execute <code>drush webform-libraries-download</code>, which will download all included libraries.') . '</li>' .
+              '<li>' . $this->t('Execute <code>drush webform-libraries-download</code>, which will download third party libraries required by the Webform module.') . '</li>' .
+              '<li>' . $this->t("Execute <code>drush webform-composer-update</code>, which will update your Drupal installation's composer.json to include the Webform module's selected libraries as repositories.") . '</li>' .
             '</ul>' .
-            '<br/><hr/><br/>',
+            '<p><hr/><p>',
         ],
         'libraries' => [
           '#prefix' => '<dl>',
