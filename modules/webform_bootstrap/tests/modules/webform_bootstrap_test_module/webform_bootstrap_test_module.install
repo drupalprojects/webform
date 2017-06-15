@@ -34,6 +34,21 @@ alert alert-danger
 alert alert-success
 alert alert-info
 alert-dismissible';
+
+  $element_classes = '
+input-sm
+input-lg
+text-primary
+text-success
+text-info
+text-warning
+text-danger
+bg-primary
+bg-success
+bg-info
+bg-warning
+bg-danger';
+
   $button_classes = '
 btn
 btn btn-default
@@ -46,13 +61,19 @@ btn btn-link
 btn-xs
 btn-sm
 btn-lg';
+
+  $assets_css = '.tabs--primary {
+    margin-bottom: 25px;
+}';
+
   \Drupal::configFactory()->getEditable('webform.settings')
     ->set('settings.form_classes', $container_classes)
     ->set('settings.button_classes', $button_classes)
     ->set('settings.confirmation_classes', $container_classes)
     ->set('settings.confirmation_back_classes', $button_classes)
     ->set('element.wrapper_classes', $container_classes)
-    ->set('element.classes', $container_classes)
+    ->set('element.classes', $element_classes)
+    ->set('assets.css', $assets_css)
     ->save();
 
   // Set Bootstrap theme settings.
@@ -74,6 +95,7 @@ function webform_bootstrap_test_module_uninstall() {
     ->set('settings.confirmation_back_classes', $default_config['settings']['confirmation_back_classes'])
     ->set('element.wrapper_classes', $default_config['element']['wrapper_classes'])
     ->set('element.classes', $default_config['element']['classes'])
+    ->set('assets.css', '')
     ->save();
 
   // Set default theme to bartik.
