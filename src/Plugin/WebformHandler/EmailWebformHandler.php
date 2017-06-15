@@ -259,6 +259,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $text_element_options = [];
     $elements = $this->webform->getElementsInitializedAndFlattened();
     foreach ($elements as $key => $element) {
+      $element_handler = $this->elementManager->getElementInstance($element);
+      if (!$element_handler->isInput($element)) {
+        continue;
+      }
+
       $title = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', ['@title' => $element['#title'], '@key' => $key]) : $key;
       $text_element_options["[webform_submission:values:$key:value]"] = $title;
       if (isset($element['#options'])) {
