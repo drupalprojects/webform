@@ -580,11 +580,19 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
     // Get entity value, type, instance, and token.
     if ($entity = $element_handler->getTargetEntity($element, $webform_submission, $options)) {
       $entity_type = $entity->getEntityTypeId();
+      // Map entity type id to entity token name.
+      $entity_token_names = [
+        // Taxonomy tokens are not prefixed with 'taxonomy_'.
+        // @see taxonomy_token_info()
+        'taxonomy_term' => 'term',
+        'taxonomy_vocabulary' => 'vocabulary',
+      ];
+      $entity_token_name = (isset($entity_token_names[$entity_type])) ? $entity_token_names[$entity_type] : $entity_type;
       $entity_token = implode(':', $keys);
       $replacements = \Drupal::token()->generate(
         $entity_type,
-        [$entity_token => "[$entity_type:$entity_token]"],
-        [$entity_type => $entity],
+        [$entity_token => "[$entity_token_name:$entity_token]"],
+        [$entity_token_name => $entity],
         $options,
         $bubbleable_metadata
       );
