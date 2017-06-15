@@ -711,6 +711,16 @@ libraries.jquery.icheck.flat:
   dependencies:
     - webform/libraries.jquery.icheck
 
+libraries.jquery.icheck.line:
+  version: *webform_icheck_version
+  license: *webform_icheck_license
+  cdn: *webform_icheck_cdn
+  css:
+    theme:
+      /libraries/jquery.icheck/skins/line/_all.css: {}
+  dependencies:
+    - webform/libraries.jquery.icheck
+
 libraries.jquery.icheck.minimal:
   version: *webform_icheck_version
   license: *webform_icheck_license

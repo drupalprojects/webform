@@ -580,12 +580,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $icheck_skin = strtok($default_icheck, '-');
       }
       if ($icheck) {
-        if ($this->hasProperty('wrapper_attributes')) {
-          $element['#wrapper_attributes']['data-webform-icheck'] = $icheck;
-        }
-        else {
-          $element['#attributes']['data-webform-icheck'] = $icheck;
-        }
+        $element['#attributes']['data-webform-icheck'] = $icheck;
         $element['#attached']['library'][] = 'webform/webform.element.icheck';
         $element['#attached']['library'][] = 'webform/libraries.jquery.icheck.' . $icheck_skin;
       }
@@ -1754,6 +1749,18 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           'flat-blue' => $this->t('Flat: Blue'),
           'flat-green' => $this->t('Flat: Green'),
           'flat-aero' => $this->t('Flat: Aero'),
+        ],
+        (string) $this->t('Line') => [
+          'line' => $this->t('Line: Black'),
+          'line-grey' => $this->t('Line: Grey'),
+          'line-yellow' => $this->t('Line: Yellow'),
+          'line-orange' => $this->t('Line: Orange'),
+          'line-red' => $this->t('Line: Red'),
+          'line-pink' => $this->t('Line: Pink'),
+          'line-purple' => $this->t('Line: Purple'),
+          'line-blue' => $this->t('Line: Blue'),
+          'line-green' => $this->t('Line: Green'),
+          'line-aero' => $this->t('Line: Aero'),
         ],
       ],
       '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
