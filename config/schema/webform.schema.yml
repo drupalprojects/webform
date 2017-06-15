@@ -136,6 +136,15 @@ webform.settings:
         default_description_display:
           type: string
           label: 'Default title display'
+        default_empty_option:
+          type: boolean
+          label: 'Default empty option'
+        default_empty_option_required:
+          type: label
+          label: 'Default empty option required label'
+        default_empty_option_optional:
+          type: label
+          label: 'Default empty option optional label'
         default_google_maps_api_key:
           type: string
           label: 'Default Google Maps API key'

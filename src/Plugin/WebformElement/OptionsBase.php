@@ -393,12 +393,33 @@ abstract class OptionsBase extends WebformElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('Empty option label'),
       '#description' => $this->t('The label to show for the initial option denoting no selection in a select element.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['value' => 'number'],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
+        ],
+      ],
     ];
+    $default_empty_option = $this->configFactory->get('webform.settings')->get('element.default_empty_option');
+    if ($default_empty_option) {
+      $default_empty_option_required = $this->configFactory->get('webform.settings')->get('element.default_empty_option_required') ?: $this->t('- Select -');
+      $form['options']['empty_option']['#description'] .= '<br/>' . $this->t('Required elements default to: %required', ['%required' => $default_empty_option_required]);
+      $default_empty_option_optional = $this->configFactory->get('webform.settings')->get('element.default_empty_option_optional') ?: $this->t('- None -');
+      $form['options']['empty_option']['#description'] .= '<br/>' . $this->t('Optional elements default to: %optional', ['%optional' => $default_empty_option_optional]);
+    }
     $form['options']['empty_value'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Empty option value'),
       '#description' => $this->t('The value for the initial option denoting no selection in a select element, which is used to determine whether the user submitted a value or not.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['value' => 'number'],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
+        ],
+      ],
     ];
+
+
     $form['options']['options_randomize'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Randomize options'),

@@ -601,7 +601,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Determines the default placement of the description for all webform elements.'),
       '#default_value' => $config->get('element.default_description_display'),
     ];
-    $form['element_settings']['element']['default_icheck'] = [
+    // Element: Checkbox/Radio.
+    $form['element_settings']['checkbox'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Checkbox/radio settings'),
+      '#tree' => TRUE,
+    ];
+    $form['element_settings']['checkbox']['default_icheck'] = [
       '#type' => 'select',
       '#title' => $this->t('Enhance checkboxes/radio buttons using iCheck'),
       '#description' => $this->t('Replaces checkboxes/radio buttons with jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
@@ -647,12 +653,45 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('element.default_icheck'),
       '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
-    $form['element_settings']['element']['default_google_maps_api_key'] = [
+    // Element: Location.
+    $form['element_settings']['location'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Location settings'),
+      '#tree' => TRUE,
+    ];
+    $form['element_settings']['location']['default_google_maps_api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Google Maps API key'),
       '#description' => $this->t('Google requires users to use a valid API key. Using the <a href="https://console.developers.google.com/apis">Google API Manager</a>, you can enable the <em>Google Maps JavaScript API</em>. That will create (or reuse) a <em>Browser key</em> which you can paste here.'),
       '#default_value' => $config->get('element.default_google_maps_api_key'),
       '#access' => $this->librariesManager->isIncluded('jquery.geocomplete'),
+    ];
+    // Element: Select.
+    $form['element_settings']['select'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Select settings'),
+      '#tree' => TRUE,
+    ];
+    $form['element_settings']['select']['default_empty_option'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Default empty option'),
+      '#description' => $this->t('If checked, the first default options for select menu will always be displayed.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('element.default_empty_option'),
+    ];
+    $form['element_settings']['select']['default_empty_option_required'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default empty option required'),
+      '#description' => $this->t('The label to show for the first default option for required select menus.') . '<br/>' .
+        $this->t('Defaults to: %value', ['%value' => $this->t('- Select -')]),
+      '#default_value' => $config->get('element.default_empty_option_required'),
+    ];
+    $form['element_settings']['select']['default_empty_option_optional'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default empty option optional'),
+      '#description' => $this->t('The label to show for the first default option for optional select menus.') . '<br/>' .
+        $this->t('Defaults to: %value', ['%value' => $this->t('- None -')]),
+      '#default_value' => $config->get('element.default_empty_option_optional'),
     ];
 
     // Element: File.
@@ -1165,7 +1204,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $config->set('third_party_settings', $form_state->getValue('third_party_settings') ?: []);
     $config->set('test', $form_state->getValue('test'));
     // Element.
-    $config->set('element', $form_state->getValue('element') + ['excluded_elements' => $excluded_elements]);
+    $config->set('element', $form_state->getValue('element') +
+      $form_state->getValue('checkbox') +
+      $form_state->getValue('location') +
+      $form_state->getValue('select') +
+      ['excluded_elements' => $excluded_elements]
+    );
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
     // Assets.
