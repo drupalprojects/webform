@@ -44,6 +44,19 @@ elements: |
     '#default_value':
       - 0
       - 1
+  term:
+    '#type': webform_term_select
+    '#title': term
+    '#vocabulary': tags
+    '#default_value': 1
+  terms:
+    '#type': webform_term_select
+    '#title': term
+    '#multiple': true
+    '#vocabulary': tags
+    '#default_value':
+      - 1
+      - 2
   name:
     '#type': webform_name
     '#title': name
@@ -156,6 +169,15 @@ settings:
     <tr><th width="50%">webform_submission:values:users:99:entity:account-name</th><td width="50%">[webform_submission:values:users:99:entity:account-name]</td></tr>
     </table>
     
+    <h3>terms</h3>
+    <table class="table">
+    <tr><th width="50%">webform_submission:values:term</th><td width="50%">[webform_submission:values:term]</td></tr>
+    <tr><th width="50%">webform_submission:values:terms</th><td width="50%">[webform_submission:values:terms]</td></tr>
+    <tr><th width="50%">webform_submission:values:term:entity:name</th><td width="50%">[webform_submission:values:term:entity:name]</td></tr>
+    <tr><th width="50%">webform_submission:values:terms:entity:name</th><td width="50%">[webform_submission:values:terms:entity:name]</td></tr>
+    <tr><th width="50%">webform_submission:values:terms:1:entity:name</th><td width="50%">[webform_submission:values:terms:1:entity:name]</td></tr>
+    </table>
+
     <h3>names</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:name</th><td width="50%">[webform_submission:values:name]</td></tr>

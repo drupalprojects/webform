@@ -16,7 +16,7 @@ class WebformTokenSubmissionValue extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform'];
+  public static $modules = ['taxonomy'];
 
   /**
    * Webforms to load.
@@ -24,6 +24,16 @@ class WebformTokenSubmissionValue extends WebformTestBase {
    * @var array
    */
   protected static $testWebforms = ['test_token_submission_value'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create 'tags' vocabulary.
+    $this->createTags();
+  }
 
   /**
    * Test webform webform token submission value.
@@ -55,6 +65,13 @@ class WebformTokenSubmissionValue extends WebformTestBase {
       'webform_submission:values:user:entity:mail' => 'admin@example.com',
       'webform_submission:values:users:0:entity:account-name' => 'admin',
       'webform_submission:values:users:99:entity:account-name' => '',
+
+      // terms.
+      'webform_submission:values:term' => 'Parent 1 (1)',
+      'webform_submission:values:terms' => 'Parent 1 (1), Parent 1: Child 1 (2)',
+      'webform_submission:values:term:entity:name' => 'Parent 1',
+      'webform_submission:values:terms:entity:name' => 'Parent 1',
+      'webform_submission:values:terms:1:entity:name' => 'Parent 1: Child 1',
 
       // names.
       'webform_submission:values:name' => 'John Smith',

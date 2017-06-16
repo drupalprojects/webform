@@ -12,13 +12,6 @@ use Drupal\webform\Entity\Webform;
 class WebformSubmissionAccessTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['webform'];
-
-  /**
    * {@inheritdoc}
    */
   public function setUp() {

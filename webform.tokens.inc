@@ -589,14 +589,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
       ];
       $entity_token_name = (isset($entity_token_names[$entity_type])) ? $entity_token_names[$entity_type] : $entity_type;
       $entity_token = implode(':', $keys);
-      $replacements = \Drupal::token()->generate(
-        $entity_type,
-        [$entity_token => "[$entity_token_name:$entity_token]"],
+      return \Drupal::token()->replace(
+        "[$entity_token_name:$entity_token]",
         [$entity_token_name => $entity],
         $options,
         $bubbleable_metadata
       );
-      return ($replacements) ? reset($replacements) : '';
     }
     else {
       return '';

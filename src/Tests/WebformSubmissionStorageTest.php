@@ -15,13 +15,6 @@ use Drupal\webform\WebformInterface;
 class WebformSubmissionStorageTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['webform'];
-
-  /**
    * Test webform submission storage.
    */
   public function testSubmissionStorage() {

@@ -15,13 +15,6 @@ use Drupal\webform\WebformSubmissionInterface;
 class WebformSubmissionApiTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['webform'];
-
-  /**
    * Webforms to load.
    *
    * @var array
