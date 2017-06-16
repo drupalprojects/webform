@@ -37,17 +37,7 @@ alert-dismissible';
 
   $element_classes = '
 input-sm
-input-lg
-text-primary
-text-success
-text-info
-text-warning
-text-danger
-bg-primary
-bg-success
-bg-info
-bg-warning
-bg-danger';
+input-lg';
 
   $button_classes = '
 btn
