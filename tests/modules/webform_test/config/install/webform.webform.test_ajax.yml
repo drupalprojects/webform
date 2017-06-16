@@ -3,7 +3,7 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform
+      - webform_test
 open: null
 close: null
 uid: null
