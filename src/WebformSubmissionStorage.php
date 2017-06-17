@@ -328,36 +328,73 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /****************************************************************************/
 
   /**
+   * Get specified columns in specified order.
+   *
+   * @param array $column_names
+   *   An associative array of column names.
+   * @param array $columns
+   *   An associative array containing all available columns.
+   *
+   * @return array
+   *    An associative array containing all specified columns.
+   */
+  protected function filterColumns(array $column_names, array $columns) {
+    $filtered_columns = [];
+    foreach ($column_names as $column_name) {
+      if (isset($columns[$column_name])) {
+        $filtered_columns[$column_name] = $columns[$column_name];
+      }
+    }
+    return $filtered_columns;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getCustomColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
     // Get custom columns from the webform's state.
     if ($source_entity) {
       $source_key = $source_entity->getEntityTypeId() . '.' . $source_entity->id();
-      $custom_column_names = $webform->getState("results.custom.columns.$source_key", []);
+      $column_names = $webform->getState("results.custom.columns.$source_key", []);
       // If the source entity does not have custom columns, then see if we
       // can use the main webform as the default custom columns.
-      if (empty($custom_column_names) && $webform->getState("results.custom.default", FALSE)) {
-        $custom_column_names = $webform->getState('results.custom.columns', []);
+      if (empty($column_names) && $webform->getState("results.custom.default", FALSE)) {
+        $column_names = $webform->getState('results.custom.columns', []);
       }
     }
     else {
-      $custom_column_names = $webform->getState('results.custom.columns', []);
+      $column_names = $webform->getState('results.custom.columns', []);
     }
 
-    if (empty($custom_column_names)) {
-      return $this->getDefaultColumns($webform, $source_entity, $account, $include_elements);
-    }
-
-    // Get custom column with labels.
+    // Get columns
+    $column_names =  $column_names ?: $this->getDefaultColumnNames($webform, $source_entity, $account, $include_elements);
     $columns = $this->getColumns($webform, $source_entity, $account, $include_elements);
-    $custom_columns = [];
-    foreach ($custom_column_names as $column_name) {
-      if (isset($columns[$column_name])) {
-        $custom_columns[$column_name] = $columns[$column_name];
-      }
-    }
-    return $custom_columns;
+    return $this->filterColumns($column_names, $columns);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getUserColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
+    $column_names = $webform->getSetting('submission_user_columns', [])
+      ?: $this->getUserDefaultColumnNames($webform, $source_entity, $account, $include_elements);
+    $columns = $this->getColumns($webform, $source_entity, $account, $include_elements);
+    return $this->filterColumns($column_names, $columns);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getUserDefaultColumnNames(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
+    return ['serial', 'created', 'remote_addr'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultColumnNames(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
+    $columns = $this->getDefaultColumns($webform, $source_entity, $account, $include_elements);
+    return array_keys($columns);
   }
 
   /**
@@ -365,14 +402,12 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    */
   public function getDefaultColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
     $columns = $this->getColumns($webform, $source_entity, $account, $include_elements);
-
     // Hide certain unnecessary columns, that have default set to FALSE.
     foreach ($columns as $column_name => $column) {
       if (isset($column['default']) && $column['default'] === FALSE) {
         unset($columns[$column_name]);
       }
     }
-
     return $columns;
   }
 

@@ -749,3 +749,10 @@ function webform_update_8052() {
 function webform_update_8053() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2886853: Ability to customize user draft and submission columns.
+ */
+function webform_update_8054() {
+  _webform_update_webform_settings();
+}

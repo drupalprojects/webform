@@ -76,6 +76,7 @@ class WebformResultsCustomForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    // @see \Drupal\webform\WebformEntitySettingsForm::form
     $available_columns = $this->submissionStorage->getColumns($this->webform, $this->sourceEntity, NULL, TRUE);
     $custom_columns = $this->submissionStorage->getCustomColumns($this->webform, $this->sourceEntity, NULL, TRUE);
     // Change sid's # to an actual label.
@@ -83,16 +84,17 @@ class WebformResultsCustomForm extends FormBase {
     if (isset($custom_columns['sid'])) {
       $custom_columns['sid']['title'] = $this->t('Submission ID');
     }
-
-    // Columns.
+    // Get available columns as option.
     $columns_options = [];
     foreach ($available_columns as $column_name => $column) {
       $title = (strpos($column_name, 'element__') === 0) ? ['data' => ['#markup' => '<b>' . $column['title'] . '</b>']] : $column['title'];
       $key = (isset($column['key'])) ? str_replace('webform_', '', $column['key']) : $column['name'];
       $columns_options[$column_name] = ['title' => $title, 'key' => $key];
     }
+    // Get custom columns as the default value.
     $columns_keys = array_keys($custom_columns);
     $columns_default_value = array_combine($columns_keys, $columns_keys);
+    // Display columns in sortable table select element.
     $form['columns'] = [
       '#type' => 'webform_tableselect_sort',
       '#header' => [
@@ -276,7 +278,7 @@ class WebformResultsCustomForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Set columns.
-    $this->webform->setState($this->getStateKey('columns'), $form_state->getValue('columns'));
+    $this->webform->setState($this->getStateKey('columns'), array_values($form_state->getValue('columns')));
 
     // Set sort, direction, limit.
     $this->webform->setState($this->getStateKey('sort'), $form_state->getValue('sort'));

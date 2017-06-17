@@ -202,10 +202,10 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
     else {
-      // Display only submission properties.
-      // @see /admin/structure/webform/results/manage
-      $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
       if ($route_name == 'entity.webform_submission.collection') {
+        // Display only submission properties.
+        // @see /admin/structure/webform/results/manage
+        $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
         // Replace serial with sid when showing results from all webforms.
         unset($this->columns['serial']);
         $this->columns = [
@@ -218,6 +218,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         $this->sort = 'sid';
       }
       else {
+        $this->columns = $webform_submission_storage->getUserColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
         unset($this->columns['sid']);
         $this->sort = 'serial';
       }

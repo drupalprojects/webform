@@ -269,6 +269,40 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function getCustomColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
 
   /**
+   * Get user submission columns used to display results.
+   *
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
+   *
+   * @return array|mixed
+   *   An associative array of columns keyed by name.
+   */
+  public function getUserColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
+
+  /**
+   * Get user  default submission columns used to display results.
+   *
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   A webform.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   A user account.
+   * @param bool $include_elements
+   *   Flag that include all form element in the list of columns.
+   *
+   * @return array|mixed
+   *   An associative array of columns names.
+   */
+  public function getUserDefaultColumnNames(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
+
+  /**
    * Get default submission columns used to display results.
    *
    * @param \Drupal\webform\WebformInterface|null $webform

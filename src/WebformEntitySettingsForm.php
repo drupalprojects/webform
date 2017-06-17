@@ -3,22 +3,29 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityForm;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
-
 
 /**
  * Provides a webform to manage settings.
  */
 class WebformEntitySettingsForm extends EntityForm {
+
+  /**
+   * The webform submission storage.
+   *
+   * @var \Drupal\webform\WebformSubmissionStorageInterface
+   */
+  protected $submissionStorage;
 
   /**
    * The current user.
@@ -51,6 +58,8 @@ class WebformEntitySettingsForm extends EntityForm {
   /**
    * Constructs a WebformEntitySettingsForm.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
@@ -58,7 +67,8 @@ class WebformEntitySettingsForm extends EntityForm {
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The token manager.
    */
-  public function __construct(AccountInterface $current_user, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager) {
+    $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
     $this->currentUser = $current_user;
     $this->messageManager = $message_manager;
     $this->tokenManager = $token_manager;
@@ -70,6 +80,7 @@ class WebformEntitySettingsForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('entity_type.manager'),
       $container->get('current_user'),
       $container->get('webform.message_manager'),
       $container->get('webform.token_manager'),
@@ -559,6 +570,42 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $webform->getState('next_serial') ?: 1,
     ];
     $form['submission_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['submission_settings']['submission_columns'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Submission columns'),
+      '#description' => $this->t('Below columns are displayed to users who can view previous submissions and/or pending drafts.'),
+    ];
+    // Submission user columns.
+    // @see \Drupal\webform\Form\WebformResultsCustomForm::buildForm
+    $available_columns = $this->submissionStorage->getColumns($webform);
+    // Remove columns that should never be displayed to users.
+    $available_columns = array_diff_key($available_columns, array_flip(['uuid', 'in_draft', 'entity', 'sticky', 'notes', 'uid', 'operations']));
+    $custom_columns = $this->submissionStorage->getUserColumns($webform);
+    // Change sid's # to an actual label.
+    $available_columns['sid']['title'] = $this->t('Submission ID');
+    if (isset($custom_columns['sid'])) {
+      $custom_columns['sid']['title'] = $this->t('Submission ID');
+    }
+    // Get available columns as option.
+    $columns_options = [];
+    foreach ($available_columns as $column_name => $column) {
+      $title = (strpos($column_name, 'element__') === 0) ? ['data' => ['#markup' => '<b>' . $column['title'] . '</b>']] : $column['title'];
+      $key = (isset($column['key'])) ? str_replace('webform_', '', $column['key']) : $column['name'];
+      $columns_options[$column_name] = ['title' => $title, 'key' => $key];
+    }
+    // Get custom columns as the default value.
+    $columns_keys = array_keys($custom_columns);
+    $columns_default_value = array_combine($columns_keys, $columns_keys);
+    // Display columns in sortable table select element.
+    $form['submission_settings']['submission_columns']['submission_user_columns'] = [
+      '#type' => 'webform_tableselect_sort',
+      '#header' => [
+        'title' => $this->t('Title'),
+        'key' => $this->t('Key'),
+      ],
+      '#options' => $columns_options,
+      '#default_value' => $columns_default_value,
+    ];
 
     // Submission behaviors.
     $form['submission_behaviors'] = [
@@ -978,6 +1025,12 @@ class WebformEntitySettingsForm extends EntityForm {
           $webform->set($state, WebformDateHelper::formatStorage($values[$state]));
         }
       }
+    }
+
+    // Set customize submission user columns.
+    $values['submission_user_columns'] = array_values($values['submission_user_columns']);
+    if ($values['submission_user_columns'] == $this->submissionStorage->getUserDefaultColumnNames($webform)) {
+      $values['submission_user_columns'] = [];
     }
 
     // Set custom properties, class, and style.

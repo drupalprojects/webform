@@ -127,6 +127,7 @@ settings:
   form_details_toggle: false
   submission_label: ''
   submission_log: false
+  submission_user_columns: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -177,7 +178,7 @@ settings:
     <tr><th width="50%">webform_submission:values:terms:entity:name</th><td width="50%">[webform_submission:values:terms:entity:name]</td></tr>
     <tr><th width="50%">webform_submission:values:terms:1:entity:name</th><td width="50%">[webform_submission:values:terms:1:entity:name]</td></tr>
     </table>
-
+    
     <h3>names</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:name</th><td width="50%">[webform_submission:values:name]</td></tr>

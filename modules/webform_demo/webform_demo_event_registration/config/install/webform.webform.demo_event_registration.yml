@@ -37,6 +37,7 @@ elements: |
 css: ''
 javascript: ''
 settings:
+  ajax: false
   page: false
   page_submit_path: ''
   page_confirm_path: ''
@@ -58,6 +59,7 @@ settings:
   form_details_toggle: false
   submission_label: ''
   submission_log: true
+  submission_user_columns: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -65,8 +67,11 @@ settings:
   wizard_complete: true
   wizard_complete_label: ''
   preview: 0
+  preview_label: ''
+  preview_title: ''
   preview_message: ''
   draft: none
+  draft_multiple: false
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''

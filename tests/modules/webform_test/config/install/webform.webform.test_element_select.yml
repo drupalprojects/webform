@@ -133,6 +133,7 @@ elements: |
 css: ''
 javascript: ''
 settings:
+  ajax: false
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -154,6 +155,7 @@ settings:
   form_details_toggle: false
   submission_label: ''
   submission_log: false
+  submission_user_columns: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
