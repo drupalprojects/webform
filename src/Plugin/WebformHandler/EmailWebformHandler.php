@@ -766,7 +766,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $to = $message['to_mail'];
     $from = $message['from_mail'];
     if (!empty($message['from_name'])) {
-      $from = $message['from_name'] . ' <'  . $from . '>';
+      $from = $message['from_name'] . ' <' . $from . '>';
     }
 
     $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -967,11 +967,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'bcc_mail' => $this->t('Bcc mail'),
       'reply_to' => $this->t('Reply-to'),
       'return_path' => $this->t('Return path'),
-      '',
+      '---',
       'subject' => $this->t('Subject'),
     ];
     foreach ($values as $name => $title) {
-      if ($title == '') {
+      if ($title == '---') {
         $build[$name] = ['#markup' => '<hr/>'];
       }
       elseif (!empty($message[$name])) {
@@ -1002,14 +1002,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   protected function getMailSystemSender() {
     $mailsystem_config = $this->configFactory->get('mailsystem.settings');
-    // Get the default sender
+    // Get the default sender.
     $mailsystem_sender = $mailsystem_config->get('defaults.sender');
-    // Look for a global setting for the webform module
+    // Look for a global setting for the webform module.
     $mailsystem_sender = $mailsystem_config->get('modules.webform.none.sender') ?: $mailsystem_sender;
-    // Look for a specific setting for this webform module's email
-    $key ='email_' . $this->getHandlerId();
+    // Look for a specific setting for this webform module's email.
+    $key = 'email_' . $this->getHandlerId();
     $mailsystem_sender = $mailsystem_config->get("modules.webform.$key.sender") ?: $mailsystem_sender;
-
     return $mailsystem_sender;
   }
 

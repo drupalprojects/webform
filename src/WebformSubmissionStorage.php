@@ -376,8 +376,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * {@inheritdoc}
    */
   public function getUserColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
-    $column_names = $webform->getSetting('submission_user_columns', [])
-      ?: $this->getUserDefaultColumnNames($webform, $source_entity, $account, $include_elements);
+    $column_names = ($webform) ? $webform->getSetting('submission_user_columns', []) : [];
+    $column_names = $column_names ?: $this->getUserDefaultColumnNames($webform, $source_entity, $account, $include_elements);
     $columns = $this->getColumns($webform, $source_entity, $account, $include_elements);
     return $this->filterColumns($column_names, $columns);
   }

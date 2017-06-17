@@ -84,7 +84,6 @@ class WebformTestComposite extends WebformCompositeBase {
     // $elements['likert'] = ['#type' => 'webform_likert'];
     // $elements['likert'] = ['#type' => 'managed_file'];
     // $elements['datetime'] = ['#type' => 'datetime'];
-
     return $elements;
   }
 

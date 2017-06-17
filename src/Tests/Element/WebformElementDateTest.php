@@ -30,7 +30,7 @@ class WebformElementDateTest extends WebformTestBase {
     // Check '#format' values.
     $this->assertFieldByName('date_default', '2009-08-18');
 
-    // Check dynamic date picker
+    // Check dynamic date picker.
     $min = date('D, m/d/Y', strtotime('-1 year'));
     $max = date('D, m/d/Y', strtotime('+1 year'));
     $default_value = date('D, m/d/Y', strtotime('now'));

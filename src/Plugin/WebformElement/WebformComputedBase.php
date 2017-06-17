@@ -34,7 +34,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       'value' => '',
       'mode' => WebformComputedBaseElement::MODE_AUTO,
       'store' => FALSE,
-      // Attributes
+      // Attributes.
       'wrapper_attributes' => [],
     ] + $this->getDefaultBaseProperties();
   }
@@ -154,7 +154,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
     ];
     $form['computed']['display_on_message'] = [
       '#type' => 'webform_message',
-      '#message_message' => $this->t('This computed element\'s value will only be available as a token or exported value.'),
+      '#message_message' => $this->t("This computed element's value will only be available as a token or exported value."),
       '#message_type' => 'warning',
       '#access' => TRUE,
       '#states' => [
@@ -193,7 +193,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       // Unset the value from the $form_state to prevent modules from relying
       // on this value.
       $key = $element['#webform_key'];
-      $form_state->unsetValue($key );
+      $form_state->unsetValue($key);
     }
   }
 
@@ -218,6 +218,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
    *
    * @param array $element
    *   An element.
+   *
    * @return string
    *   The type of markup, HTML or plain-text.
    */

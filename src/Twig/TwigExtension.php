@@ -29,7 +29,6 @@ class TwigExtension extends \Twig_Extension {
     $this->tokenManager = $token_manager;
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -49,7 +48,7 @@ class TwigExtension extends \Twig_Extension {
   /**
    * Replace tokens in text.
    *
-   * @param string|array $text
+   * @param string|array $token
    *   A string of text that may contain tokens.
    * @param \Drupal\Core\Entity\EntityInterface|null $entity
    *   A Webform or Webform submission entity.

@@ -437,7 +437,7 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    */
   public function getValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []);
 
-    /**
+  /**
    * Get an element's available single value formats.
    *
    * @return array

@@ -305,9 +305,6 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $data['webform_submission'];
 
-    /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
-    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
-
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
@@ -549,6 +546,13 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   $element = $form_elements[$element_key];
   $element_handler = $element_manager->getElementInstance($element);
 
+  // Look for :html which indicates the tokens should be formatted as HTML
+  // instead of plain text.
+  if ($keys && in_array('html', $keys)) {
+    $keys = array_diff($keys, ['html']);
+    $options['html'] = TRUE;
+  }
+
   // If multiple value element look for delta.
   if ($keys && $element_handler->hasMultipleValues($element) && is_numeric($keys[0])) {
     $delta = array_shift($keys);
@@ -559,7 +563,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // If composite element look for sub-element key.
-  if ($keys && $element_handler->isComposite() && $element_handler->getCompositeElements($keys[0])) {
+  if ($keys && $element_handler->isComposite() && method_exists($element_handler, 'getInitializedCompositeElement') && $element_handler->getInitializedCompositeElement($element, $keys[0])) {
     $composite_key = array_shift($keys);
     $options['composite_key'] = $composite_key;
   }

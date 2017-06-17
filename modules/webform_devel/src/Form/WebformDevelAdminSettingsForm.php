@@ -40,8 +40,8 @@ class WebformDevelAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $this->config('webform_devel.settings')->get('logger.debug') ? '1' : '0',
       '#description' => $this->t("Checking 'Yes' will display PHP and theme notices onscreen."),
       '#options' => [
-        '0' => t('No'),
-        '1' => t('Yes'),
+        '0' => $this->t('No'),
+        '1' => $this->t('Yes'),
       ],
       '#required' => TRUE,
     ];

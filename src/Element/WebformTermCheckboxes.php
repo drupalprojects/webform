@@ -4,7 +4,6 @@ namespace Drupal\webform\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Checkboxes;
-use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
  * Provides a webform element for term checkboxes.

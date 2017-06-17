@@ -219,4 +219,14 @@ class TextFormat extends WebformElementBase {
     parent::validateConfigurationForm($form, $form_state);
   }
 
+  /**
+   * Get composite element.
+   *
+   * @return array
+   *   A composite sub-elements.
+   */
+  public function hasCompositeElement(array $element, $key) {
+    $elements = $this->getCompositeElements();
+    return (isset($elements[$key])) ? TRUE : FALSE;
+  }
 }

@@ -31,8 +31,6 @@ class WebformEntityFilterForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\webform\WebformRequestInterface $request_handler
-   *   The webform request handler.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->webformStorage = $entity_type_manager->getStorage('webform');

@@ -53,12 +53,14 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
         $entities = $entity_storage->loadMultiple($element['#default_value']);
         $element['#default_value'] = [];
         if ($entities) {
-          if (!empty($element['#multiple'])) { // #multiple requires an array.
+          if (!empty($element['#multiple'])) {
+            // #multiple requires an array.
             foreach ($entities as $entity) {
               $element['#default_value'][] = EntityAutocompleteElement::getEntityLabels([$entity]);
             }
           }
-          else { // #tags requires comma delimited entity labels.
+          else {
+            // #tags requires comma delimited entity labels.
             $element['#default_value'] = EntityAutocompleteElement::getEntityLabels($entities);
           }
         }

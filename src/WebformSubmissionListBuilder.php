@@ -238,7 +238,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         '%webform' => $this->webform->label(),
         '%user' => $this->account->getDisplayName(),
       ];
-      if ($this->state == self::STATE_DRAFT)  {
+      if ($this->state == self::STATE_DRAFT) {
         $build['#title'] = $this->t('Drafts for %webform for %user', $t_args);
       }
       else {
@@ -301,7 +301,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
 
-
     $build['table']['#attributes']['class'][] = 'webform-results__table';
 
     $build['#attached']['library'][] = 'webform/webform.admin';
@@ -329,7 +328,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--small', 'button-webform-setting']),
     ];
   }
-
 
   /****************************************************************************/
   // Header functions.
@@ -469,7 +467,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return ($is_raw) ? $entity->langcode->value : \Drupal::languageManager()->getLanguage($entity->langcode->value)->getName();
 
       case 'notes':
-        $notes_url =$this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form', ['query' => \Drupal::destination()->getAsArray()]);
+        $notes_url = $this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form', ['query' => \Drupal::destination()->getAsArray()]);
         $state = $entity->get('notes')->value ? 'on' : 'off';
         return [
           'data' => [

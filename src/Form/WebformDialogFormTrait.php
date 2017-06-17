@@ -3,13 +3,9 @@
 namespace Drupal\webform\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\CloseDialogCommand;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Drupal\webform\Ajax\ScrollTopCommand;
 use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
@@ -67,7 +63,7 @@ trait WebformDialogFormTrait {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param array $setting
+   * @param array $settings
    *   Ajax settings.
    *
    * @return array
@@ -129,6 +125,8 @@ trait WebformDialogFormTrait {
    * This allows modal dialog to using ::submitCallback to validate and submit
    * the form via one ajax request.
    */
-  public function noSubmit(array &$form, FormStateInterface $form_state) {}
+  public function noSubmit(array &$form, FormStateInterface $form_state) {
+    // Do nothing.
+  }
 
 }

@@ -671,7 +671,6 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         }
 
         // Return file content headers.
-
         $headers = file_get_content_headers($file);
 
         // Force blacklisted files to be downloaded.

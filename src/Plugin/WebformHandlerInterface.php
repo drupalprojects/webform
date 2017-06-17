@@ -374,7 +374,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   /**
    * Acts on a element after it has been created.
    *
-   * @param $key
+   * @param string $key
    *   The element's key.
    * @param array $element
    *   The element's properties.
@@ -384,7 +384,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   /**
    * Acts on a element after it has been updated.
    *
-   * @param $key
+   * @param string $key
    *   The element's key.
    * @param array $element
    *   The element's properties.
@@ -396,7 +396,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   /**
    * Acts on a element after it has been deleted.
    *
-   * @param $key
+   * @param string $key
    *   The element's key.
    * @param array $element
    *   The element's properties.

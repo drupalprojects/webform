@@ -2,9 +2,7 @@
 
 namespace Drupal\webform_test_element\Plugin\WebformElement;
 
-use Drupal\Core\Form\FormState;
 use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
-use Drupal\webform_test_element\Element\WebformTestComposite as WebformTestCompositeElement;
 
 /**
  * Provides a 'webform_test_composite' element.

@@ -14,7 +14,7 @@ class WebformHandlerExcludedTest extends WebformTestBase {
   /**
    * Test excluded handlers.
    */
-  function testExcludeHandlers() {
+  public function testExcludeHandlers() {
     $this->drupalLogin($this->rootUser);
 
     /** @var \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager */

@@ -534,9 +534,7 @@ class WebformUiEntityForm extends WebformEntityForm {
         '#markup' => $this->t('Submit button(s)'),
       ];
       if ($webform->hasFlexboxLayout()) {
-        $row['flex'] = [
-          '#markup' => (empty($element['#flex'])) ? 1 : $element['#flex'],
-        ];
+        $row['flex'] = ['#markup' => 1];
       }
       $row['required'] = ['#markup' => ''];
     }

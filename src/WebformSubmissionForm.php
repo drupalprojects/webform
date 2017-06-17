@@ -14,7 +14,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\Form\WebformAjaxFormTrait;
 use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Plugin\WebformElementManagerInterface;

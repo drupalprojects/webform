@@ -4,9 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Element\WebformComputedTwig as WebformComputedTwigElement;
 use Drupal\webform\Utility\WebformElementHelper;
-use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_computed_twig' element.
@@ -51,14 +49,14 @@ class WebformComputedTwig extends WebformComputedBase {
     ];
     $output = [];
     $output[] = [
-      '#markup' => '<p>' . $this->t('Learn about <a href=":twig_href">Twig</a> and how it is used in <a href=":drupal_href">Drupal</a>.', $t_args) .'</p>',
+      '#markup' => '<p>' . $this->t('Learn about <a href=":twig_href">Twig</a> and how it is used in <a href=":drupal_href">Drupal</a>.', $t_args) . '</p>',
     ];
     $output[] = [
       '#markup' => '<p>' . $this->t("The following variables are available:") . '</p>',
     ];
     $output[] = [
       '#theme' => 'item_list',
-      '#items' => $items
+      '#items' => $items,
     ];
     $output[] = [
       '#markup' => '<p>' . $this->t("You can also output tokens using the <code>webform_token()</code> function.") . '</p>',

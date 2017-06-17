@@ -83,6 +83,7 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
    *
    * @param array $definitions
    *   The plugin definitions to filter
+   *
    * @return array
    *   An array of plugin definitions with excluded plugins removed.
    */

@@ -2,9 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\webform\Element\WebformComputedToken as WebformComputedTokenElement;
-use Drupal\webform\WebformSubmissionInterface;
-
 /**
  * Provides a 'webform_computed_token' element.
  *

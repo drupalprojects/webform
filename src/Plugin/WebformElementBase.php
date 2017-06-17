@@ -820,12 +820,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   Format of the element, text or html.
    * @param array $element
    *   An element.
-   * @param array|mixed $value
-   *   A value.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission
+   *   A webform submission.
    * @param array $options
    *   An array of options.
+   *
    * @return array
    *   A render array representing an element as text or HTML.
    */
@@ -946,14 +945,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         foreach ($items as $index => &$item) {
           $build[] = (is_array($item)) ? $item : ['#markup' => $item];
           if ($total === 2 && $index === 0) {
-            $build[] = ['#markup' => t(' and ')];
+            $build[] = ['#markup' => ' ' . t('and') . ' '];
           }
           elseif ($index !== ($total - 1)) {
             if ($index === ($total - 2)) {
-              $build[] = ['#markup' => t(', and ')];
+              $build[] = ['#markup' => ', ' . t('and') . ' '];
             }
             else {
-              $build[] = ['#markup' => t(', ')];
+              $build[] = ['#markup' => ', '];
             }
           }
         }
@@ -1067,7 +1066,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param array $options
    *   An array of options.
    *
-   * @return
+   * @return string
    *   The element's value formatted as text.
    */
   protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {

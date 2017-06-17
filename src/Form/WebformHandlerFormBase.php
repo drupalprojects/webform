@@ -3,7 +3,6 @@
 namespace Drupal\webform\Form;
 
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;

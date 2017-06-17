@@ -52,7 +52,7 @@ class WebformElementActionsTest extends WebformTestBase {
     // Submit form.
     $this->drupalPostForm(NULL, [], t('Submit'));
 
-    // Check no actions
+    // Check no actions.
     $this->assertNoRaw('form-actions');
 
     /* Test actions buttons */

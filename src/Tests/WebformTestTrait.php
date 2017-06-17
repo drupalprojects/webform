@@ -5,9 +5,7 @@ namespace Drupal\webform\Tests;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\Entity\Webform;
 
 /**
  * Trait class for Webform tests.

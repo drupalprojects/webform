@@ -243,7 +243,7 @@ class WebformArrayHelper {
    *   Keys.
    *
    * @return bool
-   *  TRUE if multiple keys exist in an array.
+   *   TRUE if multiple keys exist in an array.
    *
    * @see https://wpscholar.com/blog/check-multiple-array-keys-exist-php/
    */

@@ -121,7 +121,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @return int
    *   Total number of submissions.
    */
-  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $in_draft = FALSE);
 
   /**
    * Get the maximum sid.

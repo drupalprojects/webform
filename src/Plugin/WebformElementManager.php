@@ -92,7 +92,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
 
     parent::alterDefinitions($definitions);
   }
-  
+
   /**
    * {@inheritdoc}
    */

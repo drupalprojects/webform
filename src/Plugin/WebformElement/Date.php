@@ -113,7 +113,7 @@ class Date extends DateBase {
         'visible' => [
           ':input[name="properties[datepicker]"]' => ['checked' => TRUE],
         ],
-      ]
+      ],
     ];
     $form['date']['step'] = [
       '#type' => 'number',
@@ -126,7 +126,7 @@ class Date extends DateBase {
         'invisible' => [
           ':input[name="properties[datepicker]"]' => ['checked' => TRUE],
         ],
-      ]
+      ],
     ];
     return $form;
   }

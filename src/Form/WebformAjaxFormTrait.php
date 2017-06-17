@@ -40,7 +40,9 @@ trait WebformAjaxFormTrait {
 
   /**
    * Get the form's Ajax wrapper id.
+   *
    * @return string
+   *   The form's Ajax wrapper id.
    */
   protected function getWrapperId() {
     return $this->getFormId() . '-ajax';
@@ -53,7 +55,7 @@ trait WebformAjaxFormTrait {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param array $setting
+   * @param array $settings
    *   Ajax settings.
    *
    * @return array
@@ -124,7 +126,7 @@ trait WebformAjaxFormTrait {
       // Rebuild form.
       return $this->replaceForm($form);
     }
-    elseif ($redirect_url = $this->getFormStateRedirectUrl($form_state)){
+    elseif ($redirect_url = $this->getFormStateRedirectUrl($form_state)) {
       // Redirect to URL.
       $response = new AjaxResponse();
       $response->addCommand(new RedirectCommand($redirect_url));
@@ -158,7 +160,7 @@ trait WebformAjaxFormTrait {
     unset($form['#prefix'], $form['#suffix']);
 
     // Get wrapper id.
-    $wrapper_id  = '#' . $this->getWrapperId();
+    $wrapper_id = '#' . $this->getWrapperId();
 
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand($wrapper_id, $form));
@@ -201,5 +203,5 @@ trait WebformAjaxFormTrait {
       return FALSE;
     }
   }
-  
+
 }

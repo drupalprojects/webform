@@ -1,41 +1,42 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\Region.
- */
 
 namespace Drupal\webform_bootstrap_test_theme\Plugin\Preprocess;
 
-use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Variables;
-use \Drupal\bootstrap\Plugin\Preprocess\PreprocessBase;
-use \Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface;
+use Drupal\bootstrap\Plugin\Preprocess\PreprocessBase;
+use Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface;
 
-/**
- * Pre-processes variables for the "region" theme hook.
- *
- * @ingroup plugins_preprocess
- *
- * @BootstrapPreprocess("region")
- */
-class Region extends PreprocessBase implements PreprocessInterface {
-
+if (class_exists('\Drupal\bootstrap\Plugin\Preprocess\PreprocessBase')) {
   /**
-   * {@inheritdoc}
+   * Pre-processes variables for the "region" theme hook.
+   *
+   * @ingroup plugins_preprocess
+   *
+   * @BootstrapPreprocess("region")
    */
-  public function preprocessVariables(Variables $variables) {
-    $region = $variables['elements']['#region'];
-    $variables['region'] = $region;
-    $variables['content'] = $variables['elements']['#children'];
+  class Region extends PreprocessBase implements PreprocessInterface {
 
-    // Support for "well" classes in regions.
-    static $region_wells;
-    if (!isset($region_wells)) {
-      $region_wells = $this->theme->getSetting('region_wells');
+    /**
+     * {@inheritdoc}
+     */
+    public function preprocessVariables(Variables $variables) {
+      $region = $variables['elements']['#region'];
+      $variables['region'] = $region;
+      $variables['content'] = $variables['elements']['#children'];
+
+      // Support for "well" classes in regions.
+      static $region_wells;
+      if (!isset($region_wells)) {
+        $region_wells = $this->theme->getSetting('region_wells');
+      }
+      if (!empty($region_wells[$region])) {
+        $variables->addClass($region_wells[$region]);
+      }
     }
-    if (!empty($region_wells[$region])) {
-      $variables->addClass($region_wells[$region]);
-    }
+
   }
 
+}
+else {
+  class Region { }
 }

@@ -41,7 +41,7 @@ interface WebformHandlerMessageInterface extends WebformHandlerInterface {
    *   An array of message parameters.
    *
    * @return bool
-   *  TRUE if the message has a recipient.
+   *   TRUE if the message has a recipient.
    */
   public function hasRecipient(WebformSubmissionInterface $webform_submission, array $message);
 

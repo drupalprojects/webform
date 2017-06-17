@@ -274,13 +274,13 @@ abstract class DateBase extends WebformElementBase {
     // ISSUE:
     // Date list in composite element is missing the date object.
     // WORKAROUND:
-    // Manually set the date object,
+    // Manually set the date object.
     $date_element_types = [
       'datelist' => '\Drupal\Core\Datetime\Element\Datelist',
       'datetime' => '\Drupal\Core\Datetime\Element\Datetime',
     ];
     if (isset($date_element_types[$element['#type']])) {
-      $date_class =  $date_element_types[$element['#type']];
+      $date_class = $date_element_types[$element['#type']];
       $input_exists = FALSE;
       $input = NestedArray::getValue($form_state->getValues(), $element['#parents'], $input_exists);
       if (!isset($input['object'])) {
@@ -343,7 +343,7 @@ abstract class DateBase extends WebformElementBase {
     if ($value === '') {
       return;
     }
-    
+
     $time = strtotime($value);
 
     // Ensure that the input is greater than the #min property, if set.

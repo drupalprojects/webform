@@ -45,6 +45,7 @@ class WebformContact extends WebformAddress {
     }
     return $lines;
   }
+
   /**
    * {@inheritdoc}
    */

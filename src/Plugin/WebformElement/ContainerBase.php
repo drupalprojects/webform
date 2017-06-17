@@ -104,6 +104,7 @@ abstract class ContainerBase extends WebformElementBase {
     $form['element_attributes']['attributes']['#classes'] = $this->configFactory->get('webform.settings')->get('element.wrapper_classes');
     return $form;
   }
+
   /**
    * {@inheritdoc}
    */

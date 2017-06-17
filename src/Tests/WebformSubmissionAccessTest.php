@@ -85,7 +85,7 @@ class WebformSubmissionAccessTest extends WebformTestBase {
     // Any submission permissions.
     /**************************************************************************/
 
-    // Login as any user
+    // Login as any user.
     $this->drupalLogin($this->anyWebformSubmissionUser);
 
     // Check webform results access allowed.

@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element as RenderElement;
 use Drupal\Core\Render\Element;
@@ -22,18 +21,18 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * Composite elements defined in the webform composite form element.
    *
-   * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComposite
-   *
    * @var array
+   *
+   * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComposite
    */
   protected $compositeElement;
 
   /**
    * Initialized composite element.
    *
-   * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComputed
-   *
    * @var array
+   *
+   * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComputed
    */
   protected $initializedCompositeElement;
 
@@ -873,7 +872,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * Get initialized composite element.
    *
-   * @param array &$element
+   * @param array $element
    *   A composite element.
    * @param string $composite_key
    *   (Optional) Composite sub element key.

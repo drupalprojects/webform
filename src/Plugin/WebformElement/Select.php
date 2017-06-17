@@ -57,7 +57,7 @@ class Select extends OptionsBase {
       if ($config->get('element.default_empty_option')) {
         $element['#empty_option'] = $empty_option;
       }
-      // Copied from:  \Drupal\Core\Render\Element\Select::processSelect
+      // Copied from: \Drupal\Core\Render\Element\Select::processSelect.
       elseif (($required && !isset($element['#default_value'])) || isset($element['#empty_value'])) {
         $element['#empty_option'] = $empty_option;
       }

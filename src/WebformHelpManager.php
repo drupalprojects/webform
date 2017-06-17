@@ -237,7 +237,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     return $build;
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -273,7 +272,7 @@ SUGGESTIONS
 <h3>Proposed resolution</h3>
 (Description of the proposed solution, the rationale behind it, and workarounds for people who cannot use the patch.)",
       ];
-    
+
     $links = [];
     $links['index'] = [
       'title' => $this->t('How can we help you?'),
@@ -320,7 +319,7 @@ SUGGESTIONS
       '#attributes' => ['class' => ['webform-help-menu']],
       'operations' => [
         '#type' => 'operations',
-        '#links' => $links
+        '#links' => $links,
       ],
     ];
   }
@@ -341,7 +340,7 @@ SUGGESTIONS
       '#attributes' => ['class' => ['button', 'button--primary']],
       '#suffix' => '<br/><br/><hr/>',
     ];
-    
+
     $build = [
       'title' => [
         '#markup' => $this->t('How can we help you?'),
@@ -353,7 +352,6 @@ SUGGESTIONS
         '#suffix' => '</div>',
       ],
     ];
-
 
     $build['content']['quote'] = [];
     $build['content']['quote']['image'] = [
@@ -427,7 +425,7 @@ SUGGESTIONS
     // Request.
     $build['content']['request'] = [];
     $build['content']['request']['title']['#markup'] = '<h3>' . $this->t('How can you request a feature?') . '</h3>';
-    $build['content']['request']['content']['#markup'] = '<p>' . $this->t('Feature requests can be added to the Webform module\'s issue queue. Use the same tips provided for creating issue reports to help you author a feature request. The better you can define your needs and ideas, the easier it will be for people to help you.') . '</p>';
+    $build['content']['request']['content']['#markup'] = '<p>' . $this->t("Feature requests can be added to the Webform module's issue queue. Use the same tips provided for creating issue reports to help you author a feature request. The better you can define your needs and ideas, the easier it will be for people to help you.") . '</p>';
     $build['content']['request']['link'] = $link_base + [
       '#url' => $links['request']['url'],
       '#title' => $this->t('Help improve the Webform module'),
@@ -454,7 +452,6 @@ SUGGESTIONS
           '#youtube_id' => $youtube_id,
           '#autoplay' => FALSE,
         ];
-        break;
 
       case 'link':
         return [
@@ -464,12 +461,10 @@ SUGGESTIONS
           '#attributes' => ['class' => ['button', 'button-action', 'button--small', 'button-webform-play']],
           '#prefix' => ' ',
         ];
-        break;
 
       case 'hidden':
       default:
         return [];
-        break;
     }
   }
 
@@ -767,7 +762,7 @@ SUGGESTIONS
             '#markup' => $library['notes'] .
               ($elements ? ' <strong>' . $this->formatPlural(count($elements), 'Required by @type element.', 'Required by @type elements.', ['@type' => WebformArrayHelper::toString($elements)]) . '</strong>': ''),
             '#prefix' => '<em>(',
-            '#suffix' => ')</em><br/>'
+            '#suffix' => ')</em><br/>',
           ],
           'download' => [
             '#type' => 'link',
@@ -782,7 +777,6 @@ SUGGESTIONS
         $build['content']['libraries'][$library_name]['title']['#suffix'] = '</dt>';
         unset($build['content']['libraries'][$library_name]['description']['download']);
       }
-
     }
     return $build;
   }
@@ -812,9 +806,9 @@ SUGGESTIONS
     $html = preg_replace('#<thead>.*</thead>#', '', $html);
     // Remove first th cell.
     $html = preg_replace('#<tr><th>.*?</th>#', '<tr>', $html);
-    // Remove empty rows
+    // Remove empty rows.
     $html = preg_replace('#<tr>(<td></td>)+?</tr>#', '', $html);
-    // Remove empty links
+    // Remove empty links.
     $html = str_replace('<a>', '', $html);
     $html = str_replace('</a>', '', $html);
 

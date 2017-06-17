@@ -61,7 +61,7 @@ details details details {
 }
 
 /* System tray actions */
-.ui-dialog.ui-dialog-off-canvas .ui-dialog-content .form-actions
-.ui-dialog.ui-dialog-offcanvas .ui-dialog-content .form-actions {
+.ui-dialog.ui-dialog-offcanvas .ui-dialog-content .form-actions,
+.ui-dialog.ui-dialog-off-canvas .ui-dialog-content .form-actions {
   margin: 1em 0;
 }

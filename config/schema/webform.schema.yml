@@ -453,8 +453,6 @@ webform.webform.*:
           sequence:
             type: string
             label: 'Column name'
-          type: boolean
-          label: 'Submission logging'
         wizard_progress_bar:
           type: boolean
           label: 'Show wizard progress bar'

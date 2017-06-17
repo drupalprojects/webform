@@ -312,4 +312,3 @@ class DateTime extends DateBase {
   }
 
 }
-
