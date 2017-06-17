@@ -18,7 +18,6 @@ function webform_bootstrap_test_module_install() {
 
   // Set default theme to bootstrap.
   \Drupal::configFactory()->getEditable('system.theme')
-    ->set('admin', 'webform_bootstrap_test_theme')
     ->set('default', 'webform_bootstrap_test_theme')
     ->save();
 
@@ -52,8 +51,33 @@ btn-xs
 btn-sm
 btn-lg';
 
-  $assets_css = '.tabs--primary {
-    margin-bottom: 25px;
+  $assets_css = '.tabs--primary /* Add space between tabs and webform. */ {
+  margin-bottom: 25px;
+}
+
+.webform-actions /* Add space between webform and submit buttons (aka actions). */ {
+  margin-top: 25px;
+}
+
+.form-required:after /* Fix required asterix (*) spacing. */ {
+  margin: 0 0 5px 5px;
+}
+
+.webform-progress-bar /* Add space between progressbar and webform. */ {
+  margin-bottom: 25px;
+}
+
+.alert .btn-primary,
+.alert .btn-primary:hover,
+.alert .btn-success,
+.alert .btn-success:hover,
+.alert .btn-info,
+.alert .btn-info:hover,
+.alert .btn-warning,
+.alert .btn-warning:hover,
+.alert .btn-danger,
+.alert .btn-danger:hover /* Button labels inside alert boxes should be white. */ {
+  color: #fff;
 }';
 
   \Drupal::configFactory()->getEditable('webform.settings')
@@ -90,7 +114,6 @@ function webform_bootstrap_test_module_uninstall() {
 
   // Set default theme to bartik.
   \Drupal::configFactory()->getEditable('system.theme')
-    ->set('admin', 'seven')
     ->set('default', 'bartik')
     ->save();
 

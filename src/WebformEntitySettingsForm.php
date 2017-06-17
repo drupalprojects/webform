@@ -1139,7 +1139,9 @@ class WebformEntitySettingsForm extends EntityForm {
           $element['#description'] = '';
         }
         $element['#description'] .= ($element['#description'] ? '<br/>' : '');
-        $element['#description'] .= $this->t('Defaults to: %value', ['%value' => $default_settings["default_$key"]]);
+        // @todo: Stop quotes from being encoded. (ie "Submit" => &quot;Submit&quote;)
+        $value = $default_settings["default_$key"];
+        $element['#description'] .= $this->t('Defaults to: %value', ['%value' => $value]);
       }
 
       $this->appendDefaultValueToElementDescriptions($element, $default_settings);

@@ -143,6 +143,17 @@ function template_preprocess_webform_confirmation(array &$variables) {
   $message_manager->setSourceEntity($source_entity);
   $message_manager->setWebformSubmission($webform_submission);
 
+  // Assets: Add custom shared and webform specific CSS and JS.
+  // @see webform_css_alter()
+  // @see webform_js_alter()
+  $assets = $webform->getAssets();
+  foreach ($assets as $type => $value) {
+    if ($value) {
+      $variables['#attached']['library'][] = "webform/webform.assets.$type";
+      $variables['#attached']['drupalSettings']['webform']['assets'][$type][$webform->id()] = md5($value);
+    }
+  }
+
   $settings = $webform->getSettings();
 
   // Set progress.

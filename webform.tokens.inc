@@ -364,12 +364,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           break;
 
         case 'values':
-          $elements = $webform_submission->getWebform()->getElementsInitialized();
-          $submission_format = (!empty($options['html'])) ? 'html' : 'text';
-          $build = $view_builder->buildElements($elements, $webform_submission, $options, $submission_format);
-          // Note, tokens can't include CSS and JS libraries since they can be
-          // included in an email.
-          $replacements[$original] = \Drupal::service('renderer')->renderPlain($build);
+          $replacements[$original] = _webform_token_get_submission_values($options, $webform_submission, $form_elements);
           break;
 
         /* Default values for the chained tokens handled below */
@@ -528,6 +523,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   $submission_data = $webform_submission->getData();
 
   // Formats:
+  // [html]
   // [values:{element_key}:{format}]
   // [values:{element_key}:{format}:{items}]
   // [values:{element_key}:{format}:html]
@@ -539,6 +535,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   $element_key = array_shift($keys);
 
+  // Build HTML values.
+  if ($element_key == 'html' && empty($keys)) {
+    $options['html'] = TRUE;
+    return _webform_token_get_submission_values($options, $webform_submission, $form_elements);
+  }
+
   // Exit is submission value or form element does not exit.
   if (!isset($submission_data[$element_key]) || !isset($form_elements[$element_key])) {
     return NULL;
@@ -546,13 +548,6 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   $element = $form_elements[$element_key];
   $element_handler = $element_manager->getElementInstance($element);
-
-  // Look for :html which indicates the tokens should be formatted as HTML
-  // instead of plain text.
-  if ($keys && in_array('html', $keys)) {
-    $keys = array_diff($keys, ['html']);
-    $options['html'] = TRUE;
-  }
 
   // If multiple value element look for delta.
   if ($keys && $element_handler->hasMultipleValues($element) && is_numeric($keys[0])) {
@@ -623,4 +618,14 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   // Note, tokens can't include CSS and JS libraries since they will
   // can be included in an email.
   return (is_array($token_value)) ? \Drupal::service('renderer')->renderPlain($token_value) : (string) $token_value;;
+}
+
+function _webform_token_get_submission_values(array $options, WebformSubmissionInterface $webform_submission, array $form_elements) {
+  $submission_format = (!empty($options['html'])) ? 'html' : 'text';
+  /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
+  $token_value = $view_builder->buildElements($form_elements, $webform_submission, $options, $submission_format);
+  // Note, tokens can't include CSS and JS libraries since they can be
+  // included in an email.
+  return \Drupal::service('renderer')->renderPlain($token_value);
 }

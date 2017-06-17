@@ -77,9 +77,8 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
         '#attributes' => ['style' => 'display:none'] + WebformDialogHelper::getModalDialogAttributes(700, ['webform-ui-element-delete-link']),
       ];
       $form['actions']['delete'] = [
-        '#type' => 'link',
-        '#title' => $this->t('Delete'),
-        '#url' => new Url('<none>'),
+        '#type' => 'submit',
+        '#value' => $this->t('Delete'),
         '#attributes' => [
           'class' => ['button', 'button--danger'],
           'onclick' => "jQuery('.webform-ui-element-delete-link').click(); return false;",

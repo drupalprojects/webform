@@ -145,11 +145,14 @@ trait WebformAjaxFormTrait {
    *   An Ajax response that replaces a form.
    */
   protected function replaceForm(array $form) {
-    // Always diplay messages.
-    $form['status_messages'] = [
-      '#type' => 'status_messages',
-      '#weight' => -1000,
-    ];
+    // Display messages first by prefixing it the form and setting its weight
+    // to -1000.
+    $form = [
+      'status_messages' => [
+        '#type' => 'status_messages',
+        '#weight' => -1000,
+      ],
+    ] + $form;
 
     // Remove wrapper.
     unset($form['#prefix'], $form['#suffix']);
