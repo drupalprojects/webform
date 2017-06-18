@@ -349,6 +349,15 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'version' => '2.3.5',
       'optional' => TRUE,
     ];
+    $libraries['progress-tracker'] = [
+      'title' => $this->t('Progress Tracker'),
+      'description' => $this->t("A flexible SASS component to illustrate the steps in a multi step process e.g. a multi step form, a timeline or a quiz."),
+      'notes' => $this->t('Progress Tracker is used by multi-step wizard forms.'),
+      'homepage_url' => Url::fromUri('http://nigelotoole.github.io/progress-tracker/'),
+      'download_url' => Url::fromUri('https://github.com/NigelOToole/progress-tracker/archive/v1.4.0.zip'),
+      'version' => '1.4.0',
+      'optional' => TRUE,
+    ];
     $libraries['signature_pad'] = [
       'title' => $this->t('Signature Pad'),
       'description' => $this->t("Signature Pad is a JavaScript library for drawing smooth signatures. It is HTML5 canvas based and uses variable width Bézier curve interpolation. It works in all modern desktop and mobile browsers and doesn't depend on any external libraries."),

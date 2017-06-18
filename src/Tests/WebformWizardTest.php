@@ -27,6 +27,19 @@ class WebformWizardTest extends WebformTestBase {
   protected static $testWebforms = ['test_form_wizard_basic', 'test_form_wizard_advanced', 'test_form_wizard_custom'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Exclude Progress tracker so that the default progress bar is displayed.
+    // The default progress bar is most likely never going to change.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('libraries.excluded_libraries', ['progress-tracker'])
+      ->save();
+  }
+
+  /**
    * Test webform advanced wizard.
    */
   public function testBasicWizard() {

@@ -528,6 +528,9 @@ function template_preprocess_webform_container_base_text(array &$variables) {
  *   - current_page: The current wizard page.
  */
 function template_preprocess_webform_progress(array &$variables) {
+  /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
+  $libaries_manager = \Drupal::service('webform.libraries_manager');
+
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
   $current_page = $variables['current_page'];
@@ -541,8 +544,9 @@ function template_preprocess_webform_progress(array &$variables) {
   $total = count($page_keys);
 
   if ($webform->getSetting('wizard_progress_bar')) {
+
     $variables['bar'] = [
-      '#theme' => 'webform_progress_bar',
+      '#theme' => ($libaries_manager->isIncluded('progress-tracker')) ? 'webform_progress_tracker' : 'webform_progress_bar',
       '#webform' => $variables['webform'],
       '#current_page' => $variables['current_page'],
     ];
@@ -568,6 +572,32 @@ function template_preprocess_webform_progress(array &$variables) {
  *   - current_page: The current wizard page.
  */
 function template_preprocess_webform_progress_bar(array &$variables) {
+  _template_preprocess_webform_progress($variables);
+}
+
+/**
+ * Prepares variables for webform 'wizard' progress tracker template.
+ *
+ * Default template: webform-progress-tracker.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - webform: A webform.
+ *   - current_page: The current wizard page.
+ */
+function template_preprocess_webform_progress_tracker(array &$variables) {
+  _template_preprocess_webform_progress($variables);
+}
+
+/**
+ * Prepares variables for webform 'wizard' progress bar & tracker template.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - webform: A webform.
+ *   - current_page: The current wizard page.
+ */
+function _template_preprocess_webform_progress(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
   $current_page = $variables['current_page'];
@@ -585,7 +615,6 @@ function template_preprocess_webform_progress_bar(array &$variables) {
     $variables['progress'][] = (isset($page['#title'])) ? $page['#title'] : '';
   }
 }
-
 /******************************************************************************/
 // Element templates
 /******************************************************************************/

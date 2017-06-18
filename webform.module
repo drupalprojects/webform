@@ -620,6 +620,14 @@ function webform_theme() {
         'max_pages' => 10,
       ],
     ],
+
+    'webform_progress_tracker' => [
+      'variables' => [
+        'webform' => NULL,
+        'current_page' => NULL,
+        'max_pages' => 10,
+      ],
+    ],
   ];
 
   // Since any rendering of a webform is going to require 'webform.theme.inc'

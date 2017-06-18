@@ -154,6 +154,15 @@ webform.progress.bar:
     theme:
       css/webform.progress.bar.css: {}
 
+webform.progress.tracker:
+  version: VERSION
+  css:
+    theme:
+      css/webform.progress.tracker.css: {}
+  dependencies:
+    - webform/libraries.progress-tracker
+
+
 webform.states:
   version: VERSION
   js:
@@ -874,6 +883,19 @@ libraries.jquery.toggles:
     /libraries/jquery.toggles/toggles.min.js: {}
   dependencies:
     - core/jquery
+
+libraries.progress-tracker:
+  remote: https://github.com/NigelOToole/progress-tracker
+  version: '1.4.0'
+  license:
+    name: MIT
+    url: https://github.com/NigelOToole/progress-tracker/blob/master/LICENSE
+    gpl-compatible: true
+  cdn:
+    /libraries/progress-tracker/: https://cdn.rawgit.com/NigelOToole/progress-tracker/v1.4.0/
+  css:
+    theme:
+      /libraries/progress-tracker/app/styles/progress-tracker.css: {}
 
 libraries.signature_pad:
   remote: https://github.com/szimek/signature_pad

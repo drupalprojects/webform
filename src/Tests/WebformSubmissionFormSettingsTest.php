@@ -51,8 +51,13 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
 
     // Create users.
     $this->createUsers();
-  }
 
+    // Exclude Progress tracker so that the default progress bar is displayed.
+    // The default progress bar is most likely never going to change.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('libraries.excluded_libraries', ['progress-tracker'])
+      ->save();
+  }
   /**
    * Tests webform setting including confirmation.
    */
