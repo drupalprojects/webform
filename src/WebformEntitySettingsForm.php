@@ -475,6 +475,12 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' => $this->t('A message to be displayed on the preview page.'),
       '#default_value' => $settings['preview_message'],
     ];
+    $form['preview_settings']['preview_container']['preview_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Preview'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.preview_classes'),
+      '#default_value' => $settings['preview_attributes'],
+    ];
 
     // Draft settings.
     $form['draft_settings'] = [

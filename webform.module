@@ -523,6 +523,10 @@ function webform_theme() {
       'variables' => ['webform' => NULL, 'source_entity' => NULL, 'webform_submission' => NULL],
     ],
 
+    'webform_preview' => [
+      'variables' => ['webform_submission' => NULL],
+    ],
+
     'webform_submission_navigation' => [
       'variables' => ['webform_submission' => NULL],
     ],

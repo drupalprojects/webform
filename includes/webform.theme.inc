@@ -121,13 +121,40 @@ function template_preprocess_webform_actions(array &$variables) {
 }
 
 /**
+ * Prepares variables for webform preview templates.
+ *
+ * Default template: webform-preview.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - webform_submission: A webform submission.
+ */
+function template_preprocess_webform_preview(array &$variables) {
+  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+  $webform_submission = $variables['webform_submission'];
+  $webform = $webform_submission->getWebform();
+
+  $variables['preview'] = [
+    '#theme' => 'webform_submission_html',
+    '#webform_submission' => $webform_submission,
+  ];
+
+  $settings = $webform->getSettings();
+
+  // Set attributes.
+  $variables['attributes'] = new Attribute($settings['preview_attributes']);
+}
+
+/**
  * Prepares variables for webform confirmation templates.
  *
  * Default template: webform-confirmation.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
+ *   - webform: A webform.
  *   - webform_submission: A webform submission.
+ *   - source_entity: A webform submission source entity.
  */
 function template_preprocess_webform_confirmation(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */

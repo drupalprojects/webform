@@ -1236,7 +1236,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Build preview.
       $form['#title'] = $this->getWebformSetting('preview_title');
       $form['preview'] = [
-        '#theme' => 'webform_submission_html',
+        '#theme' => 'webform_preview',
         '#webform_submission' => $this->entity,
         '#weight' => -10, // Progress bar is -20.
       ];

@@ -33,6 +33,10 @@ settings:
   default_confirmation_back_label: 'Back to form'
   default_submission_label: '[webform_submission:submitted-to]: Submission #[webform_submission:serial]'
   default_submission_log: false
+  preview_classes: |
+    messages messages--error
+    messages messages--warning
+    messages messages--status
   confirmation_classes: |
     messages messages--error
     messages messages--warning

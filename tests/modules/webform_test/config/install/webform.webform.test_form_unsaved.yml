@@ -53,6 +53,7 @@ settings:
   preview_label: ''
   preview_title: ''
   preview_message: ''
+  preview_attributes: {  }
   draft: none
   draft_multiple: false
   draft_auto_save: false

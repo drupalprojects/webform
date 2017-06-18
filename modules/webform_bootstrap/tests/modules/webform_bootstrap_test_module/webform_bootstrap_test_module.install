@@ -85,6 +85,7 @@ btn-lg';
     ->set('settings.button_classes', $button_classes)
     ->set('settings.confirmation_classes', $container_classes)
     ->set('settings.confirmation_back_classes', $button_classes)
+    ->set('settings.preview_classes', $container_classes)
     ->set('element.wrapper_classes', $container_classes)
     ->set('element.classes', $element_classes)
     ->set('assets.css', $assets_css)

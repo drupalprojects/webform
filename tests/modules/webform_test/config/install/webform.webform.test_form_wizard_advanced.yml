@@ -94,6 +94,7 @@ settings:
   preview_label: ''
   preview_title: ''
   preview_message: ''
+  preview_attributes: {  }
   draft: authenticated
   draft_multiple: false
   draft_auto_save: true

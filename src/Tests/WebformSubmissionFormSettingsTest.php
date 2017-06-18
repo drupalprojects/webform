@@ -461,6 +461,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '< Previous');
     $this->assertRaw('<b>Name</b><br/>test');
+    $this->assertRaw('<div class="webform-preview">');
 
     // Check required preview with custom settings.
     $webform_preview->setSettings([
@@ -468,7 +469,9 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
       'preview_label' => '{Label}',
       'preview_title' => '{Title}',
       'preview_message' => '{Message}',
+      'preview_attributes' => ['class' => ['preview-custom']],
     ]);
+
     // Add 'webform_actions' element.
     $webform_preview->setElementProperties('actions', [
       '#type' => 'webform_actions',
@@ -485,6 +488,7 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '{Back}');
     $this->assertRaw('<b>Name</b><br/>test');
+    $this->assertRaw('<div class="preview-custom webform-preview">');
 
     $this->drupalGet('webform/test_form_preview');
     $this->assertNoFieldByName('op', 'Submit');

@@ -360,6 +360,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $settings['default_preview_message'],
     ];
+    $form['webform']['preview_settings']['preview_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Preview CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Preview CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#default_value' => $config->get('settings.preview_classes'),
+    ];
 
     // Webform: Draft settings.
     $form['webform']['draft_settings'] = [

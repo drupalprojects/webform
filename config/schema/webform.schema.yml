@@ -101,6 +101,9 @@ webform.settings:
         button_classes:
           type: string
           label: 'Button CSS classes'
+        preview_classes:
+          type: string
+          label: 'Preview CSS classes'
         confirmation_classes:
           type: string
           label: 'Confirmation CSS classes'
@@ -486,6 +489,9 @@ webform.webform.*:
         preview_message:
           type: text
           label: 'Preview message'
+        preview_attributes:
+          type: ignore
+          label: 'Preview attributes'
         draft:
           type: string
           label: 'Allow users to save and finish the webform later.'

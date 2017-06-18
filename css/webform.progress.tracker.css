@@ -18,6 +18,8 @@
  */
 .webform-progress-tracker .progress-step .progress-text {
   color: #B6B6B6;
+  padding-top: 5px;
+  padding-bottom: 0;
 }
 
 .webform-progress-tracker .progress-step.is-active .progress-text {

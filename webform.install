@@ -756,3 +756,11 @@ function webform_update_8053() {
 function webform_update_8054() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2887078: Allows preview page to customized.
+ */
+function webform_update_8055() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
