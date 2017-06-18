@@ -63,10 +63,6 @@ btn-lg';
   margin: 0 0 5px 5px;
 }
 
-.webform-progress-bar /* Add space between progressbar and webform. */ {
-  margin-bottom: 25px;
-}
-
 .alert .btn-primary,
 .alert .btn-primary:hover,
 .alert .btn-success,
