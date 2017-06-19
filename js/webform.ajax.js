@@ -8,6 +8,38 @@
   'use strict';
 
   /**
+   * Provide Webform Ajax link behavior.
+   *
+   * Display fullscreen progress indicator instead of throber.
+   * Copied from:  Drupal.behaviors.AJAX
+   *
+   * @type {Drupal~behavior}
+   *
+   * @prop {Drupal~behaviorAttach} attach
+   *   Attaches the behavior to a.webform-ajax-link.
+   */
+  Drupal.behaviors.webformAjaxLink = {
+    attach: function (context) {
+      $('.webform-ajax-link').once('webform-ajax-link').each(function () {
+        var element_settings = {};
+        element_settings.progress = {type: 'fullscreen'};
+
+        // For anchor tags, these will go to the target of the anchor rather
+        // than the usual location.
+        var href = $(this).attr('href');
+        if (href) {
+          element_settings.url = href;
+          element_settings.event = 'click';
+        }
+        element_settings.dialogType = $(this).data('dialog-type');
+        element_settings.dialog = $(this).data('dialog-options');
+        element_settings.base = $(this).attr('id');
+        element_settings.element = this;
+        Drupal.ajax(element_settings);
+      });
+    }
+  };
+  /**
    * Provide Ajax callback for confirmation back to link.
    *
    * @type {Drupal~behavior}
@@ -15,7 +47,6 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior to confirmation back to link.
    */
-
   Drupal.behaviors.webformConfirmationBackAjax = {
     attach: function (context) {
       $('.js-webform-confirmation-back-link-ajax', context)

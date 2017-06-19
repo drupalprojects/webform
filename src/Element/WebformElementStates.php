@@ -132,6 +132,7 @@ class WebformElementStates extends FormElement {
     $ajax_settings = [
       'callback' => [get_called_class(), 'ajaxCallback'],
       'wrapper' => $table_id,
+      'progress' => ['type' => 'none'],
     ];
 
     // Build header.
@@ -631,11 +632,13 @@ class WebformElementStates extends FormElement {
         ];
       }
       else {
-        $selector = $value['selector']['select'];
-        if ($selector == WebformSelectOther::OTHER_OPTION) {
-          $selector = $value['selector']['other'];
+        if (isset($value['selector']['select'])) {
+          $selector = $value['selector']['select'];
+          if ($selector == WebformSelectOther::OTHER_OPTION) {
+            $selector = $value['selector']['other'];
+          }
+          $value['selector'] = $selector;
         }
-        $value['selector'] = $selector;
         $states[$index]['conditions'][] = $value;
       }
     }

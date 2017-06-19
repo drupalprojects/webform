@@ -110,6 +110,7 @@ class WebformMultiple extends FormElement {
     $ajax_settings = [
       'callback' => [get_called_class(), 'ajaxCallback'],
       'wrapper' => $table_id,
+      'progress' => ['type' => 'none'],
     ];
 
     $element['#child_keys'] = Element::children($element['#element']);

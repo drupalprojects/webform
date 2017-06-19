@@ -15,10 +15,6 @@
 /**
  * Tables
  */
-table .ajax-progress-throbber {
-  display: none;
-}
-
 th.webform-ui-element-operations {
   width: 140px;
 }
