@@ -6,7 +6,6 @@ namespace Drupal\webform_devel\Logger;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
-use Drupal\Core\Render\RendererInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -31,26 +30,16 @@ class WebformDevelLog implements LoggerInterface {
   protected $parser;
 
   /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
    * Constructs a SysLog object.
    *
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   The configuration factory object.
    * @param \Drupal\Core\Logger\LogMessageParserInterface $parser
    *   The parser to use when extracting message variables.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer.
    */
-  public function __construct(ConfigFactory $config_factory, LogMessageParserInterface $parser, RendererInterface $renderer) {
+  public function __construct(ConfigFactory $config_factory, LogMessageParserInterface $parser) {
     $this->config = $config_factory->get('webform_devel.settings');
     $this->parser = $parser;
-    $this->renderer = $renderer;
   }
 
   /**
@@ -68,7 +57,11 @@ class WebformDevelLog implements LoggerInterface {
       $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
       $message = empty($message_placeholders) ? $message : strtr($message, $message_placeholders);
       $build = ['#markup' => $message];
-      drupal_set_message($this->renderer->renderPlain($build), ($level <= 3) ? 'error' : 'warning');
+      // IMPORTANT: Do not injected the renderer into WebformDevelLog because it will cause 
+      // "LogicException: The database connection is not serializable." errors for all Ajax 
+      // callbacks.
+      // @see \Drupal\Core\Render\Renderer
+      drupal_set_message(\Drupal::service('renderer')->renderPlain($build), ($level <= 3) ? 'error' : 'warning');
     }
   }
 
