@@ -201,6 +201,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: Webform Product
+    $projects['webform_product'] = [
+      'title' => $this->t('Webform Product'),
+      'description' => $this->t('Links commerce products to webform elements.'),
+      'url' => Url::fromUri('https://github.com/chx/webform_product'),
+      'category' => 'integration',
+    ];
+
     // Integrations: Webform Slack integration.
     $projects['webform_slack'] = [
       'title' => $this->t('Webform Slack'),
