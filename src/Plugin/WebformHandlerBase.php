@@ -138,12 +138,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
     return [
       '#theme' => 'webform_handler_' . $this->pluginId . '_summary',
       '#settings' => $this->configuration,
-      '#handler' => [
-        'id' => $this->pluginDefinition['id'],
-        'handler_id' => $this->getHandlerId(),
-        'label' => $this->label(),
-        'description' => $this->pluginDefinition['description'],
-      ],
+      '#handler' => $this,
     ];
   }
 

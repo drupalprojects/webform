@@ -514,13 +514,13 @@ function webform_theme() {
       'render element' => 'element',
     ],
     'webform_handler_debug_summary' => [
-      'variables' => ['settings' => NULL, 'handler' => []],
+      'variables' => ['settings' => NULL, 'handler' => NULL],
     ],
     'webform_handler_email_summary' => [
-      'variables' => ['settings' => NULL, 'handler' => []],
+      'variables' => ['settings' => NULL, 'handler' => NULL],
     ],
     'webform_handler_remote_post_summary' => [
-      'variables' => ['settings' => NULL, 'handler' => []],
+      'variables' => ['settings' => NULL, 'handler' => NULL],
     ],
 
     'webform_confirmation' => [
@@ -586,10 +586,10 @@ function webform_theme() {
     ],
 
     'webform_email_message_html' => [
-      'variables' => ['message' => '', 'webform_submission' => NULL],
+      'variables' => ['message' => '', 'webform_submission' => NULL, 'handler' => NULL],
     ],
     'webform_email_message_text' => [
-      'variables' => ['message' => '', 'webform_submission' => NULL],
+      'variables' => ['message' => '', 'webform_submission' => NULL, 'handler' => NULL],
     ],
 
     'webform_message' => [

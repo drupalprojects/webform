@@ -789,6 +789,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#theme' => 'webform_email_message_' . (($this->configuration['html']) ? 'html' : 'text'),
       '#message' => ['body' => ['#markup' => $message['body']]] + $message,
       '#webform_submission' => $webform_submission,
+      '#handler' => $this,
     ];
     $message['body'] = trim((string) \Drupal::service('renderer')->renderPlain($build));
 
