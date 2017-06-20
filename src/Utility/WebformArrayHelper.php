@@ -151,7 +151,7 @@ class WebformArrayHelper {
    * @param string $key
    *   A array key.
    * @param string $direction
-   *   The direction of the  key to retrieve.
+   *   The direction of the key to retrieve.
    *
    * @return string|null
    *   The next or prev(ious) array key or NULL if no key is found.

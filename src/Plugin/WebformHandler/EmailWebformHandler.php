@@ -449,7 +449,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Settings: Reply-to.
     $form['settings'] += $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: Return path.
-    $form['settings'] += $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path  email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['settings'] += $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: HTML.
     $form['settings']['html'] = [
       '#type' => 'checkbox',

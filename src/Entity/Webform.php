@@ -1413,7 +1413,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     /** @var \Drupal\webform\WebformInterface $duplicate */
     $duplicate = parent::createDuplicate();
 
-    // If template, clear the  description and remove the template flag.
+    // If template, clear the description and remove the template flag.
     if ($duplicate->isTemplate()) {
       $duplicate->set('description', '');
       $duplicate->set('template', FALSE);

@@ -113,7 +113,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Track if this element has been processed because the work-around below
-    // for 'Issue #2705471: Webform states File fields' which nests  the
+    // for 'Issue #2705471: Webform states File fields' which nests the
     // 'managed_file' element in a basic container, which triggers this element
     // to processed a second time.
     if (!empty($element['#webform_managed_file_processed'])) {

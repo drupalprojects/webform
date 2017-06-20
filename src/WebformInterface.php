@@ -685,7 +685,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   The key of the data to retrieve.
    *
    * @return bool
-   *   TRUE if the  stored value for a given key exists
+   *   TRUE if the stored value for a given key exists
    */
   public function hasState($key);
 

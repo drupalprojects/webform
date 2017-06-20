@@ -312,7 +312,7 @@ trait WebformEntityReferenceTrait {
     if ($properties = $form_state->getValue('properties')) {
       $target_type = (isset($properties['target_type'])) ? $properties['target_type'] : 'node';
       $selection_handler = (isset($properties['selection_handler'])) ? $properties['selection_handler'] : 'default:' . $target_type;
-      // If the default selection handler has changed  when need to update its
+      // If the default selection handler has changed when need to update its
       // value.
       if (strpos($selection_handler, 'default:') === 0 && $selection_handler != "default:$target_type") {
         $selection_handler = "default:$target_type";

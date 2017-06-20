@@ -14,7 +14,7 @@ description: 'Test sending email during each submission state.'
 category: 'Test: Handler'
 elements: |
   message:
-    '#markup': 'Click ''Save Draft'' and ''Submit''  to send emails triggered by submissions  state.'
+    '#markup': 'Click ''Save Draft'' and ''Submit'' to send emails triggered by submissions  state.'
 css: ''
 javascript: ''
 settings:

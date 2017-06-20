@@ -436,7 +436,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   }
 
   /**
-   * Format a composite's sub element's  value as plain text.
+   * Format a composite's sub element's value as plain text.
    *
    * @param array $element
    *   An element.

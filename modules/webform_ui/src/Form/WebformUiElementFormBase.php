@@ -298,7 +298,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     $key = $form_state->getValue('key');
 
     // Make sure element key is unique for new elements.
-    if ($this instanceof  WebformUiElementAddForm || $this instanceof WebformUiElementDuplicateForm) {
+    if ($this instanceof WebformUiElementAddForm || $this instanceof WebformUiElementDuplicateForm) {
       $element_flattened = $this->getWebform()->getElementsDecodedAndFlattened();
       if (isset($element_flattened[$key])) {
         $form_state->setErrorByName('key', $this->t('The element key is already in use. It must be unique.'));

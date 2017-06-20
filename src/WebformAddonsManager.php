@@ -318,7 +318,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Migrate: YAML Form Migrate.
     $projects['yamlform_migrate'] = [
       'title' => $this->t('YAML Form Migrate'),
-      'description' => $this->t('Provides migration routines from  Drupal 6 YAML Form module to  Drupal 8 YAML Form module.'),
+      'description' => $this->t('Provides migration routines from Drupal 6 YAML Form module to Drupal 8 YAML Form module.'),
       'url' => Url::fromUri('https://www.drupal.org/sandbox/dippers/2819169'),
       'category' => 'migrate',
     ];

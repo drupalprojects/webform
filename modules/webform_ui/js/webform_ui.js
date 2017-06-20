@@ -49,7 +49,8 @@
    * @type {Drupal~behavior}
    *
    * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the behavior for locking the default actions  element by moving it to the table footer (<tfoot>).
+   *   Attaches the behavior for locking the default actions element by moving
+   *   it to the table footer (<tfoot>).
    */
   Drupal.behaviors.webformUiElementsActionsDefault = {
     attach: function (context, settings) {

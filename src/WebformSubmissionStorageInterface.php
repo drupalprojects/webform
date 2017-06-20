@@ -286,7 +286,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function getUserColumns(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE);
 
   /**
-   * Get user  default submission columns used to display results.
+   * Get user default submission columns used to display results.
    *
    * @param \Drupal\webform\WebformInterface|null $webform
    *   A webform.

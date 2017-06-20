@@ -1,6 +1,6 @@
 name: 'Webform module block context tests'
 type: module
-description: 'Support module for Webform module block context  testing.'
+description: 'Support module for Webform module block context testing.'
 package: Testing
 core: 8.x
 dependencies:

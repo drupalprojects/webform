@@ -317,7 +317,7 @@ function drush_webform_export($webform_id = NULL) {
  * Implements drush_hook_COMMAND_validate().
  */
 function drush_webform_purge_validate($webform_id = NULL) {
-  // If webform id is set to 'all' or  not included skip validation.
+  // If webform id is set to 'all' or not included skip validation.
   if (drush_get_option('all') || $webform_id == NULL) {
     return;
   }

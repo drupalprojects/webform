@@ -82,7 +82,7 @@
    * @param {string} response.selector
    *   Selector to use.
    *
-   * @see  Drupal.AjaxCommands.prototype.webformScrollTop
+   * @see Drupal.AjaxCommands.prototype.webformScrollTop
    */
   Drupal.AjaxCommands.prototype.webformScrollTop = function (ajax, response) {
     // Scroll to the top of the view. This will allow users

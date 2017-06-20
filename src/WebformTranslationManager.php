@@ -145,7 +145,7 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
    * {@inheritdoc}
    */
   public function getOriginalLangcode(WebformInterface $webform) {
-    // NOTE: Can't inject ConfigMapperInterface  because it requires that
+    // NOTE: Can't inject ConfigMapperInterface because it requires that
     // config_translation.module to be installed.
     /** @var \Drupal\config_translation\ConfigMapperInterface $mapper */
     $mapper = \Drupal::service('plugin.manager.config_translation.mapper')->createInstance('webform');
