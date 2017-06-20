@@ -50,6 +50,10 @@ class Textarea extends TextBase {
       'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_items' => $this->getItemsDefaultFormat(),
+      // Multiple.
+      'multiple' => FALSE,
+      'multiple__header_label' => '',
     ] + $this->getDefaultBaseProperties();
   }
 
