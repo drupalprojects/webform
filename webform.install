@@ -764,3 +764,10 @@ function webform_update_8055() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2887443: Default to and from email settings missing and not used.
+ */
+function webform_update_8056() {
+  _webform_update_admin_settings();
+}
