@@ -585,6 +585,13 @@ function webform_theme() {
       'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
 
+    'webform_email_message_html' => [
+      'variables' => ['message' => '', 'webform_submission' => NULL],
+    ],
+    'webform_email_message_text' => [
+      'variables' => ['message' => '', 'webform_submission' => NULL],
+    ],
+
     'webform_message' => [
       'render element' => 'element',
     ],
