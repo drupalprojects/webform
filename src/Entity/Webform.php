@@ -1413,6 +1413,10 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     /** @var \Drupal\webform\WebformInterface $duplicate */
     $duplicate = parent::createDuplicate();
 
+    // Clear path aliases, which must be unique.
+    $duplicate->setSetting('page_submit_path', '');
+    $duplicate->setSetting('page_confirm_path', '');
+
     // If template, clear the description and remove the template flag.
     if ($duplicate->isTemplate()) {
       $duplicate->set('description', '');
