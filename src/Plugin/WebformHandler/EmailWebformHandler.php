@@ -196,17 +196,18 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $webform_settings = $this->configFactory->get('webform.settings');
     $site_settings = $this->configFactory->get('system.site');
     $body_format = ($this->configuration['html']) ? 'html' : 'text';
-    $default_mail = $webform_settings->get('mail.default_to_mail') ?: $site_settings->get('mail') ?: ini_get('sendmail_from');
+    $default_to_mail = $webform_settings->get('mail.default_to_mail') ?: $site_settings->get('mail') ?: ini_get('sendmail_from');
+    $default_from_mail = $webform_settings->get('mail.default_from_mail') ?: $site_settings->get('mail') ?: ini_get('sendmail_from');
 
     $this->defaultValues = [
       'states' => [WebformSubmissionInterface::STATE_COMPLETED],
-      'to_mail' => $default_mail,
+      'to_mail' => $default_to_mail,
       'to_options' => [],
-      'cc_mail' => $default_mail,
+      'cc_mail' => $default_to_mail,
       'cc_options' => [],
-      'bcc_mail' => $default_mail,
+      'bcc_mail' => $default_to_mail,
       'bcc_options' => [],
-      'from_mail' => $default_mail,
+      'from_mail' => $default_from_mail,
       'from_options' => [],
       'from_name' => $webform_settings->get('mail.default_from_name') ?: $site_settings->get('name'),
       'subject' => $webform_settings->get('mail.default_subject') ?: 'Webform submission from: [webform_submission:source-entity]',

@@ -104,6 +104,7 @@ file:
   default_video_file_extensions: 'avi mov mp4 ogg wav webm'
 format: {  }
 mail:
+  default_to_mail: '[site:mail]'
   default_from_mail: '[site:mail]'
   default_from_name: '[site:name]'
   default_reply_to: ''

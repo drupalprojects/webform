@@ -186,6 +186,9 @@ webform.settings:
       type: mapping
       label: 'Email default settings'
       mapping:
+        default_to_mail:
+          type: email
+          label: 'Default to email'
         default_from_mail:
           type: email
           label: 'Default from email'

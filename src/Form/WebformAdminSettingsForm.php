@@ -934,6 +934,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#include_anonymous' => FALSE,
       '#default_value' => $config->get('mail.roles'),
     ];
+    $form['handler']['mail']['default_to_mail'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default to email'),
+      '#description' => $this->t('The default recipient address for emailed webform results.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('mail.default_to_mail'),
+    ];
     $form['handler']['mail']['default_from_mail'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default from email'),
