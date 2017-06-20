@@ -96,20 +96,14 @@ class WebformUiElementTest extends WebformTestBase {
     // Create element.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/add/textfield', ['key' => 'test', 'properties[title]' => 'Test'], t('Save'));
 
-    // Check elements URL contains ?element-update query string parameter.
-    $this->assertUrl('admin/structure/webform/manage/contact', ['query' => ['element-update' => 'test']]);
+    // Check elements URL contains ?update query string parameter.
+    $this->assertUrl('admin/structure/webform/manage/contact', ['query' => ['update' => 'test']]);
 
-    // Check elements element-update class exists.
-    $this->assertRaw('color-success js-webform-ui-element-update');
-
-    // Check that save elements removes ?element-update query string parameter.
+    // Check that save elements removes ?update query string parameter.
     $this->drupalPostForm(NULL, [], t('Save elements'));
 
-    // Check that save elements removes ?element-update query string parameter.
+    // Check that save elements removes ?update query string parameter.
     $this->assertUrl('admin/structure/webform/manage/contact');
-
-    // Check that save elements removes element-update class.
-    $this->assertNoRaw('color-success js-webform-ui-element-update');
 
     // Create validate unique element.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/add/textfield', ['key' => 'test', 'properties[title]' => 'Test'], t('Save'));
@@ -123,11 +117,8 @@ class WebformUiElementTest extends WebformTestBase {
     // Update element.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/test/edit', ['properties[title]' => 'Test 123', 'properties[default_value]' => 'This is a default value'], t('Save'));
 
-    // Check elements URL contains ?element-update query string parameter.
-    $this->assertUrl('admin/structure/webform/manage/contact', ['query' => ['element-update' => 'test']]);
-
-    // Check elements element-update class exists.
-    $this->assertRaw('color-success js-webform-ui-element-update');
+    // Check elements URL contains ?update query string parameter.
+    $this->assertUrl('admin/structure/webform/manage/contact', ['query' => ['update' => 'test']]);
 
     // Check element updated.
     $this->drupalGet('webform/contact');

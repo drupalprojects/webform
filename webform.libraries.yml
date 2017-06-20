@@ -51,6 +51,9 @@ webform.admin.translation:
 
 webform.ajax:
   version: VERSION
+  css:
+    theme:
+      css/webform.ajax.css: {}
   js:
     js/webform.ajax.js:  {}
   dependencies:

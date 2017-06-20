@@ -134,7 +134,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   protected $state;
 
   /**
-   * Track if table can be customized..
+   * Track if table can be customized.
    *
    * @var bool
    */

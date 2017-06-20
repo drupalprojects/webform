@@ -9,7 +9,7 @@ use Drupal\Core\Ajax\CommandInterface;
  *
  * This command is implemented in Drupal.AjaxCommands.prototype.webformScrollTop.
  */
-class ScrollTopCommand implements CommandInterface {
+class WebformScrollTopCommand implements CommandInterface {
 
   /**
    * A CSS selector string.

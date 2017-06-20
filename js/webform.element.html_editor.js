@@ -87,10 +87,22 @@
 
         options = $.extend(options, Drupal.webform.htmlEditor.options);
 
-        CKEDITOR.replace(this.id, options).on('change', function (evt) {
-          // Save data onchange since Ajax dialogs don't execute form.onsubmit.
-          $textarea.val(evt.editor.getData().trim());
-        });
+        // Catch and suppress
+        // "Uncaught TypeError: Cannot read property 'getEditor' of undefined".
+        // 
+        // Steps to reproduce this error.
+        // - Goto any form elements.
+        // - Edit an element.
+        // - Save the element.
+        try {
+          CKEDITOR.replace(this.id, options).on('change', function (evt) {
+            // Save data onchange since Ajax dialogs don't execute form.onsubmit.
+            $textarea.val(evt.editor.getData().trim());
+          });
+        }
+        catch (e) {
+          // Do nothing.
+        }
       });
     }
   };

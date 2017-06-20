@@ -316,7 +316,7 @@ class WebformElementStates extends FormElement {
    *   An array containing Ajax callback settings.
    *
    * @return array
-   *   A render array containing state operations..
+   *   A render array containing state operations.
    */
   protected static function buildOperations($table_id, $row_index, array $ajax_settings) {
     $operations = [];

@@ -695,7 +695,7 @@ function webform_update_8048() {
   }
 
   // Change webform.settings.element.exclude_types to
-  // webform.settings.element..exclude_elements.
+  // webform.settings.element.exclude_elements.
   if (($element = $config->get('element')) && isset($element['excluded_types'])) {
     $element['excluded_elements'] = $element['excluded_types'];
     unset($element['excluded_types']);

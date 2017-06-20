@@ -278,10 +278,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $form_id = $this->getFormId();
     $this->thirdPartySettingsManager->alter('webform_submission_form', $form, $form_state, $form_id);
 
-    // Add Ajax callback to form.
-    $this->buildAjaxForm($form, $form_state);
-
-    return $form;
+    return $this->buildAjaxForm($form, $form_state);
   }
 
   /**

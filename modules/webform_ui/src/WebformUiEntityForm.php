@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
+use Drupal\webform\Form\WebformEntityAjaxFormTrait;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\WebformEntityForm;
 
@@ -14,6 +15,8 @@ use Drupal\webform\WebformEntityForm;
  * Base for controller for webform UI.
  */
 class WebformUiEntityForm extends WebformEntityForm {
+
+  use WebformEntityAjaxFormTrait;
 
   /**
    * {@inheritdoc}
@@ -26,13 +29,6 @@ class WebformUiEntityForm extends WebformEntityForm {
       return $form;
     }
 
-    // Track which element has been updated.
-    $element_update = FALSE;
-    if ($this->getRequest()->query->has('element-update')) {
-      $element_update = $this->getRequest()->query->get('element-update');
-      $form['#attached']['drupalSettings']['webformUiElementUpdate'] = $element_update;
-    }
-
     $header = $this->getTableHeader();
 
     // Build table rows for elements.
@@ -40,7 +36,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     $elements = $this->getOrderableElements();
     $delta = count($elements);
     foreach ($elements as $element) {
-      $rows[$element['#webform_key']] = $this->getElementRow($element, $element_update, $delta);
+      $rows[$element['#webform_key']] = $this->getElementRow($element, $delta);
     }
 
     // Must manually add local actions to the webform because we can't alter local
@@ -179,10 +175,11 @@ class WebformUiEntityForm extends WebformEntityForm {
   /**
    * {@inheritdoc}
    */
-  protected function actions(array $form, FormStateInterface $form_state) {
-    $actions = parent::actions($form, $form_state);
-    $actions['submit']['#value'] = ($this->entity->isNew()) ? $this->t('Save') : $this->t('Save elements');
-    return $actions;
+  protected function actionsElement(array $form, FormStateInterface $form_state) {
+    $form = parent::actionsElement($form, $form_state);
+    $form['submit']['#value'] = ($this->entity->isNew()) ? $this->t('Save') : $this->t('Save elements');
+    unset($form['delete']);
+    return $form;
   }
 
   /**
@@ -271,7 +268,7 @@ class WebformUiEntityForm extends WebformEntityForm {
         'class' => [RESPONSIVE_PRIORITY_MEDIUM, 'webform-ui-element-operations'],
       ];
     }
-    if (!$this->isDialog()) {
+    if (!$this->isQuickEdit()) {
       $header['key'] = [
         'data' => $this->t('Key'),
         'class' => [RESPONSIVE_PRIORITY_LOW],
@@ -293,7 +290,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     }
     $header['weight'] = $this->t('Weight');
     $header['parent'] = $this->t('Parent');
-    if (!$this->isDialog()) {
+    if (!$this->isQuickEdit()) {
       $header['operations'] = [
         'data' => $this->t('Operations'),
         'class' => ['webform-ui-element-operations'],
@@ -307,19 +304,19 @@ class WebformUiEntityForm extends WebformEntityForm {
    *
    * @param array $element
    *   Webform element.
-   * @param bool|string $element_update
-   *   The name of the element being updated or FALSE if none.
    * @param int $delta
    *   The number of elements. @todo is this correct?
    *
    * @return array
    *   The row for the element.
    */
-  protected function getElementRow(array $element, $element_update, $delta) {
+  protected function getElementRow(array $element, $delta) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
     $row = [];
+
+
     $element_dialog_attributes = WebformDialogHelper::getModalDialogAttributes(800);
     $key = $element['#webform_key'];
 
@@ -355,12 +352,8 @@ class WebformUiEntityForm extends WebformEntityForm {
       $row_class[] = 'webform-ui-element-container';
     }
 
-    // Add classes to updated element.
-    // @see Drupal.behaviors.webformUiElementsUpdate
-    if ($element_update && $element_update == $element['#webform_key']) {
-      $row_class[] = 'color-success';
-      $row_class[] = 'js-webform-ui-element-update';
-    }
+    // Add element key.
+    $row['#attributes']['data-webform-key'] = $element['#webform_key'];
 
     $row['#attributes']['class'] = $row_class;
 
@@ -400,7 +393,7 @@ class WebformUiEntityForm extends WebformEntityForm {
         $row['add'] = ['#markup' => ''];
       }
     }
-    if (!$this->isDialog()) {
+    if (!$this->isQuickEdit()) {
       $row['name'] = [
         '#markup' => $element['#webform_key'],
       ];
@@ -458,7 +451,7 @@ class WebformUiEntityForm extends WebformEntityForm {
       ],
     ];
 
-    if (!$this->isDialog()) {
+    if (!$this->isQuickEdit()) {
       $row['operations'] = [
         '#type' => 'operations',
       ];
@@ -528,7 +521,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     if ($webform->hasContainer()) {
       $row['add'] = ['#markup' => ''];
     }
-    if (!$this->isDialog()) {
+    if (!$this->isQuickEdit()) {
       $row['name'] = ['#markup' => 'actions'];
       $row['type'] = [
         '#markup' => $this->t('Submit button(s)'),
@@ -540,7 +533,7 @@ class WebformUiEntityForm extends WebformEntityForm {
     }
     $row['weight'] = ['#markup' => ''];
     $row['parent'] = ['#markup' => ''];
-    if (!$this->isDialog()) {
+    if (!$this->isQuickEdit()) {
       $row['operations'] = [
         '#type' => 'operations',
       ];

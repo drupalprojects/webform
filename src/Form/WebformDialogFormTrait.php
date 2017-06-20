@@ -57,6 +57,16 @@ trait WebformDialogFormTrait {
   }
 
   /**
+   * Is the current request a quick edit page.
+   *
+   * @return bool
+   *   TRUE if the current request a quick edit page.
+   */
+  protected function isQuickEdit() {
+    return (\Drupal::request()->query->get('destination')) ? TRUE : FALSE;
+  }
+
+  /**
    * Add modal dialog support to a form.
    *
    * @param array $form
@@ -96,7 +106,7 @@ trait WebformDialogFormTrait {
       '#type' => 'submit',
       '#value' => $this->t('Cancel'),
       '#submit' => ['::noSubmit'],
-      '#limit_validation_errors' => [],
+      '#validate' => ['::noSubmit'],
       '#weight' => 100,
       '#ajax' => [
         'callback' => '::cancelAjaxForm',

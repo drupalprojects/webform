@@ -62,7 +62,14 @@ class WebformHandlerAddForm extends WebformHandlerFormBase {
     // Initialize the handler an pass in the webform.
     $webform_handler->setWebform($this->webform);
     // Set the initial weight so this handler comes last.
-    $webform_handler->setWeight(count($this->webform->getHandlers()));
+    $handlers = $this->webform->getHandlers();
+    $weight = 0;
+    foreach ($handlers as $handler) {
+      if ($weight < $handler->getWeight()) {
+        $weight = $handler->getWeight() + 1;
+      }
+    }
+    $webform_handler->setWeight($weight);
     return $webform_handler;
   }
 

@@ -4,11 +4,12 @@ namespace Drupal\webform\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
-use Drupal\webform\Ajax\ScrollTopCommand;
+use Drupal\webform\Ajax\WebformCloseDialogCommand;
+use Drupal\webform\Ajax\WebformRefreshCommand;
+use Drupal\webform\Ajax\WebformScrollTopCommand;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -39,6 +40,22 @@ trait WebformAjaxFormTrait {
   abstract public function cancelAjaxForm(array &$form, FormStateInterface $form_state);
 
   /**
+   * Get default ajax callback settings.
+   * @return array
+   */
+  protected function getDefaultAjaxSettings() {
+    return [
+      'disable-refocus' => TRUE,
+      'effect' => 'fade',
+      'speed' => 1000,
+      'progress' => [
+        'type' => 'throbber',
+        'message' => '',
+      ],
+    ];
+  }
+
+  /**
    * Get the form's Ajax wrapper id.
    *
    * @return string
@@ -67,15 +84,7 @@ trait WebformAjaxFormTrait {
     }
 
     // Apply default settings.
-    $settings += [
-      'disable-refocus' => TRUE,
-      'effect' => 'fade',
-      'speed' => 1000,
-      'progress' => [
-        'type' => 'throbber',
-        'message' => '',
-      ],
-    ];
+    $settings += $this->getDefaultAjaxSettings();
 
     // Make sure the form has (submit) actions.
     if (!isset($form['actions'])) {
@@ -119,8 +128,10 @@ trait WebformAjaxFormTrait {
    */
   public function submitAjaxForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->hasAnyErrors()) {
-      // Display validation errors.
-      return $this->replaceForm($form);
+      // Display validation errors and scroll to the top of the page.
+      $response = $this->replaceForm($form);
+      $response->addCommand(new WebformScrollTopCommand('#' . $this->getWrapperId()));
+      return $response;
     }
     elseif ($form_state->isRebuilding()) {
       // Rebuild form.
@@ -129,12 +140,23 @@ trait WebformAjaxFormTrait {
     elseif ($redirect_url = $this->getFormStateRedirectUrl($form_state)) {
       // Redirect to URL.
       $response = new AjaxResponse();
-      $response->addCommand(new RedirectCommand($redirect_url));
+      $response->addCommand(new WebformCloseDialogCommand());
+      $response->addCommand(new WebformRefreshCommand($redirect_url));
       return $response;
     }
     else {
       return $this->cancelAjaxForm($form, $form_state);
     }
+  }
+
+  /**
+   * Empty submit callback used to only have the submit button to use an #ajax submit callback.
+   *
+   * This allows modal dialog to using ::submitCallback to validate and submit
+   * the form via one ajax request.
+   */
+  public function noSubmit(array &$form, FormStateInterface $form_state) {
+    // Do nothing.
   }
 
   /**
@@ -159,12 +181,8 @@ trait WebformAjaxFormTrait {
     // Remove wrapper.
     unset($form['#prefix'], $form['#suffix']);
 
-    // Get wrapper id.
-    $wrapper_id = '#' . $this->getWrapperId();
-
     $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand($wrapper_id, $form));
-    $response->addCommand(new ScrollTopCommand($wrapper_id));
+    $response->addCommand(new HtmlCommand('#' . $this->getWrapperId(), $form));
     return $response;
   }
 
@@ -179,7 +197,7 @@ trait WebformAjaxFormTrait {
    */
   protected function getFormStateRedirectUrl(FormStateInterface $form_state) {
     // Always check the ?destination which is used by the off-canvas/system tray.
-    if ($this->requestStack->getCurrentRequest()->get('destination')) {
+    if (\Drupal::request()->get('destination')) {
       return base_path() . $this->getRedirectDestination()->get();
     }
 
