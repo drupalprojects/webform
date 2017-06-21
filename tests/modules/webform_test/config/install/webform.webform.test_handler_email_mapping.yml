@@ -140,6 +140,7 @@ handlers:
       subject: 'Email mapping handler: Select yes option'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -168,6 +169,7 @@ handlers:
       subject: 'Email mapping handler: Select empty'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -196,6 +198,7 @@ handlers:
       subject: 'Email mapping handler: Select default'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -226,6 +229,7 @@ handlers:
       subject: 'Email mapping handler: Checkboxes'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -254,6 +258,7 @@ handlers:
       subject: 'Email mapping handler: Radios other'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true

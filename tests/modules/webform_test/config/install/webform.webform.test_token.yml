@@ -231,6 +231,7 @@ handlers:
       subject: default
       body: '<a href="[webform_submission:update-url]">[webform_submission:update-url]</a>'
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: false

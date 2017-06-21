@@ -148,6 +148,7 @@ handlers:
       subject: default
       body: '[webform_submission:values:comments:value]'
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: false
@@ -184,6 +185,7 @@ handlers:
       subject: default
       body: '[webform_submission:values:comments:value]'
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: false

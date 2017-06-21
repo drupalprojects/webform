@@ -125,6 +125,7 @@ handlers:
       subject: 'Draft saved'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -151,6 +152,7 @@ handlers:
       subject: 'Submission converted'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -177,6 +179,7 @@ handlers:
       subject: 'Submission completed'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -203,6 +206,7 @@ handlers:
       subject: 'Submission updated'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -229,6 +233,7 @@ handlers:
       subject: 'Submission deleted'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true

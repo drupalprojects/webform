@@ -141,6 +141,7 @@ handlers:
         <h3>ol:</h3>[webform_submission:values:checkboxes:value:ol]<hr/>
         <h3>raw:</h3>[webform_submission:values:checkboxes:raw]<hr/>
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true
@@ -187,6 +188,7 @@ handlers:
         raw:
         [webform_submission:values:checkboxes:raw]
       excluded_elements: {  }
+      ignore_access: false
       html: false
       attachments: false
       debug: true

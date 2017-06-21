@@ -174,6 +174,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'subject' => 'default',
       'body' => 'default',
       'excluded_elements' => [],
+      'ignore_access' => FALSE,
       'html' => TRUE,
       'attachments' => FALSE,
       'debug' => FALSE,
@@ -424,7 +425,28 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration['excluded_elements'],
       '#parents' => ['settings', 'excluded_elements'],
     ];
-
+    $form['elements']['ignore_access'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Always include private and restricted access elements.'),
+      '#description' => $this->t('If checked, access controls for included element will be ignored.'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->configuration['ignore_access'],
+      '#parents' => ['settings', 'ignore_access'],
+    ];
+    $elements = $this->webform->getElementsInitializedFlattenedAndHasValue();
+    foreach ($elements as $key => $element) {
+      if (!empty($element['#access_view_roles']) || !empty($element['#private'])) {
+        $form['elements']['ignore_access_message'] = [
+          '#type' => 'webform_message',
+          '#message_message' => $this->t('This webform contains private and/or restricted access elements, which will only be included if the user submitting the form has access to these elements.'),
+          '#message_type' => 'warning',
+          '#states' => [
+            'visible' => [':input[name="settings[ignore_access]"]' => ['checked' => FALSE]],
+          ]
+        ];
+        break;
+      }
+    }
     // Settings.
     $results_disabled = $this->getWebform()->getSetting('results_disabled');
     $form['settings'] = [
@@ -561,6 +583,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $token_options = [
       'email' => TRUE,
       'excluded_elements' => $this->configuration['excluded_elements'],
+      'ignore_access' => $this->configuration['ignore_access'],
       'html' => ($this->configuration['html'] && $this->supportsHtml()),
     ];
 

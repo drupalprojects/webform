@@ -149,6 +149,7 @@ handlers:
       debug: false
       reply_to: ''
       return_path: ''
+      ignore_access: false
   email_reminder:
     id: scheduled_email
     label: 'Email Reminder'
@@ -178,3 +179,4 @@ handlers:
       send: '[webform_submission:node:field_webform_demo_event_date:value]'
       days: -1
       unschedule: false
+      ignore_access: false

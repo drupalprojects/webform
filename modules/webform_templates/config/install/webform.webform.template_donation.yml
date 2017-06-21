@@ -196,6 +196,7 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: false

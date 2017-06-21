@@ -42,6 +42,11 @@ elements: |
     '#type': managed_file
     '#title': File
     '#file_extensions': txt
+  notes:
+    '#type': textarea
+    '#title': Notes
+    '#private': true
+    '#default_value': 'These notes are private.'
 css: ''
 javascript: ''
 settings:
@@ -152,6 +157,7 @@ handlers:
       subject: '[webform_submission:values:subject:value]'
       body: default
       excluded_elements: {  }
+      ignore_access: true
       html: true
       attachments: true
       debug: true

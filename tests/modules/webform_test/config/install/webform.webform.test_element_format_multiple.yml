@@ -1685,6 +1685,7 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: false
       attachments: false
       debug: true
@@ -1711,6 +1712,7 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: true
       attachments: false
       debug: true

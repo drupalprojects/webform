@@ -148,6 +148,7 @@ handlers:
       subject: '[webform_submission:values:subject:value]'
       body: default
       excluded_elements: {  }
+      ignore_access: false
       html: false
       attachments: false
       debug: true

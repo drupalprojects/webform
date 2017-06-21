@@ -771,3 +771,36 @@ function webform_update_8055() {
 function webform_update_8056() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2854021: Send email based on element options selection.
+ */
+function webform_update_8057() {
+  // Add ignore_access: FALSE to email handler settings.
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_email_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if ($handler['id'] === 'email') {
+        $has_email_handler = TRUE;
+
+        $settings = [];
+        foreach ($handler['settings'] as $settings_key => $setting_value) {
+          $settings[$settings_key] = $setting_value;
+          if ($settings_key == 'excluded_elements') {
+            $settings['ignore_access'] = FALSE;
+          }
+        }
+        $handler['settings'] = $settings;
+      }
+    }
+
+    if ($has_email_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}

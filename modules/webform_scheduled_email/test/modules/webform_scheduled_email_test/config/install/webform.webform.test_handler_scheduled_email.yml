@@ -154,6 +154,7 @@ handlers:
       send: '[webform_submission:completed:html_date]'
       days: 1
       unschedule: false
+      ignore_access: false
   yesterday:
     id: scheduled_email
     label: Yesterday
@@ -185,6 +186,7 @@ handlers:
       send: '[webform_submission:completed:html_date]'
       days: -1
       unschedule: false
+      ignore_access: false
   last_year:
     id: scheduled_email
     label: 'Last year'
@@ -216,6 +218,7 @@ handlers:
       send: '2016-01-01'
       days: 0
       unschedule: false
+      ignore_access: false
   broken:
     id: scheduled_email
     label: Broken
@@ -247,6 +250,7 @@ handlers:
       send: '[broken]'
       days: 0
       unschedule: false
+      ignore_access: false
   other:
     id: scheduled_email
     label: Other
@@ -280,6 +284,7 @@ handlers:
       send: '[webform_submission:values:date:html_date]'
       days: 14
       unschedule: false
+      ignore_access: false
   draft_reminder:
     id: scheduled_email
     label: 'Draft reminder'
@@ -311,3 +316,4 @@ handlers:
       send: '[date:html_date]'
       days: 14
       unschedule: true
+      ignore_access: false

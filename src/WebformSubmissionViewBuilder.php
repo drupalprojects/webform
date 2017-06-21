@@ -151,7 +151,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
     $build = [];
 
     foreach ($elements as $key => $element) {
-      if (!is_array($element) || Element::property($key) || !$this->isVisibleElement($element) || isset($options['excluded_elements'][$key])) {
+      if (!is_array($element) || Element::property($key) || !$this->isVisibleElement($element, $options) || isset($options['excluded_elements'][$key])) {
         continue;
       }
 
@@ -160,7 +160,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
       $webform_element = $this->elementManager->createInstance($plugin_id);
 
       // Check element view access.
-      if (!$webform_element->checkAccessRules('view', $element)) {
+      if (empty($options['ignore_access']) && !$webform_element->checkAccessRules('view', $element)) {
         continue;
       }
 
@@ -220,11 +220,19 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
    *
    * @param array $element
    *   The element to check for visibility.
+   * @param array $options
+   *   - excluded_elements: An array of elements to be excluded.
+   *   - ignore_access: Flag to ignore private and/or access controls and always
+   *     display the element.
+   *   - email: Format element to be send via email.
    *
    * @return bool
    *   TRUE if the element is visible, otherwise FALSE.
    */
-  protected function isVisibleElement(array $element) {
+  protected function isVisibleElement(array $element, array $options) {
+    if (!empty($options['ignore_access'])) {
+      return TRUE;
+    }
     return (!isset($element['#access']) || (($element['#access'] instanceof AccessResultInterface && $element['#access']->isAllowed()) || ($element['#access'] === TRUE)));
   }
 
