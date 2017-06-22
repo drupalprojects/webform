@@ -714,6 +714,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_public'),
     ];
+    $form['element_settings']['file']['file_private_redirect'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Redirect anonymous users to login when attempting to access private file uploads.'),
+      '#description' => $this->t('If checked, anoymous users will be redirected to login to access private file uploads.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('file.file_private_redirect'),
+    ];
     $form['element_settings']['file']['default_max_filesize'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default maximum upload size'),

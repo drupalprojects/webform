@@ -804,3 +804,10 @@ function webform_update_8057() {
     }
   }
 }
+
+/**
+ * Issue #2888076: Redirect users to login page when trying to access the a protected webform file.
+ */
+function webform_update_8058() {
+  _webform_update_admin_settings();
+}

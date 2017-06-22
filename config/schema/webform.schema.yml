@@ -161,6 +161,9 @@ webform.settings:
         file_public:
           type: boolean
           label: 'Allow files to be uploaded to public file system.'
+        file_private_redirect:
+          type: boolean
+          label: 'Redirect anonymous users to login when attempting to access private file uploads.'
         default_max_filesize:
           type: string
           label: 'Default maximum upload size'

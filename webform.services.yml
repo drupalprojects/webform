@@ -77,6 +77,14 @@ services:
     tags:
       - { name: breadcrumb_builder, priority: 1002 }
 
+  # Event subscriber.
+
+  webform.event_subscriber:
+    class: Drupal\webform\EventSubscriber\WebformSubscriber
+    arguments: ['@current_user', '@config.factory']
+    tags:
+      - { name: event_subscriber }
+
   # Route subscriber.
 
   webform.route_subscriber:
