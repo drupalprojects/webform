@@ -1417,6 +1417,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $duplicate->setSetting('page_submit_path', '');
     $duplicate->setSetting('page_confirm_path', '');
 
+    // Update owner to current user.
+    $duplicate->setOwnerId(\Drupal::currentUser()->id());
+    
     // If template, clear the description and remove the template flag.
     if ($duplicate->isTemplate()) {
       $duplicate->set('description', '');
