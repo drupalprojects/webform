@@ -703,6 +703,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_convert_anonymous' => FALSE,
       'form_prepopulate' => FALSE,
       'form_prepopulate_source_entity' => FALSE,
+      'form_prepopulate_source_entity_required' => FALSE,
+      'form_prepopulate_source_entity_type' => FALSE,
       'form_disable_autocomplete' => FALSE,
       'form_novalidate' => FALSE,
       'form_unsaved' => FALSE,

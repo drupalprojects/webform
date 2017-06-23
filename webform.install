@@ -811,3 +811,10 @@ function webform_update_8057() {
 function webform_update_8058() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2888850: Validate source entity that passed as URL parameters.
+ */
+function webform_update_8059() {
+  _webform_update_webform_settings();
+}

@@ -29,7 +29,6 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     'test_form_assets',
     'test_form_opening',
     'test_form_closed',
-    'test_form_prepopulate',
     'test_form_submit_once',
     'test_form_disable_back',
     'test_form_unsaved',
@@ -192,53 +191,6 @@ class WebformSubmissionFormSettingsTest extends WebformTestBase {
     $this->assertRaw('This message should not be displayed');
     $this->assertNoRaw('This form is closed.');
     $this->assertNoRaw('Only submission administrators are allowed to access this webform and create new submissions.');
-
-    /**************************************************************************/
-    /* Test webform prepopulate (form_prepopulate) */
-    /**************************************************************************/
-
-    $webform_prepopulate = Webform::load('test_form_prepopulate');
-
-    // Check prepopulation of an element.
-    $this->drupalGet('webform/test_form_prepopulate', ['query' => ['name' => 'John', 'colors' => ['red', 'white']]]);
-    $this->assertFieldByName('name', 'John');
-    $this->assertFieldChecked('edit-colors-red');
-    $this->assertFieldChecked('edit-colors-white');
-    $this->assertNoFieldChecked('edit-colors-blue');
-
-    $this->drupalGet('webform/test_form_prepopulate', ['query' => ['name' => 'John', 'colors' => 'red']]);
-    $this->assertFieldByName('name', 'John');
-    $this->assertFieldChecked('edit-colors-red');
-    $this->assertNoFieldChecked('edit-colors-white');
-    $this->assertNoFieldChecked('edit-colors-blue');
-
-    // Check disabling prepopulation of an element.
-    $webform_prepopulate->setSetting('form_prepopulate', FALSE);
-    $webform_prepopulate->save();
-    $this->drupalGet('webform/test_form_prepopulate', ['query' => ['name' => 'John']]);
-    $this->assertFieldByName('name', '');
-
-    /**************************************************************************/
-    /* Test webform prepopulate source entity (form_prepopulate_source_entity) */
-    /**************************************************************************/
-
-    // Check prepopulating source entity.
-    $this->drupalPostForm('webform/test_form_prepopulate', [], t('Submit'), ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
-    $sid = $this->getLastSubmissionId($webform_prepopulate);
-    $webform_submission = WebformSubmission::load($sid);
-    $this->assertNotNull($webform_submission->getSourceEntity());
-    if ($webform_submission->getSourceEntity()) {
-      $this->assertEqual($webform_submission->getSourceEntity()->getEntityTypeId(), 'webform');
-      $this->assertEqual($webform_submission->getSourceEntity()->id(), 'contact');
-    }
-
-    // Check disabling prepopulation source entity.
-    $webform_prepopulate->setSetting('form_prepopulate_source_entity', FALSE);
-    $webform_prepopulate->save();
-    $this->drupalPostForm('webform/test_form_prepopulate', [], t('Submit'), ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
-    $sid = $this->getLastSubmissionId($webform_prepopulate);
-    $webform_submission = WebformSubmission::load($sid);
-    $this->assert(!$webform_submission->getSourceEntity());
 
     /**************************************************************************/
     /* Test webform submit once (form_submit_once) */

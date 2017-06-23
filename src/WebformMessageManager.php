@@ -245,6 +245,10 @@ class WebformMessageManager implements WebformMessageManagerInterface {
       case WebformMessageManagerInterface::TEMPLATE_PREVIEW:
         return $this->t('You are previewing the below template, which can be used to <a href=":duplicate_href">create a new webform</a>. <strong>Submitted data will be ignored</strong>.', $t_args);
 
+      case WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE:
+      case WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED:
+        return $this->t('This webform is not available. Please contact the site adminstrator.', $t_args);
+
       default:
         return FALSE;
     }
@@ -268,6 +272,17 @@ class WebformMessageManager implements WebformMessageManagerInterface {
         $context['%form'] = $webform->label();
         $message = '%form is not saving any submitted data and has been disabled.';
         break;
+
+      case WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE:
+        $context['%form'] = $webform->label();
+        $message = '%form prepopulated source entity is not valid.';
+        break;
+
+      case WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED:
+        $context['%form'] = $webform->label();
+        $message = '%form prepopulated source entity is required.';
+        break;
+
     }
 
     $this->logger->$type($message, $context);

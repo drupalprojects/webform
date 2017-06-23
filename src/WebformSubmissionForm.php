@@ -457,6 +457,21 @@ class WebformSubmissionForm extends ContentEntityForm {
       return $form;
     }
 
+    // Check prepopulate source entity required and type.
+    if ($webform->getSetting('form_prepopulate_source_entity')) {
+      if ($webform->getSetting('form_prepopulate_source_entity_required') && empty($this->getSourceEntity())) {
+        $this->messageManager->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'notice');
+        $this->messageManager->display(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'warning');
+        return $form;
+      }
+      $source_entity_type = $webform->getSetting('form_prepopulate_source_entity_type');
+      if ($source_entity_type && $this->getSourceEntity() && $source_entity_type != $this->getSourceEntity()->getEntityTypeId()) {
+        $this->messageManager->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'notice');
+        $this->messageManager->display(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'warning');
+        return $form;
+      }
+    }
+
     // Handle webform with managed file upload but saving of submission is disabled.
     if ($webform->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
       $this->messageManager->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');

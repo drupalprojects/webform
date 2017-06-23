@@ -312,23 +312,6 @@ class WebformEntitySettingsForm extends EntityForm {
 
     // Form behaviors.
     $behavior_elements = [
-      // Form specific behaviors.
-      'form_disable_autocomplete' => [
-        'title' => $this->t('Disable autocompletion'),
-        'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),
-      ],
-      'form_autofocus' => [
-        'title' => $this->t('Autofocus'),
-        'form_description' => $this->t('If checked, the first visible and enabled input will be focused when adding new submissions.'),
-      ],
-      'form_prepopulate' => [
-        'title' => $this->t('Allow elements to be populated using query string parameters.'),
-        'form_description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would setting an the 'name' element's default value to 'John Smith'."),
-      ],
-      'form_prepopulate_source_entity' => [
-        'title' => $this->t('Allow source entity to be populated using query string parameters.'),
-        'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=node&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to 'node:1'."),
-      ],
       // Global behaviors.
       // @see \Drupal\webform\Form\WebformAdminSettingsForm
       'form_submit_once' => [
@@ -356,12 +339,51 @@ class WebformEntitySettingsForm extends EntityForm {
         'all_description' => $this->t('Expand/collapse all (details) link is automatically added to all forms.'),
         'form_description' => $this->t('If checked, an expand/collapse all (details) link will be added to this webform when there are two or more details elements available on the webform.'),
       ],
+      // Form specific behaviors.
+      'form_disable_autocomplete' => [
+        'title' => $this->t('Disable autocompletion'),
+        'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),
+      ],
+      'form_autofocus' => [
+        'title' => $this->t('Autofocus'),
+        'form_description' => $this->t('If checked, the first visible and enabled input will be focused when adding new submissions.'),
+      ],
+      'form_prepopulate' => [
+        'title' => $this->t('Allow elements to be populated using query string parameters.'),
+        'form_description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would setting an the 'name' element's default value to 'John Smith'."),
+      ],
+      'form_prepopulate_source_entity' => [
+        'title' => $this->t('Allow source entity to be populated using query string parameters.'),
+        'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=node&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to 'node:1'."),
+      ],
+      'form_prepopulate_source_entity_required' => [
+        'title' => $this->t('Require source entity to be populated using query string parameters.'),
+        'form_description' => $this->t("If checked, source entity must be populated using query string parameters."),
+      ],
     ];
     $form['form_behaviors'] = [
       '#type' => 'details',
       '#title' => $this->t('Form behaviors'),
     ];
     $this->appendBehaviors($form['form_behaviors'], $behavior_elements, $settings, $default_settings);
+    $form['form_behaviors']['form_prepopulate_source_entity_required']['#states'] = [
+      'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
+    ];
+    $entity_type_options = [];
+    $entity_type_manager = \Drupal::entityTypeManager();
+    foreach ($entity_type_manager->getDefinitions() as $entity_type_id => $entity_type) {
+      $entity_type_options[$entity_type_id] = $entity_type->getLabel();
+    }
+    $form['form_behaviors']['form_prepopulate_source_entity_type'] = [
+      '#type' => 'select',
+      '#title' => 'Type of source entity to be populated using query string parameters.',
+      '#weight' => ++$form['form_behaviors']['form_prepopulate_source_entity_required']['#weight'],
+      '#empty_option' => '',
+      '#options' => $entity_type_options,
+      '#states' => [
+        'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
+      ],
+    ];
 
     // Form attributes.
     $elements = $webform->getElementsDecoded();
@@ -1167,6 +1189,7 @@ class WebformEntitySettingsForm extends EntityForm {
    *   The global webform default settings.
    */
   protected function appendBehaviors(array &$element, array $behavior_elements, array $settings, array $default_settings) {
+    $weight = 0;
     foreach ($behavior_elements as $behavior_key => $behavior_element) {
       if (!empty($default_settings['default_' . $behavior_key])) {
         $element[$behavior_key . '_disabled'] = [
@@ -1175,6 +1198,7 @@ class WebformEntitySettingsForm extends EntityForm {
           '#description' => $behavior_element['all_description'],
           '#disabled' => TRUE,
           '#default_value' => TRUE,
+          '#weight' => $weight,
         ];
         $element[$behavior_key] = [
           '#type' => 'value',
@@ -1188,8 +1212,10 @@ class WebformEntitySettingsForm extends EntityForm {
           '#description' => $behavior_element['form_description'],
           '#return_value' => TRUE,
           '#default_value' => $settings[$behavior_key],
+          '#weight' => $weight,
         ];
       }
+      $weight += 10;
     }
   }
 

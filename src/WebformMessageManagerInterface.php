@@ -129,6 +129,16 @@ interface WebformMessageManagerInterface {
   const TEMPLATE_PREVIEW = 'template_preview';
 
   /**
+   * Prepopulate source entity required.
+   */
+  const PREPOPULATE_SOURCE_ENTITY_REQUIRED = 'prepopulate_source_entity_required';
+
+  /**
+   * Prepopulate source entity type.
+   */
+  const PREPOPULATE_SOURCE_ENTITY_TYPE = 'prepopulate_source_entity_type';
+
+  /**
    * Set the webform used for custom messages and token replacement.
    *
    * @param \Drupal\webform\WebformInterface $webform

@@ -432,6 +432,12 @@ webform.webform.*:
         form_prepopulate_source_entity:
           type: boolean
           label: 'Form prepopulate source entity'
+        form_prepopulate_source_entity_required:
+          type: boolean
+          label: 'Form prepopulate source entity required'
+        form_prepopulate_source_entity_type:
+          type: string
+          label: 'Form prepopulate source entity type'
         form_unsaved:
           type: boolean
           label: 'Warn users about unsaved changes'
