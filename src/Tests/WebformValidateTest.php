@@ -5,11 +5,11 @@ namespace Drupal\webform\Tests;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform submission webform.
+ * Tests for webform custom validation.
  *
  * @group Webform
  */
-class WebformSubmissionFormTest extends WebformTestBase {
+class WebformValidateTest extends WebformTestBase {
 
   /**
    * Modules to enable.

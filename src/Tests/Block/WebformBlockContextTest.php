@@ -1,8 +1,9 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Block;
 
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform block context.

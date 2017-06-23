@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\webform\Utility\WebformYaml;
@@ -10,7 +10,7 @@ use Drupal\webform\Utility\WebformYaml;
  *
  * @group Webform
  */
-class WebformAdminSettingsTest extends WebformTestBase {
+class WebformSettingsAdminTest extends WebformTestBase {
 
   /**
    * Modules to enable.

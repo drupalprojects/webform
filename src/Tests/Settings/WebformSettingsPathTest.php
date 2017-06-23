@@ -1,9 +1,10 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -11,7 +12,7 @@ use Drupal\webform\WebformInterface;
  *
  * @group Webform
  */
-class WebformPathTest extends WebformTestBase {
+class WebformSettingsPathTest extends WebformTestBase {
 
   public static $modules = ['path', 'webform'];
 

@@ -18,9 +18,7 @@ class WebformSettingsPrepopulateTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = [
-    'test_form_prepopulate',
-  ];
+  protected static $testWebforms = ['test_form_prepopulate'];
 
   /**
    * Tests webform setting including confirmation.

@@ -1,16 +1,17 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
- * Tests for webform submission form anonymous settings.
+ * Tests for confidential webform submissions.
  *
  * @group Webform
  */
-class WebformSubmissionFormAnonymousTest extends WebformTestBase {
+class WebformSettingsConfidential extends WebformTestBase {
 
   /**
    * Webforms to load.
@@ -29,17 +30,14 @@ class WebformSubmissionFormAnonymousTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform setting including confirmation.
+   * Tests webform confidential setting.
    */
-  public function testAnonymous() {
+  public function testConfidential() {
+    $this->drupalLogin($this->rootUser);
 
-    /**************************************************************************/
-    /* Test confidential submissions (form_confidential)*/
-    /**************************************************************************/
+    $webform_confidential = Webform::load('test_form_confidential');
 
     // Check logout warning.
-    $webform_confidential = Webform::load('test_form_confidential');
-    $this->drupalLogin($this->rootUser);
     $this->drupalGet('webform/test_form_confidential');
     $this->assertNoFieldById('edit-name');
     $this->assertRaw('This form is confidential.');
