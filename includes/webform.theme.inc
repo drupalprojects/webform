@@ -807,15 +807,17 @@ function template_preprocess_webform_composite_telephone(array &$variables) {
  *   - file: The element's File object.
  */
 function template_preprocess_webform_element_managed_file(array &$variables) {
-  /** @var \Drupal\file\FileInterface $file */
-  $file = $variables['file'];
-  $variables['uri'] = file_create_url($file->getFileUri());
-  $variables['extension'] = strtolower(pathinfo($variables['uri'], PATHINFO_EXTENSION));
-  $variables['type'] = \Drupal::service('file.mime_type.guesser')->guess($variables['uri']);
-  $variables['file_link'] = [
-    '#theme' => 'file_link',
-    '#file' => $file,
-  ];
+  if (!empty($variables['file'])) {
+    /** @var \Drupal\file\FileInterface $file */
+    $file = $variables['file'];
+    $variables['uri'] = file_create_url($file->getFileUri());
+    $variables['extension'] = strtolower(pathinfo($variables['uri'], PATHINFO_EXTENSION));
+    $variables['type'] = \Drupal::service('file.mime_type.guesser')->guess($variables['uri']);
+    $variables['file_link'] = [
+      '#theme' => 'file_link',
+      '#file' => $file,
+    ];
+  }
 }
 
 /**
