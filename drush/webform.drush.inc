@@ -875,6 +875,11 @@ function drush_webform_composer_update() {
   // @see Issue #2885338: Composer: CKeditor plugins are downloadable with http.
   $secure_http = TRUE;
   foreach ($libraries as $library_name => $library) {
+    // Never overwrite existing repositories.
+    if (isset($repositories[$library_name])) {
+      continue;
+    }
+
     $dist_url = $library['download_url']->toString();
     $dist_type = (preg_match('/\.zip$/', $dist_url)) ? 'zip' : 'file';
     $package_version = $library['version'];
