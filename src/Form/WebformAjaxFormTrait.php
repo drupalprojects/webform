@@ -198,7 +198,8 @@ trait WebformAjaxFormTrait {
   protected function getFormStateRedirectUrl(FormStateInterface $form_state) {
     // Always check the ?destination which is used by the off-canvas/system tray.
     if (\Drupal::request()->get('destination')) {
-      return base_path() . $this->getRedirectDestination()->get();
+      $destination = $this->getRedirectDestination()->get();
+      return (strpos($destination, $destination) === 0) ? $destination : base_path() . $destination;
     }
 
     // ISSUE:
