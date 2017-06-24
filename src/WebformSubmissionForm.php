@@ -813,7 +813,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#value' => $this->config('webform.settings')->get('settings.default_draft_button_label'),
         '#validate' => ['::draft'],
         '#submit' => ['::submitForm', '::save', '::rebuild'],
-        '#attributes' => ['class' => ['webform-button--draft']],
+        '#attributes' => ['class' => ['webform-button--draft', 'js-webform-novalidate']],
         '#weight' => -10,
       ];
     }
