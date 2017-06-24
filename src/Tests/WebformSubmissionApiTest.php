@@ -176,12 +176,14 @@ class WebformSubmissionApiTest extends WebformTestBase {
     // Check that user limit is reached.
     $this->assertEqual(WebformSubmissionForm::isOpen($test_form_limit_webform), 'You are only allowed to have 1 submission for this webform.');
 
-    // Submit the form 2 more times to trigger the form total limit.
+    // Submit the form 3 more times to trigger the form total limit.
+    $this->drupalLogin($this->rootUser);
+    WebformSubmissionForm::submitValues($values);
     WebformSubmissionForm::submitValues($values);
     WebformSubmissionForm::submitValues($values);
 
     // Check that total limit is reached.
-    $this->assertEqual(WebformSubmissionForm::isOpen($test_form_limit_webform), 'Only 3 submissions are allowed.');
+    $this->assertEqual(WebformSubmissionForm::isOpen($test_form_limit_webform), 'Only 4 submissions are allowed.');
 
     // Check form closed message.
     $test_form_limit_webform->setStatus(FALSE)->save();

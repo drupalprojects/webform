@@ -62,6 +62,7 @@ class WebformSubmissionLimitsTest extends WebformTestBase {
     $this->drupalGet("admin/structure/webform/manage/test_form_limit/submission/$sid/edit");
     $this->assertFieldByName('op', 'Save');
     $this->assertNoRaw('No more submissions are permitted.');
+
     $this->drupalLogout();
 
     // Check webform is still available for anonymous users.
@@ -69,19 +70,32 @@ class WebformSubmissionLimitsTest extends WebformTestBase {
     $this->assertFieldByName('op', 'Submit');
     $this->assertNoRaw('You are only allowed to have 1 submission for this webform.');
 
-    // Add 1 more submissions making the total number of submissions equal to 3.
+    // Add 1 more submissions as an anonymous user making the total number of
+    // submissions equal to 3.
     $this->postSubmission($webform_limit);
 
-    // Check total limit.
+    // Check limit reached and webform not available for anonymous user.
+    $this->drupalGet('webform/test_form_limit');
     $this->assertNoFieldByName('op', 'Submit');
-    $this->assertRaw('Only 3 submissions are allowed.');
+    $this->assertRaw('You are only allowed to have 1 submission for this webform.');
+
+    // Add 1 more submissions as an root user making the total number of
+    // submissions equal to 4.
+    $this->drupalLogin($this->rootUser);
+    $this->postSubmission($webform_limit);
+    $this->drupalLogout();
+
+    // Check total limit.
+    $this->drupalGet('webform/test_form_limit');
+    $this->assertNoFieldByName('op', 'Submit');
+    $this->assertRaw('Only 4 submissions are allowed.');
     $this->assertNoRaw('You are only allowed to have 1 submission for this webform.');
 
     // Check admin can still post submissions.
     $this->drupalLogin($this->rootUser);
     $this->drupalGet('webform/test_form_limit');
     $this->assertFieldByName('op', 'Submit');
-    $this->assertRaw('Only 3 submissions are allowed.');
+    $this->assertRaw('Only 4 submissions are allowed.');
     $this->assertRaw('Only submission administrators are allowed to access this webform and create new submissions.');
   }
 

@@ -707,37 +707,47 @@ class WebformEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['submission_limits']['limit_total'] = [
+    $form['submission_limits']['total'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Total submissions'),
+    ];
+    $form['submission_limits']['total']['limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit'),
       '#min' => 1,
       '#default_value' => $settings['limit_total'],
     ];
-    $form['submission_limits']['entity_limit_total'] = [
+    $form['submission_limits']['total']['entity_limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit per source entity'),
       '#min' => 1,
       '#default_value' => $settings['entity_limit_total'],
     ];
-    $form['submission_limits']['limit_total_message'] = [
+    $form['submission_limits']['total']['limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Total submissions limit message'),
       '#min' => 1,
       '#default_value' => $settings['limit_total_message'],
     ];
-    $form['submission_limits']['limit_user'] = [
+    //
+    $form['submission_limits']['user'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Per user'),
+      '#description' => $this->t('Limit the number of submissions per user. A user is identified by their user login if logged-in, or by their Cookie if anonymous.'),
+    ];
+    $form['submission_limits']['user']['limit_user'] = [
       '#type' => 'number',
       '#title' => $this->t('Per user submission limit'),
       '#min' => 1,
       '#default_value' => $settings['limit_user'],
     ];
-    $form['submission_limits']['entity_limit_user'] = [
+    $form['submission_limits']['user']['entity_limit_user'] = [
       '#type' => 'number',
       '#min' => 1,
       '#title' => $this->t('Per user submission limit per source entity'),
       '#default_value' => $settings['entity_limit_user'],
     ];
-    $form['submission_limits']['limit_user_message'] = [
+    $form['submission_limits']['user']['limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Per user submission limit message'),
       '#default_value' => $settings['limit_user_message'],

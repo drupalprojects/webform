@@ -171,17 +171,24 @@ class WebformNodeTest extends WebformNodeTestBase {
     ]);
     $limit_form->save();
 
-    // Check per source entity user limit.
+    // Create submission as authenticated user.
     $this->drupalLogin($this->normalUser);
     $this->postNodeSubmission($node);
+
+    // Check per source entity user limit.
     $this->drupalGet('node/' . $node->id());
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw('You are only allowed to have 1 submission for this webform.');
     $this->drupalLogout();
 
+    // Create 2 submissions as root user, who can ignore submission limits.
+    $this->drupalLogin($this->rootUser);
+    $this->postNodeSubmission($node);
+    $this->postNodeSubmission($node);
+    $this->drupalLogout();
+
     // Check per source entity total limit.
-    $this->postNodeSubmission($node);
-    $this->postNodeSubmission($node);
+    $this->drupalLogin($this->normalUser);
     $this->drupalGet('node/' . $node->id());
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw('Only 3 submissions are allowed.');

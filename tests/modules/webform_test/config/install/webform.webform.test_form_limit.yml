@@ -68,8 +68,8 @@ settings:
   confirmation_back: true
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
-  limit_total: 3
-  limit_total_message: 'Only 3 submissions are allowed.'
+  limit_total: 4
+  limit_total_message: 'Only 4 submissions are allowed.'
   limit_user: 1
   limit_user_message: 'You are only allowed to have 1 submission for this webform.'
   purge: none

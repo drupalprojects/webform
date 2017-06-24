@@ -1542,13 +1542,11 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   TRUE if webform submission user limit have been met.
    */
   protected function checkUserLimit() {
-    $account = $this->currentUser();
+    // Get the submission owner and not current user.
+    // This takes into account when an API submission changes the owner id.
+    // @see \Drupal\webform\WebformSubmissionForm::submitValues
+    $account = $this->entity->getOwner();
     $webform = $this->getWebform();
-
-    // Anonymous users can't have limits.
-    if ($account->isAnonymous()) {
-      return FALSE;
-    }
 
     // Check per source entity user limit.
     $entity_limit_user = $this->getWebformSetting('entity_limit_user');
