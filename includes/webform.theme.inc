@@ -259,15 +259,17 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
 
   if (strpos(\Drupal::routeMatch()->getRouteName(), 'webform.user.submission') !== FALSE) {
     $account = \Drupal::currentUser();
+    $options = ['in_draft' => FALSE];
   }
   else {
     $account = NULL;
+    $options = ['in_draft' => NULL];
   }
 
-  if ($previous_submission = $webform_submission_storage->getPreviousSubmission($webform_submission, $source_entity, $account)) {
+  if ($previous_submission = $webform_submission_storage->getPreviousSubmission($webform_submission, $source_entity, $account, $options)) {
     $variables['prev_url'] = Url::fromRoute($route_name, ['webform_submission' => $previous_submission->id()] + $route_parameters)->toString();
   }
-  if ($next_submission = $webform_submission_storage->getNextSubmission($webform_submission, $source_entity, $account)) {
+  if ($next_submission = $webform_submission_storage->getNextSubmission($webform_submission, $source_entity, $account, $options)) {
     $variables['next_url'] = Url::fromRoute($route_name, ['webform_submission' => $next_submission->id()] + $route_parameters)->toString();
   }
 

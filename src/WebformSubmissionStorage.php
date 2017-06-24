@@ -245,29 +245,29 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function getFirstSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    return $this->getTerminusSubmission($webform, $source_entity, $account, 'ASC');
+  public function getFirstSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+    return $this->getTerminusSubmission($webform, $source_entity, $account, $options, 'first');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getLastSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    return $this->getTerminusSubmission($webform, $source_entity, $account, 'DESC');
+  public function getLastSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+    return $this->getTerminusSubmission($webform, $source_entity, $account, $options, 'last');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPreviousSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    return $this->getSiblingSubmission($webform_submission, $source_entity, $account, 'previous');
+  public function getPreviousSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+    return $this->getSiblingSubmission($webform_submission, $source_entity, $account, $options, 'previous');
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getNextSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    return $this->getSiblingSubmission($webform_submission, $source_entity, $account, 'next');
+  public function getNextSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+    return $this->getSiblingSubmission($webform_submission, $source_entity, $account, $options, 'next');
   }
 
   /**
@@ -290,24 +290,53 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   }
 
   /**
-   * {@inheritdoc}
+   * Get a webform submission's terminus (aka first or last).
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   (optional) A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   * @param array $options
+   *   (optional) Additional options and query conditions.
+   * @param string $terminus
+   *   Submission terminus, first or last.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface|null
+   *   The webform submission's terminus (aka first or last).
    */
-  protected function getTerminusSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $sort = 'DESC') {
+  protected function getTerminusSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = [], $terminus = 'first') {
+    $options += ['in_draft' => FALSE];
     $query = $this->getQuery();
-    $this->addQueryConditions($query, $webform, $source_entity, $account, ['in_draft' => FALSE]);
-    $query->sort('sid', $sort);
+    $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
+    $query->sort('sid', ($terminus == 'first') ? 'ASC' : 'DESC');
     $query->range(0, 1);
     return ($entity_ids = $query->execute()) ? $this->load(reset($entity_ids)) : NULL;
   }
 
   /**
-   * {@inheritdoc}
+   * Get a webform submission's sibling.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   (optional) A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   * @param array $options
+   *   (optional) Additional options and query conditions.
+   * @param string $direction
+   *   Direction of the sibliing.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface|null
+   *   The webform submission's sibling.
    */
-  protected function getSiblingSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $direction = 'previous') {
+  protected function getSiblingSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = [], $direction = 'previous') {
     $webform = $webform_submission->getWebform();
 
     $query = $this->getQuery();
-    $this->addQueryConditions($query, $webform, $source_entity, $account);
+    $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
 
     if ($direction == 'previous') {
       $query->condition('sid', $webform_submission->id(), '<');

@@ -185,11 +185,13 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user account.
+   * @param array $options
+   *   (optional) Additional options and query conditions.
    *
    * @return \Drupal\webform\WebformSubmissionInterface|null
    *   The webform's first submission.
    */
-  public function getFirstSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+  public function getFirstSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 
   /**
    * Get a webform's last submission.
@@ -200,11 +202,13 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user account.
+   * @param array $options
+   *   (optional) Additional options and query conditions.
    *
    * @return \Drupal\webform\WebformSubmissionInterface|null
    *   The webform's last submission.
    */
-  public function getLastSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+  public function getLastSubmission(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 
   /**
    * Get a webform submission's previous sibling.
@@ -215,11 +219,13 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user account.
+   * @param array $options
+   *   (optional) Additional options and query conditions.
    *
    * @return \Drupal\webform\WebformSubmissionInterface|null
    *   The webform submission's previous sibling.
    */
-  public function getPreviousSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+  public function getPreviousSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 
   /**
    * Get a webform submission's next sibling.
@@ -230,11 +236,13 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user account.
+   * @param array $options
+   *   (optional) Additional options and query conditions.
    *
    * @return \Drupal\webform\WebformSubmissionInterface|null
    *   The webform submission's next sibling.
    */
-  public function getNextSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+  public function getNextSubmission(WebformSubmissionInterface $webform_submission, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 
   /**
    * Get webform submission source entity types.
