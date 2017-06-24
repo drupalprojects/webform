@@ -11,7 +11,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformSettingsConfidential extends WebformTestBase {
+class WebformSettingsConfidentialTest extends WebformTestBase {
 
   /**
    * Webforms to load.

@@ -445,7 +445,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   A custom webform or FALSE if the default webform containing the webform's
    *   elements should be built.
    */
-  protected function getCustomForm(array $form, FormStateInterface $form_state) {
+  protected function getCustomForm(array &$form, FormStateInterface $form_state) {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
     $webform = $this->getWebform();
@@ -453,30 +453,26 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Exit if elements are broken, usually occurs when elements YAML is edited
     // directly in the export config file.
     if (!$webform_submission->getWebform()->getElementsInitialized()) {
-      $this->messageManager->display(WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
-      return $form;
+      return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
     }
 
     // Check prepopulate source entity required and type.
     if ($webform->getSetting('form_prepopulate_source_entity')) {
       if ($webform->getSetting('form_prepopulate_source_entity_required') && empty($this->getSourceEntity())) {
         $this->messageManager->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'notice');
-        $this->messageManager->display(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'warning');
-        return $form;
+        return $this->messageManager->append($form, WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'warning');
       }
       $source_entity_type = $webform->getSetting('form_prepopulate_source_entity_type');
       if ($source_entity_type && $this->getSourceEntity() && $source_entity_type != $this->getSourceEntity()->getEntityTypeId()) {
         $this->messageManager->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'notice');
-        $this->messageManager->display(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'warning');
-        return $form;
+        return $this->messageManager->append($form, WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'warning');
       }
     }
 
     // Handle webform with managed file upload but saving of submission is disabled.
     if ($webform->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
       $this->messageManager->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
-      $this->messageManager->display(WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
-      return $form;
+      return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
     }
 
     // Display inline confirmation message with back to link.
@@ -516,19 +512,17 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
       else {
         if ($webform->isOpening()) {
-          $form['opening'] = $this->messageManager->build(WebformMessageManagerInterface::FORM_OPEN_MESSAGE);
+          return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_OPEN_MESSAGE);
         }
         else {
-          $form['closed'] = $this->messageManager->build(WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
+          return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
         }
-        return $form;
       }
     }
 
     // Disable this webform if confidential and user is logged in.
     if ($this->isConfidential() && $this->currentUser()->isAuthenticated() && $this->entity->isNew()) {
-      $this->messageManager->display(WebformMessageManagerInterface::FORM_CONFIDENTIAL_MESSAGE, 'warning');
-      return $form;
+      return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_CONFIDENTIAL_MESSAGE, 'warning');
     }
 
     // Disable this webform if submissions are not being saved to the database or
@@ -542,14 +536,13 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
       else {
         // Display exception message to users.
-        $this->messageManager->display(WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
-        return $form;
+        return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
       }
     }
 
     // Check total limit.
     if ($this->checkTotalLimit()) {
-      $this->messageManager->display(WebformMessageManagerInterface::LIMIT_TOTAL_MESSAGE);
+      $form = $this->messageManager->append($form, WebformMessageManagerInterface::LIMIT_TOTAL_MESSAGE);
       if ($webform->access('submission_update_any')) {
         $this->messageManager->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
       }
@@ -560,7 +553,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Check user limit.
     if ($this->checkUserLimit()) {
-      $this->messageManager->display(WebformMessageManagerInterface::LIMIT_USER_MESSAGE, 'warning');
+      $form = $this->messageManager->append($form, WebformMessageManagerInterface::LIMIT_USER_MESSAGE, 'warning');
       if ($webform->access('submission_update_any')) {
         $this->messageManager->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
       }

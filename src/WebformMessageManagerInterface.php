@@ -174,6 +174,25 @@ interface WebformMessageManagerInterface {
   public function get($key);
 
   /**
+   * Append inline message message to a render array.
+   *
+   * @param array $build
+   *   A render array.
+   * @param string $key
+   *   The name of webform settings message to be displayed.
+   * @param string $type
+   *   (optional) The message's type. Defaults to 'status'. These values are
+   *   supported:
+   *   - 'status'.
+   *   - 'warning'.
+   *   - 'error'.
+   *
+   * @return array
+   *   The render array with webform inline message appended.
+   */
+  public function append(array $build, $key, $type = 'status');
+
+  /**
    * Display message.
    *
    * @param string $key
@@ -184,9 +203,6 @@ interface WebformMessageManagerInterface {
    *   - 'status'.
    *   - 'warning'.
    *   - 'error'.
-   *
-   * @return bool
-   *   TRUE if message was displayed.
    */
   public function display($key, $type = 'status');
 

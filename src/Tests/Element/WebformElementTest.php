@@ -2,7 +2,10 @@
 
 namespace Drupal\webform\Tests\Element;
 
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Tests for webform elements.

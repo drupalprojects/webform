@@ -150,14 +150,23 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   /**
    * {@inheritdoc}
    */
+  public function append(array $build, $key, $type = 'status') {
+    // Append namespace message and allow for multiple messages.
+    $build['webform_message'][] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->build($key),
+      '#message_type' => $type,
+      '#weight' => -100,
+    ];
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function display($key, $type = 'status') {
-    if ($build = $this->build($key)) {
-      drupal_set_message($this->renderer->renderPlain($build), $type);
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
+    $build = $this->build($key);
+    drupal_set_message($this->renderer->renderPlain($build), $type);
   }
 
   /**
