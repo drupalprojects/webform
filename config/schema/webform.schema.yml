@@ -504,6 +504,12 @@ webform.webform.*:
         preview_attributes:
           type: ignore
           label: 'Preview attributes'
+        preview_excluded_elements:
+          type: sequence
+          label: 'Preview excluded elements'
+          sequence:
+            type: string
+            label: 'Element name'
         draft:
           type: string
           label: 'Allow users to save and finish the webform later.'

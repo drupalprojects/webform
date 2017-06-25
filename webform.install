@@ -818,3 +818,10 @@ function webform_update_8058() {
 function webform_update_8059() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2888615: Allow preview to exclude elements.
+ */
+function webform_update_8060() {
+  _webform_update_webform_settings();
+}

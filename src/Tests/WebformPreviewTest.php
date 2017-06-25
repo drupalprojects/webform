@@ -45,14 +45,15 @@ class WebformPreviewTest extends WebformTestBase {
     $this->assertFieldByName('op', 'Preview');
 
     // Check default preview.
-    $this->drupalPostForm('webform/test_form_preview', ['name' => 'test'], t('Preview'));
+    $this->drupalPostForm('webform/test_form_preview', ['name' => 'test', 'email' => 'example@example.com'], t('Preview'));
 
     $this->assertRaw('<h1 class="page-title">Test: Webform: Preview: Preview</h1>');
     $this->assertRaw('<b>Preview</b></li>');
     $this->assertRaw('Please review your submission. Your submission is not complete until you press the "Submit" button!');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '< Previous');
-    $this->assertRaw('<b>Name</b><br/>test');
+    $this->assertRaw('<b>Name</b><br/>test<br/><br/>');
+    $this->assertRaw('<b>Email</b><br/><a href="mailto:example@example.com">example@example.com</a><br/><br/>');
     $this->assertRaw('<div class="webform-preview">');
 
     // Check required preview with custom settings.
@@ -62,6 +63,7 @@ class WebformPreviewTest extends WebformTestBase {
       'preview_title' => '{Title}',
       'preview_message' => '{Message}',
       'preview_attributes' => ['class' => ['preview-custom']],
+      'preview_excluded_elements' => ['email' => 'email'],
     ]);
 
     // Add 'webform_actions' element.
@@ -79,7 +81,8 @@ class WebformPreviewTest extends WebformTestBase {
     $this->assertRaw('{Message}');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '{Back}');
-    $this->assertRaw('<b>Name</b><br/>test');
+    $this->assertRaw('<b>Name</b><br/>test<br/><br/>');
+    $this->assertNoRaw('<b>Email</b><br/><a href="mailto:example@example.com">example@example.com</a><br/><br/>');
     $this->assertRaw('<div class="preview-custom webform-preview">');
 
     $this->drupalGet('webform/test_form_preview');

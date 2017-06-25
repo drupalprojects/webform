@@ -290,7 +290,6 @@ class WebformEntitySettingsForm extends EntityForm {
       ];
       $form['form_settings']['scheduled']['#states']['visible'][':input[name="template"]'] = ['checked' => FALSE];
     }
-
     $form['form_settings']['form_open_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Form open message'),
@@ -308,6 +307,13 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Form exception message'),
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
+    ];
+    $elements = $webform->getElementsDecoded();
+    $form['form_settings']['attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Form'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('settings.form_classes'),
+      '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
 
     // Form behaviors.
@@ -383,19 +389,6 @@ class WebformEntitySettingsForm extends EntityForm {
       '#states' => [
         'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
       ],
-    ];
-
-    // Form attributes.
-    $elements = $webform->getElementsDecoded();
-    $form['form_attributes'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Form attributes'),
-    ];
-    $form['form_attributes']['attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Form'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('settings.form_classes'),
-      '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
 
     // Wizard settings.
@@ -502,6 +495,18 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Preview'),
       '#classes' => $this->configFactory->get('webform.settings')->get('settings.preview_classes'),
       '#default_value' => $settings['preview_attributes'],
+    ];
+    // Elements.
+    $form['preview_settings']['preview_container']['elements'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Included preview values'),
+      '#description' => $this->t('If you wish to include only parts of the submission in the preview, select the elements that should be included. Please note, element specific access controls are still applied to displayed elements.'),
+      '#open' => $settings['preview_excluded_elements'] ? TRUE : FALSE,
+    ];
+    $form['preview_settings']['preview_container']['elements']['preview_excluded_elements'] = [
+      '#type' => 'webform_excluded_elements',
+      '#webform_id' => $this->getEntity()->id(),
+      '#default_value' => $settings['preview_excluded_elements'],
     ];
 
     // Draft settings.

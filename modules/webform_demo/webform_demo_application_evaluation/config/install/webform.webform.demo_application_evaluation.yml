@@ -64,6 +64,7 @@ settings:
   preview_title: ''
   preview_message: ''
   preview_attributes: {  }
+  preview_excluded_elements: {  }
   draft: '1'
   draft_multiple: false
   draft_auto_save: false

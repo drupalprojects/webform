@@ -725,6 +725,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'preview_title' => '',
       'preview_message' => '',
       'preview_attributes' => [],
+      'preview_excluded_elements' => [],
       'draft' => self::DRAFT_NONE,
       'draft_multiple' => FALSE,
       'draft_auto_save' => FALSE,
