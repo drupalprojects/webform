@@ -338,7 +338,7 @@ SUGGESTIONS
     $link_base = [
       '#type' => 'link',
       '#attributes' => ['class' => ['button', 'button--primary']],
-      '#suffix' => '<br/><br/><hr/>',
+      '#suffix' => '<br /><br /><hr />',
     ];
 
     $build = [
@@ -361,7 +361,7 @@ SUGGESTIONS
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];
-    $build['content']['quote']['content']['#markup'] = '<blockquote><strong>' . $this->t('It’s really the Drupal community and not so much the software that makes the Drupal project what it is. So fostering the Drupal community is actually more important than just managing the code base.') . '</strong><address>' . $this->t('- Dries Buytaert') . '</address></blockquote><hr/>';
+    $build['content']['quote']['content']['#markup'] = '<blockquote><strong>' . $this->t('It’s really the Drupal community and not so much the software that makes the Drupal project what it is. So fostering the Drupal community is actually more important than just managing the code base.') . '</strong><address>' . $this->t('- Dries Buytaert') . '</address></blockquote><hr />';
 
     // Community.
     $build['content']['community'] = [];
@@ -409,7 +409,7 @@ SUGGESTIONS
       $build['content']['help'] = [];
       $build['content']['help']['title']['#markup'] = '<h3>' . $this->t('Help us help you') . '</h3>';
       $build['content']['help']['video'] = $help_video;
-      $build['content']['help']['#suffix'] = '<hr/>';
+      $build['content']['help']['#suffix'] = '<hr />';
     }
 
     // Issue.
@@ -690,7 +690,7 @@ SUGGESTIONS
             '#suffix' => '</dt>',
           ],
           'description' => [
-            '#markup' => $project['description'] . ((isset($project['notes'])) ? '<br/><em>(' . $project['notes'] . ')</em>' : ''),
+            '#markup' => $project['description'] . ((isset($project['notes'])) ? '<br /><em>(' . $project['notes'] . ')</em>' : ''),
             '#prefix' => '<dd>',
             '#suffix' => '</dd>',
           ],
@@ -726,7 +726,7 @@ SUGGESTIONS
               '<li>' . $this->t('Execute <code>drush webform-libraries-download</code>, which will download third party libraries required by the Webform module.') . '</li>' .
               '<li>' . $this->t("Execute <code>drush webform-composer-update</code>, which will update your Drupal installation's composer.json to include the Webform module's selected libraries as repositories.") . '</li>' .
             '</ul>' .
-            '<p><hr/><p>',
+            '<p><hr /><p>',
         ],
         'libraries' => [
           '#prefix' => '<dl>',
@@ -756,13 +756,13 @@ SUGGESTIONS
         'description' => [
           'content' => [
             '#markup' => $library['description'],
-            '#suffix' => '<br/>'
+            '#suffix' => '<br />'
           ],
           'notes' => [
             '#markup' => $library['notes'] .
               ($elements ? ' <strong>' . $this->formatPlural(count($elements), 'Required by @type element.', 'Required by @type elements.', ['@type' => WebformArrayHelper::toString($elements)]) . '</strong>': ''),
             '#prefix' => '<em>(',
-            '#suffix' => ')</em><br/>',
+            '#suffix' => ')</em><br />',
           ],
           'download' => [
             '#type' => 'link',

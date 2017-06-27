@@ -163,7 +163,7 @@ handlers:
         <p>Submitted by: [webform_submission:user]</p>
         <p>Submitted values are:</p>
         [webform_submission:values]
-        <hr/>
+        <hr />
         <p style="color:yellow"><em>Custom styled HTML markup</em></p>
       excluded_elements: {  }
       ignore_access: true

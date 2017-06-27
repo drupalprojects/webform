@@ -93,7 +93,7 @@ class WebformComputedTwig extends WebformComputedBase {
     }
     catch (\Exception $exception) {
       $form_state->setErrorByName('markup', [
-        'message' => ['#markup' => $this->t('Failed to render computed Twig value due to error.'), '#suffix' => '<br/><br/>'],
+        'message' => ['#markup' => $this->t('Failed to render computed Twig value due to error.'), '#suffix' => '<br /><br />'],
         'error' => ['#markup' => Html::escape($exception->getMessage()), '#prefix' => '<pre>', '#suffix' => '</pre>'],
       ]);
     }

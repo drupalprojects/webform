@@ -135,7 +135,7 @@ elements: |
     text_format:
       '#type': text_format
       '#title': 'Text format'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden webform state</a><br/><a href="https://www.drupal.org/node/1954968">Issue #1954968: Required CKEditor fields always fail HTML5 validation</a>'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br /><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden webform state</a><br /><a href="https://www.drupal.org/node/1954968">Issue #1954968: Required CKEditor fields always fail HTML5 validation</a>'
 css: ''
 javascript: ''
 settings:

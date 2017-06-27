@@ -136,13 +136,13 @@ handlers:
       from_name: default
       subject: default
       body: |
-        <h3>default:</h3>[webform_submission:values:checkboxes]<hr/>
-        <h3>comma:</h3>[webform_submission:values:checkboxes:value:comma]<hr/>
-        <h3>semicolon:</h3>[webform_submission:values:checkboxes:value:semicolon]<hr/>
-        <h3>and:</h3>[webform_submission:values:checkboxes:value:and]<hr/>
-        <h3>ul:</h3>[webform_submission:values:checkboxes:value:ul]<hr/>
-        <h3>ol:</h3>[webform_submission:values:checkboxes:value:ol]<hr/>
-        <h3>raw:</h3>[webform_submission:values:checkboxes:raw]<hr/>
+        <h3>default:</h3>[webform_submission:values:checkboxes]<hr />
+        <h3>comma:</h3>[webform_submission:values:checkboxes:value:comma]<hr />
+        <h3>semicolon:</h3>[webform_submission:values:checkboxes:value:semicolon]<hr />
+        <h3>and:</h3>[webform_submission:values:checkboxes:value:and]<hr />
+        <h3>ul:</h3>[webform_submission:values:checkboxes:value:ul]<hr />
+        <h3>ol:</h3>[webform_submission:values:checkboxes:value:ol]<hr />
+        <h3>raw:</h3>[webform_submission:values:checkboxes:raw]<hr />
       excluded_elements: {  }
       ignore_access: false
       html: true

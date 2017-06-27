@@ -145,7 +145,7 @@ function _webform_test_form_states($type, array $default_properties = []) {
       foreach ($issues[$element_type] as $issue_number => $issue_title) {
         $items[$issue_number] = "<a href=\"https://www.drupal.org/node/$issue_number\">Issue #$issue_number: $issue_title</a>";
       }
-      $element['#description'] = '<b>' . t('Known Issues') . ':</b><br/>' . implode('<br/>', $items);
+      $element['#description'] = '<b>' . t('Known Issues') . ':</b><br />' . implode('<br />', $items);
     }
 
     // Set default element properties.

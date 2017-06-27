@@ -197,11 +197,11 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertRaw('(75%)');
 
     // Check preview values.
-    $this->assertRaw('<b>Last Name</b><br/>Smith<br/><br/>');
-    $this->assertRaw('<b>Gender</b><br/>Female<br/><br/>');
-    $this->assertRaw('<b>Email</b><br/><a href="mailto:janesmith@example.com">janesmith@example.com</a><br/><br/>');
-    $this->assertRaw('<b>Phone</b><br/><a href="tel:111-111-1111">111-111-1111</a><br/><br/>');
-    $this->assertRaw('This is working fine.<br/><br/>');
+    $this->assertRaw('<b>Last Name</b><br />Smith<br /><br />');
+    $this->assertRaw('<b>Gender</b><br />Female<br /><br />');
+    $this->assertRaw('<b>Email</b><br /><a href="mailto:janesmith@example.com">janesmith@example.com</a><br /><br />');
+    $this->assertRaw('<b>Phone</b><br /><a href="tel:111-111-1111">111-111-1111</a><br /><br />');
+    $this->assertRaw('This is working fine.<br /><br />');
 
     // Submit the webform.
     $this->drupalPostForm(NULL, [], t('Submit'));

@@ -1766,8 +1766,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
     if ($default_icheck) {
       $icheck_options = OptGroup::flattenOptions($form['form']['icheck']['#options']);
-      $form['form']['icheck']['#description'] .= '<br/>' . $this->t("Leave blank to use the default iCheck style. Select 'None' to display the default HTML element.");
-      $form['form']['icheck']['#description'] .= '<br/>' . $this->t('Defaults to: %value', ['%value' => $icheck_options[$default_icheck]]);
+      $form['form']['icheck']['#description'] .= '<br />' . $this->t("Leave blank to use the default iCheck style. Select 'None' to display the default HTML element.");
+      $form['form']['icheck']['#description'] .= '<br />' . $this->t('Defaults to: %value', ['%value' => $icheck_options[$default_icheck]]);
       $form['form']['icheck']['#options']['none'] = $this->t('None');
     }
 
@@ -1782,7 +1782,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['flex']['flex'] = [
       '#type' => 'select',
       '#title' => $this->t('Flex'),
-      '#description' => $this->t('The flex property specifies the length of the item, relative to the rest of the flexible items inside the same container.') . '<br/>' .
+      '#description' => $this->t('The flex property specifies the length of the item, relative to the rest of the flexible items inside the same container.') . '<br />' .
       $this->t('Defaults to: %value', ['%value' => 1]),
       '#options' => [0 => $this->t('0 (none)')] + array_combine($flex_range, $flex_range),
     ];
@@ -2032,7 +2032,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
       '#description' => $this->t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
-      '<br/>' .
+      '<br />' .
       $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => $custom_properties ,
       '#parents' => ['properties', 'custom'],

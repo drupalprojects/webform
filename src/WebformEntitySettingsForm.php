@@ -259,7 +259,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'item',
       '#input' => FALSE,
       '#description' => $this->t('If the open date/time is left blank, this form will immediately be opened.') .
-      '<br/>' .
+      '<br />' .
       $this->t('If the close date/time is left blank, this webform will never be closed.'),
       '#states' => [
         'visible' => [
@@ -972,7 +972,7 @@ class WebformEntitySettingsForm extends EntityForm {
     $form['custom_settings']['method'] = [
       '#type' => 'select',
       '#title' => $this->t('Method'),
-      '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br/>' .
+      '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br />' .
       '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, and confirmations.') . '</em>',
       '#options' => [
         '' => $this->t('POST (Default)'),
@@ -1019,7 +1019,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Custom properties'),
       '#description' =>
       $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
-      '<br/>' .
+      '<br />' .
       $this->t('These properties and callbacks are not allowed: @properties.', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
@@ -1181,7 +1181,7 @@ class WebformEntitySettingsForm extends EntityForm {
         if (!isset($element['#description'])) {
           $element['#description'] = '';
         }
-        $element['#description'] .= ($element['#description'] ? '<br/>' : '');
+        $element['#description'] .= ($element['#description'] ? '<br />' : '');
         // @todo: Stop quotes from being encoded. (ie "Submit" => &quot;Submit&quote;)
         $value = $default_settings["default_$key"];
         $element['#description'] .= $this->t('Defaults to: %value', ['%value' => $value]);

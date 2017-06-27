@@ -66,12 +66,12 @@ class WebformAddonsController extends ControllerBase implements ContainerInjecti
       ];
       $projects = $this->addons->getProjects($category_name);
       foreach ($projects as $project_name => &$project) {
-        $project['description'] .= '<br/><small>' . $project['url']->toString() . '</small>';
+        $project['description'] .= '<br /><small>' . $project['url']->toString() . '</small>';
 
         if (!empty($project['recommended']) && !$this->moduleHandler()->moduleExists($project_name)) {
 
           // Append recommended to project's description.
-          $project['description'] .= '<br/><b class="color-error">' . $this->t('Recommended') . '</b>';
+          $project['description'] .= '<br /><b class="color-error">' . $this->t('Recommended') . '</b>';
 
           // If current user can install module then display a dismissible warning.
           if ($this->currentUser()->hasPermission('administer modules')) {

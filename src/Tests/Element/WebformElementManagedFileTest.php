@@ -111,7 +111,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     // Check managed file formatting.
     $this->drupalGet('/admin/structure/webform/manage/test_element_managed_file/submission/' . $sid);
     if ($type == 'multiple') {
-      $this->assertRaw('<b>managed_file (multiple)</b><br/><div class="item-list"><ul><li>');
+      $this->assertRaw('<b>managed_file (multiple)</b><br /><div class="item-list"><ul><li>');
     }
     $this->assertRaw('<span class="file file--mime-text-plain file--text"> <a href="' . file_create_url($file->getFileUri()) . '" type="text/plain; length=' . $file->getSize() . '">' . $file->getFilename() . '</a></span>');
 

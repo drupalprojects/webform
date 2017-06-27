@@ -79,7 +79,7 @@ class WebformUiElementTestForm extends WebformUiElementFormBase {
           'style' => 'background-color: #f5f5f2',
         ],
         'element' => $this->element,
-        'hr' => ['#markup' => '<hr/>'],
+        'hr' => ['#markup' => '<hr />'],
       ];
 
       if (isset($element['#default_value'])) {

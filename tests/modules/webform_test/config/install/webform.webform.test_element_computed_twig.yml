@@ -40,22 +40,22 @@ elements: |
     '#title': webform_computed_twig_auto
     '#display_on': view
     '#value': |
-      <b class="webform_computed_twig_auto">number:</b> {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}<br/>
-      <b class="webform_computed_twig_auto">simple string:</b> {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}<br/>
-      <b class="webform_computed_twig_auto">complex string:</b> {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}<br/>
-      <b class="webform_computed_twig_auto">text_format:</b> {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}<br/>
-      <b class="webform_computed_twig_auto">xss:</b> {{ webform_token('[webform_submission:values:xss]', webform_submission) }}<br/>
+      <b class="webform_computed_twig_auto">number:</b> {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}<br />
+      <b class="webform_computed_twig_auto">simple string:</b> {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}<br />
+      <b class="webform_computed_twig_auto">complex string:</b> {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}<br />
+      <b class="webform_computed_twig_auto">text_format:</b> {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}<br />
+      <b class="webform_computed_twig_auto">xss:</b> {{ webform_token('[webform_submission:values:xss]', webform_submission) }}<br />
   webform_computed_twig_html:
     '#type': webform_computed_twig
     '#title': webform_computed_twig_html
     '#mode': html
     '#display_on': view
     '#value': |
-      <b class="webform_computed_twig_html">number:</b> {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}<br/>
-      <b class="webform_computed_twig_html">simple string:</b> {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}<br/>
-      <b class="webform_computed_twig_html">complex string:</b> {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}<br/>
-      <b class="webform_computed_twig_html">text_format:</b> {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}<br/>
-      <b class="webform_computed_twig_html">xss:</b> {{ webform_token('[webform_submission:values:xss]', webform_submission) }}<br/>
+      <b class="webform_computed_twig_html">number:</b> {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}<br />
+      <b class="webform_computed_twig_html">simple string:</b> {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}<br />
+      <b class="webform_computed_twig_html">complex string:</b> {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}<br />
+      <b class="webform_computed_twig_html">text_format:</b> {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}<br />
+      <b class="webform_computed_twig_html">xss:</b> {{ webform_token('[webform_submission:values:xss]', webform_submission) }}<br />
   webform_computed_twig_text:
     '#type': webform_computed_twig
     '#title': webform_computed_twig_text
@@ -72,11 +72,11 @@ elements: |
     '#title': webform_computed_twig_data
     '#display_on': view
     '#value': |
-      <b class="webform_computed_twig_data">number:</b> {{ data.number }} * 2 = {{ data.number * 2 }}<br/>
-      <b class="webform_computed_twig_data">simple string:</b> {{ data.simple_string }}<br/>
-      <b class="webform_computed_twig_data">complex string:</b> {{ data.complex_string }}<br/>
-      <b class="webform_computed_twig_data">text_format:</b> {{ data.text_format.value }}<br/>
-      <b class="webform_computed_twig_data">xss:</b> {{ data.xss }}<br/>
+      <b class="webform_computed_twig_data">number:</b> {{ data.number }} * 2 = {{ data.number * 2 }}<br />
+      <b class="webform_computed_twig_data">simple string:</b> {{ data.simple_string }}<br />
+      <b class="webform_computed_twig_data">complex string:</b> {{ data.complex_string }}<br />
+      <b class="webform_computed_twig_data">text_format:</b> {{ data.text_format.value }}<br />
+      <b class="webform_computed_twig_data">xss:</b> {{ data.xss }}<br />
   webform_computed_twig_store:
     '#type': webform_computed_twig
     '#title': webform_computed_twig_store

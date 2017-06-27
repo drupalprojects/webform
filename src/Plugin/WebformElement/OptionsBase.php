@@ -403,9 +403,9 @@ abstract class OptionsBase extends WebformElementBase {
     $default_empty_option = $this->configFactory->get('webform.settings')->get('element.default_empty_option');
     if ($default_empty_option) {
       $default_empty_option_required = $this->configFactory->get('webform.settings')->get('element.default_empty_option_required') ?: $this->t('- Select -');
-      $form['options']['empty_option']['#description'] .= '<br/>' . $this->t('Required elements default to: %required', ['%required' => $default_empty_option_required]);
+      $form['options']['empty_option']['#description'] .= '<br />' . $this->t('Required elements default to: %required', ['%required' => $default_empty_option_required]);
       $default_empty_option_optional = $this->configFactory->get('webform.settings')->get('element.default_empty_option_optional') ?: $this->t('- None -');
-      $form['options']['empty_option']['#description'] .= '<br/>' . $this->t('Optional elements default to: %optional', ['%optional' => $default_empty_option_optional]);
+      $form['options']['empty_option']['#description'] .= '<br />' . $this->t('Optional elements default to: %optional', ['%optional' => $default_empty_option_optional]);
     }
     $form['options']['empty_value'] = [
       '#type' => 'textfield',

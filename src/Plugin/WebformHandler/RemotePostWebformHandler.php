@@ -394,7 +394,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
     ];
 
-    $build['returned'] = ['#markup' => '<hr/>'];
+    $build['returned'] = ['#markup' => '<hr />'];
 
     // Request.
     $build['request_url'] = [
@@ -420,7 +420,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       ],
     ];
 
-    $build['returned'] = ['#markup' => '<hr/>'];
+    $build['returned'] = ['#markup' => '<hr />'];
 
     // Response.
     if ($response) {

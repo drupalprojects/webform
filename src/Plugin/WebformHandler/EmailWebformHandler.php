@@ -1005,7 +1005,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     foreach ($values as $name => $title) {
       if ($title == '---') {
-        $build[$name] = ['#markup' => '<hr/>'];
+        $build[$name] = ['#markup' => '<hr />'];
       }
       elseif (!empty($message[$name])) {
         $build[$name] = [
@@ -1184,7 +1184,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $element[$options_name] = [
         '#type' => 'webform_mapping',
         '#title' => $this->t('@title options', ['@title' => $title]),
-        '#description' => $this->t('The selected element has multiple options. You may enter email addresses for each choice. When that choice is selected, an email will be sent to the corresponding addresses. If a field is left blank, no email will be sent for that option. You may use tokens.') . '<br/><br/>',
+        '#description' => $this->t('The selected element has multiple options. You may enter email addresses for each choice. When that choice is selected, an email will be sent to the corresponding addresses. If a field is left blank, no email will be sent for that option. You may use tokens.') . '<br /><br />',
         '#description_display' => 'before',
         '#required' => TRUE,
         '#parents' => ['settings', $options_name],

@@ -129,7 +129,7 @@ function webform_token_info() {
   $webform_submission['values'] = [
     'name' => t('Submission values'),
     'description' => new FormattableMarkup((string) t('Webform tokens from submitted data.') .
-      t("Replace the '?' with...") . '<br/>' .
+      t("Replace the '?' with...") . '<br />' .
       '<ul>' .
       '<li>element_key</li>' .
       '<li>element_key:format:items</li>' .
@@ -145,13 +145,13 @@ function webform_token_info() {
       '<li>element_key:sub_element_key:entity:*</li>' .
       '<li>element_key:delta:sub_element_key:entity:*</li>' .
       '</ul>' .
-      t("All items after the 'element_key' are optional.") . '<br/>' .
-      t("The 'delta' is the numeric index for specific value") . '<br/>' .
-      t("The 'sub_element_key' is a composite element's sub element key.") . '<br/>' .
-      t("The 'format' can be 'value', 'raw', or custom format specifically associated with the element") . '<br/>' .
-      t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . '<br/>' .
-      t("The 'entity:*' applies to the referenced entity") . '<br/>' .
-      t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br/>' .
+      t("All items after the 'element_key' are optional.") . '<br />' .
+      t("The 'delta' is the numeric index for specific value") . '<br />' .
+      t("The 'sub_element_key' is a composite element's sub element key.") . '<br />' .
+      t("The 'format' can be 'value', 'raw', or custom format specifically associated with the element") . '<br />' .
+      t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . '<br />' .
+      t("The 'entity:*' applies to the referenced entity") . '<br />' .
+      t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br />' .
       t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token.")
     , []),
     'dynamic' => TRUE,

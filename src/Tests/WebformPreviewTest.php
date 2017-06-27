@@ -52,8 +52,8 @@ class WebformPreviewTest extends WebformTestBase {
     $this->assertRaw('Please review your submission. Your submission is not complete until you press the "Submit" button!');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '< Previous');
-    $this->assertRaw('<b>Name</b><br/>test<br/><br/>');
-    $this->assertRaw('<b>Email</b><br/><a href="mailto:example@example.com">example@example.com</a><br/><br/>');
+    $this->assertRaw('<b>Name</b><br />test<br /><br />');
+    $this->assertRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
     $this->assertRaw('<div class="webform-preview">');
 
     // Check required preview with custom settings.
@@ -81,8 +81,8 @@ class WebformPreviewTest extends WebformTestBase {
     $this->assertRaw('{Message}');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '{Back}');
-    $this->assertRaw('<b>Name</b><br/>test<br/><br/>');
-    $this->assertNoRaw('<b>Email</b><br/><a href="mailto:example@example.com">example@example.com</a><br/><br/>');
+    $this->assertRaw('<b>Name</b><br />test<br /><br />');
+    $this->assertNoRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
     $this->assertRaw('<div class="preview-custom webform-preview">');
 
     $this->drupalGet('webform/test_form_preview');

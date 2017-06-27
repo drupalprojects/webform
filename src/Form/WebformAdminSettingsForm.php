@@ -688,14 +688,14 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['element_settings']['select']['default_empty_option_required'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default empty option required'),
-      '#description' => $this->t('The label to show for the first default option for required select menus.') . '<br/>' .
+      '#description' => $this->t('The label to show for the first default option for required select menus.') . '<br />' .
         $this->t('Defaults to: %value', ['%value' => $this->t('- Select -')]),
       '#default_value' => $config->get('element.default_empty_option_required'),
     ];
     $form['element_settings']['select']['default_empty_option_optional'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default empty option optional'),
-      '#description' => $this->t('The label to show for the first default option for optional select menus.') . '<br/>' .
+      '#description' => $this->t('The label to show for the first default option for optional select menus.') . '<br />' .
         $this->t('Defaults to: %value', ['%value' => $this->t('- None -')]),
       '#default_value' => $config->get('element.default_empty_option_optional'),
     ];
@@ -787,7 +787,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $form['element_settings']['format'][$element_id]['item'] = [
         '#type' => 'select',
         '#title' => $this->t('Item format'),
-        '#description' => $this->t("Select how a @label element's single value is displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
+        '#description' => $this->t("Select how a @label element's single value is displayed.", ['@label' => $element_plugin_label]) . '<br />' .
         $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
         '#options' => $item_formats,
         '#default_value' => $config->get("format.$element_id"),
@@ -804,7 +804,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         $form['element_settings']['format'][$element_id]['items'] = [
           '#type' => 'select',
           '#title' => $this->t('Items format'),
-          '#description' => $this->t("Select how a @label element's multiple values are displayed.", ['@label' => $element_plugin_label]) . '<br/>' .
+          '#description' => $this->t("Select how a @label element's multiple values are displayed.", ['@label' => $element_plugin_label]) . '<br />' .
           $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
           '#options' => $items_formats,
           '#default_value' => $config->get("format.$element_id"),
@@ -869,8 +869,8 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         'title' => $library['title'],
         'description' => [
           'data' => [
-            'content' => ['#markup' => $library['description'], '#suffix' => '<br/>'],
-            'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br/>'],
+            'content' => ['#markup' => $library['description'], '#suffix' => '<br />'],
+            'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br />'],
           ],
         ],
       ];

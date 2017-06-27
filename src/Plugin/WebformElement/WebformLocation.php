@@ -176,13 +176,13 @@ class WebformLocation extends WebformCompositeBase {
     ];
     $default_api_key = \Drupal::config('webform.settings')->get('element.default_google_maps_api_key');
     if ($default_api_key) {
-      $form['composite']['api_key']['#description'] .= '<br/>' . $this->t('Defaults to: %value', ['%value' => $default_api_key]);
+      $form['composite']['api_key']['#description'] .= '<br />' . $this->t('Defaults to: %value', ['%value' => $default_api_key]);
     }
     else {
       $form['composite']['api_key']['#required'] = TRUE;
       if (\Drupal::currentUser()->hasPermission('administer webform')) {
         $t_args = [':href' => UrlGenerator::fromRoute('webform.settings')->toString()];
-        $form['composite']['api_key']['#description'] .= '<br/>' . $this->t('You can either enter an element specific API key here or set the <a href=":href">default site-wide API key</a>.', $t_args);
+        $form['composite']['api_key']['#description'] .= '<br />' . $this->t('You can either enter an element specific API key here or set the <a href=":href">default site-wide API key</a>.', $t_args);
       }
     }
 

@@ -310,7 +310,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
           if (is_string($line)) {
             $lines[$key] = ['#markup' => $line];
           }
-          $lines[$key]['#suffix'] = '<br/>';
+          $lines[$key]['#suffix'] = '<br />';
         }
         return $lines;
     }
@@ -660,7 +660,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form['element']['default_value']['#description'] = $this->t("The default value of the composite webform element as YAML.");
 
     // Update #required label.
-    $form['validation']['required']['#description'] .= '<br/>' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
+    $form['validation']['required']['#description'] .= '<br />' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
 
     // Update '#multiple__header_label'.
     $form['element']['multiple__header_label']['#states']['visible'][':input[name="properties[multiple__header]"]'] = ['checked' => FALSE];
