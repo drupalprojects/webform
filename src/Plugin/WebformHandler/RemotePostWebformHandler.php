@@ -48,7 +48,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   /**
    * The token manager.
    *
-   * @var \Drupal\webform\WebformTranslationManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 

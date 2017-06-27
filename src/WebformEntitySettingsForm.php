@@ -35,16 +35,16 @@ class WebformEntitySettingsForm extends EntityForm {
   protected $currentUser;
 
   /**
-   * The message manager.
+   * The webform message manager.
    *
    * @var \Drupal\webform\WebformMessageManagerInterface
    */
   protected $messageManager;
 
   /**
-   * The token manager.
+   * The webform token manager.
    *
-   * @var \Drupal\webform\WebformTranslationManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -63,9 +63,9 @@ class WebformEntitySettingsForm extends EntityForm {
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
-   *   The message manager.
+   *   The webform message manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
-   *   The token manager.
+   *   The webform token manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager) {
     $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');

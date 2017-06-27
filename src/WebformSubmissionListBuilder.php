@@ -47,7 +47,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   protected $requestHandler;
 
   /**
-   * The message manager.
+   * The webform message manager.
    *
    * @var \Drupal\webform\WebformMessageManagerInterface
    */

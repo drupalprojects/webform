@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class WebformAddonsController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * The add-ons manager.
+   * The webform add-ons manager.
    *
    * @var \Drupal\webform\WebformAddonsManagerInterface
    */
@@ -24,7 +24,7 @@ class WebformAddonsController extends ControllerBase implements ContainerInjecti
    * Constructs a WebformAddonsController object.
    *
    * @param \Drupal\webform\WebformAddonsManagerInterface $addons
-   *   The add-ons manager.
+   *   The webform add-ons manager.
    */
   public function __construct(WebformAddonsManagerInterface $addons) {
     $this->addons = $addons;

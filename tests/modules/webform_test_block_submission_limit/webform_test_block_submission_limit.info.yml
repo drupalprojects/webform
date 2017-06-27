@@ -1,0 +1,8 @@
+name: 'Webform module block submission limit tests'
+type: module
+description: 'Support module for Webform module block submission limit testing.'
+package: Testing
+core: 8.x
+dependencies:
+  - 'drupal:block'
+  - 'drupal:webform'

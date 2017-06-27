@@ -86,7 +86,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * The token manager.
    *
-   * @var \Drupal\webform\WebformTranslationManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -126,9 +126,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
-   *   The token manager.
+   *   The webform token manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
-   *   The libraries manager.
+   *   The webform libraries manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);

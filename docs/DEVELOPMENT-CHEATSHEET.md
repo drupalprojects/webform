@@ -84,6 +84,7 @@ drush features-export -y webform_test_views
 drush features-export -y webform_test_translation
 drush features-export -y webform_node
 drush features-export -y webform_scheduled_email_test
+drush features-export -y webform_test_block_submission_limit
 
 # Revert all feature update to *.info.yml files.
 git checkout -- *.info.yml
@@ -102,6 +103,7 @@ drush webform-tidy -y --dependencies webform_test_views
 drush webform-tidy -y --dependencies webform_test_translation
 drush webform-tidy -y --dependencies webform_node
 drush webform-tidy -y --dependencies webform_scheduled_email_test
+drush webform-tidy -y --dependencies webform_test_block_submission_limit
 
 # Re-import all webform configuration into your site.      
 drush features-import -y webform
@@ -116,4 +118,5 @@ drush features-import -y webform_test_views
 drush features-import -y webform_test_translation
 drush features-import -y webform_node
 drush features-import -y webform_scheduled_email_test
+drush features-import -y webform_test_block_submission_limit
 ```

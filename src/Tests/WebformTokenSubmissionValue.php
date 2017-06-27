@@ -103,6 +103,16 @@ john@example.com',
       'webform_submission:values:contacts:1:name' => 'Jane Doe',
       'webform_submission:values:contacts:0:email:html' => '<a href="mailto:john@example.com">john@example.com</a>',
       'webform_submission:values:contacts:1:email:raw:html' => 'jane@example.com',
+
+      // submission limits.
+      'webform_submission:limit:webform' => '100',
+      'webform_submission:total:webform' => '1',
+      'webform_submission:limit:user' => '10',
+      'webform_submission:total:user' => '1',
+      'webform_submission:limit:webform:source_entity' => '50',
+      'webform_submission:total:webform:source_entity' => '',
+      'webform_submission:limit:user:source_entity' => '5',
+      'webform_submission:total:user:source_entity' => '',
     ];
     foreach ($tokens as $token => $value) {
       $this->assertRaw("<tr><th width=\"50%\">$token</th><td width=\"50%\">$value</td></tr>");

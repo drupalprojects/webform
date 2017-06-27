@@ -4,6 +4,6 @@ description: 'Support module for Webform module block custom testing.'
 package: Testing
 core: 8.x
 dependencies:
-  - 'drupa:block'
+  - 'drupal:block'
   - 'drupal:block_content'
   - 'drupal:webform'

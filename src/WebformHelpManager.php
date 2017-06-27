@@ -74,7 +74,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   protected $pathMatcher;
 
   /**
-   * The Webform addo-ns manager.
+   * The Webform add-ons manager.
    *
    * @var \Drupal\webform\WebformAddonsManagerInterface
    */
@@ -108,9 +108,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
    *   The path matcher.
    * @param \Drupal\webform\WebformAddOnsManagerInterface $addons_manager
-   *   The Webform add-ons manager.
+   *   The webform add-ons manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
-   *   The Webform libraries manager.
+   *   The webform libraries manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */

@@ -203,19 +203,32 @@ settings:
     <tr><th width="50%">webform_submission:values:contacts:0:email:html</th><td width="50%">[webform_submission:values:contacts:0:email:html]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:email:raw:html</th><td width="50%">[webform_submission:values:contacts:1:email:raw:html]</td></tr>
     </table>
+
+    <h3>submission limits</h3>
+    <table class="table">
+    <tr><th width="50%">webform_submission:limit:webform</th><td width="50%">[webform_submission:limit:webform]</td></tr>
+    <tr><th width="50%">webform_submission:total:webform</th><td width="50%">[webform_submission:total:webform]</td></tr>
+    <tr><th width="50%">webform_submission:limit:user</th><td width="50%">[webform_submission:limit:user]</td></tr>
+    <tr><th width="50%">webform_submission:total:user</th><td width="50%">[webform_submission:total:user]</td></tr>
+    <tr><th width="50%">webform_submission:limit:webform:source_entity</th><td width="50%">[webform_submission:limit:webform:source_entity]</td></tr>
+    <tr><th width="50%">webform_submission:total:webform:source_entity</th><td width="50%">[webform_submission:total:webform:source_entity]</td></tr>
+    <tr><th width="50%">webform_submission:limit:user:source_entity</th><td width="50%">[webform_submission:limit:user:source_entity]</td></tr>
+    <tr><th width="50%">webform_submission:total:user:source_entity</th><td width="50%">[webform_submission:total:user:source_entity]</td></tr>
+    </table>
+
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
-  limit_total: null
+  limit_total: 100
   limit_total_message: ''
-  limit_user: null
+  limit_user: 10
   limit_user_message: ''
   purge: none
   purge_days: null
-  entity_limit_total: null
-  entity_limit_user: null
+  entity_limit_total: 50
+  entity_limit_user: 5
   results_disabled: false
   results_disabled_ignore: false
   token_update: true

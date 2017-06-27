@@ -50,9 +50,9 @@ class WebformEntityForm extends BundleEntityFormBase {
   protected $elementsValidator;
 
   /**
-   * The token manager.
+   * The webform token manager.
    *
-   * @var \Drupal\webform\WebformTranslationManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -68,7 +68,7 @@ class WebformEntityForm extends BundleEntityFormBase {
    * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
    *   Webform element validator.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
-   *   The token manager.
+   *   The webform token manager.
    */
   public function __construct(RendererInterface $renderer, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator, WebformTokenManagerInterface $token_manager) {
     $this->renderer = $renderer;

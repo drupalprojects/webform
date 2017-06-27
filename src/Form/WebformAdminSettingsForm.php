@@ -66,9 +66,9 @@ class WebformAdminSettingsForm extends ConfigFormBase {
   protected $submissionExporter;
 
   /**
-   * The token manager.
+   * The webform token manager.
    *
-   * @var \Drupal\webform\WebformTranslationManagerInterface
+   *@var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -87,7 +87,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
   protected $thirdPartySettingsManager;
 
   /**
-   * Add-ons manager.
+   * The webform add-ons manager.
    *
    * @var \Drupal\webform\WebformAddonsManagerInterface
    */
@@ -130,13 +130,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
    * @param \Drupal\webform\WebformSubmissionExporterInterface $submission_exporter
    *   The webform submission exporter.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
-   *   The token manager.
+   *   The webform token manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
-   *   The libraries manager.
+   *   The webform libraries manager.
    * @param \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager
    *   The webform third party settings manager.
    * @param \Drupal\webform\WebformAddonsManagerInterface $addons_manager
-   *   The add-ons manager.
+   *   The webform add-ons manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, WebformElementManagerInterface $element_manager, WebformHandlerManagerInterface $handler_manager, WebformExporterManagerInterface $exporter_manager, WebformSubmissionExporterInterface $submission_exporter, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformAddonsManagerInterface $addons_manager) {
     parent::__construct($config_factory);

@@ -74,6 +74,12 @@ webform.block:
     - webform/webform.element.codemirror.yaml
     - webform/webform.element.select2
 
+webform.block.submission_limit:
+  version: VERSION
+  css:
+    theme:
+      css/webform.block.submission_limit.css: {}
+
 # Theme
 
 webform.theme.bartik:

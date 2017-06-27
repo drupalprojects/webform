@@ -207,6 +207,24 @@ abstract class WebformTestBase extends WebTestBase {
     $this->drupalPlaceBlock('local_actions_block');
   }
 
+  /**
+   * Place webform test module blocks.
+   *
+   * @param string $module_name
+   *   Test module name.
+   */
+  protected function placeWebformBlocks($module_name) {
+    $config_directory = drupal_get_path('module', 'webform') . '/tests/modules/' . $module_name . '/config';
+    $config_files = file_scan_directory($config_directory, '/block\..*/');
+    foreach ($config_files as $config_file) {
+      $data = Yaml::decode(file_get_contents($config_file->uri));
+      $plugin_id = $data['plugin'];
+      $settings = $data['settings'];
+      unset($settings['id']);
+      $this->drupalPlaceBlock($plugin_id, $settings );
+    }
+  }
+
   /****************************************************************************/
   // Filter.
   /****************************************************************************/

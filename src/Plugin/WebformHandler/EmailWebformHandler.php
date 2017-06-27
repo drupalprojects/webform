@@ -78,9 +78,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected $mailManager;
 
   /**
-   * The token manager.
+   * The webform token manager.
    *
-   * @var \Drupal\webform\WebformTranslationManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 

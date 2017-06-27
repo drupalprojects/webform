@@ -87,6 +87,38 @@ function webform_token_info() {
     'name' => t('In draft'),
     'description' => t('Is the webform submission in draft.'),
   ];
+  $webform_submission['limit:webform'] = [
+    'name' => t('Total submissions limit'),
+    'description' => t('The total number of submissions allowed for the webform.'),
+  ];
+  $webform_submission['total:webform'] = [
+    'name' => t('Total submissions'),
+    'description' => t('The current number of submissions for the webform.'),
+  ];
+  $webform_submission['limit:user'] = [
+    'name' => t('Per user submission limit'),
+    'description' => t('The total number of submissions allowed per user for the webform.'),
+  ];
+  $webform_submission['total:user'] = [
+    'name' => t('Per user total submissions'),
+    'description' => t('The current number of submissions for the user for the webform.'),
+  ];
+  $webform_submission['limit:webform:source_entity'] = [
+    'name' => t('Total submissions limit per source entity'),
+    'description' => t('The total number of submissions allowed for the webform source entity.'),
+  ];
+  $webform_submission['total:webform:source_entity'] = [
+    'name' => t('Total submissions for source entity'),
+    'description' => t('The current number of submissions for the webform source entity.'),
+  ];
+  $webform_submission['limit:user:source_entity'] = [
+    'name' => t('Per user submission limit per source entity'),
+    'description' => t('The total number of submissions allowed per user for the webform source entity.'),
+  ];
+  $webform_submission['total:user:source_entity'] = [
+    'name' => t('Per user total submissions for source entity'),
+    'description' => t('The current number of submissions for the user for the webform source entity.'),
+  ];
 
   // Dynamic tokens for webform submissions.
   $webform_submission['url'] = [
@@ -301,14 +333,31 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 
   }
   elseif ($type == 'webform_submission' && !empty($data['webform_submission'])) {
-
-    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-    $webform_submission = $data['webform_submission'];
-
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
-    $form_elements = $webform_submission->getWebform()->getElementsInitializedAndFlattened();
+    /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
+    $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+
+    // Adding webform submission, webform, source entity to bubbleable meta.
+    // This reduces code duplication and easier to track.
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $data['webform_submission'];
+    $bubbleable_metadata->addCacheableDependency($webform_submission);
+
+    $webform = $webform_submission->getWebform();
+    $bubbleable_metadata->addCacheableDependency($webform);
+
+    $source_entity = $webform_submission->getSourceEntity();
+    if ($source_entity) {
+      $bubbleable_metadata->addCacheableDependency($source_entity);
+    }
+
+    /** @var \Drupal\Core\Session\AccountInterface $account */
+    $account = $webform_submission->getOwner() ?: User::load(0);
+    $bubbleable_metadata->addCacheableDependency($account);
+
+    $form_elements = $webform->getElementsInitializedAndFlattened();
 
     foreach ($tokens as $name => $original) {
       switch ($name) {
@@ -329,7 +378,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 
         case 'current-page':
           $current_page = $webform_submission->current_page->value;
-          if (empty($current_page) && $pages = $webform_submission->getWebform()->getPages()) {
+          if (empty($current_page) && $pages = $webform->getPages()) {
             $page_keys = array_keys($pages);
             $current_page = reset($page_keys);
           }
@@ -367,9 +416,6 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         /* Default values for the chained tokens handled below */
 
         case 'user':
-          /** @var \Drupal\Core\Session\AccountInterface $account */
-          $account = $webform_submission->getOwner() ?: User::load(0);
-          $bubbleable_metadata->addCacheableDependency($account);
           $replacements[$original] = $account->label();
           break;
 
@@ -381,15 +427,11 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           break;
 
         case 'webform':
-          $webform = $webform_submission->getWebform();
-          $bubbleable_metadata->addCacheableDependency($webform);
           $replacements[$original] = $webform->label();
           break;
 
         case 'source-entity':
-          $source_entity = $webform_submission->getSourceEntity();
           if ($source_entity) {
-            $bubbleable_metadata->addCacheableDependency($source_entity);
             $replacements[$original] = $source_entity->label();
           }
           else {
@@ -398,9 +440,40 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           break;
 
         case 'submitted-to':
-          $submitted_to = $webform_submission->getSourceEntity() ?: $webform_submission->getWebform();
-          $bubbleable_metadata->addCacheableDependency($submitted_to);
+          $submitted_to = $source_entity ?: $webform;
           $replacements[$original] = $submitted_to->label();
+          break;
+
+        case 'limit:webform':
+          $replacements[$original] = $webform->getSetting('limit_total') ?: t('None');
+          break;
+
+        case 'total:webform':
+          $replacements[$original] = $submission_storage->getTotal($webform);
+          break;
+
+        case 'limit:user':
+          $replacements[$original] = $webform->getSetting('limit_user') ?: t('None');
+          break;
+
+        case 'total:user':
+          $replacements[$original] = $submission_storage->getTotal($webform, NULL, $account);
+          break;
+
+        case 'limit:webform:source_entity':
+          $replacements[$original] = $webform->getSetting('entity_limit_total') ?: t('None');
+          break;
+
+        case 'total:webform:source_entity':
+          $replacements[$original] = $source_entity ? $submission_storage->getTotal($webform, $source_entity) : '';
+          break;
+
+        case 'limit:user:source_entity':
+          $replacements[$original] = $webform->getSetting('entity_limit_user') ?: t('None');
+          break;
+
+        case 'total:user:source_entity':
+          $replacements[$original] = $source_entity ? $submission_storage->getTotal($webform, $source_entity, $account) : '';
           break;
 
       }
