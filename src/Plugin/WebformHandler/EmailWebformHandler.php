@@ -810,7 +810,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Render body using webform email message (wrapper) template.
     $build = [
       '#theme' => 'webform_email_message_' . (($this->configuration['html']) ? 'html' : 'text'),
-      '#message' => ['body' => ['#markup' => $message['body']]] + $message,
+      '#message' => ['body' => Markup::create($message['body'])] + $message,
       '#webform_submission' => $webform_submission,
       '#handler' => $this,
     ];
