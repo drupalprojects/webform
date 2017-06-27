@@ -44,6 +44,11 @@ elements: |
     '#min': '2009-01-01'
     '#max': '2009-12-31'
     '#default_value': '2009-08-18'
+  datelist_date_year_range_reverse:
+    '#type': datelist
+    '#title': datelist_date_year_range_reverse
+    '#date_year_range': '2005:2010'
+    '#date_year_range_reverse': TRUE
 css: ''
 javascript: ''
 settings:
