@@ -14,7 +14,7 @@ provider: null
 plugin: webform_test_ajax_block
 settings:
   id: webform_test_ajax_block
-  label: 'Test Webform Ajax Modal Dialogs√'
+  label: 'Test Webform Ajax Modal Dialogs'
   provider: webform_test_ajax
   label_display: visible
 visibility:

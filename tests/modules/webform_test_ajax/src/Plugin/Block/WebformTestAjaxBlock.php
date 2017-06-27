@@ -58,6 +58,7 @@ class WebformTestAjaxBlock extends BlockBase {
     return [
       '#theme' => 'links',
       '#links' => $links,
+      '#attached' => ['library' => ['core/drupal.ajax']],
     ];
   }
 
