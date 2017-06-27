@@ -24,6 +24,9 @@ class ProcessedText extends WebformMarkupBase {
    */
   public function getDefaultProperties() {
     if (function_exists('filter_formats')) {
+      // Works around filter_default_format() throwing fatal error when
+      // user is not allowed to use any filter formats.
+      // @see filter_default_format.
       $formats = filter_formats(\Drupal::currentUser());
       $format = reset($formats);
       $default_format = $format ? $format->id() : filter_fallback_format();
