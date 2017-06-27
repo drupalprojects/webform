@@ -23,10 +23,18 @@ class ProcessedText extends WebformMarkupBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
+    if (function_exists('filter_formats')) {
+      $formats = filter_formats(\Drupal::currentUser());
+      $format = reset($formats);
+      $default_format = $format ? $format->id() : filter_fallback_format();
+    }
+    else {
+      $default_format = '';
+    }
     return parent::getDefaultProperties() + [
       // Markup settings.
       'text' => '',
-      'format' => (function_exists('filter_default_format')) ? filter_default_format(\Drupal::currentUser()) : '',
+      'format' => $default_format ,
     ];
   }
 
