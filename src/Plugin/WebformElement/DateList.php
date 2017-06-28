@@ -163,7 +163,8 @@ class DateList extends DateBase {
     // Reverse years from min:max to max:min.
     // @see \Drupal\Core\Datetime\Element\DateElementBase::datetimeRangeYears
     if (!empty($element['#date_year_range_reverse']) && isset($element['year']) && isset($element['year']['#options'])) {
-      $element['year']['#options'] = array_reverse($element['year']['#options'], TRUE);
+      $options = $element['year']['#options'];
+      $element['year']['#options'] = ['' => $options['']] + array_reverse($options, TRUE);
     }
     return $element;
   }
