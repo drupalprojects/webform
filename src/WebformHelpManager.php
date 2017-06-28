@@ -277,11 +277,7 @@ SUGGESTIONS
     $links['index'] = [
       'title' => $this->t('How can we help you?'),
       'url' => Url::fromRoute('webform.help.about'),
-      'attributes' => [
-        'class' => ['use-ajax'],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode(['width' => 640]),
-      ],
+      'attributes' => WebformDialogHelper::getModalDialogAttributes(640),
     ];
     $links['community'] = [
       'title' => $this->t('Join the Drupal Community'),
@@ -321,6 +317,7 @@ SUGGESTIONS
         '#type' => 'operations',
         '#links' => $links,
       ],
+      '#attached' => ['library' => 'webform/webform.ajax'],
     ];
   }
 

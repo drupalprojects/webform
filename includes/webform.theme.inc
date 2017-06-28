@@ -58,6 +58,7 @@ function template_preprocess_webform_help(array &$variables) {
     $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
     switch ($video_display) {
       case 'dialog':
+        $variables['#attached']['library'][] = 'webform/webform.ajax';
         $help['link'] = [
           '#type' => 'link',
           '#title' => t('Watch video'),
