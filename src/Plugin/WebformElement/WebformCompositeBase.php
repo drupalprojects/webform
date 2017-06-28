@@ -144,11 +144,12 @@ abstract class WebformCompositeBase extends WebformElementBase {
 
     if (!empty($element['#multiple__header'])) {
       $element['#header'] = TRUE;
-      $element = $this->getInitializedCompositeElement($element);
-      foreach (Element::children($element) as $key) {
-        $element['#element'][$key] = $element[$key];
-        $element['#element'][$key]['#title_display'] = 'invisible';
-        unset($element[$key]);
+      // Replace the composite element with the composite's sub-elements.
+      $element['#element'] = [];
+      $composite_element = $this->getInitializedCompositeElement($element);
+      foreach (Element::children($composite_element) as $composite_key) {
+        $element['#element'][$composite_key] = $composite_element[$composite_key];
+        $element['#element'][$composite_key]['#title_display'] = 'invisible';
       }
     }
   }
