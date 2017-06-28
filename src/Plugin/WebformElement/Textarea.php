@@ -37,6 +37,7 @@ class Textarea extends TextBase {
       'placeholder' => '',
       'disabled' => FALSE,
       'rows' => '',
+      'maxlength' => '',
       // Form validation.
       'required' => FALSE,
       'required_error' => '',
@@ -67,6 +68,20 @@ class Textarea extends TextBase {
   /**
    * {@inheritdoc}
    */
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+    parent::prepare($element, $webform_submission);
+
+    // @todo Remove once Drupal 8.4.x+ is a dependency.
+    // Textarea Form API element now supports #maxlength attribute
+    // @see https://www.drupal.org/node/2887280
+    if (!empty($element['#maxlength'])) {
+      $element['#attributes']['maxlength'] = $element['#maxlength'];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
@@ -80,10 +95,13 @@ class Textarea extends TextBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
+
     $form['element']['default_value']['#type'] = 'textarea';
     $form['element']['default_value']['#rows'] = 3;
+
     $form['form']['placeholder']['#type'] = 'textarea';
     $form['form']['placeholder']['#rows'] = 3;
+
     return $form;
   }
 
