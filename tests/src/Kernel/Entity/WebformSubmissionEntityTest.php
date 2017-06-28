@@ -27,6 +27,7 @@ class WebformSubmissionEntityTest extends KernelTestBase {
   public function setUp() {
     parent::setUp();
 
+    $this->installSchema('webform', ['webform']);
     $this->installConfig('webform');
     $this->installEntitySchema('webform_submission');
     $this->installEntitySchema('user');
@@ -36,8 +37,6 @@ class WebformSubmissionEntityTest extends KernelTestBase {
    * Tests some of the methods.
    */
   public function testWebformMethods() {
-    $this->installConfig('webform');
-
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::create(['id' => 'webform_test', 'title' => 'Test']);
     $elements = [

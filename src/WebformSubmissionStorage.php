@@ -659,7 +659,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $is_new = $entity->isNew();
 
     if (!$entity->serial()) {
-      $entity->set('serial', $this->getNextSerial($entity));
+      $next_serial = $this->entityManager->getStorage('webform')->incrementNextSerial($entity->getWebform());
+      $entity->set('serial', $next_serial);
     }
 
     $result = parent::doSave($id, $entity);
@@ -701,34 +702,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     }
 
     return $result;
-  }
-
-  /**
-   * Returns the next serial number.
-   *
-   * @return int
-   *   The next serial number.
-   */
-  protected function getNextSerial(WebformSubmissionInterface $webform_submission) {
-    $webform = $webform_submission->getWebform();
-
-    $next_serial = $webform->getState('next_serial');
-    $max_serial = $this->getMaxSerial($webform);
-    $serial = max($next_serial, $max_serial);
-
-    $webform->setState('next_serial', $serial + 1);
-
-    return $serial;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMaxSerial(WebformInterface $webform) {
-    $query = \Drupal::database()->select('webform_submission');
-    $query->condition('webform_id', $webform->id());
-    $query->addExpression('MAX(serial)');
-    return $query->execute()->fetchField() + 1;
   }
 
   /**

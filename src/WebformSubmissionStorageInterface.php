@@ -77,17 +77,6 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function checkFieldDefinitionAccess(WebformInterface $webform, array $definitions);
 
   /**
-   * Returns a webform's max serial number.
-   *
-   * @param \Drupal\webform\WebformInterface $webform
-   *   A webform.
-   *
-   * @return int
-   *   The next serial number.
-   */
-  public function getMaxSerial(WebformInterface $webform);
-
-  /**
    * Delete all webform submissions.
    *
    * @param \Drupal\webform\WebformInterface|null $webform

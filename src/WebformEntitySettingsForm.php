@@ -600,7 +600,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Next submission number'),
       '#description' => $this->t('The value of the next submission number. This is usually 1 when you start and will go up with each webform submission.'),
       '#min' => 1,
-      '#default_value' => $webform->getState('next_serial') ?: 1,
+      '#default_value' => $webform_storage->getNextSerial($webform),
     ];
     $form['submission_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
     $form['submission_settings']['submission_columns'] = [
@@ -1116,15 +1116,15 @@ class WebformEntitySettingsForm extends EntityForm {
     }
 
     // Set next serial number.
-    /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
-    $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
+    /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
+    $webform_storage = $this->entityTypeManager->getStorage('webform');
     $next_serial = (int) $values['next_serial'];
-    $max_serial = $submission_storage->getMaxSerial($webform);
+    $max_serial = $webform_storage->getMaxSerial($webform);
     if ($next_serial < $max_serial) {
       drupal_set_message($this->t('The next submission number was increased to @min to make it higher than existing submissions.', ['@min' => $max_serial]));
       $next_serial = $max_serial;
     }
-    $webform->setState('next_serial', $next_serial);
+    $webform_storage->setNextSerial($webform, $next_serial);
 
     // Remove main properties.
     unset(

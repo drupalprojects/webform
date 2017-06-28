@@ -26,6 +26,7 @@ class WebformEntityTest extends KernelTestBase {
    * Tests some of the methods.
    */
   public function testWebformMethods() {
+    $this->installSchema('webform', ['webform']);
     $this->installConfig('webform');
 
     /**************************************************************************/
@@ -295,6 +296,7 @@ class WebformEntityTest extends KernelTestBase {
    * Test paths.
    */
   public function testPaths() {
+    $this->installSchema('webform', ['webform']);
     $this->installConfig('webform');
 
     /** @var \Drupal\webform\WebformInterface $webform */

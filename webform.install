@@ -32,6 +32,36 @@ function webform_uninstall() {
 }
 
 /**
+ * Implements hook_schema().
+ *
+ * Even though Webform's are config entities we need to create a 'webform' table
+ * to track webform submission serial numbers using DB transaction locking.
+ *
+ * @see \Drupal\webform\WebformEntityStorage
+ */
+function webform_schema() {
+  $schema['webform'] = [
+    'description' => 'Stores all webform data.',
+    'fields' => [
+      'webform_id' => [
+        'description' => 'The webform id.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'next_serial' => [
+        'description' => 'The serial number to give to the next submission to this webform.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+      ],
+    ],
+    'primary key' => ['webform_id', 'next_serial'],
+  ];
+  return $schema;
+}
+/**
  * Implements hook_requirements().
  */
 function webform_requirements($phase) {
@@ -824,4 +854,46 @@ function webform_update_8059() {
  */
 function webform_update_8060() {
   _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2871207: Random Multiple Submissions. Create webform table.
+ */
+function webform_update_8061() {
+  // Copied from: webform_schema().
+  $schema = [
+    'description' => 'Stores all webform data.',
+    'fields' => [
+      'webform_id' => [
+        'description' => 'The webform id.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'next_serial' => [
+        'description' => 'The serial number to give to the next submission to this webform.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+      ],
+    ],
+    'primary key' => ['webform_id'],
+  ];
+  \Drupal::database()->schema()->createTable('webform', $schema);
+}
+
+/**
+ * Issue #2871207: Random Multiple Submissions. Populate next serial in webform table.
+ */
+function webform_update_8062() {
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    \Drupal::database()->insert('webform')
+      ->fields(['webform_id', 'next_serial'])
+      ->values([$webform->id(), $webform->getState('next_serial') ?: 1])
+      ->execute();
+    $webform->deleteState('next_serial');
+  }
 }

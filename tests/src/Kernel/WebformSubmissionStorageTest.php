@@ -27,6 +27,7 @@ class WebformSubmissionStorageTest extends KernelTestBase {
   public function setUp() {
     parent::setUp();
 
+    $this->installSchema('webform', ['webform']);
     $this->installConfig('webform');
     $this->installEntitySchema('webform_submission');
     $this->installEntitySchema('user');
