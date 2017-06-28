@@ -1227,7 +1227,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * @return array
    *   An associative array containing entity reference details element.
    */
-  public function ajaxCallback(array $form, FormStateInterface $form_state) {
+  public static function ajaxCallback(array $form, FormStateInterface $form_state) {
     $trigger_element = $form_state->getTriggeringElement();
 
     // Get options name from trigger element which is the select_other[select].
