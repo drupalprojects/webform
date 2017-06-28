@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Entity\WebformSubmission;
 
 /**
  * Tests for webform submission limits.

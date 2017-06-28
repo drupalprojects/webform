@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Drupal\webform_devel\Logger;
 
 use Drupal\Core\Config\ConfigFactory;

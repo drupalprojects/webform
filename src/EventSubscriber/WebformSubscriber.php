@@ -4,6 +4,7 @@ namespace Drupal\webform\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase::accessFileDownload
  */
 class WebformSubscriber implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The current account.
@@ -77,7 +80,7 @@ class WebformSubscriber implements EventSubscriberInterface {
 
     if ($event->getResponse()->getStatusCode() === Response::HTTP_FORBIDDEN) {
       // Display message on user login.
-      drupal_set_message(t('Please login to access the uploaded file.'));
+      drupal_set_message($this->t('Please login to access the uploaded file.'));
 
       // Redirect to user login with destination set to the private file.
       $redirect_url = Url::fromRoute(

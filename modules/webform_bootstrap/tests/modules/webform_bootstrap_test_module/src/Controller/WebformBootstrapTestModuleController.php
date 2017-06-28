@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Provides route responses for Webform Test Bootstrap Helper.
  */
-class WebformBootstrapTestModuleController extends ControllerBase  {
+class WebformBootstrapTestModuleController extends ControllerBase {
 
   /**
    * Returns a Bootstrap style-guide.

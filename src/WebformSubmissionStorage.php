@@ -659,7 +659,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $is_new = $entity->isNew();
 
     if (!$entity->serial()) {
-      $next_serial = $this->entityManager->getStorage('webform')->incrementNextSerial($entity->getWebform());
+      $next_serial = $this->entityManager->getStorage('webform')->getSerial($entity->getWebform());
       $entity->set('serial', $next_serial);
     }
 

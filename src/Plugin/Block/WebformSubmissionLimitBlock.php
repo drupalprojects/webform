@@ -120,8 +120,8 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
       '#title' => $this->t('Display limit and total submissions for'),
       '#type' => 'select',
       '#options' => [
-        'webform' => t('Webform'),
-        'user' => t('Current user'),
+        'webform' => $this->t('Webform'),
+        'user' => $this->t('Current user'),
       ],
       '#ajax' => self::getTokenAjaxSettings(),
       '#default_value' => $this->configuration['type'],
@@ -170,7 +170,7 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
     $form['advanced'] = [
       '#title' => $this->t('Advanced settings'),
       '#type' => 'details',
-      '#description' => t("Webform and source entity are automatically detected based on the current page request. You can use the below settings to hardcode the submission limit block's webform and source entity."),
+      '#description' => $this->t("Webform and source entity are automatically detected based on the current page request. You can use the below settings to hardcode the submission limit block's webform and source entity."),
       '#open' => $this->configuration['webform_id'] || $this->configuration['entity_type'],
     ];
     $form['advanced']['webform_id'] = [
@@ -180,8 +180,7 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
       '#default_value' => ($this->configuration['webform_id']) ? $this->entityTypeManager->getStorage('webform')->load($this->configuration['webform_id']) : NULL,
     ];
     $entity_type_options = [];
-    $entity_type_manager = \Drupal::entityTypeManager();
-    foreach ($entity_type_manager->getDefinitions() as $entity_type_id => $entity_type) {
+    foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       $entity_type_options[$entity_type_id] = $entity_type->getLabel();
     }
     $form['advanced']['entity_type'] = [

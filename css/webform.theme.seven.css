@@ -56,7 +56,7 @@ details details details {
 
 /* System tray title bar */
 .ui-dialog.ui-dialog-offcanvas .ui-dialog-titlebar,
-.ui-dialog.ui-dialog-off-canvas .ui-dialog-titlebar{
+.ui-dialog.ui-dialog-off-canvas .ui-dialog-titlebar {
   border-radius: 0;
 }
 

@@ -583,7 +583,7 @@ function drush_webform_libraries_composer() {
           'type' => $dist_type,
         ],
         'require' => [
-          'composer/installers' =>  '~1.0'
+          'composer/installers' => '~1.0'
         ],
       ],
     ];
@@ -803,7 +803,6 @@ function _drush_webform_docs_tidy($html) {
   return $html;
 }
 
-
 /******************************************************************************/
 // Helper functions.
 /******************************************************************************/
@@ -858,7 +857,7 @@ function drush_webform_composer_update() {
 
   // Get repositories and require.
   $repositories =& $data['repositories'];
-  $require  =& $data['require'];
+  $require =& $data['require'];
 
   // Remove all existing _webform repositories.
   foreach ($repositories as $repository_name => $repository) {
@@ -902,7 +901,7 @@ function drush_webform_composer_update() {
           'type' => $dist_type,
         ],
         'require' => [
-          'composer/installers' =>  '~1.0'
+          'composer/installers' => '~1.0',
         ],
       ],
     ];

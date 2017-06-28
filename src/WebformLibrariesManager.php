@@ -119,7 +119,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       else {
         $value = $this->t('@version (CDN).', $t_args);
         $build = [];
-        $build['download'] = ['#markup' => $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.',  $t_args)];
+        $build['download'] = ['#markup' => $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.', $t_args)];
         if (!$cli) {
           $build['cdn'] = ['#prefix' => ' ', '#markup' => $this->t('(<a href=":settings_libraries_href">Disable CDN warning</a>)', $t_args)];
         }
@@ -386,7 +386,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     }
 
     // Get excluded libraries based on excluded (element) types.
-    foreach($this->libraries as $library_name => $library) {
+    foreach ($this->libraries as $library_name => $library) {
       if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
         $excluded_libraries[$library_name] = $library_name;
       }
@@ -411,4 +411,5 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     }
     return WebformArrayHelper::keysExist($excluded_elements, $elements);
   }
+
 }

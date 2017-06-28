@@ -499,7 +499,6 @@ class WebformUiEntityForm extends WebformEntityForm {
     return $row;
   }
 
-
   /**
    * Get customize actions row.
    *

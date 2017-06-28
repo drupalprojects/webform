@@ -256,7 +256,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
 
       case WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE:
       case WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED:
-        return $this->t('This webform is not available. Please contact the site adminstrator.', $t_args);
+        return $this->t('This webform is not available. Please contact the site administrator.', $t_args);
 
       default:
         return FALSE;

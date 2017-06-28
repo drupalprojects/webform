@@ -80,17 +80,17 @@ class WebformSettingsPrepopulateTest extends WebformTestBase {
     // Check required prepopulated source entity displays error when no source
     // entity is defined.
     $this->drupalGet('webform/test_form_prepopulate');
-    $this->assertRaw('This webform is not available. Please contact the site adminstrator.');
+    $this->assertRaw('This webform is not available. Please contact the site administrator.');
 
     // Check required prepopulated source entity displays error when invalid
     // source entity is defined.
     $this->drupalGet('webform/test_form_prepopulate', ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'DOES_NOT_EXIST']]);
-    $this->assertRaw('This webform is not available. Please contact the site adminstrator.');
+    $this->assertRaw('This webform is not available. Please contact the site administrator.');
 
     // Check required prepopulated source entity loads when source entity is
     // valid.
     $this->drupalGet('webform/test_form_prepopulate', ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
-    $this->assertNoRaw('This webform is not available. Please contact the site adminstrator.');
+    $this->assertNoRaw('This webform is not available. Please contact the site administrator.');
 
     // Set prepopulated source entity type to user.
     $webform_prepopulate->setSetting('form_prepopulate_source_entity_type', 'user');
@@ -98,7 +98,7 @@ class WebformSettingsPrepopulateTest extends WebformTestBase {
 
     // Check invalid source entity type displays error.
     $this->drupalGet('webform/test_form_prepopulate', ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
-    $this->assertRaw('This webform is not available. Please contact the site adminstrator.');
+    $this->assertRaw('This webform is not available. Please contact the site administrator.');
 
     // Set prepopulated source entity type to webform.
     $webform_prepopulate->setSetting('form_prepopulate_source_entity_type', 'webform');
@@ -106,7 +106,7 @@ class WebformSettingsPrepopulateTest extends WebformTestBase {
 
     // Check invalid source entity type displays error.
     $this->drupalGet('webform/test_form_prepopulate', ['query' => ['source_entity_type' => 'webform', 'source_entity_id' => 'contact']]);
-    $this->assertNoRaw('This webform is not available. Please contact the site adminstrator.');
+    $this->assertNoRaw('This webform is not available. Please contact the site administrator.');
   }
 
 }

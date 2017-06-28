@@ -5,8 +5,6 @@
  * Installs and integrates the Webform Test Bootstrap theme.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\webform\Utility\WebformThemeHelper;
 
 // module_load_include('inc', 'webform_bootstrap_test_module');
@@ -31,5 +29,3 @@ function webform_bootstrap_test_module_preprocess_page(&$variables) {
     $variables['page']['sidebar_second'] = NULL;
   }
 }
-
-

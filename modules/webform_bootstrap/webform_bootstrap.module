@@ -10,7 +10,7 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implement hook_webform_element_alter().
+ * Implements hook_webform_element_alter().
  */
 function webform_bootstrap_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
   if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
@@ -36,7 +36,6 @@ function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $asset
   // Make sure jQuery tooltip is never loaded.
   unset($javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js']);
 }
-
 
 /**
  * Implements hook_link_alter().

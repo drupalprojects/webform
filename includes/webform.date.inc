@@ -15,7 +15,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
  *   The element.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The form state.
- * @param \Drupal\Core\Datetime\DrupalDateTime|NULL $date
+ * @param \Drupal\Core\Datetime\DrupalDateTime|null $date
  *   The date value.
  *
  * @see \Drupal\webform\Plugin\WebformElement\DateTime::prepare
@@ -41,7 +41,7 @@ function _webform_datetime_datepicker(array &$element, FormStateInterface $form_
  *   The element.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The form state.
- * @param \Drupal\Core\Datetime\DrupalDateTime|NULL $date
+ * @param \Drupal\Core\Datetime\DrupalDateTime|null $date
  *   The date value.
  *
  * @see \Drupal\webform\Plugin\WebformElement\DateTime::prepare

@@ -221,7 +221,7 @@ abstract class WebformTestBase extends WebTestBase {
       $plugin_id = $data['plugin'];
       $settings = $data['settings'];
       unset($settings['id']);
-      $this->drupalPlaceBlock($plugin_id, $settings );
+      $this->drupalPlaceBlock($plugin_id, $settings);
     }
   }
 

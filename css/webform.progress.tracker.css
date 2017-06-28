@@ -17,7 +17,7 @@
  * Update progress text to show completed and active.
  */
 .webform-progress-tracker .progress-step .progress-text {
-  color: #B6B6B6;
+  color: #b6b6b6;
   padding-top: 5px;
   padding-bottom: 0;
 }
@@ -30,7 +30,7 @@
   font-weight: bold;
 }
 
-.webform-progress-tracker .progress-step.is-complete .progress-text  {
+.webform-progress-tracker .progress-step.is-complete .progress-text {
   color: #333;
 }
 
@@ -42,11 +42,11 @@
 }
 
 .webform-progress-tracker .progress-step.is-complete:hover .progress-marker {
-  background-color: #1976D2;
+  background-color: #1976f2;
 }
 
 .webform-progress-tracker .progress-step.is-active:hover .progress-marker {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 /**
