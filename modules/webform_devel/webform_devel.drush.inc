@@ -16,9 +16,9 @@ function webform_devel_drush_command() {
     'core' => ['8+'],
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
     'examples' => [
-      'webform-repair' => 'Resets Webform user data and saved state for messages',
+      'webform-devel-reset' => 'Resets Webform user data and saved state for messages',
     ],
-    'aliases' => ['webform-reset'],
+    'aliases' => ['wfdr'],
   ];
 
   return $items;
