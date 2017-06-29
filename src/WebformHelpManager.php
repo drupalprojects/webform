@@ -288,7 +288,7 @@ SUGGESTIONS
       'url' => Url::fromUri('https://www.drupal.org/association/campaign/value-2017'),
     ];
     $links['documentation'] = [
-      'title' => $this->t('Read Webform Documentaion'),
+      'title' => $this->t('Read Webform Documentation'),
       'url' => Url::fromUri('https://www.drupal.org/docs/8/modules/webform'),
     ];
     if ($this->configFactory->get('webform.settings')->get('ui.video_display') == 'dialog') {
