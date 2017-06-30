@@ -106,14 +106,15 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
    */
   public function delete(array $entities) {
     parent::delete($entities);
-    if ($entities) {
+    if (!$entities) {
+      // If no entities were passed, do nothing.
       return;
     }
 
     // Delete all webform submission log entries.
     $webform_ids = [];
     foreach ($entities as $entity) {
-      $webform_ids[$entity->id()] = $entity;
+      $webform_ids[] = $entity->id();
     }
     $this->database->delete('webform_submission_log')
       ->condition('webform_id', $webform_ids, 'IN')

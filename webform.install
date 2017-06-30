@@ -897,3 +897,18 @@ function webform_update_8062() {
     $webform->deleteState('next_serial');
   }
 }
+
+/**
+ * Issue #2891108: Recreating deleted webform with same name results in error.
+ */
+function webform_update_8063() {
+  $webform_ids = array_keys(Webform::loadMultiple());
+  if ($webform_ids) {
+    \Drupal::database()->delete('webform_submission_log')
+      ->condition('webform_id', $webform_ids, 'NOT IN')
+      ->execute();
+    \Drupal::database()->delete('webform')
+      ->condition('webform_id', $webform_ids, 'NOT IN')
+      ->execute();
+  }
+}
