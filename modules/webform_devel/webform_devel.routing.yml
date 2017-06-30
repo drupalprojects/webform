@@ -14,6 +14,21 @@ entity.webform.export_form:
   requirements:
     _permission: 'access devel information'
 
+entity.webform.schema_form:
+  path: '/admin/structure/webform/manage/{webform}/schema'
+  defaults:
+    _entity_form: 'webform.schema'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _permission: 'access devel information'
+
+webform_devel.schema.export:
+  path: '/admin/structure/webform/manage/{webform}/schema/export'
+  defaults:
+    _controller: '\Drupal\webform_devel\Controller\WebformDevelSchemaController::index'
+  requirements:
+    _permission: 'access devel information'
+
 entity.webform.api:
   path: '/webform/{webform}/api'
   defaults:

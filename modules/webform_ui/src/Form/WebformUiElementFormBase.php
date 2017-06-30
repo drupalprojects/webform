@@ -349,6 +349,15 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     ];
     drupal_set_message($this->t('%title has been @action.', $t_args));
 
+    // Append ?update= to (redirect) destination.
+    if ($this->requestStack->getCurrentRequest()->query->get('destination')) {
+      $redirect_destination = $this->getRedirectDestination();
+      $destination = $redirect_destination->get();
+      $destination .= (strpos($destination, '?') !== FALSE ? '&' : '?') . 'update=' . $this->key;
+      $redirect_destination->set($destination);
+    }
+
+    // Still set the redirect URL just to be safe.
     $form_state->setRedirectUrl($this->webform->toUrl('edit-form', ['query' => ['update' => $this->key]]));
   }
 

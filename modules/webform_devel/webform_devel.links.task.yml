@@ -10,6 +10,12 @@ entity.webform.export_form:
   parent_id: devel.entities:webform.devel_tab
   weight: 100
 
+entity.webform.schema_form:
+  title: 'Webform'
+  route_name: entity.webform.schema_form
+  parent_id: devel.entities:webform.devel_tab
+  weight: 100
+
 entity.webform.test.form:
   title: 'Form'
   route_name: entity.webform.test

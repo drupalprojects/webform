@@ -182,7 +182,7 @@
    */
   Drupal.AjaxCommands.prototype.webformRefresh = function (ajax, response, status) {
     if (response.url.indexOf(window.location.pathname) !== -1 && $('.webform-ajax-refresh').length) {
-      updateKey = (response.url.match(/\?update=(.*)$/)) ? RegExp.$1 : null;
+      updateKey = (response.url.match(/[\?|&]update=(.*)($|&)/)) ? RegExp.$1 : null;
       $('.webform-ajax-refresh').click();
     }
     else {
