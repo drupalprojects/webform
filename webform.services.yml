@@ -59,7 +59,7 @@ services:
 
   webform_submission.exporter:
     class: Drupal\webform\WebformSubmissionExporter
-    arguments: ['@config.factory', '@entity_type.manager', '@entity.query', '@stream_wrapper_manager', '@plugin.manager.webform.element', '@plugin.manager.webform.exporter']
+    arguments: ['@config.factory', '@file_system', '@entity_type.manager', '@entity.query', '@stream_wrapper_manager', '@plugin.manager.webform.element', '@plugin.manager.webform.exporter']
 
   webform.third_party_settings_manager:
     class: Drupal\webform\WebformThirdPartySettingsManager

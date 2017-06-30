@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -56,6 +57,13 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
   protected $elementManager;
 
   /**
+   * The webform token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
    * Constructs a WebformExporterBase object.
    *
    * @param array $configuration
@@ -72,8 +80,10 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
    *   The entity type manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The webform token manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformElementManagerInterface $element_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->setConfiguration($configuration);
@@ -82,6 +92,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
     $this->entityTypeManager = $entity_type_manager;
     $this->entityStorage = $entity_type_manager->getStorage('webform_submission');
     $this->elementManager = $element_manager;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -95,7 +106,8 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
       $container->get('logger.factory')->get('webform'),
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
-      $container->get('plugin.manager.webform.element')
+      $container->get('plugin.manager.webform.element'),
+      $container->get('webform.token_manager')
     );
   }
 
@@ -253,12 +265,7 @@ abstract class WebformExporterBase extends PluginBase implements WebformExporter
   public function getSubmissionBaseName(WebformSubmissionInterface $webform_submission) {
     $export_options = $this->getConfiguration();
     $file_name = $export_options['file_name'];
-    $token_data = [
-      'webform' => $webform_submission->getWebform(),
-      'webform_submission' => $webform_submission,
-    ];
-    $token_options = ['clear' => TRUE];
-    $file_name = \Drupal::token()->replace($file_name, $token_data, $token_options);
+    $file_name = $this->tokenManager->replace($file_name, $webform_submission);
 
     // Sanitize file name.
     // @see http://stackoverflow.com/questions/2021624/string-sanitizer-for-filename

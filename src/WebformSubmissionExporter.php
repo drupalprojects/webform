@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
@@ -30,6 +31,13 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * File system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
 
   /**
    * Webform submission storage.
@@ -116,9 +124,12 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
    *   The webform element manager.
    * @param \Drupal\webform\Plugin\WebformExporterManagerInterface $exporter_manager
    *   The results exporter manager.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   File system service
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, StreamWrapperManagerInterface $stream_wrapper_manager, WebformElementManagerInterface $element_manager, WebformExporterManagerInterface $exporter_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, FileSystemInterface $file_system, EntityTypeManagerInterface $entity_type_manager, QueryFactory $query_factory, StreamWrapperManagerInterface $stream_wrapper_manager, WebformElementManagerInterface $element_manager, WebformExporterManagerInterface $exporter_manager) {
     $this->configFactory = $config_factory;
+    $this->fileSystem = $file_system;
     $this->entityStorage = $entity_type_manager->getStorage('webform_submission');
     $this->queryFactory = $query_factory;
     $this->streamWrapperManager = $stream_wrapper_manager;
@@ -684,7 +695,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       $archiver = new ArchiveTar($this->getArchiveFilePath(), 'gz');
       $stream_wrappers = array_keys($this->streamWrapperManager->getNames(StreamWrapperInterface::WRITE_VISIBLE));
       foreach ($stream_wrappers as $stream_wrapper) {
-        $files_directory = \Drupal::service('file_system')->realpath($stream_wrapper . '://webform/' . $webform->id());
+        $files_directory = $this->fileSystem->realpath($stream_wrapper . '://webform/' . $webform->id());
         $files_directories[] = $files_directory;
       }
     }
