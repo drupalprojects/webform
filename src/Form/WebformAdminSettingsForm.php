@@ -681,7 +681,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     $form['element_settings']['select']['default_empty_option'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Default empty option'),
-      '#description' => $this->t('If checked, the first default options for select menu will always be displayed.'),
+      '#description' => $this->t('If checked, the first default option for select menu will always be displayed.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('element.default_empty_option'),
     ];
