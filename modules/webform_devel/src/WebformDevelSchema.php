@@ -205,6 +205,18 @@ class WebformDevelSchema implements WebformDevelSchemaInterface {
     foreach ($options as $option_value => $option_text) {
       $maxlength = max(Unicode::strlen($option_value), $maxlength);
     }
+
+    // Check element w/ other value maxlength.
+    if (preg_match('/_other$/', $element['#type'])) {
+      if (isset($element['#other__maxlength'])) {
+        $maxlength = max($element['#other__maxlength'], $maxlength);
+      }
+      else {
+        // @see \Drupal\webform\Plugin\WebformElement\TextField::prepare
+        $maxlength = max(255, $maxlength);
+      }
+    }
+
     return $maxlength;
   }
 
