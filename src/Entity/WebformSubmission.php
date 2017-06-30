@@ -574,7 +574,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     if (isset($values['webform']) && ($values['webform'] instanceof WebformInterface)) {
       $webform = $values['webform'];
       static::$webform = $values['webform'];
-      $values['webform_id'] = 'temp';
+      $values['webform_id'] = $values['webform']->id();
     }
     else {
       /** @var \Drupal\webform\WebformInterface $webform */
