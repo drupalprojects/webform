@@ -45,11 +45,11 @@ function webform_token_info() {
   $webform_submission = [];
   $webform_submission['serial'] = [
     'name' => t('Submission serial number'),
-    'description' => t('The serial number of the webform submission .'),
+    'description' => t('The serial number of the webform submission.'),
   ];
   $webform_submission['sid'] = [
     'name' => t('Submission ID'),
-    'description' => t('The ID of the webform submission .'),
+    'description' => t('The ID of the webform submission.'),
   ];
   $webform_submission['uuid'] = [
     'name' => t('UUID'),
@@ -69,7 +69,7 @@ function webform_token_info() {
   ];
   $webform_submission['update-url'] = [
     'name' => t('Update URL'),
-    'description' => t('The URL that can used to update the webform submission. The webform must be configurated to allow users to update a submission using a secure token.'),
+    'description' => t('The URL that can used to update the webform submission. The webform must be configured to allow users to update a submission using a secure token.'),
   ];
   $webform_submission['langcode'] = [
     'name' => t('Langcode'),
