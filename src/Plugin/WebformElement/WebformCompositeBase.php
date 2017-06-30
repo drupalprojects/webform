@@ -773,7 +773,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
           '#states' => $state_disabled,
         ];
       }
-      elseif (in_array($type, ['select', 'webform_select_other']) && ($composite_options = $this->getCompositeElementOptions($composite_key))) {
+      elseif (in_array($type, ['select', 'webform_select_other'])) {
         $row['type_and_options']['data'][$composite_key . '__type'] = [
           '#type' => 'select',
           '#required' => TRUE,
@@ -785,19 +785,26 @@ abstract class WebformCompositeBase extends WebformElementBase {
           '#attributes' => ['style' => 'width: 100%; margin-bottom: 5px'],
           '#states' => $state_disabled,
         ];
-        $row['type_and_options']['data'][$composite_key . '__options'] = [
-          '#type' => 'select',
-          '#options' => $composite_options,
-          '#required' => TRUE,
-          '#attributes' => ['style' => 'width: 100%;'],
-          '#states' => $state_disabled + [
-              'invisible' => [
-                ':input[name="properties[' . $composite_key . '__type]"]' => [
-                  'value' => 'textfield',
+        if ($composite_options = $this->getCompositeElementOptions($composite_key)) {
+          $row['type_and_options']['data'][$composite_key . '__options'] = [
+            '#type' => 'select',
+            '#options' => $composite_options,
+            '#required' => TRUE,
+            '#attributes' => ['style' => 'width: 100%;'],
+            '#states' => $state_disabled + [
+                'invisible' => [
+                  ':input[name="properties[' . $composite_key . '__type]"]' => [
+                    'value' => 'textfield',
+                  ],
                 ],
               ],
-            ],
-        ];
+          ];
+        }
+        else {
+          $row['type_and_options']['data'][$composite_key . '__options'] = [
+            '#type' => 'value',
+          ];
+        }
       }
       else {
         $row['type_and_options']['data'][$composite_key . '__type'] = [
