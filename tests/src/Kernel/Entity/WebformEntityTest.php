@@ -312,6 +312,7 @@ class WebformEntityTest extends KernelTestBase {
    * Test elements CRUD operations.
    */
   public function testElementsCrud() {
+    $this->installSchema('webform', ['webform']);
     $this->installEntitySchema('webform_submission');
 
     /** @var \Drupal\webform\WebformInterface $webform */

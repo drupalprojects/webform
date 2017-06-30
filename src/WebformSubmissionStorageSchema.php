@@ -16,26 +16,6 @@ class WebformSubmissionStorageSchema extends SqlContentEntityStorageSchema {
   protected function getEntitySchema(ContentEntityTypeInterface $entity_type, $reset = FALSE) {
     $schema = parent::getEntitySchema($entity_type, $reset = FALSE);
 
-    $schema['webform'] = [
-      'description' => 'Stores all webform data.',
-      'fields' => [
-        'webform_id' => [
-          'description' => 'The webform id.',
-          'type' => 'varchar',
-          'length' => 32,
-          'not null' => TRUE,
-        ],
-        'next_serial' => [
-          'description' => 'The serial number to give to the next submission to this webform.',
-          'type' => 'int',
-          'unsigned' => TRUE,
-          'not null' => TRUE,
-          'default' => 1,
-        ],
-      ],
-      'primary key' => ['webform_id', 'next_serial'],
-    ];
-
     $schema['webform_submission_data'] = [
       'description' => 'Stores all submitted data for webform submissions.',
       'fields' => [
