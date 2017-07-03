@@ -41,6 +41,12 @@ drush webform-libraries-make > webform.libraries.make.yml
 drush webform-libraries-composer > composer.json
 ```
 
+**Manually Execute an Update Hook**
+
+```bash
+drush php-eval 'module_load_include('install', 'webform'); webform_update_8032()';
+```
+
 **Import and Export Configuration**
 
 ```bash
