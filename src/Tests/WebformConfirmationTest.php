@@ -40,6 +40,7 @@ class WebformConfirmationTest extends WebformTestBase {
     // Check confirmation message.
     $this->drupalPostForm('webform/test_confirmation_message', [], t('Submit'));
     $this->assertRaw('This is a <b>custom</b> confirmation message.');
+    $this->assertNoRaw('New submission added to <em class="placeholder">Test: Confirmation: Message</em>');
     $this->assertUrl('webform/test_confirmation_message');
 
     // Check confirmation page with custom query parameters.

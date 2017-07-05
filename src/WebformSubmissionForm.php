@@ -1356,10 +1356,11 @@ class WebformSubmissionForm extends ContentEntityForm {
         return;
 
       case 'message':
+        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        return;
+
       default:
-        if (!$this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION)) {
-          $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
-        }
+        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
         return;
     }
 
