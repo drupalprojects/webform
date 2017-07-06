@@ -20,9 +20,9 @@ class WebformElementTableTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_table'];
 
   /**
-   * Tests building of options elements.
+   * Tests table elements.
    */
-  public function testWebformElementTable() {
+  public function testTable() {
 
     $webform = Webform::load('test_element_table');
 

@@ -5,11 +5,11 @@ namespace Drupal\webform\Tests;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform preview.
+ * Tests for webform submission form preview.
  *
  * @group Webform
  */
-class WebformPreviewTest extends WebformTestBase {
+class WebformSubmissionFormPreviewTest extends WebformTestBase {
 
   /**
    * Webforms to load.
@@ -32,7 +32,7 @@ class WebformPreviewTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform preview.
+   * Tests webform webform submission form preview.
    */
   public function testPreview() {
     $this->drupalLogin($this->rootUser);

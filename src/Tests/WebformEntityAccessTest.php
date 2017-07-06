@@ -6,11 +6,11 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform access rules.
+ * Tests for webform access controle.
  *
  * @group Webform
  */
-class WebformAccessTest extends WebformTestBase {
+class WebformEntityAccessTest extends WebformTestBase {
 
   /**
    * Modules to enable.

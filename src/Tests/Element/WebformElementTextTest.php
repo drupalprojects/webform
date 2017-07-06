@@ -26,7 +26,7 @@ class WebformElementTextTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_text'];
 
   /**
-   * Tests building of custom elements.
+   * Tests text elements.
    */
   public function testTextElements() {
 

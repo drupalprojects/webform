@@ -32,7 +32,7 @@ class WebformElementFormatTest extends WebformTestBase {
   /**
    * Tests element format.
    */
-  public function testElementFormat() {
+  public function testFormat() {
 
     /**************************************************************************/
     /* Format (single) element as HTML and text */

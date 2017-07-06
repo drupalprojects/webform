@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Form;
 
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
- * Tests for webform custom validation.
+ * Tests for webform form validation.
  *
  * @group Webform
  */
-class WebformValidateTest extends WebformTestBase {
+class WebformFormValidateTest extends WebformTestBase {
 
   /**
    * Modules to enable.
@@ -26,9 +27,9 @@ class WebformValidateTest extends WebformTestBase {
   protected static $testWebforms = ['test_form_validate'];
 
   /**
-   * Tests prepare elements.
+   * Tests form (custom) validation.
    */
-  public function testForm() {
+  public function testValidate() {
     /* Test form#validate webform handling */
     $webform_validate = Webform::load('test_form_validate');
     $this->postSubmission($webform_validate, []);

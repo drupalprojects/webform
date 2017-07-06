@@ -7,14 +7,14 @@ namespace Drupal\webform\Tests;
  *
  * @group Webform
  */
-class WebformStorageTest extends WebformTestBase {
+class WebformEntityStorageTest extends WebformTestBase {
 
   /**
    * Test webform storage.
-   *
-   * @see \Drupal\webform\WebformEntityStorage::load
    */
-  public function testStorageCaching() {
+  public function testWebformEntityStorage() {
+    // Check webform entity storage caching.
+    //  @see \Drupal\webform\WebformEntityStorage::load
     /** @var \Drupal\webform\WebformEntityStorage $storage */
     $storage = \Drupal::entityTypeManager()->getStorage('webform');
 

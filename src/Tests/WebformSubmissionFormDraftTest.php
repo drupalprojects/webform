@@ -6,11 +6,11 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 
 /**
- * Tests for webform draft.
+ * Tests for webform submission form draft.
  *
  * @group Webform
  */
-class WebformDraftTest extends WebformTestBase {
+class WebformSubmissionFormDraftTest extends WebformTestBase {
 
   /**
    * Webforms to load.
@@ -30,9 +30,9 @@ class WebformDraftTest extends WebformTestBase {
   }
 
   /**
-   * Test webform draft.
+   * Test webform submission form draft.
    */
-  public function testWebformDraft() {
+  public function testDraft() {
 
     /**************************************************************************/
     // Autosave for anonymous draft to authenticated draft.
@@ -181,7 +181,7 @@ class WebformDraftTest extends WebformTestBase {
   /**
    * Test webform draft multiple.
    */
-  public function testWebformDraftMultiple() {
+  public function testDraftMultiple() {
     $this->drupalLogin($this->normalUser);
 
     $webform = Webform::load('test_form_draft_multiple');

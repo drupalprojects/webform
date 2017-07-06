@@ -39,7 +39,7 @@ class WebformElementHtmlEditorTest extends WebformTestBase {
   /**
    * Tests HTML Editor element.
    */
-  public function testWebformElementHtmlEditor() {
+  public function testHtmlEditor() {
     $this->drupalLogin($this->rootUser);
 
     // Check that HTML editor is enabled.

@@ -21,7 +21,7 @@ class WebformElementActionsTest extends WebformTestBase {
   /**
    * Tests actions element.
    */
-  public function testWebformElementActions() {
+  public function testActions() {
     /* Test webform actions */
 
     // Get form.

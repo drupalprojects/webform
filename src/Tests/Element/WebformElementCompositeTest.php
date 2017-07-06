@@ -21,7 +21,7 @@ class WebformElementCompositeTest extends WebformTestBase {
   /**
    * Test composite element.
    */
-  public function testCompositeElement() {
+  public function testComposite() {
 
     /* Display */
 

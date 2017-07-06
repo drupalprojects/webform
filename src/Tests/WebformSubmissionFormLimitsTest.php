@@ -5,11 +5,11 @@ namespace Drupal\webform\Tests;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform submission limits.
+ * Tests for webform submission form limits.
  *
  * @group Webform
  */
-class WebformSubmissionLimitsTest extends WebformTestBase {
+class WebformSubmissionFormLimitsTest extends WebformTestBase {
 
   /**
    * Modules to enable.
@@ -39,9 +39,9 @@ class WebformSubmissionLimitsTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform setting including confirmation.
+   * Tests webform submission form limits.
    */
-  public function testSettings() {
+  public function testFormLimits() {
     $webform_limit = Webform::load('test_form_limit');
 
     $this->drupalGet('webform/test_form_limit');

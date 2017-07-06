@@ -7,7 +7,7 @@ namespace Drupal\webform\Tests;
  *
  * @group Webform
  */
-class WebformTest extends WebformTestBase {
+class WebformEntityTest extends WebformTestBase {
 
   /**
    * Modules to enable.

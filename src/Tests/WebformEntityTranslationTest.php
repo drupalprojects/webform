@@ -10,7 +10,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformTranslationTest extends WebformTestBase {
+class WebformEntityTranslationTest extends WebformTestBase {
 
   /**
    * Modules to enable.

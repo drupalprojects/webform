@@ -21,7 +21,7 @@ class WebformElementEmailTest extends WebformTestBase {
   /**
    * Test email_confirm and email_multiple element.
    */
-  public function testEmailElement() {
+  public function testEmail() {
 
     /**************************************************************************/
     // email_multiple

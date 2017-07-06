@@ -5,11 +5,11 @@ namespace Drupal\webform\Tests;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform confirmation.
+ * Tests for webform submission form confirmation.
  *
  * @group Webform
  */
-class WebformConfirmationTest extends WebformTestBase {
+class WebformSubmissionFormConfirmationTest extends WebformTestBase {
 
   /**
    * Webforms to load.
@@ -29,7 +29,7 @@ class WebformConfirmationTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform confirmation.
+   * Tests webform submission form confirmation.
    */
   public function testConfirmation() {
     // Login the admin user.

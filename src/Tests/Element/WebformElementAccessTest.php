@@ -40,7 +40,7 @@ class WebformElementAccessTest extends WebformTestBase {
   /**
    * Test element access.
    */
-  public function testElementAccess() {
+  public function testAccess() {
     $webform = Webform::load('test_element_access');
 
     // Check user from USER:1 to admin submission user.
