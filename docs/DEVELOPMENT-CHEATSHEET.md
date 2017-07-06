@@ -88,6 +88,7 @@ drush features-export -y webform_test_handler
 drush features-export -y webform_test_options
 drush features-export -y webform_test_views
 drush features-export -y webform_test_translation
+drush features-export -y webform_test_paragraphs
 drush features-export -y webform_node
 drush features-export -y webform_scheduled_email_test
 drush features-export -y webform_test_block_submission_limit
@@ -107,6 +108,7 @@ drush webform-tidy -y --dependencies webform_test_handler
 drush webform-tidy -y --dependencies webform_test_options
 drush webform-tidy -y --dependencies webform_test_views
 drush webform-tidy -y --dependencies webform_test_translation
+drush webform-tidy -y --dependencies webform_test_paragraphs
 drush webform-tidy -y --dependencies webform_node
 drush webform-tidy -y --dependencies webform_scheduled_email_test
 drush webform-tidy -y --dependencies webform_test_block_submission_limit
@@ -122,6 +124,7 @@ drush features-import -y webform_test_handler
 drush features-import -y webform_test_options
 drush features-import -y webform_test_views
 drush features-import -y webform_test_translation
+drush features-import -y webform_test_paragraphs
 drush features-import -y webform_node
 drush features-import -y webform_scheduled_email_test
 drush features-import -y webform_test_block_submission_limit

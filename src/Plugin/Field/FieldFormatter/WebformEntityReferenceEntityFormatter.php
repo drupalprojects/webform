@@ -63,6 +63,9 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
     $source_entity = $items->getEntity();
     $this->messageManager->setSourceEntity($source_entity);
 
+    // Determine if webform is previewed within a Paragraph on .edit_form.
+    $is_paragraph_edit_preview = ($source_entity->getEntityTypeId() === 'paragraph' && preg_match('/\.edit_form$/', \Drupal::routeMatch()->getRouteName())) ? TRUE : FALSE;
+
     $elements = [];
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
       // Do not display the webform if the current user can't create submissions.
@@ -70,7 +73,16 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
         continue;
       }
 
-      if ($this->isOpen($entity, $items[$delta])) {
+      if ($is_paragraph_edit_preview) {
+        // Webform can not be nested withing node edit form because the nested
+        // <form> tags will cause unexpected validation issues.
+        $elements[$delta] = [
+          '#type' => 'webform_message',
+          '#message_message' => $this->t('%label webform can not be previewed when editing content.', ['%label' => $entity->label()]),
+          '#message_type' => 'info',
+        ];
+      }
+      elseif ($this->isOpen($entity, $items[$delta])) {
         $values = [];
         if ($this->getSetting('source_entity')) {
           $values += [
