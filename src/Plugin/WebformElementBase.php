@@ -2081,6 +2081,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
       // Determine if the property element is an input using the webform element
       // manager.
+      // Note: #access is used to protect inputs and containers that should always
+      // be visible.
       $is_input = $this->elementManager->getElementInstance($property_element)->isInput($property_element);
       if ($is_input) {
         if (isset($element_properties[$property_name])) {
@@ -2088,15 +2090,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           $this->setConfigurationFormDefaultValue($form, $element_properties, $property_element, $property_name);
           $has_input = TRUE;
         }
-        else {
+        elseif (empty($form[$property_name]['#access'])) {
           // Else completely remove the property element from the webform.
           unset($form[$property_name]);
         }
       }
       else {
         // Recurse down this container and see if it's children have inputs.
-        // Note: #access is used to protect containers that should always
-        // be visible.
         $container_has_input = $this->setConfigurationFormDefaultValueRecursive($property_element, $element_properties);
         if ($container_has_input) {
           $has_input = TRUE;
