@@ -13,6 +13,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\Entity\File;
+use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
@@ -620,12 +621,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     // Alter body based on the mail system sender.
     if ($this->configuration['html'] && $this->supportsHtml()) {
-      switch ($this->getMailSystemSender()) {
-        case 'swiftmailer':
-          // SwiftMailer requires that the body be valid Markup.
-          $message['body'] = Markup::create($message['body']);
-          break;
-      }
+      $message['body'] = WebformHtmlEditor::checkMarkup($message['body'], TRUE);
     }
     else {
       // Since Drupal might be rendering a token into the body as markup
@@ -810,7 +806,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Render body using webform email message (wrapper) template.
     $build = [
       '#theme' => 'webform_email_message_' . (($this->configuration['html']) ? 'html' : 'text'),
-      '#message' => ['body' => Markup::create($message['body'])] + $message,
+      '#message' => [
+          'body' => is_string($message['body']) ? Markup::create($message['body']) : $message['body']
+        ] + $message,
       '#webform_submission' => $webform_submission,
       '#handler' => $this,
     ];

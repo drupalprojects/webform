@@ -12,6 +12,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -659,6 +660,63 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('element.default_icheck'),
       '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
+    // Element: HTML Editor.
+    $form['element_settings']['html_editor'] = [
+      '#type' => 'details',
+      '#title' => $this->t('HTML editor settings'),
+      '#tree' => TRUE,
+    ];
+    $form['element_settings']['html_editor']['tidy'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Tidy HTML markup'),
+      '#description' => $this->t('If checked, &lt;p&gt; tags, which can add top and bottom margins, will be removed from all single line HTML markup.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('html_editor.tidy'),
+    ];
+    $form['element_settings']['html_editor']['disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable HTML editor'),
+      '#description' => $this->t('If checked, all HTML editors will be disabled.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('html_editor.disabled'),
+    ];
+    $format_options = ['' => ''];
+    if ($this->moduleHandler->moduleExists('filter')) {
+      $filters = filter_formats();
+      foreach ($filters as $filter) {
+        $format_options[$filter->id()] = $filter->label();
+      }
+    }
+    $form['element_settings']['html_editor']['format'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Text format'),
+      '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
+      '#options' => $format_options,
+      '#default_value' => $config->get('html_editor.format'),
+      '#states' => [
+        'visible' => [
+          ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+    $t_args = [
+      ':dialog_href' => Url::fromRoute('<current>', [], ['fragment' => 'edit-ui'])->toString(),
+      ':modules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-core-experimental'])->toString()
+    ];
+    $form['element_settings']['html_editor']['message'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t('Text formats that open CKEditor image and/or link dialogs will not work properly.') . '<br />' .
+        $this->t('You may need to <a href=":dialog_href">disable dialogs</a> or enable the experimental <a href=":modules_href">Settings Tray</a> module.', $t_args) . '<br />' .
+        $this->t('Please see <a href="https://www.drupal.org/node/2741877">Issue #2741877: Nested modals don\'t work</a>'),
+      '#message_type' => 'warning',
+      '#states' => [
+        'visible' => [
+          ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
+          ':input[name="html_editor[format]"]' => ['!value' => ''],
+        ],
+      ],
+    ];
+
     // Element: Location.
     $form['element_settings']['location'] = [
       '#type' => 'details',
@@ -1156,13 +1214,6 @@ class WebformAdminSettingsForm extends ConfigFormBase {
         '#weight' => -100,
       ];
     }
-    $form['ui']['html_editor_disabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Disable HTML editor'),
-      '#description' => $this->t('If checked, all HTML editor will be disabled.'),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('ui.html_editor_disabled'),
-    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -1230,6 +1281,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       $form_state->getValue('select') +
       ['excluded_elements' => $excluded_elements]
     );
+    $config->set('html_editor', $form_state->getValue('html_editor'));
     $config->set('file', $form_state->getValue('file'));
     $config->set('format', $format);
     // Assets.

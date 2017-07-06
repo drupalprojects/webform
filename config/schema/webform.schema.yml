@@ -154,6 +154,19 @@ webform.settings:
         excluded_elements:
           type: ignore
           label: 'Excluded types'
+    html_editor:
+      type: mapping
+      label: 'HTML editor settings'
+      mapping:
+        disabled:
+          type: boolean
+          label: 'Disable HTML editor'
+        format:
+          type: string
+          label: 'Text format'
+        tidy:
+          type: boolean
+          label: 'Tidy HTML markup'
     file:
       type: mapping
       label: 'File upload default settings'
@@ -324,9 +337,6 @@ webform.settings:
         offcanvas_disabled:
           type: boolean
           label: 'Disable system tray'
-        html_editor_disabled:
-          type: boolean
-          label: 'Disable HTML editor'
         details_save:
           type: boolean
           label: 'Save details open/close state'

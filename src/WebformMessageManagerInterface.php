@@ -124,7 +124,7 @@ interface WebformMessageManagerInterface {
   const SUBMISSION_CONFIRMATION = 'confirmation_message';
 
   /**
-   * Submission confirmation.
+   * Template preview.
    */
   const TEMPLATE_PREVIEW = 'template_preview';
 

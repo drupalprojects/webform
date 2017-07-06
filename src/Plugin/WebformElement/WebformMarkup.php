@@ -46,6 +46,7 @@ class WebformMarkup extends WebformMarkupBase {
       '#type' => 'webform_html_editor',
       '#title' => $this->t('HTML markup'),
       '#description' => $this->t('Enter custom HTML into your webform.'),
+      '#format' => FALSE,
     ];
     return $form;
   }

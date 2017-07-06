@@ -18,6 +18,7 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -549,6 +550,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if (isset($element['#title_display']) && $element['#title_display'] == 'inline') {
       unset($element['#title_display']);
       $element['#wrapper_attributes']['class'][] = 'webform-element--title-inline';
+    }
+
+    // Check descripotion markup.
+    if (isset($element['#description'])) {
+      $element['#description'] = WebformHtmlEditor::checkMarkup($element['#description']);
     }
 
     // Add default description display.

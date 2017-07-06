@@ -912,3 +912,20 @@ function webform_update_8063() {
       ->execute();
   }
 }
+
+/**
+ * Issue #2878193: Allow actions (aka submit buttons) to be placed anywhere on a webform.
+ */
+function webform_update_8064() {
+  // Move disabled HTML editor from ui to element.html_editor.
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $data = $config->getRawData();
+  if (isset($data['ui']['html_editor_disabled'])) {
+    $data['html_editor']['disabled'] = $data['ui']['html_editor_disabled'];
+  }
+  $config->setData($data);
+  $config->save();
+
+  _webform_update_admin_settings();
+
+}

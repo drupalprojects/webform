@@ -17,6 +17,16 @@ elements: |
     '#type': webform_html_editor
     '#title': 'webform_html_editor (default)'
     '#default_value': 'Hello <b>World!!!</b>'
+  webform_html_editor_disable:
+    '#type': webform_html_editor
+    '#title': 'webform_html_editor (disable)'
+    '#default_value': 'Hello <b>World!!!</b>'
+    '#disable': true
+  webform_html_editor_format:
+    '#type': webform_html_editor
+    '#title': 'webform_html_editor (format)'
+    '#default_value': 'Hello <b>World!!!</b>'
+    '#format': 'basic_html'
 css: ''
 javascript: ''
 settings:
@@ -78,7 +88,7 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: false
+  results_disabled: true
   results_disabled_ignore: false
   token_update: false
 access:
@@ -108,4 +118,11 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-handlers: {  }
+handlers:
+  debug:
+    id: debug
+    label: Debug
+    handler_id: debug
+    status: true
+    weight: 0
+    settings: {  }

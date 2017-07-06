@@ -94,6 +94,10 @@ element:
   default_icheck: ''
   default_google_maps_api_key: ''
   excluded_elements: {  }
+html_editor:
+  disabled: false
+  format: ''
+  tidy: true
 file:
   file_public: false
   file_private_redirect: true
@@ -226,7 +230,6 @@ ui:
   dialog_disabled: false
   offcanvas_disabled: false
   help_menu_disabled: false
-  html_editor_disabled: false
 libraries:
   excluded_libraries:
     - jquery.chosen

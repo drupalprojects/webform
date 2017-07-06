@@ -132,7 +132,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $this->assertRaw('file.txt');
 
     // Check resend webform with custom message.
-    $this->drupalPostForm("admin/structure/webform/manage/test_handler_email_advanced/submission/$sid/resend", ['message[body]' => 'Testing 123...'], t('Resend message'));
+    $this->drupalPostForm("admin/structure/webform/manage/test_handler_email_advanced/submission/$sid/resend", ['message[body][value]' => 'Testing 123...'], t('Resend message'));
     $sent_mail = $this->getLastEmail();
     $this->assertNotContains($sent_mail['params']['body'], '<b>First name</b><br />John<br /><br />');
     $this->assertEqual($sent_mail['params']['body'], 'Testing 123...');

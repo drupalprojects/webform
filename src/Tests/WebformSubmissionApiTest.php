@@ -174,7 +174,8 @@ class WebformSubmissionApiTest extends WebformTestBase {
     $this->assertEqual($webform_submission->id(), $this->getLastSubmissionId($test_form_limit_webform ));
 
     // Check that user limit is reached.
-    $this->assertEqual(WebformSubmissionForm::isOpen($test_form_limit_webform), 'You are only allowed to have 1 submission for this webform.');
+    $result = WebformSubmissionForm::isOpen($test_form_limit_webform);
+    $this->assertEqual($result['#markup'], 'You are only allowed to have 1 submission for this webform.');
 
     // Submit the form 3 more times to trigger the form total limit.
     $this->drupalLogin($this->rootUser);
@@ -183,11 +184,13 @@ class WebformSubmissionApiTest extends WebformTestBase {
     WebformSubmissionForm::submitValues($values);
 
     // Check that total limit is reached.
-    $this->assertEqual(WebformSubmissionForm::isOpen($test_form_limit_webform), 'Only 4 submissions are allowed.');
+    $result = WebformSubmissionForm::isOpen($test_form_limit_webform);
+    $this->assertEqual($result['#markup'], 'Only 4 submissions are allowed.');
 
     // Check form closed message.
     $test_form_limit_webform->setStatus(FALSE)->save();
-    $this->assertEqual(WebformSubmissionForm::isOpen($test_form_limit_webform), 'Sorry...This form is closed to new submissions.');
+    $result = WebformSubmissionForm::isOpen($test_form_limit_webform);
+    $this->assertEqual($result['#markup'], 'Sorry...This form is closed to new submissions.');
   }
 
 }

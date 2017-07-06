@@ -25,7 +25,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element', 'test_element_html_editor'];
+  protected static $testWebforms = ['test_element'];
 
   /**
    * Tests webform admin settings.
@@ -79,20 +79,6 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $this->drupalGet('admin/structure/webform');
     $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700}">Add webform</a>');
     $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small">Add webform</a>');
-
-    /* UI disable html editor */
-
-    // Check that HTML editor is enabled.
-    $this->drupalGet('webform/test_element_html_editor');
-    $this->assertRaw('<textarea data-drupal-selector="edit-webform-html-editor" id="edit-webform-html-editor" name="webform_html_editor" rows="5" cols="60" class="form-textarea resize-vertical">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
-
-    // Disable HTML editor.
-    $this->drupalPostForm('admin/structure/webform/settings', ['ui[html_editor_disabled]' => TRUE], t('Save configuration'));
-
-    // Check that HTML editor is removed and replaced by CodeMirror HTML editor.
-    $this->drupalGet('webform/test_element_html_editor');
-    $this->assertNoRaw('<textarea data-drupal-selector="edit-webform-html-editor" id="edit-webform-html-editor" name="webform_html_editor" rows="5" cols="60" class="form-textarea resize-vertical">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
-    $this->assertRaw('<textarea data-drupal-selector="edit-webform-html-editor" class="js-webform-codemirror webform-codemirror html form-textarea resize-vertical" data-webform-codemirror-mode="text/html" id="edit-webform-html-editor" name="webform_html_editor" rows="5" cols="60">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
 
   }
 

@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element as RenderElement;
+use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Element\WebformMapping as WebformMappingElement;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -77,6 +78,16 @@ class WebformMapping extends WebformElementBase {
     }
     if (isset($element['#destination'])) {
       $element['#destination'] = WebformOptions::getElementOptions($element, '#destination');
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+    parent::prepare($element, $webform_submission);
+    if (isset($element['#destination__description'])) {
+      $element['#destination__description'] = WebformHtmlEditor::checkMarkup($element['#destination__description']);
     }
   }
 

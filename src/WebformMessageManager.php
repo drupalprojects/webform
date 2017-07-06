@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\webform\Element\WebformHtmlEditor;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -174,10 +175,15 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    */
   public function build($key) {
     if ($message = $this->get($key)) {
-      return [
-        '#markup' => $message,
-        '#allowed_tags' => Xss::getAdminTagList(),
-      ];
+      if (is_array($message)) {
+        return $message;
+      }
+      else {
+        return [
+          '#markup' => $message,
+          '#allowed_tags' => Xss::getAdminTagList(),
+        ];
+      }
     }
     else {
       return [];
@@ -191,12 +197,12 @@ class WebformMessageManager implements WebformMessageManagerInterface {
     $webform_settings = ($this->webform) ? $this->webform->getSettings() : [];
     $entity = $this->webformSubmission ?: $this->webform;
     if (!empty($webform_settings[$key])) {
-      return $this->tokenManager->replace($webform_settings[$key], $entity);
+      return WebformHtmlEditor::checkMarkup($this->tokenManager->replace($webform_settings[$key], $entity));
     }
 
     $default_settings = $this->configFactory->get('webform.settings')->get('settings');
     if (!empty($default_settings['default_' . $key])) {
-      return $this->tokenManager->replace($default_settings['default_' . $key], $entity);
+      return WebformHtmlEditor::checkMarkup($this->tokenManager->replace($default_settings['default_' . $key], $entity));
     }
 
     $webform = $this->webform;
