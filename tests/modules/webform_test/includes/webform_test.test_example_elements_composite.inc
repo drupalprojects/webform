@@ -11,7 +11,7 @@
  * @return array
  *   An array containing examples of all elements.
  */
-function webform_test_example_elements_composite() {
+function webform_test_test_example_elements_composite() {
   /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
   $element_manager = \Drupal::service('plugin.manager.webform.element');
 

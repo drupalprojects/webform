@@ -8,7 +8,7 @@ open: null
 close: null
 uid: null
 template: false
-id: example_elements_states
+id: example_element_states
 title: 'Example: Elements: Condition Logic'
 description: 'Examples of elements using conditional logic.'
 category: Example

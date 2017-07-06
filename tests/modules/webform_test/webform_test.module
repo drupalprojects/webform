@@ -182,7 +182,7 @@ function _webform_test_get_example_element($type, array $options = []) {
   ];
   // Default element properties.
   if (!isset($default_elements)) {
-    $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.example_elements.yml');
+    $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.test_example_elements.yml');
     $default_elements = Yaml::decode($yaml);
   }
 

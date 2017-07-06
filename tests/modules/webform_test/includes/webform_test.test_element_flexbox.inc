@@ -34,7 +34,7 @@ function webform_test_test_element_flexbox() {
   }
 
   // Default element properties.
-  $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.example_elements.yml');
+  $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.test_example_elements.yml');
   $default_elements = Yaml::decode($yaml);
 
   $data = [

@@ -3,15 +3,15 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_examples
+      - webform_test
 open: null
 close: null
 uid: null
 template: false
-id: example_elements_composite
-title: 'Example: Elements: Composite'
+id: test_example_elements_composite
+title: 'Test: Example: Elements: Composite'
 description: 'Examples of composite elements, includes address, contact, and credit card.'
-category: Example
+category: 'Test: Example'
 elements: |
   webform_address_example:
     '#type': details

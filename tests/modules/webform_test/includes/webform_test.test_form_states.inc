@@ -112,7 +112,7 @@ function _webform_test_form_states($type, array $default_properties = []) {
   }
 
   // Default element properties.
-  $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.example_elements.yml');
+  $yaml = file_get_contents(drupal_get_path('module', 'webform_test') . '/includes/webform_test.test_example_elements.yml');
   $default_elements = Yaml::decode($yaml);
 
   $data = [

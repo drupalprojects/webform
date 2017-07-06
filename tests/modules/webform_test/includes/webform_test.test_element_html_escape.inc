@@ -14,7 +14,7 @@ module_load_include('inc', 'webform_test', 'includes/webform_test.example_elemen
  *   An array containing examples of all elements using HTML escaping.
  */
 function webform_test_test_element_html_escape() {
-  $elements = webform_test_example_elements();
+  $elements = webform_test_test_example_elements();
   _webform_test_test_element_html_escape_recursive($elements);
   return $elements;
 }

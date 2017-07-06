@@ -13,7 +13,7 @@ use Drupal\Component\Utility\Unicode;
  * @return array
  *   An array containing examples of all elements.
  */
-function webform_test_example_elements() {
+function webform_test_test_example_elements() {
   // Elements to be ignored.
   $skipped_elements = [
     'table',
