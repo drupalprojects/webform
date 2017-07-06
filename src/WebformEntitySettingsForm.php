@@ -832,11 +832,11 @@ class WebformEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Confirmation type'),
       '#type' => 'radios',
       '#options' => [
-        'page' => $this->t('Page (redirects to new page and displays the confirmation message)'),
-        'inline' => $this->t('Inline (reloads the current page and replaces the webform with the confirmation message.)'),
-        'message' => $this->t('Message (reloads the current page/form and displays the confirmation message at the top of the page.)'),
-        'url' => $this->t('URL (redirects to a custom path or URL)'),
-        'url_message' => $this->t('URL with message (redirects to a custom path or URL and displays the confirmation message at the top of the page.)'),
+        WebformInterface::CONFIRMATION_PAGE => $this->t('Page (redirects to new page and displays the confirmation message)'),
+        WebformInterface::CONFIRMATION_INLINE => $this->t('Inline (reloads the current page and replaces the webform with the confirmation message.)'),
+        WebformInterface::CONFIRMATION_MESSAGE => $this->t('Message (reloads the current page/form and displays the confirmation message at the top of the page.)'),
+        WebformInterface::CONFIRMATION_URL => $this->t('URL (redirects to a custom path or URL)'),
+        WebformInterface::CONFIRMATION_URL_MESSAGE => $this->t('URL with message (redirects to a custom path or URL and displays the confirmation message at the top of the page.)'),
       ],
       '#default_value' => $settings['confirmation_type'],
     ];
@@ -848,9 +848,9 @@ class WebformEntitySettingsForm extends EntityForm {
       '#maxlength' => NULL,
       '#states' => [
         'visible' => [
-          [':input[name="confirmation_type"]' => ['value' => 'url']],
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL]],
           'or',
-          [':input[name="confirmation_type"]' => ['value' => 'url_message']],
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL_MESSAGE]],
         ],
       ],
     ];
@@ -861,7 +861,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $settings['confirmation_title'],
       '#states' => [
         'visible' => [
-          ':input[name="confirmation_type"]' => ['value' => 'page'],
+          ':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_PAGE],
         ],
       ],
     ];
@@ -872,7 +872,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#default_value' => $settings['confirmation_message'],
       '#states' => [
         'invisible' => [
-          ':input[name="confirmation_type"]' => ['value' => 'url'],
+          ':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL],
         ],
       ],
     ];
@@ -880,9 +880,9 @@ class WebformEntitySettingsForm extends EntityForm {
       '#type' => 'container',
       '#states' => [
         'visible' => [
-          [':input[name="confirmation_type"]' => ['value' => 'page']],
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_PAGE]],
           'or',
-          [':input[name="confirmation_type"]' => ['value' => 'inline']],
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_INLINE]],
         ],
       ],
     ];

@@ -1020,7 +1020,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->isAjax()) {
       $confirmation_type = $this->getWebformSetting('confirmation_type');
       $state = $webform_submission->getState();
-      if ($confirmation_type == 'message' || $state == WebformSubmissionInterface::STATE_UPDATED) {
+      if ($confirmation_type == WebformInterface::CONFIRMATION_MESSAGE || $state == WebformSubmissionInterface::STATE_UPDATED) {
         static::reset($form, $form_state);
       }
     }
@@ -1364,13 +1364,13 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Handle 'page', 'url', and 'inline' confirmation types.
     $confirmation_type = $this->getWebformSetting('confirmation_type');
     switch ($confirmation_type) {
-      case 'page':
+      case WebformInterface::CONFIRMATION_PAGE:
         $redirect_url = $this->requestHandler->getUrl($webform, $this->sourceEntity, 'webform.confirmation', $route_options);
         $form_state->setRedirectUrl($redirect_url);
         return;
 
-      case 'url':
-      case 'url_message':
+      case WebformInterface::CONFIRMATION_URL:
+      case WebformInterface::CONFIRMATION_URL_MESSAGE:
         $confirmation_url = trim($this->getWebformSetting('confirmation_url', ''));
         // Remove base path from root-relative URL.
         // Only applies for Drupa; sites within a sub directory.
@@ -1382,7 +1382,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         $confirmation_url = $path_alias_manager->getPathByAlias($confirmation_url);
 
         if ($redirect_url = \Drupal::pathValidator()->getUrlIfValid($confirmation_url)) {
-          if ($confirmation_type == 'url_message') {
+          if ($confirmation_type == WebformInterface::CONFIRMATION_URL_MESSAGE) {
             $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
           }
           $this->setTrustedRedirectUrl($form_state, $redirect_url);
@@ -1395,15 +1395,16 @@ class WebformSubmissionForm extends ContentEntityForm {
         $form_state->setRedirect($route_name, $route_parameters, $route_options);
         return;
 
-      case 'inline':
+      case WebformInterface::CONFIRMATION_INLINE:
         $form_state->set('current_page', 'webform_confirmation');
         $form_state->setRebuild();
         return;
 
-      case 'message':
+      case WebformInterface::CONFIRMATION_MESSAGE:
         $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
         return;
 
+      case WebformInterface::CONFIRMATION_DEFAULT:
       default:
         $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
         return;

@@ -50,6 +50,36 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   const STATUS_SCHEDULED = 'scheduled';
 
   /**
+   * Webform confirmation page.
+   */
+  const CONFIRMATION_PAGE = 'page';
+
+  /**
+   * Webform confirmation URL.
+   */
+  const CONFIRMATION_URL = 'url';
+
+  /**
+   * Webform confirmation URL with message.
+   */
+  const CONFIRMATION_URL_MESSAGE = 'url_message';
+
+  /**
+   * Webform confirmation inline.
+   */
+  const CONFIRMATION_INLINE = 'inline';
+
+  /**
+   * Webform confirmation message.
+   */
+  const CONFIRMATION_MESSAGE = 'message';
+
+  /**
+   * Webform confirmation default.
+   */
+  const CONFIRMATION_DEFAULT = 'default';
+
+  /**
    * Returns the webform's (original) langcode.
    *
    * @return string
