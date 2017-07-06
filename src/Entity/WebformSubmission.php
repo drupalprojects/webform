@@ -554,6 +554,32 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function createDuplicate() {
+    /** @var \Drupal\webform\WebformSubmissionInterface $duplicate */
+    $duplicate = parent::createDuplicate();
+
+    $duplicate->set('serial', NULL);
+    $duplicate->set('token', Crypt::randomBytesBase64());
+
+    // Clear state.
+    $duplicate->set('in_draft', FALSE);
+    $duplicate->set('current_page', NULL);
+
+    // Create timestamps.
+    $duplicate->set('created', NULL);
+    $duplicate->set('changed', NULL);
+    $duplicate->set('completed', NULL);
+
+    // Clear admin notes and sticky.
+    $duplicate->set('notes', '');
+    $duplicate->set('sticky', FALSE);
+
+    return $duplicate;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     if (empty($values['webform_id']) && empty($values['webform'])) {
       if (empty($values['webform_id'])) {

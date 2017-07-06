@@ -483,16 +483,17 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#source_entity' => $webform_submission->getSourceEntity(),
         '#webform_submission' => $webform_submission,
       ];
-
-      // Add hidden submit button which is used as the Ajax callback.
-      // @see \Drupal\webform\Form\WebformAjaxFormTrait::buildAjaxForm
-      // @see Drupal.behaviors.webformConfirmationBackAjax (js/webform.ajax.js)
-      $form['actions']['submit'] = [
+      // Add hidden back (aka reset) button used by the Ajaxified back to link.
+      // NOTE: Below code could be used to add a 'Reset' button to any webform.
+      // @see Drupal.behaviors.webformConfirmationBackAjax
+      $form['actions']['reset'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Back'),
+        '#value' => $this->t('Reset'),
+        '#validate' => ['::noValidate'],
+        '#submit' => ['::reset'],
         '#attributes' => [
           'style' => 'display:none',
-          'class' => ['js-webform-confirmation-back-submit-ajax'],
+          'class' => ['js-webform-confirmation-back-submit-ajax']
         ],
       ];
       return $form;
@@ -1014,6 +1015,15 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Confirm webform via webform handler.
     $this->getWebform()->invokeHandlers('confirmForm', $form, $form_state, $webform_submission);
+
+    // Finally reset the form if reloading the current form and just displaying a message.
+    if ($this->isAjax()) {
+      $confirmation_type = $this->getWebformSetting('confirmation_type');
+      $state = $webform_submission->getState();
+      if ($confirmation_type == 'message' || $state == WebformSubmissionInterface::STATE_UPDATED) {
+        static::reset($form, $form_state);
+      }
+    }
   }
 
   /**
@@ -1050,6 +1060,41 @@ class WebformSubmissionForm extends ContentEntityForm {
       Cache::invalidateTags(['webform:' . $this->getWebform()->id()]);
       $form_state->setRebuild();
     }
+  }
+
+
+  /**
+   * Webform submission handler for the 'reset' action.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function reset(array &$form, FormStateInterface $form_state) {
+    // Create new webform submission.
+    /** @var \Drupal\webform\Entity\WebformSubmission $webform_submission */
+    $webform_submission = $this->getEntity()->createDuplicate();
+    $webform_submission->setData([]);
+    $this->setEntity($webform_submission);
+
+    // Reset user input but preserve form tokens.
+    $form_state->setUserInput(array_intersect_key($form_state->getUserInput(), [
+      'form_build_id' => 'form_build_id',
+      'form_token' => 'form_token',
+      'form_id' => 'form_id',
+    ]));
+
+    // Reset values.
+    $form_state->setValues([]);
+
+    // Reset current page.
+    $storage = $form_state->getStorage();
+    unset($storage['current_page']);
+    $form_state->setStorage($storage);
+
+    // Rebuild the form.
+    $this->rebuild($form, $form_state);
   }
 
   /****************************************************************************/
@@ -1752,25 +1797,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function cancelAjaxForm(array &$form, FormStateInterface $form_state) {
-    // Get form object.
-    $form_object = $this->entityManager->getFormObject('webform_submission', 'default');
-
-    // Set form entity.
-    $webform_submission = $this->storage->create(['webform_id' => $this->getWebform()->id()]);
-    $form_object->setEntity($webform_submission);
-
-    // Set form state.
-    $form_state = new FormState();
-    $form_state->setFormState([]);
-    $form_state->setUserInput([]);
-
-    // Build form.
-    /** @var \Drupal\Core\Form\FormBuilderInterface $form_builder */
-    $form_builder = \Drupal::service('form_builder');
-    $form = $form_builder->buildForm($form_object, $form_state);
-
-    // Return replace form as response.
-    return $this->replaceForm($form);
+    throw new \Exception('Webform submission Ajax form should never be cancelled. Only ::reset should be called.');
   }
 
   /****************************************************************************/
