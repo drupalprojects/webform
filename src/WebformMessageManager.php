@@ -176,15 +176,21 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    */
   public function build($key) {
     if ($message = $this->get($key)) {
-      if (is_array($message)) {
-        return $message;
-      }
-      else {
-        return [
+      // Make sure $message is renderable array.
+      if (!is_array($message)) {
+        $message = [
           '#markup' => $message,
           '#allowed_tags' => Xss::getAdminTagList(),
         ];
       }
+
+      // Set max-age to 0 if settings message contains any [token] values.
+      $setting_message = $this->setting($key);
+      if ($setting_message && strpos($setting_message, '[') !== FALSE) {
+        $message['#cache']['max-age'] = 0;
+      }
+
+      return $message;
     }
     else {
       return [];

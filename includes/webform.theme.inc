@@ -199,13 +199,6 @@ function template_preprocess_webform_confirmation(array &$variables) {
   // Set message.
   $variables['message'] = $message_manager->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
 
-  // Set max-age to 0 if message contains any [token] values.
-  // @todo Possibly replace with #lazy_builder.
-  $setting_message = $message_manager->setting(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
-  if ($setting_message && strpos($setting_message, '[') !== FALSE) {
-    $variables['message']['#cache']['max-age'] = 0;
-  }
-
   // Set attributes.
   $variables['attributes'] = new Attribute($settings['confirmation_attributes']);
 
