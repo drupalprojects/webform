@@ -1979,6 +1979,12 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         '#type' => 'webform_users',
         '#title' => $this->t('Users'),
       ];
+      $form['access']['access_' . $operation]['access_' . $operation . '_permissions'] = [
+        '#type' => 'webform_permissions',
+        '#title' => $this->t('Permissions'),
+        '#multiple' => TRUE,
+        '#select2' => TRUE,
+      ];
     }
 
     /* Administration */
