@@ -15,6 +15,9 @@ category: 'Test: Confirmation'
 elements: |
   description:
     '#markup': 'This webform will redirect to the confirmation page when submitted.'
+  test:
+    '#type': textfield
+    '#title': test
 css: ''
 javascript: ''
 settings:

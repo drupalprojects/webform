@@ -3,6 +3,7 @@
 namespace Drupal\webform\Tests;
 
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
 
 /**
  * Tests for webform submission form confirmation.
@@ -66,18 +67,20 @@ class WebformSubmissionFormConfirmationTest extends WebformTestBase {
     $webform_confirmation_page = Webform::load('test_confirmation_page');
 
     // Check confirmation page.
-    $this->drupalPostForm('webform/test_confirmation_page', [], t('Submit'));
+    $sid = $this->postSubmission($webform_confirmation_page);
+    $webform_submission = WebformSubmission::load($sid);
     $this->assertRaw('This is a custom confirmation page.');
-    $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '" rel="back" title="Back to form">Back to form</a>');
-    $this->assertUrl('webform/test_confirmation_page/confirmation');
+    $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl('canonical', ['absolute' => TRUE])->toString() . '" rel="back" title="Back to form">Back to form</a>');
+    $this->assertUrl('webform/test_confirmation_page/confirmation', ['query' => ['token' => $webform_submission->getToken()]]);
 
     // Check that the confirmation page's 'Back to form 'link includes custom
     // query parameters.
     $this->drupalGet('webform/test_confirmation_page/confirmation', ['query' => ['custom' => 'param']]);
 
     // Check confirmation page with custom query parameters.
-    $this->drupalPostForm('webform/test_confirmation_page', [], t('Submit'), ['query' => ['custom' => 'param']]);
-    $this->assertUrl('webform/test_confirmation_page/confirmation', ['query' => ['custom' => 'param']]);
+    $sid = $this->postSubmission($webform_confirmation_page, [], NULL, ['query' => ['custom' => 'param']]);
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertUrl('webform/test_confirmation_page/confirmation', ['query' => ['custom' => 'param', 'token' => $webform_submission->getToken()]]);
 
     // TODO: (TESTING)  Figure out why the inline confirmation link is not including the query string parameters.
     // $this->assertRaw('<a href="' . $webform_confirmation_page->toUrl()->toString() . '?custom=param">Back to form</a>');.

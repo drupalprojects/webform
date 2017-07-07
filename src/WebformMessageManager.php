@@ -127,6 +127,17 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   /**
    * {@inheritdoc}
    */
+  public function setWebformSubmission(WebformSubmissionInterface $webform_submission = NULL) {
+    $this->webformSubmission = $webform_submission;
+    if ($webform_submission) {
+      $this->webform = $webform_submission->getWebform();
+      $this->sourceEntity = $webform_submission->getSourceEntity();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setWebform(WebformInterface $webform = NULL) {
     $this->webform = $webform;
   }
@@ -136,16 +147,6 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    */
   public function setSourceEntity(EntityInterface $entity = NULL) {
     $this->sourceEntity = $entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setWebformSubmission(WebformSubmissionInterface $webform_submission = NULL) {
-    $this->webformSubmission = $webform_submission;
-    if ($webform_submission && empty($this->webform)) {
-      $this->webform = $webform_submission->getWebform();
-    }
   }
 
   /**
@@ -193,16 +194,27 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function get($key) {
+  public function setting($key) {
     $webform_settings = ($this->webform) ? $this->webform->getSettings() : [];
-    $entity = $this->webformSubmission ?: $this->webform;
     if (!empty($webform_settings[$key])) {
-      return WebformHtmlEditor::checkMarkup($this->tokenManager->replace($webform_settings[$key], $entity));
+      return $webform_settings[$key];
     }
 
     $default_settings = $this->configFactory->get('webform.settings')->get('settings');
     if (!empty($default_settings['default_' . $key])) {
-      return WebformHtmlEditor::checkMarkup($this->tokenManager->replace($default_settings['default_' . $key], $entity));
+      return $default_settings['default_' . $key];
+    }
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function get($key) {
+    // Get message from settings.
+    if ($setting = $this->setting($key)) {
+      $entity = $this->webformSubmission ?: $this->webform;
+      return WebformHtmlEditor::checkMarkup($this->tokenManager->replace($setting, $entity));
     }
 
     $webform = $this->webform;

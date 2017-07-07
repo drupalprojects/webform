@@ -222,9 +222,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
-    $this->messageManager->setWebform($webform);
-    $this->messageManager->setWebformSubmission($entity);
-    $this->messageManager->setSourceEntity($this->sourceEntity);
     return parent::setEntity($entity);
   }
 
@@ -453,26 +450,26 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Exit if elements are broken, usually occurs when elements YAML is edited
     // directly in the export config file.
     if (!$webform_submission->getWebform()->getElementsInitialized()) {
-      return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
+      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
     }
 
     // Check prepopulate source entity required and type.
     if ($webform->getSetting('form_prepopulate_source_entity')) {
       if ($webform->getSetting('form_prepopulate_source_entity_required') && empty($this->getSourceEntity())) {
-        $this->messageManager->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'notice');
-        return $this->messageManager->append($form, WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'warning');
+        $this->getMessageManager()->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'notice');
+        return $this->getMessageManager()->append($form, WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_REQUIRED, 'warning');
       }
       $source_entity_type = $webform->getSetting('form_prepopulate_source_entity_type');
       if ($source_entity_type && $this->getSourceEntity() && $source_entity_type != $this->getSourceEntity()->getEntityTypeId()) {
-        $this->messageManager->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'notice');
-        return $this->messageManager->append($form, WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'warning');
+        $this->getMessageManager()->log(WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'notice');
+        return $this->getMessageManager()->append($form, WebformMessageManagerInterface::PREPOPULATE_SOURCE_ENTITY_TYPE, 'warning');
       }
     }
 
     // Handle webform with managed file upload but saving of submission is disabled.
     if ($webform->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
-      $this->messageManager->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
-      return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
+      $this->getMessageManager()->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
+      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
     }
 
     // Display inline confirmation message with back to link.
@@ -505,47 +502,47 @@ class WebformSubmissionForm extends ContentEntityForm {
       // message and still allow them to create new submissions.
       if ($webform->isTemplate() && $webform->access('duplicate')) {
         if (!$this->isDialog()) {
-          $this->messageManager->display(WebformMessageManagerInterface::TEMPLATE_PREVIEW, 'warning');
+          $this->getMessageManager()->display(WebformMessageManagerInterface::TEMPLATE_PREVIEW, 'warning');
         }
       }
       elseif ($webform->access('submission_update_any')) {
-        $this->messageManager->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
+        $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
       }
       else {
         if ($webform->isOpening()) {
-          return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_OPEN_MESSAGE);
+          return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_OPEN_MESSAGE);
         }
         else {
-          return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
+          return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_CLOSE_MESSAGE);
         }
       }
     }
 
     // Disable this webform if confidential and user is logged in.
     if ($this->isConfidential() && $this->currentUser()->isAuthenticated() && $this->entity->isNew()) {
-      return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_CONFIDENTIAL_MESSAGE, 'warning');
+      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_CONFIDENTIAL_MESSAGE, 'warning');
     }
 
     // Disable this webform if submissions are not being saved to the database or
     // passed to a WebformHandler.
     if ($this->getWebformSetting('results_disabled') && !$this->getWebformSetting('results_disabled_ignore') && !$webform->getHandlers(NULL, TRUE, WebformHandlerInterface::RESULTS_PROCESSED)->count()) {
-      $this->messageManager->log(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'error');
+      $this->getMessageManager()->log(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'error');
       if ($this->currentUser()->hasPermission('administer webform')) {
         // Display error to admin but allow them to submit the broken webform.
-        $this->messageManager->display(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'error');
-        $this->messageManager->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
+        $this->getMessageManager()->display(WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'error');
+        $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
       }
       else {
         // Display exception message to users.
-        return $this->messageManager->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
+        return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
       }
     }
 
     // Check total limit.
     if ($this->checkTotalLimit()) {
-      $form = $this->messageManager->append($form, WebformMessageManagerInterface::LIMIT_TOTAL_MESSAGE);
+      $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::LIMIT_TOTAL_MESSAGE);
       if ($webform->access('submission_update_any')) {
-        $this->messageManager->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
+        $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
       }
       else {
         return $form;
@@ -554,9 +551,9 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Check user limit.
     if ($this->checkUserLimit()) {
-      $form = $this->messageManager->append($form, WebformMessageManagerInterface::LIMIT_USER_MESSAGE, 'warning');
+      $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::LIMIT_USER_MESSAGE, 'warning');
       if ($webform->access('submission_update_any')) {
-        $this->messageManager->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
+        $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_ACCESS, 'warning');
       }
       else {
         return $form;
@@ -582,7 +579,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Display test message.
     if ($this->isGet() && $this->isRoute('webform.test')) {
-      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_TEST, 'warning');
+      $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_TEST, 'warning');
 
       // Display devel generate link for webform or source entity.
       if ($this->moduleHandler->moduleExists('devel_generate') && $this->currentUser()->hasPermission('administer webform')) {
@@ -607,11 +604,11 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Display loaded or saved draft message.
     if ($webform_submission->isDraft()) {
       if ($form_state->get('draft_saved')) {
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_SAVED);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_SAVED);
         $form_state->set('draft_saved', FALSE);
       }
       elseif ($this->isGet() && !$webform->getSetting('draft_multiple')) {
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_LOADED);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_LOADED);
       }
     }
 
@@ -624,12 +621,12 @@ class WebformSubmissionForm extends ContentEntityForm {
       && ($previous_draft_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser(), TRUE))
     ) {
       if ($previous_draft_total > 1) {
-        $this->messageManager->display(WebformMessageManagerInterface::DRAFTS_PREVIOUS);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFTS_PREVIOUS);
       }
       else {
         $draft_submission = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser());
         if (!$draft_submission || $webform_submission->id() != $draft_submission->id()) {
-          $this->messageManager->display(WebformMessageManagerInterface::DRAFT_PREVIOUS);
+          $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFT_PREVIOUS);
         }
       }
     }
@@ -643,10 +640,10 @@ class WebformSubmissionForm extends ContentEntityForm {
       && ($previous_submission_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
     ) {
       if ($previous_submission_total > 1) {
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSIONS_PREVIOUS);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSIONS_PREVIOUS);
       }
       elseif ($webform_submission->id() != $this->storage->getLastSubmission($webform, $this->sourceEntity, $this->currentUser())->id()) {
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_PREVIOUS);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_PREVIOUS);
       }
     }
   }
@@ -1062,7 +1059,6 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
   }
 
-
   /**
    * Webform submission handler for the 'reset' action.
    *
@@ -1281,7 +1277,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
 
       // Display preview message.
-      $this->messageManager->display(WebformMessageManagerInterface::FORM_PREVIEW_MESSAGE, 'warning');
+      $this->getMessageManager()->display(WebformMessageManagerInterface::FORM_PREVIEW_MESSAGE, 'warning');
 
       // Build preview.
       $form['#title'] = $this->getWebformSetting('preview_title');
@@ -1351,7 +1347,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Default to displaying a confirmation message on this page.
     $state = $webform_submission->getState();
     if ($state == WebformSubmissionInterface::STATE_UPDATED) {
-      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_UPDATED);
+      $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_UPDATED);
       $form_state->setRedirect($route_name, $route_parameters, $route_options);
       return;
     }
@@ -1383,14 +1379,14 @@ class WebformSubmissionForm extends ContentEntityForm {
 
         if ($redirect_url = \Drupal::pathValidator()->getUrlIfValid($confirmation_url)) {
           if ($confirmation_type == WebformInterface::CONFIRMATION_URL_MESSAGE) {
-            $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+            $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
           }
           $this->setTrustedRedirectUrl($form_state, $redirect_url);
           return;
         }
 
         // If confirmation URL is invalid display message.
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
         $route_options['query']['webform_id'] = $webform->id();
         $form_state->setRedirect($route_name, $route_parameters, $route_options);
         return;
@@ -1401,12 +1397,12 @@ class WebformSubmissionForm extends ContentEntityForm {
         return;
 
       case WebformInterface::CONFIRMATION_MESSAGE:
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
         return;
 
       case WebformInterface::CONFIRMATION_DEFAULT:
       default:
-        $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
         return;
     }
 
@@ -1711,6 +1707,19 @@ class WebformSubmissionForm extends ContentEntityForm {
   // Helper functions
   /****************************************************************************/
 
+  /**
+   * Get the message manager.
+   *
+   * We need to wrap the message manager service because the webform submission
+   * entity is being continuous cloned and updated during form processing
+   *
+   * @see \Drupal\Core\Entity\EntityForm::buildEntity
+   */
+  protected function getMessageManager() {
+    $this->messageManager->setWebformSubmission($this->getEntity());
+    return $this->messageManager;
+  }
+  
   /**
    * Get the webform submission's webform.
    *

@@ -168,9 +168,11 @@ function template_preprocess_webform_confirmation(array &$variables) {
 
   /** @var \Drupal\webform\WebformMessageManagerInterface $message_manager */
   $message_manager = \Drupal::service('webform.message_manager');
+  $message_manager->setWebformSubmission($webform_submission);
+  // Must set webform and source entity because webform submission could be
+  // NULL.
   $message_manager->setWebform($webform);
   $message_manager->setSourceEntity($source_entity);
-  $message_manager->setWebformSubmission($webform_submission);
 
   // Assets: Add custom shared and webform specific CSS and JS.
   // @see webform_css_alter()
@@ -197,6 +199,13 @@ function template_preprocess_webform_confirmation(array &$variables) {
   // Set message.
   $variables['message'] = $message_manager->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
 
+  // Set max-age to 0 if message contains any [token] values.
+  // @todo Possibly replace with #lazy_builder.
+  $setting_message = $message_manager->setting(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+  if ($setting_message && strpos($setting_message, '[') !== FALSE) {
+    $variables['message']['#cache']['max-age'] = 0;
+  }
+
   // Set attributes.
   $variables['attributes'] = new Attribute($settings['confirmation_attributes']);
 
@@ -217,7 +226,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
   }
 
   // Apply all passed query string parameters to the 'Back to form' link.
-  unset($query['webform_id'], $query['ajax_form'], $query['_wrapper_format']);
+  unset($query['webform_id'], $query['ajax_form'], $query['_wrapper_format'], $query['token']);
   $options = ($query) ? ['query' => $query] : [];
 
   // Set back_url.

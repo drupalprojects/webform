@@ -15,6 +15,9 @@ category: 'Test: Confirmation'
 elements: |
   description:
     '#markup': 'This webform will redirect to the confirmation page when submitted.'
+  test:
+    '#type': textfield
+    '#title': test
 css: ''
 javascript: ''
 settings:
@@ -62,7 +65,7 @@ settings:
   draft_loaded_message: ''
   confirmation_type: page
   confirmation_title: ''
-  confirmation_message: 'This is a custom confirmation page.'
+  confirmation_message: 'This is a custom confirmation page. (test: [webform_submission:values:test])'
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -76,8 +79,8 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: true
-  results_disabled_ignore: true
+  results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

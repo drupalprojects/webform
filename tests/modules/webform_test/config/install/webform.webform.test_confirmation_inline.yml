@@ -15,6 +15,9 @@ category: 'Test: Confirmation'
 elements: |
   description:
     '#markup': 'This webform will display the confirmation inline when submitted.'
+  test:
+    '#type': textfield
+    '#title': test
 css: ''
 javascript: ''
 settings:
@@ -62,7 +65,7 @@ settings:
   draft_loaded_message: ''
   confirmation_type: inline
   confirmation_title: ''
-  confirmation_message: 'This is a custom inline confirmation message.'
+  confirmation_message: 'This is a custom inline confirmation message. (test: [webform_submission:values:test])'
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true

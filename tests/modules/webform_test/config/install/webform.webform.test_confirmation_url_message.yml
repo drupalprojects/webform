@@ -15,6 +15,9 @@ category: 'Test: Confirmation'
 elements: |
   description:
     '#markup': 'This webform will redirect to the homepage when submitted an display a custom confirmation message.'
+  test:
+    '#type': textfield
+    '#title': test
 css: ''
 javascript: ''
 settings:
@@ -62,7 +65,7 @@ settings:
   draft_loaded_message: ''
   confirmation_type: url_message
   confirmation_title: ''
-  confirmation_message: 'This is a custom confirmation message.'
+  confirmation_message: 'This is a custom confirmation message. (test: [webform_submission:values:test])'
   confirmation_url: '<front>'
   confirmation_attributes: {  }
   confirmation_back: true
