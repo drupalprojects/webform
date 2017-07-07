@@ -765,34 +765,42 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
           'authenticated',
         ],
         'users' => [],
+        'permissions' => [],
       ],
       'view_any' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
       'update_any' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
       'delete_any' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
       'purge_any' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
       'view_own' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
       'update_own' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
       'delete_own' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
     ];
   }
@@ -850,6 +858,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    *
    * @return bool
    *   The access result. Returns a TRUE if access is allowed.
+   *
+   * @see \Drupal\webform\Plugin\WebformElementBase::checkAccessRule
    */
   protected function checkAccessRule(array $access_rule, AccountInterface $account) {
     if (!empty($access_rule['roles']) && array_intersect($access_rule['roles'], $account->getRoles())) {
@@ -858,9 +868,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     elseif (!empty($access_rule['users']) && in_array($account->id(), $access_rule['users'])) {
       return TRUE;
     }
-    else {
-      return FALSE;
+    elseif (!empty($access_rule['permissions'])) {
+      foreach ($access_rule['permissions'] as $permission) {
+        if ($account->hasPermission($permission)) {
+          return TRUE;
+        }
+      }
     }
+
+    return FALSE;
   }
 
   /**

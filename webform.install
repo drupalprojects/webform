@@ -964,3 +964,18 @@ function webform_update_8065() {
   }
 }
 
+/**
+ * Issue #2893111: Add permissions to form and element access controls.
+ */
+function webform_update_8066() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    foreach ($data['access'] as &$rules) {
+      $rules['permissions'] = [];
+    }
+    $webform_config->setData($data)->save();
+  }
+}
+

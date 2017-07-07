@@ -6,7 +6,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform access controle.
+ * Tests for webform access controls.
  *
  * @group Webform
  */
@@ -111,6 +111,7 @@ class WebformEntityAccessTest extends WebformTestBase {
       'create' => [
         'roles' => [],
         'users' => [],
+        'permissions' => [],
       ],
     ] + Webform::getDefaultAccessRules();
     $webform->setAccessRules($access_rules)->save();
@@ -151,7 +152,7 @@ class WebformEntityAccessTest extends WebformTestBase {
       $this->assertResponse(403, 'Webform returns access denied');
     }
 
-    // Check access rules by role and user id.
+    // Check access rules by role, user id, and permission.
     foreach ($any_tests as $path => $permission) {
       $path = str_replace('{webform}', $webform_id, $path);
       $path = str_replace('{webform_submission}', $sid, $path);
@@ -161,6 +162,7 @@ class WebformEntityAccessTest extends WebformTestBase {
         $permission => [
           'roles' => [$rid],
           'users' => [],
+          'permissions' => [],
         ],
       ] + Webform::getDefaultAccessRules();
       $webform->setAccessRules($access_rules)->save();
@@ -172,11 +174,24 @@ class WebformEntityAccessTest extends WebformTestBase {
         $permission => [
           'roles' => [],
           'users' => [$uid],
+          'permissions' => [],
         ],
       ] + Webform::getDefaultAccessRules();
       $webform->setAccessRules($access_rules)->save();
       $this->drupalGet($path);
       $this->assertResponse(200, 'Webform allows access via user access rules');
+
+      // Check access rule via 'access content'.
+      $access_rules = [
+          $permission => [
+            'roles' => [],
+            'users' => [],
+            'permissions' => ['access content'],
+          ],
+        ] + Webform::getDefaultAccessRules();
+      $webform->setAccessRules($access_rules)->save();
+      $this->drupalGet($path);
+      $this->assertResponse(200, "Webform allows access via permission access rules");
     }
 
     // Check own / user specific access rules.
@@ -184,14 +199,17 @@ class WebformEntityAccessTest extends WebformTestBase {
       'view_own' => [
         'roles' => [$rid],
         'users' => [],
+        'permissions' => [],
       ],
       'update_own' => [
         'roles' => [$rid],
         'users' => [],
+        'permissions' => [],
       ],
       'delete_own' => [
         'roles' => [$rid],
         'users' => [],
+        'permissions' => [],
       ],
     ] + Webform::getDefaultAccessRules();
     $webform->setAccessRules($access_rules)->save();

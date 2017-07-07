@@ -225,10 +225,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       // Element access.
       'access_create_roles' => ['anonymous', 'authenticated'],
       'access_create_users' => [],
+      'access_create_permissions' => [],
       'access_update_roles' => ['anonymous', 'authenticated'],
       'access_update_users' => [],
+      'access_update_permissions' => [],
       'access_view_roles' => ['anonymous', 'authenticated'],
       'access_view_users' => [],
+      'access_view_permissions' => [],
     ];
   }
 
@@ -664,18 +667,49 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       return FALSE;
     }
 
-    if (!$account) {
-      $account = $this->currentUser;
+    $account = $account ?: $this->currentUser;
+    return $this->checkAccessRule($element, $operation, $account);
+  }
+
+  /**
+   * Checks an access rule against a user account's roles and id.
+   *
+   * @param array $element
+   *   The element.
+   * @param $operation
+   *   The operation
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user session for which to check access.
+   *
+   * @return bool
+   *   The access result. Returns a TRUE if access is allowed.
+   *
+   * @see \Drupal\webform\Entity\Webform::checkAccessRule
+   */
+  protected function checkAccessRule(array $element, $operation, AccountInterface $account) {
+    // If no access rules are set return TRUE.
+    // @see \Drupal\webform\Plugin\WebformElementBase::getDefaultBaseProperties
+    if (!isset($element['#access_' . $operation . '_roles'])
+      && !isset($element['#access_' . $operation . '_users'])
+      && !isset($element['#access_' . $operation . '_permissions'])) {
+      return TRUE;
     }
 
-    if (isset($element['#access_' . $operation . '_roles']) && !array_intersect($element['#access_' . $operation . '_roles'], $account->getRoles())) {
-      return FALSE;
+    if (isset($element['#access_' . $operation . '_roles']) && array_intersect($element['#access_' . $operation . '_roles'], $account->getRoles())) {
+      return TRUE;
     }
-    elseif (isset($element['#access_' . $operation . '_users']) && !in_array($account->id(), $element['#access_' . $operation . '_users'])) {
-      return FALSE;
+    elseif (isset($element['#access_' . $operation . '_users']) && in_array($account->id(), $element['#access_' . $operation . '_users'])) {
+      return TRUE;
+    }
+    elseif (isset($element['#access_' . $operation . '_permissions'])) {
+      foreach ($element['#access_' . $operation . '_permissions'] as $permission) {
+        if ($account->hasPermission($permission)) {
+          return TRUE;
+        }
+      }
     }
 
-    return TRUE;
+    return FALSE;
   }
 
   /**
