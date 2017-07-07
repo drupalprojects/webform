@@ -979,3 +979,9 @@ function webform_update_8066() {
   }
 }
 
+/**
+ * Issue #2893147: Allow empty element label to be customized.
+ */
+function webform_update_8067() {
+  _webform_update_admin_settings();
+}

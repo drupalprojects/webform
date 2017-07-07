@@ -124,6 +124,9 @@ webform.settings:
       type: mapping
       label: 'Element default settings'
       mapping:
+        empty_message:
+          type: label
+          label: 'Empty element message/placeholder'
         allowed_tags:
           type: string
           label: 'Allowed tags'

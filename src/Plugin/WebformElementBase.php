@@ -882,9 +882,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       if (!empty($options['exclude_empty'])) {
         return NULL;
       }
-      // Else set the formatted value to {Empty}.
+      // Else set the formatted value to empty message/placeholder.
       else {
-        $formatted_value = $this->t('{Empty}');
+        $formatted_value = $this->configFactory->get('webform.settings')->get('element.empty_message');
       }
     }
 

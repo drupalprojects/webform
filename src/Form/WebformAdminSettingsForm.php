@@ -566,6 +566,12 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#title' => $this->t('General settings'),
       '#tree' => TRUE,
     ];
+    $form['element_settings']['element']['empty_message'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Empty element message/placeholder'),
+      '#description' => $this->t('Text to be displayed when empty elements are included in previews and/or emails'),
+      '#default_value' => $config->get('element.empty_message'),
+    ];
     $form['element_settings']['element']['allowed_tags'] = [
       '#type' => 'webform_radios_other',
       '#title' => $this->t('Allowed tags'),

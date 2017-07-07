@@ -74,6 +74,7 @@ batch:
 purge:
   cron_size: 100
 element:
+  empty_message: '{Empty}'
   allowed_tags: admin
   wrapper_classes: |
     container-inline clearfix
