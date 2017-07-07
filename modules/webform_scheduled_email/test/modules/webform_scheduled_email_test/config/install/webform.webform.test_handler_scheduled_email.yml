@@ -74,6 +74,7 @@ settings:
   preview_message: ''
   preview_attributes: {  }
   preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: all
   draft_multiple: false
   draft_auto_save: false
@@ -158,6 +159,7 @@ handlers:
       days: 1
       unschedule: false
       ignore_access: false
+      exclude_empty: true
   yesterday:
     id: scheduled_email
     label: Yesterday
@@ -190,6 +192,7 @@ handlers:
       days: -1
       unschedule: false
       ignore_access: false
+      exclude_empty: true
   last_year:
     id: scheduled_email
     label: 'Last year'
@@ -222,6 +225,7 @@ handlers:
       days: 0
       unschedule: false
       ignore_access: false
+      exclude_empty: true
   broken:
     id: scheduled_email
     label: Broken
@@ -254,6 +258,7 @@ handlers:
       days: 0
       unschedule: false
       ignore_access: false
+      exclude_empty: true
   other:
     id: scheduled_email
     label: Other
@@ -288,6 +293,7 @@ handlers:
       days: 14
       unschedule: false
       ignore_access: false
+      exclude_empty: true
   draft_reminder:
     id: scheduled_email
     label: 'Draft reminder'
@@ -320,3 +326,4 @@ handlers:
       days: 14
       unschedule: true
       ignore_access: false
+      exclude_empty: true

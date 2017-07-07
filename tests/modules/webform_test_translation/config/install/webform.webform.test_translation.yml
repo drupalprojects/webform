@@ -54,6 +54,8 @@ settings:
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
   form_disable_autocomplete: false
   form_novalidate: false
   form_unsaved: false
@@ -74,6 +76,8 @@ settings:
   preview_title: ''
   preview_message: ''
   preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -153,3 +157,4 @@ handlers:
       reply_to: ''
       return_path: ''
       ignore_access: false
+      exclude_empty: true

@@ -835,13 +835,23 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   A render array representing an element as text or HTML.
    */
   protected function build($format, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $options += [
+      'exclude_empty' => TRUE,
+    ];
     $options['multiline'] = $this->isMultiline($element);
     $format_function = 'format' . ucfirst($format);
     $formatted_value = $this->$format_function($element, $webform_submission, $options);
 
-    // Return NULL for empty formatted value.
+    // Handle empty value.
     if ($formatted_value === '') {
-      return NULL;
+      // Return NULL for empty formatted value.
+      if (!empty($options['exclude_empty'])) {
+        return NULL;
+      }
+      // Else set the formatted value to {Empty}.
+      else {
+        $formatted_value = $this->t('{Empty}');
+      }
     }
 
     // Convert string to renderable #markup.

@@ -56,6 +56,15 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->assertRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
     $this->assertRaw('<div class="webform-preview">');
 
+    // Set preview to include empty.
+    $webform_preview->setSetting('preview_exclude_empty', FALSE);
+    $webform_preview->save();
+
+    // Check empty element is included from preview.
+    $this->drupalPostForm('webform/test_form_preview', ['name' => '', 'email' => ''], t('Preview'));
+    $this->assertRaw('<b>Name</b><br />{Empty}<br /><br />');
+    $this->assertRaw('<b>Email</b><br />{Empty}<br /><br />');
+
     // Check required preview with custom settings.
     $webform_preview->setSettings([
       'preview' => DRUPAL_REQUIRED,
@@ -88,6 +97,11 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_preview');
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '{Preview}');
+
+    // Check empty element is excluded from preview.
+    $this->drupalPostForm('webform/test_form_preview', ['name' => 'test', 'email' => ''], t('{Preview}'));
+    $this->assertRaw('<b>Name</b><br />test<br /><br />');
+    $this->assertNoRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
   }
 
 }

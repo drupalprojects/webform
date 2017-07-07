@@ -508,6 +508,12 @@ class WebformEntitySettingsForm extends EntityForm {
       '#webform_id' => $this->getEntity()->id(),
       '#default_value' => $settings['preview_excluded_elements'],
     ];
+    $form['preview_settings']['preview_container']['elements']['preview_exclude_empty'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Exclude empty elements'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['preview_exclude_empty'],
+    );
 
     // Draft settings.
     $form['draft_settings'] = [

@@ -142,6 +142,7 @@ settings:
   preview_message: ''
   preview_attributes: {  }
   preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -203,7 +204,7 @@ settings:
     <tr><th width="50%">webform_submission:values:contacts:0:email:html</th><td width="50%">[webform_submission:values:contacts:0:email:html]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:email:raw:html</th><td width="50%">[webform_submission:values:contacts:1:email:raw:html]</td></tr>
     </table>
-
+    
     <h3>submission limits</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:limit:webform</th><td width="50%">[webform_submission:limit:webform]</td></tr>
@@ -215,7 +216,6 @@ settings:
     <tr><th width="50%">webform_submission:limit:user:source_entity</th><td width="50%">[webform_submission:limit:user:source_entity]</td></tr>
     <tr><th width="50%">webform_submission:total:user:source_entity</th><td width="50%">[webform_submission:total:user:source_entity]</td></tr>
     </table>
-
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true

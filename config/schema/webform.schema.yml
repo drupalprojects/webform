@@ -520,6 +520,9 @@ webform.webform.*:
           sequence:
             type: string
             label: 'Element name'
+        preview_exclude_empty:
+          type: boolean
+          label: 'Preview exclude empty elements'
         draft:
           type: string
           label: 'Allow users to save and finish the webform later.'
@@ -815,6 +818,9 @@ webform.handler.email:
     ignore_access:
       type: boolean
       label: 'Always include private and restricted access elements.'
+    exclude_empty:
+      type: boolean
+      label: 'Preview exclude empty elements'
     html:
       type: boolean
       label: 'HTML'

@@ -539,13 +539,13 @@ function webform_theme() {
     ],
 
     'webform_submission_html' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => []],
+      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => [], 'exclude_empty' => TRUE],
     ],
     'webform_submission_table' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => []],
+      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => [], 'exclude_empty' => TRUE],
     ],
     'webform_submission_text' => [
-      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => []],
+      'variables' => ['webform_submission' => NULL, 'source_entity' => NULL, 'excluded_elements' => [], 'exclude_empty' => TRUE],
     ],
     'webform_submission_yaml' => [
       'variables' => ['webform_submission' => NULL, 'source_entity' => NULL],

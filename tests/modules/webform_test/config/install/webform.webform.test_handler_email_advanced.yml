@@ -38,6 +38,9 @@ elements: |
     '#title': Message
     '#required': true
     '#default_value': '<p><em>Please enter a message.</em></p>'
+  optional:
+    '#title': Optional
+    '#type': textfield
   file:
     '#type': managed_file
     '#title': File
@@ -87,6 +90,7 @@ settings:
   preview_message: ''
   preview_attributes: {  }
   preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -167,6 +171,7 @@ handlers:
         <p style="color:yellow"><em>Custom styled HTML markup</em></p>
       excluded_elements: {  }
       ignore_access: true
+      exclude_empty: true
       html: true
       attachments: true
       debug: true

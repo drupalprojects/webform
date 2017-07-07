@@ -177,6 +177,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'body' => 'default',
       'excluded_elements' => [],
       'ignore_access' => FALSE,
+      'exclude_empty' => TRUE,
       'html' => TRUE,
       'attachments' => FALSE,
       'debug' => FALSE,
@@ -435,6 +436,14 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration['ignore_access'],
       '#parents' => ['settings', 'ignore_access'],
     ];
+    $form['elements']['exclude_empty'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Exclude empty elements'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->configuration['exclude_empty'],
+      '#parents' => ['settings', 'exclude_empty'],
+    );
+
     $elements = $this->webform->getElementsInitializedFlattenedAndHasValue();
     foreach ($elements as $key => $element) {
       if (!empty($element['#access_view_roles']) || !empty($element['#private'])) {
@@ -586,6 +595,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'email' => TRUE,
       'excluded_elements' => $this->configuration['excluded_elements'],
       'ignore_access' => $this->configuration['ignore_access'],
+      'exclude_empty' => $this->configuration['exclude_empty'],
       'html' => ($this->configuration['html'] && $this->supportsHtml()),
     ];
 

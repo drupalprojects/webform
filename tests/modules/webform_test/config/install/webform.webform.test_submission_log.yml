@@ -56,6 +56,7 @@ settings:
   preview_message: ''
   preview_attributes: {  }
   preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: all
   draft_multiple: false
   draft_auto_save: false

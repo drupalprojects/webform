@@ -139,6 +139,7 @@ function template_preprocess_webform_preview(array &$variables) {
     '#theme' => 'webform_submission_html',
     '#webform_submission' => $webform_submission,
     '#excluded_elements' => $webform->getSetting('preview_excluded_elements'),
+    '#exclude_empty' => $webform->getSetting('preview_exclude_empty'),
   ];
 
   $settings = $webform->getSettings();
@@ -367,7 +368,10 @@ function template_preprocess_webform_submission_html(array &$variables) {
 
   $webform = $webform_submission->getWebform();
   $elements = $webform->getElementsInitialized();
-  $options = ['excluded_elements' => $variables['excluded_elements']];
+  $options = [
+    'excluded_elements' => $variables['excluded_elements'],
+    'exclude_empty' => $variables['exclude_empty'],
+  ];
   $variables['data'] = $view_builder->buildElements($elements, $webform_submission, $options);
 }
 
@@ -389,7 +393,10 @@ function template_preprocess_webform_submission_table(array &$variables) {
 
   $webform = $webform_submission->getWebform();
   $elements = $webform->getElementsInitializedFlattenedAndHasValue();
-  $options = ['excluded_elements' => $variables['excluded_elements']];
+  $options = [
+    'excluded_elements' => $variables['excluded_elements'],
+    'exclude_empty' => $variables['exclude_empty'],
+  ];
   $variables['table'] = $view_builder->buildTable($elements, $webform_submission, $options);
 }
 
@@ -435,7 +442,10 @@ function template_preprocess_webform_submission_text(array &$variables) {
 
   $webform = $webform_submission->getWebform();
   $elements = $webform->getElementsInitialized();
-  $options = ['excluded_elements' => $variables['excluded_elements']];
+  $options = [
+    'excluded_elements' => $variables['excluded_elements'],
+    'exclude_empty' => $variables['exclude_empty'],
+  ];
   $variables['data'] = $view_builder->buildElements($elements, $webform_submission, $options, 'text');
 }
 

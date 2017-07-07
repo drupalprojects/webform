@@ -444,6 +444,7 @@ settings:
   preview_message: ''
   preview_attributes: {  }
   preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -518,6 +519,7 @@ handlers:
       body: default
       excluded_elements: {  }
       ignore_access: false
+      exclude_empty: true
       html: false
       attachments: false
       debug: true
@@ -545,6 +547,7 @@ handlers:
       body: default
       excluded_elements: {  }
       ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
