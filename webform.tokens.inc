@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
@@ -128,7 +129,7 @@ function webform_token_info() {
   ];
   $webform_submission['values'] = [
     'name' => t('Submission values'),
-    'description' => new FormattableMarkup((string) t('Webform tokens from submitted data.') .
+    'description' => Markup::create((string) t('Webform tokens from submitted data.') .
       t("Replace the '?' with...") . '<br />' .
       '<ul>' .
       '<li>element_key</li>' .
@@ -153,7 +154,7 @@ function webform_token_info() {
       t("The 'entity:*' applies to the referenced entity") . '<br />' .
       t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br />' .
       t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token.")
-    , []),
+    ),
     'dynamic' => TRUE,
   ];
   // Chained tokens for webform submissions.

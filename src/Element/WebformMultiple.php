@@ -2,10 +2,10 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
 
@@ -486,7 +486,7 @@ class WebformMultiple extends FormElement {
       $items = static::convertValuesToItems($element, $values['items']);
     }
     catch (\Exception $exception) {
-      $form_state->setError($element, new FormattableMarkup($exception->getMessage(), []));
+      $form_state->setError($element, Markup::create($exception->getMessage()));
       return;
     }
 
