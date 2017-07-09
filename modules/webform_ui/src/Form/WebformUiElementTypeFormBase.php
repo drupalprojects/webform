@@ -72,4 +72,28 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     return $sorted_definitions;
   }
 
+  /**
+   * Get table header.
+   *
+   * @return array
+   *   An array containing table header.
+   */
+  protected function getHeader() {
+    $header = [];
+    $header[] = [
+      'data' => $this->t('Element'),
+    ];
+    $header[] = [
+      'data' => $this->t('Category'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    if (!$this->isOffCanvasDialog()) {
+      $header[] = [
+        'data' => $this->t('Operations'),
+        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      ];
+    }
+    return $header;
+  }
+
 }

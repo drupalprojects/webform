@@ -25,13 +25,6 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, WebformInterface $webform = NULL) {
     $parent = $this->getRequest()->query->get('parent');
 
-    $headers = [];
-    $headers[] = ['data' => $this->t('Element')];
-    $headers[] = ['data' => $this->t('Category')];
-    if (!$this->isOffCanvasDialog()) {
-      $headers[] = ['data' => $this->t('Operations')];
-    }
-
     $elements = $this->elementManager->getInstances();
     $definitions = $this->getDefinitions();
     $rows = [];
@@ -105,7 +98,7 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
 
     $form['elements'] = [
       '#type' => 'table',
-      '#header' => $headers,
+      '#header' => $this->getHeader(),
       '#rows' => $rows,
       '#empty' => $this->t('No element available.'),
       '#attributes' => [

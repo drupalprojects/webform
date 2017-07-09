@@ -34,13 +34,6 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
       throw new NotFoundHttpException();
     }
 
-    $headers = [];
-    $headers[] = ['data' => $this->t('Element')];
-    $headers[] = ['data' => $this->t('Category')];
-    if (!$this->isOffCanvasDialog()) {
-      $headers[] = ['data' => $this->t('Operations')];
-    }
-
     $definitions = $this->getDefinitions();
     $rows = [];
     foreach ($related_types as $related_type_name => $related_type_label) {
@@ -75,7 +68,7 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
     $form = [];
     $form['elements'] = [
       '#type' => 'table',
-      '#header' => $headers,
+      '#header' => $this->getHeader(),
       '#rows' => $rows,
       '#attributes' => [
         'class' => ['webform-ui-element-type-table'],
