@@ -825,6 +825,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     $message['body'] = trim((string) \Drupal::service('renderer')->renderPlain($build));
 
+    if ($this->configuration['html']) {
+      switch ($this->getMailSystemSender()) {
+        case 'swiftmailer':
+          // SwiftMailer requires that the body be valid Markup.
+          $message['body'] = Markup::create($message['body']);
+          break;
+      }
+    }
+
     // Send message.
     $this->mailManager->mail('webform', 'email_' . $this->getHandlerId(), $to, $current_langcode, $message, $from);
 
