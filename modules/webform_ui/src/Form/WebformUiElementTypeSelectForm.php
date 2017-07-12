@@ -69,7 +69,9 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
       if ($webform_element->getPluginId() == 'processed_text') {
         unset($row['title']['data']['#attributes']);
         unset($row['operations']['data']['#attributes']);
-        $row['operations']['data']['#attributes']['class'] = ['button', 'button-action', 'button--primary', 'button--small'];
+        if (isset($row['operations'])) {
+          $row['operations']['data']['#attributes']['class'] = ['button', 'button-action', 'button--primary', 'button--small'];
+        }
       }
 
       $row['title']['data']['#attributes']['class'][] = 'js-webform-tooltip-link';

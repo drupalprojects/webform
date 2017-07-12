@@ -127,6 +127,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Node Element.
+    $projects['webform_node_element'] = [
+      'title' => $this->t('Webform Node Element'),
+      'description' => $this->t("Provides a 'Node' element to display node content as an element on a webform. Can be modified dynamically using an event handler."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_node_element'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Score.
     $projects['webform_score'] = [
       'title' => $this->t('Webform Score'),

@@ -59,7 +59,11 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
         // which closes the original modal.
         // @todo Remove the below workaround once this issue is resolved.
         if ($related_type_name == 'processed_text') {
+          unset($row['title']['data']['#attributes']);
           unset($row['operations']['data']['#attributes']);
+          if (isset($row['operations'])) {
+            $row['operations']['data']['#attributes']['class'] = ['button', 'button-action', 'button--primary', 'button--small'];
+          }
         }
       }
       $rows[] = $row;
