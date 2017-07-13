@@ -150,6 +150,36 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
     $webform_submission = WebformSubmission::load($sid);
     $this->assertEqual($webform_submission->getOwnerId(), 0);
 
+    // Logout.
+    $this->drupalLogout();
+
+    // Change 'test_form_draft_anonymous' to be confidential.
+    $webform->setSetting('form_confidential', TRUE);
+
+    // Save a draft.
+    $sid = $this->postSubmission($webform, ['name' => 'John Smith'], t('Save Draft'));
+    $this->assertRaw('Your draft has been saved');
+
+    // Check that submission is owned anonymous.
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual($webform_submission->getOwnerId(), 0);
+
+    // Check loaded draft message does NOT appear on confidental submissions.
+    $this->drupalGet('webform/test_form_draft_anonymous');
+    $this->assertRaw('You have an existing draft');
+
+    // Login the normal user.
+    $this->drupalLogin($this->normalUser);
+
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    // Check that submission is NOT owned by the normal user.
+    $this->assertNotEqual($webform_submission->getOwnerId(), $this->normalUser->id());
+
+    // Check that submission is still anonymous.
+    $this->assertEqual($webform_submission->getOwnerId(), 0);
+
     /**************************************************************************/
     // Export.
     /**************************************************************************/
