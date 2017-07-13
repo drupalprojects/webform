@@ -667,43 +667,6 @@ function webform_theme_registry_alter(&$theme_registry) {
 }
 
 /**
- * Implements hook_theme_suggestions_alter().
- */
-function webform_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
-  if (strpos($hook, 'webform') !== 0) {
-    return;
-  }
-
-  if ($hook == 'webform') {
-    $suggestions[] = $hook . '__' . $variables['element']['#webform_id'];
-  }
-  elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
-    $element = $variables['element'];
-
-    if (empty($element['#type'])) {
-      return;
-    }
-
-    $type = $element['#type'];
-    $name = $element['#webform_key'];
-
-    $suggestions[] = $hook . '__' . $type;
-    $suggestions[] = $hook . '__' . $type . '__' . $name;
-  }
-  elseif (isset($variables['webform_submission'])) {
-    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-    $webform_submission = $variables['webform_submission'];
-    $webform = $webform_submission->getWebform();
-    $suggestions[] = $hook . '__' . $webform->id();
-  }
-  elseif (isset($variables['webform'])) {
-    /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $variables['webform'];
-    $suggestions[] = $hook . '__' . $webform->id();
-  }
-}
-
-/**
  * Prepares variables for checkboxes templates.
  *
  * @see \Drupal\webform\Plugin\WebformElement\OptionsBase
@@ -763,6 +726,220 @@ function webform_process_states(array &$elements, $key = '#attributes') {
   if (empty($elements[$key]['class']) || !WebformArrayHelper::inArray(['js-form-item', 'js-form-submit', 'js-form-wrapper'], $elements[$key]['class'])) {
     $elements[$key]['class'][] = 'js-form-item';
   }
+}
+
+/******************************************************************************/
+// Theme suggestions.
+/******************************************************************************/
+
+/**
+ * Provides alternate named suggestions for a specific theme hook.
+ *
+ * @param array $variables
+ *   An array of variables passed to the theme hook.
+ * @param $hook
+ *   The base hook name.
+ *
+ * @return array
+ *   An array of theme suggestions.
+ */
+function _webform_theme_suggestions(array $variables, $hook) {
+  $suggestions = [];
+
+  if ($hook == 'webform') {
+    $suggestions[] = $hook . '__' . $variables['element']['#webform_id'];
+  }
+  elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
+    $element = $variables['element'];
+
+    if (!empty($element['#type'])) {
+      $type = $element['#type'];
+      $name = $element['#webform_key'];
+
+      $suggestions[] = $hook . '__' . $type;
+      $suggestions[] = $hook . '__' . $type . '__' . $name;
+    }
+  }
+  elseif (isset($variables['webform_submission'])) {
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $variables['webform_submission'];
+    $webform = $webform_submission->getWebform();
+    $suggestions[] = $hook . '__' . $webform->id();
+  }
+  elseif (isset($variables['webform'])) {
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $variables['webform'];
+    $suggestions[] = $hook . '__' . $webform->id();
+  }
+
+  return $suggestions;
+}
+
+
+/**
+ * Helper function used to generate hook_theme_suggestions_HOOK().
+ */
+function _webform_devel_hook_theme_suggestions_generate() {
+  $theme = webform_theme();
+  print '<pre>';
+  foreach ($theme as $hook => $info) {
+    $suggestion = FALSE;
+    if ($hook == 'webform') {
+      $suggestion = TRUE;
+    }
+    elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
+      $suggestion = TRUE;
+    }
+    elseif (isset($info['variables'])
+      && !array_key_exists('element', $info['variables'])
+      && (array_key_exists('webform_submission', $info['variables']) || array_key_exists('webform', $info['variables']))) {
+      $suggestion = TRUE;
+    }
+
+    if ($suggestion) {
+      print "/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_$hook(array \$variables) {
+  return _webform_theme_suggestions(\$variables, '$hook');
+}
+
+";
+    }
+  }
+  print '</pre>';
+  exit;
+}
+
+/******************************************************************************/
+// Theme suggestions.
+// Generate using _webform_devel_hook_theme_suggestions_generate();
+/******************************************************************************/
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_confirmation(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_confirmation');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_preview(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_preview');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_navigation(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_navigation');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_information(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_information');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_html(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_html');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_table(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_table');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_text(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_text');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_yaml(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_yaml');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_element_base_html(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_element_base_html');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_element_base_text(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_element_base_text');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_container_base_html(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_container_base_html');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_container_base_text(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_container_base_text');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_email_message_html(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_email_message_html');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_email_message_text(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_email_message_text');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_progress(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_progress');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_progress_bar(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_progress_bar');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_progress_tracker(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_progress_tracker');
 }
 
 /******************************************************************************/
