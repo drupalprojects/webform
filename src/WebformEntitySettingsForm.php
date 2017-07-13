@@ -663,6 +663,7 @@ class WebformEntitySettingsForm extends EntityForm {
       '#description' => $this->t('Confidential submissions have no recorded IP address and must be submitted while logged out.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['form_confidential'],
+      '#weight' => -100,
     ];
     $form['submission_behaviors']['form_confidential_message'] = [
       '#type' => 'webform_html_editor',
@@ -674,6 +675,7 @@ class WebformEntitySettingsForm extends EntityForm {
           ':input[name="form_confidential"]' => ['checked' => TRUE],
         ],
       ],
+      '#weight' => -99,
     ];
     $form['submission_behaviors']['form_convert_anonymous'] = [
       '#type' => 'checkbox',
@@ -686,6 +688,7 @@ class WebformEntitySettingsForm extends EntityForm {
           ':input[name="form_confidential"]' => ['checked' => FALSE],
         ],
       ],
+      '#weight' => -98,
     ];
     $behavior_elements = [
       // Form specific behaviors.
