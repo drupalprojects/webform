@@ -14,7 +14,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "webform_actions",
  *   label = @Translation("Submit button(s)"),
  *   description = @Translation("Provides an element that contains a Webform's submit, draft, wizard, and/or preview buttons."),
- *   category = @Translation("Actions"),
+ *   category = @Translation("Buttons"),
  * )
  */
 class WebformActions extends ContainerBase {

@@ -46,24 +46,21 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
         '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
         '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['webform-tooltip-link', 'js-webform-tooltip-link']) + ['title' => $plugin_definition['description']],
       ];
-      $row['category']['data'] = (isset($plugin_definition['category'])) ? $plugin_definition['category'] : $this->t('Other');
-      if (!$this->isOffCanvasDialog()) {
-        $row['operations']['data'] = [
-          '#type' => 'link',
-          '#title' => $this->t('Change'),
-          '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button--primary', 'button--small']),
-        ];
-        // Issue #2741877 Nested modals don't work: when using CKEditor in a
-        // modal, then clicking the image button opens another modal,
-        // which closes the original modal.
-        // @todo Remove the below workaround once this issue is resolved.
-        if ($related_type_name == 'processed_text') {
-          unset($row['title']['data']['#attributes']);
-          unset($row['operations']['data']['#attributes']);
-          if (isset($row['operations'])) {
-            $row['operations']['data']['#attributes']['class'] = ['button', 'button-action', 'button--primary', 'button--small'];
-          }
+      $row['operations']['data'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Change'),
+        '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button--primary', 'button--small']),
+      ];
+      // Issue #2741877 Nested modals don't work: when using CKEditor in a
+      // modal, then clicking the image button opens another modal,
+      // which closes the original modal.
+      // @todo Remove the below workaround once this issue is resolved.
+      if ($related_type_name == 'processed_text') {
+        unset($row['title']['data']['#attributes']);
+        unset($row['operations']['data']['#attributes']);
+        if (isset($row['operations'])) {
+          $row['operations']['data']['#attributes']['class'] = ['button', 'button-action', 'button--primary', 'button--small'];
         }
       }
       $rows[] = $row;

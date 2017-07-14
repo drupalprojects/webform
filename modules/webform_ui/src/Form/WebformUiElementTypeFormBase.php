@@ -81,18 +81,12 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
   protected function getHeader() {
     $header = [];
     $header[] = [
-      'data' => $this->t('Element'),
+      'data' => $this->t('Type'),
     ];
     $header[] = [
-      'data' => $this->t('Category'),
-      'class' => [RESPONSIVE_PRIORITY_LOW],
+      'data' => $this->t('Operations'),
+      'width' => '140',
     ];
-    if (!$this->isOffCanvasDialog()) {
-      $header[] = [
-        'data' => $this->t('Operations'),
-        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-      ];
-    }
     return $header;
   }
 

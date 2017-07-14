@@ -63,3 +63,19 @@ thead th .dropbutton {
   background-color: #f5f5f2;
   font-weight: bold;
 }
+
+/**
+ * Element types (/admin/structure/webform/manage/[webform_id]/element/add)
+ */
+
+/**
+ * Hide uneeded responsive toggle.
+ * @see Drupal.behaviors.tableResponsive
+ */
+.webform-ui-element-type-select-form .tableresponsive-toggle {
+  display: none !important;
+}
+
+.webform-ui-element-type-select-form  .details-wrapper {
+  padding: 0.5em 0.5em 0 0.5em;
+}
