@@ -788,7 +788,7 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#type' => 'submit',
             '#value' => $previous_button_label,
             '#webform_actions_button_custom' => $previous_button_custom,
-            '#validate' => ['::validateForm'],
+            '#validate' => ['::noValidate'],
             '#submit' => ['::previous'],
             '#attributes' => ['class' => ['webform-button--previous', 'js-webform-novalidate']],
             '#weight' => 0,
