@@ -387,6 +387,7 @@ function webform_page_attachments(array &$attachments) {
   if (strpos($route_name, 'block.admin_display') === 0) {
     $attachments['#attached']['library'][] = 'webform/webform.block';
   }
+
 }
 
 /**

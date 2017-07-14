@@ -75,6 +75,11 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   const CONFIRMATION_MESSAGE = 'message';
 
   /**
+   * Webform confirmation modal.
+   */
+  const CONFIRMATION_MODAL = 'modal';
+
+  /**
    * Webform confirmation default.
    */
   const CONFIRMATION_DEFAULT = 'default';

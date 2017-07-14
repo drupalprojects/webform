@@ -22,8 +22,8 @@ webform.admin.dialog:
     js/webform.admin.js:  {}
     js/webform.dialog.js:  {}
   dependencies:
-    - core/jquery.ui.dialog
     - core/drupal.dialog.ajax
+    - core/jquery.ui.dialog
     - webform/webform.ajax
     - webform/webform.form
     - webform/webform.admin.dropbutton
@@ -49,6 +49,8 @@ webform.admin.translation:
     theme:
       css/webform.admin.translation.css: {}
 
+# Ajax.
+
 webform.ajax:
   version: VERSION
   css:
@@ -57,12 +59,27 @@ webform.ajax:
   js:
     js/webform.ajax.js:  {}
   dependencies:
-    - core/jquery
     - core/drupal
     - core/drupalSettings
+    - core/drupal.ajax
+    - core/jquery
     - core/jquery.once
     - core/jquery.form
-    - core/drupal.ajax
+
+# Assets.
+
+webform.assets.css:
+  version: VERSION
+  css:
+    theme:
+      css/webform.assets.css: { preprocess: false, minified: false }
+
+webform.assets.javascript:
+  version: VERSION
+  js:
+    js/webform.assets.js: { preprocess: false, minified: false }
+  dependencies:
+    - core/drupal
 
 # Block
 
@@ -80,19 +97,25 @@ webform.block.submission_limit:
     theme:
       css/webform.block.submission_limit.css: {}
 
-# Theme
+# Confirmation
 
-webform.theme.bartik:
+webform.confirmation:
   version: VERSION
   css:
     theme:
-      css/webform.theme.bartik.css: {}
+      css/webform.confirmation.css: {}
 
-webform.theme.seven:
+webform.confirmation.modal:
   version: VERSION
-  css:
-    theme:
-      css/webform.theme.seven.css: {}
+  js:
+    js/webform.confirmation.modal.js:  {}
+  dependencies:
+    - core/drupal
+    - core/drupal.dialog
+    - core/drupal.dialog.position
+    - core/jquery
+    - core/jquery.once
+    - webform/webform.confirmation
 
 # Help.
 
@@ -109,47 +132,15 @@ webform.help:
     - core/jquery.once
     - core/jquery.ui.accordion
 
-# Webform.
-
-webform.confirmation:
-  version: VERSION
-  css:
-    theme:
-      css/webform.confirmation.css: {}
-
-webform.form:
-  version: VERSION
-  css:
-    theme:
-      css/webform.form.css: {}
-  js:
-    js/webform.form.js:  {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
-    - webform/webform.states
-
-webform.assets.css:
-  version: VERSION
-  css:
-    theme:
-      css/webform.assets.css: { preprocess: false, minified: false }
-
-webform.assets.javascript:
-  version: VERSION
-  js:
-    js/webform.assets.js: { preprocess: false, minified: false }
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
+# Navigation.
 
 webform.navigation:
   version: VERSION
   css:
     theme:
       css/webform.navigation.css: {}
+
+# Progress.
 
 webform.progress:
   version: VERSION
@@ -171,11 +162,14 @@ webform.progress.tracker:
   dependencies:
     - webform/libraries.progress-tracker
 
+# States.
 
 webform.states:
   version: VERSION
   js:
     js/webform.states.js:  {}
+
+# Tooltip.
 
 webform.tooltip:
   version: VERSION
@@ -185,6 +179,35 @@ webform.tooltip:
     - core/drupal
     - core/jquery.once
     - core/jquery.ui.tooltip
+
+# Theme
+
+webform.theme.bartik:
+  version: VERSION
+  css:
+    theme:
+      css/webform.theme.bartik.css: {}
+
+webform.theme.seven:
+  version: VERSION
+  css:
+    theme:
+      css/webform.theme.seven.css: {}
+
+# Form.
+
+webform.form:
+  version: VERSION
+  css:
+    theme:
+      css/webform.form.css: {}
+  js:
+    js/webform.form.js:  {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/webform.states
 
 webform.form.disable_back:
   version: VERSION
@@ -197,21 +220,21 @@ webform.form.submit_once:
   js:
     js/webform.form.submit_once.js:  {}
   dependencies:
-    - system/base
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - system/base
 
 webform.form.unsaved:
   version: VERSION
   js:
     js/webform.form.unsaved.js:  {}
   dependencies:
-    - core/drupal
     - core/jquery
     - core/jquery.once
+    - core/drupal
 
-# Elements.
+# Element.
 
 webform.element.buttons:
   version: VERSION
@@ -371,11 +394,11 @@ webform.element.html_editor:
   js:
     js/webform.element.html_editor.js: {}
   dependencies:
+    - core/ckeditor
     - core/drupal
     - core/drupalSettings
     - core/jquery
     - core/jquery.once
-    - core/ckeditor
 
 webform.element.icheck:
   version: VERSION

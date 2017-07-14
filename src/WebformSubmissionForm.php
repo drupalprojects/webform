@@ -314,6 +314,31 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
 
+    /* Confirmation */
+
+    // Add confirmation modal.
+    if ($webform_confirmation_modal = $form_state->get('webform_confirmation_modal')) {
+      $form['webform_confirmation_modal'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'status',
+        '#message_message' => [
+          'title' => [
+            '#markup' => $webform_confirmation_modal['title'],
+            '#prefix' => '<b class="webform-confirmation-modal--title">',
+            '#suffix' => '</b><br/>',
+          ],
+          'content' => [
+            'content' => $webform_confirmation_modal['content'],
+            '#prefix' => '<div class="webform-confirmation-modal--content">',
+            '#suffix' => '</div>',
+          ]
+        ],
+        '#attributes' => ['class' => ['js-hide', 'webform-confirmation-modal', 'js-webform-confirmation-modal']],
+        '#weight' => -1000,
+      ];
+      $form['#attached']['library'][] = 'webform/webform.confirmation.modal';
+    }
+
     /* Data */
 
     // Get and prepopulate (via query string) submission data.
@@ -1013,13 +1038,18 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Confirm webform via webform handler.
     $this->getWebform()->invokeHandlers('confirmForm', $form, $form_state, $webform_submission);
 
-    // Finally reset the form if reloading the current form and just displaying a message.
+    // Reset the form if reloading the current form via AJAX, and just displaying a message.
+    $confirmation_type = $this->getWebformSetting('confirmation_type');
     if ($this->isAjax()) {
-      $confirmation_type = $this->getWebformSetting('confirmation_type');
       $state = $webform_submission->getState();
       if ($confirmation_type == WebformInterface::CONFIRMATION_MESSAGE || $state == WebformSubmissionInterface::STATE_UPDATED) {
         static::reset($form, $form_state);
       }
+    }
+
+    // Always reset the form to trigger a modal dialog.
+    if ($confirmation_type == WebformInterface::CONFIRMATION_MODAL) {
+      static::reset($form, $form_state);
     }
   }
 
@@ -1398,6 +1428,14 @@ class WebformSubmissionForm extends ContentEntityForm {
 
       case WebformInterface::CONFIRMATION_MESSAGE:
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        return;
+
+      case WebformInterface::CONFIRMATION_MODAL:
+        // Set webform confirmation modal in $form_state.
+        $form_state->set('webform_confirmation_modal', [
+          'title' => $this->getWebformSetting('confirmation_title', ''),
+          'content' => $this->getMessageManager()->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION),
+        ]);
         return;
 
       case WebformInterface::CONFIRMATION_DEFAULT:

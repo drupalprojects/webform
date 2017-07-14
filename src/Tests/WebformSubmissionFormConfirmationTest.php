@@ -17,7 +17,7 @@ class WebformSubmissionFormConfirmationTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_confirmation_message', 'test_confirmation_inline', 'test_confirmation_page', 'test_confirmation_page_custom', 'test_confirmation_url', 'test_confirmation_url_message'];
+  protected static $testWebforms = ['test_confirmation_message', 'test_confirmation_modal', 'test_confirmation_inline', 'test_confirmation_page', 'test_confirmation_page_custom', 'test_confirmation_url', 'test_confirmation_url_message'];
 
   /**
    * {@inheritdoc}
@@ -47,6 +47,17 @@ class WebformSubmissionFormConfirmationTest extends WebformTestBase {
     // Check confirmation page with custom query parameters.
     $this->drupalPostForm('webform/test_confirmation_message', [], t('Submit'), ['query' => ['custom' => 'param']]);
     $this->assertUrl('webform/test_confirmation_message', ['query' => ['custom' => 'param']]);
+
+    /* Test confirmation message (confirmation_type=modal) */
+
+    // Check confirmation modal.
+    $this->drupalPostForm('webform/test_confirmation_modal', ['test' => 'value'], t('Submit'));
+    $this->assertRaw('This is a <b>custom</b> confirmation modal.');
+    $this->assertRaw('<div class="js-hide webform-confirmation-modal js-webform-confirmation-modal webform-message js-webform-message js-form-wrapper form-wrapper" data-drupal-selector="edit-webform-confirmation-modal" id="edit-webform-confirmation-modal">');
+    $this->assertRaw('<div role="contentinfo" aria-label="Status message" class="messages messages--status">');
+    $this->assertRaw('<b class="webform-confirmation-modal--title">Custom confirmation modal</b><br />');
+    $this->assertRaw('<div class="webform-confirmation-modal--content">This is a <b>custom</b> confirmation modal. (test: value)</div>');
+    $this->assertUrl('webform/test_confirmation_modal');
 
     /* Test confirmation inline (confirmation_type=inline) */
 
