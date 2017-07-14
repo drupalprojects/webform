@@ -507,6 +507,34 @@ function template_preprocess_webform_codemirror(array &$variables) {
 function template_preprocess_webform_element_base_html(array &$variables) {
   $element = $variables['element'];
   $variables['title'] = (WebformElementHelper::isTitleDisplayed($element)) ? $element['#title'] : NULL;
+
+  // Build form (item) element for HTML display.
+  // @see form-element.html.twig
+  // @see template_preprocess_form_element
+  if (empty($variables['options']['email'])) {
+    $type = $element['#type'];
+
+    $variables['item'] = [
+      '#type' => 'item',
+      '#title' => $variables['title'],
+      '#name' => $element['#webform_key'],
+      // Use wrapper attributes for the id instead of #id,
+      // this stops the <label> from having a 'for' attribute.
+      '#wrapper_attributes' => [
+        'id' => $element['#webform_id'],
+        'class' => [
+          'webform-element',
+          'webform-element-type-' . str_replace('_', '-', $type),
+        ],
+      ],
+    ];
+    if (is_array($variables['value'])) {
+      $variables['item']['value'] = $variables['value'];
+    }
+    else {
+      $variables['item']['#markup'] = $variables['value'];
+    }
+  }
 }
 
 /**
@@ -543,6 +571,43 @@ function template_preprocess_webform_container_base_html(array &$variables) {
   $element = $variables['element'];
   $variables['title'] = (isset($element['#title'])) ? $element['#title'] : NULL;
   $variables['id'] = $element['#webform_id'];
+
+  // Build container (details or fieldset) for HTML display.
+  // @see template_preprocess_details()
+  // @see template_preprocess_fieldset()
+  // @see details.html.twig
+  // @see fieldset.html.twig
+  if (empty($variables['options']['email'])) {
+    if ($variables['title']) {
+      $variables['container'] = [
+        '#type' => 'details',
+        '#title' => $variables['title'],
+        '#id' => $element['#webform_id'],
+        '#open' => TRUE,
+        '#attributes' => [
+          'data-webform-element-id' => $element['#webform_id'],
+          'class' => [
+            'webform-container',
+            'webform-container-type-details',
+          ],
+        ],
+        '#children' => $variables['value'],
+      ];
+    }
+    else {
+      $variables['container'] = [
+        '#type' => 'fieldset',
+        '#id' => $element['#webform_id'],
+        '#attributes' => [
+          'class' => [
+            'webform-container',
+            'webform-container-type-fieldset',
+          ],
+        ],
+        '#children' => $variables['value'],
+      ];
+    }
+  }
 }
 
 /**
@@ -590,7 +655,6 @@ function template_preprocess_webform_progress(array &$variables) {
   $total = count($page_keys);
 
   if ($webform->getSetting('wizard_progress_bar')) {
-
     $variables['bar'] = [
       '#theme' => ($libaries_manager->isIncluded('progress-tracker')) ? 'webform_progress_tracker' : 'webform_progress_bar',
       '#webform' => $variables['webform'],

@@ -52,8 +52,10 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->assertRaw('Please review your submission. Your submission is not complete until you press the "Submit" button!');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '< Previous');
-    $this->assertRaw('<b>Name</b><br />test<br /><br />');
-    $this->assertRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
+    $this->assertRaw('<div id="test_form_preview--name" class="webform-element webform-element-type-textfield js-form-item form-item js-form-type-item form-type-item js-form-item-name form-item-name">');
+    $this->assertRaw('<label>Name</label>' . PHP_EOL . '        test');
+    $this->assertRaw('<div id="test_form_preview--email" class="webform-element webform-element-type-email js-form-item form-item js-form-type-item form-type-item js-form-item-email form-item-email">');
+    $this->assertRaw('<label>Email</label>' . PHP_EOL . '        <a href="mailto:example@example.com">example@example.com</a>');
     $this->assertRaw('<div class="webform-preview">');
 
     // Set preview to include empty.
@@ -62,8 +64,9 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
 
     // Check empty element is included from preview.
     $this->drupalPostForm('webform/test_form_preview', ['name' => '', 'email' => ''], t('Preview'));
-    $this->assertRaw('<b>Name</b><br />{Empty}<br /><br />');
-    $this->assertRaw('<b>Email</b><br />{Empty}<br /><br />');
+    $this->assertRaw('<label>Name</label>' . PHP_EOL . '        {Empty}');
+    $this->assertRaw('<div id="test_form_preview--email" class="webform-element webform-element-type-email js-form-item form-item js-form-type-item form-type-item js-form-item-email form-item-email">');
+    $this->assertRaw('<label>Email</label>' . PHP_EOL . '        {Empty}');
 
     // Check required preview with custom settings.
     $webform_preview->setSettings([
@@ -90,8 +93,8 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->assertRaw('{Message}');
     $this->assertFieldByName('op', 'Submit');
     $this->assertFieldByName('op', '{Back}');
-    $this->assertRaw('<b>Name</b><br />test<br /><br />');
-    $this->assertNoRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
+    $this->assertRaw('<label>Name</label>' . PHP_EOL . '        test');
+    $this->assertNoRaw('<label>Email</label>');
     $this->assertRaw('<div class="preview-custom webform-preview">');
 
     $this->drupalGet('webform/test_form_preview');
@@ -100,8 +103,8 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
 
     // Check empty element is excluded from preview.
     $this->drupalPostForm('webform/test_form_preview', ['name' => 'test', 'email' => ''], t('{Preview}'));
-    $this->assertRaw('<b>Name</b><br />test<br /><br />');
-    $this->assertNoRaw('<b>Email</b><br /><a href="mailto:example@example.com">example@example.com</a><br /><br />');
+    $this->assertRaw('<label>Name</label>' . PHP_EOL . '        test');
+    $this->assertNoRaw('<label>Email</label>');
   }
 
 }

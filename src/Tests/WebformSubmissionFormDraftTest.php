@@ -94,8 +94,8 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
       $this->assertNoRaw('You have an existing draft');
       $this->assertNoFieldByName('name', '');
       $this->assertNoFieldByName('comment', 'Hello World!');
-      $this->assertRaw('<b>Name</b><br />');
-      $this->assertRaw('<b>Comment</b><br />');
+      $this->assertRaw('<label>Name</label>');
+      $this->assertRaw('<label>Comment</label>');
       $this->assertRaw('Please review your submission. Your submission is not complete until you press the "Submit" button!');
 
       // Check submit.
@@ -205,7 +205,7 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
     $this->assertRaw('Please review your submission.');
     $this->drupalGet('webform/test_form_draft_authenticated');
     $this->assertRaw('You have an existing draft');
-    $this->assertRaw('<b>Name</b><br />John Smith<br /><br />');
+    $this->assertRaw('<label>Name</label>' . PHP_EOL . '        John Smith');
   }
 
   /**
