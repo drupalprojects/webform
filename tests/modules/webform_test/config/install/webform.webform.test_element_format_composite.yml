@@ -378,11 +378,11 @@ elements: |
           q2: 'How about now answering question 2?'
           q3: 'Finally, here is question 3?'
         '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
+          1: '1'
+          2: '2'
+          3: '3'
+          4: '4'
+          5: '5'
         '#default_value':
           q1: 1
           q2: 1
@@ -396,11 +396,11 @@ elements: |
           q2: 'How about now answering question 2?'
           q3: 'Finally, here is question 3?'
         '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
+          1: '1'
+          2: '2'
+          3: '3'
+          4: '4'
+          5: '5'
         '#default_value':
           q1: 1
           q2: 1
@@ -414,11 +414,11 @@ elements: |
           q2: 'How about now answering question 2?'
           q3: 'Finally, here is question 3?'
         '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
+          1: '1'
+          2: '2'
+          3: '3'
+          4: '4'
+          5: '5'
         '#default_value':
           q1: 1
           q2: 1
@@ -432,11 +432,11 @@ elements: |
           q2: 'How about now answering question 2?'
           q3: 'Finally, here is question 3?'
         '#answers':
-          1: 1
-          2: 2
-          3: 3
-          4: 4
-          5: 5
+          1: '1'
+          2: '2'
+          3: '3'
+          4: '4'
+          5: '5'
         '#default_value':
           q1: 1
           q2: 1

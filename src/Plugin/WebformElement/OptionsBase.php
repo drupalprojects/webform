@@ -183,6 +183,24 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    $element = parent::preview();
+    if ($this->hasProperty('options')) {
+      $element['#options'] = [
+        'one' => 'One',
+        'two' => 'Two',
+        'three' => 'Three',
+      ];
+    }
+    if ($this->hasProperty('options_display')) {
+      $element['#options_display'] = 'side_by_side';
+    }
+    return $element;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
   public function getTableColumn(array $element) {
     $key = $element['#webform_key'];
     $columns = parent::getTableColumn($element);

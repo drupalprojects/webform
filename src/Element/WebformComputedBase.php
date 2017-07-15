@@ -81,6 +81,10 @@ abstract class WebformComputedBase extends FormElement {
         '#value' => ['#markup' => $value],
         '#parents' => $element['#parents'],
       ];
+
+      // Set #type to item to trigger #states behavior.
+      // @see drupal_process_states;
+      $element['#type'] = 'item';
     }
     return $element;
   }

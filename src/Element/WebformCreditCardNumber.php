@@ -115,7 +115,7 @@ class WebformCreditCardNumber extends FormElement {
   public static function preRenderWebformCreditCardNumber(array $element) {
     $element['#attributes']['type'] = 'text';
     Element::setAttributes($element, ['id', 'name', 'value', 'size', 'maxlength', 'placeholder']);
-    static::setAttributes($element, ['form-textfield', 'webform-creditcard-number']);
+    static::setAttributes($element, ['form-text', 'webform-creditcard-number']);
     return $element;
   }
 

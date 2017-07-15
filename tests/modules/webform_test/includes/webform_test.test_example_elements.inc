@@ -14,18 +14,6 @@ use Drupal\Component\Utility\Unicode;
  *   An array containing examples of all elements.
  */
 function webform_test_test_example_elements() {
-  // Elements to be ignored.
-  $skipped_elements = [
-    'table',
-    'webform_computed_token',
-    'webform_computed_twig',
-    'webform_flexbox',
-    'webform_actions',
-    'webform_flexbox',
-    'webform_test',
-    'webform_wizard_page',
-  ];
-
   /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
   $element_manager = \Drupal::service('plugin.manager.webform.element');
 
@@ -39,16 +27,12 @@ function webform_test_test_example_elements() {
   ];
   foreach ($definitions as $definition) {
     $element_type = $definition['id'];
-    if (in_array($element_type, $skipped_elements)) {
-      continue;
-    }
-
     if (!empty($definition['composite'])) {
       continue;
     }
 
     $webform_element = $elements[$element_type];
-    $element = _webform_test_get_example_element($element_type);
+    $element = _webform_test_get_element_preview($element_type);
     if (!$element) {
       continue;
     }

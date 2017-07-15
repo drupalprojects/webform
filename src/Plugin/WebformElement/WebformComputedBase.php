@@ -137,6 +137,17 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return [
+      '#type' => $this->getTypeName(),
+      '#title' => $this->getPluginLabel(),
+      '#value' => $this->t('This is a @label value.', ['@label' => $this->getPluginLabel()]),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 

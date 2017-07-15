@@ -72,6 +72,16 @@ class WebformMessage extends WebformMarkupBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return parent::preview() + [
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('This is a <strong>warning</strong> message.'),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $form['markup']['#title'] = $this->t('Message settings');

@@ -55,11 +55,11 @@ elements: |
         q2: 'How about now answering question 2?'
         q3: 'Finally, here is question 3?'
       '#answers':
-        1: 1
-        2: 2
-        3: 3
-        4: 4
-        5: 5
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+        5: '5'
   webform_link_example:
     '#type': details
     '#title': Link

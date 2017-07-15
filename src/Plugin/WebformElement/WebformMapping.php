@@ -209,6 +209,24 @@ class WebformMapping extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return parent::preview() + [
+      '#source' => [
+        'one' => $this->t('One'),
+        'two' => $this->t('Two'),
+        'three' => $this->t('Three'),
+      ],
+      '#destination' => [
+        'four' => $this->t('Four'),
+        'five' => $this->t('Five'),
+        'six' => $this->t('Six'),
+      ],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildExportHeader(array $element, array $options) {
     $header = [];
     foreach ($element['#source'] as $key => $label) {

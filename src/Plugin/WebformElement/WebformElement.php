@@ -34,6 +34,13 @@ class WebformElement extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form['element'] = [
       '#type' => 'details',

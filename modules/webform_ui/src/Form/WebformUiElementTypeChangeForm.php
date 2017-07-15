@@ -34,47 +34,19 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
       throw new NotFoundHttpException();
     }
 
+    $elements = $this->elementManager->getInstances();
     $definitions = $this->getDefinitions();
-    $rows = [];
-    foreach ($related_types as $related_type_name => $related_type_label) {
-      $plugin_definition = $definitions[$related_type_name];
 
-      $row = [];
-      $row['title']['data'] = [
-        '#type' => 'link',
-        '#title' => $plugin_definition['label'],
-        '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
-        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['webform-tooltip-link', 'js-webform-tooltip-link']) + ['title' => $plugin_definition['description']],
-      ];
-      $row['operations']['data'] = [
-        '#type' => 'link',
-        '#title' => $this->t('Change'),
-        '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key], ['query' => ['type' => $related_type_name]]),
-        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button--primary', 'button--small']),
-      ];
-      // Issue #2741877 Nested modals don't work: when using CKEditor in a
-      // modal, then clicking the image button opens another modal,
-      // which closes the original modal.
-      // @todo Remove the below workaround once this issue is resolved.
-      if ($related_type_name == 'processed_text') {
-        unset($row['title']['data']['#attributes']);
-        unset($row['operations']['data']['#attributes']);
-        if (isset($row['operations'])) {
-          $row['operations']['data']['#attributes']['class'] = ['button', 'button-action', 'button--primary', 'button--small'];
-        }
-      }
-      $rows[] = $row;
-    }
-
-    $form = [];
+    $form = parent::buildForm($form, $form_state, $webform);
+    
     $form['elements'] = [
       '#type' => 'table',
       '#header' => $this->getHeader(),
-      '#rows' => $rows,
       '#attributes' => [
         'class' => ['webform-ui-element-type-table'],
       ],
     ];
+
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['cancel'] = [
       '#type' => 'link',
@@ -82,7 +54,20 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
       '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button']),
       '#url' => Url::fromRoute('entity.webform_ui.element.edit_form', ['webform' => $webform->id(), 'key' => $key]),
     ];
-    $form['#attached']['library'][] = 'webform/webform.tooltip';
+
+    foreach ($related_types as $element_type => $element_type_label) {
+      /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
+      $webform_element = $elements[$element_type];
+      $plugin_definition = $definitions[$element_type];
+
+      $url = Url::fromRoute(
+        'entity.webform_ui.element.edit_form',
+        ['webform' => $webform->id(), 'key' => $key],
+        ['query' => ['type' => $element_type]]
+      );
+      $form['elements'][$element_type] = $this->buildRow($plugin_definition, $webform_element, $url, $this->t('Change'));
+    }
+
     return $form;
   }
 

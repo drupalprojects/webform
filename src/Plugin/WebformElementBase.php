@@ -1238,6 +1238,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /****************************************************************************/
+  // Preview method.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preview() {
+    return [
+      '#type' => $this->getTypeName(),
+      '#title' => $this->getPluginLabel(),
+    ];
+  }
+
+  /****************************************************************************/
   // Test methods.
   /****************************************************************************/
 
@@ -1747,7 +1761,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['form']['disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disabled'),
-      '#description' => $this->t('Make this field non-editable. Useful for displaying default value. Changeable via JavaScript or developer tools.'),
+      '#description' => $this->t('Make this element non-editable. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
     ];
     $form['form']['open'] = [
@@ -1812,8 +1826,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           'line-aero' => $this->t('Line: Aero'),
         ],
       ],
-      '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
+    if ($this->librariesManager->isExcluded('jquery.icheck')) {
+      $form['form']['icheck']['#access'] = FALSE;
+    }
     if ($default_icheck) {
       $icheck_options = OptGroup::flattenOptions($form['form']['icheck']['#options']);
       $form['form']['icheck']['#description'] .= '<br />' . $this->t("Leave blank to use the default iCheck style. Select 'None' to display the default HTML element.");

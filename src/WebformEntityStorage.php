@@ -55,6 +55,21 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function doCreate(array $values) {
+    $entity = parent::doCreate($values);
+    // Cache new created webform entity so that it can be loaded using just the
+    // webform's id.
+    // @see '_webform_ui_temp_form'
+    // @see \Drupal\webform_ui\Form\WebformUiElementTestForm
+    // @see \Drupal\webform_ui\Form\WebformUiElementTypeFormBase
+    if ($id = $entity->id()) {
+      $this->entities[$id] = $entity;
+    }
+    return $entity;
+  }
 
   /**
    * {@inheritdoc}

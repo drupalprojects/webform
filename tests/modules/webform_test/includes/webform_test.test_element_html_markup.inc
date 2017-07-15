@@ -5,7 +5,7 @@
  * Generate examples of all elements using HTML markup.
  */
 
-module_load_include('inc', 'webform_test', 'includes/webform_test.example_elements');
+module_load_include('inc', 'webform_test', 'includes/webform_test.test_example_elements');
 
 /**
  * Generate examples of all elements using HTML markup.

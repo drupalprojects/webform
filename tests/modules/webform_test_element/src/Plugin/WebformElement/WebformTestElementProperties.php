@@ -32,6 +32,13 @@ class WebformTestElementProperties extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 

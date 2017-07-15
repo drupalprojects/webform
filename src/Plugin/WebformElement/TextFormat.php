@@ -182,6 +182,13 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return (\Drupal::moduleHandler()->moduleExists('filter')) ? parent::preview() : [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 

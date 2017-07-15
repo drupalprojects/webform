@@ -161,6 +161,27 @@ trait WebformEntityReferenceTrait {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    $element = parent::preview();
+    $element += [
+      '#target_type' => 'user',
+      '#selection_handler' => 'default:user',
+      '#selection_settings' => [
+        'include_anonymous' => TRUE,
+      ],
+    ];
+    if ($this instanceof OptionsBase) {
+      $element['#options'] = [
+        '1' => 'Administrator',
+        '0' => 'Anonymous',
+      ];
+    }
+    return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getExportDefaultOptions() {
     return [
       'entity_reference_format' => 'link',

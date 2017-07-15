@@ -133,6 +133,17 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
+  public function preview() {
+    return parent::preview() + [
+      '#map' => TRUE,
+      '#geolocation' => TRUE,
+      '#format' => 'map',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 

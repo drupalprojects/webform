@@ -27,7 +27,7 @@ function webform_test_test_example_elements_composite() {
     }
 
     $webform_element = $elements[$element_type];
-    $element = _webform_test_get_example_element($element_type);
+    $element = _webform_test_get_element_preview($element_type);
     if (!$element) {
       continue;
     }

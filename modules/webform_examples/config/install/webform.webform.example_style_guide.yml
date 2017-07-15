@@ -454,7 +454,6 @@ elements: |
     webform_flexbox:
       '#type': webform_flexbox
       '#title': 'Flexbox elements'
-      '#open': true
       element_flex_1:
         '#type': textfield
         '#title': 'Element (Flex: 1)'
