@@ -53,7 +53,7 @@ function webform_bootstrap_link_alter(&$variables) {
     'button--danger' => 'btn-danger',
     'button' => 'btn',
   ];
-  if (isset($variables['options']['attributes']['class'])) {
+  if (isset($variables['options']['attributes']['class']) && is_array($variables['options']['attributes']['class'])) {
     foreach ($variables['options']['attributes']['class'] as $index => $class) {
       if (isset($drupal_to_bootstrap[$class])) {
         $variables['options']['attributes']['class'][$index] = $drupal_to_bootstrap[$class];
