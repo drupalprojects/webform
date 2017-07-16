@@ -1,6 +1,6 @@
 name: 'Webform Templates'
 type: module
-description: 'Provides starter templates that can be used create new webforms.'
+description: 'Provides starter templates that can be used to create new webforms.'
 package: Webform
 core: 8.x
 dependencies:
