@@ -229,6 +229,9 @@ function webform_drush_help($section) {
     case 'drush:webform-libraries-remove':
       return dt('This command removes all downloaded third party libraries required by the Webform module.');
 
+    case 'drush:webform-libraries-composer-update':
+      return dt("Adds the Webform module's libraries as repositories to Drupal's composer.json.");
+
     case 'drush:webform-repair':
       return dt('Makes sure all Webform admin settings and webforms are up-to-date. Only use this command if you are having problems with your existing Webform configuration.');
 
@@ -240,6 +243,9 @@ function webform_drush_help($section) {
 
     case 'drush:webform-generate':
       return dt('This command will create submissions in specified webform.');
+
+    case 'drush:webform-composer-update':
+      return dt("Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.");
 
     case 'meta:webform:title':
       return dt('Webform commands');
