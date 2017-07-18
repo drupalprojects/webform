@@ -627,6 +627,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $message[$configuration_key] = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data, $token_options);
     }
 
+    // Since Drupal might be rendering a token into the subject as markup
+    // we need to decode all HTML entities which are being sent as plain text.
+    $message['subject'] = html_entity_decode($message['subject']);
+
     // Trim the message body.
     $message['body'] = trim($message['body']);
 

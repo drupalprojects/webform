@@ -106,7 +106,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
       'first_name' => 'John',
       'last_name' => 'Smith',
       'email' => 'from@example.com',
-      'subject' => 'Subject',
+      'subject' => 'This has "<special chararacters>"',
       'message[value]' => '<p><em>Please enter a message.</em> Test that double "quotes" are not encoded.</p>',
       'optional' => '',
     ];
@@ -114,11 +114,14 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $sid = $this->getLastSubmissionId($webform);
     $sent_mail = $this->getLastEmail();
 
-    // Check email is HTML.
+    // Check email subject with special characters.
+    $this->assertEqual($sent_mail['subject'], 'This has "<special chararacters>"');
+
+    // Check email body is HTML.
     $this->assertContains($sent_mail['params']['body'], '<b>First name</b><br />John<br /><br />');
     $this->assertContains($sent_mail['params']['body'], '<b>Last name</b><br />Smith<br /><br />');
     $this->assertContains($sent_mail['params']['body'], '<b>Email</b><br /><a href="mailto:from@example.com">from@example.com</a><br /><br />');
-    $this->assertContains($sent_mail['params']['body'], '<b>Subject</b><br />Subject<br /><br />');
+    $this->assertContains($sent_mail['params']['body'], '<b>Subject</b><br />This has &quot;&lt;special chararacters&gt;&quot;<br /><br />');
     $this->assertContains($sent_mail['params']['body'], '<b>Message</b><br /><p><em>Please enter a message.</em> Test that double "quotes" are not encoded.</p><br /><br />');
     $this->assertContains($sent_mail['params']['body'], '<p style="color:yellow"><em>Custom styled HTML markup</em></p>');
     $this->assertNotContains($sent_mail['params']['body'], '<b>Optional</b><br />{Empty}<br /><br />');

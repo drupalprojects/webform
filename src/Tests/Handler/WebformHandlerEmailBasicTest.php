@@ -51,6 +51,11 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $this->assertEqual($sent_email['headers']['Cc'], 'cc@example.com');
     $this->assertEqual($sent_email['headers']['Bcc'], 'bcc@example.com');
 
+    // Check sending a basic email via a submission.
+    $sent_email = $this->getLastEmail();
+    $this->assertEqual($sent_email['reply-to'], "John Smith <from@example.com>");
+
+
     // Check sending with the saving of results disabled.
     $webform->setSetting('results_disabled', TRUE)->save();
     $this->postSubmission($webform, ['first_name' => 'Jane', 'last_name' => 'Doe']);
@@ -91,6 +96,23 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $this->assertContains($sent_email['body'], "edit-url:");
     $this->assertContains($sent_email['body'], $webform_submission->toUrl('edit-form', ['absolute' => TRUE])->toString());
     $this->assertContains($sent_email['body'], 'Test that "double quotes" are not encoded.');
+
+    // Create a submission using HTML is subject and message.
+    $edit = [
+      'settings[subject][select]' => '[webform_submission:values:subject:value]',
+      'settings[body]' => '[webform_submission:values:message:value]',
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_email/handlers/email/edit', $edit, t('Save'));
+
+    // Check special characters in subject and message.
+    $edit = [
+      'subject' => 'This has "<special chararacters>"',
+      'message' => 'This has "<special chararacters>"',
+    ];
+    $this->postSubmission($webform, $edit);
+    $sent_email = $this->getLastEmail();
+    $this->assertEqual($sent_email['subject'], 'This has "<special chararacters>"');
+    $this->assertEqual($sent_email['body'], 'This has "<special chararacters>"' . PHP_EOL);
   }
 
 }
