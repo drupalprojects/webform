@@ -506,7 +506,9 @@ function template_preprocess_webform_codemirror(array &$variables) {
  */
 function template_preprocess_webform_element_base_html(array &$variables) {
   $element = $variables['element'];
-  $variables['title'] = (WebformElementHelper::isTitleDisplayed($element)) ? $element['#title'] : NULL;
+
+  // Set title.
+  _template_progress_webform_set_title($variables);
 
   // Build form (item) element for HTML display.
   // @see form-element.html.twig
@@ -569,7 +571,10 @@ function template_preprocess_webform_element_base_text(array &$variables) {
  */
 function template_preprocess_webform_container_base_html(array &$variables) {
   $element = $variables['element'];
-  $variables['title'] = (isset($element['#title'])) ? $element['#title'] : NULL;
+
+  // Set title.
+  _template_progress_webform_set_title($variables);
+
   $variables['id'] = $element['#webform_id'];
 
   // Build container (details or fieldset) for HTML display.
@@ -624,9 +629,30 @@ function template_preprocess_webform_container_base_html(array &$variables) {
  *     - email: Flag to determine if element is for an email.
  */
 function template_preprocess_webform_container_base_text(array &$variables) {
-  $element = $variables['element'];
-  $variables['title'] = (isset($element['#title'])) ? $element['#title'] : NULL;
+  _template_progress_webform_set_title($variables);
 }
+
+/**
+ * Set variables title to element #title or #admin_title.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The webform element.
+ */
+function _template_progress_webform_set_title(&$variables) {
+  $element = $variables['element'];
+
+  // Set title.
+  $variables['title'] = (WebformElementHelper::isTitleDisplayed($element)) ? $element['#title'] : NULL;
+  if (empty($variables['title']) && !empty($element['#admin_title'])) {
+    $variables['title'] = $element['#admin_title'];
+  }
+
+}
+
+/******************************************************************************/
+// Progress templates.
+/******************************************************************************/
 
 /**
  * Prepares variables for webform 'wizard' progress template.
@@ -725,8 +751,9 @@ function _template_preprocess_webform_progress(array &$variables) {
     $variables['progress'][] = (isset($page['#title'])) ? $page['#title'] : '';
   }
 }
+
 /******************************************************************************/
-// Element templates
+// Element templates.
 /******************************************************************************/
 
 /**

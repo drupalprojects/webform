@@ -2019,7 +2019,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['admin']['admin_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Admin title'),
-      '#description' => $this->t('The admin title will be displayed when managing elements and viewing & downloading submissions.'),
+      '#description' => $this->t('The admin title will always be displayed when managing elements and viewing & downloading submissions.') .
+        '<br/>' .
+        $this->t("If an element's title is hidden, the element's admin title will be displayed when viewing a submission."),
     ];
 
     // Disable #multiple if the element has submission data.
