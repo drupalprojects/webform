@@ -23,6 +23,18 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
     unset($element['#attached']['library'][0]);
     $element['#attached']['library'] = array_values($element['#attached']['library']);
   }
+
+  // Convert #description are being changed smart descriptions which
+  // contain render arrays to rendered markup.
+  // @see \Drupal\bootstrap\Utility\Element::smartDescription
+  static $smart_description_enabled;
+  if (!isset($smart_description_enabled)) {
+    $theme = \Drupal\bootstrap\Bootstrap::getTheme();
+    $smart_description_enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
+  }
+  if ($smart_description_enabled && isset($element['#description']) && is_array($element['#description'])) {
+    // $element['#description'] =  \Drupal::service('renderer')->renderPlain($element['#description']);
+  }
 }
 
 /**
