@@ -803,11 +803,15 @@ function template_preprocess_webform_message(array &$variables) {
  */
 function _template_preprocess_webform_composite(array &$variables) {
   $element = $variables['element'];
+
+  // Copy all accessible element children to content.
   foreach (Element::children($element) as $key) {
     if (!isset($element[$key]['#access']) || $element[$key]['#access']) {
       $variables['content'][$key] = $element[$key];
     }
   }
+
+  // Set flexbox variable used for multi column element layout.
   $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
 }
 

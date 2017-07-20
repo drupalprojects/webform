@@ -54,7 +54,7 @@ class WebformHtmlEditor extends FormElement {
   }
 
   /**
-   * Prepares a #type 'html_editor' render element for input.html.twig.
+   * Prepares a #type 'webform_html_editor' render element for input.html.twig.
    *
    * @param array $element
    *   An associative array containing the properties of the element

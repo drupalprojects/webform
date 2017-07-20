@@ -1,0 +1,7 @@
+name: 'Webform Example Composite'
+type: module
+description: 'Provides an example that shows how to create a Webform composite.'
+package: 'Webform example'
+core: 8.x
+dependencies:
+  - 'drupal:webform'

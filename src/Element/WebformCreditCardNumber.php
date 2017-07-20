@@ -39,7 +39,7 @@ class WebformCreditCardNumber extends FormElement {
       '#pre_render' => [
         [$class, 'preRenderWebformCreditCardNumber'],
       ],
-      '#theme' => 'input__creditcard_number',
+      '#theme' => 'input__webform_creditcard_number',
       '#theme_wrappers' => ['form_element'],
     ];
   }
