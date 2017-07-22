@@ -8,52 +8,15 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_date
-title: 'Test: Element: Date'
-description: 'Test date element.'
-category: 'Test: Element'
+id: test_form_reset
+title: 'Test: Webform: Reset'
+description: 'Test form reset button.'
+category: 'Test: Webform'
 elements: |
-  date_default:
-    '#type': date
-    '#title': date_default
-    '#default_value': '2009-08-18'
-  date_custom:
-    '#type': date
-    '#title': date_custom
-    '#date_date_format': d-M-Y
-    '#min': '2008-01-01'
-    '#max': '2010-12-31'
-    '#default_value': '2009-08-18'
-    '#description': '(2008-01-01 to 2010-12-31) + (d-M-Y)'
-  date_min_max:
-    '#type': date
-    '#title': date_min_max
-    '#description': '(2009-01-01 to 2009-12-31)'
-    '#min': '2009-01-01'
-    '#max': '2009-12-31'
-    '#default_value': '2009-08-18'
-  date_min_max_dynamic:
-    '#type': date
-    '#title': date_min_max_dynamic
-    '#description': '(-1 year to +1 year)'
-    '#min': '-1 year'
-    '#max': '+1 year'
-    '#default_value': now
-  date_datepicker:
-    '#type': date
-    '#title': date_datepicker
-    '#datepicker': true
-    '#date_date_format': 'D, m/d/Y'
-    '#default_value': '2009-08-18'
-  date_datepicker_min_max_dynamic:
-    '#type': date
-    '#title': date_datepicker_min_max_dynamic
-    '#datepicker': true
-    '#date_date_format': 'D, m/d/Y'
-    '#description': '(-1 year to +1 year)'
-    '#min': '-1 year'
-    '#max': '+1 year'
-    '#default_value': now
+  textfield:
+    '#type': textfield
+    '#title': 'Text field'
+    '#required': true
 css: ''
 javascript: ''
 settings:
@@ -73,9 +36,9 @@ settings:
   form_prepopulate_source_entity: false
   form_prepopulate_source_entity_required: false
   form_prepopulate_source_entity_type: ''
-  form_reset: false
+  form_reset: true
   form_disable_autocomplete: false
-  form_novalidate: false
+  form_novalidate: true
   form_unsaved: false
   form_disable_back: false
   form_autofocus: false
@@ -89,7 +52,7 @@ settings:
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
-  preview: 1
+  preview: 0
   preview_label: ''
   preview_title: ''
   preview_message: ''
@@ -117,8 +80,8 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: false
-  results_disabled_ignore: false
+  results_disabled: true
+  results_disabled_ignore: true
   token_update: false
 access:
   create:

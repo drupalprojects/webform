@@ -14,6 +14,9 @@ webform.settings:
         default_submit_button_label:
           type: label
           label: 'Default webform submit button label'
+        default_reset_button_label:
+          type: label
+          label: 'Default webform reset button label'
         default_form_submit_once:
           type: boolean
           label: 'Prevent duplicate submissions'
@@ -469,6 +472,9 @@ webform.webform.*:
         form_details_toggle:
           type: boolean
           label: 'Display collapse/expand all details link'
+        form_reset:
+          type: boolean
+          label: 'Display reset button'
         submission_label:
           type: label
           label: 'Default submission label'

@@ -985,3 +985,11 @@ function webform_update_8066() {
 function webform_update_8067() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2896667: Add Reset button.
+ */
+function webform_update_8068() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

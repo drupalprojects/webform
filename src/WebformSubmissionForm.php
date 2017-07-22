@@ -841,6 +841,18 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
 
+    // Reset.
+    if ($this->resetEnabled()) {
+      $element['reset'] = [
+        '#type' => 'submit',
+        '#value' => $this->config('webform.settings')->get('settings.default_reset_button_label'),
+        '#validate' => ['::noValidate'],
+        '#submit' => ['::reset'],
+        '#attributes' => ['class' => ['webform-button--reset', 'js-webform-novalidate']],
+        '#weight' => 10,
+      ];
+    }
+
     uasort($element, ['Drupal\Component\Utility\SortArray', 'sortByWeightProperty']);
 
     return $element;
@@ -1677,6 +1689,16 @@ class WebformSubmissionForm extends ContentEntityForm {
       default:
         return FALSE;
     }
+  }
+
+  /**
+   * Determine if reset is enabled.
+   *
+   * @return bool
+   *   TRUE if reset is enabled.
+   */
+  protected function resetEnabled() {
+    return $this->getWebformSetting('form_reset', FALSE);
   }
 
   /**

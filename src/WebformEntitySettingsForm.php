@@ -346,6 +346,10 @@ class WebformEntitySettingsForm extends EntityForm {
         'form_description' => $this->t('If checked, an expand/collapse all (details) link will be added to this webform when there are two or more details elements available on the webform.'),
       ],
       // Form specific behaviors.
+      'form_reset' => [
+        'title' => $this->t('Display reset button.'),
+        'form_description' => $this->t("If checked, users will be able to reset form and restart multistep wizards."),
+      ],
       'form_disable_autocomplete' => [
         'title' => $this->t('Disable autocompletion'),
         'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),

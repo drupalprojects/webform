@@ -54,8 +54,8 @@ drush php-eval 'module_load_include('install', 'webform'); webform_update_8032()
 # These files will be ignored. @see .gitignore.
 echo 'true' > webform.features.yml
 echo 'true' > modules/webform_examples/webform_examples.features.yml
-echo 'true' > modules/webform_examples/webform_example_element.features.yml
-echo 'true' > modules/webform_examples/webform_example_composite.features.yml
+echo 'true' > modules/webform_example_element/webform_example_element.features.yml
+echo 'true' > modules/webform_example_composite/webform_example_composite.features.yml
 echo 'true' > modules/webform_templates/webform_templates.features.yml
 echo 'true' > modules/webform_node/webform_node.features.yml
 

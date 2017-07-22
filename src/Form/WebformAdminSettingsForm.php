@@ -237,6 +237,13 @@ class WebformAdminSettingsForm extends ConfigFormBase {
       '#size' => 20,
       '#default_value' => $settings['default_submit_button_label'],
     ];
+    $form['webform']['form_settings']['default_reset_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default reset button label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_reset_button_label'],
+    ];
     $form['webform']['form_settings']['form_classes'] = [
       '#type' => 'webform_codemirror',
       '#title' => $this->t('Form CSS classes'),
