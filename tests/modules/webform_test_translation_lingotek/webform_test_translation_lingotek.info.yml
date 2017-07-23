@@ -1,0 +1,8 @@
+name: 'Webform module translation lingotek tests'
+type: module
+description: 'Support module for Webform module translation testing using Lingotek.'
+package: Testing
+core: 8.x
+dependencies:
+  - 'drupal:lingotek'
+  - 'drupal:webform'
