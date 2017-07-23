@@ -325,6 +325,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
+  public function getDefaultKey() {
+    return (isset($this->pluginDefinition['default_key'])) ? $this->pluginDefinition['default_key'] : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isInput(array $element) {
     return (!empty($element['#type'])) ? TRUE : FALSE;
   }
@@ -555,7 +562,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element['#wrapper_attributes']['class'][] = 'webform-element--title-inline';
     }
 
-    // Check descripotion markup.
+    // Check description markup.
     if (isset($element['#description'])) {
       $element['#description'] = WebformHtmlEditor::checkMarkup($element['#description']);
     }

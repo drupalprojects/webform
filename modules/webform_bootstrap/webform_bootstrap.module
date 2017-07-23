@@ -10,6 +10,15 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Implements hook_webform_element_ELEMENT_TYPE_alter().
+ */
+function webform_bootstrap_webform_element_webform_terms_of_service_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
+  // Terms of service agreement must always be displayed, so disable
+  // smart description.
+  $element['#smart_description'] = FALSE;
+}
+
+/**
  * Implements hook_webform_element_alter().
  */
 function webform_bootstrap_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
@@ -32,8 +41,8 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
     $theme = \Drupal\bootstrap\Bootstrap::getTheme();
     $smart_description_enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
   }
-  if ($smart_description_enabled && isset($element['#description']) && is_array($element['#description'])) {
-    // $element['#description'] =  \Drupal::service('renderer')->renderPlain($element['#description']);
+  if ($smart_description_enabled && isset($element['#description']) && is_array($element['#description']) && (empty($element['#smart_description']) || $element['#smart_description'] === TRUE)) {
+    $element['#description'] =  \Drupal::service('renderer')->renderPlain($element['#description']);
   }
 }
 

@@ -54,11 +54,13 @@ elements: |
       textarea_value:
         '#type': textarea
         '#title': 'Textarea (Value)'
+        '#rows': 2
         '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
         '#format': value
       textarea_raw:
         '#type': textarea
         '#title': 'Textarea (Raw value)'
+        '#rows': 2
         '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
         '#format': raw
     textfield:
@@ -324,6 +326,25 @@ elements: |
         '#international': true
         '#default_value': '+1 212-333-4444'
         '#format': link
+    webform_terms_of_service:
+      '#type': details
+      '#title': 'I agree to the {terms of service}.'
+      webform_terms_of_service_value:
+        '#type': webform_terms_of_service
+        '#title': 'I agree to the {terms of service}. (Value)'
+        '#required': true
+        '#terms_type': slideout
+        '#terms_content': '<em>These are the terms of service.</em>'
+        '#default_value': Loremipsum
+        '#format': value
+      webform_terms_of_service_raw:
+        '#type': webform_terms_of_service
+        '#title': 'I agree to the {terms of service}. (Raw value)'
+        '#required': true
+        '#terms_type': slideout
+        '#terms_content': '<em>These are the terms of service.</em>'
+        '#default_value': Loremipsum
+        '#format': raw
     webform_toggle:
       '#type': details
       '#title': Toggle
@@ -411,13 +432,13 @@ elements: |
         '#images':
           bear_1:
             text: 'Bear 1'
-            src: 'https://www.placebear.com/100/100'
+            src: 'https://www.placebear.com/80/100'
           bear_2:
             text: 'Bear 2'
-            src: 'https://www.placebear.com/120/100'
+            src: 'https://www.placebear.com/100/100'
           bear_3:
             text: 'Bear 3'
-            src: 'https://www.placebear.com/140/100'
+            src: 'https://www.placebear.com/120/100'
         '#default_value': Loremipsum
         '#format': value
       webform_image_select_raw:
@@ -427,13 +448,13 @@ elements: |
         '#images':
           bear_1:
             text: 'Bear 1'
-            src: 'https://www.placebear.com/100/100'
+            src: 'https://www.placebear.com/80/100'
           bear_2:
             text: 'Bear 2'
-            src: 'https://www.placebear.com/120/100'
+            src: 'https://www.placebear.com/100/100'
           bear_3:
             text: 'Bear 3'
-            src: 'https://www.placebear.com/140/100'
+            src: 'https://www.placebear.com/120/100'
         '#default_value': Loremipsum
         '#format': raw
       webform_image_select_image:
@@ -443,13 +464,13 @@ elements: |
         '#images':
           bear_1:
             text: 'Bear 1'
-            src: 'https://www.placebear.com/100/100'
+            src: 'https://www.placebear.com/80/100'
           bear_2:
             text: 'Bear 2'
-            src: 'https://www.placebear.com/120/100'
+            src: 'https://www.placebear.com/100/100'
           bear_3:
             text: 'Bear 3'
-            src: 'https://www.placebear.com/140/100'
+            src: 'https://www.placebear.com/120/100'
         '#default_value': Loremipsum
         '#format': image
     radios:

@@ -182,8 +182,6 @@ elements: |
       1: '1'
       2: '2'
       3: '3'
-      4: '4'
-      5: '5'
     '#disabled': true
   webform_link:
     '#type': webform_link
@@ -330,9 +328,17 @@ elements: |
     '#title': 'Term select'
     '#vocabulary': tags
     '#disabled': true
+  webform_terms_of_service:
+    '#type': webform_terms_of_service
+    '#title': 'I agree to the {terms of service}.'
+    '#required': true
+    '#terms_type': slideout
+    '#terms_content': '<em>These are the terms of service.</em>'
+    '#disabled': true
   textarea:
     '#type': textarea
     '#title': Textarea
+    '#rows': 2
     '#disabled': true
   textfield:
     '#type': textfield

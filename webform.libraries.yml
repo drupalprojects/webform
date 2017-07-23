@@ -577,6 +577,20 @@ webform.element.term_checkboxes:
     component:
       css/webform.element.term_checkboxes.css: {}
 
+webform.element.terms_of_service:
+  version: VERSION
+  css:
+    theme:
+      css/webform.element.terms_of_service.css: {}
+  js:
+    js/webform.element.terms_of_service.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.dialog.ajax
+    - core/jquery
+    - core/jquery.once
+    - core/jquery.ui.dialog
+
 webform.element.text_format:
   version: VERSION
   css:

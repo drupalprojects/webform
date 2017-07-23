@@ -109,6 +109,14 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function getTypeName();
 
   /**
+   * Gets the element's default key.
+   *
+   * @return string
+   *   The element's default key.
+   */
+  public function getDefaultKey();
+
+  /**
    * Checks if the element carries a value.
    *
    * @param array $element

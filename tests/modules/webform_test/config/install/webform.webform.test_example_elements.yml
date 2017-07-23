@@ -26,9 +26,11 @@ elements: |
     textarea:
       '#type': textarea
       '#title': Textarea
+      '#rows': 2
     textarea_multiple:
       '#type': textarea
       '#title': 'Textarea multiple'
+      '#rows': 2
       '#multiple': true
     textfield:
       '#type': textfield
@@ -51,6 +53,8 @@ elements: |
     captcha:
       '#type': captcha
       '#title': CAPTCHA
+      '#captcha_admin_mode': true
+      '#captcha_type': image_captcha/Image
     webform_codemirror:
       '#type': webform_codemirror
       '#title': CodeMirror
@@ -118,6 +122,12 @@ elements: |
       '#title': 'Telephone multiple'
       '#international': true
       '#multiple': true
+    webform_terms_of_service:
+      '#type': webform_terms_of_service
+      '#title': 'I agree to the {terms of service}.'
+      '#required': true
+      '#terms_type': slideout
+      '#terms_content': '<em>These are the terms of service.</em>'
     webform_toggle:
       '#type': webform_toggle
       '#title': Toggle
@@ -230,13 +240,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
     webform_image_select_multiple:
       '#type': webform_image_select
       '#title': 'Image select multiple'
@@ -244,13 +254,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
       '#multiple': true
     radios:
       '#type': radios
@@ -349,19 +359,13 @@ elements: |
     container:
       '#type': container
       '#title': Container
-      container_content:
-        '#markup': 'This is a Container container.'
     details:
       '#type': details
       '#title': Details
-      details_content:
-        '#markup': 'This is a Details container.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
     fieldset:
       '#type': fieldset
       '#title': Fieldset
-      fieldset_content:
-        '#markup': 'This is a Fieldset container.'
     item:
       '#type': item
       '#title': Item
@@ -372,8 +376,6 @@ elements: |
     label:
       '#type': label
       '#title': Label
-      label_content:
-        '#markup': 'This is a Label container.'
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements'

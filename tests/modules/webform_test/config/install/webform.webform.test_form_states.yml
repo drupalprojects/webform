@@ -43,8 +43,6 @@ elements: |
     visible_container:
       '#type': container
       '#title': Container
-      container_content:
-        '#markup': 'This is a Container container.'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -55,8 +53,6 @@ elements: |
     visible_details:
       '#type': details
       '#title': Details
-      details_content:
-        '#markup': 'This is a Details container.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
       '#states':
         visible:
@@ -68,8 +64,6 @@ elements: |
     visible_fieldset:
       '#type': fieldset
       '#title': Fieldset
-      fieldset_content:
-        '#markup': 'This is a Fieldset container.'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -94,8 +88,6 @@ elements: |
     visible_label:
       '#type': label
       '#title': Label
-      label_content:
-        '#markup': 'This is a Label container.'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -197,6 +189,8 @@ elements: |
     visible_captcha:
       '#type': captcha
       '#title': CAPTCHA
+      '#captcha_admin_mode': true
+      '#captcha_type': image_captcha/Image
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -530,13 +524,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
       '#default_value': Loremipsum
       '#states':
         visible:
@@ -567,8 +561,6 @@ elements: |
         1: '1'
         2: '2'
         3: '3'
-        4: '4'
-        5: '5'
       '#default_value':
         q1: 1
         q2: 1
@@ -914,9 +906,24 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_terms_of_service:
+      '#type': webform_terms_of_service
+      '#title': 'I agree to the {terms of service}.'
+      '#required': true
+      '#terms_type': slideout
+      '#terms_content': '<em>These are the terms of service.</em>'
+      '#default_value': Loremipsum
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_textarea:
       '#type': textarea
       '#title': Textarea
+      '#rows': 2
       '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
       '#states':
         visible:
@@ -1035,8 +1042,6 @@ elements: |
     invisible_container:
       '#type': container
       '#title': Container
-      container_content:
-        '#markup': 'This is a Container container.'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1044,8 +1049,6 @@ elements: |
     invisible_details:
       '#type': details
       '#title': Details
-      details_content:
-        '#markup': 'This is a Details container.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
       '#states':
         invisible:
@@ -1054,8 +1057,6 @@ elements: |
     invisible_fieldset:
       '#type': fieldset
       '#title': Fieldset
-      fieldset_content:
-        '#markup': 'This is a Fieldset container.'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1074,8 +1075,6 @@ elements: |
     invisible_label:
       '#type': label
       '#title': Label
-      label_content:
-        '#markup': 'This is a Label container.'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1153,6 +1152,8 @@ elements: |
     invisible_captcha:
       '#type': captcha
       '#title': CAPTCHA
+      '#captcha_admin_mode': true
+      '#captcha_type': image_captcha/Image
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1414,13 +1415,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
       '#default_value': Loremipsum
       '#states':
         invisible:
@@ -1445,8 +1446,6 @@ elements: |
         1: '1'
         2: '2'
         3: '3'
-        4: '4'
-        5: '5'
       '#default_value':
         q1: 1
         q2: 1
@@ -1720,9 +1719,21 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_webform_terms_of_service:
+      '#type': webform_terms_of_service
+      '#title': 'I agree to the {terms of service}.'
+      '#required': true
+      '#terms_type': slideout
+      '#terms_content': '<em>These are the terms of service.</em>'
+      '#default_value': Loremipsum
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_textarea:
       '#type': textarea
       '#title': Textarea
+      '#rows': 2
       '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
       '#states':
         invisible:
@@ -1855,6 +1866,8 @@ elements: |
     disabled_captcha:
       '#type': captcha
       '#title': CAPTCHA
+      '#captcha_admin_mode': true
+      '#captcha_type': image_captcha/Image
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2116,13 +2129,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
       '#default_value': Loremipsum
       '#states':
         disabled:
@@ -2147,8 +2160,6 @@ elements: |
         1: '1'
         2: '2'
         3: '3'
-        4: '4'
-        5: '5'
       '#default_value':
         q1: 1
         q2: 1
@@ -2422,9 +2433,21 @@ elements: |
         disabled:
           ':input[name="disabled_trigger"]':
             checked: true
+    disabled_webform_terms_of_service:
+      '#type': webform_terms_of_service
+      '#title': 'I agree to the {terms of service}.'
+      '#required': true
+      '#terms_type': slideout
+      '#terms_content': '<em>These are the terms of service.</em>'
+      '#default_value': Loremipsum
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
     disabled_textarea:
       '#type': textarea
       '#title': Textarea
+      '#rows': 2
       '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
       '#states':
         disabled:

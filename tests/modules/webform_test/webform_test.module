@@ -93,6 +93,16 @@ function _webform_test_load_include($id) {
  *   An example element or FALSE if the element type can't have an example.
  */
 function _webform_test_get_element_preview($type, array $options = []) {
+  static $skipped = [
+    'webform_example_element',
+    'webform_example_composite',
+  ];
+
+  // Skip certain elements that should never be included in test forms.
+  if (in_array($type, $skipped )) {
+    return FALSE;
+  }
+
   $options += [
     'issues' => TRUE,
   ];

@@ -36,39 +36,27 @@ elements: |
     flex_container_left:
       '#type': container
       '#title': 'Container 01'
-      container_content:
-        '#markup': 'This is a Container container.'
     flex_container_right:
       '#type': container
       '#title': 'Container 02'
-      container_content:
-        '#markup': 'This is a Container container.'
   flexbox_details:
     '#type': webform_flexbox
     flex_details_left:
       '#type': details
       '#title': 'Details 01'
-      details_content:
-        '#markup': 'This is a Details container.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
     flex_details_right:
       '#type': details
       '#title': 'Details 02'
-      details_content:
-        '#markup': 'This is a Details container.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
   flexbox_fieldset:
     '#type': webform_flexbox
     flex_fieldset_left:
       '#type': fieldset
       '#title': 'Fieldset 01'
-      fieldset_content:
-        '#markup': 'This is a Fieldset container.'
     flex_fieldset_right:
       '#type': fieldset
       '#title': 'Fieldset 02'
-      fieldset_content:
-        '#markup': 'This is a Fieldset container.'
   flexbox_item:
     '#type': webform_flexbox
     flex_item_left:
@@ -90,13 +78,9 @@ elements: |
     flex_label_left:
       '#type': label
       '#title': 'Label 01'
-      label_content:
-        '#markup': 'This is a Label container.'
     flex_label_right:
       '#type': label
       '#title': 'Label 02'
-      label_content:
-        '#markup': 'This is a Label container.'
   flexbox_webform_message:
     '#type': webform_flexbox
     flex_webform_message_left:
@@ -180,9 +164,13 @@ elements: |
     flex_captcha_left:
       '#type': captcha
       '#title': 'CAPTCHA 01'
+      '#captcha_admin_mode': true
+      '#captcha_type': image_captcha/Image
     flex_captcha_right:
       '#type': captcha
       '#title': 'CAPTCHA 02'
+      '#captcha_admin_mode': true
+      '#captcha_type': image_captcha/Image
   flexbox_checkbox:
     '#type': webform_flexbox
     flex_checkbox_left:
@@ -464,13 +452,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
     flex_webform_image_select_right:
       '#type': webform_image_select
       '#title': 'Image select 02'
@@ -478,13 +466,13 @@ elements: |
       '#images':
         bear_1:
           text: 'Bear 1'
-          src: 'https://www.placebear.com/100/100'
+          src: 'https://www.placebear.com/80/100'
         bear_2:
           text: 'Bear 2'
-          src: 'https://www.placebear.com/120/100'
+          src: 'https://www.placebear.com/100/100'
         bear_3:
           text: 'Bear 3'
-          src: 'https://www.placebear.com/140/100'
+          src: 'https://www.placebear.com/120/100'
   flexbox_language_select:
     '#type': webform_flexbox
     flex_language_select_left:
@@ -506,8 +494,6 @@ elements: |
         1: '1'
         2: '2'
         3: '3'
-        4: '4'
-        5: '5'
     flex_webform_likert_right:
       '#type': webform_likert
       '#title': 'Likert 02'
@@ -519,8 +505,6 @@ elements: |
         1: '1'
         2: '2'
         3: '3'
-        4: '4'
-        5: '5'
   flexbox_webform_link:
     '#type': webform_flexbox
     flex_webform_link_left:
@@ -819,14 +803,30 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select 02'
       '#vocabulary': tags
+  flexbox_webform_terms_of_service:
+    '#type': webform_flexbox
+    flex_webform_terms_of_service_left:
+      '#type': webform_terms_of_service
+      '#title': 'I agree to the {terms of service}. 01'
+      '#required': true
+      '#terms_type': slideout
+      '#terms_content': '<em>These are the terms of service.</em>'
+    flex_webform_terms_of_service_right:
+      '#type': webform_terms_of_service
+      '#title': 'I agree to the {terms of service}. 02'
+      '#required': true
+      '#terms_type': slideout
+      '#terms_content': '<em>These are the terms of service.</em>'
   flexbox_textarea:
     '#type': webform_flexbox
     flex_textarea_left:
       '#type': textarea
       '#title': 'Textarea 01'
+      '#rows': 2
     flex_textarea_right:
       '#type': textarea
       '#title': 'Textarea 02'
+      '#rows': 2
   flexbox_textfield:
     '#type': webform_flexbox
     flex_textfield_left:

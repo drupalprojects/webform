@@ -417,6 +417,11 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       case 'webform_toggles':
         $element['#options_display'] = 'side_by_side';
         break;
+
+      case 'webform_terms_of_service':
+        unset($element['#title_display']);
+        break;
+
     }
 
     // Add placeholder for empty element.
