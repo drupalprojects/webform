@@ -68,6 +68,20 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->assertRaw('<div id="test_form_preview--email" class="webform-element webform-element-type-email js-form-item form-item js-form-type-item form-type-item js-form-item-email form-item-email">');
     $this->assertRaw('<label>Email</label>' . PHP_EOL . '        {Empty}');
 
+    // Add special character to title.
+    $webform_preview->set('title', "This has special characters. '<>\"&");
+    $webform_preview->save();
+
+    // Check special characters in form page title.
+    $this->drupalGet('webform/test_form_preview');
+    $this->assertRaw('<title>This has special characters. \'"& | Drupal</title>');
+    $this->assertRaw('<h1 class="page-title">This has special characters. &#039;&lt;&gt;&quot;&amp;</h1>');
+
+    // Check special characters in preview page title.
+    $this->drupalPostForm('webform/test_form_preview', ['name' => 'test'], t('Preview'));
+    $this->assertRaw('<title>This has special characters. \'"&: Preview | Drupal</title>');
+    $this->assertRaw('<h1 class="page-title">This has special characters. &#039;&lt;&gt;&quot;&amp;: Preview</h1>');
+
     // Check required preview with custom settings.
     $webform_preview->setSettings([
       'preview' => DRUPAL_REQUIRED,
@@ -105,6 +119,7 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->drupalPostForm('webform/test_form_preview', ['name' => 'test', 'email' => ''], t('{Preview}'));
     $this->assertRaw('<label>Name</label>' . PHP_EOL . '        test');
     $this->assertNoRaw('<label>Email</label>');
+
   }
 
 }
