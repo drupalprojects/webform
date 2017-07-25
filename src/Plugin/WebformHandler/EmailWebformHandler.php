@@ -261,7 +261,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Get options, mail, and text elements as options (text/value).
     $options_element_options = [];
     $mail_element_options = [];
-    $text_element_options = [];
+    $text_element_options_value = [];
+    $text_element_options_raw = [];
     $elements = $this->webform->getElementsInitializedAndFlattened();
     foreach ($elements as $key => $element) {
       $element_handler = $this->elementManager->getElementInstance($element);
@@ -270,7 +271,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
 
       $title = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', ['@title' => $element['#title'], '@key' => $key]) : $key;
-      $text_element_options["[webform_submission:values:$key:value]"] = $title;
+      $text_element_options_value["[webform_submission:values:$key:value]"] = $title;
+      $text_element_options_raw["[webform_submission:values:$key:raw]"] = $title;
       if (isset($element['#options'])) {
         $options_element_options["[webform_submission:values:$key:raw]"] = $title;
       }
@@ -310,7 +312,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if (!empty($roles_element_options)) {
       $token_types[] = 'webform_role';
     }
-    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink($token_types);
+
+    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink($token_types)  +
+      ['#suffix' => $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')];
+
     if (empty($roles_element_options) && $this->currentUser->hasPermission('administer webform')) {
       $form['to']['roles_message'] = [
         '#type' => 'webform_message',
@@ -329,7 +334,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#open' => TRUE,
     ];
     $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options,  $options_element_options, NULL, TRUE);
-    $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options);
+    $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options_raw);
+    $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink() +
+      ['#suffix' => $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')];
 
     // Message.
     $form['message'] = [
@@ -337,7 +344,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Message'),
       '#open' => TRUE,
     ];
-    $form['message'] += $this->buildElement('subject', $this->t('Subject'), $this->t('subject'), $text_element_options);
+    $form['message'] += $this->buildElement('subject', $this->t('Subject'), $this->t('subject'), $text_element_options_raw);
 
     // Message: Body.
     // Building a custom select other element that toggles between
@@ -345,12 +352,12 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $body_options = [
       WebformSelectOther::OTHER_OPTION => $this->t('Custom body...'),
       'default' => $this->t('Default'),
-      (string) $this->t('Elements') => $text_element_options,
+      (string) $this->t('Elements') => $text_element_options_value,
     ];
 
     $body_default_format = ($this->configuration['html']) ? 'html' : 'text';
     $body_default_values = $this->getBodyDefaultValues();
-    if (isset($body_options[$this->configuration['body']])) {
+    if (isset($text_element_options_value[$this->configuration['body']])) {
       $body_default_value = $this->configuration['body'];
       $body_custom_default_value = $body_default_values[$body_default_format];
     }
@@ -413,7 +420,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         ],
       ];
     }
-    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink() +
+      ['#suffix' => $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values and use [webform_submission:values:ELEMENT_NAME:value] to get HTML values.')];
 
     // Elements.
     $form['elements'] = [
@@ -627,10 +635,6 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $message[$configuration_key] = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data, $token_options);
     }
 
-    // Since Drupal might be rendering a token into the subject as markup
-    // we need to decode all HTML entities which are being sent as plain text.
-    $message['subject'] = html_entity_decode($message['subject']);
-
     // Trim the message body.
     $message['body'] = trim($message['body']);
 
@@ -639,9 +643,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $message['body'] = WebformHtmlEditor::checkMarkup($message['body'], TRUE);
     }
     else {
-      // Since Drupal might be rendering a token into the body as markup
-      // we need to decode all HTML entities which are being sent as plain text.
-      $message['body'] = html_entity_decode($message['body']);
+      // Decode HTML entities in plain text body.
+      $message['body'] = Html::decodeEntities($message['body']);
     }
 
     // Add attachments.
@@ -800,6 +803,12 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   public function sendMessage(WebformSubmissionInterface $webform_submission, array $message) {
     $to = $message['to_mail'];
     $from = $message['from_mail'];
+
+    // Remove less than (<) and greater (>) than from name.
+    // @todo Figure out the proper way to encode special characters.
+    // Note: PhpMail call
+    $message['from_name'] = preg_replace('/[<>]/', '', $message['from_name']);
+
     if (!empty($message['from_name'])) {
       $from = $message['from_name'] . ' <' . $from . '>';
     }
@@ -1007,6 +1016,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   Debug message.
    */
   protected function buildDebugMessage(WebformSubmissionInterface $webform_submission, array $message) {
+    dsm($message);
     // Title.
     $build = [
       '#type' => 'details',

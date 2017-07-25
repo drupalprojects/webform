@@ -993,3 +993,31 @@ function webform_update_8068() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2895140: Email handler field(s) convert special chars to HTML code.
+ */
+function webform_update_8069() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    $data = $webform_config->getRawData();
+    $has_email_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if ($handler['id'] === 'email') {
+        $has_email_handler = TRUE;
+        foreach ($handler['settings'] as $settings_key => $setting_value) {
+          if (in_array($settings_key, ['from_name', 'subject'])) {
+            $handler['settings'][$settings_key] = preg_replace('/^\[([^]]+):value\]$/', '[\1:raw]', $setting_value);
+          }
+        }
+      }
+    }
+
+    if ($has_email_handler) {
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}

@@ -5,8 +5,8 @@
  * Builds placeholder replacement tokens for webforms and submissions.
  */
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Render\Markup;
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
@@ -693,9 +693,23 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   $format_method = (empty($options['html'])) ? 'formatText' : 'formatHtml';
   $token_value = $element_manager->invokeMethod($format_method, $element, $webform_submission, $options);
 
-  // Note, tokens can't include CSS and JS libraries since they will
-  // can be included in an email.
-  return (is_array($token_value)) ? \Drupal::service('renderer')->renderPlain($token_value) : (string) $token_value;;
+  if (is_array($token_value)) {
+    // Note, tokens can't include CSS and JS libraries since they will
+    // can be included in an email.
+    return \Drupal::service('renderer')->renderPlain($token_value);
+  }
+  elseif (isset($element['#format']) && $element['#format'] === 'raw') {
+    // Raw needs return Markup.
+    if ($token_value instanceof MarkupInterface) {
+      return $token_value;
+    }
+    else {
+      return Markup::create((string) $token_value);
+    }
+  }
+  else {
+    return (string) $token_value;
+  }
 }
 
 function _webform_token_get_submission_values(array $options, WebformSubmissionInterface $webform_submission, array $form_elements) {

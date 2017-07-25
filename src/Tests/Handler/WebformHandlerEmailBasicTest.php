@@ -99,20 +99,26 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
 
     // Create a submission using HTML is subject and message.
     $edit = [
-      'settings[subject][select]' => '[webform_submission:values:subject:value]',
+      'settings[subject][select]' => '[webform_submission:values:subject:raw]',
       'settings[body]' => '[webform_submission:values:message:value]',
     ];
     $this->drupalPostForm('admin/structure/webform/manage/test_handler_email/handlers/email/edit', $edit, t('Save'));
 
-    // Check special characters in subject and message.
+    // Check special characters.
     $edit = [
-      'subject' => 'This has "<special chararacters>"',
-      'message' => 'This has "<special chararacters>"',
+      'first_name' => '"<first_name>"',
+      'last_name' => '"<last_name>"',
+      // Drupal strip_tags() from mail subject.
+      // @see \Drupal\Core\Mail\MailManager::doMail
+      // @see http://cgit.drupalcode.org/drupal/tree/core/lib/Drupal/Core/Mail/MailManager.php#n285
+      'subject' => 'This has <removed>"special" \'chararacters\'',
+      'message' => 'This has <not_removed>"special" \'chararacters\'',
     ];
     $this->postSubmission($webform, $edit);
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['subject'], 'This has "<special chararacters>"');
-    $this->assertEqual($sent_email['body'], 'This has "<special chararacters>"' . PHP_EOL);
+    $this->assertEqual($sent_email['reply-to'], '"first_name" "last_name" <from@example.com>');
+    $this->assertEqual($sent_email['subject'], 'This has "special" \'chararacters\'');
+    $this->assertEqual($sent_email['body'], 'This has <not_removed>"special" \'chararacters\'' . PHP_EOL);
   }
 
 }

@@ -195,7 +195,7 @@ handlers:
       bcc_options: {  }
       from_mail: '[webform_submission:values:email:raw]'
       from_options: {  }
-      from_name: '[webform_submission:values:name:value]'
+      from_name: '[webform_submission:values:name:raw]'
       subject: default
       body: '[webform_submission:values:comments:value]'
       excluded_elements: {  }

@@ -170,7 +170,7 @@ handlers:
       from_mail: '[webform_submission:values:email:raw]'
       from_options: {  }
       from_name: '[webform_submission:values:first_name] [webform_submission:values:last_name]'
-      subject: '[webform_submission:values:subject:value]'
+      subject: '[webform_submission:values:subject:raw]'
       body: |
         <p>Submitted on [webform_submission:created]</p>
         <p>Submitted by: [webform_submission:user]</p>
