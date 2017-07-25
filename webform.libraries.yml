@@ -374,6 +374,12 @@ webform.element.details.toggle:
     - core/jquery
     - core/jquery.once
 
+webform.element.file.button:
+  version: VERSION
+  css:
+    theme:
+      css/webform.element.file.button.css: {}
+
 webform.element.flexbox:
   version: VERSION
   css:

@@ -27,6 +27,7 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
+use Drupal\Component\Utility\Html;
 
 require_once __DIR__ . '/includes/webform.date.inc';
 require_once __DIR__ . '/includes/webform.libraries.inc';
@@ -688,6 +689,59 @@ function webform_preprocess_radios(&$variables) {
   webform_preprocess_checkboxes($variables);
   // @see js/webform.element.radios.js
   $variables['attributes']['class'][] = 'js-webform-radios';
+}
+
+/**
+ * Prepares variables for file managed file templates.
+ *
+ * @see https://stackoverflow.com/questions/21842274/cross-browser-custom-styling-for-file-upload-button
+ * @see template_preprocess_file_managed_file().
+ */
+function webform_preprocess_file_managed_file(&$variables) {
+  $element =& $variables['element'];
+  if (empty($element['#button'])) {
+    return;
+  }
+
+  // Don't alter hidden file upload input.
+  if (isset($element['upload']['#access']) && $element['upload']['#access'] === FALSE) {
+    return;
+  }
+
+  // Create an unique id for the file upload input and label.
+  $button_id = Html::getUniqueId($variables['element']['upload']['#id'] . '-button');
+
+  // Create a label that is styled like an action button.
+  $label = [
+    '#type' => 'html_tag',
+    '#tag' => 'label',
+    '#value' => (isset($element['#button__title'])) ? $element['#button__title'] : (empty($element['#multiple']) ? t('Choose file') : t('Choose files')),
+    '#attributes' => (isset($element['#button__attributes'])) ? $element['#button__attributes'] : [],
+  ];
+
+  // Add 'for' attribute.
+  $label['#attributes']['for'] = $button_id;
+
+  // Add default button classes.
+  if (empty($label['#attributes']['class'])) {
+    $label['#attributes']['class'][] = 'button' ;
+    $label['#attributes']['class'][] = 'button-action';
+  }
+
+  // Add .webform-file-button.
+  $label['#attributes']['class'][] = 'webform-file-button';
+
+  // Make sure the label is first.
+  $element = ['label' => $label] + $element;
+
+  // Set the custom button ID for file upload input.
+  $element['upload']['#attributes']['id'] = $button_id;
+
+  // Hide the file upload.
+  $element['upload']['#attributes']['class'][] = 'webform-file-button-input';
+
+  // Attach library.
+  $element['#attached']['library'][] = 'webform/webform.element.file.button';
 }
 
 /**
