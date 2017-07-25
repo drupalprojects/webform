@@ -1016,7 +1016,6 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   Debug message.
    */
   protected function buildDebugMessage(WebformSubmissionInterface $webform_submission, array $message) {
-    dsm($message);
     // Title.
     $build = [
       '#type' => 'details',
