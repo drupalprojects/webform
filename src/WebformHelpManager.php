@@ -1397,6 +1397,14 @@ SUGGESTIONS
       'content' => $this->t("A webform node allows webforms to be fully integrated into a website as nodes."),
       'video_id' => 'blocks',
     ];
+    $help['webform_node_reference'] = [
+      'routes' => [
+        // @see /admin/structure/webform/manage/{webform}/references
+        'entity.webform.references',
+      ],
+      'title' => $this->t('Webform references'),
+      'content' => $this->t("The Reference pages displays an overview of a webform's references and allows you to quickly create new references (a.k.a Webform nodes)."),
+    ];
 
     // Webform Block.
     $help['webform_block'] = [

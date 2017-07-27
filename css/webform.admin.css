@@ -4,6 +4,13 @@
  */
 
 /**
+ * Local actions.
+ */
+.webform-form .action-links {
+  margin-bottom: 0;
+}
+
+/**
  * Webform setting button displays a gear icon.
  * @see /admin/structure/webform/manage/contact/results/submissions
  */

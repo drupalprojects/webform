@@ -147,11 +147,10 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     ];
     $header['results_operations'] = [
       'data' => $this->t('Operations'),
-      'class' => [RESPONSIVE_PRIORITY_MEDIUM, 'webform-entity-list-builder-results-operations'],
+      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
     ];
     $header['operations'] = [
       'data' => '',
-      'class' => ['webform-entity-list-builder-operations'],
     ];
     return $header;
   }
