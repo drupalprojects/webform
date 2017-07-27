@@ -158,11 +158,15 @@ elements: |
       '#title': 'Text format'
     managed_file:
       '#type': managed_file
-      '#title': File
+      '#title': 'File upload'
     managed_file_multiple:
       '#type': managed_file
-      '#title': 'File multiple'
+      '#title': 'File upload multiple'
       '#multiple': true
+    managed_file_button:
+      '#type': managed_file
+      '#title': 'File upload button'
+      '#button': true
     text_format:
       '#type': text_format
       '#title': 'Text format'
@@ -221,6 +225,9 @@ elements: |
     webform_signature:
       '#type': webform_signature
       '#title': Signature
+    webform_terms_of_service:
+      '#type': webform_terms_of_service
+      '#terms_content': 'These are the terms of service.'
     webform_toggle:
       '#type': webform_toggle
       '#title': Toggle

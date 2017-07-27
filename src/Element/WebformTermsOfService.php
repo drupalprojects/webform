@@ -74,14 +74,14 @@ class WebformTermsOfService extends Checkbox {
       '#type' => 'container',
       '#attributes' => ['class' => ['webform-terms-of-service-details', 'js-hide']],
     ];
-    if (isset($element['#terms_title'])) {
+    if (!empty($element['#terms_title'])) {
       $element['#description']['terms']['title'] = [
         '#markup' => $element['#terms_title'],
         '#prefix' => '<div class="webform-terms-of-service-details--title">',
         '#suffix' => '</div>',
       ];
     }
-    if (isset($element['#terms_content'])) {
+    if (!empty($element['#terms_content'])) {
       $element['#description']['terms']['content'] = (is_array($element['#terms_content'])) ? $element['#terms_content'] : ['#markup' => $element['#terms_content']];
       $element['#description']['terms']['content'] += [
         '#prefix' => '<div class="webform-terms-of-service-details--content">',
