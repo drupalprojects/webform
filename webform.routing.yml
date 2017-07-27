@@ -56,14 +56,14 @@ entity.webform.canonical:
     _entity_access: 'webform.submission_page'
 
 entity.webform.assets.javascript:
-  path: '/webform/{webform}/assets/javascript'
+  path: '/webform/javascript/{webform}'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformController::javascript'
   requirements:
     _entity_access: 'webform.view'
 
 entity.webform.assets.css:
-  path: '/webform/{webform}/assets/css'
+  path: '/webform/css/{webform}'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformController::css'
   requirements:

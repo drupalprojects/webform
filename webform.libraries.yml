@@ -66,21 +66,6 @@ webform.ajax:
     - core/jquery.once
     - core/jquery.form
 
-# Assets.
-
-webform.assets.css:
-  version: VERSION
-  css:
-    theme:
-      css/webform.assets.css: { preprocess: false, minified: false }
-
-webform.assets.javascript:
-  version: VERSION
-  js:
-    js/webform.assets.js: { preprocess: false, minified: false }
-  dependencies:
-    - core/drupal
-
 # Block
 
 webform.block:

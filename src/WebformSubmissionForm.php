@@ -384,13 +384,11 @@ class WebformSubmissionForm extends ContentEntityForm {
     $form['#attached']['library'][] = 'webform/webform.form';
 
     // Assets: Add custom shared and webform specific CSS and JS.
-    // @see webform_css_alter()
-    // @see webform_js_alter()
+    // @see webform_library_info_build()
     $assets = $webform->getAssets();
     foreach ($assets as $type => $value) {
       if ($value) {
-        $form['#attached']['library'][] = "webform/webform.assets.$type";
-        $form['#attached']['drupalSettings']['webform']['assets'][$type][$webform->id()] = md5($value);
+        $form['#attached']['library'][] = 'webform/webform.' . $type. '.' . $webform->id() ;
       }
     }
 

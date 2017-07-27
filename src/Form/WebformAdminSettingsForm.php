@@ -1324,6 +1324,7 @@ class WebformAdminSettingsForm extends ConfigFormBase {
     \Drupal::token()->resetInfo();
 
     // Reset libraries cached.
+    // @see webform_library_info_build()
     \Drupal::service('library.discovery')->clearCachedDefinitions();
 
     parent::submitForm($form, $form_state);
