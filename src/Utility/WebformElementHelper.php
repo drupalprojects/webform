@@ -323,4 +323,24 @@ class WebformElementHelper {
     }
   }
 
+  /**
+   * Convert element or property to a string.
+   *
+   * This method is used to prevent 'Array to string conversion' errors.
+   *
+   * @param array|string|MarkupInterface $element
+   *   An element, render array, string, or markup.
+   *
+   * @return string
+   *   The element or property to a string.
+   */
+  public static function convertToString($element) {
+    if (is_array($element)) {
+      return (string) \Drupal::service('renderer')->renderPlain($element);
+    }
+    else {
+      return (string) $element;
+    }
+  }
+
 }
