@@ -202,7 +202,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
-        '#admin_title' => NULL,
+        '#admin_title' => 'root',
       ],
       'container' => [
         '#type' => 'container',
@@ -215,7 +215,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
-        '#admin_title' => NULL,
+        '#admin_title' => 'container',
       ],
       'child' => [
         '#type' => 'textfield',
@@ -228,7 +228,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
-        '#admin_title' => NULL,
+        '#admin_title' => 'child',
       ],
     ];
     $this->assertEquals($webform->getElementsInitializedAndFlattened(), $elements_initialized_and_flattened);

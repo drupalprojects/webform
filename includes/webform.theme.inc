@@ -553,7 +553,8 @@ function template_preprocess_webform_element_base_html(array &$variables) {
  *     - email: Flag to determine if element is for an email.
  */
 function template_preprocess_webform_element_base_text(array &$variables) {
-  template_preprocess_webform_element_base_html($variables);
+  // Set title.
+  _template_progress_webform_set_title($variables, TRUE);
 }
 
 /**
@@ -629,7 +630,7 @@ function template_preprocess_webform_container_base_html(array &$variables) {
  *     - email: Flag to determine if element is for an email.
  */
 function template_preprocess_webform_container_base_text(array &$variables) {
-  _template_progress_webform_set_title($variables);
+  _template_progress_webform_set_title($variables, TRUE);
 }
 
 /**
@@ -638,8 +639,10 @@ function template_preprocess_webform_container_base_text(array &$variables) {
  * @param array $variables
  *   An associative array containing the following key:
  *   - element: The webform element.
+ * @param bool $strip_tags
+ *   Remove HTML tags from title.
  */
-function _template_progress_webform_set_title(&$variables) {
+function _template_progress_webform_set_title(&$variables, $strip_tags = FALSE) {
   $element = $variables['element'];
 
   // Set title.
@@ -648,6 +651,10 @@ function _template_progress_webform_set_title(&$variables) {
     $variables['title'] = $element['#admin_title'];
   }
 
+  // Strip all HTML tags from the title.
+  if ($strip_tags) {
+    $variables['title'] = strip_tags($variables['title']);
+  }
 }
 
 /******************************************************************************/

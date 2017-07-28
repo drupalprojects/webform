@@ -45,6 +45,11 @@ class WebformTermsOfService extends Checkbox {
    * {@inheritdoc}
    */
   public function initialize(array &$element) {
+    // Set default #title.
+    if (empty($element['#title'])) {
+      $element['#title'] = $this->getDefaultProperty('title');
+    }
+
     // Backup #title and remove curly brackets.
     // Curly brackets are used to add link to #title when it is rendered.
     // @see \Drupal\webform\Element\WebformTermsOfService::preRenderCheckbox

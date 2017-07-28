@@ -509,6 +509,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if (isset($element['#options'])) {
       $element['#options'] = WebformOptions::getElementOptions($element);
     }
+
+    // Set #admin_title to #title without any HTML markup.
+    if (!empty($element['#title']) && empty($element['#admin_title'])) {
+      $element['#admin_title'] = strip_tags($element['#title']);
+    }
   }
 
   /**
