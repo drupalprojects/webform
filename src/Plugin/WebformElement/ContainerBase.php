@@ -20,8 +20,6 @@ abstract class ContainerBase extends WebformElementBase {
       'title' => '',
       // General settings.
       'description' => '',
-      // Form display.
-      'title_display' => '',
       // Form validation.
       'required' => FALSE,
       // Attributes.
@@ -42,6 +40,21 @@ abstract class ContainerBase extends WebformElementBase {
   public function isContainer(array $element) {
     return TRUE;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+    parent::prepare($element, $webform_submission);
+
+    // Containers can only hide (aka invisible) the title by removing the
+    // #title attribute.
+    // @see core/modules/system/templates/fieldset.html.twig
+    if (isset($element['#title_display']) && $element['#title_display'] === 'invisible') {
+      unset($element['#title']);
+    }
+  }
+
 
   /**
    * {@inheritdoc}
@@ -102,6 +115,14 @@ abstract class ContainerBase extends WebformElementBase {
     // Containers are wrappers, therefore wrapper classes should be used by the
     // container element.
     $form['element_attributes']['attributes']['#classes'] = $this->configFactory->get('webform.settings')->get('element.wrapper_classes');
+
+    // Containers can only hide the title using #title_display: invisible.
+    // @see core/modules/system/templates/fieldset.html.twig
+    $form['form']['title_display']['#options'] = [
+      '' => '',
+      'invisible' => $this->t('Invisible'),
+    ];
+
     return $form;
   }
 
