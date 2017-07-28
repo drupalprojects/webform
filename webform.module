@@ -674,6 +674,42 @@ function webform_theme_registry_alter(&$theme_registry) {
 }
 
 /**
+ * Prepares variables for single local action link templates.
+ *
+ * Applies custom link attributes to local actions.
+ * Custom attributes are used to open Webform UI modals.
+ *
+ * Issue #2897396: Add a Reference Tab to track Webform nodes.
+ * @see https://www.drupal.org/node/2897396
+ *
+ * @see template_preprocess_menu_local_action();
+ * @see \Drupal\webform\WebformEntityHandlersForm
+ * @see \Drupal\webform_ui\WebformUiEntityForm
+ */
+function webform_preprocess_menu_local_action(&$variables) {
+  $link = $variables['element']['#link'];
+  // Only need to update local actions with link attributes.
+  if (!isset($link['attributes'])) {
+    return;
+  }
+
+  $link += [
+    'localized_options' => [],
+  ];
+  $link['localized_options']['attributes'] = $link['attributes'];
+  $link['localized_options']['attributes']['class'][] = 'button';
+  $link['localized_options']['attributes']['class'][] = 'button-action';
+  $link['localized_options']['set_active_class'] = TRUE;
+
+  $variables['link'] = [
+    '#type' => 'link',
+    '#title' => $link['title'],
+    '#options' => $link['localized_options'],
+    '#url' => $link['url'],
+  ];
+}
+
+/**
  * Prepares variables for checkboxes templates.
  *
  * @see \Drupal\webform\Plugin\WebformElement\OptionsBase
