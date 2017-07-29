@@ -40,7 +40,7 @@ require_once __DIR__ . '/includes/webform.translation.inc';
 function webform_help($route_name, RouteMatchInterface $route_match) {
   // Get path from route match.
   $path = preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', Url::fromRouteMatch($route_match)->setAbsolute(FALSE)->toString());
-  if (!in_array($route_name, ['system.modules_list']) && strpos($route_name, 'webform') === FALSE && strpos($path, '/webform') === FALSE) {
+  if (!in_array($route_name, ['system.modules_list', 'update.status']) && strpos($route_name, 'webform') === FALSE && strpos($path, '/webform') === FALSE) {
     return NULL;
   }
 

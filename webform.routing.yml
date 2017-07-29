@@ -9,8 +9,7 @@ webform.settings:
 webform.help.video:
   path: '/admin/help/webform/video/{id}'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformHelpController::video'
-    _title_callback: '\Drupal\webform\Controller\WebformHelpController::videoTitle'
+    _form: '\Drupal\webform\Form\WebformHelpVideoForm'
   requirements:
     _permission: 'access administration pages'
 

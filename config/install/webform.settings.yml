@@ -232,6 +232,7 @@ ui:
   dialog_disabled: false
   offcanvas_disabled: false
   help_menu_disabled: false
+  promotions_disabled: false
 libraries:
   excluded_libraries:
     - jquery.chosen

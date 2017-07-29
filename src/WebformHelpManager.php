@@ -2,7 +2,6 @@
 
 namespace Drupal\webform;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Serialization\Yaml;
@@ -37,6 +36,13 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * @var array
    */
   protected $videos;
+
+  /**
+   * The current version number of the Webform module.
+   *
+   * @var string
+   */
+  protected $version;
 
   /**
    * The current user.
@@ -171,6 +177,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'message_id' => '',
         'message_storage' => '',
         'video_id' => '',
+        'attached' => [],
       ];
 
       if (!$help['access']) {
@@ -195,6 +202,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
             '#theme' => 'webform_help',
             '#info' => $help,
           ],
+          '#attached' => $help['attached'],
         ];
         if ($help['message_close']) {
           $build['#cache']['max-age'] = 0;
@@ -880,6 +888,36 @@ SUGGESTIONS
   }
 
   /****************************************************************************/
+  // Module.
+  /****************************************************************************/
+
+  /**
+   * Get the current version number of the Webform module.
+   *
+   * @return string
+   *   The current version number of the Webform module.
+   */
+  protected function getVersion() {
+    if (isset($this->version)) {
+      return $this->version;
+    }
+
+    $module_info = Yaml::decode(file_get_contents($this->moduleHandler->getModule('webform')->getPathname()));
+    $this->version = (isset($module_info['version']) && !preg_match('/^8.x-5.\d+-.*-dev$/', $module_info['version'])) ? $module_info['version'] : '8.x-5.x-dev';
+    return $this->version;
+  }
+
+  /**
+   * Determine if the Webform module has been updated.
+   *
+   * @return bool
+   *   TRUE if the Webform module has been updated.
+   */
+  protected function isUpdated() {
+    return ($this->getVersion() !== $this->state->get('webform.version')) ? TRUE : FALSE;
+  }
+
+  /****************************************************************************/
   // Videos.
   /****************************************************************************/
 
@@ -888,6 +926,14 @@ SUGGESTIONS
    */
   protected function initVideos() {
     $videos = [];
+
+    $videos['promotion_lingotek'] = [
+      'title' => $this->t('Webform & Lingotek Partnership'),
+      'content' => $this->t('You can help support the Webform module by signing up and trying the Lingotek-Inside Drupal Translation Module for <strong>free</strong>.'),
+      'youtube_id' => '83L99vYbaGQ',
+      'submit_label' => $this->t('Sign up and try Lingotek'),
+      'submit_url' => Url::fromUri('https://lingotek.com/webform'),
+    ];
 
     $videos['introduction_short'] = [
       'title' => $this->t('Welcome to the Webform module'),
@@ -1012,22 +1058,16 @@ SUGGESTIONS
     ];
 
     // Release.
-    $module_info = Yaml::decode(file_get_contents($this->moduleHandler->getModule('webform')->getPathname()));
-    $version = (isset($module_info['version']) && !preg_match('/^8.x-5.\d+-.*-dev$/', $module_info['version'])) ? $module_info['version'] : '8.x-5.x-dev';
-    $installed_version = $this->state->get('webform.version');
-    // Reset storage state if the version has changed.
-    if ($installed_version != $version) {
-      WebformMessage::resetClosed(WebformMessage::STORAGE_STATE, 'webform.help.release');
-      $this->state->set('webform.version', $version);
-    }
     $t_args = [
-      '@version' => $version,
-      ':href' => 'https://www.drupal.org/project/webform/releases/' . $version,
+      '@version' => $this->getVersion(),
+      ':href' => 'https://www.drupal.org/project/webform/releases/' . $this->getVersion(),
     ];
     $help['release'] = [
       'routes' => [
-        // @see /admin/structure/webform
-        'entity.webform.collection',
+        // @see /admin/modules
+        'system.modules_list',
+        // @see /admin/reports/updates
+        'update.status',
       ],
       'title' => $this->t('You have successfully updated...'),
       'content' => $this->t('You have successfully updated to the @version release of the Webform module. <a href=":href">Learn more</a>', $t_args),
@@ -1036,6 +1076,7 @@ SUGGESTIONS
       'message_storage' => WebformMessage::STORAGE_STATE,
       'access' => $this->currentUser->hasPermission('administer webform'),
       'uses' => FALSE,
+      'reset_version' => TRUE,
     ];
 
     // Introduction.
@@ -1052,6 +1093,41 @@ SUGGESTIONS
       'access' => $this->currentUser->hasPermission('administer webform'),
       'video_id' => 'introduction',
     ];
+
+    /****************************************************************************/
+    // Promotions.
+    // Disable promotions via Webform admin settings.
+    // (/admin/structure/webform/settings).
+    /****************************************************************************/
+
+    if (!$this->configFactory->get('webform.settings')->get('ui.promotions_disabled')) {
+      // Lingotek.
+      $help['promotion_lingotek'] = [
+        'routes' => [
+          // @see /admin/structure/webform
+          'entity.webform.collection',
+        ],
+        'title' => $this->t('Webform & Lingotek Translation Partnership'),
+        'content' => $this->t("Help <strong>support</strong> the Webform module and internationalize your website using the Lingotek-Inside Drupal Module for continuous translation. <em>Multilingual capability + global access = increased web traffic.</em>"),
+        'message_type' => 'promotion_lingotek',
+        'message_close' => TRUE,
+        'message_storage' => WebformMessage::STORAGE_STATE,
+        'attached' => ['library' => ['webform/webform.promotions']],
+        'access' => $this->currentUser->hasPermission('administer webform'),
+        'video_id' => 'promotion_lingotek',
+        'uses' => FALSE,
+        'reset_version' => TRUE,
+      ];
+
+      // Lingotek.
+      // Note: Creating seperate dismissible message for translation overview.
+      $help['promotion_lingotek_translation_overview'] = [
+        'routes' => [
+          // @see /admin/structure/webform/manage/{webform}/translate
+          'entity.webform.config_translation_overview',
+        ],
+      ] + $help['promotion_lingotek'];
+    }
 
     /****************************************************************************/
     // General.
@@ -1416,11 +1492,25 @@ SUGGESTIONS
       'video_id' => 'blocks',
     ];
 
+    /****************************************************************************/
+
+    // Initialize help.
     foreach ($help as $id => &$help_info) {
       $help_info += [
         'id' => $id,
         'uses' => TRUE,
+        'reset_version' => FALSE,
       ];
+    }
+
+    // Reset storage state if the Webform module version has changed.
+    if ($this->isUpdated()) {
+      foreach ($help as $id => $help_info) {
+        if (!empty($help_info['reset_version'])) {
+          WebformMessage::resetClosed(WebformMessage::STORAGE_STATE, 'webform.help.' . $id);
+        }
+      }
+      $this->state->set('webform.version', $this->getVersion());
     }
 
     return $help;

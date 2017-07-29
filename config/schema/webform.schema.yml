@@ -343,6 +343,9 @@ webform.settings:
         offcanvas_disabled:
           type: boolean
           label: 'Disable system tray'
+        promotions_disabled:
+          type: boolean
+          label: 'Disable promotions'
         details_save:
           type: boolean
           label: 'Save details open/close state'

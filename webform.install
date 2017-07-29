@@ -1021,3 +1021,11 @@ function webform_update_8069() {
     }
   }
 }
+
+/**
+ * Issue #2895809: Promote partnerships within the Webform module.
+ */
+function webform_update_8070() {
+  _webform_update_admin_settings();
+}
+

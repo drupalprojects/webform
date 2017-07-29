@@ -49,6 +49,19 @@ webform.admin.translation:
     theme:
       css/webform.admin.translation.css: {}
 
+# Admin.
+
+webform.addons:
+  version: VERSION
+  css:
+    theme:
+      css/webform.addons.css: {}
+  dependencies:
+    - webform/webform.ajax
+    - webform/webform.element.details.toggle
+    - webform/webform.element.details.save
+    - webform/webform.promotions
+
 # Ajax.
 
 webform.ajax:
@@ -146,6 +159,14 @@ webform.progress.tracker:
       css/webform.progress.tracker.css: {}
   dependencies:
     - webform/libraries.progress-tracker
+
+# Promotions.
+
+webform.promotions:
+  version: VERSION
+  css:
+    theme:
+      css/webform.promotions.css: {}
 
 # States.
 

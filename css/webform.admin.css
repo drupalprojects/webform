@@ -24,14 +24,6 @@
 }
 
 /**
- * Add light gray background to Add-on details widget.
- * @see /admin/structure/webform/addons
- */
-.webform-addons details {
-  background-color: #f8f8f8;
-}
-
-/**
  * Filter webform and submissions.
  * @see /admin/structure/webform
  * @see /admin/structure/webform/templates
