@@ -518,11 +518,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   }
 
   /**
-   * Track the state of a submission.
-   *
-   * @return int
-   *   Either STATE_UNSAVED, STATE_CONVERTED, STATE_DRAFT, STATE_COMPLETED, or STATE_UPDATED,
-   *   depending on the last save operation performed.
+   * {@inheritdoc}
    */
   public function getState() {
     if (!$this->id()) {
