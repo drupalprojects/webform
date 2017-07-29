@@ -55,7 +55,6 @@ abstract class ContainerBase extends WebformElementBase {
     }
   }
 
-
   /**
    * {@inheritdoc}
    */

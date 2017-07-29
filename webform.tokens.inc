@@ -411,7 +411,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           break;
 
         case 'values':
-          $replacements[$original] = _webform_token_get_submission_values($options, $webform_submission, $form_elements);
+          $replacements[$original] = _webform_token_get_submission_values($options, $webform_submission);
           break;
 
         /* Default values for the chained tokens handled below */
@@ -712,10 +712,11 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 }
 
-function _webform_token_get_submission_values(array $options, WebformSubmissionInterface $webform_submission, array $form_elements) {
+function _webform_token_get_submission_values(array $options, WebformSubmissionInterface $webform_submission) {
   $submission_format = (!empty($options['html'])) ? 'html' : 'text';
   /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
+  $form_elements = $webform_submission->getWebform()->getElementsInitialized();
   $token_value = $view_builder->buildElements($form_elements, $webform_submission, $options, $submission_format);
   // Note, tokens can't include CSS and JS libraries since they can be
   // included in an email.
