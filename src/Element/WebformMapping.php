@@ -124,6 +124,10 @@ class WebformMapping extends FormElement {
 
     $element['#element_validate'] = [[get_called_class(), 'validateWebformMapping']];
 
+    if (isset($element['#states'])) {
+      webform_process_states($element, '#wrapper_attributes');
+    }
+
     return $element;
   }
 

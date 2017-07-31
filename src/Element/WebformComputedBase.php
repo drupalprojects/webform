@@ -86,6 +86,11 @@ abstract class WebformComputedBase extends FormElement {
       // @see drupal_process_states;
       $element['#type'] = 'item';
     }
+
+    if (isset($element['#states'])) {
+      webform_process_states($element, '#wrapper_attributes');
+    }
+
     return $element;
   }
 

@@ -265,7 +265,7 @@ webform.element.codemirror.text:
     theme:
       css/webform.element.codemirror.css: {}
   js:
-    js/webform.element.codemirror.js: {}
+    js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.text
 
@@ -275,7 +275,7 @@ webform.element.codemirror.yaml:
     theme:
       css/webform.element.codemirror.css: {}
   js:
-    js/webform.element.codemirror.js: {}
+    js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.yaml
 
@@ -285,7 +285,7 @@ webform.element.codemirror.html:
     theme:
       css/webform.element.codemirror.css: {}
   js:
-    js/webform.element.codemirror.js: {}
+    js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.html
 
@@ -295,7 +295,7 @@ webform.element.codemirror.css:
     theme:
       css/webform.element.codemirror.css: {}
   js:
-    js/webform.element.codemirror.js: {}
+    js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.css
 
@@ -305,7 +305,7 @@ webform.element.codemirror.javascript:
     theme:
       css/webform.element.codemirror.css: {}
   js:
-    js/webform.element.codemirror.js: {}
+    js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.javascript
 
@@ -315,7 +315,7 @@ webform.element.codemirror.php:
     theme:
       css/webform.element.codemirror.css: {}
   js:
-    js/webform.element.codemirror.js: {}
+    js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.php
 
@@ -674,7 +674,7 @@ libraries.codemirror.text:
     theme:
       /libraries/codemirror/lib/codemirror.css: {}
   js:
-    /libraries/codemirror/lib/codemirror.js: {}
+    /libraries/codemirror/lib/codemirror.js: {weight: -1}
     /libraries/codemirror/addon/runmode/runmode.js: {}
 
 libraries.codemirror.yaml:
