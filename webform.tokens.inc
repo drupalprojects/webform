@@ -5,10 +5,11 @@
  * Builds placeholder replacement tokens for webforms and submissions.
  */
 
-use Drupal\Core\Render\Markup;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\Markup;
 use Drupal\user\Entity\User;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
@@ -241,7 +242,7 @@ function webform_token_info() {
   $tokens['webform'] = $webform;
 
   /****************************************************************************/
-  // Webform.
+  // Webform role.
   /****************************************************************************/
 
   $roles = \Drupal::config('webform.settings')->get('mail.roles');
@@ -266,6 +267,32 @@ function webform_token_info() {
 
     $tokens['webform_role'] = $webform_role;
   }
+
+  /****************************************************************************/
+  // Webform handler.
+  /****************************************************************************/
+
+  $types['webform_handler'] = [
+    'name' => t('Webform handler'),
+    'description' => t('Tokens related to the current webform handler.'),
+    'needs-data' => 'webform_handler',
+  ];
+
+  $webform_handler = [];
+  $webform_handler['id'] = [
+    'name' => t('Webform handler ID'),
+    'description' => Markup::create((string) t('Webform handler response tokens.') . '<br/>' .
+      t("Replace the 'id:?' with...") . '<br />' .
+      '<ul>' .
+      '<li>webform_handler_id:state:key</li>' .
+      '<li>webform_handler_id:state:key1:key2</li>' .
+      '</ul>' .
+      t("For example, to display a remote post's confirmation number you would use the [webform_handler:remote_post:completed:confirmation_number] token.")
+    ),
+    'dynamic' => TRUE,
+  ];
+
+  $tokens['webform_handler'] = $webform_handler;
 
   /****************************************************************************/
 
@@ -332,6 +359,22 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       }
     }
 
+  }
+  elseif ($type == 'webform_handler') {
+    if (isset($data['webform_handler'])) {
+      $webform_handler = $data['webform_handler'];
+      foreach ($tokens as $name => $original) {
+        $parents = explode(':', $name);
+        $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
+        $replacements[$original] = ($key_exists) ? $value : $original;
+      }
+    }
+    else {
+      // Preserve all [webform_handler] tokens.
+      foreach ($tokens as $name => $original) {
+        $replacements[$original] = $original;
+      }
+    }
   }
   elseif ($type == 'webform_submission' && !empty($data['webform_submission'])) {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */

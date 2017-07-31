@@ -227,7 +227,7 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
   /**
    * Track the state of a submission.
    *
-   * @return int
+   * @return string
    *   Either STATE_NEW, STATE_DRAFT, STATE_COMPLETED, STATE_UPDATED, or
    *   STATE_CONVERTED depending on the last save operation performed.
    */

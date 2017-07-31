@@ -1029,3 +1029,41 @@ function webform_update_8070() {
   _webform_update_admin_settings();
 }
 
+/**
+ * Issue #2898424: Improve Remote Post.
+ */
+function webform_update_8071() {
+  $settings_mapping = [
+    'insert_url' => 'completed_url',
+    'insert_custom_data' => 'completed_custom_data',
+    'update_url' => 'updated_url',
+    'update_custom_data' => 'updated_custom_data',
+    'delete_url' => 'deleted_url',
+    'delete_custom_data' => 'deleted_custom_data',
+  ];
+
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $has_remote_post = FALSE;
+    $handlers = $webform->getHandlers();
+    foreach ($handlers as $handler) {
+      if ($handler instanceof \Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler) {
+        $has_remote_post = TRUE;
+        $configuration = $handler->getConfiguration();
+        foreach ($configuration['settings'] as $key => $value) {
+          if (isset($settings_mapping[$key])) {
+            $configuration['settings'][$settings_mapping[$key]] = $value;
+            unset($configuration['settings'][$key]);
+          }
+        }
+        $configuration['settings'] += $handler->defaultConfiguration();
+        $handler->setConfiguration($configuration);
+      }
+    }
+    if ($has_remote_post) {
+      $webform->save();
+    }
+  }
+
+}

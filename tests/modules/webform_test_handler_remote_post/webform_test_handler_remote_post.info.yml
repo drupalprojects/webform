@@ -1,0 +1,7 @@
+name: 'Webform module remote post tests'
+type: module
+description: 'Support module for Webform module remote post testing.'
+package: Testing
+core: 8.x
+dependencies:
+  - 'drupal:webform'

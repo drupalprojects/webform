@@ -898,15 +898,6 @@ webform.handler.remote_post:
     type:
       label: 'Type'
       type: string
-    insert_url:
-      label: 'Insert URL'
-      type: uri
-    update_url:
-      label: 'Update URL'
-      type: uri
-    delete_url:
-      label: 'Delete URL'
-      type: uri
     excluded_data:
       type: sequence
       label: 'Excluded data'
@@ -916,18 +907,42 @@ webform.handler.remote_post:
     custom_data:
       label: 'Custom data'
       type: string
-    insert_custom_data:
-      label: 'Insert custom data'
-      type: string
-    update_custom_data:
-      label: 'Update custom data'
-      type: string
-    delete_custom_data:
-      label: 'Delete custom data'
+    custom_options:
+      label: 'Custom options'
       type: string
     debug:
       type: boolean
       label: 'Enable debugging'
+    completed_url:
+      label: 'Completed URL'
+      type: uri
+    completed_custom_data:
+      label: 'Completed custom data'
+      type: string
+    updated_url:
+      label: 'Updated URL'
+      type: uri
+    updated_custom_data:
+      label: 'Updated custom data'
+      type: string
+    deleted_url:
+      label: 'Deleted URL'
+      type: uri
+    deleted_custom_data:
+      label: 'Deleted custom data'
+      type: string
+    draft_url:
+      label: 'Draft URL'
+      type: uri
+    draft_custom_data:
+      label: 'Draft custom data'
+      type: string
+    converted_url:
+      label: 'Converted URL'
+      type: uri
+    converted_custom_data:
+      label: 'Converted custom data'
+      type: string
 
 webform.exporter.*:
   type: mapping
