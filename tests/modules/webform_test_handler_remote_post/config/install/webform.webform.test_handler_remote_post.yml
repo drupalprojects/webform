@@ -34,7 +34,7 @@ elements: |
   confirmation_number:
     '#title': 'Confirmation number'
     '#type': value
-    '#value': '[webform_handler:remote_post:completed:confirmation_number]'
+    '#value': '[webform:handler:remote_post:completed:confirmation_number]'
 css: ''
 javascript: ''
 settings:
@@ -85,7 +85,7 @@ settings:
   confirmation_type: inline
   confirmation_title: ''
   confirmation_message: |
-    <p>Your confirmation number is [webform-submission:values:confirmation_number].</p>
+    <p>Your confirmation number is [webform_submission:values:confirmation_number].</p>
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true

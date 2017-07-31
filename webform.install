@@ -930,7 +930,7 @@ function webform_update_8064() {
 }
 
 /**
- * Issue #2888717: Option to include empty components in [webform-submission:values] token.
+ * Issue #2888717: Option to include empty components in [webform_submission:values] token.
  */
 function webform_update_8065() {
   _webform_update_webform_settings();

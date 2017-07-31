@@ -48,7 +48,7 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->assertRaw('Processed completed request.');
 
     // Check confirmation number is set via the
-    // [webform_handler:remote_post:completed:confirmation_number] token.
+    // [webform:handler:remote_post:completed:confirmation_number] token.
     $this->assertRaw('Your confirmation number is ' . $webform_submission->getData('confirmation_number') . '.');
 
     // Check custom header.

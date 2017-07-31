@@ -402,7 +402,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * Save webform submission data to the 'webform_submission_data' table.
    *
    * This method is public the allow webform handler (ie remote posts) to
-   * update [webform_handler] tokens stored in the submission data.
+   * update [webform:handler] tokens stored in the submission data.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.

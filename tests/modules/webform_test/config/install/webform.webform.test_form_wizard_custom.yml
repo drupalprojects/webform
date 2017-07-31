@@ -14,7 +14,7 @@ description: 'Test a multiple step ''wizard'' webform with custom hide/show page
 category: 'Test: Webform'
 elements: |
   '#attributes':
-    data-current-page: '[webform-submission:current-page]'
+    data-current-page: '[webform_submission:current-page]'
   wizard_1:
     '#type': webform_wizard_page
     '#title': 'Wizard page #1'

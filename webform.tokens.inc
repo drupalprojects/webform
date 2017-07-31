@@ -238,6 +238,18 @@ function webform_token_info() {
     'description' => t('The date the webform is closed to new submissions.'),
     'type' => 'date',
   ];
+  $webform['handler'] = [
+    'name' => t('Handler response'),
+    'description' => Markup::create((string) t('Webform handler response tokens.') . '<br/>' .
+      t("Replace the '?' with...") . '<br />' .
+      '<ul>' .
+      '<li>handler_id:state:key</li>' .
+      '<li>handler_id:state:key1:key2</li>' .
+      '</ul>' .
+      t("For example, to display a remote post's confirmation number you would use the [webform:handler:remote_post:completed:confirmation_number] token.")
+    ),
+    'dynamic' => TRUE,
+  ];
 
   $tokens['webform'] = $webform;
 
@@ -267,32 +279,6 @@ function webform_token_info() {
 
     $tokens['webform_role'] = $webform_role;
   }
-
-  /****************************************************************************/
-  // Webform handler.
-  /****************************************************************************/
-
-  $types['webform_handler'] = [
-    'name' => t('Webform handler'),
-    'description' => t('Tokens related to the current webform handler.'),
-    'needs-data' => 'webform_handler',
-  ];
-
-  $webform_handler = [];
-  $webform_handler['id'] = [
-    'name' => t('Webform handler ID'),
-    'description' => Markup::create((string) t('Webform handler response tokens.') . '<br/>' .
-      t("Replace the 'id:?' with...") . '<br />' .
-      '<ul>' .
-      '<li>webform_handler_id:state:key</li>' .
-      '<li>webform_handler_id:state:key1:key2</li>' .
-      '</ul>' .
-      t("For example, to display a remote post's confirmation number you would use the [webform_handler:remote_post:completed:confirmation_number] token.")
-    ),
-    'dynamic' => TRUE,
-  ];
-
-  $tokens['webform_handler'] = $webform_handler;
 
   /****************************************************************************/
 
@@ -359,22 +345,6 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       }
     }
 
-  }
-  elseif ($type == 'webform_handler') {
-    if (isset($data['webform_handler'])) {
-      $webform_handler = $data['webform_handler'];
-      foreach ($tokens as $name => $original) {
-        $parents = explode(':', $name);
-        $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
-        $replacements[$original] = ($key_exists) ? $value : $original;
-      }
-    }
-    else {
-      // Preserve all [webform_handler] tokens.
-      foreach ($tokens as $name => $original) {
-        $replacements[$original] = $original;
-      }
-    }
   }
   elseif ($type == 'webform_submission' && !empty($data['webform_submission'])) {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
@@ -607,6 +577,15 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
 
     /* Dynamic tokens. */
+
+    if (($handler_tokens = $token_service->findWithPrefix($tokens, 'handler'))) {
+      foreach ($handler_tokens as $key => $original) {
+        $webform_handler = isset($data['webform_handler']) ? $data['webform_handler'] : [];
+        $parents = explode(':', $key);
+        $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
+        $replacements[$original] = ($key_exists) ? $value : $original;
+      }
+    }
 
     if (($url_tokens = $token_service->findWithPrefix($tokens, 'url'))) {
       foreach ($url_tokens as $key => $original) {

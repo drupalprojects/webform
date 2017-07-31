@@ -186,7 +186,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       ];
       if ($state === WebformSubmissionInterface::STATE_COMPLETED) {
         $form[$state]['token'] = [
-          '#markup' => $this->t('Response data can be passed to submission data using [webform_handler:{machine_name}:{state}:{key}] tokens. (ie [webform_handler:remote_post:completed:confirmation_number])'),
+          '#markup' => $this->t('Response data can be passed to submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (ie [webform:handler:remote_post:completed:confirmation_number])'),
           '#prefix' => '<div>',
           '#suffix' => '</div>',
         ];
@@ -349,10 +349,10 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     // If debugging is enabled, display the request and response.
     $this->debug(t('Remote post successful!'), $state, $request_url, $request_type, $request_options, $response, 'warning');
 
-    // Replace [webform_handler] tokens in submission data.
-    // Data structured for [webform_handler:remote_post:completed:key] tokens.
+    // Replace [webform:handler] tokens in submission data.
+    // Data structured for [webform:handler:remote_post:completed:key] tokens.
     $submission_data = $webform_submission->getData();
-    $has_token = (strpos(print_r($submission_data, TRUE), '[webform_handler:' . $this->getHandlerId() . ':') !== FALSE) ? TRUE : FALSE;
+    $has_token = (strpos(print_r($submission_data, TRUE), '[webform:handler:' . $this->getHandlerId() . ':') !== FALSE) ? TRUE : FALSE;
     if ($has_token) {
       $response_data = $this->getResponseData($response);
       $token_data = ['webform_handler' => [$this->getHandlerId() => [$state => $response_data]]];
@@ -419,7 +419,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    *
    */
   protected function authenticate(array $options) {
-    // Here you can set a custom authentication token to the remote post.
+    // Here you can set a custom authentication token to the remote post options.
     return $options;
   }
 
@@ -530,6 +530,21 @@ class RemotePostWebformHandler extends WebformHandlerBase {
           '#suffix' => '</pre>',
         ],
       ];
+      $response_data = $this->getResponseData($response);
+      if ($tokens = $this->getResponseTokens($response_data, ['webform', 'handler', $this->getHandlerId(), $state])) {
+        asort($tokens);
+        $build['response_tokens'] = [
+          '#type' => 'item',
+          '#wrapper_attributes' => ['style' => 'margin: 0'],
+          '#title' => $this->t('Response tokens:'),
+          'description' => ['#markup' => $this->t('Below tokens can ONLY be used to insert response data into value and hidden elements.')],
+          'data' => [
+            '#markup' => implode(PHP_EOL, $tokens),
+            '#prefix' => '<pre>',
+            '#suffix' => '</pre>',
+          ],
+        ];
+      }
     }
     else {
       $build['response_code'] = [
@@ -549,6 +564,30 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     ];
 
     drupal_set_message(\Drupal::service('renderer')->renderPlain($build), $type);
+  }
+
+  /**
+   * Get webform handler tokens from response data.
+   *
+   * @param mixed $data
+   *   Response data.
+   * @param array $parents
+   *   Webform handler token parents.
+   *
+   * @return array
+   *   A list of webform handler tokens.
+   */
+  protected function getResponseTokens($data, array $parents = []) {
+    $tokens = [];
+    if (is_array($data)) {
+      foreach ($data as $key => $value) {
+        $tokens = array_merge($tokens, $this->getResponseTokens($value, array_merge($parents, [$key])));
+      }
+    }
+    else {
+      $tokens[] = '[' . implode(':', $parents) . ']';
+    }
+    return $tokens;
   }
 
   /**

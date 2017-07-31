@@ -15,7 +15,7 @@ category: 'Test: Webform'
 elements: |
   '#attributes':
     novalidate: novalidate
-    data-current-page: '[webform-submission:current-page]'
+    data-current-page: '[webform_submission:current-page]'
   information:
     '#title': 'Your Information'
     '#type': webform_wizard_page
