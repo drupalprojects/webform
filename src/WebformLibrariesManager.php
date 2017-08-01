@@ -75,7 +75,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function requirements($cli = FALSE) {
-    $cdn = $this->configFactory->get('webform.settings')->get('libraries.cdn', FALSE);
+    $cdn = $this->configFactory->get('webform.settings')->get('libraries.cdn') ?: FALSE;
 
     $status = [];
     $libraries = $this->getLibraries();

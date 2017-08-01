@@ -60,14 +60,12 @@ class WebformExampleElement extends WebformElementBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
-
     // Here you can define and alter a webform element's properties UI.
     // Form element property visibility and default values are defined via
     // ::getDefaultProperties.
     //
     // @see \Drupal\webform\Plugin\WebformElementBase::form
     // @see \Drupal\webform\Plugin\WebformElement\TextBase::form
-
     return $form;
   }
 

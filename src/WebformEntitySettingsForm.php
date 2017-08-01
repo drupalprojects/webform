@@ -380,8 +380,7 @@ class WebformEntitySettingsForm extends EntityForm {
       'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
     ];
     $entity_type_options = [];
-    $entity_type_manager = \Drupal::entityTypeManager();
-    foreach ($entity_type_manager->getDefinitions() as $entity_type_id => $entity_type) {
+    foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       $entity_type_options[$entity_type_id] = $entity_type->getLabel();
     }
     $form['form_behaviors']['form_prepopulate_source_entity_type'] = [
@@ -512,12 +511,12 @@ class WebformEntitySettingsForm extends EntityForm {
       '#webform_id' => $this->getEntity()->id(),
       '#default_value' => $settings['preview_excluded_elements'],
     ];
-    $form['preview_settings']['preview_container']['elements']['preview_exclude_empty'] = array(
+    $form['preview_settings']['preview_container']['elements']['preview_exclude_empty'] = [
       '#type' => 'checkbox',
-      '#title' => t('Exclude empty elements'),
+      '#title' => $this->t('Exclude empty elements'),
       '#return_value' => TRUE,
       '#default_value' => $settings['preview_exclude_empty'],
-    );
+    ];
 
     // Draft settings.
     $form['draft_settings'] = [

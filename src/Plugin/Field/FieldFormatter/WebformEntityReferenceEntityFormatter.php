@@ -74,7 +74,7 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
       }
 
       if ($is_paragraph_edit_preview) {
-        // Webform can not be nested withing node edit form because the nested
+        // Webform can not be nested within node edit form because the nested
         // <form> tags will cause unexpected validation issues.
         $elements[$delta] = [
           '#type' => 'webform_message',

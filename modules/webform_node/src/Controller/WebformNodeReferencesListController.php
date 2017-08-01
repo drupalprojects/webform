@@ -126,7 +126,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
     $field_configs = $this->fieldConfigStorage->loadByProperties(['entity_type' => 'node']);
     foreach ($field_configs as $field_config) {
       if ($field_config->get('field_type') === 'webform') {
-        $bundle =  $field_config->get('bundle');
+        $bundle = $field_config->get('bundle');
         $this->nodeTypes[$bundle] = $node_types[$bundle];
 
         $field_name = $field_config->get('field_name');
@@ -159,7 +159,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
     // Add field names.
     $or = $query->orConditionGroup();
     foreach ($this->fieldNames as $field_name) {
-      $or->condition($field_name .'.target_id', $this->webform->id());
+      $or->condition($field_name . '.target_id', $this->webform->id());
     }
     $query->condition($or);
 
@@ -234,7 +234,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
       '#type' => 'operations',
       '#links' => $this->getDefaultOperations($entity, 'results'),
     ];
-    $row['operations']['data'] = $this->buildOperations($entity, 'edit');
+    $row['operations']['data'] = $this->buildOperations($entity);
     return $row + parent::buildRow($entity);
   }
 
@@ -340,7 +340,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
           '#link' => [
             'title' => $this->t('Add @title', ['@title' => $node_type->label()]),
             'url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['webform' => $this->webform->id()]]),
-          ]
+          ],
         ];
       }
     }

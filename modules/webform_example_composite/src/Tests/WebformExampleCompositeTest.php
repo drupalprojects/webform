@@ -2,7 +2,6 @@
 
 namespace Drupal\webform_example_composite\Tests;
 
-use Drupal\Component\Utility\Html;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;

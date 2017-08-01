@@ -1120,7 +1120,7 @@ SUGGESTIONS
       ];
 
       // Lingotek.
-      // Note: Creating seperate dismissible message for translation overview.
+      // Note: Creating separate dismissible message for translation overview.
       $help['promotion_lingotek_translation_overview'] = [
         'routes' => [
           // @see /admin/structure/webform/manage/{webform}/translate

@@ -160,7 +160,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
         ],
         'video' => [
           '#type' => 'link',
-          '#title' => t('Watch video'),
+          '#title' => $this->t('Watch video'),
           '#url' => Url::fromRoute('webform.help.video', ['id' => 'promotion-lingotek']),
           '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, ['button', 'button-action', 'button-webform-play']),
         ],

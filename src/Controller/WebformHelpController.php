@@ -6,7 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\webform\WebformHelpManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -52,7 +51,7 @@ class WebformHelpController extends ControllerBase implements ContainerInjection
   public function about(Request $request) {
     $build = $this->helpManager->buildAbout();
     unset($build['title']);
-    $build +=[
+    $build += [
       '#prefix' => '<div class="webform-help">',
       '#suffix' => '</div>',
     ];

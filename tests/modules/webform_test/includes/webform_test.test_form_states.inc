@@ -6,7 +6,6 @@
  */
 
 use Drupal\webform\Entity\Webform;
-use Drupal\Core\Serialization\Yaml;
 
 /**
  * Generate test elements with #states.

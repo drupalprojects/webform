@@ -444,13 +444,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration['ignore_access'],
       '#parents' => ['settings', 'ignore_access'],
     ];
-    $form['elements']['exclude_empty'] = array(
+    $form['elements']['exclude_empty'] = [
       '#type' => 'checkbox',
       '#title' => t('Exclude empty elements'),
       '#return_value' => TRUE,
       '#default_value' => $this->configuration['exclude_empty'],
       '#parents' => ['settings', 'exclude_empty'],
-    );
+    ];
 
     $elements = $this->webform->getElementsInitializedFlattenedAndHasValue();
     foreach ($elements as $key => $element) {

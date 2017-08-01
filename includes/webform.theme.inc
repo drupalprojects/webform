@@ -670,7 +670,7 @@ function template_preprocess_webform_container_base_text(array &$variables) {
  * @param bool $strip_tags
  *   Remove HTML tags from title.
  */
-function _template_progress_webform_set_title(&$variables, $strip_tags = FALSE) {
+function _template_progress_webform_set_title(array &$variables, $strip_tags = FALSE) {
   $element = $variables['element'];
 
   // Set title.

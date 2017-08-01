@@ -837,7 +837,7 @@ function webform_process_states(array &$elements, $key = '#attributes') {
  *
  * @param array $variables
  *   An array of variables passed to the theme hook.
- * @param $hook
+ * @param string $hook
  *   The base hook name.
  *
  * @return array
@@ -874,7 +874,6 @@ function _webform_theme_suggestions(array $variables, $hook) {
 
   return $suggestions;
 }
-
 
 /**
  * Helper function used to generate hook_theme_suggestions_HOOK().
@@ -943,7 +942,6 @@ function webform_theme_suggestions_webform_preview(array $variables) {
 function webform_theme_suggestions_webform_submission_navigation(array $variables) {
   return _webform_theme_suggestions($variables, 'webform_submission_navigation');
 }
-
 
 /**
  * Implements hook_theme_suggestions_HOOK().

@@ -606,7 +606,6 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     if (($close_tokens = $token_service->findWithPrefix($tokens, 'close')) && ($close_time = $webform->get('close'))) {
       $replacements += $token_service->generate('date', $close_tokens, ['date' => strtotime($close_time)], $options, $bubbleable_metadata);
     }
-
   }
 
   return $replacements;
@@ -623,15 +622,13 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   // [values:{element_key}:{format}:{items}:html]
   // [values:{element_key}:{delta}:{format}]
   // [values:{element_key}:{delta}:{sub-element}]
-
   $keys = explode(':', $value_token);
-
   $element_key = array_shift($keys);
 
   // Build HTML values.
   if ($element_key == 'html' && empty($keys)) {
     $options['html'] = TRUE;
-    return _webform_token_get_submission_values($options, $webform_submission, $form_elements);
+    return _webform_token_get_submission_values($options, $webform_submission);
   }
 
   // Exit is submission value or form element does not exit.

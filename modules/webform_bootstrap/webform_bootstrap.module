@@ -142,4 +142,3 @@ function _webform_bootstrap_convert_button_classes(array &$classes) {
     }
   }
 }
-

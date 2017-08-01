@@ -10,6 +10,8 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -56,6 +58,20 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
+
+  /**
+   * The path alias manager.
+   *
+   * @var \Drupal\Core\Path\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
+   * The path validator.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
 
   /**
    * The webform element (plugin) manager.
@@ -127,6 +143,10 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The entity manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
+   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   *   The path alias manager.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   The path validator.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
@@ -138,10 +158,12 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    */
-  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
+  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
     parent::__construct($entity_manager);
     $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
+    $this->aliasManager = $alias_manager;
+    $this->pathValidator = $path_validator;
     $this->elementManager = $element_manager;
     $this->storage = $this->entityManager->getStorage('webform_submission');
     $this->thirdPartySettingsManager = $third_party_settings_manager;
@@ -156,6 +178,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     return new static(
       $container->get('entity.manager'),
       $container->get('renderer'),
+      $container->get('path.alias_manager'),
+      $container->get('path.validator'),
       $container->get('webform.request'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.third_party_settings_manager'),
@@ -1412,13 +1436,9 @@ class WebformSubmissionForm extends ContentEntityForm {
         // Remove base path from root-relative URL.
         // Only applies for Drupa; sites within a sub directory.
         $confirmation_url = preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', $confirmation_url);
-
         // Get system path.
-        /** @var \Drupal\Core\Path\AliasManagerInterface $path_alias_manager */
-        $path_alias_manager = \Drupal::service('path.alias_manager');
-        $confirmation_url = $path_alias_manager->getPathByAlias($confirmation_url);
-
-        if ($redirect_url = \Drupal::pathValidator()->getUrlIfValid($confirmation_url)) {
+        $confirmation_url = $this->aliasManager->getPathByAlias($confirmation_url);
+        if ($redirect_url = $this->pathValidator->getUrlIfValid($confirmation_url)) {
           if ($confirmation_type == WebformInterface::CONFIRMATION_URL_MESSAGE) {
             $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
           }

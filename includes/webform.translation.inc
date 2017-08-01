@@ -201,7 +201,6 @@ function webform_lingotek_config_entity_translation_presave(ConfigEntityInterfac
 
 /**
  * Implements hook_form_FORM_ID_alter().
- *
  */
 function webform_form_lingotek_config_management_alter(&$form, FormStateInterface $form_state, $form_id) {
   $entity_type = $form['filters']['wrapper']['bundle']['#default_value'];

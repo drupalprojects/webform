@@ -165,7 +165,7 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
     $webform_submission = WebformSubmission::load($sid);
     $this->assertEqual($webform_submission->getOwnerId(), 0);
 
-    // Check loaded draft message does NOT appear on confidental submissions.
+    // Check loaded draft message does NOT appear on confidential submissions.
     $this->drupalGet('webform/test_form_draft_anonymous');
     $this->assertRaw('You have an existing draft');
 

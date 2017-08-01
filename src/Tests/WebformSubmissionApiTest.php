@@ -76,7 +76,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
     $values = [
       'webform_id' => 'contact',
       'in_draft' => TRUE,
-      'data' => []
+      'data' => [],
     ];
     $errors = WebformSubmissionForm::validateValues($values);
     if ($errors) {
@@ -105,17 +105,17 @@ class WebformSubmissionApiTest extends WebformTestBase {
     $test_form_wizard_advanced_webform = Webform::load('test_form_wizard_advanced');
 
     // Check submitting a multistep form with required fields.
-    $values = array(
+    $values = [
       'webform_id' => 'test_form_wizard_advanced',
-      'data' => array(
+      'data' => [
         'first_name' => 'Ringo',
         'last_name' => 'Starr',
         'gender' => 'Male',
         'email' => 'example@example.com',
         'phone' => '123-456-7890',
         'comments' => 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;',
-      ),
-    );
+      ],
+    ];
     $webform_submission = WebformSubmissionForm::submitValues($values);
     $this->assertEqual($webform_submission->id(), $this->getLastSubmissionId($test_form_wizard_advanced_webform));
 
@@ -134,17 +134,17 @@ class WebformSubmissionApiTest extends WebformTestBase {
     ]);
 
     // Check validating a multistep form with invalid #options.
-    $values = array(
+    $values = [
       'webform_id' => 'test_form_wizard_advanced',
-      'data' => array(
+      'data' => [
         'first_name' => 'Ringo',
         'last_name' => 'Starr',
         'gender' => 'INVALID',
         'email' => 'example@example.com',
         'phone' => '123-456-7890',
         'comments' => 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;',
-      ),
-    );
+      ],
+    ];
     $errors = WebformSubmissionForm::validateValues($values);
     WebformElementHelper::convertRenderMarkupToStrings($errors);
     // $this->debug($errors);
@@ -171,7 +171,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
       ],
     ];
     $webform_submission = WebformSubmissionForm::submitValues($values);
-    $this->assertEqual($webform_submission->id(), $this->getLastSubmissionId($test_form_limit_webform ));
+    $this->assertEqual($webform_submission->id(), $this->getLastSubmissionId($test_form_limit_webform));
 
     // Check that user limit is reached.
     $result = WebformSubmissionForm::isOpen($test_form_limit_webform);

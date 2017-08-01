@@ -510,6 +510,12 @@ function drush_webform_libraries_make() {
   drush_print(_drush_webform_libraries_make());
 }
 
+/**
+ * Generate drush make as YAML.
+ *
+ * @return string
+ *   Drush make as YAML
+ */
 function _drush_webform_libraries_make() {
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
@@ -589,7 +595,7 @@ function drush_webform_libraries_composer() {
           'type' => $dist_type,
         ],
         'require' => [
-          'composer/installers' => '~1.0'
+          'composer/installers' => '~1.0',
         ],
       ],
     ];
@@ -599,12 +605,9 @@ function drush_webform_libraries_composer() {
   ksort($repositories);
   ksort($require);
   $data['repositories'] = $repositories;
-  $data['require'] = $require;
-
   // Drupal.org test bot is throwing...
   // Your requirements could not be resolved to an installable set of packages.
-  // @todo Try to be require all libraries so that they can be installed via composer.
-  // $data['require'];
+  $data['require'] = $require;
 
   drush_print(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }

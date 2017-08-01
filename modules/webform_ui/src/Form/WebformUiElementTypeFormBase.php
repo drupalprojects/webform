@@ -157,7 +157,6 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     $form_state->setRebuild();
   }
 
-
   /**
    * Submit form #ajax callback.
    *
@@ -213,10 +212,10 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
    * @param array $plugin_definition
    *   Webform element plugin definition.
    * @param \Drupal\webform\Plugin\WebformElementInterface $webform_element
-   *   Webform element plugin
+   *   Webform element plugin.
    * @param \Drupal\Core\Url $url
-   *   A URL
-   * @param $label
+   *   A URL.
+   * @param string $label
    *   Operation label.
    *
    * @return array
@@ -234,12 +233,12 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       '#prefix' => '<div class="webform-form-filter-text-source">',
       '#suffix' => '</div>',
     ];
-    
+
     // Preview.
     if ($this->isPreviewEnabled()) {
       $row['preview'] = $this->buildElementPreview($webform_element);
     }
-    
+
     // Operation
     $row['operation'] = [
       '#type' => 'link',
@@ -327,8 +326,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       case 'table':
         $element = $this->buildElementPreviewPlaceholder(
           $this->t('Displays a custom table. (ex @table).', ['@table' => '<table>']) .
-          '<br/>' .
-          '<em>' . $this->t('Requires understanding <a href=":href">how to build tables using render arrays</a>.', [':href' => $webform_element->getPluginApiUrl()->toString()]) . '</em>'
+          '<br/><em>' . $this->t('Requires understanding <a href=":href">how to build tables using render arrays</a>.', [':href' => $webform_element->getPluginApiUrl()->toString()]) . '</em>'
         );
         break;
 

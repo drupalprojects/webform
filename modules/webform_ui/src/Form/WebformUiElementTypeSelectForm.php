@@ -4,7 +4,6 @@ namespace Drupal\webform_ui\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\WebformInterface;
 
 /**

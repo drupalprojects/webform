@@ -441,7 +441,7 @@ abstract class WebformTestBase extends WebTestBase {
    *   Submission values.
    * @param string $submit
    *   Value of the submit button whose click is to be emulated.
-   * @param $options
+   * @param array $options
    *   Options to be forwarded to the url generator.
    *
    * @return int

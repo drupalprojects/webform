@@ -361,7 +361,6 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     $form_state->setRedirectUrl($this->webform->toUrl('edit-form', ['query' => ['update' => $this->key]]));
   }
 
-
   /**
    * Determines if the webform element key already exists.
    *

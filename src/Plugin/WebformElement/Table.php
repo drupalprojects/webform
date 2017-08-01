@@ -4,7 +4,6 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\WebformInterface;
 use Drupal\Component\Utility\Unicode;
@@ -116,7 +115,7 @@ class Table extends WebformElementBase {
           continue;
         }
 
-        // Get column element plugin and get formated HTML value.
+        // Get column element plugin and get formatted HTML value.
         $column_element_plugin = $this->elementManager->getElementInstance($column_element);
         $column_value = $column_element_plugin->format('html', $column_element, $webform_submission, $options);
 

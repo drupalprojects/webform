@@ -52,7 +52,7 @@ class WebformExampleElement extends FormElement {
    * Processes a 'webform_example_element' element.
    */
   public static function processWebformElementExample(&$element, FormStateInterface $form_state, &$complete_form) {
-    // Here you can add and manipulate your element's properties and callbacks..
+    // Here you can add and manipulate your element's properties and callbacks.
     return $element;
   }
 
