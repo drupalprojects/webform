@@ -27,6 +27,11 @@ details details details {
   background: #fff;
 }
 
+/* CodeMirror viewer */
+pre.webform-codemirror-runmode {
+  padding: .5em 1.5em;
+}
+
 /* Hide tabs and elements from printing. */
 @media print {
   body {

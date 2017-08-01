@@ -286,6 +286,58 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
 }
 
 /**
+ * Prepares variables for webform submission template.
+ *
+ * Default template: webform-submission.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - webform_submission: A webform submission.
+ */
+function template_preprocess_webform_submission(array &$variables) {
+  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+  $webform_submission = $variables['webform_submission'];
+  /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
+  $source_entity = $variables['source_entity'];
+  $type = $variables['type'];
+
+  // Make sure $type is supported, else use the HTML template and
+  // display submission information because the submission is most likely
+  // being rendered without context.
+  if (in_array($type, ['html', 'table', 'text', 'yaml'])) {
+    $submission_template = 'webform_submission_' . $type;
+  }
+  else {
+    $submission_template = 'webform_submission_html';
+  }
+
+  // Information.
+  $variables['information'] = [
+    '#theme' => 'webform_submission_information',
+    '#webform_submission' => $webform_submission,
+    '#source_entity' => $source_entity,
+  ];
+
+  // Submission.
+  $variables['data'] = [
+    '#theme' => $submission_template,
+    '#webform_submission' => $webform_submission,
+    '#source_entity' => $source_entity,
+  ];
+
+  // Wrap plain text and YAML in CodeMirror view widget.
+  if (in_array($type, ['text', 'yaml'])) {
+    $variables['data'] = [
+      '#theme' => 'webform_codemirror',
+      '#code' => $variables['data'],
+      '#type' => $type,
+    ];
+  }
+
+  $variables['#attached']['library'][] = 'webform/webform.admin';
+}
+
+/**
  * Prepares variables for webform submission information template.
  *
  * Default template: webform-submission-information.html.twig.
@@ -372,7 +424,7 @@ function template_preprocess_webform_submission_html(array &$variables) {
     'excluded_elements' => $variables['excluded_elements'],
     'exclude_empty' => $variables['exclude_empty'],
   ];
-  $variables['data'] = $view_builder->buildElements($elements, $webform_submission, $options);
+  $variables['html'] = $view_builder->buildElements($elements, $webform_submission, $options);
 }
 
 /**
@@ -413,30 +465,6 @@ function template_preprocess_webform_submission_text(array &$variables) {
   /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $variables['webform_submission'];
 
-  $variables['sid'] = $webform_submission->id();
-  $variables['uuid'] = $webform_submission->uuid();
-  $variables['is_draft'] = $webform_submission->isDraft() ? t('Yes') : t('No');
-  $variables['current_page'] = $webform_submission->getCurrentPage();
-  $variables['remote_addr'] = $webform_submission->getRemoteAddr();
-  $variables['submitted_by'] = $webform_submission->getOwner()->label();
-  $variables['webform'] = $webform_submission->getWebform()->label();
-  $variables['created'] = WebformDateHelper::format($webform_submission->getCreatedTime());
-  $variables['completed'] = WebformDateHelper::format($webform_submission->getCompletedTime());
-  $variables['changed'] = WebformDateHelper::format($webform_submission->getChangedTime());
-
-  // @see \Drupal\Core\Field\Plugin\Field\FieldFormatter\LanguageFormatter::viewValue()
-  $languages = \Drupal::languageManager()->getNativeLanguages();
-  $langcode = $webform_submission->get('langcode')->value;
-  $variables['language'] = isset($languages[$langcode]) ? $languages[$langcode]->getName() : $langcode;
-
-  if ($source_url = $webform_submission->getSourceUrl()) {
-    $variables['uri'] = $source_url->toString();
-  }
-
-  if ($source_entity = $webform_submission->getSourceEntity()) {
-    $variables['submitted_to'] = $source_entity->label();
-  }
-
   /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
 
@@ -446,7 +474,7 @@ function template_preprocess_webform_submission_text(array &$variables) {
     'excluded_elements' => $variables['excluded_elements'],
     'exclude_empty' => $variables['exclude_empty'],
   ];
-  $variables['data'] = $view_builder->buildElements($elements, $webform_submission, $options, 'text');
+  $variables['text'] = $view_builder->buildElements($elements, $webform_submission, $options, 'text');
 }
 
 /**
