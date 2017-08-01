@@ -389,7 +389,7 @@ webform.element.file.button:
 webform.element.flexbox:
   version: VERSION
   css:
-    layoutt:
+    layout:
       css/webform.element.flexbox.css: {}
 
 webform.element.image_file:
