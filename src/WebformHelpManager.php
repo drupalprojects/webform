@@ -1203,7 +1203,7 @@ SUGGESTIONS
       'title' => $this->t('Defining options'),
       'url' => Url::fromRoute('entity.webform_options.collection'),
       'content' => $this->t('The Options page lists predefined options which are used to build select menus, radio buttons, checkboxes and likerts.') . ' ' .
-      $this->t('To find and download additional options, go to <a href=":href">Webform 8.x-5.x: Options</a>.', [':href' => 'https://www.drupal.org/node/2845530']),
+      $this->t('To find and download additional options, go to <a href=":href">Webform 8.x-5.x: Cookbook</a>.', [':href' => 'https://www.drupal.org/docs/8/modules/webform/webform-cookbook']),
     ];
 
     // Elements.
