@@ -186,7 +186,12 @@ class WebformHtmlEditor extends FormElement {
     $allowed_tags = \Drupal::config('webform.settings')->get('element.allowed_tags');
     switch ($allowed_tags) {
       case 'admin':
-        return Xss::getAdminTagList();
+        $allowed_tags = Xss::getAdminTagList();
+        // <label>, <fieldset>, <legend> is missing from allowed tags.
+        $allowed_tags[] = 'label';
+        $allowed_tags[] = 'fieldset';
+        $allowed_tags[] = 'legend';
+        return $allowed_tags;
         break;
 
       case 'html':

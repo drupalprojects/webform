@@ -70,6 +70,20 @@ class WebformActions extends ContainerBase {
   /**
    * {@inheritdoc}
    */
+  public function getItemDefaultFormat() {
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getItemFormats() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
     // Containers should never have values and therefore should never have
     // a test value.

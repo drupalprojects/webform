@@ -533,11 +533,12 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *
    * @param string $key
    *   The element's key.
-   *
+   * @param bool $include_children
+   *   Include initialized children.
    * @return array|null
    *   An associative array containing an initialized element.
    */
-  public function getElement($key);
+  public function getElement($key, $include_children = FALSE);
 
   /**
    * Get a webform's raw (uninitialized) element.

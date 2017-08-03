@@ -884,9 +884,9 @@ elements: |
       '#options_display': side_by_side
       '#vocabulary': tags
       '#default_value':
-        - Loremipsum
-        - Oratione
-        - Dixisset
+        - 49
+        - 33
+        - 21
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -898,7 +898,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': Loremipsum
+      '#default_value': 49
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -912,7 +912,7 @@ elements: |
       '#required': true
       '#terms_type': slideout
       '#terms_content': '<em>These are the terms of service.</em>'
-      '#default_value': Loremipsum
+      '#default_value': true
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -971,7 +971,7 @@ elements: |
     visible_webform_toggle:
       '#type': webform_toggle
       '#title': Toggle
-      '#default_value': Loremipsum
+      '#default_value': true
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1703,9 +1703,9 @@ elements: |
       '#options_display': side_by_side
       '#vocabulary': tags
       '#default_value':
-        - Loremipsum
-        - Oratione
-        - Dixisset
+        - 49
+        - 33
+        - 21
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1714,7 +1714,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': Loremipsum
+      '#default_value': 49
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1725,7 +1725,7 @@ elements: |
       '#required': true
       '#terms_type': slideout
       '#terms_content': '<em>These are the terms of service.</em>'
-      '#default_value': Loremipsum
+      '#default_value': true
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1769,7 +1769,7 @@ elements: |
     invisible_webform_toggle:
       '#type': webform_toggle
       '#title': Toggle
-      '#default_value': Loremipsum
+      '#default_value': true
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -2417,9 +2417,9 @@ elements: |
       '#options_display': side_by_side
       '#vocabulary': tags
       '#default_value':
-        - Loremipsum
-        - Oratione
-        - Dixisset
+        - 49
+        - 33
+        - 21
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2428,7 +2428,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': Loremipsum
+      '#default_value': 49
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2439,7 +2439,7 @@ elements: |
       '#required': true
       '#terms_type': slideout
       '#terms_content': '<em>These are the terms of service.</em>'
-      '#default_value': Loremipsum
+      '#default_value': true
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2483,7 +2483,7 @@ elements: |
     disabled_webform_toggle:
       '#type': webform_toggle
       '#title': Toggle
-      '#default_value': Loremipsum
+      '#default_value': true
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

@@ -335,7 +335,7 @@ elements: |
         '#required': true
         '#terms_type': slideout
         '#terms_content': '<em>These are the terms of service.</em>'
-        '#default_value': Loremipsum
+        '#default_value': true
         '#format': value
       webform_terms_of_service_raw:
         '#type': webform_terms_of_service
@@ -343,7 +343,7 @@ elements: |
         '#required': true
         '#terms_type': slideout
         '#terms_content': '<em>These are the terms of service.</em>'
-        '#default_value': Loremipsum
+        '#default_value': true
         '#format': raw
     webform_toggle:
       '#type': details
@@ -351,12 +351,12 @@ elements: |
       webform_toggle_value:
         '#type': webform_toggle
         '#title': 'Toggle (Value)'
-        '#default_value': Loremipsum
+        '#default_value': true
         '#format': value
       webform_toggle_raw:
         '#type': webform_toggle
         '#title': 'Toggle (Raw value)'
-        '#default_value': Loremipsum
+        '#default_value': true
         '#format': raw
     url:
       '#type': details
@@ -1108,55 +1108,55 @@ elements: |
         '#type': webform_term_select
         '#title': 'Term select (Value)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': value
       webform_term_select_raw:
         '#type': webform_term_select
         '#title': 'Term select (Raw value)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': raw
       webform_term_select_link:
         '#type': webform_term_select
         '#title': 'Term select (Link)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': link
       webform_term_select_id:
         '#type': webform_term_select
         '#title': 'Term select (Entity ID)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': id
       webform_term_select_label:
         '#type': webform_term_select
         '#title': 'Term select (Label)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': label
       webform_term_select_text:
         '#type': webform_term_select
         '#title': 'Term select (Label (ID))'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': text
       webform_term_select_teaser:
         '#type': webform_term_select
         '#title': 'Term select (Teaser)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': teaser
       webform_term_select_default:
         '#type': webform_term_select
         '#title': 'Term select (Default)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': default
       webform_term_select_breadcrumb:
         '#type': webform_term_select
         '#title': 'Term select (Breadcrumb)'
         '#vocabulary': tags
-        '#default_value': Loremipsum
+        '#default_value': 49
         '#format': breadcrumb
   other_elements:
     '#type': details

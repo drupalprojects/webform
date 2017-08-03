@@ -172,13 +172,13 @@ handlers:
         custom_all: true
       custom_options: ''
       debug: true
-      completed_url: '/webform_example_remote_post/completed'
+      completed_url: /webform_example_remote_post/completed
       completed_custom_data: |
         custom_completed: true
-      updated_url: '/webform_example_remote_post/updated'
+      updated_url: /webform_example_remote_post/updated
       updated_custom_data: |
         custom_updated: true
-      deleted_url: '/webform_example_remote_post/deleted'
+      deleted_url: /webform_example_remote_post/deleted
       deleted_custom_data: |
         custom_deleted: true
       draft_url: ''

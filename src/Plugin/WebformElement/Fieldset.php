@@ -24,4 +24,11 @@ class Fieldset extends ContainerBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getItemDefaultFormat() {
+    return 'fieldset';
+  }
+
 }

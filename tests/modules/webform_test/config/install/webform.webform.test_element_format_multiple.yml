@@ -1477,9 +1477,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': comma
       webform_term_checkboxes_semicolon:
         '#type': webform_term_checkboxes
@@ -1488,9 +1488,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': semicolon
       webform_term_checkboxes_and:
         '#type': webform_term_checkboxes
@@ -1499,9 +1499,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': and
       webform_term_checkboxes_ol:
         '#type': webform_term_checkboxes
@@ -1510,9 +1510,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': ol
       webform_term_checkboxes_ul:
         '#type': webform_term_checkboxes
@@ -1521,9 +1521,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': ul
     webform_term_select:
       '#type': details
@@ -1534,9 +1534,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': comma
       webform_term_select_semicolon:
         '#type': webform_term_select
@@ -1544,9 +1544,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': semicolon
       webform_term_select_and:
         '#type': webform_term_select
@@ -1554,9 +1554,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': and
       webform_term_select_ol:
         '#type': webform_term_select
@@ -1564,9 +1564,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': ol
       webform_term_select_ul:
         '#type': webform_term_select
@@ -1574,9 +1574,9 @@ elements: |
         '#vocabulary': tags
         '#multiple': true
         '#default_value':
-          - Loremipsum
-          - Oratione
-          - Dixisset
+          - 49
+          - 33
+          - 21
         '#format_items': ul
 css: ''
 javascript: ''

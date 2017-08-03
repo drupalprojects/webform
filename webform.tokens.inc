@@ -371,8 +371,6 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     $account = $webform_submission->getOwner() ?: User::load(0);
     $bubbleable_metadata->addCacheableDependency($account);
 
-    $form_elements = $webform->getElementsInitializedAndFlattened();
-
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'langcode':
@@ -504,7 +502,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
     if ($value_tokens = $token_service->findWithPrefix($tokens, 'values')) {
       foreach ($value_tokens as $value_token => $original) {
-        $value = _webform_token_get_submission_value($value_token, $options, $webform_submission, $form_elements, $element_manager, $bubbleable_metadata);
+        $value = _webform_token_get_submission_value($value_token, $options, $webform_submission, $element_manager, $bubbleable_metadata);
         if ($value !== NULL) {
           $replacements[$original] = $value;
         }
@@ -611,7 +609,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   return $replacements;
 }
 
-function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, array $form_elements, WebformElementManagerInterface $element_manager, BubbleableMetadata $bubbleable_metadata) {
+function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, WebformElementManagerInterface $element_manager, BubbleableMetadata $bubbleable_metadata) {
   $submission_data = $webform_submission->getData();
 
   // Formats:
@@ -631,13 +629,19 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
     return _webform_token_get_submission_values($options, $webform_submission);
   }
 
-  // Exit is submission value or form element does not exit.
-  if (!isset($submission_data[$element_key]) || !isset($form_elements[$element_key])) {
+  $element = $webform_submission->getWebform()->getElement($element_key, TRUE);
+
+  // Exit if form element does not exist.
+  if (!$element) {
     return NULL;
   }
 
-  $element = $form_elements[$element_key];
   $element_handler = $element_manager->getElementInstance($element);
+
+  // Exit if no submission data and form element is not a container.
+  if (!isset($submission_data[$element_key]) && !$element_handler->isContainer($element)) {
+    return NULL;
+  }
 
   // Look for :html which indicates the tokens should be formatted as HTML
   // instead of plain text.
@@ -711,11 +715,11 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   $format_method = (empty($options['html'])) ? 'formatText' : 'formatHtml';
   $token_value = $element_manager->invokeMethod($format_method, $element, $webform_submission, $options);
-
   if (is_array($token_value)) {
     // Note, tokens can't include CSS and JS libraries since they will
     // can be included in an email.
-    return \Drupal::service('renderer')->renderPlain($token_value);
+    $markup = \Drupal::service('renderer')->renderPlain($token_value);
+    return $markup;
   }
   elseif (isset($element['#format']) && $element['#format'] === 'raw') {
     // Raw needs return Markup.

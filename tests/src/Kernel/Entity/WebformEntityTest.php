@@ -202,6 +202,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
+        '#webform_parents' => ['root'],
         '#admin_title' => 'root',
       ],
       'container' => [
@@ -215,6 +216,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
+        '#webform_parents' => ['container'],
         '#admin_title' => 'container',
       ],
       'child' => [
@@ -228,6 +230,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_children' => [],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
+        '#webform_parents' => ['container', 'child'],
         '#admin_title' => 'child',
       ],
     ];

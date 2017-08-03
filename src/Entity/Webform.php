@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Entity;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
@@ -1139,7 +1140,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         // Set #parent_flexbox to TRUE is the parent element is a
         // 'webform_flexbox'.
         $element['#webform_parent_flexbox'] = (isset($parent_element['#type']) && $parent_element['#type'] == 'webform_flexbox') ? TRUE : FALSE;
+
+        $element['#webform_parents'] = $parent_element['#webform_parents'];
       }
+
+      // Add element key to parents.
+      // #webform_parents allows make it possible to use NestedArray::getValue
+      // to get the entire unflattened element.
+      $element['#webform_parents'][] = $key;
 
       // Set #title and #admin_title to NULL if it is not defined.
       $element += [
@@ -1214,9 +1222,16 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getElement($key) {
+  public function getElement($key, $include_children = FALSE) {
     $elements_flattened = $this->getElementsInitializedAndFlattened();
-    return (isset($elements_flattened[$key])) ? $elements_flattened[$key] : NULL;
+    $element = (isset($elements_flattened[$key])) ? $elements_flattened[$key] : NULL;
+    if ($element && $include_children) {
+      $elements = $this->getElementsInitialized();
+      return NestedArray::getValue($elements, $element['#webform_parents']);
+    }
+    else {
+      return $element;
+    }
   }
 
   /**

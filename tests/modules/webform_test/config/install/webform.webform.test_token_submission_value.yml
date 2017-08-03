@@ -102,6 +102,17 @@ elements: |
         state_province: Alabama
         postal_code: 12345
         country: 'United States'
+  fieldset:
+    '#type': fieldset
+    '#title': fieldset
+    first_name:
+      '#type': textfield
+      '#title': first_name
+      '#default_value': John
+    last_name:
+      '#type': textfield
+      '#title': last_name
+      '#default_value': Smith
 css: ''
 javascript: ''
 settings:
@@ -204,6 +215,15 @@ settings:
     <tr><th width="50%">webform_submission:values:contacts:1:name</th><td width="50%">[webform_submission:values:contacts:1:name]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:0:email:html</th><td width="50%">[webform_submission:values:contacts:0:email:html]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:email:raw:html</th><td width="50%">[webform_submission:values:contacts:1:email:raw:html]</td></tr>
+    </table>
+    
+    <h3>container</h3>
+    <table class="table">
+    <tr><th width="50%">webform_submission:values:fieldset</th><td width="50%"><pre>[webform_submission:values:fieldset]</pre></td></tr>
+    <tr><th width="50%">webform_submission:values:fieldset:html</th><td width="50%">[webform_submission:values:fieldset:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:fieldset:header:html</th><td width="50%">[webform_submission:values:fieldset:header:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:fieldset:details:html</th><td width="50%">[webform_submission:values:fieldset:details:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:fieldset:fieldset:html</th><td width="50%">[webform_submission:values:fieldset:fieldset:html]</td></tr>
     </table>
     
     <h3>submission limits</h3>
