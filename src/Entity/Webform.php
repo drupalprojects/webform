@@ -94,7 +94,6 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *   lookup_keys = {
  *     "status",
  *     "template",
- *     "category",
  *   },
  * )
  */
