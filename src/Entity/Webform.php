@@ -1211,7 +1211,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       // Check if element has value (aka can be exported) and add it to
       // flattened has value array.
       if ($element_handler && $element_handler->isInput($element)) {
-        $this->elementsInitializedFlattenedAndHasValue[$key] =& $this->elementsInitializedAndFlattened[$key];
+        $this->elementsInitializedFlattenedAndHasValue[$key] = &$this->elementsInitializedAndFlattened[$key];
       }
 
       $this->initElementsRecursive($element, $key, $depth + 1);

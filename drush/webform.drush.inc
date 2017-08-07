@@ -865,8 +865,8 @@ function drush_webform_composer_update() {
   }
 
   // Get repositories and require.
-  $repositories =& $data['repositories'];
-  $require =& $data['require'];
+  $repositories = &$data['repositories'];
+  $require = &$data['require'];
 
   // Remove all existing _webform repositories.
   foreach ($repositories as $repository_name => $repository) {

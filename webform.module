@@ -743,7 +743,7 @@ function webform_preprocess_radios(&$variables) {
  * @see template_preprocess_file_managed_file().
  */
 function webform_preprocess_file_managed_file(&$variables) {
-  $element =& $variables['element'];
+  $element = &$variables['element'];
   if (empty($element['#button'])) {
     return;
   }

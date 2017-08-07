@@ -239,7 +239,7 @@ class WebformImageSelect extends Select {
     ];
 
     if (function_exists('imce_process_url_element')) {
-      $src_element =& $form['options']['images']['#element']['src'];
+      $src_element = &$form['options']['images']['#element']['src'];
       imce_process_url_element($src_element, 'link');
       $form['#attached']['library'][] = 'webform/imce.input';
     }
