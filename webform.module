@@ -319,7 +319,7 @@ function webform_mail($key, &$message, $params) {
   // value is used instead of site's email address.
   // See: \Drupal\Core\Mail\MailManager::mail.
   if (!empty($params['from_mail'])) {
-    $message['from'] = $message['headers']['From'] = (!empty($params['from_name'])) ? $params['from_name'] . ' <' . $params['from_mail'] . '>' : $params['from_mail'];
+    $message['from'] = $message['headers']['From'] = (!empty($params['from_name'])) ? Unicode::mimeHeaderEncode($params['from_name']) . ' <' . $params['from_mail'] . '>' : $params['from_mail'];
   }
 
   // Set header 'Reply-to'.
