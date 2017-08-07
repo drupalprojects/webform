@@ -404,6 +404,11 @@ trait WebformEntityReferenceTrait {
       }
     }
 
+    // Entity Reference fields are no longer supported to reference Paragraphs.
+    // @see paragraphs_form_field_storage_config_edit_form_alter()
+    $target_type_options = \Drupal::service('entity_type.repository')->getEntityTypeLabels(TRUE);
+    unset($target_type_options[(string) $this->t('Content')]['paragraph']);
+
     $form['entity_reference'] = [
       '#type' => 'fieldset',
       '#title' => t('Entity reference settings'),
@@ -411,12 +416,11 @@ trait WebformEntityReferenceTrait {
       '#suffix' => '</div>',
       '#weight' => -40,
     ];
-
     // Target type.
     $form['entity_reference']['target_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type of item to reference'),
-      '#options' => \Drupal::service('entity_type.repository')->getEntityTypeLabels(TRUE),
+      '#options' => $target_type_options,
       '#required' => TRUE,
       '#empty_option' => t('- Select a target type -'),
       '#attributes' => ['data-webform-trigger-submit' => '.js-webform-entity-reference-submit'],
