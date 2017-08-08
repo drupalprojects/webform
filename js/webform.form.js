@@ -33,7 +33,7 @@
     attach: function (context) {
       // @see http://stackoverflow.com/questions/11235622/jquery-disable-form-submit-on-enter
       $(context).find('.webform-submission-form.js-webform-disable-autosubmit input')
-        .not('[type="submit"], [type="reset"], [type=["button"], [type="image"], [type="file"]')
+        .not(':button, :input[type="image"], :input[type="file"]')
         .once('webform-disable-autosubmit')
         .on('keyup keypress', function (e) {
           var keyCode = e.keyCode || e.which;
