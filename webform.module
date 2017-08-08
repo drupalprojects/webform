@@ -122,12 +122,12 @@ function webform_cron() {
  * Implements hook_local_tasks_alter().
  */
 function webform_local_tasks_alter(&$local_tasks) {
+  // Change config translation local task hierarchy.
   if (isset($local_tasks['config_translation.local_tasks:entity.webform.config_translation_overview'])) {
-    // Change 'Translate' base route from 'entity.webform.edit_form'
-    // to 'entity.webform.canonical' because by default config entities don't
-    // have canonical views but the webform entity does.
-    $local_tasks['config_translation.local_tasks:entity.webform.config_translation_overview']['title'] = 'Translate';
     $local_tasks['config_translation.local_tasks:entity.webform.config_translation_overview']['base_route'] = 'entity.webform.canonical';
+  }
+  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.settings'])) {
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.settings']['parent_id'] = 'webform.settings';
   }
 }
 
@@ -135,11 +135,12 @@ function webform_local_tasks_alter(&$local_tasks) {
  * Implements hook_menu_local_tasks_alter().
  */
 function webform_menu_local_tasks_alter(&$data, $route_name) {
-  // Change 'Translate webform' tab to be just label 'Translate'.
-  if (strpos($route_name, 'entity.webform.') === 0) {
-    if (isset($data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'])) {
-      $data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'] = t('Translate');
-    }
+  // Change 'Translate *' tab to be just label 'Translate'.
+  if (isset($data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'])) {
+    $data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'] = t('Translate');
+  }
+  if (isset($data['tabs'][1]['config_translation.local_tasks:config_translation.item.overview.webform.settings'])) {
+    $data['tabs'][1]['config_translation.local_tasks:config_translation.item.overview.webform.settings']['#link']['title'] = t('Translate');
   }
 
   // ISSUE:

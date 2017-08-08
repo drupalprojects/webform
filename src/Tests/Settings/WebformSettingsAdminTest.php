@@ -41,16 +41,27 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $original_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();
 
     // Update 'settings.default_form_close_message'.
-    $this->drupalPostForm('admin/structure/webform/settings', [], t('Save configuration'));
-    \Drupal::configFactory()->reset('webform.settings');
-    $updated_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();
+    $types = [
+      'forms' => 'admin/structure/webform/settings',
+      'elements' => 'admin/structure/webform/settings/elements',
+      'submissions' => 'admin/structure/webform/settings/submissions',
+      'handlers' => 'admin/structure/webform/settings/handlers',
+      'exporters' => 'admin/structure/webform/settings/exporters',
+      'libraries' => 'admin/structure/webform/settings/libraries',
+      'advanced' => 'admin/structure/webform/settings/advanced',
+    ];
+    foreach ($types as $type => $path) {
+      $this->drupalPostForm($path, [], t('Save configuration'));
+      \Drupal::configFactory()->reset('webform.settings');
+      $updated_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();
 
-    // Check the updating 'Settings' via the UI did not lose or change any data.
-    $this->assertEqual($updated_data, $original_data, 'Updated admin settings via the UI did not lose or change any data');
+      // Check the updating 'Settings' via the UI did not lose or change any data.
+      $this->assertEqual($updated_data, $original_data, 'Updated admin settings via the UI did not lose or change any data');
 
-    // DEBUG:
-    $this->verbose('<pre>' . WebformYaml::tidy(Yaml::encode($original_data)) . '</pre>');
-    $this->verbose('<pre>' . WebformYaml::tidy(Yaml::encode($updated_data)) . '</pre>');
+      // DEBUG:
+      $this->verbose('<pre>' . WebformYaml::tidy(Yaml::encode($original_data)) . '</pre>');
+      $this->verbose('<pre>' . WebformYaml::tidy(Yaml::encode($updated_data)) . '</pre>');
+    }
 
     /* Elements */
 
@@ -59,7 +70,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $this->assertPattern('#\{item title\}.+\{item markup\}.+\{item description\}#ms');
 
     // Set the default description display to 'before'.
-    $this->drupalPostForm('admin/structure/webform/settings', ['element[default_description_display]' => 'before'], t('Save configuration'));
+    $this->drupalPostForm('admin/structure/webform/settings/elements', ['element[default_description_display]' => 'before'], t('Save configuration'));
 
     // Check that description is 'before' the element.
     $this->drupalGet('webform/test_element');
@@ -73,7 +84,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700}">Add webform</a>');
 
     // Disable dialogs.
-    $this->drupalPostForm('admin/structure/webform/settings', ['ui[dialog_disabled]' => TRUE], t('Save configuration'));
+    $this->drupalPostForm('admin/structure/webform/settings/advanced', ['ui[dialog_disabled]' => TRUE], t('Save configuration'));
 
     // Check that dialogs are disabled. (ie use-ajax is not included)
     $this->drupalGet('admin/structure/webform');

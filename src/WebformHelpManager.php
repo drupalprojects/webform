@@ -1097,7 +1097,7 @@ SUGGESTIONS
     /****************************************************************************/
     // Promotions.
     // Disable promotions via Webform admin settings.
-    // (/admin/structure/webform/settings).
+    // (/admin/structure/webform/settings/advanced).
     /****************************************************************************/
 
     if (!$this->configFactory->get('webform.settings')->get('ui.promotions_disabled')) {
@@ -1182,66 +1182,6 @@ SUGGESTIONS
       'content' => $this->t('The Log page lists all submission events for all webforms.'),
     ];
 
-    // Settings.
-    $help['settings'] = [
-      'routes' => [
-        // @see /admin/structure/webform/settings
-        'webform.settings',
-      ],
-      'title' => $this->t('Defining default settings'),
-      'url' => Url::fromRoute('webform.settings'),
-      'content' => $this->t('The Settings page allows administrators to manage global webform and UI configuration settings, including updating default labels & descriptions, settings default format, and defining test dataset.'),
-      'video_id' => 'admin',
-    ];
-
-    // Options.
-    $help['options'] = [
-      'routes' => [
-        // @see /admin/structure/webform/settings/options/manage
-        'entity.webform_options.collection',
-      ],
-      'title' => $this->t('Defining options'),
-      'url' => Url::fromRoute('entity.webform_options.collection'),
-      'content' => $this->t('The Options page lists predefined options which are used to build select menus, radio buttons, checkboxes and likerts.') . ' ' .
-      $this->t('To find and download additional options, go to <a href=":href">Webform 8.x-5.x: Cookbook</a>.', [':href' => 'https://www.drupal.org/docs/8/modules/webform/webform-cookbook']),
-    ];
-
-    // Elements.
-    $help['elements'] = [
-      'routes' => [
-        // @see /admin/structure/webform/settings/elements
-        'webform.element_plugins',
-      ],
-      'title' => $this->t('Webform element plugins'),
-      'url' => Url::fromRoute('webform.element_plugins'),
-      'content' => $this->t('The Elements page lists all available webform element plugins.') . ' ' .
-      $this->t('Webform element plugins are used to enhance existing render/form elements. Webform element plugins provide default properties, data normalization, custom validation, element configuration webform, and customizable display formats.'),
-    ];
-
-    // Handlers.
-    $help['handlers'] = [
-      'routes' => [
-        // @see /admin/structure/webform/settings/handlers
-        'webform.handler_plugins',
-      ],
-      'title' => $this->t('Webform handler plugins'),
-      'url' => Url::fromRoute('webform.handler_plugins'),
-      'content' => $this->t('The Handlers page lists all available webform handler plugins.') . ' ' .
-      $this->t('Handlers are used to route submitted data to external applications and send notifications & confirmations.'),
-    ];
-
-    // Exporters.
-    $help['exporters'] = [
-      'routes' => [
-        // @see /admin/structure/webform/settings/exporters
-        'webform.exporter_plugins',
-      ],
-      'title' => $this->t('Results exporter plugins'),
-      'url' => Url::fromRoute('webform.exporter_plugins'),
-      'content' => $this->t('The Exporters page lists all available results exporter plugins.') . ' ' .
-      $this->t('Exporters are used to export results into a downloadable format that can be used by MS Excel, Google Sheets, and other spreadsheet applications.'),
-    ];
-
     // Addons.
     $help['addons'] = [
       'routes' => [
@@ -1251,6 +1191,147 @@ SUGGESTIONS
       'title' => $this->t('Extend the Webform module'),
       'url' => Url::fromRoute('webform.addons'),
       'content' => $this->t('The Add-ons page includes a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal\'s Form API.  If you would like a module or project to be included in the below list, please submit a request to the <a href=":href">Webform module\'s issue queue</a>.', [':href' => 'https://www.drupal.org/node/add/project-issue/webform']),
+    ];
+
+    /****************************************************************************/
+    // Settings.
+    /****************************************************************************/
+
+    // Forms.
+    $help['settings_forms'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/forms
+        'webform.settings',
+      ],
+      'title' => $this->t('Defining default form settings'),
+      'url' => Url::fromRoute('webform.settings'),
+      'content' => $this->t('The Forms settings page allows administrators to manage form settings, behaviors, labels, and messages.'),
+      'video_id' => 'admin',
+    ];
+
+    // Elements.
+    $help['settings_elements'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/element
+        'webform.settings.elements',
+      ],
+      'title' => $this->t('Defining default element settings'),
+      'url' => Url::fromRoute('webform.settings.elements'),
+      'content' => $this->t('The Elements settings page allows administrators to manage element specific settings and HTML formatting.'),
+      'video_id' => 'admin',
+    ];
+
+    // Options.
+    $help['settings_options'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/options
+        'entity.webform_options.collection',
+      ],
+      'title' => $this->t('Defining options'),
+      'url' => Url::fromRoute('entity.webform_options.collection'),
+      'content' => $this->t('The Options page lists predefined options which are used to build select menus, radio buttons, checkboxes and likerts.') . ' ' .
+        $this->t('To find and download additional options, go to <a href=":href">Webform 8.x-5.x: Cookbook</a>.', [':href' => 'https://www.drupal.org/docs/8/modules/webform/webform-cookbook']),
+      'video_id' => 'admin',
+    ];
+
+    // Submissions.
+    $help['settings_submissions'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/submissions
+        'webform.settings.submissions',
+      ],
+      'title' => $this->t('Defining default submission settings'),
+      'url' => Url::fromRoute('webform.settings.submissions'),
+      'content' => $this->t('The Submissions settings page allows administrators to manage submissions settings and behaviors.'),
+      'video_id' => 'admin',
+    ];
+
+    // Handlers.
+    $help['settings_handlers'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/handlers
+        'webform.settings.handlers',
+      ],
+      'title' => $this->t('Defining default email and handler settings'),
+      'url' => Url::fromRoute('webform.settings.handlers'),
+      'content' => $this->t('The Handlers settings page allows administrators to manage email and handler default values and behaviors.'),
+      'video_id' => 'admin',
+    ];
+
+    // Exporters.
+    $help['settings_exporters'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/exporters
+        'webform.settings.exporters',
+      ],
+      'title' => $this->t('Defining default exporter settings'),
+      'url' => Url::fromRoute('webform.settings.exporters'),
+      'content' => $this->t('The Handlers settings page allows administrators to manage exporter default settings.'),
+      'video_id' => 'admin',
+    ];
+
+    // Libraries.
+    $help['settings_libraries'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/libraries
+        'webform.settings.libraries',
+      ],
+      'title' => $this->t('Defining default CSS/JS and library settings'),
+      'url' => Url::fromRoute('webform.settings.libraries'),
+      'content' => $this->t('The Libraries settings page allows administrators to add custom CSS/JS to all form and enabled/disable external libraries.'),
+      'video_id' => 'admin',
+    ];
+
+    // Advanced.
+    $help['settings_advanced'] = [
+      'routes' => [
+        // @see /admin/structure/webform/settings/advanced
+        'webform.settings.advanced',
+      ],
+      'title' => $this->t('Defining advanced settings'),
+      'url' => Url::fromRoute('webform.settings.advanced'),
+      'content' => $this->t('The Libraries settings page allows administrators to managed advanced settings including UI behaviors and test data.'),
+      'video_id' => 'admin',
+    ];
+
+    /****************************************************************************/
+    // Plugins.
+    /****************************************************************************/
+
+    // Elements.
+    $help['plugins_elements'] = [
+      'routes' => [
+        // @see /admin/structure/webform/plugins/elements
+        'webform.element_plugins',
+      ],
+      'title' => $this->t('Webform element plugins'),
+      'url' => Url::fromRoute('webform.element_plugins'),
+      'content' => $this->t('The Elements page lists all available webform element plugins.') . ' ' .
+      $this->t('Webform element plugins are used to enhance existing render/form elements. Webform element plugins provide default properties, data normalization, custom validation, element configuration webform, and customizable display formats.'),
+    ];
+
+    // Handlers.
+    $help['plugins_handlers'] = [
+      'routes' => [
+        // @see /admin/structure/webform/plugins/handlers
+        'webform.handler_plugins',
+      ],
+      'title' => $this->t('Webform handler plugins'),
+      'url' => Url::fromRoute('webform.handler_plugins'),
+      'content' => $this->t('The Handlers page lists all available webform handler plugins.') . ' ' .
+      $this->t('Handlers are used to route submitted data to external applications and send notifications & confirmations.'),
+    ];
+
+    // Exporters.
+    $help['plugins_exporters'] = [
+      'routes' => [
+        // @see /admin/structure/webform/plugins/exporters
+        'webform.exporter_plugins',
+      ],
+      'title' => $this->t('Results exporter plugins'),
+      'url' => Url::fromRoute('webform.exporter_plugins'),
+      'content' => $this->t('The Exporters page lists all available results exporter plugins.') . ' ' .
+      $this->t('Exporters are used to export results into a downloadable format that can be used by MS Excel, Google Sheets, and other spreadsheet applications.'),
     ];
 
     /****************************************************************************/
