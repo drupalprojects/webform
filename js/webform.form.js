@@ -32,13 +32,16 @@
   Drupal.behaviors.webformDisableAutoSubmit = {
     attach: function (context) {
       // @see http://stackoverflow.com/questions/11235622/jquery-disable-form-submit-on-enter
-      $(context).find('.webform-submission-form.js-webform-disable-autosubmit input').once('webform-disable-autosubmit').on('keyup keypress', function (e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) {
-          e.preventDefault();
-          return false;
-        }
-      });
+      $(context).find('.webform-submission-form.js-webform-disable-autosubmit input')
+        .not('[type="submit"], [type="reset"], [type=["button"], [type="image"], [type="file"]')
+        .once('webform-disable-autosubmit')
+        .on('keyup keypress', function (e) {
+          var keyCode = e.keyCode || e.which;
+          if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+          }
+        });
     }
   };
 
