@@ -218,8 +218,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'title' => $this->t('CKEditor: Fakeobjects'),
       'description' => $this->t('Utility required by CKEditor link plugin.'),
       'notes' => $this->t('Allows CKEditor to use basic image and link dialog'),
-      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/fakeobjects'),
-      'download_url' => Url::fromUri("http://download.ckeditor.com/fakeobjects/releases/fakeobjects_$ckeditor_version.zip"),
+      'homepage_url' => Url::fromUri('https://ckeditor.com/addon/fakeobjects'),
+      'download_url' => Url::fromUri("https://download.ckeditor.com/fakeobjects/releases/fakeobjects_$ckeditor_version.zip"),
       'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
@@ -227,8 +227,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'title' => $this->t('CKEditor: Image'),
       'description' => $this->t('Provides a basic image dialog for CKEditor.'),
       'notes' => $this->t('Allows CKEditor to use basic image dialog, which is not included in Drupal core.'),
-      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/image'),
-      'download_url' => Url::fromUri("http://download.ckeditor.com/image/releases/image_$ckeditor_version.zip"),
+      'homepage_url' => Url::fromUri('https://ckeditor.com/addon/image'),
+      'download_url' => Url::fromUri("https://download.ckeditor.com/image/releases/image_$ckeditor_version.zip"),
       'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
@@ -236,8 +236,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'title' => $this->t('CKEditor: Link'),
       'description' => $this->t('Provides a basic link dialog for CKEditor.'),
       'notes' => $this->t('Allows CKEditor to use basic link dialog, which is not included in Drupal core.'),
-      'homepage_url' => Url::fromUri('http://ckeditor.com/addon/link'),
-      'download_url' => Url::fromUri('http://download.ckeditor.com/link/releases/link_4.6.2.zip'),
+      'homepage_url' => Url::fromUri('https://ckeditor.com/addon/link'),
+      'download_url' => Url::fromUri('https://download.ckeditor.com/link/releases/link_4.6.2.zip'),
       'version' => '4.6.2',
       'optional' => TRUE,
     ];
