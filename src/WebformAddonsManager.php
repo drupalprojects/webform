@@ -136,7 +136,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
         '#markup' => '<img' . $img_attributes . ' />',
       ],
       [
-        '#markup' => $this->t('The Lingotek-Inside Drupal Module is the only Drupal module to integrate a translation management system (TMS) directly into Drupal, thus allowing the Drupal community to use professional-grade translation technologies (e.g. machine translation, translation memory, CAT tool) without ever having to leave the comfort of the Drupal environment.'),
+        '#markup' => $this->t('The Lingotek-Inside Drupal Module integrates a translation management system (TMS) directly into Drupal, thus allowing the Drupal community to use professional-grade translation technologies (e.g. machine translation, translation memory, CAT tool) without ever having to leave the comfort of the Drupal environment.'),
         '#prefix' => '<p>',
         '#suffix' => '<p>',
       ],
