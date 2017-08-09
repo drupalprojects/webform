@@ -251,12 +251,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
-    if ($this->operation == 'test' && $entity->isNew()) {
-      /** @var \Drupal\webform\WebformSubmissionGenerateInterface  $submission_generate */
-      $submission_generate = \Drupal::service('webform_submission.generate');
-      $entity->setData($submission_generate->getData($entity->getWebform()));
-    }
-
     return parent::setEntity($entity);
   }
 
