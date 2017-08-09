@@ -34,6 +34,9 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "access" = "Drupal\webform\WebformSubmissionAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\webform\WebformSubmissionForm",
+ *       "add" = "Drupal\webform\WebformSubmissionForm",
+ *       "edit" = "Drupal\webform\WebformSubmissionForm",
+ *       "test" = "Drupal\webform\WebformSubmissionForm",
  *       "notes" = "Drupal\webform\WebformSubmissionNotesForm",
  *       "duplicate" = "Drupal\webform\WebformSubmissionDuplicateForm",
  *       "delete" = "Drupal\webform\Form\WebformSubmissionDeleteForm",

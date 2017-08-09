@@ -220,29 +220,33 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
     }
 
-    $token = $this->getRequest()->query->get('token');
-    if ($webform->getSetting('token_update') && $token) {
-      if ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token])) {
-        $entity = reset($webform_submissions_token);
-      }
-    }
-    elseif ($webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
-      if ($webform->getSetting('draft_multiple')) {
-        // Allow multiple drafts to be restored using token.
-        // This allows the webform's public facing URL to be used instead of
-        // the admin URL of the webform.
-        if ($token && ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token, 'uid' => $this->currentUser()->id()]))) {
-          /** @var \Drupal\webform\WebformSubmissionInterface $draft_submission */
-          $draft_submission = reset($webform_submissions_token);
-          if ($draft_submission->isDraft()) {
-            $entity = $draft_submission;
-          }
+    // Load entity from token or saved draft when not editing or testing
+    // submission form.
+    if (!in_array($this->operation, ['edit', 'test'])) {
+      $token = $this->getRequest()->query->get('token');
+      if ($webform->getSetting('token_update') && $token) {
+        if ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token])) {
+          $entity = reset($webform_submissions_token);
         }
       }
-      else {
-        // Else load the most recent draft.
-        if ($webform_submission_draft = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser())) {
-          $entity = $webform_submission_draft;
+      elseif ($webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
+        if ($webform->getSetting('draft_multiple')) {
+          // Allow multiple drafts to be restored using token.
+          // This allows the webform's public facing URL to be used instead of
+          // the admin URL of the webform.
+          if ($token && ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token, 'uid' => $this->currentUser()->id()]))) {
+            /** @var \Drupal\webform\WebformSubmissionInterface $draft_submission */
+            $draft_submission = reset($webform_submissions_token);
+            if ($draft_submission->isDraft()) {
+              $entity = $draft_submission;
+            }
+          }
+        }
+        else {
+          // Else load the most recent draft.
+          if ($webform_submission_draft = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser())) {
+            $entity = $webform_submission_draft;
+          }
         }
       }
     }
