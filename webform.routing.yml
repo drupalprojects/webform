@@ -179,7 +179,7 @@ entity.webform.user.submission.delete:
 entity.webform.test:
   path: '/webform/{webform}/test'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformTestController::testForm'
+    _entity_form: 'webform_submission.test'
     _title_callback: '\Drupal\webform\Controller\WebformTestController::title'
   options:
     parameters:
