@@ -15,6 +15,17 @@ title: 'Demo: Event Registration'
 description: 'A demonstration of an event registration form.'
 category: Demo
 elements: |
+  event_information:
+    '#type': fieldset
+    '#title': 'Event Information'
+    event_title:
+      '#type': webform_computed_token
+      '#title': 'Event Title'
+      '#value': '[webform_submission:node:title]'
+    event_date:
+      '#type': webform_computed_token
+      '#title': 'Event Date'
+      '#value': '[webform_submission:node:field_webform_demo_event_date:date:short]'
   information:
     '#title': 'Your Information'
     '#type': fieldset
@@ -30,10 +41,10 @@ elements: |
       '#type': email
       '#title': Email
       '#required': true
-    actions:
-      '#type': webform_actions
-      '#title': 'Submit button(s)'
-      '#submit__label': 'Register'
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+    '#submit__label': Register
 css: ''
 javascript: ''
 settings:
