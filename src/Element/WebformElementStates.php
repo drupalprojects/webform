@@ -137,10 +137,9 @@ class WebformElementStates extends FormElement {
 
     // Build header.
     $header = [
-      ['data' => t('State'), 'width' => '20%'],
-      ['data' => t('Element/Selector'), 'width' => '45%'],
-      ['data' => t('Trigger'), 'width' => '20%'],
-      ['data' => t('Value'), 'width' => '10%'],
+      ['data' => t('State'), 'width' => '25%'],
+      ['data' => t('Element/Selector'), 'width' => '50%'],
+      ['data' => t('Trigger/Value'), 'width' => '25%'],
       ['data' => ''],
     ];
 
@@ -237,7 +236,7 @@ class WebformElementStates extends FormElement {
       '#default_value' => $state['operator'],
       '#field_prefix' => t('if'),
       '#field_suffix' => t('of the following is met:'),
-      '#wrapper_attributes' => ['colspan' => 3, 'align' => 'left'],
+      '#wrapper_attributes' => ['colspan' => 2, 'align' => 'left'],
     ];
     $row['operations'] = static::buildOperations($table_id, $row_index, $ajax_settings);
     return $row;
@@ -279,27 +278,29 @@ class WebformElementStates extends FormElement {
       '#empty_option' => '',
       '#empty_value' => '',
     ];
-    $row['trigger'] = [
+    $row['condition']['trigger'] = [
       '#type' => 'select',
       '#options' => $element['#trigger_options'],
       '#default_value' => $condition['trigger'],
       '#empty_option' => '',
       '#empty_value' => '',
+      '#parents' => [$element_name, 'states', $row_index , 'trigger'],
     ];
-    $row['value'] = [
+    $row['condition']['value'] = [
       '#type' => 'textfield',
       '#title' => t('Value'),
       '#title_display' => 'invisible',
       '#size' => 25,
       '#default_value' => $condition['value'],
+      '#placeholder' => t('Enter value...'),
       '#states' => [
         'visible' => [
           [$trigger_selector => ['value' => 'value']],
           'or',
           [$trigger_selector => ['value' => '!value']],
-
         ],
       ],
+      '#parents' => [$element_name, 'states', $row_index , 'value'],
     ];
     $row['operations'] = static::buildOperations($table_id, $row_index, $ajax_settings);
     return $row;

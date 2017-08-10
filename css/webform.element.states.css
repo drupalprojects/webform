@@ -29,6 +29,10 @@
   max-width: 100%;
 }
 
+.webform-states-table--condition input[type="text"] {
+  margin-top: 4px;
+}
+
 .webform-states-table .image-button {
   margin: 0;
 }
