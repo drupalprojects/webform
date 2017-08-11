@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformSubmissionStatesValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -63,6 +64,21 @@ class Checkboxes extends OptionsBase {
       $text .= ' [' . $this->t('Checkbox') . ']';
     }
     return $selectors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
+    $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
+    $option_value = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+    $value = $this->getRawValue($element, $webform_submission);
+    if (in_array($option_value, $value)) {
+      return (in_array($trigger, ['checked', 'unchecked'])) ? TRUE : $value;
+    }
+    else {
+      return (in_array($trigger, ['checked', 'unchecked'])) ? FALSE : NULL;
+    }
   }
 
   /**

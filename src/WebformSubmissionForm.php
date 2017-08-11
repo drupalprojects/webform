@@ -116,6 +116,13 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $tokenManager;
 
   /**
+   * The webform submission (server-side) #states validator.
+   *
+   * @var \Drupal\webform\WebformSubmissionStatesValidator
+   */
+  protected $statesValidator;
+
+  /**
    * The webform settings.
    *
    * @var array
@@ -158,7 +165,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    */
-  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
+  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionStatesValidator $states_validator) {
     parent::__construct($entity_manager);
     $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
@@ -169,6 +176,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->thirdPartySettingsManager = $third_party_settings_manager;
     $this->messageManager = $message_manager;
     $this->tokenManager = $token_manager;
+    $this->statesValidator = $states_validator;
   }
 
   /**
@@ -184,7 +192,8 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.third_party_settings_manager'),
       $container->get('webform.message_manager'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('webform_submission.states_validator')
     );
   }
 
@@ -259,6 +268,20 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
     parent::copyFormValuesToEntity($entity, $form, $form_state);
+
+    /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
+    $webform_submission = $entity;
+    $webform = $webform_submission->getWebform();
+
+    // Get elements values from webform submission.
+    $values = array_intersect_key(
+      $form_state->getValues(),
+      $webform->getElementsInitializedFlattenedAndHasValue()
+    );
+
+    // Serialize the values as YAML and merge existing data.
+    $webform_submission->setData($values + $webform_submission->getData());
+
     // Set current page.
     if ($current_page = $this->getCurrentPage($form, $form_state)) {
       $entity->setCurrentPage($current_page);
@@ -303,6 +326,9 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Call custom webform alter hook.
     $form_id = $this->getFormId();
     $this->thirdPartySettingsManager->alter('webform_submission_form', $form, $form_state, $form_id);
+
+    // Server side #states API validation.
+    $this->statesValidator->buildForm($form, $form_state);
 
     return $this->buildAjaxForm($form, $form_state);
   }
@@ -1035,29 +1061,21 @@ class WebformSubmissionForm extends ContentEntityForm {
         call_user_func_array($form_state->prepareCallback($callback), [&$form, &$form_state]);
       }
     }
+
+    // Build webform submission with validated and processed data.
+    $this->entity = $this->buildEntity($form, $form_state);
+
+    // Server side #states API validation.
+    $this->statesValidator->validateForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
-    $webform_submission = $this->entity;
-    $webform = $webform_submission->getWebform();
-
-    // Get elements values from webform submission.
-    $values = array_intersect_key(
-      $form_state->getValues(),
-      $webform->getElementsInitializedFlattenedAndHasValue()
-    );
-
-    // Serialize the values as YAML and merge existing data.
-    $webform_submission->setData($values + $webform_submission->getData());
-
     parent::submitForm($form, $form_state);
-
     // Submit webform via webform handler.
-    $this->getWebform()->invokeHandlers('submitForm', $form, $form_state, $webform_submission);
+    $this->getWebform()->invokeHandlers('submitForm', $form, $form_state, $this->entity);
   }
 
   /**

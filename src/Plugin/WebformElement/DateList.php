@@ -2,7 +2,9 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformSubmissionStatesValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -72,6 +74,55 @@ class DateList extends DateBase {
       $selector .= ' [' . $this->t('Select') . ']';
     }
     return $selectors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
+    $value = $this->getRawValue($element, $webform_submission);
+    if (empty($value)) {
+      return NULL;
+    }
+
+    // Return date part value.
+    // @see \Drupal\Core\Datetime\Element\Datelist::valueCallback
+    $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
+    $part = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+    switch ($part) {
+      case 'day':
+        $format = 'j';
+        break;
+
+      case 'month':
+        $format = 'n';
+        break;
+
+      case 'year':
+        $format = 'Y';
+        break;
+
+      case 'hour':
+        $format = in_array('ampm', $element['#date_part_order']) ? 'g' : 'G';
+        break;
+
+      case 'minute':
+        $format = 'i';
+        break;
+
+      case 'second':
+        $format = 's';
+        break;
+
+      case 'ampm':
+        $format = 'a';
+        break;
+
+      default:
+        $format = '';
+    }
+    $date = DrupalDateTime::createFromTimestamp(strtotime($value));
+    return $date->format($format);
   }
 
   /**

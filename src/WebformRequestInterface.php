@@ -5,9 +5,6 @@ namespace Drupal\webform;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Helper class webform entity methods.
- */
-/**
  * Provides an interface defining a webform request handler.
  */
 interface WebformRequestInterface {

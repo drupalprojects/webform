@@ -17,7 +17,7 @@ class WebformElementHtmlEditorTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'filter'];
+  public static $modules = ['filter', 'webform'];
 
   /**
    * Webforms to load.

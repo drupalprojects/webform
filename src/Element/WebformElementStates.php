@@ -274,6 +274,8 @@ class WebformElementStates extends FormElement {
     $row['selector'] = [
       '#type' => 'webform_select_other',
       '#options' => $element['#selector_options'],
+      '#other__option_label' => t('Custom selector...'),
+      '#other__placeholder' => t('Enter custom selector...'),
       '#default_value' => $condition['selector'],
       '#empty_option' => '',
       '#empty_value' => '',

@@ -169,14 +169,16 @@ abstract class WebformOtherBase extends FormElement {
     $other_value = $value['other'];
     if (static::isMultiple($element)) {
       $element_value = array_filter($element_value);
+      $element_value = array_combine($element_value, $element_value);
       $return_value += $element_value;
-      if (isset($element_value[static::OTHER_OPTION])) {
+      if (isset($return_value[static::OTHER_OPTION])) {
         unset($return_value[static::OTHER_OPTION]);
         if ($has_access && $other_value === '') {
           static::setOtherError($element, $form_state);
-          return;
         }
-        $return_value += [$other_value => $other_value];
+        else {
+          $return_value += [$other_value => $other_value];
+        }
       }
     }
     else {
@@ -184,7 +186,7 @@ abstract class WebformOtherBase extends FormElement {
       if ($element_value == static::OTHER_OPTION) {
         if ($has_access && $other_value === '') {
           static::setOtherError($element, $form_state);
-          return;
+          $return_value = '';
         }
         else {
           $return_value = $other_value;

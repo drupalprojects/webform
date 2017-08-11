@@ -2,8 +2,10 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformSubmissionStatesValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -101,6 +103,25 @@ class DateTime extends DateBase {
       'date' => (string) $this->t('@title [Date]', $t_args),
       'time' => (string) $this->t('@title [Time]', $t_args),
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
+    $value = $this->getRawValue($element, $webform_submission);
+    if (empty($value)) {
+      return NULL;
+    }
+
+    // Get date/time format pattern.
+    $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
+    $format = 'html_' . WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+    $pattern = DateFormat::load($format)->getPattern();
+
+    // Return date/time.
+    $date = DrupalDateTime::createFromTimestamp(strtotime($value));
+    return $date->format($pattern);
   }
 
   /**

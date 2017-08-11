@@ -76,7 +76,7 @@ states_unsupported_nesting:
     $this->drupalGet('webform/test_element_states');
 
     // Check 'States custom selector'.
-    $this->assertRaw('<input data-drupal-selector="edit-states-custom-selector-states-1-selector-other" type="text" id="edit-states-custom-selector-states-1-selector-other" name="states_custom_selector[states][1][selector][other]" value="custom_selector" size="60" maxlength="128" placeholder="Enter other..." class="form-text" />');
+    $this->assertRaw('<input data-drupal-selector="edit-states-custom-selector-states-1-selector-other" type="text" id="edit-states-custom-selector-states-1-selector-other" name="states_custom_selector[states][1][selector][other]" value="custom_selector" size="60" maxlength="128" placeholder="Enter custom selector..." class="form-text" />');
 
     // Check 'States unsupport operator'.
     $this->assertRaw('Conditional logic (Form API #states) is using the <em class="placeholder">XOR</em> operator. Form API #states must be manually entered.');

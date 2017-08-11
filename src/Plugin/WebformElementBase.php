@@ -25,6 +25,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
+use Drupal\webform\WebformSubmissionStatesValidator;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -1185,6 +1186,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
+  public function getRawValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $element['#format'] = 'raw';
+    return $this->getValue($element, $webform_submission, $options);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getItemFormats() {
     return [
       'value' => $this->t('Value'),
@@ -1550,6 +1559,25 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   protected function getElementSelectorInputsOptions(array $element) {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
+    if ($this->isComposite()) {
+      $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
+      $composite_key = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+      if ($composite_key) {
+        return $this->getRawValue($element, $webform_submission, ['composite_key' => $composite_key]);
+      }
+      else {
+        return NULL;
+      }
+    }
+    else {
+      return $this->getRawValue($element, $webform_submission);
+    }
   }
 
   /****************************************************************************/

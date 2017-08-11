@@ -10,6 +10,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
+use Drupal\webform\WebformSubmissionStatesValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -25,6 +26,13 @@ abstract class OptionsBase extends WebformElementBase {
   protected $exportDelta = FALSE;
 
   /**
+   * The other option base element type.
+   *
+   * @var string
+   */
+  protected $otherOptionType;
+
+  /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
@@ -36,38 +44,66 @@ abstract class OptionsBase extends WebformElementBase {
       unset($default_properties['wrapper_attributes']);
     }
 
-    return $default_properties + [
+    $default_properties += [
       // Options settings.
       'options' => [],
       'options_randomize' => FALSE,
     ];
+
+    // Add other properties to elements that include the other text field.
+    if ($this->isOptionsOther()) {
+      $default_properties += [
+        'other__option_label' => $this->t('Other...'),
+        'other__type' => 'textfield',
+        'other__title' => '',
+        'other__placeholder' => $this->t('Enter other...'),
+        'other__description' => '',
+        // Text field or textarea.
+        'other__size' => '',
+        'other__maxlength' => '',
+        'other__field_prefix' => '',
+        'other__field_suffix' => '',
+        // Textarea.
+        'other__rows' => '',
+        // Number.
+        'other__min' => '',
+        'other__max' => '',
+        'other__step' => '',
+      ];
+    }
+
+    return $default_properties;
   }
 
   /**
-   * Get option (option) properties.
+   * Determine if the element plugin type includes an other option text field.
    *
-   * @return array
-   *   An associative array containing other (option) properties.
+   * @return bool
+   *   TRUE if the element plugin type includes an other option text field.
    */
-  public function getOtherProperties() {
-    return [
-      'other__option_label' => $this->t('Other...'),
-      'other__type' => 'textfield',
-      'other__title' => '',
-      'other__placeholder' => $this->t('Enter other...'),
-      'other__description' => '',
-      // Text field or textarea.
-      'other__size' => '',
-      'other__maxlength' => '',
-      'other__field_prefix' => '',
-      'other__field_suffix' => '',
-      // Textarea.
-      'other__rows' => '',
-      // Number.
-      'other__min' => '',
-      'other__max' => '',
-      'other__step' => '',
-    ];
+  protected function isOptionsOther() {
+    return $this->getOptionsOtherType() ? TRUE : FALSE;
+  }
+
+  /**
+   * Get the other option base element type.
+   *
+   * @return string|NULL
+   *   The base element type (select|radios|checkboxes|buttons).
+   */
+  protected function getOptionsOtherType() {
+    if (isset($this->otherOptionType)) {
+      return $this->otherOptionType;
+    }
+
+    if (preg_match('/webform_(select|radios|checkboxes|buttons)_other$/', $this->getPluginId(), $match)) {
+      $this->otherOptionType = $match[1];
+    }
+    else {
+      $this->otherOptionType = FALSE;
+    }
+
+    return $this->otherOptionType ;
   }
 
   /**
@@ -368,6 +404,51 @@ abstract class OptionsBase extends WebformElementBase {
     else {
       $multiple = ($this->hasMultipleValues($element) && strpos($plugin_id, 'select') !== FALSE) ? '[]' : '';
       return [":input[name=\"$name$multiple\"]" => $title];
+    }
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
+    if ($this->isOptionsOther()) {
+      $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
+      $other_type = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+      $value = $this->getRawValue($element, $webform_submission);
+      if ($other_type === 'other') {
+        if ($this->hasMultipleValues($element)) {
+          $other_value = array_diff($value, array_keys($element['#options']));
+          return ($other_value) ? implode( ', ', $other_value) : NULL;
+        }
+        else {
+          // Make sure other value is not valid option.
+          return ($value && !isset($element['#options'][$value])) ? $value : NULL;
+        }
+      }
+      else {
+        if ($this->hasMultipleValues($element)) {
+          // Return array of valid #options.
+          return array_intersect($value, array_keys($element['#options']));
+        }
+        else {
+          // Return valid #option.
+          return (isset($element['#options'][$value])) ? $value : NULL;
+        }
+      }
+
+    }
+    else {
+
+      return parent::getElementSelectorInputValue($selector, $trigger, $element, $webform_submission);
+
+    }
+
+    if (in_array($option_value, $value)) {
+      return (in_array($trigger, ['checked', 'unchecked'])) ? TRUE : $value;
+    }
+    else {
+      return (in_array($trigger, ['checked', 'unchecked'])) ? FALSE : NULL;
     }
   }
 
