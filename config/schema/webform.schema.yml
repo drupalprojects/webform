@@ -980,7 +980,7 @@ block.settings.webform_block:
   label: 'Webforms block'
   mapping:
     webform_id:
-      type: text
+      type: string
       label: 'Webform'
     default_data:
       type: text
@@ -1009,13 +1009,13 @@ block.settings.webform_submission_limit_block:
       type: label
       label: 'Progress bar message'
     webform_id:
-      type: text
+      type: string
       label: 'Webform'
     entity_type:
-      type: text
+      type: string
       label: 'Source entity type'
     entity_id:
-      type: text
+      type: string
       label: 'Source entity id'
 
 # Schema for the configuration of the webform field type.
