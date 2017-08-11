@@ -26,6 +26,49 @@ elements: |
     '#state_province__required': true
     '#postal_code__required': true
     '#country__required': true
+  application_status:
+    '#type': details
+    '#title': 'Application Status'
+    '#open': true
+    '#admin': true
+    '#access_create_roles': {  }
+    state:
+      '#type': webform_buttons
+      '#title': 'Application State'
+      '#options':
+        completed: Completed
+        in_review: 'In review'
+        accepted: Accepted
+        rejected: Rejected
+      '#access_create_roles': {  }
+    completed_date:
+      '#type': datetime
+      '#title': 'Application Completed Date'
+      '#access_create_roles': {  }
+      '#access_update_roles': {  }
+      '#access_view_roles':
+        - authenticated
+    in_review_date:
+      '#type': datetime
+      '#title': 'Application In Review Date'
+      '#access_create_roles': {  }
+      '#access_update_roles': {  }
+      '#access_view_roles':
+        - authenticated
+    accepted_date:
+      '#type': datetime
+      '#title': 'Application Accepted Date'
+      '#access_create_roles': {  }
+      '#access_update_roles': {  }
+      '#access_view_roles':
+        - authenticated
+    rejected_date:
+      '#type': datetime
+      '#title': 'Application Rejected Date'
+      '#access_create_roles': {  }
+      '#access_update_roles': {  }
+      '#access_view_roles':
+        - authenticated
 css: ''
 javascript: ''
 settings:
