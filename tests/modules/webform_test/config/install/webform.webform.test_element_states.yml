@@ -60,7 +60,7 @@ elements: |
       required:
         - custom_selector:
             value: 'Yes'
-        - xor
+        - xxx
         - custom_selector:
             value: 'Yes'
   states_unsupported_nesting:

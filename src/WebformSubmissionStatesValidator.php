@@ -245,7 +245,7 @@ class WebformSubmissionStatesValidator implements WebformSubmissionStatesValidat
     $conditions_total = count($condition_results);
     switch ($condition_logic) {
       case 'xor':
-        return ($conditions_sum && $conditions_sum !== $conditions_total);
+        return ($conditions_sum === 1);
 
       case 'or':
         return (boolean) $conditions_sum;

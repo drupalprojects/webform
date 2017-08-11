@@ -58,6 +58,21 @@ elements: |
           - or
           - ':input[name="trigger_select"]':
               value: option
+    dependent_textfield_required_xor:
+      '#type': textfield
+      '#title': dependent_textfield_required_xor
+      '#description': '<b>Required:</b> checkbox:checked=true XOR textfield:filled=true XOR select:value=options'
+      '#states':
+        required:
+          - ':input[name="trigger_checkbox"]':
+              checked: true
+          - xor
+          - ':input[name="trigger_textfield"]':
+              filled: true
+          - xor
+          - ':input[name="trigger_select"]':
+              value: option
+
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger

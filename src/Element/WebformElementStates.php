@@ -232,6 +232,7 @@ class WebformElementStates extends FormElement {
       '#options' => [
         'and' => t('All'),
         'or' => t('Any'),
+        'xor' => t('One'),
       ],
       '#default_value' => $state['operator'],
       '#field_prefix' => t('if'),
@@ -704,9 +705,7 @@ class WebformElementStates extends FormElement {
           return t('Conditional logic (Form API #states) is using multiple nested conditions.');
         }
         elseif (is_string($condition)) {
-          // Make sure only an 'and/or' operator is being used. XOR is not
-          // support in UI because it is confusing to none technicl users.
-          if (!in_array($condition, ['and', 'or'])) {
+          if (!in_array($condition, ['and', 'or', 'xor'])) {
             return t('Conditional logic (Form API #states) is using the %operator operator.', ['%operator' => Unicode::strtoupper($condition)]);
           }
 

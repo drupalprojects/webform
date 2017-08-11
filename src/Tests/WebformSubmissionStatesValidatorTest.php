@@ -57,6 +57,7 @@ class WebformSubmissionStatesValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('dependent_textfield_required_and field is required.');
     $this->assertRaw('dependent_textfield_required_or field is required.');
+    $this->assertNoRaw('dependent_textfield_required_xor field is required.');
 
     // Check required multiple dependents 'OR' operator.
     $edit = [
@@ -65,6 +66,19 @@ class WebformSubmissionStatesValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertNoRaw('dependent_textfield_required_and field is required.');
     $this->assertRaw('dependent_textfield_required_or field is required.');
+
+    // Check required multiple dependents 'XOR' operator.
+    $edit = [
+      'trigger_checkbox' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('dependent_textfield_required_xor field is required.');
+
+    $edit = [
+      'trigger_checkbox' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('dependent_textfield_required_xor field is required.');
 
     // Check required checkboxes.
     $edit = [
