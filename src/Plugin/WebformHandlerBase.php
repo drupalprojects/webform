@@ -79,7 +79,15 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $submissionStorage;
 
   /**
-   * Constructs a WebformElementHandlerBase object.
+   * Constructs a WebformHandlerBase object.
+   *
+   * IMPORTANT:
+   * Webform handlers are initialized and serialized when they are attached to a
+   * webform. Make sure not include any services as a dependency injection
+   * that directly connect to the database. This will prevent
+   * "LogicException: The database connection is not serializable." exceptions
+   * from being thrown when a form is serialized via an Ajax callaback and/or
+   * form build.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -93,6 +101,8 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    *   The configuration factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   *
+   * @see \Drupal\webform\Entity\Webform::getHandlers
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
