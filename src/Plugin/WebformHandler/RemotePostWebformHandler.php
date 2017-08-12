@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformHandler;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -56,8 +57,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, ClientInterface $http_client, WebformTokenManagerInterface $token_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $config_factory, $entity_type_manager);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, ClientInterface $http_client, WebformTokenManagerInterface $token_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager);
     $this->moduleHandler = $module_handler;
     $this->httpClient = $http_client;
     $this->tokenManager = $token_manager;
@@ -71,7 +72,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')->get('webform.remote_post'),
+      $container->get('logger.factory'),
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('module_handler'),
@@ -342,7 +343,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         '@message' => $message,
         'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers-form')->toString(),
       ];
-      $this->logger->error('@form webform remote @type post (@state) to @url failed. @message', $context);
+      $this->getLogger()->error('@form webform remote @type post (@state) to @url failed. @message', $context);
       return;
     }
 

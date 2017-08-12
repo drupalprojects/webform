@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -57,18 +58,18 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $weight = '';
 
   /**
-   * A logger instance.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
-
-  /**
    * The configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * The logger factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $loggerFactory;
 
   /**
    * Webform submission storage.
@@ -86,18 +87,18 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
+   * @param LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->setConfiguration($configuration);
-    $this->logger = $logger;
+    $this->loggerFactory = $logger_factory;
     $this->configFactory = $config_factory;
     $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
   }
@@ -110,7 +111,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')->get('webform'),
+      $container->get('logger.factory'),
       $container->get('config.factory'),
       $container->get('entity_type.manager')
     );
@@ -449,6 +450,20 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * {@inheritdoc}
    */
   public function deleteElement($key, array $element) {}
+
+  /****************************************************************************/
+  // Loggin methods.
+  /****************************************************************************/
+
+  /**
+   * Get webform logger.
+   *
+   * @return \Drupal\Core\Logger\LoggerChannelInterface
+   *   Webform logger
+   */
+  protected function getLogger() {
+    return $this->loggerFactory->get('webform');
+  }
 
   /**
    * Log a webform handler's submission operation.

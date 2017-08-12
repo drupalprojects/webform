@@ -367,7 +367,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       $context = $t_args + [
         'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers-form')->toString(),
       ];
-      $this->logger->warning('%submission: Email <b>not scheduled</b> for %handler handler because %send is not a valid date/token.', $context);
+      $this->getLogger()->warning('%submission: Email <b>not scheduled</b> for %handler handler because %send is not a valid date/token.', $context);
       return FALSE;
     }
 
