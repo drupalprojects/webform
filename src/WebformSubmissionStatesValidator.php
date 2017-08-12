@@ -177,6 +177,11 @@ class WebformSubmissionStatesValidator implements WebformSubmissionStatesValidat
     foreach ($conditions as $index => $value) {
       if (is_string($value) && in_array($value, ['and', 'or', 'xor'])) {
         $condition_logic = $value;
+        // If OR conditional logic operatator, check current condition
+        // results.
+        if ($condition_logic === 'or' && array_sum($condition_results)) {
+          return TRUE;
+        }
         continue;
       }
       elseif (is_int($index)) {
