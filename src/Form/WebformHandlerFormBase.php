@@ -143,6 +143,29 @@ abstract class WebformHandlerFormBase extends FormBase {
     }
     $form['settings']['#tree'] = TRUE;
 
+    // Conditional logic.
+    if ($this->webformHandler->supportsConditions()) {
+      $form['conditional_logic'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Conditional logic'),
+        '#states' => [
+          'visible' => [
+            ':input[name="status"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
+      $form['conditional_logic']['conditions'] = [
+        '#type' => 'webform_element_states',
+        '#state_options' => [
+          'enabled' => $this->t('Enabled'),
+          'disabled' => $this->t('Disabled'),
+        ],
+        '#selector_options' => $webform->getElementsSelectorOptions(),
+        '#multiple' => FALSE,
+        '#default_value' => $this->webformHandler->getConditions(),
+      ];
+    }
+
     // Check the URL for a weight, then the webform handler,
     // otherwise use default.
     $form['weight'] = [
@@ -194,6 +217,13 @@ abstract class WebformHandlerFormBase extends FormBase {
     $this->webformHandler->setLabel($form_state->getValue('label'));
     $this->webformHandler->setStatus($form_state->getValue('status'));
     $this->webformHandler->setWeight($form_state->getValue('weight'));
+    // Clear conditions if conditions or handler is disabled.
+    if (!$this->webformHandler->supportsConditions() || $this->webformHandler->isDisabled()) {
+      $this->webformHandler->setConditions([]);
+    }
+    else {
+      $this->webformHandler->setConditions($form_state->getValue('conditions'));
+    }
 
     if ($this instanceof WebformHandlerAddForm) {
       $this->webform->addWebformHandler($this->webformHandler);

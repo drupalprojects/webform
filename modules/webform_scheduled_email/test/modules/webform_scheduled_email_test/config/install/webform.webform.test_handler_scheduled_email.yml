@@ -141,6 +141,7 @@ handlers:
     label: Tomorow
     handler_id: tomorrow
     status: true
+    conditions: {  }
     weight: -49
     settings:
       states:
@@ -174,6 +175,7 @@ handlers:
     label: Yesterday
     handler_id: yesterday
     status: true
+    conditions: {  }
     weight: -50
     settings:
       states:
@@ -207,6 +209,7 @@ handlers:
     label: 'Last year'
     handler_id: last_year
     status: true
+    conditions: {  }
     weight: -48
     settings:
       states:
@@ -240,6 +243,7 @@ handlers:
     label: Broken
     handler_id: broken
     status: true
+    conditions: {  }
     weight: -46
     settings:
       states:
@@ -273,6 +277,7 @@ handlers:
     label: Other
     handler_id: other
     status: true
+    conditions: {  }
     weight: -45
     settings:
       states:
@@ -308,6 +313,7 @@ handlers:
     label: 'Draft reminder'
     handler_id: draft_reminder
     status: true
+    conditions: {  }
     weight: -47
     settings:
       states:

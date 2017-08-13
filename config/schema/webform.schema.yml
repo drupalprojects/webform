@@ -795,14 +795,22 @@ webform.webform.*:
         mapping:
           id:
             type: string
+            label: 'Handle plugin ID'
           handler_id:
             type: string
+            label: 'Handler instance ID'
           label:
             type: label
+            label: 'Label'
           status:
             type: boolean
+            label: 'Status'
+          conditions:
+            type: ignore
+            label: 'Conditional logic'
           weight:
             type: integer
+            label: 'Weight'
           settings:
             type: webform.handler.[%parent.id]
     third_party_settings:

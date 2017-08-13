@@ -1067,3 +1067,19 @@ function webform_update_8071() {
   }
 
 }
+
+/**
+ * Issue #2901738: Add support conditions to WebformHandler.
+ */
+function webform_update_8072() {
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $handlers = $webform->getHandlers();
+    foreach ($handlers as $handler) {
+      $configuration = $handler->getConfiguration();
+      $handler->setConfiguration($configuration);
+    }
+    $webform->save();
+  }
+}

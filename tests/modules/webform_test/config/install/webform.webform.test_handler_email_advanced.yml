@@ -157,6 +157,7 @@ handlers:
     label: Email
     handler_id: email
     status: true
+    conditions: {  }
     weight: 1
     settings:
       states:

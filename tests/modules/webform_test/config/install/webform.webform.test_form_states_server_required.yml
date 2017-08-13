@@ -72,7 +72,7 @@ elements: |
           - xor
           - ':input[name="trigger_select"]':
               value: option
-
+  
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger

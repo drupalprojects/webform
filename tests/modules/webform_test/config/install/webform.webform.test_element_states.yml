@@ -53,6 +53,14 @@ elements: |
       selector_01: 'Selector 01 (selector_01)'
       selector_02: 'Selector 02 (selector_02)'
       selector_03: 'Selector 03 (selector_03)'
+  states_single:
+    '#type': webform_element_states
+    '#title': 'States single'
+    '#selector_options':
+      selector_01: 'Selector 01 (selector_01)'
+      selector_02: 'Selector 02 (selector_02)'
+      selector_03: 'Selector 03 (selector_03)'
+    '#multiple': false
   states_unsupported_operator:
     '#type': webform_element_states
     '#title': 'States unsupport operator'
@@ -184,5 +192,6 @@ handlers:
     label: Debug
     handler_id: debug
     status: true
+    conditions: {  }
     weight: 0
     settings: {  }

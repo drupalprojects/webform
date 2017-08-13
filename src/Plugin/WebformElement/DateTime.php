@@ -5,7 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformSubmissionStatesValidator;
+use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -115,8 +115,8 @@ class DateTime extends DateBase {
     }
 
     // Get date/time format pattern.
-    $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
-    $format = 'html_' . WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+    $input_name = WebformSubmissionConditionsValidator::getSelectorInputName($selector);
+    $format = 'html_' . WebformSubmissionConditionsValidator::getInputNameAsArray($input_name, 1);
     $pattern = DateFormat::load($format)->getPattern();
 
     // Return date/time.

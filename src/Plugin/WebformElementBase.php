@@ -25,7 +25,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
-use Drupal\webform\WebformSubmissionStatesValidator;
+use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -1566,8 +1566,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
     if ($this->isComposite()) {
-      $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
-      $composite_key = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+      $input_name = WebformSubmissionConditionsValidator::getSelectorInputName($selector);
+      $composite_key = WebformSubmissionConditionsValidator::getInputNameAsArray($input_name, 1);
       if ($composite_key) {
         return $this->getRawValue($element, $webform_submission, ['composite_key' => $composite_key]);
       }
@@ -1963,11 +1963,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     /* Conditional logic */
 
-    $form['conditional'] = [
+    $form['conditional_logic'] = [
       '#type' => 'details',
       '#title' => $this->t('Conditional logic'),
     ];
-    $form['conditional']['states'] = [
+    $form['conditional_logic']['states'] = [
       '#type' => 'webform_element_states',
       '#state_options' => $this->getElementStateOptions(),
       '#selector_options' => $webform->getElementsSelectorOptions(),

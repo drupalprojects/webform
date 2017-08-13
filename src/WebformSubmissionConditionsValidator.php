@@ -8,12 +8,12 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 
 /**
- * Webform submission (server-side) states validator.
+ * Webform submission conditions (#states) validator.
  *
  * @see \Drupal\webform\Element\WebformElementStates
  * @see drupal_process_states()
  */
-class WebformSubmissionStatesValidator implements WebformSubmissionStatesValidatorInterface {
+class WebformSubmissionConditionsValidator implements WebformSubmissionConditionsValidatorInterface {
 
   use StringTranslationTrait;
 
@@ -48,7 +48,7 @@ class WebformSubmissionStatesValidator implements WebformSubmissionStatesValidat
   protected $elementManager;
 
   /**
-   * Constructs a WebformSubmissionStatesValidator object.
+   * Constructs a WebformSubmissionConditionsValidator object.
    *
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.

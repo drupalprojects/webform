@@ -69,8 +69,8 @@ services:
     class: Drupal\webform\WebformTokenManager
     arguments: ['@module_handler', '@token']
 
-  webform_submission.states_validator:
-    class: Drupal\webform\WebformSubmissionStatesValidator
+  webform_submission.conditions_validator:
+    class: Drupal\webform\WebformSubmissionConditionsValidator
     arguments: ['@plugin.manager.webform.element']
 
   # Breadcrumb builder.

@@ -5,9 +5,9 @@ namespace Drupal\webform;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides an interface defining a webform states validator.
+ * Provides an interface defining a webform conditions (#states) validator.
  */
-interface WebformSubmissionStatesValidatorInterface {
+interface WebformSubmissionConditionsValidatorInterface {
 
   /**
    * Apply form #states to visible elements.

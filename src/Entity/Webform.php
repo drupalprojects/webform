@@ -1815,10 +1815,29 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function invokeHandlers($method, &$data, &$context1 = NULL, &$context2 = NULL) {
     $handlers = $this->getHandlers();
-    foreach ($handlers as $handler) {
-      if ($handler->isEnabled()) {
-        $handler->$method($data, $context1, $context2);
+
+    // Get webform submission from arguments for conditions validations.
+    $webform_submission = NULL;
+    $args = func_get_args();
+    foreach ($args as $arg) {
+      if ($arg instanceof WebformSubmissionInterface) {
+        $webform_submission = $arg;
+        break;
       }
+    }
+
+    foreach ($handlers as $handler) {
+      // If the handler is disabled never invoke it.
+      if ($handler->isDisabled()) {
+        continue;
+      }
+
+      // If the arguments contain the webform submission check conditions.
+      if ($webform_submission && !$handler->checkConditions($webform_submission)) {
+        continue;
+      }
+
+      $handler->$method($data, $context1, $context2);
     }
   }
 

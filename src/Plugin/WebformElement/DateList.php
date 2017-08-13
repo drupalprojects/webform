@@ -4,7 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformSubmissionStatesValidator;
+use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -87,8 +87,8 @@ class DateList extends DateBase {
 
     // Return date part value.
     // @see \Drupal\Core\Datetime\Element\Datelist::valueCallback
-    $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
-    $part = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+    $input_name = WebformSubmissionConditionsValidator::getSelectorInputName($selector);
+    $part = WebformSubmissionConditionsValidator::getInputNameAsArray($input_name, 1);
     switch ($part) {
       case 'day':
         $format = 'j';

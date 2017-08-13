@@ -193,8 +193,13 @@ class TestWebformHandler extends WebformHandlerBase {
    */
   protected function displayMessage($method_name, $context1 = NULL) {
     if (PHP_SAPI != 'cli') {
-      $t_args = ['@class_name' => get_class($this), '@method_name' => $method_name, '@context1' => $context1];
-      drupal_set_message($this->t('Invoked: @class_name:@method_name @context1', $t_args), 'status', TRUE);
+      $t_args = [
+        '@id' => $this->getHandlerId(),
+        '@class_name' => get_class($this),
+        '@method_name' => $method_name,
+        '@context1' => $context1,
+      ];
+      drupal_set_message($this->t('Invoked @id: @class_name:@method_name @context1', $t_args), 'status', TRUE);
       \Drupal::logger('webform.test')->notice('Invoked: @class_name:@method_name @context1', $t_args);
     }
   }

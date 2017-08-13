@@ -6,11 +6,11 @@ use Drupal\webform\Element\WebformOtherBase;
 use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for webform submission states validator.
+ * Tests for webform submission conditions (#states) validator.
  *
  * @group Webform
  */
-class WebformSubmissionStatesValidatorTest extends WebformTestBase {
+class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
 
   /**
    * Modules to enable.
@@ -39,7 +39,7 @@ class WebformSubmissionStatesValidatorTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform submission states validator required.
+   * Tests webform submission conditions (#states) validator required.
    */
   public function testFormStatesValidatorRequired() {
     $webform = Webform::load('test_form_states_server_required');
@@ -166,7 +166,7 @@ class WebformSubmissionStatesValidatorTest extends WebformTestBase {
   }
 
   /**
-   * Tests webform submission states validator wizard cross-page conditionals.
+   * Tests webform submission conditions (#states) validator wizard cross-page conditions.
    */
   public function testFormStatesValidatorWizard() {
     $webform = Webform::load('test_form_states_server_wizard');

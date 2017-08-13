@@ -136,6 +136,7 @@ handlers:
     label: 'Email Notification'
     handler_id: email_notification
     status: true
+    conditions: {  }
     weight: 1
     settings:
       states:

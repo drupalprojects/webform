@@ -94,9 +94,13 @@ class WebformEntityHandlersForm extends EntityForm {
 
       $row['summary'] = $handler->getSummary();
 
-      $row['status'] = [
-        'data' => ['#markup' => ($handler->isEnabled()) ? $this->t('Enabled') : $this->t('Disabled')],
-      ];
+      if ($handler->isDisabled()) {
+        $status = $this->t('Disabled');
+      }
+      else {
+        $status = ($handler->supportsConditions() && $handler->getConditions()) ? $this->t('Conditional') : $this->t('Enabled');
+      }
+      $row['status'] = ['data' => ['#markup' => $status]];
 
       $row['weight'] = [
         '#type' => 'weight',

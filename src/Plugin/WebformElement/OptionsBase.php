@@ -10,7 +10,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
-use Drupal\webform\WebformSubmissionStatesValidator;
+use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -413,8 +413,8 @@ abstract class OptionsBase extends WebformElementBase {
    */
   public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
     if ($this->isOptionsOther()) {
-      $input_name = WebformSubmissionStatesValidator::getSelectorInputName($selector);
-      $other_type = WebformSubmissionStatesValidator::getInputNameAsArray($input_name, 1);
+      $input_name = WebformSubmissionConditionsValidator::getSelectorInputName($selector);
+      $other_type = WebformSubmissionConditionsValidator::getInputNameAsArray($input_name, 1);
       $value = $this->getRawValue($element, $webform_submission);
       if ($other_type === 'other') {
         if ($this->hasMultipleValues($element)) {

@@ -565,6 +565,7 @@ handlers:
     label: 'Email (Text)'
     handler_id: email_text
     status: true
+    conditions: {  }
     weight: 1
     settings:
       states:
@@ -593,6 +594,7 @@ handlers:
     label: 'Email (HTML)'
     handler_id: email_html
     status: true
+    conditions: {  }
     weight: 2
     settings:
       states:

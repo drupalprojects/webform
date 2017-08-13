@@ -243,5 +243,6 @@ handlers:
     label: Debug
     handler_id: debug
     status: true
+    conditions: {  }
     weight: 1
     settings: {  }

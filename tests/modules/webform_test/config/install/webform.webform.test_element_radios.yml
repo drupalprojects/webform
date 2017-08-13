@@ -30,7 +30,7 @@ elements: |
       '#type': checkbox
       '#title': 'Required the below radio button'
       '#default_value': true
-    radios_required_conditional:
+    radios_required_conditions:
       '#type': radios
       '#title': radios_required
       '#options': yes_no
@@ -46,7 +46,7 @@ elements: |
       '#type': checkbox
       '#title': 'Required the below buttons'
       '#default_value': true
-    buttons_required_conditional:
+    buttons_required_conditions:
       '#type': webform_buttons
       '#title': buttons_required
       '#options': yes_no
@@ -161,5 +161,6 @@ handlers:
     label: Debug
     handler_id: debug
     status: true
+    conditions: {  }
     weight: 1
     settings: {  }

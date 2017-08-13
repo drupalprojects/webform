@@ -126,6 +126,7 @@ handlers:
     label: Test
     handler_id: test
     status: true
+    conditions: {  }
     weight: 1
     settings:
       message: 'One two one two this is just a test'

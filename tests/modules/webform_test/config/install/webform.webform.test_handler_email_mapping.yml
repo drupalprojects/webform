@@ -135,6 +135,7 @@ handlers:
     label: 'Select yes option'
     handler_id: select
     status: true
+    conditions: {  }
     weight: 0
     settings:
       states:
@@ -165,6 +166,7 @@ handlers:
     label: 'Select empty'
     handler_id: empty
     status: true
+    conditions: {  }
     weight: 0
     settings:
       states:
@@ -195,6 +197,7 @@ handlers:
     label: 'Select default'
     handler_id: empty
     status: true
+    conditions: {  }
     weight: 0
     settings:
       states:
@@ -225,6 +228,7 @@ handlers:
     label: Checkboxes
     handler_id: checkboxes
     status: true
+    conditions: {  }
     weight: 1
     settings:
       states:
@@ -257,6 +261,7 @@ handlers:
     label: 'Radios other'
     handler_id: radios_other
     status: true
+    conditions: {  }
     weight: 2
     settings:
       states:

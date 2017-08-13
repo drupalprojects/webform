@@ -3,48 +3,24 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_test
+      - webform_test_handler
+  module:
+    - webform_test_handler
 open: null
 close: null
 uid: null
 template: false
-id: test_element_text
-title: 'Test: Element: Text'
-description: 'Tests text field and text area based elements.'
-category: 'Test: Element'
+id: test_handler_conditions
+title: 'Test: Handler: Test conditions'
+description: 'Test handler conditions.'
+category: 'Test: Handler'
 elements: |
-  '#attributes':
-    novalidate: novalidate
-  text_format_element:
-    '#type': details
-    '#title': 'Text format elements'
-    '#open': true
-    text_format:
-      '#type': text_format
-      '#title': text_format
-      '#hide_help': true
-  counter_elements:
-    '#type': details
-    '#title': 'Word and character counter'
-    '#open': true
-    counter_characters:
-      '#type': textfield
-      '#title': 'Character counter'
-      '#counter_type': character
-      '#counter_maximum': 10
-    counter_words:
-      '#type': textarea
-      '#title': 'Word counter'
-      '#counter_type': word
-      '#counter_maximum': 3
-      '#counter_message': 'word(s) left. This is a custom message'
-  creditcard_number_elements:
-    '#type': details
-    '#title': 'Credit card number (creditcard_number)'
-    '#open': true
-    creditcard_number_basic:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number basic'
+  trigger_a:
+    '#type': checkbox
+    '#title': trigger_a
+  trigger_b:
+    '#type': checkbox
+    '#title': trigger_b
 css: ''
 javascript: ''
 settings:
@@ -92,7 +68,7 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: message
+  confirmation_type: page
   confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''
@@ -108,7 +84,7 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: true
+  results_disabled: false
   results_disabled_ignore: false
   token_update: false
 access:
@@ -147,11 +123,27 @@ access:
     users: {  }
     permissions: {  }
 handlers:
-  debug:
-    id: debug
-    label: Debug
-    handler_id: debug
+  test_a:
+    id: test
+    label: 'Test A'
+    handler_id: test_a
     status: true
-    conditions: {  }
+    conditions:
+      enabled:
+        ':input[name="trigger_a"]':
+          checked: true
     weight: 1
-    settings: {  }
+    settings:
+      message: 'Test A'
+  test_b:
+    id: test
+    label: 'Test B'
+    handler_id: test_b
+    status: true
+    conditions:
+      disabled:
+        ':input[name="trigger_b"]':
+          unchecked: true
+    weight: 1
+    settings:
+      message: 'Test B'

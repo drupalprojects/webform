@@ -8,8 +8,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -58,6 +58,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected $weight = '';
 
   /**
+   * The webform handler's conditions.
+   *
+   * @var array
+   */
+  protected $conditions = [];
+
+  /**
    * The configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -77,6 +84,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * @var \Drupal\webform\WebformSubmissionStorageInterface
    */
   protected $submissionStorage;
+
+  /**
+   * The webform submission (server-side) conditions (#states) validator.
+   *
+   * @var \Drupal\webform\WebformSubmissionConditionsValidator
+   */
+  protected $conditionsValidator;
 
   /**
    * Constructs a WebformHandlerBase object.
@@ -101,16 +115,18 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    *   The configuration factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\webform\WebformSubmissionConditionsValidatorInterface $conditions_validator
+   *   The webform submission conditions (#states) validator.
    *
    * @see \Drupal\webform\Entity\Webform::getHandlers
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
     $this->setConfiguration($configuration);
     $this->loggerFactory = $logger_factory;
     $this->configFactory = $config_factory;
     $this->submissionStorage = $entity_type_manager->getStorage('webform_submission');
+    $this->conditionsValidator = $conditions_validator;
   }
 
   /**
@@ -123,7 +139,8 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
       $plugin_definition,
       $container->get('logger.factory'),
       $container->get('config.factory'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('webform_submission.conditions_validator')
     );
   }
 
@@ -177,6 +194,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
+  public function supportsConditions() {
+    return $this->pluginDefinition['conditions'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getHandlerId() {
     return $this->handler_id;
   }
@@ -217,6 +241,21 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    */
   public function getStatus() {
     return $this->status;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConditions(array $conditions) {
+    $this->conditions = $conditions;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConditions() {
+    return $this->conditions;
   }
 
   /**
@@ -272,12 +311,37 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
+  public function checkConditions(WebformSubmissionInterface $webform_submission) {
+    // Return TRUE if conditions are disabled for the handler.
+    if (!$this->supportsConditions()) {
+      return TRUE;
+    }
+
+    $conditions = $this->getConditions();
+
+    // Return TRUE if no conditions are defined.
+    if (empty($conditions)) {
+      return TRUE;
+    }
+
+    $state = key($conditions);
+    $conditions = $conditions[$state];
+    $result = $this->conditionsValidator->validateConditions($conditions, $webform_submission);
+
+    // Negate result for 'disabled' state.
+    return ($state === 'disabled') ? !$result : $result;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getConfiguration() {
     return [
       'id' => $this->getPluginId(),
       'label' => $this->getLabel(),
       'handler_id' => $this->getHandlerId(),
       'status' => $this->getStatus(),
+      'conditions' => $this->getConditions(),
       'weight' => $this->getWeight(),
       'settings' => $this->configuration,
     ];
@@ -291,14 +355,16 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
       'handler_id' => '',
       'label' => '',
       'status' => 1,
+      'conditions' => [],
       'weight' => '',
       'settings' => [],
     ];
     $this->configuration = $configuration['settings'] + $this->defaultConfiguration();
     $this->handler_id = $configuration['handler_id'];
     $this->label = $configuration['label'];
-    $this->weight = $configuration['weight'];
     $this->status = $configuration['status'];
+    $this->conditions = $configuration['conditions'];
+    $this->weight = $configuration['weight'];
     return $this;
   }
 

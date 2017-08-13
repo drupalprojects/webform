@@ -139,6 +139,7 @@ handlers:
     label: 'Email Notification'
     handler_id: email_notification
     status: true
+    conditions: {  }
     weight: 1
     settings:
       states:
@@ -167,6 +168,7 @@ handlers:
     label: 'Email Reminder'
     handler_id: email_reminder
     status: true
+    conditions: {  }
     weight: 1
     settings:
       states:

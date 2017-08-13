@@ -144,6 +144,7 @@ handlers:
     label: 'Email confirmation'
     handler_id: email_confirmation
     status: true
+    conditions: {  }
     weight: 1
     settings:
       to_mail: default

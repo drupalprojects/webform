@@ -50,6 +50,7 @@ states_custom_selector:
     custom_selector:
       value: 'Yes'
 states_empty: {  }
+states_single: {  }
 states_unsupported_operator:
   required:
     - custom_selector:
@@ -85,6 +86,10 @@ states_unsupported_nesting:
     // Check 'States unsupport nested multiple selectors'.
     $this->assertRaw('Conditional logic (Form API #states) is using multiple nested conditions. Form API #states must be manually entered.');
     $this->assertRaw('<textarea data-drupal-selector="edit-states-unsupported-nesting-states" aria-describedby="edit-states-unsupported-nesting-states--description" class="js-webform-codemirror webform-codemirror yaml form-textarea resize-vertical" data-webform-codemirror-mode="text/x-yaml" id="edit-states-unsupported-nesting-states" name="states_unsupported_nesting[states]" rows="5" cols="60">');
+
+    // Check 'States single' (#multiple: FALSE)
+    $this->assertFieldById('edit-states-empty-add');
+    $this->assertNoFieldById('edit-states-single-add');
 
     /**************************************************************************/
     // Processing.

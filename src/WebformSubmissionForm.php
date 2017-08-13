@@ -116,11 +116,11 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $tokenManager;
 
   /**
-   * The webform submission (server-side) #states validator.
+   * The webform submission conditions (#states) validator.
    *
-   * @var \Drupal\webform\WebformSubmissionStatesValidator
+   * @var \Drupal\webform\WebformSubmissionConditionsValidator
    */
-  protected $statesValidator;
+  protected $conditionsValidator;
 
   /**
    * The webform settings.
@@ -164,8 +164,10 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The webform message manager.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
+   * @param \Drupal\webform\WebformSubmissionConditionsValidator $conditions_validator
+   *   The webform submission conditions (#states) validator.
    */
-  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionStatesValidator $states_validator) {
+  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionConditionsValidator $conditions_validator) {
     parent::__construct($entity_manager);
     $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
@@ -176,7 +178,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->thirdPartySettingsManager = $third_party_settings_manager;
     $this->messageManager = $message_manager;
     $this->tokenManager = $token_manager;
-    $this->statesValidator = $states_validator;
+    $this->conditionsValidator = $conditions_validator;
   }
 
   /**
@@ -193,7 +195,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('webform.third_party_settings_manager'),
       $container->get('webform.message_manager'),
       $container->get('webform.token_manager'),
-      $container->get('webform_submission.states_validator')
+      $container->get('webform_submission.conditions_validator')
     );
   }
 
@@ -320,15 +322,15 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Build the webform.
     $form = parent::buildForm($form, $form_state);
 
+    // Server side #states API validation.
+    $this->conditionsValidator->buildForm($form, $form_state);
+
     // Alter webform via webform handler.
     $this->getWebform()->invokeHandlers('alterForm', $form, $form_state, $webform_submission);
 
     // Call custom webform alter hook.
     $form_id = $this->getFormId();
     $this->thirdPartySettingsManager->alter('webform_submission_form', $form, $form_state, $form_id);
-
-    // Server side #states API validation.
-    $this->statesValidator->buildForm($form, $form_state);
 
     return $this->buildAjaxForm($form, $form_state);
   }
@@ -1040,6 +1042,9 @@ class WebformSubmissionForm extends ContentEntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
+    // Build webform submission with validated and processed data.
+    $this->entity = $this->buildEntity($form, $form_state);
+
     // Validate webform via webform handler.
     $this->getWebform()->invokeHandlers('validateForm', $form, $form_state, $this->entity);
 
@@ -1062,11 +1067,8 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
-    // Build webform submission with validated and processed data.
-    $this->entity = $this->buildEntity($form, $form_state);
-
     // Server side #states API validation.
-    $this->statesValidator->validateForm($form, $form_state);
+    $this->conditionsValidator->validateForm($form, $form_state);
   }
 
   /**

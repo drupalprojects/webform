@@ -143,6 +143,7 @@ handlers:
     label: 'Remote post'
     handler_id: remote_post
     status: true
+    conditions: {  }
     weight: 1
     settings:
       type: x-www-form-urlencoded

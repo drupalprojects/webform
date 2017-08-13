@@ -30,6 +30,7 @@ class WebformElementStates extends FormElement {
         [$class, 'processWebformStates'],
       ],
       '#theme_wrappers' => ['form_element'],
+      '#multiple' => TRUE,
     ];
   }
 
@@ -182,14 +183,16 @@ class WebformElementStates extends FormElement {
     ] + $rows;
 
     // Build add state action.
-    $element['add'] = [
-      '#type' => 'submit',
-      '#value' => t('Add another state'),
-      '#limit_validation_errors' => [],
-      '#submit' => [[get_called_class(), 'addStateSubmit']],
-      '#ajax' => $ajax_settings,
-      '#name' => $table_id . '_add',
-    ];
+    if ($element['#multiple']) {
+      $element['add'] = [
+        '#type' => 'submit',
+        '#value' => t('Add another state'),
+        '#limit_validation_errors' => [],
+        '#submit' => [[get_called_class(), 'addStateSubmit']],
+        '#ajax' => $ajax_settings,
+        '#name' => $table_id . '_add',
+      ];
+    }
 
     $element['#attached']['library'][] = 'webform/webform.element.states';
 
@@ -631,7 +634,7 @@ class WebformElementStates extends FormElement {
         $index++;
         $states[$index] = [
           'state' => $value['state'],
-          'operator' => $value['operator'],
+          'operator' => (isset($value['operator'])) ? $value['operator'] : 'and',
           'conditions' => [],
         ];
       }
