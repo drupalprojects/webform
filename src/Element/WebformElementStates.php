@@ -68,12 +68,12 @@ class WebformElementStates extends FormElement {
     // There are also defined by \Drupal\webform\Plugin\WebformElementBase::form.
     $element += [
       '#state_options' => [
+        'visible' => t('Visible'),
+        'invisible' => t('Hidden'),
         'enabled' => t('Enabled'),
         'disabled' => t('Disabled'),
         'required' => t('Required'),
         'optional' => t('Optional'),
-        'visible' => t('Visible'),
-        'invisible' => t('Invisible'),
         'checked' => t('Checked'),
         'unchecked' => t('Unchecked'),
         'expanded' => t('Expanded'),

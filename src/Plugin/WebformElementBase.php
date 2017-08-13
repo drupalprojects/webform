@@ -1496,7 +1496,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Set default states that apply to the element/container and sub elements.
     $states += [
       'visible' => $this->t('Visible'),
-      'invisible' => $this->t('Invisible'),
+      'invisible' => $this->t('Hidden'),
       'enabled' => $this->t('Enabled'),
       'disabled' => $this->t('Disabled'),
       'required' => $this->t('Required'),
