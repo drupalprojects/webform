@@ -67,28 +67,8 @@ class WebformElementStates extends FormElement {
     // Define default #state_options and #trigger_options.
     // There are also defined by \Drupal\webform\Plugin\WebformElementBase::form.
     $element += [
-      '#state_options' => [
-        'visible' => t('Visible'),
-        'invisible' => t('Hidden'),
-        'enabled' => t('Enabled'),
-        'disabled' => t('Disabled'),
-        'required' => t('Required'),
-        'optional' => t('Optional'),
-        'checked' => t('Checked'),
-        'unchecked' => t('Unchecked'),
-        'expanded' => t('Expanded'),
-        'collapsed' => t('Collapsed'),
-      ],
-      '#trigger_options' => [
-        'empty' => t('Empty'),
-        'filled' => t('Filled'),
-        'checked' => t('Checked'),
-        'unchecked' => t('Unchecked'),
-        'expanded' => t('Expanded'),
-        'collapsed' => t('Collapsed'),
-        'value' => t('Value is'),
-        '!value' => t('Value is not'),
-      ],
+      '#state_options' => static::getStateOptions(),
+      '#trigger_options' => static::getTriggerOptions(),
     ];
 
     $element['#tree'] = TRUE;
@@ -723,6 +703,46 @@ class WebformElementStates extends FormElement {
       }
     }
     return FALSE;
+  }
+
+  /**
+   * Get an associative array of translated state options.
+   *
+   * @return array
+   *   An associative array of translated state options.
+   */
+  static public function getStateOptions() {
+    return [
+      'visible' => t('Visible'),
+      'invisible' => t('Hidden'),
+      'enabled' => t('Enabled'),
+      'disabled' => t('Disabled'),
+      'required' => t('Required'),
+      'optional' => t('Optional'),
+      'checked' => t('Checked'),
+      'unchecked' => t('Unchecked'),
+      'expanded' => t('Expanded'),
+      'collapsed' => t('Collapsed'),
+    ];
+  }
+
+  /**
+   * Get an associative array of translated trigger options.
+   *
+   * @return array
+   *   An associative array of translated trigger options.
+   */
+  static public function getTriggerOptions() {
+    return [
+      'empty' => t('Empty'),
+      'filled' => t('Filled'),
+      'checked' => t('Checked'),
+      'unchecked' => t('Unchecked'),
+      'expanded' => t('Expanded'),
+      'collapsed' => t('Collapsed'),
+      'value' => t('Value is'),
+      '!value' => t('Value is not'),
+    ];
   }
 
 }

@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
+use Drupal\webform\Element\WebformElementStates;
 use Drupal\webform\Form\WebformEntityAjaxFormTrait;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\WebformEntityForm;
@@ -289,6 +290,12 @@ class WebformUiEntityForm extends WebformEntityForm {
           'class' => [RESPONSIVE_PRIORITY_LOW],
         ];
       }
+      if ($webform->hasConditions()) {
+        $header['conditions'] = [
+          'data' => $this->t('Conditional'),
+          'class' => [RESPONSIVE_PRIORITY_LOW],
+        ];
+      }
       $header['required'] = [
         'data' => $this->t('Required'),
         'class' => ['webform-ui-element-required', RESPONSIVE_PRIORITY_LOW],
@@ -414,6 +421,16 @@ class WebformUiEntityForm extends WebformEntityForm {
         ];
       }
 
+      if ($webform->hasConditions()) {
+        $states = [];
+        if (!empty($element['#states'])) {
+          $states = array_intersect_key(WebformElementStates::getStateOptions(), $element['#states']);
+        }
+        $row['conditional'] = [
+          '#markup' => implode('; ', $states),
+        ];
+      }
+
       if ($webform_element->hasProperty('required')) {
         $row['required'] = [
           '#type' => 'checkbox',
@@ -533,6 +550,9 @@ class WebformUiEntityForm extends WebformEntityForm {
       ];
       if ($webform->hasFlexboxLayout()) {
         $row['flex'] = ['#markup' => 1];
+      }
+      if ($webform->hasConditions()) {
+        $row['flex'] = ['#markup' => ''];
       }
       $row['required'] = ['#markup' => ''];
     }

@@ -33,7 +33,23 @@ thead th .dropbutton {
   border-top: inherit !important;
 }
 
-.webform-ui-elements-table tr.webform-ui-element-type-webform_wizard_page {
+.webform-ui-elements-table td:nth-child(1) {
+  word-wrap: break-word;
+  min-width: 200px;
+}
+
+.webform-ui-elements-table td:nth-child(3) {
+  word-wrap: break-word;
+}
+
+@media screen and (max-width: 1024px) {
+  .webform-ui-elements-table td:nth-child(3) {
+    max-width: 150px;
+  }
+}
+
+
+webform-ui-elements-table tr.webform-ui-element-type-webform_wizard_page {
   border-top: 2px solid #a6a6a6;
 }
 

@@ -312,6 +312,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $hasContainer = FALSE;
 
   /**
+   * Track if the webform has conditions (ie #states).
+   *
+   * @var bool
+   */
+  protected $hasConditions = FALSE;
+
+  /**
    * Track if the webform has translations.
    *
    * @var bool
@@ -529,6 +536,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public function hasContainer() {
     $this->initElements();
     return $this->hasContainer;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasConditions() {
+    $this->initElements();
+    return $this->hasConditions;
   }
 
   /**
@@ -1028,6 +1043,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasManagedFile = FALSE;
     $this->hasFlexboxLayout = FALSE;
     $this->hasContainer = FALSE;
+    $this->hasConditions = FALSE;
     $this->elementsActions = [];
     $this->elementsWizardPages = [];
     $this->elementsDecodedAndFlattened = [];
@@ -1082,6 +1098,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasManagedFile = NULL;
     $this->hasFlexboxLayout = NULL;
     $this->hasContainer = NULL;
+    $this->hasConditions = NULL;
     $this->elementsActions = [];
     $this->elementsWizardPages = [];
     $this->elementsDecoded = NULL;
@@ -1189,6 +1206,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         // Track container.
         if ($element_handler->isContainer($element)) {
           $this->hasContainer = TRUE;
+        }
+
+        // Track conditional.
+        if (!empty($element['#states'])) {
+          $this->hasConditions = TRUE;
         }
 
         // Track actions.
