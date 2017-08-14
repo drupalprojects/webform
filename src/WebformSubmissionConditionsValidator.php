@@ -81,6 +81,10 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
       foreach ($element['#states'] as $state => $conditions) {
         if ($this->isConditionsTargetsVisible($conditions, $elements)) {
+          list($state, $negate) = $this->processState($state);
+          if ($state == 'required') {
+            unset($element['#required']);
+          }
           continue;
         }
 
