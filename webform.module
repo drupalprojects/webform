@@ -637,6 +637,7 @@ function webform_theme() {
       'variables' => [
         'webform' => NULL,
         'current_page' => NULL,
+        'mode' => NULL,
       ],
     ],
 
@@ -644,6 +645,7 @@ function webform_theme() {
       'variables' => [
         'webform' => NULL,
         'current_page' => NULL,
+        'mode' => NULL,
         'max_pages' => 10,
       ],
     ],
@@ -652,6 +654,7 @@ function webform_theme() {
       'variables' => [
         'webform' => NULL,
         'current_page' => NULL,
+        'mode' => NULL,
         'max_pages' => 10,
       ],
     ],

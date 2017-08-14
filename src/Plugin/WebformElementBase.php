@@ -1164,6 +1164,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     $webform_key = (isset($options['webform_key'])) ? $options['webform_key'] : $element['#webform_key'];
     $value = $webform_submission->getData($webform_key);
+    // Is value is NULL and there is a #default_value, then use it.
+    if ($value === NULL && isset($element['#default_value'])) {
+      $value = $element['#default_value'];
+    }
 
     // Return multiple (delta) value or composite (composite_key) value.
     if (is_array($value)) {

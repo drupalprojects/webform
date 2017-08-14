@@ -72,7 +72,7 @@ class Checkboxes extends OptionsBase {
   public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
     $input_name = WebformSubmissionConditionsValidator::getSelectorInputName($selector);
     $option_value = WebformSubmissionConditionsValidator::getInputNameAsArray($input_name, 1);
-    $value = $this->getRawValue($element, $webform_submission);
+    $value = $this->getRawValue($element, $webform_submission) ?: [];
     if (in_array($option_value, $value)) {
       return (in_array($trigger, ['checked', 'unchecked'])) ? TRUE : $value;
     }

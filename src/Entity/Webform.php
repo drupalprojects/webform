@@ -1409,24 +1409,25 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getPages($disable_pages = FALSE) {
-    if (isset($this->pages)) {
-      return $this->pages;
+    if (isset($this->pages[$disable_pages])) {
+      return $this->pages[$disable_pages];
     }
 
     $wizard_properties = [
       '#title' => '#title',
       '#prev_button_label' => '#prev_button_label',
       '#next_button_label' => '#next_button_label',
+      '#states' => '#states',
     ];
 
     $elements = $this->getElementsInitialized();
 
     // Add webform page containers.
-    $this->pages = [];
+    $pages = [];
     if (is_array($elements) && !$disable_pages) {
       foreach ($elements as $key => $element) {
         if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
-          $this->pages[$key] = array_intersect_key($element, $wizard_properties);
+          $pages[$key] = array_intersect_key($element, $wizard_properties);
         }
       }
     }
@@ -1435,24 +1436,25 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $settings = $this->getSettings();
     if ($settings['preview'] != DRUPAL_DISABLED) {
       // If there is no start page, we must define one.
-      if (empty($this->pages)) {
-        $this->pages['webform_start'] = [
+      if (empty($pages)) {
+        $pages['webform_start'] = [
           '#title' => $this->getSetting('wizard_start_label', TRUE),
         ];
       }
-      $this->pages['webform_preview'] = [
+      $pages['webform_preview'] = [
         '#title' => $this->getSetting('preview_label', TRUE),
       ];
     }
 
     // Only add complete page, if there are some pages.
-    if ($this->pages && $this->getSetting('wizard_complete')) {
-      $this->pages['webform_complete'] = [
+    if ($pages && $this->getSetting('wizard_complete')) {
+      $pages['webform_complete'] = [
         '#title' => $this->getSetting('wizard_complete_label', TRUE),
       ];
     }
 
-    return $this->pages;
+    $this->pages[$disable_pages] = $pages;
+    return $this->pages[$disable_pages];
   }
 
   /**

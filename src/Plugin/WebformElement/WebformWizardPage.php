@@ -27,6 +27,7 @@ class WebformWizardPage extends Details {
       'open' => FALSE,
       'prev_button_label' => '',
       'next_button_label' => '',
+      'states' => [],
     ];
   }
 
@@ -90,6 +91,10 @@ class WebformWizardPage extends Details {
       '#description' => $this->t('This is used for the Previous Page button on the page after this page break.') . '<br />' .
       $this->t('Defaults to: %value', ['%value' => $this->getDefaultSettings($webform, 'wizard_next_button_label')]),
     ];
+
+    // Wizard pages only support visible or hidden state.
+    $form['conditional_logic']['states']['#multiple'] = FALSE;
+
     return $form;
   }
 
@@ -106,6 +111,16 @@ class WebformWizardPage extends Details {
    */
   protected function getDefaultSettings(WebformInterface $webform, $name) {
     return $webform->getSetting($name) ?: \Drupal::config('webform.settings')->get("settings.default_$name");
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementStateOptions() {
+    return [
+      'visible' => $this->t('Visible'),
+      'invisible' => $this->t('Hidden'),
+    ];
   }
 
 }

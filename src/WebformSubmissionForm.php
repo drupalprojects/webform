@@ -420,6 +420,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#theme' => 'webform_progress',
         '#webform' => $this->getWebform(),
         '#current_page' => $current_page,
+        '#mode' => $this->mode,
         '#weight' => -20,
       ];
     }
@@ -457,8 +458,9 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->getWebformSetting('form_unsaved')) {
       $form['#attributes']['class'][] = 'js-webform-unsaved';
       $form['#attached']['library'][] = 'webform/webform.form.unsaved';
+      $pages = $this->getPages($form, $form_state);
       $current_page = $this->getCurrentPage($form, $form_state);
-      if ($current_page && ($current_page != $this->getFirstPage($form, $form_state))) {
+      if ($current_page && ($current_page != $this->getFirstPage($pages))) {
         $form['#attributes']['data-webform-unsaved'] = TRUE;
       }
     }
@@ -500,7 +502,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Pages: Disable webform auto submit on enter for wizard webform pages only.
-    if ($this->getPages($form, $form_state)) {
+    if ($this->hasPages()) {
       $form['#attributes']['class'][] = 'js-webform-disable-autosubmit';
     }
 
@@ -807,12 +809,13 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Get current page element which can contain custom prev(ious) and next button
       // labels.
       $current_page_element = $this->getWebform()->getPage($current_page);
+      $next_page = $this->getNextPage($pages, $current_page);
 
-      $is_first_page = ($current_page == $this->getFirstPage($form, $form_state)) ? TRUE : FALSE;
-      $is_last_page = (in_array($current_page, ['webform_preview', 'webform_complete', $this->getLastPage($form, $form_state)])) ? TRUE : FALSE;
+      $is_first_page = ($current_page == $this->getFirstPage($pages)) ? TRUE : FALSE;
+      $is_last_page = (in_array($current_page, ['webform_preview', 'webform_complete', $this->getLastPage($pages)])) ? TRUE : FALSE;
       $is_preview_page = ($current_page == 'webform_preview');
-      $is_next_page_preview = ($this->getNextPage($form, $form_state) == 'webform_preview') ? TRUE : FALSE;
-      $is_next_page_complete = ($this->getNextPage($form, $form_state) == 'webform_complete') ? TRUE : FALSE;
+      $is_next_page_preview = ($next_page == 'webform_preview') ? TRUE : FALSE;
+      $is_next_page_complete = ($next_page == 'webform_complete') ? TRUE : FALSE;
       $is_next_page_optional_preview = ($is_next_page_preview && $preview_mode != DRUPAL_REQUIRED);
 
       // Only show that save button if this is the last page of the wizard or
@@ -925,7 +928,9 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($form_state->getErrors()) {
       return;
     }
-    $form_state->set('current_page', $this->getNextPage($form, $form_state));
+    $pages = $this->getPages($form, $form_state);
+    $current_page = $this->getCurrentPage($form, $form_state);
+    $form_state->set('current_page', $this->getNextPage($pages, $current_page));
     $this->wizardSubmit($form, $form_state);
   }
 
@@ -938,7 +943,9 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function previous(array &$form, FormStateInterface $form_state) {
-    $form_state->set('current_page', $this->getPreviousPage($form, $form_state));
+    $pages = $this->getPages($form, $form_state);
+    $current_page = $this->getCurrentPage($form, $form_state);
+    $form_state->set('current_page', $this->getPreviousPage($pages, $current_page));
     $this->wizardSubmit($form, $form_state);
   }
 
@@ -951,17 +958,25 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   protected function wizardSubmit(array &$form, FormStateInterface $form_state) {
-    if ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
+    $current_page = $form_state->get('current_page');
+
+    if ($current_page === 'webform_complete') {
+      $this->complete($form, $form_state);
+      $this->submitForm($form, $form_state);
+      $this->save($form, $form_state);
+      $this->confirmForm($form, $form_state);
+    }
+    elseif ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
       $form_state->setValue('in_draft', TRUE);
 
       $this->submitForm($form, $form_state);
       $this->save($form, $form_state);
+      $this->rebuild($form, $form_state);
     }
     else {
       $this->submitForm($form, $form_state);
+      $this->rebuild($form, $form_state);
     }
-
-    $this->rebuild($form, $form_state);
   }
 
   /**
@@ -1217,6 +1232,14 @@ class WebformSubmissionForm extends ContentEntityForm {
   /****************************************************************************/
 
   /**
+   * Determine if this is a multistep wizard form.
+   * @return bool
+   */
+  protected function hasPages() {
+    return $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
+  }
+
+  /**
    * Get visible wizard pages.
    *
    * Note: The array of pages is stored in the webform's state so that it can be
@@ -1239,11 +1262,23 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form_state->set('pages', $pages);
     }
 
-    // Get pages and check #access.
+    // Get pages from form state.
     $pages = $form_state->get('pages');
-    foreach ($pages as $page_key => $page) {
+    foreach ($pages as $page_key => &$page) {
+      // Check #access which can set via form alter.
       if ($page['#access'] === FALSE) {
         unset($pages[$page_key]);
+      }
+
+      // Check #states (visible/hidden).
+      elseif (!empty($page['#states'])) {
+        $state = key($page['#states']);
+        $conditions = $page['#states'][$state];
+        $result = $this->conditionsValidator->validateConditions($conditions, $this->getEntity());
+        $result = ($state === '!visible') ? !$result : $result;
+        if (!$result) {
+          unset($pages[$page_key]);
+        }
       }
     }
 
@@ -1263,7 +1298,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function getCurrentPage(array &$form, FormStateInterface $form_state) {
     if ($form_state->get('current_page') === NULL) {
-      $pages = $this->getPages($form, $form_state);
+      $pages = $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
       if (empty($pages)) {
         $form_state->set('current_page', '');
       }
@@ -1283,66 +1318,56 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * Get first page's key.
    *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   * @param array $pages
+   *   An associative array of visible wizard pages.
    *
    * @return null|string
    *   The first page's key.
    */
-  protected function getFirstPage(array &$form, FormStateInterface $form_state) {
-    $pages = $this->getPages($form, $form_state);
+  protected function getFirstPage(array $pages) {
     return WebformArrayHelper::getFirstKey($pages);
   }
 
   /**
    * Get last page's key.
    *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   * @param array $pages
+   *   An associative array of visible wizard pages.
    *
    * @return null|string
    *   The last page's key.
    */
-  protected function getLastPage(array &$form, FormStateInterface $form_state) {
-    $pages = $this->getPages($form, $form_state);
+  protected function getLastPage(array $pages) {
     return WebformArrayHelper::getLastKey($pages);
   }
 
   /**
    * Get next page's key.
    *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   * @param array $pages
+   *   An associative array of visible wizard pages.
+   * @param string $current_page
+   *   The current page.
    *
    * @return null|string
    *   The next page's key. NULL if there is no next page.
    */
-  protected function getNextPage(array &$form, FormStateInterface $form_state) {
-    $pages = $this->getPages($form, $form_state);
-    $current_page = $this->getCurrentPage($form, $form_state);
+  protected function getNextPage(array $pages, $current_page) {
     return WebformArrayHelper::getNextKey($pages, $current_page);
   }
 
   /**
    * Get previous page's key.
    *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   * @param array $pages
+   *   An associative array of visible wizard pages.
+   * @param string $current_page
+   *   The current page.
    *
    * @return null|string
    *   The previous page's key. NULL if there is no previous page.
    */
-  protected function getPreviousPage(array &$form, FormStateInterface $form_state) {
-    $pages = $this->getPages($form, $form_state);
-    $current_page = $this->getCurrentPage($form, $form_state);
+  protected function getPreviousPage(array $pages, $current_page) {
     return WebformArrayHelper::getPreviousKey($pages, $current_page);
   }
 

@@ -183,7 +183,7 @@ class WebformElementStates extends FormElement {
    * Build state row.
    *
    * @param array $element
-   *   The webform element.
+   *   The element.
    * @param array $state
    *   The state.
    * @param string $table_id
@@ -223,6 +223,9 @@ class WebformElementStates extends FormElement {
       '#wrapper_attributes' => ['colspan' => 2, 'align' => 'left'],
     ];
     $row['operations'] = static::buildOperations($table_id, $row_index, $ajax_settings);
+    if (!$element['#multiple']) {
+      unset($row['operations']['remove']);
+    }
     return $row;
   }
 
@@ -230,7 +233,7 @@ class WebformElementStates extends FormElement {
    * Build condition row.
    *
    * @param array $element
-   *   The webform element.
+   *   The element.
    * @param array $condition
    *   The condition.
    * @param string $table_id
@@ -650,7 +653,7 @@ class WebformElementStates extends FormElement {
    * Determine if an element's #states array is customized.
    *
    * @param array $element
-   *   The webform element.
+   *   The element.
    *
    * @return bool|string
    *   FALSE if #states array is not customized or a warning message.

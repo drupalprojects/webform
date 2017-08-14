@@ -1,72 +1,23 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Wizard;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\Core\Serialization\Yaml;
 
 /**
- * Tests for webform wizard.
+ * Tests for webform advanced wizard.
  *
  * @group Webform
  */
-class WebformWizardTest extends WebformTestBase {
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['webform', 'webform_test_wizard_custom'];
+class WebformWizardAdvancedTest extends WebformWizardTestBase {
 
   /**
    * Webforms to load.
    *
    * @var array
    */
-  protected static $testWebforms = ['test_form_wizard_basic', 'test_form_wizard_advanced', 'test_form_wizard_custom'];
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
-
-    // Exclude Progress tracker so that the default progress bar is displayed.
-    // The default progress bar is most likely never going to change.
-    \Drupal::configFactory()->getEditable('webform.settings')
-      ->set('libraries.excluded_libraries', ['progress-tracker'])
-      ->save();
-  }
-
-  /**
-   * Test webform advanced wizard.
-   */
-  public function testBasicWizard() {
-    $this->drupalLogin($this->rootUser);
-
-    // Create a wizard submission.
-    $wizard_webform = Webform::load('test_form_wizard_basic');
-    $this->drupalPostForm('webform/test_form_wizard_basic', [], t('Next Page >'));
-    $this->drupalPostForm(NULL, [], t('Submit'));
-    $sid = $this->getLastSubmissionId($wizard_webform);
-
-    // Check access to 'Edit: All' tab for wizard.
-    $this->drupalGet("admin/structure/webform/manage/test_form_wizard_basic/submission/$sid/edit/all");
-    $this->assertResponse(200);
-
-    // Check that page 1 and 2 are displayed.
-    $this->assertRaw('<summary role="button" aria-controls="edit-page-1" aria-expanded="false" aria-pressed="false">Page 1</summary>');
-    $this->assertRaw('<summary role="button" aria-controls="edit-page-2" aria-expanded="false" aria-pressed="false">Page 2</summary>');
-
-    // Create a contact form submission.
-    $contact_webform = Webform::load('contact');
-    $sid = $this->postSubmissionTest($contact_webform);
-
-    // Check access denied to 'Edit: All' tab for simple form.
-    $this->drupalGet("admin/structure/webform/manage/contact/submission/$sid/edit/all");
-    $this->assertResponse(403);
-  }
+  protected static $testWebforms = ['test_form_wizard_advanced'];
 
   /**
    * Test webform advanced wizard.
@@ -316,65 +267,6 @@ class WebformWizardTest extends WebformTestBase {
     $this->assertNoRaw('{webform complete}');
     $this->drupalGet('webform/test_form_wizard_advanced/confirmation');
     $this->assertNoRaw('class="webform-progress-bar"');
-  }
-
-  /**
-   * Test webform custom wizard.
-   */
-  public function testCustomWizard() {
-    // Check current page is #1.
-    $this->drupalGet('webform/test_form_wizard_custom');
-    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
-
-    // Check next page is #2.
-    $this->drupalPostForm('webform/test_form_wizard_custom', [], 'Next Page >');
-    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
-
-    // Check previous page is #1.
-    $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
-
-    // Hide pages #3 and #4.
-    $edit = [
-      'pages[wizard_1]' => TRUE,
-      'pages[wizard_2]' => TRUE,
-      'pages[wizard_3]' => FALSE,
-      'pages[wizard_4]' => FALSE,
-      'pages[wizard_5]' => TRUE,
-      'pages[wizard_6]' => TRUE,
-      'pages[wizard_7]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Next Page >');
-
-    // Check next page is #2.
-    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
-
-    // Check next page is #5.
-    $this->drupalPostForm(NULL, [], 'Next Page >');
-    $this->assertCurrentPage('Wizard page #5', 'wizard_5');
-
-    // Check previous page is #2.
-    $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #2', 'wizard_2');
-
-    // Check previous page is #1.
-    $this->drupalPostForm(NULL, [], '< Previous Page');
-    $this->assertCurrentPage('Wizard page #1', 'wizard_1');
-  }
-
-  /**
-   * Assert the current page using the progress bar's markup.
-   *
-   * @param string $title
-   *   The title of the current page.
-   * @param string $name
-   *   The name (key) of the current page.
-   */
-  protected function assertCurrentPage($title, $name = NULL) {
-    $this->assertPattern('|<li class="webform-progress-bar__page webform-progress-bar__page--current">\s+<b>' . $title . '</b>|');
-    if ($name !== NULL) {
-      $this->assertRaw('data-current-page="' . $name . '"');
-    }
   }
 
 }
