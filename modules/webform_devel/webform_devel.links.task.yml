@@ -14,18 +14,22 @@ entity.webform.test.form:
   title: 'Form'
   route_name: entity.webform.test
   parent_id: entity.webform.test
+  weight: 0
 
 entity.webform.test.api:
   title: 'API'
   route_name: entity.webform.api
   parent_id: entity.webform.test
+  weight: 10
 
 entity.node.webform.test.form:
   title: 'Form'
   route_name: entity.node.webform.test
   parent_id: entity.node.webform.test
+  weight: 0
 
 entity.node.webform.test.api:
   title: 'API'
   route_name: entity.node.webform.api
   parent_id: entity.node.webform.test
+  weight: 10
