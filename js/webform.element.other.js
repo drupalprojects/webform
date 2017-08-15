@@ -24,7 +24,13 @@
 
     if (show) {
       // Limit the other inputs width to the parent's container.
-      $element.width($element.parent().width());
+      // If the parent container is not visible it's width will be 0
+      // and ignored.
+      var width = $element.parent().width();
+      if (width) {
+        $element.width(width);
+      }
+
       // Display the element.
       $element[showEffect]();
       // Focus and require the input.
