@@ -339,7 +339,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
           '#theme' => 'menu_local_action',
           '#link' => [
             'title' => $this->t('Add @title', ['@title' => $node_type->label()]),
-            'url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['webform' => $this->webform->id()]]),
+            'url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['webform_id' => $this->webform->id()]]),
           ],
         ];
       }

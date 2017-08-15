@@ -133,8 +133,8 @@ function webform_node_node_prepare_form(NodeInterface $node, $operation, FormSta
   }
 
   // Populate the webform field.
-  $webform = \Drupal::request()->get('webform');
-  if ($webform && Webform::load($webform)) {
-    $node->$field_name->target_id = $webform;
+  $webform_id = \Drupal::request()->query->get('webform_id');
+  if ($webform_id && Webform::load($webform_id)) {
+    $node->$field_name->target_id = $webform_id;
   }
 }
