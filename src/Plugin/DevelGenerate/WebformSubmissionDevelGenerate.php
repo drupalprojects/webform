@@ -333,6 +333,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
     $entity_type = $results['entity-type'];
     $entity_id = $results['entity-id'];
 
+
     // Get submission URL from source entity or webform.
     $url = $webform->toUrl();
     if ($entity_type && $entity_id) {

@@ -231,31 +231,33 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
     }
 
-    $source_entity = $this->sourceEntity;
-
     // Load entity from token or saved draft when not editing or testing
     // submission form.
     if (!in_array($this->operation, ['edit', 'test'])) {
       $token = $this->getRequest()->query->get('token');
-      if ($webform_submission_token = $this->storage->loadFromToken($token, $webform, $source_entity)) {
-        $entity = $webform_submission_token;
+      if ($webform->getSetting('token_update') && $token) {
+        if ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token])) {
+          $entity = reset($webform_submissions_token);
+        }
       }
       elseif ($webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
-        $account = $this->currentUser();
         if ($webform->getSetting('draft_multiple')) {
           // Allow multiple drafts to be restored using token.
           // This allows the webform's public facing URL to be used instead of
           // the admin URL of the webform.
-          if ($webform_submissions_token = $this->storage->loadFromToken($token, $webform, $source_entity, $account)) {
-            $draft_submission = $webform_submission_token;
+          if ($token && ($webform_submissions_token = $this->storage->loadByProperties(['token' => $token, 'uid' => $this->currentUser()->id()]))) {
+            /** @var \Drupal\webform\WebformSubmissionInterface $draft_submission */
+            $draft_submission = reset($webform_submissions_token);
             if ($draft_submission->isDraft()) {
               $entity = $draft_submission;
             }
           }
         }
-        else if ($webform_submission_draft = $this->storage->loadDraft($webform, $source_entity, $account)) {
+        else {
           // Else load the most recent draft.
-          $entity = $webform_submission_draft;
+          if ($webform_submission_draft = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser())) {
+            $entity = $webform_submission_draft;
+          }
         }
       }
     }
@@ -1136,19 +1138,11 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Make sure the uri and remote addr are set correctly because
     // Ajax requests can cause these values to be reset.
     if ($webform_submission->isNew()) {
-      if (preg_match('/\.webform\.test$/', $this->getRouteMatch()->getRouteName())) {
-        // For test submissions use the source URL.
-        $source_url = $webform_submission->set('uri', NULL)->getSourceUrl()->setAbsolute(FALSE);
-        $uri = preg_replace('#^' . base_path() . '#', '/', $source_url->toString());
-      }
-      else {
-        // For all other submissions, use the request URI.
-        $uri = preg_replace('#^' . base_path() . '#', '/', $this->getRequest()->getRequestUri());
-        // Remove Ajax query string parameters.
-        $uri = preg_replace('/(ajax_form=1|_wrapper_format=drupal_ajax)(&|$)/', '', $uri);
-        // Remove empty query string.
-        $uri = preg_replace('/\?$/', '', $uri);
-      }
+      $uri = preg_replace('#^' . base_path() . '#', '/', $this->getRequest()->getRequestUri());
+      // Remove Ajax query string parameters.
+      $uri = preg_replace('/(ajax_form=1|_wrapper_format=drupal_ajax)(&|$)/', '', $uri);
+      // Remove empty query string.
+      $uri = preg_replace('/\?$/', '', $uri);
       $remote_addr = ($this->isConfidential()) ? '' : $this->getRequest()->getClientIp();
       $webform_submission->set('uri', $uri);
       $webform_submission->set('remote_addr', $remote_addr);

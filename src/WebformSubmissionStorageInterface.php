@@ -77,23 +77,6 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function checkFieldDefinitionAccess(WebformInterface $webform, array $definitions);
 
   /**
-   * Load submission using webform (secure) token.
-   *
-   * @param string $token
-   *   The submission (secure) token.
-   * @param \Drupal\webform\WebformInterface $webform
-   *   The webform that the submission token is associated with.
-   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   (optional) A webform submission source entity.
-   * @param \Drupal\Core\Session\AccountInterface|null $account
-   *   (optional) A user account.
-   *
-   * @return \Drupal\webform\WebformSubmissionInterface|NULL
-   *   A webform submission.
-   */
-  public function loadFromToken($token, WebformInterface $webform,  EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
-
-  /**
    * Delete all webform submissions.
    *
    * @param \Drupal\webform\WebformInterface|null $webform

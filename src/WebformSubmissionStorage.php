@@ -117,49 +117,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     return $webform_submissions;
   }
 
-
-  /**
-   * {@inheritdoc}
-   */
-  public function loadFromToken($token, WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
-    // Check token.
-    if (!$token) {
-      return NULL;
-    }
-
-    // Check that (secure) tokens are enabled for the webform.
-    if (!$account && !$webform->getSetting('token_update')) {
-      return NULL;
-    }
-
-    // Attempt to load the submission using the token.
-    $properties = ['token' => $token];
-    // Add optional source entity to properties.
-    if ($source_entity) {
-      $properties['entity_type'] = $source_entity->getEntityTypeId();
-      $properties['entity_id'] = $source_entity->id();
-    }
-    // Add optional user account to properties.
-    if ($account) {
-      $properties['uid'] = $account->id();
-    }
-
-    $entities = $this->loadByProperties($properties);
-    if (empty($entities)) {
-      return NULL;
-    }
-
-    /** @var \Drupal\webform\WebformSubmissionInterface  $entity */
-    $entity = reset($entities);
-
-    // Make sure the submission is associated with the webform.
-    if ($entity->getWebform()->id() != $webform->id()) {
-      return NULL;
-    }
-
-    return $entity;
-  }
-
   /**
    * {@inheritdoc}
    */

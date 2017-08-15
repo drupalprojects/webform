@@ -1572,18 +1572,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheContexts() {
-    $cache_contexts = parent::getCacheContexts();
-    // Add webform (secure) token query string parameter.
-    if ($this->getSetting('token_update')) {
-      $cache_contexts[] = 'url.query_args:token';
-    }
-    return $cache_contexts;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function preSave(EntityStorageInterface $storage) {
     // Always unpublish templates.
     if ($this->isTemplate()) {
