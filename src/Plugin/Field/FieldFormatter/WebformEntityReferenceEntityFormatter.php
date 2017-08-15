@@ -70,36 +70,37 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
       // Do not display the webform if the current user can't create submissions.
       if ($entity->id() && !$entity->access('submission_create')) {
-        continue;
-      }
-
-      if ($is_paragraph_edit_preview) {
-        // Webform can not be nested within node edit form because the nested
-        // <form> tags will cause unexpected validation issues.
-        $elements[$delta] = [
-          '#type' => 'webform_message',
-          '#message_message' => $this->t('%label webform can not be previewed when editing content.', ['%label' => $entity->label()]),
-          '#message_type' => 'info',
-        ];
-      }
-      elseif ($this->isOpen($entity, $items[$delta])) {
-        $values = [];
-        if ($this->getSetting('source_entity')) {
-          $values += [
-            'entity_type' => $source_entity->getEntityTypeId(),
-            'entity_id' => $source_entity->id(),
-          ];
-        }
-        if (!empty($items[$delta]->default_data)) {
-          $values['data'] = Yaml::decode($items[$delta]->default_data);
-        }
-        $elements[$delta] = $entity->getSubmissionForm($values);
+        $elements[$delta] = [];
       }
       else {
-        $this->messageManager->setWebform($entity);
-        $message_type = $this->isOpening($entity, $items[$delta]) ? WebformMessageManagerInterface::FORM_OPEN_MESSAGE : WebformMessageManagerInterface::FORM_CLOSE_MESSAGE;
-        $elements[$delta] = [];
-        $elements[$delta] = $this->messageManager->append($elements[$delta], $message_type, 'warning');
+        if ($is_paragraph_edit_preview) {
+          // Webform can not be nested within node edit form because the nested
+          // <form> tags will cause unexpected validation issues.
+          $elements[$delta] = [
+            '#type' => 'webform_message',
+            '#message_message' => $this->t('%label webform can not be previewed when editing content.', ['%label' => $entity->label()]),
+            '#message_type' => 'info',
+          ];
+        }
+        elseif ($this->isOpen($entity, $items[$delta])) {
+          $values = [];
+          if ($this->getSetting('source_entity')) {
+            $values += [
+              'entity_type' => $source_entity->getEntityTypeId(),
+              'entity_id' => $source_entity->id(),
+            ];
+          }
+          if (!empty($items[$delta]->default_data)) {
+            $values['data'] = Yaml::decode($items[$delta]->default_data);
+          }
+          $elements[$delta] = $entity->getSubmissionForm($values);
+        }
+        else {
+          $this->messageManager->setWebform($entity);
+          $message_type = $this->isOpening($entity, $items[$delta]) ? WebformMessageManagerInterface::FORM_OPEN_MESSAGE : WebformMessageManagerInterface::FORM_CLOSE_MESSAGE;
+          $elements[$delta] = [];
+          $elements[$delta] = $this->messageManager->append($elements[$delta], $message_type, 'warning');
+        }
       }
 
       $this->setCacheContext($elements[$delta], $entity, $items[$delta]);

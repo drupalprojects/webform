@@ -701,7 +701,7 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
       'token_update' => [
         'title' => $this->t('Allow users to update a submission using a secure token.'),
-        'form_description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token.  The URL to update a submission will be available when viewing a submission's information and can be inserted into the an email using the [webform_submission:update-url] token."),
+        'form_description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token. The URL to update a submission will be available when viewing a submission's information and can be inserted into the an email using the [webform_submission:update-url] token. Only webforms that are open to new submissions can be updated using the secure token."),
       ],
       // Global behaviors.
       // @see \Drupal\webform\Form\WebformAdminSettingsForm
@@ -712,6 +712,17 @@ class WebformEntitySettingsForm extends EntityForm {
       ],
     ];
     $this->appendBehaviors($form['submission_behaviors'], $behavior_elements, $settings, $default_settings);
+    $form['submission_behaviors']['token_update_warning'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t("Webform submission's accessed using the (secure) token will by-pass all webform submsission access rules."),
+      '#states' => [
+        'visible' => [
+          ':input[name="token_update"]' => ['checked' => TRUE],
+        ],
+      ],
+      '#weight' => $form['submission_behaviors']['token_update']['#weight'] + 1,
+    ];
 
     // Submission limits.
     $form['submission_limits'] = [
