@@ -298,6 +298,13 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = $this->getEntity();
     $webform = $this->getWebform();
 
+    // Add this webform and the webform settings to the cache tags.
+    $form['#cache']['tags'][] = 'config:webform.settings';
+
+    // This submission webform is based on the current URL, and hence it depends
+    // on the 'url' cache context.
+    $form['#cache']['contexts'][] = 'url';
+
     // All anonymous submissions are tracked in the $_SESSION.
     // @see \Drupal\webform\WebformSubmissionStorage::setAnonymousSubmission
     if ($this->currentUser()->isAnonymous()) {

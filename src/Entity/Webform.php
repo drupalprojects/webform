@@ -1566,9 +1566,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $cache_tags = parent::getCacheTags();
     // Add webform to cache tags which are used by the WebformSubmissionForm.
     $cache_tags[] = 'webform:' . $this->id();
-    // Add webform settings to cache tags which are used to define
-    // default settings.
-    $cache_tags[] = 'config:webform.settings';
     return $cache_tags;
   }
 
@@ -1577,9 +1574,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function getCacheContexts() {
     $cache_contexts = parent::getCacheContexts();
-    // Add paths to cache contexts since webform can be placed on multiple
-    // pages.
-    $cache_contexts[] = 'url.path';
     // Add webform (secure) token query string parameter.
     if ($this->getSetting('token_update')) {
       $cache_contexts[] = 'url.query_args:token';
