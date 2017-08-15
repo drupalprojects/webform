@@ -591,7 +591,7 @@ function webform_theme() {
       'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
     ],
     'webform_element_image_file' => [
-      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
+      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL, 'style_name' => NULL, 'format' => NULL],
     ],
     'webform_element_video_file' => [
       'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => [], 'file' => NULL],
@@ -806,6 +806,18 @@ function webform_preprocess_file_link(&$variables) {
   // Remove link to temporary anonymous private file uploads.
   if ($file->isTemporary() && $file->getOwnerId() === 0 && strpos($file->getFileUri(), 'private://webform/') === 0) {
     $variables['link'] = $file->getFilename();
+  }
+}
+
+/**
+ * Prepares variables for image.
+ *
+ * Make sure the image src for the 'webform_image_file' src is an absolute URL.
+ */
+function webform_preprocess_image(&$variables) {
+  global $base_url;
+  if (isset($variables['attributes']['class']) && in_array('webform-image-file', $variables['attributes']['class'])) {
+    $variables['attributes']['src'] = $base_url . preg_replace('/^' . preg_quote(base_path(), '/') .'/', '/', $variables['attributes']['src']);
   }
 }
 

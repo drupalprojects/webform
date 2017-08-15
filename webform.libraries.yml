@@ -392,12 +392,6 @@ webform.element.flexbox:
     layout:
       css/webform.element.flexbox.css: {}
 
-webform.element.image_file:
-  version: VERSION
-  css:
-    component:
-      css/webform.element.image_file.css: {}
-
 webform.element.html_editor:
   version: VERSION
   css:
@@ -425,15 +419,23 @@ webform.element.icheck:
     - core/jquery.once
     - webform/libraries.jquery.icheck
 
-webform.element.inputmask:
+webform.element.image_file:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.image_file.css: {}
+
+webform.element.image_file.modal:
   version: VERSION
   js:
-    js/webform.element.inputmask.js: {}
+    js/webform.element.image_file.modal.js: {}
   dependencies:
     - core/drupal
+    - core/drupalSettings
+    - core/drupal.dialog.ajax
     - core/jquery
     - core/jquery.once
-    - webform/libraries.jquery.inputmask
+    - core/jquery.ui.dialog
 
 webform.element.image_select:
   version: VERSION
@@ -447,6 +449,16 @@ webform.element.image_select:
     - core/jquery
     - core/jquery.once
     - webform/libraries.jquery.image-picker
+
+webform.element.inputmask:
+  version: VERSION
+  js:
+    js/webform.element.inputmask.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - webform/libraries.jquery.inputmask
 
 webform.element.likert:
   version: VERSION

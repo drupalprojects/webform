@@ -10,42 +10,61 @@ use Drupal\webform\Entity\WebformSubmission;
  *
  * @group Webform
  */
-class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
+class WebformElementMediaFileTest extends WebformElementManagedFileTestBase {
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['file', 'webform'];
+  public static $modules = ['file', 'image', 'webform'];
 
   /**
    * Webforms to load.
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_managed_file'];
+  protected static $testWebforms = ['test_element_media_file'];
 
   /**
-   * Test single and multiple file upload.
+   * Test media file upload elements.
    */
-  public function testFileUpload() {
-    /* Element rendering */
-    $this->drupalGet('webform/test_element_managed_file');
+  public function testMediaFileUpload() {
+    /* Element render */
 
-    // Check single file upload button.
-    $this->assertRaw('<label for="edit-managed-file-single-button-upload-button--2" class="button button-action webform-file-button">Choose file</label>');
+    // Get test webform.
+    $this->drupalGet('webform/test_element_media_file');
 
-    // Check multiple file upload button.
-    $this->assertRaw('<label for="edit-managed-file-multiple-button-upload-button--2" class="button button-action webform-file-button">Choose files</label>');
+    // Check document file.
+    $this->assertRaw('<input data-drupal-selector="edit-document-file-upload" type="file" id="edit-document-file-upload" name="files[document_file]" size="22" class="js-form-file form-file" />');
 
-    // Check single custom file upload button.
-    $this->assertRaw('<label for="edit-managed-file-single-button-custom-upload">managed_file_single_button</label>');
+    // Check audio file.
+    $this->assertRaw('<input data-drupal-selector="edit-audio-file-upload" accept="audio/*" type="file" id="edit-audio-file-upload" name="files[audio_file]" size="22" class="js-form-file form-file" />');
+
+    // Check image file.
+    $this->assertRaw('<input data-drupal-selector="edit-image-file-upload" accept="image/*" type="file" id="edit-image-file-upload" name="files[image_file]" size="22" class="js-form-file form-file" />');
+
+    // Check video file.
+    $this->assertRaw('<input data-drupal-selector="edit-video-file-upload" accept="video/*" type="file" id="edit-video-file-upload" name="files[video_file]" size="22" class="js-form-file form-file" />');
 
     /* Element processing */
 
-    $this->checkFileUpload('single', $this->files[0], $this->files[1]);
-    $this->checkFileUpload('multiple', $this->files[2], $this->files[3]);
+    // Get test webform preview with test values.
+    $this->drupalLogin($this->rootUser);
+    $this->drupalPostForm('webform/test_element_media_file/test', [], t('Preview'));
+
+    // Check audio file preview.
+    $this->assertRaw('<source src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/audio_file_mp3.mp3') . '" type="audio/mpeg">');
+
+    // Check image file preview.
+    $this->assertRaw('<img class="webform-image-file" alt="image_file_jpg.jpg" src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/image_file_jpg.jpg') . '" />');
+
+    // Check image file link to modal.
+    $this->assertRaw('/system/files/webform/test_element_media_file/_sid_/image_file_jpg_modal.jpg" class="js-webform-image-file-modal webform-image-file-modal">');
+    $this->assertRaw('/system/files/styles/thumbnail/private/webform/test_element_media_file/_sid_/image_file_jpg_modal.jpg?itok=');
+
+    // Check video file preview.
+    $this->assertRaw('<source src="' . $this->getAbsoluteUrl('/system/files/webform/test_element_media_file/_sid_/video_file_mp4.mp4') . '" type="video/mp4">');
   }
 
   /****************************************************************************/

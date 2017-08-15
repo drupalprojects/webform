@@ -257,7 +257,6 @@ function _webform_update_8011(array &$element) {
       _webform_update_8011($element[$key]);
     }
   }
-
 }
 
 /**
