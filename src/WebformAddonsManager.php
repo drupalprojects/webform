@@ -299,7 +299,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-
     // Mail: Mail System.
     $projects['mailsystem'] = [
       'title' => $this->t('Mail System'),
@@ -328,15 +327,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $projects['webform_migrate'] = [
       'title' => $this->t('Webform Migrate'),
       'description' => $this->t('Provides migration routines from d6, d7 webform to d8 webform.'),
-      'url' => Url::fromUri('https://github.com/heshanlk/webform_migrate'),
-      'category' => 'migrate',
-    ];
-
-    // Migrate: YAML Form Migrate.
-    $projects['yamlform_migrate'] = [
-      'title' => $this->t('YAML Form Migrate'),
-      'description' => $this->t('Provides migration routines from Drupal 6 YAML Form module to Drupal 8 YAML Form module.'),
-      'url' => Url::fromUri('https://www.drupal.org/sandbox/dippers/2819169'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_migrate'),
       'category' => 'migrate',
     ];
 
