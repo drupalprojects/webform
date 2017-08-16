@@ -10,6 +10,17 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Implements hook_page_attachments().
+ */
+function webform_bootstrap_page_attachments(array &$attachments) {
+  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+    return;
+  }
+
+  $attachments['#attached']['library'][] = 'webform_bootstrap/webform_bootstrap';
+}
+
+/**
  * Implements hook_webform_element_ELEMENT_TYPE_alter().
  */
 function webform_bootstrap_webform_element_webform_terms_of_service_alter(array &$element, \Drupal\Core\Form\FormStateInterface $form_state, array $context) {
