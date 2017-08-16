@@ -246,8 +246,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
-      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.25.2.zip'),
-      'version' => '5.25.2',
+      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.27.4.zip'),
+      'version' => '5.27.4',
       'optional' => TRUE,
     ];
     $libraries['jquery.geocomplete'] = [
@@ -282,8 +282,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
       'notes' => $this->t('Input masks are used to ensure predefined and custom formats for text fields.'),
       'homepage_url' => Url::fromUri('https://robinherbots.github.io/Inputmask/'),
-      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.4.zip'),
-      'version' => '3.3.4',
+      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.7.zip'),
+      'version' => '3.3.7',
       'optional' => TRUE,
     ];
     $libraries['jquery.intl-tel-input'] = [
@@ -291,8 +291,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user's country, displays a relevant placeholder and provides formatting/validation methods."),
       'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'homepage_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
-      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v11.0.12.zip'),
-      'version' => '11.0.12',
+      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.0.0.zip'),
+      'version' => '12.0.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.rateit'] = [
@@ -327,8 +327,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A lightweight, customizable javascript timepicker plugin for jQuery, inspired by Google Calendar.'),
       'notes' => $this->t('Timepicker is used to provide a polyfill for HTML 5 time elements.'),
       'homepage_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker'),
-      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.10.zip'),
-      'version' => '1.11.10',
+      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.11.zip'),
+      'version' => '1.11.11 ',
       'optional' => TRUE,
     ];
     $libraries['jquery.toggles'] = [
@@ -345,8 +345,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('The jQuery word and character counter plug-in allows you to count characters or words'),
       'notes' => $this->t('Word or character counting, with server-side validation, is available for text fields and text areas.'),
       'homepage_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin'),
-      'download_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/archive/2.3.5.zip'),
-      'version' => '2.3.5',
+      'download_url' => Url::fromUri('https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/archive/2.5.1.zip'),
+      'version' => '2.5.1',
       'optional' => TRUE,
     ];
     $libraries['progress-tracker'] = [
@@ -363,8 +363,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("Signature Pad is a JavaScript library for drawing smooth signatures. It is HTML5 canvas based and uses variable width Bézier curve interpolation. It works in all modern desktop and mobile browsers and doesn't depend on any external libraries."),
       'notes' => $this->t('Signature Pad is used to provide a signature element.'),
       'homepage_url' => Url::fromUri('https://github.com/szimek/signature_pad'),
-      'download_url' => Url::fromUri('https://github.com/szimek/signature_pad/archive/v1.5.3.zip'),
-      'version' => '1.5.3',
+      'download_url' => Url::fromUri('https://github.com/szimek/signature_pad/archive/v2.2.1.zip'),
+      'version' => '2.2.1',
       'elements' => ['webform_signature'],
     ];
     return $libraries;
