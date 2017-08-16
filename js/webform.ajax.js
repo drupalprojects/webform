@@ -181,7 +181,11 @@
    *   The XMLHttpRequest status.
    */
   Drupal.AjaxCommands.prototype.webformRefresh = function (ajax, response, status) {
-    if (response.url.indexOf(window.location.pathname) !== -1 && $('.webform-ajax-refresh').length) {
+    // Get URL path name.
+    // @see https://stackoverflow.com/questions/6944744/javascript-get-portion-of-url-path
+    var a = document.createElement('a');
+    a.href = response.url;
+    if (a.pathname == window.location.pathname && $('.webform-ajax-refresh').length) {
       updateKey = (response.url.match(/[\?|&]update=(.*)($|&)/)) ? RegExp.$1 : null;
       $('.webform-ajax-refresh').click();
     }
