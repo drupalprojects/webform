@@ -1481,7 +1481,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       case WebformInterface::CONFIRMATION_URL_MESSAGE:
         $confirmation_url = trim($this->getWebformSetting('confirmation_url', ''));
         // Remove base path from root-relative URL.
-        // Only applies for Drupa; sites within a sub directory.
+        // Only applies for Drupal sites within a sub directory.
         $confirmation_url = preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', $confirmation_url);
         // Get system path.
         $confirmation_url = $this->aliasManager->getPathByAlias($confirmation_url);
@@ -1491,6 +1491,18 @@ class WebformSubmissionForm extends ContentEntityForm {
           }
           $this->setTrustedRedirectUrl($form_state, $redirect_url);
           return;
+        }
+        else {
+          $t_args = [
+            '@webform' => $webform->label(),
+            '%url' => $this->getWebformSetting('confirmation_url'),
+          ];
+          // Display warning to use who can update the webform.
+          if ($webform->access('update')) {
+            drupal_set_message(t('Confirmation URL %url is not valid.', $t_args), 'warning');
+          }
+          // Log warning.
+          $this->getLogger('webform')->warning('@webform: Confirmation URL %url is not valid.', $t_args);
         }
 
         // If confirmation URL is invalid display message.
