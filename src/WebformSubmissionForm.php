@@ -211,7 +211,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form_id .= '_' . $source_entity->getEntityTypeId() . '_' . $source_entity->id();
     }
     if ($this->operation != 'default') {
-      $form_id .= $this->operation;
+      $form_id .= '_' . $this->operation;
     }
     return $form_id . '_form';
   }
