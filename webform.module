@@ -741,6 +741,18 @@ function webform_preprocess_radios(&$variables) {
 }
 
 /**
+ * Prepares variables for form label templates.
+ *
+ * @see \Drupal\webform\Element\WebformOtherBase::processWebformOther
+ */
+function webform_preprocess_form_element_label(&$variables) {
+  $element = $variables['element'];
+  if (isset($element['#attributes']['for']) && $element['#attributes']['for'] === FALSE) {
+    unset($variables['attributes']['for']);
+  }
+}
+
+/**
  * Prepares variables for file managed file templates.
  *
  * @see https://stackoverflow.com/questions/21842274/cross-browser-custom-styling-for-file-upload-button
