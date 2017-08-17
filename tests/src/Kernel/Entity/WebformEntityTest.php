@@ -5,6 +5,7 @@ namespace Drupal\Tests\webform\Kernel\Entity;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformException;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -40,6 +41,28 @@ class WebformEntityTest extends KernelTestBase {
     $this->assertEquals('webform_test', $webform->id());
     $this->assertFalse($webform->isTemplate());
     $this->assertTrue($webform->isOpen());
+
+    /**************************************************************************/
+    // Override.
+    /**************************************************************************/
+
+    try {
+      $webform->setOverride(TRUE);
+      $webform->save();
+      $this->fail('Not possible to save webform with override = TRUE.');
+    }
+    catch (WebformException $e) {
+      $this->pass('Not possible to save webform with override = TRUE.');
+    }
+
+    try {
+      $webform->setOverride(FALSE);
+      $webform->save();
+      $this->pass('Possible to save webform with override = FALSE.');
+    }
+    catch (WebformException $e) {
+      $this->fail('Possible to save webform with override = FALSE.');
+    }
 
     /**************************************************************************/
     // Status.

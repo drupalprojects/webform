@@ -164,6 +164,30 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    */
   public function getNumberOfWizardPages();
 
+  /**
+   * Sets the webform settings and properties override state.
+   *
+   * Setting the override state to TRUE allows modules to alter a webform's
+   * settings and properties while blocking a webform from being saved with
+   * the overridden settings.
+   *
+   * @param bool $override
+   *   The override state of the Webform.
+   *
+   * @return $this
+   *
+   * @see \Drupal\webform\WebformInterface::setSettingsOverride
+   * @see \Drupal\webform\Entity\Webform::preSave
+   */
+  public function setOverride($override = TRUE);
+
+  /**
+   * Returns the webform override status.
+   *
+   * @return bool
+   *   TRUE if the webform has any overridden settings or properties.
+   */
+  public function isOverridden();
 
   /**
    * Sets the status of the configuration entity.
@@ -345,7 +369,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function getSetting($key, $default = FALSE);
 
   /**
-   * Saves a webform setting for a given key.
+   * Sets a webform setting for a given key.
    *
    * @param string $key
    *   The key of the setting to store.
@@ -355,6 +379,49 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @return $this
    */
   public function setSetting($key, $value);
+
+  /**
+   * Sets the webform settings override.
+   *
+   * Using this methods stops a webform from being saved with the overridden
+   * settings.
+   *
+   * @param array $settings
+   *   The structured array containing the webform setting override.
+   *
+   * @return $this
+   */
+  public function setSettingsOverride(array $settings);
+
+  /**
+   * Sets a webform setting override for a given key.
+   *
+   * Using this methods stops a webform from being saved with the overridden
+   * setting.
+   *
+   * @param string $key
+   *   The key of the setting override to store.
+   * @param mixed $value
+   *   The data to store.
+   *
+   * @return $this
+   */
+  public function setSettingOverride($key, $value);
+
+  /**
+   * Sets the value of an overridden property.
+   *
+   * Using this methods stops a webform from being saved with the overridden
+   * property.
+   *
+   * @param string $property_name
+   *   The name of the property that should be set.
+   * @param mixed $value
+   *   The value the property should be set to.
+   *
+   * @return $this
+   */
+  public function setPropertyOverride($property_name, $value);
 
   /**
    * Returns the webform access controls.

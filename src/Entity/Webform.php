@@ -20,6 +20,7 @@ use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Plugin\WebformHandlerPluginCollection;
+use Drupal\webform\WebformException;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformSubmissionStorageInterface;
@@ -116,9 +117,18 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $uuid;
 
   /**
-   * The webform status.
+   * The webform override state.
+   *
+   * When set to TRUE the webform can't not be saved.
    *
    * @var bool
+   */
+  protected $override = FALSE;
+
+  /**
+   * The webform status.
+   *
+   * @var string
    */
   protected $status = WebformInterface::STATUS_OPEN;
 
@@ -365,6 +375,20 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public function setOwnerId($uid) {
     $this->uid = ($uid) ? $uid : NULL;
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setOverride($override = TRUE) {
+    $this->override = $override;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isOverridden() {
+    return $this->override;
   }
 
   /**
@@ -687,6 +711,33 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function setSettingsOverride(array $settings) {
+    $this->setSettings($settings);
+    $this->setOverride();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setSettingOverride($key, $value) {
+    $this->setSetting($key, $value);
+    $this->setOverride();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setPropertyOverride($property_name, $value) {
+    $this->set($property_name, $value);
+    $this->setOverride();
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getAccessRules() {
     return $this->access;
   }
@@ -899,12 +950,22 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function getSubmissionForm(array $values = [], $operation = 'default') {
-    // Set this webform's id.
+    // Set this webform's id which can be used by preCreate hooks.
     $values['webform_id'] = $this->id();
 
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $this->entityTypeManager()
       ->getStorage('webform_submission')
       ->create($values);
+
+    // Pass this webform to the webform submission as a direct entity reference.
+    // This guarantees overridden properties and settings are maintained.
+    // Not sure why the overridden webform is not being correctly passed to the
+    // webform submission.
+    // @see \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem::setValue
+    if ($this->isOverridden()) {
+      $webform_submission->webform_id->entity = $this;
+    }
 
     return \Drupal::service('entity.form_builder')
       ->getForm($webform_submission, $operation);
@@ -1605,6 +1666,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
+    // Throw exception when saving overridden webform.
+    if ($this->isOverridden()) {
+      throw new WebformException(sprintf('The %s webform [%s] has overridden settings and/or properties and can not be saved.', $this->label(), $this->id()));
+    }
+
     // Always unpublish templates.
     if ($this->isTemplate()) {
       $this->setStatus(WebformInterface::STATUS_CLOSED);
