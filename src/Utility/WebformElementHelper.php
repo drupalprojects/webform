@@ -40,11 +40,34 @@ class WebformElementHelper {
   ];
 
   /**
+   * Ignored element sub properties used by composite elements.
+   *
+   * @var array
+   */
+  public static $ignoredSubProperties = [
+    // Properties that will allow code injection.
+    '#allowed_tags' => '#allowed_tags',
+    // Properties that will break webform data handling.
+    '#tree' => '#tree',
+    '#array_parents' => '#array_parents',
+    '#parents' => '#parents',
+    // Callbacks are blocked to prevent unwanted code executions.
+    '#after_build' => '#after_build',
+    '#element_validate' => '#element_validate',
+    '#post_render' => '#post_render',
+    '#pre_render' => '#pre_render',
+    '#process' => '#process',
+    '#submit' => '#submit',
+    '#validate' => '#validate',
+    '#value_callback' => '#value_callback',
+  ];
+
+  /**
    * Regular expression used to determine if sub-element property should be ignored.
    *
    * @var string
    */
-  protected static $ignoredPropertiesRegExp;
+  protected static $ignoredSubPropertiesRegExp;
 
   /**
    * Determine if a webform element's title is displayed.
@@ -205,15 +228,15 @@ class WebformElementHelper {
    * @see \Drupal\webform\Element\WebformCompositeBase::processWebformComposite
    */
   protected static function isIgnoredProperty($property) {
-    // Build cached ignored properties regular expression.
-    if (!isset(self::$ignoredPropertiesRegExp)) {
-      self::$ignoredPropertiesRegExp = '/__(' . implode('|', array_keys(WebformArrayHelper::removePrefix(self::$ignoredProperties))) . ')$/';
+    // Build cached ignored sub properties regular expression.
+    if (!isset(self::$ignoredSubPropertiesRegExp)) {
+      self::$ignoredSubPropertiesRegExp = '/__(' . implode('|', array_keys(WebformArrayHelper::removePrefix(self::$ignoredSubProperties))) . ')$/';
     }
 
     if (isset(self::$ignoredProperties[$property])) {
       return TRUE;
     }
-    elseif (strpos($property, '__') !== FALSE && preg_match(self::$ignoredPropertiesRegExp, $property)) {
+    elseif (strpos($property, '__') !== FALSE && preg_match(self::$ignoredSubPropertiesRegExp, $property)) {
       return TRUE;
     }
     else {
