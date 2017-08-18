@@ -33,9 +33,10 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "list_builder" = "Drupal\webform\WebformSubmissionListBuilder",
  *     "access" = "Drupal\webform\WebformSubmissionAccessControlHandler",
  *     "form" = {
- *       "default" = "Drupal\webform\WebformSubmissionForm",
  *       "add" = "Drupal\webform\WebformSubmissionForm",
  *       "edit" = "Drupal\webform\WebformSubmissionForm",
+ *       "edit_all" = "Drupal\webform\WebformSubmissionForm",
+ *       "api" = "Drupal\webform\WebformSubmissionForm",
  *       "test" = "Drupal\webform\WebformSubmissionForm",
  *       "notes" = "Drupal\webform\WebformSubmissionNotesForm",
  *       "duplicate" = "Drupal\webform\WebformSubmissionDuplicateForm",
@@ -332,7 +333,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    */
   public function getCurrentPageTitle() {
     $current_page = $this->getCurrentPage();
-    $page = $this->getWebform()->getPage($current_page);
+    $page = $this->getWebform()->getPage('default', $current_page);
     return ($page && isset($page['#title'])) ? $page['#title'] : $current_page;
   }
 

@@ -21,14 +21,13 @@ class WebformWizardPage extends Details {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return [
-      // Page settings.
-      'title' => '',
+    $default_properties = [
       'open' => FALSE,
       'prev_button_label' => '',
       'next_button_label' => '',
-      'states' => [],
-    ];
+    ] + $this->getDefaultBaseProperties();
+    unset($default_properties['flex']);
+    return $default_properties;
   }
 
   /**

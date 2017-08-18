@@ -479,13 +479,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @param array $values
    *   (optional) An array of values to set, keyed by property name.
    * @param string $operation
-   *   (optional) The operation identifying the webform variation to be returned.
-   *   Defaults to 'default'. This is typically used in routing.
+   *   (optional) The operation identifying the webform submission form
+   *   variation to be returned.
+   *   Defaults to 'add'. This is typically used in routing.
    *
    * @return array
    *   A render array representing a webform submission webform.
    */
-  public function getSubmissionForm(array $values = [], $operation = 'default');
+  public function getSubmissionForm(array $values = [], $operation = 'add');
 
   /**
    * Get original elements (YAML) value.
@@ -626,28 +627,33 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    */
   public function getElementDecoded($key);
 
+
   /**
    * Get webform wizard pages.
    *
-   * @param bool $disable_pages
-   *   If set to TRUE all wizard page will be ignored only the (optional)
-   *   preview page will be return.
+   * @param string $operation
+   *   The webform submission operation. 
+   *   Usually 'default', 'add', 'edit', 'edit_all', 'api', or 'test'
    *
    * @return array
    *   An associative array of webform wizard pages.
+   * 
+   * @see \Drupal\webform\Entity\WebformSubmission
    */
-  public function getPages($disable_pages = FALSE);
+  public function getPages($operation = '');
 
   /**
    * Get webform wizard page.
    *
+   * @param string $operation
+   *   Operation being performed.
    * @param string|int $key
    *   The name/key of a webform wizard page.
    *
    * @return array|null
    *   A webform wizard page element.
    */
-  public function getPage($key);
+  public function getPage($operation, $key);
 
   /**
    * Update submit and confirm paths (ie URL aliases) associated with this webform.

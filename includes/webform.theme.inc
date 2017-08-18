@@ -631,9 +631,9 @@ function template_preprocess_webform_progress(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
   $current_page = $variables['current_page'];
-  $mode = $variables['mode'];
+  $operation = $variables['operation'];
 
-  $pages = $webform->getPages($mode ? TRUE : FALSE);
+  $pages = $webform->getPages($operation);
 
   $page_keys = array_keys($pages);
   $page_indexes = array_flip($page_keys);
@@ -646,7 +646,7 @@ function template_preprocess_webform_progress(array &$variables) {
       '#theme' => ($libaries_manager->isIncluded('progress-tracker')) ? 'webform_progress_tracker' : 'webform_progress_bar',
       '#webform' => $webform,
       '#current_page' => $current_page,
-      '#mode' => $mode,
+      '#operation' => $operation,
     ];
   }
 
@@ -699,9 +699,9 @@ function _template_preprocess_webform_progress(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
   $current_page = $variables['current_page'];
-  $mode = $variables['mode'];
+  $operation = $variables['operation'];
 
-  $pages = $webform->getPages($mode ? TRUE : FALSE);
+  $pages = $webform->getPages($operation);
 
   $page_keys = array_keys($pages);
   $page_indexes = array_flip($page_keys);

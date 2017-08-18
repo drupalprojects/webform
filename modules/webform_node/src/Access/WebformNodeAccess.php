@@ -104,26 +104,22 @@ class WebformNodeAccess {
    *   A webform submission.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
-   * @param string $mode
-   *   The webform display/processs mode.
-   * @param bool $resend
-   *   Flag to check resend email access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public static function checkWebformSubmissionAccess($operation, $entity_access, NodeInterface $node, WebformSubmissionInterface $webform_submission, AccountInterface $account, $mode = NULL, $resend = FALSE) {
+  public static function checkWebformSubmissionAccess($operation, $entity_access, NodeInterface $node, WebformSubmissionInterface $webform_submission, AccountInterface $account) {
     $access_result = static::checkAccess($operation, $entity_access, $node, $webform_submission, $account);
     if ($access_result->isForbidden()) {
       return $access_result;
     }
 
-    if ($mode === WebformSubmissionForm::DISABLE_PAGES) {
-      return WebformAccess::checkWebformWizardPagesAccess($webform_submission->getWebform());
-    }
+    switch ($operation) {
+      case 'webform_submission_edit_all':
+        return WebformAccess::checkWizardPagesAccess($webform_submission);
 
-    if ($resend) {
-      return WebformAccess::checkEmailAccess($webform_submission, $account);
+      case 'webform_submission_resend':
+        return WebformAccess::checkEmailAccess($webform_submission, $account);
     }
 
     return $access_result;

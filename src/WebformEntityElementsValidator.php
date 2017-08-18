@@ -356,7 +356,7 @@ class WebformEntityElementsValidator {
         ->getStorage('webform_submission')
         ->create(['webform' => $this->webform]);
 
-      $form_object = $entity_type_manager->getFormObject('webform_submission', 'default');
+      $form_object = $entity_type_manager->getFormObject('webform_submission', 'add');
       $form_object->setEntity($webform_submission);
       $form_state = (new FormState())->setFormState([]);
       $form_builder->buildForm($form_object, $form_state);

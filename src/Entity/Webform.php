@@ -876,8 +876,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function checkAccessRules($operation, AccountInterface $account, WebformSubmissionInterface $webform_submission = NULL) {
-    // Always grant access to "admin" which are webform and form
-    // submission administrators.
+    // Always grant access to user that can administer webforms and submissions
     if ($account->hasPermission('administer webform') || $account->hasPermission('administer webform submission')) {
       return TRUE;
     }
@@ -893,26 +892,41 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         $operation = 'create';
       }
     }
-    $access_rules = $this->getAccessRules();
 
-    if (isset($access_rules[$operation])
-      && in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any', 'view_own'])
+    $access_rules = $this->getAccessRules() + static::getDefaultAccessRules();
+
+    if (in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any'])
       && $this->checkAccessRule($access_rules[$operation], $account)) {
       return TRUE;
     }
-    elseif (isset($access_rules[$operation . '_any'])
+
+    if (isset($access_rules[$operation . '_any'])
       && $this->checkAccessRule($access_rules[$operation . '_any'], $account)) {
       return TRUE;
     }
-    elseif (isset($access_rules[$operation . '_own'])
-      && $account->isAuthenticated() && $webform_submission
-      && $account->id() === $webform_submission->getOwnerId()
-      && $this->checkAccessRule($access_rules[$operation . '_own'], $account)) {
-      return TRUE;
+
+    // If webform submission is not set then check 'view own'.
+    // @see \Drupal\webform\WebformSubmissionForm::displayMessages.
+    if (empty($webform_submission)
+      && $operation === 'view_own'
+      && $this->checkAccessRule($access_rules[$operation], $account)) {
+        return TRUE;
     }
-    else {
-      return FALSE;
+
+    // If webform submission is set then check the webform submission owner.
+    if (!empty($webform_submission)) {
+      $is_authenticated_owner = ($account->isAuthenticated() && $account->id() === $webform_submission->getOwnerId());
+      $is_anonymous_owner = ($account->isAnonymous() && !empty($_SESSION['webform_submissions']) && isset($_SESSION['webform_submissions'][$webform_submission->id()]));
+      $is_owner = ($is_authenticated_owner || $is_anonymous_owner);
+      if ($is_owner) {
+        if (isset($access_rules[$operation . '_own'])
+          && $this->checkAccessRule($access_rules[$operation . '_own'], $account)) {
+          return TRUE;
+        }
+      }
     }
+
+    return FALSE;
   }
 
   /**
@@ -949,7 +963,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSubmissionForm(array $values = [], $operation = 'default') {
+  public function getSubmissionForm(array $values = [], $operation = 'add') {
     // Set this webform's id which can be used by preCreate hooks.
     $values['webform_id'] = $this->id();
 
@@ -1469,10 +1483,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPages($disable_pages = FALSE) {
-    if (isset($this->pages[$disable_pages])) {
-      return $this->pages[$disable_pages];
+  public function getPages($operation = 'default') {
+    if (isset($this->pages[$operation])) {
+      return $this->pages[$operation];
     }
+
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+    /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+    $element_plugin = $element_manager->createInstance('webform_wizard_page');
 
     $wizard_properties = [
       '#title' => '#title',
@@ -1481,14 +1500,22 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       '#states' => '#states',
     ];
 
-    $elements = $this->getElementsInitialized();
-
-    // Add webform page containers.
     $pages = [];
-    if (is_array($elements) && !$disable_pages) {
+
+    // Add webform wizard pages
+    $elements = $this->getElementsInitialized();
+    if (is_array($elements) && !in_array($operation, ['edit_all', 'api'])) {
       foreach ($elements as $key => $element) {
-        if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
+        if (!isset($element['#type']) || $element['#type'] != 'webform_wizard_page') {
+          continue;
+        }
+
+        // Check element access rules and only include pages that are visible
+        // to the current user.
+        $access_operation = (in_array($operation, ['default', 'add'])) ? 'create' : 'update';
+        if ($element_plugin->checkAccessRules($access_operation, $element)) {
           $pages[$key] = array_intersect_key($element, $wizard_properties);
+          $pages[$key]['#access'] = TRUE;
         }
       }
     }
@@ -1500,10 +1527,12 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       if (empty($pages)) {
         $pages['webform_start'] = [
           '#title' => $this->getSetting('wizard_start_label', TRUE),
+          '#access' => TRUE,
         ];
       }
       $pages['webform_preview'] = [
         '#title' => $this->getSetting('preview_label', TRUE),
+        '#access' => TRUE,
       ];
     }
 
@@ -1511,18 +1540,20 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     if ($pages && $this->getSetting('wizard_complete')) {
       $pages['webform_complete'] = [
         '#title' => $this->getSetting('wizard_complete_label', TRUE),
+        '#access' => TRUE,
       ];
     }
 
-    $this->pages[$disable_pages] = $pages;
-    return $this->pages[$disable_pages];
+    $this->pages[$operation] = $pages;
+
+    return $this->pages[$operation];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPage($key) {
-    $pages = $this->getPages();
+  public function getPage($operation, $key) {
+    $pages = $this->getPages($operation);
     return (isset($pages[$key])) ? $pages[$key] : NULL;
   }
 

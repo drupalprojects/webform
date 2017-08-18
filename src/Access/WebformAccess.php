@@ -155,25 +155,16 @@ class WebformAccess {
   }
 
   /**
-   * Check whether the webform has wizard pages.
+   * Check whether a webform submissions' webform has wizard pages.
    *
-   * @param \Drupal\webform\WebformInterface $webform
-   *   A webform.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submisison.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
-   *
-   * @see \Drupal\webform\WebformSubmissionForm::buildForm
-   * @see \Drupal\webform\Entity\Webform::getPages
    */
-  public static function checkWebformWizardPagesAccess(WebformInterface $webform) {
-    $elements = $webform->getElementsInitialized();
-    foreach ($elements as $element) {
-      if (isset($element['#type']) && $element['#type'] == 'webform_wizard_page') {
-        return AccessResult::allowed();
-      }
-    }
-    return AccessResult::forbidden();
+  public static function checkWizardPagesAccess(WebformSubmissionInterface $webform_submission) {
+    return AccessResult::allowedIf($webform_submission->getWebform()->hasWizardPages());
   }
 
 }

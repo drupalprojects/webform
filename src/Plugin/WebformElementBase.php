@@ -708,13 +708,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       return TRUE;
     }
 
-    if (isset($element['#access_' . $operation . '_roles']) && array_intersect($element['#access_' . $operation . '_roles'], $account->getRoles())) {
+    // If access roles are not set then use the anonymous and authenticated
+    // roles from the element's default properties.
+    // @see \Drupal\webform\Plugin\WebformElementBase::getDefaultBaseProperties
+    if (!isset($element['#access_' . $operation . '_roles'])) {
+      $element['#access_' . $operation . '_roles'] = $this->getDefaultProperty('access_' . $operation . '_roles') ?: [];
+    }
+    if (array_intersect($element['#access_' . $operation . '_roles'], $account->getRoles())) {
       return TRUE;
     }
-    elseif (isset($element['#access_' . $operation . '_users']) && in_array($account->id(), $element['#access_' . $operation . '_users'])) {
+
+    if (isset($element['#access_' . $operation . '_users']) && in_array($account->id(), $element['#access_' . $operation . '_users'])) {
       return TRUE;
     }
-    elseif (isset($element['#access_' . $operation . '_permissions'])) {
+
+    if (isset($element['#access_' . $operation . '_permissions'])) {
       foreach ($element['#access_' . $operation . '_permissions'] as $permission) {
         if ($account->hasPermission($permission)) {
           return TRUE;

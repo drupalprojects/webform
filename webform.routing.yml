@@ -163,7 +163,7 @@ entity.webform.user.submission:
 entity.webform.user.submission.edit:
   path: '/webform/{webform}/submissions/{webform_submission}/edit'
   defaults:
-    _entity_form: 'webform_submission.default'
+    _entity_form: 'webform_submission.edit'
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
   requirements:
     _entity_access: 'webform_submission.update'
@@ -469,16 +469,11 @@ entity.webform_submission.edit_form:
 entity.webform_submission.edit_form.all:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit/all'
   defaults:
-    _entity_form: 'webform_submission.edit'
+    _entity_form: 'webform_submission.edit_all'
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
-    mode: disable_pages
   requirements:
     _entity_access: 'webform_submission.update'
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkWebformWizardPagesAccess'
-  options:
-    parameters:
-      webform:
-        type: 'entity:webform'
+    _custom_access: '\Drupal\webform\Access\WebformAccess::checkWizardPagesAccess'
 
 entity.webform_submission.notes_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/notes'

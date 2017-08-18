@@ -39,20 +39,6 @@ class WebformSubmissionForm extends ContentEntityForm {
   const DISABLE_PAGES = 'disable_pages';
 
   /**
-   * Denote form is being submitted via API, which trigger validation.
-   *
-   * @var string
-   */
-  const API_SUBMISSION = 'api_submission';
-
-  /**
-   * Determines how a webform should displayed and or processed.
-   *
-   * @var string
-   */
-  protected $mode = NULL;
-
-  /**
    * The renderer service.
    *
    * @var \Drupal\Core\Render\RendererInterface
@@ -201,6 +187,17 @@ class WebformSubmissionForm extends ContentEntityForm {
 
   /**
    * {@inheritdoc}
+   *
+   * The WebformSubmissionForm trigger the below hooks...
+   * - hook_form_alter()
+   * - hook_form_{BASE_FORM_ID}_alter() => hook_form_webform_submission_alter()
+   * - hook_form_{BASE_FORM_ID}_{WEBFORM_ID}_alter() => hook_form_webform_submission_contact_alter()
+   * - hook_form_{BASE_FORM_ID}_{WEBFORM_ID}_{ENTITY_TYPE}_{ENTITY_ID}_form_alter() => hook_form_webform_submission_contact_node_1_form_alter()
+   * - hook_form_{BASE_FORM_ID}_{WEBFORM_ID}_{ENTITY_TYPE}_{ENTITY_ID}_{OPERATION}_form_alter() => hook_form_webform_submission_contact_node_1_add_form_alter()
+   *
+   * @see hook_form_alter()
+   * @see \Drupal\Core\Entity\EntityForm::getBaseFormId
+   * @see webform_form_webform_submission_form_alter()
    */
   public function getFormId() {
     $form_id = $this->entity->getEntityTypeId();
@@ -290,9 +287,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $mode = NULL) {
-    $this->mode = $mode;
-
+  public function buildForm(array $form, FormStateInterface $form_state) {
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $this->getEntity();
     $webform = $this->getWebform();
@@ -410,7 +405,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         '#theme' => 'webform_progress',
         '#webform' => $this->getWebform(),
         '#current_page' => $current_page,
-        '#mode' => $this->mode,
+        '#operation' => $this->operation,
         '#weight' => -20,
       ];
     }
@@ -798,7 +793,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($pages) {
       // Get current page element which can contain custom prev(ious) and next button
       // labels.
-      $current_page_element = $this->getWebform()->getPage($current_page);
+      $current_page_element = $this->getWebform()->getPage($this->operation, $current_page);
       $next_page = $this->getNextPage($pages, $current_page);
 
       $is_first_page = ($current_page == $this->getFirstPage($pages)) ? TRUE : FALSE;
@@ -1234,7 +1229,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @return bool
    */
   protected function hasPages() {
-    return $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
+    return $this->getWebform()->getPages($this->operation);
   }
 
   /**
@@ -1253,10 +1248,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function getPages(array &$form, FormStateInterface $form_state) {
     if ($form_state->get('pages') === NULL) {
-      $pages = $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
-      foreach ($pages as &$page) {
-        $page['#access'] = TRUE;
-      }
+      $pages = $this->getWebform()->getPages($this->operation);
       $form_state->set('pages', $pages);
     }
 
@@ -1296,7 +1288,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function getCurrentPage(array &$form, FormStateInterface $form_state) {
     if ($form_state->get('current_page') === NULL) {
-      $pages = $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
+      $pages = $this->getWebform()->getPages($this->operation);
       if (empty($pages)) {
         $form_state->set('current_page', '');
       }
@@ -1401,7 +1393,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
     else {
       // Get all pages so that we can also hide skipped pages.
-      $pages = $this->getWebform()->getPages($this->mode ? TRUE : FALSE);
+      $pages = $this->getWebform()->getPages($this->operation);
       foreach ($pages as $page_key => $page) {
         if (isset($form['elements'][$page_key])) {
           if ($page_key != $current_page) {
@@ -1667,7 +1659,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Populate element if value exists.
       if (isset($element['#type']) && isset($values[$key])) {
         $element['#default_value'] = $values[$key];
-        if ($this->mode == self::API_SUBMISSION) {
+        if ($this->operation == 'api') {
           $element['#needs_validation'] = TRUE;
         }
       }
@@ -1968,7 +1960,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = WebformSubmission::create(['webform_id' => $webform->id()]);
 
     /** @var \Drupal\webform\WebformSubmissionForm $form_object */
-    $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'default');
+    $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'add');
     $form_object->setEntity($webform_submission);
 
     /** @var \Drupal\webform\WebformMessageManagerInterface $message_manager */
@@ -2028,7 +2020,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $webform_submission = WebformSubmission::create($values);
 
     /** @var \Drupal\webform\WebformSubmissionForm $form_object */
-    $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'default');
+    $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'api');
     $form_object->setEntity($webform_submission);
 
     // Create an empty form state which will be populated when the submission
@@ -2036,7 +2028,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $form_state = new FormState();
 
     // Submit the form.
-    \Drupal::formBuilder()->submitForm($form_object, $form_state, self::API_SUBMISSION);
+    \Drupal::formBuilder()->submitForm($form_object, $form_state);
 
     // Get the errors but skip drafts.
     $errors = ($webform_submission->isDraft() && !$validate_only) ? [] : $form_state->getErrors();

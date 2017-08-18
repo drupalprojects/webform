@@ -313,7 +313,6 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *   TRUE is the element can be accessed by the user.
    *
    * @see \Drupal\webform\Entity\Webform::checkAccessRules
-   * @see \Drupal\webform\Entity\Webform::checkAccessRule
    */
   public function checkAccessRules($operation, array $element, AccountInterface $account = NULL);
 
