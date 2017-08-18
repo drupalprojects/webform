@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
@@ -30,13 +31,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class WebformSubmissionForm extends ContentEntityForm {
 
   use WebformDialogFormTrait;
-
-  /**
-   * Denote wizard page should be disabled.
-   *
-   * @var string
-   */
-  const DISABLE_PAGES = 'disable_pages';
 
   /**
    * The renderer service.
@@ -324,18 +318,38 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
+    /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
+    $webform_submission = $this->getEntity();
+    $source_entity = $webform_submission->getSourceEntity();
+    $webform = $this->getWebform();
+
     // Add a reference to the webform's id to the $form render array.
-    $form['#webform_id'] = $this->getWebform()->id();
+    $form['#webform_id'] = $webform->id();
+
+    // Define very specific webform classes, this override the form's
+    // default classes.
+    // @see \Drupal\Core\Form\FormBuilder::retrieveForm
+    $webform_id = $webform->id();
+    $operation = $this->operation;
+    $class = [];
+    $class[] = "webform-submission-form";
+    $class[] = "webform-submission-$operation-form";
+    $class[] = "webform-submission-$webform_id-form";
+    $class[] = "webform-submission-$webform_id-$operation-form";
+    if ($source_entity) {
+      $source_entity_type = $source_entity->getEntityTypeId();
+      $source_entity_id = $source_entity->id();
+      $class[] = "webform-submission-$webform_id-$source_entity_type-$source_entity_id-form";
+      $class[] = "webform-submission-$webform_id-$source_entity_type-$source_entity_id-$operation-form";
+    }
+    array_walk($class, array('\Drupal\Component\Utility\Html', 'getClass'));
+    $form['#attributes']['class'] = $class;
 
     // Check for a custom webform, track it, and return it.
     if ($custom_form = $this->getCustomForm($form, $form_state)) {
       $custom_form['#custom_form'] = TRUE;
       return $custom_form;
     }
-
-    /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
-    $webform_submission = $this->getEntity();
-    $webform = $this->getWebform();
 
     $form = parent::form($form, $form_state);
 
