@@ -65,8 +65,8 @@ class WebformElementManagedFilePrivateTest extends WebformElementManagedFileTest
     $temp_file_uri = file_create_url('private://webform/test_element_managed_file/_sid_/' . basename($this->files[1]->uri));
 
     // Check that temp file is not linked.
-    $this->assertRaw('<span class="file file--mime-text-plain file--text"> <a href="' . $temp_file_uri . '" type="text/plain; length=16384">text-1.txt</a></span>');
-    $this->assertNoRaw('<span class="file file--mime-text-plain file--text"> ' . basename($this->files[1]->uri) . '</span>');
+    $this->assertNoRaw('<span class="file file--mime-text-plain file--text"> <a href="' . $temp_file_uri . '" type="text/plain; length=16384">text-1.txt</a></span>');
+    $this->assertRaw('<span class="file file--mime-text-plain file--text"> ' . basename($this->files[1]->uri) . '</span>');
 
     // Check that anonymous user can't access temp file.
     $this->drupalGet($temp_file_uri);
