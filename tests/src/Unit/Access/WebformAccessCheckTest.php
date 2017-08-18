@@ -4,10 +4,12 @@ namespace Drupal\Tests\webform\Unit\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Tests\UnitTestCase;
-use Drupal\webform\Access\WebformAccess;
+use Drupal\webform\Access\WebformEntityAccess;
+use Drupal\webform\Access\WebformAccountAccess;
+use Drupal\webform\Access\WebformSubmissionAccess;
 
 /**
- * @coversDefaultClass \Drupal\webform\Access\WebformAccess
+ * @coversDefaultClass \Drupal\webform\Access\WebformAccountAccess
  *
  * @group webform
  */
@@ -97,25 +99,25 @@ class WebformAccessCheckTest extends UnitTestCase {
       ->will($this->returnValue($email_webform));
 
     // Check submission access.
-    $this->assertEquals(AccessResult::neutral(), WebformAccess::checkAdminAccess($account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccess::checkAdminAccess($admin_account));
+    $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkAdminAccess($account));
+    $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkAdminAccess($admin_account));
 
     // Check submission access.
-    $this->assertEquals(AccessResult::neutral(), WebformAccess::checkSubmissionAccess($account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccess::checkSubmissionAccess($submission_manager_account));
+    $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkSubmissionAccess($account));
+    $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkSubmissionAccess($submission_manager_account));
 
     // Check overview access.
-    $this->assertEquals(AccessResult::neutral(), WebformAccess::checkOverviewAccess($account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccess::checkOverviewAccess($submission_manager_account));
+    $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkOverviewAccess($account));
+    $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkOverviewAccess($submission_manager_account));
 
     // Check email access.
-    $this->assertEquals(AccessResult::forbidden(), WebformAccess::checkEmailAccess($webform_submission, $account));
-    $this->assertEquals(AccessResult::allowed(), WebformAccess::checkEmailAccess($email_webform_submission, $submission_manager_account));
+    $this->assertEquals(AccessResult::forbidden(), WebformSubmissionAccess::checkEmailAccess($webform_submission, $account));
+    $this->assertEquals(AccessResult::allowed(), WebformSubmissionAccess::checkEmailAccess($email_webform_submission, $submission_manager_account));
 
     // @todo Fix below access check which is looping through the node's fields.
     // Check entity results access.
-    // $this->assertEquals(AccessResult::neutral(), WebformAccess::checkEntityResultsAccess($node, $account));
-    // $this->assertEquals(AccessResult::allowed(), WebformAccess::checkEntityResultsAccess($webform_node, $submission_manager_account));
+    // $this->assertEquals(AccessResult::neutral(), WebformSourceEntityAccess::checkEntityResultsAccess($node, $account));
+    // $this->assertEquals(AccessResult::allowed(), WebformSourceEntityAccess::checkEntityResultsAccess($webform_node, $submission_manager_account));
   }
 
 }

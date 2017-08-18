@@ -88,14 +88,14 @@ entity.webform.collection:
     _entity_list: 'webform'
     _title: 'Webforms'
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkOverviewAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 
 entity.webform.autocomplete:
   path: '/admin/structure/webform/autocomplete'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformController::autocomplete'
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkOverviewAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 
 entity.webform.canonical:
   path: '/webform/{webform}'
@@ -258,7 +258,7 @@ entity.webform.results_user:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_own'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_submissions:
   path: '/admin/structure/webform/manage/{webform}/results/submissions'
@@ -271,7 +271,7 @@ entity.webform.results_submissions:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_submissions.custom:
   path: '/admin/structure/webform/manage/{webform}/results/submissions/custom'
@@ -284,7 +284,7 @@ entity.webform.results_submissions.custom:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_export:
   path: '/admin/structure/webform/manage/{webform}/results/download'
@@ -297,7 +297,7 @@ entity.webform.results_export:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_export_file:
   path: '/admin/structure/webform/manage/{webform}/results/download/file/{filename}'
@@ -310,7 +310,7 @@ entity.webform.results_export_file:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_clear:
   path: '/admin/structure/webform/manage/{webform}/results/clear'
@@ -323,7 +323,7 @@ entity.webform.results_clear:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.submission_purge_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_log:
   path: '/admin/structure/webform/manage/{webform}/results/log'
@@ -337,7 +337,7 @@ entity.webform.results_log:
   requirements:
     _permission: 'access webform submission log'
     _entity_access: 'webform.submission_view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkLogAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkLogAccess'
 
 # Webform options
 
@@ -389,7 +389,7 @@ entity.webform_submission.collection:
     _entity_list: 'webform_submission'
     _title: 'Webforms'
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkSubmissionAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess:checkSubmissionAccess'
 
 entity.webform_submission.results_purge:
   path: '/admin/structure/webform/results/purge'
@@ -408,7 +408,7 @@ entity.webform_submission.results_log:
     _title: 'Webforms'
   requirements:
     _permission: 'access webform submission log'
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkSubmissionAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess:checkSubmissionAccess'
 
 # Webform submissions
 
@@ -456,7 +456,7 @@ entity.webform_submission.log:
   requirements:
     _permission: 'access webform submission log'
     _entity_access: 'webform_submission.view_any'
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkLogAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess::checkLogAccess'
 
 entity.webform_submission.edit_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit'
@@ -473,7 +473,7 @@ entity.webform_submission.edit_form.all:
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
   requirements:
     _entity_access: 'webform_submission.update'
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkWizardPagesAccess'
+    _custom_access: '\Drupal\webform\Access\WebformSubmissionAccess::checkWizardPagesAccess'
 
 entity.webform_submission.notes_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/notes'
@@ -489,7 +489,7 @@ entity.webform_submission.resend_form:
     _form: 'Drupal\webform\Form\WebformSubmissionResendForm'
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkEmailAccess'
+    _custom_access: '\Drupal\webform\Access\WebformSubmissionAccess::checkEmailAccess'
 
 entity.webform_submission.duplicate_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/duplicate'

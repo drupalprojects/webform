@@ -4,7 +4,7 @@ entity.webform.templates:
     _controller: '\Drupal\webform_templates\Controller\WebformTemplatesController::index'
     _title: 'Webforms'
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkOverviewAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 
 entity.webform.preview:
   path: '/webform/{webform}/preview'
@@ -20,4 +20,4 @@ entity.webform.templates.autocomplete:
     _controller: '\Drupal\webform\Controller\WebformController::autocomplete'
     templates: TRUE
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformAccess::checkOverviewAccess'
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'

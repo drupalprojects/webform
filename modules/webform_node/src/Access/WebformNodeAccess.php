@@ -5,9 +5,9 @@ namespace Drupal\webform_node\Access;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use Drupal\webform\Access\WebformAccess;
+use Drupal\webform\Access\WebformEntityAccess;
+use Drupal\webform\Access\WebformSubmissionAccess;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
-use Drupal\webform\WebformSubmissionForm;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -34,7 +34,7 @@ class WebformNodeAccess {
     $access_result = static::checkAccess($operation, $entity_access, $node, NULL, $account);
     if ($access_result->isAllowed()) {
       $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($node);
-      return WebformAccess::checkResultsAccess($node->$webform_field_name->entity, $node);
+      return WebformEntityAccess::checkResultsAccess($node->$webform_field_name->entity, $node);
     }
     else {
       return $access_result;
@@ -116,10 +116,10 @@ class WebformNodeAccess {
 
     switch ($operation) {
       case 'webform_submission_edit_all':
-        return WebformAccess::checkWizardPagesAccess($webform_submission);
+        return WebformSubmissionAccess::checkWizardPagesAccess($webform_submission);
 
       case 'webform_submission_resend':
-        return WebformAccess::checkEmailAccess($webform_submission, $account);
+        return WebformSubmissionAccess::checkEmailAccess($webform_submission, $account);
     }
 
     return $access_result;
