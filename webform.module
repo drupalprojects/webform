@@ -881,7 +881,7 @@ function webform_process_states(array &$elements, $key = '#attributes') {
 function _webform_theme_suggestions(array $variables, $hook) {
   $suggestions = [];
 
-  if ($hook == 'webform') {
+  if ($hook == 'webform' && isset($variables['element']) && isset($variables['element']['#webform_id'])) {
     $suggestions[] = $hook . '__' . $variables['element']['#webform_id'];
   }
   elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
