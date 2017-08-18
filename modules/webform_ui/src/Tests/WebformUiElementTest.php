@@ -103,7 +103,7 @@ class WebformUiElementTest extends WebformTestBase {
     $this->drupalPostForm(NULL, [], t('Save elements'));
 
     // Check that save elements removes ?update query string parameter.
-    $this->assertUrl('admin/structure/webform/manage/contact');
+    $this->assertUrl('admin/structure/webform/manage/contact', ['query' => ['update' => 'test']]);
 
     // Create validate unique element.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/add/textfield', ['key' => 'test', 'properties[title]' => 'Test'], t('Save'));

@@ -6,27 +6,18 @@ use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\ElementInfoManagerInterface;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\Core\Url;
 use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base for controller for webform.
+ * Webform manage elements YAML source form.
  */
-class WebformEntityForm extends BundleEntityFormBase {
+class WebformEntityEditForm extends BundleEntityFormBase {
 
   use WebformDialogFormTrait;
-
-  /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
 
   /**
    * Element info manager.
@@ -57,21 +48,18 @@ class WebformEntityForm extends BundleEntityFormBase {
   protected $tokenManager;
 
   /**
-   * Constructs a WebformEntityForm.
+   * Constructs a WebformEntityEditForm.
    *
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer.
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   The element manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
-   * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
+   * @param \Drupal\webform\WebformEntityElementsValidatorInterface $elements_validator
    *   Webform element validator.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    */
-  public function __construct(RendererInterface $renderer, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator, WebformTokenManagerInterface $token_manager) {
-    $this->renderer = $renderer;
+  public function __construct(ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformEntityElementsValidatorInterface $elements_validator, WebformTokenManagerInterface $token_manager) {
     $this->elementInfo = $element_info;
     $this->elementManager = $element_manager;
     $this->elementsValidator = $elements_validator;
@@ -84,7 +72,6 @@ class WebformEntityForm extends BundleEntityFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('renderer'),
       $container->get('plugin.manager.element_info'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.elements_validator'),
@@ -107,17 +94,7 @@ class WebformEntityForm extends BundleEntityFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $this->getEntity();
-
-    // Customize title for duplicate webform.
-    if ($this->operation == 'duplicate') {
-      // Display custom title.
-      $form['#title'] = $this->t("Duplicate '@label' form", ['@label' => $webform->label()]);
-    }
-
     $form = parent::buildForm($form, $form_state);
-
     return $this->buildDialogForm($form, $form_state);
   }
 
@@ -125,80 +102,6 @@ class WebformEntityForm extends BundleEntityFormBase {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $this->getEntity();
-
-    // Only display id, title, and description for new webforms.
-    // Once a webform is created this information is moved to the webform's settings
-    // tab.
-    if ($webform->isNew()) {
-      $form['id'] = [
-        '#type' => 'machine_name',
-        '#default_value' => $webform->id(),
-        '#machine_name' => [
-          'exists' => '\Drupal\webform\Entity\Webform::load',
-          'source' => ['title'],
-        ],
-        '#maxlength' => 32,
-        '#disabled' => (bool) $webform->id() && $this->operation != 'duplicate',
-        '#required' => TRUE,
-      ];
-      $form['title'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Title'),
-        '#maxlength' => 255,
-        '#default_value' => $webform->label(),
-        '#required' => TRUE,
-        '#id' => 'title',
-        '#attributes' => [
-          'autofocus' => 'autofocus',
-        ],
-      ];
-      $form['description'] = [
-        '#type' => 'webform_html_editor',
-        '#title' => $this->t('Administrative description'),
-        '#default_value' => $webform->get('description'),
-      ];
-      /** @var \Drupal\webform\WebformEntityStorageInterface $webform_storage */
-      $webform_storage = $this->entityTypeManager->getStorage('webform');
-      $form['category'] = [
-        '#type' => 'webform_select_other',
-        '#title' => $this->t('Category'),
-        '#options' => $webform_storage->getCategories(),
-        '#empty_option' => '<' . $this->t('None') . '>',
-        '#default_value' => $webform->get('category'),
-      ];
-      $form = $this->protectBundleIdElement($form);
-    }
-
-    // Call the isolated edit webform that can be overridden by the
-    // webform_ui.module.
-    $form = $this->editForm($form, $form_state);
-
-    return parent::form($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function actions(array $form, FormStateInterface $form_state) {
-    $actions = parent::actions($form, $form_state);
-    unset($actions['delete']);
-    return $actions;
-  }
-
-  /**
-   * Edit webform element's source code webform.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return array
-   *   The webform structure.
-   */
-  protected function editForm(array $form, FormStateInterface $form_state) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
@@ -212,14 +115,23 @@ class WebformEntityForm extends BundleEntityFormBase {
       '#mode' => 'yaml',
       '#title' => $this->t('Elements (YAML)'),
       '#description' => $this->t('Enter a <a href=":form_api_href">Form API (FAPI)</a> and/or a <a href=":render_api_href">Render Array</a> as <a href=":yaml_href">YAML</a>.', $t_args) . '<br />' .
-      '<em>' . $this->t('Please note that comments are not supported and will be removed.') . '</em>',
+        '<em>' . $this->t('Please note that comments are not supported and will be removed.') . '</em>',
       '#default_value' => $this->getElementsWithoutWebformTypePrefix($webform->get('elements')),
       '#required' => TRUE,
       '#element_validate' => ['::validateElementsYaml'],
     ];
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
-    return $form;
+    return parent::form($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function actions(array $form, FormStateInterface $form_state) {
+    $actions = parent::actions($form, $form_state);
+    unset($actions['delete']);
+    return $actions;
   }
 
   /**
@@ -253,38 +165,10 @@ class WebformEntityForm extends BundleEntityFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
-
-    // Poormans duplication of translated webform configuration.
-    // This completely bypasses the config translation system and just
-    // duplicates any translated webform config stored in the database.
-    if ($this->operation == 'duplicate') {
-      $result = \Drupal::database()->select('config', 'c')
-        ->fields('c', ['collection', 'name', 'data'])
-        ->condition('c.name', 'webform.webform.' . \Drupal::routeMatch()->getRawParameter('webform'))
-        ->condition('c.collection', 'language.%', 'LIKE')
-        ->execute();
-      while ($record = $result->fetchAssoc()) {
-        $record['name'] = 'webform.webform.' . $this->entity->id();
-        \Drupal::database()->insert('config')
-          ->fields(['collection', 'name', 'data'])
-          ->values($record)
-          ->execute();
-      }
-    }
-
-    $form_state->setRedirectUrl(Url::fromRoute('entity.webform.edit_form', ['webform' => $this->getEntity()->id()]));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function save(array $form, FormStateInterface $form_state) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
-    $is_new = $webform->isNew();
     $webform->save();
 
     $context = [
@@ -292,14 +176,8 @@ class WebformEntityForm extends BundleEntityFormBase {
       'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString()
     ];
     $t_args = ['%label' => $webform->label()];
-    if ($is_new) {
-      $this->logger('webform')->notice('Webform @label created.', $context);
-      drupal_set_message($this->t('Webform %label created.', $t_args));
-    }
-    else {
-      $this->logger('webform')->notice('Webform @label elements saved.', $context);
-      drupal_set_message($this->t('Webform %label elements saved.', $t_args));
-    }
+    $this->logger('webform')->notice('Webform @label elements saved.', $context);
+    drupal_set_message($this->t('Webform %label elements saved.', $t_args));
   }
 
   /****************************************************************************/

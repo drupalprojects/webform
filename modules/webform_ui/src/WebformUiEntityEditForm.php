@@ -2,33 +2,101 @@
 
 namespace Drupal\webform_ui;
 
+use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\ElementInfoManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformElementStates;
 use Drupal\webform\Form\WebformEntityAjaxFormTrait;
 use Drupal\webform\Utility\WebformDialogHelper;
-use Drupal\webform\WebformEntityForm;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\WebformEntityElementsValidatorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base for controller for webform UI.
+ * Webform manage elements UI form.
  */
-class WebformUiEntityForm extends WebformEntityForm {
+class WebformUiEntityEditForm extends BundleEntityFormBase {
 
   use WebformEntityAjaxFormTrait;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * Element info manager.
+   *
+   * @var \Drupal\Core\Render\ElementInfoManagerInterface
+   */
+  protected $elementInfo;
+
+  /**
+   * Webform element manager.
+   *
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
+   */
+  protected $elementManager;
+
+  /**
+   * Webform element validator.
+   *
+   * @var \Drupal\webform\WebformEntityElementsValidator
+   */
+  protected $elementsValidator;
+
+  /**
+   * The webform token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
+
+  /**
+   * Constructs a WebformUiEntityEditForm.
+   *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   *   The element manager.
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
+   *   The webform element manager.
+   * @param \Drupal\webform\WebformEntityElementsValidatorInterface $elements_validator
+   *   Webform element validator.
+   */
+  public function __construct(RendererInterface $renderer, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformEntityElementsValidatorInterface $elements_validator) {
+    $this->renderer = $renderer;
+    $this->elementInfo = $element_info;
+    $this->elementManager = $element_manager;
+    $this->elementsValidator = $elements_validator;
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function editForm(array $form, FormStateInterface $form_state) {
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('renderer'),
+      $container->get('plugin.manager.element_info'),
+      $container->get('plugin.manager.webform.element'),
+      $container->get('webform.elements_validator')
+    );
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
-
-    if ($webform->isNew()) {
-      return $form;
-    }
 
     $header = $this->getTableHeader();
 
@@ -108,23 +176,20 @@ class WebformUiEntityForm extends WebformEntityForm {
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($form);
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
-    return $form;
+
+    $form = parent::buildForm($form, $form_state);
+
+    return $this->buildAjaxForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
-
-    // Don't validate new webforms because they don't have any initial
-    // elements.
-    if ($webform->isNew()) {
-      return;
-    }
-
-    parent::validateForm($form, $form_state);
 
     // Get raw flattened elements that will be used to rebuild element's YAML
     // hierarchy.
@@ -184,7 +249,7 @@ class WebformUiEntityForm extends WebformEntityForm {
    */
   protected function actionsElement(array $form, FormStateInterface $form_state) {
     $form = parent::actionsElement($form, $form_state);
-    $form['submit']['#value'] = ($this->entity->isNew()) ? $this->t('Save') : $this->t('Save elements');
+    $form['submit']['#value'] = $this->t('Save elements');
     unset($form['delete']);
     return $form;
   }
@@ -328,7 +393,6 @@ class WebformUiEntityForm extends WebformEntityForm {
     $webform = $this->getEntity();
 
     $row = [];
-
 
     $element_dialog_attributes = WebformDialogHelper::getModalDialogAttributes(800);
     $key = $element['#webform_key'];

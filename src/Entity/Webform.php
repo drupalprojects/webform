@@ -37,13 +37,14 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "list_builder" = "Drupal\webform\WebformEntityListBuilder",
  *     "access" = "Drupal\webform\WebformEntityAccessControlHandler",
  *     "form" = {
- *       "default" = "Drupal\webform\WebformEntityForm",
+ *       "add" = "Drupal\webform\WebformEntityAddForm",
+ *       "edit" = "Drupal\webform\WebformEntityEditForm",
  *       "settings" = "Drupal\webform\WebformEntitySettingsForm",
  *       "third_party_settings" = "Drupal\webform\WebformEntityThirdPartySettingsForm",
  *       "assets" = "Drupal\webform\WebformEntityAssetsForm",
  *       "access" = "Drupal\webform\WebformEntityAccessForm",
  *       "handlers" = "Drupal\webform\WebformEntityHandlersForm",
- *       "duplicate" = "Drupal\webform\WebformEntityForm",
+ *       "duplicate" = "Drupal\webform\WebformEntityAddForm",
  *       "delete" = "Drupal\webform\WebformEntityDeleteForm",
  *     }
  *   },

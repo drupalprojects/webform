@@ -7,8 +7,8 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\webform\Form\WebformDialogFormTrait;
+use Drupal\webform\WebformEntityElementsValidatorInterface;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformEntityElementsValidator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -66,10 +66,10 @@ class WebformUiElementDeleteForm extends ConfirmFormBase {
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
-   * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
+   * @param \Drupal\webform\WebformEntityElementsValidatorInterface $elements_validator
    *   Webform element validator.
    */
-  public function __construct(RendererInterface $renderer, WebformEntityElementsValidator $elements_validator) {
+  public function __construct(RendererInterface $renderer, WebformEntityElementsValidatorInterface $elements_validator) {
     $this->renderer = $renderer;
     $this->elementsValidator = $elements_validator;
   }

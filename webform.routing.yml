@@ -191,7 +191,7 @@ entity.webform.test:
 entity.webform.add_form:
   path: '/admin/structure/webform/add'
   defaults:
-    _entity_form: 'webform.default'
+    _entity_form: 'webform.add'
     _title: 'Add webform'
   requirements:
     _entity_create_access: 'webform'
@@ -199,7 +199,7 @@ entity.webform.add_form:
 entity.webform.edit_form:
   path: '/admin/structure/webform/manage/{webform}'
   defaults:
-    _entity_form: 'webform.default'
+    _entity_form: 'webform.edit'
     _title_callback: '\Drupal\webform\Controller\WebformController::title'
   requirements:
     _entity_access: 'webform.update'
@@ -352,7 +352,7 @@ entity.webform_options.collection:
 entity.webform_options.add_form:
   path: '/admin/structure/webform/settings/options/manage/add'
   defaults:
-    _entity_form: 'webform_options.default'
+    _entity_form: 'webform_options.add'
     _title: 'Add webform options'
   requirements:
     _entity_create_access: 'webform_options'
@@ -360,7 +360,7 @@ entity.webform_options.add_form:
 entity.webform_options.edit_form:
   path: '/admin/structure/webform/settings/options/manage/{webform_options}/edit'
   defaults:
-    _entity_form: 'webform_options.default'
+    _entity_form: 'webform_options.edit'
     _title_callback: '\Drupal\webform\Controller\WebformOptionsController::title'
   requirements:
     _entity_access: 'webform_options.update'

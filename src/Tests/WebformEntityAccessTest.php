@@ -37,7 +37,10 @@ class WebformEntityAccessTest extends WebformTestBase {
     $this->drupalLogin($this->ownWebformUser);
 
     // Check create own webform.
-    $this->drupalPostForm('admin/structure/webform/add', ['id' => 'test_own', 'title' => 'test_own', 'elements' => "test:\n  '#markup': 'test'"], t('Save'));
+    $this->drupalPostForm('admin/structure/webform/add', ['id' => 'test_own', 'title' => 'test_own'], t('Save'));
+
+    // Add test element to own webform.
+    $this->drupalPostForm('/admin/structure/webform/manage/test_own', ['elements' => "test:\n  '#markup': 'test'"], t('Save'));
 
     // Check duplicate own webform.
     $this->drupalGet('admin/structure/webform/manage/test_own/duplicate');

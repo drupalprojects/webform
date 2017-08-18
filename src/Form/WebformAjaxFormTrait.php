@@ -4,12 +4,14 @@ namespace Drupal\webform\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\webform\Ajax\WebformCloseDialogCommand;
 use Drupal\webform\Ajax\WebformRefreshCommand;
 use Drupal\webform\Ajax\WebformScrollTopCommand;
+use Drupal\webform\Utility\WebformDialogHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -53,6 +55,47 @@ trait WebformAjaxFormTrait {
         'message' => '',
       ],
     ];
+  }
+
+  /**
+   * Is the current request for an Ajax modal/dialog.
+   *
+   * @return bool
+   *   TRUE if the current request is for an Ajax modal/dialog.
+   */
+  protected function isDialog() {
+    $wrapper_format = $this->getRequest()
+      ->get(MainContentViewSubscriber::WRAPPER_FORMAT);
+    return (in_array($wrapper_format, [
+      'drupal_ajax',
+      'drupal_modal',
+      'drupal_dialog',
+      'drupal_dialog_' . WebformDialogHelper::getOffCanvasTriggerName(),
+    ])) ? TRUE : FALSE;
+  }
+
+  /**
+   * Is the current request for an off canvas dialog.
+   *
+   * @return bool
+   *   TRUE if the current request is for an off canvas dialog.
+   */
+  protected function isOffCanvasDialog() {
+    $wrapper_format = $this->getRequest()
+      ->get(MainContentViewSubscriber::WRAPPER_FORMAT);
+    return (in_array($wrapper_format, [
+      'drupal_dialog_' . WebformDialogHelper::getOffCanvasTriggerName(),
+    ])) ? TRUE : FALSE;
+  }
+
+  /**
+   * Is the current request a quick edit page.
+   *
+   * @return bool
+   *   TRUE if the current request a quick edit page.
+   */
+  protected function isQuickEdit() {
+    return (\Drupal::request()->query->get('destination')) ? TRUE : FALSE;
   }
 
   /**

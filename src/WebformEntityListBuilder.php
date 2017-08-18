@@ -74,20 +74,13 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     // Must manually add local actions to the webform because we can't alter local
     // actions and add the needed dialog attributes.
     // @see https://www.drupal.org/node/2585169
-    if ($this->moduleHandler()->moduleExists('webform_ui')) {
-      $add_form_attributes = WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button-action', 'button--primary', 'button--small']);
-    }
-    else {
-      $add_form_attributes = ['class' => ['button', 'button-action', 'button--primary', 'button--small']];
-    }
-
     if (\Drupal::currentUser()->hasPermission('create webform')) {
       $build['local_actions'] = [
         'add_form' => [
           '#type' => 'link',
           '#title' => $this->t('Add webform'),
           '#url' => new Url('entity.webform.add_form'),
-          '#attributes' => $add_form_attributes,
+          '#attributes' =>  WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button-action', 'button--primary', 'button--small']),
         ],
       ];
     }

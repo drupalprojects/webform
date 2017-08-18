@@ -699,7 +699,7 @@ function webform_theme_registry_alter(&$theme_registry) {
  *
  * @see template_preprocess_menu_local_action();
  * @see \Drupal\webform\WebformEntityHandlersForm
- * @see \Drupal\webform_ui\WebformUiEntityForm
+ * @see \Drupal\webform_ui\WebformUiEntityEditForm
  */
 function webform_preprocess_menu_local_action(&$variables) {
   $link = $variables['element']['#link'];

@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
-use Drupal\webform\WebformEntityElementsValidator;
+use Drupal\webform\WebformEntityElementsValidatorInterface;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -121,10 +121,10 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    *   The entity field manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
-   * @param \Drupal\webform\WebformEntityElementsValidator $elements_validator
+   * @param \Drupal\webform\WebformEntityElementsValidatorInterface $elements_validator
    *   Webform element validator.
    */
-  public function __construct(RendererInterface $renderer, EntityFieldManagerInterface $entity_field_manager, WebformElementManagerInterface $element_manager, WebformEntityElementsValidator $elements_validator) {
+  public function __construct(RendererInterface $renderer, EntityFieldManagerInterface $entity_field_manager, WebformElementManagerInterface $element_manager, WebformEntityElementsValidatorInterface $elements_validator) {
     $this->renderer = $renderer;
     $this->entityFieldManager = $entity_field_manager;
     $this->elementManager = $element_manager;
@@ -235,7 +235,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#disabled' => ($key) ? TRUE : FALSE,
       // Allow key to populated using query string parameter.
       // Use by 'Edit submit button(s)'.
-      // @see \Drupal\webform_ui\WebformUiEntityForm::editForm
+      // @see \Drupal\webform_ui\WebformUiEntityEditForm::editForm
       '#default_value' => $this->getRequest()->get('key') ?: $key ?: $webform_element->getDefaultKey(),
       '#weight' => -98,
     ];

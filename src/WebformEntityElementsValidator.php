@@ -10,10 +10,7 @@ use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
-/**
- * Defines a class to validate webform elements.
- */
-class WebformEntityElementsValidator {
+class WebformEntityElementsValidator implements WebformEntityElementsValidatorInterface {
 
   use StringTranslationTrait;
 
@@ -53,13 +50,7 @@ class WebformEntityElementsValidator {
   protected $originalElements;
 
   /**
-   * Validate webform elements.
-   *
-   * @param \Drupal\webform\WebformInterface $webform
-   *   A webform.
-   *
-   * @return array|null
-   *   An array of error messages or NULL is the elements are valid.
+   * {@inheritdoc}
    */
   public function validate(WebformInterface $webform) {
     $this->webform = $webform;

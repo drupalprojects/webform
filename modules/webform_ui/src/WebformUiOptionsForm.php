@@ -22,7 +22,6 @@ class WebformUiOptionsForm extends WebformOptionsForm {
       '#title_display' => 'invisible',
       '#empty_options' => 10,
       '#add_more' => 10,
-      '#required' => TRUE,
       '#default_value' => $this->getOptions(),
     ];
     return $form;
