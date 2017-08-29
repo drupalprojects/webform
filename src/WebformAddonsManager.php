@@ -278,8 +278,16 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Integrations: Webform Stripe integration.
     $projects['stripe_webform'] = [
       'title' => $this->t('Webform Stripe'),
-      'description' => $this->t('Provides a stripe webform element and default handlers'),
+      'description' => $this->t('Provides a stripe webform element and default handlers.'),
       'url' => Url::fromUri('https://www.drupal.org/project/stripe_webform'),
+      'category' => 'integration',
+    ];
+
+    // Integrations: Webform SugarCRM Integration
+    $projects['webform_sugarcrm'] = [
+      'title' => $this->t('Webform SugarCRM Integration'),
+      'description' => $this->t('Provides integration for webform submission with SugarCRM.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_sugarcrm'),
       'category' => 'integration',
     ];
 
