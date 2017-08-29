@@ -776,7 +776,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case self::STATE_COMPLETED:
         $query->condition('in_draft', 0);
         break;
-
     }
 
     return $query;
