@@ -72,7 +72,6 @@ elements: |
           - xor
           - ':input[name="trigger_select"]':
               value: option
-  
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger
@@ -269,6 +268,22 @@ elements: |
             '!value': ''
           ':input[name="address_trigger[country]"]':
             '!value': ''
+  composite_required_details:
+    '#type': details
+    '#title': composite_required
+    '#open': true
+    composite_required_trigger:
+      '#type': checkbox
+      '#title': composite_required_trigger
+    composite_required_dependent:
+      '#type': webform_address
+      '#title': composite_required_dependent
+      '#title_display': before
+      '#states':
+        required:
+          ':input[name="composite_required_trigger"]':
+            'checked': true
+
 css: ''
 javascript: ''
 settings:

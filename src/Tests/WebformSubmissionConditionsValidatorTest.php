@@ -163,6 +163,13 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('address_dependent_required field is required.');
+
+    // Check required composite.
+    $edit = [
+      'composite_required_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('composite_required_dependent field is required.');
   }
 
   /**

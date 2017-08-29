@@ -167,6 +167,10 @@ class WebformElementHelper {
     // Attach library.
     $element['#attached']['library'][] = 'core/drupal.states';
 
+    // Copy #states to #_webform_states property which can be used by
+    // @see \Drupal\webform\WebformSubmissionConditionsValidator
+    $element['#_webform_states'] = $element['#states'];
+
     // Remove #states property to prevent nesting.
     unset($element['#states']);
   }

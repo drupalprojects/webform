@@ -75,11 +75,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
     // Loop through visible elements with #states.
     foreach ($elements as $element_key => &$element) {
-      if (empty($element['#states'])) {
-        continue;
-      }
-
-      foreach ($element['#states'] as $state => $conditions) {
+      $states = static::getElementStates($element);
+      foreach ($states as $state => $conditions) {
         if ($this->isConditionsTargetsVisible($conditions, $elements)) {
           list($state, $negate) = $this->processState($state);
           if ($state == 'required') {
@@ -95,7 +92,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         }
 
         // Remove #states state/conditions.
-        unset($element['#states'][$state]);
+        unset($states[$state]);
 
         // Process state/negate.
         list($state, $negate) = $this->processState($state);
@@ -127,7 +124,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         }
       }
 
-      if (empty($element['#states'])) {
+      // Remove #states if all states have been applied.
+      if (empty($states)) {
         unset($element['#states']);
       }
     }
@@ -147,18 +145,15 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
     // Loop through visible elements with #states.
     foreach ($elements as $element_key => $element) {
-      if (empty($element['#states'])) {
-        continue;
-      }
-
-      foreach ($element['#states'] as $state => $conditions) {
+      $states = static::getElementStates($element);
+      foreach ($states as $state => $conditions) {
         if (!in_array($state,  ['required', 'optional'])) {
           continue;
         }
 
         $is_required = $this->validateConditions($conditions, $webform_submission);
         $is_required = ($state == 'optional') ? !$is_required : $is_required;
-        if ($is_required && empty($form_state->getValue($element_key))) {
+        if ($is_required && empty($webform_submission->getData($element_key))) {
           $this->setRequiredError($element, $form_state);
         }
       }
@@ -401,6 +396,27 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   // Static input and selector methods.
   // @see \Drupal\webform\Plugin\WebformElementBase::getElementSelectorInputValue
   /****************************************************************************/
+
+  /**
+   * Get an element's states API array.
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @return array
+   *   an element's states API array or an empty array.
+   */
+  public static function getElementStates(array $element) {
+    if (isset($element['#states'])) {
+      return $element['#states'];
+    }
+    // @see \Drupal\webform\Utility\WebformElementHelper::fixStatesWrapper
+    if (isset($element['#_webform_states'])) {
+      return $element['#_webform_states'];
+    }
+
+    return [];
+  }
 
   /**
    * Get input name from CSS :input[name="*"] selector.

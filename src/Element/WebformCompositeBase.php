@@ -181,25 +181,27 @@ abstract class WebformCompositeBase extends FormElement {
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
-    // Only validate composite elements that are visible.
-    $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
-    if (!$has_access) {
-      return;
-    }
-
     /************************************************************************/
     // @todo Remove below code once WebformElement integration is completed.
     /************************************************************************/
 
-    // Validate required composite elements.
-    $composite_elements = static::getCompositeElements();
-    foreach ($composite_elements as $composite_key => $composite_element) {
-      if (!empty($element[$composite_key]['#required']) && $value[$composite_key] == '') {
-        if (isset($element[$composite_key]['#title'])) {
-          $form_state->setError($element[$composite_key], t('@name field is required.', ['@name' => $element[$composite_key]['#title']]));
+    // Only validate composite elements that are visible.
+    $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
+    if ($has_access) {
+      // Validate required composite elements.
+      $composite_elements = static::getCompositeElements();
+      foreach ($composite_elements as $composite_key => $composite_element) {
+        if (!empty($element[$composite_key]['#required']) && $value[$composite_key] == '') {
+          if (isset($element[$composite_key]['#title'])) {
+            $form_state->setError($element[$composite_key], t('@name field is required.', ['@name' => $element[$composite_key]['#title']]));
+          }
         }
       }
     }
-  }
 
+    // Clear empty composites value.
+    if (empty(array_filter($value))) {
+      $form_state->setValueForElement($element, NULL);
+    }
+  }
 }
