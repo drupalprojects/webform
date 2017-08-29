@@ -385,7 +385,16 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
       // Item format.
       $item_formats = $element_plugin->getItemFormats();
       foreach ($item_formats as $format_name => $format_label) {
-        $item_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
+        if (is_array($format_label)) {
+          // Support optgroup.
+          // @see \Drupal\webform\Plugin\WebformElement\WebformImageFile::getItemFormats.
+          foreach ($format_label as $format_label_value => $format_label_text) {
+            $item_formats[$format_name][$format_label_value] = new FormattableMarkup('@label (@name)', ['@label' => $format_label_text, '@name' => $format_label_value]);
+          }
+        }
+        else {
+          $item_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
+        }
       }
       $item_formats = ['' => '<' . $this->t('Default') . '>'] + $item_formats;
       $item_default_format = $element_plugin->getItemDefaultFormat();
