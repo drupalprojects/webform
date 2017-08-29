@@ -115,6 +115,13 @@ class WebformWizardPage extends Details {
   /**
    * {@inheritdoc}
    */
+  public function getElementSelectorOptions(array $element) {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getElementStateOptions() {
     return [
       'visible' => $this->t('Visible'),
