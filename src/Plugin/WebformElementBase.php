@@ -2017,14 +2017,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'create' => [
         '#title' => $this->t('Create webform submission'),
         '#description' => $this->t('Select roles and users that should be able to populate this element when creating a new submission.'),
+        '#open' => TRUE,
       ],
       'update' => [
         '#title' => $this->t('Update webform submission'),
         '#description' => $this->t('Select roles and users that should be able to update this element when updating an existing submission.'),
+        '#open' => FALSE,
       ],
       'view' => [
         '#title' => $this->t('View webform submission'),
         '#description' => $this->t('Select roles and users that should be able to view this element when viewing a submission.'),
+        '#open' => FALSE,
       ],
     ];
 
