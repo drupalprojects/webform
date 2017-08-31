@@ -26,6 +26,7 @@ webform.admin.dialog:
     - core/jquery.ui.dialog
     - webform/webform.ajax
     - webform/webform.form
+    - webform/webform.form.tabs
     - webform/webform.admin.dropbutton
     - webform/webform.element.codemirror.yaml
     - webform/webform.element.html_editor
@@ -230,6 +231,16 @@ webform.form.submit_once:
     - core/jquery
     - core/jquery.once
     - system/base
+
+webform.form.tabs:
+  version: VERSION
+  js:
+    js/webform.form.tabs.js:  {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - core/jquery.ui.tabs
 
 webform.form.unsaved:
   version: VERSION

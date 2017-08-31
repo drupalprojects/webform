@@ -175,7 +175,6 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($form);
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
-    $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
 
     $form = parent::buildForm($form, $form_state);
 

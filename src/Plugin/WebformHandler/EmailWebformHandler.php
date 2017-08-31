@@ -468,14 +468,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         break;
       }
     }
-    // Settings.
+
+    // Additional.
     $results_disabled = $this->getWebform()->getSetting('results_disabled');
-    $form['settings'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Settings'),
+    $form['additional'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Additional settings'),
     ];
     // Settings: States.
-    $form['settings']['states'] = [
+    $form['additional']['states'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Send email'),
       '#options' => [
@@ -491,11 +492,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $results_disabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $this->configuration['states'],
     ];
     // Settings: Reply-to.
-    $form['settings']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: Return path.
-    $form['settings']['return_path'] = $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: HTML.
-    $form['settings']['html'] = [
+    $form['additional']['html'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Send email as HTML'),
       '#return_value' => TRUE,
@@ -504,7 +505,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration['html'],
     ];
     // Settings: Attachments.
-    $form['settings']['attachments'] = [
+    $form['additional']['attachments'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include files as attachments'),
       '#return_value' => TRUE,
@@ -512,8 +513,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', 'attachments'],
       '#default_value' => $this->configuration['attachments'],
     ];
-    // Settings: Debug.
-    $form['settings']['debug'] = [
+
+    // Development.
+    $form['development'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Development settings'),
+    ];
+    $form['development']['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debugging'),
       '#description' => $this->t('If checked, sent emails will be displayed onscreen to all users.'),

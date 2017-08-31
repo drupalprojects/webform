@@ -263,8 +263,6 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#_validate_form' => TRUE,
     ];
 
-    $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
-
     return $this->buildDialogForm($form, $form_state);
   }
 

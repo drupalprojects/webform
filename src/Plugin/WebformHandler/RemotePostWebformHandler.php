@@ -213,12 +213,12 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       ];
     }
 
-    // Settings.
-    $form['general'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Settings'),
+    // Additional.
+    $form['additional'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Additional settings'),
     ];
-    $form['general']['type'] = [
+    $form['additional']['type'] = [
       '#type' => 'select',
       '#title' => $this->t('Post type'),
       '#description' => $this->t('Use x-www-form-urlencoded if unsure, as it is the default format for HTML webforms. You also have the option to post data in <a href="http://www.json.org/" target="_blank">JSON</a> format.'),
@@ -230,7 +230,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'type'],
       '#default_value' => $this->configuration['type'],
     ];
-    $form['general']['custom_data'] = [
+    $form['additional']['custom_data'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Custom data'),
@@ -238,7 +238,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'custom_data'],
       '#default_value' => $this->configuration['custom_data'],
     ];
-    $form['general']['custom_options'] = [
+    $form['additional']['custom_options'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Custom options'),
@@ -246,7 +246,13 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'custom_options'],
       '#default_value' => $this->configuration['custom_options'],
     ];
-    $form['general']['debug'] = [
+
+    // Development.
+    $form['development'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Development settings'),
+    ];
+    $form['development']['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debugging'),
       '#description' => $this->t('If checked, posted submissions will be displayed onscreen to all users.'),

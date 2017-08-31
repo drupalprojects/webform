@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\webform\Plugin\WebformHandlerInterface;
+use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\WebformInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -86,9 +87,13 @@ abstract class WebformHandlerFormBase extends FormBase {
     $request = $this->getRequest();
 
     $form['description'] = [
-      '#markup' => $this->webformHandler->description(),
-      '#prefix' => '<p>',
-      '#suffix' => '</p>',
+      '#type' => 'container',
+      'text' => [
+        '#markup' => $this->webformHandler->description(),
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+      ],
+      '#weight' => -20,
     ];
 
     $form['id'] = [
@@ -96,16 +101,12 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#value' => $this->webformHandler->getPluginId(),
     ];
 
-    $form['status'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enable the %name handler.', ['%name' => $this->webformHandler->label()]),
-      '#return_value' => TRUE,
-      '#default_value' => $this->webformHandler->isEnabled(),
-      // Disable broken plugins.
-      '#disabled' => ($this->webformHandler->getPluginId() == 'broken'),
+    $form['general'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('General settings'),
+      '#weight' => -10
     ];
-
-    $form['label'] = [
+    $form['general']['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
       '#maxlength' => 255,
@@ -113,8 +114,7 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#required' => TRUE,
       '#attributes' => ['autofocus' => 'autofocus'],
     ];
-
-    $form['handler_id'] = [
+    $form['general']['handler_id'] = [
       '#type' => 'machine_name',
       '#maxlength' => 64,
       '#description' => $this->t('A unique name for this handler instance. Must be alpha-numeric and underscore separated.'),
@@ -122,8 +122,23 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#required' => TRUE,
       '#disabled' => $this->webformHandler->getHandlerId() ? TRUE : FALSE,
       '#machine_name' => [
+        'source' => ['general', 'label'],
         'exists' => [$this, 'exists'],
       ],
+    ];
+
+    $form['advanced'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Advanced settings'),
+      '#weight' => -10,
+    ];
+    $form['advanced']['status'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable the %name handler.', ['%name' => $this->webformHandler->label()]),
+      '#return_value' => TRUE,
+      '#default_value' => $this->webformHandler->isEnabled(),
+      // Disable broken plugins.
+      '#disabled' => ($this->webformHandler->getPluginId() == 'broken'),
     ];
 
     $form['#parents'] = [];
@@ -146,7 +161,7 @@ abstract class WebformHandlerFormBase extends FormBase {
     // Conditional logic.
     if ($this->webformHandler->supportsConditions()) {
       $form['conditional_logic'] = [
-        '#type' => 'details',
+        '#type' => 'fieldset',
         '#title' => $this->t('Conditional logic'),
         '#states' => [
           'visible' => [
@@ -180,8 +195,30 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#button_type' => 'primary',
     ];
 
+    // Build tabs.
+    $tabs = [
+      'conditions' => [
+        'title' => $this->t('Conditions'),
+        'elements' => [
+          'conditional_logic',
+        ],
+        'weight' => 10,
+      ],
+      'advanced' =>  [
+        'title' => $this->t('Advanced'),
+        'elements' => [
+          'advanced',
+          'additional',
+          'development'
+        ],
+        'weight' => 20,
+      ],
+    ];
+    $form = WebformFormHelper::buildTabs($form, $tabs);
+
     return $this->buildDialogForm($form, $form_state);
   }
+
 
   /**
    * {@inheritdoc}

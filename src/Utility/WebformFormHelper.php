@@ -10,6 +10,108 @@ use Drupal\Core\Render\Element;
 class WebformFormHelper {
 
   /**
+   * Build form jQuery UI tabs.
+   *
+   * @param array $form
+   *   A form.
+   * @param array $tabs
+   *   An associative array contain tabs.
+   *
+   * @return array
+   *   The form with tabs.
+   *
+   * @see \Drupal\webform\Form\WebformHandlerFormBase::buildForm
+   * @see \Drupal\webform\Plugin\WebformElementBase::buildConfigurationFormTabs
+   */
+  public static function buildTabs(array $form, array $tabs) {
+    // Determine if the form has nested (configuration) settings.
+    // Used by WebformHandlers.
+    $has_settings = (isset($form['settings']) && !empty($form['settings']['#tree']));
+
+    // Always include general tab.
+    $tabs = [
+      'general' => [
+        'title' => t('General'),
+        'elements' => [],
+        'weight' => 0,
+      ]
+    ] + $tabs;
+
+    // Sort tabs by weight.
+    uasort($tabs, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
+
+    // Assign tabs to elements.
+    foreach ($tabs as $tab_name => $tab) {
+      foreach ($tab['elements'] as $element_key) {
+        if ($has_settings && isset($form['settings'][$element_key])) {
+          $form['settings'][$element_key]['#group'] = 'tab_' . $tab_name;
+          $tabs[$tab_name]['has_tabs'] = TRUE;
+        }
+        elseif (isset($form[$element_key])) {
+          $form[$element_key]['#group'] = 'tab_' . $tab_name;
+          $tabs[$tab_name]['has_tabs'] = TRUE;
+        }
+      }
+    }
+
+    // Set default general tab for settings.
+    if ($has_settings) {
+      foreach (Element::children($form['settings']) as $element_key) {
+        if (!isset($form['settings'][$element_key]['#group'])) {
+          $form['settings'][$element_key]['#group'] = 'tab_general';
+          $tabs['general']['has_tabs'] = TRUE;
+        }
+      }
+      $form['settings']['#group'] = FALSE;
+    }
+
+    // Set default general tab for all other elements.
+    foreach (Element::children($form) as $element_key) {
+      if (!isset($form[$element_key]['#group'])) {
+        $form[$element_key]['#group'] = 'tab_general';
+        $tabs['general']['has_tabs'] = TRUE;
+      }
+    }
+
+    // Build tabs.
+    $tab_items = [];
+    foreach ($tabs as $tab_name => $tab) {
+      // Skip empty tab.
+      if (empty($tab['has_tabs'])) {
+        continue;
+      }
+
+      $tab_items[] = [
+        '#prefix' => '<a href="#webform-tab--' . $tab_name. '" class="webform-tab">',
+        '#suffix' => '</a>',
+        '#markup' => $tab['title'],
+      ];
+
+      $form['tab_' . $tab_name] = [
+        '#type' => 'container',
+        '#group' => 'tabs',
+        '#attributes' => [
+          'id' => 'webform-tab--' . $tab_name,
+        ],
+      ];
+    }
+
+    // Add tabs.
+    $form['tabs'] = [
+      '#weight' => -1000,
+      '#type' => 'container',
+      '#attributes' => ['class' => ['webform-tabs']],
+      '#attached' => ['library' => ['webform/webform.form.tabs']],
+    ];
+    $form['tabs']['items'] = [
+      '#theme' => 'item_list',
+      '#items' => $tab_items,
+    ];
+
+    return $form;
+  }
+
+  /**
    * Cleanup webform state values.
    *
    * @param array $values

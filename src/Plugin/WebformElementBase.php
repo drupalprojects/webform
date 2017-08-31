@@ -22,6 +22,7 @@ use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
@@ -1976,7 +1977,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     /* Conditional logic */
 
     $form['conditional_logic'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('Conditional logic'),
     ];
     $form['conditional_logic']['states'] = [
@@ -2173,66 +2174,49 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // and alter this information using webform alteration hooks.
     $form_state->set('custom_properties', $custom_properties);
 
-    /**************************************************************************/
-    // Tabs.
-    /**************************************************************************/
+    return $this->buildConfigurationFormTabs($form, $form_state);
+  }
 
+  /**
+   * Build configuration form tabs.
+   *
+   * @param array $form
+   *   An associative array containing the initial structure of the plugin form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The plugin form with tabs.
+   */
+  protected function buildConfigurationFormTabs(array $form, FormStateInterface $form_state) {
     $tabs = [
-      'general' => $this->t('General'),
-      'advanced' => $this->t('Advanced'),
-      'access' => $this->t('Access'),
-    ];
-
-    // Set tab group (general or advanced).
-    $tab_groups = [
-      'wrapper_attributes' => 'tab_advanced',
-      'element_attributes' => 'tab_advanced',
-      'display' => 'tab_advanced',
-      'admin' => 'tab_advanced',
-      'custom' => 'tab_advanced',
-      'access' => 'tab_access',
-    ];
-    foreach (Element::children($form) as $element_key) {
-      $form[$element_key]['#group'] = (isset($tab_groups[$element_key])) ? $tab_groups[$element_key] : 'tab_general';
-    }
-
-    // Set tab access.
-    if (!isset($form['access']) || (isset($form['access']['#access']) && $form['access']['#access'] === FALSE)) {
-      unset($tabs['access']);
-    }
-
-    // Build tabs.
-    $tab_items = [];
-    foreach ($tabs as $tab_name => $tab_title) {
-      $tab_items[] = [
-        '#prefix' => '<a href="#webform-ui-element-tab--' . $tab_name. '" class="webform-ui-element-tab">',
-        '#suffix' => '</a>',
-        '#markup' => $tab_title,
-      ];
-
-      $form['tab_' . $tab_name] = [
-        '#type' => 'container',
-        '#group' => 'tabs',
-        '#attributes' => [
-          'id' => 'webform-ui-element-tab--' . $tab_name,
+      'conditions' => [
+        'title' => $this->t('Conditions'),
+        'elements' => [
+          'conditional_logic',
         ],
-      ];
-    }
-
-    // Add tabs.
-    $form['tabs'] = [
-      '#weight' => -1000,
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['webform-ui-element-tabs'],
+        'weight' => 10,
       ],
-      'items' => [
-        '#theme' => 'item_list',
-        '#items' => $tab_items,
+      'advanced' =>  [
+        'title' => $this->t('Advanced'),
+        'elements' => [
+          'wrapper_attributes',
+          'element_attributes',
+          'display',
+          'admin',
+          'custom',
+        ],
+        'weight' => 20,
+      ],
+      'access' =>  [
+        'title' => $this->t('Access'),
+        'elements' => [
+          'access',
+        ],
+        'weight' => 30,
       ],
     ];
-
-    return $form;
+    return WebformFormHelper::buildTabs($form, $tabs);
   }
 
   /**
