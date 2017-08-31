@@ -247,7 +247,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     $form = parent::buildConfigurationForm($form, $form_state);
 
     // Change 'Send email' to 'Scheduled email'.
-    $form['settings']['states']['#title'] = $this->t('Scheduled email');
+    $form['settings']['states']['#title'] = $this->t('Schedule email');
 
     return $form;
   }
