@@ -15,6 +15,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("Composite elements"),
  *   description = @Translation("Provides a form element to display a telephone number with type and extension."),
  *   composite = TRUE,
+ *   states_wrapper = TRUE,
  * )
  */
 class WebformTelephone extends WebformCompositeBase {

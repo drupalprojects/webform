@@ -14,6 +14,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("Composite elements"),
  *   description = @Translation("Provides a form element to display a link."),
  *   composite = TRUE,
+ *   states_wrapper = TRUE,
  * )
  */
 class WebformLink extends WebformCompositeBase {
