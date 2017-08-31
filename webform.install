@@ -704,7 +704,7 @@ function webform_update_8047() {
 }
 
 /**
- * Issue #2879421: Cleanup webform.settings
+ * Issue #2879421: Cleanup webform.settings.
  */
 function webform_update_8048() {
   _webform_update_admin_settings();
@@ -1081,4 +1081,11 @@ function webform_update_8072() {
     }
     $webform->save();
   }
+}
+
+/**
+ * Issue #2905955: Update hook webform_update_8048 is broken.
+ */
+function webform_update_8073() {
+  webform_update_8048();
 }
