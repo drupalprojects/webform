@@ -567,6 +567,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['actions']['reset'] = [
         '#type' => 'submit',
         '#value' => $this->t('Reset'),
+        // @see \Drupal\webform\WebformSubmissionForm::noValidate
         '#validate' => ['::noValidate'],
         '#submit' => ['::reset'],
         '#attributes' => [
@@ -826,6 +827,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           $element['preview_prev'] = [
             '#type' => 'submit',
             '#value' => $this->config('webform.settings')->get('settings.default_preview_prev_button_label'),
+            // @see \Drupal\webform\WebformSubmissionForm::noValidate
             '#validate' => ['::noValidate'],
             '#submit' => ['::previous'],
             '#attributes' => ['class' => ['webform-button--previous', 'js-webform-novalidate']],
@@ -845,6 +847,7 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#type' => 'submit',
             '#value' => $previous_button_label,
             '#webform_actions_button_custom' => $previous_button_custom,
+            // @see \Drupal\webform\WebformSubmissionForm::noValidate
             '#validate' => ['::noValidate'],
             '#submit' => ['::previous'],
             '#attributes' => ['class' => ['webform-button--previous', 'js-webform-novalidate']],
@@ -1028,10 +1031,32 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * Webform submission validation that does nothing but clear validation errors.
    *
+   * This method is used by wizard/preview previous buttons and the reset button
+   * to prevent all form validation errors from being displayed while still
+   * allowing an element's #validate callback to be triggered.
+   *
+   * This callback is being used instead of adding
+   * #limit_validation_errors = [] to the submit buttons because
+   * #limit_validation_errors also ignores all form values set via an element's
+   * #validate callback.
+   *
+   * More complex (web)form elements user #validate callbacks
+   * to process and alter an element's submitted value. Element's that rely on
+   * #validate to alter the submitted value include 'Password Confirm',
+   * 'Email Confirm', 'Composite Elements', 'Other Elements', and more...
+   *
+   * If the #limit_validation_errors property is used within a multi-step wizard
+   * form, previously submitted values will be corrupted.
+   *
    * @param array $form
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
+   *
+   * @see \Drupal\Core\Form\FormValidator::handleErrorsWithLimitedValidation
+   * @see \Drupal\Core\Render\Element\PasswordConfirm::validatePasswordConfirm
+   * @see \Drupal\webform\Element\WebformEmailConfirm
+   * @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
    */
   public function noValidate(array &$form, FormStateInterface $form_state) {
     $form_state->clearErrors();
