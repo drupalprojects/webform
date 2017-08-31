@@ -95,7 +95,7 @@ class WebformSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  static function getSubscribedEvents() {
+  static public function getSubscribedEvents() {
     $events = [];
     $events[KernelEvents::RESPONSE][] = ['onRespondRedirectPrivateFileAccess'];
     return $events;

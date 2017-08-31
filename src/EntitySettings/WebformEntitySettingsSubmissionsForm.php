@@ -230,7 +230,6 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#min' => 1,
       '#default_value' => $settings['limit_total_message'],
     ];
-    //
     $form['submission_limits']['user'] = [
       '#type' => 'details',
       '#title' => $this->t('Per user'),
@@ -282,7 +281,6 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       ],
       '#field_suffix' => $this->t('days'),
     ];
-
 
     // Draft settings.
     $form['draft_settings'] = [

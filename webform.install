@@ -131,11 +131,11 @@ function webform_requirements($phase) {
 /**
  * Update admin settings to reflect changes in the default settings.
  *
- * @param bool $reset
- *  If set TRUE old admin settings will be completly deleted.
- *
  * If you are moving or updating any admin settings this must be explicitly
  * done via an update hook.
+ *
+ * @param bool $reset
+ *  If set TRUE old admin settings will be completly deleted.
  *
  * @see drush_webform_repair().
  */
@@ -248,7 +248,7 @@ function _webform_update_webform_settings() {
 /**
  * Update webform handler setting to reflect changes in a handler's default configuration.
  *
- * @param $handler_id
+ * @param string $handler_id
  *   A webform handler id.
  *
  * @see \Drupal\webform\Plugin\WebformHandlerInterface
@@ -497,7 +497,6 @@ function webform_update_8041() {
   $config->save();
 }
 
-
 /**
  * Issue #2875371: Can't Add Email Handler w/Select "Send To".
  */
@@ -671,15 +670,15 @@ function _webform_update_8046_convert_data(array $data) {
   $actions_element = [];
   $settings = $data['settings'];
   foreach ($button_names as $button_name) {
-    $settings_prefix = ($button_name == 'submit') ? 'form_' . $button_name : $button_name .'_button';
-    if (!empty($settings[$settings_prefix .'_label'])) {
-      $actions_element['#' . $button_name . '__label'] = $settings[$settings_prefix .'_label'];
+    $settings_prefix = ($button_name == 'submit') ? 'form_' . $button_name : $button_name . '_button';
+    if (!empty($settings[$settings_prefix . '_label'])) {
+      $actions_element['#' . $button_name . '__label'] = $settings[$settings_prefix . '_label'];
     }
-    if (!empty($settings[$settings_prefix .'_attributes'])) {
-      $actions_element['#' . $button_name . '__attributes'] = $settings[$settings_prefix .'_attributes'];
+    if (!empty($settings[$settings_prefix . '_attributes'])) {
+      $actions_element['#' . $button_name . '__attributes'] = $settings[$settings_prefix . '_attributes'];
     }
-    unset($settings[$settings_prefix .'_label']);
-    unset($settings[$settings_prefix .'_attributes']);
+    unset($settings[$settings_prefix . '_label']);
+    unset($settings[$settings_prefix . '_attributes']);
   }
   $data['settings'] = $settings;
 
@@ -687,9 +686,9 @@ function _webform_update_8046_convert_data(array $data) {
   if ($actions_element) {
     $elements = Yaml::decode($data['elements']);
     $elements['actions'] = [
-        '#type' => 'webform_actions',
-        '#title' => (string) t('Submit button(s)'),
-      ] + $actions_element;
+      '#type' => 'webform_actions',
+      '#title' => (string) t('Submit button(s)'),
+    ] + $actions_element;
     $data['elements'] = Yaml::encode($elements);
   }
 

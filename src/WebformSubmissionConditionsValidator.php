@@ -74,7 +74,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     $elements = &$this->getVisibleElements($form);
 
     // Loop through visible elements with #states.
-    foreach ($elements as $element_key => &$element) {
+    foreach ($elements as &$element) {
       $states = static::getElementStates($element);
       foreach ($states as $state => $conditions) {
         if ($this->isConditionsTargetsVisible($conditions, $elements)) {
@@ -168,9 +168,6 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * {@inheritdoc}
    */
   public function validateConditions(array $conditions, WebformSubmissionInterface $webform_submission) {
-    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
-    $element_manager = \Drupal::service('plugin.manager.webform.element');
-
     $condition_logic = 'and';
     $condition_results = [];
     foreach ($conditions as $index => $value) {
@@ -209,7 +206,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       $trigger_state = key($condition);
       $trigger_value = $condition[$trigger_state];
 
-      $element_handler = $element_manager->getElementInstance($element);
+      $element_handler = $this->elementManager->getElementInstance($element);
       $element_value = $element_handler->getElementSelectorInputValue($selector, $trigger_state, $element, $webform_submission);
 
       // Process trigger state/negate.

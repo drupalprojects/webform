@@ -694,7 +694,7 @@ function drush_webform_repair() {
   _webform_update_field_storage_definitions();
 
   drush_print('Repairing webform submission storage schema...');
-   _webform_update_webform_submission_storage_schema();
+  _webform_update_webform_submission_storage_schema();
 
   // Copied from: outside_in_install().
   drush_print('Repairing quick links...');

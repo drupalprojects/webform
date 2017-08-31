@@ -34,7 +34,7 @@ class WebformTestHandlerRemotePostClient extends Client {
       // 500 Internal Server Error.
       case 500:
         $status = 500;
-        $headers = ['Content-Type' =>['application/json']];
+        $headers = ['Content-Type' => ['application/json']];
         $json = [
           'status' => 'fail',
           'message' => (string) new FormattableMarkup('Failed to process @type request.', ['@type' => $operation]),
@@ -46,7 +46,7 @@ class WebformTestHandlerRemotePostClient extends Client {
       case 200:
       default:
         $status = 200;
-        $headers = ['Content-Type' =>['application/json']];
+        $headers = ['Content-Type' => ['application/json']];
         $json = [
           'status' => 'success',
           'message' => (string) new FormattableMarkup('Processed @type request.', ['@type' => $operation]),

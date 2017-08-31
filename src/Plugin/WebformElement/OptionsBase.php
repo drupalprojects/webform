@@ -436,19 +436,9 @@ abstract class OptionsBase extends WebformElementBase {
           return (isset($element['#options'][$value])) ? $value : NULL;
         }
       }
-
     }
     else {
-
       return parent::getElementSelectorInputValue($selector, $trigger, $element, $webform_submission);
-
-    }
-
-    if (in_array($option_value, $value)) {
-      return (in_array($trigger, ['checked', 'unchecked'])) ? TRUE : $value;
-    }
-    else {
-      return (in_array($trigger, ['checked', 'unchecked'])) ? FALSE : NULL;
     }
   }
 

@@ -104,7 +104,7 @@ abstract class WebformHandlerFormBase extends FormBase {
     $form['general'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('General settings'),
-      '#weight' => -10
+      '#weight' => -10,
     ];
     $form['general']['label'] = [
       '#type' => 'textfield',
@@ -204,12 +204,12 @@ abstract class WebformHandlerFormBase extends FormBase {
         ],
         'weight' => 10,
       ],
-      'advanced' =>  [
+      'advanced' => [
         'title' => $this->t('Advanced'),
         'elements' => [
           'advanced',
           'additional',
-          'development'
+          'development',
         ],
         'weight' => 20,
       ],
@@ -218,7 +218,6 @@ abstract class WebformHandlerFormBase extends FormBase {
 
     return $this->buildDialogForm($form, $form_state);
   }
-
 
   /**
    * {@inheritdoc}

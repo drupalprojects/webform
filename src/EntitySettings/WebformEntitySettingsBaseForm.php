@@ -44,7 +44,7 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString(),
     ];
     $this->logger('webform')->notice('Webform settings @label has been saved.', $context);
 
@@ -84,7 +84,7 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
    * Append behavior checkboxes to element.
    *
    * @param array $element
-   *   An elements
+   *   An array of form elements.
    * @param array $behavior_elements
    *   An associative array of behavior elements.
    * @param array $settings

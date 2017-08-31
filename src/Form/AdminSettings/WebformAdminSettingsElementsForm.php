@@ -39,7 +39,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
    * @var \Drupal\webform\WebformLibrariesManagerInterface
    */
   protected $librariesManager;
-  
+
   /**
    * {@inheritdoc}
    */
@@ -234,7 +234,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
     ];
     $t_args = [
       ':dialog_href' => Url::fromRoute('<current>', [], ['fragment' => 'edit-ui'])->toString(),
-      ':modules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-core-experimental'])->toString()
+      ':modules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-core-experimental'])->toString(),
     ];
     $form['html_editor']['message'] = [
       '#type' => 'webform_message',
@@ -372,7 +372,6 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
           ':input[name="excluded_elements[' . $element_id . ']"]' => ['checked' => FALSE],
         ],
       ];
-
 
       $row = [];
 

@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Form\AdminSettings;
 
-
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerManagerInterface;
@@ -24,7 +23,7 @@ class WebformAdminSettingsHandlersForm extends WebformAdminSettingsBaseForm {
   /**
    * The webform token manager.
    *
-   *@var \Drupal\webform\WebformTokenManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -181,7 +180,5 @@ class WebformAdminSettingsHandlersForm extends WebformAdminSettingsBaseForm {
 
     parent::submitForm($form, $form_state);
   }
-
-
 
 }

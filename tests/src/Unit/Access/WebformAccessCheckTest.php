@@ -4,7 +4,6 @@ namespace Drupal\Tests\webform\Unit\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Tests\UnitTestCase;
-use Drupal\webform\Access\WebformEntityAccess;
 use Drupal\webform\Access\WebformAccountAccess;
 use Drupal\webform\Access\WebformSubmissionAccess;
 
@@ -28,13 +27,6 @@ class WebformAccessCheckTest extends UnitTestCase {
    * @var \Symfony\Component\DependencyInjection\ContainerBuilder
    */
   protected $container;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-  }
 
   /**
    * Tests the check admin access.
@@ -61,10 +53,6 @@ class WebformAccessCheckTest extends UnitTestCase {
           ['view any webform submission', TRUE],
       ]
       ));
-
-    $node = $this->getMockBuilder('Drupal\node\NodeInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
 
     $webform_node = $this->getMockBuilder('Drupal\node\NodeInterface')
       ->disableOriginalConstructor()

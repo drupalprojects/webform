@@ -158,7 +158,10 @@ function webform_lingotek_config_entity_document_upload(array &$source_data, Con
       // Encode all [tokens].
       $yaml = Yaml::encode($source_data);
       $yaml = preg_replace_callback(
-        '/\[([a-z][^]]+)\]/', function ($matches) {return '[***' . base64_encode($matches[1]) . '***]';},
+        '/\[([a-z][^]]+)\]/',
+        function ($matches) {
+          return '[***' . base64_encode($matches[1]) . '***]';
+        },
         $yaml
       );
       $source_data = Yaml::decode($yaml);
@@ -180,7 +183,10 @@ function webform_lingotek_config_entity_translation_presave(ConfigEntityInterfac
       // Decode all [tokens].
       $yaml = Yaml::encode($data);
       $yaml = preg_replace_callback(
-        '/\[\*\*\*([^]]+)\*\*\*\]/', function ($matches) {return '[' . base64_decode($matches[1]) . ']';},
+        '/\[\*\*\*([^]]+)\*\*\*\]/',
+        function ($matches) {
+          return '[' . base64_decode($matches[1]) . ']';
+        },
         $yaml
       );
       $data = Yaml::decode($yaml);

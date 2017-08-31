@@ -43,7 +43,9 @@ trait WebformAjaxFormTrait {
 
   /**
    * Get default ajax callback settings.
+   *
    * @return array
+   *   An associative array containing  default ajax callback settings.
    */
   protected function getDefaultAjaxSettings() {
     return [

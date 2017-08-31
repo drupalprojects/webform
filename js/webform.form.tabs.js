@@ -8,7 +8,7 @@
   'use strict';
 
   /**
-   * Intialize webform tabs.
+   * Initialize webform tabs.
    *
    * @type {Drupal~behavior}
    *

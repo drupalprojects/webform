@@ -225,7 +225,6 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#default_value' => $settings['ajax'],
     ];
 
-
     // Author information.
     $form['author_information'] = [
       '#type' => 'details',

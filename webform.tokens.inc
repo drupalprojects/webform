@@ -229,12 +229,12 @@ function webform_token_info() {
     'type' => 'user',
   ];
   $webform['open'] = [
-    'name' => t('Open date '),
+    'name' => t('Open date'),
     'description' => t('The date the webform is open to new submissions.'),
     'type' => 'date',
   ];
   $webform['close'] = [
-    'name' => t('Close date '),
+    'name' => t('Close date'),
     'description' => t('The date the webform is closed to new submissions.'),
     'type' => 'date',
   ];
@@ -580,6 +580,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       foreach ($handler_tokens as $key => $original) {
         $webform_handler = isset($data['webform_handler']) ? $data['webform_handler'] : [];
         $parents = explode(':', $key);
+        $key_exists = NULL;
         $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
         $replacements[$original] = ($key_exists) ? $value : $original;
       }
@@ -609,6 +610,23 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   return $replacements;
 }
 
+/**
+ * Get webform submission token value.
+ *
+ * @param string $value_token
+ *   A [webform_submission:value:?] token.
+ * @param array $options
+ *   An array of token options.
+ * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+ *   A webform submission.
+ * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
+ *   The webform element manager.
+ * @param \Drupal\Core\Render\BubbleableMetadata $bubbleable_metadata
+ *   (optional) Object to collect route processors' bubbleable metadata.
+ *
+ * @return \Drupal\Component\Render\MarkupInterface|string
+ *   Webform submission token value.
+ */
 function _webform_token_get_submission_value($value_token, array $options, WebformSubmissionInterface $webform_submission, WebformElementManagerInterface $element_manager, BubbleableMetadata $bubbleable_metadata) {
   $submission_data = $webform_submission->getData();
 
@@ -735,6 +753,17 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 }
 
+/**
+ * Get webform submission values.
+ *
+ * @param array $options
+ *   An array of token options.
+ * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+ *   A webform submission.
+ *
+ * @return \Drupal\Component\Render\MarkupInterface|string
+ *   Webform submission values.
+ */
 function _webform_token_get_submission_values(array $options, WebformSubmissionInterface $webform_submission) {
   $submission_format = (!empty($options['html'])) ? 'html' : 'text';
   /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */

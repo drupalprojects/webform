@@ -985,7 +985,7 @@ function template_preprocess_webform_element_image_file(array &$variables) {
         case 'modal':
           $variables['image'] += [
             '#attributes' => ['class' => ['js-webform-image-file-modal', 'webform-image-file-modal']],
-            '#attached' => ['library' => ['webform/webform.element.image_file.modal']]
+            '#attached' => ['library' => ['webform/webform.element.image_file.modal']],
           ];
           break;
 

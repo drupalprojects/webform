@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Webform confirmation settings.
  */
@@ -113,7 +114,8 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
           'or',
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL_MESSAGE]],
         ],
-      ],    ];
+      ],
+    ];
 
     // Confirmation settings.
     $form['confirmation_settings'] = [

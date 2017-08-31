@@ -50,7 +50,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
       'libraries' => 'admin/structure/webform/settings/libraries',
       'advanced' => 'admin/structure/webform/settings/advanced',
     ];
-    foreach ($types as $type => $path) {
+    foreach ($types as $path) {
       $this->drupalPostForm($path, [], t('Save configuration'));
       \Drupal::configFactory()->reset('webform.settings');
       $updated_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();

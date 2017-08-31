@@ -342,7 +342,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $class[] = "webform-submission-$webform_id-$source_entity_type-$source_entity_id-form";
       $class[] = "webform-submission-$webform_id-$source_entity_type-$source_entity_id-$operation-form";
     }
-    array_walk($class, array('\Drupal\Component\Utility\Html', 'getClass'));
+    array_walk($class, ['\Drupal\Component\Utility\Html', 'getClass']);
     $form['#attributes']['class'] = $class;
 
     // Check for a custom webform, track it, and return it.
@@ -1530,7 +1530,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           ];
           // Display warning to use who can update the webform.
           if ($webform->access('update')) {
-            drupal_set_message(t('Confirmation URL %url is not valid.', $t_args), 'warning');
+            drupal_set_message($this->t('Confirmation URL %url is not valid.', $t_args), 'warning');
           }
           // Log warning.
           $this->getLogger('webform')->warning('@webform: Confirmation URL %url is not valid.', $t_args);

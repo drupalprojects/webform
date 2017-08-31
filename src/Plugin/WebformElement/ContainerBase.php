@@ -116,7 +116,7 @@ abstract class ContainerBase extends WebformElementBase {
     $format = $this->getItemFormat($element);
 
     // Emails can only display div containers with <h3>.
-    if (!empty($variables['options']['email'])) {
+    if (!empty($options['email'])) {
       $format = 'header';
     }
 

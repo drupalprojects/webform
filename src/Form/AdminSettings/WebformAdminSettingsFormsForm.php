@@ -19,7 +19,7 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
   /**
    * The webform token manager.
    *
-   *@var \Drupal\webform\WebformTokenManagerInterface
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
 
@@ -43,7 +43,6 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
   public function getFormId() {
     return 'webform_admin_settings_forms_form';
   }
-
 
   /**
    * Constructs a WebformAdminSettingsFormsForm object.
@@ -75,6 +74,7 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
       $container->get('webform.addons_manager')
     );
   }
+
   /**
    * {@inheritdoc}
    */
@@ -405,5 +405,4 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
 
     parent::submitForm($form, $form_state);
   }
-
 }

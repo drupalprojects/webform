@@ -88,10 +88,10 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   (optional) A user account.
    *
-   * @return \Drupal\webform\WebformSubmissionInterface|NULL
+   * @return \Drupal\webform\WebformSubmissionInterface|null
    *   A webform submission.
    */
-  public function loadFromToken($token, WebformInterface $webform,  EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+  public function loadFromToken($token, WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
 
   /**
    * Delete all webform submissions.

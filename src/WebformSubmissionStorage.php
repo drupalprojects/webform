@@ -117,7 +117,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     return $webform_submissions;
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -334,8 +333,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * Get a webform submission's terminus (aka first or last).
    *
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -407,7 +406,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    *   An associative array containing all available columns.
    *
    * @return array
-   *    An associative array containing all specified columns.
+   *   An associative array containing all specified columns.
    */
   protected function filterColumns(array $column_names, array $columns) {
     $filtered_columns = [];
@@ -437,8 +436,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $column_names = $webform->getState('results.custom.columns', []);
     }
 
-    // Get columns
-    $column_names =  $column_names ?: $this->getDefaultColumnNames($webform, $source_entity, $account, $include_elements);
+    // Get columns.
+    $column_names = $column_names ?: $this->getDefaultColumnNames($webform, $source_entity, $account, $include_elements);
     $columns = $this->getColumns($webform, $source_entity, $account, $include_elements);
     return $this->filterColumns($column_names, $columns);
   }
@@ -514,7 +513,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'default' => FALSE,
     ];
 
-    // Draft
+    // Draft.
     $columns['in_draft'] = [
       'title' => $this->t('In draft'),
       'default' => FALSE,
@@ -796,7 +795,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
         default:
           throw new \Exception('Unexpected webform submission state');
-          break;
       }
 
       $this->log($entity, [

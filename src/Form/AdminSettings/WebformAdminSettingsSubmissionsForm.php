@@ -55,7 +55,7 @@ class WebformAdminSettingsSubmissionsForm extends WebformAdminSettingsBaseForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('webform.settings');
     $settings = $config->get('settings');
-    
+
     // Submission settings.
     $form['submission_settings'] = [
       '#type' => 'details',

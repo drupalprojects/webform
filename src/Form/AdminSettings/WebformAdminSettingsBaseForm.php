@@ -16,7 +16,7 @@ abstract class WebformAdminSettingsBaseForm extends ConfigFormBase {
   protected function getEditableConfigNames() {
     return ['webform.settings'];
   }
-  
+
   /****************************************************************************/
   // Exclude plugins
   /****************************************************************************/

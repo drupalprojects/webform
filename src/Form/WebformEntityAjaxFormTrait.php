@@ -27,7 +27,7 @@ trait WebformEntityAjaxFormTrait {
   /**
    * Determine if dialogs are disabled.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if dialogs are disabled.
    */
   protected function isDialogDisabled() {

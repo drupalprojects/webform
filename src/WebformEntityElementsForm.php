@@ -162,7 +162,7 @@ class WebformEntityElementsForm extends BundleEntityFormBase {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString(),
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label elements saved.', $context);

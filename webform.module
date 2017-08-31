@@ -763,7 +763,7 @@ function webform_preprocess_form_element_label(&$variables) {
  * Prepares variables for file managed file templates.
  *
  * @see https://stackoverflow.com/questions/21842274/cross-browser-custom-styling-for-file-upload-button
- * @see template_preprocess_file_managed_file().
+ * @see template_preprocess_file_managed_file()
  */
 function webform_preprocess_file_managed_file(&$variables) {
   $element = &$variables['element'];
@@ -792,7 +792,7 @@ function webform_preprocess_file_managed_file(&$variables) {
 
   // Add default button classes.
   if (empty($label['#attributes']['class'])) {
-    $label['#attributes']['class'][] = 'button' ;
+    $label['#attributes']['class'][] = 'button';
     $label['#attributes']['class'][] = 'button-action';
   }
 
@@ -836,7 +836,7 @@ function webform_preprocess_file_link(&$variables) {
 function webform_preprocess_image(&$variables) {
   global $base_url;
   if (isset($variables['attributes']['class']) && in_array('webform-image-file', (array) $variables['attributes']['class'])) {
-    $variables['attributes']['src'] = $base_url . preg_replace('/^' . preg_quote(base_path(), '/') .'/', '/', $variables['attributes']['src']);
+    $variables['attributes']['src'] = $base_url . preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', $variables['attributes']['src']);
   }
 }
 
