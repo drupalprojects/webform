@@ -856,7 +856,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $context = [
       '@form' => $this->getWebform()->label(),
       '@title' => $this->label(),
-      'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers-form')->toString(),
+      'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers')->toString(),
     ];
     $this->getLogger()->notice('@form webform sent @title email.', $context);
 

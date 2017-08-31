@@ -174,7 +174,7 @@ class WebformEntityHandlersForm extends EntityForm {
         '#theme' => 'menu_local_action',
         '#link' => [
           'title' => $this->t('Add handler'),
-          'url' => new Url('entity.webform.handlers', ['webform' => $webform->id()]),
+          'url' => new Url('entity.webform.handler', ['webform' => $webform->id()]),
           'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
         ]
       ];
@@ -239,7 +239,7 @@ class WebformEntityHandlersForm extends EntityForm {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'handlers-form')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'handlers')->toString()
     ];
     $this->logger('webform')->notice('Webform @label handler saved.', $context);
 

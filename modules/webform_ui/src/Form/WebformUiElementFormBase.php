@@ -211,7 +211,6 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       $reserved_keys = ['form_build_id', 'form_token', 'form_id', 'data', 'op'];
       $reserved_keys = array_merge($reserved_keys, array_keys($this->entityFieldManager->getBaseFieldDefinitions('webform_submission')));
       $form['#attached']['drupalSettings']['webform_ui']['reserved_keys'] = $reserved_keys;
-      $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
       $form['properties']['element']['key_warning'] = [
         '#type' => 'webform_message',
         '#message_type' => 'warning',
@@ -263,6 +262,8 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#button_type' => 'primary',
       '#_validate_form' => TRUE,
     ];
+
+    $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
 
     return $this->buildDialogForm($form, $form_state);
   }

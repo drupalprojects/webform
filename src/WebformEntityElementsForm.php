@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Webform manage elements YAML source form.
  */
-class WebformEntityEditForm extends BundleEntityFormBase {
+class WebformEntityElementsForm extends BundleEntityFormBase {
 
   use WebformDialogFormTrait;
 
@@ -48,7 +48,7 @@ class WebformEntityEditForm extends BundleEntityFormBase {
   protected $tokenManager;
 
   /**
-   * Constructs a WebformEntityEditForm.
+   * Constructs a WebformEntityElementsForm.
    *
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   The element manager.
@@ -77,17 +77,6 @@ class WebformEntityEditForm extends BundleEntityFormBase {
       $container->get('webform.elements_validator'),
       $container->get('webform.token_manager')
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function prepareEntity() {
-    if ($this->operation == 'duplicate') {
-      $this->setEntity($this->getEntity()->createDuplicate());
-    }
-
-    parent::prepareEntity();
   }
 
   /**

@@ -14,3 +14,4 @@ webform_ui.element:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - core/jquery.ui.tabs

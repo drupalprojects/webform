@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Webform manage elements UI form.
  */
-class WebformUiEntityEditForm extends BundleEntityFormBase {
+class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
   use WebformEntityAjaxFormTrait;
 
@@ -60,7 +60,7 @@ class WebformUiEntityEditForm extends BundleEntityFormBase {
   protected $tokenManager;
 
   /**
-   * Constructs a WebformUiEntityEditForm.
+   * Constructs a WebformUiEntityElementsForm.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
@@ -89,7 +89,6 @@ class WebformUiEntityEditForm extends BundleEntityFormBase {
       $container->get('webform.elements_validator')
     );
   }
-
 
   /**
    * {@inheritdoc}
@@ -176,6 +175,7 @@ class WebformUiEntityEditForm extends BundleEntityFormBase {
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($form);
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
+    $form['#attached']['library'][] = 'webform_ui/webform_ui.element';
 
     $form = parent::buildForm($form, $form_state);
 
@@ -242,6 +242,24 @@ class WebformUiEntityEditForm extends BundleEntityFormBase {
 
     // Update the webform's elements.
     $webform->setElements($elements_updated);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save(array $form, FormStateInterface $form_state) {
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $this->getEntity();
+
+    $webform->save();
+
+    $context = [
+      '@label' => $webform->label(),
+      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString()
+    ];
+    $t_args = ['%label' => $webform->label()];
+    $this->logger('webform')->notice('Webform @label elements saved.', $context);
+    drupal_set_message($this->t('Webform %label elements saved.', $t_args));
   }
 
   /**

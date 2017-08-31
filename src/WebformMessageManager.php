@@ -228,8 +228,8 @@ class WebformMessageManager implements WebformMessageManagerInterface {
 
     $t_args = [
       '%form' => ($source_entity) ? $source_entity->label() : $webform->label(),
-      ':handlers_href' => $webform->toUrl('handlers-form')->toString(),
-      ':settings_href' => $webform->toUrl('settings-form')->toString(),
+      ':handlers_href' => $webform->toUrl('handlers')->toString(),
+      ':settings_href' => $webform->toUrl('settings')->toString(),
       ':duplicate_href' => $webform->toUrl('duplicate-form')->toString(),
     ];
 
@@ -293,7 +293,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   public function log($key, $type = 'warning') {
     $webform = $this->webform;
     $context = [
-      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString(),
+      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString(),
     ];
 
     switch ($key) {

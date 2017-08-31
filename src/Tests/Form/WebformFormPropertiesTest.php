@@ -47,7 +47,7 @@ class WebformFormPropertiesTest extends WebformTestBase {
       'custom' => "'suffix': 'Form suffix TEST'
 'prefix': 'Form prefix TEST'",
     ];
-    $this->drupalPostForm('/admin/structure/webform/manage/test_form_properties/settings', $edit, t('Save'));
+    $this->drupalPostForm('/admin/structure/webform/manage/test_form_properties/settings/form', $edit, t('Save'));
     $this->drupalGet('webform/test_form_properties');
     $this->assertPattern('/Form prefix TEST<form /');
     $this->assertPattern('/<\/form>\s+Form suffix TEST/');

@@ -204,31 +204,6 @@ entity.webform.edit_form:
   requirements:
     _entity_access: 'webform.update'
 
-entity.webform.settings_form:
-  path: '/admin/structure/webform/manage/{webform}/settings'
-  defaults:
-    _entity_form: 'webform.settings'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
-  requirements:
-    _entity_access: 'webform.update'
-
-entity.webform.assets_form:
-  path: '/admin/structure/webform/manage/{webform}/assets'
-  defaults:
-    _entity_form: 'webform.assets'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
-  requirements:
-    _entity_access: 'webform.update'
-    _permission: 'edit webform assets'
-
-entity.webform.access_form:
-  path: '/admin/structure/webform/manage/{webform}/access'
-  defaults:
-    _entity_form: 'webform.access'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
-  requirements:
-    _entity_access: 'webform.update'
-
 entity.webform.duplicate_form:
   path: '/admin/structure/webform/manage/{webform}/duplicate'
   defaults:
@@ -244,6 +219,57 @@ entity.webform.delete_form:
     _title: 'Delete webform'
   requirements:
     _entity_access: 'webform.delete'
+
+# Webform settings.
+
+entity.webform.settings:
+  path: '/admin/structure/webform/manage/{webform}/settings'
+  defaults:
+    _entity_form: 'webform.settings'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _entity_access: 'webform.update'
+
+entity.webform.settings_form:
+  path: '/admin/structure/webform/manage/{webform}/settings/form'
+  defaults:
+    _entity_form: 'webform.settings_form'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _entity_access: 'webform.update'
+
+entity.webform.settings_submissions:
+  path: '/admin/structure/webform/manage/{webform}/settings/submissions'
+  defaults:
+    _entity_form: 'webform.settings_submissions'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _entity_access: 'webform.update'
+
+entity.webform.settings_confirmation:
+  path: '/admin/structure/webform/manage/{webform}/settings/confirmation'
+  defaults:
+    _entity_form: 'webform.settings_confirmation'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _entity_access: 'webform.update'
+
+entity.webform.settings_assets:
+  path: '/admin/structure/webform/manage/{webform}/settings/assets'
+  defaults:
+    _entity_form: 'webform.settings_assets'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _entity_access: 'webform.update'
+    _permission: 'edit webform assets'
+
+entity.webform.settings_access:
+  path: '/admin/structure/webform/manage/{webform}/access'
+  defaults:
+    _entity_form: 'webform.settings_access'
+    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+  requirements:
+    _entity_access: 'webform.update'
 
 # Webform submission results
 
@@ -523,9 +549,9 @@ webform_submission.multiple_delete_confirm:
   requirements:
     _permission: 'administer webform submission'
 
-# Handlers
+# Handlers.
 
-entity.webform.handlers_form:
+entity.webform.handlers:
   path: '/admin/structure/webform/manage/{webform}/handlers'
   defaults:
     _entity_form: 'webform.handlers'
@@ -533,7 +559,7 @@ entity.webform.handlers_form:
   requirements:
     _entity_access: 'webform.update'
 
-entity.webform.handlers:
+entity.webform.handler:
   path: '/admin/structure/webform/manage/{webform}/handlers/add'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginHandlerController::listHandlers'
@@ -573,7 +599,7 @@ entity.webform.handler.delete_form:
   requirements:
     _entity_access: 'webform.update'
 
-# Plugins
+# Plugins.
 
 webform.element_plugins:
   path: '/admin/structure/webform/plugins/elements'
@@ -599,7 +625,7 @@ webform.exporter_plugins:
   requirements:
     _permission: 'administer webform'
 
-# Autocomplete
+# Autocomplete.
 
 webform.element.autocomplete:
   path: '/webform/{webform}/autocomplete/{key}'
@@ -612,7 +638,7 @@ webform.element.autocomplete:
   requirements:
     _entity_access: 'webform.submission_page'
 
-# Message
+# Message.
 
 webform.element.message.close:
   path: '/webform/message/close/{storage}/{id}'

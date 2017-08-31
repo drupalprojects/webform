@@ -1362,7 +1362,7 @@ SUGGESTIONS
       ],
       'title' => $this->t('Building a webform'),
       'content' => $this->t('The Webform elements page allows users to add, update, duplicate, and delete webform elements and wizard pages.'),
-      'video_id' => 'form_elements',
+      'video_id' => 'elements',
     ];
 
     // Webform source.
@@ -1373,7 +1373,7 @@ SUGGESTIONS
       ],
       'title' => $this->t('Editing YAML source'),
       'content' => $this->t("The (View) Source page allows developers to edit a webform's render array using YAML markup.") . ' ' .
-      $this->t("Developers can use the (View) Source page to quickly alter a webform's labels, cut-n-paste multiple elements, reorder elements, and add customize properties and markup to elements."),
+        $this->t("Developers can use the (View) Source page to quickly alter a webform's labels, cut-n-paste multiple elements, reorder elements, and add customize properties and markup to elements."),
       'video_id' => 'source',
     ];
 
@@ -1406,7 +1406,7 @@ SUGGESTIONS
     $help['webform_settings'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/settings
-        'entity.webform.settings_form',
+        'entity.webform.settings',
       ],
       'title' => $this->t('Customizing webform settings'),
       'content' => $this->t("The Webform settings page allows a webform's labels, messaging, and behaviors to be customized.") . ' ' .
@@ -1414,15 +1414,18 @@ SUGGESTIONS
       'video_id' => 'form_settings',
     ];
 
-    // Webform assets.
+    // Webform settings assets.
     $help['webform_assets'] = [
       'routes' => [
-        // @see /admin/structure/webform/manage/{webform}/assets
-        'entity.webform.assets_form',
+        // @see /admin/structure/webform/manage/{webform}/settings/assets
+        'entity.webform.settings_assets',
       ],
       'title' => $this->t('Adding custom CSS/JS to a webform.'),
       'content' => $this->t("The Webform assets page allows site builders to attach custom CSS and JavaScript to a webform."),
     ];
+
+    // @todo Webform settings assets.
+
 
     // Webform access controls.
     $help['webform_access'] = [
@@ -1439,7 +1442,7 @@ SUGGESTIONS
     $help['webform_handlers'] = [
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/handlers
-        'entity.webform.handlers_form',
+        'entity.webform.handlers',
       ],
       'title' => $this->t('Enabling webform handlers'),
       'content' => $this->t('The Webform handlers page lists additional handlers (aka behaviors) that can process webform submissions.') . ' ' .

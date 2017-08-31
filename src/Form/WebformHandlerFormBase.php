@@ -234,7 +234,7 @@ abstract class WebformHandlerFormBase extends FormBase {
       drupal_set_message($this->t('The webform handler was successfully updated.'));
     }
 
-    $form_state->setRedirectUrl($this->webform->toUrl('handlers-form', ['query' => ['update' => $this->webformHandler->getHandlerId()]]));
+    $form_state->setRedirectUrl($this->webform->toUrl('handlers', ['query' => ['update' => $this->webformHandler->getHandlerId()]]));
   }
 
   /**

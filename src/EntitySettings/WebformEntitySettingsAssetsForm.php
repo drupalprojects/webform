@@ -1,15 +1,14 @@
 <?php
 
-namespace Drupal\webform;
+namespace Drupal\webform\EntitySettings;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides a webform to inject CSS and JS assets.
+ * Webform CSS and JS assets.
  */
-class WebformEntityAssetsForm extends EntityForm {
+class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
 
   /**
    * {@inheritdoc}
@@ -44,16 +43,8 @@ class WebformEntityAssetsForm extends EntityForm {
       '#description' => $this->t('Enter custom JavaScript to be attached to the webform.'),
       '#default_value' => $webform->getJavaScript(),
     ];
-    return parent::form($form, $form_state);
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function actions(array $form, FormStateInterface $form_state) {
-    $actions = parent::actions($form, $form_state);
-    unset($actions['delete']);
-    return $actions;
+    return parent::form($form, $form_state);
   }
 
   /**
@@ -64,19 +55,12 @@ class WebformEntityAssetsForm extends EntityForm {
     $webform = $this->getEntity();
     $webform->setCss($form_state->getValue('css'));
     $webform->setJavaScript($form_state->getValue('javascript'));
-    $webform->save();
-
-    $context = [
-      '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'assets-form')->toString(),
-    ];
-    $this->logger('webform')->notice('Webform assets for @label saved.', $context);
 
     // Invalidate library_info cache tag.
     // @see webform_library_info_build()
     Cache::invalidateTags(['library_info']);
 
-    drupal_set_message($this->t('Webform assets for %label saved.', ['%label' => $webform->label()]));
+    parent::save($form, $form_state);
   }
 
 }

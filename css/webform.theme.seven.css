@@ -82,3 +82,8 @@ pre.webform-codemirror-runmode {
   background: #fe6;
   border: solid 1px #ed5;
 }
+
+/* jQuery UI tabs */
+.ui-tabs .ui-tabs-panel {
+  padding: 0;
+}

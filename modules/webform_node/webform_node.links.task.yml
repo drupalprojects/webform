@@ -2,7 +2,7 @@ entity.webform.references:
   title: 'References'
   route_name: entity.webform.references
   base_route: entity.webform.canonical
-  weight: 40
+  weight: 50
 
 entity.node.webform.test:
   title: 'Test'
@@ -40,7 +40,7 @@ entity.node.webform.results_log:
   parent_id: entity.node.webform.results
   weight: 30
 
-# Submission
+# Submission.
 
 entity.node.webform_submission.canonical:
   title: 'View'
@@ -114,7 +114,7 @@ entity.node.webform_submission.log:
   base_route: entity.node.webform_submission.canonical
   weight: 50
 
-# User Submission
+# User Submission.
 
 entity.node.webform.user.submission:
   title: 'View'

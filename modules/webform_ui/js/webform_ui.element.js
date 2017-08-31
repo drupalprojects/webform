@@ -14,7 +14,7 @@
    */
   Drupal.behaviors.webformUiElementKey = {
     attach: function (context) {
-      if (!$(context).find(':input[name="key"]').length) {
+      if (!$(context).find(':input[name="key"]').length || !drupalSettings.webform_ui || !drupalSettings.webform_ui.reserved_keys) {
         return;
       }
 
@@ -36,6 +36,23 @@
         }
       }, 300);
 
+    }
+  };
+
+  /**
+   * Webform UI tabs using jQuery UI.
+   *
+   * @type {Drupal~behavior}
+   *
+   * @prop {Drupal~behaviorAttach} attach
+   *   Attaches the behavior for jQuery UI tabs.
+   */
+  Drupal.behaviors.webformUiElementTabs = {
+    attach: function (context, settings) {
+      $(context).find('div.webform-ui-element-tabs').once('webform-ui-element-tabs').tabs({
+        hide: true,
+        show: true
+      });
     }
   };
 

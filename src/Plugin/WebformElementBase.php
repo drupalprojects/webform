@@ -2011,7 +2011,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
     ];
 
-    /* Element access */
+    /* Access */
 
     $operations = [
       'create' => [
@@ -2029,11 +2029,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
 
     $form['access'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Element access'),
+      '#type' => 'container',
     ];
     if (!$this->currentUser->hasPermission('administer webform') && !$this->currentUser->hasPermission('administer webform element access')) {
-      $form['access'] = FALSE;
+      $form['access']['#access'] = FALSE;
     }
     foreach ($operations as $operation => $operation_element) {
       $form['access']['access_' . $operation] = $operation_element + [
@@ -2170,6 +2169,65 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Note: Storing this information in the webform's state allows modules to view
     // and alter this information using webform alteration hooks.
     $form_state->set('custom_properties', $custom_properties);
+
+    /**************************************************************************/
+    // Tabs.
+    /**************************************************************************/
+
+    $tabs = [
+      'general' => $this->t('General'),
+      'advanced' => $this->t('Advanced'),
+      'access' => $this->t('Access'),
+    ];
+
+    // Set tab group (general or advanced).
+    $tab_groups = [
+      'wrapper_attributes' => 'tab_advanced',
+      'element_attributes' => 'tab_advanced',
+      'display' => 'tab_advanced',
+      'admin' => 'tab_advanced',
+      'custom' => 'tab_advanced',
+      'access' => 'tab_access',
+    ];
+    foreach (Element::children($form) as $element_key) {
+      $form[$element_key]['#group'] = (isset($tab_groups[$element_key])) ? $tab_groups[$element_key] : 'tab_general';
+    }
+
+    // Set tab access.
+    if (!isset($form['access']) || (isset($form['access']['#access']) && $form['access']['#access'] === FALSE)) {
+      unset($tabs['access']);
+    }
+
+    // Build tabs.
+    $tab_items = [];
+    foreach ($tabs as $tab_name => $tab_title) {
+      $tab_items[] = [
+        '#prefix' => '<a href="#webform-ui-element-tab--' . $tab_name. '" class="webform-ui-element-tab">',
+        '#suffix' => '</a>',
+        '#markup' => $tab_title,
+      ];
+
+      $form['tab_' . $tab_name] = [
+        '#type' => 'container',
+        '#group' => 'tabs',
+        '#attributes' => [
+          'id' => 'webform-ui-element-tab--' . $tab_name,
+        ],
+      ];
+    }
+
+    // Add tabs.
+    $form['tabs'] = [
+      '#weight' => -1000,
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['webform-ui-element-tabs'],
+      ],
+      'items' => [
+        '#theme' => 'item_list',
+        '#items' => $tab_items,
+      ],
+    ];
 
     return $form;
   }

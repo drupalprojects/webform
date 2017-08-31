@@ -113,11 +113,11 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $webform = $route_match->getParameter('webform');
       $this->type = ($webform->isTemplate() && $this->moduleHandler->moduleExists('webform_templates')) ? 'webform_template' : 'webform';
     }
-    elseif (strpos($path, $base_path . 'admin/structure/webform/settings/') === 0) {
-      $this->type = 'webform_settings';
-    }
     elseif (strpos($path, $base_path . 'admin/structure/webform/test/') === 0) {
       $this->type = 'webform_test';
+    }
+    elseif (strpos($path, $base_path . 'admin/structure/webform/settings/') === 0) {
+      $this->type = 'webform_admin_settings';
     }
     else {
       $this->type = NULL;
@@ -166,7 +166,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $breadcrumb->addLink(Link::createFromRoute($this->t('Structure'), 'system.admin_structure'));
       $breadcrumb->addLink(Link::createFromRoute($this->t('Webforms'), 'entity.webform.collection'));
       switch ($this->type) {
-        case 'webform_settings':
+        case 'webform_admin_settings':
           $breadcrumb->addLink(Link::createFromRoute($this->t('Settings'), 'webform.settings'));
           if (strpos($route_name, 'config_translation.item.') === 0 && $route_name != 'config_translation.item.overview.webform.settings') {
             $breadcrumb->addLink(Link::createFromRoute($this->t('Translate'), 'config_translation.item.overview.webform.settings'));
@@ -192,7 +192,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           /** @var \Drupal\webform\WebformInterface $webform */
           $webform = $route_match->getParameter('webform');
           $breadcrumb->addLink(Link::createFromRoute($webform->label(), 'entity.webform.canonical', ['webform' => $webform->id()]));
-          $breadcrumb->addLink(Link::createFromRoute($this->t('Emails / Handlers'), 'entity.webform.handlers_form', ['webform' => $webform->id()]));
+          $breadcrumb->addLink(Link::createFromRoute($this->t('Emails / Handlers'), 'entity.webform.handlers', ['webform' => $webform->id()]));
           break;
 
         case 'webform_submission':

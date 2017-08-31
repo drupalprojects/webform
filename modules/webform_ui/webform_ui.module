@@ -21,8 +21,8 @@ function webform_ui_entity_type_alter(array &$entity_types) {
     // webform handler.
     $handlers = $webform_entity_type->getHandlerClasses();
     $handlers['form']['source'] = $handlers['form']['edit'];
-    $handlers['form']['edit'] = 'Drupal\webform_ui\WebformUiEntityEditForm';
-    $handlers['form']['quick_edit'] = 'Drupal\webform_ui\WebformUiEntityEditForm';
+    $handlers['form']['edit'] = 'Drupal\webform_ui\WebformUiEntityElementsForm';
+    $handlers['form']['quick_edit'] = 'Drupal\webform_ui\WebformUiEntityElementsForm';
     $webform_entity_type->setHandlerClass('form', $handlers['form']);
   }
 

@@ -88,7 +88,8 @@ webform.settings.advanced:
   parent_id: webform.settings
   weight: 80
 
-# Plugins
+# Plugins.
+
 webform.plugins:
   title: 'Plugins'
   route_name: webform.element_plugins
@@ -127,53 +128,21 @@ entity.webform.canonical:
   base_route: entity.webform.canonical
   weight: 0
 
+# Webform test.
+
 entity.webform.test:
   title: 'Test'
   route_name: entity.webform.test
   base_route: entity.webform.canonical
   weight: 10
 
-entity.webform.edit_form:
-  title: 'Edit'
-  route_name: entity.webform.edit_form
-  base_route: entity.webform.canonical
-  weight: 20
-
-entity.webform.edit_form_elements:
-  title: 'Elements'
-  route_name: entity.webform.edit_form
-  parent_id: entity.webform.edit_form
-  weight: 0
-
-entity.webform.edit_form_settings:
-  title: 'Settings'
-  route_name: entity.webform.settings_form
-  parent_id: entity.webform.edit_form
-  weight: 10
-
-entity.webform.edit_form_assets:
-  title: 'CSS / JS'
-  route_name: entity.webform.assets_form
-  parent_id: entity.webform.edit_form
-  weight: 20
-
-entity.webform.edit_form_access:
-  title: 'Access'
-  route_name: entity.webform.access_form
-  parent_id: entity.webform.edit_form
-  weight: 30
-
-entity.webform.edit_form_handlers:
-  title: 'Emails / Handlers'
-  route_name: entity.webform.handlers_form
-  parent_id: entity.webform.edit_form
-  weight: 40
+# Webform results.
 
 entity.webform.results:
   title: 'Results'
   route_name: entity.webform.results_submissions
   base_route: entity.webform.canonical
-  weight: 30
+  weight: 20
 
 entity.webform.results_submissions:
   title: 'Submissions'
@@ -198,6 +167,64 @@ entity.webform.results_log:
   route_name: entity.webform.results_log
   parent_id: entity.webform.results
   weight: 30
+
+# Webform edit (build).
+
+entity.webform.edit_form:
+  title: 'Build'
+  route_name: entity.webform.edit_form
+  base_route: entity.webform.canonical
+  weight: 30
+
+# Webform settings.
+
+entity.webform.settings:
+  title: 'Settings'
+  route_name: entity.webform.settings
+  base_route: entity.webform.canonical
+  weight: 40
+
+entity.webform.settings_general:
+  title: 'General'
+  route_name: entity.webform.settings
+  parent_id: entity.webform.settings
+  weight: 0
+
+entity.webform.settings_form:
+  title: 'Form'
+  route_name: entity.webform.settings_form
+  parent_id: entity.webform.settings
+  weight: 10
+
+entity.webform.settings_submissions:
+  title: 'Submissions'
+  route_name: entity.webform.settings_submissions
+  parent_id: entity.webform.settings
+  weight: 20
+
+entity.webform.settings_confirmation:
+  title: 'Confirmation'
+  route_name: entity.webform.settings_confirmation
+  parent_id: entity.webform.settings
+  weight: 30
+
+entity.webform.settings_handlers:
+  title: 'Emails / Handlers'
+  route_name: entity.webform.handlers
+  parent_id: entity.webform.settings
+  weight: 40
+
+entity.webform.settings_assets:
+  title: 'CSS / JS'
+  route_name: entity.webform.settings_assets
+  parent_id: entity.webform.settings
+  weight: 50
+
+entity.webform.settings_access:
+  title: 'Access'
+  route_name: entity.webform.settings_access
+  parent_id: entity.webform.settings
+  weight: 60
 
 # Submission
 

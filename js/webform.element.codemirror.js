@@ -91,10 +91,16 @@
     // @see http://stackoverflow.com/questions/8349571/codemirror-editor-is-not-loading-content-until-clicked
     setTimeout(function () {
       $('.CodeMirror').each(function (index, $element) {
+        // Show tab panel and open details.
+        var $tabPanel = $(this).parents('.ui-tabs-panel:hidden');
+        $tabPanel.show();
         var $details = $(this).parents('details:not([open])');
         $details.attr('open', 'open');
+
         $element.CodeMirror.refresh();
-        // Now, close details.
+
+        // Hide tab panel and close details.
+        $tabPanel.hide();
         $details.removeAttr('open');
       });
     }, 10);

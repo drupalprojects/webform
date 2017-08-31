@@ -365,7 +365,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
         drupal_set_message($this->t('%submission: Email <b>not scheduled</b> for %handler handler because %send is not a valid date/token.', $t_args), 'warning', TRUE);
       }
       $context = $t_args + [
-        'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers-form')->toString(),
+        'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers')->toString(),
       ];
       $this->getLogger()->warning('%submission: Email <b>not scheduled</b> for %handler handler because %send is not a valid date/token.', $context);
       return FALSE;

@@ -214,24 +214,34 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     }
     else {
       $operations = parent::getDefaultOperations($entity);
+      if (isset($operations['edit'])) {
+        $operations['edit']['title'] = $this->t('Build');
+      }
+      if ($entity->access('update')) {
+        $operations['settings'] = [
+          'title' => $this->t('Settings'),
+          'weight' => 22,
+          'url' => Url::fromRoute('entity.webform.settings', $route_parameters),
+        ];
+      }
       if ($entity->access('view')) {
         $operations['view'] = [
           'title' => $this->t('View'),
-          'weight' => 20,
+          'weight' => 24,
           'url' => Url::fromRoute('entity.webform.canonical', $route_parameters),
         ];
       }
       if ($entity->access('submission_update_any')) {
         $operations['test'] = [
           'title' => $this->t('Test'),
-          'weight' => 21,
+          'weight' => 25,
           'url' => Url::fromRoute('entity.webform.test', $route_parameters),
         ];
       }
       if ($entity->access('duplicate')) {
         $operations['duplicate'] = [
           'title' => $this->t('Duplicate'),
-          'weight' => 23,
+          'weight' => 26,
           'url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
           'attributes' => WebformDialogHelper::getModalDialogAttributes(700),
         ];

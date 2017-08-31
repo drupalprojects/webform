@@ -22,6 +22,7 @@ class WebformWizardPage extends Details {
    */
   public function getDefaultProperties() {
     $default_properties = [
+      'title' => '',
       'open' => FALSE,
       'prev_button_label' => '',
       'next_button_label' => '',
