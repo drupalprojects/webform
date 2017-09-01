@@ -356,10 +356,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'default' => $this->t('Default'),
       (string) $this->t('Elements') => $text_element_options_value,
     ];
-
     $body_default_format = ($this->configuration['html']) ? 'html' : 'text';
     $body_default_values = $this->getBodyDefaultValues();
-    if (isset($text_element_options_value[$this->configuration['body']])) {
+    if (WebformOptionsHelper::hasOption($this->configuration['body'], $body_options)) {
       $body_default_value = $this->configuration['body'];
       $body_custom_default_value = $body_default_values[$body_default_format];
     }
