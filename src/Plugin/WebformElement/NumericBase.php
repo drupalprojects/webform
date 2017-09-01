@@ -75,7 +75,7 @@ abstract class NumericBase extends WebformElementBase {
     $form['number']['step'] = [
       '#type' => 'number',
       '#title' => $this->t('Steps'),
-      '#description' => $this->t('Specifies the legal number intervals. Leave blank to support any number interval.'),
+      '#description' => $this->t('Specifies the legal number intervals. Leave blank to support any number interval. Decimals are supported.'),
       '#step' => 'any',
       '#size' => 4,
     ];
