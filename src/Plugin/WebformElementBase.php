@@ -1699,11 +1699,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    $form['element']['multiple__header'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Display elements in table columns'),
-      '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
-      '#return_value' => TRUE,
+    $form['element']['multiple__header_container'] = [
+      '#type' => 'container',
       '#states' => [
         'invisible' => [
           ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
@@ -1711,16 +1708,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    $form['element']['multiple__header_label'] = [
+    $form['element']['multiple__header_container']['multiple__header'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display elements in table columns'),
+      '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
+      '#return_value' => TRUE,
+    ];
+    $form['element']['multiple__header_container']['multiple__header_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Table header label'),
       '#description' => $this->t('This is used as the table header for this webform element when display multiple values.'),
-      '#states' => [
-        'invisible' => [
-          ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
-          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
-        ],
-      ],
     ];
     if ($this->hasProperty('multiple')) {
       $form['element']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');

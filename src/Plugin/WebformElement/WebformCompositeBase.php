@@ -668,7 +668,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form['validation']['required']['#description'] .= '<br />' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
 
     // Update '#multiple__header_label'.
-    $form['element']['multiple__header_label']['#states']['visible'][':input[name="properties[multiple__header]"]'] = ['checked' => FALSE];
+    $form['element']['multiple__header_container']['multiple__header_label']['#states']['visible'][':input[name="properties[multiple__header]"]'] = ['checked' => FALSE];
 
     $form['composite'] = [
       '#type' => 'fieldset',

@@ -510,9 +510,18 @@ trait WebformEntityReferenceTrait {
       '#return_value' => TRUE,
     ];
     if ($this->hasProperty('tags') && $this->hasProperty('multiple')) {
-      $form['element']['tags']['#states']['visible'][] = [':input[name="properties[multiple]"]' => ['checked' => FALSE]];
-      $form['element']['multiple']['#states']['visible'][] = [':input[name="properties[tags]"]' => ['checked' => FALSE]];
-      $form['element']['multiple__header_label']['#states']['visible'][] = [':input[name="properties[tags]"]' => ['checked' => FALSE]];
+      $form['element']['multiple']['#states'] = [
+        'disabled' => [
+          ':input[name="properties[tags]"]' => ['checked' => TRUE],
+        ],
+      ];
+      $form['element']['multiple__header_container']['#states']['visible'][] = [':input[name="properties[tags]"]' => ['checked' => FALSE]];
+      $form['element']['tags']['#states'] = [
+        'visible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
+        ],
+      ];
     }
 
     return $form;
