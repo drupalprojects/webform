@@ -65,9 +65,8 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
 
     // Confirmation type.
     $form['confirmation_type'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('Confirmation type'),
-      '#open' => TRUE,
     ];
     $form['confirmation_type']['ajax_confirmation'] = [
       '#type' => 'webform_message',
