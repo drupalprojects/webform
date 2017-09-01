@@ -233,6 +233,8 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
     $row['results_operations']['data'] = [
       '#type' => 'operations',
       '#links' => $this->getDefaultOperations($entity, 'results'),
+      '#prefix' => '<div class="webform-dropbutton">',
+      '#suffix' => '</div>',
     ];
     $row['operations']['data'] = $this->buildOperations($entity);
     return $row + parent::buildRow($entity);

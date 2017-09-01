@@ -143,6 +143,8 @@ class WebformEntityHandlersForm extends EntityForm {
       $row['operations'] = [
         '#type' => 'operations',
         '#links' => $operations,
+        '#prefix' => '<div class="webform-dropbutton">',
+        '#suffix' => '</div>',
       ];
 
       $rows[$handler_id] = $row;

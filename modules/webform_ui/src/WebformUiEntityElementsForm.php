@@ -558,6 +558,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     if (!$this->isQuickEdit()) {
       $row['operations'] = [
         '#type' => 'operations',
+        '#prefix' => '<div class="webform-dropbutton">',
+        '#suffix' => '</div>',
       ];
       $row['operations']['#links']['edit'] = [
         'title' => $this->t('Edit'),
@@ -642,6 +644,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     if (!$this->isQuickEdit()) {
       $row['operations'] = [
         '#type' => 'operations',
+        '#prefix' => '<div class="webform-dropbutton">',
+        '#suffix' => '</div>',
       ];
       $row['operations']['#links']['customize'] = [
         'title' => $this->t('Customize'),

@@ -201,6 +201,8 @@ class WebformPluginHandlerController extends ControllerBase implements Container
         $row['operations']['data'] = [
           '#type' => 'operations',
           '#links' => $links,
+          '#prefix' => '<div class="webform-dropbutton">',
+          '#suffix' => '</div>',
         ];
       }
 

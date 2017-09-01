@@ -324,6 +324,8 @@ SUGGESTIONS
       'operations' => [
         '#type' => 'operations',
         '#links' => $links,
+        '#prefix' => '<div class="webform-dropbutton">',
+        '#suffix' => '</div>',
       ],
       '#attached' => ['library' => 'webform/webform.ajax'],
     ];

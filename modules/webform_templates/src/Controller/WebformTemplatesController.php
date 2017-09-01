@@ -114,6 +114,8 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
               'attributes' => WebformDialogHelper::getModalDialogAttributes(700),
             ],
           ],
+          '#prefix' => '<div class="webform-dropbutton">',
+          '#suffix' => '</div>',
         ];
       }
       $row['preview']['data'] = [
@@ -125,6 +127,8 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
             'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
           ],
         ],
+        '#prefix' => '<div class="webform-dropbutton">',
+        '#suffix' => '</div>',
       ];
       $rows[] = $row;
     }

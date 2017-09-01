@@ -105,6 +105,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
 
     $build += parent::render();
 
+    $build['table']['#attributes']['class'][] = 'webform-forms';
+
     // Must preload libraries required by (modal) dialogs.
     WebformDialogHelper::attachLibraries($build);
 
@@ -183,8 +185,20 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $row['results_operations']['data'] = [
       '#type' => 'operations',
       '#links' => $this->getDefaultOperations($entity, 'results'),
+      '#prefix' => '<div class="webform-dropbutton">',
+      '#suffix' => '</div>',
     ];
     return $row + parent::buildRow($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOperations(EntityInterface $entity) {
+    return parent::buildOperations($entity) + [
+      '#prefix' => '<div class="webform-dropbutton">',
+      '#suffix' => '</div>',
+    ];
   }
 
   /**
