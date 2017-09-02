@@ -19,6 +19,7 @@
   border: 2px solid #0074bd;
   background: #0074bd;
   color: #fff;
+  text-decoration: none;
 }
 
 .webform-element-help:focus,
@@ -27,4 +28,5 @@
   border: 2px solid #31708f;
   background: #31708f;
   color: #fff;
+  text-decoration: none;
 }
