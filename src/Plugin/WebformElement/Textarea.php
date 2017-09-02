@@ -27,6 +27,7 @@ class Textarea extends TextBase {
     return [
       'title' => '',
       // General settings.
+      'help' => '',
       'description' => '',
       'default_value' => '',
       // Form display.

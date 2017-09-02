@@ -50,6 +50,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         'multiple__header' => FALSE,
         'multiple__header_label' => '',
         // General settings.
+        'help' => '',
         'description' => '',
         'default_value' => [],
         // Form display.

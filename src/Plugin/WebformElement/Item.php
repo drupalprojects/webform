@@ -25,6 +25,7 @@ class Item extends WebformMarkup {
     return parent::getDefaultProperties() + [
       'title' => '',
       // General settings.
+      'help' => '',
       'description' => '',
       // Form display.
       'title_display' => '',

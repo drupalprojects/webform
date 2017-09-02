@@ -1671,10 +1671,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
           'or',
           [':input[name="properties[title_display]"]' => ['value' => 'attribute']],
-          'or',
-          [':input[name="properties[title_display]"]' => ['value' => 'inline']],
-          'or',
-          [':input[name="properties[title_display]"]' => ['value' => '']],
         ]
       ]
     ];

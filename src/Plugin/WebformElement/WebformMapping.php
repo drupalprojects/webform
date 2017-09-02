@@ -35,6 +35,7 @@ class WebformMapping extends WebformElementBase {
     return [
       'title' => '',
       // General settings.
+      'help' => '',
       'description' => '',
       'default_value' => [],
       // Form display.
