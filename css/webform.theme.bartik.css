@@ -61,3 +61,12 @@ table {
 .webform-progress-tracker .progress-step {
   z-index: 0;
 }
+
+/**
+ * Tweak element help.
+ * @see css/webform.element.help.css
+ */
+summary .webform-element-help {
+  border-color: #999;
+  background: #999;
+}
