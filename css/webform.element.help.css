@@ -7,7 +7,6 @@
   display: inline-block;
   line-height: 1em;
   width: 1em;
-  background: #0074bd;
   border-radius: 50%;
   font-weight: bold;
   text-align: center;
@@ -16,8 +15,8 @@
 
 .webform-element-help:link,
 .webform-element-help:visited {
-  border: 2px solid #0074bd;
-  background: #0074bd;
+  border: 2px solid #787878;
+  background: #787878;
   color: #fff;
   text-decoration: none;
 }
@@ -25,8 +24,8 @@
 .webform-element-help:focus,
 .webform-element-help:active,
 .webform-element-help:hover {
-  border: 2px solid #31708f;
-  background: #31708f;
+  border: 2px solid #0074bd;
+  background: #0074bd;
   color: #fff;
   text-decoration: none;
 }
