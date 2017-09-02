@@ -363,8 +363,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("Signature Pad is a JavaScript library for drawing smooth signatures. It is HTML5 canvas based and uses variable width Bézier curve interpolation. It works in all modern desktop and mobile browsers and doesn't depend on any external libraries."),
       'notes' => $this->t('Signature Pad is used to provide a signature element.'),
       'homepage_url' => Url::fromUri('https://github.com/szimek/signature_pad'),
-      'download_url' => Url::fromUri('https://github.com/szimek/signature_pad/archive/v1.5.3.zip'),
-      'version' => '1.5.3',
+      'download_url' => Url::fromUri('https://github.com/szimek/signature_pad/archive/v2.3.0.zip'),
+      'version' => '2.3.0',
       'elements' => ['webform_signature'],
     ];
     return $libraries;

@@ -992,12 +992,12 @@ libraries.progress-tracker:
 
 libraries.signature_pad:
   remote: https://github.com/szimek/signature_pad
-  version: '1.5.3'
+  version: '2.3.0'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/signature_pad/: https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/
+    /libraries/signature_pad/: https://cdn.rawgit.com/szimek/signature_pad/v2.3.0/
   js:
-    /libraries/signature_pad/signature_pad.js: {}
+    /libraries/signature_pad/example/js/signature_pad.js: {}
