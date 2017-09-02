@@ -12,14 +12,30 @@
 
   'use strict';
 
+  var tooltipDefaultOptions = {
+    // @see https://stackoverflow.com/questions/18231315/jquery-ui-tooltip-html-with-links
+    show: null,
+    close: function (event, ui) {
+      ui.tooltip.hover(
+        function () {
+          $(this).stop(true).fadeTo(400, 1);
+        },
+        function () {
+          $(this).fadeOut("400", function () {
+            $(this).remove();
+          })
+        });
+    }
+  };
+
   // @see http://api.jqueryui.com/tooltip/
   Drupal.webform = Drupal.webform || {};
 
   Drupal.webform.tooltipElement = Drupal.webform.tooltipElement || {};
-  Drupal.webform.tooltipElement.options = Drupal.webform.tooltipElement.options || {};
+  Drupal.webform.tooltipElement.options = Drupal.webform.tooltipElement.options || tooltipDefaultOptions;
 
   Drupal.webform.tooltipLink = Drupal.webform.tooltipLink || {};
-  Drupal.webform.tooltipLink.options = Drupal.webform.tooltipLink.options || {};
+  Drupal.webform.tooltipLink.options = Drupal.webform.tooltipLink.options || tooltipDefaultOptions;
 
   /**
    * Initialize jQuery UI tooltip element support.

@@ -20,6 +20,7 @@ class Fieldset extends ContainerBase {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      'help' => '',
       'title_display' => '',
     ];
   }

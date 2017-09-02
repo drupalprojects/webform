@@ -1088,3 +1088,10 @@ function webform_update_8072() {
 function webform_update_8073() {
   webform_update_8048();
 }
+
+/**
+ * Issue #2906292: Display element descriptions as help icon (tooltip).
+ */
+function webform_update_8074() {
+  _webform_update_admin_settings();
+}

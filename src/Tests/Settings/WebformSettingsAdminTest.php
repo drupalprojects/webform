@@ -91,6 +91,15 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700}">Add webform</a>');
     $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small">Add webform</a>');
 
+    /* UI description help */
+
+    // Check moving #description to #help for webform admin routes.
+    $this->drupalPostForm('admin/structure/webform/settings/advanced', ['ui[description_help]' => TRUE], t('Save configuration'));
+    $this->assertRaw('<a href="#help" title="If checked, all element description will be moved to help icons." data-webform-help="If checked, all element description will be moved to help icons." class="webform-element-help">?</a>');
+
+    // Check moving #description to #help for webform admin routes.
+    $this->drupalPostForm('admin/structure/webform/settings/advanced', ['ui[description_help]' => FALSE], t('Save configuration'));
+    $this->assertNoRaw('<a href="#help" title="If checked, all element description will be moved to help icons." data-webform-help="If checked, all element description will be moved to help icons." class="webform-element-help">?</a>');
   }
 
 }

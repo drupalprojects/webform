@@ -74,6 +74,13 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
       ],
       '#default_value' => $config->get('ui.video_display'),
     ];
+    $form['ui']['description_help'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display element descriptions as help icon (tooltip)'),
+      '#description' => $this->t("If checked, all element description will be moved to help icons."),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('ui.description_help'),
+    ];
     $form['ui']['details_save'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Save details open/close state'),

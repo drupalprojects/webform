@@ -349,6 +349,9 @@ webform.settings:
         details_save:
           type: boolean
           label: 'Save details open/close state'
+        description_help:
+          type: boolean
+          label: 'Display element descriptions as help icon (tooltip)'
     libraries:
       type: mapping
       label: 'Library settings'

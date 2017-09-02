@@ -163,11 +163,6 @@ abstract class WebformHandlerFormBase extends FormBase {
       $form['conditional_logic'] = [
         '#type' => 'fieldset',
         '#title' => $this->t('Conditional logic'),
-        '#states' => [
-          'visible' => [
-            ':input[name="status"]' => ['checked' => TRUE],
-          ],
-        ],
       ];
       $form['conditional_logic']['conditions'] = [
         '#type' => 'webform_element_states',

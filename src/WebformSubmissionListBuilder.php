@@ -325,7 +325,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       '#type' => 'link',
       '#title' => $this->t('Customize'),
       '#url' => Url::fromRoute($route_name, $route_parameters, $route_options),
-      '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--small', 'button-webform-setting']),
+      '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--small', 'button-webform-table-setting']),
     ];
   }
 

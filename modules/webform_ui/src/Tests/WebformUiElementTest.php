@@ -27,6 +27,15 @@ class WebformUiElementTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_date'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+    // Disable description help icon.
+    $this->config('webform.settings')->set('ui.description_help', FALSE)->save();
+  }
+
+  /**
    * Tests element.
    */
   public function testElements() {

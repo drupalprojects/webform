@@ -14,12 +14,12 @@
  * Webform setting button displays a gear icon.
  * @see /admin/structure/webform/manage/contact/results/submissions
  */
-.button.button-webform-setting {
+.button.button-webform-table-setting {
   margin: 0 0 1em 0;
 }
 
-.button.button-webform-setting:before {
-  content: '⚙';
+.button.button-webform-table-setting:before {
+  content: '☷';
   font-size: 1.2em;
 }
 

@@ -752,6 +752,36 @@ function webform_preprocess_radios(&$variables) {
 }
 
 /**
+ * Prepares variables for details element templates.
+ */
+function webform_preprocess_details(&$variables) {
+  // Move #description to #help for webform admin routes.
+  _webform_preprocess_description_help($variables);
+
+  $element = &$variables['element'];
+
+  // Restructure the details's title to include #help.
+  if (isset($variables['title'])) {
+    _webform_preprocess_help_title($variables['title'], $element);
+  }
+}
+
+/**
+ * Prepares variables for fieldset element templates.
+ */
+function webform_preprocess_fieldset(&$variables) {
+  // Move #description to #help for webform admin routes.
+  _webform_preprocess_description_help($variables);
+
+  $element = &$variables['element'];
+
+  // Restructure the fieldset's legend title to include #help.
+  if (isset($variables['legend']['title'])) {
+    _webform_preprocess_help_title($variables['legend']['title'], $element);
+  }
+}
+
+/**
  * Prepares variables for form label templates.
  */
 function webform_preprocess_form_element_label(&$variables) {
@@ -763,14 +793,9 @@ function webform_preprocess_form_element_label(&$variables) {
     unset($variables['attributes']['for']);
   }
 
-  // Restructure the label's title to
+  // Restructure the label's title to include #help.
   if (!empty($element['#help'])) {
-    $variables['title'] = [
-      'title' => $variables['title'],
-      'help' => [
-          '#theme' => 'webform_element_help',
-        ] + array_intersect_key($element, array_flip(['#help'])),
-    ];
+    _webform_preprocess_help_title($variables['title'], $element);
 
     $title_display = (isset($element['#_title_display'])) ? $element['#_title_display'] : $element['#title_display'];
     if ($title_display == 'inline') {
@@ -786,10 +811,51 @@ function webform_preprocess_form_element_label(&$variables) {
 function webform_preprocess_form_element(&$variables) {
   $element = &$variables['element'];
 
+  // Move #description to #help for webform admin routes.
+  _webform_preprocess_description_help($variables);
+
   // Add #help and #_title_display to label.
   // Note: #_title_display is used to track inline titles
   // @see \Drupal\webform\Plugin\WebformElementBase::prepare
   $variables['label'] += array_intersect_key($element, array_flip(['#help', '#_title_display']));
+}
+
+/**
+ * Prepares #description and #help properties for form element templates.
+ */
+function _webform_preprocess_description_help(&$variables) {
+  $element = &$variables['element'];
+
+  // Move #description to #help for webform admin routes.
+  if (\Drupal::config('webform.settings')->get('ui.description_help')
+    && \Drupal::service('webform.request')->isWebformAdminRoute()
+    && isset($element['#description'])
+    && !isset($element['#help'])
+    && !empty($element['#title'])
+    && !(isset($element['#title_display']) && in_array($element['#title_display'], ['attribute', 'invisible']))
+  ) {
+    $element['#help'] = $element['#description'];
+    unset($variables['description']);
+    if (is_array($element['#help'])) {
+      $element['#help'] = \Drupal::service('renderer')->render($element['#help']);
+    }
+  }
+}
+
+/**
+ * Appent #help to title variable..
+ */
+function _webform_preprocess_help_title(&$variables, array &$element) {
+  if (empty($element['#help'])) {
+    return;
+  }
+
+  $variables = [
+    'title' => (is_array($variables)) ? $variables : ['#markup' => $variables],
+    'help' => [
+        '#theme' => 'webform_element_help',
+      ] + array_intersect_key($element, array_flip(['#help'])),
+  ];
 }
 
 /**

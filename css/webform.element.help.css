@@ -15,8 +15,8 @@
 
 .webform-element-help:link,
 .webform-element-help:visited {
-  border: 2px solid #787878;
-  background: #787878;
+  border: 2px solid #bbb;
+  background: #bbb;
   color: #fff;
   text-decoration: none;
 }

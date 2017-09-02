@@ -39,6 +39,21 @@ elements: |
     '#title': help_inline
     '#title_display': inline
     '#help': '{This is an example of help with an inline title}'
+  help_radios:
+    '#type': radios
+    '#title': help_radios
+    '#help': '{This is an example of help for radio buttons}'
+    '#options': yes_no
+  help_fieldset:
+    '#type': fieldset
+    '#title': help_fieldset
+    '#help': '{This is an example of help for a fieldset}'
+    '#description': '{This is an example of help for a fieldset}'
+  help_details:
+    '#type': details
+    '#title': help_details
+    '#help': '{This is an example of help for a details element}'
+    '#description': '{This is an example of help for a details element}'
 css: ''
 javascript: ''
 settings:

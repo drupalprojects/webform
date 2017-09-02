@@ -53,6 +53,13 @@ class WebformRequest implements WebformRequestInterface {
   protected $request;
 
   /**
+   * Track if the current page is a webform admin route.
+   *
+   * @var bool
+   */
+  protected $isAdminRoute;
+
+  /**
    * Constructs a WebformRequest object.
    *
    * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
@@ -72,6 +79,30 @@ class WebformRequest implements WebformRequestInterface {
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeRepository = $entity_type_repository;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isWebformAdminRoute() {
+    if (isset($this->isAdminRoute)) {
+      return $this->isAdminRoute;
+    }
+
+    // Make sure the current route is an admin route.
+    if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+      $this->isAdminRoute = FALSE;
+      return $this->isAdminRoute;
+    }
+
+    $route_name = $this->routeMatch->getRouteName();
+    if (in_array($route_name, ['entity.webform.canonical', 'entity.webform_submission.edit_form'])) {
+      $this->isAdminRoute = FALSE;
+    }
+    else {
+      $this->isAdminRoute = (preg_match('/^(webform\.|^entity\.([^.]+\.)?webform)/', $route_name)) ? TRUE : FALSE;
+    }
+    return $this->isAdminRoute;
   }
 
   /**

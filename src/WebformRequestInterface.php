@@ -10,6 +10,14 @@ use Drupal\Core\Entity\EntityInterface;
 interface WebformRequestInterface {
 
   /**
+   * Determine if the current request is a webform admin route.
+   *
+   * @return bool
+   *   TRUE if the current request is a webform admin route.
+   */
+  public function isWebformAdminRoute();
+
+  /**
    * Get the current request's source entity.
    *
    * @param string|array $ignored_types

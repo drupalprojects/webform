@@ -36,6 +36,15 @@ class WebformElementHelpTest extends WebformTestBase {
     // Check help with inline title.
     $this->assertRaw('<a href="#help" title="{This is an example of help with an inline title}" data-webform-help="{This is an example of help with an inline title}" class="webform-element-help">?</a>
 help_inline</label>');
+
+    // Check radios (fieldset).
+    $this->assertRaw('<a href="#help" title="{This is an example of help for radio buttons}" data-webform-help="{This is an example of help for radio buttons}" class="webform-element-help">?</a>');
+
+    // Check fieldset.
+    $this->assertRaw('<a href="#help" title="{This is an example of help for a fieldset}" data-webform-help="{This is an example of help for a fieldset}" class="webform-element-help">?</a>');
+
+    // Check details.
+    $this->assertRaw('<a href="#help" title="{This is an example of help for a details element}" data-webform-help="{This is an example of help for a details element}" class="webform-element-help">?</a>');
   }
 
 }
