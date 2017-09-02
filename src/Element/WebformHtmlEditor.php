@@ -251,7 +251,20 @@ class WebformHtmlEditor extends FormElement {
         ];
       }
     }
+  }
 
+  /**
+   * Strip dis-allowed HTML tags from HTML text.
+   *
+   * @param $text
+   *   HTML text.
+   *
+   * @return string
+   *   HTML text with dis-allowed HTML tags removed.
+   */
+  public static function stripTags($text) {
+    $allowed_tags = '<' . implode('><', static::getAllowedTags()) . '>';
+    return strip_tags($text, $allowed_tags);
   }
 
 }

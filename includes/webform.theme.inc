@@ -13,6 +13,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\Xss;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\webform\Element\WebformCodeMirror;
+use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\WebformMessageManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
 use Drupal\webform\Utility\WebformDateHelper;
@@ -872,6 +873,30 @@ function template_preprocess_webform_composite_telephone(array &$variables) {
 /******************************************************************************/
 // Element templates
 /******************************************************************************/
+
+/**
+ * Prepares variables for element help.
+ *
+ * Default template: webform-element-help.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The webform element.
+ *   - help: The help content.
+ */
+function template_preprocess_webform_element_help(array &$variables) {
+  $variables['help_icon'] = [
+    '#type' => 'link',
+    '#title' => '?',
+    '#url' => Url::fromRoute('<none>', [], ['fragment' => 'help']),
+    '#attributes' => [
+      'title' => $variables['help'],
+      // Add 'data-webform-help' attribute which support HTML markup.
+      'data-webform-help' => WebformHtmlEditor::stripTags($variables['help']),
+      'class' => ['webform-element-help'],
+    ],
+  ];
+}
 
 /**
  * Prepares variables for a managed file element.

@@ -403,6 +403,18 @@ webform.element.flexbox:
     layout:
       css/webform.element.flexbox.css: {}
 
+webform.element.help:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.help.css: {}
+  js:
+    js/webform.element.help.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+    - core/jquery.ui.tooltip
+
 webform.element.html_editor:
   version: VERSION
   css:

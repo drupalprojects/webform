@@ -183,6 +183,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $properties = [
       // Element settings.
       'title' => '',
+      'help' => '',
       'description' => '',
       'default_value' => '',
       // Form display.
@@ -244,6 +245,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [
       'title',
       'label',
+      'help',
       'description',
       'field_prefix',
       'field_suffix',
@@ -565,6 +567,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Add inline title display support.
     if (isset($element['#title_display']) && $element['#title_display'] == 'inline') {
+      $element['#_title_display'] = $element['#title_display'];
       unset($element['#title_display']);
       $element['#wrapper_attributes']['class'][] = 'webform-element--title-inline';
     }
@@ -1658,6 +1661,22 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#description' => $this->t('This is used as a descriptive label when displaying this webform element.'),
       '#required' => TRUE,
       '#attributes' => ['autofocus' => 'autofocus'],
+    ];
+    $form['element']['help'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Help'),
+      '#description' => $this->t('A tooltip displayed after the title.'),
+      '#states' => [
+        'invisible' => [
+          [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
+          'or',
+          [':input[name="properties[title_display]"]' => ['value' => 'attribute']],
+          'or',
+          [':input[name="properties[title_display]"]' => ['value' => 'inline']],
+          'or',
+          [':input[name="properties[title_display]"]' => ['value' => '']],
+        ]
+      ]
     ];
     $form['element']['description'] = [
       '#type' => 'webform_html_editor',
