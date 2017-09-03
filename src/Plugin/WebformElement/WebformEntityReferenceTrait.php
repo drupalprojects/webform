@@ -207,7 +207,7 @@ trait WebformEntityReferenceTrait {
       '#title' => $this->t('Entity reference format'),
       '#options' => [
         'link' => $this->t('Entity link; with entity id, title and url in their own column.') . '<div class="description">' . $this->t("Entity links are suitable as long as there are not too many submissions (ie 1000's) pointing to just a few unique entities (ie 100's).") . '</div>',
-        'id' => $this->t('Entity id; just the entity id column') . '<div class="description">' . $this->t('Entity links are suitable as long as there is mechanism for the referenced entity to be looked up external (ie REST API).') . '</div>',
+        'id' => $this->t('Entity id; just the entity id column') . '<div class="description">' . $this->t('Entity ids are suitable as long as there is mechanism for the referenced entity to be looked up via the external (ie REST API).') . '</div>',
       ],
       '#default_value' => $export_options['entity_reference_format'],
     ];

@@ -20,6 +20,7 @@ class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
     $form['css'] = [
       '#type' => 'details',
       '#title' => $this->t('Custom CSS'),
+      '#description' => $this->t('Enter custom CSS to be attached to the webform.'),
       '#open' => TRUE,
     ];
     $form['css']['css'] = [
@@ -27,12 +28,12 @@ class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
       '#mode' => 'css',
       '#title' => $this->t('CSS'),
       '#title_display' => 'invisible',
-      '#description' => $this->t('Enter custom CSS to be attached to the webform.'),
       '#default_value' => $webform->getCss(),
     ];
     $form['javascript'] = [
       '#type' => 'details',
       '#title' => $this->t('Custom JavaScript'),
+      '#description' => $this->t('Enter custom JavaScript to be attached to the webform.'),
       '#open' => TRUE,
     ];
     $form['javascript']['javascript'] = [
@@ -40,7 +41,6 @@ class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
       '#mode' => 'javascript',
       '#title' => $this->t('JavaScript'),
       '#title_display' => 'invisible',
-      '#description' => $this->t('Enter custom JavaScript to be attached to the webform.'),
       '#default_value' => $webform->getJavaScript(),
     ];
 

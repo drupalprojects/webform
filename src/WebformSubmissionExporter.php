@@ -437,11 +437,11 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     $form['export']['columns'] = [
       '#type' => 'details',
       '#title' => $this->t('Column options'),
+      '#description' => $this->t('The selected columns will be included in the export.'),
       '#states' => $states_options,
     ];
     $form['export']['columns']['excluded_columns'] = [
       '#type' => 'webform_excluded_columns',
-      '#description' => $this->t('The selected columns will be included in the export.'),
       '#webform_id' => $webform->id(),
       '#default_value' => $export_options['excluded_columns'],
     ];
