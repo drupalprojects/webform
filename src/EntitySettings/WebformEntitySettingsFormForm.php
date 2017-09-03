@@ -73,9 +73,6 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['form_settings']['scheduled'] = [
       '#type' => 'item',
       '#input' => FALSE,
-      '#description' => $this->t('If the open date/time is left blank, this form will immediately be opened.') .
-        '<br />' .
-        $this->t('If the close date/time is left blank, this webform will never be closed.'),
       '#states' => [
         'visible' => [
           ':input[name="status"]' => ['value' => WebformInterface::STATUS_SCHEDULED],
@@ -88,22 +85,29 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#prefix' => '<div class="container-inline form-item">',
       '#suffix' => '</div>',
       '#default_value' => $webform->get('open') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('open'))) : NULL,
+      '#help' => FALSE,
+      '#description' => [
+        '#theme' => 'webform_element_help',
+        '#help' => $this->t('If the open date/time is left blank, this form will immediately be opened.'),
+      ],
     ];
     $form['form_settings']['scheduled']['close'] = [
       '#type' => 'datetime',
       '#title' => $this->t('Close'),
+      '#title_display' => 'inline',
       '#prefix' => '<div class="container-inline form-item">',
       '#suffix' => '</div>',
+      '#help' => FALSE,
+      '#description' => [
+        '#theme' => 'webform_element_help',
+        '#help' => $this->t('If the close date/time is left blank, this webform will never be closed.'),
+      ],
       '#default_value' => $webform->get('close') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('close'))) : NULL,
     ];
-    // If the Webform templates module is enabled, add additional #states.
-    if ($this->moduleHandler->moduleExists('webform_templates')) {
-      $form['form_settings']['status']['#states'] = [
-        'visible' => [
-          ':input[name="template"]' => ['checked' => FALSE],
-        ],
-      ];
-      $form['form_settings']['scheduled']['#states']['visible'][':input[name="template"]'] = ['checked' => FALSE];
+    // If the Webform templates module is enabled and webform is template, hide status and scheduled.
+    if ($this->moduleHandler->moduleExists('webform_templates') && $webform->isTemplate()) {
+      $form['form_settings']['status']['#access'] = FALSE;
+      $form['form_settings']['scheduled']['#access'] = FALSE;
     }
     $form['form_settings']['form_open_message'] = [
       '#type' => 'webform_html_editor',

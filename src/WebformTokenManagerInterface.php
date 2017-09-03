@@ -34,7 +34,9 @@ interface WebformTokenManagerInterface {
    *
    * @param array $token_types
    *   An array containing token types that should be shown in the tree.
+   * @param string $description
+   *   (optional) Description to appear after the token tree link.
    */
-  public function buildTreeLink(array $token_types = ['webform', 'webform_submission']);
+  public function buildTreeLink(array $token_types = ['webform', 'webform_submission'], $description = NULL);
 
 }

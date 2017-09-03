@@ -44,6 +44,10 @@ elements: |
     '#title': help_radios
     '#help': '{This is an example of help for radio buttons}'
     '#options': yes_no
+  help_datetime:
+    '#type': datetime
+    '#title': help_datetime
+    '#help': '{This is an example of help for datetime}'
   help_fieldset:
     '#type': fieldset
     '#title': help_fieldset

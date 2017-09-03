@@ -782,6 +782,21 @@ function webform_preprocess_fieldset(&$variables) {
 }
 
 /**
+ * Prepares variables for datetime form wrapper templates.
+ */
+function webform_preprocess_datetime_wrapper(&$variables) {
+  // Move #description to #help for webform admin routes.
+  _webform_preprocess_description_help($variables);
+
+  $element = &$variables['element'];
+
+  // Restructure the title to include #help.
+  if (isset($variables['title'])) {
+    _webform_preprocess_help_title($variables['title'], $element);
+  }
+}
+
+/**
  * Prepares variables for form label templates.
  */
 function webform_preprocess_form_element_label(&$variables) {
@@ -796,12 +811,6 @@ function webform_preprocess_form_element_label(&$variables) {
   // Restructure the label's title to include #help.
   if (!empty($element['#help'])) {
     _webform_preprocess_help_title($variables['title'], $element);
-
-    $title_display = (isset($element['#_title_display'])) ? $element['#_title_display'] : $element['#title_display'];
-    if ($title_display == 'inline') {
-      $variables['title']['title']['#weight'] = 0;
-      $variables['title']['help']['#weight'] = -1;
-    }
   }
 }
 
@@ -856,6 +865,12 @@ function _webform_preprocess_help_title(&$variables, array &$element) {
       '#theme' => 'webform_element_help',
     ] + array_intersect_key($element, array_flip(['#help'])),
   ];
+
+  $title_display = (isset($element['#_title_display'])) ? $element['#_title_display'] : $element['#title_display'];
+  if ($title_display == 'inline') {
+    $variables['title']['#weight'] = 0;
+    $variables['help']['#weight'] = -1;
+  }
 }
 
 /**

@@ -315,8 +315,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $token_types[] = 'webform_role';
     }
 
-    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink($token_types)  +
-      ['#suffix' => $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')];
+    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+      $token_types,
+      $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')
+    );
 
     if (empty($roles_element_options) && $this->currentUser->hasPermission('administer webform')) {
       $form['to']['roles_message'] = [
@@ -337,8 +339,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options,  $options_element_options, NULL, TRUE);
     $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options_raw);
-    $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink() +
-      ['#suffix' => $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')];
+    $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+        ['webform', 'webform_submission'],
+        $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')
+    );
 
     // Message.
     $form['message'] = [
@@ -421,8 +425,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         ],
       ];
     }
-    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink() +
-      ['#suffix' => $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values and use [webform_submission:values:ELEMENT_NAME:value] to get HTML values.')];
+    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+      ['webform', 'webform_submission'],
+      $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values and use [webform_submission:values:ELEMENT_NAME:value] to get HTML values.')
+    );
 
     // Elements.
     $form['elements'] = [

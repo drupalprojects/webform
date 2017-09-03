@@ -13,6 +13,7 @@
   Drupal.webform.elementHelpIcon = Drupal.webform.elementHelpIcon || {};
   Drupal.webform.elementHelpIcon.options = Drupal.webform.elementHelpIcon.options || {
     position: { my: "left+5 top+5", at: "left bottom", collision: "flipfit" },
+    tooltipClass: 'webform-element-help--tooltip',
     // @see https://stackoverflow.com/questions/18231315/jquery-ui-tooltip-html-with-links
     show: null,
     close: function (event, ui) {

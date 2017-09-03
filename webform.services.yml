@@ -67,7 +67,7 @@ services:
 
   webform.token_manager:
     class: Drupal\webform\WebformTokenManager
-    arguments: ['@module_handler', '@token']
+    arguments: ['@config.factory', '@module_handler', '@token']
 
   webform_submission.conditions_validator:
     class: Drupal\webform\WebformSubmissionConditionsValidator

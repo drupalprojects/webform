@@ -72,9 +72,6 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       '#title' => $element['target_id']['#title'],
       '#title_display' => 'invisible',
       '#input' => FALSE,
-      '#description' => $this->t('If the open date/time is left blank, this webform will immediately be opened.') .
-        '<br />' .
-        $this->t('If the close date/time is left blank, this webform will never be closed.'),
       '#states' => [
         'visible' => [
           'input[name="' . $field_input_name . '[settings][status]"]' => ['value' => WebformInterface::STATUS_SCHEDULED],
@@ -87,6 +84,11 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       '#default_value' => $items[$delta]->open ? DrupalDateTime::createFromTimestamp(strtotime($items[$delta]->open)) : NULL,
       '#prefix' => '<div class="container-inline form-item">',
       '#suffix' => '</div>',
+      '#help' => FALSE,
+      '#description' => [
+        '#theme' => 'webform_element_help',
+        '#help' => $this->t('If the open date/time is left blank, this form will immediately be opened.'),
+      ],
     ];
     $element['settings']['scheduled']['close'] = [
       '#type' => 'datetime',
@@ -94,6 +96,11 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       '#default_value' => $items[$delta]->close ? DrupalDateTime::createFromTimestamp(strtotime($items[$delta]->close)) : NULL,
       '#prefix' => '<div class="container-inline form-item">',
       '#suffix' => '</div>',
+      '#help' => FALSE,
+      '#description' => [
+        '#theme' => 'webform_element_help',
+        '#help' => $this->t('If the close date/time is left blank, this webform will never be closed.'),
+      ],
     ];
 
     $element['settings']['default_data'] = [
