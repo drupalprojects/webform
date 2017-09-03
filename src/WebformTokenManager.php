@@ -101,7 +101,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
         return [
           'token_tree_link' => $build,
           'help' => [
-            '#theme' => 'webform_element_help',
+            '#type' => 'webform_help',
             '#help' => $description,
           ]
         ];

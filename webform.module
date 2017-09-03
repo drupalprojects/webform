@@ -862,7 +862,7 @@ function _webform_preprocess_help_title(&$variables, array &$element) {
   $variables = [
     'title' => (is_array($variables)) ? $variables : ['#markup' => $variables],
     'help' => [
-      '#theme' => 'webform_element_help',
+      '#type' => 'webform_help',
     ] + array_intersect_key($element, array_flip(['#help'])),
   ];
 

@@ -180,20 +180,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         '#type' => 'details',
         '#open' => ($state === WebformSubmissionInterface::STATE_COMPLETED),
         '#title' => $state_item['label'],
+        '#description' => $state_item['description'],
         '#access' => $state_item['access'],
       ];
-      $form[$state]['description'] = [
-        '#markup' => $state_item['description'],
-        '#prefix' => '<div>',
-        '#suffix' => '</div>',
-      ];
-      if ($state === WebformSubmissionInterface::STATE_COMPLETED) {
-        $form[$state]['token'] = [
-          '#markup' => $this->t('Response data can be passed to submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (ie [webform:handler:remote_post:completed:confirmation_number])'),
-          '#prefix' => '<div>',
-          '#suffix' => '</div>',
-        ];
-      }
       $form[$state][$state_url] = [
         '#type' => 'url',
         '#title' => $this->t('@title URL', $t_args),
@@ -211,6 +200,13 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         '#states' => ['visible' => [':input[name="settings[' . $state_url . ']"]' => ['filled' => TRUE]]],
         '#default_value' => $this->configuration[$state_custom_data],
       ];
+      if ($state === WebformSubmissionInterface::STATE_COMPLETED) {
+        $form[$state]['token'] = [
+          '#type' => 'webform_message',
+          '#message_message' => $this->t('Response data can be passed to submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (ie [webform:handler:remote_post:completed:confirmation_number])'),
+          '#message_type' => 'info',
+        ];
+      }
     }
 
     // Additional.

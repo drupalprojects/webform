@@ -402,7 +402,10 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
         '#type' => 'select',
         '#title' => $this->t('Item format'),
         '#title_display' => 'invisible',
-        '#description' => $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
+        '#field_suffix' => [
+          '#type' => 'webform_help',
+          '#help' => $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
+        ],
         '#options' => $item_formats,
         '#default_value' => $config->get("format.$element_id"),
         '#parents' => ['format', $element_id, 'item'],
@@ -422,7 +425,10 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
           '#type' => 'select',
           '#title' => $this->t('Items format'),
           '#title_display' => 'invisible',
-          '#description' => $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
+          '#field_suffix' => [
+            '#type' => 'webform_help',
+            '#help' => $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
+          ],
           '#options' => $items_formats,
           '#default_value' => $config->get("format.$element_id"),
           '#parents' => ['format', $element_id, 'items'],

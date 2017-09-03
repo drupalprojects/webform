@@ -22,9 +22,10 @@ details details details {
   background-color: #fff;
 }
 
-/* Add white background to tooltips */
+/* Add yellow background to tooltips */
 .ui-tooltip.ui-widget {
-  background: #fff;
+  background: #fe6;;
+  border-color: #ed5;
 }
 
 /* CodeMirror viewer */
