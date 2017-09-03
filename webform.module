@@ -869,7 +869,7 @@ function _webform_preprocess_help_title(&$variables, array &$element) {
   // Get #title_display and move help before title for 'inline' titles.
   if (isset($element['#_title_display'])) {
     // #_title_display is set via \Drupal\webform\Plugin\WebformElementBase::prepare
-    $title_display = $element['#title_display'];
+    $title_display = $element['#_title_display'];
   }
   elseif (isset($element['#title_display'])) {
     $title_display = $element['#title_display'];
