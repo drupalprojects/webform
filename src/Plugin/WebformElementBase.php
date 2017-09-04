@@ -1992,6 +1992,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['conditional_logic'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Conditional logic'),
+      // Adding a fixed height to conditional logic container to prevent
+      // modal dialog from collapsing when Ajax requests are made,
+      // which triggers a dialog resize.
+      // @see \Drupal\webform\Form\WebformHandlerFormBase::buildForm
+      '#attributes' => ['style' => 'height: 400px'],
     ];
     $form['conditional_logic']['states'] = [
       '#type' => 'webform_element_states',
