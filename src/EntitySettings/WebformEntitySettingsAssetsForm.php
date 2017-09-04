@@ -18,10 +18,9 @@ class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
     $webform = $this->entity;
 
     $form['css'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('Custom CSS'),
       '#description' => $this->t('Enter custom CSS to be attached to the webform.'),
-      '#open' => TRUE,
     ];
     $form['css']['css'] = [
       '#type' => 'webform_codemirror',
@@ -31,10 +30,9 @@ class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
       '#default_value' => $webform->getCss(),
     ];
     $form['javascript'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('Custom JavaScript'),
       '#description' => $this->t('Enter custom JavaScript to be attached to the webform.'),
-      '#open' => TRUE,
     ];
     $form['javascript']['javascript'] = [
       '#type' => 'webform_codemirror',
