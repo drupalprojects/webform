@@ -18,6 +18,11 @@ details details {
   background-color: #f8f8f8;
 }
 
+/* Reduce the width of number inputs */
+input.form-number {
+  width: 6em;
+}
+
 details details details {
   background-color: #fff;
 }
