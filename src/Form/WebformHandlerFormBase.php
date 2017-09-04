@@ -163,11 +163,6 @@ abstract class WebformHandlerFormBase extends FormBase {
       $form['conditional_logic'] = [
         '#type' => 'fieldset',
         '#title' => $this->t('Conditional logic'),
-        // Adding a fixed height to conditional logic container to prevent
-        // modal dialog from collapsing when Ajax requests are made,
-        // which triggers a dialog resize.
-        // @see \Drupal\webform\Plugin\WebformElementBase::form
-        '#attributes' => ['style' => 'height: 400px'],
       ];
       $form['conditional_logic']['conditions'] = [
         '#type' => 'webform_element_states',

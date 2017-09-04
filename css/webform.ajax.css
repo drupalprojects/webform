@@ -27,3 +27,22 @@
 .webform-ajax-messages .messages + .messages {
   margin: 0;
 }
+
+/**
+ * Always position webform modal dialog at the top of the page.
+ *
+ * This prevents the dialogs position from jumping as its content is refreshed
+ * and when the window is resized.
+ *
+ * @see core/misc/dialog/dialog.position.js
+ * @see \Drupal\webform\Utility\WebformDialogHelper::getModalDialogAttributes
+ */
+.webform-modal {
+  top: 55px !important;
+}
+
+@media (max-width: 975px) {
+  .webform-modal {
+    top: 35px !important;
+  }
+}
