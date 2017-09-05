@@ -508,7 +508,17 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           $states = array_intersect_key(WebformElementStates::getStateOptions(), $element['#states']);
         }
         $row['conditional'] = [
-          '#markup' => implode('; ', $states),
+          '#type' => 'link',
+          '#title' => implode('; ', $states),
+          '#url' => new Url(
+            'entity.webform_ui.element.edit_form',
+            ['webform' => $webform->id(), 'key' => $key]
+          ),
+          '#attributes' => $element_dialog_attributes + [
+            // Add custom hash to current page's location.
+            // @see Drupal.behaviors.webformAjaxLink
+            'data-hash' => 'webform-tab--conditions',
+          ],
         ];
       }
 

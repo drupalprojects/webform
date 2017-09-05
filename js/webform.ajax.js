@@ -36,6 +36,17 @@
         element_settings.base = $(this).attr('id');
         element_settings.element = this;
         Drupal.ajax(element_settings);
+
+        // For anchor tags with 'data-hash' attribute, add the hash to current
+        // pages location.
+        // @see \Drupal\webform_ui\WebformUiEntityElementsForm::getElementRow
+        // @see Drupal.behaviors.webformFormTabs
+        var hash = $(this).data('hash');
+        if (hash) {
+          $(this).on('click', function() {
+            location.hash = $(this).data('hash');
+          });
+        }
       });
     }
   };

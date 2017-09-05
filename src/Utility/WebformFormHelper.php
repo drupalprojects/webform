@@ -3,6 +3,7 @@
 namespace Drupal\webform\Utility;
 
 use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
 
 /**
  * Helper class webform based methods.
@@ -75,6 +76,7 @@ class WebformFormHelper {
 
     // Build tabs.
     $tab_items = [];
+    $index = 0;
     foreach ($tabs as $tab_name => $tab) {
       // Skip empty tab.
       if (empty($tab['has_tabs'])) {
@@ -82,9 +84,13 @@ class WebformFormHelper {
       }
 
       $tab_items[] = [
-        '#prefix' => '<a href="#webform-tab--' . $tab_name. '" class="webform-tab">',
-        '#suffix' => '</a>',
-        '#markup' => $tab['title'],
+        '#type' => 'link',
+        '#url' => Url::fromRoute('<none>', [], ['fragment' => 'webform-tab--' . $tab_name]),
+        '#title' =>  $tab['title'],
+        '#attributes' => [
+          'class' => ['webform-tab'],
+          'data-tab-index' => $index++,
+        ],
       ];
 
       $form['tab_' . $tab_name] = [
