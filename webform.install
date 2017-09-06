@@ -1063,7 +1063,6 @@ function webform_update_8071() {
       $webform->save();
     }
   }
-
 }
 
 /**
@@ -1094,4 +1093,49 @@ function webform_update_8073() {
  */
 function webform_update_8074() {
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2895671: Entity reference format.
+ */
+function webform_update_8075() {
+  // Update webform.settings.
+  $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+  if ($admin_config->get('export.entity_reference_format') === 'id') {
+    $admin_config->set('export.entity_reference_items', ['id']);
+  }
+  else {
+    $admin_config->set('export.entity_reference_items', ['id', 'title', 'url']);
+  }
+  $admin_config->clear('export.entity_reference_format');
+  $admin_config->save();
+
+  // Update webform results.export state.
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $namespace = 'webform.webform.' . $webform->id();
+    $values = \Drupal::state()->get($namespace, []);
+    if (empty($values)) {
+      continue;
+    }
+
+    // Loop through state value looking for results.export variable.
+    foreach ($values as $key => &$value) {
+      if (strpos($key, 'results.export') === 0) {
+        switch ($value['entity_reference_format']) {
+          case 'id':
+            $value['entity_reference_items'] = ['id'];
+            break;
+          default:
+
+          case 'link':
+            $value['entity_reference_items'] = ['id', 'title', 'url'];
+            break;
+        }
+        unset($value['entity_reference_format']);
+        \Drupal::state()->set($namespace, $values);
+      }
+    }
+  }
 }

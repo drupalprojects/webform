@@ -188,11 +188,11 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
 
     // Check export with draft settings.
     $this->drupalGet('admin/structure/webform/manage/test_form_draft_authenticated/results/download');
-    $this->assertFieldByName('export[download][state]', 'all');
+    $this->assertFieldByName('state', 'all');
 
     // Check export without draft settings.
     $this->drupalGet('admin/structure/webform/manage/test_form_preview/results/download');
-    $this->assertNoFieldByName('export[download][state]', 'all');
+    $this->assertNoFieldByName('state', 'all');
 
     // Check autosave on submit with validation errors.
     $this->drupalPostForm('webform/test_form_draft_authenticated', [], t('Submit'));

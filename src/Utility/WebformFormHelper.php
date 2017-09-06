@@ -198,7 +198,7 @@ class WebformFormHelper {
           }
           // Now append the current element to array of element references.
           $elements[$key][] = &$build[$key];
-          // Finally †rack elements with duplicate keys.
+          // Finally track elements with duplicate keys.
           $duplicate_element_keys[$key] = TRUE;
         }
         else {

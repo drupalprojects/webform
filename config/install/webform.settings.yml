@@ -64,7 +64,10 @@ export:
   composite_element_item_format: label
   options_format: compact
   options_item_format: label
-  entity_reference_format: link
+  entity_reference_items:
+    - id
+    - title
+    - url
   likert_answers_format: label
   signature_format: status
   excluded_exporters: {  }

@@ -76,9 +76,8 @@ class WebformAdminSettingsExportersForm extends WebformAdminSettingsBaseForm {
       '#description' => $this->t('Enter default export settings to be used by all webforms.'),
       '#open' => TRUE,
     ];
-    $export_options = NestedArray::mergeDeep($config->get('export') ?: [],
-      $this->submissionExporter->getValuesFromInput($form_state->getUserInput())
-    );
+
+    $export_options = $config->get('export') ;
     $export_form_state = new FormState();
     $this->submissionExporter->buildExportOptionsForm($form['export_settings'], $export_form_state, $export_options);
 

@@ -1378,7 +1378,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $prefix = $this->getAdminLabel($element) . $export_options['header_prefix_label_delimiter'];
     }
     else {
-      $prefix = $this->getKey($element) . $export_options['header_prefix_key_delimiter'];;
+      $prefix = $this->getKey($element) . $export_options['header_prefix_key_delimiter'];
     }
 
     foreach ($header as $index => $column) {

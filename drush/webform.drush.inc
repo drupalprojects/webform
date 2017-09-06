@@ -41,7 +41,7 @@ function webform_drush_command() {
       'header-keys' => 'Set to "label" (default) or "key"',
       'options-item-format' => 'Set to "label" (default) or "key". Set to "key" to print select list values by their keys instead of labels.',
       'options-format' => 'Set to "separate" (default) or "compact" to determine how select list values are exported.',
-      'entity-reference-format' => 'Set to "link" (default) or "id" to determine how entity references are exported.',
+      'entity-reference-items' => 'Comma-separated list of entity reference items (id, title, and/or url) to be exported.',
       'excluded-columns' => 'Comma-separated list of component IDs or webform keys to exclude.',
       // Download options.
       'entity-type' => 'The entity type to which this submission was submitted from.',
@@ -290,10 +290,14 @@ function drush_webform_export($webform_id = NULL) {
   $submission_exporter->setSourceEntity($source_entity);
 
   // Get command options as export options.
+  $default_options = $submission_exporter->getDefaultExportOptions();
   $export_options = drush_redispatch_get_options();
   // Convert dashes to underscores.
   foreach ($export_options as $key => $value) {
     unset($export_options[$key]);
+    if (isset($default_options[$key]) && is_array($default_options[$key])) {
+      $value = explode(',', $value);
+    }
     $export_options[str_replace('-', '_', $key)] = $value;
   }
   $export_options += $submission_exporter->getDefaultExportOptions();

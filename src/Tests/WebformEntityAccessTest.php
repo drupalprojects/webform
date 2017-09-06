@@ -17,7 +17,14 @@ class WebformEntityAccessTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'webform'];
+  public static $modules = ['node', 'webform', 'webform_test_submissions'];
+
+  /**
+   * Webforms to load.
+   *
+   * @var array
+   */
+  protected static $testWebforms = ['test_submissions'];
 
   /**
    * {@inheritdoc}
@@ -96,8 +103,10 @@ class WebformEntityAccessTest extends WebformTestBase {
     global $base_path;
 
     /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_submissions');
     /** @var \Drupal\webform\WebformSubmissionInterface[] $submissions */
-    list($webform, $submissions) = $this->createWebformWithSubmissions();
+    $submissions = array_values(\Drupal::entityTypeManager()->getStorage('webform_submission')->loadByProperties(['webform_id' => 'test_submissions']));
+
     $account = $this->drupalCreateUser(['access content']);
 
     $webform_id = $webform->id();

@@ -265,6 +265,23 @@ abstract class OptionsBase extends WebformElementBase {
       return;
     }
 
+    // Build format options with help.
+    $options_format_options = [
+      'compact' => [
+        'text' => ['#markup' => $this->t('Compact; with the option values delimited by commas in one column.')],
+        'help' => ['#type' => 'webform_help', '#help' => $this->t('Compact options are more suitable for importing data into other systems.')],
+      ],
+      'separate' => [
+        'text' => ['#markup' => $this->t('Separate; with each possible option value in its own column.')],
+        'help' => ['#type' => 'webform_help', '#help' => $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application. Ranking will be included for sortable option elements.')],
+      ],
+    ];
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
+    $renderer = \Drupal::service('renderer');
+    foreach ($options_format_options as $value => $text) {
+      $options_format_options[$value] = $renderer->render($text);
+    }
+
     $form['options'] = [
       '#type' => 'details',
       '#title' => $this->t('Select menu, radio buttons, and checkboxes options'),
@@ -274,10 +291,7 @@ abstract class OptionsBase extends WebformElementBase {
     $form['options']['options_format'] = [
       '#type' => 'radios',
       '#title' => $this->t('Options format'),
-      '#options' => [
-        'compact' => $this->t('Compact; with the option values delimited by commas in one column.') . '<div class="description">' . $this->t('Compact options are more suitable for importing data into other systems.') . '</div>',
-        'separate' => $this->t('Separate; with each possible option value in its own column.') . '<div class="description">' . $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application. Ranking will be included for sortable option elements.') . '</div>',
-      ],
+      '#options' => $options_format_options,
       '#default_value' => $export_options['options_format'],
     ];
     $form['options']['options_item_format'] = [
@@ -316,7 +330,7 @@ abstract class OptionsBase extends WebformElementBase {
   public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
     $value = $this->getValue($element, $webform_submission);
 
-    $element_options = $element['#options'];
+    $element_options = (isset($element['#options'])) ? $element['#options'] : [];
     if ($export_options['options_format'] == 'separate') {
       $record = [];
       // Combine the values so that isset can be used instead of in_array().

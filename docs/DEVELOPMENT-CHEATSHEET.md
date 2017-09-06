@@ -75,6 +75,7 @@ drush en -y webform\
   webform_test_handler_remote_post\
   webform_test_options\
   webform_test_views\
+  webform_test_submissions\
   webform_test_translation\
   webform_scheduled_email_test\
   webform_node;
@@ -98,6 +99,7 @@ drush features-export -y webform_test_handler
 drush features-export -y webform_test_handler_remote_post
 drush features-export -y webform_test_options
 drush features-export -y webform_test_views
+drush features-export -y webform_test_submissions
 drush features-export -y webform_test_translation
 drush features-export -y webform_test_paragraphs
 drush features-export -y webform_node
@@ -122,6 +124,7 @@ drush webform-tidy -y --dependencies webform_test_handler
 drush webform-tidy -y --dependencies webform_test_handler_remote_post
 drush webform-tidy -y --dependencies webform_test_options
 drush webform-tidy -y --dependencies webform_test_views
+drush webform-tidy -y --dependencies webform_test_submissions
 drush webform-tidy -y --dependencies webform_test_translation
 drush webform-tidy -y --dependencies webform_test_paragraphs
 drush webform-tidy -y --dependencies webform_node
@@ -142,6 +145,7 @@ drush features-import -y webform_test_handler
 drush features-import -y webform_test_handler_remote_post
 drush features-import -y webform_test_options
 drush features-import -y webform_test_views
+drush features-import -y webform_test_submissions
 drush features-import -y webform_test_translation
 drush features-import -y webform_test_paragraphs
 drush features-import -y webform_node

@@ -184,7 +184,7 @@ trait WebformEntityReferenceTrait {
    */
   public function getExportDefaultOptions() {
     return [
-      'entity_reference_format' => 'link',
+      'entity_reference_items' => ['id', 'title', 'url'],
     ];
   }
 
@@ -192,7 +192,6 @@ trait WebformEntityReferenceTrait {
    * {@inheritdoc}
    */
   public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
-    parent::buildExportOptionsForm($form, $form_state, $export_options);
     if (isset($form['entity_reference'])) {
       return;
     }
@@ -202,31 +201,55 @@ trait WebformEntityReferenceTrait {
       '#title' => $this->t('Entity reference options'),
       '#open' => TRUE,
     ];
-    $form['entity_reference']['entity_reference_format'] = [
-      '#type' => 'radios',
+    $form['entity_reference']['entity_reference_items'] = [
+      '#type' => 'checkboxes',
       '#title' => $this->t('Entity reference format'),
       '#options' => [
-        'link' => $this->t('Entity link; with entity id, title and url in their own column.') . '<div class="description">' . $this->t("Entity links are suitable as long as there are not too many submissions (ie 1000's) pointing to just a few unique entities (ie 100's).") . '</div>',
-        'id' => $this->t('Entity id; just the entity id column') . '<div class="description">' . $this->t('Entity ids are suitable as long as there is mechanism for the referenced entity to be looked up via the external (ie REST API).') . '</div>',
+        'id' => $this->t("ID, the entity's unique identified."),
+        'title' => $this->t("Title, the entity's title/label."),
+        'url' => $this->t("URL, the entity's URL."),
       ],
-      '#default_value' => $export_options['entity_reference_format'],
+      '#required' => TRUE,
+      '#default_value' => $export_options['entity_reference_items'],
+      '#element_validate' => [[get_class($this), 'validateEntityReferenceFormat']],
     ];
+  }
+
+  /**
+   * Form API callback. Remove unchecked options from value array.
+   */
+  public static function validateEntityReferenceFormat(array &$element, FormStateInterface $form_state, array &$completed_form) {
+    $values = $element['#value'];
+    // Filter unchecked/unselected options whose value is 0.
+    $values = array_filter($values, function ($value) {
+      return $value !== 0;
+    });
+    $values = array_values($values);
+    $form_state->setValueForElement($element, $values);
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildExportHeader(array $element, array $options) {
-    if (!$this->hasMultipleValues($element) && $options['entity_reference_format'] == 'link') {
+    if (!$this->hasMultipleValues($element)) {
+      $header = $options['entity_reference_items'];
       if ($options['header_format'] == 'label') {
-        $header = [
-          (string) $this->t('ID'),
-          (string) $this->t('Title'),
-          (string) $this->t('URL'),
-        ];
-      }
-      else {
-        $header = ['id', 'title', 'url'];
+        foreach ($header as $index => $column) {
+          switch ($column) {
+            case 'id':
+              $header[$index] = $this->t('ID');
+              break;
+
+            case 'title':
+              $header[$index] = $this->t('Title');
+              break;
+
+            case 'url':
+              $header[$index] = $this->t('URL');
+              break;
+          }
+        }
       }
       return $this->prefixExportHeader($header, $element, $options);
     }
@@ -241,26 +264,50 @@ trait WebformEntityReferenceTrait {
   public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
     $value = $this->getValue($element, $webform_submission);
 
-    if (!$this->hasMultipleValues($element) && $export_options['entity_reference_format'] == 'link') {
+    if (!$this->hasMultipleValues($element)) {
       $entity_type = $this->getTargetType($element);
       $entity_storage = $this->entityTypeManager->getStorage($entity_type);
       $entity_id = $value;
 
       $record = [];
       if ($entity_id && ($entity = $entity_storage->load($entity_id))) {
-        $record[] = $entity->id();
-        $record[] = $entity->label();
-        $record[] = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
+        foreach ($export_options['entity_reference_items'] as $column) {
+          switch ($column) {
+            case 'id':
+              $record[] = $entity->id();
+              break;
+
+            case 'title':
+              $record[] = $entity->label();
+              break;
+
+            case 'url':
+              $record[] = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
+              break;
+          }
+        }
       }
       else {
-        $record[] = "$entity_type:$entity_id";
-        $record[] = '';
-        $record[] = '';
+        foreach ($export_options['entity_reference_items'] as $column) {
+          switch ($column) {
+            case 'id':
+              $record[] = $entity_id;
+              break;
+
+            case 'title':
+              $record[] = '';
+              break;
+
+            case 'url':
+              $record[] = '';
+              break;
+          }
+        }
       }
       return $record;
     }
     else {
-      if ($export_options['entity_reference_format'] == 'id') {
+      if ($export_options['entity_reference_items'] == ['id']) {
         $element['#format'] = 'raw';
       }
       return parent::buildExportRecord($element, $webform_submission, $export_options);

@@ -269,15 +269,18 @@ webform.settings:
         header_prefix_label_delimiter:
           type: string
           label: 'Column header prefix label delimiter'
-        entity_reference_format:
-          type: string
-          label: 'Options format'
+        entity_reference_items:
+          type: sequence
+          label: 'Entity reference format items'
+          sequence:
+            type: string
+            label: 'Entity reference format item'
         options_format:
           type: string
-          label: 'Options item format'
+          label: 'Options format'
         options_item_format:
           type: string
-          label: 'Entity reference format'
+          label: 'Options item format'
         likert_answers_format:
           type: string
           label: 'Likert answers format'

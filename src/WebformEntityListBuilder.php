@@ -316,6 +316,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     // Filter by key(word).
     if ($keys) {
       $or = $query->orConditionGroup()
+        ->condition('id', $this->keys, 'CONTAINS')
         ->condition('title', $this->keys, 'CONTAINS')
         ->condition('description', $this->keys, 'CONTAINS')
         ->condition('category', $this->keys, 'CONTAINS')
