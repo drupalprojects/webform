@@ -153,11 +153,8 @@ class WebformResultsExportOptionsTest extends WebformTestBase {
     $this->assertNoRaw('Hillary,Clinton');
 
     // Check date range.
-    $submissions[0]->set('created', strtotime('1/01/2000'))->save();
-    $submissions[1]->set('created', strtotime('1/01/2001'))->save();
-    $submissions[2]->set('created', strtotime('1/01/2002'))->save();
-    $this->getExport($webform, ['range_type' => 'date', 'range_start' => '12/31/2000', 'range_end' => '12/31/2001']);
-    $this->assertNoRaw('George,Washington');
+    $this->getExport($webform, ['range_type' => 'date', 'range_start' => '2000-01-01', 'range_end' => '2001-01-01']);
+    $this->assertRaw('George,Washington');
     $this->assertRaw('Abraham,Lincoln');
     $this->assertNoRaw('Hillary,Clinton');
 
