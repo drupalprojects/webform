@@ -40,8 +40,15 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Issue #2836374: Wrapper attributes are not supported by composite
     // elements, this includes radios, checkboxes, and buttons.
-    if (preg_match('/(radios|checkboxes|buttons|tableselect|tableselect_sort)$/', $this->getPluginId())) {
+    if (preg_match('/(radios|checkboxes|buttons|tableselect|tableselect_sort|table_sort)$/', $this->getPluginId())) {
       unset($default_properties['wrapper_attributes']);
+    }
+
+    if (preg_match('/(tableselect|tableselect_sort|table_sort)$/', $this->getPluginId())) {
+      unset($default_properties['title_display']);
+      unset($default_properties['help']);
+      unset($default_properties['description']);
+      unset($default_properties['description_display']);
     }
 
     $default_properties += [
@@ -133,14 +140,7 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
-    parent::prepare($element, $webform_submission);
-
-    // Randomize options.
-    if (isset($element['#options']) && !empty($element['#options_randomize'])) {
-      $element['#options'] = WebformArrayHelper::shuffle($element['#options']);
-    }
-
-    $is_wrapper_fieldset = in_array($element['#type'], ['checkboxes', 'radios']);
+    $is_wrapper_fieldset = in_array($element['#type'], ['checkboxes', 'radios', 'webform_entity_checkboxes', 'webform_entity_radios', 'webform_term_checkboxes','webform_toggles', 'webform_buttons']);
     if ($is_wrapper_fieldset) {
       // Issue #2396145: Option #description_display for webform element fieldset
       // is not changing anything.
@@ -154,15 +154,36 @@ abstract class OptionsBase extends WebformElementBase {
             $element += ['#field_prefix' => ''];
             $element['#field_prefix'] = '<div class="description">' . $description . '</div>' . $element['#field_prefix'];
             unset($element['#description']);
+            unset($element['#description_display']);
+            break;
+
+          case 'tooltip':
+            $element += ['#field_suffix' => ''];
+            $element['#field_suffix'] .= '<div class="description visually-hidden">' . $description . '</div>';
+            // @see \Drupal\Core\Render\Element\CompositeFormElementTrait
+            // @see \Drupal\webform\Plugin\WebformElementBase::prepare
+            $element['#attributes']['class'][] = 'js-webform-tooltip-element';
+            $element['#attributes']['class'][] = 'webform-tooltip-element';
+            $element['#attached']['library'][] = 'webform/webform.tooltip';
+            unset($element['#description']);
+            unset($element['#description_display']);
             break;
 
           case 'invisible':
             $element += ['#field_suffix' => ''];
             $element['#field_suffix'] .= '<div class="description visually-hidden">' . $description . '</div>';
             unset($element['#description']);
+            unset($element['#description_display']);
             break;
         }
       }
+    }
+
+    parent::prepare($element, $webform_submission);
+
+    // Randomize options.
+    if (isset($element['#options']) && !empty($element['#options_randomize'])) {
+      $element['#options'] = WebformArrayHelper::shuffle($element['#options']);
     }
 
     // If the element is #required and the #default_value is an empty string

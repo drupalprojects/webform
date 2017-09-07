@@ -34,7 +34,16 @@ class TextFormat extends WebformElementBase {
       'allowed_formats' => [],
       'hide_help' => FALSE,
     ];
-    unset($default_properties['disabled']);
+    unset(
+      $default_properties['disabled'],
+      $default_properties['attributes'],
+      $default_properties['wrapper_attributes'],
+      $default_properties['title_display'],
+      $default_properties['description_display'],
+      $default_properties['field_prefix'],
+      $default_properties['field_suffix'],
+      $default_properties['help']
+    );
     return $default_properties;
   }
 

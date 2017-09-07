@@ -46,10 +46,31 @@
     attach: function (context) {
       $(context).find('.js-webform-tooltip-element').once('webform-tooltip-element').each(function () {
         var $element = $(this);
-        var $description = $element.children('.description.visually-hidden');
+
+        // Checkboxes, radios, buttons, toggles, etc... use fieldsets.
+        // @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
+        var $description;
+        if ($element.is('fieldset')) {
+          $description = $element.find('> .fieldset-wrapper > .field-suffix .description.visually-hidden');
+        }
+        else {
+          $description = $element.children('.description.visually-hidden');
+        }
+
+        var has_visible_input = $element.find(':input:not([type=hidden])').length;
+        var has_checkboxes_or_radios = $element.find(':checkbox, :radio').length;
+        var is_composite = $element.hasClass('form-composite');
+        var is_custom = $element.is('.js-form-type-webform-signature, .js-form-type-webform-image-select, .js-form-type-webform-mapping, .js-form-type-webform-rating, .js-form-type-datelist, .js-form-type-datetime')
+        var items;
+        if (has_visible_input && !has_checkboxes_or_radios && !is_composite && !is_custom) {
+          items = ':input';
+        }
+        else {
+          items = '.js-webform-tooltip-element';
+        }
 
         var options = $.extend({
-          items: ':input',
+          items: items,
           content: $description.html()
         }, Drupal.webform.tooltipElement.options);
 

@@ -40,6 +40,8 @@ class WebformLocation extends WebformCompositeBase {
       // Form validation.
       'required' => FALSE,
       'required_error' => '',
+      // Attributes.
+      'wrapper_attributes' => [],
       // Location settings.
       'geolocation' => FALSE,
       'hidden' => FALSE,

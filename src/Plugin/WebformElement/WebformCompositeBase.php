@@ -45,24 +45,26 @@ abstract class WebformCompositeBase extends WebformElementBase {
    */
   public function getDefaultProperties() {
     $properties = [
-        'title' => '',
-        'multiple' => FALSE,
-        'multiple__header' => FALSE,
-        'multiple__header_label' => '',
-        // General settings.
-        'help' => '',
-        'description' => '',
-        'default_value' => [],
-        // Form display.
-        'title_display' => 'invisible',
-        'description_display' => '',
-        'disabled' => FALSE,
-        // Form validation.
-        'required' => FALSE,
-        'required_error' => '',
-        // Flex box.
-        'flexbox' => '',
-      ] + $this->getDefaultBaseProperties();
+      'title' => '',
+      'multiple' => FALSE,
+      'multiple__header' => FALSE,
+      'multiple__header_label' => '',
+      // General settings.
+      'help' => '',
+      'description' => '',
+      'default_value' => [],
+      // Form display.
+      'title_display' => 'invisible',
+      'description_display' => '',
+      'disabled' => FALSE,
+      // Form validation.
+      'required' => FALSE,
+      'required_error' => '',
+      // Flex box.
+      'flexbox' => '',
+      // Attributes.
+      'wrapper_attributes' => [],
+    ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();
     foreach ($composite_elements as $composite_key => $composite_element) {
