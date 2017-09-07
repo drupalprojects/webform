@@ -135,7 +135,7 @@ class WebformMessage extends WebformMarkupBase {
     $form['markup']['message_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Message ID'),
-      '#description' => $this->t("Unique ID used to store the message's closed state. Please enter only lower-case letters, numbers, dashes, and underscores.") . '<br />' .
+      '#description' => $this->t("Unique ID used to store the message's closed state. Please enter only lower-case letters, numbers, dashes, and underscores.") . '<br /><br />' .
       $this->t('Defaults to: %value', ['%value' => '[webform:id]--[element:key]']),
       '#pattern' => '/^[a-z0-9-_]+$/',
       '#states' => [

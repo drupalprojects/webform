@@ -171,10 +171,10 @@ abstract class DateBase extends WebformElementBase {
     $form = parent::form($form, $form_state);
 
     // Append supported date input format to #default_value description.
-    $form['element']['default_value']['#description'] .= '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.');
+    $form['element']['default_value']['#description'] .= '<br /><br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.');
 
     // Append token date format to #default_value description.
-    $form['element']['default_value']['#description'] .= '<br />' . $this->t("You may use tokens. Tokens should use the 'html_date' or 'html_datetime' date format. (ie @date_format)", ['@date_format' => '[webform-authenticated-user:field_date_of_birth:date:html_date]']);
+    $form['element']['default_value']['#description'] .= '<br /><br />' . $this->t("You may use tokens. Tokens should use the 'html_date' or 'html_datetime' date format. (ie @date_format)", ['@date_format' => '[webform-authenticated-user:field_date_of_birth:date:html_date]']);
 
     // Allow custom date formats to be entered.
     $form['display']['format']['#type'] = 'webform_select_other';
@@ -189,13 +189,13 @@ abstract class DateBase extends WebformElementBase {
     $form['date']['min'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Min'),
-      '#description' => $this->t('Specifies the minimum date.') . '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
+      '#description' => $this->t('Specifies the minimum date.') . '<br /><br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
       '#weight' => 10,
     ];
     $form['date']['max'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Max'),
-      '#description' => $this->t('Specifies the maximum date.') . '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
+      '#description' => $this->t('Specifies the maximum date.') . '<br /><br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
       '#weight' => 10,
     ];
 

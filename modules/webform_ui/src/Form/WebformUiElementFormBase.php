@@ -253,6 +253,8 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     if (isset($form['properties']['flex']) && !$this->isParentElementFlexbox($key, $parent_key)) {
       $form['properties']['flex']['#access'] = FALSE;
     }
+    
+    $form['#attached']['library'][] = 'webform_ui/webform_ui';
 
     // Set actions.
     $form['actions'] = ['#type' => 'actions'];

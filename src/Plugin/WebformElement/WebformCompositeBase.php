@@ -661,7 +661,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['custom']['properties']['#description'] .= '<br />' .
+    $form['custom']['properties']['#description'] .= '<br /><br />' .
       $this->t("You can set sub-element properties using a double underscore between the sub-element's key and sub-element's property (subelement__property). For example, you can add custom attributes or states (conditional logic) to the title sub-element using 'title__attributes' and 'title__states'.");
     return $form;
   }
@@ -675,7 +675,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form['element']['default_value']['#description'] = $this->t("The default value of the composite webform element as YAML.");
 
     // Update #required label.
-    $form['validation']['required']['#description'] .= '<br />' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
+    $form['validation']['required_container']['required']['#description'] .= '<br /><br />' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
 
     // Update '#multiple__header_label'.
     $form['element']['multiple__header_container']['multiple__header_label']['#states']['visible'][':input[name="properties[multiple__header]"]'] = ['checked' => FALSE];

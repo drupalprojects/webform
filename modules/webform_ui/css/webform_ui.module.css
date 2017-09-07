@@ -48,8 +48,7 @@ thead th .dropbutton {
   }
 }
 
-
-webform-ui-elements-table tr.webform-ui-element-type-webform_wizard_page {
+.webform-ui-elements-table tr.webform-ui-element-type-webform_wizard_page {
   border-top: 2px solid #a6a6a6;
 }
 
@@ -129,4 +128,17 @@ webform-ui-elements-table tr.webform-ui-element-type-webform_wizard_page {
   border: 1px dashed #bbb;
   padding: .4em;
   color: #888;
+}
+
+/**
+ * Element (/admin/structure/webform/manage/[webform_id]/element/add/[elment_type])
+ * @see \Drupal\webform\Plugin\WebformElementBase::form
+ */
+.form--inline.webform-ui-element-form-inline--input .form-item {
+  min-width: 130px;
+}
+
+.form--inline.webform-ui-element-form-inline--input .form-item select,
+.form--inline.webform-ui-element-form-inline--input .form-item input {
+  width: 120px
 }

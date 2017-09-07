@@ -281,14 +281,14 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
     $form['select']['default_empty_option_required'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default empty option required'),
-      '#description' => $this->t('The label to show for the first default option for required select menus.') . '<br />' .
+      '#description' => $this->t('The label to show for the first default option for required select menus.') . '<br /><br />' .
         $this->t('Defaults to: %value', ['%value' => $this->t('- Select -')]),
       '#default_value' => $config->get('element.default_empty_option_required'),
     ];
     $form['select']['default_empty_option_optional'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default empty option optional'),
-      '#description' => $this->t('The label to show for the first default option for optional select menus.') . '<br />' .
+      '#description' => $this->t('The label to show for the first default option for optional select menus.') . '<br /><br />' .
         $this->t('Defaults to: %value', ['%value' => $this->t('- None -')]),
       '#default_value' => $config->get('element.default_empty_option_optional'),
     ];

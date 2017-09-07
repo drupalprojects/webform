@@ -70,7 +70,7 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
         if (!isset($element['#description'])) {
           $element['#description'] = '';
         }
-        $element['#description'] .= ($element['#description'] ? '<br />' : '');
+        $element['#description'] .= ($element['#description'] ? '<br /><br />' : '');
         // @todo: Stop quotes from being encoded. (ie "Submit" => &quot;Submit&quote;)
         $value = $default_settings["default_$key"];
         $element['#description'] .= $this->t('Defaults to: %value', ['%value' => $value]);

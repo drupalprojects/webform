@@ -1648,6 +1648,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form_object = $form_state->getFormObject();
     $webform = $form_object->getWebform();
 
+    // Check if inline help is enabled and set inline form attributes.
+    $help_enabled = $this->configFactory->get('webform.settings')->get('ui.description_help');
+    $form_inline_input_attributes = ($help_enabled) ? ['class' => ['form--inline', 'clearfix', 'webform-ui-element-form-inline--input']] : [];
+
     /* Element settings */
 
     $form['element'] = [
@@ -1745,7 +1749,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'details',
       '#title' => $this->t('Form display'),
     ];
-    $form['form']['title_display'] = [
+    $form['form']['display_container'] = [
+      '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
+    ];
+    $form['form']['display_container']['title_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Title display'),
       '#options' => [
@@ -1758,7 +1766,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
       '#description' => $this->t('Determines the placement of the title.'),
     ];
-    $form['form']['description_display'] = [
+    $form['form']['display_container']['description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Description display'),
       '#options' => [
@@ -1770,40 +1778,52 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
       '#description' => $this->t('Determines the placement of the description.'),
     ];
-    $form['form']['field_prefix'] = [
+    $form['form']['field_container'] = [
+      '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
+    ];
+    $form['form']['field_container']['field_prefix'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Field prefix'),
       '#description' => $this->t('Text or code that is placed directly in front of the input. This can be used to prefix an input with a constant string. Examples: $, #, -.'),
       '#size' => 10,
     ];
-    $form['form']['field_suffix'] = [
+    $form['form']['field_container']['field_suffix'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Field suffix'),
       '#description' => $this->t('Text or code that is placed directly after the input. This can be used to add a unit to an input. Examples: lb, kg, %.'),
       '#size' => 10,
     ];
-    $form['form']['size'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Size'),
-      '#description' => $this->t('Leaving blank will use the default size.'),
-      '#min' => 1,
-      '#size' => 4,
+    $form['form']['length_container'] = [
+      '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
     ];
-    $form['form']['maxlength'] = [
+    $form['form']['length_container']['maxlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Maxlength'),
       '#description' => $this->t('Leaving blank will use the default maxlength.'),
       '#min' => 1,
       '#size' => 4,
     ];
-    $form['form']['minlength'] = [
+    $form['form']['length_container']['minlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Minlength'),
       '#description' => $this->t('The element may still be empty unless it is required.'),
       '#min' => 1,
       '#size' => 4,
     ];
-    $form['form']['rows'] = [
+    $form['form']['size_container'] = [
+      '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
+    ];
+    $form['form']['size_container']['size'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Size'),
+      '#description' => $this->t('Leaving blank will use the default size.'),
+      '#min' => 1,
+      '#size' => 4,
+    ];
+    $form['form']['size_container']['rows'] = [
       '#type' => 'number',
       '#title' => $this->t('Rows'),
       '#description' => $this->t('Leaving blank will use the default rows.'),
@@ -1898,8 +1918,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
     if ($default_icheck) {
       $icheck_options = OptGroup::flattenOptions($form['form']['icheck']['#options']);
-      $form['form']['icheck']['#description'] .= '<br />' . $this->t("Leave blank to use the default iCheck style. Select 'None' to display the default HTML element.");
-      $form['form']['icheck']['#description'] .= '<br />' . $this->t('Defaults to: %value', ['%value' => $icheck_options[$default_icheck]]);
+      $form['form']['icheck']['#description'] .= '<br /><br />' . $this->t("Leave blank to use the default iCheck style. Select 'None' to display the default HTML element.");
+      $form['form']['icheck']['#description'] .= '<br /><br />' . $this->t('Defaults to: %value', ['%value' => $icheck_options[$default_icheck]]);
       $form['form']['icheck']['#options']['none'] = $this->t('None');
     }
 
@@ -1914,7 +1934,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['flex']['flex'] = [
       '#type' => 'select',
       '#title' => $this->t('Flex'),
-      '#description' => $this->t('The flex property specifies the length of the item, relative to the rest of the flexible items inside the same container.') . '<br />' .
+      '#description' => $this->t('The flex property specifies the length of the item, relative to the rest of the flexible items inside the same container.') . '<br /><br />' .
       $this->t('Defaults to: %value', ['%value' => 1]),
       '#options' => [0 => $this->t('0 (none)')] + array_combine($flex_range, $flex_range),
     ];
@@ -1954,15 +1974,18 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'details',
       '#title' => $this->t('Form validation'),
     ];
-    $form['validation']['required'] = [
+    $form['validation']['required_container'] = [
+      '#type' => 'container',
+    ];
+    $form['validation']['required_container']['required'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Required'),
       '#description' => $this->t('Check this option if the user must enter a value.'),
       '#return_value' => TRUE,
     ];
-    $form['validation']['required_error'] = [
+    $form['validation']['required_container']['required_error'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Custom required error message'),
+      '#title' => $this->t('Required message'),
       '#description' => $this->t('If set, this message will be used when a required webform element is empty, instead of the default "Field x is required." message.'),
       '#states' => [
         'visible' => [
@@ -1970,15 +1993,18 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    $form['validation']['unique'] = [
+    $form['validation']['unique_container'] = [
+      '#type' => 'container',
+    ];
+    $form['validation']['unique_container']['unique'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Unique'),
       '#description' => $this->t('Check that all entered values for this element are unique. The same value is not allowed to be used twice.'),
       '#return_value' => TRUE,
     ];
-    $form['validation']['unique_error'] = [
+    $form['validation']['unique_container']['unique_error'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Custom unique error message'),
+      '#title' => $this->t('Unique message'),
       '#description' => $this->t('If set, this message will be used when an element\'s value is not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
       '#states' => [
         'visible' => [
@@ -2005,13 +2031,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'details',
       '#title' => $this->t('Submission display'),
     ];
-    $form['display']['format'] = [
+    $form['display']['display_container'] = [
+      '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
+    ];
+    $form['display']['display_container']['format'] = [
       '#type' => 'select',
       '#title' => $this->t('Item format'),
       '#description' => $this->t('Select how a single value is displayed.'),
       '#options' => $this->getItemFormats(),
     ];
-    $form['display']['format_items'] = [
+    $form['display']['display_container']['format_items'] = [
       '#type' => 'select',
       '#title' => $this->t('Items format'),
       '#description' => $this->t('Select how multiple values are displayed.'),
@@ -2174,7 +2204,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
       '#description' => $this->t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
-        '<br />' .
+        '<br /><br />' .
         $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => $custom_properties ,
       '#parents' => ['properties', 'custom'],
