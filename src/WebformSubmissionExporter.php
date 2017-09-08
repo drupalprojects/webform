@@ -740,7 +740,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
           $query->condition('created', strtotime($export_options['range_start']), '>=');
         }
         if ($export_options['range_end']) {
-          $query->condition('created', strtotime($export_options['range_end']), '<=');
+          $query->condition('created', strtotime('+1 day', strtotime($export_options['range_end'])), '<');
         }
         break;
     }
