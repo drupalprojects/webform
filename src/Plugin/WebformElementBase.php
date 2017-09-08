@@ -1669,7 +1669,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
     $form['element']['help'] = [
       '#type' => 'webform_html_editor',
-      '#title' => $this->t('Help'),
+      '#title' => $this->t('Help text'),
       '#description' => $this->t('A tooltip displayed after the title.'),
       '#states' => [
         'invisible' => [
