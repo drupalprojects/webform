@@ -33,6 +33,10 @@ class WebformTokenSubmissionValue extends WebformTestBase {
 
     // Create 'tags' vocabulary.
     $this->createTags();
+    
+    // Add view own submission to anonymous so the submissions can be be
+    // converted to authenticated.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
   }
 
   /**

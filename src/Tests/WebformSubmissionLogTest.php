@@ -27,6 +27,10 @@ class WebformSubmissionLogTest extends WebformTestBase {
 
     // Create users.
     $this->createUsers();
+
+    // Add view own submission to anonymous so the submissions can be be
+    // converted to authenticated.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
   }
 
   /**

@@ -21,6 +21,17 @@ class WebformScheduledEmailTest extends WebformNodeTestBase {
   public static $modules = ['webform', 'webform_scheduled_email', 'webform_scheduled_email_test', 'webform_node'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Add view own submission to anonymous so the submissions can be be
+    // converted to authenticated.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
+  }
+
+  /**
    * Tests webform schedule email handler.
    */
   public function testWebformScheduledEmail() {

@@ -27,6 +27,10 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
 
     // Create users.
     $this->createUsers();
+
+    // Add view own submission to anonymous so the submissions can be be
+    // converted to authenticated.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
   }
 
   /**
@@ -115,6 +119,21 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
     /**************************************************************************/
 
     $webform = Webform::load('test_form_draft_anonymous');
+
+    // Revoke 'view own webform submission' permission.
+    $this->revokeViewWebformSubmissionOwnPermissionToAnonymous();
+
+    // Check that draft is not converted without 'view own webform submission'
+    // permission.
+    $sid = $this->postSubmission($webform, ['name' => 'John Smith'], t('Save Draft'));
+    $this->drupalLogin($this->normalUser);
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual($webform_submission->getOwnerId(), 0);
+
+    // Add 'view own webform submission' permission.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
+    $this->drupalLogout();
 
     // Save a draft.
     $sid = $this->postSubmission($webform, ['name' => 'John Smith'], t('Save Draft'));

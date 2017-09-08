@@ -4,6 +4,7 @@ namespace Drupal\webform\EntitySettings;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionStorageInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -72,6 +73,10 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
 
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $webform_submission_storage */
     $webform_submission_storage = $this->entityTypeManager->getStorage('webform_submission');
+
+    // Make sure used can view own submission.
+    $anonymous_user = User::getAnonymousUser();
+    $anonymous_user_has_view_own_access = $anonymous_user->hasPermission('view own webform submission') || $webform->checkAccessRules('view_own', $anonymous_user);
 
     $default_settings = $this->config('webform.settings')->get('settings');
     $settings = $webform->getSettings();
@@ -171,6 +176,20 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       ],
       '#weight' => -98,
     ];
+    if (!$anonymous_user_has_view_own_access) {
+      $t_args = [':href' => $webform->toUrl('settings-access')->toString()];
+      $form['submission_behaviors']['form_convert_anonymous_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'error',
+        '#message_message' => $this->t('Anonymous users must be able to <a href=":href">view own webform submissions</a> to be able to convert anonymous user drafts and submissions to authenticated user.', $t_args),
+        '#states' => [
+          'visible' => [
+            ':input[name="form_convert_anonymous"]' => ['checked' => TRUE],
+          ],
+        ],
+        '#weight' => -97,
+      ];
+    }
     $behavior_elements = [
       // Form specific behaviors.
       'form_previous_submissions' => [
@@ -298,6 +317,19 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
         WebformInterface::DRAFT_ALL => $this->t('Authenticated and anonymous users'),
       ],
     ];
+    if (!$anonymous_user_has_view_own_access) {
+      $t_args = [':href' => $webform->toUrl('settings-access')->toString()];
+      $form['draft_settings']['draft_anonymous_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'error',
+        '#message_message' => $this->t('Anonymous users must be able to <a href=":href">view own webform submissions</a> to be able to automatically save drafts.', $t_args),
+        '#states' => [
+          'visible' => [
+            ':input[name="draft"]' => ['value' => WebformInterface::DRAFT_ALL],
+          ],
+        ],
+      ];
+    }
     $form['draft_settings']['draft_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
@@ -312,6 +344,8 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
         ],
       ],
     ];
+
+
     $form['draft_settings']['draft_container'] = [
       '#type' => 'container',
       '#states' => [

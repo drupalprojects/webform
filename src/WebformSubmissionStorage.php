@@ -1196,6 +1196,13 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       return;
     }
 
+    // Make sure used can view own submission.
+    $has_view_own_permission = $this->currentUser->hasPermission('view own webform submission');
+    $has_view_own_access = $webform_submission->getWebform()->checkAccessRules('view_own', $this->currentUser);
+    if (!$has_view_own_permission && !$has_view_own_access) {
+      return;
+    }
+
     $_SESSION['webform_submissions'][$webform_submission->id()] = $webform_submission->id();
   }
 

@@ -28,6 +28,17 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
   protected static $testWebforms = ['test_handler_remote_post'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Add view own submission to anonymous so the submissions can be be
+    // converted to authenticated.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
+  }
+
+  /**
    * Test remote post handler.
    */
   public function testRemotePostHandler() {

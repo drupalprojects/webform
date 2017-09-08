@@ -20,6 +20,17 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
   protected static $testWebforms = ['test_handler_email_states'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Add view own submission to anonymous so the submissions can be be
+    // converted to authenticated.
+    $this->addViewWebformSubmissionOwnPermissionToAnonymous();
+  }
+
+  /**
    * Test email states handler.
    */
   public function testEmailStates() {
