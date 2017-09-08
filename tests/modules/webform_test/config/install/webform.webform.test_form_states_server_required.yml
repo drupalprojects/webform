@@ -283,6 +283,79 @@ elements: |
         required:
           ':input[name="composite_required_trigger"]':
             'checked': true
+  composite_sub_elements_required_details:
+    '#type': details
+    '#title': composite_sub_elements_required
+    '#open': true
+    composite_sub_elements_required_trigger:
+      '#type': radios
+      '#title': composite_sub_elements_required_trigger
+      '#options':
+        a: A
+        b: B
+      '#options_display': side_by_side
+    composite_subelements_dependent_a:
+      '#type': webform_address
+      '#title': composite_subelements_dependent_a
+      '#multiple': true
+      '#multiple__header': true
+      '#address__title': address_a
+      '#address__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: a
+      '#address_2__title': address2_a
+      '#city__title': city_a
+      '#city__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: a
+      '#state_province__title': state_province_a
+      '#state_province__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: a
+      '#postal_code__title': postal_code_a
+      '#postal_code__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: a
+      '#country__title': country_a
+      '#country__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: a
+    composite_subelements_dependent_b:
+      '#type': webform_address
+      '#title': composite_subelements_dependent_b
+      '#multiple': true
+      '#multiple__header': true
+      '#address__title': address_b
+      '#address__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: b
+      '#address_2__title': address2_b
+      '#city__title': city_b
+      '#city__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: b
+      '#state_province__title': state_province_b
+      '#state_province__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: b
+      '#postal_code__title': postal_code_b
+      '#postal_code__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: b
+      '#country__title': country_b
+      '#country__states':
+        required:
+          ':input[name="composite_sub_elements_required_trigger"]':
+            value: b
 
 css: ''
 javascript: ''

@@ -131,31 +131,76 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     }
   }
 
+  /****************************************************************************/
+  // Validation methods.
+  /****************************************************************************/
+
   /**
    * {@inheritdoc}
    *
    * @see \Drupal\webform\WebformSubmissionForm::validateForm
    */
   public function validateForm(array &$form, FormStateInterface $form_state)  {
+    $this->validateFormRecursive($form, $form_state);
+  }
+
+  /**
+   * Recurse through a form and validate visible elements.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  protected function validateFormRecursive(array $form, FormStateInterface $form_state) {
+    foreach ($form as $key => $element) {
+      if (Element::property($key) || !is_array($element)) {
+        continue;
+      }
+
+      if (isset($element['#access']) && $element['#access'] === FALSE) {
+        continue;
+      }
+
+      $this->validateFormElement($element, $form_state);
+
+      $this->validateFormRecursive($element, $form_state);
+    }
+  }
+
+  /**
+   * Validate a form element.
+   *
+   * @param array $element
+   *   A form element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  protected function validateFormElement(array $element, FormStateInterface $form_state) {
+    $states = static::getElementStates($element);
+    if (empty($states)) {
+      return;
+    }
+
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $form_state->getFormObject()->getEntity();
+    foreach ($states as $state => $conditions) {
+      if (!in_array($state, ['required', 'optional'])) {
+        continue;
+      }
 
-    // Get visible form elements.
-    $elements = $this->getVisibleElements($form);
+      $is_required = $this->validateConditions($conditions, $webform_submission);
+      $is_required = ($state == 'optional') ? !$is_required : $is_required;
 
-    // Loop through visible elements with #states.
-    foreach ($elements as $element_key => $element) {
-      $states = static::getElementStates($element);
-      foreach ($states as $state => $conditions) {
-        if (!in_array($state,  ['required', 'optional'])) {
-          continue;
-        }
+      if (isset($element['#webform_key'])) {
+        $value = $webform_submission->getData($element['#webform_key']);
+      }
+      else {
+        $value = $element['#value'];
+      }
 
-        $is_required = $this->validateConditions($conditions, $webform_submission);
-        $is_required = ($state == 'optional') ? !$is_required : $is_required;
-        if ($is_required && empty($webform_submission->getData($element_key))) {
-          $this->setRequiredError($element, $form_state);
-        }
+      if ($is_required && ($value === '' || $value === NULL)) {
+        $this->setRequiredError($element, $form_state);
       }
     }
   }

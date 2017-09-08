@@ -170,6 +170,37 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('composite_required_dependent field is required.');
+
+    // Check required composite subelements.
+    $edit = [
+      'composite_sub_elements_required_trigger' => 'a',
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('address_a field is required.');
+    $this->assertRaw('city_a field is required.');
+    $this->assertRaw('state_province_a field is required.');
+    $this->assertRaw('postal_code_a field is required.');
+    $this->assertRaw('country_a field is required.');
+    $this->assertNoRaw('address_b field is required.');
+    $this->assertNoRaw('city_b field is required.');
+    $this->assertNoRaw('state_province_b field is required.');
+    $this->assertNoRaw('postal_code_b field is required.');
+    $this->assertNoRaw('country_b field is required.');
+
+    $edit = [
+      'composite_sub_elements_required_trigger' => 'b',
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertNoRaw('address_a field is required.');
+    $this->assertNoRaw('city_a field is required.');
+    $this->assertNoRaw('state_province_a field is required.');
+    $this->assertNoRaw('postal_code_a field is required.');
+    $this->assertNoRaw('country_a field is required.');
+    $this->assertRaw('address_b field is required.');
+    $this->assertRaw('city_b field is required.');
+    $this->assertRaw('state_province_b field is required.');
+    $this->assertRaw('postal_code_b field is required.');
+    $this->assertRaw('country_b field is required.');
   }
 
   /**
