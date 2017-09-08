@@ -589,17 +589,19 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       if ($webform_element->getPluginId() == 'processed_text') {
         unset($row['operations']['#links']['edit']['attributes']);
       }
-      $row['operations']['#links']['duplicate'] = [
-        'title' => $this->t('Duplicate'),
-        'url' => new Url(
-          'entity.webform_ui.element.duplicate_form',
-          [
-            'webform' => $webform->id(),
-            'key' => $key,
-          ]
-        ),
-        'attributes' => $element_dialog_attributes,
-      ];
+      if (!$is_container) {
+        $row['operations']['#links']['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'url' => new Url(
+            'entity.webform_ui.element.duplicate_form',
+            [
+              'webform' => $webform->id(),
+              'key' => $key,
+            ]
+          ),
+          'attributes' => $element_dialog_attributes,
+        ];
+      }
       $row['operations']['#links']['delete'] = [
         'title' => $this->t('Delete'),
         'url' => new Url(
