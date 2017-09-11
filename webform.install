@@ -1089,7 +1089,7 @@ function webform_update_8073() {
 }
 
 /**
- * Issue #2906292: Display element descriptions as help icon (tooltip).
+ * Issue #2906292: Display element description as help icon (tooltip).
  */
 function webform_update_8074() {
   _webform_update_admin_settings();
