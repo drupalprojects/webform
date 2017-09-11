@@ -74,16 +74,12 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
     foreach ($entities as $entity) {
       /** @var \Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem $item */
       $item = $entity->_referringItem;
-
-      // Only override an open webform.
-      if ($entity->isOpen()) {
-        // Directly call set override to prevent the altered webform from being
-        // saved.
-        $entity->setOverride();
-        $entity->set('open', $item->open);
-        $entity->set('close', $item->close);
-        $entity->setStatus($item->status);
-      }
+      // Directly call set override to prevent the altered webform from being
+      // saved.
+      $entity->setOverride();
+      $entity->set('open', $item->open);
+      $entity->set('close', $item->close);
+      $entity->setStatus($item->status);
     }
     return $entities;
   }
