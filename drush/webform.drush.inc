@@ -40,7 +40,8 @@ function webform_drush_command() {
       // Tabular export options.
       'header-keys' => 'Set to "label" (default) or "key"',
       'options-item-format' => 'Set to "label" (default) or "key". Set to "key" to print select list values by their keys instead of labels.',
-      'options-format' => 'Set to "separate" (default) or "compact" to determine how select list values are exported.',
+      'options-single-format' => 'Set to "separate" (default) or "compact" to determine how single select list values are exported.',
+      'options-multiple-format' => 'Set to "separate" (default) or "compact" to determine how multiple select list values are exported.',
       'entity-reference-items' => 'Comma-separated list of entity reference items (id, title, and/or url) to be exported.',
       'excluded-columns' => 'Comma-separated list of component IDs or webform keys to exclude.',
       // Download options.

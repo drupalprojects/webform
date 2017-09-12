@@ -275,9 +275,12 @@ webform.settings:
           sequence:
             type: string
             label: 'Entity reference format item'
-        options_format:
+        options_single_format:
           type: string
-          label: 'Options format'
+          label: 'Options single value format'
+        options_multiple_format:
+          type: string
+          label: 'Options multiple values format'
         options_item_format:
           type: string
           label: 'Options item format'

@@ -272,7 +272,8 @@ abstract class OptionsBase extends WebformElementBase {
    */
   public function getExportDefaultOptions() {
     return [
-      'options_format' => 'compact',
+      'options_single_format' => 'compact',
+      'options_multiple_format' => 'compact',
       'options_item_format' => 'label',
     ];
   }
@@ -309,11 +310,19 @@ abstract class OptionsBase extends WebformElementBase {
       '#open' => TRUE,
       '#weight' => -10,
     ];
-    $form['options']['options_format'] = [
+    $form['options']['options_single_format'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Options format'),
+      '#title' => $this->t('Options single value format'),
+      '#description' => $this->t('Elements that collect a single option value include select menus, radios, and buttons.'),
       '#options' => $options_format_options,
-      '#default_value' => $export_options['options_format'],
+      '#default_value' => $export_options['options_single_format'],
+    ];
+    $form['options']['options_multiple_format'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Options multiple values format'),
+      '#description' => $this->t('Elements that collect multiple option values include multi-select, checkboxes, and toggles.'),
+      '#options' => $options_format_options,
+      '#default_value' => $export_options['options_multiple_format'],
     ];
     $form['options']['options_item_format'] = [
       '#type' => 'radios',
@@ -330,7 +339,8 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportHeader(array $element, array $options) {
-    if ($options['options_format'] == 'separate' && isset($element['#options'])) {
+    $options_format = ($element['#webform_multiple'] ? $options['options_multiple_format'] : $options['options_single_format']);
+    if ($options_format == 'separate' && isset($element['#options'])) {
       $header = [];
       foreach ($element['#options'] as $option_value => $option_text) {
         // Note: If $option_text is an array (typically a tableselect row)
@@ -349,10 +359,11 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
-    $value = $this->getValue($element, $webform_submission);
-
     $element_options = (isset($element['#options'])) ? $element['#options'] : [];
-    if ($export_options['options_format'] == 'separate') {
+    $options_format = ($element['#webform_multiple'] ? $export_options['options_multiple_format'] : $export_options['options_single_format']);
+    if ($options_format == 'separate') {
+      $value = $this->getRawValue($element, $webform_submission);
+
       $record = [];
       // Combine the values so that isset can be used instead of in_array().
       // http://stackoverflow.com/questions/13483219/what-is-faster-in-array-or-isset

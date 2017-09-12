@@ -1120,7 +1120,7 @@ function webform_update_8075() {
       continue;
     }
 
-    // Loop through state value looking for results.export variable.
+    // Loop through state values looking for results.export variable.
     foreach ($values as $key => &$value) {
       if (strpos($key, 'results.export') === 0) {
         switch ($value['entity_reference_format']) {
@@ -1134,6 +1134,41 @@ function webform_update_8075() {
             break;
         }
         unset($value['entity_reference_format']);
+        \Drupal::state()->set($namespace, $values);
+      }
+    }
+  }
+}
+
+/**
+ * Issue #2908080: Allow options single and multiple format to be specified during export.
+ */
+function webform_update_8076() {
+  // Update webform.settings.
+  $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+  if ($options_format = $admin_config->get('export.options_format')) {
+    $admin_config->set('export.options_single_format', $options_format);
+    $admin_config->set('export.options_multiple_format', $options_format);
+  }
+  $admin_config->clear('export.options_format');
+  $admin_config->save();
+
+  // Update webform results.export state.
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $namespace = 'webform.webform.' . $webform->id();
+    $values = \Drupal::state()->get($namespace, []);
+    if (empty($values)) {
+      continue;
+    }
+
+    // Loop through state values looking for results.export variable.
+    foreach ($values as $key => &$value) {
+      if (strpos($key, 'results.export') === 0) {
+        $value['options_single_format'] = $value['options_format'];
+        $value['options_multiple_format'] = $value['options_format'];
+        unset($value['options_format']);
         \Drupal::state()->set($namespace, $values);
       }
     }
