@@ -106,12 +106,7 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
-    // If #tags (aka multiple entities) use #after_builder to set #element_value
-    // which must be executed after
-    // \Drupal\Core\Entity\Element\EntityAutocomplete::validateEntityAutocomplete().
-    if ($this->hasMultipleValues($element)) {
-      $element['#after_build'][] = [get_class($this), 'afterBuildEntityAutocomplete'];
-    }
+    $element['#after_build'][] = [get_class($this), 'afterBuildEntityAutocomplete'];
 
     // If selection handler include auto_create when need to also set it for
     // the $element.
@@ -135,27 +130,45 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
   public static function validateEntityAutocomplete(array &$element, FormStateInterface $form_state) {
     $name = $element['#name'];
     $value = $form_state->getValue($name);
-    if (is_array($value) && !empty($value)) {
+    if (empty($value) || !is_array($value)) {
+      return;
+    }
+
+    if (empty($element['#webform_multiple'])) {
+      $form_state->setValueForElement($element, static::getEntityIdFromItem($value));
+    }
+    else {
       $entity_ids = [];
       foreach ($value as $item) {
-        if (isset($item['target_id'])) {
-          $entity_ids[] = $item['target_id'];
-        }
-        elseif (isset($item['entity'])) {
-          // If #auto_create is set then we need to save the entity and get
-          // the new entity's id.
-          // @todo Decide what level of access controls are needed to allow
-          // users to create entities.
-          $entity = $item['entity'];
-          $entity->save();
-          $entity_ids[] = $entity->id();
-        }
-        else {
-          $entity_ids[] = $item;
-        }
+        $entity_ids[] = static::getEntityIdFromItem($item);
       }
       $form_state->setValueForElement($element, $entity_ids);
     }
   }
 
+  /**
+   * Get the entity id from the submitted and processed #value.
+   *
+   * @param array|string $item
+   *   The entity item.
+   *
+   * @return string
+   *   The entity id.
+   */
+  protected static function getEntityIdFromItem($item) {
+    if (isset($item['target_id'])) {
+      return $item['target_id'];
+    }
+    elseif (isset($item['entity'])) {
+      // If #auto_create is set then we need to save the entity and get
+      // the new entity's id.
+      // @todo Decide what level of access controls are needed to allow users to create entities.
+      $entity = $item['entity'];
+      $entity->save();
+      return $entity->id();
+    }
+    else {
+      return $item;
+    }
+  }
 }

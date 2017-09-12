@@ -390,9 +390,9 @@ trait WebformEntityReferenceTrait {
       // Get entity reference value from user input because
       // $form_state->getValue() does not always contain every input's value.
       $user_input = $form_state->getUserInput();
-      $target_type = (isset($user_input['properties']['target_type'])) ? $user_input['properties']['target_type'] : 'node';
-      $selection_handler = (isset($user_input['properties']['selection_handler'])) ? $user_input['properties']['selection_handler'] : 'default:' . $target_type;
-      $selection_settings = (isset($user_input['properties']['selection_settings'])) ? $user_input['properties']['selection_settings'] : [];
+      $target_type = (!empty($user_input['properties']['target_type'])) ? $user_input['properties']['target_type'] : 'node';
+      $selection_handler = (!empty($user_input['properties']['selection_handler'])) ? $user_input['properties']['selection_handler'] : 'default:' . $target_type;
+      $selection_settings = (!empty($user_input['properties']['selection_settings'])) ? $user_input['properties']['selection_settings'] : [];
       // If the default selection handler has changed when need to update its
       // value.
       if (strpos($selection_handler, 'default:') === 0 && $selection_handler != "default:$target_type") {
