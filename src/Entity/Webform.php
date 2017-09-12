@@ -681,11 +681,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function setSettings(array $settings) {
     // Always apply the default settings.
-    $this->settings = static::getDefaultSettings();
-    // Now apply custom settings.
+    $this->settings += static::getDefaultSettings();
+
+    // Now apply new settings.
     foreach ($settings as $name => $value) {
       $this->settings[$name] = $value;
     }
+
     return $this;
   }
 
