@@ -762,15 +762,15 @@ libraries.codemirror.php:
 
 libraries.jquery.word-and-character-counter:
   remote: https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin
-  version: '2.3.5'
+  version: '2.5.1'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/jquery.word-and-character-counter/: https://cdn.rawgit.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/2.3.5/
+    /libraries/jquery.word-and-character-counter/: https://cdn.rawgit.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/2.5.1/
   js:
-    /libraries/jquery.word-and-character-counter/word-and-character-counter.min.js: {}
+    /libraries/jquery.word-and-character-counter/jquery.word-and-character-counter.min.js: {}
   dependencies:
     - core/jquery
 

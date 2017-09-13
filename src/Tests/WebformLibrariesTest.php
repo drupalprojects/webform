@@ -55,7 +55,7 @@ class WebformLibrariesTest extends WebformTestBase {
     $this->drupalGet('webform/test_libraries_optional');
     $this->assertRaw('/select2.min.js');
     $this->assertRaw('/chosen.jquery.js');
-    $this->assertRaw('/word-and-character-counter.min.js');
+    $this->assertRaw('/jquery.word-and-character-counter.min.js');
     $this->assertRaw('/intlTelInput.min.js');
     $this->assertRaw('/jquery.inputmask.bundle.min.js');
     $this->assertRaw('/icheck.js');
@@ -88,7 +88,7 @@ class WebformLibrariesTest extends WebformTestBase {
     $this->drupalGet('webform/test_libraries_optional');
     $this->assertNoRaw('/select2.min.js');
     $this->assertNoRaw('/chosen.jquery.js');
-    $this->assertNoRaw('/word-and-character-counter.min.js');
+    $this->assertNoRaw('/jquery.word-and-character-counter.min.js');
     $this->assertNoRaw('/intlTelInput.min.js');
     $this->assertNoRaw('/jquery.inputmask.bundle.min.js');
     $this->assertNoRaw('/icheck.js');
