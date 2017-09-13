@@ -576,7 +576,7 @@ class WebformElementStates extends FormElement {
             $trigger = $condition['trigger'];
             $value = $condition['value'] ?: TRUE;
             if ($selector && $trigger) {
-              if ($operator == 'or') {
+              if ($operator == 'or' || $operator == 'xor') {
                 if ($index !== 0) {
                   $states[$state][] = $operator;
                 }
