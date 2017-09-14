@@ -116,6 +116,13 @@ webform.confirmation.modal:
     - core/jquery.once
     - webform/webform.confirmation
 
+# Contextual
+
+webform.contextual:
+  version: VERSION
+  js:
+    js/webform.contextual.js:  {}
+
 # Help.
 
 webform.help:

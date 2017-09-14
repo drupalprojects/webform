@@ -412,6 +412,11 @@ function _webform_page_attachments(array &$attachments) {
     }
   }
 
+  // Attach webform contextual link helper.
+  if (\Drupal::currentUser()->hasPermission('access contextual links')) {
+    $attachments['#attached']['library'][] = 'webform/webform.contextual';
+  }
+
   // Attach details element save open/close library.
   // This ensures pages without a webform will still be able to save the
   // details element state.
@@ -509,6 +514,24 @@ function webform_file_access(FileInterface $file, $operation, AccountInterface $
 function webform_file_download($uri) {
   return ManagedFile::accessFileDownload($uri);
 }
+
+
+/**
+ * Implements hook_contextual_links_view_alter().
+ */
+function webform_contextual_links_view_alter(&$element, $items) {
+  $links = [
+    'entitywebformresults-submissions',
+    'entitywebformedit-form',
+    'entitywebformsettings',
+  ];
+  foreach ($links as $link) {
+    if (isset($element['#links'][$link])) {
+      $element['#links'][$link]['attributes']['class'][] = 'webform-contextual';
+    }
+  }
+}
+
 
 /**
  * Implements hook_theme().
