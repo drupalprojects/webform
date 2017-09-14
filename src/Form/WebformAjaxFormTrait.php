@@ -97,6 +97,10 @@ trait WebformAjaxFormTrait {
    *   TRUE if the current request a quick edit page.
    */
   protected function isQuickEdit() {
+    if (!$this->moduleHandler->moduleExists('quickedit')) {
+      return FALSE;
+    }
+    
     return (\Drupal::request()->query->get('destination')) ? TRUE : FALSE;
   }
 
