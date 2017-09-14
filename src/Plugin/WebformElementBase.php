@@ -1663,6 +1663,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['element']['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
+      '#maxlength' => NULL,
       '#description' => $this->t('This is used as a descriptive label when displaying this webform element.'),
       '#required' => TRUE,
       '#attributes' => ['autofocus' => 'autofocus'],
