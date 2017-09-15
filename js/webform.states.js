@@ -24,14 +24,14 @@
   $document.on('state:visible', function (e) {
     if (e.trigger) {
       if (e.value) {
-        $(':input', e.target).andSelf().each(function () {
+        $(':input', e.target).addBack().each(function () {
           restoreValueAndRequired(this);
           triggerEventHandlers(this);
         });
       }
       else {
         // @see https://www.sitepoint.com/jquery-function-clear-form-data/
-        $(':input', e.target).andSelf().each(function () {
+        $(':input', e.target).addBack().each(function () {
           backupValueAndRequired(this);
           clearValueAndRequired(this);
           triggerEventHandlers(this);
