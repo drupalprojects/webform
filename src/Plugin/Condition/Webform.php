@@ -6,8 +6,8 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\webform\WebformEntityReferenceManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 
 /**
  * Provides a 'Webform' condition.
@@ -32,10 +32,15 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
   protected $entityStorage;
 
   /**
+   * The webform entity reference manager
+   *
+   * @var \Drupal\webform\WebformEntityReferenceManagerInterface
+   */
+  protected $webformEntityReferenceManager;
+
+  /**
    * Creates a new Webform instance.
    *
-   * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
-   *   The entity storage.
    * @param array $configuration
    *   The plugin configuration, i.e. an array with configuration values keyed
    *   by configuration option name. The special key 'context' may be used to
@@ -45,10 +50,15 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $entity_storage
+   *   The entity storage.
+   * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
+   *   The webform entity reference manager.
    */
-  public function __construct(EntityStorageInterface $entity_storage, array $configuration, $plugin_id, $plugin_definition) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityStorageInterface $entity_storage, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityStorage = $entity_storage;
+    $this->webformEntityReferenceManager = $webform_entity_reference_manager;
   }
 
   /**
@@ -56,10 +66,11 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-      $container->get('entity_type.manager')->getStorage('webform'),
       $configuration,
       $plugin_id,
-      $plugin_definition
+      $plugin_definition,
+      $container->get('entity_type.manager')->getStorage('webform'),
+      $container->get('webform.entity_reference_manager')
     );
   }
 
@@ -178,9 +189,8 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
       return $webform;
     }
     if ($node = $this->getContextValue('node')) {
-      $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($node);
-      if ($webform_field_name && $node->$webform_field_name->entity) {
-        return $node->$webform_field_name->entity;
+      if ($webform_target = $this->webformEntityReferenceManager->getWebform($node)) {
+        return $webform_target;
       }
     }
     return NULL;

@@ -183,7 +183,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
    * Get options name for current webform and source entity.
    *
    * @return string
-   *   Settings name as 'webform.export.{entity_type}.{entity_id}.
+   *   Settings name as 'webform.export.{entity_type}.{entity_id}'.
    */
   protected function getWebformOptionsName() {
     if ($entity = $this->getSourceEntity()) {

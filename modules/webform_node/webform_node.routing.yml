@@ -361,3 +361,19 @@ entity.node.webform_submission.log:
   requirements:
     _permission: 'access webform submission log'
     _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformLogAccess'
+
+entity.node.webform.entity_reference.set:
+  path: '/node/{node}/webform/change/{webform}'
+  defaults:
+    _controller: '\Drupal\webform_node\Controller\WebformNodeEntityReferenceController::change'
+    operation: webform_submission_view
+    entity_access: 'webform.submission_view_any'
+  options:
+    parameters:
+      node:
+        type: 'entity:node'
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformAccess'
+    _csrf_token: 'TRUE'

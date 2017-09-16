@@ -10,7 +10,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
-use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
@@ -484,7 +483,10 @@ function webform_update_8024() {
  * Issue #2857417: Add support for open and close date/time to Webform nodes. Update database scheme.
  */
 function webform_update_8025() {
-  $webform_tables = WebformEntityReferenceItem::getTableNames();
+  /** @var \Drupal\webform\WebformEntityReferenceManagerInterface $entity_reference_manager */
+  $entity_reference_manager = \Drupal::service('webform.entity_reference_manager');
+
+  $webform_tables = $entity_reference_manager->getTableNames();
   $database_schema = \Drupal::database()->schema();
   $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
   foreach ($schema as $item_name => $item) {

@@ -33,6 +33,10 @@ services:
     class: Drupal\webform\WebformEmailProvider
     arguments: ['@config.factory', '@module_handler', '@plugin.manager.mail']
 
+  webform.entity_reference_manager:
+    class: Drupal\webform\WebformEntityReferenceManager
+    arguments: ['@current_route_match', '@current_user', '@user.data']
+
   webform.help_manager:
     class: Drupal\webform\WebformHelpManager
     arguments: ['@current_user', '@config.factory', '@module_handler', '@state', '@path.matcher', '@webform.addons_manager', '@webform.libraries_manager', '@plugin.manager.webform.element']
@@ -51,7 +55,7 @@ services:
 
   webform.request:
     class: Drupal\webform\WebformRequest
-    arguments: ['@router.route_provider', '@request_stack', '@current_route_match', '@entity_type.manager', '@entity_type.repository']
+    arguments: ['@router.route_provider', '@request_stack', '@current_route_match', '@entity_type.manager', '@entity_type.repository', '@webform.entity_reference_manager']
 
   webform_submission.generate:
     class: Drupal\webform\WebformSubmissionGenerate

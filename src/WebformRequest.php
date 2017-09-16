@@ -9,7 +9,6 @@ use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\Url;
-use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -23,6 +22,20 @@ class WebformRequest implements WebformRequestInterface {
    * @var \Drupal\Core\Routing\RouteProviderInterface
    */
   protected $routeProvider;
+
+  /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
 
   /**
    * The entity type manager.
@@ -39,18 +52,11 @@ class WebformRequest implements WebformRequestInterface {
   protected $entityTypeRepository;
 
   /**
-   * The current route match.
+   * The webform entity reference manager
    *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
+   * @var \Drupal\webform\WebformEntityReferenceManagerInterface
    */
-  protected $routeMatch;
-
-  /**
-   * The current request.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  protected $request;
+  protected $webformEntityReferenceManager;
 
   /**
    * Track if the current page is a webform admin route.
@@ -72,13 +78,16 @@ class WebformRequest implements WebformRequestInterface {
    *   The entity type repository.
    * @param \Drupal\Core\Entity\EntityTypeRepositoryInterface $entity_type_repository
    *   The entity type repository.
+   * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
+   *   The webform entity reference manager.
    */
-  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository) {
+  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
     $this->routeProvider = $route_provider;
     $this->request = $request_stack->getCurrentRequest();
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeRepository = $entity_type_repository;
+    $this->webformEntityReferenceManager = $webform_entity_reference_manager;
   }
 
   /**
@@ -141,17 +150,15 @@ class WebformRequest implements WebformRequestInterface {
    */
   public function getCurrentWebform() {
     $source_entity = static::getCurrentSourceEntity('webform');
-    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
-    if ($source_entity && $webform_field_name && $source_entity->hasField($webform_field_name)) {
-      return $source_entity->$webform_field_name->entity;
-    }
-    else {
-      $webform = $this->routeMatch->getParameter('webform');
-      if (is_string($webform)) {
-        $webform = $this->entityTypeManager->getStorage('webform')->load($webform);
-      }
+    if ($source_entity && ($webform = $this->webformEntityReferenceManager->getWebform($source_entity))) {
       return $webform;
     }
+
+    $webform = $this->routeMatch->getParameter('webform');
+    if (is_string($webform)) {
+      $webform = $this->entityTypeManager->getStorage('webform')->load($webform);
+    }
+    return $webform;
   }
 
   /**
@@ -291,11 +298,8 @@ class WebformRequest implements WebformRequestInterface {
     }
 
     // Validate that source entity's field target id is the correct webform.
-    $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
-    if ($webform_field_name
-      && $source_entity->hasField($webform_field_name)
-      && $source_entity->$webform_field_name->target_id == $webform->id()
-    ) {
+    $webform_target = $this->webformEntityReferenceManager->getWebform($source_entity);
+    if ($webform_target && $webform_target->id() == $webform->id()) {
       return TRUE;
     }
     else {
@@ -342,7 +346,7 @@ class WebformRequest implements WebformRequestInterface {
     // Check that the webform is referenced by the source entity.
     if (!$webform->getSetting('form_prepopulate_source_entity')) {
       // Get source entity's webform field.
-      $webform_field_name = WebformEntityReferenceItem::getEntityWebformFieldName($source_entity);
+      $webform_field_name = $this->webformEntityReferenceManager->getFieldName($source_entity);
       if (!$webform_field_name) {
         return NULL;
       }
