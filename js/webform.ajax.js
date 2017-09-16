@@ -7,6 +7,12 @@
 
   'use strict';
 
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.ajax = Drupal.webform.ajax || {};
+  // Allow scrollTopOffset to be custom defined or based on whether there is a
+  // floating toolbar.
+  Drupal.webform.ajax.scrollTopOffset = Drupal.webform.ajax.scrollTopOffset || ($('#toolbar-administration').length ? 140 : 10);
+
   /**
    * Provide Webform Ajax link behavior.
    *
@@ -125,7 +131,7 @@
 
       // Scroll to elements that are not visible.
       if (!isScrolledIntoView($element)) {
-        $('html, body').animate({scrollTop: $element.offset().top - 140}, 500);
+        $('html, body').animate({scrollTop: $element.offset().top - Drupal.webform.ajax.scrollTopOffset}, 500);
       }
     }
     updateKey = null; // Reset element update.
@@ -158,7 +164,7 @@
    * @param {string} response.selector
    *   Selector to use.
    *
-   * @see Drupal.AjaxCommands.prototype.webformScrollTop
+   * @see Drupal.AjaxCommands.prototype.viewScrollTop
    */
   Drupal.AjaxCommands.prototype.webformScrollTop = function (ajax, response) {
     // Scroll to the top of the view. This will allow users
@@ -174,8 +180,8 @@
       scrollTarget = $(scrollTarget).parent();
     }
     // Only scroll upward.
-    if (offset.top - 10 < $(scrollTarget).scrollTop()) {
-      $(scrollTarget).animate({scrollTop: (offset.top - 10)}, 500);
+    if (offset.top - Drupal.webform.ajax.scrollTopOffset < $(scrollTarget).scrollTop()) {
+      $(scrollTarget).animate({scrollTop: (offset.top - Drupal.webform.ajax.scrollTopOffset)}, 500);
     }
   };
 

@@ -184,7 +184,9 @@ trait WebformAjaxFormTrait {
     }
     elseif ($form_state->isRebuilding()) {
       // Rebuild form.
-      return $this->replaceForm($form);
+      $response = $this->replaceForm($form);
+      $response->addCommand(new WebformScrollTopCommand('#' . $this->getWrapperId()));
+      return $response;
     }
     elseif ($redirect_url = $this->getFormStateRedirectUrl($form_state)) {
       // Redirect to URL.
