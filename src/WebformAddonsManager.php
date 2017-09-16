@@ -373,6 +373,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'submission',
     ];
 
+    // Submissions: Webform Permissions By Term.
+    $projects['webform_permissions_by_term'] = [
+      'title' => $this->t('Webform Permissions By Term'),
+      'description' => $this->t('Extends the functionality of Permissions By Term to be able to limit the webform submissions access by users or roles.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_permissions_by_term'),
+      'category' => 'submission',
+    ];
+
     // Submissions: Webform Queue.
     $projects['webform_queue'] = [
       'title' => $this->t('Webform Queue'),
