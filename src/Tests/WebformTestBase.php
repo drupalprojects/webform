@@ -12,7 +12,6 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\Role;
-use Drupal\user\Entity\User;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
@@ -191,33 +190,6 @@ abstract class WebformTestBase extends WebTestBase {
     $anonymous_role->grantPermission('view own webform submission')
       ->grantPermission('edit own webform submission')
       ->grantPermission('delete own webform submission')
-      ->save();
-  }
-
-  /**
-   * Add 'view own webform submission' permission to anonymous role.
-   *
-   * This allow submissions to be tracked via $_SESSION.
-   *
-   * @see \Drupal\webform\WebformSubmissionStorage::setAnonymousSubmission
-   */
-  protected function addViewWebformSubmissionOwnPermissionToAnonymous() {
-    /** @var \Drupal\user\RoleInterface $anonymous_role */
-    $anonymous_role = Role::load('anonymous');
-    $anonymous_role->grantPermission('view own webform submission')
-      ->save();
-  }
-
-
-  /**
-   * Revoke 'view own webform submission' permission from anonymous role.
-   *
-   * @see \Drupal\webform\WebformSubmissionStorage::setAnonymousSubmission
-   */
-  protected function revokeViewWebformSubmissionOwnPermissionToAnonymous() {
-    /** @var \Drupal\user\RoleInterface $anonymous_role */
-    $anonymous_role = Role::load('anonymous');
-    $anonymous_role->revokePermission('view own webform submission')
       ->save();
   }
 

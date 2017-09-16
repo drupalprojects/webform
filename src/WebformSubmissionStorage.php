@@ -1196,14 +1196,41 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       return;
     }
 
-    // Make sure used can view own submission.
-    $has_view_own_permission = $this->currentUser->hasPermission('view own webform submission');
-    $has_view_own_access = $webform_submission->getWebform()->checkAccessRules('view_own', $this->currentUser);
-    if (!$has_view_own_permission && !$has_view_own_access) {
-      return;
+    // Check if anonymous users are allowed to save submission using $_SESSION.
+    if ($this->checkAnonymousSubmissionAccess($webform_submission)) {
+      $_SESSION['webform_submissions'][$webform_submission->id()] = $webform_submission->id();
     }
+  }
 
-    $_SESSION['webform_submissions'][$webform_submission->id()] = $webform_submission->id();
+  /**
+   * Check if anonymous users are allowed to save submission using $_SESSION.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   *
+   * @return bool
+   *   TRUE if anonymous users are allowed to save submission using $_SESSION.
+   */
+  protected function checkAnonymousSubmissionAccess(WebformSubmissionInterface $webform_submission) {
+    $webform = $webform_submission->getWebform();
+    if ($this->currentUser->hasPermission('view own webform submission')) {
+      return TRUE;
+    }
+    elseif ($webform->checkAccessRules('view_own', $this->currentUser)) {
+      return TRUE;
+    }
+    elseif ($webform->getSetting('form_convert_anonymous')) {
+      return TRUE;
+    }
+    elseif ($webform->getSetting('limit_user') || ($webform->getSetting('entity_limit_user') && $webform_submission->getSourceEntity())) {
+      return TRUE;
+    }
+    elseif ($webform->getSetting('draft') === WebformInterface::DRAFT_ALL) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
   /**
