@@ -3,7 +3,7 @@ Webform Bootstrap
 
 ### About this Module
 
-The Webform Boostrap module help integrate Webform with the Bootstrap base theme.
+The Webform Bootstrap module help integrate Webform with the Bootstrap base theme.
 
 ### Code Snippets
 

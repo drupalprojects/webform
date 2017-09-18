@@ -75,10 +75,25 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function requirements($cli = FALSE) {
-    $cdn = $this->configFactory->get('webform.settings')->get('libraries.cdn') ?: FALSE;
+    $cdn = $this->configFactory->get('webform.settings')->get('requirements.cdn') ?: FALSE;
 
-    $status = [];
     $libraries = $this->getLibraries();
+
+    // Track stats.
+    $severity = REQUIREMENT_OK;
+    $stats = [
+      '@total' => count($libraries),
+      '@installed' => 0,
+      '@excluded' => 0,
+      '@missing' => 0,
+    ];
+
+    // Build library info array.
+    $info = [
+      '#prefix' => '<p><hr/></p><dl>',
+      '#suffix' => '</dl>',
+    ];
+
     foreach ($libraries as $library_name => $library) {
       $library_path = '/libraries/' . $library_name;
       $library_exists = (file_exists(DRUPAL_ROOT . $library_path)) ? TRUE : FALSE;
@@ -96,7 +111,9 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       ];
 
       if ($this->isExcluded($library_name)) {
-        $value = $this->t('Excluded', $t_args);
+        // Excluded.
+        $stats['@excluded']++;
+        $title = $this->t('<strong>@title</strong> Excluded', $t_args);
         if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
           $t_args['@element_type'] = implode('; ', $library['elements']);
           $description = $this->t('The <a href=":homepage_href">@title</a> library is excluded because required element types (@element_type) are <a href=":settings_elements_href">excluded</a>.', $t_args);
@@ -104,39 +121,57 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         else {
           $description = $this->t('The <a href=":homepage_href">@title</a> library is <a href=":settings_libraries_href">excluded</a>.', $t_args);
         }
-        $severity = REQUIREMENT_OK;
       }
       elseif ($library_exists) {
-        $value = $this->t('@version (Installed)', $t_args);
+        // Installed.
+        $stats['@installed']++;
+        $title = $this->t('<strong>@title @version</strong> (Installed)', $t_args);
         $description = $this->t('The <a href=":homepage_href">@title</a> library is installed in <b>@path</b>.', $t_args);
-        $severity = REQUIREMENT_OK;
       }
       elseif ($cdn) {
-        $value = $this->t('@version (CDN).', $t_args);
-        $description = $this->t('The <a href=":homepage_href">@title</a> library is <a href=":external_href">externally hosted libraries</a> and loaded via a Content Delivery Network (CDN).', $t_args);
-        $severity = REQUIREMENT_OK;
-      }
-      else {
-        $value = $this->t('@version (CDN).', $t_args);
-        $build = [];
-        $build['download'] = ['#markup' => $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.', $t_args)];
-        if (!$cli) {
-          $build['cdn'] = ['#prefix' => ' ', '#markup' => $this->t('(<a href=":settings_libraries_href">Disable CDN warning</a>)', $t_args)];
-        }
-        $description = $this->renderer->renderPlain($build);
+        // Missing.
+        $stats['@missing']++;
+        $title = $this->t('<span class="color-warning"><strong>@title @version</strong> (CDN).</span>', $t_args);
+        $description = $this->t('Please download the <a href=":homepage_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library.', $t_args);
         $severity = REQUIREMENT_WARNING;
       }
+      else {
+        // CDN.
+        $stats['@missing']++;
+        $title = $this->t('<strong>@title @version</strong> (CDN).', $t_args);
+        $description = $this->t('The <a href=":homepage_href">@title</a> library is <a href=":external_href">externally hosted libraries</a> and loaded via a Content Delivery Network (CDN).', $t_args);
+      }
 
-      $status['webform_library_' . $library_name] = [
-        'library' => $library ,
-        'title' => $this->t('Webform library: @title', $t_args),
-        'value' => $value,
-        'description' => $description,
-        'severity' => $severity,
+      $info[$library_name] = [
+        'title' => [
+          '#markup' => $title,
+          '#prefix' => '<dt>',
+          '#suffix' => '</dt>',
+        ],
+        'description' => [
+          '#markup' => $description,
+          '#prefix' => '<dd>',
+          '#suffix' => '</dd>',
+        ],
       ];
     }
 
-    return $status;
+    // Description.
+    $description = [
+      'info' => $info,
+    ];
+    if (!$cli && $severity == REQUIREMENT_WARNING) {
+      $description['cdn'] = ['#markup' => $this->t('<a href=":href">Disable CDN warning</a>', [':href' => Url::fromRoute('webform.settings.advanced')->toString()])];
+    }
+
+    return [
+      'webform_libraries' => [
+        'title' => $this->t('Webform: External libraries'),
+        'value' => $this->t('@total libraries (@installed installed; @excluded excluded; @missing CDN)', $stats),
+        'description' => $this->renderer->renderPlain($description),
+        'severity' => $severity,
+      ],
+    ];
   }
 
   /**

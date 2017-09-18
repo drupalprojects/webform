@@ -241,6 +241,9 @@ ui:
 libraries:
   excluded_libraries:
     - jquery.chosen
-  cdn: false
+requirements:
+  cdn: true
+  bootstrap: true
+  spam: true
 langcode: en
 third_party_settings: {  }

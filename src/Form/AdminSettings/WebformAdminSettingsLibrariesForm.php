@@ -141,25 +141,6 @@ class WebformAdminSettingsLibrariesForm extends WebformAdminSettingsBaseForm {
         ],
       ],
     ];
-    $form['libraries']['cdn'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Use CDN'),
-      '#description' => $this->t('If checked, all warnings about missing libraries will be disabled.'),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('libraries.cdn'),
-    ];
-    $form['libraries']['cdn_message'] = [
-      '#type' => 'webform_message',
-      '#message_type' => 'warning',
-      '#message_message' => $this->t('Note that it is in generally not a good idea to load libraries from a CDN; avoid this if possible. It introduces more points of failure both performance- and security-wise, requires more TCP/IP connections to be set up and these external assets are usually not in the browser cache anyway.'),
-      '#states' => [
-        'visible' => [
-          ':input[name="libraries[cdn]"]' => [
-            'checked' => TRUE,
-          ],
-        ],
-      ],
-    ];
 
     return parent::buildForm($form, $form_state);
   }

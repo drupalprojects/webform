@@ -145,6 +145,36 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
       ];
     }
 
+    // Requirements.
+    $form['requirements'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Requirements'),
+      '#description' => $this->t('The below requirements are checked by the <a href=":href">Status report</a>.', [':href' => Url::fromRoute('system.status')->toString()]),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+    ];
+    $form['requirements']['cdn'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Check if CDN is being used for external libraries.'),
+      '#description' => $this->t('If unchecked, all warnings about missing libraries will be disabled.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('requirements.cdn'),
+    ];
+    $form['requirements']['bootstrap'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Check if Webform Bootstrap Integration module is installed when using the Bootstrap theme.'),
+      '#description' => $this->t('If unchecked, all warnings about the Webform Bootstrapp Integration module will be disabled.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('requirements.bootstrap'),
+    ];
+    $form['requirements']['spam'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Check if SPAM protection module is installed.'),
+      '#description' => $this->t('If unchecked, all warnings about Webform SPAM protection will be disabled.'),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('requirements.spam'),
+    ];
+
     // Test.
     $form['test'] = [
       '#type' => 'details',
@@ -205,6 +235,7 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('webform.settings');
     $config->set('ui', $form_state->getValue('ui'));
+    $config->set('requirements', $form_state->getValue('requirements'));
     $config->set('test', $form_state->getValue('test'));
     $config->set('batch', $form_state->getValue('batch'));
     $config->save();
