@@ -110,11 +110,6 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
     $form['context_mapping']['webform_submission']['#description'] = $this->t("Select 'Webform submission from URL' to display this block, when the current request's path contains a webform submission that was created from the selected webform.");
     $form['context_mapping']['node']['#description'] = $this->t("Select 'Node from URL' to display this block, when the current request's path contains a node that references the selected webform using a dedicated webform field or node.");
 
-    // Hide 'Negate the condition', which does not make sense.
-    if (isset($form['negate'])) {
-      $form['negate']['#access'] = FALSE;
-    }
-
     // Attached library to summarize configuration settings.
     $form['#attached']['library'][] = 'webform/webform.block';
 
