@@ -137,18 +137,8 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       ],
       [
         '#markup' => $this->t('The Lingotek-Inside Drupal Module integrates a translation management system (TMS) directly into Drupal, thus allowing the Drupal community to use professional-grade translation technologies (e.g. machine translation, translation memory, CAT tool) without ever having to leave the comfort of the Drupal environment.'),
-        '#prefix' => '<p>',
-        '#suffix' => '<p>',
-      ],
-      [
-        '#markup' => $this->t('You can help support the Webform module by signing up and trying the Lingotek-Inside Drupal Module for <strong>free</strong>. The maintainer of Webform for Drupal 8 (<a href="http://www.jrockowitz.com/">jrockowitz</a>) has become a Lingotek partner. If you become a customer of Lingotek\'s professional translation service, Jacob Rockowitz will receive a software referral fee, which will help fund his ongoing and dedicated effort to improving and making the Webform module for Drupal 8 <strong>awesome!!!</strong>'),
-        '#prefix' => '<blockquote>',
-        '#suffix' => '</blockquote>',
-      ],
-      [
-        '#markup' => $this->t('It only takes 5 simple questions to indicate that the Webform module referred you to Lingotek. Then you can download and try the Lingotek module for free.'),
-        '#prefix' => '<p>',
-        '#suffix' => '<p>',
+        '#prefix' => '<div class="clearfix">',
+        '#suffix' => '</div>',
       ],
       ['#markup' => '<hr/>'],
       'actions' => [

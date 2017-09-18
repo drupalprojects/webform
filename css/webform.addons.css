@@ -12,12 +12,19 @@
 }
 
 .webform-addons-promotions img {
-  width: 100%;
-  max-width: 800px;
+  float: left;
+  margin: 0 20px 20px 0;
 }
 
 .webform-addons-promotions .button {
   margin-left: 0;
+}
+
+@media screen and (max-width: 480px) {
+  .webform-addons-promotions img {
+    float: none;
+    margin: 0 0 20px;
+  }
 }
 
 /**

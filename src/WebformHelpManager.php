@@ -1106,8 +1106,8 @@ SUGGESTIONS
       // Lingotek.
       $help['promotion_lingotek'] = [
         'routes' => [
-          // @see /admin/structure/webform
-          'entity.webform.collection',
+          // @see /admin/structure/webform/manage/{webform}/translate
+          'entity.webform.config_translation_overview',
         ],
         'title' => $this->t('Webform & Lingotek Translation Partnership'),
         'content' => $this->t("Help <strong>support</strong> the Webform module and internationalize your website using the Lingotek-Inside Drupal Module for continuous translation. <em>Multilingual capability + global access = increased web traffic.</em>"),
@@ -1120,15 +1120,6 @@ SUGGESTIONS
         'uses' => FALSE,
         'reset_version' => TRUE,
       ];
-
-      // Lingotek.
-      // Note: Creating separate dismissible message for translation overview.
-      $help['promotion_lingotek_translation_overview'] = [
-        'routes' => [
-          // @see /admin/structure/webform/manage/{webform}/translate
-          'entity.webform.config_translation_overview',
-        ],
-      ] + $help['promotion_lingotek'];
     }
 
     /****************************************************************************/
