@@ -118,6 +118,5 @@ services:
 
   webform.twig_extension:
     class: Drupal\webform\Twig\TwigExtension
-    arguments: ['@webform.token_manager']
     tags:
       - { name: twig.extension }
