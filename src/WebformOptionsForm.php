@@ -183,7 +183,8 @@ class WebformOptionsForm extends EntityForm {
 
     $options = $webform_options->getOptions();
     if (empty($options)) {
-      $options = WebformOptions::getElementOptions(['#options' => $webform_options->id()]);
+      $element = ['#options' => $webform_options->id()];
+      $options = WebformOptions::getElementOptions($element);
     }
 
     return WebformOptionsHelper::convertOptionsToString($options);

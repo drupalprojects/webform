@@ -115,6 +115,11 @@ class WebformOptionsTest extends WebformTestBase {
     $element = ['#options' => 'country_names'];
     $options = WebformOptions::getElementOptions($element);
     $this->assertEqual(reset($options), 'Switzerland');
+
+    // Make sure we can reach the option admin pages.
+    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalGet('admin/structure/webform/settings/options/manage');
+    $this->drupalGet('admin/structure/webform/settings/options/manage/add');
   }
 
 }
