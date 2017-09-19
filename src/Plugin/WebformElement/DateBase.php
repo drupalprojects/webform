@@ -58,9 +58,11 @@ abstract class DateBase extends WebformElementBase {
     if (isset($element['#date_date_format'])) {
       if (!empty($element['#min'])) {
         $element['#attributes']['min'] = date($element['#date_date_format'], strtotime($element['#min']));
+        $element['#attributes']['data-min-year'] = date('Y', strtotime($element['#min']));
       }
       if (!empty($element['#max'])) {
         $element['#attributes']['max'] = date($element['#date_date_format'], strtotime($element['#max']));
+        $element['#attributes']['data-max-year'] = date('Y', strtotime($element['#max']));
       }
     }
 
