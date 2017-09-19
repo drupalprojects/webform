@@ -1709,6 +1709,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_html:
     id: email
     label: 'Email (HTML)'
@@ -1738,3 +1740,5 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

@@ -160,16 +160,18 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
       send: '[webform_submission:completed:html_date]'
       days: 1
       unschedule: false
-      ignore_access: false
-      exclude_empty: true
   yesterday:
     id: scheduled_email
     label: Yesterday
@@ -194,16 +196,18 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
       send: '[webform_submission:completed:html_date]'
       days: -1
       unschedule: false
-      ignore_access: false
-      exclude_empty: true
   last_year:
     id: scheduled_email
     label: 'Last year'
@@ -228,16 +232,18 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
       send: '2016-01-01'
       days: 0
       unschedule: false
-      ignore_access: false
-      exclude_empty: true
   broken:
     id: scheduled_email
     label: Broken
@@ -262,16 +268,18 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
       send: '[broken]'
       days: 0
       unschedule: false
-      ignore_access: false
-      exclude_empty: true
   other:
     id: scheduled_email
     label: Other
@@ -298,16 +306,18 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
       send: '[webform_submission:values:date:html_date]'
       days: 14
       unschedule: false
-      ignore_access: false
-      exclude_empty: true
   draft_reminder:
     id: scheduled_email
     label: 'Draft reminder'
@@ -332,13 +342,15 @@ handlers:
       subject: default
       body: default
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
       send: '[date:html_date]'
       days: 14
       unschedule: true
-      ignore_access: false
-      exclude_empty: true

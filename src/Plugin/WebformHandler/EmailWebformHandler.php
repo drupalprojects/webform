@@ -185,6 +185,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'debug' => FALSE,
       'reply_to' => '',
       'return_path' => '',
+      'sender_mail' => '',
+      'sender_name' => '',
     ];
   }
 
@@ -220,6 +222,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'body' => $this->getBodyDefaultValues($body_format),
       'reply_to' => $webform_settings->get('mail.default_reply_to') ?: '',
       'return_path' => $webform_settings->get('mail.default_return_path') ?: '',
+      'sender_mail' => $webform_settings->get('mail.default_sender_mail') ?: '',
+      'sender_name' => $webform_settings->get('mail.default_sender_name') ?: '',
     ];
 
     return $this->defaultValues;
@@ -500,6 +504,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: Return path.
     $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
+    // Settings: Sender mail.
+    $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), $mail_element_options,  $options_element_options);
+    // Settings: Sender name.
+    $form['additional']['sender_name'] = $this->buildElement('sender_name', $this->t('Sender name'), $this->t('Sender name'), $text_element_options_raw);
+
     // Settings: HTML.
     $form['additional']['html'] = [
       '#type' => 'checkbox',
@@ -1171,17 +1180,24 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration[$name],
     ];
 
-    // Use multiple email for reply_to and return_path because it supports
-    // tokens.
-    if (in_array($name, ['reply_to', 'return_path'])) {
+    // Use multiple email for reply_to, return_path, and sender_mail because
+    // it supports tokens.
+    if (in_array($name, ['reply_to', 'return_path', 'sender_mail'])) {
       $element[$name]['#other__type'] = 'webform_email_multiple';
       $element[$name]['#other__cardinality'] = 1;
       $element[$name]['#other__description'] = '';
-      if ($name == 'reply_to') {
-        $element[$name]['#description'] = $this->t('The email address that a recipient will see when they replying to an email.');
-      }
-      else {
-        $element[$name]['#description'] = $this->t('The email address to which bounce messages are delivered.');
+      switch ($name) {
+        case 'reply_to':
+          $element[$name]['#description'] = $this->t('The email address that a recipient will see when they replying to an email.');
+          break;
+
+        case 'return_path':
+          $element[$name]['#description'] = $this->t('The email address to which bounce messages are delivered.');
+          break;
+
+        case 'sender_mail':
+          $element[$name]['#description'] = $this->t('The email address submitting the message, if other than shown by the From header');
+          break;
       }
       $t_args = ['@title' => $title];
       if ($default_email = $this->getDefaultConfigurationValue($name)) {

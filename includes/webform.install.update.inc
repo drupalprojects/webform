@@ -10,10 +10,10 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
-
 /******************************************************************************/
 // Webform-8.x-5.0-beta1 - December 7, 2016 (No update required).
 /******************************************************************************/
@@ -621,7 +621,7 @@ function webform_update_8030() {
  * Issue #2854021: Send email based on element options selection.
  */
 function webform_update_8031() {
-  _webform_update_webform_handler_settings('email');
+  _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
 }
 
 /**

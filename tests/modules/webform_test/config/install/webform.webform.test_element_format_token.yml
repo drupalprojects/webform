@@ -162,6 +162,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_text:
     id: email
     label: 'Email (Text)'
@@ -211,3 +213,5 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

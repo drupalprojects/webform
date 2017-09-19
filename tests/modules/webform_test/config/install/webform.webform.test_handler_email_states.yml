@@ -146,6 +146,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_converted:
     id: email
     label: 'Submission converted'
@@ -175,6 +177,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_completed:
     id: email
     label: 'Submission completed'
@@ -204,6 +208,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_updated:
     id: email
     label: 'Submission updated'
@@ -233,6 +239,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_deleted:
     id: email
     label: 'Submission deleted'
@@ -262,3 +270,5 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

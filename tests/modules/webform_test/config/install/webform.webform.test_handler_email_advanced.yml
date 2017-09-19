@@ -187,3 +187,5 @@ handlers:
       debug: true
       reply_to: reply_to@example.com
       return_path: return_path@example.com
+      sender_mail: sender_mail@example.com
+      sender_name: sender_name

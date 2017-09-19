@@ -164,6 +164,8 @@ handlers:
       debug: false
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   email_notification:
     id: email
     label: 'Email notification'
@@ -193,3 +195,5 @@ handlers:
       debug: false
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

@@ -217,3 +217,5 @@ handlers:
       debug: false
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

@@ -161,6 +161,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   empty:
     id: email
     label: 'Select empty'
@@ -192,6 +194,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   default:
     id: email
     label: 'Select default'
@@ -223,6 +227,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   checkboxes:
     id: email
     label: Checkboxes
@@ -256,6 +262,8 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''
   radios_other:
     id: email
     label: 'Radios other'
@@ -287,3 +295,5 @@ handlers:
       debug: true
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

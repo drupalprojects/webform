@@ -322,6 +322,15 @@ function webform_mail($key, &$message, $params) {
     $message['send'] = FALSE;
   }
 
+  // Set default parameters.
+  $params += [
+    'from_mail' => '',
+    'reply_to' => '',
+    'return_path' => '',
+    'sender_mail' => '',
+    'sender_name' => '',
+  ];
+
   $message['subject'] = $params['subject'];
   $message['body'][] = $params['body'];
 
@@ -333,33 +342,34 @@ function webform_mail($key, &$message, $params) {
   }
 
   // Set header 'Reply-to'.
-  if (!empty($params['reply_to'])) {
-    $message['reply-to'] = $message['headers']['Reply-to'] = $params['reply_to'];
+  $reply_to = $params['reply_to'] ?: \Drupal::config('webform.settings')->get('mail.default_reply_to') ?: '';
+  if (empty($reply_to) && !empty($params['from_mail'])) {
+    // @todo Determine if the 'reply-to' must only be the to 'from mail' if 'from mail' has the same domain as the 'site mail'.
+    $reply_to = $message['from'];
   }
-  elseif ($default_reply_to = \Drupal::config('webform.settings')->get('mail.default_reply_to')) {
-    $message['reply-to'] = $message['headers']['Reply-to'] = $default_reply_to;
-  }
-  elseif (!empty($params['from_mail'])) {
-    // @todo Determine if the 'reply-to' must only be see to 'from mail' if
-    // 'from mail' has the same domain as the 'site mail'.
-    $message['reply-to'] = $message['headers']['Reply-to'] = $message['from'];
+  if ($reply_to) {
+    $message['reply-to'] = $message['headers']['Reply-to'] = $reply_to;
   }
 
   // Set header 'Return-Path'.
-  if (!empty($params['return_path'])) {
-    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $params['return_path'];
-  }
-  elseif ($default_return_path = \Drupal::config('webform.settings')->get('mail.default_return_path')) {
-    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $default_return_path;
-
-  }
-  elseif (!empty($params['from_mail'])) {
-    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $params['from_mail'];
+  $return_path = $params['return_path'] ?: \Drupal::config('webform.settings')->get('mail.default_return_path') ?: $params['from_mail'] ?: '';
+  if ($return_path) {
+    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $return_path;
   }
 
+  // Set header 'Sender'.
+  $sender_mail = $params['sender_mail'] ?: \Drupal::config('webform.settings')->get('mail.default_sender_mail') ?: '';
+  $sender_name = $params['sender_name'] ?: \Drupal::config('webform.settings')->get('mail.default_sender_name') ?: $params['from_name'] ?: '';
+  if ($sender_mail) {
+    $message['headers']['Sender'] = ($sender_name) ? Unicode::mimeHeaderEncode($sender_name) . ' <' . $sender_mail . '>' : $sender_mail;
+  }
+
+  // Set header 'Cc'.
   if (!empty($params['cc_mail'])) {
     $message['headers']['Cc'] = $params['cc_mail'];
   }
+
+  // Set header 'Bcc'.
   if (!empty($params['bcc_mail'])) {
     $message['headers']['Bcc'] = $params['bcc_mail'];
   }

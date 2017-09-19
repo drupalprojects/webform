@@ -130,41 +130,39 @@ function _webform_update_webform_settings() {
 /**
  * Update webform handler setting to reflect changes in a handler's default configuration.
  *
- * @param string $handler_id
- *   A webform handler id.
+ * Must be called by passing in the handler's class using ::class
+ *
+ * Example usage:
+ * @code
+ * _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
+ * @endcode
+ *
+ * @param \Drupal\webform\Plugin\WebformHandlerInterface $handler_class
+ *   A handler class instance.
  *
  * @see \Drupal\webform\Plugin\WebformHandlerInterface
  */
-function _webform_update_webform_handler_settings($handler_id) {
-  /** @var \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager */
-  $handler_manager = \Drupal::service('plugin.manager.webform.handler');
-  /** @var \Drupal\webform\Plugin\WebformHandlerInterface $handler */
-  $handler = $handler_manager->createInstance($handler_id);
-
-  $default_settings = $handler->defaultConfiguration();
-
-  $config_factory = \Drupal::configFactory();
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
-
-    $data = $webform_config->getRawData();
+function _webform_update_webform_handler_class_settings($handler_class) {
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
     $has_handler = FALSE;
-    foreach ($data['handlers'] as &$handler) {
-      if ($handler['id'] === $handler_id) {
+    $handlers = $webform->getHandlers();
+    foreach ($handlers as $handler) {
+      if ($handler instanceof $handler_class) {
         $has_handler = TRUE;
+        $configuration = $handler->getConfiguration();
 
-        $settings = $default_settings;
-        foreach ($handler['settings'] as $settings_key => $setting_value) {
+        $settings = $handler->defaultConfiguration();
+        foreach ($configuration['settings'] as $settings_key => $setting_value) {
           $settings[$settings_key] = $setting_value;
         }
-
-        $handler['settings'] = $settings;
+        $configuration['settings'] = $settings;
+        $handler->setConfiguration($configuration);
       }
     }
-
     if ($has_handler) {
-      $webform_config->setData($data);
-      $webform_config->save();
+      $webform->save();
     }
   }
 }

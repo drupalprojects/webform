@@ -120,6 +120,8 @@ mail:
   default_from_name: '[site:name]'
   default_reply_to: ''
   default_return_path: ''
+  default_sender_mail: ''
+  default_sender_name: ''
   default_subject: 'Webform submission from: [webform_submission:source-entity]'
   default_body_text: |
     Submitted on [webform_submission:created]

@@ -223,6 +223,12 @@ webform.settings:
         default_return_path:
           type: label
           label: 'Default return path email'
+        default_sender_mail:
+          type: email
+          label: 'Default sender email'
+        default_sender_name:
+          type: label
+          label: 'Default sender name'
         default_subject:
           type: label
           label: 'Default email subject'
@@ -893,6 +899,12 @@ webform.handler.email:
     return_path:
       type: label
       label: 'Return path email'
+    sender_mail:
+      type: email
+      label: 'Sender email'
+    sender_name:
+      type: label
+      label: 'Sender name'
     subject:
       label: 'Email subject'
       type: label
