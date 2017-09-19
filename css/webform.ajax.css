@@ -44,9 +44,3 @@
 .toolbar-tray-open.toolbar-horizontal .webform-modal {
   top: 90px !important;
 }
-
-@media (max-width: 975px) {
-  .webform-modal {
-    top: 50px !important;
-  }
-}
