@@ -170,7 +170,7 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
   /**
    * {@inheritdoc}
    */
-  public static function getElementOptions(array $element, $property_name = '#options') {
+  public static function getElementOptions(array &$element, $property_name = '#options') {
     // If element already has #options return them.
     // NOTE: Only WebformOptions can be altered. If you need to alter an
     // element's options, @see hook_webform_element_alter().
