@@ -208,7 +208,7 @@ class DateList extends DateBase {
 
 
   /**
-   * After build hander for Date elements.
+   * After build handler for Datelist element.
    */
   public static function afterBuild(array $element, \Drupal\Core\Form\FormStateInterface $form_state) {
     // Reverse years from min:max to max:min.
