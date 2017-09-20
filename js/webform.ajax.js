@@ -6,13 +6,7 @@
 (function ($, Drupal) {
 
   'use strict';
-
-  Drupal.webform = Drupal.webform || {};
-  Drupal.webform.ajax = Drupal.webform.ajax || {};
-  // Allow scrollTopOffset to be custom defined or based on whether there is a
-  // floating toolbar.
-  Drupal.webform.ajax.scrollTopOffset = Drupal.webform.ajax.scrollTopOffset || ($('#toolbar-administration').length ? 140 : 10);
-
+  
   /**
    * Provide Webform Ajax link behavior.
    *
@@ -179,9 +173,20 @@
     while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
       scrollTarget = $(scrollTarget).parent();
     }
-    // Only scroll upward.
-    if (offset.top - Drupal.webform.ajax.scrollTopOffset < $(scrollTarget).scrollTop()) {
-      $(scrollTarget).animate({scrollTop: (offset.top - Drupal.webform.ajax.scrollTopOffset)}, 500);
+
+    if ($(scrollTarget).length && $(scrollTarget)[0].tagName === 'HTML') {
+      // Scroll to top when scroll target is the entire page.
+      // @see https://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+      var rect = $(scrollTarget)[0].getBoundingClientRect();
+      if (!(rect.top >= 0 && rect.left >= 0 && rect.bottom <= $(window).height() && rect.right <= $(window).width())) {
+        $(scrollTarget).animate({scrollTop: 0}, 500);
+      }
+    }
+    else {
+      // Only scroll upward.
+      if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+        $(scrollTarget).animate({scrollTop: (offset.top - 10)}, 500);
+      }
     }
   };
 

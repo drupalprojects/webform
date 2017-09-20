@@ -25,7 +25,7 @@ class WebformTestAjaxBlock extends BlockBase {
 
     $links = [];
     foreach ($webforms as $webform_id => $webform) {
-      if (strpos($webform_id, 'test_ajax') !== 0) {
+      if (strpos($webform_id, 'test_ajax') !== 0 && $webform_id != 'test_form_wizard_long_100') {
         continue;
       }
 
