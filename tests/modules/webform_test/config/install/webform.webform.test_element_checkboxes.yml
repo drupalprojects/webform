@@ -8,67 +8,26 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_radios
-title: 'Test: Element: Radios'
-description: 'Test the radios.'
+id: test_element_checkboxes
+title: 'Test: Element: Checkboxes'
+description: 'Test the checkboxes.'
 category: 'Test: Element'
 elements: |
-  radios_required_example:
+  checkboxes_descriptions_example:
     '#type': details
-    '#title': 'Radios required'
+    '#title': 'Checkboxes descriptions'
     '#open': true
-    radios_required:
-      '#type': radios
-      '#title': radios_required
-      '#required': true
-      '#options': yes_no
-  radios_required_conditional_example:
-    '#type': details
-    '#title': 'Radios required conditional'
-    '#open': true
-    radios_required_conditional_trigger:
-      '#type': checkbox
-      '#title': 'Required the below radio button'
-      '#default_value': true
-    radios_required_conditions:
-      '#type': radios
-      '#title': radios_required
-      '#options': yes_no
-      '#states':
-        required:
-          ':input[name="radios_required_conditional_trigger"]':
-            checked: true
-  buttons_required_conditional_example:
-    '#type': details
-    '#title': 'Buttons required conditional'
-    '#open': true
-    buttons_required_conditional_trigger:
-      '#type': checkbox
-      '#title': 'Required the below buttons'
-      '#default_value': true
-    buttons_required_conditions:
-      '#type': webform_buttons
-      '#title': buttons_required
-      '#options': yes_no
-      '#states':
-        required:
-          ':input[name="buttons_required_conditional_trigger"]':
-            checked: true
-  radios_descriptions_example:
-    '#type': details
-    '#title': 'Radios descriptions'
-    '#open': true
-    radios_description:
-      '#type': radios
-      '#title': radios_description
+    checkboxes_description:
+      '#type': checkboxes
+      '#title': checkboxes_description
       '#options_description_display': description
       '#options':
         one: 'One -- This is a description'
         two: 'Two -- This is a description'
         three: 'Three -- This is a description'
-    radios_help:
-      '#type': radios
-      '#title': radios_help
+    checkboxes_help:
+      '#type': checkboxes
+      '#title': checkboxes_help
       '#options_description_display': help
       '#options':
         one: 'One -- This is a description'

@@ -35,6 +35,7 @@ class WebformElementOptions extends FormElement {
       ],
       '#theme_wrappers' => ['form_element'],
       '#custom__type' => 'webform_options',
+      '#options_description' => FALSE,
     ];
   }
 
@@ -124,6 +125,7 @@ class WebformElementOptions extends FormElement {
           ],
         ],
         '#error_no_message' => TRUE,
+        '#options_description' => $element['#options_description'],
         '#default_value' => (isset($element['#default_value']) && !is_string($element['#default_value'])) ? $element['#default_value'] : [],
       ];
     }

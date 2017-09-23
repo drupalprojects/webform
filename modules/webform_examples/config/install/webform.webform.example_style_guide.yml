@@ -65,6 +65,23 @@ elements: |
         one: One
         two: Two
         three: Three
+    checkboxes_help:
+      '#type': checkboxes
+      '#title': 'Checkboxes with help text'
+      '#options_display': side_by_side
+      '#options_description_display': help
+      '#options':
+        one: 'One -- This is help text.'
+        two: 'Two -- This is help text.'
+        three: 'Three -- This is  help text.'
+    checkboxes_description:
+      '#type': checkboxes
+      '#title': 'Checkboxes with descriptions'
+      '#options_description_display': description
+      '#options':
+        one: 'One -- This is a descripion.'
+        two: 'Two -- This is a descripion.'
+        three: 'Three -- This is a descripion.'
     checkboxes_icheck:
       '#type': checkboxes
       '#title': 'Checkboxes (iCheck)'

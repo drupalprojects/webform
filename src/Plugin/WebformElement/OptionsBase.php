@@ -225,7 +225,8 @@ abstract class OptionsBase extends WebformElementBase {
     $format = $this->getItemFormat($element);
     if ($format == 'value' && isset($element['#options'])) {
       $flattened_options = OptGroup::flattenOptions($element['#options']);
-      return WebformOptionsHelper::getOptionText($value, $flattened_options);
+      $options_description = $this->hasProperty('options_description_display');
+      return WebformOptionsHelper::getOptionText($value, $flattened_options, $options_description);
     }
     else {
       return $value;
@@ -289,21 +290,13 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Build format options with help.
     $options_format_options = [
-      'compact' => [
-        'text' => ['#markup' => $this->t('Compact; with the option values delimited by commas in one column.')],
-        'help' => ['#type' => 'webform_help', '#help' => $this->t('Compact options are more suitable for importing data into other systems.')],
-      ],
-      'separate' => [
-        'text' => ['#markup' => $this->t('Separate; with each possible option value in its own column.')],
-        'help' => ['#type' => 'webform_help', '#help' => $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application. Ranking will be included for sortable option elements.')],
-      ],
+      'compact' => $this->t('Compact; with the option values delimited by commas in one column.') .
+        WebformOptionsHelper::DESCRIPTION_DELIMITER .
+        $this->t('Compact options are more suitable for importing data into other systems.'),
+      'separate' => $this->t('Separate; with each possible option value in its own column.') .
+        WebformOptionsHelper::DESCRIPTION_DELIMITER .
+        $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application. Ranking will be included for sortable option elements.'),
     ];
-    /** @var \Drupal\Core\Render\RendererInterface $renderer */
-    $renderer = \Drupal::service('renderer');
-    foreach ($options_format_options as $value => $text) {
-      $options_format_options[$value] = $renderer->render($text);
-    }
-
     $form['options'] = [
       '#type' => 'details',
       '#title' => $this->t('Select menu, radio buttons, and checkboxes options'),
@@ -315,6 +308,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#title' => $this->t('Options single value format'),
       '#description' => $this->t('Elements that collect a single option value include select menus, radios, and buttons.'),
       '#options' => $options_format_options,
+      '#options_description_display' => 'help',
       '#default_value' => $export_options['options_single_format'],
     ];
     $form['options']['options_multiple_format'] = [
@@ -322,6 +316,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#title' => $this->t('Options multiple values format'),
       '#description' => $this->t('Elements that collect multiple option values include multi-select, checkboxes, and toggles.'),
       '#options' => $options_format_options,
+      '#options_description_display' => 'help',
       '#default_value' => $export_options['options_multiple_format'],
     ];
     $form['options']['options_item_format'] = [
@@ -494,6 +489,9 @@ abstract class OptionsBase extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    $help_enabled = $this->configFactory->get('webform.settings')->get('ui.description_help');
+    $form_inline_input_attributes = ($help_enabled) ? ['class' => ['form--inline', 'clearfix', 'webform-ui-element-form-inline--input']] : [];
+
     $form['element']['default_value']['#description'] = $this->t('The default value of the field identified by its key.');
 
     // Issue #2836374: Wrapper attributes are not supported by composite
@@ -514,9 +512,15 @@ abstract class OptionsBase extends WebformElementBase {
     $form['options']['options'] = [
       '#type' => 'webform_element_options',
       '#title' => $this->t('Options'),
+      '#options_description' => $this->hasProperty('options_description_display'),
       '#required' => TRUE,
     ];
-    $form['options']['options_display'] = [
+
+    $form['options']['options_display_container'] = [
+      '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
+    ];
+    $form['options']['options_display_container']['options_display'] = [
       '#title' => $this->t('Options display'),
       '#type' => 'select',
       '#options' => [
@@ -524,6 +528,14 @@ abstract class OptionsBase extends WebformElementBase {
         'two_columns' => $this->t('Two columns'),
         'three_columns' => $this->t('Three columns'),
         'side_by_side' => $this->t('Side by side'),
+      ],
+    ];
+    $form['options']['options_display_container']['options_description_display'] = [
+      '#title' => $this->t('Options description display'),
+      '#type' => 'select',
+      '#options' => [
+        'description' => $this->t('Description'),
+        'help' => $this->t('Help text'),
       ],
     ];
     $form['options']['empty_option'] = [

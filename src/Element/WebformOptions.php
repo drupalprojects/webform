@@ -7,6 +7,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformOptionsHelper;
 
 /**
  * Provides a webform element to assist in creation of options.
@@ -29,6 +30,7 @@ class WebformOptions extends FormElement {
       '#labels' => t('options'),
       '#empty_items' => 5,
       '#add_more' => 1,
+      '#options_description' => FALSE,
       '#process' => [
         [$class, 'processWebformOptions'],
       ],
@@ -49,7 +51,7 @@ class WebformOptions extends FormElement {
       if (static::hasOptGroup($options)) {
         return $options;
       }
-      return static::convertOptionsToValues($options);
+      return static::convertOptionsToValues($options, $element['#options_description']);
     }
     elseif (is_array($input) && isset($input['options'])) {
       return (is_string($input['options'])) ? Yaml::decode($input['options']) : $input['options'];
@@ -104,8 +106,23 @@ class WebformOptions extends FormElement {
             '#maxlength' => 255,
           ],
         ],
-        '#default_value' => (isset($element['#default_value'])) ? static::convertOptionsToValues($element['#default_value']) : [],
+        '#default_value' => (isset($element['#default_value'])) ? static::convertOptionsToValues($element['#default_value'], $element['#options_description']) : [],
       ];
+      if ($element['#options_description']) {
+        $element['options']['#header'] = [
+          ['data' => t('Options value'), 'width' => '25%'],
+          ['data' => t('Options text'), 'width' => '25%'],
+          ['data' => t('Options description'), 'width' => '50%'],
+        ];
+        $element['options']['#element']['description'] = [
+          '#type' => 'textarea',
+          '#title' => t('Option description'),
+          '#title_display' => t('invisible'),
+          '#placeholder' => t('Enter description'),
+          '#rows' => 2,
+          '#maxlength' => 255,
+        ];
+      }
       return $element;
     }
   }
@@ -120,7 +137,7 @@ class WebformOptions extends FormElement {
       $options = Yaml::decode($options_value);
     }
     else {
-      $options = static::convertValuesToOptions($options_value);
+      $options = static::convertValuesToOptions($options_value, $element['#options_description']);
     }
 
     // Validate required options.
@@ -149,17 +166,22 @@ class WebformOptions extends FormElement {
    *
    * @param array $values
    *   An array of values.
+   * @param bool $options_description
+   *   Options has description.
    *
    * @return array
    *   An array of options.
    */
-  public static function convertValuesToOptions(array $values = []) {
+  public static function convertValuesToOptions(array $values = [], $options_description = FALSE) {
     $options = [];
     foreach ($values as $value) {
       $option_value = $value['value'];
       $option_text = $value['text'];
-
+      if ($options_description && !empty($value['description'])) {
+        $option_text .= WebformOptionsHelper::DESCRIPTION_DELIMITER . $value['description'];
+      }
       // Populate empty option value or option text.
+
       if ($option_value === '') {
         $option_value = $option_text;
       }
@@ -177,14 +199,22 @@ class WebformOptions extends FormElement {
    *
    * @param array $options
    *   An array of options.
+   * @param bool $options_description
+   *   Options has description.
    *
    * @return array
    *   An array of values.
    */
-  public static function convertOptionsToValues(array $options = []) {
+  public static function convertOptionsToValues(array $options = [], $options_description = FALSE) {
     $values = [];
     foreach ($options as $value => $text) {
-      $values[] = ['value' => $value, 'text' => $text];
+      if ($options_description && strpos($text, WebformOptionsHelper::DESCRIPTION_DELIMITER) !== FALSE) {
+        list($text, $description) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $text);
+        $values[] = ['value' => $value, 'text' => $text, 'description' => $description];
+      }
+      else {
+        $values[] = ['value' => $value, 'text' => $text];
+      }
     }
     return $values;
   }
