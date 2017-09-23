@@ -108,6 +108,9 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
     parent::prepare($element, $webform_submission);
     $element['#after_build'][] = [get_class($this), 'afterBuildEntityAutocomplete'];
 
+    // Remove maxlength.
+    $element['#maxlength'] = NULL;
+
     // If selection handler include auto_create when need to also set it for
     // the $element.
     // @see \Drupal\Core\Entity\Element\EntityAutocomplete::validateEntityAutocomplete
