@@ -27,10 +27,15 @@ details details details {
   background-color: #fff;
 }
 
-/* Add yellow background to tooltips */
+/* Add yellow background to tooltips and tabs */
 .ui-tooltip.ui-widget {
   background: #fe6;;
-  border-color: #ed5;
+  border: 1px solid #ed5;
+}
+
+.webform-tabs .ui-tabs-active.ui-state-active {
+  background: #fe6;
+  border: 1px solid #ed5;
 }
 
 /* CodeMirror viewer */
