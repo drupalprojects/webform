@@ -49,7 +49,8 @@ use Drupal\webform\WebformSubmissionInterface;
  *   entity_keys = {
  *     "id" = "sid",
  *     "bundle" = "webform_id",
- *     "uuid" = "uuid"
+ *     "uuid" = "uuid",
+ *     "langcode" = "langcode"
  *   },
  *   links = {
  *     "canonical" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}",
