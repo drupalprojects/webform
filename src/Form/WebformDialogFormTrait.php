@@ -78,7 +78,7 @@ trait WebformDialogFormTrait {
    * {@inheritdoc}
    */
   public function cancelAjaxForm(array &$form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
+    $response = $this->createAjaxResponse($form, $form_state);
     $response->addCommand(new CloseDialogCommand());
     return $response;
   }

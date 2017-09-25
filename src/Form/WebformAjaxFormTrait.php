@@ -11,7 +11,9 @@ use Drupal\Core\Url;
 use Drupal\webform\Ajax\WebformCloseDialogCommand;
 use Drupal\webform\Ajax\WebformRefreshCommand;
 use Drupal\webform\Ajax\WebformScrollTopCommand;
+use Drupal\webform\Ajax\WebformSubmissionAjaxResponse;
 use Drupal\webform\Utility\WebformDialogHelper;
+use Drupal\webform\WebformSubmissionForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -178,19 +180,19 @@ trait WebformAjaxFormTrait {
   public function submitAjaxForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->hasAnyErrors()) {
       // Display validation errors and scroll to the top of the page.
-      $response = $this->replaceForm($form);
+      $response = $this->replaceForm($form, $form_state);
       $response->addCommand(new WebformScrollTopCommand('#' . $this->getWrapperId()));
       return $response;
     }
     elseif ($form_state->isRebuilding()) {
       // Rebuild form.
-      $response = $this->replaceForm($form);
+      $response = $this->replaceForm($form, $form_state);
       $response->addCommand(new WebformScrollTopCommand('#' . $this->getWrapperId()));
       return $response;
     }
     elseif ($redirect_url = $this->getFormStateRedirectUrl($form_state)) {
       // Redirect to URL.
-      $response = new AjaxResponse();
+      $response = $this->createAjaxResponse($form, $form_state);
       $response->addCommand(new WebformCloseDialogCommand());
       $response->addCommand(new WebformRefreshCommand($redirect_url));
       return $response;
@@ -211,15 +213,43 @@ trait WebformAjaxFormTrait {
   }
 
   /**
+   * Create an AjaxResponse or WebformAjaxResponse object.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An AjaxResponse or WebformAjaxResponse object
+   */
+  protected function createAjaxResponse(array $form, $form_state) {
+    $form_object = $form_state->getFormObject();
+    if ($form_object instanceof WebformSubmissionForm) {
+      /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+      $webform_submission = $form_object->getEntity();
+
+      $response = new WebformSubmissionAjaxResponse();
+      $response->setWebformSubmission($webform_submission);
+      return $response;
+    }
+    else {
+      return new AjaxResponse();
+    }
+  }
+
+  /**
    * Replace form via an Ajax response.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   An Ajax response that replaces a form.
    */
-  protected function replaceForm(array $form) {
+  protected function replaceForm(array $form, $form_state) {
     // Display messages first by prefixing it the form and setting its weight
     // to -1000.
     $form = [
@@ -232,7 +262,7 @@ trait WebformAjaxFormTrait {
     // Remove wrapper.
     unset($form['#prefix'], $form['#suffix']);
 
-    $response = new AjaxResponse();
+    $response = $this->createAjaxResponse($form, $form_state);
     $response->addCommand(new HtmlCommand('#' . $this->getWrapperId(), $form));
     return $response;
   }
