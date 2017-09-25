@@ -160,6 +160,37 @@ elements: |
       - id: jane
         first_name: Jane
         last_name: Doe
+  webform_multiple_elements_flattened:
+    '#type': webform_multiple
+    '#title': webform_multiple_elements_flattened
+    '#header': true
+    '#element':
+      value:
+        '#type': textfield
+        '#title': value
+        '#title_display': invisible
+        '#placeholder': 'Enter value'
+      option:
+        '#type': container
+        '#title': 'text/description'
+        '#title_display': invisible
+        text:
+          '#type': textfield
+          '#title': text
+          '#title_display': invisible
+          '#placeholder': 'Enter text'
+        description:
+          '#type': textfield
+          '#title': description
+          '#title_display': invisible
+          '#placeholder': 'Enter description'
+    '#default_value':
+      - value: one
+        text: One
+        description: This is the number 1.
+      - value: two
+        text: Two
+        description: This is the number 2.
 css: ''
 javascript: ''
 settings:

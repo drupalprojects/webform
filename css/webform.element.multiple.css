@@ -17,6 +17,7 @@
 
 .webform-multiple-table td {
   white-space: nowrap;
+  vertical-align: top;
 }
 
 .webform-multiple-table td:first-child {

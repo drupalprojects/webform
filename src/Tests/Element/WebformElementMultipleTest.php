@@ -78,7 +78,14 @@ webform_multiple_elements_hidden_table:
     last_name: Smith
   - first_name: Jane
     id: jane
-    last_name: Doe");
+    last_name: Doe
+webform_multiple_elements_flattened:
+  - value: one
+    text: One
+    description: 'This is the number 1.'
+  - value: two
+    text: Two
+    description: 'This is the number 2.'");
 
     /**************************************************************************/
     // Rendering.
@@ -97,6 +104,7 @@ webform_multiple_elements_hidden_table:
     $this->assertRaw('<td><input data-drupal-selector="edit-webform-multiple-default-items-0-operations-add" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-add" name="webform_multiple_default_table_add_0"');
     $this->assertRaw('<input data-drupal-selector="edit-webform-multiple-default-items-0-operations-remove" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-remove" name="webform_multiple_default_table_remove_0"');
 
+    
     /**************************************************************************/
     // Validation.
     /**************************************************************************/

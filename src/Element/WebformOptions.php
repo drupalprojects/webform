@@ -87,10 +87,45 @@ class WebformOptions extends FormElement {
     }
     else {
       $properties = ['#label', '#labels', '#empty_items', '#add_more'];
+
       $element['options'] = array_intersect_key($element, array_combine($properties, $properties)) + [
         '#type' => 'webform_multiple',
         '#header' => TRUE,
-        '#element' => [
+        '#default_value' => (isset($element['#default_value'])) ? static::convertOptionsToValues($element['#default_value'], $element['#options_description']) : [],
+      ];
+
+      if ($element['#options_description']) {
+        $element['options']['#element'] = [
+          'value' => [
+            '#type' => 'textfield',
+            '#title' => t('Option value'),
+            '#title_display' => t('invisible'),
+            '#placeholder' => t('Enter value'),
+            '#maxlength' => 255,
+          ],
+          'option' => [
+            '#type' => 'container',
+            '#title' => t('Option text/description'),
+            '#title_display' => t('invisible'),
+            'text' => [
+              '#type' => 'textfield',
+              '#title' => t('Option text'),
+              '#title_display' => t('invisible'),
+              '#placeholder' => t('Enter text'),
+              '#maxlength' => 255,
+            ],
+            'description' => [
+              '#type' => 'textarea',
+              '#title' => t('Option description'),
+              '#title_display' => t('invisible'),
+              '#placeholder' => t('Enter description'),
+              '#rows' => 2,
+            ],
+          ],
+        ];
+      }
+      else {
+        $element['options']['#element'] = [
           'value' => [
             '#type' => 'textfield',
             '#title' => t('Option value'),
@@ -105,22 +140,6 @@ class WebformOptions extends FormElement {
             '#placeholder' => t('Enter text'),
             '#maxlength' => 255,
           ],
-        ],
-        '#default_value' => (isset($element['#default_value'])) ? static::convertOptionsToValues($element['#default_value'], $element['#options_description']) : [],
-      ];
-      if ($element['#options_description']) {
-        $element['options']['#header'] = [
-          ['data' => t('Options value'), 'width' => '25%'],
-          ['data' => t('Options text'), 'width' => '25%'],
-          ['data' => t('Options description'), 'width' => '50%'],
-        ];
-        $element['options']['#element']['description'] = [
-          '#type' => 'textarea',
-          '#title' => t('Option description'),
-          '#title_display' => t('invisible'),
-          '#placeholder' => t('Enter description'),
-          '#rows' => 2,
-          '#maxlength' => 255,
         ];
       }
       return $element;
@@ -180,8 +199,8 @@ class WebformOptions extends FormElement {
       if ($options_description && !empty($value['description'])) {
         $option_text .= WebformOptionsHelper::DESCRIPTION_DELIMITER . $value['description'];
       }
+      
       // Populate empty option value or option text.
-
       if ($option_value === '') {
         $option_value = $option_text;
       }
