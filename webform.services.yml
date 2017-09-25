@@ -4,7 +4,7 @@ services:
 
   plugin.manager.webform.element:
     class: Drupal\webform\Plugin\WebformElementManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@config.factory', '@plugin.manager.element_info']
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@theme_handler', '@config.factory', '@plugin.manager.element_info']
 
   plugin.manager.webform.handler:
     class: Drupal\webform\Plugin\WebformHandlerManager
