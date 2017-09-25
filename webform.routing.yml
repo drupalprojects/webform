@@ -64,13 +64,7 @@ webform.help.video:
   requirements:
     _permission: 'access administration pages'
 
-webform.help.about:
-  path: '/admin/help/webform/about'
-  defaults:
-    _controller: '\Drupal\webform\Controller\WebformHelpController::about'
-    _title: 'How can we help you?'
-  requirements:
-    _permission: 'access administration pages'
+# Add-ons
 
 webform.addons:
   path: '/admin/structure/webform/addons'
@@ -79,6 +73,24 @@ webform.addons:
     _title: 'Webforms'
   requirements:
     _permission: 'administer webform'
+
+# About
+
+webform.about:
+  path: '/admin/structure/webform/about'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformAboutController::webform'
+    _title: 'About Webform'
+  requirements:
+    _permission: 'access webform overview'
+
+webform.about.drupal:
+  path: '/admin/structure/webform/about/drupal'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformAboutController::drupal'
+    _title: 'About Drupal'
+  requirements:
+    _permission: 'access webform overview'
 
 # Forms
 

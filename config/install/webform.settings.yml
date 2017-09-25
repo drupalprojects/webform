@@ -237,7 +237,7 @@ ui:
   details_save: true
   dialog_disabled: false
   offcanvas_disabled: false
-  help_menu_disabled: false
+  about_disabled: false
   promotions_disabled: false
   description_help: true
 libraries:

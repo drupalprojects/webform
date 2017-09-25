@@ -39,9 +39,6 @@ function template_preprocess_webform_help(array &$variables) {
   $variables += $help_info;
 
   $help = [];
-  if (!empty($help_info['menu']) && !\Drupal::config('webform.settings')->get('ui.help_menu_disabled')) {
-    $help['menu'] = $help_manager->buildHelpMenu();
-  }
   if (is_array($help_info['content'])) {
     $help['content'] = $help_info['content'];
   }

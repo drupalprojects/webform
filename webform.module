@@ -130,6 +130,15 @@ function webform_local_tasks_alter(&$local_tasks) {
   if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.settings'])) {
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.settings']['parent_id'] = 'webform.settings';
   }
+
+  // Disable 'About' tab.
+  if (\Drupal::config('webform.settings')->get('ui.about_disabled')) {
+    unset(
+      $local_tasks['webform.about'],
+      $local_tasks['webform.about.webform'],
+      $local_tasks['webform.about.drupal']
+    );
+  }
 }
 
 /**

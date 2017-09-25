@@ -1,0 +1,26 @@
+/**
+ * @file
+ * About styles.
+ *
+ * @see /admin/structure/webform/about
+ */
+
+.webform-about h4 {
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.webform-about .button.button--primary {
+  width: 100%;
+  max-width: 600px;
+  margin: 0;
+}
+
+.webform-about img {
+  width: 100%;
+  height: auto;
+}
+
+.webform-about .webform-help-video-youtube {
+  max-width: 600px;
+}

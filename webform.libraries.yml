@@ -50,7 +50,7 @@ webform.admin.translation:
     theme:
       css/webform.admin.translation.css: {}
 
-# Admin.
+# Add-ons.
 
 webform.addons:
   version: VERSION
@@ -62,6 +62,16 @@ webform.addons:
     - webform/webform.element.details.toggle
     - webform/webform.element.details.save
     - webform/webform.promotions
+
+# About.
+
+webform.about:
+  version: VERSION
+  css:
+    theme:
+      css/webform.about.css: {}
+  dependencies:
+    - webform/webform.help
 
 # Ajax.
 
