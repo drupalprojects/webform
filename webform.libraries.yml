@@ -270,12 +270,26 @@ webform.form.unsaved:
 
 # Element.
 
-webform.element.buttons:
+# Drupal 8.3.x and below
+webform.element.buttons.buttonset:
   version: VERSION
   js:
-    js/webform.element.buttons.js: {}
+    js/webform.element.buttons.buttonset.js: {}
   dependencies:
     - core/jquery.ui.button
+
+# Drupal 8.4.x and above
+webform.element.buttons.checkboxradio:
+  version: VERSION
+  js:
+    # Issue #2906737: With the new jquery 3 checkboxradio and selectmenu error.
+    # @see https://www.drupal.org/node/2906737
+    /core/assets/vendor/jquery.ui/ui/form-reset-mixin-min.js: { minified: true }
+    /core/assets/vendor/jquery.ui/ui/escape-selector-min.js: { minified: true }
+    /core/assets/vendor/jquery.ui/ui/widgets/checkboxradio-min.js: { minified: true }
+    js/webform.element.buttons.checkboxradio.js: {}
+  dependencies:
+    - core/jquery.ui.checkboxradio
 
 webform.element.chosen:
   version: VERSION
