@@ -1148,19 +1148,22 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
-    // Escape all HTML entities.
     $format = $this->getItemFormat($element);
-    if ($format != 'raw' && is_string($value)) {
-      $value = Html::escape($value);
-    }
 
-    // Apply #field prefix and #field_suffix to value.
-    if (isset($element['#type'])) {
-      if (isset($element['#field_prefix'])) {
-        $value = $element['#field_prefix'] . $value;
+    if ($format != 'raw') {
+      // Escape all HTML entities.
+      if (is_string($value)) {
+        $value = Html::escape($value);
       }
-      if (isset($element['#field_suffix'])) {
-        $value .= $element['#field_suffix'];
+
+      // Apply #field prefix and #field_suffix to value.
+      if (isset($element['#type'])) {
+        if (isset($element['#field_prefix'])) {
+          $value = $element['#field_prefix'] . $value;
+        }
+        if (isset($element['#field_suffix'])) {
+          $value .= $element['#field_suffix'];
+        }
       }
     }
 
