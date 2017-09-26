@@ -186,11 +186,16 @@ abstract class OptionsBase extends WebformElementBase {
       $element['#options'] = WebformArrayHelper::shuffle($element['#options']);
     }
 
-    // Options description display must be set to trigger the layout.
+    // Options description display must be set to trigger the description display.
     if ($this->hasProperty('options_description_display') && empty($element['#options_description_display'])) {
       $element['#options_description_display'] = $this->getDefaultProperty('options_description_display');
     }
-    
+
+    // Options display must be set to trigger the options display.
+    if ($this->hasProperty('options_display') && empty($element['#options_display'])) {
+      $element['#options_display'] = $this->getDefaultProperty('options_display');
+    }
+
     // If the element is #required and the #default_value is an empty string
     // we need to unset the #default_value to prevent the below error.
     // 'An illegal choice has been detected'.

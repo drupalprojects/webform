@@ -59,7 +59,7 @@ class WebformElementOtherTest extends WebformTestBase {
     $this->assertRaw('<input data-drupal-selector="edit-checkboxes-other-basic-other" type="text" id="edit-checkboxes-other-basic-other" name="checkboxes_other_basic[other]" value="Four" size="60" maxlength="128" placeholder="Enter other..." class="form-text" />');
 
     // Check advanced checkboxes.
-    $this->assertRaw('<div id="edit-checkboxes-other-advanced-checkboxes" class="webform-options-display-two-columns form-checkboxes">');
+    $this->assertRaw('<div id="edit-checkboxes-other-advanced-checkboxes" class="js-webform-checkboxes webform-options-display-two-columns form-checkboxes">');
     $this->assertRaw('<label class="js-form-required form-required">Checkboxes other advanced</label>');
     $this->assertRaw('<input data-drupal-selector="edit-checkboxes-other-advanced-other" aria-describedby="edit-checkboxes-other-advanced-other--description" type="text" id="edit-checkboxes-other-advanced-other" name="checkboxes_other_advanced[other]" value="Four" size="60" maxlength="128" placeholder="What is this other option" class="form-text" />');
     $this->assertRaw('<div id="edit-checkboxes-other-advanced-other--description" class="description">');

@@ -595,7 +595,7 @@ function webform_element_info_alter(array &$info) {
  *
  * @param array $element
  *   An associative array containing the properties and children of the
- *   webform_tableselect_order element.
+ *   radios or checkboxes element.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
  * @param array $complete_form
@@ -605,23 +605,20 @@ function webform_element_info_alter(array &$info) {
  *   The processed element.
  */
 function webform_process_options(&$element, FormStateInterface $form_state, &$complete_form) {
-  if (!isset($element['#options_description_display'])) {
-    return $element;
-  }
+  if (!empty($element['#options_description_display'])) {
+    $description_property_name = ($element['#options_description_display'] == 'help') ? '#help' : '#description';
+    foreach (Element::children($element) as $key) {
+      $title = (string) $element[$key]['#title'];
+      // Check for -- delimiter.
+      if (strpos($title, WebformOptionsHelper::DESCRIPTION_DELIMITER) === FALSE) {
+        continue;
+      }
 
-  $description_property_name = ($element['#options_description_display'] == 'help') ? '#help' : '#description';
-  foreach (Element::children($element) as $key) {
-    $title = (string) $element[$key]['#title'];
-    // Check for -- delimiter.
-    if (strpos($title, WebformOptionsHelper::DESCRIPTION_DELIMITER) === FALSE) {
-      continue;
+      list($title, $description) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $title);
+      $element[$key]['#title'] = Markup::create($title);
+      $element[$key][$description_property_name] = Markup::create($description);
     }
-
-    list($title, $description) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $title);
-    $element[$key]['#title'] = Markup::create($title);
-    $element[$key][$description_property_name] = Markup::create($description);
   }
-
   return $element;
 }
 

@@ -240,10 +240,7 @@ function webform_preprocess_menu_local_action(&$variables) {
  * @see \Drupal\webform\Plugin\WebformElement\OptionsBase
  */
 function webform_preprocess_checkboxes(&$variables) {
-  $element = $variables['element'];
-  $options_display = (!empty($element['#options_display'])) ? $element['#options_display'] : 'one_column';
-  $variables['attributes']['class'][] = 'webform-options-display-' . str_replace('_', '-', $options_display);
-  $variables['#attached']['library'][] = 'webform/webform.element.options';
+  _webform_preprocess_options($variables);
 }
 
 /**
@@ -252,9 +249,23 @@ function webform_preprocess_checkboxes(&$variables) {
  * @see \Drupal\webform\Plugin\WebformElement\OptionsBase
  */
 function webform_preprocess_radios(&$variables) {
-  webform_preprocess_checkboxes($variables);
-  // @see js/webform.element.radios.js
-  $variables['attributes']['class'][] = 'js-webform-radios';
+  _webform_preprocess_options($variables);
+}
+
+/**
+ * Prepares variables for checkboxes and radios options templates.
+ *
+ * Below code must be trigger and template_preprocess_(radios|checkboxes) which
+ * reset the element's 'attributes';
+ */
+function _webform_preprocess_options(&$variables) {
+  $element = $variables['element'];
+
+  if (!empty($element['#options_display'])) {
+    $variables['attributes']['class'][] = 'js-webform-' . $element['#type'];
+    $variables['attributes']['class'][] = 'webform-options-display-' . str_replace('_', '-', $element['#options_display']);
+    $variables['#attached']['library'][] = 'webform/webform.element.options';
+  }
 }
 
 /**
