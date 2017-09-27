@@ -152,6 +152,7 @@ class DateList extends DateBase {
     ];
     $form['date']['date_text_parts'] = [
       '#type' => 'checkboxes',
+      '#options_display' => 'side_by_side',
       '#title' => $this->t('Date text parts'),
       '#description' => $this->t("Select date parts that should be presented as text fields instead of drop-down selectors."),
       '#options' => [
@@ -181,6 +182,7 @@ class DateList extends DateBase {
       '#description' => $this->t('The increment to use for minutes and seconds'),
       '#min' => 1,
       '#size' => 4,
+      '#weight' => 10,
     ];
     return $form;
   }

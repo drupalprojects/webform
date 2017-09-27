@@ -235,9 +235,6 @@ class DateTime extends DateBase {
       '#weight' => 10,
     ];
 
-    $form['date']['min']['#title'] = $this->t('Date min');
-    $form['date']['max']['#title'] = $this->t('Date max');
-
     // Time.
     $form['time'] = [
       '#type' => 'fieldset',
@@ -285,7 +282,8 @@ class DateTime extends DateBase {
         ],
       ],
     ];
-    $form['time']['date_time_min'] = [
+    $form['time']['date_time_container'] = $this->getFormInlineContainer();
+    $form['time']['date_time_container']['date_time_min'] = [
       '#type' => 'webform_time',
       '#title' => $this->t('Time min'),
       '#description' => $this->t('Specifies the minimum time.'),
@@ -295,7 +293,7 @@ class DateTime extends DateBase {
         ],
       ],
     ];
-    $form['time']['date_time_max'] = [
+    $form['time']['date_time_container']['date_time_max'] = [
       '#type' => 'webform_time',
       '#title' => $this->t('Time max'),
       '#description' => $this->t('Specifies the maximum time.'),

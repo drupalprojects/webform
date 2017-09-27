@@ -28,7 +28,7 @@ class WebformToggles extends OptionsBase {
       'on_text' => '',
       'off_text' => '',
     ];
-    unset($properties['required']);
+    unset($properties['required'], $properties['required_message']);
     return $properties;
 
   }

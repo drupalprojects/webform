@@ -28,6 +28,7 @@
   background: #0074bd;
   color: #fff;
   text-decoration: none;
+  cursor: help;
 }
 
 .ui-tooltip.webform-element-help--tooltip  {

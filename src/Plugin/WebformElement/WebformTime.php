@@ -101,12 +101,13 @@ class WebformTime extends WebformElementBase {
       '#other__placeholder' => $this->t('Custom time format...'),
       '#other__description' => $this->t('Enter time format using <a href="http://php.net/manual/en/function.date.php">Time Input Format</a>.'),
     ];
-    $form['time']['min'] = [
+    $form['time']['time_container'] = $this->getFormInlineContainer();
+    $form['time']['time_container']['min'] = [
       '#type' => 'webform_time',
       '#title' => $this->t('Min'),
       '#description' => $this->t('Specifies the minimum time.'),
     ];
-    $form['time']['max'] = [
+    $form['time']['time_container']['max'] = [
       '#type' => 'webform_time',
       '#title' => $this->t('Max'),
       '#description' => $this->t('Specifies the maximum time.'),

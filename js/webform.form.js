@@ -176,7 +176,7 @@
       }
 
       if ($table.length) {
-        $filter_rows = $table.find('div.webform-form-filter-text-source');
+        $filter_rows = $table.find('.webform-form-filter-text-source');
         $input.on('keyup', filterElementList);
         if ($input.val()) {
           $input.keyup();

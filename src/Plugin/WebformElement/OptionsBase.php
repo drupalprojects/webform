@@ -499,9 +499,6 @@ abstract class OptionsBase extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $help_enabled = $this->configFactory->get('webform.settings')->get('ui.description_help');
-    $form_inline_input_attributes = ($help_enabled) ? ['class' => ['form--inline', 'clearfix', 'webform-ui-element-form-inline--input']] : [];
-
     $form['element']['default_value']['#description'] = $this->t('The default value of the field identified by its key.');
 
     // Issue #2836374: Wrapper attributes are not supported by composite
@@ -526,10 +523,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#required' => TRUE,
     ];
 
-    $form['options']['options_display_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['options']['options_display_container'] = $this->getFormInlineContainer();
     $form['options']['options_display_container']['options_display'] = [
       '#title' => $this->t('Options display'),
       '#type' => 'select',
@@ -632,7 +626,24 @@ abstract class OptionsBase extends WebformElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('Other description'),
     ];
-    $form['options_other']['other__size'] = [
+
+    $form['options_other']['other__field_container'] = $this->getFormInlineContainer();
+    $form['options_other']['other__field_container']['other__field_prefix'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Other field prefix'),
+      '#description' => $this->t('Text or code that is placed directly in front of the input. This can be used to prefix an input with a constant string. Examples: $, #, -.'),
+      '#size' => 10,
+      '#states' => $states_textfield_or_number,
+    ];
+    $form['options_other']['other__field_container']['other__field_suffix'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Other field suffix'),
+      '#description' => $this->t('Text or code that is placed directly after the input. This can be used to add a unit to an input. Examples: lb, kg, %.'),
+      '#size' => 10,
+      '#states' => $states_textfield_or_number,
+    ];
+    $form['options_other']['other__size_container'] = $this->getFormInlineContainer();
+    $form['options_other']['other__size_container']['other__size'] = [
       '#type' => 'number',
       '#title' => $this->t('Other size'),
       '#description' => $this->t('Leaving blank will use the default size.'),
@@ -640,7 +651,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#size' => 4,
       '#states' => $states_textfield_or_number,
     ];
-    $form['options_other']['other__maxlength'] = [
+    $form['options_other']['other__size_container']['other__maxlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Other maxlength'),
       '#description' => $this->t('Leaving blank will use the default maxlength.'),
@@ -648,21 +659,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#size' => 4,
       '#states' => $states_textfield_or_number,
     ];
-    $form['options_other']['other__field_prefix'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Other field prefix'),
-      '#description' => $this->t('Text or code that is placed directly in front of the input. This can be used to prefix an input with a constant string. Examples: $, #, -.'),
-      '#size' => 10,
-      '#states' => $states_textfield_or_number,
-    ];
-    $form['options_other']['other__field_suffix'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Other field suffix'),
-      '#description' => $this->t('Text or code that is placed directly after the input. This can be used to add a unit to an input. Examples: lb, kg, %.'),
-      '#size' => 10,
-      '#states' => $states_textfield_or_number,
-    ];
-    $form['options_other']['other__rows'] = [
+    $form['options_other']['other__size_container']['other__rows'] = [
       '#type' => 'number',
       '#title' => $this->t('Other rows'),
       '#description' => $this->t('Leaving blank will use the default rows.'),
@@ -670,7 +667,9 @@ abstract class OptionsBase extends WebformElementBase {
       '#size' => 4,
       '#states' => $states_textarea,
     ];
-    $form['options_other']['other__min'] = [
+
+    $form['options_other']['other__number_container'] = $this->getFormInlineContainer();
+    $form['options_other']['other__number_container']['other__min'] = [
       '#type' => 'number',
       '#title' => $this->t('Other min'),
       '#description' => $this->t('Specifies the minimum value.'),
@@ -678,7 +677,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#size' => 4,
       '#states' => $states_number,
     ];
-    $form['options_other']['other__max'] = [
+    $form['options_other']['other__number_container']['other__max'] = [
       '#type' => 'number',
       '#title' => $this->t('Other max'),
       '#description' => $this->t('Specifies the maximum value.'),
@@ -686,7 +685,7 @@ abstract class OptionsBase extends WebformElementBase {
       '#size' => 4,
       '#states' => $states_number,
     ];
-    $form['options_other']['other__step'] = [
+    $form['options_other']['other__number_container']['other__step'] = [
       '#type' => 'number',
       '#title' => $this->t('Other steps'),
       '#description' => $this->t('Specifies the legal number intervals. Leave blank to support any number interval.'),

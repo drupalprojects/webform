@@ -135,7 +135,7 @@ thead th .dropbutton {
  * @see \Drupal\webform\Plugin\WebformElementBase::form
  */
 .form--inline.webform-ui-element-form-inline--input .form-item {
-  min-width: 130px;
+  min-width: 150px;
 }
 
 .form--inline.webform-ui-element-form-inline--input .form-type-checkbox {
@@ -143,6 +143,7 @@ thead th .dropbutton {
 }
 
 .form--inline.webform-ui-element-form-inline--input .form-item select,
-.form--inline.webform-ui-element-form-inline--input .form-item input[type="text"] {
-  width: 120px
+.form--inline.webform-ui-element-form-inline--input .form-item input[type="text"],
+.form--inline.webform-ui-element-form-inline--input .form-item input[type="number"]{
+  width: 140px
 }

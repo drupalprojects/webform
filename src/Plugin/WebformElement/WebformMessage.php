@@ -122,12 +122,13 @@ class WebformMessage extends WebformMarkupBase {
       '#type' => 'radios',
       '#title' => $this->t('Message storage'),
       '#options' => [
-        WebformMessageElement::STORAGE_NONE => $this->t('None: Message state is never stored.'),
-        WebformMessageElement::STORAGE_SESSION => $this->t('Session storage: Message state is reset after the browser is closed.'),
-        WebformMessageElement::STORAGE_LOCAL => $this->t('Local storage: Message state persists after the browser is closed.'),
-        WebformMessageElement::STORAGE_USER => $this->t("User data: Message state is saved to the current user's data. (Applies to authenticated users only)"),
-        WebformMessageElement::STORAGE_STATE => $this->t("State API: Message state is saved to the site's system state. (Applies to authenticated users only)"),
+        WebformMessageElement::STORAGE_NONE => $this->t('None -- Message state is never stored.'),
+        WebformMessageElement::STORAGE_SESSION => $this->t('Session storage -- Message state is reset after the browser is closed.'),
+        WebformMessageElement::STORAGE_LOCAL => $this->t('Local storage -- Message state persists after the browser is closed.'),
+        WebformMessageElement::STORAGE_USER => $this->t("User data -- Message state is saved to the current user's data. (Applies to authenticated users only)"),
+        WebformMessageElement::STORAGE_STATE => $this->t("State API -- Message state is saved to the site's system state. (Applies to authenticated users only)"),
       ],
+      '#options_description_display' => 'help',
       '#states' => [
         'visible' => [':input[name="properties[message_close]"]' => ['checked' => TRUE]],
       ],

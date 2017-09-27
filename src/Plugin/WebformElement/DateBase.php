@@ -190,13 +190,13 @@ abstract class DateBase extends WebformElementBase {
 
     $form['date']['min'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Min'),
+      '#title' => $this->t('Date min'),
       '#description' => $this->t('Specifies the minimum date.') . '<br /><br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
       '#weight' => 10,
     ];
     $form['date']['max'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Max'),
+      '#title' => $this->t('Date max'),
       '#description' => $this->t('Specifies the maximum date.') . '<br /><br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
       '#weight' => 10,
     ];

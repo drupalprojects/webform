@@ -1678,7 +1678,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Check if inline help is enabled and set inline form attributes.
     $help_enabled = $this->configFactory->get('webform.settings')->get('ui.description_help');
-    $form_inline_input_attributes = ($help_enabled) ? ['class' => ['form--inline', 'clearfix', 'webform-ui-element-form-inline--input']] : [];
 
     /* Element settings */
 
@@ -1778,10 +1777,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'details',
       '#title' => $this->t('Form display'),
     ];
-    $form['form']['display_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['form']['display_container'] = $this->getFormInlineContainer();
     $form['form']['display_container']['title_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Title display'),
@@ -1807,10 +1803,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
       '#description' => $this->t('Determines the placement of the description.'),
     ];
-    $form['form']['field_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['form']['field_container'] = $this->getFormInlineContainer();
     $form['form']['field_container']['field_prefix'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Field prefix'),
@@ -1823,10 +1816,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#description' => $this->t('Text or code that is placed directly after the input. This can be used to add a unit to an input. Examples: lb, kg, %.'),
       '#size' => 10,
     ];
-    $form['form']['length_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['form']['length_container'] = $this->getFormInlineContainer();
     $form['form']['length_container']['maxlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Maxlength'),
@@ -1841,10 +1831,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#min' => 1,
       '#size' => 4,
     ];
-    $form['form']['size_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['form']['size_container'] = $this->getFormInlineContainer();
     $form['form']['size_container']['size'] = [
       '#type' => 'number',
       '#title' => $this->t('Size'),
@@ -1878,12 +1865,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Disabled'),
       '#description' => $this->t('Make this element non-editable. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
+      '#weight' => 50,
     ];
     $form['form']['open'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Open'),
       '#description' => $this->t('Contents should be visible (open) to the user.'),
       '#return_value' => TRUE,
+      '#weight' => 50,
     ];
     $default_icheck = $this->configFactory->get('webform.settings')->get('element.default_icheck');
     $form['form']['icheck'] = [
@@ -2022,10 +2011,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    $form['validation']['unique_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['validation']['unique_container'] = $this->getFormInlineContainer();
     $form['validation']['unique_container']['unique'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Unique'),
@@ -2083,10 +2069,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'details',
       '#title' => $this->t('Submission display'),
     ];
-    $form['display']['display_container'] = [
-      '#type' => 'container',
-      '#attributes' => $form_inline_input_attributes,
-    ];
+    $form['display']['display_container'] = $this->getFormInlineContainer();
     $form['display']['display_container']['format'] = [
       '#type' => 'select',
       '#title' => $this->t('Item format'),
@@ -2270,6 +2253,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form_state->set('custom_properties', $custom_properties);
 
     return $this->buildConfigurationFormTabs($form, $form_state);
+  }
+
+  /**
+   * Get form--inline container which is used for side-by-side element layout.
+   *
+   * @return array
+   *   A container element with .form--inline class if inline help text is
+   *   enabled.
+   */
+  protected function getFormInlineContainer() {
+    $help_enabled = $this->configFactory->get('webform.settings')->get('ui.description_help');
+    return [
+      '#type' => 'container',
+      '#attributes' => ($help_enabled) ? ['class' => ['form--inline', 'clearfix', 'webform-ui-element-form-inline--input']] : [],
+    ];
   }
 
   /**
