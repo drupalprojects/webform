@@ -170,7 +170,21 @@ SUGGESTIONS
     );
 
     // Maintainer.
-    $build['maintainer'] = ['#type' => 'fieldset'];
+    $maintainer_url = Url::fromUri('http://www.jrockowitz.com/', ['fragment' => 'contact']);;
+
+    $build['maintainer'] = [
+      '#type' => 'fieldset',
+      '#attributes' => ['class' => 'webform-about-callout webform-about-callout--maintainer'],
+    ];
+    $build['maintainer']['image'] = [
+      '#type' => 'link',
+      '#title' => [
+        '#theme' => 'image',
+        '#uri' => drupal_get_path('module', 'webform') . '/images/about/jrockowitz.png',
+        '#alt' => $this->t('Jacob Rockowitz'),
+      ],
+      '#url' => $maintainer_url,
+    ];
     $build['maintainer']['title'] = [
       '#markup' => $this->t('About the maintainer (me)'),
       '#prefix' => '<h2>',
@@ -183,7 +197,7 @@ SUGGESTIONS
     ];
     $build['maintainer']['link'] = $this->buildLink(
       $this->t('Hire me to help you with the Webform module and Drupal 8'),
-      'http://www.jrockowitz.com/#contact',
+      $maintainer_url,
       ['button', 'button--primary']
     );
 
@@ -304,7 +318,20 @@ SUGGESTIONS
     );
 
     // Join.
-    $build['join'] = ['#type' => 'fieldset'];
+    $join_url = Url::fromUri('https://www.drupal.org/association/campaign/value-2017', ['fragment' => 'join']);;
+    $build['join'] = [
+      '#type' => 'fieldset',
+      '#attributes' => ['class' => 'webform-about-callout webform-about-callout--join'],
+    ];
+    $build['join']['image'] = [
+      '#type' => 'link',
+      '#title' => [
+        '#theme' => 'image',
+        '#uri' => drupal_get_path('module', 'webform') . '/images/about/drupal-association.png',
+        '#alt' => $this->t('Drupal Association'),
+      ],
+      '#url' => $join_url,
+    ];
     $build['join']['title'] = [
       '#markup' => $this->t('The Drupal Association brings value to Drupal and to you.'),
       '#prefix' => '<h2>',
@@ -317,7 +344,7 @@ SUGGESTIONS
     ];
     $build['join']['link'] = $this->buildLink(
       $this->t('Join the Drupal Association today'),
-      Url::fromUri('https://www.drupal.org/association/campaign/value-2017', ['fragment' => 'join']),
+      $join_url,
       ['button', 'button--primary']
     );
 
