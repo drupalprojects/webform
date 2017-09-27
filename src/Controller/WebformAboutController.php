@@ -168,9 +168,9 @@ SUGGESTIONS
       $this->t('Help improve the Webform module'),
       Url::fromUri('https://www.drupal.org/node/add/project-issue/webform', ['query' => $feature_query])
     );
-    $build['feature']['divider'] = $this->buildDivider();
 
     // Maintainer.
+    $build['maintainer'] = ['#type' => 'fieldset'];
     $build['maintainer']['title'] = [
       '#markup' => $this->t('About the maintainer (me)'),
       '#prefix' => '<h2>',
@@ -183,7 +183,8 @@ SUGGESTIONS
     ];
     $build['maintainer']['link'] = $this->buildLink(
       $this->t('Hire me to help you with the Webform module and Drupal 8'),
-      'http://www.jrockowitz.com/#contact'
+      'http://www.jrockowitz.com/#contact',
+      ['button', 'button--primary']
     );
 
     $build['#attached']['library'][] = 'webform/webform.about';
@@ -284,24 +285,41 @@ SUGGESTIONS
     );
     $build['user']['divide'] = $this->buildDivider();
 
-    // Join.
-    $build['join'] = [];
-    $build['join']['title'] = [
-      '#markup' => $this->t('Join the Drupal Association'),
+    // Association.
+    $build['association'] = [];
+    $build['association']['title'] = [
+      '#markup' => $this->t('Meet the Drupal Association'),
       '#prefix' => '<h2>',
       '#suffix' => '</h2>',
     ];
-    $build['join']['video'] = $this->buildVideo('LZWqFSMul84');
-    $build['join']['content'] = [
+    $build['association']['video'] = $this->buildVideo('LZWqFSMul84');
+    $build['association']['content'] = [
       '#markup' => $this->t("The Drupal Association is dedicated to fostering and supporting the Drupal software project, the community, and its growth. We help the Drupal community with funding, infrastructure, education, promotion, distribution, and online collaboration at Drupal.org."),
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];
-    $build['join']['link'] = $this->buildLink(
+    $build['association']['link'] = $this->buildLink(
       $this->t('Learn more about the Drupal Association'),
 'https://www.drupal.org/association/campaign/value-2017'
     );
-    $build['join']['divide'] = $this->buildDivider();
+
+    // Join.
+    $build['join'] = ['#type' => 'fieldset'];
+    $build['join']['title'] = [
+      '#markup' => $this->t('The Drupal Association brings value to Drupal and to you.'),
+      '#prefix' => '<h2>',
+      '#suffix' => '</h2>',
+    ];
+    $build['join']['content'] = [
+      '#markup' => $this->t("The Engineering Team on Drupal.org maintains all the infrastructure behind the many services you use on this site, as well as the services themselves. Join the Drupal Association as a member today to fund the work we do to keep the home of the Drupal project thriving."),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    ];
+    $build['join']['link'] = $this->buildLink(
+      $this->t('Join the Drupal Association today'),
+      Url::fromUri('https://www.drupal.org/association/campaign/value-2017', ['fragment' => 'join']),
+      ['button', 'button--primary']
+    );
 
     $build['#attached']['library'][] = 'webform/webform.about';
 
@@ -329,11 +347,13 @@ SUGGESTIONS
    *   Link title.
    * @param string $url
    *   Link URL.
+   * @param array $class
+   *   Link class names.
    *
    * @return array
    *   A render array containing a link.
    */
-  protected function buildLink($title, $url) {
+  protected function buildLink($title, $url, array $class = ['button']) {
     if (is_string($url)) {
       $url = Url::fromUri($url);
     }
@@ -341,7 +361,7 @@ SUGGESTIONS
       '#type' => 'link',
       '#title' => $title . ' ›',
       '#url' => $url,
-      '#attributes' => ['class' => ['button', 'button--primary']],
+      '#attributes' => ['class' => $class],
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];
