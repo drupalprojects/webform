@@ -65,26 +65,26 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
     $this->assertLinkByHref($submissions[0]->toUrl()->toString());
     $this->assertLinkByHref($submissions[1]->toUrl()->toString());
     $this->assertLinkByHref($submissions[2]->toUrl()->toString());
-    $this->assertRaw($submissions[0]->getData('first_name'));
-    $this->assertRaw($submissions[1]->getData('first_name'));
-    $this->assertRaw($submissions[2]->getData('first_name'));
+    $this->assertRaw($submissions[0]->getElementData('first_name'));
+    $this->assertRaw($submissions[1]->getElementData('first_name'));
+    $this->assertRaw($submissions[2]->getElementData('first_name'));
     $this->assertNoFieldById('edit-reset', 'reset');
 
     // Check results filtered by key(word).
-    $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/submissions', ['search' => $submissions[0]->getData('first_name')], t('Filter'));
-    $this->assertUrl('admin/structure/webform/manage/' . $webform->id() . '/results/submissions?search=' . $submissions[0]->getData('first_name') . '&state=');
-    $this->assertRaw($submissions[0]->getData('first_name'));
-    $this->assertNoRaw($submissions[1]->getData('first_name'));
-    $this->assertNoRaw($submissions[2]->getData('first_name'));
+    $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/submissions', ['search' => $submissions[0]->getElementData('first_name')], t('Filter'));
+    $this->assertUrl('admin/structure/webform/manage/' . $webform->id() . '/results/submissions?search=' . $submissions[0]->getElementData('first_name') . '&state=');
+    $this->assertRaw($submissions[0]->getElementData('first_name'));
+    $this->assertNoRaw($submissions[1]->getElementData('first_name'));
+    $this->assertNoRaw($submissions[2]->getElementData('first_name'));
     $this->assertFieldById('edit-reset', 'Reset');
 
     // Check results filtered by state.
     $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/submissions', ['state' => 'starred'], t('Filter'));
     $this->assertUrl('admin/structure/webform/manage/' . $webform->id() . '/results/submissions?search=&state=starred');
     $this->assertRaw('<option value="starred" selected="selected">Starred [1]</option>');
-    $this->assertNoRaw($submissions[0]->getData('first_name'));
-    $this->assertRaw($submissions[1]->getData('first_name'));
-    $this->assertNoRaw($submissions[2]->getData('first_name'));
+    $this->assertNoRaw($submissions[0]->getElementData('first_name'));
+    $this->assertRaw($submissions[1]->getElementData('first_name'));
+    $this->assertNoRaw($submissions[2]->getElementData('first_name'));
     $this->assertFieldById('edit-reset', 'Reset');
 
     /**************************************************************************/
@@ -137,9 +137,9 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
 
     // Check that only one result (Hillary #2) is displayed with pager.
     $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions');
-    $this->assertNoRaw($submissions[0]->getData('first_name'));
-    $this->assertNoRaw($submissions[1]->getData('first_name'));
-    $this->assertRaw($submissions[2]->getData('first_name'));
+    $this->assertNoRaw($submissions[0]->getElementData('first_name'));
+    $this->assertNoRaw($submissions[1]->getElementData('first_name'));
+    $this->assertRaw($submissions[2]->getElementData('first_name'));
     $this->assertRaw('<nav class="pager" role="navigation" aria-labelledby="pagination-heading">');
 
     // Reset the limit to 20.

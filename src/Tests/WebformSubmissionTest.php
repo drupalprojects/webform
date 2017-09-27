@@ -106,8 +106,8 @@ class WebformSubmissionTest extends WebformTestBase {
 
     // Check duplicate submission.
     $this->assertNotEqual($sid, $duplicate_sid);
-    $this->assertEqual($duplicate_submission->getData('subject'), '{Duplicate Subject}');
-    $this->assertEqual($duplicate_submission->getData('message'), '{Original Message}');
+    $this->assertEqual($duplicate_submission->getElementData('subject'), '{Duplicate Subject}');
+    $this->assertEqual($duplicate_submission->getElementData('message'), '{Original Message}');
   }
 
 }

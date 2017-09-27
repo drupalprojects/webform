@@ -712,7 +712,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
 
       // Get submission email addresseses as an array.
-      $options_element_value = $webform_submission->getData($element_name);
+      $options_element_value = $webform_submission->getElementData($element_name);
       if (is_array($options_element_value)) {
         $options_values = $options_element_value;
       }
@@ -798,7 +798,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
 
       // Get file ids.
-      $fids = $webform_submission->getData($configuration_key);
+      $fids = $webform_submission->getElementData($configuration_key);
       if (empty($fids)) {
         continue;
       }

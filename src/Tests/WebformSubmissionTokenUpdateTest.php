@@ -45,7 +45,7 @@ class WebformSubmissionTokenUpdateTest extends WebformTestBase {
     $this->drupalGet($webform_submission->getTokenUrl());
     $this->assertResponse(200);
     $this->assertRaw('Submission information');
-    $this->assertFieldByName('textfield', $webform_submission->getData('textfield'));
+    $this->assertFieldByName('textfield', $webform_submission->getElementData('textfield'));
 
     // Check token update access denied.
     $webform->setSetting('token_update', FALSE)->save();
@@ -53,7 +53,7 @@ class WebformSubmissionTokenUpdateTest extends WebformTestBase {
     $this->drupalGet($webform_submission->getTokenUrl());
     $this->assertResponse(200);
     $this->assertNoRaw('Submission information');
-    $this->assertNoFieldByName('textfield', $webform_submission->getData('textfield'));
+    $this->assertNoFieldByName('textfield', $webform_submission->getElementData('textfield'));
 
     // Logout and switch to anonymous user.
     $this->drupalLogout();

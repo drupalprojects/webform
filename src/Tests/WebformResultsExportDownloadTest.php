@@ -79,7 +79,7 @@ class WebformResultsExportDownloadTest extends WebformTestBase {
     $submissions = WebformSubmission::loadMultiple($sids);
     foreach ($submissions as $submission) {
       $serial = $submission->serial();
-      $fid = $submission->getData('managed_file_single');
+      $fid = $submission->getElementData('managed_file_single');
       $filename = File::load($fid)->getFilename();
 
       $this->assert(isset($files["submission-$serial/$filename"]));
@@ -110,7 +110,7 @@ class WebformResultsExportDownloadTest extends WebformTestBase {
     $submissions = WebformSubmission::loadMultiple($sids);
     foreach ($submissions as $submission) {
       $serial = $submission->serial();
-      $fid = $submission->getData('managed_file_single');
+      $fid = $submission->getElementData('managed_file_single');
       $filename = File::load($fid)->getFilename();
 
       $this->assert(isset($files["submission-$serial.yml"]));

@@ -80,7 +80,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
 
     // Check that test file was uploaded to the current submission.
     $second = ($type == 'multiple') ? [$fid] : $fid;
-    $this->assertEqual($submission->getData($key), $second, 'Test file was upload to the current submission');
+    $this->assertEqual($submission->getElementData($key), $second, 'Test file was upload to the current submission');
 
     // Check test file file usage.
     $this->assertIdentical(['webform' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($file), 'The file has 1 usage.');
@@ -131,7 +131,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
 
     // Check that test new file was uploaded to the current submission.
     $second = ($type == 'multiple') ? [$new_fid] : $new_fid;
-    $this->assertEqual($submission->getData($key), $second, 'Test new file was upload to the current submission');
+    $this->assertEqual($submission->getElementData($key), $second, 'Test new file was upload to the current submission');
 
     // Check that test file was deleted from the disk and database.
     $this->assert(!file_exists($file->getFileUri()), 'Test file deleted from disk');

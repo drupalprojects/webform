@@ -37,7 +37,7 @@ class WebformElementManagedFilePrivateTest extends WebformElementManagedFileTest
     $file = File::load($fid);
 
     // Check that test file 3 was uploaded to the current submission.
-    $this->assertEqual($submission->getData('managed_file_single'), $fid, 'Test file 3 was upload to the current submission');
+    $this->assertEqual($submission->getElementData('managed_file_single'), $fid, 'Test file 3 was upload to the current submission');
 
     // Check test file 3 file usage.
     $this->assertIdentical(['webform' => ['webform_submission' => [$sid => '1']]], $this->fileUsage->listUsage($file), 'The file has 3 usage.');

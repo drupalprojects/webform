@@ -193,7 +193,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       $is_required = ($state == 'optional') ? !$is_required : $is_required;
 
       if (isset($element['#webform_key'])) {
-        $value = $webform_submission->getData($element['#webform_key']);
+        $value = $webform_submission->getElementData($element['#webform_key']);
       }
       else {
         $value = $element['#value'];
