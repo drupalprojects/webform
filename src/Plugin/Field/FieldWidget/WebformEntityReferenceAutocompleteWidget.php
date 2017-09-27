@@ -64,6 +64,7 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
         WebformInterface::STATUS_CLOSED => $this->t('Closed'),
         WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled'),
       ],
+      '#options_display' => 'side_by_side',
       '#default_value' => $items[$delta]->status,
     ];
 

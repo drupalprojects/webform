@@ -25,6 +25,11 @@ class WebformFormHelper {
    * @see \Drupal\webform\Plugin\WebformElementBase::buildConfigurationFormTabs
    */
   public static function buildTabs(array $form, array $tabs) {
+    // Allow tabs to be disabled via $form['#tab'] = FALSE.
+    if (isset($form['#tabs']) && $form['#tabs'] === FALSE) {
+      return $form;
+    }
+
     // Determine if the form has nested (configuration) settings.
     // Used by WebformHandlers.
     $has_settings = (isset($form['settings']) && !empty($form['settings']['#tree']));

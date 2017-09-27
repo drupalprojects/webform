@@ -52,6 +52,7 @@ function webform_devel_form_webform_admin_settings_advanced_form_alter(&$form, F
       '0' => t('No'),
       '1' => t('Yes'),
     ],
+    '#options_display' => 'side_by_side',
     '#required' => TRUE,
   ];
   $form['#submit'][] = '_webform_devel_form_webform_admin_settings_advanced_form_submit';
