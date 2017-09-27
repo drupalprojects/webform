@@ -138,7 +138,11 @@ thead th .dropbutton {
   min-width: 130px;
 }
 
+.form--inline.webform-ui-element-form-inline--input .form-type-checkbox {
+  min-width: inherit;
+}
+
 .form--inline.webform-ui-element-form-inline--input .form-item select,
-.form--inline.webform-ui-element-form-inline--input .form-item input {
+.form--inline.webform-ui-element-form-inline--input .form-item input[type="text"] {
   width: 120px
 }

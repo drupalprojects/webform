@@ -196,6 +196,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'required' => FALSE,
       'required_error' => '',
       'unique' => FALSE,
+      'unique_user' => FALSE,
+      'unique_entity' => FALSE,
       'unique_error' => '',
       // Attributes.
       'wrapper_attributes' => [],
@@ -1429,8 +1431,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       return;
     }
 
-    $webform_id = $element['#webform'];
-    $sid = $element['#webform_submission'];
     $name = $element['#name'];
     $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
@@ -1439,17 +1439,42 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       return;
     }
 
-    // Using range() is more efficient than using countQuery() for data checks.
-    $query = Database::getConnection()->select('webform_submission_data')
-      ->fields('webform_submission_data', ['sid'])
-      ->condition('webform_id', $webform_id)
-      ->condition('name', $name)
-      ->condition('value', $value)
-      ->range(0, 1);
-    if ($sid) {
-      $query->condition('sid', $sid, '<>');
+    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+    $form_object = $form_state->getFormObject();
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $form_object->getEntity();
+    $webform = $webform_submission->getWebform();
+
+    // Build unique quert.
+    $query = \Drupal::database()->select('webform_submission', 'ws');
+    $query->leftJoin('webform_submission_data', 'wsd', 'ws.sid = wsd.sid');
+    $query->fields('ws', ['sid']);
+    $query->condition('wsd.webform_id', $webform->id());
+    $query->condition('wsd.name', $name);
+    $query->condition('wsd.value', $value);
+    // Unique user condition.
+    if (!empty($element['#unique_user'])) {
+      $query->condition('ws.uid', $webform_submission->getOwnerId());
     }
+    // Unique (source) entity condition.
+    if (!empty($element['#unique_entity'])) {
+      if ($source_entity = $webform_submission->getSourceEntity()) {
+        $query->condition('ws.entity_type', $source_entity->getEntityTypeId());
+        $query->condition('ws.entity_id', $source_entity->id());
+      }
+      else {
+        $query->isNull('ws.entity_type');
+        $query->isNull('ws.entity_id');
+      }
+    }
+    // Exclude the current webform submission.
+    if ($sid = $webform_submission->id()) {
+      $query->condition('ws.sid', $sid, '<>');
+    }
+    // Using range() is more efficient than using countQuery() for data checks.
+    $query->range(0, 1);
     $count = $query->execute()->fetchField();
+
     if ($count) {
       if (isset($element['#unique_error'])) {
         $form_state->setError($element, $element['#unique_error']);
@@ -1999,20 +2024,43 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
     $form['validation']['unique_container'] = [
       '#type' => 'container',
+      '#attributes' => $form_inline_input_attributes,
     ];
     $form['validation']['unique_container']['unique'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Unique'),
-      '#description' => $this->t('Check that all entered values for this element are unique. The same value is not allowed to be used twice.'),
+      '#description' => $this->t('Check that all entered values for this element are unique.'),
       '#return_value' => TRUE,
     ];
-    $form['validation']['unique_container']['unique_error'] = [
+    $form['validation']['unique_container']['unique_entity'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Unique per entity'),
+      '#description' => $this->t('Check that entered values for this element is unique for the current source entity.'),
+      '#return_value' => TRUE,
+      '#states' => [
+        'visible' => [
+          ['input[name="properties[unique]"]' => ['checked' => TRUE]],
+        ],
+      ],
+    ];
+    $form['validation']['unique_container']['unique_user'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Unique per user'),
+      '#description' => $this->t('Check that entered values for this element is unique for the current user.'),
+      '#return_value' => TRUE,
+      '#states' => [
+        'visible' => [
+          ['input[name="properties[unique]"]' => ['checked' => TRUE]],
+        ],
+      ],
+    ];
+    $form['validation']['unique_error'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Unique message'),
       '#description' => $this->t('If set, this message will be used when an element\'s value is not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
       '#states' => [
         'visible' => [
-          ':input[name="properties[unique]"]' => ['checked' => TRUE],
+          [':input[name="properties[unique]"]' => ['checked' => TRUE]],
         ],
       ],
     ];
