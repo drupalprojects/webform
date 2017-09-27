@@ -218,6 +218,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#weight' => ++$form['form_behaviors']['form_prepopulate_source_entity_required']['#weight'],
       '#empty_option' => '',
       '#options' => $entity_type_options,
+      '#default_value' => $settings['form_prepopulate_source_entity_type'],
       '#states' => [
         'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
       ],
