@@ -90,7 +90,7 @@ class WebformElementMultiple extends FormElement {
       ],
     ];
 
-    // Set disabled
+    // Set disabled.
     if (!empty($element['#disabled'])) {
       $element['container']['cardinality']['#disabled'] = TRUE;
       $element['container']['cardinality_number']['#disabled'] = TRUE;

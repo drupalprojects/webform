@@ -649,7 +649,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $element['#element_validate'] = $element_validate;
       }
 
-      // Add webform element #minlength, #unique, and/or #multiple validation handler.
+      // Add webform element #minlength, #unique, and/or #multiple
+      // validation handler.
       if (isset($element['#minlength'])) {
         $element['#element_validate'][] = [get_class($this), 'validateMinlength'];
       }
@@ -697,7 +698,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param array $element
    *   The element.
    * @param $operation
-   *   The operation
+   *   The operation.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user session for which to check access.
    *
@@ -1676,9 +1677,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form_object = $form_state->getFormObject();
     $webform = $form_object->getWebform();
 
-    // Check if inline help is enabled and set inline form attributes.
-    $help_enabled = $this->configFactory->get('webform.settings')->get('ui.description_help');
-
     /* Element settings */
 
     $form['element'] = [
@@ -1704,8 +1702,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
           'or',
           [':input[name="properties[title_display]"]' => ['value' => 'attribute']],
-        ]
-      ]
+        ],
+      ],
     ];
     $form['element']['description'] = [
       '#type' => 'webform_html_editor',
@@ -2248,8 +2246,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Set custom properties.
-    // Note: Storing this information in the webform's state allows modules to view
-    // and alter this information using webform alteration hooks.
+    // Note: Storing this information in the webform's state allows modules to
+    // view and alter this information using webform alteration hooks.
     $form_state->set('custom_properties', $custom_properties);
 
     return $this->buildConfigurationFormTabs($form, $form_state);
@@ -2290,7 +2288,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
         'weight' => 10,
       ],
-      'advanced' =>  [
+      'advanced' => [
         'title' => $this->t('Advanced'),
         'elements' => [
           'wrapper_attributes',
@@ -2301,7 +2299,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
         'weight' => 20,
       ],
-      'access' =>  [
+      'access' => [
         'title' => $this->t('Access'),
         'elements' => [
           'access',
@@ -2319,7 +2317,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   A webform render array.
    * @param array $element_properties
    *   The element's properties without hash prefix. Any property that is found
-   *   in the webform will be populated and unset from $element_properties array.
+   *   in the webform will be populated and unset from
+   *   $element_properties array.
    *
    * @return bool
    *   TRUE is the webform has any inputs.
@@ -2345,8 +2344,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
       // Determine if the property element is an input using the webform element
       // manager.
-      // Note: #access is used to protect inputs and containers that should always
-      // be visible.
+      // Note: #access is used to protect inputs and containers that should
+      // always be visible.
       $is_input = $this->elementManager->getElementInstance($property_element)->isInput($property_element);
       if ($is_input) {
         if (isset($element_properties[$property_name])) {

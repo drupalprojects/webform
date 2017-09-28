@@ -57,7 +57,7 @@ class WebformHtmlEditor extends FormElement {
    * Prepares a #type 'webform_html_editor' render element for input.html.twig.
    *
    * @param array $element
-   *   An associative array containing the properties of the element
+   *   An associative array containing the properties of the element.
    *
    * @return array
    *   The HTML Editor which can be a CodeMirror element, TextFormat, or
@@ -83,7 +83,7 @@ class WebformHtmlEditor extends FormElement {
       return $element;
     }
 
-    // If #context and format is defined return 'text_format' element
+    // If #context and format is defined return 'text_format' element.
     $format = \Drupal::config('webform.settings')->get('html_editor.format') ?: $element['#format'];
     if ($format) {
       $element['value'] += [
@@ -131,7 +131,7 @@ class WebformHtmlEditor extends FormElement {
     if (isset($element['#states'])) {
       webform_process_states($element, '#wrapper_attributes');
     }
-    
+
     return $element;
   }
 
@@ -192,15 +192,12 @@ class WebformHtmlEditor extends FormElement {
         $allowed_tags[] = 'fieldset';
         $allowed_tags[] = 'legend';
         return $allowed_tags;
-        break;
 
       case 'html':
         return Xss::getHtmlTagList();
-        break;
 
       default:
         return preg_split('/ +/', $allowed_tags);
-        break;
     }
   }
 
@@ -227,7 +224,7 @@ class WebformHtmlEditor extends FormElement {
         $text = preg_replace('#</p>\s*$#', '', $text);
       }
     }
-    
+
     if ($format = \Drupal::config('webform.settings')->get('html_editor.format')) {
       if ($render) {
         return check_markup($text, $format);
@@ -256,7 +253,7 @@ class WebformHtmlEditor extends FormElement {
   /**
    * Strip dis-allowed HTML tags from HTML text.
    *
-   * @param $text
+   * @param string $text
    *   HTML text.
    *
    * @return string

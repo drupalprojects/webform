@@ -86,7 +86,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   /**
    * Determine if webform handler supports conditions.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if the webform handler supports conditions.
    */
   public function supportsConditions();
@@ -252,11 +252,10 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
    * - \Drupal\webform\Plugin\WebformHandlerInterface::alterElements
    * - \Drupal\webform\Plugin\WebformHandlerInterface::preCreate
    *
-   *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if handler is disable or webform submission passes conditions.
    *   FALSE if webform submission fails conditions.
    */

@@ -237,7 +237,7 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
    * Get a webform submission element's data.
    *
    * @param string $key
-   *   An webform submission element's key
+   *   An webform submission element's key.
    *
    * @return mixed
    *   An webform submission element's data/value.

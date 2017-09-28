@@ -19,11 +19,11 @@ class WebformDialogHelper {
   /**
    * Get Off canvas trigger name.
    *
+   * Issue #2862625: Rename offcanvas to two words in code and comments.
+   * https://www.drupal.org/node/2862625
+   *
    * @return string
    *   The off canvas trigger name.
-   *
-   * @see Issue #2862625: Rename offcanvas to two words in code and comments.
-   * @see https://www.drupal.org/node/2862625
    */
   public static function getOffCanvasTriggerName() {
     if (isset(self::$offCanvasTriggerName)) {

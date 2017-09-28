@@ -38,7 +38,7 @@ class WebformEntityReferenceManager implements WebformEntityReferenceManagerInte
   /**
    * The user data service.
    *
-   * @var \Drupal\user\UserDataInterface;
+   * @var \Drupal\user\UserDataInterface
    */
   protected $userData;
 
@@ -148,7 +148,7 @@ class WebformEntityReferenceManager implements WebformEntityReferenceManagerInte
     // Sort fields alphabetically.
     ksort($field_names);
 
-    return $field_names ;
+    return $field_names;
   }
 
   /**

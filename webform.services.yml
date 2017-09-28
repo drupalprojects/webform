@@ -55,7 +55,7 @@ services:
 
   webform.request:
     class: Drupal\webform\WebformRequest
-    arguments: ['@router.route_provider', '@request_stack', '@current_route_match', '@entity_type.manager', '@entity_type.repository', '@webform.entity_reference_manager']
+    arguments: ['@router.route_provider', '@request_stack', '@router.admin_context', '@current_route_match', '@entity_type.manager', '@entity_type.repository', '@webform.entity_reference_manager']
 
   webform_submission.generate:
     class: Drupal\webform\WebformSubmissionGenerate

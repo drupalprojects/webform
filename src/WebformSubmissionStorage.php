@@ -334,7 +334,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
    * Get a webform submission's terminus (aka first or last).
    *
    * @param \Drupal\webform\WebformInterface $webform
-   *   A webform
+   *   A webform.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface $account

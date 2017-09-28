@@ -324,7 +324,7 @@ class WebformLikert extends WebformElementBase {
       return $this->formatHtml($element, $webform_submission);
     }
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -342,7 +342,7 @@ class WebformLikert extends WebformElementBase {
       ],
     ];
   }
-  
+
   /**
    * {@inheritdoc}
    */

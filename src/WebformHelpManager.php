@@ -536,7 +536,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           ],
           'notes' => [
             '#markup' => $library['notes'] .
-              ($elements ? ' <strong>' . $this->formatPlural(count($elements), 'Required by @type element.', 'Required by @type elements.', ['@type' => WebformArrayHelper::toString($elements)]) . '</strong>': ''),
+              ($elements ? ' <strong>' . $this->formatPlural(count($elements), 'Required by @type element.', 'Required by @type elements.', ['@type' => WebformArrayHelper::toString($elements)]) . '</strong>' : ''),
             '#prefix' => '<em>(',
             '#suffix' => ')</em><br />',
           ],
@@ -603,7 +603,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     // Convert groups.
     $html = preg_replace('#<tr><td>([^<]+)</td>(<td></td>){2}</tr>#', '<tr><th bgcolor="' . $group_color . '">\1</th><th bgcolor="' . $group_color . '">Webform Module</th><th bgcolor="' . $group_color . '">Contact Module</th></tr>', $html);
 
-    // Add cell colors
+    // Add cell colors.
     $html = preg_replace('#<tr><td>([^<]+)</td>#', '<tr><td bgcolor="' . $feature_color . '">\1</td>', $html);
     $html = preg_replace('#<td>Yes([^<]*)</td>#', '<td bgcolor="' . $yes_color . '"><img src="https://www.drupal.org/misc/watchdog-ok.png" alt="Yes"> \1</td>', $html);
     $html = preg_replace('#<td>No([^<]*)</td>#', '<td bgcolor="' . $custom_color . '"><img src="https://www.drupal.org/misc/watchdog-error.png" alt="No"> \1</td>', $html);
@@ -629,7 +629,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $filter = (object) ['settings' => ['filter_url_length' => 255]];
     $html = _filter_url($html, $filter);
 
-    // Tidy
+    // Tidy.
     if (class_exists('\tidy')) {
       $tidy = new \tidy();
       $tidy->parseString($html, ['show-body-only' => TRUE, 'wrap' => '0'], 'utf8');
@@ -1183,9 +1183,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'title' => $this->t('Adding custom CSS/JS to a webform.'),
       'content' => $this->t("The Webform assets page allows site builders to attach custom CSS and JavaScript to a webform."),
     ];
-
-    // @todo Webform settings assets.
-
 
     // Webform access controls.
     $help['webform_access'] = [

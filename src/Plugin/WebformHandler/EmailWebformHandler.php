@@ -341,7 +341,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send from'),
       '#open' => TRUE,
     ];
-    $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options,  $options_element_options, NULL, TRUE);
+    $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, $options_element_options, NULL, TRUE);
     $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options_raw);
     $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink(
         ['webform', 'webform_submission'],
@@ -472,7 +472,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
           '#message_type' => 'warning',
           '#states' => [
             'visible' => [':input[name="settings[ignore_access]"]' => ['checked' => FALSE]],
-          ]
+          ],
         ];
         break;
       }
@@ -505,7 +505,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Settings: Return path.
     $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: Sender mail.
-    $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), $mail_element_options,  $options_element_options);
+    $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), $mail_element_options, $options_element_options);
     // Settings: Sender name.
     $form['additional']['sender_name'] = $this->buildElement('sender_name', $this->t('Sender name'), $this->t('Sender name'), $text_element_options_raw);
 
@@ -633,7 +633,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     // Copy configuration to $message.
     foreach ($this->configuration as $configuration_key => $configuration_value) {
-      // Get configuration name (to, cc, bcc, from, name, subject, mail) and type (mail, options, or text).
+      // Get configuration name (to, cc, bcc, from, name, subject, mail)
+      // and type (mail, options, or text).
       list($configuration_name, $configuration_type) = (strpos($configuration_key, '_') !== FALSE) ? explode('_', $configuration_key) : [$configuration_key, 'text'];
 
       // Set options and continue.
@@ -828,7 +829,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     // Remove less than (<) and greater (>) than from name.
     // @todo Figure out the proper way to encode special characters.
-    // Note: PhpMail call
+    // Note: PhpMail call.
     $message['from_name'] = preg_replace('/[<>]/', '', $message['from_name']);
 
     if (!empty($message['from_name'])) {
@@ -853,7 +854,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $build = [
       '#theme' => 'webform_email_message_' . (($this->configuration['html']) ? 'html' : 'text'),
       '#message' => [
-          'body' => is_string($message['body']) ? Markup::create($message['body']) : $message['body']
+          'body' => is_string($message['body']) ? Markup::create($message['body']) : $message['body'],
         ] + $message,
       '#webform_submission' => $webform_submission,
       '#handler' => $this,
@@ -1053,7 +1054,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'bcc_mail' => $this->t('Bcc mail'),
       'reply_to' => $this->t('Reply-to'),
       'return_path' => $this->t('Return path'),
-      '---',
+      '---' => '---',
       'subject' => $this->t('Subject'),
     ];
     foreach ($values as $name => $title) {
@@ -1235,7 +1236,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
           'js-hide',
           "js-$ajax_wrapper-submit",
           'js-webform-novalidate',
-        ]
+        ],
       ],
     ];
 
@@ -1323,7 +1324,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public static function ajaxCallback(array $form, FormStateInterface $form_state) {
     $trigger_element = $form_state->getTriggeringElement();
-    return NestedArray::getValue($form,  array_slice($trigger_element['#array_parents'], 0, -1));
+    return NestedArray::getValue($form,  array_slice($trigger_element['#array_parents'],0, -1));
   }
 
   /**

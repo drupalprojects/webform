@@ -167,7 +167,8 @@ class WebformElementHelper {
     // Attach library.
     $element['#attached']['library'][] = 'core/drupal.states';
 
-    // Copy #states to #_webform_states property which can be used by
+    // Copy #states to #_webform_states property which can be used by the
+    // WebformSubmissionConditionsValidator.
     // @see \Drupal\webform\WebformSubmissionConditionsValidator
     $element['#_webform_states'] = $element['#states'];
 

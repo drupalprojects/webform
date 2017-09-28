@@ -85,7 +85,9 @@ abstract class WebformExcludedBase extends FormElement {
    * @return array
    *   An array container the header for the excluded tableselect element.
    */
-  public static function getWebformExcludedHeader() { }
+  public static function getWebformExcludedHeader() {
+    return [];
+  }
 
   /**
    * Get options for excluded tableselect element.
@@ -98,6 +100,8 @@ abstract class WebformExcludedBase extends FormElement {
    *   An array of options containing title, name, and type of items for a
    *   tableselect element.
    */
-  public static function getWebformExcludedOptions(array $element) { }
+  public static function getWebformExcludedOptions(array $element) {
+    return [];
+  }
 
 }

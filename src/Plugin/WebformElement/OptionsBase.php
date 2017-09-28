@@ -95,7 +95,7 @@ abstract class OptionsBase extends WebformElementBase {
   /**
    * Get the other option base element type.
    *
-   * @return string|NULL
+   * @return string|null
    *   The base element type (select|radios|checkboxes|buttons).
    */
   protected function getOptionsOtherType() {
@@ -110,14 +110,17 @@ abstract class OptionsBase extends WebformElementBase {
       $this->otherOptionType = FALSE;
     }
 
-    return $this->otherOptionType ;
+    return $this->otherOptionType;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getTranslatableProperties() {
-    return array_merge(parent::getTranslatableProperties(), ['options', 'empty_option', 'option_label']);
+    return array_merge(
+      parent::getTranslatableProperties(),
+      ['options', 'empty_option', 'option_label']
+    );
   }
 
   /**
@@ -140,7 +143,7 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
-    $is_wrapper_fieldset = in_array($element['#type'], ['checkboxes', 'radios', 'webform_entity_checkboxes', 'webform_entity_radios', 'webform_term_checkboxes','webform_toggles', 'webform_buttons']);
+    $is_wrapper_fieldset = in_array($element['#type'], ['checkboxes', 'radios', 'webform_entity_checkboxes', 'webform_entity_radios', 'webform_term_checkboxes', 'webform_toggles', 'webform_buttons']);
     if ($is_wrapper_fieldset) {
       // Issue #2396145: Option #description_display for webform element fieldset
       // is not changing anything.
@@ -457,7 +460,6 @@ abstract class OptionsBase extends WebformElementBase {
       return [":input[name=\"$name$multiple\"]" => $title];
     }
   }
-
 
   /**
    * {@inheritdoc}

@@ -7,7 +7,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\webform\Plugin\WebformElementBase;
-use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -246,4 +245,5 @@ class TextFormat extends WebformElementBase {
     $elements = $this->getCompositeElements();
     return (isset($elements[$key])) ? TRUE : FALSE;
   }
+
 }

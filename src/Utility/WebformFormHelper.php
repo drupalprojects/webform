@@ -40,7 +40,7 @@ class WebformFormHelper {
         'title' => t('General'),
         'elements' => [],
         'weight' => 0,
-      ]
+      ],
     ] + $tabs;
 
     // Sort tabs by weight.
@@ -91,7 +91,7 @@ class WebformFormHelper {
       $tab_items[] = [
         '#type' => 'link',
         '#url' => Url::fromRoute('<none>', [], ['fragment' => 'webform-tab--' . $tab_name]),
-        '#title' =>  $tab['title'],
+        '#title' => $tab['title'],
         '#attributes' => [
           'class' => ['webform-tab'],
           'data-tab-index' => $index++,

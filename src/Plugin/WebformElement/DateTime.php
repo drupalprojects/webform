@@ -379,7 +379,7 @@ class DateTime extends DateBase {
   /**
    * After build handler for Datetime elements.
    */
-  public static function afterBuild(array $element, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public static function afterBuild(array $element, FormStateInterface $form_state) {
     if (isset($element['time'])) {
       if (!empty($element['#date_time_min'])) {
         $element['time']['#min'] = $element['#date_time_min'];

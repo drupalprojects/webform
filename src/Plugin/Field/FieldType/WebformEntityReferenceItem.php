@@ -2,14 +2,11 @@
 
 namespace Drupal\webform\Plugin\Field\FieldType;
 
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\DataDefinition;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\webform\WebformInterface;
 
 /**
@@ -108,7 +105,6 @@ class WebformEntityReferenceItem extends EntityReferenceItem {
 
     return $properties;
   }
-
 
   /**
    * {@inheritdoc}

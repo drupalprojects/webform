@@ -257,10 +257,9 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
     $this->assertFieldByName('name', '');
 
     // Save third anonymous draft.
-    $sid_3 = $this->postSubmission($webform, ['name' => 'Jane Doe'], t('Save Draft'));
+    $this->postSubmission($webform, ['name' => 'Jane Doe'], t('Save Draft'));
     $this->assertRaw('Submission saved. You may return to this form later and it will restore the current values.');
-    $webform_submission_3 = WebformSubmission::load($sid_2);
-
+    
     // Check restore third anonymous draft.
     $this->drupalGet('webform/test_form_draft_multiple');
     $this->assertNoRaw('You have saved drafts.');

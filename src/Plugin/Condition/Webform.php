@@ -32,7 +32,7 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
   protected $entityStorage;
 
   /**
-   * The webform entity reference manager
+   * The webform entity reference manager.
    *
    * @var \Drupal\webform\WebformEntityReferenceManagerInterface
    */

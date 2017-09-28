@@ -145,13 +145,13 @@ trait WebformEntityReferenceTrait {
    */
   public function getItemFormats() {
     $formats = parent::getItemFormats() + [
-        'link' => $this->t('Link'),
-        'id' => $this->t('Entity ID'),
-        'label' => $this->t('Label'),
-        'text' => $this->t('Label (ID)'),
-        'teaser' => $this->t('Teaser'),
-        'default' => $this->t('Default'),
-      ];
+      'link' => $this->t('Link'),
+      'id' => $this->t('Entity ID'),
+      'label' => $this->t('Label'),
+      'text' => $this->t('Label (ID)'),
+      'teaser' => $this->t('Teaser'),
+      'default' => $this->t('Default'),
+    ];
     if ($this->hasProperty('breadcrumb')) {
       $formats['breadcrumb'] = $this->t('Breadcrumb');
     }
@@ -545,7 +545,7 @@ trait WebformEntityReferenceTrait {
           'js-hide',
           'js-webform-entity-reference-submit',
           'js-webform-novalidate',
-        ]
+        ],
       ],
     ];
 
@@ -626,7 +626,7 @@ trait WebformEntityReferenceTrait {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  static public function validateEntityReferenceCallback(array $form, FormStateInterface $form_state) {
+  public static function validateEntityReferenceCallback(array $form, FormStateInterface $form_state) {
     $form_state->clearErrors();
   }
 
@@ -638,7 +638,7 @@ trait WebformEntityReferenceTrait {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  static public function submitEntityReferenceCallback(array $form, FormStateInterface $form_state) {
+  public static function submitEntityReferenceCallback(array $form, FormStateInterface $form_state) {
     $form_state->setRebuild();
   }
 
@@ -653,7 +653,7 @@ trait WebformEntityReferenceTrait {
    * @return array
    *   The properties element.
    */
-  static public function entityReferenceAjaxCallback(array $form, FormStateInterface $form_state) {
+  public static function entityReferenceAjaxCallback(array $form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
     return $element;

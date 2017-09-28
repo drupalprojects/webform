@@ -103,7 +103,7 @@ abstract class TextBase extends WebformElementBase {
       ],
     ];
     if ($this->librariesManager->isExcluded('jquery.inputmask')) {
-      $form['form']['input_mask'] ['#access'] = FALSE;
+      $form['form']['input_mask']['#access'] = FALSE;
     }
 
     // Pattern.

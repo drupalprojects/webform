@@ -9,7 +9,6 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
 
-
 /**
  * Provides a webform element to assist in creation of multiple elements.
  *

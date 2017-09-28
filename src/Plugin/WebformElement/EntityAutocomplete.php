@@ -174,4 +174,5 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
       return $item;
     }
   }
+
 }

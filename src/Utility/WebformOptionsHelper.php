@@ -66,7 +66,7 @@ class WebformOptionsHelper {
    *   The option value.
    * @param array $options
    *   An associative array of options.
-   * @param array $options_description
+   * @param bool $options_description
    *   Remove description which is delimited using ' -- '.
    *
    * @return string

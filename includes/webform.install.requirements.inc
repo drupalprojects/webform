@@ -136,7 +136,7 @@ function webform_requirements($phase) {
           '#suffix' => '</strong></dt>',
         ],
         'description' => [
-          '#markup' =>  $project['description'],
+          '#markup' => $project['description'],
           '#prefix' => '<dd>',
           '#suffix' => '</dd>',
         ],

@@ -5,7 +5,6 @@ namespace Drupal\webform\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\webform\WebformMessageManagerInterface;
 
 /**
  * Plugin implementation of the 'Webform rendered entity' formatter.
@@ -26,8 +25,8 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
    */
   public static function defaultSettings() {
     return [
-        'source_entity' => TRUE,
-      ] + parent::defaultSettings();
+      'source_entity' => TRUE,
+    ] + parent::defaultSettings();
   }
 
   /**
@@ -68,7 +67,8 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
 
     $elements = [];
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
-      // Do not display the webform if the current user can't create submissions.
+      // Do not display the webform if the current user can't
+      // create submissions.
       if ($entity->id() && !$entity->access('submission_create')) {
         $elements[$delta] = [];
       }

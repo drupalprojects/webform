@@ -62,12 +62,12 @@ class Range extends NumericBase {
    */
   public function preview() {
     return parent::preview() + [
-      '#min'=> 0,
-      '#max'=> 100,
-      '#step'=> 1,
-      '#range__output'=> TRUE,
-      '#range__output_prefix'=> '$',
-      '#range__output_suffix'=> '.00',
+      '#min' => 0,
+      '#max' => 100,
+      '#step' => 1,
+      '#range__output' => TRUE,
+      '#range__output_prefix' => '$',
+      '#range__output_suffix' => '.00',
     ];
   }
 

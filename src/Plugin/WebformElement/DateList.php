@@ -42,7 +42,6 @@ class DateList extends DateBase {
     ];
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -208,11 +207,10 @@ class DateList extends DateBase {
     parent::setConfigurationFormDefaultValue($form, $element_properties, $property_element, $property_name);
   }
 
-
   /**
    * After build handler for Datelist element.
    */
-  public static function afterBuild(array $element, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public static function afterBuild(array $element, FormStateInterface $form_state) {
     // Reverse years from min:max to max:min.
     // @see \Drupal\Core\Datetime\Element\DateElementBase::datetimeRangeYears
     if (!empty($element['#date_year_range_reverse']) && isset($element['year']) && isset($element['year']['#options'])) {

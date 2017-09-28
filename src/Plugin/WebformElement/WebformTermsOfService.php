@@ -97,7 +97,6 @@ class WebformTermsOfService extends Checkbox {
     ];
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -116,7 +115,7 @@ class WebformTermsOfService extends Checkbox {
       '#options' => [
         WebformTermsOfServiceElement::TERMS_MODAL => $this->t('Modal'),
         WebformTermsOfServiceElement::TERMS_SLIDEOUT => $this->t('Slideout'),
-      ]
+      ],
     ];
     $form['terms_of_service']['terms_title'] = [
       '#type' => 'textfield',

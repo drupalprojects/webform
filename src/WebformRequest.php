@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
+use Drupal\Core\Routing\AdminContext;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\Url;
@@ -24,18 +25,25 @@ class WebformRequest implements WebformRequestInterface {
   protected $routeProvider;
 
   /**
-   * The current route match.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
-
-  /**
    * The current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $request;
+
+  /**
+   * The route admin context to determine whether a route is an admin one.
+   *
+   * @var \Drupal\Core\Routing\AdminContext
+   */
+  protected $adminContext;
+
+  /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
 
   /**
    * The entity type manager.
@@ -72,6 +80,8 @@ class WebformRequest implements WebformRequestInterface {
    *   The route provider.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\Core\Routing\AdminContext $admin_context
+   *   The route admin context service.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -81,9 +91,10 @@ class WebformRequest implements WebformRequestInterface {
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
    */
-  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, AdminContext $admin_context, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
     $this->routeProvider = $route_provider;
     $this->request = $request_stack->getCurrentRequest();
+    $this->adminContext = $admin_context;
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeRepository = $entity_type_repository;
@@ -99,7 +110,7 @@ class WebformRequest implements WebformRequestInterface {
     }
 
     // Make sure the current route is an admin route.
-    if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+    if (!$this->adminContext->isAdminRoute()) {
       $this->isAdminRoute = FALSE;
       return $this->isAdminRoute;
     }

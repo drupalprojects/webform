@@ -16,7 +16,6 @@ use Drupal\webform\WebformTokenManagerInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -135,7 +134,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $webform = $this->getWebform();
 
-    // States
+    // States.
     $states = [
       WebformSubmissionInterface::STATE_COMPLETED => [
         'state' => $this->t('completed'),
@@ -174,7 +173,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $t_args = [
         '@state' => $state_item['state'],
         '@title' => $state_item['label'],
-        '@url' => 'http://www.mycrm.com/form_' . $state . '_handler.php'
+        '@url' => 'http://www.mycrm.com/form_' . $state . '_handler.php',
       ];
       $form[$state] = [
         '#type' => 'details',
@@ -323,7 +322,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $request_url = $this->configuration[$state . '_url'];
     $request_type = $this->configuration['type'];
     $request_options = (!empty($this->configuration['custom_options'])) ? Yaml::decode($this->configuration['custom_options']) : [];
-    $request_options[($request_type == 'json' ? 'json' :'form_params')] = $this->getRequestData($state, $webform_submission);
+    $request_options[($request_type == 'json' ? 'json' : 'form_params')] = $this->getRequestData($state, $webform_submission);
 
     try {
       $response = $this->httpClient->post($request_url, $request_options);
@@ -413,7 +412,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * Authentication remote post options and authentication tokens
+   * Authentication remote post options and authentication tokens.
    *
    * @param array $options
    *   Request options including the form_params or json and the request header.
@@ -421,7 +420,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    * @return array
    *   The request options with authentication tokens add to the
    *   parameters or header.
-   *
    */
   protected function authenticate(array $options) {
     // Here you can set a custom authentication token to the remote post options.
@@ -429,7 +427,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * Get response data
+   * Get response data.
    *
    * @param \Psr\Http\Message\ResponseInterface $response
    *   The response returned by the remote server.

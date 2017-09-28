@@ -83,7 +83,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
   protected $webformSubmissionGenerate;
 
   /**
-   * The webform entity reference manager
+   * The webform entity reference manager.
    *
    * @var \Drupal\webform\WebformEntityReferenceManagerInterface
    */
@@ -280,7 +280,11 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
         $this->generateSubmission($values);
         if (function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
           $now = time();
-          drush_log(dt('Completed @feedback submissions (@rate submissions/min)', ['@feedback' => drush_get_option('feedback', 1000), '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start)]), 'ok');
+          $dt_args = [
+            '@feedback' => drush_get_option('feedback', 1000),
+            '@rate' => (drush_get_option('feedback', 1000) * 60) / ($now - $start),
+          ];
+          drush_log(dt('Completed @feedback submissions (@rate submissions/min)', $dt_args), 'ok');
           $start = $now;
         }
       }

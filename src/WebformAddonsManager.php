@@ -146,7 +146,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
           '#type' => 'link',
           '#title' => $this->t('Sign up and try Lingotek'),
           '#url' => Url::fromUri('https://lingotek.com/webform'),
-          '#attributes' => ['class' =>  ['button', 'button--primary']],
+          '#attributes' => ['class' => ['button', 'button--primary']],
         ],
         'video' => [
           '#type' => 'link',
@@ -220,7 +220,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Element: Webform Score.
     $projects['webform_score'] = [
       'title' => $this->t('Webform Score'),
-      'description' => $this->t('Lets you score an individual user\'s answers, then store and display the scores.'),
+      'description' => $this->t("Lets you score an individual user's answers, then store and display the scores."),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_score'),
       'category' => 'element',
     ];
@@ -249,7 +249,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Integrations: Webform Product
+    // Integrations: Webform Product.
     $projects['webform_product'] = [
       'title' => $this->t('Webform Product'),
       'description' => $this->t('Links commerce products to webform elements.'),
@@ -273,7 +273,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
-    // Integrations: Webform SugarCRM Integration
+    // Integrations: Webform SugarCRM Integration.
     $projects['webform_sugarcrm'] = [
       'title' => $this->t('Webform SugarCRM Integration'),
       'description' => $this->t('Provides integration for webform submission with SugarCRM.'),
@@ -413,7 +413,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'utility',
     ];
 
-
     // Validation: Clientside Validation.
     $projects['clientside_validation'] = [
       'title' => $this->t('Clientside Validation'),
@@ -430,7 +429,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'validation',
     ];
 
-    // Devel: Maillog / Mail Developer
+    // Devel: Maillog / Mail Developer.
     $projects['maillog'] = [
       'title' => $this->t('Maillog / Mail Developer'),
       'description' => $this->t('Utility to log all Mails for debugging purposes. It is possible to suppress mail delivery for e.g. dev or staging systems.'),

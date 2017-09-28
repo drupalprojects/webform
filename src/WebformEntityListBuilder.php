@@ -80,7 +80,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           '#type' => 'link',
           '#title' => $this->t('Add webform'),
           '#url' => new Url('entity.webform.add_form'),
-          '#attributes' =>  WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button-action', 'button--primary', 'button--small']),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button-action', 'button--primary', 'button--small']),
         ],
       ];
     }

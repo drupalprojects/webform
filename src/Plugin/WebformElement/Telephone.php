@@ -98,9 +98,9 @@ class Telephone extends TextBase {
         // Issue #2484693: Telephone Link field formatter breaks Drupal with 5
         // digits or less in the number
         // return [
-        //  '#type' => 'link',
-        //  '#title' => $value,
-        //  '#url' => \Drupal::pathValidator()->getUrlIfValid('tel:' . $value),
+        //   '#type' => 'link',
+        //   '#title' => $value,
+        //   '#url' => \Drupal::pathValidator()->getUrlIfValid('tel:' . $value),
         // ];
         // Workaround: Manually build a static HTML link.
         $t_args = [':tel' => 'tel:' . $value, '@tel' => $value];

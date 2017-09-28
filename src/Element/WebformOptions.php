@@ -199,7 +199,7 @@ class WebformOptions extends FormElement {
       if ($options_description && !empty($value['description'])) {
         $option_text .= WebformOptionsHelper::DESCRIPTION_DELIMITER . $value['description'];
       }
-      
+
       // Populate empty option value or option text.
       if ($option_value === '') {
         $option_value = $option_text;

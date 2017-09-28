@@ -714,7 +714,7 @@ class WebformElementStates extends FormElement {
    * @return array
    *   An associative array of translated state options.
    */
-  static public function getStateOptions() {
+  public static function getStateOptions() {
     return [
       'visible' => t('Visible'),
       'invisible' => t('Hidden'),
@@ -735,7 +735,7 @@ class WebformElementStates extends FormElement {
    * @return array
    *   An associative array of translated trigger options.
    */
-  static public function getTriggerOptions() {
+  public static function getTriggerOptions() {
     return [
       'empty' => t('Empty'),
       'filled' => t('Filled'),
