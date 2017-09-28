@@ -233,7 +233,8 @@ trait WebformEntityReferenceTrait {
    */
   public function buildExportHeader(array $element, array $options) {
     if (!$this->hasMultipleValues($element)) {
-      $header = $options['entity_reference_items'];
+      $default_options = $this->getExportDefaultOptions();
+      $header = isset($options['entity_reference_items']) ? $options['entity_reference_items'] : $default_options['entity_reference_items'];
       if ($options['header_format'] == 'label') {
         foreach ($header as $index => $column) {
           switch ($column) {
@@ -263,6 +264,8 @@ trait WebformEntityReferenceTrait {
    */
   public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
     $value = $this->getValue($element, $webform_submission);
+    $default_options = $this->getExportDefaultOptions();
+    $entity_reference_items = isset($export_options['entity_reference_items']) ? $export_options['entity_reference_items'] : $default_options['entity_reference_items'];
 
     if (!$this->hasMultipleValues($element)) {
       $entity_type = $this->getTargetType($element);
@@ -271,7 +274,7 @@ trait WebformEntityReferenceTrait {
 
       $record = [];
       if ($entity_id && ($entity = $entity_storage->load($entity_id))) {
-        foreach ($export_options['entity_reference_items'] as $column) {
+        foreach ($entity_reference_items as $column) {
           switch ($column) {
             case 'id':
               $record[] = $entity->id();
@@ -288,7 +291,7 @@ trait WebformEntityReferenceTrait {
         }
       }
       else {
-        foreach ($export_options['entity_reference_items'] as $column) {
+        foreach ($entity_reference_items as $column) {
           switch ($column) {
             case 'id':
               $record[] = $entity_id;
@@ -307,7 +310,7 @@ trait WebformEntityReferenceTrait {
       return $record;
     }
     else {
-      if ($export_options['entity_reference_items'] == ['id']) {
+      if ($entity_reference_items == ['id']) {
         $element['#format'] = 'raw';
       }
       return parent::buildExportRecord($element, $webform_submission, $export_options);
