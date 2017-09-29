@@ -94,7 +94,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
     $form['element']['empty_message'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Empty element message/placeholder'),
-      '#description' => $this->t('Text to be displayed when empty elements are included in previews and/or emails'),
+      '#description' => $this->t('Text that will be shown when empty elements are included in submission previews and/or emails'),
       '#default_value' => $config->get('element.empty_message'),
     ];
     $form['element']['allowed_tags'] = [
@@ -109,7 +109,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
       '#other__default_value' => implode(' ', Xss::getAdminTagList()),
       '#other__maxlength' => 1000,
       '#required' => TRUE,
-      '#description' => $this->t('Allowed tags are applied to any element property that may contain HTML markup. This properties include #title, #description, #field_prefix, and #field_suffix'),
+      '#description' => $this->t('Allowed tags are applied to any element property that may contain HTML markup. Element properties which can contain HTML markup include #title, #description, #field_prefix, and #field_suffix.'),
       '#default_value' => $config->get('element.allowed_tags'),
     ];
     $form['element']['wrapper_classes'] = [
@@ -149,7 +149,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
     $form['checkbox']['default_icheck'] = [
       '#type' => 'select',
       '#title' => $this->t('Enhance checkboxes/radio buttons using iCheck'),
-      '#description' => $this->t('Replaces checkboxes/radio buttons with jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
+      '#description' => $this->t('If set, all checkboxes/radio buttons with be enhanced using jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
       '#options' => [
         '' => '',
         (string) $this->t('Minimal') => [
@@ -240,7 +240,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
       '#type' => 'webform_message',
       '#message_message' => $this->t('Text formats that open CKEditor image and/or link dialogs will not work properly.') . '<br />' .
         $this->t('You may need to <a href=":dialog_href">disable dialogs</a> or enable the experimental <a href=":modules_href">Settings Tray</a> module.', $t_args) . '<br />' .
-        $this->t('Please see <a href="https://www.drupal.org/node/2741877">Issue #2741877: Nested modals don\'t work</a>'),
+        $this->t('For more information see: <a href="https://www.drupal.org/node/2741877">Issue #2741877: Nested modals don\'t work</a>'),
       '#message_type' => 'warning',
       '#states' => [
         'visible' => [
@@ -274,21 +274,21 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
     $form['select']['default_empty_option'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Default empty option'),
-      '#description' => $this->t('If checked, the first default option for select menu will always be displayed.'),
+      '#description' => $this->t('If checked, the first default option for a select menu will always be displayed.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('element.default_empty_option'),
     ];
     $form['select']['default_empty_option_required'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default empty option required'),
-      '#description' => $this->t('The label to show for the first default option for required select menus.') . '<br /><br />' .
+      '#description' => $this->t('The label to show for the first default option for a required select menus.') . '<br /><br />' .
         $this->t('Defaults to: %value', ['%value' => $this->t('- Select -')]),
       '#default_value' => $config->get('element.default_empty_option_required'),
     ];
     $form['select']['default_empty_option_optional'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default empty option optional'),
-      '#description' => $this->t('The label to show for the first default option for optional select menus.') . '<br /><br />' .
+      '#description' => $this->t('The label to show for the first default option for an optional select menus.') . '<br /><br />' .
         $this->t('Defaults to: %value', ['%value' => $this->t('- None -')]),
       '#default_value' => $config->get('element.default_empty_option_optional'),
     ];
@@ -302,16 +302,16 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
     ];
     $form['file']['file_public'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Allow files to be uploaded to public file system.'),
-      '#description' => $this->t('Public files upload destination is dangerous for webforms that are available to anonymous and/or untrusted users.') . ' ' .
-        $this->t('For more information see: <a href=":href">DRUPAL-PSA-2016-003</a>', [':href' => 'https://www.drupal.org/psa-2016-003']),
+      '#title' => $this->t('Allow files to be uploaded to public file system'),
+      '#description' => $this->t('Allowing public file uploads is dangerous for webforms that are available to anonymous and/or untrusted users.') . ' ' .
+        $this->t('For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_public'),
     ];
     $form['file']['file_private_redirect'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Redirect anonymous users to login when attempting to access private file uploads.'),
-      '#description' => $this->t('If checked, anoymous users will be redirected to login to access private file uploads.'),
+      '#title' => $this->t('Redirect anonymous users to login when attempting to access private file uploads'),
+      '#description' => $this->t('If checked, anonymous users will be redirected to the user login page when attempting to access private file uploads.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_private_redirect'),
     ];

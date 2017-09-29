@@ -363,7 +363,7 @@ webform.settings:
           label: 'Save details open/close state'
         description_help:
           type: boolean
-          label: 'Display element description as help icon (tooltip)'
+          label: 'Display element description as help text (tooltip)'
     libraries:
       type: mapping
       label: 'Library settings'
@@ -380,13 +380,13 @@ webform.settings:
       mapping:
         cdn:
           type: boolean
-          label: 'Check if CDN is being used for external libraries.'
+          label: 'Check if CDN is being used for external libraries'
         bootstrap:
           type: boolean
-          label: 'Check if Webform Bootstrap Integration module is installed when using the Bootstrap theme.'
+          label: 'Check if Webform Bootstrap Integration module is installed when using the Bootstrap theme'
         spam:
           type: boolean
-          label: 'Check if SPAM protection module is installed.'
+          label: 'Check if SPAM protection module is installed'
     third_party_settings:
       type: sequence
       label: 'Third party settings'
@@ -568,7 +568,7 @@ webform.webform.*:
           label: 'Allow users to save and finish the webform later.'
         draft_multiple:
           type: boolean
-          label: 'Allow users to save multiple drafts.'
+          label: 'Allow users to save multiple drafts'
         draft_auto_save:
           type: boolean
           label: 'Automatically save as draft when previewing and when there are validation errors.'

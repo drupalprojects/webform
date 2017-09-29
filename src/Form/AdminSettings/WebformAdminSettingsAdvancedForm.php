@@ -100,8 +100,8 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
     ];
     $form['ui']['description_help'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Display element description as help icon (tooltip)'),
-      '#description' => $this->t("If checked, all element description will be moved to help icons."),
+      '#title' => $this->t('Display element description as help text (tooltip)'),
+      '#description' => $this->t("If checked, all element descriptions will be moved to help text (tooltip)."),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.description_help'),
     ];
@@ -118,21 +118,21 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
     $form['ui']['dialog_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable dialogs'),
-      '#description' => $this->t('If checked, all modal dialogs (ie popups) will be disabled.'),
+      '#description' => $this->t('If checked, all modal dialogs (i.e. popups) will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.dialog_disabled'),
     ];
     $form['ui']['about_disabled'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Disable about'),
-      '#description' => $this->t("If checked, 'About' tab will be disabled."),
+      '#title' => $this->t("Disable the 'About' section"),
+      '#description' => $this->t("If checked, 'About' section/tab will be remove from the admin UI."),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.about_disabled'),
     ];
     $form['ui']['offcanvas_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable off-canvas system tray'),
-      '#description' => $this->t('If checked, off-canvas system tray will be disabled.'),
+      '#description' => $this->t('If checked, the off-canvas system tray will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.offcanvas_disabled'),
       '#access' => $this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3),
@@ -179,21 +179,21 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
     ];
     $form['requirements']['cdn'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Check if CDN is being used for external libraries.'),
+      '#title' => $this->t('Check if CDN is being used for external libraries'),
       '#description' => $this->t('If unchecked, all warnings about missing libraries will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('requirements.cdn'),
     ];
     $form['requirements']['bootstrap'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Check if Webform Bootstrap Integration module is installed when using the Bootstrap theme.'),
-      '#description' => $this->t('If unchecked, all warnings about the Webform Bootstrapp Integration module will be disabled.'),
+      '#title' => $this->t('Check if the Webform Bootstrap Integration module is installed when using the Bootstrap theme'),
+      '#description' => $this->t('If unchecked, all warnings about the Webform Bootstrap Integration module will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('requirements.bootstrap'),
     ];
     $form['requirements']['spam'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Check if SPAM protection module is installed.'),
+      '#title' => $this->t('Check if SPAM protection module is installed'),
       '#description' => $this->t('If unchecked, all warnings about Webform SPAM protection will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('requirements.spam'),
@@ -210,14 +210,14 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Test data by element type'),
-      '#description' => $this->t("Above test data is keyed by FAPI element #type."),
+      '#description' => $this->t("Above test data is keyed by element #type."),
       '#default_value' => $config->get('test.types'),
     ];
     $form['test']['names'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Test data by element name'),
-      '#description' => $this->t("Above test data is keyed by full or partial element names. For example, Using 'zip' will populate fields that are named 'zip' and 'zip_code' but not 'zipcode' or 'zipline'."),
+      '#description' => $this->t("Above test data is keyed by full or partial element names. For example, using 'zip' will populate fields that are named 'zip' and 'zip_code' but not 'zipcode' or 'zipline'."),
       '#default_value' => $config->get('test.names'),
     ];
 

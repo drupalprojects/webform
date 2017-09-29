@@ -160,7 +160,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     ];
     $form['submission_behaviors']['form_convert_anonymous'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Convert anonymous user drafts and submissions to authenticated user.'),
+      '#title' => $this->t('Convert anonymous user drafts and submissions to authenticated user'),
       '#description' => $this->t('If checked, drafts and submissions created by an anonymous user will be reassigned to their user account when they login.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['form_convert_anonymous'],
@@ -179,13 +179,15 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       ],
       'token_update' => [
         'title' => $this->t('Allow users to update a submission using a secure token.'),
-        'form_description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token. The URL to update a submission will be available when viewing a submission's information and can be inserted into the an email using the [webform_submission:update-url] token. Only webforms that are open to new submissions can be updated using the secure token."),
+        'form_description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token.") . ' ' .
+          $this->t("The 'tokenized' URL to update a submission will be available when viewing a submission's information and can be inserted into an email using the [webform_submission:update-url] token.") . ' '  .
+          $this->t('Only webforms that are open to new submissions can be updated using the secure token.'),
       ],
       // Global behaviors.
       // @see \Drupal\webform\Form\WebformAdminSettingsForm
       'submission_log' => [
         'title' => $this->t('Log submission events'),
-        'all_description' => $this->t('All submission event are being logged for all webforms.'),
+        'all_description' => $this->t('All submission event are being logged for all webforms'),
         'form_description' => $this->t('If checked, events will be logged for submissions to this webforms.'),
       ],
     ];
@@ -193,7 +195,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     $form['submission_behaviors']['token_update_warning'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t("Webform submission's accessed using the (secure) token will by-pass all webform submsission access rules."),
+      '#message_message' => $this->t("Submissions accessed using the (secure) token will by-pass all webform submission access rules."),
       '#states' => [
         'visible' => [
           ':input[name="token_update"]' => ['checked' => TRUE],
@@ -233,7 +235,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     $form['submission_limits']['user'] = [
       '#type' => 'details',
       '#title' => $this->t('Per user'),
-      '#description' => $this->t('Limit the number of submissions per user. A user is identified by their user login if logged-in, or by their Cookie if anonymous.'),
+      '#description' => $this->t('Limit the number of submissions per user. A user is identified by their user id if logged-in, or by their Cookie if anonymous.'),
     ];
     $form['submission_limits']['user']['limit_user'] = [
       '#type' => 'number',
@@ -322,8 +324,8 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     ];
     $form['draft_settings']['draft_container']['draft_multiple'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Allow users to save multiple drafts.'),
-      "#description" => $this->t('If checked, users will be able saved and resume multiple drafts.'),
+      '#title' => $this->t('Allow users to save multiple drafts'),
+      "#description" => $this->t('If checked, users will be able save and resume multiple drafts.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['draft_multiple'],
     ];

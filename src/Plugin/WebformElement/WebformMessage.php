@@ -103,7 +103,7 @@ class WebformMessage extends WebformMarkupBase {
     ];
     $form['markup']['message_close'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Allow users to close the message.'),
+      '#title' => $this->t('Allow users to close the message'),
       '#return_value' => TRUE,
     ];
     $form['markup']['message_close_effect'] = [

@@ -1757,13 +1757,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['element']['multiple__header_container']['multiple__header'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display elements in table columns'),
-      '#description' => $this->t("If checked composite elements titles will be displayed in table column headers."),
+      '#description' => $this->t("If checked, the composite sub-element titles will be displayed as the table header labels."),
       '#return_value' => TRUE,
     ];
     $form['element']['multiple__header_container']['multiple__header_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Table header label'),
-      '#description' => $this->t('This is used as the table header for this webform element when display multiple values.'),
+      '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
     ];
     if ($this->hasProperty('multiple')) {
       $form['element']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
@@ -2030,7 +2030,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['validation']['unique_container']['unique_user'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Unique per user'),
-      '#description' => $this->t('Check that entered values for this element is unique for the current user.'),
+      '#description' => $this->t('Check that entered values for this element are unique for the current user.'),
       '#return_value' => TRUE,
       '#states' => [
         'visible' => [
@@ -2041,7 +2041,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['validation']['unique_error'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Unique message'),
-      '#description' => $this->t('If set, this message will be used when an element\'s value is not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
+      '#description' => $this->t('If set, this message will be used when an element\'s value are not unique, instead of the default "@message" message.', ['@message' => $this->t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.')]),
       '#states' => [
         'visible' => [
           [':input[name="properties[unique]"]' => ['checked' => TRUE]],
@@ -2217,7 +2217,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       unset($custom_properties['type']);
     }
 
-    // Allow custom properties (ie #attributes) to be added to the element.
+    // Allow custom properties (i.e. #attributes) to be added to the element.
     $form['custom'] = [
       '#type' => 'details',
       '#title' => $this->t('Custom settings'),
@@ -2236,7 +2236,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
-      '#description' => $this->t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
+      '#description' => $this->t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added to the custom properties.') .
         '<br /><br />' .
         $this->t('These properties and callbacks are not allowed: @properties', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => $custom_properties ,

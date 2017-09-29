@@ -196,7 +196,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     // Unschedule.
     $form['scheduled']['unschedule'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Unschedule email when draft or submission is saved.'),
+      '#title' => $this->t('Unschedule email when draft or submission is saved'),
       '#description' => $this->t('You can use this setting to unschedule a draft reminder, when submission has been completed.'),
       '#default_value' => $this->configuration['unschedule'],
       '#return_value' => TRUE,
@@ -207,7 +207,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     if ($webform->hasSubmissions()) {
       $form['scheduled']['queue'] = [
         '#type' => 'checkbox',
-        '#title' => $this->t('Schedule emails for all existing submissions.'),
+        '#title' => $this->t('Schedule emails for all existing submissions'),
         '#description' => $this->t('Check schedule emails after submissions have been processed.'),
         '#return_value' => TRUE,
         '#parents' => ['settings', 'queue'],

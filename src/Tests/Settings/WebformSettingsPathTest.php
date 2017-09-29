@@ -43,7 +43,7 @@ class WebformSettingsPathTest extends WebformTestBase {
     $this->drupalGet('form/' . str_replace('_', '-', $webform->id()) . '/confirmation');
     $this->assertResponse(200, 'Confirm URL alias exists');
 
-    // Check page hidden (ie access denied).
+    // Check page hidden (i.e. access denied).
     $webform->setSettings(['page' => FALSE])->save();
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(403, 'Submit system path access denied');

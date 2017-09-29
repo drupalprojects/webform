@@ -133,7 +133,7 @@ class WebformAdminSettingsLibrariesForm extends WebformAdminSettingsBaseForm {
     $form['libraries']['select_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('<a href=":select2_href">Select2</a> and <a href=":chosen_href">Chosen</a> provide very similar functionality, Most websites should only have one of these libraries enabled.', $t_args),
+      '#message_message' => $this->t('<a href=":select2_href">Select2</a> and <a href=":chosen_href">Chosen</a> provide very similar functionality, most websites should only have one of these libraries enabled.', $t_args),
       '#states' => [
         'visible' => [
           ':input[name="libraries[excluded_libraries][jquery.select2]"]' => ['checked' => TRUE],

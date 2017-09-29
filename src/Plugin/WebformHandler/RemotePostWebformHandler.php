@@ -185,7 +185,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $form[$state][$state_url] = [
         '#type' => 'url',
         '#title' => $this->t('@title URL', $t_args),
-        '#description' => $this->t('The full URL to POST to when an existing webform submission is @state. E.g. @url', $t_args),
+        '#description' => $this->t('The full URL to POST to when an existing webform submission is @state. (e.g. @url)', $t_args),
         '#required' => ($state === WebformSubmissionInterface::STATE_COMPLETED),
         '#parents' => ['settings', $state_url],
         '#default_value' => $this->configuration[$state_url],
@@ -202,7 +202,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       if ($state === WebformSubmissionInterface::STATE_COMPLETED) {
         $form[$state]['token'] = [
           '#type' => 'webform_message',
-          '#message_message' => $this->t('Response data can be passed to submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (ie [webform:handler:remote_post:completed:confirmation_number])'),
+          '#message_message' => $this->t('Response data can be passed to the submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (i.e. [webform:handler:remote_post:completed:confirmation_number])'),
           '#message_type' => 'info',
         ];
       }

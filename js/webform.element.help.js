@@ -1,6 +1,6 @@
 /**
  * @file
- * JavaScript behaviors for element help icon (tooltip).
+ * JavaScript behaviors for element help text (tooltip).
  */
 
 (function ($, Drupal) {

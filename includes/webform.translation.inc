@@ -150,7 +150,7 @@ function webform_lingotek_config_entity_document_upload(array &$source_data, Con
       $translation_manager = \Drupal::service('webform.translation_manager');
 
       // Replace elements with just the translatable properties
-      // (ie #title, #description, #options, etc...) so that Lingotek's
+      // (i.e. #title, #description, #options, etc...) so that Lingotek's
       // translation services can correctly translate each element.
       $translation_elements = $translation_manager->getTranslationElements($entity, $entity->language()->getId());
       $source_data['elements'] = $translation_elements;

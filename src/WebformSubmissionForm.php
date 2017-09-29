@@ -1099,7 +1099,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Webform validate handlers (via form['#validate']) are not called when
     // #validate handlers are attached to the trigger element
-    // (ie submit button), so we need to manually call $form['validate']
+    // (i.e. submit button), so we need to manually call $form['validate']
     // handlers to support the modules that use form['#validate'] like the
     // validators.module.
     // @see \Drupal\webform\WebformSubmissionForm::actions

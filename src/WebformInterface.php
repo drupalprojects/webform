@@ -125,7 +125,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function hasContainer();
 
   /**
-   * Determine if the webform has conditional logic (ie #states).
+   * Determine if the webform has conditional logic (i.e. #states).
    *
    * @return bool
    *   TRUE if the webform has conditional logic
@@ -656,7 +656,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function getPage($operation, $key);
 
   /**
-   * Update submit and confirm paths (ie URL aliases) associated with this webform.
+   * Update submit and confirm paths (i.e. URL aliases) associated with this webform.
    */
   public function updatePaths();
 
@@ -681,10 +681,10 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *
    * @param string $plugin_id
    *   (optional) Plugin id used to return specific plugin instances
-   *   (ie handlers).
+   *   (i.e. handlers).
    * @param bool $status
    *   (optional) Status used to return enabled or disabled plugin instances
-   *   (ie handlers).
+   *   (i.e. handlers).
    * @param int $results
    *   (optional) Value indicating if webform submissions are saved to internal
    *   or external system.

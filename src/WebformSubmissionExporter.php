@@ -332,7 +332,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
     $form['export']['element']['multiple_delimiter'] = [
       '#type' => 'select',
       '#title' => $this->t('Element multiple values delimiter'),
-      '#description' => $this->t('This is the delimiter when an element has multiple values.'),
+      '#description' => $this->t('The delimiter used when an element has multiple values.'),
       '#required' => TRUE,
       '#options' => [
         ';' => $this->t('Semicolon (;)'),
@@ -365,7 +365,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
 
     $form['export']['header']['header_prefix'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t("Include an element's title with all sub elements and values in each column header."),
+      '#title' => $this->t("Include an element's title with all sub elements and values in each column header"),
       '#return_value' => TRUE,
       '#default_value' => $export_options['header_prefix'],
     ];

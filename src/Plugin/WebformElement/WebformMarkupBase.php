@@ -71,7 +71,7 @@ abstract class WebformMarkupBase extends WebformElementBase implements WebformEl
 
       // Since we are not passing this element to the
       // webform_container_base_html template we need to replace the default
-      // sub elements with the value (ie renderable sub elements).
+      // sub elements with the value (i.e. renderable sub elements).
       if (is_array($value)) {
         $element = $value + $element;
       }
@@ -99,7 +99,7 @@ abstract class WebformMarkupBase extends WebformElementBase implements WebformEl
 
       // Since we are not passing this element to the
       // webform_container_base_text template we need to replace the default
-      // sub elements with the value (ie renderable sub elements).
+      // sub elements with the value (i.e. renderable sub elements).
       if (is_array($value)) {
         $element = $value + $element;
       }

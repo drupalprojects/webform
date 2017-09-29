@@ -327,7 +327,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $hasContainer = FALSE;
 
   /**
-   * Track if the webform has conditions (ie #states).
+   * Track if the webform has conditions (i.e. #states).
    *
    * @var bool
    */

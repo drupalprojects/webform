@@ -303,10 +303,10 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Build format options with help.
     $options_format_options = [
-      'compact' => $this->t('Compact; with the option values delimited by commas in one column.') .
+      'compact' => $this->t('Compact, with the option values delimited by commas in one column.') .
         WebformOptionsHelper::DESCRIPTION_DELIMITER .
         $this->t('Compact options are more suitable for importing data into other systems.'),
-      'separate' => $this->t('Separate; with each possible option value in its own column.') .
+      'separate' => $this->t('Separate, with each possible option value in its own column.') .
         WebformOptionsHelper::DESCRIPTION_DELIMITER .
         $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application. Ranking will be included for sortable option elements.'),
     ];
@@ -380,7 +380,7 @@ abstract class OptionsBase extends WebformElementBase {
         $value = array_combine($value, $value);
         $deltas = ($this->exportDelta) ? array_flip(array_values($value)) : FALSE;
       }
-      // Separate multiple values (ie options).
+      // Separate multiple values (i.e. options).
       foreach ($element_options as $option_value => $option_text) {
         if ((is_array($value) && isset($value[$option_value])) || ($value == $option_value)) {
           $record[] = ($deltas) ? ($deltas[$option_value] + 1) : 'X';

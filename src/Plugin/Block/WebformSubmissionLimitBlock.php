@@ -118,17 +118,17 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
    */
   public function blockForm($form, FormStateInterface $form_state) {
     $form['type'] = [
-      '#title' => $this->t('Display limit and total submissions for'),
+      '#title' => $this->t('Display limit and total submissions for the'),
       '#type' => 'select',
       '#options' => [
-        'webform' => $this->t('Webform'),
+        'webform' => $this->t('Current webform'),
         'user' => $this->t('Current user'),
       ],
       '#ajax' => self::getTokenAjaxSettings(),
       '#default_value' => $this->configuration['type'],
     ];
     $form['source_entity'] = [
-      '#title' => $this->t('Restrict limit and total submissions to current or specified source entity.'),
+      '#title' => $this->t('Restrict limit and total submissions to current or specified source entity'),
       '#type' => 'checkbox',
       '#return_value' => TRUE,
       '#ajax' => self::getTokenAjaxSettings(),

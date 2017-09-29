@@ -101,7 +101,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     ];
     $form['general_settings']['template'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Allow this webform to be used as a template.'),
+      '#title' => $this->t('Allow this webform to be used as a template'),
       '#description' => $this->t('If checked, this webform will be available as a template to all users who can create new webforms.'),
       '#return_value' => TRUE,
       '#access' => $this->moduleHandler->moduleExists('webform_templates'),
@@ -109,8 +109,8 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     ];
     $form['general_settings']['results_disabled'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Disable saving of submissions.'),
-      '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts will be disabled. Submissions must be sent via an email or handled using a custom <a href=":href">webform handler</a>.', [':href' => Url::fromRoute('entity.webform.handlers', ['webform' => $webform->id()])->toString()]),
+      '#title' => $this->t('Disable saving of submissions'),
+      '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts will be disabled. Submissions must be sent via an email or processed using a custom <a href=":href">webform handler</a>.', [':href' => Url::fromRoute('entity.webform.handlers', ['webform' => $webform->id()])->toString()]),
       '#return_value' => TRUE,
       '#default_value' => $settings['results_disabled'],
     ];
@@ -173,7 +173,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
     $form['page_settings']['page'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Allow users to post submission from a dedicated URL.'),
+      '#title' => $this->t('Allow users to post submission from a dedicated URL'),
       '#description' => $this->t('If unchecked, this webform must be attached to a <a href=":node_href">node</a> or a <a href=":block_href">block</a> to receive submissions.', $t_args),
       '#return_value' => TRUE,
       '#default_value' => $settings['page'],

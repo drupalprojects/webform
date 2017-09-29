@@ -169,7 +169,7 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
       ],
       'default_form_disable_back' => [
         'title' => $this->t('Disable back button for all webforms'),
-        'description' => $this->t('If checked, users will not be allowed to navigate back to the webform using the browsers back button.'),
+        'description' => $this->t("If checked, users will not be allowed to navigate back to the webform using the browser's back button."),
       ],
       'default_form_unsaved' => [
         'title' => $this->t('Warn users about unsaved changes for all webforms'),
@@ -180,8 +180,8 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
         'description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to all webforms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
       ],
       'default_form_details_toggle' => [
-        'title' => $this->t('Display collapse/expand all details link for all webforms'),
-        'description' => $this->t('If checked, an expand/collapse all (details) link will be added to all webforms with two or more details elements.'),
+        'title' => $this->t('Display collapse/expand all details link on all webforms'),
+        'description' => $this->t('If checked, an expand/collapse all details link will be added to all webforms which contain two or more details elements.'),
       ],
     ];
     foreach ($behavior_elements as $behavior_key => $behavior_element) {

@@ -81,7 +81,7 @@ class Range extends NumericBase {
 
     $form['number']['range__output'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t("Output the range's value."),
+      '#title' => $this->t("Output the range's value"),
       '#return_type' => TRUE,
     ];
     $form['number']['range__output_prefix'] = [

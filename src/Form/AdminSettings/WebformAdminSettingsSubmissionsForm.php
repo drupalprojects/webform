@@ -80,7 +80,7 @@ class WebformAdminSettingsSubmissionsForm extends WebformAdminSettingsBaseForm {
     ];
     $behavior_elements = [
       'default_submission_log' => [
-        'title' => $this->t('Log all submission events for all webforms.'),
+        'title' => $this->t('Log all submission events for all webforms'),
         'description' => $this->t('If checked, all submission events will be logged to dedicated submission log available to all webforms and submissions.'),
       ],
     ];
@@ -127,7 +127,7 @@ class WebformAdminSettingsSubmissionsForm extends WebformAdminSettingsBaseForm {
       '#title' => $this->t('Amount of submissions to process'),
       '#min' => 1,
       '#default_value' => $config->get('purge.cron_size'),
-      '#description' => $this->t('Amount of submissions to purge during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
+      '#description' => $this->t('Enter the amount of submissions to be purged during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
     ];
 
     return parent::buildForm($form, $form_state);

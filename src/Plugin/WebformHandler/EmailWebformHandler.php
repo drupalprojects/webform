@@ -685,7 +685,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    * @param string $configuration_name
-   *   The email configuration name. (ie to, cc, bcc, or from)
+   *   The email configuration name. (i.e. to, cc, bcc, or from)
    * @param string $configuration_value
    *   The email configuration value.
    *

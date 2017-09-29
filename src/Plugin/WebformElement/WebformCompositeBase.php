@@ -690,7 +690,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form['composite']['flexbox'] = [
       '#type' => 'select',
       '#title' => $this->t('Use Flexbox'),
-      '#description' => $this->t("If 'Automatic' is selected Flexbox layout will only be used if a Flexbox element is included in the webform."),
+      '#description' => $this->t("If 'Automatic' is selected Flexbox layout will only be used if a 'Flexbox layout' element is included in the webform."),
       '#options' => [
         '' => $this->t('Automatic'),
         0 => $this->t('No'),

@@ -80,7 +80,7 @@ class WebformAutocomplete extends TextField {
     ];
     $form['autocomplete']['autocomplete_existing'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Include existing submission values.'),
+      '#title' => $this->t('Include existing submission values'),
       '#description' => $this->t("If checked, all existing submission values will be visible to the webform's users."),
       '#return_value' => TRUE,
     ];

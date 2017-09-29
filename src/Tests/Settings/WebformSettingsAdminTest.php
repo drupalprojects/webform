@@ -86,7 +86,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
     // Disable dialogs.
     $this->drupalPostForm('admin/structure/webform/settings/advanced', ['ui[dialog_disabled]' => TRUE], t('Save configuration'));
 
-    // Check that dialogs are disabled. (ie use-ajax is not included)
+    // Check that dialogs are disabled. (i.e. use-ajax is not included)
     $this->drupalGet('admin/structure/webform');
     $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;webform-modal&quot;}">Add webform</a>');
     $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small">Add webform</a>');
@@ -95,11 +95,11 @@ class WebformSettingsAdminTest extends WebformTestBase {
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/settings/advanced', ['ui[description_help]' => TRUE], t('Save configuration'));
-    $this->assertRaw('<a href="#help" title="If checked, all element description will be moved to help icons." data-webform-help="If checked, all element description will be moved to help icons." class="webform-element-help">?</a>');
+    $this->assertRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help">?</a>');
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/settings/advanced', ['ui[description_help]' => FALSE], t('Save configuration'));
-    $this->assertNoRaw('<a href="#help" title="If checked, all element description will be moved to help icons." data-webform-help="If checked, all element description will be moved to help icons." class="webform-element-help">?</a>');
+    $this->assertNoRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help">?</a>');
   }
 
 }

@@ -92,7 +92,7 @@ class Date extends DateBase {
     $form['date']['datepicker'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use date picker'),
-      '#description' => $this->t('If checked, HTML5 date element will be replaced with <a href="https://jqueryui.com/datepicker/">jQuery UI datepicker</a>'),
+      '#description' => $this->t('If checked, the HTML5 date element will be replaced with <a href="https://jqueryui.com/datepicker/">jQuery UI datepicker</a>'),
       '#return_value' => TRUE,
     ];
     $date_format = DateFormat::load('html_date')->getPattern();

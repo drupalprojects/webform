@@ -156,7 +156,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       'form_disable_back' => [
         'title' => $this->t('Disable back button'),
         'all_description' => $this->t('Back button is disabled for all forms.'),
-        'form_description' => $this->t('If checked, users will not be allowed to navigate back to the form using the browsers back button.'),
+        'form_description' => $this->t("If checked, users will not be allowed to navigate back to the form using the browser's back button."),
       ],
       'form_unsaved' => [
         'title' => $this->t('Warn users about unsaved changes'),
@@ -175,27 +175,27 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ],
       // Form specific behaviors.
       'form_reset' => [
-        'title' => $this->t('Display reset button.'),
-        'form_description' => $this->t("If checked, users will be able to reset form and restart multistep wizards."),
+        'title' => $this->t('Display reset button'),
+        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards."),
       ],
       'form_disable_autocomplete' => [
         'title' => $this->t('Disable autocompletion'),
         'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),
       ],
       'form_autofocus' => [
-        'title' => $this->t('Autofocus'),
-        'form_description' => $this->t('If checked, the first visible and enabled input will be focused when adding new submissions.'),
+        'title' => $this->t('Autofocus the first element'),
+        'form_description' => $this->t('If checked, the first visible and enabled form element will be focused when adding a new submission.'),
       ],
       'form_prepopulate' => [
-        'title' => $this->t('Allow elements to be populated using query string parameters.'),
-        'form_description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would setting an the 'name' element's default value to 'John Smith'."),
+        'title' => $this->t('Allow elements to be populated using query string parameters'),
+        'form_description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would set the 'name' element's default value to 'John Smith'."),
       ],
       'form_prepopulate_source_entity' => [
-        'title' => $this->t('Allow source entity to be populated using query string parameters.'),
+        'title' => $this->t('Allow source entity to be populated using query string parameters'),
         'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=node&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to 'node:1'."),
       ],
       'form_prepopulate_source_entity_required' => [
-        'title' => $this->t('Require source entity to be populated using query string parameters.'),
+        'title' => $this->t('Require source entity to be populated using query string parameters'),
         'form_description' => $this->t("If checked, source entity must be populated using query string parameters."),
       ],
     ];
@@ -214,7 +214,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     }
     $form['form_behaviors']['form_prepopulate_source_entity_type'] = [
       '#type' => 'select',
-      '#title' => 'Type of source entity to be populated using query string parameters.',
+      '#title' => 'Type of source entity to be populated using query string parameters',
       '#weight' => ++$form['form_behaviors']['form_prepopulate_source_entity_required']['#weight'],
       '#empty_option' => '',
       '#options' => $entity_type_options,
@@ -311,13 +311,13 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['preview_settings']['preview_container']['preview_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview label'),
-      '#description' => $this->t('A text displayed within a wizard progress bar.'),
+      '#description' => $this->t("The text displayed within a multistep wizard's progress bar"),
       '#default_value' => $settings['preview_label'],
     ];
     $form['preview_settings']['preview_container']['preview_title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview page title'),
-      '#description' => $this->t('A title displayed on the preview page.'),
+      '#description' => $this->t('The title displayed on the preview page.'),
       '#default_value' => $settings['preview_title'],
     ];
     $form['preview_settings']['preview_container']['preview_message'] = [
@@ -419,7 +419,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#mode' => 'yaml',
       '#title' => $this->t('Custom properties'),
       '#description' =>
-        $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added upon submission.') .
+        $this->t('Properties do not have to prepended with a hash (#) character, the hash character will be automatically added to the custom properties.') .
         '<br /><br />' .
         $this->t('These properties and callbacks are not allowed: @properties.', ['@properties' => WebformArrayHelper::toString(WebformArrayHelper::addPrefix(WebformElementHelper::$ignoredProperties))]),
       '#default_value' => WebformArrayHelper::removePrefix($properties),

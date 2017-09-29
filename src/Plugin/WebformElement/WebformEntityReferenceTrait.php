@@ -205,9 +205,9 @@ trait WebformEntityReferenceTrait {
       '#type' => 'checkboxes',
       '#title' => $this->t('Entity reference format'),
       '#options' => [
-        'id' => $this->t("ID, the entity's unique identified."),
-        'title' => $this->t("Title, the entity's title/label."),
-        'url' => $this->t("URL, the entity's URL."),
+        'id' => $this->t("ID, an entity's unique identified"),
+        'title' => $this->t("Title, an entity's title/label"),
+        'url' => $this->t("URL, an entity's URL"),
       ],
       '#required' => TRUE,
       '#default_value' => $export_options['entity_reference_items'],

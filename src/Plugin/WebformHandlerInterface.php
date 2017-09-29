@@ -32,7 +32,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   const CARDINALITY_SINGLE = 1;
 
   /**
-   * Value indicating webform submissions are not processed (ie email or saved) by the handler.
+   * Value indicating webform submissions are not processed (i.e. email or saved) by the handler.
    */
   const RESULTS_IGNORED = 0;
 
@@ -47,7 +47,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   const SUBMISSION_OPTIONAL = 0;
 
   /**
-   * Value indicating webform submissions are processed (ie email or saved) by the handler.
+   * Value indicating webform submissions are processed (i.e. email or saved) by the handler.
    */
   const RESULTS_PROCESSED = 1;
 

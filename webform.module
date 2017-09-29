@@ -238,7 +238,7 @@ function webform_form_webform_submission_form_alter(&$form, FormStateInterface $
   _webform_page_attachments($form);
 
   // Execute hook_form_BASE_FORM_ID_alter for the webform & source entity
-  // without the operation. (ie 'add', 'edit', 'notes', etc...)
+  // without the operation. (i.e. 'add', 'edit', 'notes', etc...)
   // @see \Drupal\webform\WebformSubmissionForm::getFormId
   $form_object = $form_state->getFormObject();
 

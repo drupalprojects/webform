@@ -228,7 +228,7 @@ class WebformImageSelect extends Select {
     $form['options']['images_randomize'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Randomize images'),
-      '#description' => $this->t('Randomizes the order of the images when they are displayed in the webform.'),
+      '#description' => $this->t('Randomizes the order of the images when they are displayed in the webform'),
       '#return_value' => TRUE,
     ];
     $form['options']['show_label'] = [

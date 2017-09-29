@@ -248,7 +248,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       '#type' => 'link',
       '#title' => $label,
       // Must clone the URL object to prevent the above 'label' link attributes
-      // (ie webform-tooltip-link) from being copied to 'operation' link.
+      // (i.e. webform-tooltip-link) from being copied to 'operation' link.
       '#url' => clone $url,
       '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button--primary', 'button--small']),
     ];
