@@ -363,6 +363,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'submission',
     ];
 
+    // Webform Invitation.
+    $projects['webform_invitation'] = [
+      'title' => $this->t('Webform Invitation'),
+      'description' => $this->t('Allows you to restrict submissions to a webform by generating codes (which may then be distributed e.g. by email to participants).'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_invitation'),
+      'category' => 'submission',
+    ];
+
     // Submissions: Webform Permissions By Term.
     $projects['webform_permissions_by_term'] = [
       'title' => $this->t('Webform Permissions By Term'),
