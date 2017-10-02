@@ -305,6 +305,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'mail',
     ];
 
+    // Mail: Webform Mass Email.
+    $projects['webform_mass_email'] = [
+      'title' => $this->t('Webform Mass Email'),
+      'description' => $this->t('Provides a functionality to send mass email for the subscribers of a webform.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_mass_email'),
+      'category' => 'mail',
+    ];
+
     // Mail: SMTP Authentication Support.
     $projects['smtp'] = [
       'title' => $this->t('SMTP Authentication Support'),
