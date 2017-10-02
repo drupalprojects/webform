@@ -169,12 +169,11 @@ class WebformMapping extends WebformElementBase {
    * {@inheritdoc}
    */
   public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
-
-    // Return empty value.
-    if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
+    if ($this->hasValue($element, $webform_submission, $options)) {
       return '';
     }
+
+    $value = $this->getValue($element, $webform_submission, $options);
 
     $element += [
       '#destination' => [],

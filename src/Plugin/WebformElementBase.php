@@ -8,7 +8,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
@@ -23,6 +22,7 @@ use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformFormHelper;
+use Drupal\webform\Utility\WebformHtmlHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
@@ -204,7 +204,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       'format_items' => $this->getItemsDefaultFormat(),
+      'format_items_html' => '',
+      'format_items_text' => '',
     ];
 
     $properties += $this->getDefaultBaseProperties();
@@ -399,13 +403,25 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function isMultiline(array $element) {
-    $format = $this->getItemsFormat($element);
-    if ($this->hasMultipleValues($element) && in_array($format, ['ol', 'ul', 'hr'])) {
+    $item_format = $this->getItemFormat($element);
+    $items_format = $this->getItemsFormat($element);
+
+    // Check is multi value element.
+    if ($this->hasMultipleValues($element) && in_array($items_format, ['ol', 'ul', 'hr', 'custom'])) {
       return TRUE;
     }
-    else {
-      return $this->pluginDefinition['multiline'];
+
+    // Check if custom items template has HTML block tags.
+    if ($items_format == 'custom' && isset($element['#format_items_html']) && WebformHtmlHelper::hasBlockTags($element['#format_items_html'])) {
+      return TRUE;
     }
+
+    // Check if custom item template has HTML block tags.
+    if ($item_format == 'custom' && isset($element['#format_html']) && WebformHtmlHelper::hasBlockTags($element['#format_html'])) {
+      return TRUE;
+    }
+
+    return $this->pluginDefinition['multiline'];
   }
 
   /**
@@ -903,29 +919,29 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
     $options['multiline'] = $this->isMultiline($element);
     $format_function = 'format' . ucfirst($format);
-    $formatted_value = $this->$format_function($element, $webform_submission, $options);
+    $value = $this->$format_function($element, $webform_submission, $options);
 
     // Handle empty value.
-    if ($formatted_value === '') {
+    if ($value === '') {
       // Return NULL for empty formatted value.
       if (!empty($options['exclude_empty'])) {
         return NULL;
       }
       // Else set the formatted value to empty message/placeholder.
       else {
-        $formatted_value = $this->configFactory->get('webform.settings')->get('element.empty_message');
+        $value = $this->configFactory->get('webform.settings')->get('element.empty_message');
       }
     }
 
     // Convert string to renderable #markup.
-    if (is_string($formatted_value)) {
-      $formatted_value = ['#markup' => $formatted_value];
+    if (is_string($value)) {
+      $value = ['#markup' => $value];
     }
 
     return [
       '#theme' => 'webform_element_base_' . $format,
       '#element' => $element,
-      '#value' => $formatted_value,
+      '#value' => $value,
       '#webform_submission' => $webform_submission,
       '#options' => $options,
     ];
@@ -961,10 +977,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The element's value formatted as plain text or a render array.
    */
   protected function format($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
-
-    // Return empty value.
-    if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
+    if (!$this->hasValue($element, $webform_submission, $options) && !$this->isContainer($element)) {
       return '';
     }
 
@@ -976,17 +989,67 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       if (isset($options['delta'])) {
         return $this->$item_function($element, $webform_submission, $options);
       }
-
-      $items = [];
-      foreach ($value as $delta => $item) {
-        $items[] = $this->$item_function($element, $webform_submission, ['delta' => $delta] + $options);
+      elseif ($this->getItemsFormat($element) == 'custom') {
+        return $this->formatCustomItems($type, $element, $webform_submission, $options);
       }
-
-      return $this->$items_function($element, $items, $options);
+      else {
+        return $this->$items_function($element, $webform_submission, $options);
+      }
     }
     else {
-      return $this->$item_function($element, $webform_submission, $options);
+      if ($this->getItemFormat($element) == 'custom') {
+        return $this->formatCustomItem($type, $element, $webform_submission, $options);
+      }
+      else {
+        return $this->$item_function($element, $webform_submission, $options);
+      }
     }
+  }
+
+  /**
+   * Format an element's items using custom HTML or plain text.
+   *
+   * @param string $type
+   *   The format type, HTML or Text.
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's items formatted as plain text or a render array.
+   */
+  function formatCustomItems($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $name = strtolower($type);
+
+    // Get value.
+    $value = $this->getValue($element, $webform_submission, $options);
+
+    // Get items.
+    $items = [];
+    $item_function = 'format' . $type . 'Item';
+    foreach (array_keys($value) as $delta) {
+      $items[] = $this->$item_function($element, $webform_submission, ['delta' => $delta] + $options);
+    }
+
+    // Get template.
+    $template = trim($element['#format_items_' . $name]);
+
+    // Get context.
+    $context = (isset($options['context'])) ? $options['context'] : [];
+    $context += [
+      'value' => $value,
+      'items' => $items,
+      'data' => $webform_submission->getData(),
+    ];
+
+    return [
+      '#type' => 'inline_template',
+      '#template' => $template,
+      '#context' => $context,
+    ];
   }
 
   /**
@@ -994,15 +1057,23 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   An element.
-   * @param array $items
-   *   An array of items to be displayed as HTML.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    * @param array $options
    *   An array of options.
    *
    * @return string|array
    *   The element's items as HTML.
    */
-  protected function formatHtmlItems(array &$element, array $items, array $options = []) {
+  protected function formatHtmlItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
+    // Get items.
+    $items = [];
+    foreach (array_keys($value) as $delta) {
+      $items[] = $this->formatHtmlItem($element, $webform_submission, ['delta' => $delta] + $options);
+    }
+
     $format = $this->getItemsFormat($element);
     switch ($format) {
       case 'ol':
@@ -1070,15 +1141,23 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   An element.
-   * @param array $items
-   *   An array of items to be displayed as text.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    * @param array $options
    *   An array of options.
    *
    * @return string
    *   The element's items as text.
    */
-  protected function formatTextItems(array &$element, array $items, array $options = []) {
+  protected function formatTextItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+
+    // Get items.
+    $items = [];
+    foreach (array_keys($value) as $delta) {
+      $items[] = $this->formatTextItem($element, $webform_submission, ['delta' => $delta] + $options);
+    }
+
     $format = $this->getItemsFormat($element);
     switch ($format) {
       case 'ol':
@@ -1119,6 +1198,56 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
+   * Format an element's item using custom HTML or plain text.
+   *
+   * @param string $type
+   *   The format type, HTML or Text.
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   The element's item formatted as plain text or a render array.
+   */
+  function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $name = strtolower($type);
+
+    // Get template.
+    $template = trim($element['#format_' . $name]);
+
+    // Get context.
+    $context = (isset($options['context'])) ? $options['context'] : [];
+
+    // Get context.value.
+    $value = $this->getValue($element, $webform_submission, $options);
+    $context['value'] = $value;
+
+    // Get content.item.
+    $context['item'] = [];
+    // Parse item.format from template and add to context.
+    if (preg_match_all("/item(?:\[['\"]|\.)([a-zA-Z0-9-_:]+)/", $template, $matches)) {
+      $formats = array_unique($matches[1]);
+      $item_function = 'format' . $type . 'Item';
+      foreach ($formats as $format) {
+        $context['item'][$format] = $this->$item_function(['#format' => $format] + $element, $webform_submission, $options);
+      }
+    }
+
+    // Add submission data to context.
+    $context['data'] = $webform_submission->getData();
+
+    // Return inline template.
+    return [
+      '#type' => 'inline_template',
+      '#template' => $template,
+      '#context' => $context,
+    ];
+  }
+
+  /**
    * Format an element's value as HTML.
    *
    * @param array $element
@@ -1150,7 +1279,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
-
     $format = $this->getItemFormat($element);
 
     if ($format != 'raw') {
@@ -1171,6 +1299,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     return $value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasValue(array $element, WebformSubmissionInterface $webform_submission, array $options = [])  {
+    $value = $this->getValue($element, $webform_submission, $options);
+    return ($value === '' || $value === NULL || (is_array($value) && empty($value))) ? FALSE : TRUE;
   }
 
   /**
@@ -2067,23 +2203,116 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'details',
       '#title' => $this->t('Submission display'),
     ];
-    $form['display']['display_container'] = $this->getFormInlineContainer();
-    $form['display']['display_container']['format'] = [
+    // Item.
+    $form['display']['item'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Single item'),
+    ];
+    $form['display']['item']['format'] = [
       '#type' => 'select',
       '#title' => $this->t('Item format'),
       '#description' => $this->t('Select how a single value is displayed.'),
-      '#options' => $this->getItemFormats(),
+      '#options' => $this->getItemFormats() + ['custom' => $this->t('Custom...')],
     ];
-    $form['display']['display_container']['format_items'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Items format'),
-      '#description' => $this->t('Select how multiple values are displayed.'),
-      '#options' => $this->getItemsFormats(),
+    $custom_states = [
+      'visible' => [':input[name="properties[format]"]' => ['value' => 'custom']],
+      'required' => [':input[name="properties[format]"]' => ['value' => 'custom']],
+    ];
+    $form['display']['item']['format_html'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'twig',
+      '#title' => $this->t('Item format custom HTML'),
+      '#description' => $this->t('The HTML to display for a single element value. You may include HTML or <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
+      '#states' => $custom_states,
+    ];
+    $form['display']['item']['format_text'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'twig',
+      '#title' => $this->t('Item format custom Text'),
+      '#description' => $this->t('The text to display for a single element value. You may include <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
+      '#states' => $custom_states,
+    ];
+    $items = [
+      'value' => '{{ value }}',
+    ];
+    $formats = $this->getItemFormats();
+    foreach ($formats as $format_name => $format) {
+      if (is_array($format)) {
+        foreach ($format as $sub_format_name => $sub_format) {
+          $items["item['$sub_format_name']"] = "{{ item['$sub_format_name'] }}";
+        }
+      }
+      else {
+        $items["item.$format_name"] = "{{ item.$format_name }}";
+      }
+    }
+    $form['display']['item']['patterns'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Replacement patterns'),
+      '#access' => TRUE,
+      '#states' => $custom_states,
+      '#value' => [
+        'description' => [
+          '#markup' => '<p>' . $this->t('The following replacement tokens are available for single element value.') . '</p>',
+        ],
+        'items' => [
+          '#theme' => 'item_list',
+          '#items' => $items,
+        ],
+      ],
+    ];
+    // Items.
+    $form['display']['items'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Multiple items'),
       '#states' => [
         'visible' => [
           [':input[name="properties[multiple][container][cardinality]"]' => ['value' => '-1']],
           'or',
           [':input[name="properties[multiple][container][cardinality_number]"]' => ['!value' => 1]],
+        ],
+      ],
+    ];
+    $form['display']['items']['format_items'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Items format'),
+      '#description' => $this->t('Select how multiple values are displayed.'),
+      '#options' => $this->getItemsFormats() + ['custom' => $this->t('Custom...')],
+    ];
+    $custom_states = [
+      'visible' => [':input[name="properties[format_items]"]' => ['value' => 'custom']],
+      'required' => [':input[name="properties[format_items]"]' => ['value' => 'custom']],
+    ];
+    $form['display']['items']['format_items_html'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'twig',
+      '#title' => $this->t('Items format custom HTML'),
+      '#description' => $this->t('The HTML to display for multiple element values. You may include HTML or <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
+      '#states' => $custom_states,
+    ];
+    $form['display']['items']['format_items_text'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'twig',
+      '#title' => $this->t('Items format custom Text'),
+      '#description' => $this->t('The text to display for multiple element values. You may include <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
+      '#states' => $custom_states,
+    ];
+    $items = [
+      '{{ value }}',
+      '{{ items }}',
+    ];
+    $form['display']['items']['patterns'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Replacement patterns'),
+      '#access' => TRUE,
+      '#states' => $custom_states,
+      '#value' => [
+        'description' => [
+          '#markup' => '<p>' . $this->t('The following replacement tokens are available for multiple element values.') . '</p>',
+        ],
+        'items' => [
+          '#theme' => 'item_list',
+          '#items' => $items,
         ],
       ],
     ];

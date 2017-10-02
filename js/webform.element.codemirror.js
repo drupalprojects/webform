@@ -108,12 +108,10 @@
 
   // On state:visible refresh CodeMirror elements.
   $(document).on('state:visible', function (event) {
-    var $element = $(event.target);
-    if ($element.hasClass('js-webform-codemirror')) {
-      $element.parent().find('.CodeMirror').each(function (index, $element) {
-        $element.CodeMirror.refresh();
-      });
-    }
+    var $element = $(event.target).parent().find('.js-webform-codemirror');
+    $element.parent().find('.CodeMirror').each(function (index, $element) {
+      $element.CodeMirror.refresh();
+    });
   });
 
 })(jQuery, Drupal);

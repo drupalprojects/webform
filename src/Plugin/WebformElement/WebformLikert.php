@@ -169,11 +169,6 @@ class WebformLikert extends WebformElementBase {
   public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
-    // Return empty value.
-    if ($value === '' || $value === NULL || (is_array($value) && empty($value))) {
-      return '';
-    }
-
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'raw':

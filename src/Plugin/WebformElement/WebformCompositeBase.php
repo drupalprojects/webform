@@ -290,11 +290,35 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
+  function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $name = strtolower($type);
 
-    // Return empty value.
-    if (empty($value) || empty(array_filter($value))) {
+    // Parse element.composite_key from template and add composite element
+    // to context.
+    $template = trim($element['#format_' . $name]);
+    if (preg_match_all("/element(?:\[['\"]|\.)([a-zA-Z0-9-_:]+)/", $template, $matches)) {
+      $composite_elements = $this->getCompositeElements();
+      $composite_keys = array_unique($matches[1]);
+
+      $item_function = 'format' . $type;
+      $options['context'] = [
+        'element' => [],
+      ];
+      foreach ($composite_keys as $composite_key) {
+        if (isset($composite_elements[$composite_key])) {
+          $options['context']['element'][$composite_key] = $this->$item_function(['#format' => NULL] + $element, $webform_submission, ['composite_key' => $composite_key] + $options);
+        }
+      }
+    }
+
+    return parent::formatCustomItem($type, $element, $webform_submission, $options);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    if (!$this->hasValue($element, $webform_submission, $options)) {
       return '';
     }
 
@@ -333,10 +357,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
-
-    // Return empty value.
-    if (empty($value) || (is_array($value) && empty(array_filter($value)))) {
+    if (!$this->hasValue($element, $webform_submission, $options)) {
       return '';
     }
 
@@ -697,6 +718,12 @@ abstract class WebformCompositeBase extends WebformElementBase {
         1 => $this->t('Yes'),
       ],
     ];
+
+    $item_pattern = &$form['display']['item']['patterns']['#value']['items']['#items'];
+    $composite_elements = $this->getCompositeElements();
+    foreach ($composite_elements as $composite_key => $composite_element) {
+      $item_pattern[] = "{{ element.$composite_key }}";
+    }
     return $form;
   }
 

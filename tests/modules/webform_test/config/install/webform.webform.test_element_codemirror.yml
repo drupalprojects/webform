@@ -17,15 +17,17 @@ elements: |
     novalidate: novalidate
   text_basic:
     '#type': webform_codemirror
-    '#title': 'Text basic'
+    '#title': text_basic
+    '#default_value': 'Hello'
   yaml_basic:
     '#type': webform_codemirror
     '#mode': yaml
-    '#title': 'YAML basic'
+    '#title': yaml_basic
+    '#default_value': 'test: hello'
   yaml_array:
     '#type': webform_codemirror
     '#mode': yaml
-    '#title': 'YAML array'
+    '#title': yaml_array
     '#description': 'Pass an associative array as the default value'
     '#default_value':
       one: One
@@ -34,7 +36,16 @@ elements: |
   html_basic:
     '#type': webform_codemirror
     '#mode': html
-    '#title': 'HTML basic'
+    '#title': html_basic
+    '#default_value': '<b>Hello</b>'
+  twig_basic:
+    '#type': webform_codemirror
+    '#mode': twig
+    '#title': twig_basic
+    '#default_value': |
+  
+      {% set value = "Hello" %}
+      {{ value }}
 css: ''
 javascript: ''
 settings:

@@ -69,20 +69,22 @@ abstract class ContainerBase extends WebformElementBase {
       return NULL;
     }
 
-    // Add #first and #last property to $children.
-    // This is used to remove returns from #last with multiple lines of
-    // text.
-    // @see webform-element-base-text.html.twig
-    reset($formatted_value);
-    $first_key = key($formatted_value);
-    if (isset($formatted_value[$first_key]['#options'])) {
-      $formatted_value[$first_key]['#options']['first'] = TRUE;
-    }
+    if (is_array($formatted_value)) {
+      // Add #first and #last property to $children.
+      // This is used to remove returns from #last with multiple lines of
+      // text.
+      // @see webform-element-base-text.html.twig
+      reset($formatted_value);
+      $first_key = key($formatted_value);
+      if (isset($formatted_value[$first_key]['#options'])) {
+        $formatted_value[$first_key]['#options']['first'] = TRUE;
+      }
 
-    end($formatted_value);
-    $last_key = key($formatted_value);
-    if (isset($formatted_value[$last_key]['#options'])) {
-      $formatted_value[$last_key]['#options']['last'] = TRUE;
+      end($formatted_value);
+      $last_key = key($formatted_value);
+      if (isset($formatted_value[$last_key]['#options'])) {
+        $formatted_value[$last_key]['#options']['last'] = TRUE;
+      }
     }
 
     return [
@@ -92,14 +94,6 @@ abstract class ContainerBase extends WebformElementBase {
       '#webform_submission' => $webform_submission,
       '#options' => $options,
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function format($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $item_function = 'format' . $type . 'Item';
-    return $this->$item_function($element, $webform_submission, $options);
   }
 
   /**
@@ -201,6 +195,25 @@ abstract class ContainerBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $name = strtolower($type);
+
+    // Parse children from template and children to context.
+    $template = trim($element['#format_' . $name]);
+    if (strpos($template, 'children') != FALSE) {
+      /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
+      $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
+      $options['context'] = [
+        'children' => $view_builder->buildElements($element, $webform_submission, $options, $name),
+      ];
+    }
+
+    return parent::formatCustomItem($type, $element, $webform_submission, $options);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getItemDefaultFormat() {
     return 'header';
   }
@@ -233,6 +246,10 @@ abstract class ContainerBase extends WebformElementBase {
       'invisible' => $this->t('Invisible'),
     ];
 
+    // Remove value from item custom display replacement patterns.
+    $item_patterns = &$form['display']['item']['patterns']['#value']['items']['#items'];
+    unset($item_patterns['value']);
+    $item_patterns = ['children' => '{{ children }}'] + $item_patterns;
     return $form;
   }
 

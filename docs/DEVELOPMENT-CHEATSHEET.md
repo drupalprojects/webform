@@ -94,7 +94,7 @@ drush features-export -y webform_example_element
 drush features-export -y webform_example_composite
 drush features-export -y webform_example_remote_post
 drush features-export -y webform_templates
-drush features-export -y webform_testdrush cr
+drush features-export -y webform_test
 drush features-export -y webform_test_element
 drush features-export -y webform_test_handler
 drush features-export -y webform_test_handler_remote_post

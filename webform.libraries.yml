@@ -361,6 +361,16 @@ webform.element.codemirror.php:
   dependencies:
     - webform/libraries.codemirror.php
 
+webform.element.codemirror.twig:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.codemirror.css: {}
+  js:
+    js/webform.element.codemirror.js: {weight: -1}
+  dependencies:
+    - webform/libraries.codemirror.twig
+
 webform.element.color:
   version: VERSION
   css:
@@ -788,6 +798,15 @@ libraries.codemirror.php:
     /libraries/codemirror/mode/php/php.js: {}
     /libraries/codemirror/mode/clike/clike.js: {}
 
+  dependencies:
+    - webform/libraries.codemirror.text
+
+libraries.codemirror.twig:
+  version: *webform_codemirror_version
+  license: *webform_codemirror_license
+  cdn: *webform_codemirror_cdn
+  js:
+    /libraries/codemirror/mode/twig/twig.js: {}
   dependencies:
     - webform/libraries.codemirror.text
 

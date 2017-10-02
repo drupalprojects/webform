@@ -430,6 +430,21 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function formatText(array $element, WebformSubmissionInterface $webform_submission, array $options = []);
 
   /**
+   * Determine if an element's has a submission value.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return bool
+   *   TRUE if them element's has a submission value.
+   */
+  public function hasValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []);
+
+  /**
    * Get an element's submission value.
    *
    * @param array $element
