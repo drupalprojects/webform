@@ -49,6 +49,7 @@ pre.webform-codemirror-runmode {
     padding-top: 0 !important; /* Using !import to ensure that <body style="padding-top: *"> set via the toolbar.module is overridden. */
   }
 
+  .region.region-highlighted,
   .shortcut-action,
   .dropbutton-wrapper,
   .block-system-breadcrumb-block,
