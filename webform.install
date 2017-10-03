@@ -902,3 +902,11 @@ function webform_update_8079() {
   $admin_config->clear('ui.help_menu_disabled');
   $admin_config->save();
 }
+
+/**
+ * Issue #2901738: Add support conditions to WebformHandler.
+ */
+function webform_update_8080() {
+  $webform = Webform::load('test_translation');
+  $webform->save();
+}

@@ -494,6 +494,20 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function isTranslation() {
+    $config_translation = \Drupal::moduleHandler()->moduleExists('config_translation');
+    if (!$config_translation) {
+      return FALSE;
+    }
+
+    $webform_langcode = $this->langcode;
+    $current_langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+    return ($webform_langcode != $current_langcode) ? TRUE : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasSubmissions() {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
@@ -1133,17 +1147,18 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->elementsInitializedFlattenedAndHasValue = [];
     $this->elementsTranslations = [];
     try {
-      $config_translation = \Drupal::moduleHandler()->moduleExists('config_translation');
-      /** @var \Drupal\webform\WebformTranslationManagerInterface $translation_manager */
-      $translation_manager = \Drupal::service('webform.translation_manager');
-      /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
-      $language_manager = \Drupal::service('language_manager');
-
-      // If current webform is translated, load the base (default) webform and apply
-      // the translation to the elements.
-      if ($config_translation && $this->langcode != $language_manager->getCurrentLanguage()->getId()) {
+      if ($this->isTranslation()) {
+        /** @var \Drupal\webform\WebformTranslationManagerInterface $translation_manager */
+        $translation_manager = \Drupal::service('webform.translation_manager');
         $elements = $translation_manager->getElements($this);
         $this->elementsTranslations = Yaml::decode($this->elements);
+/******************************************************************************/
+        // Reset the webform's element with original language's elements.
+        // This makes sure when a webform is saved the original elements are
+        // not overwritten by the translation.
+        // @see \Drupal\webform\Entity\Webform::preSave
+        // $this->elements = $elements;
+/******************************************************************************/
       }
       else {
         $elements = Yaml::decode($this->elements);
@@ -1151,6 +1166,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
       // Since YAML supports simple values.
       $elements = (is_array($elements)) ? $elements : [];
+
       $this->elementsDecoded = $elements;
     }
     catch (\Exception $exception) {
@@ -1712,6 +1728,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Always unpublish templates.
     if ($this->isTemplate()) {
       $this->setStatus(WebformInterface::STATUS_CLOSED);
+    }
+
+    // If webform translation, make sure elements are initialized which prevents
+    // the translation from overwriting the original elements.
+    if ($this->isTranslation()) {
+      throw new \Exception('Unable to save webform translation');
+      // $this->getElementsInitialized();
     }
 
     // Serialize elements array to YAML.

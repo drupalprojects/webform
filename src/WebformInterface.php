@@ -251,6 +251,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function isConfidential();
 
   /**
+   * Determine if the current webform entity is a translation.
+   *
+   * @return bool
+   *   TRUE if the current webform entity is a translation.
+   */
+  public function isTranslation();
+
+  /**
    * Checks if a webform has submissions.
    *
    * @return bool
