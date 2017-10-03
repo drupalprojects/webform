@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Entity\Webform;
@@ -160,6 +161,10 @@ function webform_node_node_delete(NodeInterface $node) {
  */
 function webform_node_preprocess_page_title(&$variables) {
   $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node && is_string($node)) {
+    $node = Node::load($node);
+  }
+
   if (!$node) {
     return;
   }
