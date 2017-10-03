@@ -55,7 +55,11 @@ class WebformLocation extends WebformCompositeBase {
     $composite_elements = $this->getCompositeElements();
     foreach ($composite_elements as $composite_key => $composite_element) {
       $properties[$composite_key . '__title'] = (string) $composite_element['#title'];
-      if ($composite_key != 'value') {
+      // The value is always visible and supports a custom placeholder.
+      if ($composite_key == 'value') {
+        $properties[$composite_key . '__placeholder'] = '';
+      }
+      else {
         $properties[$composite_key . '__access'] = FALSE;
       }
     }
@@ -209,7 +213,7 @@ class WebformLocation extends WebformCompositeBase {
   protected function buildCompositeElementsTable() {
     $header = [
       $this->t('Key'),
-      $this->t('Title'),
+      $this->t('Title/Placeholder'),
       $this->t('Visible'),
     ];
 
@@ -240,6 +244,13 @@ class WebformLocation extends WebformCompositeBase {
               '#placeholder' => $this->t('Enter title...'),
               '#attributes' => $attributes,
             ],
+            $composite_key . '__placeholder' => [
+              '#type' => 'textfield',
+              '#title' => $this->t('@title placeholder', $t_args),
+              '#title_display' => 'invisible',
+              '#placeholder' => $this->t('Enter placeholder...'),
+              '#attributes' => $attributes,
+            ],
           ],
         ];
       }
@@ -248,10 +259,20 @@ class WebformLocation extends WebformCompositeBase {
       }
 
       // Access.
-      $row[$composite_key . '__access'] = [
-        '#type' => 'checkbox',
-        '#return_value' => TRUE,
-      ];
+      if ($composite_key === 'value') {
+        $row[$composite_key . '__access'] = [
+          '#type' => 'checkbox',
+          '#default_value' => TRUE,
+          '#disabled' => TRUE,
+          '#access' => TRUE,
+        ];
+      }
+      else {
+        $row[$composite_key . '__access'] = [
+          '#type' => 'checkbox',
+          '#return_value' => TRUE,
+        ];
+      }
 
       $rows[$composite_key] = $row;
     }
