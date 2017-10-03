@@ -38,6 +38,11 @@ details details details {
   border: 1px solid #ed5;
 }
 
+/* Accordion icon */
+.ui-accordion-icons .ui-icon {
+  display: inline-block;
+}
+
 /* CodeMirror viewer */
 pre.webform-codemirror-runmode {
   padding: .5em 1.5em;
