@@ -723,6 +723,8 @@ function webform_update_8070() {
  * Issue #2898424: Improve Remote Post.
  */
 function webform_update_8071() {
+  _webform_update_set_config_language_not_specified();
+
   $settings_mapping = [
     'insert_url' => 'completed_url',
     'insert_custom_data' => 'completed_custom_data',
@@ -755,6 +757,8 @@ function webform_update_8071() {
       $webform->save();
     }
   }
+
+  _webform_update_set_config_language_original();
 }
 
 /**
@@ -762,7 +766,9 @@ function webform_update_8071() {
  */
 function webform_update_8072() {
   drupal_flush_all_caches();
-  
+
+  _webform_update_set_config_language_not_specified();
+
   /** @var \Drupal\webform\WebformInterface[] $webforms */
   $webforms = Webform::loadMultiple();
   foreach ($webforms as $webform) {
@@ -773,6 +779,8 @@ function webform_update_8072() {
     }
     $webform->save();
   }
+
+  _webform_update_set_config_language_original();
 }
 
 /**
@@ -901,12 +909,4 @@ function webform_update_8079() {
   $admin_config->set('ui.about_disabled', $help_menu_disabled );
   $admin_config->clear('ui.help_menu_disabled');
   $admin_config->save();
-}
-
-/**
- * Issue #2901738: Add support conditions to WebformHandler.
- */
-function webform_update_8080() {
-  $webform = Webform::load('test_translation');
-  $webform->save();
 }

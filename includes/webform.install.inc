@@ -143,6 +143,8 @@ function _webform_update_webform_settings() {
  * @see \Drupal\webform\Plugin\WebformHandlerInterface
  */
 function _webform_update_webform_handler_class_settings($handler_class) {
+  _webform_update_set_config_language_not_specified();
+
   /** @var \Drupal\webform\WebformInterface[] $webforms */
   $webforms = Webform::loadMultiple();
   foreach ($webforms as $webform) {
@@ -165,6 +167,8 @@ function _webform_update_webform_handler_class_settings($handler_class) {
       $webform->save();
     }
   }
+
+  _webform_update_set_config_language_original();
 }
 
 /**
@@ -253,3 +257,37 @@ function _webform_update_webform_submission_storage_schema() {
   $manager = \Drupal::entityDefinitionUpdateManager();
   $manager->updateEntityType($manager->getEntityType('webform_submission'));
 }
+
+/**
+ * Set config translation to LANGCODE_NOT_SPECIFIED.
+ *
+ * This makes sure that the original config entity is loaded and saved().
+ */
+function _webform_update_set_config_language_not_specified() {
+  _webform_update_set_config_override_language(TRUE);
+}
+
+/**
+ * Set config translation back to the original language.
+ */
+function _webform_update_set_config_language_original() {
+  _webform_update_set_config_override_language(FALSE);
+}
+
+function _webform_update_set_config_override_language($override = TRUE) {
+  if (!\Drupal::moduleHandler()->moduleExists('config_translation')) {
+    return;
+  }
+
+  static $original_language;
+  $language_manager = \Drupal::languageManager();
+  if ($override) {
+    $original_language = $language_manager->getConfigOverrideLanguage();
+    $language = $language_manager->getLanguage(\Drupal\Core\Language\LanguageInterface::LANGCODE_NOT_SPECIFIED);
+    $language_manager->setConfigOverrideLanguage($language);
+  }
+  elseif ($original_language) {
+    $language_manager->setConfigOverrideLanguage($original_language);
+  }
+}
+

@@ -256,7 +256,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @return bool
    *   TRUE if the current webform entity is a translation.
    */
-  public function isTranslation();
+  public function isConfigTranslation();
 
   /**
    * Checks if a webform has submissions.
