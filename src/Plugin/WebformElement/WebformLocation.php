@@ -49,7 +49,11 @@ class WebformLocation extends WebformCompositeBase {
       'api_key' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       'format_items' => $this->getItemsDefaultFormat(),
+      'format_items_html' => '',
+      'format_items_text' => '',
     ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();

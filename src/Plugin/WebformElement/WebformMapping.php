@@ -47,6 +47,8 @@ class WebformMapping extends WebformElementBase {
       'required_error' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       // Mapping settings.
       'arrow' => '→',
       'source' => [],

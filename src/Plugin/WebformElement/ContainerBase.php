@@ -27,6 +27,8 @@ abstract class ContainerBase extends WebformElementBase {
       'attributes' => [],
       // Format.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
     ] + $this->getDefaultBaseProperties();
   }
 

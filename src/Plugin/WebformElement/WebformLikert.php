@@ -44,6 +44,8 @@ class WebformLikert extends WebformElementBase {
       'required_error' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       // Likert settings.
       'questions' => [],
       'questions_randomize' => FALSE,
