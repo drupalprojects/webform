@@ -512,6 +512,18 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function isConfigEditRoute() {
+    $config_translation = \Drupal::moduleHandler()->moduleExists('config_translation');
+    if (!$config_translation) {
+      return TRUE;
+    }
+
+    return (preg_match('/^entity.webform.(?:edit|source|settings|assets|access|handlers|third_party_settings)_form$/', \Drupal::routeMatch()->getRouteName()));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasSubmissions() {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
@@ -1729,7 +1741,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     // If webform translation, make sure elements are initialized which prevents
     // the translation from overwriting the original elements.
-    if ($this->isConfigTranslation()) {
+    if ($this->isConfigTranslation() && !$this->isConfigEditRoute()) {
       throw new \Exception('Unable to save webform because the original translation would overwritten');
     }
 

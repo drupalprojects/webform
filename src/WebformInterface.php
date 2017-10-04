@@ -259,6 +259,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function isConfigTranslation();
 
   /**
+   * Determine if the current route allows webform entity to be editted.
+   *
+   * @return bool
+   *   TRUE if the current route allows webform entity to be editted.
+   */
+  public function isConfigEditRoute();
+
+  /**
    * Checks if a webform has submissions.
    *
    * @return bool
