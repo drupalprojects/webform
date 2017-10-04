@@ -161,7 +161,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     // WORK-AROUND: Don't link to the webform.
     // See: Access control is not applied to config entity queries
     // https://www.drupal.org/node/2636066
-    $row['title']['data']['title'] = ['#markup' => ($entity->access('view')) ? $entity->toLink()->toString() : $entity->label()];
+    $row['title']['data']['title'] = ['#markup' => ($entity->access('submission_page')) ? $entity->toLink()->toString() : $entity->label()];
     if ($entity->isTemplate()) {
       $row['title']['data']['template'] = ['#markup' => ' <b>(' . $this->t('Template') . ')</b>'];
     }
@@ -238,7 +238,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           'url' => Url::fromRoute('entity.webform.settings', $route_parameters),
         ];
       }
-      if ($entity->access('view')) {
+      if ($entity->access('submission_page')) {
         $operations['view'] = [
           'title' => $this->t('View'),
           'weight' => 24,
@@ -352,7 +352,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     // If the user is not a webform admin, check access to each webform.
     if (!$this->isAdmin()) {
       foreach ($entities as $entity_id => $entity) {
-        if (!$entity->access('update')) {
+        if (!$entity->access('update') && !$entity->access('submission_view_any')) {
           unset($entities[$entity_id]);
         }
       }
