@@ -30,7 +30,7 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'webform_admin_settings_libraries_form';
+    return 'webform_admin_config_libraries_form';
   }
 
   /**

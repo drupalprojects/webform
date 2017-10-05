@@ -31,7 +31,7 @@ class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'webform_admin_settings_handlers_form';
+    return 'webform_admin_config_handlers_form';
   }
 
   /**

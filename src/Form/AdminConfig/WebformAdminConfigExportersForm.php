@@ -33,7 +33,7 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'webform_admin_settings_exporters_form';
+    return 'webform_admin_config_exporters_form';
   }
 
   /**

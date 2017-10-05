@@ -40,7 +40,7 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'webform_admin_settings_advanced_form';
+    return 'webform_admin_config_advanced_form';
   }
 
   /**
