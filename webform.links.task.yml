@@ -34,58 +34,58 @@ entity.webform_submission.results_log:
 
 # Settings.
 
-webform.settings:
-  title: 'Settings'
-  route_name: webform.settings
+webform.config:
+  title: 'Configuration'
+  route_name: webform.config
   base_route: entity.webform.collection
   weight: 30
 
-webform.settings.forms:
+webform.config.forms:
   title: 'Forms'
-  route_name: webform.settings
-  parent_id: webform.settings
+  route_name: webform.config
+  parent_id: webform.config
   weight: 10
 
-webform.settings.elements:
+webform.config.elements:
   title: 'Elements'
-  route_name: webform.settings.elements
-  parent_id: webform.settings
+  route_name: webform.config.elements
+  parent_id: webform.config
   weight: 20
 
-webform.settings.options:
+webform.config.options:
   title: 'Options'
   route_name: entity.webform_options.collection
-  parent_id: webform.settings
+  parent_id: webform.config
   weight: 30
 
-webform.settings.submissions:
+webform.config.submissions:
   title: 'Submissions'
-  route_name: webform.settings.submissions
-  parent_id: webform.settings
+  route_name: webform.config.submissions
+  parent_id: webform.config
   weight: 40
 
-webform.settings.handlers:
+webform.config.handlers:
   title: 'Handlers'
-  route_name: webform.settings.handlers
-  parent_id: webform.settings
+  route_name: webform.config.handlers
+  parent_id: webform.config
   weight: 50
 
-webform.settings.exporters:
+webform.config.exporters:
   title: 'Exporters'
-  route_name: webform.settings.exporters
-  parent_id: webform.settings
+  route_name: webform.config.exporters
+  parent_id: webform.config
   weight: 60
 
-webform.settings.libraries:
+webform.config.libraries:
   title: 'Libraries'
-  route_name: webform.settings.libraries
-  parent_id: webform.settings
+  route_name: webform.config.libraries
+  parent_id: webform.config
   weight: 70
 
-webform.settings.advanced:
+webform.config.advanced:
   title: 'Advanced'
-  route_name: webform.settings.advanced
-  parent_id: webform.settings
+  route_name: webform.config.advanced
+  parent_id: webform.config
   weight: 80
 
 # Plugins.

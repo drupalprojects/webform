@@ -203,7 +203,7 @@ class WebformLocation extends WebformCompositeBase {
     else {
       $form['composite']['api_key']['#required'] = TRUE;
       if (\Drupal::currentUser()->hasPermission('administer webform')) {
-        $t_args = [':href' => UrlGenerator::fromRoute('webform.settings.elements')->toString()];
+        $t_args = [':href' => UrlGenerator::fromRoute('webform.config.elements')->toString()];
         $form['composite']['api_key']['#description'] .= '<br /><br />' . $this->t('You can either enter an element specific API key here or set the <a href=":href">default site-wide API key</a>.', $t_args);
       }
     }

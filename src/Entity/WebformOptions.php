@@ -33,11 +33,11 @@ use Drupal\webform\WebformOptionsInterface;
  *     "label" = "label",
  *   },
  *   links = {
- *     "add-form" = "/admin/structure/webform/settings/options/add",
- *     "edit-form" = "/admin/structure/webform/settings/options/manage/{webform_options}/edit",
- *     "duplicate-form" = "/admin/structure/webform/settings/options/manage/{webform_options}/duplicate",
- *     "delete-form" = "/admin/structure/webform/settings/options/manage/{webform_options}/delete",
- *     "collection" = "/admin/structure/webform/settings/options/manage",
+ *     "add-form" = "/admin/structure/webform/config/options/add",
+ *     "edit-form" = "/admin/structure/webform/config/options/manage/{webform_options}/edit",
+ *     "duplicate-form" = "/admin/structure/webform/config/options/manage/{webform_options}/duplicate",
+ *     "delete-form" = "/admin/structure/webform/config/options/manage/{webform_options}/delete",
+ *     "collection" = "/admin/structure/webform/config/options/manage",
  *   },
  *   config_export = {
  *     "id",

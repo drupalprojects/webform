@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Form\AdminSettings;
+namespace Drupal\webform\Form\AdminConfig;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure webform admin settings for libraries.
  */
-class WebformAdminSettingsLibrariesForm extends WebformAdminSettingsBaseForm {
+class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
 
   /**
    * The libraries manager.
@@ -34,7 +34,7 @@ class WebformAdminSettingsLibrariesForm extends WebformAdminSettingsBaseForm {
   }
 
   /**
-   * Constructs a WebformAdminSettingsLibrariesForm object.
+   * Constructs a WebformAdminConfigLibrariesForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

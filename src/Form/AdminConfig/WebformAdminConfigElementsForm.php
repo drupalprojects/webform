@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Form\AdminSettings;
+namespace Drupal\webform\Form\AdminConfig;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Xss;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure webform admin settings for elements.
  */
-class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
+class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
 
   /**
    * The module handler.
@@ -48,7 +48,7 @@ class WebformAdminSettingsElementsForm extends WebformAdminSettingsBaseForm {
   }
 
   /**
-   * Constructs a WebformAdminSettingsElementsForm object.
+   * Constructs a WebformAdminConfigElementsForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

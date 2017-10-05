@@ -127,8 +127,8 @@ function webform_local_tasks_alter(&$local_tasks) {
   if (isset($local_tasks['config_translation.local_tasks:entity.webform.config_translation_overview'])) {
     $local_tasks['config_translation.local_tasks:entity.webform.config_translation_overview']['base_route'] = 'entity.webform.canonical';
   }
-  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.settings'])) {
-    $local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.settings']['parent_id'] = 'webform.settings';
+  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.config'])) {
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.config']['parent_id'] = 'webform.config';
   }
 
   // Disable 'About' tab.
@@ -149,8 +149,8 @@ function webform_menu_local_tasks_alter(&$data, $route_name) {
   if (isset($data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'])) {
     $data['tabs'][0]['config_translation.local_tasks:entity.webform.config_translation_overview']['#link']['title'] = t('Translate');
   }
-  if (isset($data['tabs'][1]['config_translation.local_tasks:config_translation.item.overview.webform.settings'])) {
-    $data['tabs'][1]['config_translation.local_tasks:config_translation.item.overview.webform.settings']['#link']['title'] = t('Translate');
+  if (isset($data['tabs'][1]['config_translation.local_tasks:config_translation.item.overview.webform.config'])) {
+    $data['tabs'][1]['config_translation.local_tasks:config_translation.item.overview.webform.config']['#link']['title'] = t('Translate');
   }
 
   // ISSUE:
@@ -288,7 +288,7 @@ function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInte
   // Remove 'Webforms' prefix from breadcrumb links generated path breadcrumbs.
   // @see \Drupal\system\PathBasedBreadcrumbBuilder
   $path = Url::fromRouteMatch($route_match)->toString();
-  if (strpos($path, '/admin/structure/webform/settings/') !== FALSE) {
+  if (strpos($path, '/admin/structure/webform/config/') !== FALSE) {
     $links = $breadcrumb->getLinks();
     foreach ($links as $link) {
       $text = $link->getText();

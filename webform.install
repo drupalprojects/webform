@@ -408,7 +408,7 @@ function webform_update_8048() {
     $config->clear('purge_settings');
   }
 
-  // Change webform.settings.elements to webform.settings.element.
+  // Change webform.config.elements to webform.settings.element.
   if ($config->get('elements')) {
     $config->set('element', $config->get('elements'));
     $config->clear('elements');

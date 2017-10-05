@@ -97,8 +97,8 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       $groups[$group_name] = [];
     }
     foreach ($help as $name => $info) {
-      $group_name = (isset($info['group'])) ? $info['group'] : $this->t('General');
-      $groups[$group_name ][$name] = $info;
+      $group_name = (isset($info['group'])) ? $info['group'] : (string) $this->t('General');
+      $groups[$group_name][$name] = $info;
     }
     $groups = array_filter($groups);
 

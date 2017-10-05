@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Form\AdminSettings;
+namespace Drupal\webform\Form\AdminConfig;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure webform admin settings for forms.
  */
-class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
+class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
 
   /**
    * The webform token manager.
@@ -45,7 +45,7 @@ class WebformAdminSettingsFormsForm extends WebformAdminSettingsBaseForm {
   }
 
   /**
-   * Constructs a WebformAdminSettingsFormsForm object.
+   * Constructs a WebformAdminConfigFormsForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

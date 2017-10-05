@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Form\AdminSettings;
+namespace Drupal\webform\Form\AdminConfig;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure webform admin settings for handlers.
  */
-class WebformAdminSettingsHandlersForm extends WebformAdminSettingsBaseForm {
+class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
 
   /**
    * The webform handler manager.
@@ -35,7 +35,7 @@ class WebformAdminSettingsHandlersForm extends WebformAdminSettingsBaseForm {
   }
 
   /**
-   * Constructs a WebformAdminSettingsHandlersForm object.
+   * Constructs a WebformAdminConfigHandlersForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

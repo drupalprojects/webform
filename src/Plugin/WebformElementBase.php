@@ -836,7 +836,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $t_args = [
       '%title' => $this->getLabel($element),
       '%type' => $this->getPluginLabel(),
-      ':href' => Url::fromRoute('webform.settings.elements')->toString(),
+      ':href' => Url::fromRoute('webform.config.elements')->toString(),
     ];
     if ($this->currentUser->hasPermission('administer webform')) {
       $message = $this->t('%title is a %type element, which has been disabled and will not be rendered. Go to the <a href=":href">admin settings</a> page to enable this element.', $t_args);

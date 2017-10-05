@@ -720,21 +720,30 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    */
   protected function initGroups() {
     return [
+      // General.
       'general' => $this->t('General'),
-      'administration' => $this->t('Administration'),
-      'promotions' => $this->t('Promotions'),
-      'plugins' => $this->t('Plugins'),
+      // Form.
       'forms' => $this->t('Forms'),
-      'form_settings' => $this->t('Form settings'),
       'settings' => $this->t('Settings'),
       'elements' => $this->t('Elements'),
       'options' => $this->t('Options'),
       'submissions' => $this->t('Submissions'),
       'handlers' => $this->t('Email/Handlers'),
       'exporters' => $this->t('Exporters'),
+      // Administrative.
+      'administration' => $this->t('Administration'),
+      'configuration' => $this->t('Configuration'),
+      'plugins' => $this->t('Plugins'),
+      'addons' => $this->t('Add-ons'),
+      // Translations.
+      'translations' => $this->t('Translations'),
+      // Devel.
       'devel' => $this->t('Devel'),
+      // Modules.
       'webform_nodes' => $this->t('Webform Nodes'),
       'webform_blocks' => $this->t('Webform Blocks'),
+      // Promotions.
+      'promotions' => $this->t('Promotions'),
     ];
   }
 
@@ -866,6 +875,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ':libraries_href' => Url::fromRoute('help.page', ['name' => 'webform'], ['fragment' => 'libraries'])->toString(),
     ];
     $help['install'] = [
+      'group' => 'general',
       'title' => $this->t('Installing the Webform module'),
       'content' => $this->t('<strong>Congratulations!</strong> You have successfully installed the Webform module. Please make sure to install additional <a href=":libraries_href">third-party libraries</a>, <a href=":submodules_href">sub-modules</a>, and optional <a href=":addons_href">add-ons</a>.', $t_args),
       'video_id' => 'install',
@@ -922,7 +932,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /****************************************************************************/
     // Promotions.
     // Disable promotions via Webform admin settings.
-    // (/admin/structure/webform/settings/advanced).
+    // (/admin/structure/webform/config/advanced).
     /****************************************************************************/
 
     if (!$this->configFactory->get('webform.settings')->get('ui.promotions_disabled')) {
@@ -952,7 +962,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Webforms.
     $help['webforms_manage'] = [
-      'group' => 'administration',
+      'group' => 'forms',
       'title' => $this->t('Managing webforms'),
       'content' => $this->t('The Forms page lists all available webforms, which can be filtered by title, description, and/or elements.'),
       'url' => Url::fromRoute('entity.webform.collection'),
@@ -1004,7 +1014,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Addons.
     $help['addons'] = [
-      'group' => 'general',
+      'group' => 'addons',
       'title' => $this->t('Extend the Webform module'),
       'content' => $this->t('The Add-ons page includes a list of modules and projects that extend and/or provide additional functionality to the Webform module and Drupal\'s Form API.  If you would like a module or project to be included in the below list, please submit a request to the <a href=":href">Webform module\'s issue queue</a>.', [':href' => 'https://www.drupal.org/node/add/project-issue/webform']),
       'url' => Url::fromRoute('webform.addons'),
@@ -1019,107 +1029,107 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /****************************************************************************/
 
     // Forms.
-    $help['settings_forms'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining default form settings'),
-      'content' => $this->t('The Forms settings page allows administrators to manage form settings, behaviors, labels, and messages.'),
-      'url' => Url::fromRoute('webform.settings'),
+    $help['config_forms'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining default form configuration'),
+      'content' => $this->t('The Forms configuration page allows administrators to manage form settings, behaviors, labels, and messages.'),
+      'url' => Url::fromRoute('webform.config'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/forms
-        'webform.settings',
+        // @see /admin/structure/webform/config/forms
+        'webform.config',
       ],
     ];
 
     // Elements.
-    $help['settings_elements'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining default element settings'),
-      'url' => Url::fromRoute('webform.settings.elements'),
-      'content' => $this->t('The Elements settings page allows administrators to manage element specific settings and HTML formatting.'),
+    $help['config_elements'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining default element configuration'),
+      'url' => Url::fromRoute('webform.config.elements'),
+      'content' => $this->t('The Elements configuration page allows administrators to manage element specific settings and HTML formatting.'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/element
-        'webform.settings.elements',
+        // @see /admin/structure/webform/config/element
+        'webform.config.elements',
       ],
     ];
 
     // Options.
-    $help['settings_options'] = [
-      'group' => 'administration',
+    $help['config_options'] = [
+      'group' => 'configuration',
       'title' => $this->t('Defining options'),
       'content' => $this->t('The Options page lists predefined options which are used to build select menus, radio buttons, checkboxes and likerts.') . ' ' .
         $this->t('To find and download additional options, go to <a href=":href">Webform 8.x-5.x: Cookbook</a>.', [':href' => 'https://www.drupal.org/docs/8/modules/webform/webform-cookbook']),
       'url' => Url::fromRoute('entity.webform_options.collection'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/options
+        // @see /admin/structure/webform/config/options
         'entity.webform_options.collection',
       ],
     ];
 
     // Submissions.
-    $help['settings_submissions'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining default submission settings'),
-      'content' => $this->t('The Submissions settings page allows administrators to manage submissions settings and behaviors.'),
-      'url' => Url::fromRoute('webform.settings.submissions'),
+    $help['config_submissions'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining default submission configuration'),
+      'content' => $this->t('The Submissions configuration page allows administrators to manage submissions settings and behaviors.'),
+      'url' => Url::fromRoute('webform.config.submissions'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/submissions
-        'webform.settings.submissions',
+        // @see /admin/structure/webform/config/submissions
+        'webform.config.submissions',
       ],
     ];
 
     // Handlers.
-    $help['settings_handlers'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining default email and handler settings'),
-      'content' => $this->t('The Handlers settings page allows administrators to manage email and handler default values and behaviors.'),
-      'url' => Url::fromRoute('webform.settings.handlers'),
+    $help['config_handlers'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining default email and handler configuration'),
+      'content' => $this->t('The Handlersconfiguration page allows administrators to manage email and handler default values and behaviors.'),
+      'url' => Url::fromRoute('webform.config.handlers'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/handlers
-        'webform.settings.handlers',
+        // @see /admin/structure/webform/config/handlers
+        'webform.config.handlers',
       ],
     ];
 
     // Exporters.
-    $help['settings_exporters'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining default exporter settings'),
-      'content' => $this->t('The Handlers settings page allows administrators to manage exporter default settings.'),
-      'url' => Url::fromRoute('webform.settings.exporters'),
+    $help['config_exporters'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining default exporter configuration'),
+      'content' => $this->t('The Handlers configuration page allows administrators to manage exporter default settings.'),
+      'url' => Url::fromRoute('webform.config.exporters'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/exporters
-        'webform.settings.exporters',
+        // @see /admin/structure/webform/config/exporters
+        'webform.config.exporters',
       ],
     ];
 
     // Libraries.
-    $help['settings_libraries'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining default CSS/JS and library settings'),
-      'content' => $this->t('The Libraries settings page allows administrators to add custom CSS/JS to all form and enabled/disable external libraries.'),
-      'url' => Url::fromRoute('webform.settings.libraries'),
+    $help['config_libraries'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining default CSS/JS and library configuration'),
+      'content' => $this->t('The Libraries configuration page allows administrators to add custom CSS/JS to all form and enabled/disable external libraries.'),
+      'url' => Url::fromRoute('webform.config.libraries'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/libraries
-        'webform.settings.libraries',
+        // @see /admin/structure/webform/config/libraries
+        'webform.config.libraries',
       ],
     ];
 
     // Advanced.
-    $help['settings_advanced'] = [
-      'group' => 'administration',
-      'title' => $this->t('Defining advanced settings'),
-      'content' => $this->t('The Libraries settings page allows administrators to managed advanced settings including UI behaviors and test data.'),
-      'url' => Url::fromRoute('webform.settings.advanced'),
+    $help['config_advanced'] = [
+      'group' => 'configuration',
+      'title' => $this->t('Defining advanced configuration'),
+      'content' => $this->t('The Libraries configuration page allows administrators to managed advanced settings including UI behaviors and test data.'),
+      'url' => Url::fromRoute('webform.config.advanced'),
       'video_id' => 'admin',
       'routes' => [
-        // @see /admin/structure/webform/settings/advanced
-        'webform.settings.advanced',
+        // @see /admin/structure/webform/config/advanced
+        'webform.config.advanced',
       ],
     ];
 
@@ -1213,7 +1223,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform test form.
-    $help['webform_test_form'] = [
+    $help['test_form'] = [
       'group' => 'forms',
       'title' => $this->t('Testing a webform'),
       'content' => $this->t("The Webform test form allows a webform to be tested using a customizable test dataset.") . ' ' .
@@ -1227,7 +1237,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform test API.
-    $help['webform_test_api'] = [
+    $help['test_api'] = [
       'group' => 'forms',
       'title' => $this->t('Testing a webform API'),
       'content' => $this->t("The Webform test API form allows a webform's API to be tested using raw webform submission values and data."),
@@ -1241,7 +1251,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Webform translations.
     $help['webform_translations'] = [
-      'group' => 'forms',
+      'group' => 'translations',
       'title' => $this->t('Translating a webform'),
       'content' => $this->t("The Translation page allows a webform's configuration and elements to be translated into multiple languages."),
       'video_id' => 'translate',
@@ -1256,8 +1266,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /****************************************************************************/
 
     // Webform settings.
-    $help['webform_settings'] = [
-      'group' => 'form_settings',
+    $help['settings'] = [
+      'group' => 'settings',
       'title' => $this->t('Customizing webform general settings'),
       'content' => $this->t("The Webform settings page allows a webform's labels, messaging, and behaviors to be customized.") . ' ' .
         $this->t('Administrators can open/close a webform, enable/disable drafts, allow previews, set submission limits, and disable the saving of results.'),
@@ -1269,8 +1279,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform settings form.
-    $help['webform_settings_form'] = [
-      'group' => 'form_settings',
+    $help['settings_form'] = [
+      'group' => 'settings',
       'title' => $this->t('Customizing webform form settings'),
       'content' => $this->t("The Webform form settings page allows a webform's labels, messaging, and behaviors to be customized.") . ' ' .
         $this->t('Administrators can open/close a webform, enable/disable drafts, allow previews, set submission limits, and disable the saving of results.'),
@@ -1282,8 +1292,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform settings submissions.
-    $help['webform_settings_submissions'] = [
-      'group' => 'form_settings',
+    $help['settings_submissions'] = [
+      'group' => 'settings',
       'title' => $this->t('Customizing webform submissions settings'),
       'content' => $this->t("The Webform submissions settings page allows a webform's labels, messaging, and behaviors to be customized.") . ' ' .
         $this->t('Administrators can open/close a webform, enable/disable drafts, allow previews, set submission limits, and disable the saving of results.'),
@@ -1295,8 +1305,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform settings confirmation.
-    $help['webform_settings_confirmation'] = [
-      'group' => 'form_settings',
+    $help['settings_confirmation'] = [
+      'group' => 'settings',
       'title' => $this->t('Customizing webform confirmation settings'),
       'content' => $this->t("The Webform submissions confirmation page allows a webform's labels, messaging, and behaviors to be customized.") . ' ' .
         $this->t('Administrators can open/close a webform, enable/disable drafts, allow previews, set submission limits, and disable the saving of results.'),
@@ -1308,8 +1318,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform settings assets.
-    $help['webform_settings_assets'] = [
-      'group' => 'form_settings',
+    $help['settings_assets'] = [
+      'group' => 'settings',
       'title' => $this->t('Adding custom CSS/JS to a webform.'),
       'content' => $this->t("The Webform assets page allows site builders to attach custom CSS and JavaScript to a webform."),
       'routes' => [
@@ -1319,8 +1329,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform access controls.
-    $help['webform_settings_access'] = [
-      'group' => 'form_settings',
+    $help['settings_access'] = [
+      'group' => 'settings',
       'title' => $this->t('Controlling access to submissions'),
       'content' => $this->t('The Webform access control page allows administrator to determine who can create, update, delete, and purge webform submissions.'),
       'video_id' => 'access',
@@ -1331,8 +1341,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Webform handlers.
-    $help['webform_settings_handlers'] = [
-      'group' => 'form_settings',
+    $help['settings_handlers'] = [
+      'group' => 'settings',
       'title' => $this->t('Enabling webform handlers'),
       'content' => $this->t('The Webform handlers page lists additional handlers (aka behaviors) that can process webform submissions.') . ' ' .
         $this->t('Handlers are <a href=":href">plugins</a> that act on a webform submission.', [':href' => 'https://www.drupal.org/developing/api/8/plugins']) . ' ' .
