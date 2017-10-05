@@ -10,6 +10,17 @@ use Drupal\Core\Routing\RouteMatchInterface;
 interface WebformHelpManagerInterface {
 
   /**
+   * Get group.
+   *
+   * @param string|null $id
+   *   (optional) Group name.
+   *
+   * @return array|mixed
+   *   A single group item or all groups.
+   */
+  public function getGroup($id = NULL);
+
+  /**
    * Get help.
    *
    * @param string|null $id

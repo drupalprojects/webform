@@ -57,6 +57,7 @@ webform.settings.advanced:
     _permission: 'administer webform'
 
 # Help
+
 webform.help.video:
   path: '/admin/help/webform/video/{id}'
   defaults:

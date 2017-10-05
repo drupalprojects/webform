@@ -187,7 +187,7 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
     // This allows dynamic options to be overridden.
     $id = $element[$property_name];
     if ($webform_options = WebformOptions::load($id)) {
-      $options = $webform_options->getOptions();
+      $options = $webform_options->getOptions() ?: [];
     }
     else {
       $options = [];
