@@ -46,16 +46,18 @@ abstract class WebformCompositeBase extends WebformElementBase {
   public function getDefaultProperties() {
     $properties = [
       'title' => '',
+      'default_value' => [],
       'multiple' => FALSE,
       'multiple__header' => FALSE,
       'multiple__header_label' => '',
-      // General settings.
+      // Description/Help.
       'help' => '',
       'description' => '',
-      'default_value' => [],
+      'more' => '',
+      'more_title' => '',
       // Form display.
-      'title_display' => 'invisible',
       'description_display' => '',
+      'title_display' => 'invisible',
       'disabled' => FALSE,
       // Form validation.
       'required' => FALSE,

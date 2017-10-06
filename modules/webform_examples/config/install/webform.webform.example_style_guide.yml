@@ -421,6 +421,11 @@ elements: |
       '#title': 'Description displayed in tooltip'
       '#description': 'This description is displayed in a tooltip. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.'
       '#description_display': tooltip
+    description_more:
+      '#type': textfield
+      '#title': 'Description with (read) more'
+      '#description': 'This is a description.'
+      '#more': 'This is more text'
   container_elements:
     '#type': details
     '#title': 'Containers elements'

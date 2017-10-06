@@ -148,6 +148,20 @@ webform.help:
     - core/jquery.once
     - core/jquery.ui.accordion
 
+# More.
+
+webform.element.more:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.more.css: {}
+  js:
+    js/webform.element.more.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+
 # Navigation.
 
 webform.navigation:

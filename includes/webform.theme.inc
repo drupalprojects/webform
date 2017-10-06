@@ -7,6 +7,7 @@
 
 use Drupal\file\Entity\File;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Template\Attribute;
 
 /******************************************************************************/
 // Theme hooks.
@@ -92,6 +93,10 @@ function webform_theme() {
 
     'webform_element_help' => [
       'variables' => ['help' => NULL],
+    ],
+
+    'webform_element_more' => [
+      'variables' => ['more' => NULL, 'more_title' => '', 'attributes' => []],
     ],
 
     'webform_element_managed_file' => [
@@ -275,6 +280,9 @@ function webform_preprocess_details(&$variables) {
   // Move #description to #help for webform admin routes.
   _webform_preprocess_description_help($variables);
 
+  // Add (read) more to #description.
+  _webform_preprocess_details_description_more($variables);
+
   $element = &$variables['element'];
 
   // Restructure the details's title to include #help.
@@ -290,6 +298,9 @@ function webform_preprocess_fieldset(&$variables) {
   // Move #description to #help for webform admin routes.
   _webform_preprocess_description_help($variables);
 
+  // Add (read) more to #description.
+  _webform_preprocess_form_element_description_more($variables);
+
   $element = &$variables['element'];
 
   // Restructure the fieldset's legend title to include #help.
@@ -304,6 +315,9 @@ function webform_preprocess_fieldset(&$variables) {
 function webform_preprocess_datetime_wrapper(&$variables) {
   // Move #description to #help for webform admin routes.
   _webform_preprocess_description_help($variables);
+
+  // Add (read) more to #description.
+  _webform_preprocess_form_element_description_more($variables);
 
   $element = &$variables['element'];
 
@@ -340,6 +354,9 @@ function webform_preprocess_form_element(&$variables) {
   // Move #description to #help for webform admin routes.
   _webform_preprocess_description_help($variables);
 
+  // Add (read) more to #description.
+  _webform_preprocess_form_element_description_more($variables);
+
   // Add #help and #_title_display to label.
   // Note: #_title_display is used to track inline titles
   // @see \Drupal\webform\Plugin\WebformElementBase::prepare
@@ -369,7 +386,7 @@ function _webform_preprocess_description_help(&$variables) {
 }
 
 /**
- * Appent #help to title variable..
+ * Append #help to title variable.
  */
 function _webform_preprocess_help_title(&$variables, array &$element) {
   if (empty($element['#help'])) {
@@ -399,6 +416,76 @@ function _webform_preprocess_help_title(&$variables, array &$element) {
     $variables['title']['#weight'] = 0;
     $variables['help']['#weight'] = -1;
   }
+}
+
+/**
+ * Prepares #more property for form element template.
+ *
+ * @see template_preprocess_form_element()
+ * @see form-element.html.twig
+ * @see template_preprocess_datetime_wrapper()
+ * @see datetime-wrapper.html.twig
+ */
+function _webform_preprocess_form_element_description_more(&$variables) {
+  $element = &$variables['element'];
+  if (empty($element['#more'])) {
+    return;
+  }
+
+  // Make sure $variables['description']['content'] is a render array.
+  if (!isset($variables['description'])) {
+    $variables['description_display'] = $element['#description_display'];
+    $description_attributes = [];
+    if (!empty($element['#id'])) {
+      $description_attributes['id'] = $element['#id'] . '--description';
+    }
+    $variables['description']['attributes'] = new Attribute($description_attributes);
+    $variables['description']['content'] = [];
+  }
+
+  // Move content to content.description and convert description to
+  // render array.
+  $variables['description']['content'] = [
+    'description' => is_array($variables['description']['content']) ? $variables['description']['content'] : ['#markup' => $variables['description']['content']],
+  ];
+
+  // If description display is invisible hie the description.
+  if (isset($variables['description_display']) && $variables['description_display'] == 'invisible') {
+    $variables['description']['content']['description']['#prefix'] = '<div class="visually-hidden">';
+    $variables['description']['content']['description']['#suffix'] = '</div>';
+    $variables['description_display'] = 'after';
+  }
+
+  // Add more element.
+  $variables['description']['content']['more'] = [
+    '#type' => 'webform_more',
+    '#attributes' => (!empty($element['#id'])) ? ['id' => $element['#id'] . '--more'] : [],
+  ] + array_intersect_key($element, array_flip(['#more', '#more_title']));
+}
+
+/**
+ * Prepares #more property for details template.
+ *
+ * @see template_preprocess_details()
+ * @see details.html.twig
+ */
+function _webform_preprocess_details_description_more(&$variables) {
+  $element = &$variables['element'];
+  if (empty($element['#more'])) {
+    return;
+  }
+
+  // Convert description to render array.
+  $variables['description'] = [
+    'description' => is_array($variables['description']) ? $variables['description'] : ['#markup' => $variables['description']],
+  ];
+
+  // Add more element.
+  $variables['description']['more'] = [
+    '#type' => 'webform_more',
+    '#attributes' => (!empty($element['#id'])) ? ['id' => $element['#id'] . '--more'] : [],
+  ] + array_intersect_key($element, array_flip(['#more', '#more_title']));
+
 }
 
 /**

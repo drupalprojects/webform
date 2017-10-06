@@ -183,9 +183,12 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $properties = [
       // Element settings.
       'title' => '',
+      'default_value' => '',
+      // Description/Help.
       'help' => '',
       'description' => '',
-      'default_value' => '',
+      'more' => '',
+      'more_title' => '',
       // Form display.
       'title_display' => '',
       'description_display' => '',
@@ -252,6 +255,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'title',
       'label',
       'help',
+      'more',
+      'more_title',
       'description',
       'field_prefix',
       'field_suffix',
@@ -608,6 +613,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element[$attributes_property]['class'][] = 'js-webform-tooltip-element';
       $element[$attributes_property]['class'][] = 'webform-tooltip-element';
       $element['#attached']['library'][] = 'webform/webform.tooltip';
+      // More is not supported with tooltip.
+      unset($element['#more']);
     }
 
     // Add iCheck support.
@@ -1829,23 +1836,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#required' => TRUE,
       '#attributes' => ['autofocus' => 'autofocus'],
     ];
-    $form['element']['help'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Help text'),
-      '#description' => $this->t('A tooltip displayed after the title.'),
-      '#states' => [
-        'invisible' => [
-          [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
-          'or',
-          [':input[name="properties[title_display]"]' => ['value' => 'attribute']],
-        ],
-      ],
-    ];
-    $form['element']['description'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Description'),
-      '#description' => $this->t('A short description of the element used as help for the user when he/she uses the webform.'),
-    ];
     if ($this->isComposite()) {
       $form['element']['default_value'] = [
         '#type' => 'webform_codemirror',
@@ -1904,6 +1894,51 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if ($this->hasProperty('multiple')) {
       $form['element']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
     }
+
+    /* Element description */
+
+    $form['element_description'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Element description/help'),
+    ];
+    $form['element_description']['help'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Help text'),
+      '#description' => $this->t('A tooltip displayed after the title.'),
+      '#states' => [
+        'invisible' => [
+          [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
+          'or',
+          [':input[name="properties[title_display]"]' => ['value' => 'attribute']],
+        ],
+      ],
+    ];
+    $form['element_description']['description'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Description'),
+      '#description' => $this->t('A short description of the element used as help for the user when he/she uses the webform.'),
+    ];
+    $form['element_description']['more_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('More label'),
+      '#description' => $this->t('The click-able label used to open and close more text.') . '<br /><br />' .
+        $this->t('Defaults to: %value', ['%value' => $this->configFactory->get('webform.settings')->get('element.default_more_title')]),
+      '#states' => [
+        'invisible' => [
+          ':input[name="properties[description_display]"]' => ['value' => 'tooltip'],
+        ],
+      ],
+    ];
+    $form['element_description']['more'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('More text'),
+      '#description' => $this->t('A long description of the element that provides form additional information which can opened and closed.'),
+      '#states' => [
+        'invisible' => [
+          ':input[name="properties[description_display]"]' => ['value' => 'tooltip'],
+        ],
+      ],
+    ];
 
     /* Form display */
 

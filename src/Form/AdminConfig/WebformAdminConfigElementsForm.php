@@ -126,6 +126,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('element.classes'),
     ];
+    // Element: Description/Help.
     $form['element']['default_description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Default description display'),
@@ -138,6 +139,13 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       ],
       '#description' => $this->t('Determines the default placement of the description for all webform elements.'),
       '#default_value' => $config->get('element.default_description_display'),
+    ];
+    $form['element']['default_more_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default more label'),
+      '#description' => $this->t('The (read) more label used hide/show more information about an element.'),
+      '#required' => 'required',
+      '#default_value' => $config->get('element.default_more_title'),
     ];
     // Element: Checkbox/Radio.
     $form['checkbox'] = [

@@ -896,6 +896,23 @@ function template_preprocess_webform_element_help(array &$variables) {
 }
 
 /**
+ * Prepares variables for element more.
+ *
+ * Default template: webform-element-more.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The webform element.
+ */
+function template_preprocess_webform_element_more(array &$variables) {
+  if (empty($variables['more_title'])) {
+    $variables['more_title'] = \Drupal::config('webform.settings')->get('element.default_more_title');
+  }
+
+  $variables['attributes'] = new Attribute($variables['attributes']);
+}
+
+/**
  * Prepares variables for a managed file element.
  *
  * @param array $variables
