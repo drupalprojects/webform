@@ -22,6 +22,10 @@ elements: |
     '#title': more_title
     '#more_title': '{Custom more title}'
     '#more': '{This is an example of more}'
+  more_html:
+    '#type': textfield
+    '#title': more_html
+    '#more': '{This is an example of more with <b>HTML markup</b>}'
   more_title_description:
     '#type': textfield
     '#title': more_title_description

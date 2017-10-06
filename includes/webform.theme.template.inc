@@ -909,6 +909,13 @@ function template_preprocess_webform_element_more(array &$variables) {
     $variables['more_title'] = \Drupal::config('webform.settings')->get('element.default_more_title');
   }
 
+  if (!is_array($variables['more'])) {
+    $variables['more'] = [
+      '#markup' => $variables['more'],
+      '#allowed_tags' => WebformHtmlEditor::getAllowedTags(),
+    ];
+  }
+
   $variables['attributes'] = new Attribute($variables['attributes']);
 }
 

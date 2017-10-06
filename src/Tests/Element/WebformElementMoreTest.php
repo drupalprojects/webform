@@ -34,12 +34,16 @@ class WebformElementMoreTest extends WebformTestBase {
     $this->assertRaw('<div id="edit-more-title--more" class="js-webform-element-more webform-element-more">');
     $this->assertRaw('<div class="webform-element-more--link"><a href="#more">{Custom more title}</a></div>');
 
-    // Check more with desciption.
+    // Check more with HTML markup.
+    $this->assertRaw('<div id="edit-more-html--more" class="js-webform-element-more webform-element-more">');
+    $this->assertRaw('<div class="webform-element-more--content">{This is an example of more with <b>HTML markup</b>}</div>');
+
+    // Check more with description.
     $this->assertRaw('<div id="edit-more-title-description--description" class="description">');
     $this->assertRaw('{This is an example of a description}');
     $this->assertRaw('<div id="edit-more-title-description--more" class="js-webform-element-more webform-element-more">');
 
-    // Check more with hidden desciption.
+    // Check more with hidden description.
     $this->assertRaw('<div id="edit-more-title-description-hidden--description" class="description">');
     $this->assertRaw('<div class="visually-hidden">{This is an example of a hidden description}</div>');
     $this->assertRaw('<div id="edit-more-title-description-hidden--more" class="js-webform-element-more webform-element-more">');
