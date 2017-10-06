@@ -423,25 +423,25 @@ entity.webform_options.delete_form:
 # Webform results (submissions)
 
 entity.webform_submission.collection:
-  path: '/admin/structure/webform/results/manage'
+  path: '/admin/structure/webform/submissions/manage'
   defaults:
     _entity_list: 'webform_submission'
     _title: 'Webforms'
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess:checkSubmissionAccess'
 
-entity.webform_submission.results_purge:
-  path: '/admin/structure/webform/results/purge'
+entity.webform_submission.collection_purge:
+  path: '/admin/structure/webform/submissions/purge'
   defaults:
     _form: 'Drupal\webform\Form\WebformSubmissionsPurgeForm'
-    _title: 'Webforms: Results purge'
+    _title: 'Webforms'
   requirements:
     _permission: 'administer webform'
 
 # Webform log (submissions)
 
-entity.webform_submission.results_log:
-  path: '/admin/structure/webform/log'
+entity.webform_submission.collection_log:
+  path: '/admin/structure/webform/submissions/log'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformSubmissionLogController::overview'
     _title: 'Webforms'

@@ -984,7 +984,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'content' => $this->t('The Results page lists all incoming submissions for all webforms.'),
       'url' => Url::fromRoute('entity.webform_submission.collection'),
       'routes' => [
-        // @see /admin/structure/webform/results/manage
+        // @see /admin/structure/webform/submissions/manage
         'entity.webform_submission.collection',
       ],
     ];
@@ -994,10 +994,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'group' => 'submissions',
       'title' => $this->t('Log'),
       'content' => $this->t('The Log page lists all submission events for all webforms.'),
-      'url' => Url::fromRoute('entity.webform_submission.results_log'),
+      'url' => Url::fromRoute('entity.webform_submission.collection_log'),
       'routes' => [
         // @see /admin/structure/webform/results/log
-        'entity.webform_submission.results_log',
+        'entity.webform_submission.collection_log',
       ],
     ];
 
@@ -1006,7 +1006,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'group' => 'submissions',
       'title' => $this->t('Submission log'),
       'content' => $this->t('The Submission log lists all events logged for this submission.'),
-      'url' => Url::fromRoute('entity.webform_submission.results_log'),
+      'url' => Url::fromRoute('entity.webform_submission.collection_log'),
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/submission/{webform_submission}/log
         'entity.webform_submission.log',

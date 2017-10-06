@@ -9,26 +9,26 @@ entity.webform.collection:
 # Templates have weight: 10. @see webform_templates.links.task.yml
 
 entity.webform_submission.collection:
-  title: 'Results'
+  title: 'Submissions'
   route_name: entity.webform_submission.collection
   base_route: entity.webform.collection
   weight: 20
 
-entity.webform_submission.manage:
+entity.webform_submission.collection_manage:
   title: 'Manage'
   route_name: entity.webform_submission.collection
   parent_id: entity.webform_submission.collection
   weight: 0
 
-entity.webform_submission.results_purge:
+entity.webform_submission.collection_purge:
   title: 'Purge'
-  route_name: entity.webform_submission.results_purge
+  route_name: entity.webform_submission.collection_purge
   parent_id: entity.webform_submission.collection
   weight: 10
 
-entity.webform_submission.results_log:
+entity.webform_submission.collection_log:
   title: 'Log'
-  route_name: entity.webform_submission.results_log
+  route_name: entity.webform_submission.collection_log
   parent_id: entity.webform_submission.collection
   weight: 20
 
