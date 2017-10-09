@@ -906,8 +906,7 @@ function webform_update_8079() {
 }
 
 /**
-<<<<<<< HEAD
- * Issue #2914153: Add 'More' hide/show text support to elements
+ * Issue #2914153: Add 'More' hide/show text support to elements.
  */
 function webform_update_8080() {
   _webform_update_admin_settings();
@@ -918,10 +917,12 @@ function webform_update_8080() {
  */
 function webform_update_8081() {
   _webform_update_webform_handler_class_settings(RemotePostWebformHandler::class);
-=======
+}
+
+/**
  * Issue #2912672: Mismatch entity Webform submission caused by langcode changes.
  */
-function webform_update_8080() {
+function webform_update_8082() {
   // Set webform_submission.langcode to NOT NULL.
   // Copied from: system_update_8007().
   $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
@@ -941,5 +942,4 @@ function webform_update_8080() {
     'not null' => TRUE,
   ];
   Database::getConnection()->schema()->changeField('webform_submission', 'langcode', 'langcode', $spec);
->>>>>>> 2912672-mismatch-webform-submission
 }
