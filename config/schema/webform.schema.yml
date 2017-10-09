@@ -148,6 +148,9 @@ webform.settings:
         default_more_title:
           type: label
           label: 'Default more title'
+        default_section_title_tag:
+          type: label
+          label: 'Default section title tag'
         default_empty_option:
           type: boolean
           label: 'Default empty option'

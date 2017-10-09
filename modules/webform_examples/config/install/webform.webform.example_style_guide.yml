@@ -438,6 +438,10 @@ elements: |
       '#type': fieldset
       '#title': Fieldset
       '#description': 'This is a description.'
+    webform_section:
+      '#type': webform_section
+      '#title': Section
+      '#description': 'This is a description.'
     container_form_inline:
       '#type': container
       '#attributes':

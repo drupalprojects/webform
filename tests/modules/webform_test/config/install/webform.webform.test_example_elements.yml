@@ -376,6 +376,9 @@ elements: |
     label:
       '#type': label
       '#title': Label
+    webform_section:
+      '#type': webform_section
+      '#title': Section
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements'
@@ -485,7 +488,6 @@ elements: |
     webform_term_checkboxes:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes'
-      '#options_display': side_by_side
       '#vocabulary': tags
     webform_term_select:
       '#type': webform_term_select

@@ -8,61 +8,35 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_help
-title: 'Test: Element: Help'
-description: 'Test element #help property.'
+id: test_element_section
+title: 'Test: Element: Section'
+description: 'Test the section element.'
 category: 'Test: Element'
 elements: |
-  help:
-    '#type': textfield
-    '#title': help
-    '#help': '{This is an example of help}'
-  help_required:
-    '#type': textfield
-    '#title': help_required
-    '#required': true
-    '#help': '{This is an example of help for a required element}'
-  help_html:
-    '#type': textfield
-    '#title': help_html
-    '#help': '{This is an example of help with <b>HTML markup</b>}'
-  help_xss:
-    '#type': textfield
-    '#title': help_xss
-    '#help': '{This is an example of help with <b>XSS <script>alert("XSS")</b>}'
-  help_checkbox:
-    '#type': checkbox
-    '#title': help_checkbox
-    '#help': '{This is an example of help}'
-  help_inline:
-    '#type': textfield
-    '#title': help_inline
-    '#title_display': inline
-    '#help': '{This is an example of help with an inline title}'
-  help_radios:
-    '#type': radios
-    '#title': help_radios
-    '#help': '{This is an example of help for radio buttons}'
-    '#options': yes_no
-  help_datetime:
-    '#type': datetime
-    '#title': help_datetime
-    '#help': '{This is an example of help for datetime}'
-  help_fieldset:
-    '#type': fieldset
-    '#title': help_fieldset
-    '#help': '{This is an example of help for a fieldset}'
-    '#description': '{This is an example of help for a fieldset}'
-  help_details:
-    '#type': details
-    '#title': help_details
-    '#help': '{This is an example of help for a details element}'
-    '#description': '{This is an example of help for a details element}'
-  help_section:
+  webform_section:
     '#type': webform_section
-    '#title': help_section
-    '#help': '{This is an example of help for a section element}'
-    '#description': '{This is an example of help for a section element}'
+    '#title': webform_section
+    '#help': '{This is help text}'
+    '#description': '{This is a description}'
+    webform_section_textfield:
+      '#type': textfield
+      '#title': webform_section_textfield
+  webform_section_required:
+    '#type': webform_section
+    '#title': webform_section_required
+    '#required': true
+    webform_section_required_textfield:
+      '#type': textfield
+      '#title': webform_section_required_textfield
+  webform_section_title_custom:
+    '#type': webform_section
+    '#title': webform_section_title_custom
+    '#title_tag': h5
+    '#title_attributes':
+      'style': 'color: red'
+    webform_section_h5_textfield:
+      '#type': textfield
+      '#title': webform_section_h5_textfield
 css: ''
 javascript: ''
 settings:
@@ -110,7 +84,7 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: page
+  confirmation_type: message
   confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''
@@ -126,8 +100,8 @@ settings:
   purge_days: null
   entity_limit_total: null
   entity_limit_user: null
-  results_disabled: true
-  results_disabled_ignore: true
+  results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

@@ -125,6 +125,10 @@ function webform_theme() {
     'webform_message' => [
       'render element' => 'element',
     ],
+    'webform_section' => [
+      'render element' => 'element',
+    ],
+
     'webform_composite_address' => [
       'render element' => 'element',
     ],
@@ -306,6 +310,21 @@ function webform_preprocess_fieldset(&$variables) {
   // Restructure the fieldset's legend title to include #help.
   if (isset($variables['legend']['title'])) {
     _webform_preprocess_help_title($variables['legend']['title'], $element);
+  }
+}
+
+/**
+ * Prepares variables for webform section element templates.
+ */
+function webform_preprocess_webform_section(&$variables) {
+  // Move #description to #help for webform admin routes.
+  _webform_preprocess_description_help($variables);
+
+  $element = &$variables['element'];
+
+  // Restructure the section's title to include #help.
+  if (isset($variables['title'])) {
+    _webform_preprocess_help_title($variables['title'], $element);
   }
 }
 

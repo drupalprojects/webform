@@ -376,6 +376,9 @@ elements: |
     label:
       '#type': label
       '#title': 'Label | <script>alert(''This markup is not escaped properly!!!'') </script>'
+    webform_section:
+      '#type': webform_section
+      '#title': 'Section | <script>alert(''This markup is not escaped properly!!!'') </script>'
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements | <script>alert(''This markup is not escaped properly!!!'') </script>'
@@ -485,7 +488,6 @@ elements: |
     webform_term_checkboxes:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes | <script>alert(''This markup is not escaped properly!!!'') </script>'
-      '#options_display': side_by_side
       '#vocabulary': tags
     webform_term_select:
       '#type': webform_term_select

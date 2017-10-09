@@ -45,6 +45,9 @@ help_inline</label>');
 
     // Check details.
     $this->assertRaw('<a href="#help" title="{This is an example of help for a details element}" data-webform-help="{This is an example of help for a details element}" class="webform-element-help">?</a>');
+
+    // Check section.
+    $this->assertRaw('<a href="#help" title="{This is an example of help for a section element}" data-webform-help="{This is an example of help for a section element}" class="webform-element-help">?</a>');
   }
 
 }

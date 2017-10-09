@@ -9,6 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Render\Element\RenderElement;
 use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\Xss;
 use Drupal\image\Entity\ImageStyle;
@@ -749,6 +750,57 @@ function template_preprocess_webform_message(array &$variables) {
   if (isset($element['#closed'])) {
     $variables['closed'] = $element['#closed'];
   }
+}
+
+/**
+ * Prepares variables for webform section element templates.
+ *
+ * Default template: webform-section.html.twig.
+ *
+ * Copied from: template_preprocess_fieldset()
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #attributes, #children, #description, #id, #title,
+ *     #value.
+ */
+function template_preprocess_webform_section(&$variables) {
+  $element = $variables['element'];
+  Element::setAttributes($element, ['id']);
+  RenderElement::setAttributes($element);
+  $variables['attributes'] = isset($element['#attributes']) ? $element['#attributes'] : [];
+  $variables['prefix'] = isset($element['#field_prefix']) ? $element['#field_prefix'] : NULL;
+  $variables['suffix'] = isset($element['#field_suffix']) ? $element['#field_suffix'] : NULL;
+  $variables['title_display'] = isset($element['#title_display']) ? $element['#title_display'] : NULL;
+  $variables['title_tag'] = isset($element['#title_tag']) ? $element['#title_tag'] : 'h2';
+  $variables['title_attributes'] = isset($element['#title_attributes']) ? $element['#title_attributes'] : [];
+  $variables['children'] = $element['#children'];
+  $variables['required'] = !empty($element['#required']) ? $element['#required'] : NULL;
+
+  // Allow markup in title
+  if (isset($element['#title']) && $element['#title'] !== '') {
+    $variables['title'] = ['#markup' => $element['#title']];
+  }
+
+  // Add 'visually-hidden' class to title attributes.
+  if ($variables['title_display'] == 'invisible') {
+    $variables['title_attributes']['class'][] = 'visually-hidden';
+  }
+  $variables['title_attributes'] = new Attribute($variables['title_attributes']);
+
+  if (!empty($element['#description'])) {
+    $description_id = $element['#attributes']['id'] . '--description';
+    $description_attributes['id'] = $description_id;
+    $variables['description']['attributes'] = new Attribute($description_attributes);
+    $variables['description']['content'] = $element['#description'];
+
+    // Add the description's id to the fieldset aria attributes.
+    $variables['attributes']['aria-describedby'] = $description_id;
+  }
+
+  // Suppress error messages.
+  $variables['errors'] = NULL;
 }
 
 /******************************************************************************/

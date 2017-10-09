@@ -147,6 +147,21 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#required' => 'required',
       '#default_value' => $config->get('element.default_more_title'),
     ];
+    $form['element']['default_section_title_tag'] = [
+      '#type' => 'webform_select_other',
+      '#title' => $this->t('Default section title tag'),
+      '#options' => [
+        'h1' => $this->t('Header 1 (h1)'),
+        'h2' => $this->t('Header 2 (h2)'),
+        'h3' => $this->t('Header 3 (h3)'),
+        'h4' => $this->t('Header 4 (h4)'),
+        'h5' => $this->t('Header 5 (h5)'),
+        'h6' => $this->t('Header 6 (h6)'),
+      ],
+      '#required' => 'required',
+      '#default_value' => $config->get('element.default_section_title_tag'),
+    ];
+
     // Element: Checkbox/Radio.
     $form['checkbox'] = [
       '#type' => 'details',

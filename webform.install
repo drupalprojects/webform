@@ -943,3 +943,10 @@ function webform_update_8082() {
   ];
   Database::getConnection()->schema()->changeField('webform_submission', 'langcode', 'langcode', $spec);
 }
+
+/**
+ * Issue #2914904: Add section element.
+ */
+function webform_update_8083() {
+  _webform_update_admin_settings();
+}
