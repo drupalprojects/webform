@@ -238,7 +238,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     }
 
     // Disable caching when Webform editorial module is enabled.
-    if ($this->moduleHandler->moduleExists('webform_editorial')) {
+    if ($this->moduleHandler->moduleExists('webform_editorial') && $build) {
       $build['#cache']['max-age'] = 0;
     }
 
