@@ -2,7 +2,7 @@ entity.webform.templates:
   path: '/admin/structure/webform/templates'
   defaults:
     _controller: '\Drupal\webform_templates\Controller\WebformTemplatesController::index'
-    _title: 'Webforms'
+    _title: 'Webforms: Templates'
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 

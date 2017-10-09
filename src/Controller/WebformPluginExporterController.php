@@ -82,7 +82,7 @@ class WebformPluginExporterController extends ControllerBase implements Containe
     // Settings
     $build['settings'] = [
       '#type' => 'link',
-      '#title' => $this->t('Edit settings'),
+      '#title' => $this->t('Edit configuration'),
       '#url' => Url::fromRoute('webform.config.exporters'),
       '#attributes' => ['class' => ['button', 'button--small'], 'style' => 'float: right'],
     ];

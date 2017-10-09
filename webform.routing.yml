@@ -4,7 +4,7 @@ webform.config:
   path: '/admin/structure/webform/config'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigFormsForm'
-    _title: 'Webforms: Forms'
+    _title: 'Webforms: Forms configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -12,7 +12,7 @@ webform.config.elements:
   path: '/admin/structure/webform/config/elements'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigElementsForm'
-    _title: 'Webforms: Elements'
+    _title: 'Webforms: Elements configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -20,7 +20,7 @@ webform.config.submissions:
   path: '/admin/structure/webform/config/submissions'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigSubmissionsForm'
-    _title: 'Webforms: Submissions'
+    _title: 'Webforms: Submissions configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -28,7 +28,7 @@ webform.config.handlers:
   path: '/admin/structure/webform/config/handlers'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigHandlersForm'
-    _title: 'Webforms: Handlers'
+    _title: 'Webforms: Handlers configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -36,7 +36,7 @@ webform.config.exporters:
   path: '/admin/structure/webform/config/exporters'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigExportersForm'
-    _title: 'Webforms: Exporters'
+    _title: 'Webforms: Exporters configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -44,7 +44,7 @@ webform.config.libraries:
   path: '/admin/structure/webform/config/libraries'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigLibrariesForm'
-    _title: 'Webforms: Libraries'
+    _title: 'Webforms: Libraries configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -52,7 +52,7 @@ webform.config.advanced:
   path: '/admin/structure/webform/config/advanced'
   defaults:
     _form: '\Drupal\webform\Form\AdminConfig\WebformAdminConfigAdvancedForm'
-    _title: 'Webforms: Advanced'
+    _title: 'Webforms: Advanced configuration'
   requirements:
     _permission: 'administer webform'
 
@@ -71,7 +71,7 @@ webform.addons:
   path: '/admin/structure/webform/addons'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformAddonsController::index'
-    _title: 'Webforms'
+    _title: 'Webforms: Add-ons'
   requirements:
     _permission: 'administer webform'
 
@@ -81,7 +81,7 @@ webform.about:
   path: '/admin/structure/webform/about'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformAboutController::webform'
-    _title: 'About Webform'
+    _title: 'Webforms: About Webform'
   requirements:
     _permission: 'access webform overview'
 
@@ -89,7 +89,7 @@ webform.about.drupal:
   path: '/admin/structure/webform/about/drupal'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformAboutController::drupal'
-    _title: 'About Drupal'
+    _title: 'Webforms: About Drupal'
   requirements:
     _permission: 'access webform overview'
 
@@ -426,7 +426,7 @@ entity.webform_submission.collection:
   path: '/admin/structure/webform/submissions/manage'
   defaults:
     _entity_list: 'webform_submission'
-    _title: 'Webforms'
+    _title: 'Webforms: Submissions'
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess:checkSubmissionAccess'
 
@@ -434,7 +434,7 @@ entity.webform_submission.collection_purge:
   path: '/admin/structure/webform/submissions/purge'
   defaults:
     _form: 'Drupal\webform\Form\WebformSubmissionsPurgeForm'
-    _title: 'Webforms'
+    _title: 'Webforms: Submissions purge'
   requirements:
     _permission: 'administer webform'
 
@@ -444,7 +444,7 @@ entity.webform_submission.collection_log:
   path: '/admin/structure/webform/submissions/log'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformSubmissionLogController::overview'
-    _title: 'Webforms'
+    _title: 'Webforms: Submissions log'
   requirements:
     _permission: 'access webform submission log'
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess:checkSubmissionAccess'
@@ -618,7 +618,7 @@ webform.element_plugins:
   path: '/admin/structure/webform/plugins/elements'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginElementController::index'
-    _title: 'Webforms: Elements'
+    _title: 'Webforms: Element plugins'
   requirements:
     _permission: 'administer webform'
 
@@ -626,7 +626,7 @@ webform.handler_plugins:
   path: '/admin/structure/webform/plugins/handlers'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginHandlerController::index'
-    _title: 'Webforms: Handlers'
+    _title: 'Webforms: Handler plugins'
   requirements:
     _permission: 'administer webform'
 
@@ -634,7 +634,7 @@ webform.exporter_plugins:
   path: '/admin/structure/webform/plugins/exporters'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginExporterController::index'
-    _title: 'Webforms: Exports'
+    _title: 'Webforms: Export plugins'
   requirements:
     _permission: 'administer webform'
 

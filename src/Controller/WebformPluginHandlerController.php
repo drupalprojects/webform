@@ -91,7 +91,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
     // Settings
     $build['settings'] = [
       '#type' => 'link',
-      '#title' => $this->t('Edit settings'),
+      '#title' => $this->t('Edit configuration'),
       '#url' => Url::fromRoute('webform.config.handlers'),
       '#attributes' => ['class' => ['button', 'button--small'], 'style' => 'float: right'],
     ];

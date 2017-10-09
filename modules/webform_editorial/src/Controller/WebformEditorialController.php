@@ -106,14 +106,14 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     $build['title'] = [
       '#prefix' => '<h1>',
       '#suffix' => '</h1>',
-      '#markup' => $this->t('Webform: Help'),
+      '#markup' => $this->t('Webform: Help editorial'),
     ];
     foreach ($groups as $group_name => $help) {
       // Header.
       $header = [
-        ['data' => $this->t('Name'), 'width' => '10%'],
+        ['data' => $this->t('Name'), 'width' => '20%'],
         ['data' => $this->t('Title'), 'width' => '20%'],
-        ['data' => $this->t('Content'), 'width' => '60%'],
+        ['data' => $this->t('Content'), 'width' => '50%'],
         ['data' => $this->t('Links'), 'width' => '10%'],
       ];
 
@@ -130,7 +130,10 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
         }
         asort($paths);
         foreach ($paths as $index => $path) {
-          $paths[$index] = str_replace('/admin/structure/webform/', '../', $path);
+          $path = str_replace('/admin/structure/webform/', '../', $path);
+          $path = str_replace('/admin/structure/', '../', $path);
+          $path = preg_replace('/\{[^}]+\}/', '*', $path);
+          $paths[$index] = $path;
         }
         $name = '<b>' . $name .'</b><br/><small><small><em>' . implode('<br />', $paths) .'</em></small></small>';
 
@@ -149,8 +152,25 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           ],
         ];
       }
-      $build[$group_name] = $this->buildTable($this->helpManager->getGroup($group_name) ?: $group_name, $header, $rows, 'h2');
+      $title = ($this->helpManager->getGroup($group_name) ?: $group_name) . ' [' . $group_name . ']';
+      $build[$group_name] = $this->buildTable($title, $header, $rows, 'h2');
     }
+
+    // Add presentations.
+    $presentations = $this->helpManager->initVideoPresentations();
+    foreach ($presentations as $presentation_name => $presentation) {
+
+      $build[$presentation_name]['description']['title'] = [
+        '#markup' => $presentation['title'],
+        '#prefix' => '<strong>',
+        '#suffix' => '</strong><br/>',
+      ];
+      $build[$presentation_name]['description']['content'] = [
+        '#markup' => $presentation['content'],
+        '#suffix' => '<br/><br/>',
+      ];
+    }
+
 
     return $this->response($build);
   }
@@ -183,7 +203,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       $video = Link::fromTextAndUrl($image, Url::fromUri('https://www.youtube.com/watch', ['query' => ['v' => $info['youtube_id']]]))->toString();
       $rows[] = [
         'data' => [
-          ['data' => '<b>' . $name . '</b>'],
+          ['data' => '<b>' . $name . '</b>' . (!empty($info['hidden']) ? '<br/>[' . $this->t('hidden') . ']' : '')],
           ['data' => $info['title']],
           ['data' => $info['content']],
           ['data' => $video],
@@ -191,7 +211,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       ];
     }
 
-    $build = $this->buildTable('Webform: Videos', $header, $rows);
+    $build = $this->buildTable('Webform: Videos editorial', $header, $rows);
     return $this->response($build);
   }
 
@@ -215,7 +235,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     $build['title'] = [
       '#prefix' => '<h1>',
       '#suffix' => '</h1>',
-      '#markup' => $this->t('Webform: Elements'),
+      '#markup' => $this->t('Webform: Elements editorial'),
     ];
     foreach ($grouped_definitions as $category_name => $elements) {
 
@@ -278,7 +298,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       ];
     }
 
-    $build = $this->buildTable('Webform: Libraries', $header, $rows);
+    $build = $this->buildTable('Webform: Libraries editorial', $header, $rows);
     return $this->response($build);
   }
 
@@ -326,6 +346,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
         '#suffix' => "</$title_tag>",
         '#markup' => $title,
       ],
+      'description' => [],
       'table' => [
         '#theme' => 'table',
         '#header' => $header,

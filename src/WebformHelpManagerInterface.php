@@ -64,28 +64,6 @@ interface WebformHelpManagerInterface {
   public function buildIndex();
 
   /**
-   * Build the elements section.
-   *
-   * @param bool $docs
-   *   Set to TRUE to build exportable HTML documentation.
-   *
-   * @return array
-   *   An render array containing the elements section.
-   */
-  public function buildElements($docs = FALSE);
-
-  /**
-   * Build the uses section.
-   *
-   * @param bool $docs
-   *   Set to TRUE to build exportable HTML documentation.
-   *
-   * @return array
-   *   An render array containing the uses section.
-   */
-  public function buildUses($docs = FALSE);
-
-  /**
    * Build the videos section.
    *
    * @param bool $docs

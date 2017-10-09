@@ -2,7 +2,7 @@ webform_editorial.index:
   path: '/admin/structure/webform/editorial'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: 'Editorial'
+    _title: 'Webform: Editorial'
   requirements:
     _permission: 'administer webform'
 
