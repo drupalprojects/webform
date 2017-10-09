@@ -3,36 +3,34 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_example_remote_post
+      - webform_test_handler_remote_post
 open: null
 close: null
 uid: null
 template: false
-id: example_remote_post
-title: 'Example: Remote post'
-description: 'An example of a webform submission posted to a remote server.'
-category: Example
+id: test_handler_remote_get
+title: 'Test: Handler: Remote HTTP GET'
+description: 'Test remote post handler using HTTP GET method.'
+category: 'Test: Handler'
 elements: |
+  response_type:
+    '#title': 'Response type'
+    '#type': select
+    '#options':
+      200: '200 OK'
+      500: '500 Internal Server Error'
+      404: '404 Not Found'
+    '#default_value': 200
   first_name:
     '#title': 'First name'
     '#type': textfield
     '#required': true
+    '#default_value': John
   last_name:
     '#title': 'Last name'
     '#type': textfield
     '#required': true
-  email:
-    '#title': Email
-    '#type': email
-    '#required': true
-  subject:
-    '#title': Subject
-    '#type': textfield
-    '#required': true
-  message:
-    '#title': Message
-    '#type': textarea
-    '#required': true
+    '#default_value': Smith
   confirmation_number:
     '#title': 'Confirmation number'
     '#type': value
@@ -51,7 +49,7 @@ settings:
   form_previous_submissions: true
   form_confidential: false
   form_confidential_message: ''
-  form_convert_anonymous: false
+  form_convert_anonymous: true
   form_prepopulate: false
   form_prepopulate_source_entity: false
   form_prepopulate_source_entity_required: false
@@ -79,7 +77,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
-  draft: none
+  draft: all
   draft_multiple: false
   draft_auto_save: false
   draft_saved_message: ''
@@ -142,14 +140,14 @@ access:
 handlers:
   remote_post:
     id: remote_post
-    label: 'Remote post'
+    label: 'Remote HTTP GET'
     handler_id: remote_post
     status: true
     conditions: {  }
     weight: 1
     settings:
-      method: POST
-      type: x-www-form-urlencoded
+      method: GET
+      type: ''
       excluded_data:
         serial: serial
         sid: sid
@@ -171,19 +169,23 @@ handlers:
         notes: notes
         confirmation_number: confirmation_number
       custom_data: |
-        custom_all: true
-      custom_options: ''
+        custom_data: true
+      custom_options: |
+        headers:
+          custom_header: 'true'
       debug: true
-      completed_url: /webform_example_remote_post/completed
+      completed_url: 'http://webform-test-handler-remote-post/completed'
       completed_custom_data: |
         custom_completed: true
-      updated_url: /webform_example_remote_post/updated
+      updated_url: 'http://webform-test-handler-remote-post/updated'
       updated_custom_data: |
         custom_updated: true
-      deleted_url: /webform_example_remote_post/deleted
+      deleted_url: 'http://webform-test-handler-remote-post/deleted'
       deleted_custom_data: |
         custom_deleted: true
-      draft_url: ''
-      draft_custom_data: ''
-      converted_url: ''
-      converted_custom_data: ''
+      draft_url: 'http://webform-test-handler-remote-post/draft'
+      draft_custom_data: |
+        custom_draft: true
+      converted_url: 'http://webform-test-handler-remote-post/converted'
+      converted_custom_data: |
+        custom_converted: true

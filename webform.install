@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
+use Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 
@@ -908,4 +909,11 @@ function webform_update_8079() {
  */
 function webform_update_8080() {
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2913215: Remote Post handler add GET method support.
+ */
+function webform_update_8081() {
+  _webform_update_webform_handler_class_settings(RemotePostWebformHandler::class);
 }

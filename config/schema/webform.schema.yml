@@ -940,6 +940,9 @@ webform.handler.remote_post:
   type: mapping
   label: 'Remote Post'
   mapping:
+    method:
+      label: 'Method'
+      type: string
     type:
       label: 'Type'
       type: string
