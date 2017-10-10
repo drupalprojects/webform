@@ -62,7 +62,8 @@ class WebformSection extends ContainerBase {
         'h4' => $this->t('Header 4 (h4)'),
         'h5' => $this->t('Header 5 (h5)'),
         'h6' => $this->t('Header 6 (h6)'),
-      ]
+        'label' => $this->t('Label (label)'),
+      ],
     ];
 
     return $form;

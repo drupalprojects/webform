@@ -157,6 +157,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         'h4' => $this->t('Header 4 (h4)'),
         'h5' => $this->t('Header 5 (h5)'),
         'h6' => $this->t('Header 6 (h6)'),
+        'label' => $this->t('Label (label)'),
       ],
       '#required' => 'required',
       '#default_value' => $config->get('element.default_section_title_tag'),
