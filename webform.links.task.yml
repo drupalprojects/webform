@@ -9,83 +9,83 @@ entity.webform.collection:
 # Templates have weight: 10. @see webform_templates.links.task.yml
 
 entity.webform_submission.collection:
-  title: 'Results'
+  title: 'Submissions'
   route_name: entity.webform_submission.collection
   base_route: entity.webform.collection
   weight: 20
 
-entity.webform_submission.manage:
+entity.webform_submission.collection_manage:
   title: 'Manage'
   route_name: entity.webform_submission.collection
   parent_id: entity.webform_submission.collection
   weight: 0
 
-entity.webform_submission.results_purge:
+entity.webform_submission.collection_purge:
   title: 'Purge'
-  route_name: entity.webform_submission.results_purge
+  route_name: entity.webform_submission.collection_purge
   parent_id: entity.webform_submission.collection
   weight: 10
 
-entity.webform_submission.results_log:
+entity.webform_submission.collection_log:
   title: 'Log'
-  route_name: entity.webform_submission.results_log
+  route_name: entity.webform_submission.collection_log
   parent_id: entity.webform_submission.collection
   weight: 20
 
 # Settings.
 
-webform.settings:
-  title: 'Settings'
-  route_name: webform.settings
+webform.config:
+  title: 'Configuration'
+  route_name: webform.config
   base_route: entity.webform.collection
   weight: 30
 
-webform.settings.forms:
+webform.config.forms:
   title: 'Forms'
-  route_name: webform.settings
-  parent_id: webform.settings
+  route_name: webform.config
+  parent_id: webform.config
   weight: 10
 
-webform.settings.elements:
+webform.config.elements:
   title: 'Elements'
-  route_name: webform.settings.elements
-  parent_id: webform.settings
+  route_name: webform.config.elements
+  parent_id: webform.config
   weight: 20
 
-webform.settings.options:
+webform.config.options:
   title: 'Options'
   route_name: entity.webform_options.collection
-  parent_id: webform.settings
+  parent_id: webform.config
   weight: 30
 
-webform.settings.submissions:
+webform.config.submissions:
   title: 'Submissions'
-  route_name: webform.settings.submissions
-  parent_id: webform.settings
+  route_name: webform.config.submissions
+  parent_id: webform.config
   weight: 40
 
-webform.settings.handlers:
+webform.config.handlers:
   title: 'Handlers'
-  route_name: webform.settings.handlers
-  parent_id: webform.settings
+  route_name: webform.config.handlers
+  parent_id: webform.config
   weight: 50
 
-webform.settings.exporters:
+webform.config.exporters:
   title: 'Exporters'
-  route_name: webform.settings.exporters
-  parent_id: webform.settings
+  route_name: webform.config.exporters
+  parent_id: webform.config
   weight: 60
 
-webform.settings.libraries:
+webform.config.libraries:
   title: 'Libraries'
-  route_name: webform.settings.libraries
-  parent_id: webform.settings
+  route_name: webform.config.libraries
+  parent_id: webform.config
   weight: 70
 
-webform.settings.advanced:
+webform.config.advanced:
   title: 'Advanced'
-  route_name: webform.settings.advanced
-  parent_id: webform.settings
+  route_name: webform.config.advanced
+  parent_id: webform.config
   weight: 80
 
 # Plugins.

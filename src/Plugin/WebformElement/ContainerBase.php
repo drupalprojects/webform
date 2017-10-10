@@ -27,6 +27,8 @@ abstract class ContainerBase extends WebformElementBase {
       'attributes' => [],
       // Format.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
     ] + $this->getDefaultBaseProperties();
   }
 
@@ -149,19 +151,10 @@ abstract class ContainerBase extends WebformElementBase {
       case 'header':
       default:
         return [
-          '#type' => 'container',
+          '#type' => 'webform_section',
           '#id' => $element['#webform_id'],
-          '#attributes' => [
-            'class' => [
-              'webform-container',
-              'webform-container-type-header',
-            ],
-          ],
-          'title' => [
-            '#markup' => $element['#title'],
-            '#prefix' => '<h3 class="webform-container-type-header--title">',
-            '#suffix' => '</h3>',
-          ],
+          '#title' => $element['#title'],
+          '#title_tag' => \Drupal::config('webform.settings')->get('element.default_section_title_tag'),
         ] + $children;
     }
   }
@@ -240,8 +233,9 @@ abstract class ContainerBase extends WebformElementBase {
     $form['element_attributes']['attributes']['#classes'] = $this->configFactory->get('webform.settings')->get('element.wrapper_classes');
 
     // Containers can only hide the title using #title_display: invisible.
-    // @see core/modules/system/templates/fieldset.html.twig
-    $form['form']['title_display']['#options'] = [
+    // @see fieldset.html.twig
+    // @see webform-section.html.twig
+    $form['form']['display_container']['title_display']['#options'] = [
       '' => '',
       'invisible' => $this->t('Invisible'),
     ];

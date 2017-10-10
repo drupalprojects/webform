@@ -145,6 +145,12 @@ webform.settings:
         default_description_display:
           type: string
           label: 'Default title display'
+        default_more_title:
+          type: label
+          label: 'Default more title'
+        default_section_title_tag:
+          type: label
+          label: 'Default section title tag'
         default_empty_option:
           type: boolean
           label: 'Default empty option'
@@ -937,6 +943,9 @@ webform.handler.remote_post:
   type: mapping
   label: 'Remote Post'
   mapping:
+    method:
+      label: 'Method'
+      type: string
     type:
       label: 'Type'
       type: string

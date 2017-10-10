@@ -1,8 +1,7 @@
 <?php
 
-namespace Drupal\webform\Form\AdminSettings;
+namespace Drupal\webform\Form\AdminConfig;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
@@ -13,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure webform admin settings for exporters.
  */
-class WebformAdminSettingsExportersForm extends WebformAdminSettingsBaseForm {
+class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
 
   /**
    * The webform exporter manager.
@@ -33,11 +32,11 @@ class WebformAdminSettingsExportersForm extends WebformAdminSettingsBaseForm {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'webform_admin_settings_exporters_form';
+    return 'webform_admin_config_exporters_form';
   }
 
   /**
-   * Constructs a WebformAdminSettingsExportersForm object.
+   * Constructs a WebformAdminConfigExportersForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

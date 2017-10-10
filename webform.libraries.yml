@@ -148,6 +148,20 @@ webform.help:
     - core/jquery.once
     - core/jquery.ui.accordion
 
+# More.
+
+webform.element.more:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.more.css: {}
+  js:
+    js/webform.element.more.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+
 # Navigation.
 
 webform.navigation:
@@ -330,6 +344,16 @@ webform.element.codemirror.html:
     js/webform.element.codemirror.js: {weight: -1}
   dependencies:
     - webform/libraries.codemirror.html
+
+webform.element.codemirror.htmlmixed:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.codemirror.css: {}
+  js:
+    js/webform.element.codemirror.js: {weight: -1}
+  dependencies:
+    - webform/libraries.codemirror.htmlmixed
 
 webform.element.codemirror.css:
   version: VERSION
@@ -771,6 +795,18 @@ libraries.codemirror.html:
     /libraries/codemirror/mode/htmlmixed/htmlmixed.js: {}
   dependencies:
     - webform/libraries.codemirror.text
+
+libraries.codemirror.htmlmixed:
+  version: *webform_codemirror_version
+  license: *webform_codemirror_license
+  cdn: *webform_codemirror_cdn
+  js:
+    /libraries/codemirror/mode/xml/xml.js: {}
+    /libraries/codemirror/mode/htmlmixed/htmlmixed.js: {}
+  dependencies:
+    - webform/libraries.codemirror.text
+    - webform/libraries.codemirror.css
+    - webform/libraries.codemirror.js
 
 libraries.codemirror.css:
   version: *webform_codemirror_version

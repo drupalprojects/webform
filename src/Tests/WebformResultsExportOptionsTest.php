@@ -190,7 +190,7 @@ class WebformResultsExportOptionsTest extends WebformTestBase {
 
     // Check changing default export (delimiter) settings.
     $this->drupalLogin($this->rootUser);
-    $this->drupalPostForm('admin/structure/webform/settings/exporters', ['delimiter' => '|'], t('Save configuration'));
+    $this->drupalPostForm('admin/structure/webform/config/exporters', ['delimiter' => '|'], t('Save configuration'));
     $this->drupalPostForm('admin/structure/webform/manage/' . $webform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"|"Submission URI"');
 

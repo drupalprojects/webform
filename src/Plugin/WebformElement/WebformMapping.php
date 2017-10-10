@@ -34,10 +34,12 @@ class WebformMapping extends WebformElementBase {
   public function getDefaultProperties() {
     return [
       'title' => '',
-      // General settings.
+      'default_value' => [],
+      // Description/Help.
       'help' => '',
       'description' => '',
-      'default_value' => [],
+      'more' => '',
+      'more_title' => '',
       // Form display.
       'title_display' => '',
       'description_display' => '',
@@ -47,6 +49,8 @@ class WebformMapping extends WebformElementBase {
       'required_error' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       // Mapping settings.
       'arrow' => '→',
       'source' => [],

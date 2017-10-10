@@ -28,6 +28,8 @@ class Container extends ContainerBase {
       'states' => [],
       // Format.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
     ];
   }
 

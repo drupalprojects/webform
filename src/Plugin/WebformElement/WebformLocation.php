@@ -27,12 +27,14 @@ class WebformLocation extends WebformCompositeBase {
    */
   public function getDefaultProperties() {
     $properties = [
-      'multiple' => FALSE,
-      'help' => '',
       'title' => '',
-      // General settings.
-      'description' => '',
       'default_value' => [],
+      'multiple' => FALSE,
+      // Description/Help.
+      'help' => '',
+      'description' => '',
+      'more' => '',
+      'more_title' => '',
       // Form display.
       'title_display' => '',
       'description_display' => '',
@@ -49,7 +51,11 @@ class WebformLocation extends WebformCompositeBase {
       'api_key' => '',
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       'format_items' => $this->getItemsDefaultFormat(),
+      'format_items_html' => '',
+      'format_items_text' => '',
     ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();
@@ -199,7 +205,7 @@ class WebformLocation extends WebformCompositeBase {
     else {
       $form['composite']['api_key']['#required'] = TRUE;
       if (\Drupal::currentUser()->hasPermission('administer webform')) {
-        $t_args = [':href' => UrlGenerator::fromRoute('webform.settings.elements')->toString()];
+        $t_args = [':href' => UrlGenerator::fromRoute('webform.config.elements')->toString()];
         $form['composite']['api_key']['#description'] .= '<br /><br />' . $this->t('You can either enter an element specific API key here or set the <a href=":href">default site-wide API key</a>.', $t_args);
       }
     }

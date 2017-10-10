@@ -25,7 +25,7 @@ class WebformButtons extends Radios {
     if (floatval(\Drupal::VERSION) < 8.4) {
       // Buttonset is deprecated jQueryUI 1.12
       // https://api.jqueryui.com/buttonset/
-      $element['#attached']['library'][] = 'webform/webform.element.buttons';
+      $element['#attached']['library'][] = 'webform/webform.element.buttons.buttonset';
     }
     else {
       $element['#attached']['library'][] = 'webform/webform.element.buttons.checkboxradio';

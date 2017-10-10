@@ -27,6 +27,7 @@ class WebformCodeMirror extends Textarea {
   protected static $modes = [
     'css' => 'text/css',
     'html' => 'text/html',
+    'htmlmixed' => 'htmlmixed',
     'javascript' => 'text/javascript',
     'text' => 'text/plain',
     'yaml' => 'text/x-yaml',

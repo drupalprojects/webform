@@ -63,7 +63,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "resend-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/resend",
  *     "duplicate-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/duplicate",
  *     "delete-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/delete",
- *     "collection" = "/admin/structure/webform/results/manage/list"
+ *     "collection" = "/admin/structure/webform/submissions/manage/list"
  *   },
  *   permission_granularity = "bundle"
  * )

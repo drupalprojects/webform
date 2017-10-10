@@ -58,6 +58,11 @@ elements: |
     '#title': help_details
     '#help': '{This is an example of help for a details element}'
     '#description': '{This is an example of help for a details element}'
+  help_section:
+    '#type': webform_section
+    '#title': help_section
+    '#help': '{This is an example of help for a section element}'
+    '#description': '{This is an example of help for a section element}'
 css: ''
 javascript: ''
 settings:

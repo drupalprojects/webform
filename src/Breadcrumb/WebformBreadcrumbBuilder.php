@@ -72,10 +72,9 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     // Skip all config_translation routes except the overview
     // and allow Drupal to use the path as the breadcrumb.
-    if (strpos($route_name, 'config_translation') !== FALSE && !in_array($route_name, ['entity.webform.config_translation_overview', 'config_translation.item.overview.webform.settings', 'config_translation.item.add.webform.settings', 'config_translation.item.edit.webform.settings', 'config_translation.item.delete.webform.settings'])) {
+    if (strpos($route_name, 'config_translation') !== FALSE && !in_array($route_name, ['entity.webform.config_translation_overview', 'config_translation.item.overview.webform.config', 'config_translation.item.add.webform.config', 'config_translation.item.edit.webform.config', 'config_translation.item.delete.webform.config'])) {
       return FALSE;
     }
-
     try {
       $path = Url::fromRouteMatch($route_match)->toString();
       $base_path = base_path();
@@ -84,6 +83,7 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $path = '';
       $base_path = '/';
     }
+
     if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' ||  $args[2] == 'webform_submission')) {
       $this->type = 'webform_source_entity';
     }
@@ -116,11 +116,11 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $webform = $route_match->getParameter('webform');
       $this->type = ($webform->isTemplate() && $this->moduleHandler->moduleExists('webform_templates')) ? 'webform_template' : 'webform';
     }
-    elseif (strpos($path, $base_path . 'admin/structure/webform/test/') === 0) {
+    elseif (strpos($path, 'admin/structure/webform/test/') !== FALSE) {
       $this->type = 'webform_test';
     }
-    elseif (strpos($path, $base_path . 'admin/structure/webform/settings/') === 0) {
-      $this->type = 'webform_admin_settings';
+    elseif (strpos($path, 'admin/structure/webform/config/') !== FALSE) {
+      $this->type = 'webform_config';
     }
     else {
       $this->type = NULL;
@@ -169,10 +169,10 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $breadcrumb->addLink(Link::createFromRoute($this->t('Structure'), 'system.admin_structure'));
       $breadcrumb->addLink(Link::createFromRoute($this->t('Webforms'), 'entity.webform.collection'));
       switch ($this->type) {
-        case 'webform_admin_settings':
-          $breadcrumb->addLink(Link::createFromRoute($this->t('Settings'), 'webform.settings'));
-          if (strpos($route_name, 'config_translation.item.') === 0 && $route_name != 'config_translation.item.overview.webform.settings') {
-            $breadcrumb->addLink(Link::createFromRoute($this->t('Translate'), 'config_translation.item.overview.webform.settings'));
+        case 'webform_config':
+          $breadcrumb->addLink(Link::createFromRoute($this->t('Configuration'), 'webform.config'));
+          if (strpos($route_name, 'config_translation.item.') === 0 && $route_name != 'config_translation.item.overview.webform.config') {
+            $breadcrumb->addLink(Link::createFromRoute($this->t('Translate'), 'config_translation.item.overview.webform.config'));
           }
           break;
 

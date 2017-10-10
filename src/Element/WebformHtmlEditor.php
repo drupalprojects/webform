@@ -182,7 +182,7 @@ class WebformHtmlEditor extends FormElement {
    * @return array
    *   Allowed tags.
    */
-  protected static function getAllowedTags() {
+  public static function getAllowedTags() {
     $allowed_tags = \Drupal::config('webform.settings')->get('element.allowed_tags');
     switch ($allowed_tags) {
       case 'admin':

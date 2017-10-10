@@ -204,7 +204,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     else {
       if ($route_name == 'entity.webform_submission.collection') {
         // Display only submission properties.
-        // @see /admin/structure/webform/results/manage
+        // @see /admin/structure/webform/submissions/manage
         $this->columns = $webform_submission_storage->getDefaultColumns($this->webform, $this->sourceEntity, $this->account, FALSE);
         // Replace serial with sid when showing results from all webforms.
         unset($this->columns['serial']);

@@ -101,7 +101,7 @@ function webform_requirements($phase) {
         $requirements['webform_bootstrap'] = [
           'title' => t('Webform: Bootstrap integration'),
           'value' => t('Webform Bootstrap Integration module not installed.'),
-          'description' => t('The Webform Bootstrap module helps support Webform to Bootstrap integration. <a href=":href">Disable Webform Bootstrap Integration warning</a>', [':href' => Url::fromRoute('webform.settings.advanced')->toString()]),
+          'description' => t('The Webform Bootstrap module helps support Webform to Bootstrap integration. <a href=":href">Disable Webform Bootstrap Integration warning</a>', [':href' => Url::fromRoute('webform.config.advanced')->toString()]),
           'severity' => REQUIREMENT_WARNING,
         ];
       }

@@ -118,8 +118,8 @@ class WebformOptionsTest extends WebformTestBase {
 
     // Make sure we can reach the option admin pages.
     $this->drupalLogin($this->adminWebformUser);
-    $this->drupalGet('admin/structure/webform/settings/options/manage');
-    $this->drupalGet('admin/structure/webform/settings/options/manage/add');
+    $this->drupalGet('admin/structure/webform/config/options/manage');
+    $this->drupalGet('admin/structure/webform/config/options/manage/add');
   }
 
 }

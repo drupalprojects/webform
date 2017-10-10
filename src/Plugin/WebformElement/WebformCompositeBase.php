@@ -46,16 +46,18 @@ abstract class WebformCompositeBase extends WebformElementBase {
   public function getDefaultProperties() {
     $properties = [
       'title' => '',
+      'default_value' => [],
       'multiple' => FALSE,
       'multiple__header' => FALSE,
       'multiple__header_label' => '',
-      // General settings.
+      // Description/Help.
       'help' => '',
       'description' => '',
-      'default_value' => [],
+      'more' => '',
+      'more_title' => '',
       // Form display.
-      'title_display' => 'invisible',
       'description_display' => '',
+      'title_display' => 'invisible',
       'disabled' => FALSE,
       // Form validation.
       'required' => FALSE,
@@ -816,15 +818,34 @@ abstract class WebformCompositeBase extends WebformElementBase {
           '#states' => $state_disabled,
         ];
       }
-      elseif (in_array($type, ['select', 'webform_select_other'])) {
+      elseif (in_array($type, ['select', 'webform_select_other', 'radios', 'webform_radios_other'])) {
+        // Get base type (select or radios).
+        $base_type = preg_replace('/webform_(select|radios)_other/', '\1', $type);
+
+        // Get type options.
+        switch ($base_type) {
+          case 'radios':
+            $type_options = [
+              'radios' => $this->t('Radios'),
+              'webform_radios_other' => $this->t('Radios other'),
+              'textfield' => $this->t('Text field'),
+            ];
+            break;
+
+          case 'select':
+          default:
+            $type_options = [
+              'select' => $this->t('Select'),
+              'webform_select_other' => $this->t('Select other'),
+              'textfield' => $this->t('Text field'),
+            ];
+            break;
+        }
+
         $row['type_and_options']['data'][$composite_key . '__type'] = [
           '#type' => 'select',
           '#required' => TRUE,
-          '#options' => [
-            'select' => $this->t('Select'),
-            'webform_select_other' => $this->t('Select other'),
-            'textfield' => $this->t('Text field'),
-          ],
+          '#options' => $type_options,
           '#attributes' => ['style' => 'width: 100%; margin-bottom: 5px'],
           '#states' => $state_disabled,
         ];

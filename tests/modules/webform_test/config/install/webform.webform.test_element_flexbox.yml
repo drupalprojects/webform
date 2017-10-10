@@ -95,6 +95,14 @@ elements: |
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
+  flexbox_webform_section:
+    '#type': webform_flexbox
+    flex_webform_section_left:
+      '#type': webform_section
+      '#title': 'Section 01'
+    flex_webform_section_right:
+      '#type': webform_section
+      '#title': 'Section 02'
   flexbox_table:
     '#type': webform_flexbox
     flex_table_left:
@@ -786,12 +794,10 @@ elements: |
     flex_webform_term_checkboxes_left:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes 01'
-      '#options_display': side_by_side
       '#vocabulary': tags
     flex_webform_term_checkboxes_right:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes 02'
-      '#options_display': side_by_side
       '#vocabulary': tags
   flexbox_webform_term_select:
     '#type': webform_flexbox

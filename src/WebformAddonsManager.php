@@ -191,14 +191,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Provides configuration filter for importing and exporting split config.'),
       'url' => Url::fromUri('https://www.drupal.org/project/config_split'),
       'category' => 'config',
-    ];
-
-    // Element: Webform Crosspage Conditions.
-    $projects['webform_crosspage_conditions'] = [
-      'title' => $this->t('Webform Crosspage Conditions'),
-      'description' => $this->t('Provides the handler that evaluates the field state conditions with the fields from other than current page'),
-      'url' => Url::fromUri('https://github.com/artemvd/webform_crosspage_conditions'),
-      'category' => 'element',
+      'recommended' => TRUE,
     ];
 
     // Element: Webform Layout Container.
@@ -327,6 +320,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Translates content, configuration, and interface using the Lingotek Translation Management System.'),
       'url' => Url::fromUri('https://www.drupal.org/project/lingotek'),
       'category' => 'multilingual',
+      'recommended' => TRUE,
     ];
 
     // Migrate: Webform Migrate.
@@ -335,6 +329,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Provides migration routines from d6, d7 webform to d8 webform.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_migrate'),
       'category' => 'migrate',
+      'recommended' => TRUE,
     ];
 
     // Spam: Antibot.
@@ -352,6 +347,8 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Provides CAPTCHA for adding challenges to arbitrary forms.'),
       'url' => Url::fromUri('https://www.drupal.org/project/captcha'),
       'category' => 'spam',
+      'recommended' => TRUE,
+
     ];
 
     // Spam: Honeypot.
@@ -361,6 +358,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/honeypot'),
       'category' => 'spam',
       'third_party_settings' => TRUE,
+      'recommended' => TRUE,
     ];
 
     // Submissions: Webform Views Integration.
@@ -369,6 +367,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Integrates Webform 8.x-5.x and Views modules.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_views'),
       'category' => 'submission',
+      'recommended' => TRUE,
     ];
 
     // Webform Invitation.
@@ -416,8 +415,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('IMCE'),
       'description' => $this->t('IMCE is an image/file uploader and browser that supports personal directories and quota.'),
       'url' => Url::fromUri('https://www.drupal.org/project/imce'),
-      'recommended' => TRUE,
       'category' => 'utility',
+      'install' => TRUE,
+      'recommended' => TRUE,
     ];
 
     // Utility: Token.
@@ -425,8 +425,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Token'),
       'description' => $this->t('Provides a user interface for the Token API and some missing core tokens.'),
       'url' => Url::fromUri('https://www.drupal.org/project/token'),
-      'recommended' => TRUE,
       'category' => 'utility',
+      'install' => TRUE,
+      'recommended' => TRUE,
     ];
 
     // Validation: Clientside Validation.
@@ -435,6 +436,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Adds clientside validation to forms.'),
       'url' => Url::fromUri('https://www.drupal.org/project/clientside_validation'),
       'category' => 'validation',
+      'recommended' => TRUE,
     ];
 
     // Validation: Validators.
@@ -451,6 +453,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Utility to log all Mails for debugging purposes. It is possible to suppress mail delivery for e.g. dev or staging systems.'),
       'url' => Url::fromUri('https://www.drupal.org/project/maillog'),
       'category' => 'development',
+      'recommended' => TRUE,
     ];
 
     return $projects;

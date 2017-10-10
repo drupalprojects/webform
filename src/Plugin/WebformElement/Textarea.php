@@ -26,10 +26,12 @@ class Textarea extends TextBase {
   public function getDefaultProperties() {
     return [
       'title' => '',
-      // General settings.
+      'default_value' => '',
+      // Description/Help.
       'help' => '',
       'description' => '',
-      'default_value' => '',
+      'more' => '',
+      'more_title' => '',
       // Form display.
       'title_display' => '',
       'description_display' => '',
@@ -54,7 +56,11 @@ class Textarea extends TextBase {
       'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
       'format_items' => $this->getItemsDefaultFormat(),
+      'format_items_html' => '',
+      'format_items_text' => '',
       // Multiple.
       'multiple' => FALSE,
       'multiple__header_label' => '',

@@ -94,6 +94,8 @@ element:
     messages messages--warning
     messages messages--status
   default_description_display: ''
+  default_more_title: More
+  default_section_title_tag: h2
   default_empty_option: true
   default_empty_option_required: ''
   default_empty_option_optional: ''

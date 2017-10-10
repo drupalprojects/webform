@@ -24,10 +24,11 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
     return [
       // Markup settings.
       'display_on' => static::DISPLAY_ON_BOTH,
-      // General settings.
+      // Description/Help.
       'help' => '',
-      'title' => '',
       'description' => '',
+      'more' => '',
+      'more_title' => '',
       // Form display.
       'title_display' => '',
       'description_display' => '',

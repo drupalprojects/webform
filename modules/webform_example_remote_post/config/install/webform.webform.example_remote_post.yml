@@ -148,6 +148,7 @@ handlers:
     conditions: {  }
     weight: 1
     settings:
+      method: POST
       type: x-www-form-urlencoded
       excluded_data:
         serial: serial

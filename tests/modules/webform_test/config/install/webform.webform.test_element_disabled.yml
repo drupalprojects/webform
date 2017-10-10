@@ -320,7 +320,6 @@ elements: |
   webform_term_checkboxes:
     '#type': webform_term_checkboxes
     '#title': 'Term checkboxes'
-    '#options_display': side_by_side
     '#vocabulary': tags
     '#disabled': true
   webform_term_select:

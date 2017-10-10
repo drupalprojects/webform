@@ -134,23 +134,11 @@
 
         var $buttons = $element.find('input[type="radio"]');
         var $input = $element.find('.js-webform-buttons-other-input');
-
-        // Note: Initializing buttonset here so that we can set the onchange
-        // event handler.
-        // @see Drupal.behaviors.webformButtons
         var $container = $(this).find('.form-radios');
-        // Remove all div and classes around radios and labels.
-        $container.html($container.find('input[type="radio"], label').removeClass());
-        // Create buttonset and set onchange handler.
-        $container.buttonset().change(function () {
+
+        // Create set onchange handler.
+        $container.change(function () {
           toggleOther(($(this).find(':radio:checked').val() === '_other_'), $input);
-        });
-        // Disable buttonset.
-        $container.buttonset('option', 'disabled', $container.find('input[type="radio"]:disabled').length);
-        // Turn buttonset off/on when the input is disabled/enabled.
-        // @see webform.states.js
-        $container.on('webform:disabled', function () {
-          $container.buttonset('option', 'disabled', $container.find('input[type="radio"]:disabled').length);
         });
 
         toggleOther(($buttons.filter(':checked').val() === '_other_'), $input, false);

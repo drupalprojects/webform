@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Form\AdminSettings;
+namespace Drupal\webform\Form\AdminConfig;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Configure webform admin advanced settings.
  */
-class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
+class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
 
   /**
    * The module handler.
@@ -40,11 +40,11 @@ class WebformAdminSettingsAdvancedForm extends WebformAdminSettingsBaseForm {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'webform_admin_settings_advanced_form';
+    return 'webform_admin_config_advanced_form';
   }
 
   /**
-   * Constructs a WebformAdminSettingsAdvancedForm object.
+   * Constructs a WebformAdminConfigAdvancedForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.

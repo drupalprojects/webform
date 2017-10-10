@@ -6,9 +6,11 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
+use Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 
@@ -408,7 +410,7 @@ function webform_update_8048() {
     $config->clear('purge_settings');
   }
 
-  // Change webform.settings.elements to webform.settings.element.
+  // Change webform.config.elements to webform.settings.element.
   if ($config->get('elements')) {
     $config->set('element', $config->get('elements'));
     $config->clear('elements');
@@ -909,4 +911,50 @@ function webform_update_8079() {
   $admin_config->set('ui.about_disabled', $help_menu_disabled );
   $admin_config->clear('ui.help_menu_disabled');
   $admin_config->save();
+}
+
+/**
+ * Issue #2914153: Add 'More' hide/show text support to elements.
+ */
+function webform_update_8080() {
+  _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2913215: Remote Post handler add GET method support.
+ */
+function webform_update_8081() {
+  _webform_update_webform_handler_class_settings(RemotePostWebformHandler::class);
+}
+
+/**
+ * Issue #2912672: Mismatch entity Webform submission caused by langcode changes.
+ */
+function webform_update_8082() {
+  // Set webform_submission.langcode to NOT NULL.
+  // Copied from: system_update_8007().
+  $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
+  $item = &$schema['webform_submission.field_schema_data.langcode'];
+  foreach ($item as $table_name => &$table_schema) {
+    foreach ($table_schema['fields'] as $field_name => &$field) {
+      $field['not null'] = TRUE;
+    }
+  }
+  \Drupal::keyValue('entity.storage_schema.sql')->setMultiple($schema);
+
+  // Update field definition.
+  // Copied from: node_update_8300().
+  $spec = [
+    'type' => 'varchar_ascii',
+    'length' => 12,
+    'not null' => TRUE,
+  ];
+  Database::getConnection()->schema()->changeField('webform_submission', 'langcode', 'langcode', $spec);
+}
+
+/**
+ * Issue #2914904: Add section element.
+ */
+function webform_update_8083() {
+  _webform_update_admin_settings();
 }

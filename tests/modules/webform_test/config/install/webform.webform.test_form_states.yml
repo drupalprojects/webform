@@ -108,6 +108,16 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_section:
+      '#type': webform_section
+      '#title': Section
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_table:
       '#type': table
       '#title': Table
@@ -431,7 +441,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 1
+      '#default_value': 8
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -881,12 +891,11 @@ elements: |
     visible_webform_term_checkboxes:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes'
-      '#options_display': side_by_side
       '#vocabulary': tags
       '#default_value':
-        - 49
-        - 33
-        - 21
+        - 17
+        - 39
+        - 19
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -898,7 +907,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 49
+      '#default_value': 17
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1085,6 +1094,13 @@ elements: |
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_webform_section:
+      '#type': webform_section
+      '#title': Section
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1340,7 +1356,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 1
+      '#default_value': 8
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1700,12 +1716,11 @@ elements: |
     invisible_webform_term_checkboxes:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes'
-      '#options_display': side_by_side
       '#vocabulary': tags
       '#default_value':
-        - 49
-        - 33
-        - 21
+        - 17
+        - 39
+        - 19
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1714,7 +1729,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 49
+      '#default_value': 17
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -2054,7 +2069,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 1
+      '#default_value': 8
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2414,12 +2429,11 @@ elements: |
     disabled_webform_term_checkboxes:
       '#type': webform_term_checkboxes
       '#title': 'Term checkboxes'
-      '#options_display': side_by_side
       '#vocabulary': tags
       '#default_value':
-        - 49
-        - 33
-        - 21
+        - 17
+        - 39
+        - 19
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2428,7 +2442,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 49
+      '#default_value': 17
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

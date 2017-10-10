@@ -12,7 +12,10 @@ id: webform_node_test_multiple_a
 title: 'Test: Webform Node Multiple A'
 description: 'Test Webform Node Multiple A'
 category: 'Test: Webform Node'
-elements: "textfield_a:\n  '#title': textfield_a\n  '#type': textfield\n"
+elements: |
+  textfield_a:
+    '#title': textfield_a
+    '#type': textfield
 css: ''
 javascript: ''
 settings:

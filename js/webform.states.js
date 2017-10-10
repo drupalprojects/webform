@@ -64,24 +64,27 @@
   function triggerEventHandlers(input) {
     var $input = $(input);
     var type = input.type;
-    var tag = input.tagName.toLowerCase(); // Normalize case.
+    var tag = input.tagName.toLowerCase();
+    // Add 'webform.states' as extra parameter to event handlers.
+    // @see Drupal.behaviors.webformUnsaved
+    var extraParameters = ['webform.states'];
     if (type === 'checkbox' || type === 'radio') {
       $input
-        .trigger('change')
-        .trigger('blur');
+        .trigger('change', extraParameters)
+        .trigger('blur', extraParameters);
     }
     else if (tag === 'select') {
       $input
-        .trigger('change')
-        .trigger('blur');
+        .trigger('change', extraParameters)
+        .trigger('blur', extraParameters);
     }
     else if (type !== 'submit' && type !== 'button') {
       $input
-        .trigger('input')
-        .trigger('change')
-        .trigger('keydown')
-        .trigger('keyup')
-        .trigger('blur');
+        .trigger('input', extraParameters)
+        .trigger('change', extraParameters)
+        .trigger('keydown', extraParameters)
+        .trigger('keyup', extraParameters)
+        .trigger('blur', extraParameters);
     }
   }
 

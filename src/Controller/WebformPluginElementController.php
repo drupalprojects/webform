@@ -283,8 +283,8 @@ class WebformPluginElementController extends ControllerBase implements Container
     // Settings
     $build['settings'] = [
       '#type' => 'link',
-      '#title' => $this->t('Edit settings'),
-      '#url' => Url::fromRoute('webform.settings.elements'),
+      '#title' => $this->t('Edit configuration'),
+      '#url' => Url::fromRoute('webform.config.elements'),
       '#attributes' => ['class' => ['button', 'button--small'], 'style' => 'float: right'],
     ];
 
