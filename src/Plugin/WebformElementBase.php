@@ -2749,8 +2749,27 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $this->getConfigurationFormProperty($element_properties, $property_name, $property_value, $element);
 
       // Unset element property that matched the default property.
-      if ($default_properties[$property_name] == $element_properties[$property_name]) {
-        unset($element_properties[$property_name]);
+      switch ($property_name) {
+        case 'multiple':
+          // The #multiple property element is converted to the correct datatype
+          // so we are looking for 'strict equality' (===).
+          // This prevents #multiple: 2 from being interpeted as TRUE.
+          // @see \Drupal\webform\Element\WebformElementMultiple::validateWebformElementMultiple
+          // @see \Drupal\webform\Plugin\WebformElement\Checkboxes::getDefaultProperties
+          if ($default_properties[$property_name] === $element_properties[$property_name]) {
+            unset($element_properties[$property_name]);
+          }
+          break;
+
+        default:
+          // Most elements properties are strings or numbers and we need to use
+          // 'type-converting equality' (==) because all numbers are posted
+          // back to the server as strings.
+          if ($default_properties[$property_name] == $element_properties[$property_name]) {
+            unset($element_properties[$property_name]);
+          }
+          break;
+
       }
     }
 
