@@ -50,13 +50,11 @@
  * @see /admin/structure/webform/manage/contact/results/submissions
  */
 .webform-results__table th,
-.webform-results__table td > div {
+.webform-results__table td {
   max-width: 400px;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 14em;
 }
 
 /* Make sure 'Operations' is never cut-off */
