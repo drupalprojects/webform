@@ -154,7 +154,7 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
 
     // Check date of birth.
     $this->assertRaw('<th specifier="element__dob"><a href="' . $base_path . 'admin/structure/webform/manage/' . $webform->id() . '/results/submissions?sort=asc&amp;order=Date%20of%20birth" title="sort by Date of birth">Date of birth</a></th>');
-    $this->assertRaw('<td><div>Sunday, October 26, 1947</div></td>');
+    $this->assertRaw('<td>Sunday, October 26, 1947</td>');
 
     // Display Header key and element raw.
     $webform->setState('results.custom.format', [
@@ -170,7 +170,7 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
 
     // Check date of birth.
     $this->assertRaw('<th specifier="element__dob"><a href="' . $base_path . 'admin/structure/webform/manage/' . $webform->id() . '/results/submissions?sort=asc&amp;order=dob" title="sort by dob">dob</a></th>');
-    $this->assertRaw('<td><div>1947-10-26</div></td>');
+    $this->assertRaw('<td>1947-10-26</td>');
 
     /**************************************************************************/
     // Customize user results.
