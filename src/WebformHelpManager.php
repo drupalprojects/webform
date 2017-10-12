@@ -1119,8 +1119,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['config_libraries_help'] = [
       'group' => 'configuration',
       'title' => $this->t('Configuration: Libraries: Help'),
-      'content' => '<p>' . $this->t('The Webform module utilizes the third-party Open Source libraries enhance webform elements and to provide additional functionality.') . ' ' .
-        $this->t('It is recommended that these libraries be installed in your Drupal installations /libraries directory.') . ' ' .
+      'content' => '<p>' . $this->t('The Webform module utilizes third-party Open Source libraries to enhance webform elements and to provide additional functionality.') . ' ' .
+        $this->t('It is recommended that these libraries are installed in your Drupal installations /libraries directory.') . ' ' .
         $this->t('If these libraries are not installed, they will be automatically loaded from a CDN.') . ' ' .
         $this->t('All libraries are optional and can be excluded via the admin settings form.') .
         '</p>' .
