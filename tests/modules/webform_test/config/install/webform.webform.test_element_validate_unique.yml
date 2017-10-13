@@ -17,11 +17,6 @@ elements: |
     '#type': textfield
     '#title': unique_textfield
     '#unique': true
-  unique_textfield_multiple:
-    '#type': textfield
-    '#title': unique_textfield_multiple
-    '#unique': true
-    '#multiple': 3
   unique_user_textfield:
     '#type': textfield
     '#title': unique_user_textfield
