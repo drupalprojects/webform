@@ -834,6 +834,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Remove properties that should only be applied to the child element.
     $element = array_diff_key($element, array_flip(['#attributes', '#field_prefix', '#field_suffix', '#pattern', '#placeholder', '#maxlength', '#element_validate']));
+
+    // Apply #unique multiple validation.
+    if (isset($element['#unique'])) {
+      $element['#element_validate'][] = [get_class($this), 'validateUniqueMultiple'];
+    }
   }
 
   /**
@@ -1575,10 +1580,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       return;
     }
 
-    $name = $element['#name'];
+    $name = $element['#webform_key'];
     $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
-    // Skip empty unique fields or arrays (aka #multiple).
+    // Skip empty unique fields or composite arrays.
     if ($value === '' || is_array($value)) {
       return;
     }
@@ -1589,7 +1594,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $webform_submission = $form_object->getEntity();
     $webform = $webform_submission->getWebform();
 
-    // Build unique quert.
+    // Build unique query.
     $query = \Drupal::database()->select('webform_submission', 'ws');
     $query->leftJoin('webform_submission_data', 'wsd', 'ws.sid = wsd.sid');
     $query->fields('ws', ['sid']);
@@ -1627,6 +1632,41 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $t_args = [
           '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
           '%value' => $value,
+        ];
+        $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
+      }
+      else {
+        $form_state->setError($element);
+      }
+    }
+  }
+
+  /**
+   * Form API callback. Validate element #unique multiple values.
+   */
+  public static function validateUniqueMultiple(array &$element, FormStateInterface $form_state) {
+    if (!isset($element['#unique'])) {
+      return;
+    }
+
+    $name = $element['#name'];
+    $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
+
+    if (empty($value)) {
+      return;
+    }
+
+    // Compare number of values to unique number of values.
+    if (count($value) != count(array_unique($value))) {
+      $duplicates = WebformArrayHelper::getDuplicates($value);
+
+      if (isset($element['#unique_error'])) {
+        $form_state->setError($element, $element['#unique_error']);
+      }
+      elseif (isset($element['#title'])) {
+        $t_args = [
+          '%name' => empty($element['#title']) ? $name : $element['#title'],
+          '%value' => reset($duplicates),
         ];
         $form_state->setError($element, t('The value %value has already been submitted once for the %name element. You may have already submitted this webform, or you need to use a different value.', $t_args));
       }

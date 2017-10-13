@@ -29,6 +29,7 @@ class WebformElementValidateUniqueTest extends WebformTestBase {
 
     $edit = [
       'unique_textfield' => '{unique_textfield}',
+      'unique_textfield_multiple[items][0][_item_]' => '{unique_textfield_multiple}',
       'unique_user_textfield' => '{unique_user_textfield}',
       'unique_entity_textfield' => '{unique_entity_textfield}',
       'unique_error' => '{unique_error}',
@@ -38,6 +39,7 @@ class WebformElementValidateUniqueTest extends WebformTestBase {
     // unique errors.
     $sid = $this->postSubmission($webform, $edit);
     $this->assertNoRaw('The value <em class="placeholder">{unique_textfield}</em> has already been submitted once for the <em class="placeholder">unique_textfield</em> element. You may have already submitted this webform, or you need to use a different value.</li>');;
+    $this->assertNoRaw('unique_textfield_multiple error message.');;
     $this->assertNoRaw('unique_user_textfield error message.');
     $this->assertNoRaw('unique_entity_textfield error message.');
     $this->assertNoRaw('unique_error error message.');
@@ -47,6 +49,7 @@ class WebformElementValidateUniqueTest extends WebformTestBase {
     // unique errors.
     $this->postSubmission($webform, $edit);
     $this->assertRaw('The value <em class="placeholder">{unique_textfield}</em> has already been submitted once for the <em class="placeholder">unique_textfield</em> element. You may have already submitted this webform, or you need to use a different value.</li>');;
+    $this->assertRaw('unique_textfield_multiple error message.');;
     $this->assertRaw('unique_user_textfield error message.');
     $this->assertRaw('unique_entity_textfield error message.');
     $this->assertRaw('unique_error error message.');
@@ -59,6 +62,15 @@ class WebformElementValidateUniqueTest extends WebformTestBase {
     $this->assertNoRaw('unique_entity_textfield error message.');
     $this->assertNoRaw('unique_error error message.');
     $this->assertNoRaw('unique_ignored error message.');
+
+    // Check #unique multiple validation within the same element.
+    // @see \Drupal\webform\Plugin\WebformElementBase::validateUniqueMultiple
+    $edit = [
+      'unique_textfield_multiple[items][0][_item_]' => '{same}',
+      'unique_textfield_multiple[items][2][_item_]' => '{same}',
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('unique_textfield_multiple error message.');;
 
     // Purge existing submissions.
     $this->purgeSubmissions();
