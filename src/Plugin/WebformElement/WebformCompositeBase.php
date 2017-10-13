@@ -66,6 +66,13 @@ abstract class WebformCompositeBase extends WebformElementBase {
       'flexbox' => '',
       // Attributes.
       'wrapper_attributes' => [],
+      // Submission display.
+      'format' => $this->getItemDefaultFormat(),
+      'format_html' => '',
+      'format_text' => '',
+      'format_items' => $this->getItemsDefaultFormat(),
+      'format_items_html' => '',
+      'format_items_text' => '',
     ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();
