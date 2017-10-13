@@ -259,6 +259,21 @@ class WebformArrayHelper {
   }
 
   /**
+   * Get duplicate values in an array.
+   *
+   * @param array $array
+   *   An array.
+   *
+   * @return array
+   *   An array container duplicate values.
+   *
+   * @see https://magp.ie/2011/02/02/find-duplicates-in-an-array-with-php/
+   */
+  public static function getDuplicates(array $array) {
+    return array_unique(array_diff_assoc($array, array_unique($array)));
+  }
+
+  /**
    * Traverse an associative array and collect references to all key/value pairs in an associative array.
    *
    * @param array $build
