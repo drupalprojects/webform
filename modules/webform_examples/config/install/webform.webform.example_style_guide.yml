@@ -100,7 +100,7 @@ elements: |
         two: Two
         three: Three
     radios_icheck:
-      '#type': checkboxes
+      '#type': radios
       '#title': 'Radios (iCheck)'
       '#options_display': side_by_side
       '#options':
