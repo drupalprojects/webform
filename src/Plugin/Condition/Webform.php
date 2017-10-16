@@ -6,6 +6,7 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformEntityReferenceManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -90,9 +91,8 @@ class Webform extends ConditionPluginBase implements ContainerFactoryPluginInter
       '#options' => $options,
       '#multiple' => $options,
       '#default_value' => $this->configuration['webforms'],
-      '#attached' => ['library' => ['webform/webform.element.select2']],
-      '#attributes' => ['class' => ['js-webform-select2', 'webform-select2']],
     ];
+    WebformElementHelper::enhanceSelect($form['webforms'], TRUE);
 
     if (empty($this->configuration['context_mapping'])) {
       $form['message'] = [

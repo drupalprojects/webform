@@ -105,8 +105,8 @@ class WebformHtmlEditor extends FormElement {
     $element['#attached']['library'][] = 'webform/webform.element.html_editor';
     $element['#attached']['drupalSettings']['webform']['html_editor']['allowedContent'] = static::getAllowedContent();
 
-    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
     $base_path = base_path();
+    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
     $libaries_manager = \Drupal::service('webform.libraries_manager');
     $libraries = $libaries_manager->getLibraries(TRUE);
     $element['#attached']['drupalSettings']['webform']['html_editor']['plugins'] = [];

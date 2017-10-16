@@ -141,6 +141,55 @@ class WebformElementHelper {
   }
 
   /**
+   * Enhance select menu with the Select2 or the Chosen library.
+   *
+   * Please Note: Select2 is preferred library for Webform administrative
+   * forms.
+   *
+   * @param array $element
+   *   A select element.
+   * @param bool $library
+   *   Flag to automatically detect and apply library.
+   *
+   * @return array
+   *   The select element with Select2 or Chosen class and library attached.
+   */
+  public static function enhanceSelect(array &$element, $library = FALSE) {
+    // If automatic is FALSE, look at the element's #select2 and #chosen
+    // property.
+    if (!$library) {
+      if (isset($element['#select2'])) {
+        $library = 'select2';
+      }
+      elseif (isset($element['#chosen'])) {
+        $library = 'chosen';
+      }
+    }
+
+    if ($library === FALSE) {
+      return $element;
+    }
+
+    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
+    $libaries_manager = \Drupal::service('webform.libraries_manager');
+
+    // Add select2 library and classes.
+    if (($library === TRUE || $library === 'select2') && $libaries_manager->isIncluded('jquery.select2')) {
+      $element['#attached']['library'][] = 'webform/webform.element.select2';
+      $element['#attributes']['class'][] = 'js-webform-select2';
+      $element['#attributes']['class'][] = 'webform-select2';
+    }
+    // Add chosen library and classes.
+    elseif (($library === TRUE || $library === 'chosen') && $libaries_manager->isIncluded('jquery.chosen')) {
+      $element['#attached']['library'][] = 'webform/webform.element.chosen';
+      $element['#attributes']['class'][] = 'js-webform-chosen';
+      $element['#attributes']['class'][] = 'webform-chosen';
+    }
+
+    return $element;
+  }
+
+  /**
    * Fix webform element #states handling.
    *
    * @param array $element
