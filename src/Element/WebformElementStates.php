@@ -563,7 +563,7 @@ class WebformElementStates extends FormElement {
           $selector = $condition['selector'];
           $trigger = $condition['trigger'];
           if ($selector && $trigger) {
-            $value = $condition['value'] ?: TRUE;
+            $value = (in_array($trigger, ['value', '!value'])) ? $condition['value'] : TRUE;
           }
           else {
             $value = '';
@@ -574,7 +574,7 @@ class WebformElementStates extends FormElement {
           foreach ($state_array['conditions'] as $index => $condition) {
             $selector = $condition['selector'];
             $trigger = $condition['trigger'];
-            $value = $condition['value'] ?: TRUE;
+            $value = (in_array($trigger, ['value', '!value'])) ? $condition['value'] : TRUE;
             if ($selector && $trigger) {
               if ($operator == 'or' || $operator == 'xor') {
                 if ($index !== 0) {

@@ -35,6 +35,24 @@ elements: |
         - or
         - selector_02:
             checked: true
+  states_values:
+    '#type': webform_element_states
+    '#title': 'States basic'
+    '#selector_options':
+      selector_01: 'Selector 01 (selector_01)'
+      selector_02: 'Selector 02 (selector_02)'
+      selector_03: 'Selector 03 (selector_03)'
+      selector_04: 'Selector 04 (selector_04)'
+    '#default_value':
+      enabled:
+        selector_01:
+          value: '0'
+        selector_02:
+          value: 'false'
+        selector_03:
+          value: ''
+        selector_04:
+          checked: true
   states_custom_selector:
     '#type': webform_element_states
     '#title': 'States custom selector'

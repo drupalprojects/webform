@@ -45,6 +45,16 @@ class WebformElementStatesTest extends WebformTestBase {
     - or
     - selector_02:
         checked: true
+states_values:
+  enabled:
+    selector_01:
+      value: '0'
+    selector_02:
+      value: 'false'
+    selector_03:
+      value: ''
+    selector_04:
+      checked: true
 states_custom_selector:
   required:
     custom_selector:
