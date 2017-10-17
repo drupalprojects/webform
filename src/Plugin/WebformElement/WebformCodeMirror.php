@@ -40,6 +40,7 @@ class WebformCodeMirror extends WebformElementBase {
       return '';
     }
 
+    $element += ['#mode' => 'text'];
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'code':

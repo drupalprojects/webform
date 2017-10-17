@@ -77,7 +77,7 @@
       // Webform CodeMirror syntax coloring.
       $(context).find('.js-webform-codemirror-runmode').once('webform-codemirror-runmode').each(function () {
         // Mode Runner - http://codemirror.net/demo/runmode.html
-        CodeMirror.runMode($(this).addClass('cm-s-default').html(), $(this).attr('data-webform-codemirror-mode'), this);
+        CodeMirror.runMode($(this).addClass('cm-s-default').text(), $(this).attr('data-webform-codemirror-mode'), this);
       });
 
     }

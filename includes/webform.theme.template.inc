@@ -7,6 +7,7 @@
 
 use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\RenderElement;
@@ -512,10 +513,8 @@ function template_preprocess_webform_submission_yaml(array &$variables) {
 function template_preprocess_webform_codemirror(array &$variables) {
   $variables['mode'] = WebformCodeMirror::getMode($variables['type']);
   if (is_string($variables['code'])) {
-    $variables['code'] = [
-      '#markup' => $variables['code'],
-      '#allowed_tags' => Xss::getAdminTagList(),
-    ];
+    // Encode all HTML entities include tags.
+    $variables['code'] = Markup::create(htmlentities($variables['code']));
   }
 }
 

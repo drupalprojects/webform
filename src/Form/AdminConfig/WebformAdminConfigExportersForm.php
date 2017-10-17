@@ -71,7 +71,7 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
     // Export.
     $form['export_settings'] = [
       '#type' => 'details',
-      '#title' => $this->t('Export settings'),
+      '#title' => $this->t('Default export settings'),
       '#description' => $this->t('Enter default export settings to be used by all webforms.'),
       '#open' => TRUE,
     ];

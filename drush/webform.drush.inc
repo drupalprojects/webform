@@ -1019,3 +1019,10 @@ function _drush_webform_validate($webform_id = NULL) {
   }
   return NULL;
 }
+
+// Add dt() function so that the WebformEditorialController can extract
+// editorial.
+// @see \Drupal\webform_editorial\Controller\WebformEditorialController::drush
+if (!function_exists('dt')) {
+  function dt($string) {return $string;}
+}

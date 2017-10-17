@@ -108,6 +108,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       '#suffix' => '</h1>',
       '#markup' => $this->t('Webform: Help editorial'),
     ];
+    $group_index = 1;
     foreach ($groups as $group_name => $help) {
       // Header.
       $header = [
@@ -152,7 +153,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           ],
         ];
       }
-      $title = ($this->helpManager->getGroup($group_name) ?: $group_name) . ' [' . $group_name . ']';
+      $title = ($this->helpManager->getGroup($group_name) ?: $group_name) . ' [' . str_pad($group_index++, 2, '0', STR_PAD_LEFT) . ' - ' . $group_name . ']';
       $build[$group_name] = $this->buildTable($title, $header, $rows, 'h2');
     }
 
@@ -264,7 +265,6 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-
   /****************************************************************************/
   // Libraries.
   /****************************************************************************/
@@ -303,6 +303,110 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
   }
 
   /****************************************************************************/
+  // Schema.
+  /****************************************************************************/
+
+  /**
+   * Returns webform schema.
+   **
+   * @return array
+   *   A renderable array containing webform entity scheme.
+   */
+  public function schema() {
+    // Header.
+    $header = [
+      ['data' => $this->t('Name'), 'width' => '20%'],
+      ['data' => $this->t('Type'), 'width' => '20%'],
+      ['data' => $this->t('Description'), 'width' => '60%'],
+    ];
+
+    // Rows.
+    $rows = [];
+    /** @var \Drupal\Core\Field\BaseFieldDefinition[] $base_fields */
+    $base_fields = \Drupal::service('entity_field.manager')->getBaseFieldDefinitions('webform_submission');
+    foreach ($base_fields as $field_name => $base_field) {
+      $rows[] = [
+        'data' => [
+          ['data' => $field_name],
+          ['data' => $base_field->getType()],
+          ['data' => $base_field->getDescription()],
+        ],
+      ];
+    }
+    $build = $this->buildTable('Webform Submission', $header, $rows);
+    return $this->response($build);
+  }
+
+  /****************************************************************************/
+  // Drush.
+  /****************************************************************************/
+
+  /**
+   * Returns webform drush.
+   **
+   * @return array
+   *   A renderable array containing webform entity scheme.
+   */
+  public function drush() {
+    module_load_include('inc', 'webform', 'drush/webform.drush');
+
+    $build = [];
+    $build['title'] = [
+      '#prefix' => '<h1>',
+      '#suffix' => '</h1>',
+      '#markup' => $this->t('Webform: Drush editorial'),
+    ];
+    // Header.
+    $header = [
+      ['data' => $this->t('Name'), 'width' => '30%'],
+      ['data' => $this->t('Value'), 'width' => '70%'],
+    ];
+    $build = [];
+    $commands = webform_drush_command();
+    foreach ($commands as $command_name => $command) {
+      $build[$command_name] = [];
+      $build[$command_name]['title'] = [
+        '#prefix' => '<h2>',
+        '#suffix' => '</h2>',
+        '#markup' => $command_name,
+      ];
+      $build[$command_name]['description'] = [
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+        '#markup' => $command['description'],
+      ];
+      if ($help = webform_drush_help('drush:' . $command_name)) {
+        $build[$command_name]['help'] = [
+          '#prefix' => '<address>',
+          '#suffix' => '</address>',
+          '#markup' => $help,
+        ];
+      }
+
+      $properties = [
+        'arguments', 'options', 'examples'
+      ];
+      foreach($properties as $property) {
+        if (isset($command[$property])) {
+          $rows = [];
+          foreach ($command[$property] as $name => $value) {
+            $rows[] = [
+              'data' => [
+                ['data' => $name],
+                ['data' => $value],
+              ],
+            ];
+          }
+          $build[$command_name][$property] = $this->buildTable($property, $header, $rows, 'h3', FALSE);
+        }
+      }
+      $build[$command_name]['hr'] = ['#markup' => '<br/><hr/>'];
+    }
+
+    return $this->response($build);
+  }
+
+  /****************************************************************************/
   // Helper methods.
   /****************************************************************************/
 
@@ -317,11 +421,13 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    *   The table's rows.
    * @param string $title_tag
    *   The header tag for title.
+   * @param bool $hr
+   *   Append horizontal rule.
    *
    * @return array
    *   A renderable array representing a table with title.
    */
-  protected function buildTable($title, array $header, array $rows, $title_tag = 'h1') {
+  protected function buildTable($title, array $header, array $rows, $title_tag = 'h1', $hr = TRUE) {
     // Add style and alignment to header.
     foreach ($header as &$column) {
       $column['style'] = 'background-color: #ccc';
@@ -358,10 +464,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           'width' => '950',
         ],
       ],
-      '#suffix' => '<br/><hr/>',
+      '#suffix' => ($hr) ? '<br/><hr/>' : '',
     ];
   }
-
 
   /**
    * Build a custom response the returns raw HTML markup.

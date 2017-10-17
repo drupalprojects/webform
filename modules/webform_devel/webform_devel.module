@@ -49,8 +49,8 @@ function webform_devel_form_webform_admin_config_advanced_form_alter(&$form, For
     '#default_value' => \Drupal::config('webform_devel.settings')->get('logger.debug') ? '1' : '0',
     '#description' => t("Checking 'Yes' will display PHP and theme notices onscreen."),
     '#options' => [
-      '0' => t('No'),
       '1' => t('Yes'),
+      '0' => t('No'),
     ],
     '#options_display' => 'side_by_side',
     '#required' => TRUE,
