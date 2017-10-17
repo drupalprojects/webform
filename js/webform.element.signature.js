@@ -28,7 +28,7 @@
         var value = $input.val();
         var $wrapper = $input.parent();
         var $canvas = $wrapper.find('canvas');
-        var $button = $wrapper.find(':button, input[type="submit"]');
+        var $button = $wrapper.find(':button, :submit');
         var canvas = $canvas[0];
         // Set height.
         $canvas.attr('width', $wrapper.width());
