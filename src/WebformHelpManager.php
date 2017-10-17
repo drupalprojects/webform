@@ -1417,18 +1417,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
     ];
 
-    $help['submission_edit'] = [
-      'group' => 'submission',
-      'title' => $this->t('Submission: View'),
-      'content' => $this->t("The <strong>View</strong> page displays a submission's general information and data."),
-      'routes' => [
-        // @see /admin/structure/webform/manage/{webform}/submission/{webform_submisssion}
-        'entity.webform_submission.canonical',
-        // @see /node/{node}/webform/submission/{webform_submisssion}
-        'entity.node.webform_submission.canonical',
-      ],
-    ];
-
     $help['submission_table'] = [
       'group' => 'submission',
       'title' => $this->t('Submission: Table'),
@@ -1557,25 +1545,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     // Modules.
     /**************************************************************************/
 
-    // Webform Node.
-    $help['webform_node'] = [
-      'group' => 'webform_nodes',
-      'title' => $this->t('Webform Node'),
-      'content' => $this->t("A <strong>Webform Node</strong> allows webforms to be fully integrated into a website as nodes."),
-      'video_id' => 'blocks',
-      'paths' => [
-        '/node/add/webform',
-      ],
-    ];
-    $help['webform_node_reference'] = [
-      'group' => 'webform_nodes',
-      'title' => $this->t('Webform Node: References'),
-      'content' => $this->t("The <strong>Reference</strong> pages displays an overview of a webform's references and allows you to quickly create new references (a.k.a Webform nodes)."),
-      'routes' => [
-        // @see /admin/structure/webform/manage/{webform}/references
-        'entity.webform.references',
-      ],
-    ];
     // Webform Node.
     $help['webform_node'] = [
       'group' => 'webform_nodes',
