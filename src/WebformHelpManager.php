@@ -660,7 +660,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     $videos['installing'] = [
       'title' => $this->t('Installing the Webform module and third-party libraries'),
-      'content' => $this->t('This screencast walks through installing the core Webform module, sub-module, required libraries, and add-ons.'),
+      'content' => $this->t('This screencast walks through installing the core Webform module, sub-module, required libraries and add-ons.'),
       'youtube_id' => 'IMfFTrsjg5k',
     ];
 
@@ -781,7 +781,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'elements' => [
         'title' => $this->t('Adding elements to a webform'),
-        'content' => $this->t('This presentation provides an overview of how to create, configure, and manage form elements, layouts and multi-step wizards.'),
+        'content' => $this->t('This presentation provides an overview of how to create, configure and manage form elements, layouts and multi-step wizards.'),
         'youtube_id' => '',
       ],
       'handlers' => [
@@ -801,17 +801,17 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'submission' => [
         'title' => $this->t('Understanding a webform submission'),
-        'content' => $this->t("This presentation shows how to review, edit, resend, and administer a  submission."),
+        'content' => $this->t("This presentation shows how to review, edit, resend and administer a  submission."),
         'youtube_id' => '',
       ],
       'configuration' => [
         'title' => $this->t("Configuring the Webform module"),
-        'content' => $this->t('This presentation walksthrough all the configuration settings available to manage forms, submissions, options, handlers, exporters, libraries, and assets.'),
+        'content' => $this->t('This presentation walksthrough all the configuration settings available to manage forms, submissions, options, handlers, exporters, libraries and assets.'),
         'youtube_id' => '',
       ],
       'plugins' => [
         'title' => $this->t("Understanding webform plugins"),
-        'content' => $this->t("This presentation offers an overview of the Webform module's element, handler, and exporter plugins."),
+        'content' => $this->t("This presentation offers an overview of the Webform module's element, handler and exporter plugins."),
         'youtube_id' => '',
       ],
       'addons' => [
@@ -831,7 +831,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ],
       'translations' => [
         'title' => $this->t('Translating webforms'),
-        'content' => $this->t("This presentation shows how to translate a webform's title, descriptions, label, and messages."),
+        'content' => $this->t("This presentation shows how to translate a webform's title, descriptions, label and messages."),
         'youtube_id' => '',
       ],
       'devel' => [
@@ -1568,7 +1568,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'group' => 'webform_nodes',
       'title' => $this->t('Webform Node: Results: Submissions'),
       'content' => $this->t("The <strong>Submissions</strong> page displays a customizable overview of a webform node's submissions.") . ' ' .
-        $this->t("Submissions can be reviewed, updated, flagged, and annotated."),
+        $this->t("Submissions can be reviewed, updated, flagged and annotated."),
       'routes' => [
         // @see /node/{node}/webform/results/submissions
         'entity.node.webform.results_submissions',
