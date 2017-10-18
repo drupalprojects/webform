@@ -358,8 +358,10 @@ function drush_webform_purge($webform_id = NULL) {
   // Set the webform.
   $webform = ($webform_id == 'all') ? NULL : Webform::load($webform_id);
 
+  /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
+  $entity_type_manager = \Drupal::service('entity_type.manager');
   /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
-  $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+  $submission_storage = $entity_type_manager->getStorage('webform_submission');
   /** @var \Drupal\webform\WebformRequestInterface $request_handler */
   $request_handler = \Drupal::service('webform.request');
 
@@ -382,7 +384,7 @@ function drush_webform_purge($webform_id = NULL) {
       return drush_user_abort();
     }
 
-    $form = new WebformResultsClearForm($submission_storage, $request_handler);
+    $form = new WebformResultsClearForm($entity_type_manager, $request_handler);
     $form->batchSet();
     drush_backend_batch_process();
   }
@@ -399,7 +401,7 @@ function drush_webform_purge($webform_id = NULL) {
       return drush_user_abort();
     }
 
-    $form = new WebformSubmissionsPurgeForm($submission_storage, $request_handler);
+    $form = new WebformSubmissionsPurgeForm($entity_type_manager, $request_handler);
     $form->batchSet($webform, $source_entity);
     drush_backend_batch_process();
   }
