@@ -60,8 +60,10 @@ trait WebformEntityTrait {
     foreach ($options as $key => $value) {
       // Set the entity in the correct language for display.
       $option = \Drupal::entityTypeManager()->getStorage($element['#target_type'])->load($key);
-      $option = $entity_repository->getTranslationFromContext($option);
-      $options[$key] = $option->label();
+      if ($option) {
+        $option = $entity_repository->getTranslationFromContext($option);
+        $options[$key] = $option->label();
+      }
     }
 
     // Only select menu can support optgroups.
