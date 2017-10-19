@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class WebformHandlerBase extends PluginBase implements WebformHandlerInterface {
 
   /**
-   * The webform .
+   * The webform.
    *
    * @var \Drupal\webform\WebformInterface
    */
