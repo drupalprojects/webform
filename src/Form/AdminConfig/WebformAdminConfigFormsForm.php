@@ -266,7 +266,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['preview_settings']['default_preview_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default preview message'),
-      '#required' => TRUE,
+      '#description' => $this->t('Leave blank to not automatically include a preview message on all forms.'),
       '#default_value' => $settings['default_preview_message'],
     ];
     $form['preview_settings']['preview_classes'] = [
