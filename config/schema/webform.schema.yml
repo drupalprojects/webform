@@ -328,6 +328,9 @@ webform.settings:
         default_batch_delete_size:
           type: integer
           label: 'Batch delete size'
+        default_batch_email_size:
+          type: integer
+          label: 'Batch email size'
     purge:
       type: mapping
       label: 'Purging settings'

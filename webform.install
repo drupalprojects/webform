@@ -950,3 +950,10 @@ function webform_update_8082() {
 function webform_update_8083() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2917174 by zenimagine: Improve "Webform Scheduled Email Handler".
+ */
+function webform_update_8084() {
+  _webform_update_admin_settings();
+}

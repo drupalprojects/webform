@@ -249,6 +249,14 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('batch.default_batch_delete_size'),
     ];
+    $form['batch']['default_batch_email_size'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Batch email size'),
+      '#description' => $this->t('Batch email size is used by any handler that sends out bulk emails. This include the scheduled email handler.'),
+      '#min' => 1,
+      '#required' => TRUE,
+      '#default_value' => $config->get('batch.default_batch_email_size'),
+    ];
 
     return parent::buildForm($form, $form_state);
   }
