@@ -27,6 +27,11 @@ elements: |
     '#title': 'webform_html_editor (format)'
     '#default_value': 'Hello <b>World!!!</b>'
     '#format': 'basic_html'
+  webform_html_editor_codemirror:
+    '#type': webform_html_editor
+    '#title': 'webform_html_editor_codemirror (none)'
+    '#default_value': 'Hello <b>World!!!</b>'
+    '#format': false
 css: ''
 javascript: ''
 settings:
