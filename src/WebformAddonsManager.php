@@ -390,7 +390,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $projects['webform_sanitize'] = [
       'title' => $this->t('Webform Sanitize'),
       'description' => $this->t('Sanitizes submissions to remove potentially sensitive data.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/webform_queue'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_sanitize'),
       'category' => 'submission',
     ];
 
