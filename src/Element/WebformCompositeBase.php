@@ -12,7 +12,6 @@ use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase as WebformManage
  */
 abstract class WebformCompositeBase extends FormElement {
 
-
   /**
    * {@inheritdoc}
    */

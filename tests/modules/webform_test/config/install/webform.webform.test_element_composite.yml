@@ -89,6 +89,20 @@ elements: |
       '#default_value':
         title: Example
         url: http://example.com
+  composite_elements_multiple:
+    '#type': details
+    '#title': 'Composite Elements Multiple'
+    '#open': true
+    link_multiple:
+      '#type': webform_link
+      '#title': 'Link multiple'
+      '#multiple': true
+      '#multiple__header': true
+      '#default_value':
+        - title: Example
+          url: http://example.com
+      '#title__help': 'This is link title help'
+      '#url__help': 'This is link url help'
 css: ''
 javascript: ''
 settings:

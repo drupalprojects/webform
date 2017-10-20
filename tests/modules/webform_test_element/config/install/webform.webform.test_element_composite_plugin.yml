@@ -8,8 +8,8 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_composite_custom
-title: 'Test: Element: Composite custom'
+id: test_element_composite_plugin
+title: 'Test: Element: Composite custom plugin'
 description: 'Test custom webform composite element.'
 category: 'Test: Element'
 elements: |

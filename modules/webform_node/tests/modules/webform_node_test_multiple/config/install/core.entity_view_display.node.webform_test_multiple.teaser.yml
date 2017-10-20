@@ -17,5 +17,6 @@ content:
     weight: 100
     region: content
 hidden:
-  field_webform_test_multiple_b: true
   field_webform_test_multiple_a: true
+  field_webform_test_multiple_b: true
+  langcode: true

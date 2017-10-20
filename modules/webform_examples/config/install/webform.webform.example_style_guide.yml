@@ -364,6 +364,31 @@ elements: |
       '#title': 'Link multiple'
       '#multiple': true
       '#multiple__header': true
+    webform_custom_composite:
+      '#type': webform_composite
+      '#title': 'Custom composite'
+      '#element':
+        first_name:
+          '#type': textfield
+          '#title': 'First name'
+        last_name:
+          '#type': textfield
+          '#title': 'Last name'
+        gender:
+          '#type': select
+          '#options': gender
+          '#title': Gender
+        martial_status:
+          '#type': webform_select_other
+          '#options': marital_status
+          '#title': 'Martial status'
+        employment_status:
+          '#type': webform_select_other
+          '#options': employment_status
+          '#title': 'Employment status'
+        age:
+          '#type': number
+          '#title': 'Age'
   form_elements:
     '#type': details
     '#title': 'Form elements'

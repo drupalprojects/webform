@@ -25,7 +25,8 @@ class WebformCodeMirror extends WebformElementBase {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
-      // Codemirror setings.
+      // Codemirror settings.
+      'placeholder' => '',
       'mode' => 'text',
     ];
   }

@@ -298,12 +298,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
-    $values = $form_state->getValues();
-    foreach ($this->configuration as $name => $value) {
-      if (isset($values[$name])) {
-        $this->configuration[$name] = $values[$name];
-      }
-    }
+    $this->applyFormStateToConfiguration($form_state);
     if ($this->configuration['method'] === 'GET') {
       $this->configuration['type'] = '';
     }

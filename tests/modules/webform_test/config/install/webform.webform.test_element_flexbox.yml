@@ -243,6 +243,38 @@ elements: |
     flex_color_right:
       '#type': color
       '#title': 'Color 02'
+  flexbox_webform_composite:
+    '#type': webform_flexbox
+    flex_webform_composite_left:
+      '#type': webform_composite
+      '#title': 'Composite custom 01'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+      '#gender__options':
+        Male: Male
+        Female: Female
+    flex_webform_composite_right:
+      '#type': webform_composite
+      '#title': 'Composite custom 02'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+      '#gender__options':
+        Male: Male
+        Female: Female
   flexbox_webform_computed_token:
     '#type': webform_flexbox
     flex_webform_computed_token_left:

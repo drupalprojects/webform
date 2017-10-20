@@ -225,7 +225,6 @@ class WebformMultiple extends FormElement {
       ];
     }
     else {
-
       $header = [];
       $header['_handle_'] = [
         'class' => ["$table_id--handle", "webform-multiple-table--handle"],
@@ -235,8 +234,19 @@ class WebformMultiple extends FormElement {
           if (static::isHidden($element['#element'][$child_key])) {
             continue;
           }
+
+          $title = [];
+          $title['title'] = [
+            '#markup' => (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '',
+          ];
+          if (!empty($element['#element'][$child_key]['#help'])) {
+            $title['help'] = [
+              '#type' => 'webform_help',
+              '#help' => $element['#element'][$child_key]['#help'],
+            ];
+          }
           $header[$child_key] = [
-            'data' => (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '',
+            'data' => $title,
             'class' => ["$table_id--$child_key", "webform-multiple-table--$child_key"],
           ];
         }

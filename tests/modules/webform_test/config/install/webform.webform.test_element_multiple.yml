@@ -170,10 +170,12 @@ elements: |
         '#title': value
         '#title_display': invisible
         '#placeholder': 'Enter value'
+        '#help': 'This is custom help text'
       option:
         '#type': container
         '#title': 'text/description'
         '#title_display': invisible
+        '#help': 'This is custom help text'
         text:
           '#type': textfield
           '#title': text

@@ -73,6 +73,22 @@ elements: |
     '#type': color
     '#title': Color
     '#disabled': true
+  webform_composite:
+    '#type': webform_composite
+    '#title': 'Composite custom'
+    '#element':
+      name:
+        '#type': textfield
+        '#title': Name
+        '#title_display': invisible
+      gender:
+        '#type': select
+        '#title': Gender
+        '#title_display': invisible
+    '#gender__options':
+      Male: Male
+      Female: Female
+    '#disabled': true
   webform_contact:
     '#type': webform_contact
     '#title': Contact

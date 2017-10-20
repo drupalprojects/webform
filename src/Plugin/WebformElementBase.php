@@ -2808,8 +2808,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           if ($default_properties[$property_name] == $element_properties[$property_name]) {
             unset($element_properties[$property_name]);
           }
-          break;
 
+          break;
+      }
+
+      // Cast data types.
+      if (is_bool($default_properties[$property_name]) && isset($element_properties[$property_name])) {
+        $element_properties[$property_name] = (bool) $element_properties[$property_name];
       }
     }
 

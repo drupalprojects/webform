@@ -28,6 +28,7 @@ class WebformElementOptions extends FormElement {
     $class = get_class($this);
     return [
       '#input' => TRUE,
+      '#yaml' => FALSE,
       '#likert' => FALSE,
       '#process' => [
         [$class, 'processWebformElementOptions'],
@@ -87,7 +88,7 @@ class WebformElementOptions extends FormElement {
       '#type' => 'select',
       '#description' => t('Please select <a href=":href">predefined @type</a> or enter custom @type.', $t_args),
       '#options' => [
-        self::CUSTOM_OPTION => t('Custom...'),
+        self::CUSTOM_OPTION => t('Custom @type...', $t_args),
       ] + $options,
 
       '#attributes' => [
@@ -115,6 +116,7 @@ class WebformElementOptions extends FormElement {
     else {
       $element['custom'] = [
         '#type' => 'webform_options',
+        '#yaml' => $element['#yaml'],
         '#title' => $element['#title'],
         '#title_display' => 'invisible',
         '#label' => ($element['#likert']) ? t('answer') : t('option'),

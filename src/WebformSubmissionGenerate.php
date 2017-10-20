@@ -121,7 +121,19 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       if ($options['random']) {
         shuffle($values);
       }
-      $limit = (isset($element['#multiple']) && $element['#multiple'] > 1 && $element['#multiple'] < 3) ? $element['#multiple'] : 3;
+
+      $limit = 3;
+      if (isset($element['#multiple'])) {
+        // #multiple: FALSE is only applicable to webform_composite element.
+        // @see \Drupal\webform\Plugin\WebformElement\WebformComposite
+        if ($element['#multiple'] === FALSE) {
+          $limit = 1;
+        }
+        elseif ($element['#multiple'] > 1 && $element['#multiple'] < 3) {
+          $limit =  $element['#multiple'];
+        }
+      }
+
       return array_slice($values, 0, $limit);
     }
     else {

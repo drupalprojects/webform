@@ -62,6 +62,14 @@ class WebformEntityTranslationTest extends WebformTestBase {
     $this->assertRaw('<option value="1">Uno</option>');
     $this->assertRaw('<option value="4">Las cuatro</option>');
 
+    // Check translated webform custom composite.
+    $this->drupalGet('es/webform/test_translation');
+    $this->assertRaw('<label for="edit-composite">Compuesto</label>');
+    $this->assertRaw('<th class="composite-table--first_name webform-multiple-table--first_name">Nombre</th>');
+    $this->assertRaw('<th class="composite-table--last_name webform-multiple-table--last_name">Apellido</th>');
+    $this->assertRaw('<th class="composite-table--age webform-multiple-table--age">Edad</th>');
+    $this->assertRaw('<span class="field-suffix">años. antiguo</span>');
+
     // Check that webform is not translated into French.
     $this->drupalGet('fr/webform/test_translation');
     $this->assertRaw('<label for="edit-textfield">Text field</label>');

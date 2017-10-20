@@ -155,6 +155,23 @@ elements: |
       '#title': Address
       '#description': 'This is a description for the ''webform_address'' element.'
       '#description_display': tooltip
+    webform_composite:
+      '#type': webform_composite
+      '#title': 'Composite custom'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+      '#gender__options':
+        Male: Male
+        Female: Female
+      '#description': 'This is a description for the ''webform_composite'' element.'
+      '#description_display': tooltip
     webform_contact:
       '#type': webform_contact
       '#title': Contact

@@ -26,6 +26,7 @@ class WebformOptions extends FormElement {
     $class = get_class($this);
     return [
       '#input' => TRUE,
+      '#yaml' => FALSE,
       '#label' => t('option'),
       '#labels' => t('options'),
       '#empty_items' => 5,
@@ -74,14 +75,15 @@ class WebformOptions extends FormElement {
     WebformElementHelper::fixStatesWrapper($element);
 
     // For options with optgroup display a CodeMirror YAML editor.
-    if (isset($element['#default_value']) && is_array($element['#default_value']) && static::hasOptGroup($element['#default_value'])) {
+    if (!empty($element['#yaml']) || (isset($element['#default_value']) && is_array($element['#default_value']) && static::hasOptGroup($element['#default_value']))) {
       // Build table.
       $element['options'] = [
         '#type' => 'webform_codemirror',
         '#mode' => 'yaml',
-        '#default_value' => Yaml::encode($element['#default_value']),
+        '#default_value' => trim(Yaml::encode($element['#default_value'])),
+        '#placeholder' => t('Enter custom options'),
         '#description' => t('Key-value pairs MUST be specified as "safe_key: \'Some readable options\'". Use of only alphanumeric characters and underscores is recommended in keys. One option per line.') . '<br /><br />' .
-        t('Option groups can be created by using just the group name followed by indented group options.'),
+          t('Option groups can be created by using just the group name followed by indented group options.'),
       ];
       return $element;
     }

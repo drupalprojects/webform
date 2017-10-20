@@ -281,6 +281,35 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_webform_composite:
+      '#type': webform_composite
+      '#title': 'Composite custom'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+      '#gender__options':
+        Male: Male
+        Female: Female
+      '#default_value':
+        - name: Loremipsum
+          gender: Loremipsum
+        - name: Loremipsum
+          gender: Loremipsum
+        - name: Loremipsum
+          gender: Loremipsum
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_webform_computed_token:
       '#type': webform_computed_token
       '#title': 'Computed token'
@@ -441,7 +470,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 8
+      '#default_value': 4
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -893,9 +922,9 @@ elements: |
       '#title': 'Term checkboxes'
       '#vocabulary': tags
       '#default_value':
-        - 17
-        - 39
-        - 19
+        - 13
+        - 7
+        - 12
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -907,7 +936,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 17
+      '#default_value': 13
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1232,6 +1261,32 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_webform_composite:
+      '#type': webform_composite
+      '#title': 'Composite custom'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+      '#gender__options':
+        Male: Male
+        Female: Female
+      '#default_value':
+        - name: Loremipsum
+          gender: Loremipsum
+        - name: Loremipsum
+          gender: Loremipsum
+        - name: Loremipsum
+          gender: Loremipsum
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_webform_computed_token:
       '#type': webform_computed_token
       '#title': 'Computed token'
@@ -1356,7 +1411,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 8
+      '#default_value': 4
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1718,9 +1773,9 @@ elements: |
       '#title': 'Term checkboxes'
       '#vocabulary': tags
       '#default_value':
-        - 17
-        - 39
-        - 19
+        - 13
+        - 7
+        - 12
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1729,7 +1784,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 17
+      '#default_value': 13
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1945,6 +2000,32 @@ elements: |
         disabled:
           ':input[name="disabled_trigger"]':
             checked: true
+    disabled_webform_composite:
+      '#type': webform_composite
+      '#title': 'Composite custom'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+      '#gender__options':
+        Male: Male
+        Female: Female
+      '#default_value':
+        - name: Loremipsum
+          gender: Loremipsum
+        - name: Loremipsum
+          gender: Loremipsum
+        - name: Loremipsum
+          gender: Loremipsum
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
     disabled_webform_computed_token:
       '#type': webform_computed_token
       '#title': 'Computed token'
@@ -2069,7 +2150,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 8
+      '#default_value': 4
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2431,9 +2512,9 @@ elements: |
       '#title': 'Term checkboxes'
       '#vocabulary': tags
       '#default_value':
-        - 17
-        - 39
-        - 19
+        - 13
+        - 7
+        - 12
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2442,7 +2523,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 17
+      '#default_value': 13
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

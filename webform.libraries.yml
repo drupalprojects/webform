@@ -412,11 +412,23 @@ webform.element.composite:
     component:
       css/webform.element.composite.css: {}
 
-webform.element.composite_telephone:
+webform.element.composite.telephone:
   version: VERSION
   css:
     component:
-      css/webform.element.composite_telephone.css: {}
+      css/webform.element.composite.telephone.css: {}
+
+webform.element.composite.admin:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.composite.admin.css: {}
+  js:
+    js/webform.element.composite.admin.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
 
 webform.element.counter:
   version: VERSION
@@ -776,6 +788,7 @@ libraries.codemirror.text:
   js:
     /libraries/codemirror/lib/codemirror.js: {weight: -1}
     /libraries/codemirror/addon/runmode/runmode.js: {}
+    /libraries/codemirror/addon/display/placeholder.js: {}
 
 libraries.codemirror.yaml:
   version: *webform_codemirror_version

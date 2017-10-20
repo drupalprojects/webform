@@ -3,39 +3,21 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_test_translation
+      - webform_test
 open: null
 close: null
 uid: null
 template: false
-id: test_translation
-title: 'Test: Translations'
-description: 'Test translating a webform.'
-category: null
+id: test_element_composite_custom
+title: 'Test: Element: Composite custom'
+description: 'Test custom composite/grid element.'
+category: 'Test: Element'
 elements: |
-  textfield:
-    '#type': textfield
-    '#title': 'Text field'
-  select_options:
-    '#type': select
-    '#title': 'Select (options)'
-    '#options': test_translation
-  select_custom:
-    '#type': webform_select_other
-    '#title': 'Select (custom)'
-    '#options':
-      4: Four
-      5: Five
-      6: Six
-    '#other__option_label': 'Custom number...'
-  details:
-    '#type': details
-    '#title': Details
-    markup:
-      '#markup': 'This is some HTML markup.'
-  composite:
+  webform_composite_basic:
     '#type': webform_composite
-    '#title': Composite
+    '#title': webform_composite_basic
+    '#multiple': false
+    '#multiple_header': false
     '#element':
       first_name:
         '#type': textfield
@@ -43,16 +25,46 @@ elements: |
       last_name:
         '#type': textfield
         '#title': 'Last name'
+    '#default_value':
+       - first_name: John
+         last_name: Smith
+  webform_composite_advanced:
+    '#type': webform_composite
+    '#title': webform_composite_advanced
+    '#element':
+      first_name:
+        '#type': textfield
+        '#title': 'First name'
+      last_name:
+        '#type': textfield
+        '#title': 'Last name'
+      gender:
+        '#type': select
+        '#options':
+          Male: Male
+          Female: Female
+        '#title': Gender
+      martial_status:
+        '#type': webform_select_other
+        '#options': marital_status
+        '#title': 'Martial status'
+      employment_status:
+        '#type': webform_select_other
+        '#options': employment_status
+        '#title': 'Employment status'
       age:
         '#type': number
         '#title': 'Age'
         '#field_suffix': 'yrs. old'
-        '#max': 1
+        '#min': 1
         '#max': 125
-  actions:
-    '#type': webform_actions
-    '#title': 'Submit button(s)'
-    '#submit__label': 'Send message'
+    '#default_value':
+       - first_name: John
+         last_name: Smith
+         gender: Male
+         martial_status: Single
+         employment_status: Unemployed
+         age: 20
 css: ''
 javascript: ''
 settings:
@@ -100,10 +112,10 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: url_message
+  confirmation_type: message
   confirmation_title: ''
-  confirmation_message: 'Your message has been sent.'
-  confirmation_url: '<front>'
+  confirmation_message: ''
+  confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
@@ -155,34 +167,11 @@ access:
     users: {  }
     permissions: {  }
 handlers:
-  email_confirmation:
-    id: email
-    label: 'Email confirmation'
-    handler_id: email_confirmation
+  debug:
+    id: debug
+    label: Debug
+    handler_id: debug
     status: true
     conditions: {  }
-    weight: 1
-    settings:
-      to_mail: default
-      cc_mail: ''
-      bcc_mail: ''
-      from_mail: default
-      from_name: default
-      subject: default
-      body: default
-      excluded_elements: {  }
-      html: true
-      attachments: false
-      debug: false
-      states:
-        - completed
-      to_options: {  }
-      cc_options: {  }
-      bcc_options: {  }
-      from_options: {  }
-      reply_to: ''
-      return_path: ''
-      ignore_access: false
-      exclude_empty: true
-      sender_mail: ''
-      sender_name: ''
+    weight: 0
+    settings: {  }
