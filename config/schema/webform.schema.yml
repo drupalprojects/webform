@@ -449,6 +449,9 @@ webform.webform.*:
         ajax:
           type: boolean
           label: 'Use Ajax'
+        ajax_scroll_top:
+          type: string
+          label: 'Ajax scroll top'
         page:
           type: boolean
           label: 'Enable page'

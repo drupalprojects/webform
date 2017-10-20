@@ -763,6 +763,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public static function getDefaultSettings() {
     return [
       'ajax' => FALSE,
+      'ajax_scroll_top' => 'form',
       'page' => TRUE,
       'page_submit_path' => '',
       'page_confirm_path' => '',

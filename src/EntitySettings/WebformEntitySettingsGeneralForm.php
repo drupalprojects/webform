@@ -224,6 +224,22 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['ajax'],
     ];
+    $form['ajax_settings']['ajax_scroll_top'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('On Ajax load, scroll to the top of the...'),
+      '#description' => $this->t("Select where the page should be scrolled to when paging, saving of drafts, previews, submissions, and confirmations. Select 'None' to disable scrolling."),
+      '#options' => [
+        '' => $this->t('None'),
+        'form' => $this->t('Form'),
+        'page' => $this->t('Page'),
+      ],
+      '#states' => [
+        'visible' => [
+          ':input[name="ajax"]' => ['checked' => TRUE],
+        ],
+      ],
+      '#default_value' => $settings['ajax_scroll_top'],
+    ];
 
     // Author information.
     $form['author_information'] = [

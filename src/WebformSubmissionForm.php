@@ -515,6 +515,12 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attributes']['class'][] = 'js-webform-disable-autosubmit';
     }
 
+    // Ajax: Scroll to.
+    // @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
+    if ($this->isAjax()) {
+      $form['#webform_ajax_scroll_top'] = $this->getWebformSetting('ajax_scroll_top');
+    }
+
     // Add #after_build callbacks.
     $form['#after_build'][] = '::afterBuild';
 

@@ -6,7 +6,13 @@
 (function ($, Drupal) {
 
   'use strict';
-  
+
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.ajax = Drupal.webform.ajax || {};
+  // Allow scrollTopOffset to be custom defined or based on whether there is a
+  // floating toolbar.
+  Drupal.webform.ajax.scrollTopOffset = Drupal.webform.ajax.scrollTopOffset || ($('#toolbar-administration').length ? 140 : 10);
+
   /**
    * Provide Webform Ajax link behavior.
    *
@@ -174,7 +180,7 @@
       scrollTarget = $(scrollTarget).parent();
     }
 
-    if ($(scrollTarget).length && $(scrollTarget)[0].tagName === 'HTML') {
+    if (response.target == 'page' && $(scrollTarget).length && $(scrollTarget)[0].tagName === 'HTML') {
       // Scroll to top when scroll target is the entire page.
       // @see https://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
       var rect = $(scrollTarget)[0].getBoundingClientRect();
@@ -184,8 +190,8 @@
     }
     else {
       // Only scroll upward.
-      if (offset.top - 10 < $(scrollTarget).scrollTop()) {
-        $(scrollTarget).animate({scrollTop: (offset.top - 10)}, 500);
+      if (offset.top - Drupal.webform.ajax.scrollTopOffset < $(scrollTarget).scrollTop()) {
+        $(scrollTarget).animate({scrollTop: (offset.top - Drupal.webform.ajax.scrollTopOffset)}, 500);
       }
     }
   };

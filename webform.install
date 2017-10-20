@@ -952,8 +952,15 @@ function webform_update_8083() {
 }
 
 /**
- * Issue #2917174 by zenimagine: Improve "Webform Scheduled Email Handler".
+ * Issue #2917174: Improve "Webform Scheduled Email Handler".
  */
 function webform_update_8084() {
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2908882: Loading next or previous page with AJAX should scroll to top of the window.
+ */
+function webform_update_8085() {
+  _webform_update_webform_settings();
 }
