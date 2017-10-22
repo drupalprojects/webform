@@ -68,7 +68,7 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
     */
 
     // WORKAROUND:
-    // Create a hidden link that is click using jQuery.
+    // Create a hidden link that is clicked using jQuery.
     if ($this->isDialog()) {
       $form['delete'] = [
         '#type' => 'link',
