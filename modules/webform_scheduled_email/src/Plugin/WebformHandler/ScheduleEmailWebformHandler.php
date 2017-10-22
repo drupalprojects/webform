@@ -164,7 +164,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       '#title' => $this->t('Send email on'),
       '#options' => $send_options,
       '#other__placeholder' => $this->t('YYYY-MM-DD'),
-      '#other__description' => $this->t('Enter a valid ISO date/time (YYYY-MM-DD) or token which returns a valid ISO date.'),
+      '#other__description' => $this->t('Enter a valid ISO date (YYYY-MM-DD) or token which returns a valid ISO date.'),
       '#parents' => ['settings', 'send'],
       '#default_value' => $this->configuration['send'],
     ];
