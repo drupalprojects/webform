@@ -28,6 +28,7 @@ class WebformMultiple extends FormElement {
     $class = get_class($this);
     return [
       '#input' => TRUE,
+      '#access' => TRUE,
       '#label' => t('item'),
       '#labels' => t('items'),
       '#key' => NULL,
@@ -311,10 +312,23 @@ class WebformMultiple extends FormElement {
         // @see \Drupal\webform\Element\WebformMultiple::convertValuesToItems
         if (static::isHidden($element['#element'][$child_key])) {
           $row['_handle_'][$child_key] = $element['#element'][$child_key];
-          // ISSUE: All elements in _handle_ are losing their value.
-          // WORKAROUND: Convert to element to rendered hidden field.
-          $row['_handle_'][$child_key]['#type'] = 'hidden';
-          unset($row['_handle_'][$child_key]['#access']);
+          // ISSUE:
+          // All elements in _handle_ with #access: FALSE are losing
+          // their values.
+          //
+          // Moving these #access: FALSE and value elements outside of the
+          // table does not work. What is even move baffling is manually adding
+          // a 'value' element does work.
+          //
+          // $element['hidden'][$row_index][$child_key] = $element['#element'][$child_key];
+          // $element['hidden'][1000]['test'] = ['#type' => 'value', '#value' => 'test'];
+          //
+          // WORKAROUND:
+          // Convert element to rendered hidden element.
+          if (!isset($element['#access']) || $element['#access'] !== FALSE) {
+            $row['_handle_'][$child_key]['#type'] = 'hidden';
+            unset($row['_handle_'][$child_key]['#access']);
+          }
           static::setElementRowParentsRecursive($row['_handle_'][$child_key], $child_key, $handle_parents);
         }
         else {
@@ -404,6 +418,9 @@ class WebformMultiple extends FormElement {
    *   The default values.
    */
   protected static function setElementRowDefaultValueRecursive(array &$element, array $default_value) {
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+
     foreach (Element::children($element) as $child_key) {
       if (isset($default_value[$child_key])) {
         if ($element[$child_key]['#type'] == 'value') {
@@ -411,6 +428,11 @@ class WebformMultiple extends FormElement {
         }
         else {
           $element[$child_key]['#default_value'] = $default_value[$child_key];
+          // Set default value.
+          // @see \Drupal\webform\Plugin\WebformElementInterface::setDefaultValue
+          // @see \Drupal\webform\Plugin\WebformElement\DateBase::setDefaultValue
+          $element_plugin = $element_manager->getElementInstance($element[$child_key]);
+          $element_plugin->setDefaultValue($element[$child_key]);
         }
       }
       static::setElementRowDefaultValueRecursive($element[$child_key], $default_value);

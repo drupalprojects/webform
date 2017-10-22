@@ -327,8 +327,13 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   /**
    * Set an element's default value using saved data.
    *
+   * The method allows the submission's 'saved' #default_value to be different
+   * from the element's #default_value
+   *
    * @param array $element
    *   An element.
+   *
+   * @see \Drupal\webform\Plugin\WebformElement\DateBase::setDefaultValue
    */
   public function setDefaultValue(array &$element);
 

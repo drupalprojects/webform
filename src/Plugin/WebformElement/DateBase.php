@@ -8,6 +8,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -78,8 +79,10 @@ abstract class DateBase extends WebformElementBase {
     if (in_array($element['#type'], ['datelist', 'datetime'])) {
       if (!empty($element['#default_value'])) {
         if (is_array($element['#default_value'])) {
-          foreach ($element['#default_value'] as $key => $value) {
-            $element['#default_value'][$key] = ($value) ? DrupalDateTime::createFromTimestamp(strtotime($value)) : NULL;
+          if (WebformArrayHelper::isSequential($element['#default_value'])) {
+            foreach ($element['#default_value'] as $key => $value) {
+              $element['#default_value'][$key] = ($value) ? DrupalDateTime::createFromTimestamp(strtotime($value)) : NULL;
+            }
           }
         }
         elseif (is_string($element['#default_value'])) {
@@ -336,19 +339,6 @@ abstract class DateBase extends WebformElementBase {
         $input = $date_class::valueCallback($element, $input, $form_state);
         $form_state->setValueForElement($element, $input);
       }
-    }
-
-    // ISSUE:
-    // When datelist is nested inside a webform_multiple element the $form_state
-    // value is not being properly set.
-    //
-    // WORKAROUND:
-    // Set the $form_state datelist value using $element['#value'].
-    // @todo: Possible move this validation logic to webform_multiple.
-    if (!empty($element['#multiple'])) {
-      $values = $form_state->getValues();
-      NestedArray::setValue($values, $element['#parents'], $element['#value']);
-      $form_state->setValues($values);
     }
   }
 
