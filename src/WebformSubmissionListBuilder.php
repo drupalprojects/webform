@@ -545,9 +545,9 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
           $element = $column['element'];
           $options = $column;
 
-          /** @var \Drupal\webform\Plugin\WebformElementInterface $element_handler */
-          $element_handler = $column['plugin'];
-          $html = $element_handler->formatTableColumn($element, $entity, $options);
+          /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+          $element_plugin = $column['plugin'];
+          $html = $element_plugin->formatTableColumn($element, $entity, $options);
           return (is_array($html)) ? ['data' => $html] : $html;
         }
         else {

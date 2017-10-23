@@ -2790,11 +2790,22 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     $properties = $this->getConfigurationFormProperties($form, $form_state);
-    if ($ignored_properties = WebformElementHelper::getIgnoredProperties($properties)) {
+
+    $ignored_properties = WebformElementHelper::getIgnoredProperties($properties);
+    foreach ($ignored_properties as $ignored_property => $ignored_message) {
+      // Display custom messages.
+      if ($ignored_property != $ignored_message) {
+        unset($ignored_properties[$ignored_property]);
+        $form_state->setErrorByName('custom', $ignored_message);
+      }
+    }
+    
+    // Display ignored properties message.
+    if ($ignored_properties) {
       $t_args = [
         '@properties' => WebformArrayHelper::toString($ignored_properties),
       ];
-      $form_state->setErrorByName('custom', $this->t('Element contains ignored/unsupported properties: @properties.', $t_args));
+      $form_state->setErrorByName('custom', $this->t('Element contains ignored/unsupported properties: @properties', $t_args));
     }
   }
 

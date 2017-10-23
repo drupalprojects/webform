@@ -271,8 +271,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $text_element_options_raw = [];
     $elements = $this->webform->getElementsInitializedAndFlattened();
     foreach ($elements as $key => $element) {
-      $element_handler = $this->elementManager->getElementInstance($element);
-      if (!$element_handler->isInput($element)) {
+      $element_plugin = $this->elementManager->getElementInstance($element);
+      if (!$element_plugin->isInput($element)) {
         continue;
       }
 
@@ -786,10 +786,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $attachments = [];
     $elements = $this->webform->getElementsInitializedAndFlattened();
     foreach ($elements as $configuration_key => $element) {
-      $element_handler = $this->elementManager->getElementInstance($element);
+      $element_plugin = $this->elementManager->getElementInstance($element);
       // Only elements that extend the 'Managed file' element can add
       // file attachments.
-      if (!($element_handler instanceof WebformManagedFileBase)) {
+      if (!($element_plugin instanceof WebformManagedFileBase)) {
         continue;
       }
 

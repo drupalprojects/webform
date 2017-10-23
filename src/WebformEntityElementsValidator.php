@@ -206,18 +206,23 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     $ignored_properties = WebformElementHelper::getIgnoredProperties($this->elements);
     if ($ignored_properties) {
       $messages = [];
-      foreach ($ignored_properties as $ignored_property) {
-        $line_numbers = $this->getLineNumbers('/^\s*(["\']?)' . preg_quote($ignored_property, '/') . '\1\s*:/');
-        $t_args = [
-          '%property' => $ignored_property,
-          '@line_number' => WebformArrayHelper::toString($line_numbers),
-        ];
-        $messages[] = $this->formatPlural(
-          count($line_numbers),
-          'Elements contain an unsupported %property property found on line @line_number.',
-          'Elements contain an unsupported %property property found on lines @line_number.',
-          $t_args
-        );
+      foreach ($ignored_properties as $ignored_property => $ignored_message) {
+        if ($ignored_property != $ignored_message) {
+          $messages[] = $ignored_message;
+        }
+        else {
+          $line_numbers = $this->getLineNumbers('/^\s*(["\']?)' . preg_quote($ignored_property, '/') . '\1\s*:/');
+          $t_args = [
+            '%property' => $ignored_property,
+            '@line_number' => WebformArrayHelper::toString($line_numbers),
+          ];
+          $messages[] = $this->formatPlural(
+            count($line_numbers),
+            'Elements contain an unsupported %property property found on line @line_number.',
+            'Elements contain an unsupported %property property found on lines @line_number.',
+            $t_args
+          );
+        }
       }
       return $messages;
     }

@@ -654,10 +654,10 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
     return NULL;
   }
 
-  $element_handler = $element_manager->getElementInstance($element);
+  $element_plugin = $element_manager->getElementInstance($element);
 
   // Exit if no submission data and form element is not a container.
-  if (!isset($submission_data[$element_key]) && !$element_handler->isContainer($element)) {
+  if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
     return NULL;
   }
 
@@ -669,7 +669,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // If multiple value element look for delta.
-  if ($keys && $element_handler->hasMultipleValues($element) && is_numeric($keys[0])) {
+  if ($keys && $element_plugin->hasMultipleValues($element) && is_numeric($keys[0])) {
     $delta = array_shift($keys);
     $options['delta'] = $delta;
   }
@@ -678,7 +678,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // If composite element look for sub-element key.
-  if ($keys && $element_handler->isComposite() && method_exists($element_handler, 'getInitializedCompositeElement') && $element_handler->getInitializedCompositeElement($element, $keys[0])) {
+  if ($keys && $element_plugin->isComposite() && method_exists($element_plugin, 'getInitializedCompositeElement') && $element_plugin->getInitializedCompositeElement($element, $keys[0])) {
     $composite_key = array_shift($keys);
     $options['composite_key'] = $composite_key;
   }
@@ -687,12 +687,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // Set entity reference chaining.
-  if ($keys && $keys[0] == 'entity' && $element_handler instanceof WebformElementEntityReferenceInterface) {
+  if ($keys && $keys[0] == 'entity' && $element_plugin instanceof WebformElementEntityReferenceInterface) {
     // Remove entity from keys.
     array_shift($keys);
 
     // Get entity value, type, instance, and token.
-    if ($entity = $element_handler->getTargetEntity($element, $webform_submission, $options)) {
+    if ($entity = $element_plugin->getTargetEntity($element, $webform_submission, $options)) {
       $entity_type = $entity->getEntityTypeId();
       // Map entity type id to entity token name.
       $entity_token_names = [

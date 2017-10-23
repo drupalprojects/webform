@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
+use Drupal\webform\Plugin\WebformElement\WebformComposite;
 
 /**
  * Helper class webform element methods.
@@ -240,6 +241,23 @@ class WebformElementHelper {
       if (Element::property($key)) {
         if (self::isIgnoredProperty($key)) {
           $ignored_properties[$key] = $key;
+        }
+        elseif ($key == '#element' && is_array($value) && isset($element['#type']) && $element['#type'] === 'webform_composite') {
+          foreach ($value as $composite_key => $composite_value) {
+
+            // Multiple sub composite elements are not supported.
+            if (isset($composite_value['#multiple'])) {
+              $ignored_properties['#multiple'] = t('Custom composite sub elements do not support elements with multiple values.');
+            }
+
+            // Check that sub composite element type is supported.
+            if (isset($composite_value['#type']) && !WebformComposite::isSupportedElementType($composite_value['#type'])) {
+              $composite_type = $composite_value['#type'];
+              $ignored_properties["composite.$composite_type"] = t('Custom composite elements do not support the %type element.', ['%type' => $composite_type]);
+            }
+
+            $ignored_properties += self::getIgnoredProperties($composite_value);
+          }
         }
       }
       elseif (is_array($value)) {

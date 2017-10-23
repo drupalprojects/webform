@@ -3,9 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\RenderElement;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformInterface;
@@ -31,7 +29,7 @@ class WebformComposite extends WebformCompositeBase {
    *
    * @var array
    */
-  protected $ignoredElementTypes = [
+  protected static $ignoredElementTypes = [
     'hidden',
     'value',
     'webform_autocomplete',
@@ -127,25 +125,17 @@ class WebformComposite extends WebformCompositeBase {
 
     foreach ($grouped_definitions as $group => $definitions) {
       foreach ($definitions as $element_type => $definition) {
-        $element = ['#type' => $element_type];
-        $element_handler = $elements[$element_type];
-        // Skip element types that are not supported.
-        if (!$element_handler->isInput($element)
-          || $element_handler->isComposite()
-          || $element_handler->isContainer($element)
-          || $element_handler->hasMultipleValues($element)
-          || $element_handler instanceof WebformElementEntityReferenceInterface
-          || $element_handler instanceof WebformComputedBase
-          || $element_handler instanceof WebformManagedFileBase
-          || in_array($element_type, $this->ignoredElementTypes)) {
+        if (!static::isSupportedElementType($element_type)) {
           continue;
         }
 
+        $element_plugin = $elements[$element_type];
+
         $type_options[$group][$element_type] = $definition['label'];
-        if ($element_handler->hasProperty('options')) {
+        if ($element_plugin->hasProperty('options')) {
           $options_elements[$element_type] = $element_type;
         }
-        if ($element_handler->hasProperty('placeholder')) {
+        if ($element_plugin->hasProperty('placeholder')) {
           $placeholder_elements[$element_type] = $element_type;
         }
       }
@@ -289,9 +279,9 @@ class WebformComposite extends WebformCompositeBase {
       $value = array_filter($value);
       foreach ($value as $property_name => $property_value) {
         if (!in_array($property_name, ['type', 'custom'])) {
-          /** @var \Drupal\webform\Plugin\WebformElementInterface $element_handler */
-          $element_handler = $this->elementManager->createInstance($value['type']);
-          if (!$element_handler->hasProperty($property_name)) {
+          /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+          $element_plugin = $this->elementManager->createInstance($value['type']);
+          if (!$element_plugin->hasProperty($property_name)) {
             unset($value[$property_name]);
           }
         }
@@ -337,9 +327,9 @@ class WebformComposite extends WebformCompositeBase {
     // Make #options is set for composite element that requires #options.
     $properties = $this->getConfigurationFormProperties($form, $form_state);
     foreach ($properties['#element'] as $key => $element) {
-      /** @var \Drupal\webform\Plugin\WebformElementInterface $element_handler */
-      $element_handler = $this->elementManager->getElementInstance($element);
-      if ($element_handler->hasProperty('options') && empty($element['#options'])) {
+      /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+      $element_plugin = $this->elementManager->getElementInstance($element);
+      if ($element_plugin->hasProperty('options') && empty($element['#options'])) {
         $t_args = ['%title' => $element['#title']];
         $form_state->setErrorByName('element', $this->t('Options for %title is required.', $t_args));
       }
@@ -432,6 +422,36 @@ class WebformComposite extends WebformCompositeBase {
   public function getCompositeElements() {
     // Return empty array since composite (sub) elements are custom.
     return [];
+  }
+
+  /**
+   * Determine if element type is supported by custom composite elements.
+   *
+   * @param string $type
+   *   An element type.
+   *
+   * @return bool
+   *   TRUE if element type is supported by custom composite elements.
+   */
+  public static function isSupportedElementType($type) {
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+
+    $element = ['#type' => $type];
+    $element_plugin = $element_manager->getElementInstance($element);
+    // Skip element types that are not supported.
+    if (!$element_plugin->isInput($element)
+      || $element_plugin->isComposite()
+      || $element_plugin->isContainer($element)
+      || $element_plugin->hasMultipleValues($element)
+      || $element_plugin instanceof WebformElementEntityReferenceInterface
+      || $element_plugin instanceof WebformComputedBase
+      || $element_plugin instanceof WebformManagedFileBase
+      || in_array($type, static::$ignoredElementTypes)) {
+      return FALSE;
+    }
+    else {
+      return TRUE;
+    }
   }
 
 }

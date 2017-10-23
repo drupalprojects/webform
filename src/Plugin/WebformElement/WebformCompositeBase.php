@@ -244,7 +244,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     foreach ($composite_elements as $composite_key => $composite_element) {
       $has_access = (!isset($composite_elements['#access']) || $composite_elements['#access']);
       if ($has_access && isset($composite_element['#type'])) {
-        $element_handler = $this->elementManager->getElementInstance($composite_element);
+        $element_plugin = $this->elementManager->getElementInstance($composite_element);
         $composite_title = (isset($composite_element['#title'])) ? $composite_element['#title'] : $composite_key;
 
         switch ($composite_element['#type']) {
@@ -258,7 +258,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
             break;
 
           default:
-            $selectors[":input[name=\"{$name}[{$composite_key}]\"]"] = $composite_title . ' [' . $element_handler->getPluginLabel() . ']';
+            $selectors[":input[name=\"{$name}[{$composite_key}]\"]"] = $composite_title . ' [' . $element_plugin->getPluginLabel() . ']';
             break;
         }
       }

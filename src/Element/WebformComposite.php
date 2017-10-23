@@ -21,7 +21,6 @@ class WebformComposite extends WebformMultiple {
     ] + parent::getInfo();
   }
 
-
   /**
    * Process items and build multiple elements widget.
    */

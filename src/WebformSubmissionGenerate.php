@@ -95,12 +95,12 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       'random' => TRUE,
     ];
 
-    /** @var \Drupal\webform\Plugin\WebformElementInterface $element_handler */
+    /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
     $plugin_id = $this->elementManager->getElementPluginId($element);
-    $element_handler = $this->elementManager->createInstance($plugin_id);
+    $element_plugin = $this->elementManager->createInstance($plugin_id);
 
     // Exit if element does not have a value.
-    if (!$element_handler->isInput($element)) {
+    if (!$element_plugin->isInput($element)) {
       return NULL;
     }
 
@@ -117,7 +117,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
     // $values = $this->tokenManager->replace($values, $webform);.
     // Elements that use multiple values require an array as the
     // default value.
-    if ($element_handler->hasMultipleValues($element)) {
+    if ($element_plugin->hasMultipleValues($element)) {
       if ($options['random']) {
         shuffle($values);
       }
