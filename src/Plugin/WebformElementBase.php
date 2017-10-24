@@ -865,9 +865,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Set the multiple element.
     $element['#element'] = $element;
     // Remove properties that should only be applied to the parent element.
-    // NOTE: #multiple is not removed because it is used by during validation.
-    // @see \Drupal\webform\Plugin\WebformElement\DateBase::preValidateDate
-    $element['#element'] = array_diff_key($element['#element'], array_flip(['#default_value', '#description', '#description_display', '#required', '#required_error', '#states', '#wrapper_attributes', '#prefix', '#suffix', '#element', '#tags']));
+    $element['#element'] = array_diff_key($element['#element'], array_flip(['#default_value', '#description', '#description_display', '#required', '#required_error', '#states', '#wrapper_attributes', '#prefix', '#suffix', '#element', '#tags', '#multiple']));
     // Always make the title invisible.
     $element['#element']['#title_display'] = 'invisible';
 
@@ -1926,21 +1924,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#required' => TRUE,
       '#attributes' => ['autofocus' => 'autofocus'],
     ];
-    if ($this->isComposite()) {
-      $form['element']['default_value'] = [
-        '#type' => 'webform_codemirror',
-        '#mode' => 'yaml',
-        '#title' => $this->t('Default value'),
-        '#description' => $this->t('The default value of the webform element.'),
-      ];
-    }
-    else {
-      $form['element']['default_value'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Default value'),
-        '#description' => $this->t('The default value of the webform element.'),
-      ];
-    }
     $form['element']['value'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Value'),
@@ -1981,8 +1964,31 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Table header label'),
       '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
     ];
+
+    /* Default value */
+
+    $form['default'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Default value'),
+    ];
+    if ($this->isComposite()) {
+      $form['default']['default_value'] = [
+        '#type' => 'webform_codemirror',
+        '#mode' => 'yaml',
+        '#title' => $this->t('Default value'),
+        '#description' => $this->t('The default value of the webform element.'),
+      ];
+    }
+    else {
+      $form['default']['default_value'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Default value'),
+        '#description' => $this->t('The default value of the webform element.'),
+        '#maxlength' => NULL,
+      ];
+    }
     if ($this->hasProperty('multiple')) {
-      $form['element']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
+      $form['default']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
     }
 
     /* Element description */
@@ -2645,6 +2651,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'advanced' => [
         'title' => $this->t('Advanced'),
         'elements' => [
+          'default',
           'wrapper_attributes',
           'element_attributes',
           'display',
@@ -2661,7 +2668,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         'weight' => 30,
       ],
     ];
-    return WebformFormHelper::buildTabs($form, $tabs);
+    return WebformFormHelper::buildTabs($form, $tabs, $form_state->get('active_tab'));
   }
 
   /**
@@ -2773,6 +2780,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         // This is applicable to elements that support #multiple #options.
         if (is_array($default_value) && $property_name == 'default_value' && !$this->isComposite()) {
           $property_element['#default_value'] = implode(', ', $default_value);
+        }
+        elseif (is_bool($default_value) && $property_name == 'default_value') {
+          $property_element['#default_value'] = $default_value ? 1 : 0;
         }
         else {
           $property_element['#default_value'] = $default_value;

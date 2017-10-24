@@ -7,6 +7,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -54,7 +55,15 @@ class WebformMultiple extends FormElement {
    */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input === FALSE) {
-      return (isset($element['#default_value'])) ? $element['#default_value'] : [];
+      if (!isset($element['#default_value'])) {
+        return [];
+      }
+      elseif (!is_array($element['#default_value'])) {
+        return [$element['#default_value']];
+      }
+      else {
+        return $element['#default_value'];
+      }
     }
     elseif (is_array($input) && isset($input['items'])) {
       return $input['items'];
@@ -155,18 +164,18 @@ class WebformMultiple extends FormElement {
 
     // Build table.
     $element['items'] = [
-      '#prefix' => '<div id="' . $table_id . '" class="webform-multiple-table">',
-      '#suffix' => '</div>',
-      '#type' => 'table',
-      '#header' => $header,
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'webform-multiple-sort-weight',
+        '#prefix' => '<div id="' . $table_id . '" class="webform-multiple-table">',
+        '#suffix' => '</div>',
+        '#type' => 'table',
+        '#header' => $header,
+        '#tabledrag' => [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'webform-multiple-sort-weight',
+          ],
         ],
-      ],
-    ] + $rows;
+      ] + $rows;
 
     // Build add items actions.
     if (empty($element['#cardinality'])) {
@@ -295,7 +304,7 @@ class WebformMultiple extends FormElement {
       static::setElementRowDefaultValueRecursive($element['#element'], (array) $default_value);
     }
     else {
-      $element['#element']['#default_value'] = $default_value;
+      static::setElementDefaultValue($element['#element'], $default_value);
     }
 
     $row = [];
@@ -418,24 +427,35 @@ class WebformMultiple extends FormElement {
    *   The default values.
    */
   protected static function setElementRowDefaultValueRecursive(array &$element, array $default_value) {
-    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
-    $element_manager = \Drupal::service('plugin.manager.webform.element');
-
     foreach (Element::children($element) as $child_key) {
       if (isset($default_value[$child_key])) {
-        if ($element[$child_key]['#type'] == 'value') {
-          $element[$child_key]['#value'] = $default_value[$child_key];
-        }
-        else {
-          $element[$child_key]['#default_value'] = $default_value[$child_key];
-          // Set default value.
-          // @see \Drupal\webform\Plugin\WebformElementInterface::setDefaultValue
-          // @see \Drupal\webform\Plugin\WebformElement\DateBase::setDefaultValue
-          $element_plugin = $element_manager->getElementInstance($element[$child_key]);
-          $element_plugin->setDefaultValue($element[$child_key]);
-        }
+        static::setElementDefaultValue($element[$child_key], $default_value[$child_key]);
       }
       static::setElementRowDefaultValueRecursive($element[$child_key], $default_value);
+    }
+  }
+
+  /**
+   * Set element row default value recusively.
+   *
+   * @param array $element
+   *   The element.
+   * @param mixed $default_value
+   *   The default value.
+   */
+  protected static function setElementDefaultValue(array &$element, $default_value) {
+    if ($element['#type'] == 'value') {
+      $element['#value'] = $default_value;
+    }
+    else {
+      $element['#default_value'] = $default_value;
+      // Set default value.
+      // @see \Drupal\webform\Plugin\WebformElementInterface::setDefaultValue
+      // @see \Drupal\webform\Plugin\WebformElement\DateBase::setDefaultValue
+      /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+      $element_manager = \Drupal::service('plugin.manager.webform.element');
+      $element_plugin = $element_manager->getElementInstance($element);
+      $element_plugin->setDefaultValue($element);
     }
   }
 

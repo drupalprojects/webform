@@ -90,7 +90,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
         }
       }
       if (isset($properties[$composite_key . '__type'])) {
-        $properties['default_value'][$composite_key] = '';
         $properties[$composite_key . '__description'] = FALSE;
         $properties[$composite_key . '__help'] = FALSE;
         $properties[$composite_key . '__required'] = FALSE;
@@ -133,7 +132,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
 
     // If #flexbox is not set or an empty string, determine if the
     // webform is using a flexbox layout.
-    if (!isset($element['#flexbox']) || $element['#flexbox'] === '') {
+    if ((!isset($element['#flexbox']) || $element['#flexbox'] === '') && $webform_submission) {
       $webform = $webform_submission->getWebform();
       $element['#flexbox'] = $webform->hasFlexboxLayout();
     }
@@ -703,7 +702,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form = parent::form($form, $form_state);
 
     // Update #default_value description.
-    $form['element']['default_value']['#description'] = $this->t("The default value of the composite webform element as YAML.");
+    $form['default']['default_value']['#description'] = $this->t("The default value of the composite webform element as YAML.");
 
     // Update #required label.
     $form['validation']['required_container']['required']['#description'] .= '<br /><br />' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required.");

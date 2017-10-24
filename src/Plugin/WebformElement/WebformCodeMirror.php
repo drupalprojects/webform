@@ -108,8 +108,8 @@ class WebformCodeMirror extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $form['element']['default_value']['#type'] = 'webform_codemirror';
-    $form['element']['default_value']['#rows'] = 3;
+    $form['default']['default_value']['#type'] = 'webform_codemirror';
+    $form['default']['default_value']['#rows'] = 3;
 
     $form['codemirror'] = [
       '#type' => 'fieldset',

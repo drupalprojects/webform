@@ -17,6 +17,8 @@ class WebformFormHelper {
    *   A form.
    * @param array $tabs
    *   An associative array contain tabs.
+   * @param string $active_tab
+   *   The active tab name.
    *
    * @return array
    *   The form with tabs.
@@ -24,7 +26,7 @@ class WebformFormHelper {
    * @see \Drupal\webform\Form\WebformHandlerFormBase::buildForm
    * @see \Drupal\webform\Plugin\WebformElementBase::buildConfigurationFormTabs
    */
-  public static function buildTabs(array $form, array $tabs) {
+  public static function buildTabs(array $form, array $tabs, $active_tab = '') {
     // Allow tabs to be disabled via $form['#tab'] = FALSE.
     if (isset($form['#tabs']) && $form['#tabs'] === FALSE) {
       return $form;
@@ -97,7 +99,6 @@ class WebformFormHelper {
           'data-tab-index' => $index++,
         ],
       ];
-
       $form['tab_' . $tab_name] = [
         '#type' => 'container',
         '#group' => 'tabs',
@@ -114,6 +115,10 @@ class WebformFormHelper {
       '#attributes' => ['class' => ['webform-tabs']],
       '#attached' => ['library' => ['webform/webform.form.tabs']],
     ];
+    if ($active_tab) {
+      $form['tabs']['#attributes']['data-tab-active'] = 'webform-tab--' . $active_tab;
+    }
+
     $form['tabs']['items'] = [
       '#theme' => 'item_list',
       '#items' => $tab_items,
