@@ -17,7 +17,7 @@ entity.webform.preview:
 entity.webform.templates.autocomplete:
   path: '/admin/structure/webform/templates/autocomplete'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::autocomplete'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::autocomplete'
     templates: TRUE
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'

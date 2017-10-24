@@ -68,12 +68,12 @@ class WebformEntityReferenceManager implements WebformEntityReferenceManagerInte
   public function isUserWebformRoute(EntityInterface $entity) {
     $entity_type = $entity->getEntityTypeId();
     $user_routes = [
-      "entity.$entity_type.webform.test",
+      "entity.$entity_type.webform.test_form",
       "entity.$entity_type.webform.results_submissions",
       "entity.$entity_type.webform.results_export",
       "entity.$entity_type.webform.results_clear",
       "entity.$entity_type.webform.results_log",
-      "entity.$entity_type.webform.api",
+      "entity.$entity_type.webform.api_form",
     ];
     return in_array($this->routeMatch->getRouteName(), $user_routes);
   }

@@ -1177,9 +1177,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('Multiple test submissions can be created using the devel_generate module.'),
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/test
-        'entity.webform.test',
+        'entity.webform.test_form',
         // @see /node/{node}/webform/test
-        'entity.node.webform.test',
+        'entity.node.webform.test_form',
       ],
     ];
 

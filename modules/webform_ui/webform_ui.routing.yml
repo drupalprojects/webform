@@ -3,7 +3,7 @@
 entity.webform.source_form:
   path: '/admin/structure/webform/manage/{webform}/source'
   defaults:
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
     _entity_form: 'webform.source'
   requirements:
     _custom_access: '\Drupal\webform_ui\Access\WebformUiAccess::checkWebformSourceAccess'

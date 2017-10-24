@@ -326,7 +326,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
         $operations['test'] = [
           'title' => $this->t('Test'),
           'weight' => 21,
-          'url' => Url::fromRoute('entity.node.webform.test', $route_parameters),
+          'url' => Url::fromRoute('entity.node.webform.test_form', $route_parameters),
         ];
       }
     }

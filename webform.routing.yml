@@ -106,37 +106,37 @@ entity.webform.collection:
 entity.webform.autocomplete:
   path: '/admin/structure/webform/autocomplete'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::autocomplete'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::autocomplete'
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 
 entity.webform.canonical:
   path: '/webform/{webform}'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::addForm'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::addForm'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.submission_page'
 
 entity.webform.assets.javascript:
   path: '/webform/javascript/{webform}'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::javascript'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::javascript'
   requirements:
     _entity_access: 'webform.view'
 
 entity.webform.assets.css:
   path: '/webform/css/{webform}'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::css'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::css'
   requirements:
     _entity_access: 'webform.view'
 
 entity.webform.confirmation:
   path: '/webform/{webform}/confirmation'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::confirmation'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::confirmation'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.submission_create'
 
@@ -189,7 +189,7 @@ entity.webform.user.submission.delete:
   requirements:
     _entity_access: 'webform_submission.delete'
 
-entity.webform.test:
+entity.webform.test_form:
   path: '/webform/{webform}/test'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformTestController::testForm'
@@ -213,7 +213,7 @@ entity.webform.edit_form:
   path: '/admin/structure/webform/manage/{webform}'
   defaults:
     _entity_form: 'webform.edit'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
@@ -239,7 +239,7 @@ entity.webform.settings:
   path: '/admin/structure/webform/manage/{webform}/settings'
   defaults:
     _entity_form: 'webform.settings'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
@@ -247,7 +247,7 @@ entity.webform.settings_form:
   path: '/admin/structure/webform/manage/{webform}/settings/form'
   defaults:
     _entity_form: 'webform.settings_form'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
@@ -255,7 +255,7 @@ entity.webform.settings_submissions:
   path: '/admin/structure/webform/manage/{webform}/settings/submissions'
   defaults:
     _entity_form: 'webform.settings_submissions'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
@@ -263,7 +263,7 @@ entity.webform.settings_confirmation:
   path: '/admin/structure/webform/manage/{webform}/settings/confirmation'
   defaults:
     _entity_form: 'webform.settings_confirmation'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
@@ -271,7 +271,7 @@ entity.webform.settings_assets:
   path: '/admin/structure/webform/manage/{webform}/settings/assets'
   defaults:
     _entity_form: 'webform.settings_assets'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
     _permission: 'edit webform assets'
@@ -280,7 +280,7 @@ entity.webform.settings_access:
   path: '/admin/structure/webform/manage/{webform}/access'
   defaults:
     _entity_form: 'webform.settings_access'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
@@ -303,7 +303,7 @@ entity.webform.results_submissions:
   path: '/admin/structure/webform/manage/{webform}/results/submissions'
   defaults:
     _entity_list: 'webform_submission'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   options:
     parameters:
       webform:
@@ -329,7 +329,7 @@ entity.webform.results_export:
   path: '/admin/structure/webform/manage/{webform}/results/download'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformResultsExportController::index'
-    _title_callback: 'Drupal\webform\Controller\WebformController::title'
+    _title_callback: 'Drupal\webform\Controller\WebformEntityController::title'
   options:
     parameters:
       webform:
@@ -342,7 +342,7 @@ entity.webform.results_export_file:
   path: '/admin/structure/webform/manage/{webform}/results/download/file/{filename}'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformResultsExportController::file'
-    _title_callback: 'Drupal\webform\Controller\WebformController::title'
+    _title_callback: 'Drupal\webform\Controller\WebformEntityController::title'
   options:
     parameters:
       webform:
@@ -355,7 +355,7 @@ entity.webform.results_clear:
   path: '/admin/structure/webform/manage/{webform}/results/clear'
   defaults:
     _form: 'Drupal\webform\Form\WebformResultsClearForm'
-    _title_callback: 'Drupal\webform\Controller\WebformController::title'
+    _title_callback: 'Drupal\webform\Controller\WebformEntityController::title'
   options:
     parameters:
       webform:
@@ -368,7 +368,7 @@ entity.webform.results_log:
   path: '/admin/structure/webform/manage/{webform}/results/log'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformSubmissionLogController::overview'
-    _title_callback: 'Drupal\webform\Controller\WebformController::title'
+    _title_callback: 'Drupal\webform\Controller\WebformEntityController::title'
   options:
     parameters:
       webform:
@@ -568,7 +568,7 @@ entity.webform.handlers:
   path: '/admin/structure/webform/manage/{webform}/handlers'
   defaults:
     _entity_form: 'webform.handlers'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 

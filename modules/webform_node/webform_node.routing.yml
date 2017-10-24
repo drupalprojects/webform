@@ -2,14 +2,14 @@ entity.webform.references:
   path: '/admin/structure/webform/manage/{webform}/references'
   defaults:
     _controller: '\Drupal\webform_node\Controller\WebformNodeReferencesListController::listing'
-    _title_callback: '\Drupal\webform\Controller\WebformController::title'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
   requirements:
     _entity_access: 'webform.update'
 
 entity.node.webform.confirmation:
   path: '/node/{node}/webform/confirmation'
   defaults:
-    _controller: '\Drupal\webform\Controller\WebformController::confirmation'
+    _controller: '\Drupal\webform\Controller\WebformEntityController::confirmation'
     _title_callback: '\Drupal\Core\Entity\Controller\EntityController::title'
     operation: view
     entity_access: 'webform.submission_create'
@@ -91,7 +91,7 @@ entity.node.webform.user.submission.delete:
   requirements:
     _custom_access: '\Drupal\webform_node\Access\WebformNodeAccess::checkWebformSubmissionAccess'
 
-entity.node.webform.test:
+entity.node.webform.test_form:
   path: '/node/{node}/webform/test'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformTestController::testForm'
@@ -151,7 +151,7 @@ entity.node.webform.results_export_file:
   path: '/node/{node}/webform/results/download/file/{filename}'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformResultsExportController::file'
-    _title_callback: 'Drupal\webform\Controller\WebformController::title'
+    _title_callback: 'Drupal\webform\Controller\WebformEntityController::title'
     operation: webform_submission_view
     entity_access: 'webform.submission_view_any'
   options:

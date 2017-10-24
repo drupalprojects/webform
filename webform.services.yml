@@ -114,6 +114,14 @@ services:
     tags:
       - { name: 'context_provider' }
 
+  # Theme negotiator
+
+  webform.theme_negotiator:
+    class: Drupal\webform\Theme\WebformThemeNegotiator
+    arguments: ['@current_user', '@config.factory']
+    tags:
+      - { name: theme_negotiator, priority: -41 }
+
   # Twig extension.
 
   webform.twig_extension:

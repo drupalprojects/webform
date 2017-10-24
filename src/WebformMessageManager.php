@@ -235,7 +235,10 @@ class WebformMessageManager implements WebformMessageManagerInterface {
     ];
 
     switch ($key) {
-      case WebformMessageManagerInterface::ADMIN_ACCESS:
+      case WebformMessageManagerInterface::ADMIN_PAGE:
+        return $this->t('Only webform administrators are allowed to access this page and create new submissions.', $t_args);
+
+      case WebformMessageManagerInterface::ADMIN_CLOSED:
         return $this->t('This webform is <a href=":settings_href">closed</a>. Only submission administrators are allowed to access this webform and create new submissions.', $t_args);
 
       case WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION:

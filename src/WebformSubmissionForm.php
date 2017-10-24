@@ -604,7 +604,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         }
       }
       elseif ($webform->access('submission_update_any')) {
-        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_ACCESS, 'info');
+        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
       }
       else {
         if ($webform->isOpening()) {
@@ -628,7 +628,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       if ($this->currentUser()->hasPermission('administer webform')) {
         // Display error to admin but allow them to submit the broken webform.
         $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_SAVE_EXCEPTION, 'error');
-        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_ACCESS, 'info');
+        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
       }
       else {
         // Display exception message to users.
@@ -640,7 +640,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->checkTotalLimit()) {
       $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::LIMIT_TOTAL_MESSAGE);
       if ($webform->access('submission_update_any')) {
-        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_ACCESS, 'info');
+        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
       }
       else {
         return $form;
@@ -651,7 +651,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->checkUserLimit()) {
       $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::LIMIT_USER_MESSAGE, 'warning');
       if ($webform->access('submission_update_any')) {
-        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_ACCESS, 'info');
+        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
       }
       else {
         return $form;
@@ -697,6 +697,11 @@ class WebformSubmissionForm extends ContentEntityForm {
         ];
         drupal_set_message($this->renderer->renderPlain($build), 'warning');
       }
+    }
+
+    // Display admin only message.
+    if ($this->isGet() && $this->isRoute('webform.canonical') && !$this->getWebform()->getSetting('page')) {
+      $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_PAGE, 'info');
     }
 
     // Display loaded or saved draft message.

@@ -168,15 +168,27 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     $t_args = [
       ':node_href' => ($this->moduleHandler->moduleExists('node')) ? Url::fromRoute('node.add', ['node_type' => 'webform'])->toString() : '',
       ':block_href' => ($this->moduleHandler->moduleExists('block')) ? Url::fromRoute('block.admin_display')->toString() : '',
+      ':view_href' => $webform->toUrl()->toString(),
+      ':test_href' => $webform->toUrl('test-form')->toString(),
     ];
     $default_settings['default_page_submit_path'] = $default_page_submit_path;
     $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
     $form['page_settings']['page'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Allow users to post submission from a dedicated URL'),
+      '#title' => $this->t('Allow users to post submissions from a dedicated URL'),
       '#description' => $this->t('If unchecked, this webform must be attached to a <a href=":node_href">node</a> or a <a href=":block_href">block</a> to receive submissions.', $t_args),
       '#return_value' => TRUE,
       '#default_value' => $settings['page'],
+    ];
+    $form['page_settings']['page_message'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('Any user who can update this webform will still be able to <a href=":view_href">view</a> and <a href=":test_href">test</a> this webform with the administrative theme.', $t_args),
+      '#states' => [
+        'visible' => [
+          ':input[name="page"]' => ['checked' => FALSE],
+        ],
+      ],
     ];
     if ($this->moduleHandler->moduleExists('path')) {
       $form['page_settings']['page_submit_path'] = [

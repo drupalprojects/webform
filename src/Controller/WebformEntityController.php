@@ -11,7 +11,6 @@ use Drupal\webform\WebformRequestInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Provides route responses for webform.
  */
-class WebformController extends ControllerBase implements ContainerInjectionInterface {
+class WebformEntityController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * The renderer service.
@@ -43,7 +42,7 @@ class WebformController extends ControllerBase implements ContainerInjectionInte
   protected $tokenManager;
 
   /**
-   * Constructs a WebformController object.
+   * Constructs a WebformEntityController object.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
