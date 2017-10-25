@@ -23,16 +23,14 @@ class WebformTime extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
-      'multiple' => FALSE,
-      'multiple__header_label' => '',
+    return [
       // Time settings.
       'timepicker' => FALSE,
       'time_format' => 'H:i',
       'min' => '',
       'max' => '',
       'step' => '',
-    ];
+    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
   }
 
   /**

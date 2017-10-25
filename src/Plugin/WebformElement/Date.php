@@ -32,13 +32,13 @@ class Date extends DateBase {
       }
     }
 
-    return parent::getDefaultProperties() + [
+    return [
       // Date settings.
       'datepicker' => FALSE,
       'date_date_format' => $date_format,
       'step' => '',
       'size' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

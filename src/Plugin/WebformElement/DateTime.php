@@ -40,7 +40,7 @@ class DateTime extends DateBase {
       }
     }
 
-    return parent::getDefaultProperties() + [
+    return [
       // Date settings.
       'date_date_format' => $date_format,
       'date_date_element' => 'date',
@@ -52,7 +52,7 @@ class DateTime extends DateBase {
       'date_time_min' => '',
       'date_time_max' => '',
       'date_time_step' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

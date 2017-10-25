@@ -13,15 +13,6 @@ use Drupal\Core\Render\Element\FormElement;
 class WebformComposite extends WebformMultiple {
 
   /**
-   * {@inheritdoc}
-   */
-  public function getInfo() {
-    return [
-      '#empty_items' => 0,
-    ] + parent::getInfo();
-  }
-
-  /**
    * Process items and build multiple elements widget.
    */
   public static function processWebformMultiple(&$element, FormStateInterface $form_state, &$complete_form) {

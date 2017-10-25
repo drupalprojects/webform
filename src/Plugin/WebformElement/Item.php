@@ -22,7 +22,7 @@ class Item extends WebformMarkup {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       'title' => '',
       // Description/Help.
       'help' => '',
@@ -36,7 +36,7 @@ class Item extends WebformMarkup {
       'field_suffix' => '',
       // Form validation.
       'required' => FALSE,
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

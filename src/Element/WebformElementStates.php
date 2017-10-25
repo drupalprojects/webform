@@ -209,6 +209,7 @@ class WebformElementStates extends FormElement {
       '#default_value' => $state['state'],
       '#empty_option' => '',
       '#empty_value' => '',
+      '#wrapper_attributes' => ['class' => ['webform-states-table--state']],
     ];
     $row['operator'] = [
       '#type' => 'select',
@@ -220,7 +221,7 @@ class WebformElementStates extends FormElement {
       '#default_value' => $state['operator'],
       '#field_prefix' => t('if'),
       '#field_suffix' => t('of the following is met:'),
-      '#wrapper_attributes' => ['colspan' => 2, 'align' => 'left'],
+      '#wrapper_attributes' => ['class' => ['webform-states-table--operator'], 'colspan' => 2, 'align' => 'left'],
     ];
     $row['operations'] = static::buildOperations($table_id, $row_index, $ajax_settings);
     if (!$element['#multiple']) {
@@ -263,9 +264,13 @@ class WebformElementStates extends FormElement {
       '#options' => $element['#selector_options'],
       '#other__option_label' => t('Custom selector...'),
       '#other__placeholder' => t('Enter custom selector...'),
+      '#wrapper_attributes' => ['class' => ['webform-states-table--selector']],
       '#default_value' => $condition['selector'],
       '#empty_option' => '',
       '#empty_value' => '',
+    ];
+    $row['condition'] = [
+      '#wrapper_attributes' => ['class' => ['webform-states-table--condition']]
     ];
     $row['condition']['trigger'] = [
       '#type' => 'select',
@@ -274,6 +279,7 @@ class WebformElementStates extends FormElement {
       '#empty_option' => '',
       '#empty_value' => '',
       '#parents' => [$element_name, 'states', $row_index , 'trigger'],
+      '#wrapper_attributes' => ['class' => ['webform-states-table--trigger']],
     ];
     $row['condition']['value'] = [
       '#type' => 'textfield',
@@ -289,6 +295,7 @@ class WebformElementStates extends FormElement {
           [$trigger_selector => ['value' => '!value']],
         ],
       ],
+      '#wrapper_attributes' => ['class' => ['webform-states-table--value']],
       '#parents' => [$element_name, 'states', $row_index , 'value'],
     ];
     $row['operations'] = static::buildOperations($table_id, $row_index, $ajax_settings);
@@ -309,7 +316,9 @@ class WebformElementStates extends FormElement {
    *   A render array containing state operations.
    */
   protected static function buildOperations($table_id, $row_index, array $ajax_settings) {
-    $operations = [];
+    $operations = [
+      '#wrapper_attributes' => ['class' => ['webform-states-table--operations']],
+    ];
     $operations['add'] = [
       '#type' => 'image_button',
       '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',

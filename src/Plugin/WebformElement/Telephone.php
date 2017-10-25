@@ -24,11 +24,11 @@ class Telephone extends TextBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       'multiple' => FALSE,
       'international' => FALSE,
       'international_initial_country' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

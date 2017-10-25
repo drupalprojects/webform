@@ -23,12 +23,12 @@ class WebformSignature extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $default_properties = [
+    $properties = [
       // General settings.
       'description' => $this->t('Sign above'),
     ] + parent::getDefaultProperties();
-    unset($default_properties['disabled']);
-    return $default_properties;
+    unset($properties['disabled']);
+    return $properties;
   }
 
   /**

@@ -21,10 +21,10 @@ class Details extends ContainerBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       'help' => '',
       'open' => FALSE,
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

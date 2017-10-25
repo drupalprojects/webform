@@ -220,6 +220,24 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
+   * Get default multiple properties used by most elements.
+   *
+   * @return array
+   *   An associative array containing default multiple properties.
+   */
+  protected function getDefaultMultipleProperties() {
+    return [
+      'multiple' => FALSE,
+      'multiple__header_label' => '',
+      'multiple__min_items' => 1,
+      'multiple__empty_items' => 1,
+      'multiple__add_more' => 1,
+      'multiple__sorting' => TRUE,
+      'multiple__operations' => TRUE,
+    ];
+  }
+
+  /**
    * Get default base properties used by all elements.
    *
    * @return array
@@ -872,10 +890,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Change the element to a multiple element.
     $element['#type'] = 'webform_multiple';
     $element['#webform_multiple'] = TRUE;
+
+    // Set cardinality from #multiple.
     if ($element['#multiple'] > 1) {
       $element['#cardinality'] = $element['#multiple'];
     }
-    $element['#empty_items'] = 0;
+
+    // Apply multiple properties.
+    $multiple_properties = $this->getDefaultMultipleProperties();
+    foreach ($multiple_properties as $multiple_property => $multiple_value) {
+      if (strpos($multiple_property,'multiple__') === 0) {
+        $property_name = str_replace('multiple__', '', $multiple_property);
+        $element["#$property_name"] = (isset($element["#$multiple_property"])) ? $element["#$multiple_property"] : $multiple_value;
+      }
+    }
     if (!empty($element['#multiple__header_label'])) {
       $element['#header'] = $element['#multiple__header_label'];
     }
@@ -1944,8 +1972,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    $form['element']['multiple__header_container'] = [
-      '#type' => 'container',
+    
+    // Multiple.
+    $form['multiple'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Multiple settings'),
       '#states' => [
         'invisible' => [
           ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
@@ -1953,16 +1984,49 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    $form['element']['multiple__header_container']['multiple__header'] = [
+    $form['multiple']['multiple__header'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display elements in table columns'),
       '#description' => $this->t("If checked, the composite sub-element titles will be displayed as the table header labels."),
       '#return_value' => TRUE,
     ];
-    $form['element']['multiple__header_container']['multiple__header_label'] = [
+    $form['multiple']['multiple__header_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Table header label'),
       '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__min_items'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Minimum amount of items'),
+      '#required' => TRUE,
+      '#min' => 1,
+      '#max' => 20,
+    ];
+    $form['multiple']['multiple__empty_items'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Number of empty items'),
+      '#required' => TRUE,
+      '#min' => 0,
+      '#max' => 20,
+    ];
+    $form['multiple']['multiple__add_more'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Number of add more items'),
+      '#required' => TRUE,
+      '#min' => 1,
+      '#max' => 20,
+    ];
+    $form['multiple']['multiple__sorting'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to sort elements.'),
+      '#desription' => $this->t('If unchecked, the elements will no longer be sortable.'),
+      '#return_value' => TRUE,
+    ];
+    $form['multiple']['multiple__operations'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to add/remove elements.'),
+      '#desription' => $this->t('If unchecked, the add/remove (+/x) buttons will be removed from each table row.'),
+      '#return_value' => TRUE,
     ];
 
     /* Default value */

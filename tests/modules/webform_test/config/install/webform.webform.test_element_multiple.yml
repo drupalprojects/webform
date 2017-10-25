@@ -20,6 +20,22 @@ elements: |
       - One
       - Two
       - Three
+  webform_multiple_no_sorting:
+    '#type': webform_multiple
+    '#title': webform_multiple_no_sorting
+    '#sorting': false
+    '#default_value':
+      - One
+      - Two
+      - Three
+  webform_multiple_no_operations:
+    '#type': webform_multiple
+    '#title': webform_multiple_no_operations
+    '#operations': false
+    '#default_value':
+      - One
+      - Two
+      - Three
   webform_multiple_email_five:
     '#type': webform_multiple
     '#title': webform_multiple_email_five

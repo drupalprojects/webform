@@ -56,7 +56,7 @@ class WebformComposite extends WebformCompositeBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $properties = parent::getDefaultProperties();
+    $properties = parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
     $properties['multiple'] = TRUE;
     $properties['multiple__header'] = TRUE;
     unset(
@@ -81,11 +81,22 @@ class WebformComposite extends WebformCompositeBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
 
+    // Set cardinality.
     if (isset($element['#multiple'])) {
       $element['#cardinality'] = ($element['#multiple'] === FALSE) ? 1 : $element['#multiple'];
     }
 
-    $element['#header'] = (isset($element['#multiple__header'])) ? $element['#multiple__header'] : TRUE;
+    // Apply multiple properties.
+    $multiple_properties = $this->getDefaultMultipleProperties();
+    foreach ($multiple_properties as $multiple_property => $multiple_value) {
+      if (strpos($multiple_property,'multiple__') === 0) {
+        $property_name = str_replace('multiple__', '', $multiple_property);
+        $element["#$property_name"] = (isset($element["#$multiple_property"])) ? $element["#$multiple_property"] : $multiple_value;
+      }
+    }
+
+    // Default to displaying table header.
+    $element += ['#header' => TRUE];
 
     // Transfer '#{composite_key}_{property}' from main element to composite
     // element.
@@ -106,6 +117,17 @@ class WebformComposite extends WebformCompositeBase {
     // Don't set multiple wrapper since 'webform_composite' extends
     // 'webform_multiple'.
     return;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+    // Always to should multiple element settings since WebformComposite
+    // extends WebformMultiple.
+    unset($form['multiple']['#states']);
+    return $form;
   }
 
   /**

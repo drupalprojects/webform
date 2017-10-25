@@ -24,7 +24,7 @@ class DateList extends DateBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       // Date settings.
       'date_part_order' => [
         'year',
@@ -39,7 +39,7 @@ class DateList extends DateBase {
       'date_year_range' => '1900:2050',
       'date_year_range_reverse' => FALSE,
       'date_increment' => 1,
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

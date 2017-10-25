@@ -36,22 +36,22 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $default_properties = parent::getDefaultProperties();
+    $properties = parent::getDefaultProperties();
 
     // Issue #2836374: Wrapper attributes are not supported by composite
     // elements, this includes radios, checkboxes, and buttons.
     if (preg_match('/(radios|checkboxes|buttons|tableselect|tableselect_sort|table_sort)$/', $this->getPluginId())) {
-      unset($default_properties['wrapper_attributes']);
+      unset($properties['wrapper_attributes']);
     }
 
     if (preg_match('/(tableselect|tableselect_sort|table_sort)$/', $this->getPluginId())) {
-      unset($default_properties['title_display']);
-      unset($default_properties['help']);
-      unset($default_properties['description']);
-      unset($default_properties['description_display']);
+      unset($properties['title_display']);
+      unset($properties['help']);
+      unset($properties['description']);
+      unset($properties['description_display']);
     }
 
-    $default_properties += [
+    $properties += [
       // Options settings.
       'options' => [],
       'options_randomize' => FALSE,
@@ -59,7 +59,7 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Add other properties to elements that include the other text field.
     if ($this->isOptionsOther()) {
-      $default_properties += [
+      $properties += [
         'other__option_label' => $this->t('Other...'),
         'other__type' => 'textfield',
         'other__title' => '',
@@ -79,7 +79,7 @@ abstract class OptionsBase extends WebformElementBase {
       ];
     }
 
-    return $default_properties;
+    return $properties;
   }
 
   /**

@@ -39,7 +39,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $max_filesize = Bytes::toInt($max_filesize);
     $max_filesize = ($max_filesize / 1024 / 1024);
     $file_extensions = $this->getFileExtensions();
-    $default_properties = parent::getDefaultProperties() + [
+    $properties = parent::getDefaultProperties() + [
       'multiple' => FALSE,
       'max_filesize' => $max_filesize,
       'file_extensions' => $file_extensions,
@@ -49,8 +49,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       'button__attributes' => [],
     ];
     // File uploads can't have default files.
-    unset($default_properties['default_value']);
-    return $default_properties;
+    unset($properties['default_value']);
+    return $properties;
   }
 
   /**

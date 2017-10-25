@@ -16,14 +16,14 @@ abstract class NumericBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       // Form validation.
       'size' => '',
       'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
       'autocomplete' => 'on',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

@@ -61,10 +61,7 @@ class Textarea extends TextBase {
       'format_items' => $this->getItemsDefaultFormat(),
       'format_items_html' => '',
       'format_items_text' => '',
-      // Multiple.
-      'multiple' => FALSE,
-      'multiple__header_label' => '',
-    ] + $this->getDefaultBaseProperties();
+    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
   }
 
   /**

@@ -47,8 +47,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $properties = [
       'title' => '',
       'default_value' => [],
-      'multiple' => FALSE,
-      'multiple__header' => FALSE,
       'multiple__header_label' => '',
       // Description/Help.
       'help' => '',
@@ -73,7 +71,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       'format_items' => $this->getItemsDefaultFormat(),
       'format_items_html' => '',
       'format_items_text' => '',
-    ] + $this->getDefaultBaseProperties();
+    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
 
     $composite_elements = $this->getCompositeElements();
     foreach ($composite_elements as $composite_key => $composite_element) {

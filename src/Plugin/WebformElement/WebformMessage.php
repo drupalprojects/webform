@@ -23,7 +23,7 @@ class WebformMessage extends WebformMarkupBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       // Attributes.
       'attributes' => [],
       // Message settings.
@@ -33,7 +33,7 @@ class WebformMessage extends WebformMarkupBase {
       'message_close_effect' => 'slide',
       'message_id' => '',
       'message_storage' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**

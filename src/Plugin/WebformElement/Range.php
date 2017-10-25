@@ -22,7 +22,7 @@ class Range extends NumericBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       // Form validation.
       'min' => '',
       'max' => '',
@@ -31,7 +31,7 @@ class Range extends NumericBase {
       'range__output' => FALSE,
       'range__output_prefix' => '',
       'range__output_suffix' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**
