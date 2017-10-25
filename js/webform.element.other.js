@@ -39,7 +39,12 @@
       var value = $input.data('webform-value');
       if (value !== undefined) {
         $input.val(value);
-        $input.get(0).setSelectionRange(0, 0);
+        var input = $input.get(0);
+        // Move cursor to the beginning of the other text input.
+        // @see https://stackoverflow.com/questions/21177489/selectionstart-selectionend-on-input-type-number-no-longer-allowed-in-chrome
+        if ($.inArray(input.type, ['text', 'search', 'url', 'tel', 'password']) !== -1) {
+          input.setSelectionRange(0, 0);
+        }
       }
       // Refresh CodeMirror used as other element.
       $element.parent().find('.CodeMirror').each(function (index, $element) {

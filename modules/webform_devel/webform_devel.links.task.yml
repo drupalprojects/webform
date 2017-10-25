@@ -22,7 +22,6 @@ entity.webform.test_form.api:
   parent_id: entity.webform.test_form
   weight: 10
 
-
 entity.node.webform.test_form.form:
   title: 'Form'
   route_name: entity.node.webform.test_form

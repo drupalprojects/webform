@@ -807,9 +807,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       /** @var \Drupal\file\FileInterface[] $files */
       $files = File::loadMultiple(is_array($fids) ? $fids : [$fids]);
       foreach ($files as $file) {
-        $filepath = \Drupal::service('file_system')->realpath($file->getFileUri());
         $attachments[] = [
-          'filecontent' => file_get_contents($filepath),
+          'filecontent' => file_get_contents($file->getFileUri()),
           'filename' => $file->getFilename(),
           'filemime' => $file->getMimeType(),
           // Add URL to be used by resend webform.
