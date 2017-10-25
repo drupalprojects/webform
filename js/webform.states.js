@@ -165,7 +165,7 @@
 
     // Check for #states no clear attribute.
     // @see https://css-tricks.com/snippets/jquery/make-an-jquery-hasattr/
-    if ($input[0].hasAttribute('data-webform-states-no-clear')) {
+    if ($input.closest('[data-webform-states-no-clear]').length) {
       return;
     }
 

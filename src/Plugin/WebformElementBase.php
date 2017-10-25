@@ -1998,31 +1998,39 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['multiple']['multiple__min_items'] = [
       '#type' => 'number',
       '#title' => $this->t('Minimum amount of items'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#required' => TRUE,
       '#min' => 1,
       '#max' => 20,
     ];
     $form['multiple']['multiple__empty_items'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of empty items'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#required' => TRUE,
       '#min' => 0,
       '#max' => 20,
     ];
     $form['multiple']['multiple__add_more'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of add more items'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#required' => TRUE,
       '#min' => 1,
       '#max' => 20,
     ];
     $form['multiple']['multiple__sorting'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to sort elements.'),
-      '#desription' => $this->t('If unchecked, the elements will no longer be sortable.'),
+      '#description' => $this->t('If unchecked, the elements will no longer be sortable.'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#return_value' => TRUE,
     ];
     $form['multiple']['multiple__operations'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to add/remove elements.'),
-      '#desription' => $this->t('If unchecked, the add/remove (+/x) buttons will be removed from each table row.'),
+      '#description' => $this->t('If unchecked, the add/remove (+/x) buttons will be removed from each table row.'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#return_value' => TRUE,
     ];
 
