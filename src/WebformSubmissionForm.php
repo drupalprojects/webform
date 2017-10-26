@@ -840,12 +840,14 @@ class WebformSubmissionForm extends ContentEntityForm {
           $track_pages = array_flip(array_keys($pages));
           $track_previous_page = ($previous_page) ? $track_pages[$previous_page] + 1 : NULL;
           $track_next_page = ($next_page) ? $track_pages[$next_page] + 1 : NULL;
+          $track_last_page = ($this->getWebform()->getSetting('wizard_complete')) ? count($track_pages) : count($track_pages) + 1;
           break;
 
         default;
         case 'name':
           $track_previous_page = $previous_page;
           $track_next_page = $next_page;
+          $track_last_page = 'webform_complete';
           break;
       }
 
@@ -859,6 +861,10 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Only show that save button if this is the last page of the wizard or
       // on preview page or right before the optional preview.
       $element['submit']['#access'] = $is_last_page || $is_preview_page || $is_next_page_optional_preview || $is_next_page_complete;
+
+      if ($track) {
+        $element['submit']['#attributes']['data-webform-wizard-page'] = $track_last_page;
+      }
 
       if (!$is_first_page) {
         if ($is_preview_page) {

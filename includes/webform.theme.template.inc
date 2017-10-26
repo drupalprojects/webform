@@ -221,7 +221,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
   }
 
   // Apply all passed query string parameters to the 'Back to form' link.
-  unset($query['webform_id'], $query['ajax_form'], $query['_wrapper_format'], $query['token']);
+  unset($query['webform_id'], $query['ajax_form'], $query['_wrapper_format'], $query['token'], $query['page']);
   $options = ($query) ? ['query' => $query] : [];
 
   // Set back_url.
@@ -229,7 +229,11 @@ function template_preprocess_webform_confirmation(array &$variables) {
     $variables['back_url'] = $source_entity->toUrl('canonical', $options)->toString();
   }
   elseif ($webform_submission) {
-    $variables['back_url'] = $webform_submission->getSourceUrl()->toString();
+    $source_url = $webform_submission->getSourceUrl();
+    $query = $source_url->getOption('query');
+    unset($query['webform_id'], $query['ajax_form'], $query['_wrapper_format'], $query['token'], $query['page']);
+    $source_url->setOption('query', $query);
+    $variables['back_url'] = $source_url->toString();
   }
   else {
     $variables['back_url'] = $webform->toUrl('canonical', $options)->toString();
