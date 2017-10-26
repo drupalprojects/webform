@@ -36,7 +36,7 @@ class WebformElementCompositeCustomTest extends WebformTestBase {
     $this->assertRaw('<th class="webform_composite_basic-table--weight webform-multiple-table--weight">Weight</th>');
 
     // Check advanced custom composite.
-    $this->assertRaw('<span class="field-suffix">yrs. old</span>');
+    $this->assertRaw('<span class="field-suffix"> yrs. old</span>');
 
     /* Processing */
 

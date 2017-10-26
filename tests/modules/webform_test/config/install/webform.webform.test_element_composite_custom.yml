@@ -55,7 +55,7 @@ elements: |
       age:
         '#type': number
         '#title': 'Age'
-        '#field_suffix': 'yrs. old'
+        '#field_suffix': ' yrs. old'
         '#min': 1
         '#max': 125
     '#default_value':
