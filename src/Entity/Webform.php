@@ -795,6 +795,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'wizard_start_label' => '',
       'wizard_complete' => TRUE,
       'wizard_complete_label' => '',
+      'wizard_track' => '',
       'preview' => DRUPAL_DISABLED,
       'preview_label' => '',
       'preview_title' => '',

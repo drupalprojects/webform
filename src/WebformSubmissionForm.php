@@ -830,7 +830,24 @@ class WebformSubmissionForm extends ContentEntityForm {
       // Get current page element which can contain custom prev(ious) and next button
       // labels.
       $current_page_element = $this->getWebform()->getPage($this->operation, $current_page);
+      $previous_page = $this->getPreviousPage($pages, $current_page);
       $next_page = $this->getNextPage($pages, $current_page);
+
+      // Track previous and next page.
+      $track = $this->getWebform()->getSetting('wizard_track');
+      switch ($track) {
+        case 'index':
+          $track_pages = array_flip(array_keys($pages));
+          $track_previous_page = ($previous_page) ? $track_pages[$previous_page] + 1 : NULL;
+          $track_next_page = ($next_page) ? $track_pages[$next_page] + 1 : NULL;
+          break;
+
+        default;
+        case 'name':
+          $track_previous_page = $previous_page;
+          $track_next_page = $next_page;
+          break;
+      }
 
       $is_first_page = ($current_page == $this->getFirstPage($pages)) ? TRUE : FALSE;
       $is_last_page = (in_array($current_page, ['webform_preview', 'webform_complete', $this->getLastPage($pages)])) ? TRUE : FALSE;
@@ -854,6 +871,9 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#attributes' => ['class' => ['webform-button--previous', 'js-webform-novalidate']],
             '#weight' => 0,
           ];
+          if ($track) {
+            $element['preview_prev']['#attributes']['data-webform-wizard-page'] = $track_previous_page;
+          }
         }
         else {
           if (isset($current_page_element['#prev_button_label'])) {
@@ -874,6 +894,9 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#attributes' => ['class' => ['webform-button--previous', 'js-webform-novalidate']],
             '#weight' => 0,
           ];
+          if ($track) {
+            $element['wizard_prev']['#attributes']['data-webform-wizard-page'] = $track_previous_page;
+          }
         }
       }
 
@@ -887,6 +910,9 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#attributes' => ['class' => ['webform-button--preview']],
             '#weight' => 1,
           ];
+          if ($track) {
+            $element['preview_next']['#attributes']['data-webform-wizard-page'] = $track_next_page;
+          }
         }
         else {
           if (isset($current_page_element['#next_button_label'])) {
@@ -903,11 +929,17 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#webform_actions_button_custom' => $next_button_custom,
             '#validate' => ['::validateForm'],
             '#submit' => ['::next'],
-            '#attributes' => ['class' => ['webform-button--next']],
+            '#attributes' => [
+              'class' => ['webform-button--next']
+            ],
             '#weight' => 1,
           ];
+          if ($track) {
+            $element['wizard_next']['#attributes']['data-webform-wizard-page'] = $track_next_page;
+          }
         }
       }
+      $element['#attached']['library'][] = 'webform/webform.form.wizard';
     }
 
     // Draft.

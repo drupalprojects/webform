@@ -964,3 +964,10 @@ function webform_update_8084() {
 function webform_update_8085() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2918860: Webform MultiStep URL Params.
+ */
+function webform_update_8086() {
+  _webform_update_webform_settings();
+}

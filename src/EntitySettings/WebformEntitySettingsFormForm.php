@@ -276,6 +276,16 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         ],
       ],
     ];
+    $form['wizard_settings']['wizard_track'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Track wizard progress in the URL by'),
+      '#options' => [
+        'name' => $this->t("Page name (?page=contact)"),
+        'index' => $this->t("Page index (?page=2)"),
+      ],
+      '#empty_option' => '',
+      '#default_value' => $settings['wizard_track'],
+    ];
 
     // Preview settings.
     $form['preview_settings'] = [

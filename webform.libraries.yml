@@ -282,6 +282,15 @@ webform.form.unsaved:
     - core/jquery.once
     - core/drupal
 
+webform.form.wizard:
+  version: VERSION
+  js:
+    js/webform.form.wizard.js:  {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
 # Element.
 
 # Drupal 8.3.x and below

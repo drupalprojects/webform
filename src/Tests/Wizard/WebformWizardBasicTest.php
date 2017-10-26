@@ -45,6 +45,36 @@ class WebformWizardBasicTest extends WebformWizardTestBase {
     // Check access denied to 'Edit: All' tab for simple form.
     $this->drupalGet("admin/structure/webform/manage/contact/submission/$sid/edit/all");
     $this->assertResponse(403);
+
+    // Enable tracking by name.
+    $wizard_webform->setSetting('wizard_track', 'name')->save();
+
+    // Check next page.
+    $this->drupalGet('webform/test_form_wizard_basic');
+    $this->assertRaw('data-webform-wizard-page="page_2" data-drupal-selector="edit-wizard-next"');
+
+    // Check next and previous page.
+    $this->drupalPostForm('webform/test_form_wizard_basic', [], t('Next Page >'));
+    $this->assertRaw('data-webform-wizard-page="page_1" data-drupal-selector="edit-wizard-prev"');
+    $this->assertRaw('data-webform-wizard-page="webform_preview" data-drupal-selector="edit-preview-next"');
+
+    $this->drupalPostForm(NULL, [], t('Preview'));
+    $this->assertRaw('data-webform-wizard-page="page_2" data-drupal-selector="edit-preview-prev"');
+
+    // Enable tracking by index.
+    $wizard_webform->setSetting('wizard_track', 'index')->save();
+
+    // Check next page.
+    $this->drupalGet('webform/test_form_wizard_basic');
+    $this->assertRaw('data-webform-wizard-page="2" data-drupal-selector="edit-wizard-next"');
+
+    // Check next and previous page.
+    $this->drupalPostForm('webform/test_form_wizard_basic', [], t('Next Page >'));
+    $this->assertRaw('data-webform-wizard-page="1" data-drupal-selector="edit-wizard-prev"');
+    $this->assertRaw('data-webform-wizard-page="3" data-drupal-selector="edit-preview-next"');
+
+    $this->drupalPostForm(NULL, [], t('Preview'));
+    $this->assertRaw('data-webform-wizard-page="2" data-drupal-selector="edit-preview-prev"');
   }
 
 }

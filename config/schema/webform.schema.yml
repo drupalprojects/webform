@@ -551,6 +551,9 @@ webform.webform.*:
         wizard_complete_label:
           type: label
           label: 'Wizard complete label'
+        wizard_track:
+          type: text
+          label: 'Track wizard progress in the URL'
         preview:
           type: integer
           label: 'Enable preview page'
