@@ -46,7 +46,7 @@ elements: |
       age:
         '#type': number
         '#title': 'Age'
-        '#field_suffix': 'yrs. old'
+        '#field_suffix': ' yrs. old'
         '#max': 1
         '#max': 125
   actions:

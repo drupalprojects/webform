@@ -351,10 +351,57 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getItemFormats() {
-    return parent::getItemFormats() + [
-      'list' => $this->t('List'),
+  protected function formatHtmlItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+    $format = $this->getItemsFormat($element);
+    if ($format !== 'table') {
+      return parent::formatHtmlItems($element, $webform_submission, $options);
+    }
+
+    $composite_elements = $this->getInitializedCompositeElement($element);
+
+    // Get header.
+    $header = [];
+    foreach (RenderElement::children($composite_elements) as $composite_key) {
+      if (isset($composite_elements[$composite_key]['#access']) && $composite_elements[$composite_key]['#access'] === FALSE) {
+        unset($composite_elements[$composite_key]);
+        continue;
+      }
+
+      $composite_element = $composite_elements[$composite_key];
+      $header[$composite_key] = (isset($composite_element['#title'])) ? $composite_element['#title'] : $composite_key;
+    }
+
+    // Get rows.
+    $rows = [];
+    $values = $this->getValue($element, $webform_submission, $options);
+    foreach ($values as $delta => $value) {
+      foreach ($header as $composite_key => $composite_title) {
+        $composite_value = $this->formatCompositeHtml($element, $webform_submission, ['delta' => $delta, 'composite_key' => $composite_key] + $options);
+        if (is_array($composite_value)) {
+          $rows[$delta][$composite_key] = ['data' => $composite_value];
+        }
+        else {
+          $rows[$delta][$composite_key] = ['data' => ['#markup' => $composite_value]];
+        }
+      }
+    }
+
+    return [
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function formatTextItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+    $format = $this->getItemsFormat($element);
+    if ($format === 'table') {
+       $element['#format_items'] = 'hr';
+    }
+    return parent::formatTextItems($element, $webform_submission, $options);
   }
 
   /**
@@ -541,6 +588,15 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  public function getItemFormats() {
+    return parent::getItemFormats() + [
+        'list' => $this->t('List'),
+      ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getItemsDefaultFormat() {
     return 'ul';
   }
@@ -553,6 +609,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       'ol' => $this->t('Ordered list'),
       'ul' => $this->t('Unordered list'),
       'hr' => $this->t('Horizontal rule'),
+      'table' => $this->t('Table'),
     ];
   }
 
@@ -730,6 +787,11 @@ abstract class WebformCompositeBase extends WebformElementBase {
     foreach ($composite_elements as $composite_key => $composite_element) {
       $item_pattern[] = "{{ element.$composite_key }}";
     }
+
+    //  Hide single item display when multiple item display is set to 'table'.
+    $form['display']['item']['#states']['invisible'] = [
+      ':input[name="properties[format_items]"]' => ['value' => 'table']
+    ];
 
     $form['#attached']['library'][] = 'webform/webform.element.composite.admin';
 
