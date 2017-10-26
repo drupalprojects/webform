@@ -91,7 +91,7 @@ function webform_drush_command() {
       'prefix' => 'Prefix for file names to be tidied. (Defaults to webform)'
     ],
     'arguments' => [
-      'module' => "The module (config/install) or config directory (sync) that needs its YAML configuration files tidied. (Defaults to webform)",
+      'target' => "The module (config/install), config directory (sync), or path (/some/path) that needs its YAML configuration files tidied. (Defaults to webform)",
     ],
     'examples' => [
       'drush webform-tidy webform' => "Tidies YAML configuration files in 'webform/config' for the Webform module",
@@ -414,34 +414,38 @@ function drush_webform_purge($webform_id = NULL) {
 /**
  * Implements drush_hook_COMMAND_validate().
  */
-function drush_webform_tidy_validate($module = 'webform') {
+function drush_webform_tidy_validate($target = 'webform') {
   global $config_directories;
-  if (!isset($config_directories[$module]) && !file_exists(drupal_get_path('module', $module) . '/config')) {
-    $t_args = [
-      '@module' => $module,
-      '@directory' => drupal_get_path('module', $module) . '/config',
-    ];
-    return drush_set_error(dt("@module does not contain a '@module/config' directory (@directory) or config directory does not exist.", $t_args));
+  if (!isset($config_directories[$target])
+    && !(\Drupal::moduleHandler()->moduleExists($target) && file_exists(drupal_get_path('module', $target) . '/config'))
+    && !file_exists(realpath($target))) {
+    $t_args = ['@target' => $target];
+    return drush_set_error(dt("Unable to find '@target' module (config/install), config directory (sync), or path (/some/path/).", $t_args));
   }
 }
 
 /**
  * Implements drush_hook_COMMAND().
  */
-function drush_webform_tidy($module = 'webform') {
+function drush_webform_tidy($target = 'webform') {
   global $config_directories;
   $prefix = drush_get_option('prefix', 'webform');
 
-  if (isset($config_directories[$module])) {
-    $file_directory_path = DRUPAL_ROOT . '/' . $config_directories[$module];
+  if (isset($config_directories[$target])) {
+    $file_directory_path = DRUPAL_ROOT . '/' . $config_directories[$target];
+    $dependencies = drush_get_option('dependencies');
+  }
+  elseif (\Drupal::moduleHandler()->moduleExists($target)) {
+    $file_directory_path = drupal_get_path('module', $target) . '/config';
     $dependencies = drush_get_option('dependencies');
   }
   else {
-    $file_directory_path = drupal_get_path('module', $module) . '/config';
+    $file_directory_path = realpath($target);
     $dependencies = FALSE;
   }
+
   $files = file_scan_directory($file_directory_path, ($prefix) ? '/^' . preg_quote($prefix, '/.') . '.*\.yml$/' : '/.*\.yml$/');
-  drush_print(dt("Reviewing @count YAML configuration '@prefix.*' files in '@module'.", ['@count' => count($files), '@module' => $module, '@prefix' => $prefix]));
+  drush_print(dt("Reviewing @count YAML configuration '@prefix.*' files in '@module'.", ['@count' => count($files), '@module' => $target, '@prefix' => $prefix]));
 
   $total = 0;
   foreach ($files as $file) {
@@ -452,9 +456,9 @@ function drush_webform_tidy($module = 'webform') {
     if ($dependencies && preg_match('/^(webform\.webform\.|webform\.webform_options\.)/', $file->filename)) {
       try {
         $data = Yaml::decode($tidied_yaml);
-        if (empty($data['dependencies']['enforced']['module']) || !in_array($module, $data['dependencies']['enforced']['module'])) {
+        if (empty($data['dependencies']['enforced']['module']) || !in_array($target, $data['dependencies']['enforced']['module'])) {
           drush_print(dt('Adding module dependency to @file...', ['@file' => $file->filename]));
-          $data['dependencies']['enforced']['module'][] = $module;
+          $data['dependencies']['enforced']['module'][] = $target;
           $tidied_yaml = Yaml::encode($data);
         }
       }
