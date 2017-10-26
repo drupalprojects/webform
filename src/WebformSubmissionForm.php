@@ -310,6 +310,12 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Build the webform.
     $form = parent::buildForm($form, $form_state);
+    
+    // Ajax: Scroll to.
+    // @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
+    if ($this->isAjax()) {
+      $form['#webform_ajax_scroll_top'] = $this->getWebformSetting('ajax_scroll_top');
+    }
 
     // Server side #states API validation.
     $this->conditionsValidator->buildForm($form, $form_state);
@@ -513,12 +519,6 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Pages: Disable webform auto submit on enter for wizard webform pages only.
     if ($this->hasPages()) {
       $form['#attributes']['class'][] = 'js-webform-disable-autosubmit';
-    }
-
-    // Ajax: Scroll to.
-    // @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
-    if ($this->isAjax()) {
-      $form['#webform_ajax_scroll_top'] = $this->getWebformSetting('ajax_scroll_top');
     }
 
     // Add #after_build callbacks.
