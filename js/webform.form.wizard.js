@@ -17,7 +17,7 @@
    */
   Drupal.behaviors.webformWizardPage = {
     attach: function (context) {
-      $('[data-webform-wizard-page]', context).once('webform-wizard-page').on('click', function() {
+      $(':button[data-webform-wizard-page], :submit[data-webform-wizard-page]', context).once('webform-wizard-page').on('click', function() {
         var page = $(this).attr('data-webform-wizard-page');
         this.form.action = this.form.action.replace(/\?.+$/, '') + '?page=' + page;
       });
