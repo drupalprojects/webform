@@ -494,10 +494,7 @@ function template_preprocess_webform_submission_yaml(array &$variables) {
   $data = $webform_submission->toArray(TRUE, TRUE);
   $yaml = Yaml::encode($data);
   $yaml = WebformYaml::tidy($yaml);
-  $variables['yaml'] = [
-    '#markup' => $yaml,
-    '#allowed_tags' => Xss::getAdminTagList(),
-  ];;
+  $variables['yaml'] = $yaml;
 }
 
 /**
