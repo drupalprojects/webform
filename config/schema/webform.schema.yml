@@ -53,9 +53,9 @@ webform.settings:
         default_wizard_start_label:
           type: label
           label: 'Default wizard start label'
-        default_wizard_complete_label:
+        default_wizard_confirmation_label:
           type: label
-          label: 'Default wizard complete label'
+          label: 'Default wizard confirmation label'
         default_preview_next_button_label:
           type: label
           label: 'Default preview button label'
@@ -545,12 +545,12 @@ webform.webform.*:
         wizard_start_attributes:
           type: ignore
           label: 'Wizard start attributes'
-        wizard_complete:
+        wizard_confirmation:
           type: boolean
           label: 'Include confirmation page in progress'
-        wizard_complete_label:
+        wizard_confirmation_label:
           type: label
-          label: 'Wizard complete label'
+          label: 'Wizard confirmation label'
         wizard_track:
           type: text
           label: 'Track wizard progress in the URL'

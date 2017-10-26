@@ -310,7 +310,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Build the webform.
     $form = parent::buildForm($form, $form_state);
-    
+
     // Ajax: Scroll to.
     // @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
     if ($this->isAjax()) {
@@ -341,6 +341,24 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Add a reference to the webform's id to the $form render array.
     $form['#webform_id'] = $webform->id();
+
+    // Track current page name or index by setting the
+    // "data-webform-wizard-page"
+    // attribute which is used Drupal.behaviors.webformWizardTrackPage.
+    // The data parameter is append to the URL after the form has been submitted
+    // @see js/webform.form.wizard.js
+    $track = $this->getWebform()->getSetting('wizard_track');
+    if ($track && $this->getRequest()->isMethod('POST')) {
+      $current_page = $this->getCurrentPage($form, $form_state);
+      if ($track == 'index') {
+        $pages = $this->getWebform()->getPages($this->operation);
+        $track_pages = array_flip(array_keys($pages));
+        $form['#attributes']['data-webform-wizard-current-page'] = ($track_pages[$current_page] + 1);
+      }
+      else {
+        $form['#attributes']['data-webform-wizard-current-page'] = $current_page;
+      }
+    }
 
     // Define very specific webform classes, this override the form's
     // default classes.
@@ -840,22 +858,22 @@ class WebformSubmissionForm extends ContentEntityForm {
           $track_pages = array_flip(array_keys($pages));
           $track_previous_page = ($previous_page) ? $track_pages[$previous_page] + 1 : NULL;
           $track_next_page = ($next_page) ? $track_pages[$next_page] + 1 : NULL;
-          $track_last_page = ($this->getWebform()->getSetting('wizard_complete')) ? count($track_pages) : count($track_pages) + 1;
+          $track_last_page = ($this->getWebform()->getSetting('wizard_confirmation')) ? count($track_pages) : count($track_pages) + 1;
           break;
 
         default;
         case 'name':
           $track_previous_page = $previous_page;
           $track_next_page = $next_page;
-          $track_last_page = 'webform_complete';
+          $track_last_page = 'webform_confirmation';
           break;
       }
 
       $is_first_page = ($current_page == $this->getFirstPage($pages)) ? TRUE : FALSE;
-      $is_last_page = (in_array($current_page, ['webform_preview', 'webform_complete', $this->getLastPage($pages)])) ? TRUE : FALSE;
+      $is_last_page = (in_array($current_page, ['webform_preview', 'webform_confirmation', $this->getLastPage($pages)])) ? TRUE : FALSE;
       $is_preview_page = ($current_page == 'webform_preview');
       $is_next_page_preview = ($next_page == 'webform_preview') ? TRUE : FALSE;
-      $is_next_page_complete = ($next_page == 'webform_complete') ? TRUE : FALSE;
+      $is_next_page_complete = ($next_page == 'webform_confirmation') ? TRUE : FALSE;
       $is_next_page_optional_preview = ($is_next_page_preview && $preview_mode != DRUPAL_REQUIRED);
 
       // Only show that save button if this is the last page of the wizard or
@@ -1021,7 +1039,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected function wizardSubmit(array &$form, FormStateInterface $form_state) {
     $current_page = $form_state->get('current_page');
 
-    if ($current_page === 'webform_complete') {
+    if ($current_page === 'webform_confirmation') {
       $this->complete($form, $form_state);
       $this->submitForm($form, $form_state);
       $this->save($form, $form_state);
@@ -1651,7 +1669,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->hideElements($element);
     }
   }
-  
+
   /**
    * Prepare webform elements.
    *

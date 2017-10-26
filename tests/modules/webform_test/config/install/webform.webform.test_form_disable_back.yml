@@ -377,8 +377,8 @@ settings:
   wizard_progress_pages: true
   wizard_progress_percentage: true
   wizard_start_label: ''
-  wizard_complete: true
-  wizard_complete_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
   preview: 0
   preview_label: ''
   preview_title: ''

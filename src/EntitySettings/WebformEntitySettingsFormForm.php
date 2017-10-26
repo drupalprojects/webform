@@ -253,11 +253,11 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_percentage'],
     ];
-    $form['wizard_settings']['wizard_complete'] = [
+    $form['wizard_settings']['wizard_confirmation'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include confirmation page in progress'),
       '#return_value' => TRUE,
-      '#default_value' => $settings['wizard_complete'],
+      '#default_value' => $settings['wizard_confirmation'],
     ];
     $form['wizard_settings']['wizard_start_label'] = [
       '#type' => 'textfield',
@@ -265,14 +265,14 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#size' => 20,
       '#default_value' => $settings['wizard_start_label'],
     ];
-    $form['wizard_settings']['wizard_complete_label'] = [
+    $form['wizard_settings']['wizard_confirmation_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wizard end label'),
       '#size' => 20,
-      '#default_value' => $settings['wizard_complete_label'],
+      '#default_value' => $settings['wizard_confirmation_label'],
       '#states' => [
         'visible' => [
-          ':input[name="wizard_complete"]' => ['checked' => TRUE],
+          ':input[name="webform_confirmation"]' => ['checked' => TRUE],
         ],
       ],
     ];

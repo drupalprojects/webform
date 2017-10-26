@@ -971,3 +971,23 @@ function webform_update_8085() {
 function webform_update_8086() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2918860: Webform MultiStep URL Params.
+ */
+function webform_update_8087() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    if (isset($data['settings']['wizard_complete'])) {
+      $data['settings']['wizard_comfirmation'] = $data['settings']['wizard_complete'];
+      unset($data['settings']['wizard_complete']);
+    }
+    if (isset($data['settings']['wizard_complete_label'])) {
+      $data['settings']['wizard_comfirmation_label'] = $data['settings']['wizard_complete_label'];
+      unset($data['settings']['wizard_complete_label']);
+    }
+    $webform_config->setData($data)->save();
+  }
+}

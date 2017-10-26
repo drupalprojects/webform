@@ -793,8 +793,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'wizard_progress_pages' => FALSE,
       'wizard_progress_percentage' => FALSE,
       'wizard_start_label' => '',
-      'wizard_complete' => TRUE,
-      'wizard_complete_label' => '',
+      'wizard_confirmation' => TRUE,
+      'wizard_confirmation_label' => '',
       'wizard_track' => '',
       'preview' => DRUPAL_DISABLED,
       'preview_label' => '',
@@ -1546,9 +1546,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     }
 
     // Only add complete page, if there are some pages.
-    if ($pages && $this->getSetting('wizard_complete')) {
-      $pages['webform_complete'] = [
-        '#title' => $this->getSetting('wizard_complete_label', TRUE),
+    if ($pages && $this->getSetting('wizard_confirmation')) {
+      $pages['webform_confirmation'] = [
+        '#title' => $this->getSetting('wizard_confirmation_label', TRUE),
         '#access' => TRUE,
       ];
     }

@@ -222,12 +222,12 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#size' => 20,
       '#default_value' => $settings['default_wizard_start_label'],
     ];
-    $form['wizard_settings']['default_wizard_complete_label'] = [
+    $form['wizard_settings']['default_wizard_confirmation_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default wizard end label'),
       '#required' => TRUE,
       '#size' => 20,
-      '#default_value' => $settings['default_wizard_complete_label'],
+      '#default_value' => $settings['default_wizard_confirmation_label'],
     ];
 
     // Preview settings.

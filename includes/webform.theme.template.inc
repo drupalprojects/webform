@@ -190,11 +190,11 @@ function template_preprocess_webform_confirmation(array &$variables) {
   $settings = $webform->getSettings();
 
   // Set progress.
-  if ($webform->getPages() && $settings['wizard_complete'] && ($settings['wizard_progress_bar'] || $settings['wizard_progress_pages'] || $settings['wizard_progress_percentage'])) {
+  if ($webform->getPages() && $settings['wizard_confirmation'] && ($settings['wizard_progress_bar'] || $settings['wizard_progress_pages'] || $settings['wizard_progress_percentage'])) {
     $variables['progress'] = [
       '#theme' => 'webform_progress',
       '#webform' => $webform,
-      '#current_page' => 'webform_complete',
+      '#current_page' => 'webform_confirmation',
     ];
   }
 

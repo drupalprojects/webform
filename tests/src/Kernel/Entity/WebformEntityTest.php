@@ -288,7 +288,7 @@ class WebformEntityTest extends KernelTestBase {
       'page_1' => ['#title' => 'Page 1', '#access' => TRUE],
       'page_2' => ['#title' => 'Page 2', '#access' => TRUE],
       'page_3' => ['#title' => 'Page 3', '#access' => TRUE],
-      'webform_complete' => ['#title' => 'Complete', '#access' => TRUE],
+      'webform_confirmation' => ['#title' => 'Complete', '#access' => TRUE],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
@@ -299,7 +299,7 @@ class WebformEntityTest extends KernelTestBase {
       'page_2' => ['#title' => 'Page 2', '#access' => TRUE],
       'page_3' => ['#title' => 'Page 3', '#access' => TRUE],
       'webform_preview' => ['#title' => 'Preview', '#access' => TRUE],
-      'webform_complete' => ['#title' => 'Complete', '#access' => TRUE],
+      'webform_confirmation' => ['#title' => 'Complete', '#access' => TRUE],
     ];
     $this->assertEquals($webform->getPages(), $wizard_pages);
 
@@ -308,7 +308,7 @@ class WebformEntityTest extends KernelTestBase {
     $wizard_pages = [
       'webform_start' => ['#title' => 'Start', '#access' => TRUE],
       'webform_preview' => ['#title' => 'Preview', '#access' => TRUE],
-      'webform_complete' => ['#title' => 'Complete', '#access' => TRUE],
+      'webform_confirmation' => ['#title' => 'Complete', '#access' => TRUE],
     ];
     $this->assertEquals($webform->getPages(TRUE), $wizard_pages);
 
