@@ -318,14 +318,28 @@ abstract class DateBase extends WebformElementBase {
    * Webform element pre validation handler for Date elements.
    */
   public static function preValidateDate(&$element, FormStateInterface $form_state, &$complete_form) {
+    // ISSUE #2723159:
+    // Datetime form element cannot validate when using a
+    // format without seconds.
+    // WORKAROUND:
+    // Append the second format before the time element is validated.
+    //
+    // @see \Drupal\Core\Datetime\Element\Datetime::valueCallback
+    // @see https://www.drupal.org/node/2723159
+    if ($element['#type'] === 'datetime' && $element['#date_time_format'] === 'H:i' && strlen($element['#value']['time']) === 8) {
+      $element['#date_time_format'] = 'H:i:s';
+    }
+
     // ISSUE:
     // Date list in composite element is missing the date object.
+    //
     // WORKAROUND:
     // Manually set the date object.
     $date_element_types = [
       'datelist' => '\Drupal\Core\Datetime\Element\Datelist',
       'datetime' => '\Drupal\Core\Datetime\Element\Datetime',
     ];
+
     if (isset($date_element_types[$element['#type']])) {
       $date_class = $date_element_types[$element['#type']];
       $input_exists = FALSE;

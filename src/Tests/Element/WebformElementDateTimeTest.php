@@ -58,6 +58,10 @@ class WebformElementDateTimeTest extends WebformTestBase {
     $this->drupalPostForm('webform/test_element_datetime', $edit, t('Submit'));
     $this->assertRaw('<em class="placeholder">datetime_min_max</em> must be on or after <em class="placeholder">2009-01-01</em>.');
 
+    // Check: Issue #2723159: Datetime form element cannot validate when using a
+    // format without seconds.
+    $this->drupalPostForm('webform/test_element_datetime', [], t('Submit'));
+    $this->assertNoRaw('The datetime_no_seconds date is invalid.');
   }
 
 }

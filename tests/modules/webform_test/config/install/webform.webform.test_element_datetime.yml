@@ -87,6 +87,17 @@ elements: |
     '#date_time_element': timepicker
     '#date_time_format': 'g:i A'
     '#default_value': '2009-08-18T18:00:00-05:00'
+  datetime_no_seconds:
+    '#type': datetime
+    '#title': datetime_no_seconds
+    '#description': |
+      @see <a href="https://www.drupal.org/node/2917107">Issue #2917107: Date and Time validation problem</a><b r/>
+      @see <a href="https://www.drupal.org/node/2723159">Issue #2723159: Datetime form element cannot validate when using a format without seconds</a><b r/>
+    '#date_date_element': datepicker
+    '#date_time_element': text
+    '#date_time_format': 'H:i'
+    '#date_time_step': '900'
+    '#default_value': '2009-08-18T01:00:00-05:00'
 css: ''
 javascript: ''
 settings:
