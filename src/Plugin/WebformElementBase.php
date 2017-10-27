@@ -730,7 +730,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $element['#after_build'][] = [get_class($this), 'hiddenElementAfterBuild'];
   }
 
-
   /**
    * Webform element #after_build callback: Wrap #element_validate so that we suppress element validation errors.
    */
@@ -788,7 +787,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *
    * @param array $element
    *   The element.
-   * @param $operation
+   * @param string $operation
    *   The operation.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user session for which to check access.
@@ -899,7 +898,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Apply multiple properties.
     $multiple_properties = $this->getDefaultMultipleProperties();
     foreach ($multiple_properties as $multiple_property => $multiple_value) {
-      if (strpos($multiple_property,'multiple__') === 0) {
+      if (strpos($multiple_property, 'multiple__') === 0) {
         $property_name = str_replace('multiple__', '', $multiple_property);
         $element["#$property_name"] = (isset($element["#$multiple_property"])) ? $element["#$multiple_property"] : $multiple_value;
       }
@@ -1109,7 +1108,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return array|string
    *   The element's items formatted as plain text or a render array.
    */
-  function formatCustomItems($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatCustomItems($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $name = strtolower($type);
 
     // Get value.
@@ -1153,7 +1152,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return string|array
    *   The element's items as HTML.
    */
-  protected function formatHtmlItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatHtmlItems(array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
     // Get items.
@@ -1237,7 +1236,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return string
    *   The element's items as text.
    */
-  protected function formatTextItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatTextItems(array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
     // Get items.
@@ -1300,7 +1299,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @return array|string
    *   The element's item formatted as plain text or a render array.
    */
-  function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $name = strtolower($type);
 
     // Get template.
@@ -1392,7 +1391,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function hasValue(array $element, WebformSubmissionInterface $webform_submission, array $options = [])  {
+  public function hasValue(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
     return ($value === '' || $value === NULL || (is_array($value) && empty($value))) ? FALSE : TRUE;
   }
@@ -1972,7 +1971,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-    
+
     // Multiple.
     $form['multiple'] = [
       '#type' => 'fieldset',
@@ -2878,7 +2877,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $form_state->setErrorByName('custom', $ignored_message);
       }
     }
-    
+
     // Display ignored properties message.
     if ($ignored_properties) {
       $t_args = [

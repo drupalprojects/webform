@@ -207,7 +207,7 @@ class WebformRequest implements WebformRequestInterface {
   /**
    * {@inheritdoc}
    */
-  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, $route_options = []) {
+  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, array $route_options = []) {
     $route_name = $this->getRouteName($webform_entity, $source_entity, $route_name);
     $route_parameters = $this->getRouteParameters($webform_entity, $source_entity);
     return Url::fromRoute($route_name, $route_parameters, $route_options);

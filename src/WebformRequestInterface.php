@@ -77,7 +77,7 @@ interface WebformRequestInterface {
    * @return \Drupal\Core\Url
    *   The URL for a form/submission and source entity.
    */
-  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, $route_options = []);
+  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, array $route_options = []);
 
   /**
    * Get the route name for a form/submission and source entity.

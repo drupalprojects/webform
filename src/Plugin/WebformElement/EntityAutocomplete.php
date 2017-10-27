@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\Core\Entity\Element\EntityAutocomplete as EntityAutocompleteElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
@@ -48,7 +47,7 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
     if (!empty($element['#default_value'])) {
       $target_type = $this->getTargetType($element);
       $entity_storage = $this->entityTypeManager->getStorage($target_type);
-      if ($entities = $entity_storage->loadMultiple((array)$element['#default_value'])) {
+      if ($entities = $entity_storage->loadMultiple((array) $element['#default_value'])) {
         $element['#default_value'] = (empty($element['#tags'])) ? reset($entities) : $entities;
       }
       else {

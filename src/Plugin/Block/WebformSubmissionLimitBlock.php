@@ -5,7 +5,6 @@ namespace Drupal\webform\Plugin\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -475,7 +474,7 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
    *   Token prefix which can be 'total' or 'limit'.
    * @param string $type
    *   The submission type which can be 'webform' or 'user'.
-   * @param $source_entity
+   * @param bool $source_entity
    *   Flag indicating if source entity should be included in available tokens.
    *
    * @return string

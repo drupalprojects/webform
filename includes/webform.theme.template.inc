@@ -12,7 +12,6 @@ use Drupal\Core\Url;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\RenderElement;
 use Drupal\Core\Template\Attribute;
-use Drupal\Component\Utility\Xss;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\Element\WebformHtmlEditor;
@@ -765,7 +764,7 @@ function template_preprocess_webform_message(array &$variables) {
  *     Properties used: #attributes, #children, #description, #id, #title,
  *     #value.
  */
-function template_preprocess_webform_section(&$variables) {
+function template_preprocess_webform_section(array &$variables) {
   $element = $variables['element'];
   Element::setAttributes($element, ['id']);
   RenderElement::setAttributes($element);
@@ -778,7 +777,7 @@ function template_preprocess_webform_section(&$variables) {
   $variables['children'] = $element['#children'];
   $variables['required'] = !empty($element['#required']) ? $element['#required'] : NULL;
 
-  // Allow markup in title
+  // Allow markup in title.
   if (isset($element['#title']) && $element['#title'] !== '') {
     $variables['title'] = ['#markup' => $element['#title']];
   }

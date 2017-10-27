@@ -88,7 +88,7 @@ function webform_drush_command() {
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
     'options' => [
       'dependencies' => 'Add module dependencies to installed webform and options configuration entities.',
-      'prefix' => 'Prefix for file names to be tidied. (Defaults to webform)'
+      'prefix' => 'Prefix for file names to be tidied. (Defaults to webform)',
     ],
     'arguments' => [
       'target' => "The module (config/install), config directory (sync), or path (/some/path) that needs its YAML configuration files tidied. (Defaults to webform)",
@@ -567,8 +567,9 @@ function _drush_webform_libraries_make() {
 /**
  * Implements drush_hook_COMMAND().
  *
- * @see How to handle module library dependencies #68
- * https://github.com/drupal-composer/drupal-project/issues/68
+ * How to handle module library dependencies #68
+ *
+ * @see https://github.com/drupal-composer/drupal-project/issues/68
  */
 function drush_webform_libraries_composer() {
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
@@ -757,8 +758,8 @@ function drush_webform_docs() {
   if (!file_exists($html_directory_path)) {
     $file_system->mkdir($html_directory_path);
   }
-  if (!file_exists($images_directory_path )) {
-    $file_system->mkdir($images_directory_path );
+  if (!file_exists($images_directory_path)) {
+    $file_system->mkdir($images_directory_path);
   }
 
   // Generate docs from MarkDown using the README module's ReadmeManager.
@@ -918,7 +919,7 @@ function drush_webform_composer_update() {
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
   $libraries = $libraries_manager->getLibraries(TRUE);
-  // Track if recommended secure_http: true can be used/
+  // Track if recommended secure_http: true can be used.
   // @see Issue #2885338: Composer: CKeditor plugins are downloadable with http.
   $secure_http = TRUE;
   foreach ($libraries as $library_name => $library) {
@@ -1030,5 +1031,14 @@ function _drush_webform_validate($webform_id = NULL) {
 // editorial.
 // @see \Drupal\webform_editorial\Controller\WebformEditorialController::drush
 if (!function_exists('dt')) {
+  /**
+   * Rudimentary replacement for Drupal API t() function.
+   *
+   * @param string
+   *   String to process, possibly with replacement item.
+   *
+   * @return
+   *   The processed string.
+   */
   function dt($string) {return $string;}
 }

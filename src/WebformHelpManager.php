@@ -262,7 +262,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * {@inheritdoc}
    */
   public function buildVideos($docs = FALSE) {
-    $video_display = \Drupal::config('webform.settings')->get('ui.video_display');
+    $video_display = $this->configFactory->get('webform.settings')->get('ui.video_display');
     if ($docs) {
       $video_display = 'documentation';
     }
@@ -326,7 +326,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       ];
       $row['content']['data']['link'] = [
         '#type' => 'link',
-        '#title' => t('Watch video'),
+        '#title' => $this->t('Watch video'),
         '#url' => $url,
         '#attributes' => $link_attributes,
         '#prefix' => '<p>',

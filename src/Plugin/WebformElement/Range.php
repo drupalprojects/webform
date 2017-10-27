@@ -56,7 +56,7 @@ class Range extends NumericBase {
       $element['#attached']['library'][] = 'webform/webform.element.range';
     }
   }
-  
+
   /**
    * {@inheritdoc}
    */

@@ -84,7 +84,7 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
    */
   protected function alterDefinitions(&$definitions) {
     // Prevents Fatal error: Class 'Drupal\bootstrap\Bootstrap' during install
-    // w/ Bootstrap theme and webform
+    // w/ Bootstrap theme and webform.
     $this->themeHandler->reset();
 
     // Unset elements that are missing target element or dependencies.

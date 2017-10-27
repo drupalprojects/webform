@@ -77,11 +77,9 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     }
     try {
       $path = Url::fromRouteMatch($route_match)->toString();
-      $base_path = base_path();
     }
     catch (\Exception $exception) {
       $path = '';
-      $base_path = '/';
     }
 
     if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' ||  $args[2] == 'webform_submission')) {

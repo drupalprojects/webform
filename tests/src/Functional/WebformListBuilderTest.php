@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\webform\Functional;
 
-use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -103,14 +102,13 @@ class WebformListBuilderTest extends BrowserTestBase {
    * @param string $link
    *   The link to find.
    *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Exception
    *   When the row can't be found.
    */
   protected function assertLinkNotInRow($row_text, $link) {
-    /** @var \Behat\Mink\Element\NodeElement $row */
     $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $row_text));
     if (!$row) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'table row', 'value', $row_text);
+      throw new \Exception($this->getSession()->getDriver(), 'table row', 'value', $row_text);
     }
 
     $links = $row->findAll('named', ['link', $link]);

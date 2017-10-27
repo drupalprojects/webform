@@ -61,6 +61,6 @@ abstract class BooleanBase extends WebformElementBase {
     ];
 
     return $form;
-
   }
+
 }

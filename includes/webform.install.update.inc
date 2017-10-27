@@ -11,9 +11,8 @@ use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
-use Drupal\webform\Utility\WebformOptionsHelper;
-use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
+
 /******************************************************************************/
 // Webform-8.x-5.0-beta1 - December 7, 2016 (No update required).
 /******************************************************************************/
@@ -631,7 +630,8 @@ function webform_update_8032() {
   _webform_update_webform_submission_storage_schema();
 
   if (!\Drupal::database()->schema()->tableExists('webform_submission_log')) {
-    // Copied from: \Drupal\webform\WebformSubmissionStorageSchema::getEntitySchema
+    // Copied from:
+    // \Drupal\webform\WebformSubmissionStorageSchema::getEntitySchema.
     $schema = [
       'description' => 'Table that contains logs of all webform submission events.',
       'fields' => [

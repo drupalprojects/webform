@@ -611,6 +611,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   The element's key.
    * @param bool $include_children
    *   Include initialized children.
+   *
    * @return array|null
    *   An associative array containing an initialized element.
    */
@@ -627,17 +628,16 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    */
   public function getElementDecoded($key);
 
-
   /**
    * Get webform wizard pages.
    *
    * @param string $operation
-   *   The webform submission operation. 
-   *   Usually 'default', 'add', 'edit', 'edit_all', 'api', or 'test'
+   *   The webform submission operation.
+   *   Usually 'default', 'add', 'edit', 'edit_all', 'api', or 'test'.
    *
    * @return array
    *   An associative array of webform wizard pages.
-   * 
+   *
    * @see \Drupal\webform\Entity\WebformSubmission
    */
   public function getPages($operation = '');
@@ -735,6 +735,10 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   The handle method to be invoked.
    * @param mixed $data
    *   The argument to passed by reference to the handler method.
+   * @param mixed $context1
+   *   (optional) An additional variable that is passed by reference.
+   * @param mixed $context2
+   *   (optional) An additional variable that is passed by reference.
    */
   public function invokeHandlers($method, &$data, &$context1 = NULL, &$context2 = NULL);
 
@@ -745,6 +749,10 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   The handle method to be invoked.
    * @param mixed $data
    *   The argument to passed by reference to the handler method.
+   * @param mixed $context1
+   *   (optional) An additional variable that is passed by reference.
+   * @param mixed $context2
+   *   (optional) An additional variable that is passed by reference.
    */
   public function invokeElements($method, &$data, &$context1 = NULL, &$context2 = NULL);
 

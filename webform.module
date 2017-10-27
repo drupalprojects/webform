@@ -538,7 +538,6 @@ function webform_file_download($uri) {
   return ManagedFile::accessFileDownload($uri);
 }
 
-
 /**
  * Implements hook_contextual_links_view_alter().
  */

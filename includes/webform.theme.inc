@@ -377,7 +377,7 @@ function webform_preprocess_form_element(&$variables) {
   _webform_preprocess_form_element_description_more($variables);
 
   // Add #help and #_title_display to label.
-  // Note: #_title_display is used to track inline titles
+  // Note: #_title_display is used to track inline titles.
   // @see \Drupal\webform\Plugin\WebformElementBase::prepare
   $variables['label'] += array_intersect_key($element, array_flip(['#help', '#_title_display']));
 }
@@ -415,13 +415,14 @@ function _webform_preprocess_help_title(&$variables, array &$element) {
   $variables = [
     'title' => (is_array($variables)) ? $variables : ['#markup' => $variables],
     'help' => [
-        '#type' => 'webform_help',
-      ] + array_intersect_key($element, array_flip(['#help'])),
+      '#type' => 'webform_help',
+    ] + array_intersect_key($element, array_flip(['#help'])),
   ];
 
   // Get #title_display and move help before title for 'inline' titles.
   if (isset($element['#_title_display'])) {
-    // #_title_display is set via \Drupal\webform\Plugin\WebformElementBase::prepare
+    // #_title_display is set
+    // via \Drupal\webform\Plugin\WebformElementBase::prepare.
     $title_display = $element['#_title_display'];
   }
   elseif (isset($element['#title_display'])) {

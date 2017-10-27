@@ -116,7 +116,6 @@ class WebformComposite extends WebformCompositeBase {
   protected function prepareMultipleWrapper(array &$element) {
     // Don't set multiple wrapper since 'webform_composite' extends
     // 'webform_multiple'.
-    return;
   }
 
   /**
@@ -337,7 +336,7 @@ class WebformComposite extends WebformCompositeBase {
     // Check for duplicate keys.
     $keys = [];
     $element = $form_state->getValue('element');
-    foreach ($element as $delta => $value) {
+    foreach ($element as $value) {
       $key = $value['key'];
       if (isset($keys[$key])) {
         $form_state->setErrorByName('element', $this->t('Duplicate key found. The %key key must 

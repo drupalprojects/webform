@@ -228,7 +228,7 @@ function webform_update_8043() {
 }
 
 /**
- * Issue #2872464: MultiStep Preview Page - change the Page Title and Progress Bar Title
+ * Issue #2872464: MultiStep Preview Page - change the Page Title and Progress Bar Title.
  */
 function webform_update_8044() {
   _webform_update_admin_settings();
@@ -740,7 +740,7 @@ function webform_update_8071() {
     $has_remote_post = FALSE;
     $handlers = $webform->getHandlers();
     foreach ($handlers as $handler) {
-      if ($handler instanceof \Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler) {
+      if ($handler instanceof RemotePostWebformHandler) {
         $has_remote_post = TRUE;
         $configuration = $handler->getConfiguration();
         foreach ($configuration['settings'] as $key => $value) {
@@ -764,7 +764,7 @@ function webform_update_8071() {
  */
 function webform_update_8072() {
   drupal_flush_all_caches();
-  
+
   /** @var \Drupal\webform\WebformInterface[] $webforms */
   $webforms = Webform::loadMultiple();
   foreach ($webforms as $webform) {
@@ -823,8 +823,8 @@ function webform_update_8075() {
           case 'id':
             $value['entity_reference_items'] = ['id'];
             break;
-          default:
 
+          default:
           case 'link':
             $value['entity_reference_items'] = ['id', 'title', 'url'];
             break;
@@ -900,7 +900,7 @@ function webform_update_8079() {
   // Convert ui.help_menu_disabled to ui.about_disabled.
   $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
   $help_menu_disabled = $admin_config->get('ui.help_menu_disabled') ?: FALSE;
-  $admin_config->set('ui.about_disabled', $help_menu_disabled );
+  $admin_config->set('ui.about_disabled', $help_menu_disabled);
   $admin_config->clear('ui.help_menu_disabled');
   $admin_config->save();
 }

@@ -294,7 +294,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $name = strtolower($type);
 
     // Parse element.composite_key from template and add composite element
@@ -351,7 +351,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function formatHtmlItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatHtmlItems(array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $format = $this->getItemsFormat($element);
     if ($format !== 'table') {
       return parent::formatHtmlItems($element, $webform_submission, $options);
@@ -396,7 +396,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  protected function formatTextItems(array &$element,  WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatTextItems(array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $format = $this->getItemsFormat($element);
     if ($format === 'table') {
        $element['#format_items'] = 'hr';
@@ -788,9 +788,9 @@ abstract class WebformCompositeBase extends WebformElementBase {
       $item_pattern[] = "{{ element.$composite_key }}";
     }
 
-    //  Hide single item display when multiple item display is set to 'table'.
+    // Hide single item display when multiple item display is set to 'table'.
     $form['display']['item']['#states']['invisible'] = [
-      ':input[name="properties[format_items]"]' => ['value' => 'table']
+      ':input[name="properties[format_items]"]' => ['value' => 'table'],
     ];
 
     $form['#attached']['library'][] = 'webform/webform.element.composite.admin';

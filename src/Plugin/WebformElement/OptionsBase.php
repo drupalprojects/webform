@@ -270,7 +270,7 @@ abstract class OptionsBase extends WebformElementBase {
     }
     return $element;
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -472,7 +472,7 @@ abstract class OptionsBase extends WebformElementBase {
       if ($other_type === 'other') {
         if ($this->hasMultipleValues($element)) {
           $other_value = array_diff($value, array_keys($element['#options']));
-          return ($other_value) ? implode( ', ', $other_value) : NULL;
+          return ($other_value) ? implode(', ', $other_value) : NULL;
         }
         else {
           // Make sure other value is not valid option.

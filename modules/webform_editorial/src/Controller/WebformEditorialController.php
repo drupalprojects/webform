@@ -4,7 +4,9 @@ namespace Drupal\webform_editorial\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
@@ -21,12 +23,26 @@ use Drupal\webform\WebformLibrariesManagerInterface;
 class WebformEditorialController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
+   * Active database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * The renderer.
    *
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
-  
+
+  /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
   /**
    * The webform help manager.
    *
@@ -51,8 +67,12 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
   /**
    * Constructs a WebformEditorialController object.
    *
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection to be used.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager.
    * @param \Drupal\webform\WebformHelpManagerInterface $help_manager
    *   The webform help manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
@@ -60,8 +80,10 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The webform libraries manager.
    */
-  public function __construct(RendererInterface $renderer, WebformHelpManagerInterface $help_manager, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
+  public function __construct(Connection $database, RendererInterface $renderer, EntityFieldManagerInterface $entity_field_manager, WebformHelpManagerInterface $help_manager, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
+    $this->database = $database;
     $this->renderer = $renderer;
+    $this->entityFieldManager = $entity_field_manager;
     $this->helpManager = $help_manager;
     $this->elementManager = $element_manager;
     $this->librariesManager = $libraries_manager;
@@ -72,7 +94,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('database'),
       $container->get('renderer'),
+      $container->get('entity_field.manager'),
       $container->get('webform.help_manager'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.libraries_manager')
@@ -127,7 +151,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           $paths = array_merge($paths, $info['paths']);
         }
         if (!empty($info['routes'])) {
-          $paths = array_merge($paths, \Drupal::database()->query("SELECT path FROM {router} WHERE name IN (:name[])", [':name[]' => $info['routes']])->fetchCol() ?: []);
+          $paths = array_merge($paths, $this->database->query("SELECT path FROM {router} WHERE name IN (:name[])", [':name[]' => $info['routes']])->fetchCol() ?: []);
         }
         asort($paths);
         foreach ($paths as $index => $path) {
@@ -323,7 +347,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     // Rows.
     $rows = [];
     /** @var \Drupal\Core\Field\BaseFieldDefinition[] $base_fields */
-    $base_fields = \Drupal::service('entity_field.manager')->getBaseFieldDefinitions('webform_submission');
+    $base_fields = $this->entityFieldManager->getBaseFieldDefinitions('webform_submission');
     foreach ($base_fields as $field_name => $base_field) {
       $rows[] = [
         'data' => [

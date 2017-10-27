@@ -243,7 +243,7 @@ class WebformElementHelper {
           $ignored_properties[$key] = $key;
         }
         elseif ($key == '#element' && is_array($value) && isset($element['#type']) && $element['#type'] === 'webform_composite') {
-          foreach ($value as $composite_key => $composite_value) {
+          foreach ($value as $composite_value) {
 
             // Multiple sub composite elements are not supported.
             if (isset($composite_value['#multiple'])) {

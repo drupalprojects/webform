@@ -95,6 +95,7 @@ class Telephone extends TextBase {
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'link':
+        /**********************************************************************/
         // Issue #2484693: Telephone Link field formatter breaks Drupal with 5
         // digits or less in the number
         // return [
@@ -103,6 +104,8 @@ class Telephone extends TextBase {
         //   '#url' => \Drupal::pathValidator()->getUrlIfValid('tel:' . $value),
         // ];
         // Workaround: Manually build a static HTML link.
+        /**********************************************************************/
+
         $t_args = [':tel' => 'tel:' . $value, '@tel' => $value];
         return t('<a href=":tel">@tel</a>', $t_args);
 

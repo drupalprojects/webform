@@ -254,7 +254,7 @@ class WebformMultiple extends FormElement {
         $header[] = ['class' => ["$table_id--handle", "webform-multiple-table--handle"]];
       }
 
-      $header = array_merge($header,  $element['#header']);
+      $header = array_merge($header, $element['#header']);
 
       if ($element['#sorting']) {
         $header[] = ['class' => ["$table_id--weight", "webform-multiple-table--weight"]];

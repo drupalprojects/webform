@@ -130,7 +130,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('likert_dependent_required field is required.');
-    
+
     // Check required datelist.
     $edit = [
       'datelist_trigger[year]' => date('Y'),
@@ -210,7 +210,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $webform = Webform::load('test_form_states_server_wizard');
 
     /**************************************************************************/
-    
+
     // Go to default #states for page 02 with trigger-checkbox unchecked.
     $this->postSubmission($webform, [], t('Next Page >'));
 
@@ -252,7 +252,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     // Go to default #states for page 02 with trigger_checkbox checked.
     $this->postSubmission($webform, ['page_01_trigger_checkbox' => TRUE], t('Next Page >'));
 
-    // Check trigger-checkbox value is Yes
+    // Check trigger-checkbox value is Yes.
     $this->assertRaw('<input data-drupal-selector="edit-page-01-trigger-checkbox-computed" type="hidden" name="page_01_trigger_checkbox_computed" value="Yes" />');
 
     // Check page_02_textfield_required is required.

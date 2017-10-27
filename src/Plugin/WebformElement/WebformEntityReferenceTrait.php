@@ -421,7 +421,7 @@ trait WebformEntityReferenceTrait {
     // Set 'User' entity reference selection filter type role's #default_value
     // to an array and not NULL, which throws
     // "Warning: Invalid argument supplied for foreach()
-    // in Drupal\Core\Render\Element\Checkboxes::valueCallback() "
+    // in Drupal\Core\Render\Element\Checkboxes::valueCallback()"
     // @see \Drupal\user\Plugin\EntityReferenceSelection\UserSelection::buildConfigurationForm
     if ($target_type == 'user'
       && isset($selection_settings['filter']['type'])
