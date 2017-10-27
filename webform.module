@@ -446,6 +446,20 @@ function _webform_page_attachments(array &$attachments) {
   if (\Drupal::config('webform.settings')->get('ui.details_save')) {
     $attachments['#attached']['library'][] = 'webform/webform.element.details.save';
   }
+
+  // Assets: Add custom shared and webform specific CSS and JS.
+  // @see webform_library_info_build()
+  /** @var \Drupal\webform\WebformRequestInterface $request_handler */
+  $request_handler = \Drupal::service('webform.request');
+  if ($webform = $request_handler->getCurrentWebform()) {
+    $assets = $webform->getAssets();
+    foreach ($assets as $type => $value) {
+      if ($value) {
+        $attachments['#attached']['library'][] = 'webform/webform.' . $type . '.' . $webform->id() ;
+      }
+    }
+  }
+
 }
 
 /**

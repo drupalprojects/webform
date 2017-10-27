@@ -17,6 +17,11 @@ class WebformEntitySettingsAssetsForm extends WebformEntitySettingsBaseForm {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->entity;
 
+    $form['description'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t('The below CSS and JavasScript will be loaded on all pages that references and loads this webform.'),
+      '#message_type' => 'info',
+    ];
     $form['css'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Custom CSS'),

@@ -473,15 +473,6 @@ class WebformSubmissionForm extends ContentEntityForm {
     // @see https://www.drupal.org/node/2274843#inline
     $form['#attached']['library'][] = 'webform/webform.form';
 
-    // Assets: Add custom shared and webform specific CSS and JS.
-    // @see webform_library_info_build()
-    $assets = $webform->getAssets();
-    foreach ($assets as $type => $value) {
-      if ($value) {
-        $form['#attached']['library'][] = 'webform/webform.' . $type . '.' . $webform->id() ;
-      }
-    }
-
     // Attach disable back button.
     if ($this->getWebformSetting('form_disable_back')) {
       $form['#attached']['library'][] = 'webform/webform.form.disable_back';
