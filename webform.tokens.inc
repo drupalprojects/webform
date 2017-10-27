@@ -143,8 +143,11 @@ function webform_token_info() {
       '<li>element_key:delta:format</li>' .
       '<li>element_key:delta:format:html</li>' .
       '<li>element_key:entity:*</li>' .
+      '<li>element_key:entity:*</li>' .
       '<li>element_key:delta:entity:*</li>' .
+      '<li>element_key:delta:entity:field_name:*</li>' .
       '<li>element_key:sub_element_key:entity:*</li>' .
+      '<li>element_key:sub_element_key:entity:fiel_name:*</li>' .
       '<li>element_key:delta:sub_element_key:entity:*</li>' .
       '</ul>' .
       t("All items after the 'element_key' are optional.") . '<br />' .
