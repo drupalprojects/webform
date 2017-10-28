@@ -310,7 +310,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     $elements = $webform->getElementsInitializedAndFlattened();
     $weights = [];
-    foreach ($elements as &$element) {
+    foreach ($elements as $element_key => &$element) {
       $parent_key = $element['#webform_parent_key'];
       if (!isset($weights[$parent_key])) {
         $element['#weight'] = $weights[$parent_key] = 0;
@@ -333,7 +333,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           $element['#title'] = Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE);
         }
         else {
-          $element['#title'] = '[' . t('blank') . ']';
+          $element['#title'] = '[' .  $element_key . ']';
         }
       }
     }

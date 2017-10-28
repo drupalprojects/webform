@@ -96,7 +96,7 @@ class DateTime extends DateBase {
     // Prepare element after date/time formats have been updated.
     parent::prepare($element, $webform_submission);
 
-    $element['#after_build'][] = [get_class($this), 'afterBuild'];
+    $element['#after_build'][] = [get_class($this), 'afterBuildDateTime'];
   }
 
   /**
@@ -380,7 +380,7 @@ class DateTime extends DateBase {
   /**
    * After build handler for Datetime elements.
    */
-  public static function afterBuild(array $element, FormStateInterface $form_state) {
+  public static function afterBuildDateTime(array $element, FormStateInterface $form_state) {
     if (isset($element['time'])) {
       if (!empty($element['#date_time_min'])) {
         $element['time']['#min'] = $element['#date_time_min'];

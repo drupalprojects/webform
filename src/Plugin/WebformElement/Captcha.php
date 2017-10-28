@@ -28,6 +28,8 @@ class Captcha extends WebformElementBase {
       // Captcha settings.
       'captcha_type' => 'default',
       'captcha_admin_mode' => FALSE,
+      'captcha_title' => '',
+      'captcha_description' => '',
       // Flexbox.
       'flex' => 1,
       // Conditional logic.
@@ -72,7 +74,11 @@ class Captcha extends WebformElementBase {
     if ($is_test || $is_admin) {
       $element['#captcha_admin_mode'] = TRUE;
     }
+
     parent::prepare($element, $webform_submission);
+
+    $element['#after_build'][] = [get_class($this), 'afterBuildCaptcha'];
+
   }
 
   /**
@@ -127,6 +133,22 @@ class Captcha extends WebformElementBase {
       '#required' => TRUE,
       '#options' => $captcha_types,
     ];
+    // Custom title and description.
+    $form['captcha']['captcha_container'] = [
+      '#type' => 'container',
+      '#states' => [
+        'invisible' => [[':input[name="properties[captcha_type]"]' => ['value' => 'recaptcha/reCAPTCHA']]],
+      ],
+    ];
+    $form['captcha']['captcha_container']['captcha_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Question title'),
+    ];
+    $form['captcha']['captcha_container']['captcha_description'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Question description'),
+    ];
+    // Admin mode.
     $form['captcha']['captcha_admin_mode'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Admin mode'),
@@ -134,6 +156,25 @@ class Captcha extends WebformElementBase {
       '#return_value' => TRUE,
     ];
     return $form;
+  }
+
+
+  /**
+   * After build handler for CAPTCHA elements.
+   */
+  public static function afterBuildCaptcha(array $element, FormStateInterface $form_state) {
+    // Make sure that the CAPTCHA response supports #title.
+    if (isset($element['captcha_widgets'])
+      && isset($element['captcha_widgets']['captcha_response'])
+      && isset($element['captcha_widgets']['captcha_response']['#title'])) {
+      if (!empty($element['#captcha_title'])) {
+        $element['captcha_widgets']['captcha_response']['#title'] = $element['#captcha_title'];
+      }
+      if (!empty($element['#captcha_description'])) {
+        $element['captcha_widgets']['captcha_response']['#description'] = $element['#captcha_description'];
+      }
+    }
+    return $element;
   }
 
 }
