@@ -2603,7 +2603,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Unset 'format_items' if the element does not support multiple values.
     if (!$this->supportsMultipleValues()) {
-      unset($default_properties['format_items']);
+      unset(
+        $default_properties['format_items'],
+        $default_properties['format_items_html'],
+        $default_properties['format_items_text']
+      );
     }
 
     $element_properties = WebformArrayHelper::removePrefix($this->configuration) + $default_properties;
