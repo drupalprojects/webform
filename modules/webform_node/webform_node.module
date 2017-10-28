@@ -53,7 +53,7 @@ function webform_node_help($route_name, RouteMatchInterface $route_match) {
   }
 
   // Display warning message if webform query string parameter is missing.
-  if ($has_webform_field && !\Drupal::request()->get('webform')) {
+  if ($has_webform_field && !\Drupal::request()->get('webform_id')) {
     $build = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
@@ -64,7 +64,7 @@ function webform_node_help($route_name, RouteMatchInterface $route_match) {
       '#cache' => ['max-age' => 0],
     ];
   }
-  elseif (\Drupal::request()->get('webform')) {
+  elseif (\Drupal::request()->get('webform_id')) {
     // If there is a webform query string parameter, then disable caching.
     $build = ['#cache' => ['max-age' => 0]];
   }
@@ -138,9 +138,10 @@ function webform_node_node_prepare_form(NodeInterface $node, $operation, FormSta
     return;
   }
 
-  // Populate the webform field.
+  // Populate the node's title and webform field.
   $webform_id = \Drupal::request()->query->get('webform_id');
-  if ($webform_id && Webform::load($webform_id)) {
+  if ($webform_id && ($webform = Webform::load($webform_id))) {
+    $node->title->value = $webform->label();
     $node->$field_name->target_id = $webform_id;
   }
 }

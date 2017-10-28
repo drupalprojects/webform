@@ -113,7 +113,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       if ($this->isExcluded($library_name)) {
         // Excluded.
         $stats['@excluded']++;
-        $title = $this->t('<strong>@title</strong> Excluded', $t_args);
+        $title = $this->t('<strong>@title</strong> (Excluded)', $t_args);
         if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
           $t_args['@element_type'] = implode('; ', $library['elements']);
           $description = $this->t('The <a href=":homepage_href">@title</a> library is excluded because required element types (@element_type) are <a href=":settings_elements_href">excluded</a>.', $t_args);
