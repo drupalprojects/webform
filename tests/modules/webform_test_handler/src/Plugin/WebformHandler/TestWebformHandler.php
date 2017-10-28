@@ -88,7 +88,7 @@ class TestWebformHandler extends WebformHandlerBase {
    */
   public function confirmForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
     drupal_set_message($this->configuration['message'], 'status', TRUE);
-    \Drupal::logger('webform.test')->notice($this->configuration['message']);
+    \Drupal::logger('webform.test_form')->notice($this->configuration['message']);
     $this->displayMessage(__FUNCTION__);
   }
 
@@ -200,7 +200,7 @@ class TestWebformHandler extends WebformHandlerBase {
         '@context1' => $context1,
       ];
       drupal_set_message($this->t('Invoked @id: @class_name:@method_name @context1', $t_args), 'status', TRUE);
-      \Drupal::logger('webform.test')->notice('Invoked: @class_name:@method_name @context1', $t_args);
+      \Drupal::logger('webform.test_form')->notice('Invoked: @class_name:@method_name @context1', $t_args);
     }
   }
 

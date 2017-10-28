@@ -1190,9 +1190,9 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'content' => $this->t("The <strong>API</strong> form allows developers to test a webform's API."),
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/api
-        'entity.webform.api',
+        'entity.webform.api_form',
         // @see /node/{node}/webform/api
-        'entity.node.webform.api',
+        'entity.node.webform.api_form',
       ],
     ];
 

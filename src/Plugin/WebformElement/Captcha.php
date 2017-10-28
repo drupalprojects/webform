@@ -69,7 +69,7 @@ class Captcha extends WebformElementBase {
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Enable admin mode for test or user with 'skip CAPTCHA' permission.
-    $is_test = (strpos(\Drupal::routeMatch()->getRouteName(), '.webform.test') !== FALSE) ? TRUE : FALSE;
+    $is_test = (strpos(\Drupal::routeMatch()->getRouteName(), '.webform.test_form') !== FALSE) ? TRUE : FALSE;
     $is_admin = \Drupal::currentUser()->hasPermission('skip CAPTCHA');
     if ($is_test || $is_admin) {
       $element['#captcha_admin_mode'] = TRUE;

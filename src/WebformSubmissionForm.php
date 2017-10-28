@@ -685,7 +685,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $source_entity = $this->getSourceEntity();
 
     // Display test message.
-    if ($this->isGet() && $this->isRoute('webform.test')) {
+    if ($this->isGet() && $this->isRoute('webform.test_form')) {
       $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_TEST, 'warning');
 
       // Display devel generate link for webform or source entity.
