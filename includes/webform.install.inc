@@ -138,12 +138,12 @@ function _webform_update_webform_settings() {
  * _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
  * @endcode
  *
- * @param \Drupal\webform\Plugin\WebformHandlerInterface $handler_class
+ * @param string $handler_class
  *   A handler class instance.
  *
  * @see \Drupal\webform\Plugin\WebformHandlerInterface
  */
-function _webform_update_webform_handler_class_settings(WebformHandlerInterface $handler_class) {
+function _webform_update_webform_handler_class_settings($handler_class) {
   /** @var \Drupal\webform\WebformInterface[] $webforms */
   $webforms = Webform::loadMultiple();
   foreach ($webforms as $webform) {
