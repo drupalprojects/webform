@@ -230,8 +230,8 @@ class WebformActions extends ContainerBase {
 
     if (!$webform->hasActions()) {
       $form['element']['title']['#default_value'] = $this->t('Submit button(s)');
-      $this->key = 'acccc';
     }
+
     return $form;
   }
 
