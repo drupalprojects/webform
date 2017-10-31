@@ -57,6 +57,7 @@ class WebformComposite extends WebformCompositeBase {
    */
   public function getDefaultProperties() {
     $properties = parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    $properties['element'] = [];
     $properties['multiple'] = TRUE;
     $properties['multiple__header'] = TRUE;
     unset(
