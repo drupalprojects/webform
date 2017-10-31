@@ -94,6 +94,16 @@ element:
     messages messages--error
     messages messages--warning
     messages messages--status
+  horizontal_rule_classes: |
+    webform-horizontal-rule--solid
+    webform-horizontal-rule--dashed
+    webform-horizontal-rule--dotted
+    webform-horizontal-rule--gradient
+    webform-horizontal-rule--thin
+    webform-horizontal-rule--medium
+    webform-horizontal-rule--thick
+    webform-horizontal-rule--flaired
+    webform-horizontal-rule--glyph
   default_description_display: ''
   default_more_title: More
   default_section_title_tag: h2

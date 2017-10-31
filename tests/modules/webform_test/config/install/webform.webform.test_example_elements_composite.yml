@@ -24,7 +24,6 @@ elements: |
       '#type': webform_address
       '#title': 'Address multiple'
       '#multiple': true
-      '#multiple__header': true
   webform_composite_example:
     '#type': details
     '#title': 'Composite custom'
@@ -41,9 +40,9 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
     webform_composite_multiple:
       '#type': webform_composite
       '#title': 'Composite custom multiple'
@@ -56,9 +55,9 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
       '#multiple': true
       '#multiple__header': true
   webform_contact_example:
@@ -105,7 +104,6 @@ elements: |
       '#type': webform_link
       '#title': 'Link multiple'
       '#multiple': true
-      '#multiple__header': true
   webform_location_example:
     '#type': details
     '#title': Location
@@ -149,7 +147,6 @@ elements: |
       '#type': webform_name
       '#title': 'Name multiple'
       '#multiple': true
-      '#multiple__header': true
   webform_telephone_example:
     '#type': details
     '#title': 'Telephone advanced'
@@ -161,7 +158,6 @@ elements: |
       '#type': webform_telephone
       '#title': 'Telephone advanced multiple'
       '#multiple': true
-      '#multiple__header': true
   text_format_example:
     '#type': details
     '#title': 'Text format'

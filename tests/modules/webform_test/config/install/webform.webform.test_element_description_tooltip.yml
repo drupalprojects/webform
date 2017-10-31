@@ -167,9 +167,9 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
       '#description': 'This is a description for the ''webform_composite'' element.'
       '#description_display': tooltip
     webform_contact:

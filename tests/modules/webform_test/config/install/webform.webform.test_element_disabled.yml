@@ -85,9 +85,9 @@ elements: |
         '#type': select
         '#title': Gender
         '#title_display': invisible
-    '#gender__options':
-      Male: Male
-      Female: Female
+        '#options':
+          Male: Male
+          Female: Female
     '#disabled': true
   webform_contact:
     '#type': webform_contact

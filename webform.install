@@ -991,3 +991,10 @@ function webform_update_8087() {
     $webform_config->setData($data)->save();
   }
 }
+
+/**
+ * Issue #2919989: Add horizontal rule element
+ */
+function webform_update_8088() {
+  _webform_update_admin_settings();
+}

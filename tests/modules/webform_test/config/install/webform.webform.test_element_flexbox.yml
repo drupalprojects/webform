@@ -257,9 +257,9 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
     flex_webform_composite_right:
       '#type': webform_composite
       '#title': 'Composite custom 02'
@@ -272,9 +272,9 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
   flexbox_webform_computed_token:
     '#type': webform_flexbox
     flex_webform_computed_token_left:
@@ -475,6 +475,22 @@ elements: |
       '#type': managed_file
       '#title': 'File 02'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br /><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br /><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br /><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
+  flexbox_webform_horizontal_rule:
+    '#type': webform_flexbox
+    flex_webform_horizontal_rule_left:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
+      '#title': 'webform_horizontal_rule 01'
+    flex_webform_horizontal_rule_right:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
+      '#title': 'webform_horizontal_rule 02'
   flexbox_webform_image_file:
     '#type': webform_flexbox
     flex_webform_image_file_left:

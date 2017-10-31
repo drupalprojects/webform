@@ -126,6 +126,13 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('element.classes'),
     ];
+    $form['element']['horizontal_rule_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Horizontal rule CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Horizontal rule  CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('element.horizontal_rule_classes'),
+    ];
     // Element: Description/Help.
     $form['element']['default_description_display'] = [
       '#type' => 'select',

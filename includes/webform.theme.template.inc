@@ -752,6 +752,24 @@ function template_preprocess_webform_message(array &$variables) {
 }
 
 /**
+ * Prepares variables for Webform horizontal rule templates.
+ *
+ * Default template: webform-horizontal-rule.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #id, #attributes.
+ */
+function template_preprocess_webform_horizontal_rule(array &$variables) {
+  $element = $variables['element'];
+
+  if (!empty($element['#id'])) {
+    $variables['attributes']['id'] = $element['#id'];
+  }
+}
+
+/**
  * Prepares variables for webform section element templates.
  *
  * Default template: webform-section.html.twig.

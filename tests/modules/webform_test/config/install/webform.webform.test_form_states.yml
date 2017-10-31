@@ -293,16 +293,19 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
       '#default_value':
-        - name: Loremipsum
-          gender: Loremipsum
-        - name: Loremipsum
-          gender: Loremipsum
-        - name: Loremipsum
-          gender: Loremipsum
+        -
+          name: Loremipsum
+          gender: Male
+        -
+          name: Loremipsum
+          gender: Male
+        -
+          name: Loremipsum
+          gender: Male
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -470,7 +473,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 4
+      '#default_value': 1
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -539,6 +542,19 @@ elements: |
       '#type': managed_file
       '#title': File
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br /><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br /><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br /><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_webform_horizontal_rule:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -922,9 +938,9 @@ elements: |
       '#title': 'Term checkboxes'
       '#vocabulary': tags
       '#default_value':
-        - 13
-        - 7
-        - 12
+        - 41
+        - 48
+        - 43
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -936,7 +952,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 13
+      '#default_value': 41
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1273,16 +1289,19 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
       '#default_value':
-        - name: Loremipsum
-          gender: Loremipsum
-        - name: Loremipsum
-          gender: Loremipsum
-        - name: Loremipsum
-          gender: Loremipsum
+        -
+          name: Loremipsum
+          gender: Male
+        -
+          name: Loremipsum
+          gender: Male
+        -
+          name: Loremipsum
+          gender: Male
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1411,7 +1430,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 4
+      '#default_value': 1
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1468,6 +1487,16 @@ elements: |
       '#type': managed_file
       '#title': File
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br /><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br /><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br /><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_webform_horizontal_rule:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1773,9 +1802,9 @@ elements: |
       '#title': 'Term checkboxes'
       '#vocabulary': tags
       '#default_value':
-        - 13
-        - 7
-        - 12
+        - 41
+        - 48
+        - 43
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1784,7 +1813,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 13
+      '#default_value': 41
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -2012,16 +2041,19 @@ elements: |
           '#type': select
           '#title': Gender
           '#title_display': invisible
-      '#gender__options':
-        Male: Male
-        Female: Female
+          '#options':
+            Male: Male
+            Female: Female
       '#default_value':
-        - name: Loremipsum
-          gender: Loremipsum
-        - name: Loremipsum
-          gender: Loremipsum
-        - name: Loremipsum
-          gender: Loremipsum
+        -
+          name: Loremipsum
+          gender: Male
+        -
+          name: Loremipsum
+          gender: Male
+        -
+          name: Loremipsum
+          gender: Male
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2150,7 +2182,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2826451">Issue #2826451: TermSelection returning HTML characters in select list</a>'
-      '#default_value': 4
+      '#default_value': 1
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2207,6 +2239,16 @@ elements: |
       '#type': managed_file
       '#title': File
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2705471">Issue #2705471: Webform states managed file fields</a><br /><a href="https://www.drupal.org/node/2113931">Issue #2113931: File Field design update</a><br /><a href="https://www.drupal.org/node/2346893">Issue #2346893: Duplicate Ajax wrapper around a file field</a><br /><a href="https://www.drupal.org/node/2482783">Issue #2482783: File upload errors not set or shown correctly</a>'
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_webform_horizontal_rule:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2512,9 +2554,9 @@ elements: |
       '#title': 'Term checkboxes'
       '#vocabulary': tags
       '#default_value':
-        - 13
-        - 7
-        - 12
+        - 41
+        - 48
+        - 43
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2523,7 +2565,7 @@ elements: |
       '#type': webform_term_select
       '#title': 'Term select'
       '#vocabulary': tags
-      '#default_value': 13
+      '#default_value': 41
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

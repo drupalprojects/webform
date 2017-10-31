@@ -515,6 +515,12 @@ webform.element.html_editor:
     - core/jquery
     - core/jquery.once
 
+webform.element.horizontal_rule:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.horizontal_rule.css: {}
+
 webform.element.icheck:
   version: VERSION
   css:
