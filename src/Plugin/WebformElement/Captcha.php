@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "captcha",
+ *   default_key = "captcha",
  *   api = "https://www.drupal.org/project/captcha",
  *   label = @Translation("CAPTCHA"),
  *   description = @Translation("Provides a form element that determines whether the user is human."),

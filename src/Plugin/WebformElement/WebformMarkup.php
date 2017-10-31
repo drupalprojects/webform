@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "webform_markup",
+ *   default_key = "markup",
  *   label = @Translation("Basic HTML"),
  *   description = @Translation("Provides an element to render basic HTML markup."),
  *   category = @Translation("Markup elements"),

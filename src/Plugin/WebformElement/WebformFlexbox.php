@@ -10,6 +10,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "webform_flexbox",
+ *   default_key = "flexbox",
  *   api = "http://www.w3schools.com/css/css3_flexbox.asp",
  *   label = @Translation("Flexbox layout"),
  *   description = @Translation("Provides a flex(ible) box container used to layout elements in multiple columns."),

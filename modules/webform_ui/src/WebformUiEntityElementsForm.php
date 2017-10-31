@@ -661,7 +661,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       ];
       $row['operations']['#links']['customize'] = [
         'title' => $this->t('Customize'),
-        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_actions'], ['query' => ['key' => 'actions']]),
+        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_actions']),
         'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
       ];
     }

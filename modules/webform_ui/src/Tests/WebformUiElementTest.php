@@ -116,7 +116,7 @@ class WebformUiElementTest extends WebformTestBase {
 
     // Create validate unique element.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/add/textfield', ['key' => 'test', 'properties[title]' => 'Test'], t('Save'));
-    $this->assertRaw('The element key is already in use. It must be unique.');
+    $this->assertRaw('The machine-readable name is already in use. It must be unique.');
 
     // Check read element.
     $this->drupalGet('webform/contact');

@@ -3,12 +3,10 @@
 namespace Drupal\webform_ui\Form;
 
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
@@ -242,12 +240,10 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '#required' => TRUE,
       '#parents' => ['key'],
       '#disabled' => ($key) ? TRUE : FALSE,
-      // Allow key to populated using query string parameter.
-      // Use by 'Edit submit button(s)'.
-      // @see \Drupal\webform_ui\WebformUiEntityEditForm::editForm
-      '#default_value' => $this->getRequest()->get('key') ?: $key ?: $element_plugin->getDefaultKey(),
+      '#default_value' => $key ?: $this->getDefaultKey(),
       '#weight' => -98,
     ];
+
     // Remove the key's help text (aka description) once it has been set.
     if ($key) {
       $form['properties']['element']['key']['#description'] = NULL;
@@ -276,6 +272,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     ];
 
     $form = $this->buildDefaultValueForm($form, $form_state);
+
 
     return $this->buildDialogForm($form, $form_state);
   }
@@ -313,14 +310,6 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
 
     // Update key for new and duplicated elements.
     $this->key = $key;
-
-    // Make sure element key is unique for new elements.
-    if ($this instanceof WebformUiElementAddForm || $this instanceof WebformUiElementDuplicateForm) {
-      $element_flattened = $this->getWebform()->getElementsDecodedAndFlattened();
-      if (isset($element_flattened[$key])) {
-        $form_state->setErrorByName('key', $this->t('The element key is already in use. It must be unique.'));
-      }
-    }
 
     // Clone webform and add/update the element.
     $webform = clone $this->webform;
@@ -379,21 +368,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     // Still set the redirect URL just to be safe.
     $form_state->setRedirectUrl($this->webform->toUrl('edit-form', ['query' => ['update' => $key]]));
   }
-
-  /**
-   * Determines if the webform element key already exists.
-   *
-   * @param string $key
-   *   The webform element key.
-   *
-   * @return bool
-   *   TRUE if the webform element key, FALSE otherwise.
-   */
-  public function exists($key) {
-    $elements = $this->webform->getElementsInitializedAndFlattened();
-    return (isset($elements[$key])) ? TRUE : FALSE;
-  }
-
+  
   /**
    * {@inheritdoc}
    */
@@ -462,6 +437,64 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     }
 
     return FALSE;
+  }
+
+  /****************************************************************************/
+  // Element key handling.
+  /****************************************************************************/
+  
+  /**
+   * Determines if the webform element key already exists.
+   *
+   * @param string $key
+   *   The webform element key.
+   *
+   * @return bool
+   *   TRUE if the webform element key, FALSE otherwise.
+   */
+  public function exists($key) {
+    $elements = $this->webform->getElementsInitializedAndFlattened();
+    return (isset($elements[$key])) ? TRUE : FALSE;
+  }
+
+  /**
+   * Get the default key for the current element.
+   *
+   * Default key will be auto incremented when there are  duplicate keys.
+   *
+   * @return null|string
+   *   An element's default key which will be incremented to prevent duplicate
+   *   keys.
+   */
+  protected function getDefaultKey() {
+    $element_plugin = $this->getWebformElementPlugin();
+    if (empty($element_plugin->getDefaultKey())) {
+      return NULL;
+    }
+
+    $base_key = $element_plugin->getDefaultKey();
+    $elements = $this->getWebform()->getElementsDecodedAndFlattened();
+    $increment = NULL;
+    foreach ($elements as $element_key => $element) {
+      if (strpos($element_key, $base_key) === 0) {
+        if (preg_match('/^' . $base_key . '_(\d+)$/', $element_key, $match)) {
+          $element_increment = intval($match[1]);
+          if ($element_increment > $increment) {
+            $increment = $element_increment;
+          }
+        }
+        elseif ($increment === NULL) {
+          $increment = 0;
+        }
+      }
+    }
+
+    if ($increment === NULL) {
+      return $base_key;
+    }
+    else {
+      return $base_key . '_' . str_pad(($increment + 1), 2, '0', STR_PAD_LEFT);
+    }
   }
 
   /****************************************************************************/

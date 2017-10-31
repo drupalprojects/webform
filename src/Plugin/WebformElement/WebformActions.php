@@ -12,6 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "webform_actions",
+ *   default_key = "actions",
  *   label = @Translation("Submit button(s)"),
  *   description = @Translation("Provides an element that contains a Webform's submit, draft, wizard, and/or preview buttons."),
  *   category = @Translation("Buttons"),
