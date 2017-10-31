@@ -993,7 +993,7 @@ function webform_update_8087() {
 }
 
 /**
- * Issue #2919989: Add horizontal rule element
+ * Issue #2919989: Add horizontal rule element.
  */
 function webform_update_8088() {
   _webform_update_admin_settings();
