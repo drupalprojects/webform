@@ -148,7 +148,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     });
 
     $states = [
-      WebformSubmissionInterface::STATE_DRAFT => $this->t('Draft'),
+      WebformSubmissionInterface::STATE_DRAFT => $this->t('Draft Saved'),
+      WebformSubmissionInterface::STATE_CONVERTED => $this->t('Converted'),
       WebformSubmissionInterface::STATE_COMPLETED => $this->t('Completed'),
       WebformSubmissionInterface::STATE_UPDATED => $this->t('Updated'),
       WebformSubmissionInterface::STATE_DELETED => $this->t('Deleted'),
