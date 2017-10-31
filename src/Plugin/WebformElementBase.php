@@ -903,6 +903,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $element["#$property_name"] = (isset($element["#$multiple_property"])) ? $element["#$multiple_property"] : $multiple_value;
       }
     }
+
+    // If header label is defined use it for the #header.
     if (!empty($element['#multiple__header_label'])) {
       $element['#header'] = $element['#multiple__header_label'];
     }

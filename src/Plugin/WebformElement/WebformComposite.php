@@ -56,15 +56,22 @@ class WebformComposite extends WebformCompositeBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $properties = parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    $properties = $this->getDefaultMultipleProperties() + parent::getDefaultProperties();
     $properties['element'] = [];
-    $properties['multiple'] = TRUE;
-    $properties['multiple__header'] = TRUE;
-    unset(
-      $properties['flexbox'],
-      $properties['multiple__header_label']
-    );
+    unset($properties['flexbox']);
     return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDefaultMultipleProperties() {
+    $properties = [
+      'multiple' => TRUE,
+      'multiple__header' => TRUE,
+    ] + parent::getDefaultMultipleProperties();
+    return $properties;
+
   }
 
   /**
@@ -99,6 +106,11 @@ class WebformComposite extends WebformCompositeBase {
     // Default to displaying table header.
     $element += ['#header' => TRUE];
 
+    // If header label is defined use it for the #header.
+    if (!empty($element['#multiple__header_label'])) {
+      $element['#header'] = $element['#multiple__header_label'];
+    }
+
     // Transfer '#{composite_key}_{property}' from main element to composite
     // element.
     foreach ($element['#element'] as $composite_key => $composite_element) {
@@ -124,6 +136,7 @@ class WebformComposite extends WebformCompositeBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
+
     // Always to should multiple element settings since WebformComposite
     // extends WebformMultiple.
     unset($form['multiple']['#states']);

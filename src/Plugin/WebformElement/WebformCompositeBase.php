@@ -47,7 +47,6 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $properties = [
       'title' => '',
       'default_value' => [],
-      'multiple__header_label' => '',
       // Description/Help.
       'help' => '',
       'description' => '',
@@ -96,6 +95,16 @@ abstract class WebformCompositeBase extends WebformElementBase {
       $properties[$composite_key . '__access'] = TRUE;
     }
     return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDefaultMultipleProperties() {
+    return [
+      'multiple__header' => FALSE,
+      'multiple__header_label' => '',
+    ] + parent::getDefaultMultipleProperties();
   }
 
   /****************************************************************************/
