@@ -49,7 +49,7 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler {
           break;
 
         case 'duplicate':
-          if ($entity->isTemplate() || ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner))) {
+          if ($account->hasPermission('create webform') && ($entity->isTemplate() || ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)))) {
             return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
           }
           break;
