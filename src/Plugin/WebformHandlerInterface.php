@@ -398,6 +398,23 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function postDelete(WebformSubmissionInterface $webform_submission);
 
   /****************************************************************************/
+  // Preprocessing methods.
+  /****************************************************************************/
+
+  /**
+   * Prepares variables for webform confirmation templates.
+   *
+   * Default template: webform-confirmation.html.twig.
+   *
+   * @param array $variables
+   *   An associative array containing the following key:
+   *   - webform: A webform.
+   *   - webform_submission: A webform submission.
+   *   - source_entity: A webform submission source entity.
+   */
+  public function preprocessConfirmation(array &$variables);
+
+  /****************************************************************************/
   // Handler methods.
   /****************************************************************************/
 

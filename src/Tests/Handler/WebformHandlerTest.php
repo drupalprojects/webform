@@ -68,6 +68,8 @@ class WebformHandlerTest extends WebformTestBase {
     $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:preSave');
     $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:postSave insert');
     $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:postLoad');
+    $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:preprocessConfirmation');
+    $this->assertRaw('<div class="webform-confirmation__message">::preprocessConfirmation</div>');
 
     // Check update submission plugin invoking.
     $this->drupalPostForm('/admin/structure/webform/manage/test_handler_test/submission/' . $sid . '/edit', [], t('Save'));

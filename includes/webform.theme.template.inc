@@ -237,6 +237,8 @@ function template_preprocess_webform_confirmation(array &$variables) {
   else {
     $variables['back_url'] = $webform->toUrl('canonical', $options)->toString();
   }
+
+  $webform->invokeHandlers('preprocessConfirmation', $variables);
 }
 
 /**

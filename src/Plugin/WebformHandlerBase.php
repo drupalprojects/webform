@@ -490,6 +490,15 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {}
 
   /****************************************************************************/
+  // Preprocessing methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preprocessConfirmation(array &$variables) {}
+
+  /****************************************************************************/
   // Handler methods.
   /****************************************************************************/
 

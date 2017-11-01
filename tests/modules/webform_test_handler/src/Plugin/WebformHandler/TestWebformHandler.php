@@ -144,6 +144,14 @@ class TestWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
+  public function preprocessConfirmation(array &$variables) {
+    $this->displayMessage(__FUNCTION__);
+    $variables['message'] = '::preprocessConfirmation';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function createHandler() {
     $this->displayMessage(__FUNCTION__);
   }
