@@ -610,6 +610,15 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     }
   }
 
+  // If 'webform_clear' options is set, clear all [webform*] tokens.
+  if (strpos($type, 'webform') === 0 && !empty($options['webform_clear'])) {
+    foreach ($tokens as $token) {
+      if (!isset($replacements[$token])) {
+        $replacements[$token] = '';
+      }
+    }
+  }
+
   return $replacements;
 }
 

@@ -68,8 +68,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return $text;
     }
 
-    // Set token options.
-    $options += ['clear' => TRUE];
+    // Default all webform related tokens to be cleared.
+    // @see \webform_tokens
+    $options += ['webform_clear' => TRUE];
 
     // Replace @deprecated [webform-submission] with [webform_submission].
     $text = str_replace('[webform-submission:', '[webform_submission:', $text);

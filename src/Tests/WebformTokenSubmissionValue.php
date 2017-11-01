@@ -113,6 +113,10 @@ john@example.com',
       'webform_submission:total:webform:source_entity' => '',
       'webform_submission:limit:user:source_entity' => '5',
       'webform_submission:total:user:source_entity' => '',
+
+      // removed and ignored.
+      'webform:removed:token' => '',
+      'ignored:token' => '[ignored:token]',
     ];
     foreach ($tokens as $token => $value) {
       $this->assertRaw("<tr><th width=\"50%\">$token</th><td width=\"50%\">$value</td></tr>");

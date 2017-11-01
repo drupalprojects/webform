@@ -238,6 +238,12 @@ settings:
     <tr><th width="50%">webform_submission:limit:user:source_entity</th><td width="50%">[webform_submission:limit:user:source_entity]</td></tr>
     <tr><th width="50%">webform_submission:total:user:source_entity</th><td width="50%">[webform_submission:total:user:source_entity]</td></tr>
     </table>
+
+    <h3>removed and ignored</h3>
+    <table class="table">
+    <tr><th width="50%">webform:removed:token</th><td width="50%">[webform:removed:token]</td></tr>
+    <tr><th width="50%">ignored:token</th><td width="50%">[ignored:token]</td></tr>
+    </table>
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
