@@ -30,7 +30,7 @@ class WebformTime extends WebformElementBase {
       'min' => '',
       'max' => '',
       'step' => '',
-    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
   /**

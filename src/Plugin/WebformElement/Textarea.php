@@ -61,7 +61,7 @@ class Textarea extends TextBase {
       'format_items' => $this->getItemsDefaultFormat(),
       'format_items_html' => '',
       'format_items_text' => '',
-    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
   /**

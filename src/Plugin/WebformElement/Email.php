@@ -21,7 +21,7 @@ class Email extends TextBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    return parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
   /**

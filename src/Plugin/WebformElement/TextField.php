@@ -28,7 +28,7 @@ class TextField extends TextBase {
       'counter_type' => '',
       'counter_maximum' => '',
       'counter_message' => '',
-    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
   /**

@@ -23,7 +23,7 @@ abstract class DateBase extends WebformElementBase {
       // Form validation.
       'min' => '',
       'max' => '',
-    ] + parent::getDefaultProperties() + parent::getDefaultMultipleProperties();
+    ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
   /****************************************************************************/
