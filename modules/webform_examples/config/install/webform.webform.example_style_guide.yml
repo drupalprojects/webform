@@ -490,12 +490,12 @@ elements: |
     '#type': details
     '#title': 'Divider'
     '#open': true
-      horizontal_rule:
-        '#type': webform_horizontal_rule
-        '#attributes':
-          class:
-            - webform-horizontal-rule--dotted
-            - webform-horizontal-rule--thick
+    horizontal_rule:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
   messages:
     '#type': details
     '#title': Messages
