@@ -347,6 +347,7 @@ abstract class DateBase extends WebformElementBase {
       if (!isset($input['object'])) {
         $input = $date_class::valueCallback($element, $input, $form_state);
         $form_state->setValueForElement($element, $input);
+        $element['#value'] = $input;
       }
     }
   }
