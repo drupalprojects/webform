@@ -890,7 +890,7 @@ function webform_update_8077() {
  */
 function webform_update_8078() {
   _webform_update_admin_settings();
-  _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
+  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
 }
 
 /**
@@ -916,7 +916,7 @@ function webform_update_8080() {
  * Issue #2913215: Remote Post handler add GET method support.
  */
 function webform_update_8081() {
-  _webform_update_webform_handler_class_settings(RemotePostWebformHandler::class);
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
 }
 
 /**

@@ -714,6 +714,9 @@ function drush_webform_repair() {
   drush_print('Repairing webform settings...');
   _webform_update_webform_settings();
 
+  drush_print('Repairing webform handlers...');
+  _webform_update_webform_handler_configuration();
+  
   drush_print('Repairing webform field storage definitions...');
   _webform_update_field_storage_definitions();
 

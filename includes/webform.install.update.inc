@@ -620,7 +620,7 @@ function webform_update_8030() {
  * Issue #2854021: Send email based on element options selection.
  */
 function webform_update_8031() {
-  _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
+  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
 }
 
 /**
