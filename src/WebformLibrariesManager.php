@@ -252,7 +252,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $libraries['ckeditor.autogrow'] = [
       'title' => $this->t('CKEditor: Autogrow'),
       'description' => $this->t('Automatically expand and shrink vertically depending on the amount and size of content entered in its editing area.'),
-      'notes' => $this->t('Allows CKEditor to automatically expand and shrink vertically '),
+      'notes' => $this->t('Allows CKEditor to automatically expand and shrink vertically.'),
       'homepage_url' => Url::fromUri('https://ckeditor.com/addon/autogrow'),
       'download_url' => Url::fromUri("https://download.ckeditor.com/autogrow/releases/autogrow_$ckeditor_version.zip"),
       'version' => $ckeditor_version,
@@ -261,7 +261,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $libraries['ckeditor.fakeobjects'] = [
       'title' => $this->t('CKEditor: Fakeobjects'),
       'description' => $this->t('Utility required by CKEditor link plugin.'),
-      'notes' => $this->t('Allows CKEditor to use basic image and link dialog'),
+      'notes' => $this->t('Allows CKEditor to use basic image and link dialog.'),
       'homepage_url' => Url::fromUri('https://ckeditor.com/addon/fakeobjects'),
       'download_url' => Url::fromUri("https://download.ckeditor.com/fakeobjects/releases/fakeobjects_$ckeditor_version.zip"),
       'version' => $ckeditor_version,
