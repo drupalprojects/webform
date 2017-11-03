@@ -142,6 +142,10 @@ class WebformEntityElementsForm extends BundleEntityFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
+    if ($form_state->hasAnyErrors()) {
+      return;
+    }
+
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
     $elements = $webform->getElementsDecoded();
