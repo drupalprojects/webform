@@ -27,9 +27,6 @@ interface WebformTokenManagerInterface {
    *     array of token replacements after they are generated.
    *   - clear: A boolean flag indicating that tokens should be removed from the
    *     final text if no replacement value can be generated.
-   *   - webform_clear: A boolean flag indicating that only webform tokens
-   *     should be removed from the final text if no replacement value can be
-   *     generated. (Default is TRUE)
    *
    * @return string|array
    *   Text or array with tokens replaced.

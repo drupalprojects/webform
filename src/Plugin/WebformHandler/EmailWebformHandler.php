@@ -622,18 +622,25 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function getMessage(WebformSubmissionInterface $webform_submission) {
     $token_data = [];
-    $token_options = [
-      'email' => TRUE,
-      'excluded_elements' => $this->configuration['excluded_elements'],
-      'ignore_access' => $this->configuration['ignore_access'],
-      'exclude_empty' => $this->configuration['exclude_empty'],
-      'html' => ($this->configuration['html'] && $this->supportsHtml()),
-    ];
 
     $message = [];
 
     // Copy configuration to $message.
     foreach ($this->configuration as $configuration_key => $configuration_value) {
+
+      $token_options = [
+        'email' => TRUE,
+        'excluded_elements' => $this->configuration['excluded_elements'],
+        'ignore_access' => $this->configuration['ignore_access'],
+        'exclude_empty' => $this->configuration['exclude_empty'],
+        'html' => ($this->configuration['html'] && $this->supportsHtml()),
+      ];
+
+      // Clear tokens from email values.
+      if (strpos($configuration_key, '_mail') !==  FALSE) {
+        $token_options['clear'] = TRUE;
+      }
+
       // Get configuration name (to, cc, bcc, from, name, subject, mail)
       // and type (mail, options, or text).
       list($configuration_name, $configuration_type) = (strpos($configuration_key, '_') !== FALSE) ? explode('_', $configuration_key) : [$configuration_key, 'text'];
