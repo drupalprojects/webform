@@ -1,0 +1,204 @@
+uuid: 76ccaf9f-f2c5-4fda-9939-316ce3bdc8f4
+langcode: en
+status: open
+dependencies:
+  enforced:
+    module:
+      - webform_test
+_core:
+  default_config_hash: HXJTQ6yD8Ij1iWN_h9J_dG9hxJzLDyHhxn-GHiFwfWY
+open: null
+close: null
+uid: null
+template: false
+id: test_handler_action
+title: 'Test: Handler: Action'
+description: 'Test action handler.'
+category: 'Test: Handler'
+elements: |
+  status:
+    '#type': fieldset
+    '#title': Status
+    sticky:
+      '#type': radios
+      '#title': Status
+      '#title_display': invisible
+      '#options':
+        flag: Flag/Star
+        unflag: Unflag/Unstar
+  notes:
+    '#type': fieldset
+    '#title': Notes
+    notes_add:
+      '#title': 'Add note'
+      '#type': textarea
+    notes_last:
+      '#title': 'Last note'
+      '#type': textarea
+      '#attributes':
+        readonly: readonly
+        style: 'background-color: #eee'
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  form_submit_once: false
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_unsaved: false
+  form_disable_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  submission_label: ''
+  submission_log: false
+  submission_user_columns: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_start_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  preview: 1
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  draft: authenticated
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  confirmation_type: page
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  limit_total: null
+  limit_total_message: ''
+  limit_user: null
+  limit_user_message: ''
+  purge: none
+  purge_days: null
+  entity_limit_total: null
+  entity_limit_user: null
+  results_disabled: false
+  results_disabled_ignore: false
+  token_update: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  notes:
+    id: action
+    label: 'Notes'
+    handler_id: notes
+    status: true
+    conditions:
+      enabled:
+        ':input[name="notes_add"]':
+          filled: true
+    weight: -48
+    settings:
+      states:
+        - draft
+        - completed
+        - updated
+      notes: '[webform_submission:values:notes_add]'
+      sticky: null
+      data: |
+        notes_add: ''
+        notes_last: '[webform_submission:values:notes_add]'
+      debug: true
+  flag:
+    id: action
+    label: Flag
+    handler_id: flag
+    status: true
+    conditions:
+      enabled:
+        ':input[name="sticky"]':
+          value: flag
+    weight: -50
+    settings:
+      states:
+        - draft
+        - converted
+        - completed
+        - updated
+      notes: ''
+      sticky: true
+      data: ''
+      debug: true
+  unflag:
+    id: action
+    label: Unflag
+    handler_id: unflag
+    status: true
+    conditions:
+      enabled:
+        ':input[name="sticky"]':
+          value: unflag
+    weight: -49
+    settings:
+      states:
+        - draft
+        - converted
+        - completed
+        - updated
+      notes: ''
+      sticky: false
+      data: ''
+      debug: true

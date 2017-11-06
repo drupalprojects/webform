@@ -248,7 +248,7 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
    * Set a webform submission element's data.
    *
    * @param string $key
-   *   An webform submission element's key
+   *   An webform submission element's key.
    * @param mixed $value
    *   A value.
    *
@@ -355,6 +355,11 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
    *   An authenticated user account.
    */
   public function convert(UserInterface $account);
+
+  /**
+   * Resave a webform submission without trigger any hooks or handlers.
+   */
+  public function resave();
 
   /**
    * Gets an array of all property values.

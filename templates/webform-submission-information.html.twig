@@ -47,7 +47,9 @@
           <div><b>{{ 'Flagged'|t }}:</b> {{ sticky }}</div>
         {% endif %}
         {% if notes %}
-          <div><b>{{ 'Notes'|t }}:</b> {{ notes }}</div>
+          <div><b>{{ 'Notes'|t }}:</b><br/>
+          <pre>{{ notes }}</pre>
+          </div>
         {% endif %}
       {% endif %}
 

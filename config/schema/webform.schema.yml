@@ -869,6 +869,29 @@ webform.handler.*:
   type: mapping
   label: 'Handler settings'
 
+webform.handler.action:
+  type: mapping
+  label: 'Action'
+  mapping:
+    states:
+      type: sequence
+      label: 'States'
+      sequence:
+        type: string
+        label: 'State'
+    notes:
+      label: 'Notes'
+      type: text
+    sticky:
+      label: 'Flag'
+      type: boolean
+    data:
+      label: 'Data'
+      type: text
+    debug:
+      type: boolean
+      label: 'Enable debugging'
+
 webform.handler.log:
   type: mapping
   label: 'Log'

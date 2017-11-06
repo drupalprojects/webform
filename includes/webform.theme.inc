@@ -31,6 +31,9 @@ function webform_theme() {
     'webform_actions' => [
       'render element' => 'element',
     ],
+    'webform_handler_action_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => NULL],
+    ],
     'webform_handler_debug_summary' => [
       'variables' => ['settings' => NULL, 'handler' => NULL],
     ],

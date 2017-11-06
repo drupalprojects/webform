@@ -302,6 +302,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     if ($this->configuration['method'] === 'GET') {
       $this->configuration['type'] = '';
     }
+
+    // Cast debug.
+    $this->configuration['debug'] = (bool) $this->configuration['debug'];
   }
 
   /**
@@ -386,10 +389,10 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $token_data = ['webform_handler' => [$this->getHandlerId() => [$state => $response_data]]];
       $submission_data = $this->tokenManager->replace($submission_data, $webform_submission, $token_data);
       $webform_submission->setData($submission_data);
-      // Save changes to the submission data without invoking any hooks
+      // Resave changes to the submission data without invoking any hooks
       // or handlers.
       if ($this->isResultsEnabled()) {
-        $this->submissionStorage->saveData($webform_submission);
+        $webform_submission->resave();
       }
     }
   }

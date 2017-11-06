@@ -594,6 +594,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         }
       }
     }
+
+    // Cast debug.
+    $this->configuration['debug'] = (bool) $this->configuration['debug'];
   }
 
   /**
@@ -861,8 +864,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $build = [
       '#theme' => 'webform_email_message_' . (($this->configuration['html']) ? 'html' : 'text'),
       '#message' => [
-          'body' => is_string($message['body']) ? Markup::create($message['body']) : $message['body'],
-        ] + $message,
+        'body' => is_string($message['body']) ? Markup::create($message['body']) : $message['body'],
+      ] + $message,
       '#webform_submission' => $webform_submission,
       '#handler' => $this,
     ];

@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -715,33 +716,6 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $this->setAnonymousSubmission($entity);
     }
 
-    // DEBUG: dsm($entity->getState());
-    // Log transaction.
-    $webform = $entity->getWebform();
-    $context = [
-      '@id' => $entity->id(),
-      '@form' => $webform->label(),
-      'link' => $entity->toLink($this->t('Edit'), 'edit-form')->toString(),
-    ];
-    switch ($entity->getState()) {
-      case WebformSubmissionInterface::STATE_DRAFT:
-        \Drupal::logger('webform')->notice('@form: Submission #@id draft saved.', $context);
-        break;
-
-      case WebformSubmissionInterface::STATE_UPDATED:
-        \Drupal::logger('webform')->notice('@form: Submission #@id updated.', $context);
-        break;
-
-      case WebformSubmissionInterface::STATE_COMPLETED:
-        if ($result === SAVED_NEW) {
-          \Drupal::logger('webform')->notice('@form: Submission #@id created.', $context);
-        }
-        else {
-          \Drupal::logger('webform')->notice('@form: Submission #@id completed.', $context);
-        }
-        break;
-    }
-
     return $result;
   }
 
@@ -751,6 +725,34 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   protected function doPostSave(EntityInterface $entity, $update) {
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     parent::doPostSave($entity, $update);
+
+    // Log transaction.
+    $webform = $entity->getWebform();
+    if (!$entity->getWebform()->getSetting('results_disabled')) {
+      $context = [
+        '@id' => $entity->id(),
+        '@form' => $webform->label(),
+        'link' => $entity->toLink($this->t('Edit'), 'edit-form')->toString(),
+      ];
+      switch ($entity->getState()) {
+        case WebformSubmissionInterface::STATE_DRAFT:
+          \Drupal::logger('webform')->notice('@form: Submission #@id draft saved.', $context);
+          break;
+
+        case WebformSubmissionInterface::STATE_UPDATED:
+          \Drupal::logger('webform')->notice('@form: Submission #@id updated.', $context);
+          break;
+
+        case WebformSubmissionInterface::STATE_COMPLETED:
+          if ($update) {
+            \Drupal::logger('webform')->notice('@form: Submission #@id completed.', $context);
+          }
+          else {
+            \Drupal::logger('webform')->notice('@form: Submission #@id created.', $context);
+          }
+          break;
+      }
+    }
 
     // Log submission events.
     if ($entity->getWebform()->hasSubmissionLog()) {
@@ -806,6 +808,27 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     $this->invokeWebformElements('postSave', $entity, $update);
     $this->invokeWebformHandlers('postSave', $entity, $update);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function resave(EntityInterface $entity) {
+    /** @var \Drupal\webform\WebformSubmissionInterface $entity */
+
+    $transaction = $this->database->startTransaction();
+    try {
+      $return = $this->doSave($entity->id(), $entity);
+
+      // Ignore replica server temporarily.
+      db_ignore_replica();
+      return $return;
+    }
+    catch (\Exception $e) {
+      $transaction->rollBack();
+      watchdog_exception($this->entityTypeId, $e);
+      throw new EntityStorageException($e->getMessage(), $e->getCode(), $e);
+    }
   }
 
   /**

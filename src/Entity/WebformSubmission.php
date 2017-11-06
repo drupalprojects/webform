@@ -709,6 +709,13 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function resave() {
+    return $this->entityManager()->getStorage($this->entityTypeId)->resave($this);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function convert(UserInterface $account) {
     $this->converting = TRUE;
     $this->setOwner($account);
@@ -756,7 +763,6 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       return $values;
     }
   }
-
 
   /**
    * Default value callback for 'uid' base field definition.

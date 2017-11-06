@@ -368,6 +368,25 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function getCustomSetting($name, $default, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL);
 
   /****************************************************************************/
+  // Custom CRUD methods.
+  /****************************************************************************/
+
+  /**
+   * Resaves the entity without triggering any hooks or handlers.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to save.
+   *
+   * @return
+   *   SAVED_NEW or SAVED_UPDATED is returned depending on the operation
+   *   performed.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *   In case of failures, an exception is thrown.
+   */
+  public function resave(EntityInterface $entity);
+
+  /****************************************************************************/
   // Invoke methods.
   /****************************************************************************/
 
