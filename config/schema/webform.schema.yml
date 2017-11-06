@@ -888,6 +888,12 @@ webform.handler.action:
     data:
       label: 'Data'
       type: text
+    message:
+      label: 'Message'
+      type: text
+    message_type:
+      label: 'Message type'
+      type: string
     debug:
       type: boolean
       label: 'Enable debugging'

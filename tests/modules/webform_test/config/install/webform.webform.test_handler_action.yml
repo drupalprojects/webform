@@ -161,6 +161,8 @@ handlers:
       data: |
         notes_add: ''
         notes_last: '[webform_submission:values:notes_add]'
+      message: 'Submission notes have been updated.'
+      message_type: status
       debug: true
   flag:
     id: action
@@ -181,6 +183,8 @@ handlers:
       notes: ''
       sticky: true
       data: ''
+      message: 'Submission has been flagged.'
+      message_type: status
       debug: true
   unflag:
     id: action
@@ -201,4 +205,6 @@ handlers:
       notes: ''
       sticky: false
       data: ''
+      message: 'Submission has been unflagged.'
+      message_type: status
       debug: true

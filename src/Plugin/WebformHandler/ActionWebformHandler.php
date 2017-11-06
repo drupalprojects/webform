@@ -2,11 +2,14 @@
 
 namespace Drupal\webform\Plugin\WebformHandler;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -75,6 +78,16 @@ class ActionWebformHandler extends WebformHandlerBase {
     ];
     $this->configuration['states'] = array_intersect_key($states, array_combine($this->configuration['states'], $this->configuration['states']));
 
+    // Get message type.
+    $message_types = [
+      'status' => t('Status'),
+      'error' => t('Error'),
+      'warning' => t('Warning'),
+      'info' => t('Info'),
+    ];
+    $this->configuration['message'] = WebformHtmlEditor::checkMarkup($this->configuration['message']);
+    $this->configuration['message_type'] = $message_types[$this->configuration['message_type']];
+
     // Get data element keys.
     $data = Yaml::decode($this->configuration['data']) ?: [];
     $this->configuration['data'] = array_keys($data);
@@ -93,6 +106,8 @@ class ActionWebformHandler extends WebformHandlerBase {
       'notes' => '',
       'sticky' => '',
       'data' => '',
+      'message' => '',
+      'message_type' => 'status',
       'debug' => FALSE,
     ];
   }
@@ -140,6 +155,22 @@ class ActionWebformHandler extends WebformHandlerBase {
       '#mode' => 'text',
       '#title' => $this->t('Append the below text to notes (Plain text)'),
       '#default_value' => $this->configuration['notes'],
+    ];
+    $form['actions']['message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Display message'),
+      '#default_value' => $this->configuration['message'],
+    ];
+    $form['actions']['message_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Display message type'),
+      '#options' => [
+        'status' => t('Status'),
+        'error' => t('Error'),
+        'warning' => t('Warning'),
+        'info' => t('Info'),
+      ],
+      '#default_value' => $this->configuration['message_type'],
     ];
     $form['actions']['data'] = [
       '#type' => 'webform_codemirror',
@@ -265,6 +296,15 @@ class ActionWebformHandler extends WebformHandlerBase {
       }
     }
 
+    // Display message.
+    if ($this->configuration['message']) {
+      $message = WebformHtmlEditor::checkMarkup(
+        $this->tokenManager->replace($this->configuration['message'], $webform_submission)
+      );
+      $message_type = $this->configuration['message_type'];
+      drupal_set_message(\Drupal::service('renderer')->render($message), $message_type);
+    }
+
     // Resave the webform submission without trigger any hooks or handlers.
     $webform_submission->resave();
 
@@ -314,7 +354,21 @@ class ActionWebformHandler extends WebformHandlerBase {
     $build['data'] = [
       '#type' => 'item',
       '#title' => $this->t('Data'),
-      '#markup' => '<pre>' . htmlentities($this->configuration['notes']) . '</pre>',
+      '#markup' => $this->configuration['notes'] ? '<pre>' . htmlentities($this->configuration['notes']) . '</pre>' : '',
+      '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+    ];
+
+    $build['message'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Message'),
+      '#markup' => $this->configuration['message'],
+      '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+    ];
+
+    $build['message_type'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Message type'),
+      '#markup' => $this->configuration['message_type'],
       '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
     ];
 
