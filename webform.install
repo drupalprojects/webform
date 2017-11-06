@@ -1009,11 +1009,11 @@ function webform_update_8089() {
     $data = $webform_config->getRawData();
     if (isset($data['settings']['wizard_comfirmation'])) {
       $data['settings']['wizard_confirmation'] = $data['settings']['wizard_comfirmation'];
-      unset($data['settings']['wizard_complete']);
+      unset($data['settings']['wizard_comfirmation']);
     }
     if (isset($data['settings']['wizard_comfirmation_label'])) {
       $data['settings']['wizard_confirmation_label'] = $data['settings']['wizard_comfirmation_label'];
-      unset($data['settings']['wizard_complete_label']);
+      unset($data['settings']['wizard_comfirmation_label']);
     }
     $webform_config->setData($data)->save();
   }
