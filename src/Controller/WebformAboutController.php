@@ -314,11 +314,11 @@ SUGGESTIONS
     ];
     $build['association']['link'] = $this->buildLink(
       $this->t('Learn more about the Drupal Association'),
-'https://www.drupal.org/association/campaign/value-2017'
+'https://www.drupal.org/association/campaign/value-2017?utm_source=webform&utm_medium=referral&utm_campaign=membership-webform-2017-11-06'
     );
 
     // Join.
-    $join_url = Url::fromUri('https://www.drupal.org/association/campaign/value-2017', ['fragment' => 'join']);;
+    $join_url = Url::fromUri('https://www.drupal.org/association/campaign/value-2017?utm_source=webform&utm_medium=referral&utm_campaign=membership-webform-2017-11-06', ['fragment' => 'join']);;
     $build['join'] = [
       '#type' => 'fieldset',
       '#attributes' => ['class' => 'webform-about-callout webform-about-callout--join'],

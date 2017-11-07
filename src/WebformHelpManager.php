@@ -856,6 +856,64 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help = [];
 
     /**************************************************************************/
+    // Promotions.
+    // Disable promotions via Webform admin settings.
+    // (/admin/structure/webform/config/advanced).
+    /**************************************************************************/
+
+    // Promotions: Drupal Association.
+    $help['promotion_drupal_association'] = [
+      'group' => 'promotions',
+      'title' => $this->t('Promotions: Drupal Association'),
+      'content' => [
+        'description' => [
+          '#markup' => $this->t('The Drupal Association brings value to Drupal and to you.'),
+          '#prefix' => '<strong>',
+          '#suffix' => '</strong>',
+        ],
+        'link' => [
+          '#type' => 'link',
+          '#title' => $this->t('Join today'),
+          '#url' => Url::fromUri('https://www.drupal.org/association/campaign/value-2017?utm_source=webform&utm_medium=referral&utm_campaign=membership-webform-2017-11-06'),
+          '#attributes' => ['class' => ['button', 'button--primary', 'button--small', 'button-action']],
+          '#prefix' => ' ',
+        ],
+      ],
+      'message_type' => 'promotion_drupal_association',
+      'message_close' => TRUE,
+      'message_storage' => WebformMessage::STORAGE_STATE,
+      'attached' => ['library' => ['webform/webform.promotions']],
+      'access' => $this->currentUser->hasPermission('administer webform')
+        && !$this->configFactory->get('webform.settings')->get('ui.promotions_disabled'),
+      'reset_version' => TRUE,
+      'routes' => [
+        // @see /admin/structure/webform
+        'entity.webform.collection',
+      ],
+    ];
+
+    // Promotions: Lingotek.
+    $help['promotion_lingotek'] = [
+      'group' => 'promotions',
+      'title' => $this->t('Promotions: Lingotek'),
+      'content' => $this->t("Help <strong>support</strong> the Webform module and internationalize your website using the Lingotek-Inside Drupal Module for continuous translation. <em>Multilingual capability + global access = increased web traffic.</em>"),
+      'video_id' => 'promotion_lingotek',
+      'message_type' => 'promotion_lingotek',
+      'message_close' => TRUE,
+      'message_storage' => WebformMessage::STORAGE_STATE,
+      'attached' => ['library' => ['webform/webform.promotions']],
+      'access' => $this->currentUser->hasPermission('administer webform')
+        && !$this->configFactory->get('webform.settings')->get('ui.promotions_disabled'),
+      'reset_version' => TRUE,
+      'routes' => [
+        // /admin/structure/webform/config/translate
+        'config_translation.item.overview.webform.config',
+        // @see /admin/structure/webform/manage/{webform}/translate
+        'entity.webform.config_translation_overview',
+      ],
+    ];
+
+    /**************************************************************************/
     // Installation.
     /**************************************************************************/
 
@@ -1654,33 +1712,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}
         'entity.webform.edit_form',
-      ],
-    ];
-
-    /**************************************************************************/
-    // Promotions.
-    // Disable promotions via Webform admin settings.
-    // (/admin/structure/webform/config/advanced).
-    /**************************************************************************/
-
-    // Promotions: Lingotek.
-    $help['promotion_lingotek'] = [
-      'group' => 'promotions',
-      'title' => $this->t('Promotions: Lingotek'),
-      'content' => $this->t("Help <strong>support</strong> the Webform module and internationalize your website using the Lingotek-Inside Drupal Module for continuous translation. <em>Multilingual capability + global access = increased web traffic.</em>"),
-      'video_id' => 'promotion_lingotek',
-      'message_type' => 'promotion_lingotek',
-      'message_close' => TRUE,
-      'message_storage' => WebformMessage::STORAGE_STATE,
-      'attached' => ['library' => ['webform/webform.promotions']],
-      'access' => $this->currentUser->hasPermission('administer webform')
-        && !$this->configFactory->get('webform.settings')->get('ui.promotions_disabled'),
-      'reset_version' => TRUE,
-      'routes' => [
-        // /admin/structure/webform/config/translate
-        'config_translation.item.overview.webform.config',
-        // @see /admin/structure/webform/manage/{webform}/translate
-        'entity.webform.config_translation_overview',
       ],
     ];
 
