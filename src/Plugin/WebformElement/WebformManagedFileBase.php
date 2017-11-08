@@ -366,23 +366,10 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function postDelete(array &$element, WebformSubmissionInterface $webform_submission) {
-    $webform = $webform_submission->getWebform();
-
-    $data = $webform_submission->getData();
-    $key = $element['#webform_key'];
-
-    $value = isset($data[$key]) ? $data[$key] : [];
-    $fids = (is_array($value)) ? $value : [$value];
-
     // Delete File record.
+    $fids = (array) ($webform_submission->getElementData($element['#webform_key']) ?: []);
     foreach ($fids as $fid) {
       file_delete($fid);
-    }
-
-    // Remove the empty directory for all stream wrappers.
-    $stream_wrappers = array_keys(\Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE));
-    foreach ($stream_wrappers as $stream_wrapper) {
-      file_unmanaged_delete_recursive($stream_wrapper . '://webform/' . $webform->id() . '/' . $webform_submission->id());
     }
   }
 
@@ -608,7 +595,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $form['file']['file_extensions'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Allowed file extensions'),
-      '#description' => $this->t('Separate extensions with a space and do not include the leading dot. '),
+      '#description' => $this->t('Separate extensions with a space and do not include the leading dot.'),
       '#maxlength' => 255,
     ];
     $form['file']['multiple'] = [

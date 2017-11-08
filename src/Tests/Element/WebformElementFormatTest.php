@@ -52,7 +52,6 @@ class WebformElementFormatTest extends WebformTestBase {
       'Email confirm (Link)' => '<a href="mailto:example@example.com">example@example.com</a>',
       'Email multiple (Link)' => '<a href="mailto:example@example.com">example@example.com</a>, <a href="mailto:test@test.com">test@test.com</a>, <a href="mailto:random@random.com">random@random.com</a>',
       'Signature (Status)' => '[signed]',
-      'Signature (Image)' => '[signed]',
       'Telephone (Link)' => '<a href="tel:+1 212-333-4444">+1 212-333-4444</a>',
       'Toggle (Value)' => 'Yes',
       'URL (Link)' => '<a href="http://example.com">http://example.com</a>',

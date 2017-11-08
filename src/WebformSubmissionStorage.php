@@ -16,6 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -852,6 +853,18 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     foreach ($entities as $entity) {
       $this->invokeWebformElements('postDelete', $entity);
       $this->invokeWebformHandlers('postDelete', $entity);
+    }
+
+    // Remove the webform submission specific file directory for all stream wrappers.
+    // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase
+    // @see \Drupal\webform\Plugin\WebformElement\WebformSignature
+    foreach ($entities as $entity) {
+      $webform = $entity->getWebform();
+      $stream_wrappers = array_keys(\Drupal::service('stream_wrapper_manager')
+        ->getNames(StreamWrapperInterface::WRITE_VISIBLE));
+      foreach ($stream_wrappers as $stream_wrapper) {
+        file_unmanaged_delete_recursive($stream_wrapper . '://webform/' . $webform->id() . '/' . $entity->id());
+      }
     }
 
     // Delete submission log after all pre and post delete hooks are called.

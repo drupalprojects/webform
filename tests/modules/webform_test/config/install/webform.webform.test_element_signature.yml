@@ -13,13 +13,9 @@ title: 'Test: Element: Signature'
 description: 'Test the signature element.'
 category: 'Test: Element'
 elements: |
-  signature_elements:
-    '#type': details
-    '#title': 'Signature Elements'
-    '#open': true
-    signature_basic:
-      '#type': webform_signature
-      '#title': 'Signature basic'
+  signature:
+    '#type': webform_signature
+    '#title': signature
 css: ''
 javascript: ''
 settings:
@@ -56,7 +52,7 @@ settings:
   wizard_start_label: ''
   wizard_confirmation: true
   wizard_confirmation_label: ''
-  preview: 0
+  preview: 1
   preview_label: ''
   preview_title: ''
   preview_message: ''
@@ -68,9 +64,9 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: message
+  confirmation_type: page
   confirmation_title: ''
-  confirmation_message: ''
+  confirmation_message: '[webform_submission:values:signature:html]'
   confirmation_url: ''
   confirmation_attributes: {  }
   confirmation_back: true
@@ -87,6 +83,7 @@ settings:
   results_disabled: false
   results_disabled_ignore: false
   token_update: false
+  wizard_track: ''
 access:
   create:
     roles:

@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -139,6 +140,17 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
     $this->database->delete('webform')
       ->condition('webform_id', $webform_ids, 'IN')
       ->execute();
+
+    // Remove the webform specific file directory for all stream wrappers.
+    // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase
+    // @see \Drupal\webform\Plugin\WebformElement\WebformSignature
+    foreach ($entities as $entity) {
+      $stream_wrappers = array_keys(\Drupal::service('stream_wrapper_manager')
+        ->getNames(StreamWrapperInterface::WRITE_VISIBLE));
+      foreach ($stream_wrappers as $stream_wrapper) {
+        file_unmanaged_delete_recursive($stream_wrapper . '://webform/' . $entity->id());
+      }
+    }
   }
 
   /**
