@@ -377,7 +377,10 @@ abstract class WebformCompositeBase extends WebformElementBase {
       }
 
       $composite_element = $composite_elements[$composite_key];
-      $header[$composite_key] = (isset($composite_element['#title'])) ? $composite_element['#title'] : $composite_key;
+      $header[$composite_key] = [
+        'data' => (isset($composite_element['#title'])) ? $composite_element['#title'] : $composite_key,
+        'bgcolor' => '#eee',
+      ];
     }
 
     // Get rows.
@@ -399,6 +402,11 @@ abstract class WebformCompositeBase extends WebformElementBase {
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#attributes' => [
+        'cellspacing' => 0,
+        'cellpadding' => 5,
+        'border' => 1,
+      ]
     ];
   }
 
