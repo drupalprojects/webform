@@ -189,7 +189,14 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $form_state->getFormObject()->getEntity();
     foreach ($states as $state => $conditions) {
+      // Only required/optional validation is supported.
       if (!in_array($state, ['required', 'optional'])) {
+        continue;
+      }
+
+      // Element must be an input to be required or optional.
+      $element_plugin = $this->elementManager->getElementInstance($element);
+      if (!$element_plugin->isInput($element)) {
         continue;
       }
 
