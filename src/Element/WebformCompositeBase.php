@@ -162,7 +162,10 @@ abstract class WebformCompositeBase extends FormElement {
     }
 
     $element += $composite_elements;
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformComposite']];
+    if (!isset($element['#element_validate'])) {
+      $element['#element_validate'] = [];
+    }
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformComposite']);
 
     if (!empty($element['#flexbox'])) {
       $element['#attached']['library'][] = 'webform/webform.element.flexbox';
