@@ -95,6 +95,10 @@ class WebformWizardPage extends Details {
     // Wizard pages only support visible or hidden state.
     $form['conditional_logic']['states']['#multiple'] = FALSE;
 
+    // Wizard pages use server-side validation and can't support
+    // custom selectors.
+    $form['conditional_logic']['states']['#selector_other'] = FALSE;
+
     return $form;
   }
 

@@ -60,6 +60,7 @@ states_custom_selector:
     custom_selector:
       value: 'Yes'
 states_empty: {  }
+states_no_selector_other: {  }
 states_single: {  }
 states_unsupported_operator:
   required:
@@ -100,6 +101,11 @@ states_unsupported_nesting:
     // Check 'States single' (#multiple: FALSE)
     $this->assertFieldById('edit-states-empty-add');
     $this->assertNoFieldById('edit-states-single-add');
+
+    // Check 'States with no other selector' (#selector_other: FALSE)
+    $this->assertNoFieldById('edit-states-no-selector-other-states-1-selector-select');
+    $this->assertNoFieldById('edit-states-no-selector-other-states-1-selector-other');
+    $this->assertFieldById('edit-states-no-selector-other-states-1-selector');
 
     /**************************************************************************/
     // Processing.
