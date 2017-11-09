@@ -87,8 +87,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
         }
       }
       if (isset($properties[$composite_key . '__type'])) {
-        $properties[$composite_key . '__description'] = FALSE;
-        $properties[$composite_key . '__help'] = FALSE;
+        $properties[$composite_key . '__description'] = '';
+        $properties[$composite_key . '__help'] = '';
         $properties[$composite_key . '__required'] = FALSE;
         $properties[$composite_key . '__placeholder'] = '';
       }
