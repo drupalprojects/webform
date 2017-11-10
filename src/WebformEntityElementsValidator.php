@@ -339,8 +339,13 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
    * @see \Drupal\webform\Entity\Webform::getSubmissionForm()
    */
   protected function validateRendering() {
+    // Override Drupal's error and exception handler so that we can capture
+    // all rendering exceptions and display the captured error/exception
+    // message to the user.
+    // @see _webform_entity_element_validate_rendering_error_handler()
+    // @see _webform_entity_element_validate_rendering_exception_handler()
     set_error_handler('_webform_entity_element_validate_rendering_error_handler');
-
+    set_exception_handler('_webform_entity_element_validate_rendering_exception_handler');
     try {
       /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
       $entity_type_manager = \Drupal::service('entity_type.manager');
@@ -358,11 +363,18 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
       $form_builder->buildForm($form_object, $form_state);
       $message = NULL;
     }
+    // PHP 7 introduces Throwable, which covers both Error and
+    // Exception throwables.
+    // @see _drupal_exception_handler
+    catch (\Throwable $error) {
+      $message = $error->getMessage();
+    }
     catch (\Exception $exception) {
       $message = $exception->getMessage();
     }
-
-    set_error_handler('_drupal_error_handler');
+    // Restore  Drupal's error and exception handler
+    restore_error_handler();
+    restore_exception_handler();
 
     if ($message) {
       $build = [

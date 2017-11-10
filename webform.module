@@ -684,6 +684,22 @@ function _webform_entity_element_validate_rendering_error_handler($error_level, 
 }
 
 /**
+ * Provides custom PHP exception handling when webform rendering is validated.
+ *
+ * @param \Exception|\Throwable $exception
+ *   The exception object that was thrown.
+ *
+ * @throws \Exception
+ *   Throw the exception back to
+ *   WebformEntityElementsValidator::validateRendering().
+ *
+ * @see \Drupal\webform\WebformEntityElementsValidator::validateRendering()
+ */
+function _webform_entity_element_validate_rendering_exception_handler($exception) {
+  throw $exception;
+}
+
+/**
  * Implements hook_query_alter().
  *
  * Append EAV sort to webform_submission entity query.
