@@ -124,8 +124,8 @@ class TextFormat extends WebformElementBase {
   public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
-    $value = (isset($value['value'])) ? $value['value'] : $value;
     $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
+    $value = (isset($value['value'])) ? $value['value'] : $value;
     switch ($format) {
       case 'raw':
         return $value;
@@ -143,6 +143,7 @@ class TextFormat extends WebformElementBase {
     $value = $this->getValue($element, $webform_submission, $options);
 
     $format = (isset($value['format'])) ? $value['format'] : $this->getItemFormat($element);
+    $value = (isset($value['value'])) ? $value['value'] : $value;
     switch ($format) {
       case 'raw':
         return $value;
@@ -161,13 +162,6 @@ class TextFormat extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function getItemDefaultFormat() {
-    return (function_exists('filter_default_format')) ? filter_default_format() : parent::getItemDefaultFormat();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getItemFormats() {
     $formats = parent::getItemFormats();
     $filters = (class_exists('\Drupal\filter\Entity\FilterFormat')) ? FilterFormat::loadMultiple() : [];
@@ -175,6 +169,14 @@ class TextFormat extends WebformElementBase {
       $formats[$filter->id()] = $filter->label();
     }
     return $formats;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildExportRecord(array $element, WebformSubmissionInterface $webform_submission, array $export_options) {
+    $element['#format_items'] = $export_options['multiple_delimiter'];
+    return [$this->formatHtml($element, $webform_submission, $export_options)];
   }
 
   /**
