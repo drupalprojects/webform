@@ -784,6 +784,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_novalidate' => FALSE,
       'form_unsaved' => FALSE,
       'form_disable_back' => FALSE,
+      'form_submit_back' => FALSE,
       'form_autofocus' => FALSE,
       'form_details_toggle' => FALSE,
       'submission_label' => '',

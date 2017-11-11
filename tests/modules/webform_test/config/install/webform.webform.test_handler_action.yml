@@ -1,12 +1,9 @@
-uuid: 76ccaf9f-f2c5-4fda-9939-316ce3bdc8f4
 langcode: en
 status: open
 dependencies:
   enforced:
     module:
       - webform_test
-_core:
-  default_config_hash: HXJTQ6yD8Ij1iWN_h9J_dG9hxJzLDyHhxn-GHiFwfWY
 open: null
 close: null
 uid: null
@@ -63,6 +60,7 @@ settings:
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
   submission_label: ''
@@ -74,6 +72,7 @@ settings:
   wizard_start_label: ''
   wizard_confirmation: true
   wizard_confirmation_label: ''
+  wizard_track: ''
   preview: 1
   preview_label: ''
   preview_title: ''
@@ -143,7 +142,7 @@ access:
 handlers:
   notes:
     id: action
-    label: 'Notes'
+    label: Notes
     handler_id: notes
     status: true
     conditions:

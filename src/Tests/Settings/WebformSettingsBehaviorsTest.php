@@ -20,6 +20,7 @@ class WebformSettingsBehaviorsTest extends WebformTestBase {
   protected static $testWebforms = [
     'test_form_submit_once',
     'test_form_disable_back',
+    'test_form_submit_back',
     'test_form_unsaved',
     'test_form_disable_autocomplete',
     'test_form_novalidate',
@@ -113,6 +114,43 @@ class WebformSettingsBehaviorsTest extends WebformTestBase {
     // Check webform has webform.form.disable_back.js.
     $this->drupalGet('webform/test_form_disable_back');
     $this->assertRaw('webform.form.disable_back.js');
+
+
+    /**************************************************************************/
+    /* Test webform submit back button (test_form_submit_back) */
+    /**************************************************************************/
+
+    $webform_form_submit_back = Webform::load('test_form_submit_back');
+
+    // Check webform has webform.form.submit_back.js.
+    $this->drupalGet('webform/test_form_submit_back');
+    $this->assertRaw('webform.form.submit_back.js');
+
+    // Disable YAML specific form_submit_back setting.
+    $webform_form_submit_back->setSetting('form_submit_back', FALSE);
+    $webform_form_submit_back->save();
+
+    // Check submit_back checkbox is enabled.
+    $this->drupalGet('admin/structure/webform/manage/test_form_submit_back/settings/form');
+    $this->assertRaw('<input data-drupal-selector="edit-form-submit-back" aria-describedby="edit-form-submit-back--description" type="checkbox" id="edit-form-submit-back" name="form_submit_back" value class="form-checkbox" />');
+
+    // Check webform no longer has webform.form.submit_back.js.
+    $this->drupalGet('webform/test_form_submit_back');
+    $this->assertNoRaw('webform.form.submit_back.js');
+
+    // Enable default (global) submit_back on all webforms.
+    \Drupal::configFactory()->getEditable('webform.settings')
+      ->set('settings.default_form_submit_back', TRUE)
+      ->save();
+
+    // Check submit_back checkbox is disabled.
+    $this->drupalGet('admin/structure/webform/manage/test_form_submit_back/settings/form');
+    $this->assertRaw('<input data-drupal-selector="edit-form-submit-back-disabled" aria-describedby="edit-form-submit-back-disabled--description" disabled="disabled" type="checkbox" id="edit-form-submit-back-disabled" name="form_submit_back_disabled" value="1" checked="checked" class="form-checkbox" />');
+    $this->assertRaw('Browser back button submits the previous page for all forms.');
+
+    // Check webform has webform.form.submit_back.js.
+    $this->drupalGet('webform/test_form_submit_back');
+    $this->assertRaw('webform.form.submit_back.js');
 
     /**************************************************************************/
     /* Test webform (client-side) unsaved (form_unsaved) */

@@ -253,6 +253,12 @@ webform.form.disable_back:
   js:
     js/webform.form.disable_back.js:  {preprocess: false}
 
+webform.form.submit_back:
+  version: VERSION
+  header: true
+  js:
+    js/webform.form.submit_back.js:  {preprocess: false}
+
 webform.form.submit_once:
   version: VERSION
   js:

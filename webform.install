@@ -1018,3 +1018,11 @@ function webform_update_8089() {
     $webform_config->setData($data)->save();
   }
 }
+
+/**
+ * Issue #2920443: Browser Back Button to submit to previous wizard page.
+ */
+function webform_update_8090() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

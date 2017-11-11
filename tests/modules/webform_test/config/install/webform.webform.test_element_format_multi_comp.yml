@@ -624,6 +624,7 @@ settings:
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
   submission_label: ''

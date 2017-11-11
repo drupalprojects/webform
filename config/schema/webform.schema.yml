@@ -41,6 +41,9 @@ webform.settings:
         default_form_disable_back:
           type: boolean
           label: 'Disable back button'
+        default_form_submit_back:
+          type: boolean
+          label: 'Submit previous wizard page when browser back button is clicked'
         default_form_details_toggle:
           type: boolean
           label: 'Display collapse/expand all details link'
@@ -506,6 +509,9 @@ webform.webform.*:
         form_disable_back:
           type: boolean
           label: 'Disable back button'
+        form_submit_back:
+          type: boolean
+          label: 'Submit previous wizard page when browser back button is clicked'
         form_disable_autocomplete:
           type: boolean
           label: 'Disable autocompletion'

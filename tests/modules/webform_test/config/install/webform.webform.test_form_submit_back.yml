@@ -8,25 +8,25 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_rating
-title: 'Test: Element: Rating'
-description: 'Test the rating element.'
-category: 'Test: Element'
+id: test_form_submit_back
+title: 'Test: Webform: Back Button submit'
+description: 'Browser Back Button to submit to previous page.'
+category: 'Test: Webform'
 elements: |
-  rating_elements:
-    '#type': details
-    '#title': 'Rating Elements'
-    '#open': true
-    rating_basic:
-      '#type': webform_rating
-      '#title': 'Rating basic'
-    rating_advanced:
-      '#type': webform_rating
-      '#title': 'Rating advanced'
-      '#star_size': large
-      '#reset': true
-      '#max': '10'
-      '#step': '0.1'
+  page_1:
+    '#title': 'Page 1'
+    '#type': webform_wizard_page
+    element_1:
+      '#title': 'Element 1'
+      '#type': textfield
+      '#default_value': '{element_1}'
+  page_2:
+    '#title': 'Page 2'
+    '#type': webform_wizard_page
+    element_2:
+      '#title': 'Element 2'
+      '#type': textfield
+      '#default_value': '{element_2}'
 css: ''
 javascript: ''
 settings:
@@ -50,9 +50,9 @@ settings:
   form_reset: false
   form_disable_autocomplete: false
   form_novalidate: false
-  form_unsaved: false
+  form_unsaved: true
   form_disable_back: false
-  form_submit_back: false
+  form_submit_back: true
   form_autofocus: false
   form_details_toggle: false
   submission_label: ''
@@ -65,7 +65,7 @@ settings:
   wizard_confirmation: true
   wizard_confirmation_label: ''
   wizard_track: ''
-  preview: 0
+  preview: 1
   preview_label: ''
   preview_title: ''
   preview_message: ''
@@ -77,7 +77,7 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: message
+  confirmation_type: page
   confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''
@@ -131,12 +131,4 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers:
-  debug:
-    id: debug
-    label: Debug
-    handler_id: debug
-    status: true
-    conditions: {  }
-    weight: 1
-    settings: {  }
+handlers: {  }

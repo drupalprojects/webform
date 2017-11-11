@@ -158,6 +158,11 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'all_description' => $this->t('Back button is disabled for all forms.'),
         'form_description' => $this->t("If checked, users will not be allowed to navigate back to the form using the browser's back button."),
       ],
+      'form_submit_back' => [
+        'title' => $this->t('Submit previous page when browser back button is clicked'),
+        'all_description' => $this->t('Browser back button submits the previous page for all forms.'),
+        'form_description' => $this->t("If checked, the browser back button will submit the previous page and navigate back emulating the behaviour of user clicking a wizard or preview page's back button."),
+      ],
       'form_unsaved' => [
         'title' => $this->t('Warn users about unsaved changes'),
         'all_description' => $this->t('Unsaved warning is enabled for all forms.'),

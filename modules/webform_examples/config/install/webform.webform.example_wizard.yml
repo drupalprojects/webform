@@ -78,6 +78,7 @@ settings:
   form_novalidate: false
   form_unsaved: true
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
   submission_label: ''
@@ -89,6 +90,7 @@ settings:
   wizard_start_label: ''
   wizard_confirmation: true
   wizard_confirmation_label: ''
+  wizard_track: ''
   preview: 2
   preview_label: ''
   preview_title: ''

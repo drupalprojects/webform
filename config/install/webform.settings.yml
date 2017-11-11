@@ -8,6 +8,7 @@ settings:
   default_form_submit_once: false
   default_form_confidential_message: 'This form is confidential. You must <a href="[site:login-url]/logout?destination=[current-page:url:relative]">Log out</a> to submit it.'
   default_form_disable_back: false
+  default_form_submit_back: false
   default_form_unsaved: false
   default_form_novalidate: false
   default_form_details_toggle: true

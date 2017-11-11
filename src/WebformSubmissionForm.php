@@ -479,13 +479,18 @@ class WebformSubmissionForm extends ContentEntityForm {
     $assets = $webform->getAssets();
     foreach ($assets as $type => $value) {
       if ($value) {
-        $form['#attached']['library'][] = 'webform/webform.' . $type . '.' . $webform->id() ;
+        $form['#attached']['library'][] = 'webform/webform.' . $type . '.' . $webform->id();
       }
     }
 
     // Attach disable back button.
     if ($this->getWebformSetting('form_disable_back')) {
       $form['#attached']['library'][] = 'webform/webform.form.disable_back';
+    }
+
+    // Attach browser back button.
+    if ($this->getWebformSetting('form_submit_back')) {
+      $form['#attached']['library'][] = 'webform/webform.form.submit_back';
     }
 
     // Unsaved: Add unsaved message.
@@ -954,9 +959,7 @@ class WebformSubmissionForm extends ContentEntityForm {
             '#webform_actions_button_custom' => $next_button_custom,
             '#validate' => ['::validateForm'],
             '#submit' => ['::next'],
-            '#attributes' => [
-              'class' => ['webform-button--next']
-            ],
+            '#attributes' => ['class' => ['webform-button--next']],
             '#weight' => 1,
           ];
           if ($track) {
@@ -1794,7 +1797,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           return FALSE;
         }
       }
-      else  {
+      else {
         if ($webform_submission->getOwnerId() === $this->currentUser()->id()) {
           return FALSE;
         }
@@ -1806,7 +1809,6 @@ class WebformSubmissionForm extends ContentEntityForm {
     // @see \Drupal\webform\WebformSubmissionForm::submitValues
     $account = $this->entity->getOwner();
     $webform = $this->getWebform();
-
 
     // Check per source entity user limit.
     $entity_limit_user = $this->getWebformSetting('entity_limit_user');
@@ -2047,7 +2049,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param \Drupal\webform\WebformInterface $webform
    *   A webform.
    *
-   * @return array|boolean
+   * @return array|bool
    *   Return TRUE if the webform is open to new submissions else returns
    *   an error message.
    *

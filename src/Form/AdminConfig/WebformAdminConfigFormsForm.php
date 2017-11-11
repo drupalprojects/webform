@@ -171,6 +171,10 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
         'title' => $this->t('Disable back button for all webforms'),
         'description' => $this->t("If checked, users will not be allowed to navigate back to the webform using the browser's back button."),
       ],
+      'default_form_submit_back' => [
+        'title' => $this->t('Submit previous page when browser back button is clicked for all webforms'),
+        'description' => $this->t("If checked, the browser back button will submit the previous page and navigate back emulating the behaviour of user clicking a wizard or preview page's back button."),
+      ],
       'default_form_unsaved' => [
         'title' => $this->t('Warn users about unsaved changes for all webforms'),
         'description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a webform with unsaved changes.'),
@@ -405,4 +409,5 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
 
     parent::submitForm($form, $form_state);
   }
+
 }
