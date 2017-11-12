@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
@@ -363,7 +364,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Define very specific webform classes, this override the form's
     // default classes.
     // @see \Drupal\Core\Form\FormBuilder::retrieveForm
-    $webform_id = $webform->id();
+    $webform_id = Html::cleanCssIdentifier($webform->id());
     $operation = $this->operation;
     $class = [];
     $class[] = "webform-submission-form";
