@@ -144,6 +144,31 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#default_value' => (isset($elements['#attributes'])) ? $elements['#attributes'] : [],
     ];
 
+    // Form access denied.
+    $form['form_access_denied'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Access denied'),
+      '#open' => TRUE,
+    ];
+    $form['form_access_denied']['form_login'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Redirect to login when access denied to webform'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['form_login'],
+    ];
+    $form['form_access_denied']['form_login_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Login message when access denied to webform'),
+      '#description' => $this->t('A message to be displayed on the login page.'),
+      '#default_value' => $settings['form_login_message'],
+      '#states' => [
+        'visible' => [
+          ':input[name="form_login"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
     // Form behaviors.
     $behavior_elements = [
       // Global behaviors.

@@ -32,6 +32,9 @@ webform.settings:
         default_form_confidential_message:
           type: text
           label: 'Default webform confidential message'
+        default_form_login_message:
+          type: text
+          label: 'Default login message when access denied to webform'
         default_form_novalidate:
           type: boolean
           label: 'Disable client-side validation'
@@ -101,6 +104,9 @@ webform.settings:
         default_submission_log:
           type: boolean
           label: 'Default submission logging'
+        default_submission_login_message:
+          type: text
+          label: 'Default login message when access denied to submission'
         form_classes:
           type: string
           label: 'Form CSS classes '
@@ -195,6 +201,9 @@ webform.settings:
         file_private_redirect:
           type: boolean
           label: 'Redirect anonymous users to login when attempting to access private file uploads.'
+        file_private_redirect_message:
+          type: text
+          label: 'Login message when access denied to private file uploads.'
         default_max_filesize:
           type: string
           label: 'Default maximum upload size'
@@ -490,7 +499,7 @@ webform.webform.*:
           label: 'Form confidential message'
         form_convert_anonymous:
           type: boolean
-          label: 'Convert anonymous drafts and submissions to authenticated.'
+          label: 'Convert anonymous drafts and submissions to authenticated'
         form_prepopulate:
           type: boolean
           label: 'Form prepopulate elements'
@@ -527,6 +536,12 @@ webform.webform.*:
         form_reset:
           type: boolean
           label: 'Display reset button'
+        form_login:
+          type: boolean
+          label: 'Redirect to login when access denied to webform'
+        form_login_message:
+          type: text
+          label: 'Login message when access denied to webform'
         submission_label:
           type: label
           label: 'Default submission label'
@@ -539,6 +554,12 @@ webform.webform.*:
           sequence:
             type: string
             label: 'Column name'
+        submission_login:
+          type: boolean
+          label: 'Redirect to login when access denied to submission'
+        submission_login_message:
+          type: text
+          label: 'Login message when access denied to submission'
         wizard_progress_bar:
           type: boolean
           label: 'Show wizard progress bar'

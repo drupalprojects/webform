@@ -259,9 +259,13 @@ settings:
   form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
+  form_login: false
+  form_login_message: ''
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_login: false
+  submission_login_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false

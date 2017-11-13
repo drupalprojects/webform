@@ -89,6 +89,10 @@ function webform_token_info() {
     'name' => t('In draft'),
     'description' => t('Is the webform submission in draft.'),
   ];
+  $webform['label'] = [
+    'name' => t('Label'),
+    'description' => t('The label of the webform submission.'),
+  ];
   $webform_submission['limit:webform'] = [
     'name' => t('Total submissions limit'),
     'description' => t('The total number of submissions allowed for the webform.'),
@@ -414,6 +418,10 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
 
         case 'token':
           $replacements[$original] = $webform_submission->getToken();
+          break;
+
+        case 'label':
+          $replacements[$original] = $webform_submission->label();
           break;
 
         /* Default values for the dynamic tokens handled below. */

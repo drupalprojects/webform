@@ -132,6 +132,32 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#default_value' => $columns_default_value,
     ];
 
+
+    // Submission access denied.
+    $form['submission_access_denied'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Access denied'),
+      '#open' => TRUE,
+    ];
+    $form['submission_access_denied']['submission_login'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Redirect to login when access denied to submission'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['submission_login'],
+    ];
+    $form['submission_access_denied']['submission_login_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Login message when access denied to submission'),
+      '#description' => $this->t('A message to be displayed on the login page.'),
+      '#default_value' => $settings['submission_login_message'],
+      '#states' => [
+        'visible' => [
+          ':input[name="submission_login"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['submission_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
     // Submission behaviors.
     $form['submission_behaviors'] = [
       '#type' => 'details',

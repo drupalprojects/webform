@@ -1026,3 +1026,11 @@ function webform_update_8090() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2923047: Redirect to user login when Access Denied for a Webform
+ */
+function webform_update_8091() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

@@ -127,6 +127,12 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $settings['default_form_confidential_message'],
     ];
+    $form['form_settings']['default_form_login_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default login message when access denied to webform'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_form_login_message'],
+    ];
     $form['form_settings']['default_submit_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default submit button label'),

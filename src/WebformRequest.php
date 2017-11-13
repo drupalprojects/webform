@@ -175,6 +175,17 @@ class WebformRequest implements WebformRequestInterface {
   /**
    * {@inheritdoc}
    */
+  public function getCurrentWebformSubmission() {
+    $webform_submission = $this->routeMatch->getParameter('webform_submission');
+    if (is_string($webform_submission)) {
+      $webform_submission = $this->entityTypeManager->getStorage('webform_submission')->load($webform_submission);
+    }
+    return $webform_submission;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getWebformEntities() {
     $webform = $this->getCurrentWebform();
     $source_entity = $this->getCurrentSourceEntity('webform');

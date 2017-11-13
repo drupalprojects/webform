@@ -8,23 +8,14 @@ open: null
 close: null
 uid: null
 template: false
-id: test_form_prepopulate
-title: 'Test: Webform: Prepopulate'
-description: 'Test prepopulating elements using query string parameters.'
+id: test_form_login
+title: 'Test: Webform: Login'
+description: 'Test login access denied to form or submission.'
 category: 'Test: Webform'
 elements: |
-  name:
+  textfield:
     '#type': textfield
-    '#title': Name
-  colors:
-    '#type': checkboxes
-    '#title': Colors
-    '#options':
-      red: Red
-      white: White
-      blue: Blue
-  prepopulate_name:
-    '#markup': '<a href="?source_entity_type=user&source_entity_id=1&name=John+Smith&colors[]=red&colors[]=white">Prepopulate elements and source entity using query string parameter ?source_entity_type=user&source_entity_id=1&name=John+Smith&colors[]=red&colors[]=white</a>'
+    '#title': textfield
 css: ''
 javascript: ''
 settings:
@@ -41,8 +32,8 @@ settings:
   form_confidential: false
   form_confidential_message: ''
   form_convert_anonymous: false
-  form_prepopulate: true
-  form_prepopulate_source_entity: true
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
   form_prepopulate_source_entity_required: false
   form_prepopulate_source_entity_type: ''
   form_reset: false
@@ -53,13 +44,13 @@ settings:
   form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
-  form_login: false
-  form_login_message: ''
+  form_login: true
+  form_login_message: 'Please login to access <b>[webform:title]</b>.'
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
-  submission_login: false
-  submission_login_message: ''
+  submission_login: true
+  submission_login_message: 'Please login to access <b>[webform_submission:label]</b>.'
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -79,7 +70,7 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: message
+  confirmation_type: page
   confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''

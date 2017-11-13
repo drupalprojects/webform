@@ -37,6 +37,14 @@ interface WebformRequestInterface {
   public function getCurrentWebform();
 
   /**
+   * Get webform submission associated with the current request.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface|null
+   *   The current request's webform submission.
+   */
+  public function getCurrentWebformSubmission();
+
+  /**
    * Get the webform and source entity for the current request.
    *
    * @return array

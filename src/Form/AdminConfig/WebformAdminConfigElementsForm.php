@@ -346,6 +346,18 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_private_redirect'),
     ];
+    $form['file']['file_private_redirect_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Login message when access denied to private file uploads.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('file.file_private_redirect_message'),
+      '#states' => [
+        'visible' => [
+          ':input[name="file[file_private_redirect]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     $form['file']['default_max_filesize'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default maximum upload size'),
