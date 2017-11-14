@@ -47,7 +47,7 @@ class WebformElementFormatTest extends WebformTestBase {
     $body = $this->getMessageBody($submission, 'email_html');
     $elements = [
       'Checkbox (Value)' => 'Yes',
-      'Color (Color swatch)' => '<span style="display:inline-block; height:1em; width:1em; border:1px solid #000; background-color:#ffffcc"></span> #ffffcc',
+      'Color (Color swatch)' => '<font color="#ffffcc">█</font> #ffffcc',
       'Email (Link)' => '<a href="mailto:example@example.com">example@example.com</a>',
       'Email confirm (Link)' => '<a href="mailto:example@example.com">example@example.com</a>',
       'Email multiple (Link)' => '<a href="mailto:example@example.com">example@example.com</a>, <a href="mailto:test@test.com">test@test.com</a>, <a href="mailto:random@random.com">random@random.com</a>',

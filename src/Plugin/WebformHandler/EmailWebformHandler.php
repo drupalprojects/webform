@@ -15,7 +15,6 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\Entity\File;
-use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
@@ -672,9 +671,19 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Trim the message body.
     $message['body'] = trim($message['body']);
 
-    // Alter body based on the mail system sender.
+    // Convert message body to HTML.
     if ($this->configuration['html'] && $this->supportsHtml()) {
-      $message['body'] = WebformHtmlEditor::checkMarkup($message['body'], TRUE);
+      // Apply optional global format to body.
+      // NOTE: $message['body'] is not passed-thru Xss::filter() to allow
+      // style tags to be supoported.
+      if ($format = $this->configFactory->get('webform.settings')->get('html_editor.format')) {
+        $build = [
+          '#type' => 'processed_text',
+          '#text' => $message['body'],
+          '#format' => $format,
+        ];
+        $message['body']= \Drupal::service('renderer')->renderPlain($build);
+      }
     }
 
     // Add attachments.

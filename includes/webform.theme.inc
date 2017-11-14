@@ -90,10 +90,6 @@ function webform_theme() {
       'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
     ],
 
-    'webform_element_color_value_swatch' => [
-      'variables' => ['element' => [], 'value' => NULL, 'webform_submission' => NULL, 'options' => []],
-    ],
-
     'webform_element_help' => [
       'variables' => ['help' => NULL],
     ],
