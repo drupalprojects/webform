@@ -9,7 +9,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformTokenSubmissionValue extends WebformTestBase {
+class WebformTokenSubmissionValueTest extends WebformTestBase {
 
   /**
    * Modules to enable.

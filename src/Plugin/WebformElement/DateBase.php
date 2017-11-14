@@ -92,7 +92,7 @@ abstract class DateBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  public function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
     $timestamp = strtotime($value);
@@ -101,7 +101,7 @@ abstract class DateBase extends WebformElementBase {
     }
 
     $format = $this->getItemFormat($element) ?: 'html_' . $this->getDateType($element);
-    if ($format == 'raw') {
+    if ($format === 'raw') {
       return $value;
     }
     elseif (DateFormat::load($format)) {

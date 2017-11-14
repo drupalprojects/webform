@@ -111,14 +111,14 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
       // Drupal strip_tags() from mail subject.
       // @see \Drupal\Core\Mail\MailManager::doMail
       // @see http://cgit.drupalcode.org/drupal/tree/core/lib/Drupal/Core/Mail/MailManager.php#n285
-      'subject' => 'This has <removed>"special" \'chararacters\'',
-      'message' => 'This has <not_removed>"special" \'chararacters\'',
+      'subject' => 'This has <removed>"special" \'characters\'',
+      'message' => 'This has <not_removed>"special" \'characters\'',
     ];
     $this->postSubmission($webform, $edit);
     $sent_email = $this->getLastEmail();
     $this->assertEqual($sent_email['reply-to'], '"first_name" "last_name" <from@example.com>');
-    $this->assertEqual($sent_email['subject'], 'This has "special" \'chararacters\'');
-    $this->assertEqual($sent_email['body'], 'This has <not_removed>"special" \'chararacters\'' . PHP_EOL);
+    $this->assertEqual($sent_email['subject'], 'This has "special" \'characters\'');
+    $this->assertEqual($sent_email['body'], 'This has <not_removed>"special" \'characters\'' . PHP_EOL);
   }
 
 }

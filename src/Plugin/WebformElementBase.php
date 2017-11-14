@@ -14,6 +14,7 @@ use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\ElementInfoManagerInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -1366,31 +1367,42 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * @param array $options
    *   An array of options.
    *
-   * @return string
+   * @return \Drupal\Component\Render\MarkupInterface|string
    *   The element's value formatted as text.
+   *   Use Markup::create() to make sure the element's value is not double
+   *   escaped when used as a token.
+   *
+   * @see _webform_token_get_submission_value()
    */
   protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
     $format = $this->getItemFormat($element);
 
-    if ($format != 'raw') {
-      // Escape all HTML entities.
-      if (is_string($value)) {
-        $value = Html::escape($value);
-      }
-
-      // Apply #field prefix and #field_suffix to value.
-      if (isset($element['#type'])) {
-        if (isset($element['#field_prefix'])) {
-          $value = $element['#field_prefix'] . $value;
-        }
-        if (isset($element['#field_suffix'])) {
-          $value .= $element['#field_suffix'];
-        }
-      }
+    if ($format === 'raw') {
+      return Markup::create($value);
     }
 
-    return $value;
+    // Build a render that used #plain_text so that HTML characters are escaped.
+    // @see \Drupal\Core\Render\Renderer::ensureMarkupIsSafe
+    if ($value === '0') {
+      // Issue #2765609: #plain_text doesn't render empty-like values
+      // (e.g. 0 and "0").
+      // Workaround: Use #markup until this issue is fixed.
+      $build = ['#markup' => $value];
+    }
+    else {
+      $build = ['#plain_text' => $value];
+    }
+
+    // Apply #field prefix and #field_suffix to the render array.
+    if (isset($element['#field_prefix'])) {
+      $build['#prefix'] = $element['#field_prefix'];
+    }
+    if (isset($element['#field_suffix'])) {
+      $build['#suffix'] = $element['#field_suffix'];
+    }
+
+    return \Drupal::service('renderer')->renderPlain($build);
   }
 
   /**

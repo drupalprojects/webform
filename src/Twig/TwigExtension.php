@@ -60,9 +60,6 @@ class TwigExtension extends \Twig_Extension {
     /** @var \Drupal\webform\WebformTokenManagerInterface $value */
     $value = \Drupal::service('webform.token_manager')->replace($token, $entity, $data, $options);
 
-    // Must decode HTML entities which are going to re-encoded.
-    $value = Html::decodeEntities($value);
-
     return (WebformHtmlHelper::containsHtml($value)) ? ['#markup' => $value] : $value;
   }
 

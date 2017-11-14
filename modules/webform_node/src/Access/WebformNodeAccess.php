@@ -120,7 +120,7 @@ class WebformNodeAccess {
         return WebformSubmissionAccess::checkWizardPagesAccess($webform_submission);
 
       case 'webform_submission_resend':
-        return WebformSubmissionAccess::checkEmailAccess($webform_submission, $account);
+        return WebformSubmissionAccess::checkResendAccess($webform_submission, $account);
     }
 
     return $access_result;

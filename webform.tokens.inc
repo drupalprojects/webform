@@ -593,7 +593,8 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         $parents = explode(':', $key);
         $key_exists = NULL;
         $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
-        $replacements[$original] = ($key_exists) ? $value : $original;
+        // A handler response is always considered safe markup.
+        $replacements[$original] = ($key_exists) ? Markup::create($value) : $original;
       }
     }
 
@@ -714,12 +715,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
       ];
       $entity_token_name = (isset($entity_token_names[$entity_type])) ? $entity_token_names[$entity_type] : $entity_type;
       $entity_token = implode(':', $keys);
-      return \Drupal::token()->replace(
+      return Markup::create(\Drupal::token()->replace(
         "[$entity_token_name:$entity_token]",
         [$entity_token_name => $entity],
         $options,
         $bubbleable_metadata
-      );
+      ));
     }
     else {
       return '';
@@ -747,19 +748,19 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   if (is_array($token_value)) {
     // Note, tokens can't include CSS and JS libraries since they will
     // can be included in an email.
-    $markup = \Drupal::service('renderer')->renderPlain($token_value);
-    return $markup;
+    return \Drupal::service('renderer')->renderPlain($token_value);
+  }
+  elseif ($token_value instanceof MarkupInterface) {
+    return $token_value;
   }
   elseif (isset($element['#format']) && $element['#format'] === 'raw') {
-    // Raw needs return Markup.
-    if ($token_value instanceof MarkupInterface) {
-      return $token_value;
-    }
-    else {
-      return Markup::create((string) $token_value);
-    }
+    // Make sure raw tokens are always rendered AS-IS.
+    return Markup::create((string) $token_value);
   }
   else {
+    // All strings will be escaped as HtmlEscapedText.
+    // @see \Drupal\Core\Utility\Token::replace
+    // @see \Drupal\Component\Render\HtmlEscapedText
     return (string) $token_value;
   }
 }

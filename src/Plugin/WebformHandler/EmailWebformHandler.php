@@ -676,10 +676,6 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if ($this->configuration['html'] && $this->supportsHtml()) {
       $message['body'] = WebformHtmlEditor::checkMarkup($message['body'], TRUE);
     }
-    else {
-      // Decode HTML entities in plain text body.
-      $message['body'] = Html::decodeEntities($message['body']);
-    }
 
     // Add attachments.
     $message['attachments'] = $this->getMessageAttachments($webform_submission);

@@ -98,9 +98,9 @@ class WebformAccessCheckTest extends UnitTestCase {
     $this->assertEquals(AccessResult::neutral(), WebformAccountAccess::checkOverviewAccess($account));
     $this->assertEquals(AccessResult::allowed(), WebformAccountAccess::checkOverviewAccess($submission_manager_account));
 
-    // Check email access.
-    $this->assertEquals(AccessResult::forbidden(), WebformSubmissionAccess::checkEmailAccess($webform_submission, $account));
-    $this->assertEquals(AccessResult::allowed(), WebformSubmissionAccess::checkEmailAccess($email_webform_submission, $submission_manager_account));
+    // Check resend (email) message access.
+    $this->assertEquals(AccessResult::forbidden(), WebformSubmissionAccess::checkResendAccess($webform_submission, $account));
+    $this->assertEquals(AccessResult::allowed(), WebformSubmissionAccess::checkResendAccess($email_webform_submission, $submission_manager_account));
 
     // @todo Fix below access check which is looping through the node's fields.
     // Check entity results access.

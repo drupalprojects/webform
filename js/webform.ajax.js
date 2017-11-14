@@ -16,7 +16,7 @@
   /**
    * Provide Webform Ajax link behavior.
    *
-   * Display fullscreen progress indicator instead of throber.
+   * Display fullscreen progress indicator instead of throbber.
    * Copied from: Drupal.behaviors.AJAX
    *
    * @type {Drupal~behavior}

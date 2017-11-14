@@ -566,6 +566,9 @@ function template_preprocess_webform_element_base_html(array &$variables) {
       $variables['item']['#markup'] = $variables['value'];
     }
   }
+  else {
+    $variables['title'] = ['#markup' => $variables['title']];
+  }
 }
 
 /**

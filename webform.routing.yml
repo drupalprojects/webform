@@ -528,7 +528,7 @@ entity.webform_submission.resend_form:
     _form: 'Drupal\webform\Form\WebformSubmissionResendForm'
     _title_callback: 'Drupal\webform\Controller\WebformSubmissionController::title'
   requirements:
-    _custom_access: '\Drupal\webform\Access\WebformSubmissionAccess::checkEmailAccess'
+    _custom_access: '\Drupal\webform\Access\WebformSubmissionAccess::checkResendAccess'
 
 entity.webform_submission.duplicate_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/duplicate'
