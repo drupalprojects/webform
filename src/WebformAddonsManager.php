@@ -82,6 +82,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $categories['element'] = [
       'title' => $this->t('Elements'),
     ];
+    $categories['enhancement'] = [
+      'title' => $this->t('Enhancements'),
+    ];
     $categories['integration'] = [
       'title' => $this->t('Integration'),
     ];
@@ -224,6 +227,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
       'category' => 'element',
+    ];
+
+    // Enhancement: Webform Wizard Full Title.
+    $projects['webform_wizard_full_title'] = [
+      'title' => $this->t('Webform Wizard Full Title'),
+      'description' => $this->t('Extends functionality of Webform so on wizard forms, the title of the wizard page can override the form title'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_wizard_full_title'),
+      'category' => 'enhancement',
     ];
 
     // Integration: Webform iContact.
