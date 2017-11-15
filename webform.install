@@ -552,6 +552,11 @@ function webform_update_8060() {
  * Issue #2871207: Random Multiple Submissions. Create webform table.
  */
 function webform_update_8061() {
+  // Issue #2923303: Problems with updating the webform module.
+  if (\Drupal::database()->schema()->tableExists('webform')) {
+    \Drupal::database()->schema()->dropTable('webform');
+  }
+
   // Copied from: webform_schema().
   $schema = [
     'description' => 'Stores all webform data.',
