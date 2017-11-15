@@ -290,8 +290,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
-      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.27.4.zip'),
-      'version' => '5.27.4',
+      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.31.0.zip'),
+      'version' => '5.31.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.geocomplete'] = [
@@ -326,8 +326,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
       'notes' => $this->t('Input masks are used to ensure predefined and custom formats for text fields.'),
       'homepage_url' => Url::fromUri('https://robinherbots.github.io/Inputmask/'),
-      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.7.zip'),
-      'version' => '3.3.7',
+      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.10.zip'),
+      'version' => '3.3.10',
       'optional' => TRUE,
     ];
     $libraries['jquery.intl-tel-input'] = [
@@ -335,8 +335,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user's country, displays a relevant placeholder and provides formatting/validation methods."),
       'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'homepage_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
-      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.0.0.zip'),
-      'version' => '12.0.0',
+      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.1.0.zip'),
+      'version' => '12.1.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.rateit'] = [
@@ -353,8 +353,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Select2 gives you a customizable select box with support for searching and tagging.'),
       'notes' => $this->t('Select2 is used to improve the user experience for select menus. Select2 is the recommended select menu enhancement library.'),
       'homepage_url' => Url::fromUri('https://select2.github.io/'),
-      'download_url' => Url::fromUri('https://github.com/select2/select2/archive/4.0.3.zip'),
-      'version' => '4.0.3',
+      'download_url' => Url::fromUri('https://github.com/select2/select2/archive/4.0.5.zip'),
+      'version' => '4.0.5',
       'optional' => TRUE,
     ];
     $libraries['jquery.chosen'] = [
@@ -362,8 +362,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A jQuery plugin that makes long, unwieldy select boxes much more user-friendly.'),
       'notes' => $this->t('Chosen is used to improve the user experience for select menus. Chosen is an alternative to Select2.'),
       'homepage_url' => Url::fromUri('https://harvesthq.github.io/chosen/'),
-      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.7.0/chosen_v1.7.0.zip'),
-      'version' => '1.7.0',
+      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.8.2/chosen_v1.8.2.zip'),
+      'version' => '1.8.2',
       'optional' => TRUE,
     ];
     $libraries['jquery.timepicker'] = [
@@ -371,8 +371,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A lightweight, customizable javascript timepicker plugin for jQuery, inspired by Google Calendar.'),
       'notes' => $this->t('Timepicker is used to provide a polyfill for HTML 5 time elements.'),
       'homepage_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker'),
-      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.11.zip'),
-      'version' => '1.11.11 ',
+      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.12.zip'),
+      'version' => '1.11.12',
       'optional' => TRUE,
     ];
     $libraries['jquery.toggles'] = [
