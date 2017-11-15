@@ -51,6 +51,7 @@ settings:
   submission_user_columns: {  }
   submission_login: true
   submission_login_message: 'Please login to access <b>[webform_submission:label]</b>.'
+  submission_exception_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false

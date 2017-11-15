@@ -129,6 +129,11 @@ interface WebformMessageManagerInterface {
   const SUBMISSION_CONFIRMATION = 'confirmation_message';
 
   /**
+   * Submission exception.
+   */
+  const SUBMISSION_EXCEPTION = 'submission_exception_message';
+
+  /**
    * Template preview.
    */
   const TEMPLATE_PREVIEW = 'template_preview';

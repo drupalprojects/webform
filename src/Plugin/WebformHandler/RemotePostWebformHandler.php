@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformMessageManagerInterface;
 use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -56,13 +57,21 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $tokenManager;
 
   /**
+   * The webform message manager.
+   *
+   * @var \Drupal\webform\WebformMessageManagerInterface
+   */
+  protected $messageManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, ModuleHandlerInterface $module_handler, ClientInterface $http_client, WebformTokenManagerInterface $token_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, ModuleHandlerInterface $module_handler, ClientInterface $http_client, WebformTokenManagerInterface $token_manager, WebformMessageManagerInterface $message_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
     $this->moduleHandler = $module_handler;
     $this->httpClient = $http_client;
     $this->tokenManager = $token_manager;
+    $this->messageManager = $message_manager;
   }
 
   /**
@@ -79,7 +88,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $container->get('webform_submission.conditions_validator'),
       $container->get('module_handler'),
       $container->get('http_client'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('webform.message_manager')
     );
   }
 
@@ -337,6 +347,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       return;
     }
 
+    $this->messageManager->setWebformSubmission($webform_submission);
+
     $request_url = $this->configuration[$state . '_url'];
     $request_method = (!empty($this->configuration['method'])) ? $this->configuration['method'] : 'POST';
     $request_type = ($request_method == 'POST') ? $this->configuration['type'] : NULL;
@@ -355,25 +367,21 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       }
     }
     catch (RequestException $request_exception) {
-      $message = $request_exception->getMessage();
       $response = $request_exception->getResponse();
 
       // Encode HTML entities to prevent broken markup from breaking the page.
+      $message = $request_exception->getMessage();
       $message = nl2br(htmlentities($message));
 
-      // If debugging is enabled, display the error message on screen.
-      $this->debug($message, $state, $request_url, $request_method, $request_type, $request_options, $response, 'error');
+      $this->handleError($state, $message, $request_url, $request_method, $request_type, $request_options, $response);
+      return;
+    }
 
-      // Log error message.
-      $context = [
-        '@form' => $this->getWebform()->label(),
-        '@state' => $state,
-        '@type' => $request_type,
-        '@url' => $request_url,
-        '@message' => $message,
-        'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers')->toString(),
-      ];
-      $this->getLogger()->error('@form webform remote @type post (@state) to @url failed. @message', $context);
+    // Display submission exception if response code is not 2xx.
+    $status_code = $response->getStatusCode();
+    if ($status_code < 200 || $status_code >= 300) {
+      $message = $this->t('Remote post request return @status_code status code.', ['@status_code' => $status_code]);
+      $this->handleError($state, $message, $request_url, $request_method, $request_type, $request_options, $response);
       return;
     }
 
@@ -467,6 +475,64 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $data = json_decode($body, TRUE);
     return (json_last_error() === JSON_ERROR_NONE) ? $data : $body;
   }
+
+  /**
+   * Get webform handler tokens from response data.
+   *
+   * @param mixed $data
+   *   Response data.
+   * @param array $parents
+   *   Webform handler token parents.
+   *
+   * @return array
+   *   A list of webform handler tokens.
+   */
+  protected function getResponseTokens($data, array $parents = []) {
+    $tokens = [];
+    if (is_array($data)) {
+      foreach ($data as $key => $value) {
+        $tokens = array_merge($tokens, $this->getResponseTokens($value, array_merge($parents, [$key])));
+      }
+    }
+    else {
+      $tokens[] = '[' . implode(':', $parents) . ']';
+    }
+    return $tokens;
+  }
+
+  /**
+   * Determine if saving of results is enabled.
+   *
+   * @return bool
+   *   TRUE if saving of results is enabled.
+   */
+  protected function isResultsEnabled() {
+    return ($this->getWebform()->getSetting('results_disabled') === FALSE);
+  }
+
+  /**
+   * Determine if saving of draft is enabled.
+   *
+   * @return bool
+   *   TRUE if saving of draft is enabled.
+   */
+  protected function isDraftEnabled() {
+    return $this->isResultsEnabled() && ($this->getWebform()->getSetting('draft') != WebformInterface::DRAFT_NONE);
+  }
+
+  /**
+   * Determine if converting anoynmous submissions to authenticated is enabled.
+   *
+   * @return bool
+   *   TRUE if converting anoynmous submissions to authenticated is enabled.
+   */
+  protected function isConvertEnabled() {
+    return $this->isDraftEnabled() && ($this->getWebform()->getSetting('form_convert_anonymous') === TRUE);
+  }
+
+  /****************************************************************************/
+  // Debug and exception handlers.
+  /****************************************************************************/
 
   /**
    * Display debugging information.
@@ -618,57 +684,47 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * Get webform handler tokens from response data.
+   * Handle error by logging and display debugging and/or exception message.
    *
-   * @param mixed $data
-   *   Response data.
-   * @param array $parents
-   *   Webform handler token parents.
-   *
-   * @return array
-   *   A list of webform handler tokens.
+   * @param string $message
+   *   Message to be displayed.
+   * @param string $state
+   *   The state of the webform submission.
+   *   Either STATE_NEW, STATE_DRAFT, STATE_COMPLETED, STATE_UPDATED, or
+   *   STATE_CONVERTED depending on the last save operation performed.
+   * @param string $request_url
+   *   The remote URL the request is being posted to.
+   * @param string $request_method
+   *   The method of remote post.
+   * @param string $request_type
+   *   The type of remote post.
+   * @param string $request_options
+   *   The requests options including the submission data..
+   * @param \Psr\Http\Message\ResponseInterface|null $response
+   *   The response returned by the remote server.
+   * @param string $type
+   *   The type of message to be displayed to the end use.
    */
-  protected function getResponseTokens($data, array $parents = []) {
-    $tokens = [];
-    if (is_array($data)) {
-      foreach ($data as $key => $value) {
-        $tokens = array_merge($tokens, $this->getResponseTokens($value, array_merge($parents, [$key])));
-      }
-    }
-    else {
-      $tokens[] = '[' . implode(':', $parents) . ']';
-    }
-    return $tokens;
-  }
+  protected function handleError($state, $message, $request_url, $request_method, $request_type, $request_options, $response) {
+    // If debugging is enabled, display the error message on screen.
+    $this->debug($message, $state, $request_url, $request_method, $request_type, $request_options, $response, 'error');
 
-  /**
-   * Determine if saving of results is enabled.
-   *
-   * @return bool
-   *   TRUE if saving of results is enabled.
-   */
-  protected function isResultsEnabled() {
-    return ($this->getWebform()->getSetting('results_disabled') === FALSE);
-  }
+    // Log error message.
+    $context = [
+      '@form' => $this->getWebform()->label(),
+      '@state' => $state,
+      '@type' => $request_type,
+      '@url' => $request_url,
+      '@message' => $message,
+      'link' => $this->getWebform()
+        ->toLink($this->t('Edit'), 'handlers')
+        ->toString(),
+    ];
+    $this->getLogger()
+      ->error('@form webform remote @type post (@state) to @url failed. @message', $context);
 
-  /**
-   * Determine if saving of draft is enabled.
-   *
-   * @return bool
-   *   TRUE if saving of draft is enabled.
-   */
-  protected function isDraftEnabled() {
-    return $this->isResultsEnabled() && ($this->getWebform()->getSetting('draft') != WebformInterface::DRAFT_NONE);
-  }
-
-  /**
-   * Determine if converting anoynmous submissions to authenticated is enabled.
-   *
-   * @return bool
-   *   TRUE if converting anoynmous submissions to authenticated is enabled.
-   */
-  protected function isConvertEnabled() {
-    return $this->isDraftEnabled() && ($this->getWebform()->getSetting('form_convert_anonymous') === TRUE);
+    // Display submission exception message.
+    $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION, 'error');
   }
 
 }

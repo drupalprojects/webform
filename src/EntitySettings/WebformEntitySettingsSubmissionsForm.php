@@ -87,6 +87,12 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#title' => $this->t('Submission label'),
       '#default_value' => $settings['submission_label'],
     ];
+    $form['submission_settings']['submission_exception_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Submission exception message'),
+      '#description' => $this->t('A message to be displayed if submission handling breaks.'),
+      '#default_value' => $settings['submission_exception_message'],
+    ];
     $form['submission_settings']['next_serial'] = [
       '#type' => 'number',
       '#title' => $this->t('Next submission number'),
