@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\user\Entity\User;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -131,6 +132,9 @@ class TextFormat extends WebformElementBase {
         return $value;
 
       case 'value':
+        $default_format = filter_default_format(User::load($webform_submission->getOwnerId()));
+        return check_markup($value, $default_format);
+
       default:
         return check_markup($value, $format);
     }
