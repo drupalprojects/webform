@@ -158,7 +158,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    */
   protected function validateFormRecursive(array $form, FormStateInterface $form_state) {
     foreach ($form as $key => $element) {
-      if (Element::property($key) || !is_array($element)) {
+      if (!Element::child($key) || !is_array($element)) {
         continue;
       }
 
