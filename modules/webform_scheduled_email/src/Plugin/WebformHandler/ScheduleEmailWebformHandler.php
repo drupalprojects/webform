@@ -177,7 +177,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     }
     $days = array_reverse($days);
     foreach ($days as $day) {
-      $days_options["+$day"] = $this->t('+ @day days', ['@day' => $day]);
+      $days_options[$day] = $this->t('+ @day days', ['@day' => $day]);
     }
     $form['scheduled']['days'] = [
       '#type' => 'webform_select_other',
