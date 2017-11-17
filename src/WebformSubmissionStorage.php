@@ -392,7 +392,14 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     $query->range(0, 1);
 
-    return ($entity_ids = $query->execute()) ? $this->load(reset($entity_ids)) : NULL;
+    $submission = ($entity_ids = $query->execute()) ? $this->load(reset($entity_ids)) : NULL;
+
+    // If account is specified, we need make sure the user can view the submission.
+    if ($submission && $account && !$submission->access('view', $account)) {
+      return NULL;
+    }
+
+    return $submission;
   }
 
   /****************************************************************************/
