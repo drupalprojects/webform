@@ -199,6 +199,22 @@ abstract class OptionsBase extends WebformElementBase {
       $element['#options_display'] = $this->getDefaultProperty('options_display');
     }
 
+    // Make sure submitted value is not lost if the element's #options were
+    // altered after the submission was completed.
+    $is_completed = $webform_submission && $webform_submission->isCompleted();
+    $has_default_value = (isset($element['#default_value']) && $element['#default_value'] !== '' && $element['#default_value'] !== NULL);
+    if ($is_completed && $has_default_value && !$this->isOptionsOther()) {
+      if ($element['#default_value'] === $webform_submission->getElementData($element['#webform_key'])) {
+        $options = OptGroup::flattenOptions($element['#options']);
+        $default_values = (array) $element['#default_value'];
+        foreach ($default_values as $default_value) {
+          if (!isset($options[$default_value])) {
+            $element['#options'][$default_value] = $default_value;
+          }
+        }
+    }
+    }
+
     // If the element is #required and the #default_value is an empty string
     // we need to unset the #default_value to prevent the below error.
     // 'An illegal choice has been detected'.
@@ -417,15 +433,14 @@ abstract class OptionsBase extends WebformElementBase {
    * {@inheritdoc}
    */
   protected function getElementSelectorInputsOptions(array $element) {
-    $plugin_id = $this->getPluginId();
-    if (preg_match('/webform_(select|radios|checkboxes|buttons)_other$/', $plugin_id, $match)) {
+    if ($other_type = $this->getOptionsOtherType()) {
       list($type) = explode(' ', $this->getPluginLabel());
       $title = $this->getAdminLabel($element);
-      $name = $match[1];
+      $name = $other_type;
 
       $inputs = [];
       $inputs[$name] = $title . ' [' . $type . ']';
-      $inputs['other'] = $title . ' [' . $this->t('Text field') . ']';
+      $inputs['other'] = $title . ' [' . $this->t('Other field') . ']';
       return $inputs;
     }
     else {
