@@ -26,6 +26,7 @@ class WebformElementComposite extends FormElement {
     'type' => 'type',
     'title' => 'title',
     'help' => 'help',
+    'placeholder' => 'placeholder',
     'description' => 'description',
     'options' => 'options',
     'required' => 'required',
@@ -259,14 +260,26 @@ class WebformElementComposite extends FormElement {
       $key = $element_value['key'];
       unset($element_value['key']);
 
+      // Remove empty strings from array.
+      $element_value = array_filter($element_value, function ($value) {
+        return ($value !== '');
+      });
+
+      // Unset empty required.
+      if (empty($element_value['required'])) {
+        unset($element_value['required']);
+      }
+
       // Limit value keys to supported element properties.
-      $element_value = array_filter($element_value);
-      foreach ($element_value as $property_name => $property_value) {
-        if (!in_array($property_name, ['type', 'custom'])) {
-          /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
-          $element_plugin = $element_manager->createInstance($element_value['type']);
-          if (!$element_plugin->hasProperty($property_name)) {
-            unset($element_value[$property_name]);
+      // This removes options from elements that don't support #options.
+      if (isset($element_value['type'])) {
+        foreach ($element_value as $property_name => $property_value) {
+          if (!in_array($property_name, ['type', 'custom'])) {
+            /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+            $element_plugin = $element_manager->createInstance($element_value['type']);
+            if (!$element_plugin->hasProperty($property_name)) {
+              unset($element_value[$property_name]);
+            }
           }
         }
       }
@@ -283,11 +296,13 @@ class WebformElementComposite extends FormElement {
 
     // Make #options is set for composite element that requires #options.
     foreach ($elements as $composite_key => $composite_element) {
-      /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
-      $element_plugin = $element_manager->getElementInstance($composite_element);
-      if ($element_plugin->hasProperty('options') && empty($composite_element['#options'])) {
-        $t_args = ['%title' => $composite_element['#title']];
-        $form_state->setErrorByName($element, t('Options for %title is required.', $t_args));
+      if (isset($composite_element['type'])) {
+        /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+        $element_plugin = $element_manager->getElementInstance($composite_element);
+        if ($element_plugin->hasProperty('options') && empty($composite_element['#options'])) {
+          $t_args = ['%title' => $composite_element['#title']];
+          $form_state->setErrorByName($element, t('Options for %title is required.', $t_args));
+        }
       }
     }
 
