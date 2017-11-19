@@ -100,8 +100,8 @@ abstract class WebformCompositeBase extends FormElement {
         }
       }
 
-      // Make sure to remove any #options reference on textfields
-      // To prevnnt "An illegal choice has been detected." error.
+      // Make sure to remove any #options references on text fields.
+      // This prevents "An illegal choice has been detected." error.
       // @see FormValidator::performRequiredValidation()
       if ($composite_element['#type'] == 'textfield') {
         unset($composite_element['#options']);
