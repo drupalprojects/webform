@@ -7,6 +7,7 @@ use Drupal\Core\Render\Element as RenderElement;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementBase;
@@ -785,7 +786,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form['composite'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('@title settings', ['@title' => $this->getPluginLabel()]),
-      '#attributes' => ['class' => ['webform-composite-admin-elements']],
+      '#attributes' => ['class' => ['webform-admin-composite-elements']],
     ];
     $form['composite']['element'] = $this->buildCompositeElementsTable();
     $form['composite']['flexbox'] = [
@@ -810,7 +811,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       ':input[name="properties[format_items]"]' => ['value' => 'table'],
     ];
 
-    $form['#attached']['library'][] = 'webform/webform.element.composite.admin';
+    $form['#attached']['library'][] = 'webform/webform.admin.composite';
 
     return $form;
   }
@@ -1083,6 +1084,51 @@ abstract class WebformCompositeBase extends WebformElementBase {
       }
     }
     return $options;
+  }
+
+  /****************************************************************************/
+  // Composite helper methods.
+  /****************************************************************************/
+
+  /**
+   * Determine if element type is supported by custom composite elements.
+   *
+   * @param string $type
+   *   An element type.
+   *
+   * @return bool
+   *   TRUE if element type is supported by custom composite elements.
+   */
+  public static function isSupportedElementType($type) {
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+
+    // Skip element types that are not supported.
+    $element = ['#type' => $type];
+    $element_plugin = $element_manager->getElementInstance($element);
+    if (!$element_plugin->isInput($element)
+      || $element_plugin->isComposite()
+      || $element_plugin->isContainer($element)
+      || $element_plugin->hasMultipleValues($element)
+      || $element_plugin instanceof WebformElementEntityReferenceInterface
+      || $element_plugin instanceof WebformComputedBase
+      || $element_plugin instanceof WebformManagedFileBase ) {
+      return FALSE;
+    }
+
+    // Skip ignored types that are not supported.
+    $ignored_element_types = [
+      'hidden',
+      'value',
+      'webform_autocomplete',
+      'webform_image_select',
+      'webform_terms_of_service',
+    ];
+    if (in_array($type, $ignored_element_types)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }

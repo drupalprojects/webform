@@ -8,10 +8,10 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_format_multi_comp
-title: 'Test: Element: Format composite multiple values'
+id: test_composite_format_multiple
+title: 'Test: Composite: Format composite multiple values'
 description: 'Test composite element formatting with multiple value.'
-category: 'Test: Element'
+category: 'Test: Composite'
 elements: |
   composite_elements:
     '#type': details

@@ -17,7 +17,7 @@ elements: |
     '#type': webform_wizard_page
     '#title': 'Wizard page #1'
     wizard_1_custom_composite:
-      '#type': webform_composite
+      '#type': webform_custom_composite
       '#title': wizard_1_custom_composite
       '#element':
         datelist:
@@ -61,7 +61,7 @@ elements: |
     '#type': webform_wizard_page
     '#title': 'Wizard page #2'
     wizard_2_custom_composite:
-      '#type': webform_composite
+      '#type': webform_custom_composite
       '#title': wizard_2_custom_composite
       '#element':
         datelist:

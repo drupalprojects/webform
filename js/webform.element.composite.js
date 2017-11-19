@@ -1,6 +1,6 @@
 /**
  * @file
- * JavaScript behaviors for composite admin UI.
+ * JavaScript behaviors for composite element builder.
  */
 
 (function ($, Drupal) {
@@ -8,11 +8,11 @@
   'use strict';
 
   /**
-   * Initialize custom composite support.
+   * Initialize composite element builder.
    *
    * @type {Drupal~behavior}
    */
-  Drupal.behaviors.webformCompositeAdmin = {
+  Drupal.behaviors.webformElementComposite = {
     attach: function (context) {
       $('[data-composite-types]').once('webform-composite-types').each(function() {
         var $element = $(this);

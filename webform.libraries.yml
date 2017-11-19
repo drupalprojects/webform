@@ -11,6 +11,12 @@ webform.admin:
     - webform/webform.form
     - webform/webform.admin.dropbutton
 
+webform.admin.composite:
+  version: VERSION
+  css:
+    theme:
+      css/webform.admin.composite.css: {}
+
 # Used preload libraries required by (modal) dialogs.
 # @see js/webform.element.codemirror.js
 webform.admin.dialog:
@@ -426,20 +432,8 @@ webform.element.composite:
   css:
     component:
       css/webform.element.composite.css: {}
-
-webform.element.composite.telephone:
-  version: VERSION
-  css:
-    component:
-      css/webform.element.composite.telephone.css: {}
-
-webform.element.composite.admin:
-  version: VERSION
-  css:
-    component:
-      css/webform.element.composite.admin.css: {}
   js:
-    js/webform.element.composite.admin.js: {}
+    js/webform.element.composite.js: {}
   dependencies:
     - core/drupal
     - core/jquery
@@ -781,6 +775,22 @@ webform.element.video_file:
   css:
     component:
       css/webform.element.video_file.css: {}
+
+# Composite.
+
+webform.composite:
+  version: VERSION
+  css:
+    component:
+      css/webform.composite.css: {}
+
+webform.composite.telephone:
+  version: VERSION
+  css:
+    component:
+      css/webform.composite.telephone.css: {}
+  dependencies:
+    - webform/webform.composite
 
 # Contrib Module.
 

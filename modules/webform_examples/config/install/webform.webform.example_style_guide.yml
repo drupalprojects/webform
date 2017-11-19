@@ -365,7 +365,7 @@ elements: |
       '#multiple': true
       '#multiple__header': true
     webform_custom_composite:
-      '#type': webform_composite
+      '#type': webform_custom_composite
       '#title': 'Custom composite'
       '#element':
         first_name:

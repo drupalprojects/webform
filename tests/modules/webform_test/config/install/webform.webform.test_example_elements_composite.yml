@@ -24,12 +24,12 @@ elements: |
       '#type': webform_address
       '#title': 'Address multiple'
       '#multiple': true
-  webform_composite_example:
+  webform_custom_composite_example:
     '#type': details
     '#title': 'Composite custom'
     '#open': true
-    webform_composite:
-      '#type': webform_composite
+    webform_custom_composite:
+      '#type': webform_custom_composite
       '#title': 'Composite custom'
       '#element':
         name:
@@ -43,8 +43,8 @@ elements: |
           '#options':
             Male: Male
             Female: Female
-    webform_composite_multiple:
-      '#type': webform_composite
+    webform_custom_composite_multiple:
+      '#type': webform_custom_composite
       '#title': 'Composite custom multiple'
       '#element':
         name:

@@ -34,7 +34,7 @@ elements: |
     markup:
       '#markup': 'This is some HTML markup.'
   composite:
-    '#type': webform_composite
+    '#type': webform_custom_composite
     '#title': Composite
     '#element':
       first_name:

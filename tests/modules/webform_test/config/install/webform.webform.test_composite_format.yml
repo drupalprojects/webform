@@ -8,10 +8,10 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_format_composite
-title: 'Test: Element: Format composite'
+id: test_composite_format
+title: 'Test: Composite: Format composite'
 description: 'Test composite element formatting.'
-category: 'Test: Element'
+category: 'Test: Composite'
 elements: |
   advanced_elements:
     '#type': details

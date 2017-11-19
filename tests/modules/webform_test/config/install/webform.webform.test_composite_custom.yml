@@ -8,14 +8,14 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_composite_custom
-title: 'Test: Element: Composite custom'
-description: 'Test custom composite/grid element.'
-category: 'Test: Element'
+id: test_composite_custom
+title: 'Test: Composite: Custom composite'
+description: 'Test custom composite element.'
+category: 'Test: Composite'
 elements: |
-  webform_composite_basic:
-    '#type': webform_composite
-    '#title': webform_composite_basic
+  webform_custom_composite_basic:
+    '#type': webform_custom_composite
+    '#title': webform_custom_composite_basic
     '#multiple': false
     '#multiple_header': false
     '#element':
@@ -28,9 +28,9 @@ elements: |
     '#default_value':
        - first_name: John
          last_name: Smith
-  webform_composite_advanced:
-    '#type': webform_composite
-    '#title': webform_composite_advanced
+  webform_custom_composite_advanced:
+    '#type': webform_custom_composite
+    '#title': webform_custom_composite_advanced
     '#element':
       first_name:
         '#type': textfield

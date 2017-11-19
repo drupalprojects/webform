@@ -155,8 +155,8 @@ elements: |
       '#title': Address
       '#description': 'This is a description for the ''webform_address'' element.'
       '#description_display': tooltip
-    webform_composite:
-      '#type': webform_composite
+    webform_custom_composite:
+      '#type': webform_custom_composite
       '#title': 'Composite custom'
       '#element':
         name:

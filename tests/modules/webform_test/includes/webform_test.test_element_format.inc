@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Generate test elements with Flexbox wrappers.
+ * Generate test elements with formatting.
  */
 
 use Drupal\Component\Utility\Unicode;

@@ -119,3 +119,19 @@ function webform_update_8092() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2924551: Move the WebformComposite element to WebformCustomComposite.
+ */
+function webform_update_8093() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $config_name) {
+    $config = $config_factory->getEditable($config_name);
+    $elements = $config->get('elements');
+    if (strpos($elements, "'#type': webform_composite") !== FALSE) {
+      $elements = str_replace("'#type': webform_composite", "'#type': webform_custom_composite", $elements);
+      $config->set('elements', $elements);
+      $config->save(TRUE);
+    }
+  }
+}
