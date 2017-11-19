@@ -917,7 +917,7 @@ libraries.jquery.icheck:
     url: https://en.wikipedia.org/wiki/MIT_License
     gpl-compatible: true
   cdn: &webform_icheck_cdn
-    /libraries/jquery.icheck//: https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/
+    /libraries/jquery.icheck/: https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/
   js:
     /libraries/jquery.icheck/icheck.js: {}
   dependencies:
