@@ -30,6 +30,21 @@ interface WebformSubmissionConditionsValidatorInterface {
   public function validateForm(array &$form, FormStateInterface $form_state);
 
   /**
+   * Validate state with conditions.
+   *
+   * @param $state
+   *   A state.
+   * @param array $conditions
+   *   An associative array containing conditions.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   *
+   * @return bool|NULL
+   *   TRUE if conditions validate. NULL if conditions can't be processed.
+   */
+  public function validateState($state, array $conditions, WebformSubmissionInterface $webform_submission);
+
+  /**
    * Validate #state conditions.
    *
    * @param array $conditions

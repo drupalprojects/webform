@@ -217,7 +217,30 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   }
 
   /****************************************************************************/
-  // Condition methods.
+  // Validate state methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateState($state, array $conditions, WebformSubmissionInterface $webform_submission) {
+    // Process state/negate.
+    list($state, $negate) = $this->processState($state);
+
+    // Validation conditions.
+    $result = $this->validateConditions($conditions, $webform_submission);
+
+    // Skip invalid conditions.
+    if ($result === NULL) {
+      return NULL;
+    }
+
+    // Negate the result.
+    return ($negate) ? !$result : $result;
+  }
+
+  /****************************************************************************/
+  // Validate condition methods.
   /****************************************************************************/
 
   /**

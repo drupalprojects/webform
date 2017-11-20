@@ -1382,14 +1382,13 @@ class WebformSubmissionForm extends ContentEntityForm {
       if ($page['#access'] === FALSE) {
         unset($pages[$page_key]);
       }
-
       // Check #states (visible/hidden).
       elseif (!empty($page['#states'])) {
         $state = key($page['#states']);
         $conditions = $page['#states'][$state];
-        $result = $this->conditionsValidator->validateConditions($conditions, $this->getEntity());
-        $result = ($state === '!visible') ? !$result : $result;
-        if (!$result) {
+
+        $result = $this->conditionsValidator->validateState($state, $conditions, $this->getEntity());
+        if ($result !== NULL && !$result) {
           unset($pages[$page_key]);
         }
       }
