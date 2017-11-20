@@ -167,7 +167,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         ],
       ],
     ];
-    $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Form behaviors.
     $behavior_elements = [
