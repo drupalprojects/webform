@@ -286,7 +286,10 @@ class WebformElementComposite extends FormElement {
 
       if (isset($element_value['custom'])) {
         if ($element_value['custom']) {
-          $element_value += Yaml::decode($element_value['custom']);
+          $custom = Yaml::decode($element_value['custom']);
+          if ($custom && is_array($custom)) {
+            $element_value += $custom;
+          }
         }
         unset($element_value['custom']);
       }
