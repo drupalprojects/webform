@@ -264,6 +264,8 @@ webform.form.submit_back:
   header: true
   js:
     js/webform.form.submit_back.js:  {preprocess: false}
+  dependencies:
+    - core/jquery
 
 webform.form.submit_once:
   version: VERSION
