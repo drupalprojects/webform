@@ -133,12 +133,23 @@ wizard_1_test_composite_multiple:
     select: ''
     date: ''
     webform_entity_select: ''
-    webform_toggle: ''
+    webform_toggle: 0
     entity_autocomplete: null
     datetime: ''
 wizard_2_custom_composite: {  }
 wizard_2_test_composite: null
-wizard_2_test_composite_multiple: {  }");
+wizard_2_test_composite_multiple:
+  - textfield: ''
+    email: ''
+    webform_email_confirm: ''
+    tel: ''
+    select: ''
+    date: ''
+    webform_entity_select: ''
+    webform_toggle: 0
+    entity_autocomplete: null
+    datelist: ''
+    datetime: ''");
 
     // Check submiting page #2.
     $edit = [
@@ -179,15 +190,15 @@ wizard_1_test_composite:
   datetime: ''
 wizard_1_test_composite_multiple:
   - textfield: '{wizard_1_test_composite_multiple_textfield}'
-    datelist: '2001-01-01T01:10:00+1100'
     email: ''
     webform_email_confirm: ''
     tel: ''
     select: ''
     date: ''
     webform_entity_select: ''
-    webform_toggle: ''
+    webform_toggle: 0
     entity_autocomplete: null
+    datelist: '2001-01-01T01:10:00+1100'
     datetime: ''
 wizard_2_custom_composite:
   - datelist: '2002-02-02T02:20:00+1100'
@@ -213,7 +224,7 @@ wizard_2_test_composite_multiple:
     select: ''
     date: ''
     webform_entity_select: ''
-    webform_toggle: ''
+    webform_toggle: 0
     entity_autocomplete: null
     datetime: ''");
   }

@@ -107,7 +107,7 @@ abstract class WebformCompositeBase extends FormElement {
         unset($composite_element['#options']);
       }
 
-      // Initialize, prepare, and populate composite sub-element.
+      // Initialize composite sub-element.
       $element_plugin = $element_manager->getElementInstance($composite_element);
 
       // Note: File uploads are not supported because uploaded file

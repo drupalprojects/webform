@@ -80,6 +80,7 @@ class WebformMultiple extends FormElement {
    * Process items and build multiple elements widget.
    */
   public static function processWebformMultiple(&$element, FormStateInterface $form_state, &$complete_form) {
+    // Set tree.
     $element['#tree'] = TRUE;
 
     // Disable operation when #cardinality is set.
@@ -129,18 +130,19 @@ class WebformMultiple extends FormElement {
 
       $number_of_items = $form_state->get($number_of_items_storage_key);
     }
+
     $table_id = implode('_', $element['#parents']) . '_table';
 
-    // DEBUG: Disable Ajax callback by commenting out the below callback and
-    // wrapper.
+    // DEBUG:
+    // Disable Ajax callback by commenting out the below callback and wrapper.
     $ajax_settings = [
       'callback' => [get_called_class(), 'ajaxCallback'],
       'wrapper' => $table_id,
       'progress' => ['type' => 'none'],
     ];
 
-    // Track element child keys.
-    $element['#child_keys'] = Element::children($element['#element']);
+    // Initialize, prepare, and finalize sub-elements.
+    static::initializeElement($element);
 
     // Build (single) element header.
     $header = static::buildElementHeader($element);
@@ -223,6 +225,45 @@ class WebformMultiple extends FormElement {
   }
 
   /**
+   * Initialize element.
+   *
+   * @param array $element
+   *   The element.
+   */
+  protected static function initializeElement(array &$element) {
+    // Track element child keys.
+    $element['#child_keys'] = Element::children($element['#element']);
+    if (!$element['#child_keys']) {
+      return;
+    }
+
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+
+    // Initialize, prepare, and finalize composite sub-elements.
+    foreach ($element['#child_keys'] as $composite_key) {
+      $composite_element = $element['#element'][$composite_key];
+      // If the element's #access is FALSE, apply it to all sub elements.
+      if (isset($element['#access']) && $element['#access'] === FALSE) {
+        $composite_element['#access'] = FALSE;
+      }
+
+      // If #header then hide the element's #title.
+      if ($element['#header'] && !isset($composite_element['#title_display'])) {
+        $composite_element['#title_display'] = 'invisible';
+      }
+
+      // Initialize, prepare, and populate composite sub-element.
+      $element_plugin = $element_manager->getElementInstance($composite_element);
+      $element_plugin->initialize($composite_element);
+      $element_plugin->prepare($composite_element);
+      $element_plugin->finalize($composite_element);
+
+      $element['#element'][$composite_key] = $composite_element;
+    }
+  }
+
+  /**
    * Build a single element header.
    *
    * @param array $element
@@ -231,7 +272,7 @@ class WebformMultiple extends FormElement {
    * @return array
    *   A render array containing inputs for an element's header.
    */
-  public static function buildElementHeader(array $element) {
+  protected static function buildElementHeader(array $element) {
     $table_id = implode('-', $element['#parents']) . '-table';
 
     $colspan = 0;
@@ -341,7 +382,7 @@ class WebformMultiple extends FormElement {
    * @return array
    *   A render array containing inputs for an element's value and weight.
    */
-  public static function buildElementRow($table_id, $row_index, array $element, $default_value, $weight, array $ajax_settings) {
+  protected static function buildElementRow($table_id, $row_index, array $element, $default_value, $weight, array $ajax_settings) {
     if ($element['#child_keys']) {
       static::setElementRowDefaultValueRecursive($element['#element'], (array) $default_value);
     }
