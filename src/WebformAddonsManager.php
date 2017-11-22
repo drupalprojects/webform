@@ -381,6 +381,16 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Submissions: Webform Analysis.
+    $projects['webform_analysis'] = [
+      'title' => $this->t('Webform Analysis'),
+      'description' => $this->t('Used to obtain statistics on the results of form submissions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_analysis'),
+      'category' => 'submission',
+      'recommended' => TRUE,
+    ];
+
+
     // Webform Invitation.
     $projects['webform_invitation'] = [
       'title' => $this->t('Webform Invitation'),
