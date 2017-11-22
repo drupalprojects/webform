@@ -19,6 +19,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Form\WebformDialogFormTrait;
+use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -1739,13 +1740,35 @@ class WebformSubmissionForm extends ContentEntityForm {
         continue;
       }
 
-      // Populate element if value exists.
-      if (isset($element['#type']) && isset($values[$key])) {
-        $element['#default_value'] = $values[$key];
-        if ($this->operation == 'api') {
-          $element['#needs_validation'] = TRUE;
+      // Populate an element's #default_value or #value (i.e. hidden elements).
+      if (isset($values[$key])) {
+        $element_plugin = $this->elementManager->getElementInstance($element);
+        if ($element_plugin->isInput($element)) {
+          $is_prepopulated_query = ($this->getRequest()->query->get($key) !== NULL);
+
+          // Note: Managed file elements do support #default_value but
+          // it can be used for test elements
+          $is_managed_file_test = ($element_plugin instanceof WebformManagedFileBase);
+          if ($element_plugin->hasProperty('default_value') || ($is_managed_file_test && !$is_prepopulated_query)) {
+            $element['#default_value'] = $values[$key];
+          }
+          elseif ($element_plugin->hasProperty('value')) {
+            // Hidden element's #value can be prepopulated using query string.
+            if ($element_plugin->getPluginId() === 'hidden') {
+              $element['#value'] = $values[$key];
+            }
+            // Value element's #value should never be prepopulated using query string.
+            elseif ($element_plugin->getPluginId() === 'value' && !$is_prepopulated_query ) {
+              $element['#value'] = $values[$key];
+            }
+          }
+
+          if ($this->operation === 'api') {
+            $element['#needs_validation'] = TRUE;
+          }
         }
       }
+
 
       $this->populateElements($element, $values);
     }
