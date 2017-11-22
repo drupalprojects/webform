@@ -96,8 +96,8 @@ class WebformTermsOfService extends Checkbox {
 
     // Change #type to checkbox so that element is rendered correctly.
     $element['#type'] = 'checkbox';
-    $element['#wrapper_attributes']['class'] = 'form-type-webform-terms-of-service';
-    $element['#wrapper_attributes']['class'] = 'js-form-type-webform-terms-of-service';
+    $element['#wrapper_attributes']['class'][] = 'form-type-webform-terms-of-service';
+    $element['#wrapper_attributes']['class'][] = 'js-form-type-webform-terms-of-service';
 
     return $element;
   }
