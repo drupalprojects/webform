@@ -623,16 +623,28 @@ function _webform_theme_suggestions(array $variables, $hook) {
       $suggestions[] = $hook . '__' . $type . '__' . $name;
     }
   }
-  elseif (isset($variables['webform_submission'])) {
-    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-    $webform_submission = $variables['webform_submission'];
-    $webform = $webform_submission->getWebform();
-    $suggestions[] = $hook . '__' . $webform->id();
-  }
-  elseif (isset($variables['webform'])) {
-    /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $variables['webform'];
-    $suggestions[] = $hook . '__' . $webform->id();
+  else {
+    if (isset($variables['webform_submission'])) {
+      /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+      $webform_submission = $variables['webform_submission'];
+      $webform = $webform_submission->getWebform();
+    }
+    elseif (isset($variables['webform'])) {
+        /** @var \Drupal\webform\WebformInterface $webform */
+      $webform = $variables['webform'];
+    }
+    else {
+      $webform = NULL;
+    }
+    if ($webform) {
+      $suggestions[] = $hook . '__' . $webform->id();
+      if (isset($variables['handler'])) {
+        /** @var \Drupal\webform\Plugin\WebformHandlerInterface $handler */
+        $handler = $variables['handler'];
+        $suggestions[] = $hook . '__' . $webform->id() . '__' . $handler->getPluginId();
+        $suggestions[] = $hook . '__' . $webform->id() . '__' . $handler->getPluginId() . '__' . $handler->getHandlerId();
+      }
+    }
   }
 
   return $suggestions;

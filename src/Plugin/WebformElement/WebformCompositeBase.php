@@ -419,6 +419,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       '#header' => $header,
       '#rows' => $rows,
       '#attributes' => [
+        'width' => '100%',
         'cellspacing' => 0,
         'cellpadding' => 5,
         'border' => 1,
@@ -758,6 +759,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $generate = \Drupal::service('webform_submission.generate');
 
     $composite_elements = $this->getInitializedCompositeElement($element);
+
     $values = [];
     for ($i = 1; $i <= 3; $i++) {
       $value = [];

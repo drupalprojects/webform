@@ -7,8 +7,10 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Xss;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Render\Markup;
@@ -25,6 +27,7 @@ use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\Plugin\WebformHandlerMessageInterface;
 use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformThemeManagerInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -66,6 +69,20 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected $currentUser;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * The configuration object factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -87,6 +104,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected $tokenManager;
 
   /**
+   * The webform theme manager.
+   *
+   * @var \Drupal\webform\WebformThemeManagerInterface
+   */
+  protected $themeManager;
+
+  /**
    * A webform element plugin manager.
    *
    * @var \Drupal\webform\Plugin\WebformElementManagerInterface
@@ -103,10 +127,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, AccountInterface $current_user, MailManagerInterface $mail_manager, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, AccountInterface $current_user, ModuleHandlerInterface $module_handler, LanguageManagerInterface $language_manager, MailManagerInterface $mail_manager, WebformThemeManagerInterface $theme_manager, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger_factory, $config_factory, $entity_type_manager, $conditions_validator);
     $this->currentUser = $current_user;
+    $this->moduleHandler = $module_handler;
+    $this->languageManager = $language_manager;
     $this->mailManager = $mail_manager;
+    $this->themeManager = $theme_manager;
     $this->tokenManager = $token_manager;
     $this->elementManager = $element_manager;
   }
@@ -124,7 +151,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $container->get('entity_type.manager'),
       $container->get('webform_submission.conditions_validator'),
       $container->get('current_user'),
+      $container->get('module_handler'),
+      $container->get('language_manager'),
       $container->get('plugin.manager.mail'),
+      $container->get('webform.theme_manager'),
       $container->get('webform.token_manager'),
       $container->get('plugin.manager.webform.element')
     );
@@ -623,6 +653,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * {@inheritdoc}
    */
   public function getMessage(WebformSubmissionInterface $webform_submission) {
+    // Switch to default theme.
+    $this->themeManager->setDefaultTheme();
+
     $token_data = [];
 
     $message = [];
@@ -682,7 +715,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
           '#text' => $message['body'],
           '#format' => $format,
         ];
-        $message['body']= \Drupal::service('renderer')->renderPlain($build);
+        $message['body']= $this->themeManager->renderPlain($build);
       }
     }
 
@@ -692,7 +725,12 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Add webform submission.
     $message['webform_submission'] = $webform_submission;
 
+    // Switch back to active theme.
+    $this->themeManager->setActiveTheme();
+
     return $message;
+
+
   }
 
   /**
@@ -851,7 +889,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $from = $message['from_name'] . ' <' . $from . '>';
     }
 
-    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Don't send the message if To, CC, and BCC is empty.
     if (!$this->hasRecipient($webform_submission, $message)) {
@@ -874,7 +912,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#webform_submission' => $webform_submission,
       '#handler' => $this,
     ];
-    $message['body'] = trim((string) \Drupal::service('renderer')->renderPlain($build));
+    $message['body'] = trim((string) $this->themeManager->renderPlain($build));
 
     if ($this->configuration['html']) {
       switch ($this->getMailSystemSender()) {
@@ -915,7 +953,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       ];
       drupal_set_message($this->t("%subject sent to %to_mail from %from_name [%from_mail].", $t_args), 'warning', TRUE);
       $debug_message = $this->buildDebugMessage($webform_submission, $message);
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($debug_message), 'warning', TRUE);
+      drupal_set_message($this->themeManager->renderPlain($debug_message, FALSE), 'warning', TRUE);
     }
   }
 
@@ -996,7 +1034,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $element['files'] = [
         '#type' => 'item',
         '#title' => $this->t('Attachments'),
-        '#markup' => \Drupal::service('renderer')->renderPlain($file_links),
+        '#markup' => $this->themeManager->renderPlain($file_links),
       ];
     }
 
@@ -1036,10 +1074,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   protected function supportsAttachments() {
     // If 'system.mail.interface.default' is 'test_mail_collector' allow
     // email attachments during testing.
-    if (\Drupal::configFactory()->get('system.mail')->get('interface.default') == 'test_mail_collector') {
+    if ($this->configFactory->get('system.mail')->get('interface.default') == 'test_mail_collector') {
       return TRUE;
     }
-    return \Drupal::moduleHandler()->moduleExists('mailsystem');
+
+    return $this->moduleHandler->moduleExists('mailsystem');
   }
 
   /**

@@ -5,7 +5,6 @@
  * Helps support Webform to Bootstrap integration.
  */
 
-use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -13,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  * Implements hook_page_attachments().
  */
 function webform_bootstrap_page_attachments(array &$attachments) {
-  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+  if (!_webform_bootstrap_is_active_theme()) {
     return;
   }
 
@@ -33,7 +32,7 @@ function webform_bootstrap_webform_element_webform_terms_of_service_alter(array 
  * Implements hook_webform_element_alter().
  */
 function webform_bootstrap_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
-  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+  if (!_webform_bootstrap_is_active_theme()) {
     return;
   }
 
@@ -68,7 +67,7 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
  * Implements hook_js_alter().
  */
 function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $assets) {
-  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+  if (!_webform_bootstrap_is_active_theme()) {
     return;
   }
 
@@ -80,7 +79,7 @@ function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $asset
  * Implements hook_link_alter().
  */
 function webform_bootstrap_link_alter(&$variables) {
-  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+  if (!_webform_bootstrap_is_active_theme()) {
     return;
   }
 
@@ -94,7 +93,7 @@ function webform_bootstrap_link_alter(&$variables) {
  * Implements template_preprocess_input().
  */
 function webform_bootstrap_preprocess_input(&$variables) {
-  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+  if (!_webform_bootstrap_is_active_theme()) {
     return;
   }
 
@@ -124,7 +123,7 @@ function webform_bootstrap_preprocess_input(&$variables) {
  * @see webform_preprocess_file_managed_file()
  */
 function webform_bootstrap_preprocess_file_managed_file(&$variables) {
-  if (!WebformThemeHelper::isActiveTheme('bootstrap')) {
+  if (!_webform_bootstrap_is_active_theme()) {
     return;
   }
 
@@ -159,4 +158,16 @@ function _webform_bootstrap_convert_button_classes(array &$classes) {
       $classes[$index] = $drupal_to_bootstrap[$class];
     }
   }
+}
+
+/**
+ * Determine if Bootstrap is the active theme.
+ * 
+ * @return bool
+ *   TRUE if Bootstrap is the active theme.
+ */
+function _webform_bootstrap_is_active_theme() {
+  /** @var \Drupal\webform\WebformThemeManagerInterface $theme_manager */
+  $theme_manager = \Drupal::service('webform.theme_manager');
+  return $theme_manager->isActiveTheme('bootstrap');
 }

@@ -24,7 +24,6 @@ use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
-use Drupal\webform\Utility\WebformThemeHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
@@ -428,7 +427,9 @@ function webform_page_attachments(array &$attachments) {
  *   An array of page attachments.
  */
 function _webform_page_attachments(array &$attachments) {
-  $active_theme_names = WebformThemeHelper::getActiveThemeNames();
+  /** @var \Drupal\webform\WebformThemeManagerInterface $theme_manager */
+  $theme_manager = \Drupal::service('webform.theme_manager');
+  $active_theme_names = $theme_manager->getActiveThemeNames();
   foreach ($active_theme_names as $active_theme_name) {
     if (file_exists(drupal_get_path('module', 'webform') . "/css/webform.theme.$active_theme_name.css")) {
       $attachments['#attached']['library'][] = "webform/webform.theme.$active_theme_name";

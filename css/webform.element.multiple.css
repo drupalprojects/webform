@@ -40,10 +40,8 @@
 
 .webform-multiple-table td.webform-multiple-table--operations input {
   margin: 0 2px;
-}
-
-.webform-multiple-table td.webform-multiple-table--operations input {
   opacity: 0.4;
+  background: none;
 }
 
 .webform-multiple-table td.webform-multiple-table--operations input:hover,
