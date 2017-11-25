@@ -390,7 +390,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
-
     // Webform Invitation.
     $projects['webform_invitation'] = [
       'title' => $this->t('Webform Invitation'),
@@ -412,6 +411,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Webform Sanitize'),
       'description' => $this->t('Sanitizes submissions to remove potentially sensitive data.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_sanitize'),
+      'category' => 'submission',
+    ];
+
+    // Submissions: Webform Scheduled Tasks.
+    $projects['webform_scheduled_tasks'] = [
+      'title' => $this->t('Webform Scheduled Tasks'),
+      'description' => $this->t('Allows the regular cleansing/sanitization of sensitive fields in Webform.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_scheduled_tasks'),
       'category' => 'submission',
     ];
 
