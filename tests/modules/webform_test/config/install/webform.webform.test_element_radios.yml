@@ -74,6 +74,22 @@ elements: |
         one: 'One -- This is a description'
         two: 'Two -- This is a description'
         three: 'Three -- This is a description'
+  radios_inline_title_example:
+    '#type': details
+    '#title': 'Radios inline title'
+    '#open': true
+    radios_inline_title:
+      '#type': radios
+      '#title': radios_inline_title
+      '#title_display': inline
+      '#options': yes_no
+      '#options_display': side_by_side
+    radios_other_inline_title:
+      '#type': webform_radios_other
+      '#title': radios_other_inline_title
+      '#title_display': inline
+      '#options': yes_no
+      '#options_display': side_by_side
 css: ''
 javascript: ''
 settings:

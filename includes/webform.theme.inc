@@ -309,6 +309,12 @@ function webform_preprocess_fieldset(&$variables) {
 
   $element = &$variables['element'];
 
+  // Apply inline title defined by radios, checkboxes, and buttons.
+  // @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
+  if (isset($element['#_title_display'])) {
+    $variables['attributes']['class'][] = 'webform-fieldset--title-inline';
+  }
+
   // Restructure the fieldset's legend title to include #help.
   if (isset($variables['legend']['title'])) {
     _webform_preprocess_help_title($variables['legend']['title'], $element);

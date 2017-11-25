@@ -611,6 +611,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     // Add inline title display support.
+    // Inline fieldset layout is handled via webform_preprocess_fieldset().
+    // @see webform_preprocess_fieldset()
     if (isset($element['#title_display']) && $element['#title_display'] == 'inline') {
       // Store reference to unset #title_display.
       $element['#_title_display'] = $element['#title_display'];

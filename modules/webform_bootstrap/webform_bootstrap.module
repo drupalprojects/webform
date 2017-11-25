@@ -61,6 +61,23 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
   if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
     $element['#input_group'] = TRUE;
   }
+
+  // Tweak element types.
+  if (isset($element['#type'])) {
+    switch ($element['#type']) {
+      case 'webform_buttons':
+      case 'webform_entity_checkboxes':
+      case 'webform_entity_radios':
+      case 'webform_term_checkboxes':
+      case 'webform_toggles':
+        // Prevent elements that extend radios and checkboxes from being wrapped
+        // in a fieldset.
+        // @see \Drupal\bootstrap\Plugin\Alter\ElementInfo::alter
+        $element['#bootstrap_panel'] = FALSE;
+        break;
+
+    }
+  }
 }
 
 /**
