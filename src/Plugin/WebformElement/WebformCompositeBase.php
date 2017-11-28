@@ -1056,7 +1056,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
    */
   public function getCompositeElements() {
     $class = $this->getFormElementClassDefinition();
-    return $class::getCompositeElements();
+    return $class::getCompositeElements([]);
   }
 
   /**

@@ -315,11 +315,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * Get the Webform element's form element class definition.
    *
+   * We use the plugin's base id here to support plugin derivatives.
+   *
    * @return string
    *   A form element class definition.
    */
   protected function getFormElementClassDefinition() {
-    $definition = $this->elementInfo->getDefinition($this->getPluginId());
+    $definition = $this->elementInfo->getDefinition($this->getBaseId());
     return $definition['class'];
   }
 
@@ -490,7 +492,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function getInfo() {
-    return $this->elementInfo->getInfo($this->getPluginId());
+    return $this->elementInfo->getInfo($this->getBaseId());
   }
 
   /****************************************************************************/

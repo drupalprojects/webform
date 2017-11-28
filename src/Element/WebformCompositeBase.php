@@ -39,7 +39,7 @@ abstract class WebformCompositeBase extends FormElement {
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     $default_value = [];
 
-    $composite_elements = static::getCompositeElements();
+    $composite_elements = static::getCompositeElements($element);
     foreach ($composite_elements as $composite_key => $composite_element) {
       if (isset($composite_element['#type']) && $composite_element['#type'] != 'label') {
         $default_value[$composite_key] = '';
@@ -59,11 +59,14 @@ abstract class WebformCompositeBase extends FormElement {
   /**
    * Get a renderable array of webform elements.
    *
+   * @param array $element
+   *   A render a array for the current element.
+   *
    * @return array
    *   A renderable array of webform elements, containing the base properties
    *   for the composite's webform elements.
    */
-  public static function getCompositeElements() {
+  public static function getCompositeElements(array $element) {
     return [];
   }
 
@@ -89,7 +92,7 @@ abstract class WebformCompositeBase extends FormElement {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
-    $composite_elements = static::getCompositeElements();
+    $composite_elements = static::getCompositeElements($element);
     foreach ($composite_elements as $composite_key => &$composite_element) {
       // Transfer '#{composite_key}_{property}' from main element to composite
       // element.
@@ -192,7 +195,7 @@ abstract class WebformCompositeBase extends FormElement {
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
     if ($has_access) {
       // Validate required composite elements.
-      $composite_elements = static::getCompositeElements();
+      $composite_elements = static::getCompositeElements($element);
       foreach ($composite_elements as $composite_key => $composite_element) {
         if (!empty($element[$composite_key]['#required']) && $value[$composite_key] == '') {
           if (isset($element[$composite_key]['#title'])) {

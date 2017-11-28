@@ -32,7 +32,7 @@ class WebformExampleComposite extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements() {
+  public static function getCompositeElements(array $element) {
     // Generate an unique ID that can be used by #states.
     $html_id = Html::getUniqueId('webform_example_composite');
 

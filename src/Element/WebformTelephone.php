@@ -23,7 +23,7 @@ class WebformTelephone extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements() {
+  public static function getCompositeElements(array $element) {
     $elements = [];
     $elements['type'] = [
       '#type' => 'select',

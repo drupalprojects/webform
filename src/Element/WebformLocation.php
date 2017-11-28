@@ -27,7 +27,7 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements() {
+  public static function getCompositeElements(array $element) {
     // @see https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingAddressTypes
     $attributes = [];
     $attributes['lat'] = [
@@ -111,7 +111,7 @@ class WebformLocation extends WebformCompositeBase {
     // Composite elements should always be displayed and rendered so that
     // location data can be populated, so #access is really just converting the
     // readonly elements to hidden elements.
-    $composite_elements = static::getCompositeElements();
+    $composite_elements = static::getCompositeElements($element);
     foreach ($composite_elements as $composite_key => $composite_element) {
       if ($composite_key != 'value') {
         if (isset($element[$composite_key]['#access']) && $element[$composite_key]['#access'] === FALSE) {
