@@ -121,7 +121,7 @@ class WebformElementHelper {
   }
 
   /**
-   * Set a property on all elements.
+   * Set a property on all elements and sub-elements.
    *
    * @param array $element
    *   A render element.
@@ -133,12 +133,11 @@ class WebformElementHelper {
    * @return array
    *   A render element with with a property set on all elements.
    */
-  public static function setPropertyRecursive(array $element, $property_key, $property_value) {
+  public static function setPropertyRecursive(array &$element, $property_key, $property_value) {
     $element[$property_key] = $property_value;
     foreach (Element::children($element) as $key) {
       self::setPropertyRecursive($element[$key], $property_key, $property_value);
     }
-    return $element;
   }
 
   /**

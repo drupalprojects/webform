@@ -70,6 +70,7 @@ class WebformComputedTwig extends WebformComputedBase {
       'description' => $output,
     ];
     $form['computed']['value']['#mode'] = 'twig';
+
     // Set #access so that help is always visible.
     WebformElementHelper::setPropertyRecursive($form['computed']['help'], '#access', TRUE);
 
