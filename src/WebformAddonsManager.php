@@ -25,17 +25,10 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
    * Constructs a WebformAddOnsManager object.
    */
   public function __construct() {
-    $this->promotions = $this->initPromotions();
     $this->projects = $this->initProjects();
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getPromotions() {
-    return $this->promotions;
-  }
-
   /**
    * {@inheritdoc}
    */
@@ -116,51 +109,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Development'),
     ];
     return $categories;
-  }
-
-  /**
-   * Initialize add-on promotions.
-   *
-   * @return array
-   *   An associative array containing add-on promotions.
-   */
-  protected function initPromotions() {
-    $promotions = [];
-
-    // Lingotek.
-    $img_attributes = new Attribute([
-      'src' => base_path() . drupal_get_path('module', 'webform') . '/images/promotions/lingotek-logo.png',
-      'alt' => $this->t('Lingotek: The Translation Network'),
-      'title' => $this->t('Lingotek: The Translation Network'),
-    ]);
-    $promotions['promotion_lingotek'] = [];
-    $promotions['promotion_lingotek']['content'] = [
-      [
-        '#markup' => '<img' . $img_attributes . ' />',
-      ],
-      [
-        '#markup' => $this->t('The Lingotek-Inside Drupal Module integrates a translation management system (TMS) directly into Drupal, thus allowing the Drupal community to use professional-grade translation technologies (e.g. machine translation, translation memory, CAT tool) without ever having to leave the comfort of the Drupal environment.'),
-        '#prefix' => '<div class="clearfix">',
-        '#suffix' => '</div>',
-      ],
-      ['#markup' => '<hr/>'],
-      'actions' => [
-        'try' => [
-          '#type' => 'link',
-          '#title' => $this->t('Sign up and try Lingotek'),
-          '#url' => Url::fromUri('https://lingotek.com/webform'),
-          '#attributes' => ['class' => ['button', 'button--primary']],
-        ],
-        'video' => [
-          '#type' => 'link',
-          '#title' => $this->t('Watch video'),
-          '#url' => Url::fromRoute('webform.help.video', ['id' => 'promotion-lingotek']),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, ['button', 'button-action', 'button-webform-play']),
-        ],
-      ],
-    ];
-
-    return $promotions;
   }
 
   /**
@@ -339,7 +287,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Translates content, configuration, and interface using the Lingotek Translation Management System.'),
       'url' => Url::fromUri('https://www.drupal.org/project/lingotek'),
       'category' => 'multilingual',
-      'recommended' => TRUE,
     ];
 
     // Migrate: Webform Migrate.

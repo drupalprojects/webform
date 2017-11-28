@@ -724,15 +724,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'youtube_id' => 'uQo-1s2h06E',
     ];
 
-    $videos['promotion_lingotek'] = [
-      'title' => $this->t('Webform & Lingotek Partnership'),
-      'content' => $this->t('You can help support the Webform module by signing up and trying the Lingotek-Inside Drupal Translation Module for <strong>free</strong>.'),
-      'youtube_id' => '83L99vYbaGQ',
-      'submit_label' => $this->t('Sign up and try Lingotek'),
-      'submit_url' => Url::fromUri('https://lingotek.com/webform'),
-      'hidden' => TRUE,
-    ];
-
     $videos['association'] = [
       'title' => $this->t('Join the Drupal Association'),
       'content' => $this->t('The Drupal Association is dedicated to fostering and supporting the Drupal software project, the community and its growth. We help the Drupal community with funding, infrastructure, education, promotion, distribution and online collaboration at Drupal.org.'),
@@ -889,27 +880,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'routes' => [
         // @see /admin/structure/webform
         'entity.webform.collection',
-      ],
-    ];
-
-    // Promotions: Lingotek.
-    $help['promotion_lingotek'] = [
-      'group' => 'promotions',
-      'title' => $this->t('Promotions: Lingotek'),
-      'content' => $this->t("Help <strong>support</strong> the Webform module and internationalize your website using the Lingotek-Inside Drupal Module for continuous translation. <em>Multilingual capability + global access = increased web traffic.</em>"),
-      'video_id' => 'promotion_lingotek',
-      'message_type' => 'promotion_lingotek',
-      'message_close' => TRUE,
-      'message_storage' => WebformMessage::STORAGE_STATE,
-      'attached' => ['library' => ['webform/webform.promotions']],
-      'access' => $this->currentUser->hasPermission('administer webform')
-        && !$this->configFactory->get('webform.settings')->get('ui.promotions_disabled'),
-      'reset_version' => TRUE,
-      'routes' => [
-        // /admin/structure/webform/config/translate
-        'config_translation.item.overview.webform.config',
-        // @see /admin/structure/webform/manage/{webform}/translate
-        'entity.webform.config_translation_overview',
       ],
     ];
 

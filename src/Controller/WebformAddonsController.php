@@ -53,26 +53,6 @@ class WebformAddonsController extends ControllerBase implements ContainerInjecti
       ],
     ];
 
-    // Promotions.
-    $build['promotions'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['webform-addons-promotions'],
-      ],
-
-    ];
-    $promotions = $this->addons->getPromotions();
-    foreach ($promotions as $promotion_name => $promotion) {
-      $build['promotions'][$promotion_name] = [
-        '#type' => 'webform_message',
-        '#message_type' => $promotion_name,
-        '#message_message' => $promotion['content'],
-        '#message_close' => TRUE,
-        '#message_id' => 'webform.addons.promotion.' . $promotion_name,
-        '#message_storage' => WebformMessage::STORAGE_SESSION,
-      ];
-    }
-
     // Projects.
     $build['projects'] = [
       '#type' => 'container',
