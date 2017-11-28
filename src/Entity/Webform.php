@@ -2202,4 +2202,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     return new \ArrayIterator([]);
   }
 
+  /**
+   * Define empty to string method.
+   *
+   * See: Issue #2926903: Devel Tokens tab Broken when Webform Embedded in Node
+   */
+  public function __toString() {
+    return '';
+  }
+
 }
