@@ -43,6 +43,9 @@ function webform_theme() {
     'webform_handler_remote_post_summary' => [
       'variables' => ['settings' => NULL, 'handler' => NULL],
     ],
+    'webform_handler_settings_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => NULL],
+    ],
 
     'webform_confirmation' => [
       'variables' => ['webform' => NULL, 'source_entity' => NULL, 'webform_submission' => NULL],

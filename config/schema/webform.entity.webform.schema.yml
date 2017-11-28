@@ -41,6 +41,8 @@ webform.webform.*:
     settings:
       type: mapping
       label: 'Settings'
+      # Below mapping is copied to: webform.handler.settings
+      #@see webform.plugin.handler.schema.yml
       mapping:
         ajax:
           type: boolean

@@ -166,11 +166,12 @@ class WebformPluginHandlerController extends ControllerBase implements Container
       $row = [];
 
       $row['title']['data'] = [
-        '#type' => 'inline_template',
-        '#template' => '<div class="webform-form-filter-text-source">{{ label }}</div>',
-        '#context' => [
-          'label' => $definition['label'],
-        ],
+        '#type' => 'link',
+        '#title' => $definition['label'],
+        '#url' => Url::fromRoute('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => $plugin_id]),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+        '#prefix' => '<div class="webform-form-filter-text-source">',
+        '#suffix' => '</div>',
       ];
 
       $row['description'] = [

@@ -62,6 +62,13 @@ class TestWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
+  public function overrideSettings(array &$settings, WebformSubmissionInterface $webform_submission) {
+    $this->displayMessage(__FUNCTION__);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function alterForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
     $this->displayMessage(__FUNCTION__);
   }

@@ -223,14 +223,13 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function setEntity(EntityInterface $entity) {
-    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-    $webform_submission = $entity;
-    $webform = $webform_submission->getWebform();
+    /** @var \Drupal\webform\WebformSubmissionInterface $entity */
+    $webform = $entity->getWebform();
 
     // Get the source entity and allow webform submission to be used as a source
     // entity.
     $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform']);
-    if ($this->sourceEntity == $webform_submission) {
+    if ($this->sourceEntity == $entity) {
       $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
     }
 
@@ -262,7 +261,23 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
+    // Alter webform settings before setting the entity.
+    $entity->getWebform()->invokeHandlers('overrideSettings', $entity);
+
     return parent::setEntity($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildEntity(array $form, FormStateInterface $form_state) {
+    /** @var \Drupal\webform\WebformSubmissionInterface $entity */
+    $entity = parent::buildEntity($form, $form_state);
+
+    // Alter webform settings before setting the entity.
+    $entity->getWebform()->invokeHandlers('overrideSettings', $entity);
+
+    return $entity;
   }
 
   /**

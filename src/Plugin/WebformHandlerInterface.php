@@ -278,6 +278,23 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function alterElements(array &$elements, WebformInterface $webform);
 
   /****************************************************************************/
+  // Webform submission methods.
+  /****************************************************************************/
+
+  /**
+   * Alter/override a webform submission webform settings.
+   *
+   * IMPORTANT: Webform settings are overridden for just the webform submission.
+   * Overridden settings are never saved to the Webform's configuration.
+   *
+   * @param array $settings
+   *   An associative array containing the webform settings.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  public function overrideSettings(array &$settings, WebformSubmissionInterface $webform_submission);
+
+  /****************************************************************************/
   // Submission form methods.
   /****************************************************************************/
 

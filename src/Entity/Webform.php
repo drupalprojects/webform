@@ -194,6 +194,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $settings = [];
 
   /**
+   * The webform settings original.
+   *
+   * @var string
+   */
+  protected $settingsOriginal;
+
+  /**
    * The webform access controls.
    *
    * @var array
@@ -593,6 +600,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasPreview() {
+    return ($this->getSetting('preview') != DRUPAL_DISABLED);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasWizardPages() {
     return $this->getNumberOfWizardPages() ? TRUE : FALSE;
   }
@@ -685,7 +699,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     // Now apply new settings.
     foreach ($settings as $name => $value) {
-      $this->settings[$name] = $value;
+      if (key_exists($name, $this->settings)) {
+        $this->settings[$name] = $value;
+      }
     }
 
     return $this;
@@ -713,6 +729,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $settings[$key] = $value;
     $this->setSettings($settings);
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function resetSettings() {
+    $this->settings = $this->settingsOriginal;
+    $this->setOverride(FALSE);
   }
 
   /**
@@ -1637,6 +1661,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public static function postLoad(EntityStorageInterface $storage, array &$entities) {
     foreach ($entities as $entity) {
       $entity->elementsOriginal = $entity->elements;
+      $entity->settingsOriginal = $entity->settings;
     }
   }
 
@@ -1773,6 +1798,9 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Reset elements.
     $this->resetElements();
     $this->elementsOriginal = $this->elements;
+
+    // Reset settings.
+    $this->settingsOriginal = $this->settings;
   }
 
   /**
@@ -1982,8 +2010,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function invokeHandlers($method, &$data, &$context1 = NULL, &$context2 = NULL) {
-    $handlers = $this->getHandlers();
-
     // Get webform submission from arguments for conditions validations.
     $webform_submission = NULL;
     $args = func_get_args();
@@ -1994,18 +2020,36 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       }
     }
 
-    foreach ($handlers as $handler) {
-      // If the handler is disabled never invoke it.
-      if ($handler->isDisabled()) {
-        continue;
+    // If webform submission and alter settings, make sure to completely
+    // reset all settings to their original values.
+    if ($method === 'overrideSettings') {
+      $this->resetSettings();
+      $settings = $this->getSettings();
+      $handlers = $this->getHandlers();
+      foreach ($handlers as $handler) {
+        if ($handler->isEnabled() && $handler->checkConditions($webform_submission)) {
+          $handler->overrideSettings($settings, $webform_submission);
+        }
       }
-
-      // If the arguments contain the webform submission check conditions.
-      if ($webform_submission && !$handler->checkConditions($webform_submission)) {
-        continue;
+      if ($settings != $this->settingsOriginal) {
+        $this->setSettingsOverride($settings);
       }
+    }
+    else {
+      $handlers = $this->getHandlers();
+      foreach ($handlers as $handler) {
+        // If the handler is disabled never invoke it.
+        if ($handler->isDisabled()) {
+          continue;
+        }
 
-      $handler->$method($data, $context1, $context2);
+        // If the arguments contain the webform submission check conditions.
+        if ($webform_submission && !$handler->checkConditions($webform_submission)) {
+          continue;
+        }
+
+        $handler->$method($data, $context1, $context2);
+      }
     }
   }
 

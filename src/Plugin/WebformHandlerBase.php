@@ -428,6 +428,15 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   public function alterElements(array &$elements, WebformInterface $webform) {}
 
   /****************************************************************************/
+  // Webform submission methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function overrideSettings(array &$settings, WebformSubmissionInterface $webform_submission) {}
+
+  /****************************************************************************/
   // Submission form methods.
   /****************************************************************************/
 

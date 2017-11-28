@@ -149,6 +149,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function getNumberOfActions();
 
   /**
+   * Determine if the webform has preview page.
+   *
+   * @return bool
+   *   TRUE if the webform has preview page.
+   */
+  public function hasPreview();
+
+  /**
    * Determine if the webform has multistep form wizard pages.
    *
    * @return bool
@@ -379,6 +387,11 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @return $this
    */
   public function setSetting($key, $value);
+
+  /**
+   * Reset overridden settings to original settings.
+   */
+  public function resetSettings();
 
   /**
    * Sets the webform settings override.
