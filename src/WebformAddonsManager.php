@@ -197,6 +197,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Element: Webform Composite Tools.
+    $projects['webform_composite'] = [
+      'title' => $this->t('Webform Composite Tools'),
+      'description' => $this->t("Provides a reusable composite element for use on webforms."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_composite'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
