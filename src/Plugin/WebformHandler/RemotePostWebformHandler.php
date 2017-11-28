@@ -447,21 +447,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * Authentication remote post options and authentication tokens.
-   *
-   * @param array $options
-   *   Request options including the form_params or json and the request header.
-   *
-   * @return array
-   *   The request options with authentication tokens add to the
-   *   parameters or header.
-   */
-  protected function authenticate(array $options) {
-    // Here you can set a custom authentication token to the remote post options.
-    return $options;
-  }
-
-  /**
    * Get response data.
    *
    * @param \Psr\Http\Message\ResponseInterface $response
