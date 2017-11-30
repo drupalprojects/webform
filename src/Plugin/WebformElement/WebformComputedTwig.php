@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Element\WebformMessage as WebformMessageElement;
 
 /**
  * Provides a 'webform_computed_twig' element.
@@ -64,6 +65,21 @@ class WebformComputedTwig extends WebformComputedBase {
     $output[] = [
       '#markup' => "<pre>{{ webform_token('[webform_submission:values:element_value]', webform_submission) }}</pre>",
     ];
+    $output[] = [
+      '#markup' => '<p>' . $this->t("You can also output tokens using the <code>webform_token()</code> function.") . '</p>',
+    ];
+    if ($this->currentUser->hasPermission('administer modules') && !\Drupal::moduleHandler()->moduleExists('twig_tweak')) {
+      $t_args = [
+        ':module_href' => 'https://www.drupal.org/project/twig_tweak',
+        ':documentation_href' => 'https://www.drupal.org/docs/8/modules/twig-tweak/cheat-sheet-8x-2x',
+      ];
+      $output[] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'info',
+        '#message_message' => $this->t('Install the <a href=":module_href">Twig tweak</a> module, which provides a Twig extension with some <a href=":documentation_href">useful functions and filters</a> that can improve development experience.', $t_args),
+        '#storage' => WebformMessageElement::STORAGE_STATE,
+      ];
+    }
     $form['computed']['help'] = [
       '#type' => 'details',
       '#title' => $this->t('Help using Twig'),
