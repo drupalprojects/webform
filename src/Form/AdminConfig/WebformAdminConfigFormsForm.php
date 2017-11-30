@@ -92,18 +92,8 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['page_settings']['default_page_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default base path for webform URLs'),
-      '#description' => $this->t('Leave blank to display the automatic generation of URL aliases for all webforms.'),
+      '#required' => TRUE,
       '#default_value' => $settings['default_page_base_path'],
-    ];
-    $form['page_settings']['default_page_base_path_message'] = [
-      '#type' => 'webform_message',
-      '#message_message' => $this->t('All URL aliases for all webforms have to be manually created.'),
-      '#message_type' => 'warning',
-      '#states' => [
-        'visible' => [
-          ':input[name="page_settings[default_page_base_path]"]' => ['empty' => TRUE],
-        ],
-      ],
     ];
 
     // Form settings.

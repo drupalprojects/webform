@@ -164,20 +164,15 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#title' => $this->t('URL path settings'),
       '#open' => TRUE,
     ];
-    $default_page_base_path = trim($default_settings['default_page_base_path'], '/');
-    if ($default_page_base_path) {
-      $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
-      $default_settings['default_page_submit_path'] = $default_page_submit_path;
-      $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
-      $form_state->set('default_settings', $default_settings);
-    }
-
+    $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
     $t_args = [
       ':node_href' => ($this->moduleHandler->moduleExists('node')) ? Url::fromRoute('node.add', ['node_type' => 'webform'])->toString() : '',
       ':block_href' => ($this->moduleHandler->moduleExists('block')) ? Url::fromRoute('block.admin_display')->toString() : '',
       ':view_href' => $webform->toUrl()->toString(),
       ':test_href' => $webform->toUrl('test-form')->toString(),
     ];
+    $default_settings['default_page_submit_path'] = $default_page_submit_path;
+    $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
     $form['page_settings']['page'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to post submissions from a dedicated URL'),
