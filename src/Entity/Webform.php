@@ -1819,8 +1819,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return;
     }
 
-    $submit_base_path = $this->settings['page_submit_path'] ?: trim(\Drupal::config('webform.settings')->get('settings.default_page_base_path'), '/') . '/' . str_replace('_', '-', $this->id());
-    $submit_base_path = '/' . trim($submit_base_path, '/');
+    $page_submit_path = trim($this->settings['page_submit_path'], '/');
+    $default_page_base_path = trim(\Drupal::config('webform.settings')->get('settings.default_page_base_path'), '/');
+
+    // Skip generating paths if submit path and base path are empty.
+    if (empty($page_submit_path) && empty($default_page_base_path)) {
+      return;
+    }
+
+    $submit_base_path = '/' . ($page_submit_path ?: $default_page_base_path . '/' . str_replace('_', '-', $this->id()));
 
     // Update submit path.
     $submit_suffixes = [
