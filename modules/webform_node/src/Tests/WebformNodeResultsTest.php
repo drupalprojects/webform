@@ -191,5 +191,4 @@ class WebformNodeResultsTest extends WebformNodeTestBase {
     $this->assertEqual($submission_storage->getTotal($webform), 3);
   }
 
-
 }
