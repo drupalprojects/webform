@@ -164,15 +164,20 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#title' => $this->t('URL path settings'),
       '#open' => TRUE,
     ];
-    $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
+    $default_page_base_path = trim($default_settings['default_page_base_path'], '/');
+    if ($default_page_base_path) {
+      $default_page_submit_path = trim($default_settings['default_page_base_path'], '/') . '/' . str_replace('_', '-', $webform->id());
+      $default_settings['default_page_submit_path'] = $default_page_submit_path;
+      $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
+      $form_state->set('default_settings', $default_settings);
+    }
+
     $t_args = [
       ':node_href' => ($this->moduleHandler->moduleExists('node')) ? Url::fromRoute('node.add', ['node_type' => 'webform'])->toString() : '',
       ':block_href' => ($this->moduleHandler->moduleExists('block')) ? Url::fromRoute('block.admin_display')->toString() : '',
       ':view_href' => $webform->toUrl()->toString(),
       ':test_href' => $webform->toUrl('test-form')->toString(),
     ];
-    $default_settings['default_page_submit_path'] = $default_page_submit_path;
-    $default_settings['default_page_confirm_path'] = $default_page_submit_path . '/confirmation';
     $form['page_settings']['page'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to post submissions from a dedicated URL'),
@@ -180,6 +185,19 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['page'],
     ];
+    if ($this->moduleHandler->moduleExists('path') && $settings['page']) {
+      $t_args[':path_alias'] = Url::fromRoute('path.admin_overview')->toString();
+      $form['page_settings']['page_message_warning'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Unchecking this box will delete ALL aliases you may have created for this form via the <a href=":path_alias">path</a> module.', $t_args),
+        '#states' => [
+          'visible' => [
+            ':input[name="page"]' => ['checked' => FALSE],
+          ],
+        ],
+      ];
+    }
     $form['page_settings']['page_message'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
@@ -191,10 +209,11 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       ],
     ];
     if ($this->moduleHandler->moduleExists('path')) {
+      $t_args[':path_alias'] = Url::fromRoute('path.admin_overview')->toString();
       $form['page_settings']['page_submit_path'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Webform URL alias'),
-        '#description' => $this->t('Optionally specify an alternative URL by which the webform submit page can be accessed.', $t_args),
+        '#description' => $this->t('Optionally specify an alternative URL by which the webform submit page can be accessed. Any value entered here will overwrite ALL aliases you may have created for this form via the <a href=":path_alias">path</a> module.', $t_args),
         '#default_value' => $settings['page_submit_path'],
         '#states' => [
           'visible' => [
