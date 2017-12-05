@@ -115,7 +115,7 @@ class WebformTime extends WebformElementBase {
       '#title' => $this->t('Step'),
       '#description' => $this->t('Specifies the minute intervals.'),
       '#options' => [
-        '' => $this->t('1 minute'),
+        60 => $this->t('1 minute'),
         300 => $this->t('5 minutes'),
         600 => $this->t('10 minutes'),
         900 => $this->t('15 minutes'),
