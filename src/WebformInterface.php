@@ -608,6 +608,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function getElementsSelectorOptions();
 
   /**
+   * Get webform elements that can be prepopulated.
+   *
+   * @return array
+   *   Webform elements that can be prepopulated.
+   */
+  public function getElementsPrepopulate();
+
+  /**
    * Sets elements (YAML) value.
    *
    * @param array $elements

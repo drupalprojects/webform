@@ -251,6 +251,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [
       // Administration.
       'admin_title' => '',
+      'prepopulate' => FALSE,
       'private' => FALSE,
       // Flexbox.
       'flex' => 1,
@@ -2220,6 +2221,24 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#return_value' => TRUE,
       '#weight' => 50,
     ];
+    $form['form']['prepopulate'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Prepopulate'),
+      '#description' => $this->t('Allow element to be populated using query string parameters'),
+      '#return_value' => TRUE,
+      '#weight' => 50,
+    ];
+    // Disabled check element when prepopulate is enabled for all elements.
+    if ($webform->getSetting('form_prepopulate') && $this->hasProperty('prepopulate')) {
+      $form['form']['prepopulate_disabled'] = [
+        '#description' => $this->t('Prepopulation is enabled for all form elements.'),
+        '#value' => TRUE,
+        '#disabled' => TRUE,
+        '#access' => TRUE,
+      ] + $form['form']['prepopulate'];
+      $form['form']['prepopulate']['#value'] = FALSE;
+      $form['form']['prepopulate']['#access'] = FALSE;
+    }
     $form['form']['open'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Open'),

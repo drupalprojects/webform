@@ -1739,6 +1739,14 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->getWebformSetting('form_prepopulate')) {
       $data += $this->getRequest()->query->all();
     }
+    else {
+      $elements = $this->getWebform()->getElementsPrepopulate();
+      foreach ($elements as $element_key) {
+        if ($this->getRequest()->query->has($element_key)) {
+          $data[$element_key] = $this->getRequest()->query->get($element_key);
+        }
+      }
+    }
   }
 
   /**
@@ -1755,36 +1763,41 @@ class WebformSubmissionForm extends ContentEntityForm {
         continue;
       }
 
-      // Populate an element's #default_value or #value (i.e. hidden elements).
-      if (isset($values[$key])) {
-        $element_plugin = $this->elementManager->getElementInstance($element);
-        if ($element_plugin->isInput($element)) {
-          $is_prepopulated_query = ($this->getRequest()->query->get($key) !== NULL);
-
-          // Note: Managed file elements do support #default_value but
-          // it can be used for test elements
-          $is_managed_file_test = ($element_plugin instanceof WebformManagedFileBase);
-          if ($element_plugin->hasProperty('default_value') || ($is_managed_file_test && !$is_prepopulated_query)) {
-            $element['#default_value'] = $values[$key];
-          }
-          elseif ($element_plugin->hasProperty('value')) {
-            // Hidden element's #value can be prepopulated using query string.
-            if ($element_plugin->getPluginId() === 'hidden') {
-              $element['#value'] = $values[$key];
-            }
-            // Value element's #value should never be prepopulated using query string.
-            elseif ($element_plugin->getPluginId() === 'value' && !$is_prepopulated_query ) {
-              $element['#value'] = $values[$key];
-            }
-          }
-
-          if ($this->operation === 'api') {
-            $element['#needs_validation'] = TRUE;
-          }
-        }
+      // If value is not set, continue to populate sub-elements.
+      if (!isset($values[$key])) {
+        $this->populateElements($element, $values);
+        continue;
       }
 
+      // Get the element's plugin.
+      $element_plugin = $this->elementManager->getElementInstance($element);
 
+      // If not input, populate sub-elements and continue.
+      if (!$element_plugin || !$element_plugin->isInput($element)) {
+        $this->populateElements($element, $values);
+        continue;
+      }
+
+      // If input does not support prepopulate, populate sub-elements and continue.
+      if ($this->getRequest()->query->has($key) && !$element_plugin->hasProperty('prepopulate')) {
+        $this->populateElements($element, $values);
+        continue;
+      }
+
+      // Populate default value or value.
+      if ($element_plugin->hasProperty('default_value')) {
+        $element['#default_value'] = $values[$key];
+      }
+      elseif ($element_plugin->hasProperty('value')) {
+        $element['#value'] = $values[$key];
+      }
+
+      // API values need to trigger validation.
+      if ($this->operation === 'api') {
+        $element['#needs_validation'] = TRUE;
+      }
+
+      // Populate sub-elements.
       $this->populateElements($element, $values);
     }
   }

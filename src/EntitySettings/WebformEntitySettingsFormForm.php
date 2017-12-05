@@ -217,8 +217,8 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'form_description' => $this->t('If checked, the first visible and enabled form element will be focused when adding a new submission.'),
       ],
       'form_prepopulate' => [
-        'title' => $this->t('Allow elements to be populated using query string parameters'),
-        'form_description' => $this->t("If checked, elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would set the 'name' element's default value to 'John Smith'."),
+        'title' => $this->t('Allow all elements to be populated using query string parameters'),
+        'form_description' => $this->t("If checked, all elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would set the 'name' element's default value to 'John Smith'. Please note that individual elements can also have prepopulation enabled."),
       ],
       'form_prepopulate_source_entity' => [
         'title' => $this->t('Allow source entity to be populated using query string parameters'),

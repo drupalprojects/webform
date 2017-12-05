@@ -292,6 +292,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $elementsTranslations;
 
   /**
+   * Track the elements that are prepopulated.
+   *
+   * @var array
+   */
+  protected $elementsPrepopulate = [];
+
+  /**
    * Track the elements that are 'webform_actions' (aka submit buttons).
    *
    * @var array
@@ -1140,6 +1147,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function getElementsPrepopulate() {
+    return $this->elementsPrepopulate;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function setElements(array $elements) {
     $this->elements = Yaml::encode($elements);
     $this->resetElements();
@@ -1154,16 +1168,19 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       return;
     }
 
+    // @see \Drupal\webform\Entity\Webform::resetElements
     $this->hasManagedFile = FALSE;
     $this->hasFlexboxLayout = FALSE;
     $this->hasContainer = FALSE;
     $this->hasConditions = FALSE;
+    $this->elementsPrepopulate = [];
     $this->elementsActions = [];
     $this->elementsWizardPages = [];
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
     $this->elementsInitializedFlattenedAndHasValue = [];
     $this->elementsTranslations = [];
+
     try {
       $config_translation = \Drupal::moduleHandler()->moduleExists('config_translation');
       /** @var \Drupal\webform\WebformTranslationManagerInterface $translation_manager */
@@ -1213,6 +1230,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasFlexboxLayout = NULL;
     $this->hasContainer = NULL;
     $this->hasConditions = NULL;
+    $this->elementsPrepopulate = [];
     $this->elementsActions = [];
     $this->elementsWizardPages = [];
     $this->elementsDecoded = NULL;
@@ -1325,6 +1343,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         // Track conditional.
         if (!empty($element['#states'])) {
           $this->hasConditions = TRUE;
+        }
+
+        // Track prepopulated.
+        if (!empty($element['#prepopulate']) && $element_plugin->hasProperty('prepopulate')) {
+          $this->elementsPrepopulate[$key] = $key;
         }
 
         // Track actions.

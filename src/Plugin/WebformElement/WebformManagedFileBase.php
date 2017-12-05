@@ -48,8 +48,10 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       'button__title' => '',
       'button__attributes' => [],
     ];
-    // File uploads can't have default files.
-    unset($properties['default_value']);
+    // File uploads can't be prepopulated.
+    unset(
+      $properties['prepopulate']
+    );
     return $properties;
   }
 
@@ -547,6 +549,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
+
     $form['file'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('File settings'),
@@ -634,6 +637,10 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         ],
       ],
     ];
+
+
+    // Hide default value, which is not applicable for file uploads.
+    $form['default']['#access'] = FALSE;
 
     return $form;
   }
