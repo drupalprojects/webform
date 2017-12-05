@@ -4,6 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -216,6 +217,10 @@ class DateList extends DateBase {
     if (!empty($element['#date_year_range_reverse']) && isset($element['year']) && isset($element['year']['#options'])) {
       $options = $element['year']['#options'];
       $element['year']['#options'] = ['' => $options['']] + array_reverse($options, TRUE);
+    }
+    // Suppress inline error messages for datelist sub-elements.
+    foreach (Element::children($element) as $child_key) {
+      $element[$child_key]['#error_no_message'] = TRUE;
     }
     return $element;
   }
