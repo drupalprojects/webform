@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Utility\WebformArrayHelper;
 
 /**
  * Webform submission conditions (#states) validator.
@@ -249,6 +250,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   public function validateConditions(array $conditions, WebformSubmissionInterface $webform_submission) {
     $condition_logic = 'and';
     $condition_results = [];
+
     foreach ($conditions as $index => $value) {
       if (is_string($value) && in_array($value, ['and', 'or', 'xor'])) {
         $condition_logic = $value;
@@ -282,42 +284,19 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         return NULL;
       }
 
-      $trigger_state = key($condition);
-      $trigger_value = $condition[$trigger_state];
-
-      $element_plugin = $this->elementManager->getElementInstance($element);
-      $element_value = $element_plugin->getElementSelectorInputValue($selector, $trigger_state, $element, $webform_submission);
-
-      // Process trigger state/negate.
-      list($trigger_state, $trigger_negate) = $this->processState($trigger_state);
-
-      // Process triggers (aka remote conditions).
-      // @see \Drupal\webform\Element\WebformElementStates::processWebformStates
-      switch ($trigger_state) {
-        case 'empty':
-          $result = (empty($element_value) === (boolean) $trigger_value);
-          break;
-
-        case 'checked':
-          $result = ((boolean) $element_value === (boolean) $trigger_value);
-          break;
-
-        case 'value':
-          if ($element_plugin->hasMultipleValues($element)) {
-            $trigger_values = (array) $trigger_value;
-            $element_values = (array) $element_value;
-            $result = (array_intersect($trigger_values, $element_values)) ? TRUE : FALSE;
-          }
-          else {
-            $result = ((string) $element_value === (string) $trigger_value);
-          }
-          break;
-
-        default:
-          return NULL;
+      // Issue #1149078: States API doesn't work with multiple select fields.
+      // @see https://www.drupal.org/project/drupal/issues/1149078
+      if (WebformArrayHelper::isSequential($condition)) {
+        $sub_condition_results = [];
+        foreach ($condition as $sub_condition) {
+          $sub_condition_results[] = $this->checkCondition($element, $selector, $sub_condition, $webform_submission);
+        }
+        // Evalute sub-conditions using the 'OR' operator.
+        $condition_results[$selector] = (boolean) array_sum($sub_condition_results);
       }
-
-      $condition_results[$selector] = ($trigger_negate) ? !$result : $result;
+      else {
+        $condition_results[$selector] = $this->checkCondition($element, $selector, $condition, $webform_submission);
+      }
     }
 
     // Process condition logic. (XOR, AND, or OR)
@@ -337,6 +316,60 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         // Never called.
         return NULL;
     }
+  }
+
+  /**
+   * Check a condition.
+   *
+   * @param array $element
+   *   An element.
+   * @param $selector
+   *   The element's selector.
+   * @param array $condition
+   *   The condition.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   *
+   * @return bool|null
+   *   TRUE if condition is validated. NULL if the condition can't be evaluated.
+   */
+  protected function checkCondition(array $element, $selector, array $condition, WebformSubmissionInterface $webform_submission) {
+    $trigger_state = key($condition);
+    $trigger_value = $condition[$trigger_state];
+
+    $element_plugin = $this->elementManager->getElementInstance($element);
+    $element_value = $element_plugin->getElementSelectorInputValue($selector, $trigger_state, $element, $webform_submission);
+
+    // Process trigger state/negate.
+    list($trigger_state, $trigger_negate) = $this->processState($trigger_state);
+
+    // Process triggers (aka remote conditions).
+    // @see \Drupal\webform\Element\WebformElementStates::processWebformStates
+    switch ($trigger_state) {
+      case 'empty':
+        $result = (empty($element_value) === (boolean) $trigger_value);
+        break;
+
+      case 'checked':
+        $result = ((boolean) $element_value === (boolean) $trigger_value);
+        break;
+
+      case 'value':
+        if ($element_plugin->hasMultipleValues($element)) {
+          $trigger_values = (array) $trigger_value;
+          $element_values = (array) $element_value;
+          $result = (array_intersect($trigger_values, $element_values)) ? TRUE : FALSE;
+        }
+        else {
+          $result = ((string) $element_value === (string) $trigger_value);
+        }
+        break;
+
+      default:
+        return NULL;
+    }
+
+    return ($trigger_negate) ? !$result : $result;
   }
 
   /****************************************************************************/

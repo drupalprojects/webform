@@ -155,6 +155,26 @@ elements: |
           - or
           - ':input[name="select_other_multiple_trigger[other]"]':
               filled: true
+  select_values_trigger_details:
+    '#type': details
+    '#title': select_values_trigger
+    '#open': true
+    select_values_trigger:
+      '#type': select
+      '#title': select_values_trigger
+      '#options':
+        one: One
+        two: Two
+        three: Three
+    select_values_trigger_dependent_required:
+      '#type': textfield
+      '#title': select_values_trigger_dependent_required
+      '#description': '<b>Required:</b> select_values_trigger:value=one OR select_values_trigger=two'
+      '#states':
+        required:
+          ':input[name="select_values_trigger"]':
+            - value: one
+            - value: two
   email_confirm_trigger_details:
     '#type': details
     '#title': email_confirm_trigger
