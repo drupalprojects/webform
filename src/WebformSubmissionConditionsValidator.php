@@ -201,17 +201,21 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         continue;
       }
 
+      // Determine if the element is required.
       $is_required = $this->validateConditions($conditions, $webform_submission);
       $is_required = ($state == 'optional') ? !$is_required : $is_required;
 
+      // Determine if the element is empty (but not zero).
       if (isset($element['#webform_key'])) {
         $value = $webform_submission->getElementData($element['#webform_key']);
       }
       else {
         $value = $element['#value'];
       }
+      $is_empty = (empty($value) && $value !== '0');
 
-      if ($is_required && ($value === '' || $value === NULL)) {
+      // If required and empty then set required error.
+      if ($is_required && $is_empty) {
         $this->setRequiredError($element, $form_state);
       }
     }
