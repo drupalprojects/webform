@@ -75,6 +75,11 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     $definitions = [];
     foreach ($field_definitions as $field_name => $field_definition) {
+      // Exclude the 'map' field type which is used by the metatag.module.
+      if ($field_definition->getType() === 'map') {
+        continue;
+      }
+
       $definitions[$field_name] = [
         'title' => $field_definition->getLabel(),
         'name' => $field_name,
