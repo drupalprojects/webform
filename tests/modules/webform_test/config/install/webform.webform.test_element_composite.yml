@@ -20,9 +20,11 @@ elements: |
       first_name:
         '#type': textfield
         '#title': 'First name'
+        '#required': true
       last_name:
         '#type': textfield
         '#title': 'Last name'
+        '#required': true
   webform_element_composite_advanced:
     '#type': webform_element_composite
     '#title': webform_element_composite_advanced

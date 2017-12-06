@@ -31,9 +31,11 @@ class WebformElementCompositeTest extends WebformTestBase {
   first_name:
     '#type': textfield
     '#title': 'First name'
+    '#required': true
   last_name:
     '#type': textfield
     '#title': 'Last name'
+    '#required': true
 webform_element_composite_advanced:
   first_name:
     '#type': textfield
@@ -69,9 +71,11 @@ webform_element_composite_advanced:
   first_name:
     '#type': textfield
     '#title': 'First name'
+    '#required': true
   last_name:
     '#type': textfield
     '#title': 'Last name'
+    '#required': true
 webform_element_composite_advanced:
   first_name:
     '#type': textfield

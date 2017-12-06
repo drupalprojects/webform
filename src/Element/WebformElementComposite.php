@@ -216,11 +216,11 @@ class WebformElementComposite extends FormElement {
             '#rows' => 2,
           ],
         ],
+        // Note: Setting #return_value: TRUE is not returning any value.
         'required' => [
           '#type' => 'checkbox',
           '#title' => t('Req.'),
           '#title_display' => 'invisible',
-          '#return_value' => TRUE,
           '#help' => '<b>' . t('Required') . ':</b> ' . t('Check this option if the user must enter a value.'),
         ],
       ],
@@ -239,7 +239,6 @@ class WebformElementComposite extends FormElement {
   public static function validateWebformElementComposite(&$element, FormStateInterface $form_state, &$complete_form) {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
-
     $elements_value = NestedArray::getValue($form_state->getValues(), $element['elements']['#parents']);
 
     // Check for duplicate keys.
@@ -265,9 +264,12 @@ class WebformElementComposite extends FormElement {
         return ($value !== '');
       });
 
-      // Unset empty required.
+      // Unset empty required or case to boolean.
       if (empty($element_value['required'])) {
         unset($element_value['required']);
+      }
+      else {
+        $element_value['required'] = TRUE;
       }
 
       // Limit value keys to supported element properties.
