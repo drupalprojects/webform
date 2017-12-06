@@ -78,7 +78,14 @@ class Date extends DateBase {
 
       // Format default value.
       if (isset($element['#default_value'])) {
-        $element['#default_value'] = date($element['#date_date_format'], strtotime($element['#default_value']));
+        if ($this->hasMultipleValues($element)) {
+          foreach ($element['#default_value'] as $index => $default_value) {
+            $element['#default_value'][$index] = date($element['#date_date_format'], strtotime($default_value));
+          }
+        }
+        else {
+          $element['#default_value'] = date($element['#date_date_format'], strtotime($element['#default_value']));
+        }
       }
     }
   }
