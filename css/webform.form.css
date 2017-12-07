@@ -54,8 +54,21 @@
 }
 
 /**
- * Readonly inputs.
+ * Readonly inputs. (@see .form-disabled)
+ * @see https://www.wufoo.com/html5/attributes/21-readonly.html
  */
-.webform-readonly {
-  background-color: #f0f0f0;
+.webform-readonly input[type="date"],
+.webform-readonly input[type="datetime-local"],
+.webform-readonly input[type="email"],
+.webform-readonly input[type="number"],
+.webform-readonly input[type="password"],
+.webform-readonly input[type="search"],
+.webform-readonly input[type="tel"],
+.webform-readonly input[type="text"],
+.webform-readonly input[type="time"],
+.webform-readonly input[type="url"],
+.webform-readonly textarea {
+  background: #ededed;
+  border-color: #bbb;
+  color: #717171;
 }

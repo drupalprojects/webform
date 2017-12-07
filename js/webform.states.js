@@ -21,6 +21,12 @@
     }
   });
 
+  $document.on('state:readonly', function (e) {
+    if (e.trigger) {
+      $(e.target).prop('readonly', e.value).closest('.js-form-item, .js-form-wrapper').toggleClass('webform-readonly', e.value).find('input, textarea').prop('readonly', e.value);
+    }
+  });
+
   $document.on('state:visible', function (e) {
     if (e.trigger) {
       if (e.value) {

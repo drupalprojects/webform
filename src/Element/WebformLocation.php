@@ -122,7 +122,7 @@ class WebformLocation extends WebformCompositeBase {
           $element[$composite_key]['#type'] = 'hidden';
         }
         else {
-          $element[$composite_key]['#attributes']['class'][] = 'webform-readonly';
+          $element[$composite_key]['#wrapper_attributes']['class'][] = 'webform-readonly';
           $element[$composite_key]['#readonly'] = 'readonly';
         }
       }

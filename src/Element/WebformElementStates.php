@@ -739,6 +739,8 @@ class WebformElementStates extends FormElement {
       'invisible' => t('Hidden'),
       'enabled' => t('Enabled'),
       'disabled' => t('Disabled'),
+      'readwrite' => t('Read/write'),
+      'readonly' => t('Read-only'),
       'required' => t('Required'),
       'optional' => t('Optional'),
       'checked' => t('Checked'),

@@ -674,6 +674,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     if ($this->isInput($element)) {
+      // Handle #readonly support.
+      // @see \Drupal\Core\Form\FormBuilder::handleInputElement
+      if (!empty($element['#readonly'])) {
+        $element['#attributes']['readonly'] = 'readonly';
+        if ($this->hasProperty('wrapper_attributes')) {
+          $element['#wrapper_attributes']['class'][] = 'webform-readonly';
+        }
+      }
+
       // Set custom required error message as 'data-required-error' attribute.
       // @see Drupal.behaviors.webformRequiredError
       // @see webform.form.js
@@ -1829,6 +1838,15 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'optional' => $this->t('Optional'),
     ];
 
+    // Set readwrite/readonly states for any element that supports it
+    // and containers.
+    if ($this->hasProperty('readonly') || $this->isContainer(['#type' => $this->getPluginId()])) {
+      $states += [
+        'readwrite' => $this->t('Read/write'),
+        'readonly' => $this->t('Read-only'),
+      ];
+    }
+
     // Set checked/unchecked states for any element that contains checkboxes.
     if ($this instanceof Checkbox || $this instanceof Checkboxes) {
       $states += [
@@ -2217,7 +2235,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['form']['disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disabled'),
-      '#description' => $this->t('Make this element non-editable. Useful for displaying default value. Changeable via JavaScript.'),
+      '#description' => $this->t('Make this element non-editable with the value <strong>ignored</strong>. Useful for displaying default value. Changeable via JavaScript.'),
+      '#return_value' => TRUE,
+      '#weight' => 50,
+    ];
+    $form['form']['readonly'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Readonly'),
+      '#description' => $this->t('Make this element non-editable with the value <strong>submitted</strong>. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
       '#weight' => 50,
     ];

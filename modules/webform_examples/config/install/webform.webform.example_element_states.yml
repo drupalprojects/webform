@@ -175,6 +175,20 @@ elements: |
         required:
           ':input[name="filled"]':
             filled: true
+  readonly_example:
+    '#type': details
+    '#title': 'Text field readonly example'
+    '#open': true
+    readonly_checkbox:
+      '#type': checkbox
+      '#title': 'Please check this box to make the below text field readonly'
+    readonly_textfield:
+      '#type': textfield
+      '#title': 'Textfield field'
+      '#states':
+        readonly:
+          ':input[name="readonly_checkbox"]':
+            checked: true
 css: ''
 javascript: ''
 settings:

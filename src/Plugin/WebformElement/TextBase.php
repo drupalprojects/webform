@@ -17,6 +17,7 @@ abstract class TextBase extends WebformElementBase {
    */
   public function getDefaultProperties() {
     return [
+      'readonly' => FALSE,
       'size' => '',
       'minlength' => '',
       'maxlength' => '',
