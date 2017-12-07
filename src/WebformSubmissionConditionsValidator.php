@@ -471,7 +471,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
           unset($element['#required']);
         }
         if (isset($element['#states']['invisible']) && !isset($element['#states']['optional'])) {
-          $element['#states']['invisible'] = $element['#states']['optional'];
+          $element['#states']['optional'] = $element['#states']['invisible'];
           unset($element['#required']);
         }
         if (!isset($element['#required'])) {
