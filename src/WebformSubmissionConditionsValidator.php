@@ -35,10 +35,10 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     'expanded' => '!collapsed',
     'open' => '!collapsed',
     'closed' => 'collapsed',
+    'readwrite' => '!readonly',
     // Below states are never used by the #states API.
     // 'untouched' => '!touched',
     // 'irrelevant' => '!relevant',
-    // 'readwrite' => '!readonly',
   ];
 
   /**
