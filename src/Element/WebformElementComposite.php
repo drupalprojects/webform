@@ -6,7 +6,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
-use \Drupal\webform\Plugin\WebformElement\WebformCompositeBase as WebformCompositeBaseElement;
+use Drupal\webform\Plugin\WebformElement\WebformCompositeBase as WebformCompositeBaseElement;
 use Drupal\webform\Utility\WebformArrayHelper;
 
 /**
@@ -132,7 +132,7 @@ class WebformElementComposite extends FormElement {
           '#help' => '<b>' . t('Key') . ':</b> ' . t('A unique machine-readable name. Can only contain lowercase letters, numbers, and underscores.') .
             '<br/><br/>' . '<b>' . t('Type') . ':</b> ' . t('The type of element to be displayed.') .
             '<br/><br/>' . '<b>' . t('Options') . ':</b> ' . t('Please select predefined options or enter custom options.') . ' ' . t('Key-value pairs MUST be specified as "safe_key: \'Some readable options\'". Use of only alphanumeric characters and underscores is recommended in keys. One option per line.') .
-            ($edit_source ? '<br/><br/>' . '<b>' . t('Custom Properties') . ':</b> ' .t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added to the custom properties.') : ''),
+            ($edit_source ? '<br/><br/>' . '<b>' . t('Custom Properties') . ':</b> ' . t('Properties do not have to be prepended with a hash (#) character, the hash character will be automatically added to the custom properties.') : ''),
           'key' => [
             '#type' => 'textfield',
             '#title' => t('Key'),

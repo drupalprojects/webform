@@ -4,7 +4,6 @@ namespace Drupal\webform;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
@@ -249,8 +248,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * {@inheritdoc}
    */
   public function buildIndex() {
-    // return $this->buildAddons();
-    // return $this->buildLibraries();
     return $this->buildVideos();
   }
 
@@ -343,7 +340,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'border' => 0,
         'cellpadding' => 2,
         'cellspacing' => 0,
-      ]
+      ],
     ];
 
     if (!$docs) {
@@ -1058,7 +1055,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['config_handlers'] = [
       'group' => 'configuration',
       'title' => $this->t('Configuration: Handlers'),
-      'content' => $this->t('The <strong>Handlers configuration</strong> page allows administrators to enable/disable handlers and configure default email settings and messages.')  . ' ' .
+      'content' => $this->t('The <strong>Handlers configuration</strong> page allows administrators to enable/disable handlers and configure default email settings and messages.') . ' ' .
         $this->t('<strong>Handlers</strong> are used to route submitted data to external applications and send notifications & confirmations.'),
       'video_id' => 'admin',
       'routes' => [
@@ -1240,7 +1237,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     // Elements.
     /**************************************************************************/
 
-    // Elements
+    // Elements.
     $help['elements'] = [
       'group' => 'elements',
       'title' => $this->t('Elements'),

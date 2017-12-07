@@ -71,5 +71,4 @@ class WebformEntityAccess {
     return $access_result->addCacheTags(['config:webform.settings']);
   }
 
-
 }

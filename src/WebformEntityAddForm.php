@@ -128,7 +128,7 @@ class WebformEntityAddForm extends BundleEntityFormBase {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString(),
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label created.', $context);

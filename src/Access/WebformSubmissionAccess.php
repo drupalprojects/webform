@@ -50,5 +50,6 @@ class WebformSubmissionAccess {
     }
     return AccessResult::forbidden();
   }
+
 }
 

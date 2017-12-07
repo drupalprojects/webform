@@ -28,5 +28,5 @@ class WebformSourceEntityAccess {
 
     return AccessResult::allowedIf($entity->access('update', $account) && $entity_reference_manager->getWebform($entity));
   }
-}
 
+}
