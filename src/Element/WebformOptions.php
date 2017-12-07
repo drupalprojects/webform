@@ -104,6 +104,7 @@ class WebformOptions extends FormElement {
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
             '#maxlength' => 255,
+            '#attributes' => ['class' => ['js-webform-options-value']],
           ],
           'option' => [
             '#type' => 'container',
@@ -134,6 +135,7 @@ class WebformOptions extends FormElement {
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
             '#maxlength' => 255,
+            '#attributes' => ['class' => ['js-webform-options-value']],
           ],
           'text' => [
             '#type' => 'textfield',
@@ -144,6 +146,8 @@ class WebformOptions extends FormElement {
           ],
         ];
       }
+
+      $element['#attached']['library'][] = 'webform/webform.element.options.admin';
       return $element;
     }
   }

@@ -622,6 +622,15 @@ webform.element.options:
     component:
       css/webform.element.options.css: {}
 
+webform.element.options.admin:
+  version: VERSION
+  js:
+    js/webform.element.options.admin.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+
 webform.element.other:
   version: VERSION
   css:
