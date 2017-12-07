@@ -2459,6 +2459,19 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#state_options' => $this->getElementStateOptions(),
       '#selector_options' => $webform->getElementsSelectorOptions(),
     ];
+    if (!$this->hasProperty('state')) {
+      $form['conditional_logic']['states_required_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Please note when an element is hidden it will not be required.'),
+        '#access' => TRUE,
+        '#states' => [
+          'visible' => [
+            ':input[name="properties[required]"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
+    }
 
     /* Submission display */
 

@@ -72,6 +72,21 @@ elements: |
           - xor
           - ':input[name="trigger_select"]':
               value: option
+  required_hidden_trigger_details:
+    '#type': details
+    '#title': required_hidden_trigger
+    '#open': true
+    required_hidden_trigger:
+      '#type': checkbox
+      '#title': required_hidden_trigger
+    required_hidden_dependent_required:
+      '#type': textfield
+      '#title': required_hidden_dependent_required
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="required_hidden_trigger"]':
+            checked: true
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger

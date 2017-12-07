@@ -71,8 +71,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $form_state->getFormObject()->getEntity();
 
-    // Get visible form elements.
-    $elements = &$this->getVisibleElements($form);
+    // Get build and get visible form elements.
+    $elements = &$this->getBuildElements($form);
 
     // Loop through visible elements with #states.
     foreach ($elements as &$element) {
@@ -433,7 +433,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   /****************************************************************************/
 
   /**
-   * Get visible elements with from a form.
+   * Build and get visible elements from a form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -441,24 +441,42 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * @return array
    *   Visible elements.
    */
-  protected function &getVisibleElements(array &$form) {
+  protected function &getBuildElements(array &$form) {
     $elements = [];
-    $this->getVisibleElementsRecusive($elements, $form);
+    $this->getBuildElementsRecusive($elements, $form);
     return $elements;
   }
 
   /**
-   * Recurse through a form and get visible elements.
+   * Recurse through a form, review #states/#required, and get visible elements.
    *
    * @param array $elements
    *   Visible elements with #states property
    * @param array $form
    *   An associative array containing the structure of the form.
    */
-  protected function getVisibleElementsRecusive(array &$elements, array &$form) {
+  protected function getBuildElementsRecusive(array &$elements, array &$form) {
     foreach ($form as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;
+      }
+
+      // If element has #states and is #required there may be a conflict where
+      // visiblly hidden elements are required. The solution is to convert
+      // #required into corresponding 'required/optional' states based on
+      // 'visible/invisible' states.
+      if (isset($element['#states']) && !empty($element['#required'])) {
+        if (isset($element['#states']['visible']) && !isset($element['#states']['required'])) {
+          $element['#states']['required'] = $element['#states']['visible'];
+          unset($element['#required']);
+        }
+        if (isset($element['#states']['invisible']) && !isset($element['#states']['optional'])) {
+          $element['#states']['invisible'] = $element['#states']['optional'];
+          unset($element['#required']);
+        }
+        if (!isset($element['#required'])) {
+          $element['#_required'] = TRUE;
+        }
       }
 
       if (isset($element['#access']) && $element['#access'] === FALSE) {
@@ -467,7 +485,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
       $elements[$key] = &$element;
 
-      $this->getVisibleElementsRecusive($elements, $element);
+      $this->getBuildElementsRecusive($elements, $element);
     }
   }
 

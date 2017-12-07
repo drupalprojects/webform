@@ -89,6 +89,16 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('dependent_textfield_required_xor field is required.');
 
     /**************************************************************************/
+    // required_hidden_trigger.
+    /**************************************************************************/
+
+    $edit = [
+      'required_hidden_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('required_hidden_dependent_required field is required.');
+
+    /**************************************************************************/
     // checkboxes_trigger.
     /**************************************************************************/
 
