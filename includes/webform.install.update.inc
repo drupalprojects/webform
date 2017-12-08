@@ -5,6 +5,7 @@
  * Archived Webform update hooks.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
@@ -1702,3 +1703,67 @@ function webform_update_8088() {
 /******************************************************************************/
 // Webform-8.x-5.0-beta23 - November 2, 2017 (No updates required).
 /******************************************************************************/
+
+/******************************************************************************/
+// Webform-8.x-5.0-beta24+
+/******************************************************************************/
+
+/**
+ * Issue #2920762: Typo in update 8087: "wizard_comfirmation_label".
+ */
+function webform_update_8089() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    if (isset($data['settings']['wizard_comfirmation'])) {
+      $data['settings']['wizard_confirmation'] = $data['settings']['wizard_comfirmation'];
+      unset($data['settings']['wizard_comfirmation']);
+    }
+    if (isset($data['settings']['wizard_comfirmation_label'])) {
+      $data['settings']['wizard_confirmation_label'] = $data['settings']['wizard_comfirmation_label'];
+      unset($data['settings']['wizard_comfirmation_label']);
+    }
+    $webform_config->setData($data)->save();
+  }
+}
+
+/**
+ * Issue #2920443: Browser Back Button to submit to previous wizard page.
+ */
+function webform_update_8090() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2923047: Redirect to user login when Access Denied for a Webform.
+ */
+function webform_update_8091() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2915653: Remote post error handling.
+ */
+function webform_update_8092() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2924551: Move the WebformComposite element to WebformCustomComposite.
+ */
+function webform_update_8093() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $config_name) {
+    $config = $config_factory->getEditable($config_name);
+    $elements = $config->get('elements');
+    if (strpos($elements, "'#type': webform_composite") !== FALSE) {
+      $elements = str_replace("'#type': webform_composite", "'#type': webform_custom_composite", $elements);
+      $config->set('elements', $elements);
+      $config->save(TRUE);
+    }
+  }
+}
