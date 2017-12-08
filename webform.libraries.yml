@@ -624,6 +624,9 @@ webform.element.options:
 
 webform.element.options.admin:
   version: VERSION
+  css:
+    component:
+      css/webform.form.css: {}
   js:
     js/webform.element.options.admin.js: {}
   dependencies:

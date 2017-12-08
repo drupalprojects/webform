@@ -25,8 +25,19 @@
 
         // On focus, determine if option value and option text are in-sync.
         $value.on('focus', function () {
-          $value.data('webform_options_sync', $value.val() === $text.val());
+          var sync = $value.val() === $text.val();
+          $value.data('webform_options_sync', sync);
+          if (sync) {
+            $text.prop('readonly', true).closest('.js-form-item, .js-form-wrapper').addClass('webform-readonly');
+          }
         });
+
+        $value.on('blur', function () {
+          if ($value.data('webform_options_sync')) {
+            $text.prop('readonly', false).closest('.js-form-item, .js-form-wrapper').removeClass('webform-readonly');
+          }
+        });
+
 
         // On keyup, if option value and option text are in-sync then set
         // option text to option value.
