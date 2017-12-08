@@ -49,6 +49,12 @@ elements: |
     '#title': datelist_date_year_range_reverse
     '#date_year_range': '2005:2010'
     '#date_year_range_reverse': TRUE
+  datelist_required_error:
+    '#type': datelist
+    '#title': datelist_required_error
+    '#default_value': '2009-08-18T01:00:00-05:00'
+    '#required': 'Custom required error'
+    '#required_error': 'Custom required error'
 css: ''
 javascript: ''
 settings:
@@ -71,7 +77,7 @@ settings:
   form_prepopulate_source_entity_type: ''
   form_reset: false
   form_disable_autocomplete: false
-  form_novalidate: false
+  form_novalidate: true
   form_unsaved: false
   form_disable_back: false
   form_submit_back: false

@@ -3,8 +3,10 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Datetime\Element\Datelist as DatelistElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -222,7 +224,55 @@ class DateList extends DateBase {
     foreach (Element::children($element) as $child_key) {
       $element[$child_key]['#error_no_message'] = TRUE;
     }
+
+    // Override Datelist validate callback so that we can support custom
+    // #required_error message.
+    foreach ($element['#element_validate'] as &$validate_callback) {
+      if (is_array($validate_callback) && $validate_callback[0] === 'Drupal\Core\Datetime\Element\Datelist') {
+        $validate_callback[0] = DateList::class;
+      }
+    }
     return $element;
+  }
+
+  /**
+   * Override validation callback for a datelist element and set #required_error.
+   *
+   * @param array $element
+   *   The element being processed.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
+   */
+  public static function validateDatelist(&$element, FormStateInterface $form_state, &$complete_form) {
+    $has_required_error = (!empty($element['#required']) && !empty($element['#required_error']));
+    if (!$has_required_error) {
+      DatelistElement::validateDatelist($element, $form_state, $complete_form);
+      return;
+    }
+
+    // Clone the $form_state so that we can capture and
+    // set #required_error message.
+    // Note: We are not using SubformState because we are just trying clone
+    // the $form_state.
+    $temp_form_state = clone $form_state;
+
+    // Clear error to ensure that we only capture datelist validation errors.
+    $temp_form_state->clearErrors();
+
+    // Validate the date list element.
+    DatelistElement::validateDatelist($element, $temp_form_state, $complete_form);
+
+    // Copy $temp_form_state errors to $form_state error and alter
+    // override default required error message is applicable.
+    $errors = $temp_form_state->getErrors();
+    foreach ($errors as $name => $message) {
+      if ($message instanceof TranslatableMarkup && $message->getUntranslatedString() === "The %field date is required.") {
+        $message = $element['#required_error'];
+      }
+      $form_state->setErrorByName($name, $message);
+    }
   }
 
 }

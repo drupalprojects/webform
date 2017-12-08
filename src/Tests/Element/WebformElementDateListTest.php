@@ -55,6 +55,17 @@ class WebformElementDateListTest extends WebformTestBase {
     ];
     $this->drupalPostForm('webform/test_element_datelist', $edit, t('Submit'));
     $this->assertRaw('<em class="placeholder">datelist_min_max</em> must be on or after <em class="placeholder">2009-01-01</em>.');
+
+    // Check custom required error.
+    $edit = [
+      'datelist_required_error[year]' => '',
+      'datelist_required_error[month]' => '',
+      'datelist_required_error[day]' => '',
+      'datelist_required_error[hour]' => '',
+      'datelist_required_error[minute]' => '',
+    ];
+    $this->drupalPostForm('webform/test_element_datelist', $edit, t('Submit'));
+    $this->assertRaw('Custom required error');
   }
 
 }
