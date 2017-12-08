@@ -46,6 +46,17 @@ field.widget.settings.webform_entity_reference_autocomplete:
     placeholder:
       type: label
       label: 'Placeholder'
+    default_data:
+      type: boolean
+      label: 'Default submission data'
+
+field.widget.settings.webform_entity_reference_select:
+  type: mapping
+  label: 'Webform select display format settings'
+  mapping:
+    default_data:
+      type: boolean
+      label: 'Default submission data'
 
 field.formatter.settings.webform_entity_reference_entity_view:
   type: mapping
