@@ -54,10 +54,8 @@
           removePlugins: 'elementspath,magicline',
           // Toolbar settings.
           format_tags: 'p;h2;h3;h4;h5;h6',
-          // Autogrow.
-          extraPlugins: 'autogrow',
-          autoGrow_minHeight: 60,
-          autoGrow_maxHeight: 300
+          // extraPlugins
+          extraPlugins: ''
         };
 
         // Add toolbar.
@@ -83,6 +81,21 @@
           options.toolbar.push({name: 'colors', items: ['TextColor', 'BGColor']});
           options.toolbar.push({name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']});
           options.toolbar.push({name: 'tools', items: ['Source', '-', 'Maximize']});
+        }
+
+        // Add autogrow plugin.
+        if (plugins['autogrow']) {
+          options.extraPlugins += (options.extraPlugins ? ',' : '') + 'autogrow';
+          options.autoGrow_minHeight = 60;
+          options.autoGrow_maxHeight = 300;
+        }
+
+        // Add CodeMirror integration plugin.
+        if (plugins['codemirror']) {
+          options.extraPlugins += (options.extraPlugins ? ',' : '') + 'codemirror';
+          options.codemirror = {
+            mode: 'text/html'
+          };
         }
 
         options = $.extend(options, Drupal.webform.htmlEditor.options);

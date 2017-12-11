@@ -107,21 +107,23 @@ class WebformHtmlEditor extends FormElement {
     $element['#attached']['library'][] = 'webform/webform.element.html_editor';
     $element['#attached']['drupalSettings']['webform']['html_editor']['allowedContent'] = static::getAllowedContent();
 
-    $base_path = base_path();
-    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libaries_manager */
-    $libaries_manager = \Drupal::service('webform.libraries_manager');
-    $libraries = $libaries_manager->getLibraries(TRUE);
+    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
+    $libraries_manager = \Drupal::service('webform.libraries_manager');
+    $libraries = $libraries_manager->getLibraries(TRUE);
     $element['#attached']['drupalSettings']['webform']['html_editor']['plugins'] = [];
     foreach ($libraries as $library_name => $library) {
-      if (strpos($library_name, 'ckeditor.') === 0) {
-        $plugin_version = $library['version'];
-        $plugin_name = str_replace('ckeditor.', '', $library_name);
-        if (file_exists("libraries/$library_name")) {
-          $element['#attached']['drupalSettings']['webform']['html_editor']['plugins'][$plugin_name] = "{$base_path}libraries/{$library_name}/";
-        }
-        else {
-          $element['#attached']['drupalSettings']['webform']['html_editor']['plugins'][$plugin_name] = "https://cdn.rawgit.com/ckeditor/ckeditor-dev/$plugin_version/plugins/$plugin_name/";
-        }
+      if (strpos($library_name, 'ckeditor.') === FALSE) {
+        continue;
+      }
+
+      $plugin_name = str_replace('ckeditor.', '', $library_name);
+      $plugin_path = $library['plugin_path'];
+      $plugin_url = $library['plugin_url'];
+      if (file_exists($plugin_path)) {
+        $element['#attached']['drupalSettings']['webform']['html_editor']['plugins'][$plugin_name] = base_path() . $plugin_path;
+      }
+      else {
+        $element['#attached']['drupalSettings']['webform']['html_editor']['plugins'][$plugin_name] = $plugin_url;
       }
     }
 
