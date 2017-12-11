@@ -97,6 +97,10 @@ function webform_token_info() {
     'name' => t('Total submissions limit'),
     'description' => t('The total number of submissions allowed for the webform.'),
   ];
+  $webform_submission['interval:webform'] = [
+    'name' => t('Total submissions limit interval'),
+    'description' => t('The total submissions interval for the webform.'),
+  ];
   $webform_submission['total:webform'] = [
     'name' => t('Total submissions'),
     'description' => t('The current number of submissions for the webform.'),
@@ -104,6 +108,10 @@ function webform_token_info() {
   $webform_submission['limit:user'] = [
     'name' => t('Per user submission limit'),
     'description' => t('The total number of submissions allowed per user for the webform.'),
+  ];
+  $webform_submission['interval:user'] = [
+    'name' => t('Per user submission limit interval'),
+    'description' => t('The total submissions interval per user for the webform.'),
   ];
   $webform_submission['total:user'] = [
     'name' => t('Per user total submissions'),
@@ -113,6 +121,10 @@ function webform_token_info() {
     'name' => t('Total submissions limit per source entity'),
     'description' => t('The total number of submissions allowed for the webform source entity.'),
   ];
+  $webform_submission['interval:webform:source_entity'] = [
+    'name' => t('Total submissions limit interval per source entity'),
+    'description' => t('The total submissions interval for the webform source entity.'),
+  ];
   $webform_submission['total:webform:source_entity'] = [
     'name' => t('Total submissions for source entity'),
     'description' => t('The current number of submissions for the webform source entity.'),
@@ -120,6 +132,10 @@ function webform_token_info() {
   $webform_submission['limit:user:source_entity'] = [
     'name' => t('Per user submission limit per source entity'),
     'description' => t('The total number of submissions allowed per user for the webform source entity.'),
+  ];
+  $webform_submission['interval:user:source_entity'] = [
+    'name' => t('Per user submission limit interval per source entity'),
+    'description' => t('The total submissions interval per user for the webform source entity.'),
   ];
   $webform_submission['total:user:source_entity'] = [
     'name' => t('Per user total submissions for source entity'),
@@ -471,12 +487,20 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform->getSetting('limit_total') ?: t('None');
           break;
 
+        case 'interval:webform':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('limit_total_interval'));
+          break;
+
         case 'total:webform':
           $replacements[$original] = $submission_storage->getTotal($webform);
           break;
 
         case 'limit:user':
           $replacements[$original] = $webform->getSetting('limit_user') ?: t('None');
+          break;
+
+        case 'interval:user':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('limit_user_interval'));
           break;
 
         case 'total:user':
@@ -487,12 +511,20 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform->getSetting('entity_limit_total') ?: t('None');
           break;
 
+        case 'interval:webform:source_entity':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('entity_limit_total_interval'));
+          break;
+
         case 'total:webform:source_entity':
           $replacements[$original] = $source_entity ? $submission_storage->getTotal($webform, $source_entity) : '';
           break;
 
         case 'limit:user:source_entity':
           $replacements[$original] = $webform->getSetting('entity_limit_user') ?: t('None');
+          break;
+
+        case 'interval:user:source_entity':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('entity_limit_user_interval'));
           break;
 
         case 'total:user:source_entity':

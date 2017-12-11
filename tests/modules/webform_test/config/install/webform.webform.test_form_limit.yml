@@ -80,13 +80,17 @@ settings:
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
   limit_total: 4
+  limit_total_interval: 60
   limit_total_message: 'Only 4 submissions are allowed.'
   limit_user: 1
+  limit_user_interval: 60
   limit_user_message: 'You are only allowed to have 1 submission for this webform.'
+  entity_limit_total: 2
+  entity_limit_total_interval: 60
+  entity_limit_user: 1
+  entity_limit_user_interval: 60
   purge: none
   purge_days: null
-  entity_limit_total: 2
-  entity_limit_user: 1
   results_disabled: false
   results_disabled_ignore: true
   token_update: false

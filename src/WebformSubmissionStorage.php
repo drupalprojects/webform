@@ -203,9 +203,14 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $in_draft = FALSE) {
+  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []) {
+    // Default total to only look at completed submissions.
+    $options += [
+      'in_draft' => FALSE,
+    ];
+
     $query = $this->getQuery();
-    $this->addQueryConditions($query, $webform, $source_entity, $account, ['in_draft' => $in_draft]);
+    $this->addQueryConditions($query, $webform, $source_entity, $account, $options);
 
     // Issue: Query count method is not working for SQL Lite.
     // return $query->count()->execute();
@@ -251,6 +256,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     $options += [
       'check_source_entity' => FALSE,
       'in_draft' => NULL,
+      'interval' => NULL,
     ];
 
     if ($webform) {
@@ -283,6 +289,10 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
 
     if ($options['in_draft'] !== NULL) {
       $query->condition('in_draft', $options['in_draft']);
+    }
+
+    if ($options['interval']) {
+      $query->condition('completed', \Drupal::time()->getRequestTime() - $options['interval'], '>');
     }
   }
 

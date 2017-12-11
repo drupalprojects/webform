@@ -761,7 +761,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       && $this->getWebformSetting('draft') !== WebformInterface::DRAFT_NONE
       && $this->getWebformSetting('draft_multiple', FALSE)
       && ($this->isRoute('webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
-      && ($previous_draft_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser(), TRUE))
+      && ($previous_draft_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser(), ['in_draft' => TRUE]))
     ) {
       if ($previous_draft_total > 1) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFTS_PREVIOUS);
@@ -1816,15 +1816,17 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Check per source entity total limit.
     $entity_limit_total = $this->getWebformSetting('entity_limit_total');
+    $entity_limit_total_interval = $this->getWebformSetting('entity_limit_total_interval');
     if ($entity_limit_total && ($source_entity = $this->getLimitSourceEntity())) {
-      if ($this->storage->getTotal($webform, $source_entity) >= $entity_limit_total) {
+      if ($this->storage->getTotal($webform, $source_entity, NULL, ['interval' => $entity_limit_total_interval]) >= $entity_limit_total) {
         return TRUE;
       }
     }
 
     // Check total limit.
     $limit_total = $this->getWebformSetting('limit_total');
-    if ($limit_total && $this->storage->getTotal($webform) >= $limit_total) {
+    $limit_total_interval = $this->getWebformSetting('limit_total_interval');
+    if ($limit_total && $this->storage->getTotal($webform, NULL, NULL, ['interval' => $limit_total_interval]) >= $limit_total) {
       return TRUE;
     }
 
@@ -1862,15 +1864,17 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Check per source entity user limit.
     $entity_limit_user = $this->getWebformSetting('entity_limit_user');
+    $entity_limit_user_interval = $this->getWebformSetting('entity_limit_user_interval');
     if ($entity_limit_user && ($source_entity = $this->getLimitSourceEntity())) {
-      if ($this->storage->getTotal($webform, $source_entity, $account) >= $entity_limit_user) {
+      if ($this->storage->getTotal($webform, $source_entity, $account, ['interval' => $entity_limit_user_interval]) >= $entity_limit_user) {
         return TRUE;
       }
     }
 
     // Check user limit.
     $limit_user = $this->getWebformSetting('limit_user');
-    if ($limit_user && $this->storage->getTotal($webform, NULL, $account) >= $limit_user) {
+    $limit_user_interval = $this->getWebformSetting('limit_user_interval');
+    if ($limit_user && $this->storage->getTotal($webform, NULL, $account, ['interval' => $limit_user_interval]) >= $limit_user) {
       return TRUE;
     }
 

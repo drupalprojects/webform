@@ -120,14 +120,16 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) A webform submission source entity.
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   (optional) A user account.
-   * @param bool $in_draft
-   *   (optional) Look for submissions in draft. Defaults to FALSE.
-   *   Setting to NULL will return all saved submissions and drafts.
-   *
+   * @param array $options
+   *   Options/conditions include:
+   *   - in_draft (boolean): NULL will return all saved submissions and drafts.
+   *     Defaults to FALSE.
+   *   - interval (int): Limit total within an seconds interval.
+
    * @return int
    *   Total number of submissions.
    */
-  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $in_draft = FALSE);
+  public function getTotal(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 
   /**
    * Get the maximum sid.
@@ -175,6 +177,11 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   (optional) The current user account.
    * @param array $options
    *   (optional) Additional options and query conditions.
+   *   Options/conditions include:
+   *   - in_draft (boolean): NULL will return all saved submissions and drafts.
+   *     Defaults to NULL
+   *   - check_source_entity (boolean): Check that a source entity is defined.
+   *   - interval (int): Limit total within an seconds interval.
    */
   public function addQueryConditions(AlterableInterface $query, WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, array $options = []);
 

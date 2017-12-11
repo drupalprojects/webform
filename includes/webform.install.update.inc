@@ -1767,3 +1767,11 @@ function webform_update_8093() {
     }
   }
 }
+
+/**
+ * Issue #2929665: Permit one webform submission per day based on email entered.
+ */
+function webform_update_8094() {
+  _webform_update_webform_settings();
+}
+

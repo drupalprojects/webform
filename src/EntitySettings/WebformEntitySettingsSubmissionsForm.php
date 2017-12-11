@@ -4,6 +4,7 @@ namespace Drupal\webform\EntitySettings;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionStorageInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -252,17 +253,42 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#min' => 1,
       '#default_value' => $settings['limit_total'],
     ];
+    $form['submission_limits']['total']['limit_total_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Total submissions limit interval'),
+      '#default_value' => $settings['limit_total_interval'],
+      '#states' => [
+        'visible' => [':input[name="limit_total"]' => ['filled' => TRUE]],
+      ]
+    ];
     $form['submission_limits']['total']['entity_limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit per source entity'),
       '#min' => 1,
       '#default_value' => $settings['entity_limit_total'],
     ];
+    $form['submission_limits']['total']['entity_limit_total_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Total submissions limit interval per source entity'),
+      '#default_value' => $settings['entity_limit_total_interval'],
+      '#states' => [
+        'visible' => [':input[name="entity_limit_total"]' => ['filled' => TRUE]],
+      ]
+    ];
     $form['submission_limits']['total']['limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Total submissions limit message'),
       '#min' => 1,
       '#default_value' => $settings['limit_total_message'],
+      '#states' => [
+        'visible' => [
+          [':input[name="limit_total"]' => ['filled' => TRUE]],
+          'or',
+          [':input[name="entity_limit_total"]' => ['filled' => TRUE]],
+        ],
+      ],
     ];
     $form['submission_limits']['user'] = [
       '#type' => 'details',
@@ -275,16 +301,41 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#min' => 1,
       '#default_value' => $settings['limit_user'],
     ];
+    $form['submission_limits']['user']['limit_user_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Per user submission limit interval'),
+      '#default_value' => $settings['limit_user_interval'],
+      '#states' => [
+        'visible' => [':input[name="limit_user"]' => ['filled' => TRUE]],
+      ]
+    ];
     $form['submission_limits']['user']['entity_limit_user'] = [
       '#type' => 'number',
       '#min' => 1,
       '#title' => $this->t('Per user submission limit per source entity'),
       '#default_value' => $settings['entity_limit_user'],
     ];
+    $form['submission_limits']['user']['entity_limit_user_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Per user submission limit interval per source entity'),
+      '#default_value' => $settings['entity_limit_user_interval'],
+      '#states' => [
+        'visible' => [':input[name="entity_limit_user"]' => ['filled' => TRUE]],
+      ]
+    ];
     $form['submission_limits']['user']['limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Per user submission limit message'),
       '#default_value' => $settings['limit_user_message'],
+      '#states' => [
+        'visible' => [
+          [':input[name="limit_user"]' => ['filled' => TRUE]],
+          'or',
+          [':input[name="entity_limit_user"]' => ['filled' => TRUE]],
+        ],
+      ],
     ];
 
     // Purge settings.

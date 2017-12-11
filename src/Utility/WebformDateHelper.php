@@ -3,11 +3,26 @@
 namespace Drupal\webform\Utility;
 
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Form\OptGroup;
 
 /**
  * Helper class webform date helper methods.
  */
 class WebformDateHelper {
+
+  /**
+   * Cached interval options.
+   *
+   * @var array
+   */
+  static $intervalOptions;
+
+  /**
+   * Cached interval options flattened.
+   *
+   * @var array
+   */
+  static $intervalOptionsFlattened;
 
   /**
    * Wrapper for DateFormatter that return an empty string for empty timestamps.
@@ -69,6 +84,108 @@ class WebformDateHelper {
   public static function isValidDateFormat($time, $format = 'Y-m-d') {
     $datetime = \DateTime::createFromFormat($format, $time);
     return ($datetime && $datetime->format($format) === $time);
+  }
+
+  /**
+   * Get interval options used by submission limits.
+   *
+   * @return array
+   *   An associative array of interval options.
+   */
+  public static function getIntervalOptions() {
+    self::initIntervalOptions();
+    return self::$intervalOptions;
+  }
+
+  /**
+   * Get interval options used by submission limits.
+   *
+   * @return array
+   *   An associative array of interval options.
+   */
+  public static function getIntervalOptionsFlattened() {
+    self::initIntervalOptions();
+    return self::$intervalOptionsFlattened;
+  }
+
+  /**
+   * Get interval text.
+   *
+   * @param int|NULL $interval
+   *   An interval.
+   *
+   * @return string
+   *   An intervals' text.
+   */
+  public static function getIntervalText($interval) {
+    $interval = ((string) $interval) ?: '';
+    $intervals = self::getIntervalOptionsFlattened();
+    return (isset($intervals[$interval])) ? $intervals[$interval] : $intervals[''];
+  }
+
+  /**
+   * Get interval options used by submission limits.
+   *
+   * @return array
+   *   An associative array of interval options.
+   */
+  protected static function initIntervalOptions () {
+    if (!isset(self::$intervalOptions)) {
+      $options = ['' => t('ever'),];
+
+      // Minute.
+      $minute = 60;
+      $minute_optgroup = (string) t('Minute');
+      $options[$minute_optgroup][$minute] = t('every minute');
+      $increment = 5;
+      while ($increment < 60) {
+        $increment += 5;
+        $options[$minute_optgroup][($increment * $minute)] = t('every @increment minutes', ['@increment' => $increment]);
+      }
+
+      // Hour.
+      $hour = $minute * 60;
+      $hour_optgroup = (string) t('Hour');
+      $options[$hour_optgroup][$hour] = t('every hour');
+      $increment = 1;
+      while ($increment < 24) {
+        $increment += 1;
+        $options[$hour_optgroup][($increment * $hour)] = t('every @increment hours', ['@increment' => $increment]);
+      }
+
+      // Day.
+      $day = $hour * 24;
+      $day_optgroup = (string) t('Day');
+      $options[$day_optgroup][$day] = t('every day');
+      $increment = 1;
+      while ($increment < 7) {
+        $increment += 1;
+        $options[$day_optgroup][($increment * $day)] = t('every @increment days', ['@increment' => $increment]);
+      }
+
+      // Week.
+      $week = $day * 7;
+      $week_optgroup = (string) t('Week');
+      $options[$week_optgroup][$week] = t('every week');
+      $increment = 1;
+      while ($increment < 52) {
+        $increment += 1;
+        $options[$week_optgroup][($increment * $week)] = t('every @increment weeks', ['@increment' => $increment]);
+      }
+
+      // Year.
+      $year = $day * 365;
+      $year_optgroup = (string) t('Year');
+      $options[$year_optgroup][$year] = t('every year');
+      $increment = 1;
+      while ($increment < 10) {
+        $increment += 1;
+        $options[$year_optgroup][($increment * $year)] = t('every @increment year', ['@increment' => $increment]);
+      }
+
+      self::$intervalOptions = $options;
+      self::$intervalOptionsFlattened = OptGroup::flattenOptions($options);
+    }
   }
 
 }
