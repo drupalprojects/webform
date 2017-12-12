@@ -31,7 +31,6 @@ class WebformHtmlHelperTest extends UnitTestCase {
     $result = WebformHtmlHelper::containsHtml($text);
     $this->assertEquals($expected, $result, $text);
   }
-
   /**
    * Data provider for testContainsHtml().
    *
@@ -43,7 +42,7 @@ class WebformHtmlHelperTest extends UnitTestCase {
     $tests[] = ['<b>some text</b>', TRUE];
     return $tests;
   }
-  
+
   /**
    * Tests WebformHtmlHelper has block tags with WebformHtmlHelper::hasBlockTags().
    *

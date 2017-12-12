@@ -123,12 +123,12 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
     }
     else {
       $submission_template = 'webform_submission_html';
-      $display_submission_information  = TRUE;
+      $display_submission_information = TRUE;
     }
 
     // Build submission display.
     foreach ($entities as $id => $webform_submission) {
-      if ($display_submission_information ) {
+      if ($display_submission_information) {
         $build[$id]['information'] = [
           '#theme' => 'webform_submission_information',
           '#webform_submission' => $webform_submission,

@@ -191,6 +191,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('likert_dependent_required field is required.');
 
+    /**************************************************************************/
+    // datelist_trigger.
+    /**************************************************************************/
+
     // Check required datelist.
     $edit = [
       'datelist_trigger[year]' => date('Y'),
@@ -203,12 +207,6 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('datelist_dependent_required field is required.');
-
-    /**************************************************************************/
-    // datelist_trigger.
-    /**************************************************************************/
-
-    // No test.
 
     /**************************************************************************/
     // datetime_trigger.

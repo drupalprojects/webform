@@ -34,7 +34,7 @@ class WebformHandlerEmailRenderingTest extends WebformTestBase {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = Webform::load('contact');
 
-    // Check that we are currenly using the bartik.theme.
+    // Check that we are currently using the bartik.theme.
     $this->drupalGet('webform/contact');
     $this->assertRaw('core/themes/bartik/css/base/elements.css');
 

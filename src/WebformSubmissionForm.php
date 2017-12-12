@@ -361,7 +361,10 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Track current page name or index by setting the
     // "data-webform-wizard-page"
     // attribute which is used Drupal.behaviors.webformWizardTrackPage.
-    // The data parameter is append to the URL after the form has been submitted
+    //
+    // The data parameter is append to the URL after the form has
+    // been submitted.
+    //
     // @see js/webform.form.wizard.js
     $track = $this->getWebform()->getSetting('wizard_track');
     if ($track && $this->getRequest()->isMethod('POST')) {

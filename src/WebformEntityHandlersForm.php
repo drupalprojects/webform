@@ -69,7 +69,7 @@ class WebformEntityHandlersForm extends EntityForm {
       ['data' => $this->t('Weight'), 'class' => [RESPONSIVE_PRIORITY_LOW]],
       ['data' => $this->t('Operations')],
     ];
-    
+
     // Build table rows for handlers.
     $handlers = $this->entity->getHandlers();
     $rows = [];
@@ -155,7 +155,6 @@ class WebformEntityHandlersForm extends EntityForm {
     $handler_definitions = $this->handlerManager->removeExcludeDefinitions($handler_definitions);
     unset($handler_definitions['broken']);
 
-
     // Must manually add local actions to the webform because we can't alter local
     // actions and add the needed dialog attributes.
     // @see https://www.drupal.org/node/2585169
@@ -167,7 +166,7 @@ class WebformEntityHandlersForm extends EntityForm {
           'title' => $this->t('Add email'),
           'url' => new Url('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => 'email']),
           'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-        ]
+        ],
       ];
     }
     unset($handler_definitions['email']);
@@ -178,7 +177,7 @@ class WebformEntityHandlersForm extends EntityForm {
           'title' => $this->t('Add handler'),
           'url' => new Url('entity.webform.handler', ['webform' => $webform->id()]),
           'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-        ]
+        ],
       ];
     }
     $form['local_actions'] = [
@@ -241,7 +240,7 @@ class WebformEntityHandlersForm extends EntityForm {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'handlers')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'handlers')->toString(),
     ];
     $this->logger('webform')->notice('Webform @label handler saved.', $context);
 

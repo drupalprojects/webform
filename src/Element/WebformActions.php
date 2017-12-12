@@ -79,18 +79,18 @@ class WebformActions extends Container {
       }
 
       // Hide buttons using #access.
-      if (!empty($element['#' . $button_name .'_hide'])) {
+      if (!empty($element['#' . $button_name . '_hide'])) {
         $element[$button_name]['#access'] = FALSE;
       }
 
       // Apply custom label.
-      if (!empty($element['#' . $button_name .'__label']) && empty($element[$button_name]['#webform_actions_button_custom'])) {
-        $element[$button_name]['#value'] = $element['#' . $button_name .'__label'];
+      if (!empty($element['#' . $button_name . '__label']) && empty($element[$button_name]['#webform_actions_button_custom'])) {
+        $element[$button_name]['#value'] = $element['#' . $button_name . '__label'];
       }
 
       // Apply attributes (class, style, properties).
-      if (!empty($element['#' . $button_name .'__attributes'])) {
-        foreach ($element['#' . $button_name .'__attributes'] as $attribute_name => $attribute_value) {
+      if (!empty($element['#' . $button_name . '__attributes'])) {
+        foreach ($element['#' . $button_name . '__attributes'] as $attribute_name => $attribute_value) {
           if ($attribute_name == 'class') {
             // Merge class names.
             $element[$button_name]['#attributes']['class'] = array_merge($element[$button_name]['#attributes']['class'], $attribute_value);

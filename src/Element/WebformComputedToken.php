@@ -2,9 +2,6 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\Component\Utility\Html;
-
-
 use Drupal\webform\WebformSubmissionInterface;
 
 /**

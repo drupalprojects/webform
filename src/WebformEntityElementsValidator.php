@@ -10,6 +10,9 @@ use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
+/**
+ * Webform elements validator.
+ */
 class WebformEntityElementsValidator implements WebformEntityElementsValidatorInterface {
 
   use StringTranslationTrait;
@@ -372,7 +375,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     catch (\Exception $exception) {
       $message = $exception->getMessage();
     }
-    // Restore  Drupal's error and exception handler
+    // Restore  Drupal's error and exception handler.
     restore_error_handler();
     restore_exception_handler();
 

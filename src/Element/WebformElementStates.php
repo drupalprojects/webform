@@ -274,7 +274,7 @@ class WebformElementStates extends FormElement {
       $row['selector']['#other__placeholder'] = t('Enter custom selector...');
     }
     $row['condition'] = [
-      '#wrapper_attributes' => ['class' => ['webform-states-table--condition']]
+      '#wrapper_attributes' => ['class' => ['webform-states-table--condition']],
     ];
     $row['condition']['trigger'] = [
       '#type' => 'select',

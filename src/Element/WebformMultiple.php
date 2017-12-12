@@ -7,7 +7,6 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -397,7 +396,7 @@ class WebformMultiple extends FormElement {
       $row['_handle_'] = [
         '#wrapper_attributes' => [
           'class' => ['webform-multiple-table--handle'],
-        ]
+        ],
       ];
     }
 
@@ -575,6 +574,8 @@ class WebformMultiple extends FormElement {
    *
    * @param array $element
    *   The child element.
+   * @param string $element_key
+   *   The child element's key
    * @param array $parents
    *   The main element's parents.
    */
