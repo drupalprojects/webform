@@ -103,7 +103,7 @@ class WebformOptions extends FormElement {
             '#title' => t('Option value'),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
-            '#maxlength' => 255,
+            '#maxlength' => NULL,
             '#attributes' => ['class' => ['js-webform-options-value']],
           ],
           'option' => [
@@ -115,7 +115,7 @@ class WebformOptions extends FormElement {
               '#title' => t('Option text'),
               '#title_display' => t('invisible'),
               '#placeholder' => t('Enter text'),
-              '#maxlength' => 255,
+              '#maxlength' => NULL,
             ],
             'description' => [
               '#type' => 'textarea',
