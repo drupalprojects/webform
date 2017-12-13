@@ -13,36 +13,57 @@ title: 'Test: Element: Likert'
 description: 'Test the likert element.'
 category: 'Test: Element'
 elements: |
-  likert_elements:
-    '#type': details
-    '#title': 'Likert Elements'
-    '#open': true
-    likert_default:
-      '#type': webform_likert
-      '#title': 'likert (default)'
-      '#questions':
-        q1: 'Question 1'
-        q2: 'Question 2'
-        q3: 'Question 3'
-      '#answers':
-        1: 'Option 1'
-        2: 'Option 2'
-        3: 'Option 3'
-    likert_advanced:
-      '#type': webform_likert
-      '#title': 'likert (advanced)'
-      '#required': true
-      '#na_answer': true
-      '#na_answer_value': N/A
-      '#na_answer_text': 'Not applicable'
-      '#questions':
-        q1: 'Question 1'
-        q2: 'Question 2'
-        q3: 'Question 3'
-      '#answers':
-        1: 'Option 1'
-        2: 'Option 2'
-        3: 'Option 3'
+  likert_default:
+    '#type': webform_likert
+    '#title': likert_default
+    '#questions':
+      q1: 'Question 1'
+      q2: 'Question 2'
+      q3: 'Question 3'
+    '#answers':
+      1: 'Option 1'
+      2: 'Option 2'
+      3: 'Option 3'
+  likert_advanced:
+    '#type': webform_likert
+    '#title': likert_advanced
+    '#required': true
+    '#na_answer': true
+    '#na_answer_value': N/A
+    '#na_answer_text': 'Not applicable'
+    '#questions':
+      q1: 'Question 1'
+      q2: 'Question 2'
+      q3: 'Question 3'
+    '#answers':
+      1: 'Option 1'
+      2: 'Option 2'
+      3: 'Option 3'
+  likert_description:
+    '#type': webform_likert
+    '#title': likert_description
+    '#questions':
+      q1: 'Question 1 -- This is a description'
+      q2: 'Question 2 -- This is a description'
+      q3: 'Question 3 -- This is a description'
+    '#answers':
+      1: 'Option 1 -- This is a description'
+      2: 'Option 2 -- This is a description'
+      3: 'Option 3 -- This is a description'
+  likert_help:
+    '#type': webform_likert
+    '#title': likert_help
+    '#questions_description_display': help
+    '#questions':
+      q1: 'Question 1 -- This is a help text'
+      q2: 'Question 2 -- This is a help text'
+      q3: 'Question 3 -- This is a help text'
+    '#answers_description_display': help
+    '#answers':
+      1: 'Option 1 -- This is a help text'
+      2: 'Option 2 -- This is a help text'
+      3: 'Option 3 -- This is a help text'
+
 css: ''
 javascript: ''
 settings:

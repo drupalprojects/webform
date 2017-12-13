@@ -3,6 +3,7 @@
 namespace Drupal\webform\Element;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
@@ -88,6 +89,7 @@ class WebformOptions extends FormElement {
       return $element;
     }
     else {
+      $t_args = ['@label' => isset($element['#label']) ? Unicode::ucfirst($element['#label']) : t('Options')];
       $properties = ['#label', '#labels', '#empty_items', '#add_more'];
 
       $element['options'] = array_intersect_key($element, array_combine($properties, $properties)) + [
@@ -100,7 +102,7 @@ class WebformOptions extends FormElement {
         $element['options']['#element'] = [
           'value' => [
             '#type' => 'textfield',
-            '#title' => t('Option value'),
+            '#title' => t('@label value', $t_args),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
             '#maxlength' => NULL,
@@ -108,18 +110,18 @@ class WebformOptions extends FormElement {
           ],
           'option' => [
             '#type' => 'container',
-            '#title' => t('Option text/description'),
+            '#title' => t('@label text/description', $t_args),
             '#title_display' => t('invisible'),
             'text' => [
               '#type' => 'textfield',
-              '#title' => t('Option text'),
+              '#title' => t('@label text', $t_args),
               '#title_display' => t('invisible'),
               '#placeholder' => t('Enter text'),
               '#maxlength' => NULL,
             ],
             'description' => [
               '#type' => 'textarea',
-              '#title' => t('Option description'),
+              '#title' => t('@label description', $t_args),
               '#title_display' => t('invisible'),
               '#placeholder' => t('Enter description'),
               '#rows' => 2,
@@ -131,7 +133,7 @@ class WebformOptions extends FormElement {
         $element['options']['#element'] = [
           'value' => [
             '#type' => 'textfield',
-            '#title' => t('Option value'),
+            '#title' => t('@label value', $t_args),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
             '#maxlength' => 255,
@@ -139,7 +141,7 @@ class WebformOptions extends FormElement {
           ],
           'text' => [
             '#type' => 'textfield',
-            '#title' => t('Option text'),
+            '#title' => t('@label text', $t_args),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter text'),
             '#maxlength' => 255,

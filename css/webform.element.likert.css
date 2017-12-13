@@ -45,10 +45,12 @@
 }
 
 /**
- * Hide radio title when Likert is displayed within a grid on desktop.
+ * Hide radio title and description when Likert is displayed within a
+ * grid on desktop.
  * @see \Drupal\webform\Element\WebformLikert::processWebformLikert
  */
-.webform-likert-label {
+.webform-likert-label,
+.webform-likert-description {
   display: none;
 }
 
@@ -98,11 +100,15 @@
   }
 
   /**
-   * Show radio title when Likert is displayed inline on mobile.
+   * Show radio title and description when Likert is displayed inline on mobile.
    * @see \Drupal\webform\Element\WebformLikert::processWebformLikert
    */
   .webform-likert-label {
     display: inline;
+  }
+
+  .webform-likert-description {
+    display: block;
   }
 
   .form-type-webform-likert td:last-child {
