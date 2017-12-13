@@ -281,6 +281,50 @@ function _webform_form_webform_submission_form_after_build($form, FormStateInter
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add warnings when attempting to update the Webform module using
+ * the 'Update manager'.
+ *
+ * @see https://www.drupal.org/project/webform/issues/2930116
+ * @see https://www.drupal.org/project/webform/issues/2920095
+ */
+function webform_form_update_manager_update_form_alter(&$form, FormStateInterface $form_state) {
+  if (!isset($form['projects']) || !isset($form['projects']['#options']['webform'])) {
+    return;
+  }
+
+  // Display dismissible warning at the top of the page.
+  $t_args = [
+    ':href_manual' => 'https://www.drupal.org/docs/user_guide/en/extend-manual-install.html',
+    ':href_drush' => 'https://www.drupal.org/docs/user_guide/en/security-update-module.html',
+  ];
+  $form['webform_update_manager_warning'] = [
+    '#type' => 'webform_message',
+    '#message_type' => 'warning',
+    '#message_message' => t('The Webform module may not update properly using this administrative interface. It is strongly recommended that you update the Webform module <a href=":href_manual">manually</a> or by using <a href=":href_drush">Drush</a>.', $t_args),
+    '#message_close' => TRUE,
+    '#message_storage' => WebformMessage::STORAGE_SESSION,
+    '#weight' => -10,
+  ];
+
+  // Display warning to backup site when webform  is checked.
+  $form['projects']['#options']['webform']['title']['data'] = [
+    'title' => $form['projects']['#options']['webform']['title']['data'],
+    'container' => [
+      '#type' => 'container',
+      '#states' => ['visible' => [':input[name="projects[webform]"]' => ['checked' => TRUE]]],
+      '#attributes' => ['class' => ['js-form-wrapper'], 'style' => 'display:none'],
+      'message' => [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => t('Please make sure to backup your website before updating the Webform module.'),
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_system_breadcrumb_alter().
  */
 function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
