@@ -19,6 +19,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
+use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
@@ -295,25 +296,38 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $this->applyFormStateToConfiguration($form_state);
 
     // Get options, mail, and text elements as options (text/value).
-    $options_element_options = [];
-    $mail_element_options = [];
     $text_element_options_value = [];
     $text_element_options_raw = [];
+    $options_element_options = [];
+    $mail_element_options = [];
+    $name_element_options = [];
+
     $elements = $this->webform->getElementsInitializedAndFlattened();
     foreach ($elements as $key => $element) {
       $element_plugin = $this->elementManager->getElementInstance($element);
-      if (!$element_plugin->isInput($element)) {
+      if (!$element_plugin->isInput($element) || !isset($element['#type'])) {
         continue;
       }
 
       $title = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', ['@title' => $element['#title'], '@key' => $key]) : $key;
+
       $text_element_options_value["[webform_submission:values:$key:value]"] = $title;
       $text_element_options_raw["[webform_submission:values:$key:raw]"] = $title;
+
       if (isset($element['#options'])) {
         $options_element_options["[webform_submission:values:$key:raw]"] = $title;
       }
-      elseif (isset($element['#type']) && in_array($element['#type'], ['email', 'hidden', 'value', 'select', 'radios', 'textfield', 'webform_email_multiple', 'webform_email_confirm'])) {
+      elseif (in_array($element['#type'], ['email', 'hidden', 'value', 'select', 'radios', 'textfield', 'webform_email_multiple', 'webform_email_confirm'])) {
         $mail_element_options["[webform_submission:values:$key:raw]"] = $title;
+      }
+
+      // Name elements options can only include the 'webform_name' composite
+      // and single value elements.
+      if ($element['#type'] == 'webform_name') {
+        $name_element_options["[webform_submission:values:$key:value]"] = $title;
+      }
+      elseif (!$element_plugin->isComposite() && !$element_plugin->hasMultipleValues($elements)) {
+        $name_element_options["[webform_submission:values:$key:raw]"] = $title;
       }
     }
 
@@ -372,7 +386,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#open' => TRUE,
     ];
     $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, $options_element_options, NULL, TRUE);
-    $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $text_element_options_raw);
+    $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $name_element_options);
     $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink(
         ['webform', 'webform_submission'],
         $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')
@@ -537,7 +551,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Settings: Sender mail.
     $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), $mail_element_options, $options_element_options);
     // Settings: Sender name.
-    $form['additional']['sender_name'] = $this->buildElement('sender_name', $this->t('Sender name'), $this->t('Sender name'), $text_element_options_raw);
+    $form['additional']['sender_name'] = $this->buildElement('sender_name', $this->t('Sender name'), $this->t('Sender name'), $name_element_options);
 
     // Settings: HTML.
     $form['additional']['html'] = [
