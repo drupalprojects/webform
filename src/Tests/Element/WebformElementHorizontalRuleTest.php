@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for horizontal rule element.
  *
  * @group Webform
  */
-class WebformElementHorizontalRuleTest extends WebformTestBase {
+class WebformElementHorizontalRuleTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

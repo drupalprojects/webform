@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Test for webform element managed public file handling (DRUPAL-PSA-2016-003).
@@ -11,7 +10,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementManagedFilePublicTest extends WebformTestBase {
+class WebformElementManagedFilePublicTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

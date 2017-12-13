@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for text format element.
  *
  * @group Webform
  */
-class WebformElementTextFormatTest extends WebformTestBase {
+class WebformElementTextFormatTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.

@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for mapping element.
  *
  * @group Webform
  */
-class WebformElementMappingTest extends WebformTestBase {
+class WebformElementMappingTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

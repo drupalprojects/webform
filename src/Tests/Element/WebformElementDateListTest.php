@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -11,7 +10,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementDateListTest extends WebformTestBase {
+class WebformElementDateListTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

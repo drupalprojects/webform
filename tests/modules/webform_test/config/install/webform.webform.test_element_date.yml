@@ -45,6 +45,12 @@ elements: |
     '#datepicker': true
     '#date_date_format': 'D, m/d/Y'
     '#default_value': '2009-08-18'
+  date_datepicker_custom:
+    '#type': date
+    '#title': date_datepicker_custom
+    '#datepicker': true
+    '#date_date_format': 'l, F j, Y'
+    '#default_value': '2009-08-18'
   date_datepicker_min_max_dynamic:
     '#type': date
     '#title': date_datepicker_min_max_dynamic

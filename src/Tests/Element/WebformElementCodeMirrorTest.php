@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform CodeMirror element.
  *
  * @group Webform
  */
-class WebformElementCodeMirrorTest extends WebformTestBase {
+class WebformElementCodeMirrorTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

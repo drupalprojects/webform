@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform terms of service element.
  *
  * @group Webform
  */
-class WebformElementTermsOfServiceTest extends WebformTestBase {
+class WebformElementTermsOfServiceTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.

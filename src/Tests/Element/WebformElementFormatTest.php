@@ -5,7 +5,6 @@ namespace Drupal\webform\Tests\Element;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -13,7 +12,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @group Webform
  */
-class WebformElementFormatTest extends WebformTestBase {
+class WebformElementFormatTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.
@@ -56,7 +55,7 @@ class WebformElementFormatTest extends WebformTestBase {
       'Toggle (Value)' => 'Yes',
       'URL (Link)' => '<a href="http://example.com">http://example.com</a>',
       'Date (Raw value)' => '1942-06-18',
-      'Date (Fallback date format)' => 'Thu, 06/18/1942 - 00:00',
+      'Date (Fallback date format)' => '1942-06-18',
       'Date (HTML Date)' => '1942-06-18',
       'Date (HTML Datetime)' => '1942-06-18T00:00:00+1000',
       'Date (HTML Month)' => '1942-06',
@@ -92,7 +91,7 @@ class WebformElementFormatTest extends WebformTestBase {
       'Toggle (Value): Yes',
       'URL (Link): http://example.com',
       'Date (Raw value): 1942-06-18',
-      'Date (Fallback date format): Thu, 06/18/1942 - 00:00',
+      'Date (Fallback date format): 1942-06-18',
       'Date (HTML Date): 1942-06-18',
       'Date (HTML Datetime): 1942-06-18T00:00:00+1000',
       'Date (HTML Month): 1942-06',

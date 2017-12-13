@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for likert element.
  *
  * @group Webform
  */
-class WebformElementLikertTest extends WebformTestBase {
+class WebformElementLikertTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

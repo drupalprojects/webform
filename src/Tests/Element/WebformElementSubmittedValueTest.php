@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform submission value.
  *
  * @group Webform
  */
-class WebformElementSubmittedValueTest extends WebformTestBase {
+class WebformElementSubmittedValueTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

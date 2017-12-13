@@ -100,7 +100,7 @@ abstract class DateBase extends WebformElementBase {
       return $value;
     }
 
-    $format = $this->getItemFormat($element) ?: 'html_' . $this->getDateType($element);
+    $format = $this->getItemFormat($element);
     if ($format === 'raw') {
       return $value;
     }
@@ -109,18 +109,6 @@ abstract class DateBase extends WebformElementBase {
     }
     else {
       return date($format, $timestamp);
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getItemFormat(array $element) {
-    if (isset($element['#format'])) {
-      return $element['#format'];
-    }
-    else {
-      return parent::getItemFormat($element);
     }
   }
 

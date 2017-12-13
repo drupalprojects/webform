@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for composite element (builder).
  *
  * @group Webform
  */
-class WebformElementCompositeTest extends WebformTestBase {
+class WebformElementCompositeTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

@@ -4,7 +4,6 @@ namespace Drupal\webform\Tests\Element;
 
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -12,7 +11,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementDateTimeTest extends WebformTestBase {
+class WebformElementDateTimeTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

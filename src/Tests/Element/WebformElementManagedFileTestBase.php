@@ -3,12 +3,11 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Base class for testing webform element managed file handling.
  */
-abstract class WebformElementManagedFileTestBase extends WebformTestBase {
+abstract class WebformElementManagedFileTestBase extends WebformElementTestBase {
 
   /**
    * Modules to enable.

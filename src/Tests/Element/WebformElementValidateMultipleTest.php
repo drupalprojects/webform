@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform validate multiple.
  *
  * @group Webform
  */
-class WebformElementValidateMultipleTest extends WebformTestBase {
+class WebformElementValidateMultipleTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

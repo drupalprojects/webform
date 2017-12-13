@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform validate unique.
  *
  * @group Webform
  */
-class WebformElementValidateUniqueTest extends WebformTestBase {
+class WebformElementValidateUniqueTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

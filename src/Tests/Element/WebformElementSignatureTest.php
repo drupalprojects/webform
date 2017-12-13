@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for signature element.
  *
  * @group Webform
  */
-class WebformElementSignatureTest extends WebformTestBase {
+class WebformElementSignatureTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

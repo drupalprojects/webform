@@ -4,14 +4,13 @@ namespace Drupal\webform\Tests\Element;
 
 use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform submission webform element custom #format support.
  *
  * @group Webform
  */
-class WebformElementFormatCustomTest extends WebformTestBase {
+class WebformElementFormatCustomTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.

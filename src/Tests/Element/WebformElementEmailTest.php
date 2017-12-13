@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for email_confirm and email_multiple element.
  *
  * @group Webform
  */
-class WebformElementEmailTest extends WebformTestBase {
+class WebformElementEmailTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

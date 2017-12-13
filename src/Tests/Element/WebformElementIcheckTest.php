@@ -2,14 +2,13 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for iCheck element.
  *
  * @group Webform
  */
-class WebformElementIcheckTest extends WebformTestBase {
+class WebformElementIcheckTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

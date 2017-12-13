@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Element\WebformHtmlEditor;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform HTML editor element.
  *
  * @group Webform
  */
-class WebformElementHtmlEditorTest extends WebformTestBase {
+class WebformElementHtmlEditorTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.
