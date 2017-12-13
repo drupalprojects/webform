@@ -87,6 +87,21 @@ elements: |
         visible:
           ':input[name="required_hidden_trigger"]':
             checked: true
+  minlength_hidden_trigger_details:
+    '#type': details
+    '#title': minlength_hidden_trigger
+    '#open': true
+    minlength_hidden_trigger:
+      '#type': checkbox
+      '#title': minlength_hidden_trigger
+    minlength_hidden_dependent:
+      '#type': textfield
+      '#title': minlength_hidden_dependent
+      '#minlength': 1
+      '#states':
+        visible:
+          ':input[name="minlength_hidden_trigger"]':
+            checked: true
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger

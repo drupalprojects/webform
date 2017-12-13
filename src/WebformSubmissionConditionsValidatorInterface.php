@@ -59,4 +59,17 @@ interface WebformSubmissionConditionsValidatorInterface {
    */
   public function validateConditions(array $conditions, WebformSubmissionInterface $webform_submission);
 
+  /**
+   * Determine if an element is visible.
+   *
+   * @param array $element
+   *  An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   *
+   * @return bool
+   *  TRUE if the element is visible.
+   */
+  public function isElementVisible(array $element, WebformSubmissionInterface $webform_submission);
+
 }

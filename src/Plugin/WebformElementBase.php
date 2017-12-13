@@ -737,19 +737,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Prepare multiple element.
     $this->prepareMultipleWrapper($element);
 
-    // ISSUE: Hidden elements still need to call #element_validate because
-    // certain elements, including managed_file, checkboxes, password_confirm,
-    // etc..., will also massage the submitted values via #element_validate.
-    //
-    // SOLUTION: Call #element_validate for all hidden elements but suppresses
-    // #element_validate errors.
-    //
     // Set hidden element #after_build handler.
     $element['#after_build'][] = [get_class($this), 'hiddenElementAfterBuild'];
   }
 
   /**
-   * Webform element #after_build callback: Wrap #element_validate so that we suppress element validation errors.
+   * Webform element #after_build callback.
+   *
+   * Wrap #element_validate so that we suppress element validation errors.
    */
   public static function hiddenElementAfterBuild(array $element, FormStateInterface $form_state) {
     if (!isset($element['#access']) || $element['#access']) {
@@ -759,32 +754,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     // Disabled #required validation for hidden elements.
     $element['#required'] = FALSE;
 
-    // Wrap #element_validate so that we suppress validation error messages.
-    if (!empty($element['#element_validate'])) {
-      $element['#_element_validate'] = $element['#element_validate'];
-      $element['#element_validate'] = [[get_called_class(), 'hiddenElementValidate']];
-    }
-
-    return $element;
-  }
-
-  /**
-   * Webform element #element_validate callback: Execute #element_validate and suppress errors.
-   */
-  public static function hiddenElementValidate(array $element, FormStateInterface $form_state) {
-    // Create a temp webform state that will capture and suppress all element
-    // validation errors.
-    $temp_form_state = clone $form_state;
-    $temp_form_state->setLimitValidationErrors([]);
-
-    // @see \Drupal\Core\Form\FormValidator::doValidateForm
-    foreach ($element['#_element_validate'] as $callback) {
-      $complete_form = &$form_state->getCompleteForm();
-      call_user_func_array($form_state->prepareCallback($callback), [&$element, &$temp_form_state, &$complete_form]);
-    }
-
-    // Get the temp webform state's values.
-    $form_state->setValues($temp_form_state->getValues());
+    return WebformElementHelper::setElementValidate($element);
   }
 
   /**

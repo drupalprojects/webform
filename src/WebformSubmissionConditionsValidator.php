@@ -7,6 +7,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Webform submission conditions (#states) validator.
@@ -77,16 +78,21 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     // Loop through visible elements with #states.
     foreach ($elements as &$element) {
       $states = static::getElementStates($element);
-      foreach ($states as $state => $conditions) {
+      foreach ($states as $original_state => $conditions) {
         if (!is_array($conditions)) {
           continue;
         }
 
+        // Process state/negate.
+        list($state, $negate) = $this->processState($original_state);
+
+        // Is hide/state when need to make sure validation is not triggered.
+        if ($state === 'visible') {
+          $element['#after_build'][] = [get_class($this), 'elementAfterBuild'];
+        }
+
+        // Skip if conditions targets are visible.
         if ($this->isConditionsTargetsVisible($conditions, $elements)) {
-          list($state, $negate) = $this->processState($state);
-          if ($state == 'required') {
-            unset($element['#required']);
-          }
           continue;
         }
 
@@ -95,12 +101,6 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         if ($result === NULL) {
           continue;
         }
-
-        // Remove #states state/conditions.
-        unset($states[$state]);
-
-        // Process state/negate.
-        list($state, $negate) = $this->processState($state);
 
         // Negate the result.
         $result = ($negate) ? !$result : $result;
@@ -127,6 +127,9 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
             $element['#default_value'] = $result;
             break;
         }
+
+        // Remove #states state/conditions.
+        unset($states[$original_state]);
       }
 
       // Remove #states if all states have been applied.
@@ -134,6 +137,76 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         unset($element['#states']);
       }
     }
+  }
+
+  /****************************************************************************/
+  // Element hide/show validation methods.
+  /****************************************************************************/
+
+  /**
+   * Webform element #after_build callback: Wrap #element_validate so that we suppress element validation errors.
+   */
+  public static function elementAfterBuild(array $element, FormStateInterface $form_state) {
+    return WebformElementHelper::setElementValidate($element, [get_called_class(), 'elementValidate']);
+  }
+
+  /**
+   * Webform conditional #element_validate callback: Execute #element_validate and suppress errors.
+   */
+  public static function elementValidate(array &$element, FormStateInterface $form_state) {
+    // Element validation is trigger sequentially.
+    // Triggers must be validated before dependants.
+    //
+    // Build webform submission with validated and processed data.
+    // Webform submission must be rebuilt every time since the
+    // $element and $form_state values can be changed by validation callbacks.
+
+    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+    $form_object = $form_state->getFormObject();
+    $complete_form = &$form_state->getCompleteForm();
+    $webform_submission = $form_object->buildEntity($complete_form, $form_state);
+
+    /** @var \Drupal\webform\WebformSubmissionConditionsValidatorInterface $conditions_validator */
+    $conditions_validator = \Drupal::service('webform_submission.conditions_validator');
+    if ($conditions_validator->isElementVisible($element, $webform_submission)) {
+      WebformElementHelper::triggerElementValidate($element, $form_state);
+    }
+    else {
+      WebformElementHelper::suppressElementValidate($element, $form_state);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isElementVisible(array $element, WebformSubmissionInterface $webform_submission) {
+    $states = static::getElementStates($element);
+
+    $visible = TRUE;
+    foreach ($states as $state => $conditions) {
+      if (!is_array($conditions)) {
+        continue;
+      }
+
+      // Process state/negate.
+      list($state, $negate) = $this->processState($state);
+
+      $result = $this->validateConditions($conditions, $webform_submission);
+      // Skip invalid conditions.
+      if ($result === NULL) {
+        continue;
+      }
+
+      // Negate the result.
+      $result = ($negate) ? !$result : $result;
+
+      // Apply result to element state.
+      if ($state === 'visible' && $result === FALSE) {
+        $visible = FALSE;
+      }
+    }
+
+    return $visible;
   }
 
   /****************************************************************************/
