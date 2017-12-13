@@ -86,16 +86,26 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     }
 
     // Add the filter by key(word) and/or state.
-    $state_options = [
-      '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
-      WebformInterface::STATUS_OPEN => $this->t('Open [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_OPEN)]),
-      WebformInterface::STATUS_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_CLOSED)]),
-      WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_SCHEDULED)]),
-    ];
+    if (\Drupal::currentUser()->hasPermission('administer webform')) {
+      $state_options = [
+        '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
+        WebformInterface::STATUS_OPEN => $this->t('Open [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_OPEN)]),
+        WebformInterface::STATUS_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_CLOSED)]),
+        WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled [@total]', ['@total' => $this->getTotal(NULL, WebformInterface::STATUS_SCHEDULED)]),
+      ];
+    }
+    else {
+      $state_options = [
+        '' => $this->t('All'),
+        WebformInterface::STATUS_OPEN => $this->t('Open'),
+        WebformInterface::STATUS_CLOSED => $this->t('Closed'),
+        WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled'),
+      ];
+    }
     $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->category, $this->state, $state_options);
 
     // Display info.
-    if ($total = $this->getTotal($this->keys, $this->category, $this->state)) {
+    if (\Drupal::currentUser()->hasPermission('administer webform') && ($total = $this->getTotal($this->keys, $this->category, $this->state))) {
       $build['info'] = [
         '#markup' => $this->formatPlural($total, '@total webform', '@total webforms', ['@total' => $total]),
         '#prefix' => '<div>',
