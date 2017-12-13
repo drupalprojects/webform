@@ -7,6 +7,19 @@
 
   'use strict';
 
+  /**
+   * Check if an element has a specified data attribute.
+   *
+   * @param string data
+   *   The data attribute name.
+   *
+   * @returns {boolean}
+   *   TRUE if an element has a specified data attribute.
+   */
+  $.fn.hasData = function (data) {
+    return (typeof this.data(data) !== 'undefined');
+  };
+
   var $document = $(document);
 
   // Issue #2860529: Conditional required File upload field don't work.
@@ -106,23 +119,25 @@
     var tag = input.tagName.toLowerCase(); // Normalize case.
 
     // Backup required.
-    if ($input.prop('required')) {
-      $input.data('webform-require', true);
+    if ($input.prop('required') && !$input.hasData('webform-required')) {
+      $input.data('webform-required', true);
     }
 
     // Backup value.
-    if (type === 'checkbox' || type === 'radio') {
-      $input.data('webform-value', $input.prop('checked'));
-    }
-    else if (tag === 'select') {
-      var values = [];
-      $input.find('option:selected').each(function (i, option) {
-        values[i] = option.value;
-      });
-      $input.data('webform-value', values);
-    }
-    else if (type != 'submit' && type != 'button') {
-      $input.data('webform-value', input.value);
+    if (!$input.hasData('webform-value')) {
+      if (type === 'checkbox' || type === 'radio') {
+        $input.data('webform-value', $input.prop('checked'));
+      }
+      else if (tag === 'select') {
+        var values = [];
+        $input.find('option:selected').each(function (i, option) {
+          values[i] = option.value;
+        });
+        $input.data('webform-value', values);
+      }
+      else if (type !== 'submit' && type !== 'button') {
+        $input.data('webform-value', input.value);
+      }
     }
   }
 
@@ -152,11 +167,16 @@
       else if (type !== 'submit' && type !== 'button') {
         input.value = value;
       }
+      $input.removeData('webform-value');
     }
 
     // Restore required.
-    if ($input.data('webform-required')) {
-      $input.prop('required', true);
+    var required = $input.data('webform-required');
+    if (typeof required !== 'undefined') {
+      if (required) {
+        $input.prop('required', true);
+      }
+      $input.removeData('webform-required');
     }
   }
 
@@ -189,7 +209,7 @@
         input.selectedIndex = -1;
       }
     }
-    else if (type !== 'submit' && type != 'button') {
+    else if (type !== 'submit' && type !== 'button') {
       input.value = (type === 'color') ? '#000000' : '';
     }
 
