@@ -2159,17 +2159,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#size' => 10,
     ];
     $form['form']['length_container'] = $this->getFormInlineContainer();
-    $form['form']['length_container']['maxlength'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Maxlength'),
-      '#description' => $this->t('Leaving blank will use the default maxlength.'),
-      '#min' => 1,
-      '#size' => 4,
-    ];
     $form['form']['length_container']['minlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Minlength'),
       '#description' => $this->t('The element may still be empty unless it is required.'),
+      '#min' => 1,
+      '#size' => 4,
+    ];    $form['form']['length_container']['maxlength'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Maxlength'),
+      '#description' => $this->t('Leaving blank will use the default maxlength.'),
       '#min' => 1,
       '#size' => 4,
     ];
