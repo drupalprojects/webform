@@ -74,10 +74,10 @@ class WebformElementDateTest extends WebformElementTestBase {
     $this->assertElementPreview('date_default', '2009-08-18');
     $this->assertElementPreview('date_custom', '18-Aug-2009');
     $this->assertElementPreview('date_min_max', '2009-08-18');
-    $this->assertElementPreview('date_min_max_dynamic', '2017-12-14');
+    $this->assertElementPreview('date_min_max_dynamic', date('Y-m-d', strtotime('now')));
     $this->assertElementPreview('date_datepicker', 'Tue, 08/18/2009');
     $this->assertElementPreview('date_datepicker_custom', 'Tuesday, August 18, 2009');
-    $this->assertElementPreview('date_datepicker_min_max_dynamic', 'Thu, 12/14/2017');
+    $this->assertElementPreview('date_datepicker_min_max_dynamic', date('D, m/d/Y', strtotime('now')));
   }
 
 }
