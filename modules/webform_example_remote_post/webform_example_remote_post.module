@@ -14,7 +14,7 @@ use Drupal\Core\Url;
  * remote post URLs are set to the correct base URL and path.
  */
 function webform_example_remote_post_webform_load(array $entities) {
-  if (isset($entities['example_remote_post']) && PHP_SAPI !== 'cli') {
+  if (isset($entities['example_remote_post']) && PHP_SAPI !== 'cli' && !in_array(\Drupal::routeMatch()->getRouteName(), ['system.modules_list', 'system.modules_list_confirm'])) {
     // Reset remote post URL to the current base URL and base path.
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $entities['example_remote_post'];
