@@ -12,6 +12,12 @@ git push -u origin [issue-number]-[issue-description]
 # Create patch
 git diff 8.x-5.x > [project_name]-[issue-description]-[issue-number]-00.patch
 
+# Apply remote patch
+curl https://www.drupal.org/files/issues/[project_name]-[issue-description]-[issue-number]-00.patch | git apply -
+
+# Force apply patch
+patch -p1  < [project_name]-[issue-description]-[issue-number]-00.patch
+
 # Create interdiff
 interdiff \
   [issue-number]-[old-comment-number].patch \
