@@ -57,10 +57,7 @@ handler:
   excluded_handlers: {  }
 export:
   exporter: delimited
-  delimiter: ','
   multiple_delimiter: ;
-  excel: false
-  file_name: 'submission-[webform_submission:serial]'
   header_format: label
   header_prefix: true
   header_prefix_label_delimiter: ': '
@@ -75,6 +72,8 @@ export:
     - url
   likert_answers_format: label
   signature_format: status
+  delimiter: ','
+  excel: false
   excluded_exporters: {  }
 batch:
   default_batch_export_size: 500
@@ -144,7 +143,7 @@ mail:
   default_body_text: |
     Submitted on [webform_submission:created]
     Submitted by: [webform_submission:user]
-    
+
     Submitted values are:
     [webform_submission:values]
   default_body_html: |
