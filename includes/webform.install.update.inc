@@ -1775,21 +1775,3 @@ function webform_update_8094() {
   _webform_update_webform_settings();
 }
 
-/**
- * Issue #2918721: Access controlling Webform administration.
- */
-function webform_update_8095() {
-  // Add 'administer' access rule to allow webforms.
-  $config_factory = \Drupal::configFactory();
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
-    $data = $webform_config->getRawData();
-    $data['access']['administer'] = [
-      'roles' => [],
-      'users' => [],
-      'permissions' => [],
-    ];
-    $webform_config->setData($data)->save();
-  }
-}
-

@@ -132,10 +132,6 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-  administer:
-    roles: {  }
-    users: {  }
-    permissions: {  }
 handlers:
   test:
     id: test

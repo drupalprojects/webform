@@ -163,10 +163,6 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-  administer:
-    roles: {  }
-    users: {  }
-    permissions: {  }
 handlers:
   email_notification:
     id: email

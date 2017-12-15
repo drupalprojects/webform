@@ -63,6 +63,7 @@ elements: |
       1: 'Option 1 -- This is a help text'
       2: 'Option 2 -- This is a help text'
       3: 'Option 3 -- This is a help text'
+
 css: ''
 javascript: ''
 settings:
@@ -173,10 +174,6 @@ access:
     users: {  }
     permissions: {  }
   delete_own:
-    roles: {  }
-    users: {  }
-    permissions: {  }
-  administer:
     roles: {  }
     users: {  }
     permissions: {  }

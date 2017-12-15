@@ -114,22 +114,6 @@ class WebformEntityAccessTest extends WebformTestBase {
     $uid = $account->id();
     $rid = $account->getRoles()[1];
 
-    // Check 'administer' access rule.
-    $access_rules = [
-      'administer' => [
-        'roles' => [],
-        'users' => [$uid],
-        'permissions' => [],
-      ],
-    ] + Webform::getDefaultAccessRules();
-    $webform->setAccessRules($access_rules)->save();
-    $this->drupalLogin($account);
-    $this->drupalGet("admin/structure/webform/manage/$webform_id/settings");
-    $this->assertResponse(200, 'Webform setting access for administer rule.');
-    $this->drupalGet("admin/structure/webform/manage/$webform_id/results/submissions");
-    $this->assertResponse(200, 'Webform submissions access for administer rule.');
-    $this->drupalLogout($account);
-
     // Check create authenticated/anonymous access.
     $webform->setAccessRules(Webform::getDefaultAccessRules())->save();
     $this->drupalGet('webform/' . $webform->id());
@@ -147,6 +131,7 @@ class WebformEntityAccessTest extends WebformTestBase {
     // Check no access.
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(403, 'Webform returns access denied');
+
     $any_tests = [
       'webform/{webform}' => 'create',
       'admin/structure/webform/manage/{webform}/results/submissions' => 'view_any',

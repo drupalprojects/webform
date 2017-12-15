@@ -150,10 +150,6 @@ access:
   delete_own:
     roles: {  }
     users: {  }
-  administer:
-    roles: {  }
-    users: {  }
-    permissions: {  }
 handlers:
   email_notification:
     id: email
