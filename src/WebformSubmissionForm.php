@@ -19,6 +19,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Form\WebformDialogFormTrait;
+use Drupal\webform\Plugin\WebformElement\Hidden;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -1786,8 +1787,13 @@ class WebformSubmissionForm extends ContentEntityForm {
         continue;
       }
 
+      // Determine if this is a hidden element.
+      // Hidden elements use #value but need to use #default_value to
+      // be populated.
+      $is_hidden = ($element_plugin instanceof Hidden);
+
       // Populate default value or value.
-      if ($element_plugin->hasProperty('default_value')) {
+      if ($element_plugin->hasProperty('default_value') || $is_hidden) {
         $element['#default_value'] = $values[$key];
       }
       elseif ($element_plugin->hasProperty('value')) {
