@@ -1775,3 +1775,10 @@ function webform_update_8094() {
   _webform_update_webform_settings();
 }
 
+/**
+ * Issue #2918721: Access controlling Webform administration.
+ */
+function webform_update_8095() {
+  _webform_update_webform_settings();
+}
+

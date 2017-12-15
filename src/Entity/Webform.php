@@ -919,6 +919,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         'users' => [],
         'permissions' => [],
       ],
+      'administer' => [
+        'roles' => [],
+        'users' => [],
+        'permissions' => [],
+      ],
     ];
   }
 
@@ -945,11 +950,16 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     $access_rules = $this->getAccessRules() + static::getDefaultAccessRules();
 
-    if (in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any'])
-      && $this->checkAccessRule($access_rules[$operation], $account)) {
+    // Check administer access rule and grant full access to user.
+    if ($this->checkAccessRule($access_rules['administer'], $account)) {
       return TRUE;
     }
 
+    // Check operation specific access rules.
+    if (in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any', 'administer'])
+      && $this->checkAccessRule($access_rules[$operation], $account)) {
+      return TRUE;
+    }
     if (isset($access_rules[$operation . '_any'])
       && $this->checkAccessRule($access_rules[$operation . '_any'], $account)) {
       return TRUE;

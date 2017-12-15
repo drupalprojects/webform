@@ -458,6 +458,28 @@ webform.webform.*:
               sequence:
                 type: string
                 label: 'Permission'
+        administer:
+          type: mapping
+          label: 'Administer webform and submissions'
+          mapping:
+            roles:
+              type: sequence
+              label: 'Roles'
+              sequence:
+                type: string
+                label: 'Role'
+            users:
+              type: sequence
+              label: 'Users'
+              sequence:
+                type: integer
+                label: 'User IDs'
+            permissions:
+              type: sequence
+              label: 'Permissions'
+              sequence:
+                type: string
+                label: 'Permission'
     handlers:
       type: sequence
       label: 'Webform handlers'
