@@ -55,6 +55,9 @@ class WebformResultsExportOptionsTest extends WebformTestBase {
     $this->assertRaw('Abraham,Lincoln');
     $this->assertRaw('Hillary,Clinton');
 
+    // Check special characters.
+    $this->assertRaw("quotes' \"\"","html <markup>");
+
     // Check delimiter.
     $this->getExport($webform, ['delimiter' => '|']);
     $this->assertRaw('"First name"|"Last name"');
@@ -135,7 +138,7 @@ class WebformResultsExportOptionsTest extends WebformTestBase {
     $this->assertRaw('Address,"Address 2",City/Town,State/Province,"Zip/Postal Code",Country');
 
     // Check limit.
-    $this->getExport($webform, ['range_type' => 'latest', 'range_latest' => 1]);
+    $this->getExport($webform, ['range_type' => 'latest', 'range_latest' => 2]);
     $this->assertRaw('Hillary,Clinton');
     $this->assertNoRaw('George,Washington');
     $this->assertNoRaw('Abraham,Lincoln');

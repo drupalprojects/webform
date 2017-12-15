@@ -247,37 +247,20 @@ abstract class OptionsBase extends WebformElementBase {
   }
 
   /**
-   * Format an element's value as text.
-   *
-   * @param array $element
-   *   An element.
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return \Drupal\Component\Render\MarkupInterface|string
-   *   The element's value formatted as text.
-   *   Use Markup::create() to make sure the element's value is not double
-   *   escaped when used as a token.
-   *
-   * @see _webform_token_get_submission_value()
+   * {@inheritdoc}
    */
-  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
+  protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $format = $this->getItemFormat($element);
+    $value = $this->formatTextItem($element, $webform_submission, ['prefixing' => FALSE] + $options);
 
-    switch ($format) {
-      case 'raw':
-        return Markup::create($value);
+    if ($format === 'raw') {
+      return Markup::create($value);
+    }
 
-      case 'value':
-        if (isset($element['#options'])) {
-          $flattened_options = OptGroup::flattenOptions($element['#options']);
-          $options_description = $this->hasProperty('options_description_display');
-          $value = WebformOptionsHelper::getOptionText($value, $flattened_options, $options_description);
-        }
-        break;
+    if (isset($element['#options'])) {
+      $flattened_options = OptGroup::flattenOptions($element['#options']);
+      $options_description = $this->hasProperty('options_description_display');
+      $value = WebformOptionsHelper::getOptionText($value, $flattened_options, $options_description);
     }
 
     // Build a render that used #plain_text so that HTML characters are escaped.
@@ -292,17 +275,49 @@ abstract class OptionsBase extends WebformElementBase {
       $build = ['#plain_text' => $value];
     }
 
-    // Apply #field prefix and #field_suffix to the render array.
-    if (isset($element['#field_prefix'])) {
-      $build['#prefix'] = $element['#field_prefix'];
-    }
-    if (isset($element['#field_suffix'])) {
-      $build['#suffix'] = $element['#field_suffix'];
+    $options += ['prefixing' => TRUE];
+    if ($options['prefixing']) {
+      if (isset($element['#field_prefix'])) {
+        $build['#prefix'] = $element['#field_prefix'];
+      }
+      if (isset($element['#field_suffix'])) {
+        $build['#suffix'] = $element['#field_suffix'];
+      }
     }
 
-    return \Drupal::service('renderer')->renderPlain($build);
+    return $build;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+    $format = $this->getItemFormat($element);
+
+    if ($format === 'raw') {
+      return $value;
+    }
+
+    if (isset($element['#options'])) {
+      $flattened_options = OptGroup::flattenOptions($element['#options']);
+      $options_description = $this->hasProperty('options_description_display');
+      $value = WebformOptionsHelper::getOptionText($value, $flattened_options, $options_description);
+    }
+
+    $options += ['prefixing' => TRUE];
+    $options += ['prefixing' => TRUE];
+    if ($options['prefixing']) {
+      if (isset($element['#field_prefix'])) {
+        $value = strip_tags($element['#field_prefix']) . $value;
+      }
+      if (isset($element['#field_suffix'])) {
+        $value .= strip_tags($element['#field_suffix']);
+      }
+    }
+
+    return $value;
+  }
 
   /**
    * {@inheritdoc}

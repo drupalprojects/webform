@@ -1338,29 +1338,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   The element's value formatted as HTML or a render array.
    */
   protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    return $this->formatTextItem($element, $webform_submission, $options);
-  }
-
-  /**
-   * Format an element's value as text.
-   *
-   * @param array $element
-   *   An element.
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
-   * @param array $options
-   *   An array of options.
-   *
-   * @return \Drupal\Component\Render\MarkupInterface|string
-   *   The element's value formatted as text.
-   *   Use Markup::create() to make sure the element's value is not double
-   *   escaped when used as a token.
-   *
-   * @see _webform_token_get_submission_value()
-   */
-  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $value = $this->getValue($element, $webform_submission, $options);
     $format = $this->getItemFormat($element);
+    $value = $this->formatTextItem($element, $webform_submission, ['prefixing' => FALSE] + $options);
 
     if ($format === 'raw') {
       return Markup::create($value);
@@ -1378,15 +1357,53 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $build = ['#plain_text' => $value];
     }
 
-    // Apply #field prefix and #field_suffix to the render array.
-    if (isset($element['#field_prefix'])) {
-      $build['#prefix'] = $element['#field_prefix'];
-    }
-    if (isset($element['#field_suffix'])) {
-      $build['#suffix'] = $element['#field_suffix'];
+    $options += ['prefixing' => TRUE];
+    if ($options['prefixing']) {
+      if (isset($element['#field_prefix'])) {
+        $build['#prefix'] = $element['#field_prefix'];
+      }
+      if (isset($element['#field_suffix'])) {
+        $build['#suffix'] = $element['#field_suffix'];
+      }
     }
 
-    return \Drupal::service('renderer')->renderPlain($build);
+    return $build;
+  }
+
+  /**
+   * Format an element's value as text.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return string
+   *   The element's value formatted as text.
+   *
+   * @see _webform_token_get_submission_value()
+   */
+  protected function formatTextItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $value = $this->getValue($element, $webform_submission, $options);
+    $format = $this->getItemFormat($element);
+
+    if ($format === 'raw') {
+      return $value;
+    }
+
+    $options += ['prefixing' => TRUE];
+    if ($options['prefixing']) {
+      if (isset($element['#field_prefix'])) {
+        $value = strip_tags($element['#field_prefix']) . $value;
+      }
+      if (isset($element['#field_suffix'])) {
+        $value .= strip_tags($element['#field_suffix']);
+      }
+    }
+
+    return $value;
   }
 
   /**
