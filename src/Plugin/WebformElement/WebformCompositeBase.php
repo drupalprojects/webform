@@ -369,6 +369,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
           }
           $lines[$key]['#suffix'] = '<br />';
         }
+        // Remove the <br/> suffix from the last line.
+        unset($lines[$key]['#suffix']);
         return $lines;
     }
   }

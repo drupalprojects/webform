@@ -97,8 +97,8 @@ john@example.com',
   Springfield, Alabama. 12345
   United States
   jane@example.com',
-      'webform_submission:values:contacts:html' => '<div class="item-list"><ul><li>John Smith<br />10 Main Street<br />Springfield, Alabama. 12345<br />United States<br /><a href="mailto:john@example.com">john@example.com</a><br /></li><li>Jane Doe<br />10 Main Street<br />Springfield, Alabama. 12345<br />United States<br /><a href="mailto:jane@example.com">jane@example.com</a><br /></li></ul></div>',
-      'webform_submission:values:contacts:0:html' => 'John Smith<br />10 Main Street<br />Springfield, Alabama. 12345<br />United States<br /><a href="mailto:john@example.com">john@example.com</a><br />',
+      'webform_submission:values:contacts:html' => '<div class="item-list"><ul><li>John Smith<br />10 Main Street<br />Springfield, Alabama. 12345<br />United States<br /><a href="mailto:john@example.com">john@example.com</a></li><li>Jane Doe<br />10 Main Street<br />Springfield, Alabama. 12345<br />United States<br /><a href="mailto:jane@example.com">jane@example.com</a></li></ul></div>',
+      'webform_submission:values:contacts:0:html' => 'John Smith<br />10 Main Street<br />Springfield, Alabama. 12345<br />United States<br /><a href="mailto:john@example.com">john@example.com</a>',
       'webform_submission:values:contacts:0:name' => 'John Smith',
       'webform_submission:values:contacts:1:name' => 'Jane Doe',
       'webform_submission:values:contacts:0:email:html' => '<a href="mailto:john@example.com">john@example.com</a>',
