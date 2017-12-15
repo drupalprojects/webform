@@ -1333,7 +1333,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['settings_access'] = [
       'group' => 'settings',
       'title' => $this->t('Settings: Access'),
-      'content' => $this->t('The <strong>Access</strong> settings page allows an administrator to determine who can create, update, delete and purge webform submissions.'),
+      'content' => $this->t('The <strong>Access</strong> settings page allows an administrator to determine who can administer a webform and/or create, update, delete and purge webform submissions.'),
       'video_id' => 'access',
       'routes' => [
         // @see /admin/structure/webform/manage/{webform}/access

@@ -41,21 +41,22 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler {
     $is_owner = ($account->isAuthenticated() && $account->id() == $uid);
     // Check if 'update' or 'delete' of 'own' or 'any' webform is allowed.
     if ($account->isAuthenticated()) {
+      $has_administer = $entity->checkAccessRules('administer', $account);
       switch ($operation) {
         case 'update':
-          if ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)) {
+          if ($has_administer || $account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)) {
             return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
           }
           break;
 
         case 'duplicate':
-          if ($account->hasPermission('create webform') && ($entity->isTemplate() || ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)))) {
+          if ($has_administer || $account->hasPermission('create webform') && ($entity->isTemplate() || ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)))) {
             return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
           }
           break;
 
         case 'delete':
-          if ($account->hasPermission('delete any webform') || ($account->hasPermission('delete own webform') && $is_owner)) {
+          if ($has_administer || $account->hasPermission('delete any webform') || ($account->hasPermission('delete own webform') && $is_owner)) {
             return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
           }
           break;
