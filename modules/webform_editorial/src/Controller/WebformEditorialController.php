@@ -168,6 +168,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           $video = $this->helpManager->getVideo($info['video_id']);
           $links[] = Link::fromTextAndUrl('Video', Url::fromUri('https://www.youtube.com/watch', ['query' => ['v' => $video['youtube_id']]]))->toString();
         }
+        if (is_array($info['content'])) {
+          $info['content'] = $this->renderer->renderPlain($info['content']);
+        }
         $rows[] = [
           'data' => [
             ['data' => $name],
