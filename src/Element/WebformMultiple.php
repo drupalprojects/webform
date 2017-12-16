@@ -68,7 +68,7 @@ class WebformMultiple extends FormElement {
       }
     }
     elseif (is_array($input) && isset($input['items'])) {
-      return $input['items'];
+      return static::convertValuesToItems($element, $input['items']);
     }
     else {
       return NULL;
@@ -704,14 +704,15 @@ class WebformMultiple extends FormElement {
     // @see \Drupal\webform\Element\WebformEmailConfirm::validateWebformEmailConfirm
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
-    // Convert values to items and validate duplicate keys.
-    try {
-      $items = static::convertValuesToItems($element, $values['items']);
-    }
-    catch (\Exception $exception) {
-      $form_state->setError($element, Markup::create($exception->getMessage()));
+
+    // Validate unique keys.
+    if ($error_message = static::validateUniqueKeys($element, $values['items'])) {
+      $form_state->setError($element, $error_message);
       return;
     }
+
+    // Convert values to items and validate duplicate keys.
+    $items = static::convertValuesToItems($element, $values['items']);
 
     // Validate required items.
     if (!empty($element['#required']) && empty($items)) {
@@ -796,13 +797,6 @@ class WebformMultiple extends FormElement {
         $key_name = $element['#key'];
         $key_value = $item[$key_name];
         unset($item[$key_name]);
-
-        // Validate unique #key.
-        if (isset($items[$key_value])) {
-          $key_title = isset($element['#element'][$key_name]['#title']) ? $element['#element'][$key_name]['#title'] : $key_name;
-          throw new \Exception(t("The %title '@key' is already in use. It must be unique.", ['@key' => $key_value, '%title' => $key_title]));
-        }
-
         $items[$key_value] = $item;
       }
       else {
@@ -811,6 +805,44 @@ class WebformMultiple extends FormElement {
     }
 
     return $items;
+  }
+
+  /**
+   * Validate composite element has unique keys.
+   *
+   * @param array $element
+   *   The multiple element.
+   * @param array $values
+   *   An array containing of item and weight.
+   *
+   * @return NULL|string
+   *   NULL if element has unique keys, else an error message with
+   *   the duplicate key.
+   */
+  protected static function validateUniqueKeys(array $element, array $values) {
+    // Only validate if the element's #key is defined.
+    if (!isset($element['#key'])) {
+      return NULL;
+    }
+
+    $unique_keys = [];
+    foreach ($values as $value) {
+      $item = (isset($value['_item_'])) ? $value['_item_'] : $value;
+      $key_name = $element['#key'];
+      $key_value = $item[$key_name];
+      if (empty($key_value)) {
+        continue;
+      }
+
+      if (isset($unique_keys[$key_value])) {
+        $key_title = isset($element['#element'][$key_name]['#title']) ? $element['#element'][$key_name]['#title'] : $key_name;
+        $t_args = ['@key' => $key_value, '%title' => $key_title];
+        return t("The %title '@key' is already in use. It must be unique.", $t_args);
+      }
+
+      $unique_keys[$key_value] = $key_value;
+    }
+    return NULL;
   }
 
   /**
