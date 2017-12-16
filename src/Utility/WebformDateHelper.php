@@ -180,7 +180,7 @@ class WebformDateHelper {
       $increment = 1;
       while ($increment < 10) {
         $increment += 1;
-        $options[$year_optgroup][($increment * $year)] = t('every @increment year', ['@increment' => $increment]);
+        $options[$year_optgroup][($increment * $year)] = t('every @increment years', ['@increment' => $increment]);
       }
 
       self::$intervalOptions = $options;
