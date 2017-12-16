@@ -30,7 +30,7 @@
       // Set active tab and clear the location hash once it is set.
       if (location.hash) {
         var active = $('a[href="' + location.hash + '"]').data('tab-index');
-        if (active != undefined) {
+        if (active !== undefined) {
           Drupal.webform.formTabs.options.active = active;
           location.hash = '';
         }

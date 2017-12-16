@@ -10,7 +10,7 @@
   /**
    * Check if an element has a specified data attribute.
    *
-   * @param string data
+   * @param {string} data
    *   The data attribute name.
    *
    * @returns {boolean}
