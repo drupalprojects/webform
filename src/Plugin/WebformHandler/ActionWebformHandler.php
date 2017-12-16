@@ -85,7 +85,7 @@ class ActionWebformHandler extends WebformHandlerBase {
       'warning' => t('Warning'),
       'info' => t('Info'),
     ];
-    $this->configuration['message'] = WebformHtmlEditor::checkMarkup($this->configuration['message']);
+    $this->configuration['message'] = $this->configuration['message'] ? WebformHtmlEditor::checkMarkup($this->configuration['message']) : NULL;
     $this->configuration['message_type'] = $message_types[$this->configuration['message_type']];
 
     // Get data element keys.
@@ -104,7 +104,7 @@ class ActionWebformHandler extends WebformHandlerBase {
     return [
       'states' => [WebformSubmissionInterface::STATE_COMPLETED],
       'notes' => '',
-      'sticky' => '',
+      'sticky' => NULL,
       'data' => '',
       'message' => '',
       'message_type' => 'status',
@@ -243,12 +243,7 @@ class ActionWebformHandler extends WebformHandlerBase {
     $this->configuration['states'] = array_values(array_filter($this->configuration['states']));
 
     // Cleanup sticky.
-    if ($this->configuration['sticky'] === '') {
-      $this->configuration['sticky'] = NULL;
-    }
-    else {
-      $this->configuration['sticky'] = (bool) $this->configuration['sticky'];
-    }
+    $this->configuration['sticky'] = ($this->configuration['sticky'] === '') ? NULL : (bool) $this->configuration['sticky'];
 
     // Cast debug.
     $this->configuration['debug'] = (bool) $this->configuration['debug'];

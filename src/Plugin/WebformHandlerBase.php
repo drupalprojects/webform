@@ -577,7 +577,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
         continue;
       }
 
-      if (isset($default_configuration[$element_key]) && isset($element['#type'])) {
+      if (array_key_exists($element_key, $default_configuration) && isset($element['#type'])) {
         $element['#parents'] = ['settings', $element_key];
       }
       else {
