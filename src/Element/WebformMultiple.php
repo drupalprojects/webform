@@ -247,16 +247,16 @@ class WebformMultiple extends FormElement {
         $composite_element['#access'] = FALSE;
       }
 
-      // If #header then hide the element's #title.
-      if ($element['#header'] && !isset($composite_element['#title_display'])) {
-        $composite_element['#title_display'] = 'invisible';
-      }
-
       // Initialize, prepare, and populate composite sub-element.
       $element_plugin = $element_manager->getElementInstance($composite_element);
       $element_plugin->initialize($composite_element);
       $element_plugin->prepare($composite_element);
       $element_plugin->finalize($composite_element);
+
+      // If #header then hide the element's #title.
+      if ($element['#header'] && !isset($composite_element['#title_display'])) {
+        $composite_element['#title_display'] = 'invisible';
+      }
 
       $element['#element'][$composite_key] = $composite_element;
     }
