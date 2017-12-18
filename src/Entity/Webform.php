@@ -1206,7 +1206,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       // the translation to the elements.
       if ($config_translation && $this->langcode != $language_manager->getCurrentLanguage()->getId()) {
         $elements = $translation_manager->getElements($this);
-        $this->elementsTranslations = Yaml::decode($this->elements);
+        $this->elementsTranslations = $translation_manager->getElements($this, $language_manager->getCurrentLanguage()->getId());
       }
       else {
         $elements = Yaml::decode($this->elements);

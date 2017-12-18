@@ -106,6 +106,24 @@ class WebformEntityTranslationTest extends WebformTestBase {
     $this->assertEqual(['textfield' => ['#title' => 'French']], $translation_element);
 
     /**************************************************************************/
+    // Submissions.
+    /**************************************************************************/
+
+    // Check English table headers are not translated.
+    $this->drupalGet('admin/structure/webform/manage/test_translation/results/submissions');
+    $this->assertRaw('>Text field<');
+    $this->assertRaw('>Select (options)<');
+    $this->assertRaw('>Select (custom)<');
+    $this->assertRaw('>Composite<');
+
+    // Check Spanish table headers are translated
+    $this->drupalGet('es/admin/structure/webform/manage/test_translation/results/submissions');
+    $this->assertRaw('>Campo de texto<');
+    $this->assertRaw('>Seleccione (opciones)<');
+    $this->assertRaw('>Seleccione (personalizado)<');
+    $this->assertRaw('>Compuesto<');
+
+    /**************************************************************************/
     // Site wide language
     /**************************************************************************/
 
