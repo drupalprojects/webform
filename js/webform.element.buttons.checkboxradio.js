@@ -7,6 +7,15 @@
 
   'use strict';
 
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.buttons = Drupal.webform.buttons || {};
+  Drupal.webform.buttons.selector = Drupal.webform.buttons.selector || [
+    // Applies to Classy, Bartik, and Seven themes.
+    '.js-webform-buttons .form-radios',
+    // Applies to Stable and Bootstrap themes.
+    '.js-webform-buttons .js-form-type-radio'
+  ].join(',');
+
   /**
    * Create jQuery UI buttons (checkboxradio) element.
    *
@@ -14,7 +23,7 @@
    */
   Drupal.behaviors.webformButtonsCheckboxRadio = {
     attach: function (context) {
-      $(context).find('.js-webform-buttons .form-radios, .js-webform-buttons.form-radios, .js-webform-buttons .js-webform-radios').once('webform-buttons').each(function () {
+      $(context).find(Drupal.webform.buttons.selector).once('webform-buttons').each(function () {
         var $buttons = $(this);
 
         // Remove classes around radios and labels and move to main element.

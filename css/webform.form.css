@@ -21,11 +21,8 @@
 /**
  * Element title inline.
  */
-.webform-element--title-inline label {
+.webform-element--title-inline > label {
   display: inline;
-}
-
-.webform-element--title-inline label {
   padding-right: 0.5em;
 }
 
