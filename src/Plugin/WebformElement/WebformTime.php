@@ -29,7 +29,7 @@ class WebformTime extends WebformElementBase {
       'time_format' => 'H:i',
       'min' => '',
       'max' => '',
-      'step' => '60',
+      'step' => 60,
     ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
