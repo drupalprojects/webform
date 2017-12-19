@@ -163,16 +163,28 @@ class WebformPluginHandlerController extends ControllerBase implements Container
         continue;
       }
 
+      $is_submission_required = ($definition['submission'] === WebformHandlerInterface::SUBMISSION_REQUIRED);
+      $is_results_disabled = $webform->getSetting('results_disabled');
+
       $row = [];
 
-      $row['title']['data'] = [
-        '#type' => 'link',
-        '#title' => $definition['label'],
-        '#url' => Url::fromRoute('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => $plugin_id]),
-        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-        '#prefix' => '<div class="webform-form-filter-text-source">',
-        '#suffix' => '</div>',
-      ];
+      if ($is_submission_required && $is_results_disabled) {
+        $row['title']['data'] = [
+          '#markup' => $definition['label'],
+          '#prefix' => '<div class="webform-form-filter-text-source">',
+          '#suffix' => '</div>',
+        ];
+      }
+      else {
+        $row['title']['data'] = [
+          '#type' => 'link',
+          '#title' => $definition['label'],
+          '#url' => Url::fromRoute('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => $plugin_id]),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+          '#prefix' => '<div class="webform-form-filter-text-source">',
+          '#suffix' => '</div>',
+        ];
+      }
 
       $row['description'] = [
         'data' => [
@@ -183,8 +195,6 @@ class WebformPluginHandlerController extends ControllerBase implements Container
       $row['category'] = $definition['category'];
 
       // Check submission required.
-      $is_submission_required = ($definition['submission'] === WebformHandlerInterface::SUBMISSION_REQUIRED);
-      $is_results_disabled = $webform->getSetting('results_disabled');
       if ($is_submission_required && $is_results_disabled) {
         $row['operations']['data'] = [
           '#type' => 'html_tag',
