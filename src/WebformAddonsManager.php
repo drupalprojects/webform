@@ -153,6 +153,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Crafty Clicks.
+    $projects['webform_craftyclicks'] = [
+      'title' => $this->t('Webform Crafty Clicks'),
+      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
@@ -177,11 +185,11 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
-    // Element: Webform Crafty Clicks.
-    $projects['webform_craftyclicks'] = [
-      'title' => $this->t('Webform Crafty Clicks'),
-      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+    // Element: Webform Simple Hierarchical Select.
+    $projects['webform_shs'] = [
+      'title' => $this->t('Webform Simple Hierarchical Select'),
+      'description' => $this->t("Integrates Simple Hierarchical Select module with Webform."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_shs'),
       'category' => 'element',
     ];
 
