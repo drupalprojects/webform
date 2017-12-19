@@ -122,33 +122,6 @@ function template_preprocess_webform_actions(array &$variables) {
 }
 
 /**
- * Prepares variables for webform preview templates.
- *
- * Default template: webform-preview.html.twig.
- *
- * @param array $variables
- *   An associative array containing the following key:
- *   - webform_submission: A webform submission.
- */
-function template_preprocess_webform_preview(array &$variables) {
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $variables['webform_submission'];
-  $webform = $webform_submission->getWebform();
-
-  $variables['preview'] = [
-    '#theme' => 'webform_submission_html',
-    '#webform_submission' => $webform_submission,
-    '#excluded_elements' => $webform->getSetting('preview_excluded_elements'),
-    '#exclude_empty' => $webform->getSetting('preview_exclude_empty'),
-  ];
-
-  $settings = $webform->getSettings();
-
-  // Set attributes.
-  $variables['attributes'] = new Attribute($settings['preview_attributes']);
-}
-
-/**
  * Prepares variables for webform confirmation templates.
  *
  * Default template: webform-confirmation.html.twig.
@@ -292,55 +265,21 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
 }
 
 /**
- * Prepares variables for webform submission template.
+ * Prepares variables for webform submission templates.
  *
  * Default template: webform-submission.html.twig.
  *
  * @param array $variables
- *   An associative array containing the following key:
- *   - webform_submission: A webform submission.
+ *   An associative array containing:
+ *   - elements: An array of elements to display in view mode.
+ *   - webform_submission: The webform submissions object.
+ *   - view_mode: View mode; e.g., 'html', 'text', 'table', 'yaml', etc.
  */
 function template_preprocess_webform_submission(array &$variables) {
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $variables['webform_submission'];
-  /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
-  $source_entity = $variables['source_entity'];
-  $type = $variables['type'];
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  $variables['webform_submission'] = $variables['elements']['#webform_submission'];
+  $variables['webform'] = $variables['elements']['#webform_submission']->getWebform();
 
-  // Make sure $type is supported, else use the HTML template and
-  // display submission information because the submission is most likely
-  // being rendered without context.
-  if (in_array($type, ['html', 'table', 'text', 'yaml'])) {
-    $submission_template = 'webform_submission_' . $type;
-  }
-  else {
-    $submission_template = 'webform_submission_html';
-  }
-
-  // Information.
-  $variables['information'] = [
-    '#theme' => 'webform_submission_information',
-    '#webform_submission' => $webform_submission,
-    '#source_entity' => $source_entity,
-  ];
-
-  // Submission.
-  $variables['data'] = [
-    '#theme' => $submission_template,
-    '#webform_submission' => $webform_submission,
-    '#source_entity' => $source_entity,
-  ];
-
-  // Wrap plain text and YAML in CodeMirror view widget.
-  if (in_array($type, ['text', 'yaml'])) {
-    $variables['data'] = [
-      '#theme' => 'webform_codemirror',
-      '#code' => $variables['data'],
-      '#type' => $type,
-    ];
-  }
-
-  $variables['#attached']['library'][] = 'webform/webform.admin';
 }
 
 /**
@@ -406,100 +345,6 @@ function template_preprocess_webform_submission_information(array &$variables) {
       $variables['submissions_view'] = TRUE;
     }
   }
-}
-
-/**
- * Prepares variables for webform submission HTML template.
- *
- * Default template: webform-submission-html.html.twig.
- *
- * @param array $variables
- *   An associative array containing the following key:
- *   - webform_submission: A webform submission.
- */
-function template_preprocess_webform_submission_html(array &$variables) {
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $variables['webform_submission'];
-
-  /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
-
-  $webform = $webform_submission->getWebform();
-  $elements = $webform->getElementsInitialized();
-  $options = [
-    'excluded_elements' => $variables['excluded_elements'],
-    'exclude_empty' => $variables['exclude_empty'],
-  ];
-  $variables['html'] = $view_builder->buildElements($elements, $webform_submission, $options);
-}
-
-/**
- * Prepares variables for webform submission table template.
- *
- * Default template: webform-submission-table.html.twig.
- *
- * @param array $variables
- *   An associative array containing the following key:
- *   - webform_submission: A webform submission.
- */
-function template_preprocess_webform_submission_table(array &$variables) {
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $variables['webform_submission'];
-
-  /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
-
-  $webform = $webform_submission->getWebform();
-  $elements = $webform->getElementsInitializedFlattenedAndHasValue();
-  $options = [
-    'excluded_elements' => $variables['excluded_elements'],
-    'exclude_empty' => $variables['exclude_empty'],
-  ];
-  $variables['table'] = $view_builder->buildTable($elements, $webform_submission, $options);
-}
-
-/**
- * Prepares variables for webform submission plain text template.
- *
- * Default template: webform-submission-text.html.twig.
- *
- * @param array $variables
- *   An associative array containing the following key:
- *   - webform_submission: A webform submission.
- */
-function template_preprocess_webform_submission_text(array &$variables) {
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $variables['webform_submission'];
-
-  /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
-
-  $webform = $webform_submission->getWebform();
-  $elements = $webform->getElementsInitialized();
-  $options = [
-    'excluded_elements' => $variables['excluded_elements'],
-    'exclude_empty' => $variables['exclude_empty'],
-  ];
-  $variables['text'] = $view_builder->buildElements($elements, $webform_submission, $options, 'text');
-}
-
-/**
- * Prepares variables for webform submission YAML template.
- *
- * Default template: webform-submission-yaml.html.twig.
- *
- * @param array $variables
- *   An associative array containing the following key:
- *   - webform_submission: A webform submission.
- */
-function template_preprocess_webform_submission_yaml(array &$variables) {
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $variables['webform_submission'];
-
-  $data = $webform_submission->toArray(TRUE, TRUE);
-  $yaml = Yaml::encode($data);
-  $yaml = WebformYaml::tidy($yaml);
-  $variables['yaml'] = $yaml;
 }
 
 /**

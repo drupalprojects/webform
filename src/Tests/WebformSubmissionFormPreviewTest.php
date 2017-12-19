@@ -56,7 +56,7 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->assertRaw('<label>Name</label>' . PHP_EOL . '        test');
     $this->assertRaw('<div id="test_form_preview--email" class="webform-element webform-element-type-email js-form-item form-item js-form-type-item form-type-item js-form-item-email form-item-email">');
     $this->assertRaw('<label>Email</label>' . PHP_EOL . '        <a href="mailto:example@example.com">example@example.com</a>');
-    $this->assertRaw('<div class="webform-preview">');
+    $this->assertRaw('<div class="webform-preview js-form-wrapper form-wrapper" data-drupal-selector="edit-preview" id="edit-preview">');
 
     // Clear default preview message.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -118,7 +118,7 @@ class WebformSubmissionFormPreviewTest extends WebformTestBase {
     $this->assertFieldByName('op', '{Back}');
     $this->assertRaw('<label>Name</label>' . PHP_EOL . '        test');
     $this->assertNoRaw('<label>Email</label>');
-    $this->assertRaw('<div class="preview-custom webform-preview">');
+    $this->assertRaw('<div class="preview-custom webform-preview js-form-wrapper form-wrapper" data-drupal-selector="edit-preview" id="edit-preview">');
 
     $this->drupalGet('webform/test_form_preview');
     $this->assertNoFieldByName('op', 'Submit');

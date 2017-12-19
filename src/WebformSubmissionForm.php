@@ -16,6 +16,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Form\WebformDialogFormTrait;
@@ -1525,12 +1526,17 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->getMessageManager()->display(WebformMessageManagerInterface::FORM_PREVIEW_MESSAGE, 'warning');
 
       // Build preview.
+      $preview_attributes = new Attribute($this->getWebform()->getSetting('preview_attributes'));
+      $preview_attributes->addClass('webform-preview');
       $form['#title'] = PlainTextOutput::renderFromHtml($this->getWebformSetting('preview_title'));
       $form['preview'] = [
-        '#theme' => 'webform_preview',
-        '#webform_submission' => $this->entity,
+        '#type' => 'container',
+        '#attributes' => $preview_attributes,
         // Progress bar is -20.
         '#weight' => -10,
+        'submission' => $this->entityManager
+          ->getViewBuilder('webform_submission')
+          ->view($this->entity, 'preview'),
       ];
     }
     else {
