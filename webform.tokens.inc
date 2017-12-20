@@ -331,9 +331,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       $bubbleable_metadata->addCacheableDependency($account);
       $replacements += $token_service->generate('user', $tokens, ['user' => $account], $options, $bubbleable_metadata);
     }
-    else {
-      // For anonymous user we are going to always return empty string.
-      foreach ($tokens as $name => $original) {
+    // Make sure to clear all tokens.
+    foreach ($tokens as $name => $original) {
+      if (!isset($replacements[$original])) {
         $replacements[$original] = '';
       }
     }
