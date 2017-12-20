@@ -260,6 +260,7 @@ ui:
 libraries:
   excluded_libraries:
     - jquery.chosen
+    - jquery.icheck
 requirements:
   cdn: true
   bootstrap: true

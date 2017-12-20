@@ -142,17 +142,23 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
         $description = $this->t('The <a href=":homepage_href">@title</a> library is <a href=":external_href">externally hosted libraries</a> and loaded via a Content Delivery Network (CDN).', $t_args);
       }
 
-      $info[$library_name] = [
-        'title' => [
-          '#markup' => $title,
-          '#prefix' => '<dt>',
-          '#suffix' => '</dt>',
-        ],
-        'description' => [
+      $info[$library_name] = [];
+      $info[$library_name]['title'] = [
+        '#markup' => $title,
+        '#prefix' => '<dt>',
+        '#suffix' => '</dt>',
+      ];
+      $info[$library_name]['description'] = [
+        'content' => [
           '#markup' => $description,
-          '#prefix' => '<dd>',
-          '#suffix' => '</dd>',
         ],
+        'status' => (!empty($library['deprecated'])) ? [
+          '#markup' => $library['deprecated'],
+          '#prefix' => '<div class="color-warning"><strong>',
+          '#suffix' => '</strong></div>',
+        ] : [],
+        '#prefix' => '<dd>',
+        '#suffix' => '</dd>',
       ];
     }
 
@@ -330,6 +336,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'download_url' => Url::fromUri('https://github.com/fronteed/icheck/archive/1.0.2.zip'),
       'version' => '1.0.2 ',
       'optional' => TRUE,
+      'deprecated' => $this->t('The iCheck library is not being maintained and has been <a href=":href">deprecated</a>. It wil be removed before Webform 8.x-5.0.', [':href' => 'https://www.drupal.org/project/webform/issues/2931154']),
     ];
     $libraries['jquery.image-picker'] = [
       'title' => $this->t('jQuery: Image Picker'),

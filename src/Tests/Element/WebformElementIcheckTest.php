@@ -18,6 +18,16 @@ class WebformElementIcheckTest extends WebformElementTestBase {
   protected static $testWebforms = ['test_element_icheck'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+    $this->config('webform.settings')
+      ->set('libraries.excluded_libraries', [])
+      ->save();
+  }
+
+  /**
    * Test iCheck element.
    */
   public function testIcheckElement() {
