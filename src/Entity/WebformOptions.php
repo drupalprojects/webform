@@ -81,6 +81,13 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
   protected $category;
 
   /**
+   * Flag to used options as likert answers.
+   *
+   * @var bool
+   */
+  protected $likert = FALSE;
+
+  /**
    * The webform options options.
    *
    * @var string
@@ -93,6 +100,13 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
    * @var string
    */
   protected $optionsDecoded;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isLikert() {
+    return $this->likert;
+  }
 
   /**
    * {@inheritdoc}

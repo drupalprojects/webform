@@ -76,6 +76,13 @@ class WebformOptionsForm extends EntityForm {
       '#empty_option' => '<' . $this->t('None') . '>',
       '#default_value' => $webform_options->get('category'),
     ];
+    $form['likert'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use as likert'),
+      '#description' =>  $this->t("If checked, options will be available as answers to Likert elements. The 'Likert:' prefix will be removed from the option's label when listed as answers for a Likert elment."),
+      '#default_value' => $webform_options->get('likert'),
+      '#return_value' => FALSE,
+    ];
 
     // Call the isolated edit webform that can be overridden by the
     // webform_ui.module.

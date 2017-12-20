@@ -48,7 +48,7 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
    * {@inheritdoc}
    */
   public function getLikerts() {
-    $webform_options = $this->loadMultiple();
+    $webform_options = $this->loadByProperties(['likert' => TRUE]);
     @uasort($webform_options, [$this->entityType->getClass(), 'sort']);
 
     $likert_options = [];

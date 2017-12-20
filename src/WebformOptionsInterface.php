@@ -10,6 +10,14 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 interface WebformOptionsInterface extends ConfigEntityInterface {
 
   /**
+   * Determine if options should be used as Likert scale.
+   *
+   * @return bool
+   *   TRUE if options should be used as Likert scale.
+   */
+  public function isLikert();
+
+  /**
    * Set options (YAML) value.
    *
    * @param array $options

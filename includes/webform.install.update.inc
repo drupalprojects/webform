@@ -14,6 +14,7 @@ use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 
@@ -1782,3 +1783,18 @@ function webform_update_8095() {
   _webform_update_webform_settings();
 }
 
+/**
+ * Issue #2931888: Add a boolean flag 'use as likert' for options list and remove the machine name pattern matching in likert element.
+ */
+function webform_update_8096() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform_options.') as $config_name) {
+    $config = $config_factory->getEditable($config_name);
+    $data = $config->getRawData();
+
+    $likert = (strpos($data['id'], 'likert_') === 0) ? TRUE : FALSE;
+    WebformArrayHelper::insertAfter($data, 'category', 'likert', $likert);
+    $config->setData($data);
+    $config->save(TRUE);
+  }
+}
