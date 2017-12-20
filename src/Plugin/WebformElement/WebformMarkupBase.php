@@ -25,9 +25,7 @@ abstract class WebformMarkupBase extends WebformElementBase implements WebformEl
    * {@inheritdoc}
    */
   public function isContainer(array $element) {
-    // Markup that that supports the #display_on property should not support
-    // sub-elements.
-    return ($this->hasProperty('display_on')) ? FALSE : TRUE;
+    return FALSE;
   }
 
   /**
