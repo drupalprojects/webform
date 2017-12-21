@@ -65,6 +65,26 @@ echo 'true' > modules/webform_example_composite/webform_example_composite.featur
 echo 'true' > modules/webform_example_element/webform_example_remote_post.features.yml
 echo 'true' > modules/webform_templates/webform_templates.features.yml
 echo 'true' > modules/webform_node/webform_node.features.yml
+echo 'true' > tests/modules/webform_test.features.yml
+echo 'true' > tests/modules/webform_test_ajax.features.yml
+echo 'true' > tests/modules/webform_test_alter_hooks.features.yml
+echo 'true' > tests/modules/webform_test_block_context.features.yml
+echo 'true' > tests/modules/webform_test_block_custom.features.yml
+echo 'true' > tests/modules/webform_test_block_submission_limit.features.yml
+echo 'true' > tests/modules/webform_test_config_performance.features.yml
+echo 'true' > tests/modules/webform_test_custom_properties.features.yml
+echo 'true' > tests/modules/webform_test_element.features.yml
+echo 'true' > tests/modules/webform_test_handler.features.yml
+echo 'true' > tests/modules/webform_test_handler_remote_post.features.yml
+echo 'true' > tests/modules/webform_test_options.features.yml
+echo 'true' > tests/modules/webform_test_paragraphs.features.yml
+echo 'true' > tests/modules/webform_test_submissions.features.yml
+echo 'true' > tests/modules/webform_test_third_party_settings.features.yml
+echo 'true' > tests/modules/webform_test_translation.features.yml
+echo 'true' > tests/modules/webform_test_translation_lingotek.features.yml
+echo 'true' > tests/modules/webform_test_validate.features.yml
+echo 'true' > tests/modules/webform_test_views.features.yml
+echo 'true' > tests/modules/webform_test_wizard_custom.features.yml
 
 # Make sure all modules that are going to be exported are enabled
 drush en -y webform\
