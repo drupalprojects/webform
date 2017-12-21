@@ -111,6 +111,14 @@ elements: |
             value: 'Yes'
           selector_04:
             value: 'Yes'
+  states_custom_condition:
+    '#type': webform_element_states
+    '#title': states_custom_condition
+    '#default_value':
+      required:
+        custom_selector:
+          value:
+            pattern: '[a-z0-9]+'
 css: ''
 javascript: ''
 settings:

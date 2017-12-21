@@ -20,6 +20,37 @@
     return (typeof this.data(data) !== 'undefined');
   };
 
+  /**
+   * Adds pattern, less than, and greater than support to #state API.
+   *
+   * @type {Drupal~behavior}
+   *
+   * @see http://drupalsun.com/julia-evans/2012/03/09/extending-form-api-states-regular-expressions
+   */
+  Drupal.behaviors.webformStatesComparisions = {
+    attach: function (context, settings) {
+      if (Drupal.states) {
+        Drupal.states.Dependent.comparisons.Object = function (reference, value) {
+          if ('pattern' in reference) {
+            return (new RegExp(reference.pattern)).test(value);
+          }
+          else if ('!pattern' in reference) {
+            return !((new RegExp(reference['!pattern'])).test(value));
+          }
+          else if ('less' in reference) {
+            return (value !== '' && reference.less > value);
+          }
+          else if ('greater' in reference) {
+            return (value !== '' && reference.greater < value);
+          }
+          else {
+            return reference.indexOf(value) !== false;
+          }
+        }
+      }
+    }
+  };
+
   var $document = $(document);
 
   // Issue #2860529: Conditional required File upload field don't work.

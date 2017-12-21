@@ -78,7 +78,12 @@ states_unsupported_nesting:
     - selector_03:
         value: 'Yes'
       selector_04:
-        value: 'Yes'");
+        value: 'Yes'
+states_custom_condition:
+  required:
+    custom_selector:
+      value:
+        pattern: '[a-z0-9]+'");
 
     /**************************************************************************/
     // Rendering.

@@ -24,7 +24,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_form_states_server_required', 'test_form_states_server_wizard'];
+  protected static $testWebforms = ['test_form_states_server_required', 'test_form_states_server_wizard', 'test_form_states_server_custom'];
 
   /**
    * {@inheritdoc}
@@ -287,6 +287,29 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('state_province_b field is required.');
     $this->assertRaw('postal_code_b field is required.');
     $this->assertRaw('country_b field is required.');
+
+    /**************************************************************************/
+    // custom.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_custom');
+
+    // Check no #states required errors.
+    $this->postSubmission($webform);
+    $this->assertRaw('New submission added to Test: Form API #states custom pattern, less, and greater condition validation');
+
+    $edit = [
+      'trigger_pattern' => 'abc',
+      'trigger_not_pattern' => 'ABC',
+      'trigger_less' => 1,
+      'trigger_greater' => 11,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertNoRaw('New submission added to Test: Form API #states custom pattern, less, and greater condition validation');
+    $this->assertRaw('dependent_pattern field is required.');
+    $this->assertRaw('dependent_not_pattern field is required.');
+    $this->assertRaw('dependent_less field is required.');
+    $this->assertRaw('dependent_greater field is required.');
   }
 
   /**

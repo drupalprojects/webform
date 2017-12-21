@@ -417,6 +417,17 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     $element_plugin = $this->elementManager->getElementInstance($element);
     $element_value = $element_plugin->getElementSelectorInputValue($selector, $trigger_state, $element, $webform_submission);
 
+    // Process trigger sub state used for custom #states API validation.
+    // @see Drupal.behaviors.webformStatesComparisions
+    // @see http://drupalsun.com/julia-evans/2012/03/09/extending-form-api-states-regular-expressions
+    if ($trigger_state == 'value' && is_array($trigger_value)) {
+      $trigger_substate = key($trigger_value);
+      if (in_array($trigger_substate, ['pattern', '!pattern', 'less', 'greater'])) {
+        $trigger_state = $trigger_substate;
+        $trigger_value = reset($trigger_value);
+      }
+    }
+
     // Process trigger state/negate.
     list($trigger_state, $trigger_negate) = $this->processState($trigger_state);
 
@@ -440,6 +451,19 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         else {
           $result = ((string) $element_value === (string) $trigger_value);
         }
+        break;
+
+      case 'pattern':
+        // @see \Drupal\Core\Render\Element\FormElement::validatePattern
+        $result = preg_match('{' . $trigger_value . '}', $element_value);
+        break;
+
+      case 'less':
+        $result = ($element_value !== '' && $trigger_value > $element_value);
+        break;
+
+      case 'greater':
+        $result = ($element_value !== '' && $trigger_value < $element_value);
         break;
 
       default:
