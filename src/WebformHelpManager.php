@@ -388,7 +388,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
             '#title' => $project['title'],
             '#url' => $project['url'],
             '#prefix' => '<dt>',
-            '#suffix' => ((isset($project['recommended'])) ? ' ★': '') . '</dt>',
+            '#suffix' => ((isset($project['recommended'])) ? ' ★' : '') . '</dt>',
           ],
           'description' => [
             '#markup' => $project['description'],
@@ -440,7 +440,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'description' => [
           'content' => [
             '#markup' => $library['description'],
-            '#suffix' => '<br />'
+            '#suffix' => '<br />',
           ],
           'notes' => [
             '#markup' => $library['notes'] .

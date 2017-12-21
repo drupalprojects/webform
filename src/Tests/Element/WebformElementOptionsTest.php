@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-
 /**
  * Tests for webform element options.
  *

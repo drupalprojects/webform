@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Form;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformSubmissionExporterInterface;

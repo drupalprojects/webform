@@ -552,7 +552,7 @@ class WebformElementStates extends FormElement {
 
       foreach ($conditions as $condition_key => $condition_value) {
         if (is_string($condition_key)) {
-          $states[$index]['conditions'][] = static::getStatesArrayCondition( $condition_key, $condition_value);
+          $states[$index]['conditions'][] = static::getStatesArrayCondition($condition_key, $condition_value);
         }
         elseif (is_string($condition_value)) {
           $states[$index]['operator'] = $condition_value;
@@ -572,7 +572,7 @@ class WebformElementStates extends FormElement {
    * Get states array condition.
    *
    * @param string $selector
-   *   The selector
+   *   The selector.
    * @param array $condition
    *   The condition.
    *

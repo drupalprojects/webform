@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-
 /**
  * Tests for the webform element custom properties.
  *

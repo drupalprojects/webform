@@ -106,4 +106,5 @@ interface WebformHelpManagerInterface {
    *   An render array containing the comparison section.
    */
   public function buildComparison($docs = FALSE);
+
 }

@@ -79,7 +79,7 @@ class WebformOptionsForm extends EntityForm {
     $form['likert'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use as likert'),
-      '#description' =>  $this->t("If checked, options will be available as answers to Likert elements. The 'Likert:' prefix will be removed from the option's label when listed as answers for a Likert elment."),
+      '#description' => $this->t("If checked, options will be available as answers to Likert elements. The 'Likert:' prefix will be removed from the option's label when listed as answers for a Likert elment."),
       '#default_value' => $webform_options->get('likert'),
       '#return_value' => FALSE,
     ];

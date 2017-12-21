@@ -2,11 +2,9 @@
 
 namespace Drupal\webform\Plugin\WebformHandler;
 
-use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\webform\Element\WebformHtmlEditor;

@@ -100,7 +100,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
           'help' => [
             '#type' => 'webform_help',
             '#help' => $description,
-          ]
+          ],
         ];
       }
       else {
@@ -109,7 +109,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
           'description' => [
             '#prefix' => ' ',
             '#markup' => $description,
-          ]
+          ],
         ];
       }
     }

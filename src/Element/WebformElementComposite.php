@@ -299,8 +299,8 @@ class WebformElementComposite extends FormElement {
       $elements[$key] = WebformArrayHelper::addPrefix($element_value);
     }
 
-    // Make #options is set for composite element that requires #options.
-    foreach ($elements as $composite_key => $composite_element) {
+    // Make sure #options is set for composite element's that require #options.
+    foreach ($elements as $composite_element) {
       if (isset($composite_element['type'])) {
         /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
         $element_plugin = $element_manager->getElementInstance($composite_element);

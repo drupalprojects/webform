@@ -500,11 +500,10 @@ function _webform_page_attachments(array &$attachments) {
     $assets = $webform->getAssets();
     foreach ($assets as $type => $value) {
       if ($value) {
-        $attachments['#attached']['library'][] = 'webform/webform.' . $type . '.' . $webform->id() ;
+        $attachments['#attached']['library'][] = 'webform/webform.' . $type . '.' . $webform->id();
       }
     }
   }
-
 }
 
 /**

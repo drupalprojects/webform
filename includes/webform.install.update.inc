@@ -1621,8 +1621,8 @@ function webform_update_8082() {
   // Copied from: system_update_8007().
   $schema = \Drupal::keyValue('entity.storage_schema.sql')->getAll();
   $item = &$schema['webform_submission.field_schema_data.langcode'];
-  foreach ($item as $table_name => &$table_schema) {
-    foreach ($table_schema['fields'] as $field_name => &$field) {
+  foreach ($item as &$table_schema) {
+    foreach ($table_schema['fields'] as &$field) {
       $field['not null'] = TRUE;
     }
   }

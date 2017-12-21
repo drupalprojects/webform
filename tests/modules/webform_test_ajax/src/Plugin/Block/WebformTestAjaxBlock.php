@@ -27,7 +27,6 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected $redirectDestination;
 
-
   /**
    * Creates a WebformBlock instance.
    *

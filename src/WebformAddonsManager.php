@@ -3,9 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
  * Webform add-ons manager.
@@ -28,7 +26,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $this->projects = $this->initProjects();
   }
 
-  /**
   /**
    * {@inheritdoc}
    */

@@ -3,7 +3,6 @@
 namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;

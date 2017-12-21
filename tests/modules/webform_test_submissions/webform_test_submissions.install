@@ -31,12 +31,12 @@ function webform_test_submissions_install() {
         [
           'value' => '{Body}',
           'format' => filter_default_format(),
-        ]
+        ],
       ],
       'title' => 'Node ' . $i,
       'type' => 'webform_test_submissions',
       'uid' => 0,
-      'status' => NodeInterface::PUBLISHED
+      'status' => NodeInterface::PUBLISHED,
     ]);
     $node->save();
     $nodes[$i] = $node->id();

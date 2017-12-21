@@ -12,7 +12,6 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class WebformSubmissionAccess {
 
-
   /**
    * Check whether a webform submissions' webform has wizard pages.
    *

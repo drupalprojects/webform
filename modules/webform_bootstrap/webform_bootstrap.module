@@ -52,7 +52,7 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
     $smart_description_enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
   }
   if ($smart_description_enabled && isset($element['#description']) && is_array($element['#description']) && (empty($element['#smart_description']) || $element['#smart_description'] === TRUE)) {
-    $element['#description'] =  \Drupal::service('renderer')->renderPlain($element['#description']);
+    $element['#description'] = \Drupal::service('renderer')->renderPlain($element['#description']);
   }
 
   // Enable Bootstrap .input-group wrapper for #field_prefix.
@@ -179,7 +179,7 @@ function _webform_bootstrap_convert_button_classes(array &$classes) {
 
 /**
  * Determine if Bootstrap is the active theme.
- * 
+ *
  * @return bool
  *   TRUE if Bootstrap is the active theme.
  */

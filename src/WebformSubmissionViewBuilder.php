@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityViewBuilder;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Template\Attribute;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
 use Symfony\Component\DependencyInjection\ContainerInterface;

@@ -12,6 +12,9 @@ use Drupal\webform\Tests\WebformTestBase;
  */
 class WebformHandlerEmailRenderingTest extends WebformTestBase {
 
+  /**
+   * {@inheritdoc}
+   */
   public function setUp() {
     parent::setUp();
 
@@ -23,7 +26,6 @@ class WebformHandlerEmailRenderingTest extends WebformTestBase {
       ->set('admin', 'seven')
       ->save();
   }
-
 
   /**
    * Test email handler rendering.

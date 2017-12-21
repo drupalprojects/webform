@@ -125,7 +125,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    *   - in_draft (boolean): NULL will return all saved submissions and drafts.
    *     Defaults to FALSE.
    *   - interval (int): Limit total within an seconds interval.
-
+   *
    * @return int
    *   Total number of submissions.
    */
@@ -384,9 +384,9 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to save.
    *
-   * @return
-   *   SAVED_NEW or SAVED_UPDATED is returned depending on the operation
-   *   performed.
+   * @return bool|int
+   *   If the record insert or update failed, returns FALSE. If it succeeded,
+   *   returns SAVED_NEW or SAVED_UPDATED, depending on the operation performed.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   In case of failures, an exception is thrown.

@@ -220,7 +220,7 @@ class WebformSignature extends WebformElementBase {
     $sid = $webform_submission->id();
     $element_key = $element['#webform_key'];
 
-    $image_base_directory = 'public://webform/'. $webform->id();
+    $image_base_directory = 'public://webform/' . $webform->id();
 
     $image_signature_directory = "$image_base_directory/$element_key";
     file_prepare_directory($image_signature_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);

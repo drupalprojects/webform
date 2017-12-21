@@ -53,7 +53,7 @@ class WebformNodeReferencesListController extends EntityListBuilder implements C
   protected $fieldConfigStorage;
 
   /**
-   * The webform entity reference manager
+   * The webform entity reference manager.
    *
    * @var \Drupal\webform\WebformEntityReferenceManagerInterface
    */

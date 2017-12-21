@@ -159,7 +159,6 @@ class Captcha extends WebformElementBase {
     return $form;
   }
 
-
   /**
    * After build handler for CAPTCHA elements.
    */

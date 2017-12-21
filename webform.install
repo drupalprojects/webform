@@ -58,4 +58,3 @@ function webform_schema() {
   ];
   return $schema;
 }
-

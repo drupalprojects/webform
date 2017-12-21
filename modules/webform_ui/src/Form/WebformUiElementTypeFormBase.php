@@ -243,7 +243,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       $row['preview'] = $this->buildElementPreview($webform_element);
     }
 
-    // Operation
+    // Operation.
     $row['operation'] = [
       '#type' => 'link',
       '#title' => $label,

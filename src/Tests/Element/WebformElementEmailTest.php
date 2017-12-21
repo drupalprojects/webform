@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-
 /**
  * Tests for email_confirm and email_multiple element.
  *

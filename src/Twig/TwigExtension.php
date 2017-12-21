@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Twig;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\webform\Utility\WebformHtmlHelper;
 

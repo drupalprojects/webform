@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Form;
 
-use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormStateInterface;
 

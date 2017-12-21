@@ -130,7 +130,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
           $limit = 1;
         }
         elseif ($element['#multiple'] > 1 && $element['#multiple'] < 3) {
-          $limit =  $element['#multiple'];
+          $limit = $element['#multiple'];
         }
       }
 

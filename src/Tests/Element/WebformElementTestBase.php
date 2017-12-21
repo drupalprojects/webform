@@ -10,15 +10,15 @@ use Drupal\webform\Tests\WebformTestBase;
 abstract class WebformElementTestBase extends WebformTestBase {
 
   /**
-   * Assert element preview,
+   * Assert element preview.
    *
    * @param string $label
    *   The element's label.
-   * @param $value
+   * @param string $value
    *   The element's value.
    */
   protected function assertElementPreview($label, $value) {
-    $this->assertPattern('/<label>' . preg_quote($label, '/') . '<\/label>\s+' . preg_quote($value,'/') . '/');
+    $this->assertPattern('/<label>' . preg_quote($label, '/') . '<\/label>\s+' . preg_quote($value, '/') . '/');
   }
 
 }

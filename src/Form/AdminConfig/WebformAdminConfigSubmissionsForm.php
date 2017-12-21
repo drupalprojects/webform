@@ -160,5 +160,5 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
 
     parent::submitForm($form, $form_state);
   }
-  
+
 }

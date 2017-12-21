@@ -76,7 +76,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeTestBase {
 
     /**************************************************************************/
 
-    // Select webform A
+    // Select webform A.
     $this->drupalGet('node/1/webform/test');
     $this->clickLink('Test: Webform Node Multiple A');
 

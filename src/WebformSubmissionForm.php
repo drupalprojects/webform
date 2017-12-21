@@ -1185,7 +1185,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Build webform submission with validated and processed data.
     $this->entity = $this->buildEntity($form, $form_state);
-    
+
     // Server side #states API validation.
     $this->conditionsValidator->validateForm($form, $form_state);
 

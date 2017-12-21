@@ -32,14 +32,14 @@ interface WebformSubmissionConditionsValidatorInterface {
   /**
    * Validate state with conditions.
    *
-   * @param $state
+   * @param string $state
    *   A state.
    * @param array $conditions
    *   An associative array containing conditions.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    *
-   * @return bool|NULL
+   * @return bool|null
    *   TRUE if conditions validate. NULL if conditions can't be processed.
    */
   public function validateState($state, array $conditions, WebformSubmissionInterface $webform_submission);
@@ -52,7 +52,7 @@ interface WebformSubmissionConditionsValidatorInterface {
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    *
-   * @return bool|NULL
+   * @return bool|null
    *   TRUE if conditions validate. NULL if conditions can't be processed.
    *
    * @see drupal_process_states()
@@ -63,12 +63,12 @@ interface WebformSubmissionConditionsValidatorInterface {
    * Determine if an element is visible.
    *
    * @param array $element
-   *  An element.
+   *   An element.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
    *
    * @return bool
-   *  TRUE if the element is visible.
+   *   TRUE if the element is visible.
    */
   public function isElementVisible(array $element, WebformSubmissionInterface $webform_submission);
 

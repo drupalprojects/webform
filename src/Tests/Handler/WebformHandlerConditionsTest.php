@@ -50,7 +50,7 @@ class WebformHandlerConditionsTest extends WebformTestBase {
     $this->assertRaw('Invoked test_a: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:alterElements');
     $this->assertRaw('Invoked test_b: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:alterElements');
 
-    // Trigger only A handler
+    // Trigger only A handler.
     $this->postSubmission($webform, ['trigger_a' => TRUE]);
 
     // Check non submission hooks are executed.
@@ -67,7 +67,7 @@ class WebformHandlerConditionsTest extends WebformTestBase {
     $this->assertRaw('Test A');
     $this->assertRaw('Invoked test_a: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:confirmForm');
 
-    // Trigger only B handler
+    // Trigger only B handler.
     $this->postSubmission($webform, ['trigger_b' => TRUE]);
 
     // Check non submission hooks are executed.

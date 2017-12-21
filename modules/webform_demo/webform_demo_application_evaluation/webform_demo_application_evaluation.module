@@ -11,7 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  * Implements hook_ENTITY_TYPE_presave().
  */
 function webform_demo_application_evaluation_webform_submission_presave(WebformSubmissionInterface $webform_submission) {
-  if ($webform_submission->getWebform()->id() != 'demo_application'){
+  if ($webform_submission->getWebform()->id() != 'demo_application') {
     return;
   }
 
@@ -31,8 +31,9 @@ function webform_demo_application_evaluation_webform_submission_presave(WebformS
   if ($original_data['state'] != $current_data['state']) {
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $date_formatter = \Drupal::service('date.formatter');
-    $current_data[$current_data['state'] .'_date'] = $date_formatter->format(time(), 'html_datetime');
+    $current_data[$current_data['state'] . '_date'] = $date_formatter->format(time(), 'html_datetime');
 
     $webform_submission->setData($current_data);
   }
+
 }

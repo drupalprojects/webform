@@ -32,7 +32,7 @@ class WebformBlockCacheTest extends BrowserTestBase {
     parent::setUp();
 
     $this->authenticatedUser = $this->drupalCreateUser([
-      'access content'
+      'access content',
     ]);
 
     $this->createContentType(['type' => 'page']);
@@ -44,7 +44,7 @@ class WebformBlockCacheTest extends BrowserTestBase {
 
     $this->drupalPlaceBlock('webform_block', [
       'webform_id' => 'contact',
-      'region' => 'footer'
+      'region' => 'footer',
     ])->save();
   }
 
@@ -77,12 +77,12 @@ class WebformBlockCacheTest extends BrowserTestBase {
    */
   public function testAuthenticatedAndRestrictedVisitIsCacheable() {
     $access_rules = [
-        'create' => [
-          'roles' => [],
-          'users' => [],
-          'permissions' => ['access content'],
-        ],
-      ] + Webform::getDefaultAccessRules();
+      'create' => [
+        'roles' => [],
+        'users' => [],
+        'permissions' => ['access content'],
+      ],
+    ] + Webform::getDefaultAccessRules();
 
     Webform::load('contact')->setAccessRules($access_rules)->save();
 
@@ -94,4 +94,5 @@ class WebformBlockCacheTest extends BrowserTestBase {
     $this->drupalGet('/node/1');
     $this->assertEquals('HIT', $this->drupalGetHeader('X-Drupal-Dynamic-Cache'));
   }
+
 }

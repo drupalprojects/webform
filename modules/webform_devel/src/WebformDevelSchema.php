@@ -20,7 +20,6 @@ use Drupal\webform\WebformInterface;
 
 /**
  * Provides a webform schema generator.
- *
  */
 class WebformDevelSchema implements WebformDevelSchemaInterface {
 
@@ -53,6 +52,12 @@ class WebformDevelSchema implements WebformDevelSchemaInterface {
     $this->elementManager = $element_manager;
   }
 
+  /**
+   * Get webform scheme columns.
+   *
+   * @return array
+   *   Associative array container webform scheme columns
+   */
   public function getColumns() {
     return [
       'name' => $this->t('Name'),
@@ -65,6 +70,15 @@ class WebformDevelSchema implements WebformDevelSchemaInterface {
     ];
   }
 
+  /**
+   * Get a webform's scheme elements.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   *
+   * @return array
+   *   An associative containing a webform's scheme elements.
+   */
   public function getElements(WebformInterface $webform) {
     $records = [];
     $elements = $webform->getElementsInitializedFlattenedAndHasValue();

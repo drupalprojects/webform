@@ -160,7 +160,6 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     // Build webform submission with validated and processed data.
     // Webform submission must be rebuilt every time since the
     // $element and $form_state values can be changed by validation callbacks.
-
     /** @var \Drupal\webform\WebformSubmissionForm $form_object */
     $form_object = $form_state->getFormObject();
     $complete_form = &$form_state->getCompleteForm();
@@ -218,7 +217,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *
    * @see \Drupal\webform\WebformSubmissionForm::validateForm
    */
-  public function validateForm(array &$form, FormStateInterface $form_state)  {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     $this->validateFormRecursive($form, $form_state);
   }
 
@@ -400,7 +399,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *
    * @param array $element
    *   An element.
-   * @param $selector
+   * @param string $selector
    *   The element's selector.
    * @param array $condition
    *   The condition.
@@ -548,7 +547,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * Recurse through a form, review #states/#required, and get visible elements.
    *
    * @param array $elements
-   *   Visible elements with #states property
+   *   Visible elements with #states property.
    * @param array $form
    *   An associative array containing the structure of the form.
    */
@@ -649,10 +648,10 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   /**
    * Get input name from CSS :input[name="*"] selector.
    *
-   * @param $selector
+   * @param string $selector
    *   A CSS :input[name="*"] selector.
    *
-   * @return string|NULL
+   * @return string|null
    *   The input name or NULL if selector can not be parsed
    */
   public static function getSelectorInputName($selector) {
@@ -674,7 +673,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *
    * @see http://php.net/manual/en/faq.html.php#faq.html.arrays
    */
-  public static function getInputNameAsArray($name, $index = NULL){
+  public static function getInputNameAsArray($name, $index = NULL) {
     $name = str_replace(['][', '[', ']'], ['|', '|', ''], $name);
     $array = explode('|', $name);
     if ($index !== NULL) {

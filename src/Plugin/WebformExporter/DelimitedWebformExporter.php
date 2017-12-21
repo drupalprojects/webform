@@ -117,5 +117,4 @@ class DelimitedWebformExporter extends TabularBaseWebformExporter {
     return $record;
   }
 
-
 }

@@ -2,8 +2,6 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\Core\Render\Element\FormElement;
-
 /**
  * Provides a webform custom composite element.
  *

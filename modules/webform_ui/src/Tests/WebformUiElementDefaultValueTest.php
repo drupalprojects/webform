@@ -3,7 +3,6 @@
 namespace Drupal\webform_ui\Tests;
 
 use Drupal\webform\Tests\WebformTestBase;
-use Drupal\webform\Entity\Webform;
 
 /**
  * Tests for webform UI element.

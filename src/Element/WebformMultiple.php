@@ -5,7 +5,6 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
 
@@ -460,7 +459,7 @@ class WebformMultiple extends FormElement {
       $row['_operations_'] = [
         '#wrapper_attributes' => [
           'class' => ['webform-multiple-table--operations'],
-        ]
+        ],
       ];
       $row['_operations_']['add'] = [
         '#type' => 'image_button',
@@ -575,7 +574,7 @@ class WebformMultiple extends FormElement {
    * @param array $element
    *   The child element.
    * @param string $element_key
-   *   The child element's key
+   *   The child element's key.
    * @param array $parents
    *   The main element's parents.
    */
@@ -815,7 +814,7 @@ class WebformMultiple extends FormElement {
    * @param array $values
    *   An array containing of item and weight.
    *
-   * @return NULL|string
+   * @return null|string
    *   NULL if element has unique keys, else an error message with
    *   the duplicate key.
    */

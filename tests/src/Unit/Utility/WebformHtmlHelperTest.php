@@ -14,7 +14,6 @@ use Drupal\Tests\UnitTestCase;
  */
 class WebformHtmlHelperTest extends UnitTestCase {
 
-
   /**
    * Tests WebformHtmlHelper has block tags with WebformHtmlHelper::containsHtml().
    *
@@ -31,6 +30,7 @@ class WebformHtmlHelperTest extends UnitTestCase {
     $result = WebformHtmlHelper::containsHtml($text);
     $this->assertEquals($expected, $result, $text);
   }
+
   /**
    * Data provider for testContainsHtml().
    *

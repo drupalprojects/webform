@@ -76,7 +76,7 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
       '#open' => TRUE,
     ];
 
-    $export_options = $config->get('export') ;
+    $export_options = $config->get('export');
     $export_form_state = new FormState();
     $this->submissionExporter->buildExportOptionsForm($form['export_settings'], $export_form_state, $export_options);
 
@@ -107,5 +107,5 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
 
     parent::submitForm($form, $form_state);
   }
-  
+
 }

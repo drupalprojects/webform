@@ -131,7 +131,7 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->assertRaw('File not found');
     $this->assertRaw('Unable to process this submission. Please contact the site administrator.');
 
-    // Disable saving of results
+    // Disable saving of results.
     $webform->setSetting('results_disabled', TRUE);
     $webform->save();
 

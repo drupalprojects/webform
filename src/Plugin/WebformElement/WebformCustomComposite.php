@@ -67,7 +67,7 @@ class WebformCustomComposite extends WebformCompositeBase {
     // Apply multiple properties.
     $multiple_properties = $this->getDefaultMultipleProperties();
     foreach ($multiple_properties as $multiple_property => $multiple_value) {
-      if (strpos($multiple_property,'multiple__') === 0) {
+      if (strpos($multiple_property, 'multiple__') === 0) {
         $property_name = str_replace('multiple__', '', $multiple_property);
         $element["#$property_name"] = (isset($element["#$multiple_property"])) ? $element["#$multiple_property"] : $multiple_value;
       }

@@ -466,7 +466,7 @@ class WebformScheduledEmailManager implements WebformScheduledEmailManagerInterf
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   A webform or webform submission.
    * @param string|null $handler_id
-   *   A webform handler id
+   *   A webform handler id.
    * @param int $limit
    *   The maximum number of schedule emails to be scheduled per request.
    *

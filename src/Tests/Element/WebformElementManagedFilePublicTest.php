@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-
 /**
  * Test for webform element managed public file handling (DRUPAL-PSA-2016-003).
  *

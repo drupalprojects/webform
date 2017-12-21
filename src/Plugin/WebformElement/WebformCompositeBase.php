@@ -425,7 +425,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         'cellspacing' => 0,
         'cellpadding' => 5,
         'border' => 1,
-      ]
+      ],
     ];
   }
 
@@ -1131,7 +1131,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
       || $element_plugin->hasMultipleValues($element)
       || $element_plugin instanceof WebformElementEntityReferenceInterface
       || $element_plugin instanceof WebformComputedBase
-      || $element_plugin instanceof WebformManagedFileBase ) {
+      || $element_plugin instanceof WebformManagedFileBase) {
       return FALSE;
     }
 

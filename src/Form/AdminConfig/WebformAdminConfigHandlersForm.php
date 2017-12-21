@@ -126,7 +126,7 @@ class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
       '#title' => $this->t('Default sender name'),
       '#description' => $this->t('The default sender name which is used along with the default sender email address.'),
       '#default_value' => $config->get('mail.default_sender_name'),
-    ];    
+    ];
     $form['mail']['default_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default email subject'),

@@ -74,7 +74,7 @@ class WebformHtmlEditor extends FormElement {
 
     // If HTML disabled and no #format is specified return simple CodeMirror
     // HTML editor.
-    $disabled = \Drupal::config('webform.settings')->get('html_editor.disabled') ?: ($element['#format'] ===  FALSE);
+    $disabled = \Drupal::config('webform.settings')->get('html_editor.disabled') ?: ($element['#format'] === FALSE);
     if ($disabled) {
       $element['value'] += [
         '#type' => 'webform_codemirror',

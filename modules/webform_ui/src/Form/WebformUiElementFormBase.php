@@ -368,7 +368,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     // Still set the redirect URL just to be safe.
     $form_state->setRedirectUrl($this->webform->toUrl('edit-form', ['query' => ['update' => $key]]));
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -442,7 +442,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   /****************************************************************************/
   // Element key handling.
   /****************************************************************************/
-  
+
   /**
    * Determines if the webform element key already exists.
    *
@@ -537,7 +537,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       $form['properties']['#type'] = 'container';
       $form['properties']['#attributes']['style'] = 'display: none';
 
-      // Add tokens
+      // Add tokens.
       $form['token_tree_link'] = $form['properties']['token_tree_link'];
 
       // Disable client-side validation.

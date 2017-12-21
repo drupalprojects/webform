@@ -638,7 +638,6 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       ],
     ];
 
-
     // Hide default value, which is not applicable for file uploads.
     $form['default']['#access'] = FALSE;
 

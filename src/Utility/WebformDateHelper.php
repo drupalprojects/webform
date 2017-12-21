@@ -15,14 +15,14 @@ class WebformDateHelper {
    *
    * @var array
    */
-  static $intervalOptions;
+  protected static $intervalOptions;
 
   /**
    * Cached interval options flattened.
    *
    * @var array
    */
-  static $intervalOptionsFlattened;
+  protected static $intervalOptionsFlattened;
 
   /**
    * Wrapper for DateFormatter that return an empty string for empty timestamps.
@@ -111,7 +111,7 @@ class WebformDateHelper {
   /**
    * Get interval text.
    *
-   * @param int|NULL $interval
+   * @param int|null $interval
    *   An interval.
    *
    * @return string
@@ -124,14 +124,11 @@ class WebformDateHelper {
   }
 
   /**
-   * Get interval options used by submission limits.
-   *
-   * @return array
-   *   An associative array of interval options.
+   * Initialize interval options used by submission limits.
    */
-  protected static function initIntervalOptions () {
+  protected static function initIntervalOptions() {
     if (!isset(self::$intervalOptions)) {
-      $options = ['' => t('ever'),];
+      $options = ['' => t('ever')];
 
       // Minute.
       $minute = 60;

@@ -61,4 +61,5 @@ interface WebformThemeManagerInterface {
    *   The rendered HTML.
    */
   public function renderPlain(array &$elements, $default_theme = TRUE);
+
 }

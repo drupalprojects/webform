@@ -275,4 +275,5 @@ class WebformSubmissionResendForm extends FormBase {
   public function ajaxMessageCallback(array $form, FormStateInterface $form_state) {
     return $form['message'];
   }
+
 }

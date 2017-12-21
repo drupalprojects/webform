@@ -61,9 +61,9 @@ function webform_ui_webform_submission_form_alter(array &$form, FormStateInterfa
  * Implements hook_contextual_links_view_alter().
  *
  * Issue #2752637: hook_contextual_links_view_alter not getting called.
- * @see https://www.drupal.org/node/2752637
- *
  * Issue #2773591: New contextual links are not available after a module is installed
+ *
+ * @see https://www.drupal.org/node/2752637
  * @see https://www.drupal.org/node/2773591
  */
 function webform_ui_contextual_links_view_alter(&$element, $items) {

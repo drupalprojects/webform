@@ -7,14 +7,12 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\filter\Entity\FilterFormat;
-use Drupal\node\NodeInterface;
 use Drupal\simpletest\WebTestBase;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\Role;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Entity\WebformSubmission;
 
 /**
  * Defines an abstract test base for webform tests.

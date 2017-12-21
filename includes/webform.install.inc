@@ -9,7 +9,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\Plugin\WebformHandlerInterface;
 
 /**
  * Update admin settings to reflect changes in the default settings.

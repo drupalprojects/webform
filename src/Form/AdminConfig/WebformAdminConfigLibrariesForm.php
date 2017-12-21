@@ -127,8 +127,6 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
           ],
         ],
       ];
-
-
     }
     $form['libraries']['excluded_libraries'] = [
       '#type' => 'tableselect',

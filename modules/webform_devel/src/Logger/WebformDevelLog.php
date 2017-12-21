@@ -56,9 +56,10 @@ class WebformDevelLog implements LoggerInterface {
       $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
       $message = empty($message_placeholders) ? $message : strtr($message, $message_placeholders);
       $build = ['#markup' => $message];
-      // IMPORTANT: Do not injected the renderer into WebformDevelLog because it will cause 
-      // "LogicException: The database connection is not serializable." errors for all Ajax 
-      // callbacks.
+      // IMPORTANT: Do not injected the renderer into WebformDevelLog because
+      // it will cause...
+      // "LogicException: The database connection is not serializable." errors
+      // for all Ajax callbacks.
       // @see \Drupal\Core\Render\Renderer
       drupal_set_message(\Drupal::service('renderer')->renderPlain($build), ($level <= 3) ? 'error' : 'warning');
     }

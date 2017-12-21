@@ -19,7 +19,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
-use Drupal\webform\Plugin\WebformElement\WebformCompositeBase;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
@@ -547,7 +546,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Settings: Reply-to.
     $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: Return path.
-    $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path '), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path'), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
     // Settings: Sender mail.
     $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), $mail_element_options, $options_element_options);
     // Settings: Sender name.
@@ -686,7 +685,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       ];
 
       // Clear tokens from email values.
-      if (strpos($configuration_key, '_mail') !==  FALSE) {
+      if (strpos($configuration_key, '_mail') !== FALSE) {
         $token_options['clear'] = TRUE;
       }
 
@@ -729,7 +728,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
           '#text' => $message['body'],
           '#format' => $format,
         ];
-        $message['body']= $this->themeManager->renderPlain($build);
+        $message['body'] = $this->themeManager->renderPlain($build);
       }
     }
 
@@ -743,8 +742,6 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $this->themeManager->setActiveTheme();
 
     return $message;
-
-
   }
 
   /**

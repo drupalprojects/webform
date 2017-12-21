@@ -130,9 +130,6 @@ class WebformElementHelper {
    *   The property key.
    * @param mixed $property_value
    *   The property value.
-   *
-   * @return array
-   *   A render element with with a property set on all elements.
    */
   public static function setPropertyRecursive(array &$element, $property_key, $property_value) {
     $element[$property_key] = $property_value;
@@ -457,7 +454,7 @@ class WebformElementHelper {
    * @param array $element
    *   An element.
    * @param array $element_validate
-   *   Element validate callback
+   *   Element validate callback.
    *
    * @return array
    *   The element with validate callback.
@@ -472,6 +469,7 @@ class WebformElementHelper {
     }
     return $element;
   }
+
   /**
    * Webform element #element_validate callback: Execute #element_validate and suppress errors.
    *

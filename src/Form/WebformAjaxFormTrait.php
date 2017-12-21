@@ -102,7 +102,6 @@ trait WebformAjaxFormTrait {
     if (!$this->moduleHandler->moduleExists('quickedit')) {
       return FALSE;
     }
-    
     return (\Drupal::request()->query->get('destination')) ? TRUE : FALSE;
   }
 
@@ -228,7 +227,7 @@ trait WebformAjaxFormTrait {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   An AjaxResponse or WebformAjaxResponse object
    */
-  protected function createAjaxResponse(array $form, $form_state) {
+  protected function createAjaxResponse(array $form, FormStateInterface $form_state) {
     $form_object = $form_state->getFormObject();
     if ($form_object instanceof WebformSubmissionForm) {
       /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
@@ -254,7 +253,7 @@ trait WebformAjaxFormTrait {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   An Ajax response that replaces a form.
    */
-  protected function replaceForm(array $form, $form_state) {
+  protected function replaceForm(array $form, FormStateInterface $form_state) {
     // Display messages first by prefixing it the form and setting its weight
     // to -1000.
     $form = [

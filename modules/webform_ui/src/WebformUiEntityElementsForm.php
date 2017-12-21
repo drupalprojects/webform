@@ -333,7 +333,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           $element['#title'] = Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE);
         }
         else {
-          $element['#title'] = '[' .  $element_key . ']';
+          $element['#title'] = '[' . $element_key . ']';
         }
       }
     }

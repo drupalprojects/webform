@@ -55,7 +55,6 @@ class WebformHandlerEmailBasicTest extends WebformTestBase {
     $sent_email = $this->getLastEmail();
     $this->assertEqual($sent_email['reply-to'], "John Smith <from@example.com>");
 
-
     // Check sending with the saving of results disabled.
     $webform->setSetting('results_disabled', TRUE)->save();
     $this->postSubmission($webform, ['first_name' => 'Jane', 'last_name' => 'Doe']);

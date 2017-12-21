@@ -52,13 +52,13 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
    *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $render_cache
    *   The render cache service.
-   * @param \Drupal\Core\Routing\RouteBuilderInterface $route_builder
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, CacheBackendInterface $render_cache, RouteBuilderInterface $router_builder) {
     parent::__construct($config_factory);
-    $this->moduleHandler = $module_handler;
     $this->renderCache = $render_cache;
+    $this->moduleHandler = $module_handler;
     $this->routerBuilder = $router_builder;
   }
 
@@ -271,7 +271,7 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
     $config->set('test', $form_state->getValue('test'));
     $config->set('batch', $form_state->getValue('batch'));
     $config->save();
-    
+
     // Clear render cache so that local tasks can be updated.
     // @see webform_local_tasks_alter()
     $this->renderCache->deleteAll();

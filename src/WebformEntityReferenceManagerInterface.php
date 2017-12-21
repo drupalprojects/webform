@@ -61,7 +61,7 @@ interface WebformEntityReferenceManagerInterface {
   /**
    * Determine if the entity has a webform entity reference field.
    *
-   * @param \Drupal\Core\Entity\EntityInterface|NULL $entity
+   * @param \Drupal\Core\Entity\EntityInterface|null $entity
    *   A fieldable content entity.
    *
    * @return bool
