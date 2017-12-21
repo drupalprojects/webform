@@ -214,6 +214,7 @@ class WebformMultiple extends FormElement {
         '#max' => 100,
         '#default_value' => $element['#add_more'],
         '#field_suffix' => t('more @labels', ['@labels' => $element['#labels']]),
+        '#error_no_message' => TRUE,
       ];
     }
 
