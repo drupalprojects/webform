@@ -64,6 +64,8 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
     $element['#wrapper_attributes']['id'] = $element['#id'] . '--wrapper';
     $element['#wrapper_attributes']['class'][] = 'form-composite';
 
+    $element['#attributes']['id'] = $element['#id'];
+
     // Add class name to wrapper attributes.
     $class_name = str_replace('_', '-', $element['#type']);
     static::setAttributes($element, ['js-' . $class_name, $class_name]);
