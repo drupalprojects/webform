@@ -212,6 +212,8 @@ webform.states:
   version: VERSION
   js:
     js/webform.states.js:  {}
+  dependencies:
+    - core/drupal.states
 
 # Tooltip.
 
