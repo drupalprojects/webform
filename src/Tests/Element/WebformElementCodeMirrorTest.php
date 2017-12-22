@@ -89,13 +89,30 @@ class WebformElementCodeMirrorTest extends WebformElementTestBase {
     // code:twig
     /**************************************************************************/
 
-    // Check Twig.
+    // Check disabled Twig editor.
     $this->drupalGet('webform/test_element_codemirror');
     $this->assertRaw('<label for="edit-twig-basic">twig_basic</label>');
+    $this->assertRaw('<textarea data-drupal-selector="edit-twig-basic" disabled="disabled" class="js-webform-codemirror webform-codemirror twig form-textarea resize-vertical" data-webform-codemirror-mode="twig" id="edit-twig-basic" name="twig_basic" rows="5" cols="60">
+{% set value = &quot;Hello&quot; %}
+{{ value }}
+</textarea>');
+
+    // Login and enable Twig editor.
+    $this->drupalLogin($this->rootUser);
+
+    // Check enabled Twig editor.
+    $this->drupalGet('webform/test_element_codemirror');
     $this->assertRaw('<textarea data-drupal-selector="edit-twig-basic" class="js-webform-codemirror webform-codemirror twig form-textarea resize-vertical" data-webform-codemirror-mode="twig" id="edit-twig-basic" name="twig_basic" rows="5" cols="60">
 {% set value = &quot;Hello&quot; %}
 {{ value }}
 </textarea>');
+
+    // Check that enabled Twig editor can be updated.
+    $edit = [
+      'twig_basic' => 'Can edit Twig template.',
+    ];
+    $this->drupalPostForm('webform/test_element_codemirror', $edit, t('Submit'));
+    $this->assertRaw('Can edit Twig template.');
 
     // Check invalid Twig syntax.
     $edit = [

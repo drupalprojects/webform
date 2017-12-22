@@ -22,6 +22,7 @@ use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Plugin\WebformElement\Checkbox;
 use Drupal\webform\Plugin\WebformElement\Checkboxes;
 use Drupal\webform\Plugin\WebformElement\Details;
+use Drupal\webform\Twig\TwigExtension;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformFormHelper;
@@ -1960,6 +1961,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form_object = $form_state->getFormObject();
     $webform = $form_object->getWebform();
 
+    $element_properties = $form_state->get('element_properties');
+
     /* Element settings */
 
     $form['element'] = [
@@ -2459,6 +2462,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     /* Submission display */
+    $edit_twig = TwigExtension::editTwig();
 
     $form['display'] = [
       '#type' => 'details',
@@ -2473,8 +2477,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'select',
       '#title' => $this->t('Item format'),
       '#description' => $this->t('Select how a single value is displayed.'),
-      '#options' => $this->getItemFormats() + ['custom' => $this->t('Custom...')],
+      '#options' => $this->getItemFormats(),
     ];
+    $format = isset($element_properties['format']) ? $element_properties['format'] : NULL;
+    $format_custom = ($edit_twig || $format === 'custom');
+    if ($format_custom ) {
+      $form['display']['item']['format']['#options'] += ['custom' => $this->t('Custom...')];
+    }
     $custom_states = [
       'visible' => [':input[name="properties[format]"]' => ['value' => 'custom']],
       'required' => [':input[name="properties[format]"]' => ['value' => 'custom']],
@@ -2485,6 +2494,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Item format custom HTML'),
       '#description' => $this->t('The HTML to display for a single element value. You may include HTML or <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
       '#states' => $custom_states,
+      '#access' => $format_custom,
     ];
     $form['display']['item']['format_text'] = [
       '#type' => 'webform_codemirror',
@@ -2492,6 +2502,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Item format custom Text'),
       '#description' => $this->t('The text to display for a single element value. You may include <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
       '#states' => $custom_states,
+      '#access' => $format_custom,
     ];
     $items = [
       'value' => '{{ value }}',
@@ -2510,7 +2521,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['display']['item']['patterns'] = [
       '#type' => 'details',
       '#title' => $this->t('Replacement patterns'),
-      '#access' => TRUE,
+      '#access' => $edit_twig,
       '#states' => $custom_states,
       '#value' => [
         'description' => [
@@ -2522,6 +2533,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
+
     // Items.
     $form['display']['items'] = [
       '#type' => 'fieldset',
@@ -2538,8 +2550,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'select',
       '#title' => $this->t('Items format'),
       '#description' => $this->t('Select how multiple values are displayed.'),
-      '#options' => $this->getItemsFormats() + ['custom' => $this->t('Custom...')],
+      '#options' => $this->getItemsFormats(),
     ];
+    $format_items = isset($element_properties['format_items']) ? $element_properties['format_items'] : NULL;
+    $format_items_custom = ($edit_twig || $format_items === 'custom');
+    if ($format_items_custom) {
+      $form['display']['items']['format_items']['#options'] += ['custom' => $this->t('Custom...')];
+    }
     $custom_states = [
       'visible' => [':input[name="properties[format_items]"]' => ['value' => 'custom']],
       'required' => [':input[name="properties[format_items]"]' => ['value' => 'custom']],
@@ -2550,6 +2567,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Items format custom HTML'),
       '#description' => $this->t('The HTML to display for multiple element values. You may include HTML or <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
       '#states' => $custom_states,
+      '#access' => $format_items_custom,
     ];
     $form['display']['items']['format_items_text'] = [
       '#type' => 'webform_codemirror',
@@ -2557,6 +2575,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Items format custom Text'),
       '#description' => $this->t('The text to display for multiple element values. You may include <a href=":href">Twig</a>. You may enter data from the submission as per the "Replacement patterns" below.', [':href' => 'http://twig.sensiolabs.org/documentation']),
       '#states' => $custom_states,
+      '#access' => $format_items_custom,
     ];
     $items = [
       '{{ value }}',
@@ -2565,7 +2584,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['display']['items']['patterns'] = [
       '#type' => 'details',
       '#title' => $this->t('Replacement patterns'),
-      '#access' => TRUE,
+      '#access' => $edit_twig,
       '#states' => $custom_states,
       '#value' => [
         'description' => [

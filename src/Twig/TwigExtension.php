@@ -11,6 +11,16 @@ use Drupal\webform\Utility\WebformHtmlHelper;
 class TwigExtension extends \Twig_Extension {
 
   /**
+   * Determine if the  current user can edit Twig templates.
+   *
+   * @return bool
+   *   TRUE if the  current user can edit Twig templates.
+   */
+  public static function editTwig() {
+    return (\Drupal::currentUser()->hasPermission('edit webform twig') || \Drupal::currentUser()->hasPermission('administer webform'));
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getFunctions() {
