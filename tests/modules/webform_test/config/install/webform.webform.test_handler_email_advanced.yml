@@ -196,6 +196,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: true
+      twig: false
       debug: true
       reply_to: reply_to@example.com
       return_path: return_path@example.com

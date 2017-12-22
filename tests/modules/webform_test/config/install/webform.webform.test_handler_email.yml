@@ -178,6 +178,7 @@ handlers:
       exclude_empty: true
       html: false
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''

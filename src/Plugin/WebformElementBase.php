@@ -2462,7 +2462,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     /* Submission display */
-    $edit_twig = TwigExtension::editTwig();
+    $has_edit_twig_access = TwigExtension::hasEditTwigAccess();
 
     $form['display'] = [
       '#type' => 'details',
@@ -2480,7 +2480,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#options' => $this->getItemFormats(),
     ];
     $format = isset($element_properties['format']) ? $element_properties['format'] : NULL;
-    $format_custom = ($edit_twig || $format === 'custom');
+    $format_custom = ($has_edit_twig_access || $format === 'custom');
     if ($format_custom ) {
       $form['display']['item']['format']['#options'] += ['custom' => $this->t('Custom...')];
     }
@@ -2521,7 +2521,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['display']['item']['patterns'] = [
       '#type' => 'details',
       '#title' => $this->t('Replacement patterns'),
-      '#access' => $edit_twig,
+      '#access' => $has_edit_twig_access,
       '#states' => $custom_states,
       '#value' => [
         'description' => [
@@ -2553,7 +2553,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#options' => $this->getItemsFormats(),
     ];
     $format_items = isset($element_properties['format_items']) ? $element_properties['format_items'] : NULL;
-    $format_items_custom = ($edit_twig || $format_items === 'custom');
+    $format_items_custom = ($has_edit_twig_access || $format_items === 'custom');
     if ($format_items_custom) {
       $form['display']['items']['format_items']['#options'] += ['custom' => $this->t('Custom...')];
     }
@@ -2584,7 +2584,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['display']['items']['patterns'] = [
       '#type' => 'details',
       '#title' => $this->t('Replacement patterns'),
-      '#access' => $edit_twig,
+      '#access' => $has_edit_twig_access,
       '#states' => $custom_states,
       '#value' => [
         'description' => [

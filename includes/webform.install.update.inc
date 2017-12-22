@@ -1810,3 +1810,10 @@ function webform_update_8096() {
     $config->save(TRUE);
   }
 }
+
+/**
+ * Issue #2932607: Add Twig support to email body.
+ */
+function webform_update_8097() {
+  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+}

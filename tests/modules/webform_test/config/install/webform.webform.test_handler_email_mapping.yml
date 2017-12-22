@@ -170,6 +170,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -203,6 +204,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -236,6 +238,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -271,6 +274,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -304,6 +308,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''

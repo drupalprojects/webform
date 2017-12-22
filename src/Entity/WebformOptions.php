@@ -44,6 +44,7 @@ use Drupal\webform\WebformOptionsInterface;
  *     "uuid",
  *     "label",
  *     "category",
+ *     "likert",
  *     "options",
  *   }
  * )

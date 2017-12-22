@@ -109,6 +109,9 @@ webform.handler.email:
     attachments:
       type: boolean
       label: 'Attachments'
+    twig:
+      type: boolean
+      label: 'Twig'
     debug:
       type: boolean
       label: 'Enable debugging'

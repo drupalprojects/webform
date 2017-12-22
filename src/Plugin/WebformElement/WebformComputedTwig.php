@@ -5,7 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Utility\WebformElementHelper;
-use Drupal\webform\Element\WebformMessage as WebformMessageElement;
+use Drupal\webform\Twig\TwigExtension;
 
 /**
  * Provides a 'webform_computed_twig' element.
@@ -25,66 +25,7 @@ class WebformComputedTwig extends WebformComputedBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
-    $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
-    $field_definitions = $submission_storage->getFieldDefinitions();
-    $items = [
-      '{{ webform }}',
-      '{{ webform_submission }}',
-      '{{ elements }}',
-      '{{ elements_flattened }}',
-      // @todo Dynamically generate examples for all elements.
-      // This could be overkill.
-      '{{ data.element_key }}',
-      '{{ data.element_key.delta }}',
-      '{{ data.composite_element_key.subelement_key }}',
-      '{{ data.composite_element_key.delta.subelement_key }}',
-    ];
-    foreach (array_keys($field_definitions) as $field_name) {
-      $items[] = "{{ $field_name }}";
-    }
-
-    $t_args = [
-      ':twig_href' => 'https://twig.sensiolabs.org/',
-      ':drupal_href' => 'https://www.drupal.org/docs/8/theming/twig',
-    ];
-    $output = [];
-    $output[] = [
-      '#markup' => '<p>' . $this->t('Learn about <a href=":twig_href">Twig</a> and how it is used in <a href=":drupal_href">Drupal</a>.', $t_args) . '</p>',
-    ];
-    $output[] = [
-      '#markup' => '<p>' . $this->t("The following variables are available:") . '</p>',
-    ];
-    $output[] = [
-      '#theme' => 'item_list',
-      '#items' => $items,
-    ];
-    $output[] = [
-      '#markup' => '<p>' . $this->t("You can also output tokens using the <code>webform_token()</code> function.") . '</p>',
-    ];
-    $output[] = [
-      '#markup' => "<pre>{{ webform_token('[webform_submission:values:element_value]', webform_submission) }}</pre>",
-    ];
-    $output[] = [
-      '#markup' => '<p>' . $this->t("You can also output tokens using the <code>webform_token()</code> function.") . '</p>',
-    ];
-    if ($this->currentUser->hasPermission('administer modules') && !\Drupal::moduleHandler()->moduleExists('twig_tweak')) {
-      $t_args = [
-        ':module_href' => 'https://www.drupal.org/project/twig_tweak',
-        ':documentation_href' => 'https://www.drupal.org/docs/8/modules/twig-tweak/cheat-sheet-8x-2x',
-      ];
-      $output[] = [
-        '#type' => 'webform_message',
-        '#message_type' => 'info',
-        '#message_message' => $this->t('Install the <a href=":module_href">Twig tweak</a> module, which provides a Twig extension with some <a href=":documentation_href">useful functions and filters</a> that can improve development experience.', $t_args),
-        '#storage' => WebformMessageElement::STORAGE_STATE,
-      ];
-    }
-    $form['computed']['help'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Help using Twig'),
-      'description' => $output,
-    ];
+    $form['computed']['help'] = TwigExtension::buildTwigHelp();
     $form['computed']['value']['#mode'] = 'twig';
 
     // Set #access so that help is always visible.

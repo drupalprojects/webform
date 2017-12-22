@@ -8,22 +8,36 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_format_token
-title: 'Test: Element: Format: Token'
-description: 'Test element formatting using tokens.'
-category: 'Test: Element'
+id: test_handler_email_twig
+title: 'Test: Handler: Email Twig'
+description: 'Test Twig email handler.'
+category: 'Test: Handler'
 elements: |
-  checkboxes:
-    '#type': checkboxes
-    '#title': checkboxes
-    '#options':
-      1: one
-      2: two
-      3: three
-    '#default_value':
-      - 1
-      - 2
-      - 3
+  first_name:
+    '#title': 'First name'
+    '#type': textfield
+    '#required': true
+    '#default_value': John
+  last_name:
+    '#title': 'Last name'
+    '#type': textfield
+    '#required': true
+    '#default_value': Smith
+  email:
+    '#title': Email
+    '#type': email
+    '#required': true
+    '#default_value': from@example.com
+  subject:
+    '#title': Subject
+    '#type': textfield
+    '#required': true
+    '#default_value': '{subject}'
+  message:
+    '#title': Message
+    '#type': textarea
+    '#required': true
+    '#default_value': '{message}'
 css: ''
 javascript: ''
 settings:
@@ -138,92 +152,35 @@ access:
     users: {  }
     permissions: {  }
 handlers:
-  email_html:
+  email:
     id: email
-    label: 'Email (HTML)'
-    handler_id: email_html
-    status: false
+    label: Email
+    handler_id: email
+    status: true
     conditions: {  }
-    weight: -9
+    weight: 1
     settings:
       states:
         - completed
-      to_mail: default
+      to_mail: to@example.com
       to_options: {  }
-      cc_mail: ''
+      cc_mail: cc@example.com
       cc_options: {  }
-      bcc_mail: ''
+      bcc_mail: bcc@example.com
       bcc_options: {  }
-      from_mail: default
+      from_mail: '[webform_submission:values:email:raw]'
       from_options: {  }
-      from_name: default
-      subject: default
+      from_name: '[webform_submission:values:first_name:raw] [webform_submission:values:last_name:raw]'
+      subject: '[webform_submission:values:subject:raw]'
       body: |
-        <h3>default:</h3>[webform_submission:values:checkboxes]<hr />
-        <h3>comma:</h3>[webform_submission:values:checkboxes:value:comma]<hr />
-        <h3>semicolon:</h3>[webform_submission:values:checkboxes:value:semicolon]<hr />
-        <h3>and:</h3>[webform_submission:values:checkboxes:value:and]<hr />
-        <h3>ul:</h3>[webform_submission:values:checkboxes:value:ul]<hr />
-        <h3>ol:</h3>[webform_submission:values:checkboxes:value:ol]<hr />
-        <h3>raw:</h3>[webform_submission:values:checkboxes:raw]<hr />
+        <p>Submitted values are:</p>
+        {{ webform_token('[webform_submission:values]', webform_submission) }}
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
       html: true
       attachments: false
-      twig: false
-      debug: true
-      reply_to: ''
-      return_path: ''
-      sender_mail: ''
-      sender_name: ''
-  email_text:
-    id: email
-    label: 'Email (Text)'
-    handler_id: email_text
-    status: false
-    conditions: {  }
-    weight: -10
-    settings:
-      states:
-        - completed
-      to_mail: default
-      to_options: {  }
-      cc_mail: ''
-      cc_options: {  }
-      bcc_mail: ''
-      bcc_options: {  }
-      from_mail: default
-      from_options: {  }
-      from_name: default
-      subject: default
-      body: |
-        default:
-        [webform_submission:values:checkboxes]
-        
-        comma:
-        [webform_submission:values:checkboxes:value:comma]
-        
-        semicolon:
-        [webform_submission:values:checkboxes:value:semicolon]
-        
-        and:
-        [webform_submission:values:checkboxes:value:and]
-        
-        ul:
-        [webform_submission:values:checkboxes:value:ul]
-        
-        ol:
-        [webform_submission:values:checkboxes:value:ol]
-        
-        raw:
-        [webform_submission:values:checkboxes:raw]
-      excluded_elements: {  }
-      ignore_access: false
-      exclude_empty: true
-      html: false
-      attachments: false
-      twig: false
+      twig: true
       debug: true
       reply_to: ''
       return_path: ''

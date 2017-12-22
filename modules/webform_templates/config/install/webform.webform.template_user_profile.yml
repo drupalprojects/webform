@@ -263,6 +263,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: false
       reply_to: ''
       return_path: ''

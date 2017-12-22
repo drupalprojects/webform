@@ -91,7 +91,7 @@ class WebformCodeMirror extends Textarea {
 
     // Check edit Twig template permission and complete disable editing.
     if ($element['#mode'] == 'twig') {
-      if (!TwigExtension::editTwig()) {
+      if (!TwigExtension::hasEditTwigAccess()) {
         $element['#disable'] = TRUE;
         $element['#attributes']['disabled'] = 'disabled';
         $element['#field_prefix'] = [

@@ -59,12 +59,17 @@ drush php-eval 'module_load_include('install', 'webform'); webform_update_8032()
 # Generate *.features.yml for the webform.module and sub-modules.
 # These files will be ignored. @see .gitignore.
 echo 'true' > webform.features.yml
+
 echo 'true' > modules/webform_examples/webform_examples.features.yml
 echo 'true' > modules/webform_example_element/webform_example_element.features.yml
 echo 'true' > modules/webform_example_composite/webform_example_composite.features.yml
 echo 'true' > modules/webform_example_element/webform_example_remote_post.features.yml
 echo 'true' > modules/webform_templates/webform_templates.features.yml
 echo 'true' > modules/webform_node/webform_node.features.yml
+echo 'true' > modules/webform_node/tests/modules/webform_node_test_multiple/webform_node_test_multiple.features.yml
+
+echo 'true' > modules/webform_demo/webform_demo_application_evaluation/webform_demo_application_evaluation.features.yml
+echo 'true' > modules/webform_demo/webform_demo_event_registration/webform_demo_event_registration.features.yml
 echo 'true' > tests/modules/webform_test/webform_test.features.yml
 echo 'true' > tests/modules/webform_test_ajax/webform_test_ajax.features.yml
 echo 'true' > tests/modules/webform_test_alter_hooks/webform_test_alter_hooks.features.yml

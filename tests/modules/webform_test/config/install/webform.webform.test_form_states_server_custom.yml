@@ -77,7 +77,6 @@ elements: |
         ':input[name="trigger_greater"]':
           value:
             greater: 10
-            
 css: ''
 javascript: ''
 settings:

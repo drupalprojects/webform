@@ -20,6 +20,7 @@ use Drupal\file\Entity\File;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Element\WebformSelectOther;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase;
+use Drupal\webform\Twig\TwigExtension;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
@@ -212,6 +213,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'exclude_empty' => TRUE,
       'html' => TRUE,
       'attachments' => FALSE,
+      'twig' => FALSE,
       'debug' => FALSE,
       'reply_to' => '',
       'return_path' => '',
@@ -399,35 +401,60 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     $form['message'] += $this->buildElement('subject', $this->t('Subject'), $this->t('subject'), $text_element_options_raw);
 
-    // Message: Body.
+    $has_edit_twig_access = (TwigExtension::hasEditTwigAccess() || $this->configuration['twig']);
+
+      // Message: Body.
     // Building a custom select other element that toggles between
-    // HTML (CKEditor) and Plain text (CodeMirror) custom body elements.
-    $body_options = [
-      WebformSelectOther::OTHER_OPTION => $this->t('Custom body...'),
-      'default' => $this->t('Default'),
-      (string) $this->t('Elements') => $text_element_options_value,
-    ];
+    // HTML (CKEditor), Plain text (CodeMirror), and Twig (CodeMirror)
+    // custom body elements.
+    $body_options = [];
+    $body_options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom body...');
+    if ($has_edit_twig_access) {
+      $body_options['twig'] = $this->t('Twig template...');
+    }
+    $body_options['default'] = $this->t('Default');
+    $body_options[(string) $this->t('Elements')] = $text_element_options_value;
+
+    // Get default format.
     $body_default_format = ($this->configuration['html']) ? 'html' : 'text';
+
+    // Get default values.
     $body_default_values = $this->getBodyDefaultValues();
+
+    // Get custom default values which are the same as default values.
+    $body_custom_default_values = $this->getBodyDefaultValues();
+
+    // Set up default Twig body and convert tokens to use the
+    // webform_token() Twig function.
+    // @see \Drupal\webform\Twig\TwigExtension
+    $twig_default_body = $body_custom_default_values[$body_default_format];
+    $twig_default_body = preg_replace('/(\[[^]]+\])/', '{{ webform_token(\'\1\', webform_submission) }}', $twig_default_body);
+    $body_custom_default_values['twig'] = $twig_default_body;
+
+    // Look at the 'body' and determine the body select and custom
+    // default values.
     if (WebformOptionsHelper::hasOption($this->configuration['body'], $body_options)) {
-      $body_default_value = $this->configuration['body'];
-      $body_custom_default_value = $body_default_values[$body_default_format];
+      $body_select_default_value = $this->configuration['body'];
+    }
+    elseif ($this->configuration['twig']) {
+      $body_select_default_value = 'twig';
+      $body_custom_default_values['twig'] = $this->configuration['body'];
     }
     else {
-      $body_default_value = WebformSelectOther::OTHER_OPTION;
-      $body_custom_default_value = $this->configuration['body'];
+      $body_select_default_value = WebformSelectOther::OTHER_OPTION;
+      $body_custom_default_values[$body_default_format] = $this->configuration['body'];
     }
+
+    // Build body select menu.
     $form['message']['body'] = [
       '#type' => 'select',
       '#title' => $this->t('Body'),
       '#options' => $body_options,
       '#required' => TRUE,
       '#parents' => ['settings', 'body'],
-      '#default_value' => $body_default_value,
+      '#default_value' => $body_select_default_value,
     ];
     foreach ($body_default_values as $format => $default_value) {
-      // Custom body.
-      $custom_default_value = ($format === $body_default_format) ? $body_custom_default_value : $default_value;
       if ($format == 'html') {
         $form['message']['body_custom_' . $format] = [
           '#type' => 'webform_html_editor',
@@ -443,7 +470,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#title' => $this->t('Body custom value (@format)', ['@label' => $format]),
         '#title_display' => 'hidden',
         '#parents' => ['settings', 'body_custom_' . $format],
-        '#default_value' => $custom_default_value,
+        '#default_value' => $body_custom_default_values[$format],
         '#states' => [
           'visible' => [
             ':input[name="settings[body]"]' => ['value' => WebformSelectOther::OTHER_OPTION],
@@ -462,7 +489,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#mode' => $format,
         '#title' => $this->t('Body default value (@format)', ['@label' => $format]),
         '#title_display' => 'hidden',
-        '#default_value' => $default_value,
+        '#default_value' => $body_default_values[$format],
         '#attributes' => ['readonly' => 'readonly', 'disabled' => 'disabled'],
         '#states' => [
           'visible' => [
@@ -472,6 +499,33 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         ],
       ];
     }
+    // Twig body with help.
+    $form['message']['body_custom_twig'] = [
+      '#type' => 'webform_codemirror',
+      '#mode' => 'twig',
+      '#title' => $this->t('Body custom value (Twig)'),
+      '#title_display' => 'hidden',
+      '#parents' => ['settings', 'body_custom_twig'],
+      '#default_value' => $body_custom_default_values['twig'],
+      '#access' => $has_edit_twig_access,
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[body]"]' => ['value' => 'twig'],
+        ],
+        'required' => [
+          ':input[name="settings[body]"]' => ['value' => 'twig'],
+        ],
+      ],
+    ];
+    $form['message']['body_custom_twig_help'] = TwigExtension::buildTwigHelp() + [
+      '#access' => $has_edit_twig_access,
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[body]"]' => ['value' => 'twig'],
+        ],
+      ],
+    ];
+    // Tokens.
     $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink(
       ['webform', 'webform_submission'],
       $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values and use [webform_submission:values:ELEMENT_NAME:value] to get HTML values.')
@@ -601,16 +655,21 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $values = $form_state->getValues();
 
     // Set custom body based on the selected format.
-    if ($values['body'] === WebformSelectOther::OTHER_OPTION) {
-      $body_format = ($values['html']) ? 'html' : 'text';
-      $values['body'] = $values['body_custom_' . $body_format];
+    $values['twig'] = FALSE;
+    switch ($values['body']) {
+      case 'twig':
+        $values['body'] = $values['body_custom_twig'];
+        $values['twig'] = TRUE;
+        break;
+
+      case WebformSelectOther::OTHER_OPTION:
+        $body_format = ($values['html']) ? 'html' : 'text';
+        $values['body'] = $values['body_custom_' . $body_format];
+        break;
     }
-    unset(
-      $values['body_custom_text'],
-      $values['body_default_html']
-    );
 
     $form_state->setValues($values);
+    $this->applyFormStateToConfiguration($form_state);
   }
 
   /**
@@ -669,26 +728,20 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Switch to default theme.
     $this->themeManager->setDefaultTheme();
 
+    $token_options = [
+      'email' => TRUE,
+      'excluded_elements' => $this->configuration['excluded_elements'],
+      'ignore_access' => $this->configuration['ignore_access'],
+      'exclude_empty' => $this->configuration['exclude_empty'],
+      'html' => ($this->configuration['html'] && $this->supportsHtml()),
+    ];
+
     $token_data = [];
 
     $message = [];
 
     // Copy configuration to $message.
     foreach ($this->configuration as $configuration_key => $configuration_value) {
-
-      $token_options = [
-        'email' => TRUE,
-        'excluded_elements' => $this->configuration['excluded_elements'],
-        'ignore_access' => $this->configuration['ignore_access'],
-        'exclude_empty' => $this->configuration['exclude_empty'],
-        'html' => ($this->configuration['html'] && $this->supportsHtml()),
-      ];
-
-      // Clear tokens from email values.
-      if (strpos($configuration_key, '_mail') !== FALSE) {
-        $token_options['clear'] = TRUE;
-      }
-
       // Get configuration name (to, cc, bcc, from, name, subject, mail)
       // and type (mail, options, or text).
       list($configuration_name, $configuration_type) = (strpos($configuration_key, '_') !== FALSE) ? explode('_', $configuration_key) : [$configuration_key, 'text'];
@@ -710,8 +763,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         $configuration_value = implode(',', array_unique($emails));
       }
 
-      // Set message key.
-      $message[$configuration_key] = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data, $token_options);
+      // If Twig enabled render and body, render the Twig template.
+      if ($configuration_key == 'body' && $this->configuration['twig']) {
+        $message[$configuration_key] = TwigExtension::renderTwigTemplate($webform_submission, $configuration_value, $token_options);
+      }
+      else {
+        // Clear tokens from email values.
+        $token_options['clear'] = (strpos($configuration_key, '_mail') !== FALSE) ? TRUE : FALSE;
+        $message[$configuration_key] = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data, $token_options);
+      }
     }
 
     // Trim the message body.
