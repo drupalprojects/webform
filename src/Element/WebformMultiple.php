@@ -176,12 +176,11 @@ class WebformMultiple extends FormElement {
 
     // Build table.
     $element['items'] = [
-        '#prefix' => '<div id="' . $table_id . '" class="webform-multiple-table">',
-        '#suffix' => '</div>',
-        '#type' => 'table',
-        '#header' => $header,
-
-      ] + $rows;
+      '#prefix' => '<div id="' . $table_id . '" class="webform-multiple-table">',
+      '#suffix' => '</div>',
+      '#type' => 'table',
+      '#header' => $header,
+    ] + $rows;
 
     // Add sorting to table.
     if ($element['#sorting']) {
@@ -303,6 +302,8 @@ class WebformMultiple extends FormElement {
       if ($element['#operations']) {
         $header[] = ['class' => ["$table_id--handle", "webform-multiple-table--operations"]];
       }
+
+      return $header;
     }
     elseif (is_string($element['#header'])) {
       return [
