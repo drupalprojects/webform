@@ -1963,6 +1963,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     $element_properties = $form_state->get('element_properties');
 
+    /**************************************************************************/
+    // General.
+    /**************************************************************************/
+
     /* Element settings */
 
     $form['element'] = [
@@ -1999,93 +2003,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ],
     ];
-
-    // Multiple.
-    $form['multiple'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Multiple settings'),
-      '#states' => [
-        'invisible' => [
-          ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
-          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
-        ],
-      ],
-    ];
-    $form['multiple']['multiple__header'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Display elements in table columns'),
-      '#description' => $this->t("If checked, the composite sub-element titles will be displayed as the table header labels."),
-      '#return_value' => TRUE,
-    ];
-    $form['multiple']['multiple__header_label'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Table header label'),
-      '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
-    ];
-    $form['multiple']['multiple__min_items'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Minimum amount of items'),
-      '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#required' => TRUE,
-      '#min' => 1,
-      '#max' => 20,
-    ];
-    $form['multiple']['multiple__empty_items'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Number of empty items'),
-      '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#required' => TRUE,
-      '#min' => 0,
-      '#max' => 20,
-    ];
-    $form['multiple']['multiple__add_more'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Number of add more items'),
-      '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#required' => TRUE,
-      '#min' => 1,
-      '#max' => 20,
-    ];
-    $form['multiple']['multiple__sorting'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Allow users to sort elements.'),
-      '#description' => $this->t('If unchecked, the elements will no longer be sortable.'),
-      '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#return_value' => TRUE,
-    ];
-    $form['multiple']['multiple__operations'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Allow users to add/remove elements.'),
-      '#description' => $this->t('If unchecked, the add/remove (+/x) buttons will be removed from each table row.'),
-      '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#return_value' => TRUE,
-    ];
-
-    /* Default value */
-
-    $form['default'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Default value'),
-    ];
-    if ($this->isComposite()) {
-      $form['default']['default_value'] = [
-        '#type' => 'webform_codemirror',
-        '#mode' => 'yaml',
-        '#title' => $this->t('Default value'),
-        '#description' => $this->t('The default value of the webform element.'),
-      ];
-    }
-    else {
-      $form['default']['default_value'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Default value'),
-        '#description' => $this->t('The default value of the webform element.'),
-        '#maxlength' => NULL,
-      ];
-    }
-    if ($this->hasProperty('multiple')) {
-      $form['default']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
-    }
 
     /* Element description */
 
@@ -2326,46 +2243,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $form['form']['icheck']['#options']['none'] = $this->t('None');
     }
 
-    /* Flexbox item */
-
-    $form['flex'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Flexbox item'),
-      '#description' => $this->t('Learn more about using <a href=":href">flexbox layouts</a>.', [':href' => 'http://www.w3schools.com/css/css3_flexbox.asp']),
-    ];
-    $flex_range = range(0, 12);
-    $form['flex']['flex'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Flex'),
-      '#description' => $this->t('The flex property specifies the length of the item, relative to the rest of the flexible items inside the same container.') . '<br /><br />' .
-      $this->t('Defaults to: %value', ['%value' => 1]),
-      '#options' => [0 => $this->t('0 (none)')] + array_combine($flex_range, $flex_range),
-    ];
-
-    /* Wrapper and element attributes */
-
-    $form['wrapper_attributes'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Wrapper attributes'),
-    ];
-    $form['wrapper_attributes']['wrapper_attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Wrapper'),
-      '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom...' to enter custom classes."),
-      '#style__description' => $this->t("Apply custom styles to the element's wrapper around both the field and its label."),
-      '#attributes__description' => $this->t("Enter additional attributes to be added the element's wrapper."),
-      '#classes' => $this->configFactory->get('webform.settings')->get('element.wrapper_classes'),
-    ];
-    $form['element_attributes'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Element attributes'),
-    ];
-    $form['element_attributes']['attributes'] = [
-      '#type' => 'webform_element_attributes',
-      '#title' => $this->t('Element'),
-      '#classes' => $this->configFactory->get('webform.settings')->get('element.classes'),
-    ];
-
     /* Validation */
 
     // Placeholder webform elements with #options.
@@ -2436,6 +2313,26 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
     ];
 
+    /* Flexbox item */
+
+    $form['flex'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Flexbox item'),
+      '#description' => $this->t('Learn more about using <a href=":href">flexbox layouts</a>.', [':href' => 'http://www.w3schools.com/css/css3_flexbox.asp']),
+    ];
+    $flex_range = range(0, 12);
+    $form['flex']['flex'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Flex'),
+      '#description' => $this->t('The flex property specifies the length of the item, relative to the rest of the flexible items inside the same container.') . '<br /><br />' .
+      $this->t('Defaults to: %value', ['%value' => 1]),
+      '#options' => [0 => $this->t('0 (none)')] + array_combine($flex_range, $flex_range),
+    ];
+
+    /**************************************************************************/
+    // Conditions.
+    /**************************************************************************/
+
     /* Conditional logic */
 
     $form['conditional_logic'] = [
@@ -2460,6 +2357,124 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         ],
       ];
     }
+
+    /**************************************************************************/
+    // Advanced.
+    /**************************************************************************/
+
+    /* Default value */
+
+    $form['default'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Default value'),
+    ];
+    if ($this->isComposite()) {
+      $form['default']['default_value'] = [
+        '#type' => 'webform_codemirror',
+        '#mode' => 'yaml',
+        '#title' => $this->t('Default value'),
+        '#description' => $this->t('The default value of the webform element.'),
+      ];
+    }
+    else {
+      $form['default']['default_value'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Default value'),
+        '#description' => $this->t('The default value of the webform element.'),
+        '#maxlength' => NULL,
+      ];
+    }
+    if ($this->hasProperty('multiple')) {
+      $form['default']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
+    }
+
+    // Multiple.
+    $form['multiple'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Multiple settings'),
+      '#states' => [
+        'invisible' => [
+          ':input[name="properties[multiple][container][cardinality]"]' => ['!value' => -1],
+          ':input[name="properties[multiple][container][cardinality_number]"]' => ['value' => 1],
+        ],
+      ],
+    ];
+    $form['multiple']['multiple__header'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display elements in table columns'),
+      '#description' => $this->t("If checked, the composite sub-element titles will be displayed as the table header labels."),
+      '#return_value' => TRUE,
+    ];
+    $form['multiple']['multiple__header_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Table header label'),
+      '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__min_items'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Minimum amount of items'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#required' => TRUE,
+      '#min' => 1,
+      '#max' => 20,
+    ];
+    $form['multiple']['multiple__empty_items'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Number of empty items'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#required' => TRUE,
+      '#min' => 0,
+      '#max' => 20,
+    ];
+    $form['multiple']['multiple__add_more'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Number of add more items'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#required' => TRUE,
+      '#min' => 1,
+      '#max' => 20,
+    ];
+    $form['multiple']['multiple__sorting'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to sort elements.'),
+      '#description' => $this->t('If unchecked, the elements will no longer be sortable.'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#return_value' => TRUE,
+    ];
+    $form['multiple']['multiple__operations'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow users to add/remove elements.'),
+      '#description' => $this->t('If unchecked, the add/remove (+/x) buttons will be removed from each table row.'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#return_value' => TRUE,
+    ];
+
+    /* Wrapper attributes */
+
+    $form['wrapper_attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Wrapper attributes'),
+    ];
+    $form['wrapper_attributes']['wrapper_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Wrapper'),
+      '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom...' to enter custom classes."),
+      '#style__description' => $this->t("Apply custom styles to the element's wrapper around both the field and its label."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added the element's wrapper."),
+      '#classes' => $this->configFactory->get('webform.settings')->get('element.wrapper_classes'),
+    ];
+
+    /* Element attributes */
+
+    $form['element_attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Element attributes'),
+    ];
+    $form['element_attributes']['attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Element'),
+      '#classes' => $this->configFactory->get('webform.settings')->get('element.classes'),
+    ];
 
     /* Submission display */
     $has_edit_twig_access = TwigExtension::hasEditTwigAccess();
@@ -2597,6 +2612,31 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
     ];
 
+    /* Administration */
+
+    $form['admin'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Administration'),
+    ];
+    $form['admin']['private'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Private'),
+      '#description' => $this->t('Private elements are shown only to users with results access.'),
+      '#weight' => 50,
+      '#return_value' => TRUE,
+    ];
+    $form['admin']['admin_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Admin title'),
+      '#description' => $this->t('The admin title will always be displayed when managing elements and viewing & downloading submissions.') .
+        '<br/>' .
+        $this->t("If an element's title is hidden, the element's admin title will be displayed when viewing a submission."),
+    ];
+
+    /**************************************************************************/
+    // Access.
+    /**************************************************************************/
+
     /* Access */
 
     $operations = [
@@ -2643,26 +2683,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ];
     }
 
-    /* Administration */
-
-    $form['admin'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Administration'),
-    ];
-    $form['admin']['private'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Private'),
-      '#description' => $this->t('Private elements are shown only to users with results access.'),
-      '#weight' => 50,
-      '#return_value' => TRUE,
-    ];
-    $form['admin']['admin_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Admin title'),
-      '#description' => $this->t('The admin title will always be displayed when managing elements and viewing & downloading submissions.') .
-        '<br/>' .
-        $this->t("If an element's title is hidden, the element's admin title will be displayed when viewing a submission."),
-    ];
+    /**************************************************************************/
 
     // Disable #multiple if the element has submission data.
     if (!$form_object->isNew() && $this->hasProperty('multiple')) {
@@ -2805,6 +2826,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         'title' => $this->t('Advanced'),
         'elements' => [
           'default',
+          'multiple',
           'wrapper_attributes',
           'element_attributes',
           'display',
