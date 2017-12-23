@@ -49,7 +49,7 @@
        */
       $(function () {
         $(document).on('state:visible', function (e) {
-          $('select.js-webform-select2, .js-webform-select2 select').select2('close');
+          $('select.select2-hidden-accessible').select2('close');
         });
       });
 

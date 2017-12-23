@@ -2447,7 +2447,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#state_options' => $this->getElementStateOptions(),
       '#selector_options' => $webform->getElementsSelectorOptions(),
     ];
-    if (!$this->hasProperty('state')) {
+    if ($this->hasProperty('states') && $this->hasProperty('required')) {
       $form['conditional_logic']['states_required_message'] = [
         '#type' => 'webform_message',
         '#message_type' => 'warning',
