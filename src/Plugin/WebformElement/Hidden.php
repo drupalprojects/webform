@@ -23,7 +23,7 @@ class Hidden extends TextBase {
       // Element settings.
       'title' => '',
       'value' => '',
-      'prepopulate' => TRUE,
+      'prepopulate' => FALSE,
     ];
   }
 

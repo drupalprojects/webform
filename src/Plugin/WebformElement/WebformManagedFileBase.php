@@ -51,9 +51,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       'button__attributes' => [],
     ];
     // File uploads can't be prepopulated.
-    unset(
-      $properties['prepopulate']
-    );
+    unset($properties['prepopulate']);
     return $properties;
   }
 

@@ -35,6 +35,15 @@ abstract class ContainerBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  protected function getDefaultBaseProperties() {
+    $properties = parent::getDefaultBaseProperties();
+    unset($properties['prepopulate']);
+    return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isInput(array $element) {
     return FALSE;
   }
