@@ -365,18 +365,22 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       // Sanitize filename.
       // @see http://stackoverflow.com/questions/2021624/string-sanitizer-for-filename
       if (!empty($element['#sanitize'])) {
-        $destination_basename = pathinfo($destination_filename, PATHINFO_BASENAME);
-        $destination_basename = $transliteration->transliterate($destination_basename, $webform_submission->language()->getId(), '_');
-        $destination_basename = Unicode::strtolower($destination_basename);
-        $destination_basename = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $destination_basename);
-        $destination_basename = preg_replace('/\s+/', '-', $destination_basename);
-        $destination_basename = trim($destination_basename, '-');
-
         $destination_extension = pathinfo($destination_filename, PATHINFO_EXTENSION);
         $destination_extension = Unicode::strtolower($destination_extension);
 
+        $destination_basename = rtrim(pathinfo($destination_filename, PATHINFO_BASENAME), ".$destination_extension");
+        $destination_basename = Unicode::strtolower($destination_basename);
+        $destination_basename = $transliteration->transliterate($destination_basename, \Drupal::languageManager()->getCurrentLanguage()->getId(), '-');
+        $destination_basename = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $destination_basename);
+        $destination_basename = preg_replace('/\s+/', '-', $destination_basename);
+        $destination_basename = trim($destination_basename, '-');
+        // If the basename if emepty use the element's key.
+        if (empty($destination_basename)) {
+          $destination_basename = $key;
+        }
+
         $destination_filename = $destination_basename . '.' . $destination_extension;
-        $destination_uri = $file_system->dirname($destination_uri) . $destination_filename ;
+        $destination_uri = $file_system->dirname($destination_uri) . $destination_filename;
       }
 
       // Save file if there is a new destination URI.
