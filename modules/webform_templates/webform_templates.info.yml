@@ -4,4 +4,4 @@ description: 'Provides starter templates that can be used to create new webforms
 package: Webform
 core: 8.x
 dependencies:
-  - 'drupal:webform'
+  - 'webform:webform'

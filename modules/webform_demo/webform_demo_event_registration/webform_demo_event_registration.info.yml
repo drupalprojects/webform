@@ -5,6 +5,6 @@ package: 'Webform Demo'
 core: 8.x
 dependencies:
   - 'drupal:datetime'
-  - 'drupal:webform'
-  - 'drupal:webform_node'
-  - 'drupal:webform_scheduled_email'
+  - 'webform:webform'
+  - 'webform:webform_node'
+  - 'webform:webform_scheduled_email'

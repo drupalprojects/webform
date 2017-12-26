@@ -6,4 +6,4 @@ core: 8.x
 dependencies:
   - 'drupal:block'
   - 'drupal:block_content'
-  - 'drupal:webform'
+  - 'webform:webform'

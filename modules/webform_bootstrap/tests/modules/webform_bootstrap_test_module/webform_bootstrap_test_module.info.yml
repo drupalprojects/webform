@@ -4,6 +4,6 @@ description: 'Installs and integrates the Webform Test Bootstrap theme.'
 package: Testing
 core: 8.x
 dependencies:
-  - 'drupal:styleguide'
-  - 'drupal:webform'
-  - 'drupal:webform_bootstrap'
+  - 'styleguide:styleguide'
+  - 'webform:webform'
+  - 'webform:webform_bootstrap'

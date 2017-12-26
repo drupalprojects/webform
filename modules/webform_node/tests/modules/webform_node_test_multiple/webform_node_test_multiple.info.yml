@@ -10,5 +10,5 @@ dependencies:
   - 'drupal:path'
   - 'drupal:text'
   - 'drupal:user'
-  - 'drupal:webform'
-  - 'drupal:webform_node'
+  - 'webform:webform'
+  - 'webform:webform_node'

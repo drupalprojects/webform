@@ -7,5 +7,5 @@ dependencies:
   - 'drupal:config_translation'
   - 'drupal:language'
   - 'drupal:locale'
-  - 'drupal:lingotek'
-  - 'drupal:webform'
+  - 'lingotek:lingotek'
+  - 'webform:webform'
