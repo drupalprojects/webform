@@ -380,7 +380,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         }
 
         $destination_filename = $destination_basename . '.' . $destination_extension;
-        $destination_uri = $file_system->dirname($destination_uri) . $destination_filename;
+        $destination_uri = $file_system->dirname($destination_uri) . '/' . $destination_filename;
       }
 
       // Save file if there is a new destination URI.
