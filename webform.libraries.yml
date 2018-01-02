@@ -327,6 +327,11 @@ webform.element.buttons.checkboxradio:
     /core/assets/vendor/jquery.ui/ui/escape-selector-min.js: { minified: true }
     /core/assets/vendor/jquery.ui/ui/widgets/checkboxradio-min.js: { minified: true }
     js/webform.element.buttons.checkboxradio.js: {}
+  # Issue #2933980: JQuery UI CSS dependencies are not met in core.
+  # @see https://www.drupal.org/node/2933980
+  css:
+    component:
+      /core/assets/vendor/jquery.ui/themes/base/button.css: {}
   dependencies:
     - core/jquery.ui.checkboxradio
 
