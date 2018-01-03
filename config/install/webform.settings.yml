@@ -143,7 +143,7 @@ mail:
   default_body_text: |
     Submitted on [webform_submission:created]
     Submitted by: [webform_submission:user]
-
+    
     Submitted values are:
     [webform_submission:values]
   default_body_html: |

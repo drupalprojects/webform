@@ -23,37 +23,29 @@ class WebformRating extends Range {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $properties = parent::getDefaultProperties();
-    unset(
-      $properties['range__output'],
-      $properties['range__output_prefix'],
-      $properties['range__output_suffix']
-    );
-    $properties += [
+    $properties = [
+      // Number settings.
+      'max' => 5,
       // General settings.
       'default_value' => 0,
       // Rating settings.
       'star_size' => 'medium',
       'reset' => FALSE,
-    ];
+    ] + parent::getDefaultProperties();
+    unset(
+      $properties['output'],
+      $properties['output__field_prefix'],
+      $properties['output__field_suffix'],
+      $properties['output__attributes']
+    );
     return $properties;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
-    if (!isset($element['#step'])) {
-      $element['#step'] = 1;
-    }
-    parent::prepare($element, $webform_submission);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
-    $element += ['#min' => 1, '#max' => 5];
+    $element += ['#min' => 0, '#max' => 5];
     return parent::getTestValues($element, $webform, $options);
   }
 

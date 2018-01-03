@@ -701,18 +701,18 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#range__output': true
-      '#range__output_prefix': $
-      '#range__output_suffix': '.00'
+      '#output': right
+      '#output__field_prefix': $
+      '#output__field_suffix': '.00'
     flex_range_right:
       '#type': range
       '#title': 'Range 02'
       '#min': 0
       '#max': 100
       '#step': 1
-      '#range__output': true
-      '#range__output_prefix': $
-      '#range__output_suffix': '.00'
+      '#output': right
+      '#output__field_prefix': $
+      '#output__field_suffix': '.00'
   flexbox_webform_rating:
     '#type': webform_flexbox
     flex_webform_rating_left:

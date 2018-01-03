@@ -1041,9 +1041,9 @@ function _webform_update_8046_convert_data(array $data) {
   if ($actions_element) {
     $elements = Yaml::decode($data['elements']);
     $elements['actions'] = [
-        '#type' => 'webform_actions',
-        '#title' => (string) t('Submit button(s)'),
-      ] + $actions_element;
+      '#type' => 'webform_actions',
+      '#title' => (string) t('Submit button(s)'),
+    ] + $actions_element;
     $data['elements'] = Yaml::encode($elements);
   }
 
@@ -1816,4 +1816,26 @@ function webform_update_8096() {
  */
 function webform_update_8097() {
   _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+}
+
+/**
+ * Issue #2933705: Element Range.
+ */
+function webform_update_8098() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $elements = $webform_config->get('elements');
+    if (strpos($elements, '#range__output') !== FALSE) {
+      // Convert properties.
+      $elements = str_replace(
+        ['#range__output_prefix', '#range__output_suffix', '#range__output'],
+        ['#output__field_prefix', '#output__field_suffix', '#output'],
+        $elements);
+      // Convert '#output': true to '#output': right.
+      $elements = str_replace("'#output': true", "'#output': right", $elements);
+      $webform_config->set('elements', $elements);
+      $webform_config->save(TRUE);
+    }
+  }
 }

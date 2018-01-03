@@ -780,9 +780,9 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#range__output': true
-      '#range__output_prefix': $
-      '#range__output_suffix': '.00'
+      '#output': right
+      '#output__field_prefix': $
+      '#output__field_suffix': '.00'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1677,9 +1677,9 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#range__output': true
-      '#range__output_prefix': $
-      '#range__output_suffix': '.00'
+      '#output': right
+      '#output__field_prefix': $
+      '#output__field_suffix': '.00'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -2429,9 +2429,9 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#range__output': true
-      '#range__output_prefix': $
-      '#range__output_suffix': '.00'
+      '#output': right
+      '#output__field_prefix': $
+      '#output__field_suffix': '.00'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

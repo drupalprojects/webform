@@ -32,7 +32,7 @@ abstract class NumericBase extends WebformElementBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
     if ($this->hasProperty('step') && !isset($element['#step'])) {
-      $element['#step'] = 'any';
+      $element['#step'] = $this->getDefaultProperty('step') ?: 'any';
     }
   }
 
