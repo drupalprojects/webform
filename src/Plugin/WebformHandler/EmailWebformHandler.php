@@ -1468,7 +1468,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   The element name or NULL if token can not be parsed.
    */
   protected function getElementNameFromToken($token, $format = 'raw') {
-    if (preg_match('/\[webform_submission:values:([^:]+):' . $format . '\]/', $token, $match)) {
+    if (preg_match('/^\[webform_submission:values:([^:]+):' . $format . '\]$/', $token, $match)) {
       return $match[1];
     }
     else {
