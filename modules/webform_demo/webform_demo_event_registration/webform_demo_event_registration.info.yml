@@ -8,3 +8,4 @@ dependencies:
   - 'webform:webform'
   - 'webform:webform_node'
   - 'webform:webform_scheduled_email'
+  - 'token:token'
