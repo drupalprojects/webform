@@ -178,8 +178,8 @@ class Range extends NumericBase {
     $form['output']['output'] = [
       '#type' => 'select',
       '#title' => $this->t("Output the range's value"),
+      '#empty_option' => $this->t('- None -'),
       '#options' => [
-        '' => '',
         'right' => t('Right'),
         'left' => t('Left'),
         'above' => t('Above (Floating)'),

@@ -245,7 +245,6 @@ abstract class ContainerBase extends WebformElementBase {
     // @see fieldset.html.twig
     // @see webform-section.html.twig
     $form['form']['display_container']['title_display']['#options'] = [
-      '' => '',
       'invisible' => $this->t('Invisible'),
     ];
 

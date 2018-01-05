@@ -94,7 +94,7 @@ class WebformMapping extends FormElement {
         case 'select':
         case 'webform_select_other':
           $destination_element += [
-            '#empty_value' => '',
+            '#empty_option' => t('- Select -'),
             '#options' => $element['#destination'],
           ];
           break;

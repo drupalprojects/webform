@@ -1295,7 +1295,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#type' => 'webform_select_other',
       '#title' => $title,
       '#options' => $options,
-      '#empty_option' => (!$required) ? '' : NULL,
+      '#empty_option' => (!$required) ? $this->t('- None -') : NULL,
       '#other__title' => $title,
       '#other__title_display' => 'hidden',
       '#other__placeholder' => $this->t('Enter @label...', ['@label' => $label]),
@@ -1305,6 +1305,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#parents' => ['settings', $name],
       '#default_value' => $this->configuration[$name],
     ];
+
+    if (in_array($name, ['reply_to', 'return_path', 'sender_mail', 'sender_name'])) {
+      $element[$name]['#empty_option'] = $this->t('- Default -');
+    }
 
     // Use multiple email for reply_to, return_path, and sender_mail because
     // it supports tokens.

@@ -2059,8 +2059,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['form']['display_container']['title_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Title display'),
+      '#empty_option' => $this->t('- Default -'),
       '#options' => [
-        '' => '',
         'before' => $this->t('Before'),
         'after' => $this->t('After'),
         'inline' => $this->t('Inline'),
@@ -2072,8 +2072,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['form']['display_container']['description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Description display'),
+      '#empty_option' => $this->t('- Default -'),
       '#options' => [
-        '' => '',
         'before' => $this->t('Before'),
         'after' => $this->t('After'),
         'invisible' => $this->t('Invisible'),
@@ -2181,8 +2181,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'select',
       '#title' => 'Enhance using iCheck',
       '#description' => $this->t('Replaces @type element with jQuery <a href=":href">iCheck</a> boxes.', ['@type' => Unicode::strtolower($this->getPluginLabel()), ':href' => 'http://icheck.fronteed.com/']),
+      '#empty_option' => $this->t('- Default -'),
       '#options' => [
-        '' => '',
         (string) $this->t('Minimal') => [
           'minimal' => $this->t('Minimal: Black'),
           'minimal-grey' => $this->t('Minimal: Grey'),

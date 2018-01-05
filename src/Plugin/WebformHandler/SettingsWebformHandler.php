@@ -177,7 +177,6 @@ class SettingsWebformHandler extends WebformHandlerBase {
       '#description' => $this->t('Enter the setting name and value as YAML.'),
       '#default_value' => $custom_settings,
       '#parents' => ['settings', 'custom'],
-      '#access' => $has_confirmation_title,
     ];
 
     // Custom settings definitions.

@@ -183,7 +183,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       '#type' => 'webform_select_other',
       '#title' => $this->t('Days'),
       '#title_display' => 'hidden',
-      '#empty_option' => '',
+      '#empty_option' => $this->t('- None -'),
       '#options' => $days_options,
       '#default_value' => $this->configuration['days'],
       '#other__option_label' => $this->t('Custom number of days...'),

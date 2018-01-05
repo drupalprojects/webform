@@ -246,7 +246,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#type' => 'select',
       '#title' => 'Type of source entity to be populated using query string parameters',
       '#weight' => ++$form['form_behaviors']['form_prepopulate_source_entity_required']['#weight'],
-      '#empty_option' => '',
+      '#empty_option' => $this->t('- None -'),
       '#options' => $entity_type_options,
       '#default_value' => $settings['form_prepopulate_source_entity_type'],
       '#states' => [
@@ -313,7 +313,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'name' => $this->t("Page name (?page=contact)"),
         'index' => $this->t("Page index (?page=2)"),
       ],
-      '#empty_option' => '',
+      '#empty_option' => $this->t('- None -'),
       '#default_value' => $settings['wizard_track'],
     ];
 

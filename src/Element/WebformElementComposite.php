@@ -149,7 +149,7 @@ class WebformElementComposite extends FormElement {
             '#title' => t('Type'),
             '#title_display' => 'invisible',
             '#options' => $type_options,
-            '#empty_option' => t('Select type'),
+            '#empty_option' => t('- Select type -'),
             '#required' => TRUE,
             '#attributes' => ['class' => ['js-webform-composite-type']],
           ],

@@ -82,7 +82,7 @@ class WebformEntityAddForm extends BundleEntityFormBase {
       '#type' => 'webform_select_other',
       '#title' => $this->t('Category'),
       '#options' => $webform_storage->getCategories(),
-      '#empty_option' => '<' . $this->t('None') . '>',
+      '#empty_option' => $this->t('- None -'),
       '#default_value' => $webform->get('category'),
     ];
     $form = $this->protectBundleIdElement($form);

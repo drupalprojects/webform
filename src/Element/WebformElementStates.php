@@ -208,8 +208,7 @@ class WebformElementStates extends FormElement {
       '#type' => 'select',
       '#options' => $element['#state_options'],
       '#default_value' => $state['state'],
-      '#empty_option' => '',
-      '#empty_value' => '',
+      '#empty_option' => t('- Select -'),
       '#wrapper_attributes' => ['class' => ['webform-states-table--state']],
     ];
     $row['operator'] = [
@@ -265,8 +264,7 @@ class WebformElementStates extends FormElement {
       '#options' => $element['#selector_options'],
       '#wrapper_attributes' => ['class' => ['webform-states-table--selector']],
       '#default_value' => $condition['selector'],
-      '#empty_option' => '',
-      '#empty_value' => '',
+      '#empty_option' => t('- Select -'),
     ];
     if ($element['#selector_other']) {
       $row['selector']['#type'] = 'webform_select_other';
@@ -280,8 +278,7 @@ class WebformElementStates extends FormElement {
       '#type' => 'select',
       '#options' => $element['#trigger_options'],
       '#default_value' => $condition['trigger'],
-      '#empty_option' => '',
-      '#empty_value' => '',
+      '#empty_option' => t('- Select -'),
       '#parents' => [$element_name, 'states', $row_index , 'trigger'],
       '#wrapper_attributes' => ['class' => ['webform-states-table--trigger']],
     ];

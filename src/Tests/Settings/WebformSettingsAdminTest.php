@@ -54,13 +54,18 @@ class WebformSettingsAdminTest extends WebformTestBase {
       $this->drupalPostForm($path, [], t('Save configuration'));
       \Drupal::configFactory()->reset('webform.settings');
       $updated_data = \Drupal::configFactory()->getEditable('webform.settings')->getRawData();
+      $this->ksort($updated_data);
 
       // Check the updating 'Settings' via the UI did not lose or change any data.
       $this->assertEqual($updated_data, $original_data, 'Updated admin settings via the UI did not lose or change any data');
 
+
       // DEBUG:
-      $this->verbose('<pre>' . WebformYaml::tidy(Yaml::encode($original_data)) . '</pre>');
-      $this->verbose('<pre>' . WebformYaml::tidy(Yaml::encode($updated_data)) . '</pre>');
+      $original_yaml = WebformYaml::tidy(Yaml::encode($original_data));
+      $updated_yaml = WebformYaml::tidy(Yaml::encode($updated_data));
+      $this->verbose('<pre>' . $original_yaml . '</pre>');
+      $this->verbose('<pre>' . $updated_yaml . '</pre>');
+      $this->debug(array_diff(explode(PHP_EOL, $original_yaml), explode(PHP_EOL, $updated_yaml)));
     }
 
     /* Elements */
@@ -102,4 +107,12 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $this->assertNoRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help">?</a>');
   }
 
+  protected function ksort(array &$array) {
+    ksort($array);
+    foreach ($array as &$value) {
+      if (is_array($value)) {
+        ksort($value);
+      }
+    }
+  }
 }

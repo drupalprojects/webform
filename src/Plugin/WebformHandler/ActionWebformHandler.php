@@ -141,8 +141,8 @@ class ActionWebformHandler extends WebformHandlerBase {
     $form['actions']['sticky'] = [
       '#type' => 'select',
       '#title' => $this->t('Change status'),
+      '#empty_option' => $this->t('- None -'),
       '#options' => [
-        '' => '',
         '1' => $this->t('Flag/Star'),
         '0' => $this->t('Unflag/Unstar'),
       ],
