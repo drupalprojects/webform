@@ -198,6 +198,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'enhancement',
     ];
 
+    // Integration: Webform HubSpot.
+    $projects['hubspot'] = [
+      'title' => $this->t('Webform HubSpot'),
+      'description' => $this->t('Provides HubSpot leads API integration with Drupal.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/hubspot'),
+      'category' => 'integration',
+    ];
+
     // Integration: Webform iContact.
     $projects['webform_icontact'] = [
       'title' => $this->t('Webform iContact'),
