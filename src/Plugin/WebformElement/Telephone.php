@@ -66,7 +66,7 @@ class Telephone extends TextBase {
     $form['telephone']['international_initial_country'] = [
       '#title' => $this->t('Initial country'),
       '#type' => 'select',
-      '#empty_option' => '',
+      '#empty_option' => $this->t('- None -'),
       '#options' => [
         'auto' => $this->t('Auto detect'),
       ] + CountryManager::getStandardList(),

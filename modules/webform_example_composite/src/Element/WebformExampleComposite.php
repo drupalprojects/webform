@@ -61,7 +61,6 @@ class WebformExampleComposite extends WebformCompositeBase {
       '#type' => 'select',
       '#title' => t('Gender'),
       '#options' => 'gender',
-      '#empty_option' => '',
       '#states' => [
         'enabled' => [
           '[data-webform-composite-id="' . $html_id . '--first_name"]' => ['filled' => TRUE],
