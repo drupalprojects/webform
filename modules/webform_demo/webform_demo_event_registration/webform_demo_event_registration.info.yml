@@ -5,7 +5,7 @@ package: 'Webform Demo'
 core: 8.x
 dependencies:
   - 'drupal:datetime'
+  - 'token:token'
   - 'webform:webform'
   - 'webform:webform_node'
   - 'webform:webform_scheduled_email'
-  - 'token:token'
