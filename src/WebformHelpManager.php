@@ -886,6 +886,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Installation.
     $t_args = [
+      ':about_href' => Url::fromRoute('webform.about')->toString(),
       ':addons_href' => Url::fromRoute('webform.addons')->toString(),
       ':submodules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-webform'])->toString(),
       ':libraries_href' => Url::fromRoute('webform.config.libraries')->toString(),
@@ -893,7 +894,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $help['installation'] = [
       'group' => 'installation',
       'title' => $this->t('Installation'),
-      'content' => $this->t('<strong>Congratulations!</strong> You have successfully installed the Webform module. Please make sure to install additional <a href=":libraries_href">third-party libraries</a>, <a href=":submodules_href">sub-modules</a> and optional <a href=":addons_href">add-ons</a>.', $t_args),
+      'content' => '<strong>' . $this->t('Congratulations!') . '</strong> ' .
+        $this->t('You have successfully installed the Webform module.') .
+        ' ' . $this->t('Learn more about the <a href=":about_href">Webform module and Drupal</a>', $t_args) . '</br>' .
+        $this->t('Please make sure to install additional <a href=":libraries_href">third-party libraries</a>, <a href=":submodules_href">sub-modules</a> and optional <a href=":addons_href">add-ons</a>.', $t_args),
       'video_id' => 'installation',
       'message_type' => 'info',
       'message_close' => TRUE,
