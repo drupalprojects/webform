@@ -1,6 +1,6 @@
 {
-  "name": "drupal/webform",
-  "description": "Enables the creation of webforms and questionnaires.",
+  "name": "drupal/webform_scheduled_email",
+  "description": "Extends the Webform email handler to allow emails to be scheduled.",
   "type": "drupal-module",
   "license": "GPL-2.0+",
   "minimum-stability": "dev",

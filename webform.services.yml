@@ -26,6 +26,9 @@ services:
   webform.addons_manager:
     class: Drupal\webform\WebformAddonsManager
 
+  webform.cli_service:
+    class: Drupal\webform\Commands\WebformCliService
+
   webform.elements_validator:
     class: Drupal\webform\WebformEntityElementsValidator
 

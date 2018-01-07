@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Webform module drush commands.
+ * Webform scheduled email module drush commands.
  */
 
 use Drupal\webform\Entity\Webform;
@@ -21,7 +21,7 @@ function webform_scheduled_email_drush_command() {
     'core' => ['8+'],
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_SITE,
     'arguments' => [
-      'webform' => '(optional) The webform ID you want the cron task to be executed for',
+      'webform_id' => '(optional) The webform ID you want the cron task to be executed for',
       'handler_id' => '(optional) The handler ID you want the cron task to be executed for',
     ],
     'options' => [
@@ -57,6 +57,12 @@ function webform_scheduled_email_help($section) {
 
 /**
  * Implements drush_hook_COMMAND().
+ *
+ * NOTE:
+ * Unable to use drush_hook_COMMAND_validate because we are using a custom
+ * callback to prevent conflicts with webform_scheduled_email_cron().
+ *
+ * @see webform_scheduled_email_cron()
  */
 function webform_scheduled_email_cron_process($webform_id = NULL, $handler_id = NULL) {
   $schedule_limit = drush_get_option('schedule_limit') ?: 1000;
