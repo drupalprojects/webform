@@ -13,8 +13,10 @@
     }
   ],
   "support": {
-    "issues": "https://drupal.org/project/issues/webform",
-    "source": "http://cgit.drupalcode.org/webform"
+    "issues": "https://www.drupal.org/project/issues/webform?version=8.x",
+    "source": "http://cgit.drupalcode.org/webform",
+    "docs": "https://www.drupal.org/docs/8/modules/webform",
+    "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
   },
   "extra": {
     "drush": {
