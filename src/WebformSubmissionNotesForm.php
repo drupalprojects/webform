@@ -72,7 +72,16 @@ class WebformSubmissionNotesForm extends ContentEntityForm {
     $form['sticky'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Star/flag the status of this submission'),
+      '#description' => $this->t('If checked, this submissions will be starred when reviewing results.'),
       '#default_value' => $webform_submission->isSticky(),
+      '#return_value' => TRUE,
+      '#access' => $this->isDialog() ? FALSE : TRUE,
+    ];
+    $form['locked'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Lock this submission'),
+      '#description' => $this->t('If checked, users will not be able to update this submission.'),
+      '#default_value' => $webform_submission->isLocked(),
       '#return_value' => TRUE,
       '#access' => $this->isDialog() ? FALSE : TRUE,
     ];

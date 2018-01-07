@@ -23,6 +23,16 @@ elements: |
       '#options':
         flag: Flag/Star
         unflag: Unflag/Unstar
+  locked:
+    '#type': fieldset
+    '#title': Locked
+    lock:
+      '#type': radios
+      '#title': Lock
+      '#title_display': invisible
+      '#options':
+        locked: Locked
+        unlocked: Unlocked
   notes:
     '#type': fieldset
     '#title': Notes
@@ -71,6 +81,7 @@ settings:
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
+  submission_locked_message: 'This is submission was automatically locked.'
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -166,6 +177,7 @@ handlers:
         - updated
       notes: '[webform_submission:values:notes_add]'
       sticky: null
+      locked: null
       data: |
         notes_add: ''
         notes_last: '[webform_submission:values:notes_add]'
@@ -214,5 +226,48 @@ handlers:
       sticky: false
       data: ''
       message: 'Submission has been unflagged.'
+      message_type: status
+      debug: true
+  locked:
+    id: action
+    label: Locked
+    handler_id: locked
+    status: true
+    conditions:
+      enabled:
+        ':input[name="lock"]':
+          value: locked
+    weight: -52
+    settings:
+      states:
+        - draft
+        - converted
+        - completed
+        - updated
+      notes: ''
+      sticky: null
+      locked: true
+      data: ''
+      message: 'Submission has been locked.'
+      message_type: status
+      debug: true
+  unlocked:
+    id: action
+    label: Unlocked
+    handler_id: unlocked
+    status: true
+    conditions:
+      enabled:
+        ':input[name="lock"]':
+          value: unlocked
+    weight: -51
+    settings:
+      states:
+        - locked
+      notes: ''
+      sticky: null
+      locked: false
+      data: ''
+      message: 'Submission has been unlocked.'
       message_type: status
       debug: true

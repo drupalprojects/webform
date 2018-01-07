@@ -543,10 +543,15 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       'default' => FALSE,
     ];
 
-    // Sticky (Starred/Unstarred).
     if (empty($account)) {
+      // Sticky (Starred/Unstarred).
       $columns['sticky'] = [
         'title' => $this->t('Starred'),
+      ];
+
+      // Locked.
+      $columns['locked'] = [
+        'title' => $this->t('Locked'),
       ];
 
       // Notes.

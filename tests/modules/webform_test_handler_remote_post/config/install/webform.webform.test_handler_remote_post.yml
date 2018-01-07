@@ -178,6 +178,7 @@ handlers:
         entity_type: entity_type
         entity_id: entity_id
         sticky: sticky
+        locked: locked
         notes: notes
         confirmation_number: confirmation_number
       custom_data: |

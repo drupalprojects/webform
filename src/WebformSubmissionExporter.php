@@ -257,6 +257,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       'range_start' => '',
       'range_end' => '',
       'state' => 'all',
+      'locked' => '',
       'sticky' => '',
       'download' => TRUE,
       'files' => FALSE,

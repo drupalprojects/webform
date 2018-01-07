@@ -6,11 +6,13 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\Plugin\WebformHandler\ActionWebformHandler;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler;
@@ -1839,3 +1841,67 @@ function webform_update_8098() {
     }
   }
 }
+
+
+/**
+ * Issue #2888862: Provide a mechanism to lock a webform submission.
+ */
+function webform_update_8099() {
+  // Copied from: node_update_8001()
+  //
+  // Install the definition that this field had in
+  // \Drupal\webform\Entity\WebformSubmission::baseFieldDefinitions()
+  // at the time that this update function was written. If/when code is
+  // deployed that changes that definition, the corresponding module must
+  // implement an update function that invokes
+  // \Drupal::entityDefinitionUpdateManager()->updateFieldStorageDefinition()
+  // with the new definition.
+  $storage_definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Locked'))
+    ->setDescription(t('A flag that indicates a locked webform submission.'))
+    ->setDefaultValue(FALSE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('locked', 'webform_submission', 'webform', $storage_definition);
+
+  // Set default value.
+  \Drupal::database()->update('webform_submission')
+    ->fields(['locked' => 0])
+    ->execute();
+
+  // Add submission locked message to admin and webform settings.
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2888862: Provide a mechanism to lock a webform submission. Update handlers.
+ */
+function webform_update_8100() {
+  // Add locked to action handler.
+  _webform_update_webform_handler_configuration(ActionWebformHandler::class);
+
+  // Add locked to remote post handler's excluded data.
+  /** @var \Drupal\webform\WebformInterface[] $webforms */
+  $webforms = Webform::loadMultiple();
+  foreach ($webforms as $webform) {
+    $has_handler = FALSE;
+    $handlers = $webform->getHandlers();
+    foreach ($handlers as $handler) {
+      if ($handler instanceof RemotePostWebformHandler) {
+        $has_handler = TRUE;
+        $configuration = $handler->getConfiguration();
+        $settings = $configuration['settings'];
+        if ($settings['excluded_data']) {
+          $settings['excluded_data']['locked'] = 'locked';
+          $configuration['settings'] = $settings;
+          $handler->setConfiguration($configuration);
+        }
+      }
+    }
+    if ($has_handler) {
+      $webform->save();
+    }
+  }
+}
+

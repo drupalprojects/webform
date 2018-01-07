@@ -98,7 +98,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   protected $originalData = [];
 
   /**
-   * Flag to indicated is submission is being converted from anonymous to authenticated.
+   * Flag to indicated if submission is being converted from anonymous to authenticated.
    *
    * @var bool
    */
@@ -191,6 +191,11 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       ->setLabel(t('Submitted to: Entity ID'))
       ->setDescription(t('The ID of the entity of which this webform submission was submitted from.'))
       ->setSetting('max_length', 255);
+
+    $fields['locked'] = BaseFieldDefinition::create('boolean')
+        ->setLabel(t('Locked'))
+        ->setDescription(t('A flag that indicates a locked webform submission.'))
+        ->setDefaultValue(FALSE);
 
     $fields['sticky'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Sticky'))
@@ -296,6 +301,14 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    */
   public function setSticky($sticky) {
     $this->set('sticky', $sticky);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLocked($locked) {
+    $this->set('locked', $locked);
     return $this;
   }
 
@@ -519,6 +532,13 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function isLocked() {
+    return $this->get('locked')->value ? TRUE: FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isSticky() {
     return (bool) $this->get('sticky')->value;
   }
@@ -542,6 +562,9 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     }
     elseif ($this->isDraft()) {
       return self::STATE_DRAFT;
+    }
+    elseif ($this->isLocked()) {
+      return self::STATE_LOCKED;
     }
     elseif ($this->completed->value == $this->changed->value) {
       return self::STATE_COMPLETED;
@@ -579,9 +602,10 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     $duplicate->set('changed', NULL);
     $duplicate->set('completed', NULL);
 
-    // Clear admin notes and sticky.
+    // Clear admin notes, sticky, and locked.
     $duplicate->set('notes', '');
     $duplicate->set('sticky', FALSE);
+    $duplicate->set('locked', FALSE);
 
     return $duplicate;
   }

@@ -27,6 +27,11 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
   const STATE_COMPLETED = 'completed';
 
   /**
+   * Return status for submission that has been locked.
+   */
+  const STATE_LOCKED = 'locked';
+
+  /**
    * Return status for submission that has been updated.
    */
   const STATE_UPDATED = 'updated';
@@ -138,6 +143,24 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
    * @return $this
    */
   public function setSticky($sticky);
+
+  /**
+   * Get the submission's locked status.
+   *
+   * @return string
+   *   The submission's lock status.
+   */
+  public function isLocked();
+
+  /**
+   * Sets the submission's locked flag.
+   *
+   * @param bool $locked
+   *   The submission's locked flag.
+   *
+   * @return $this
+   */
+  public function setLocked($locked);
 
   /**
    * Gets the remote IP address of the submission.

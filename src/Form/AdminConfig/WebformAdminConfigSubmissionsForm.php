@@ -75,6 +75,12 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $settings['default_submission_exception_message'],
     ];
+    $form['submission_settings']['default_submission_locked_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default locked message'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_submission_locked_message'],
+    ];
     $form['submission_settings']['default_submission_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default submission label'),

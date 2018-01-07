@@ -520,7 +520,7 @@ entity.webform_submission.notes_form:
     _entity_form: 'webform_submission.notes'
     _title_callback: '\Drupal\webform\Controller\WebformSubmissionViewController::title'
   requirements:
-    _entity_access: 'webform_submission.update_any'
+    _entity_access: 'webform_submission.notes'
 
 entity.webform_submission.resend_form:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/resend'
@@ -547,12 +547,20 @@ entity.webform_submission.delete_form:
   requirements:
     _entity_access: 'webform_submission.delete'
 
+entity.webform_submission.locked_toggle:
+  path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/locked'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformSubmissionController::locked'
+  requirements:
+    _entity_access: 'webform_submission.notes'
+    _csrf_token: 'TRUE'
+
 entity.webform_submission.sticky_toggle:
   path: '/admin/structure/webform/manage/{webform}/submission/{webform_submission}/sticky'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformSubmissionController::sticky'
   requirements:
-    _entity_access: 'webform_submission.update'
+    _entity_access: 'webform_submission.notes'
     _csrf_token: 'TRUE'
 
 webform_submission.multiple_delete_confirm:

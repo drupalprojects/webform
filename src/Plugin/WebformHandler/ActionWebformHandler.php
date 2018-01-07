@@ -73,6 +73,7 @@ class ActionWebformHandler extends WebformHandlerBase {
       WebformSubmissionInterface::STATE_CONVERTED => $this->t('Converted'),
       WebformSubmissionInterface::STATE_COMPLETED => $this->t('Completed'),
       WebformSubmissionInterface::STATE_UPDATED => $this->t('Updated'),
+      WebformSubmissionInterface::STATE_LOCKED => $this->t('Locked'),
     ];
     $this->configuration['states'] = array_intersect_key($states, array_combine($this->configuration['states'], $this->configuration['states']));
 
@@ -103,6 +104,7 @@ class ActionWebformHandler extends WebformHandlerBase {
       'states' => [WebformSubmissionInterface::STATE_COMPLETED],
       'notes' => '',
       'sticky' => NULL,
+      'locked' => NULL,
       'data' => '',
       'message' => '',
       'message_type' => 'status',
@@ -147,6 +149,17 @@ class ActionWebformHandler extends WebformHandlerBase {
         '0' => $this->t('Unflag/Unstar'),
       ],
       '#default_value' => ($this->configuration['sticky'] === NULL) ? '' : ($this->configuration['sticky'] ? '1' : '0'),
+    ];
+    $form['actions']['locked'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Change lock'),
+      '#description' => $this->t('Webform submissions can only be unlocked programatically.'),
+      '#options' => [
+        '' => '',
+        '1' => $this->t('Lock'),
+        '0' => $this->t('Unlock'),
+      ],
+      '#default_value' => ($this->configuration['locked'] === NULL) ? '' : ($this->configuration['locked'] ? '1' : '0'),
     ];
     $form['actions']['notes'] = [
       '#type' => 'webform_codemirror',
@@ -243,6 +256,9 @@ class ActionWebformHandler extends WebformHandlerBase {
     // Cleanup sticky.
     $this->configuration['sticky'] = ($this->configuration['sticky'] === '') ? NULL : (bool) $this->configuration['sticky'];
 
+    // Cleanup locked.
+    $this->configuration['locked'] = ($this->configuration['locked'] === '') ? NULL : (bool) $this->configuration['locked'];
+
     // Cast debug.
     $this->configuration['debug'] = (bool) $this->configuration['debug'];
   }
@@ -273,6 +289,11 @@ class ActionWebformHandler extends WebformHandlerBase {
       $webform_submission->setSticky($this->configuration['sticky']);
     }
 
+    // Set locked.
+    if ($this->configuration['locked'] !== NULL) {
+      $webform_submission->setLocked($this->configuration['locked']);
+    }
+
     // Append notes.
     if ($this->configuration['notes']) {
       $notes = rtrim($webform_submission->getNotes());
@@ -295,7 +316,7 @@ class ActionWebformHandler extends WebformHandlerBase {
         $this->tokenManager->replace($this->configuration['message'], $webform_submission)
       );
       $message_type = $this->configuration['message_type'];
-      drupal_set_message(\Drupal::service('renderer')->render($message), $message_type);
+      drupal_set_message(\Drupal::service('renderer')->renderPlain($message), $message_type);
     }
 
     // Resave the webform submission without trigger any hooks or handlers.
@@ -334,6 +355,13 @@ class ActionWebformHandler extends WebformHandlerBase {
       '#type' => 'item',
       '#title' => $this->t('Status'),
       '#markup' => ($this->configuration['sticky'] === NULL) ? '' : ($this->configuration['sticky'] ? $this->t('Flagged/Starred') : $this->t('Unflagged/Unstarred')),
+      '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
+    ];
+
+    $build['locked'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Lock'),
+      '#markup' => ($this->configuration['locked'] === NULL) ? '' : ($this->configuration['locked'] ? $this->t('Locked') : $this->t('Unlocked')),
       '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
     ];
 

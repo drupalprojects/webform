@@ -826,6 +826,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'submission_login' => FALSE,
       'submission_login_message' => '',
       'submission_exception_message' => '',
+      'submission_locked_message' => '',
       'wizard_progress_bar' => TRUE,
       'wizard_progress_pages' => FALSE,
       'wizard_progress_percentage' => FALSE,
@@ -970,7 +971,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     if (empty($webform_submission)
       && $operation === 'view_own'
       && $this->checkAccessRule($access_rules[$operation], $account)) {
-        return TRUE;
+      return TRUE;
     }
 
     // If webform submission is set then check the webform submission owner.

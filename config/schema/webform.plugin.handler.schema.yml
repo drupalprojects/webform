@@ -18,6 +18,9 @@ webform.handler.action:
     sticky:
       label: 'Flag'
       type: boolean
+    locked:
+      label: 'Locked'
+      type: boolean
     data:
       label: 'Data'
       type: text

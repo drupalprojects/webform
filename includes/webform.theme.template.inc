@@ -307,6 +307,7 @@ function template_preprocess_webform_submission_information(array &$variables) {
   $variables['completed'] = WebformDateHelper::format($webform_submission->getCompletedTime());
   $variables['changed'] = WebformDateHelper::format($webform_submission->getChangedTime());
   $variables['sticky'] = $webform_submission->isSticky() ? t('Yes') : '';
+  $variables['locked'] = $webform_submission->isLocked() ? t('Yes') : '';
   $variables['notes'] = $webform_submission->getNotes();
 
   // @see \Drupal\Core\Field\Plugin\Field\FieldFormatter\LanguageFormatter::viewValue()

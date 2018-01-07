@@ -131,6 +131,9 @@ webform.webform.*:
         submission_exception_message:
           type: text
           label: 'Submission exception message'
+        submission_locked_message:
+          type: text
+          label: 'Submission locked message'
         submission_log:
           type: boolean
           label: 'Submission logging'

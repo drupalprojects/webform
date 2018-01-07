@@ -71,6 +71,7 @@ settings:
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
+  submission_locked_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -178,6 +179,7 @@ handlers:
         entity_type: entity_type
         entity_id: entity_id
         sticky: sticky
+        locked: locked
         notes: notes
         confirmation_number: confirmation_number
       custom_data: |

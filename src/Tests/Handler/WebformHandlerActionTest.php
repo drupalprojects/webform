@@ -4,6 +4,7 @@ namespace Drupal\webform\Tests\Handler;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\Tests\WebformTestBase;
 
 /**
@@ -36,6 +37,9 @@ class WebformHandlerActionTest extends WebformTestBase {
 
     // Check that submission is not flagged (sticky).
     $this->assertFalse($webform_submission->isSticky());
+
+    // Check that submission is unlocked.
+    $this->assertFalse($webform_submission->isLocked());
 
     // Check that submission notes is empty.
     $this->assertTrue(empty($webform_submission->getNotes()));
@@ -76,6 +80,7 @@ class WebformHandlerActionTest extends WebformTestBase {
 
     // Check messages.
     $this->assertRaw('Submission has been unflagged.');
+    //$this->assertRaw('Submission has been unlocked.');
     $this->assertRaw('Submission notes have been updated.');
 
     // Reload the webform submission.
@@ -93,6 +98,34 @@ class WebformHandlerActionTest extends WebformTestBase {
 
     // Check that notes_last is updated with second note.
     $this->assertEqual($webform_submission->getElementData('notes_last'), 'This is the second note');
+
+    // Lock submission.
+    $edit = [
+      'lock' => 'locked',
+    ];
+    $this->drupalPostForm("admin/structure/webform/manage/test_handler_action/submission/$sid/edit", $edit, t('Save'));
+
+    // Check locked message.
+    $this->assertRaw('Submission has been locked.');
+
+    // Reload the webform submission.
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+
+    // Check that submission is locked.
+    $this->assertTrue($webform_submission->isLocked());
+    $this->assertEqual(WebformSubmissionInterface::STATE_LOCKED, $webform_submission->getState());
+
+    // Check that submission is locked.
+    $this->drupalGet("admin/structure/webform/manage/test_handler_action/submission/$sid/edit");
+    $this->assertRaw('This is submission was automatically locked.');
+    
+    // Programmatically unlock the submission.
+    $webform_submission->setElementData('lock', 'unlocked');
+    $webform_submission->save();
+
+    $this->assertFalse($webform_submission->isLocked());
+    $this->assertNotEqual(WebformSubmissionInterface::STATE_LOCKED, $webform_submission->getState());
   }
 
 }

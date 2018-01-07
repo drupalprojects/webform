@@ -37,6 +37,7 @@ settings:
   default_submission_label: '[webform_submission:submitted-to]: Submission #[webform_submission:serial]'
   default_submission_login_message: 'Please login to access this submission.'
   default_submission_exception_message: 'Unable to process this submission. Please contact the site administrator.'
+  default_submission_locked_message: 'This submission has been locked.'
   default_submission_log: false
   preview_classes: |
     messages messages--error

@@ -41,10 +41,13 @@
       {% if submitted_to %}
         <div><b>{{ 'Submitted to'|t }}:</b> {{ submitted_to }}</div>
       {% endif %}
-      {% if sticky or notes %}
+      {% if sticky or locked or notes %}
         <br />
         {% if sticky %}
           <div><b>{{ 'Flagged'|t }}:</b> {{ sticky }}</div>
+        {% endif %}
+        {% if locked %}
+          <div><b>{{ 'Locked'|t }}:</b> {{ locked }}</div>
         {% endif %}
         {% if notes %}
           <div><b>{{ 'Notes'|t }}:</b><br/>

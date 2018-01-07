@@ -595,6 +595,11 @@ class WebformSubmissionForm extends ContentEntityForm {
       return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
     }
 
+    // Exit if submission is locked.
+    if ($webform_submission->isLocked()) {
+      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::SUBMISSION_LOCKED, 'warning');
+    }
+
     // Check prepopulate source entity required and type.
     if ($webform->getSetting('form_prepopulate_source_entity')) {
       if ($webform->getSetting('form_prepopulate_source_entity_required') && empty($this->getSourceEntity())) {

@@ -108,6 +108,9 @@ webform.settings:
         default_submission_exception_message:
           type: text
           label: 'Default submission exception message'
+        default_submission_locked_message:
+          type: text
+          label: 'Default submission locked message'
         form_classes:
           type: string
           label: 'Form CSS classes '

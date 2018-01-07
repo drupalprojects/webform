@@ -30,6 +30,16 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   const STATE_UNSTARRED = 'unstarred';
 
   /**
+   * Submission state locked.
+   */
+  const STATE_LOCKED = 'locked';
+
+  /**
+   * Submission state unlocked.
+   */
+  const STATE_UNLOCKED = 'unlocked';
+
+  /**
    * Submission state completed.
    */
   const STATE_COMPLETED = 'completed';
@@ -258,6 +268,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
         self::STATE_STARRED => $this->t('Starred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_STARRED)]),
         self::STATE_UNSTARRED => $this->t('Unstarred [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNSTARRED)]),
+        self::STATE_LOCKED => $this->t('Locked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_LOCKED)]),
+        self::STATE_UNLOCKED => $this->t('Unlocked [@total]', ['@total' => $this->getTotal(NULL, self::STATE_UNLOCKED)]),
       ];
       // Add draft to state options.
       if (!$this->webform || $this->webform->getSetting('draft') != WebformInterface::DRAFT_NONE) {
@@ -391,11 +403,12 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     switch ($name) {
       case 'notes':
       case 'sticky':
+      case 'locked':
         return [
           'data' => new FormattableMarkup('<span class="webform-icon webform-icon-@name webform-icon-@name--link"></span>', ['@name' => $name]),
           'class' => ['webform-results__icon'],
-          'field' => 'sticky',
-          'specifier' => 'sticky',
+          'field' => $name,
+          'specifier' => $name,
         ];
 
       default:
@@ -531,6 +544,23 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
           'class' => ['webform-results__icon'],
         ];
 
+      case 'locked':
+        $route_name = 'entity.webform_submission.locked_toggle';
+        $route_parameters = ['webform' => $entity->getWebform()->id(), 'webform_submission' => $entity->id()];
+        $state = $entity->isLocked() ? 'on' : 'off';
+        return [
+          'data' => [
+            '#type' => 'link',
+            '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-lock webform-icon-locked--@state"></span>', ['@state' => $state]),
+            '#url' => Url::fromRoute($route_name, $route_parameters),
+            '#attributes' => [
+              'id' => 'webform-submission-' . $entity->id() . '-locked',
+              'class' => ['use-ajax'],
+            ],
+          ],
+          'class' => ['webform-results__icon'],
+        ];
+
       case 'uid':
         return ($is_raw) ? $entity->getOwner()->id() : ($entity->getOwner()->getAccountName() ?: t('Anonymous'));
 
@@ -594,7 +624,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       ];
     }
 
-    if ($entity->access('update')) {
+    if ($entity->access('notes')) {
       $operations['notes'] = [
         'title' => $this->t('Notes'),
         'weight' => 21,
@@ -777,6 +807,14 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
       case self::STATE_UNSTARRED:
         $query->condition('sticky', 0);
+        break;
+
+      case self::STATE_LOCKED:
+        $query->condition('locked', 1);
+        break;
+
+      case self::STATE_UNLOCKED:
+        $query->condition('locked', 0);
         break;
 
       case self::STATE_DRAFT:

@@ -134,6 +134,11 @@ interface WebformMessageManagerInterface {
   const SUBMISSION_EXCEPTION = 'submission_exception_message';
 
   /**
+   * Submission exception.
+   */
+  const SUBMISSION_LOCKED = 'submission_locked_message';
+
+  /**
    * Template preview.
    */
   const TEMPLATE_PREVIEW = 'template_preview';
@@ -144,6 +149,11 @@ interface WebformMessageManagerInterface {
   const PREPOPULATE_SOURCE_ENTITY_REQUIRED = 'prepopulate_source_entity_required';
 
   /**
+   * Prepopulate source entity type.
+   */
+  const PREPOPULATE_SOURCE_ENTITY_TYPE = 'prepopulate_source_entity_type';
+
+  /**
    * Set the webform submission used for token replacement.
    *
    * Webform and source entity will also be set using the webform submission.
@@ -152,11 +162,6 @@ interface WebformMessageManagerInterface {
    *   A webform submission.
    */
   public function setWebformSubmission(WebformSubmissionInterface $webform_submission = NULL);
-
-  /**
-   * Prepopulate source entity type.
-   */
-  const PREPOPULATE_SOURCE_ENTITY_TYPE = 'prepopulate_source_entity_type';
 
   /**
    * Set the webform used for custom messages and token replacement.

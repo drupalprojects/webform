@@ -118,6 +118,7 @@ settings:
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
+  submission_locked_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
