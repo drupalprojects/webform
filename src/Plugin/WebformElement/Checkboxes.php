@@ -13,7 +13,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   id = "checkboxes",
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Checkboxes.php/class/Checkboxes",
  *   label = @Translation("Checkboxes"),
- *   description = @Translation("Provides a form element for a set of checkboxes, with the ability to enter a custom value."),
+ *   description = @Translation("Provides a form element for a set of checkboxes."),
  *   category = @Translation("Options elements"),
  * )
  */
