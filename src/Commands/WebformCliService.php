@@ -691,15 +691,14 @@ class WebformCliService implements WebformCliServiceInterface {
       }
 
       // Move files and directories from temp location to download location.
+      // using rename.
       $files = scandir($temp_location);
       // Remove directories (. ..)
       unset($files[0], $files[1]);
       if ((count($files) == 1) && is_dir($temp_location . '/' . current($files))) {
         $temp_location .= '/' . current($files);
       }
-      if (!$this->drush_move_dir($temp_location, $download_location, TRUE)) {
-        $this->drush_set_error("Unable to move $temp_location to $download_location");
-      }
+      rename($temp_location, $download_location);
 
       // Remove the tarball.
       if (file_exists($temp_filepath)) {

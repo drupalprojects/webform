@@ -6,6 +6,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Psr\Log\LogLevel;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Base class for Webform commands for Drush 9.x.
@@ -66,29 +67,19 @@ abstract class WebformCommandsBase extends DrushCommands {
     return Drush::redispatchOptions();
   }
 
-  /****************************************************************************/
-  // Prevent Call to undefined function drush_trim_path() which is being
-  // called by drush_tempdir().
-  // @todo Remove below commands once Drush 9.x-rc2 has been released.
-  /****************************************************************************/
-
-  public function drush_tempdir() {
-    $tmp_dir = $this->drush_trim_path(Drush::config()->tmp());
-    $tmp_dir .= '/' . 'drush_tmp_' . uniqid(time() . '_');
-
-    drush_mkdir($tmp_dir);
-    drush_register_file_for_deletion($tmp_dir);
-
-    return $tmp_dir;
+  public function drush_mkdir($path) {
+    $fs = new Filesystem();
+    $fs->mkdir($path);
+    return true;
   }
 
-  public function drush_trim_path($path, $os = NULL) {
-    if (drush_is_windows($os)) {
-      return rtrim($path, '/\\');
+  public function drush_tarball_extract($path, $destination = FALSE) {
+    $this->drush_mkdir($destination);
+    $return = drush_shell_cd_and_exec(dirname($path), "unzip %s -d %s", $path, $destination);
+    if (!$return) {
+      throw new \Exception(dt('Unable to unzip !filename.', array('!filename' => $path)));
     }
-    else {
-      return rtrim($path, '/');
-    }
+    return $return;
   }
 
 }
