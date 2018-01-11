@@ -96,7 +96,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           '#type' => 'link',
           '#title' => $this->t('Add webform'),
           '#url' => new Url('entity.webform.add_form'),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button-action', 'button--primary', 'button--small']),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['button', 'button-action', 'button--primary', 'button--small']),
         ],
       ];
     }
@@ -283,11 +283,11 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           'title' => $this->t('Duplicate'),
           'weight' => 26,
           'url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(700),
+          'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
         ];
       }
       if (isset($operations['delete'])) {
-        $operations['delete']['attributes'] = WebformDialogHelper::getModalDialogAttributes(700);
+        $operations['delete']['attributes'] = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW);
       }
 
     }

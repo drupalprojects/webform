@@ -109,14 +109,14 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
           '#type' => 'link',
           '#title' => $this->t('Select'),
           '#url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button--primary']),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['button', 'button--primary']),
         ];
       }
       $row['operations']['data']['preview'] = [
         '#type' => 'link',
         '#title' => $this->t('Preview'),
         '#url' => Url::fromRoute('entity.webform.preview', $route_parameters),
-        '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button']),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, ['button']),
       ];
       $rows[] = $row;
     }

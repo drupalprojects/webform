@@ -118,24 +118,17 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
     $form['ui']['dialog_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable dialogs'),
-      '#description' => $this->t('If checked, all modal dialogs (i.e. popups) will be disabled.'),
+      '#description' => $this->t('If checked, all modal/off-canvas dialogs (i.e. popups) will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.dialog_disabled'),
-    ];
-    $form['ui']['about_disabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t("Disable the 'About' section"),
-      '#description' => $this->t("If checked, 'About' section/tab will be remove from the admin UI."),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('ui.about_disabled'),
     ];
     $form['ui']['offcanvas_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable off-canvas system tray'),
-      '#description' => $this->t('If checked, the off-canvas system tray will be disabled.'),
+      '#description' => $this->t('If checked, all off-canvas system trays will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.offcanvas_disabled'),
-      '#access' => $this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3),
+      '#access' => (floatval(\Drupal::VERSION) >= 8.5),
       '#states' => [
         'visible' => [
           ':input[name="ui[dialog_disabled]"]' => [
@@ -143,6 +136,13 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
           ],
         ],
       ],
+    ];
+    $form['ui']['about_disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t("Disable the 'About' section"),
+      '#description' => $this->t("If checked, 'About' section/tab will be remove from the admin UI."),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('ui.about_disabled'),
     ];
     $form['ui']['promotions_disabled'] = [
       '#type' => 'checkbox',
@@ -153,21 +153,6 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.promotions_disabled'),
     ];
-    if (!$this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3)) {
-      $form['ui']['offcanvas_message'] = [
-        '#type' => 'webform_message',
-        '#message_type' => 'info',
-        '#message_message' => $this->t('Enable the experimental <a href=":href">System tray module</a> to improve the Webform module\'s user experience.', [':href' => 'https://www.drupal.org/blog/drupal-82-now-with-more-outside-in']),
-        '#states' => [
-          'visible' => [
-            ':input[name="ui[dialog_disabled]"]' => [
-              'checked' => FALSE,
-            ],
-          ],
-        ],
-        '#weight' => -100,
-      ];
-    }
 
     // Requirements.
     $form['requirements'] = [

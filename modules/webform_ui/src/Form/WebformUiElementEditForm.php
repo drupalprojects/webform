@@ -62,7 +62,7 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
             'key' => $key,
           ]
         ),
-        '#attributes' => WebformDialogHelper::getModalDialogAttributes(700, ['button', 'button--danger']),
+        '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::NARROW_DIALOG, ['button', 'button--danger']),
       ];
     }
     */
@@ -74,7 +74,7 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
         '#type' => 'link',
         '#title' => $this->t('Delete'),
         '#url' => new Url('entity.webform_ui.element.delete_form', ['webform' => $webform->id(), 'key' => $key]),
-        '#attributes' => ['style' => 'display:none'] + WebformDialogHelper::getModalDialogAttributes(700, ['webform-ui-element-delete-link']),
+        '#attributes' => ['style' => 'display:none'] + WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['webform-ui-element-delete-link']),
       ];
       $form['actions']['delete'] = [
         '#type' => 'submit',

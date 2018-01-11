@@ -61,7 +61,7 @@ function template_preprocess_webform_help(array &$variables) {
           '#type' => 'link',
           '#title' => t('Watch video'),
           '#url' => Url::fromRoute('webform.help.video', ['id' => str_replace('_', '-', $video_info['id'])]),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, $classes),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE, $classes),
           '#prefix' => ' ',
         ];
         break;

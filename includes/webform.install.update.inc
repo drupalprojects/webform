@@ -1905,3 +1905,10 @@ function webform_update_8100() {
   }
 }
 
+/**
+ * Issue #2935697: Add support for new Off-Canvas dialog tray. Remove quickedit links.
+ */
+function webform_update_8101() {
+  \Drupal::service('cache.discovery')->deleteAll();
+  Cache::invalidateTags(['rendered']);
+}

@@ -116,7 +116,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       '#link' => [
         'title' => $this->t('Add element'),
         'url' => new Url('entity.webform_ui.element', ['webform' => $webform->id()]),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(),
       ]
     ];
     if ($this->elementManager->createInstance('webform_wizard_page')->isEnabled()) {
@@ -125,7 +125,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         '#link' => [
           'title' => $this->t('Add page'),
           'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
         ]
       ];
     }
@@ -135,7 +135,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         '#link' => [
           'title' => $this->t('Add layout'),
           'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
         ]
       ];
     }
@@ -357,40 +357,36 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         'class' => [RESPONSIVE_PRIORITY_MEDIUM, 'webform-ui-element-operations'],
       ];
     }
-    if (!$this->isQuickEdit()) {
-      $header['key'] = [
-        'data' => $this->t('Key'),
+    $header['key'] = [
+      'data' => $this->t('Key'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    $header['type'] = [
+      'data' => $this->t('Type'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    if ($webform->hasFlexboxLayout()) {
+      $header['flex'] = [
+        'data' => $this->t('Flex'),
         'class' => [RESPONSIVE_PRIORITY_LOW],
-      ];
-      $header['type'] = [
-        'data' => $this->t('Type'),
-        'class' => [RESPONSIVE_PRIORITY_LOW],
-      ];
-      if ($webform->hasFlexboxLayout()) {
-        $header['flex'] = [
-          'data' => $this->t('Flex'),
-          'class' => [RESPONSIVE_PRIORITY_LOW],
-        ];
-      }
-      if ($webform->hasConditions()) {
-        $header['conditions'] = [
-          'data' => $this->t('Conditional'),
-          'class' => [RESPONSIVE_PRIORITY_LOW],
-        ];
-      }
-      $header['required'] = [
-        'data' => $this->t('Required'),
-        'class' => ['webform-ui-element-required', RESPONSIVE_PRIORITY_LOW],
       ];
     }
+    if ($webform->hasConditions()) {
+      $header['conditions'] = [
+        'data' => $this->t('Conditional'),
+        'class' => [RESPONSIVE_PRIORITY_LOW],
+      ];
+    }
+    $header['required'] = [
+      'data' => $this->t('Required'),
+      'class' => ['webform-ui-element-required', RESPONSIVE_PRIORITY_LOW],
+    ];
     $header['weight'] = $this->t('Weight');
     $header['parent'] = $this->t('Parent');
-    if (!$this->isQuickEdit()) {
-      $header['operations'] = [
-        'data' => $this->t('Operations'),
-        'class' => ['webform-ui-element-operations'],
-      ];
-    }
+    $header['operations'] = [
+      'data' => $this->t('Operations'),
+      'class' => ['webform-ui-element-operations'],
+    ];
     return $header;
   }
 
@@ -411,7 +407,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     $row = [];
 
-    $element_dialog_attributes = WebformDialogHelper::getModalDialogAttributes(800);
+    $element_dialog_attributes = WebformDialogHelper::getOffCanvasDialogAttributes();
     $key = $element['#webform_key'];
 
     $plugin_id = $this->elementManager->getElementPluginId($element);
@@ -480,57 +476,55 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           '#type' => 'link',
           '#title' => $this->t('Add element'),
           '#url' => new Url('entity.webform_ui.element', $route_parameters, $route_options),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--primary', 'button--small']),
+          '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, ['button', 'button-action', 'button--primary', 'button--small']),
         ];
       }
       else {
         $row['add'] = ['#markup' => ''];
       }
     }
-    if (!$this->isQuickEdit()) {
-      $row['name'] = [
-        '#markup' => $element['#webform_key'],
+    $row['name'] = [
+      '#markup' => $element['#webform_key'],
+    ];
+
+    $row['type'] = [
+      '#markup' => $webform_element->getPluginLabel(),
+    ];
+
+    if ($webform->hasFlexboxLayout()) {
+      $row['flex'] = [
+        '#markup' => (empty($element['#flex'])) ? 1 : $element['#flex'],
       ];
+    }
 
-      $row['type'] = [
-        '#markup' => $webform_element->getPluginLabel(),
+    if ($webform->hasConditions()) {
+      $states = [];
+      if (!empty($element['#states'])) {
+        $states = array_intersect_key(WebformElementStates::getStateOptions(), $element['#states']);
+      }
+      $row['conditional'] = [
+        '#type' => 'link',
+        '#title' => implode('; ', $states),
+        '#url' => new Url(
+          'entity.webform_ui.element.edit_form',
+          ['webform' => $webform->id(), 'key' => $key]
+        ),
+        '#attributes' => $element_dialog_attributes + [
+          // Add custom hash to current page's location.
+          // @see Drupal.behaviors.webformAjaxLink
+          'data-hash' => 'webform-tab--conditions',
+        ],
       ];
+    }
 
-      if ($webform->hasFlexboxLayout()) {
-        $row['flex'] = [
-          '#markup' => (empty($element['#flex'])) ? 1 : $element['#flex'],
-        ];
-      }
-
-      if ($webform->hasConditions()) {
-        $states = [];
-        if (!empty($element['#states'])) {
-          $states = array_intersect_key(WebformElementStates::getStateOptions(), $element['#states']);
-        }
-        $row['conditional'] = [
-          '#type' => 'link',
-          '#title' => implode('; ', $states),
-          '#url' => new Url(
-            'entity.webform_ui.element.edit_form',
-            ['webform' => $webform->id(), 'key' => $key]
-          ),
-          '#attributes' => $element_dialog_attributes + [
-            // Add custom hash to current page's location.
-            // @see Drupal.behaviors.webformAjaxLink
-            'data-hash' => 'webform-tab--conditions',
-          ],
-        ];
-      }
-
-      if ($webform_element->hasProperty('required')) {
-        $row['required'] = [
-          '#type' => 'checkbox',
-          '#default_value' => (empty($element['#required'])) ? FALSE : TRUE,
-        ];
-      }
-      else {
-        $row['required'] = ['#markup' => ''];
-      }
+    if ($webform_element->hasProperty('required')) {
+      $row['required'] = [
+        '#type' => 'checkbox',
+        '#default_value' => (empty($element['#required'])) ? FALSE : TRUE,
+      ];
+    }
+    else {
+      $row['required'] = ['#markup' => ''];
     }
 
     $row['weight'] = [
@@ -565,16 +559,34 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       ],
     ];
 
-    if (!$this->isQuickEdit()) {
-      $row['operations'] = [
-        '#type' => 'operations',
-        '#prefix' => '<div class="webform-dropbutton">',
-        '#suffix' => '</div>',
-      ];
-      $row['operations']['#links']['edit'] = [
-        'title' => $this->t('Edit'),
+    $row['operations'] = [
+      '#type' => 'operations',
+      '#prefix' => '<div class="webform-dropbutton">',
+      '#suffix' => '</div>',
+    ];
+    $row['operations']['#links']['edit'] = [
+      'title' => $this->t('Edit'),
+      'url' => new Url(
+        'entity.webform_ui.element.edit_form',
+        [
+          'webform' => $webform->id(),
+          'key' => $key,
+        ]
+      ),
+      'attributes' => $element_dialog_attributes,
+    ];
+    // Issue #2741877 Nested modals don't work: when using CKEditor in a
+    // modal, then clicking the image button opens another modal,
+    // which closes the original modal.
+    // @todo Remove the below workaround once this issue is resolved.
+    if ($webform_element->getPluginId() == 'processed_text' && !WebformDialogHelper::useOffCanvas()) {
+      unset($row['operations']['#links']['edit']['attributes']);
+    }
+    if (!$is_container) {
+      $row['operations']['#links']['duplicate'] = [
+        'title' => $this->t('Duplicate'),
         'url' => new Url(
-          'entity.webform_ui.element.edit_form',
+          'entity.webform_ui.element.duplicate_form',
           [
             'webform' => $webform->id(),
             'key' => $key,
@@ -582,38 +594,18 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         ),
         'attributes' => $element_dialog_attributes,
       ];
-      // Issue #2741877 Nested modals don't work: when using CKEditor in a
-      // modal, then clicking the image button opens another modal,
-      // which closes the original modal.
-      // @todo Remove the below workaround once this issue is resolved.
-      if ($webform_element->getPluginId() == 'processed_text') {
-        unset($row['operations']['#links']['edit']['attributes']);
-      }
-      if (!$is_container) {
-        $row['operations']['#links']['duplicate'] = [
-          'title' => $this->t('Duplicate'),
-          'url' => new Url(
-            'entity.webform_ui.element.duplicate_form',
-            [
-              'webform' => $webform->id(),
-              'key' => $key,
-            ]
-          ),
-          'attributes' => $element_dialog_attributes,
-        ];
-      }
-      $row['operations']['#links']['delete'] = [
-        'title' => $this->t('Delete'),
-        'url' => new Url(
-          'entity.webform_ui.element.delete_form',
-          [
-            'webform' => $webform->id(),
-            'key' => $key,
-          ]
-        ),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(700),
-      ];
     }
+    $row['operations']['#links']['delete'] = [
+      'title' => $this->t('Delete'),
+      'url' => new Url(
+        'entity.webform_ui.element.delete_form',
+        [
+          'webform' => $webform->id(),
+          'key' => $key,
+        ]
+      ),
+      'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
+    ];
     return $row;
   }
 
@@ -633,38 +625,34 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       '#type' => 'link',
       '#title' => $this->t('Submit button(s)'),
       '#url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_actions'], ['query' => ['key' => 'actions']]),
-      '#attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+      '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
     ];
     if ($webform->hasContainer()) {
       $row['add'] = ['#markup' => ''];
     }
-    if (!$this->isQuickEdit()) {
-      $row['name'] = ['#markup' => 'actions'];
-      $row['type'] = [
-        '#markup' => $this->t('Submit button(s)'),
-      ];
-      if ($webform->hasFlexboxLayout()) {
-        $row['flex'] = ['#markup' => 1];
-      }
-      if ($webform->hasConditions()) {
-        $row['flex'] = ['#markup' => ''];
-      }
-      $row['required'] = ['#markup' => ''];
+    $row['name'] = ['#markup' => 'actions'];
+    $row['type'] = [
+      '#markup' => $this->t('Submit button(s)'),
+    ];
+    if ($webform->hasFlexboxLayout()) {
+      $row['flex'] = ['#markup' => 1];
     }
+    if ($webform->hasConditions()) {
+      $row['flex'] = ['#markup' => ''];
+    }
+    $row['required'] = ['#markup' => ''];
     $row['weight'] = ['#markup' => ''];
     $row['parent'] = ['#markup' => ''];
-    if (!$this->isQuickEdit()) {
-      $row['operations'] = [
-        '#type' => 'operations',
-        '#prefix' => '<div class="webform-dropbutton">',
-        '#suffix' => '</div>',
-      ];
-      $row['operations']['#links']['customize'] = [
-        'title' => $this->t('Customize'),
-        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_actions']),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(800),
-      ];
-    }
+    $row['operations'] = [
+      '#type' => 'operations',
+      '#prefix' => '<div class="webform-dropbutton">',
+      '#suffix' => '</div>',
+    ];
+    $row['operations']['#links']['customize'] = [
+      'title' => $this->t('Customize'),
+      'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_actions']),
+      'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
+    ];
     return $row;
   }
 

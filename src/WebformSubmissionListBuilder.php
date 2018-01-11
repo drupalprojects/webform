@@ -337,7 +337,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       '#type' => 'link',
       '#title' => $this->t('Customize'),
       '#url' => Url::fromRoute($route_name, $route_parameters, $route_options),
-      '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button-action', 'button--small', 'button-webform-table-setting']),
+      '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, ['button', 'button-action', 'button--small', 'button-webform-table-setting']),
     ];
   }
 
@@ -487,7 +487,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
             '#type' => 'link',
             '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-notes webform-icon-notes--@state"></span>', ['@state' => $state]),
             '#url' => $notes_url,
-            '#attributes' => WebformDialogHelper::getModalDialogAttributes(700),
+            '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
           ],
           'class' => ['webform-results__icon'],
         ];

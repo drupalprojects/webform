@@ -12,7 +12,6 @@ use Drupal\webform\Ajax\WebformCloseDialogCommand;
 use Drupal\webform\Ajax\WebformRefreshCommand;
 use Drupal\webform\Ajax\WebformScrollTopCommand;
 use Drupal\webform\Ajax\WebformSubmissionAjaxResponse;
-use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\WebformSubmissionForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -74,7 +73,7 @@ trait WebformAjaxFormTrait {
       'drupal_ajax',
       'drupal_modal',
       'drupal_dialog',
-      'drupal_dialog_' . WebformDialogHelper::getOffCanvasTriggerName(),
+      'drupal_dialog.off_canvas',
     ])) ? TRUE : FALSE;
   }
 
@@ -88,21 +87,8 @@ trait WebformAjaxFormTrait {
     $wrapper_format = $this->getRequest()
       ->get(MainContentViewSubscriber::WRAPPER_FORMAT);
     return (in_array($wrapper_format, [
-      'drupal_dialog_' . WebformDialogHelper::getOffCanvasTriggerName(),
+      'drupal_dialog_off_canvas',
     ])) ? TRUE : FALSE;
-  }
-
-  /**
-   * Is the current request a quick edit page.
-   *
-   * @return bool
-   *   TRUE if the current request a quick edit page.
-   */
-  protected function isQuickEdit() {
-    if (!$this->moduleHandler->moduleExists('quickedit')) {
-      return FALSE;
-    }
-    return (\Drupal::request()->query->get('destination')) ? TRUE : FALSE;
   }
 
   /**

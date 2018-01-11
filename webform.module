@@ -24,6 +24,7 @@ use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionForm;
@@ -544,6 +545,22 @@ function webform_library_info_build() {
  * Implements hook_css_alter().
  */
 function webform_css_alter(&$css, AttachedAssetsInterface $assets) {
+  // Remove the stable.theme's off-canvas CSS reset for webform admin routes.
+  // @see https://www.drupal.org/project/drupal/issues/2826722
+  //
+  // NOTE: Most admin themes correct style jQuery UI dialogs because Drupal's
+  // admin UI, especially Views, relies on them.
+  $use_off_canvas = WebformDialogHelper::useOffCanvas();
+  $is_admin_route = \Drupal::service('router.admin_context')->isAdminRoute();
+  $is_webform_route = preg_match('/(^webform|^entity\.webform|^entity\.node\.webform)/', \Drupal::routeMatch()->getRouteName());
+  if ($use_off_canvas && $is_admin_route && $is_webform_route) {
+    foreach ($css as $key => $item) {
+      if (strpos($key, 'core/themes/stable/css/core/dialog/off-canvas') === 0) {
+        unset($css[$key]);
+      }
+    }
+  }
+
   _webform_asset_alter($css, 'css');
 }
 

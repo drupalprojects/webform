@@ -277,8 +277,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       switch ($video_display) {
         case 'dialog':
           $url = Url::fromRoute('webform.help.video', ['id' => str_replace('_', '-', $video['id'])]);
-          $image_attributes = WebformDialogHelper::getModalDialogAttributes(1000);
-          $link_attributes = WebformDialogHelper::getModalDialogAttributes(1000, $classes);
+          $image_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE);
+          $link_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE, $classes);
           break;
 
         case 'link':
