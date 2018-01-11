@@ -83,7 +83,17 @@ class WebformEntityHandlersForm extends EntityForm {
         '#tree' => FALSE,
         'data' => [
           'label' => [
-            '#markup' => '<b>' . $handler->label() . '</b>: ' . $handler->description(),
+            '#type' => 'link',
+            '#title' => $handler->label(),
+            '#url' => Url::fromRoute('entity.webform.handler.edit_form', [
+              'webform' => $this->entity->id(),
+              'webform_handler' => $handler_id,
+            ]),
+            '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
+          ],
+          'description' => [
+            '#prefix' => '<br/>',
+            '#markup' => $handler->description(),
           ],
         ],
       ];
