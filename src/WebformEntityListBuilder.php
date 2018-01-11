@@ -443,4 +443,11 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     return ($account->hasPermission('administer webform') || $account->hasPermission('edit any webform') || $account->hasPermission('view any webform submission'));
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function ensureDestination(Url $url) {
+    return $url;
+  }
+
 }
