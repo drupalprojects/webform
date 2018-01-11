@@ -698,7 +698,7 @@ class WebformCliService implements WebformCliServiceInterface {
       if ((count($files) == 1) && is_dir($temp_location . '/' . current($files))) {
         $temp_location .= '/' . current($files);
       }
-      rename($temp_location, $download_location);
+      file_unmanaged_move($temp_location, $download_location);
 
       // Remove the tarball.
       if (file_exists($temp_filepath)) {
