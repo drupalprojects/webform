@@ -168,6 +168,9 @@ class WebformSubmissionResendForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $params = $form_state->getValue('message');
 
+    // Add webform submission.
+    $params['webform_submission'] = $this->webformSubmission;
+
     $message_handler_id = $form_state->getValue('message_handler_id');
     $message_handler = $this->webformSubmission->getWebform()->getHandler($message_handler_id);
 
