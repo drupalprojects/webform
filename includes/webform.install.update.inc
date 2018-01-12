@@ -627,7 +627,7 @@ function webform_update_8030() {
  * Issue #2854021: Send email based on element options selection.
  */
 function webform_update_8031() {
-  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+  _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
 }
 
 /**
@@ -1582,7 +1582,7 @@ function webform_update_8077() {
  */
 function webform_update_8078() {
   _webform_update_admin_settings();
-  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+  _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
 }
 
 /**
@@ -1612,7 +1612,7 @@ function webform_update_8080() {
  * Issue #2913215: Remote Post handler add GET method support.
  */
 function webform_update_8081() {
-  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
+  _webform_update_webform_handler_class_settings(RemotePostWebformHandler::class);
 }
 
 /**
@@ -1817,7 +1817,7 @@ function webform_update_8096() {
  * Issue #2932607: Add Twig support to email body.
  */
 function webform_update_8097() {
-  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+  _webform_update_webform_handler_class_settings(EmailWebformHandler::class);
 }
 
 /**
@@ -1879,7 +1879,7 @@ function webform_update_8099() {
  */
 function webform_update_8100() {
   // Add locked to action handler.
-  _webform_update_webform_handler_configuration(ActionWebformHandler::class);
+  _webform_update_webform_handler_class_settings(ActionWebformHandler::class);
 
   // Add locked to remote post handler's excluded data.
   /** @var \Drupal\webform\WebformInterface[] $webforms */

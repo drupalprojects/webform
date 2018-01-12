@@ -765,7 +765,7 @@ class WebformCliService implements WebformCliServiceInterface {
     _webform_update_webform_settings();
 
     $this->drush_print('Repairing webform handlers...');
-    _webform_update_webform_handler_configuration();
+    _webform_update_webform_handler_class_settings();
 
     $this->drush_print('Repairing webform field storage definitions...');
     _webform_update_field_storage_definitions();

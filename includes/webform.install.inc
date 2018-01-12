@@ -130,7 +130,7 @@ function _webform_update_webform_settings() {
 /**
  * Update webform handler setting to reflect changes in a handler's default configuration.
  *
- * Must be called by passing in the handler's class using ::class
+ * Must be called by passing in the handler's class using ::class.
  *
  * Example usage:
  * @code
@@ -142,7 +142,7 @@ function _webform_update_webform_settings() {
  *
  * @see \Drupal\webform\Plugin\WebformHandlerInterface
  */
-function _webform_update_webform_handler_class_settings($handler_class) {
+function _webform_update_webform_handler_class_settings($handler_class = NULL) {
   _webform_update_set_config_language_not_specified();
 
   /** @var \Drupal\webform\WebformInterface[] $webforms */
@@ -151,7 +151,7 @@ function _webform_update_webform_handler_class_settings($handler_class) {
     $has_handler = FALSE;
     $handlers = $webform->getHandlers();
     foreach ($handlers as $handler) {
-      if ($handler instanceof $handler_class) {
+      if (empty($handler_class) || $handler instanceof $handler_class) {
         $has_handler = TRUE;
         $configuration = $handler->getConfiguration();
 
