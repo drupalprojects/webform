@@ -21,14 +21,14 @@ class WebformWizardPage extends Details {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $default_properties = [
+    $properties = [
       'title' => '',
       'open' => FALSE,
       'prev_button_label' => '',
       'next_button_label' => '',
     ] + $this->getDefaultBaseProperties();
-    unset($default_properties['flex']);
-    return $default_properties;
+    unset($properties['flex']);
+    return $properties;
   }
 
   /**
@@ -94,6 +94,10 @@ class WebformWizardPage extends Details {
 
     // Wizard pages only support visible or hidden state.
     $form['conditional_logic']['states']['#multiple'] = FALSE;
+
+    // Wizard pages use server-side validation and can't support
+    // custom selectors.
+    $form['conditional_logic']['states']['#selector_other'] = FALSE;
 
     return $form;
   }

@@ -24,7 +24,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_form_states_server_required', 'test_form_states_server_wizard'];
+  protected static $testWebforms = ['test_form_states_server_required', 'test_form_states_server_wizard', 'test_form_states_server_custom'];
 
   /**
    * {@inheritdoc}
@@ -48,6 +48,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform);
     $this->assertRaw('New submission added to Test: Form API #states server-side required validation.');
 
+    /**************************************************************************/
+    // multiple_triggers.
+    /**************************************************************************/
+
     // Check required multiple dependents 'AND' and 'OR' operator.
     $edit = [
       'trigger_checkbox' => TRUE,
@@ -58,6 +62,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('dependent_textfield_required_and field is required.');
     $this->assertRaw('dependent_textfield_required_or field is required.');
     $this->assertNoRaw('dependent_textfield_required_xor field is required.');
+
+    /**************************************************************************/
+    // multiple_dependents.
+    /**************************************************************************/
 
     // Check required multiple dependents 'OR' operator.
     $edit = [
@@ -80,6 +88,30 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('dependent_textfield_required_xor field is required.');
 
+    /**************************************************************************/
+    // required_hidden_trigger.
+    /**************************************************************************/
+
+    $edit = [
+      'required_hidden_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('required_hidden_dependent_required field is required.');
+
+    /**************************************************************************/
+    // minlength_hidden_trigger
+    /**************************************************************************/
+
+    $edit = [
+      'minlength_hidden_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('<em class="placeholder">minlength_hidden_dependent</em> cannot be less than <em class="placeholder">1</em> characters but is currently <em class="placeholder">0</em> characters long.');
+
+    /**************************************************************************/
+    // checkboxes_trigger.
+    /**************************************************************************/
+
     // Check required checkboxes.
     $edit = [
       'checkboxes_trigger[one]' => TRUE,
@@ -87,12 +119,20 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('checkboxes_dependent_required field is required.');
 
+    /**************************************************************************/
+    // text_format_trigger.
+    /**************************************************************************/
+
     // Check required text_format.
     $edit = [
       'text_format_trigger[format]' => 'full_html',
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('text_format_dependent_required field is required.');
+
+    /**************************************************************************/
+    // select_other_trigger.
+    /**************************************************************************/
 
     // Check required webform_select_other select #options.
     $edit = [
@@ -109,12 +149,38 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('select_other_dependent_required field is required.');
 
+    /**************************************************************************/
+    // select_other_multiple_trigger.
+    /**************************************************************************/
+
     // Check required webform_select_other_multiple select #options.
     $edit = [
       'select_other_multiple_trigger[select][]' => 'one',
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('select_other_multiple_dependent_required field is required.');
+
+    /**************************************************************************/
+    // select_values_trigger.
+    /**************************************************************************/
+
+    // Check required select_values_trigger select option 'one'.
+    $edit = [
+      'select_values_trigger' => 'one',
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('select_values_trigger_dependent_required field is required.');
+
+    // Check required select_values_trigger select option 'two'.
+    $edit = [
+      'select_values_trigger' => 'two',
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('select_values_trigger_dependent_required field is required.');
+
+    /**************************************************************************/
+    // email_confirm_trigger.
+    /**************************************************************************/
 
     // Check required webform_email_confirm.
     $edit = [
@@ -124,13 +190,21 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('email_confirm_dependent_required field is required.');
 
+    /**************************************************************************/
+    // likert_trigger.
+    /**************************************************************************/
+
     // Check required webform_likert.
     $edit = [
       'likert_trigger[q1]' => 'a1',
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('likert_dependent_required field is required.');
-    
+
+    /**************************************************************************/
+    // datelist_trigger.
+    /**************************************************************************/
+
     // Check required datelist.
     $edit = [
       'datelist_trigger[year]' => date('Y'),
@@ -144,6 +218,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('datelist_dependent_required field is required.');
 
+    /**************************************************************************/
+    // datetime_trigger.
+    /**************************************************************************/
+
     // Check required datetime.
     $edit = [
       'datetime_trigger[date]' => date('2001-01-01'),
@@ -151,6 +229,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('datetime_dependent_required field is required.');
+
+    /**************************************************************************/
+    // address_trigger.
+    /**************************************************************************/
 
     // Check required address.
     $edit = [
@@ -163,6 +245,10 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('address_dependent_required field is required.');
+
+    /**************************************************************************/
+    // composite_required.
+    /**************************************************************************/
 
     // Check required composite.
     $edit = [
@@ -201,6 +287,29 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('state_province_b field is required.');
     $this->assertRaw('postal_code_b field is required.');
     $this->assertRaw('country_b field is required.');
+
+    /**************************************************************************/
+    // custom.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_custom');
+
+    // Check no #states required errors.
+    $this->postSubmission($webform);
+    $this->assertRaw('New submission added to Test: Form API #states custom pattern, less, and greater condition validation');
+
+    $edit = [
+      'trigger_pattern' => 'abc',
+      'trigger_not_pattern' => 'ABC',
+      'trigger_less' => 1,
+      'trigger_greater' => 11,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertNoRaw('New submission added to Test: Form API #states custom pattern, less, and greater condition validation');
+    $this->assertRaw('dependent_pattern field is required.');
+    $this->assertRaw('dependent_not_pattern field is required.');
+    $this->assertRaw('dependent_less field is required.');
+    $this->assertRaw('dependent_greater field is required.');
   }
 
   /**
@@ -210,7 +319,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $webform = Webform::load('test_form_states_server_wizard');
 
     /**************************************************************************/
-    
+
     // Go to default #states for page 02 with trigger-checkbox unchecked.
     $this->postSubmission($webform, [], t('Next Page >'));
 
@@ -252,7 +361,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     // Go to default #states for page 02 with trigger_checkbox checked.
     $this->postSubmission($webform, ['page_01_trigger_checkbox' => TRUE], t('Next Page >'));
 
-    // Check trigger-checkbox value is Yes
+    // Check trigger-checkbox value is Yes.
     $this->assertRaw('<input data-drupal-selector="edit-page-01-trigger-checkbox-computed" type="hidden" name="page_01_trigger_checkbox_computed" value="Yes" />');
 
     // Check page_02_textfield_required is required.

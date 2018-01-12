@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for element more.
  *
  * @group Webform
  */
-class WebformElementMoreTest extends WebformTestBase {
+class WebformElementMoreTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

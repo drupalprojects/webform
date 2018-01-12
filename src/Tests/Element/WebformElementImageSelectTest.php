@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for webform image select element.
  *
  * @group Webform
  */
-class WebformElementImageSelectTest extends WebformTestBase {
+class WebformElementImageSelectTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

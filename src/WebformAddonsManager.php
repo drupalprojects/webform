@@ -3,9 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
  * Webform add-ons manager.
@@ -25,15 +23,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
    * Constructs a WebformAddOnsManager object.
    */
   public function __construct() {
-    $this->promotions = $this->initPromotions();
     $this->projects = $this->initProjects();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPromotions() {
-    return $this->promotions;
   }
 
   /**
@@ -82,6 +72,9 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     $categories['element'] = [
       'title' => $this->t('Elements'),
     ];
+    $categories['enhancement'] = [
+      'title' => $this->t('Enhancements'),
+    ];
     $categories['integration'] = [
       'title' => $this->t('Integration'),
     ];
@@ -113,51 +106,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Development'),
     ];
     return $categories;
-  }
-
-  /**
-   * Initialize add-on promotions.
-   *
-   * @return array
-   *   An associative array containing add-on promotions.
-   */
-  protected function initPromotions() {
-    $promotions = [];
-
-    // Lingotek.
-    $img_attributes = new Attribute([
-      'src' => base_path() . drupal_get_path('module', 'webform') . '/images/promotions/lingotek-logo.png',
-      'alt' => $this->t('Lingotek: The Translation Network'),
-      'title' => $this->t('Lingotek: The Translation Network'),
-    ]);
-    $promotions['promotion_lingotek'] = [];
-    $promotions['promotion_lingotek']['content'] = [
-      [
-        '#markup' => '<img' . $img_attributes . ' />',
-      ],
-      [
-        '#markup' => $this->t('The Lingotek-Inside Drupal Module integrates a translation management system (TMS) directly into Drupal, thus allowing the Drupal community to use professional-grade translation technologies (e.g. machine translation, translation memory, CAT tool) without ever having to leave the comfort of the Drupal environment.'),
-        '#prefix' => '<div class="clearfix">',
-        '#suffix' => '</div>',
-      ],
-      ['#markup' => '<hr/>'],
-      'actions' => [
-        'try' => [
-          '#type' => 'link',
-          '#title' => $this->t('Sign up and try Lingotek'),
-          '#url' => Url::fromUri('https://lingotek.com/webform'),
-          '#attributes' => ['class' => ['button', 'button--primary']],
-        ],
-        'video' => [
-          '#type' => 'link',
-          '#title' => $this->t('Watch video'),
-          '#url' => Url::fromRoute('webform.help.video', ['id' => 'promotion-lingotek']),
-          '#attributes' => WebformDialogHelper::getModalDialogAttributes(1000, ['button', 'button-action', 'button-webform-play']),
-        ],
-      ],
-    ];
-
-    return $promotions;
   }
 
   /**
@@ -194,6 +142,22 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Element: Webform Composite Tools.
+    $projects['webform_composite'] = [
+      'title' => $this->t('Webform Composite Tools'),
+      'description' => $this->t("Provides a reusable composite element for use on webforms."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_composite'),
+      'category' => 'element',
+    ];
+
+    // Element: Webform Crafty Clicks.
+    $projects['webform_craftyclicks'] = [
+      'title' => $this->t('Webform Crafty Clicks'),
+      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
@@ -218,12 +182,28 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
-    // Element: Webform Crafty Clicks.
-    $projects['webform_craftyclicks'] = [
-      'title' => $this->t('Webform Crafty Clicks'),
-      'description' => $this->t('Adds Crafty Clicks UK postcode lookup to the Webform Address composite element.'),
-      'url' => Url::fromUri('https://www.drupal.org/project/webform_craftyclicks'),
+    // Element: Webform Simple Hierarchical Select.
+    $projects['webform_shs'] = [
+      'title' => $this->t('Webform Simple Hierarchical Select'),
+      'description' => $this->t("Integrates Simple Hierarchical Select module with Webform."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_shs'),
       'category' => 'element',
+    ];
+
+    // Enhancement: Webform Wizard Full Title.
+    $projects['webform_wizard_full_title'] = [
+      'title' => $this->t('Webform Wizard Full Title'),
+      'description' => $this->t('Extends functionality of Webform so on wizard forms, the title of the wizard page can override the form title'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_wizard_full_title'),
+      'category' => 'enhancement',
+    ];
+
+    // Integration: Webform HubSpot.
+    $projects['hubspot'] = [
+      'title' => $this->t('Webform HubSpot'),
+      'description' => $this->t('Provides HubSpot leads API integration with Drupal.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/hubspot'),
+      'category' => 'integration',
     ];
 
     // Integration: Webform iContact.
@@ -320,7 +300,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'description' => $this->t('Translates content, configuration, and interface using the Lingotek Translation Management System.'),
       'url' => Url::fromUri('https://www.drupal.org/project/lingotek'),
       'category' => 'multilingual',
-      'recommended' => TRUE,
     ];
 
     // Migrate: Webform Migrate.
@@ -370,6 +349,15 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Submissions: Webform Analysis.
+    $projects['webform_analysis'] = [
+      'title' => $this->t('Webform Analysis'),
+      'description' => $this->t('Used to obtain statistics on the results of form submissions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_analysis'),
+      'category' => 'submission',
+      'recommended' => TRUE,
+    ];
+
     // Webform Invitation.
     $projects['webform_invitation'] = [
       'title' => $this->t('Webform Invitation'),
@@ -383,6 +371,22 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'title' => $this->t('Webform Permissions By Term'),
       'description' => $this->t('Extends the functionality of Permissions By Term to be able to limit the webform submissions access by users or roles.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_permissions_by_term'),
+      'category' => 'submission',
+    ];
+
+    // Submissions: Webform Sanitize.
+    $projects['webform_sanitize'] = [
+      'title' => $this->t('Webform Sanitize'),
+      'description' => $this->t('Sanitizes submissions to remove potentially sensitive data.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_sanitize'),
+      'category' => 'submission',
+    ];
+
+    // Submissions: Webform Scheduled Tasks.
+    $projects['webform_scheduled_tasks'] = [
+      'title' => $this->t('Webform Scheduled Tasks'),
+      'description' => $this->t('Allows the regular cleansing/sanitization of sensitive fields in Webform.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_scheduled_tasks'),
       'category' => 'submission',
     ];
 

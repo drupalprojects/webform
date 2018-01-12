@@ -62,6 +62,14 @@ class WebformEntityTranslationTest extends WebformTestBase {
     $this->assertRaw('<option value="1">Uno</option>');
     $this->assertRaw('<option value="4">Las cuatro</option>');
 
+    // Check translated webform custom composite.
+    $this->drupalGet('es/webform/test_translation');
+    $this->assertRaw('<label for="edit-composite">Compuesto</label>');
+    $this->assertRaw('<th class="composite-table--first_name webform-multiple-table--first_name">Nombre</th>');
+    $this->assertRaw('<th class="composite-table--last_name webform-multiple-table--last_name">Apellido</th>');
+    $this->assertRaw('<th class="composite-table--age webform-multiple-table--age">Edad</th>');
+    $this->assertRaw('<span class="field-suffix">años. antiguo</span>');
+
     // Check that webform is not translated into French.
     $this->drupalGet('fr/webform/test_translation');
     $this->assertRaw('<label for="edit-textfield">Text field</label>');
@@ -96,6 +104,24 @@ class WebformEntityTranslationTest extends WebformTestBase {
     // custom properties are removed.
     $translation_element = $translation_manager->getElements($webform, 'fr', TRUE);
     $this->assertEqual(['textfield' => ['#title' => 'French']], $translation_element);
+
+    /**************************************************************************/
+    // Submissions.
+    /**************************************************************************/
+
+    // Check English table headers are not translated.
+    $this->drupalGet('admin/structure/webform/manage/test_translation/results/submissions');
+    $this->assertRaw('>Text field<');
+    $this->assertRaw('>Select (options)<');
+    $this->assertRaw('>Select (custom)<');
+    $this->assertRaw('>Composite<');
+
+    // Check Spanish table headers are translated
+    $this->drupalGet('es/admin/structure/webform/manage/test_translation/results/submissions');
+    $this->assertRaw('>Campo de texto<');
+    $this->assertRaw('>Seleccione (opciones)<');
+    $this->assertRaw('>Seleccione (personalizado)<');
+    $this->assertRaw('>Compuesto<');
 
     /**************************************************************************/
     // Site wide language

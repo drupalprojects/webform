@@ -144,6 +144,6 @@ thead th .dropbutton {
 
 .form--inline.webform-ui-element-form-inline--input .form-item select,
 .form--inline.webform-ui-element-form-inline--input .form-item input[type="text"],
-.form--inline.webform-ui-element-form-inline--input .form-item input[type="number"]{
-  width: 140px
+.form--inline.webform-ui-element-form-inline--input .form-item input[type="number"] {
+  width: 140px;
 }

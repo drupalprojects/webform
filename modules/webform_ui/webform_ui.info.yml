@@ -4,4 +4,4 @@ description: 'Provides a user interface for building and maintaining webforms.'
 package: Webform
 core: 8.x
 dependencies:
-  - 'drupal:webform'
+  - 'webform:webform'

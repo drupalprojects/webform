@@ -11,6 +11,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *
  * @WebformElement(
  *   id = "webform_markup",
+ *   default_key = "markup",
  *   label = @Translation("Basic HTML"),
  *   description = @Translation("Provides an element to render basic HTML markup."),
  *   category = @Translation("Markup elements"),
@@ -23,18 +24,20 @@ class WebformMarkup extends WebformMarkupBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       'wrapper_attributes' => [],
       // Markup settings.
       'markup' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildText(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
-    $element['#markup'] = MailFormatHelper::htmlToText($element['#markup']);
+    if (isset($element['#markup'])) {
+      $element['#markup'] = MailFormatHelper::htmlToText($element['#markup']);
+    }
     return parent::buildText($element, $webform_submission, $options);
   }
 
@@ -47,7 +50,6 @@ class WebformMarkup extends WebformMarkupBase {
       '#type' => 'webform_html_editor',
       '#title' => $this->t('HTML markup'),
       '#description' => $this->t('Enter custom HTML into your webform.'),
-      '#format' => FALSE,
     ];
     return $form;
   }

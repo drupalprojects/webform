@@ -9,7 +9,6 @@
 
   // @see http://api.jqueryui.com/tooltip/
   Drupal.webform = Drupal.webform || {};
-
   Drupal.webform.elementHelpIcon = Drupal.webform.elementHelpIcon || {};
   Drupal.webform.elementHelpIcon.options = Drupal.webform.elementHelpIcon.options || {
     position: { my: "left+5 top+5", at: "left bottom", collision: "flipfit" },

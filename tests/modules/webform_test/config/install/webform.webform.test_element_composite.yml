@@ -9,90 +9,57 @@ close: null
 uid: null
 template: false
 id: test_element_composite
-title: 'Test: Element: Composite'
-description: 'Test composite elements, includes address, contact, name, and credit card.'
+title: 'Test: Element: Composite (Builder)'
+description: 'Test composite element builder used custom composites.'
 category: 'Test: Element'
 elements: |
-  composite_flexbox:
-    '#type': details
-    '#title': 'Composite Flexbox'
-    '#open': true
-    address:
-      '#type': webform_address
-      '#title': Address
-      '#flexbox': true
-    contact:
-      '#type': webform_contact
-      '#title': Contact
-      '#flexbox': true
-    name:
-      '#type': webform_name
-      '#title': Name
-      '#flexbox': true
-    creditcard:
-      '#type': webform_creditcard
-      '#title': 'Credit card'
-      '#flexbox': true
-  composite_elements:
-    '#type': details
-    '#title': 'Composite Elements'
-    '#open': true
-    contact_basic:
-      '#type': webform_contact
-      '#title': 'Contact basic'
-      '#required': true
-      '#name__required': true
-      '#default_value':
-        name: 'John Smith'
-        company: Acme
-        address: '100 Main Street'
-        address_2: 'PO BOX 999'
-        city: 'Hill Valley'
-        state_province: 'New Jersey'
-        country: 'United States'
-        postal_code: 11111-1111
-        email: example@example.com
-        phone: 123-456-7890
-    contact_advanced:
-      '#type': webform_contact
-      '#title': 'Contact advanced'
-      '#default_value':
-        name: 'John Smith'
-        company: Acme
-        address: '100 Main Street'
-        address_2: 'PO BOX 999'
-        city: 'Hill Valley'
-        state_province: 'New Jersey'
-        country: 'United States'
-        postal_code: 11111-1111
-        email: example@example.com
-        phone: 123-456-7890
-      '#name__required': true
-      '#name__title': 'Custom contact name'
-      '#name__description': 'Custom contact name description'
-      '#state_province__type': textfield
-      '#country__required': true
-      '#country__access': false
-    creditcard_basic:
-      '#type': webform_creditcard
-      '#title': 'Credit Card'
-      '#default_value':
-        name: 'John Smith'
-        number: 4111111111111111
-        type: VI
-        civ: 111
-        expiration_month: 1
-        expiration_year: 2025
-    link_basic:
-      '#type': webform_link
-      '#title': 'Link'
-      '#default_value':
-        title: Example
-        url: http://example.com
+  webform_element_composite_basic:
+    '#type': webform_element_composite
+    '#title': webform_element_composite_basic
+    '#default_value':
+      first_name:
+        '#type': textfield
+        '#title': 'First name'
+        '#required': true
+      last_name:
+        '#type': textfield
+        '#title': 'Last name'
+        '#required': true
+  webform_element_composite_advanced:
+    '#type': webform_element_composite
+    '#title': webform_element_composite_advanced
+    '#default_value':
+      first_name:
+        '#type': textfield
+        '#title': 'First name'
+      last_name:
+        '#type': textfield
+        '#title': 'Last name'
+      gender:
+        '#type': select
+        '#options':
+          Male: Male
+          Female: Female
+        '#title': Gender
+      martial_status:
+        '#type': webform_select_other
+        '#options': marital_status
+        '#title': 'Martial status'
+      employment_status:
+        '#type': webform_select_other
+        '#options': employment_status
+        '#title': 'Employment status'
+      age:
+        '#type': number
+        '#title': 'Age'
+        '#field_suffix': ' yrs. old'
+        '#min': 1
+        '#max': 125
 css: ''
 javascript: ''
 settings:
   ajax: false
+  ajax_scroll_top: form
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -113,17 +80,25 @@ settings:
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
+  form_login: false
+  form_login_message: ''
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_login: false
+  submission_login_message: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_start_label: ''
-  wizard_complete: true
-  wizard_complete_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
   preview: 0
   preview_label: ''
   preview_title: ''
@@ -145,15 +120,19 @@ settings:
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
   limit_total: null
+  limit_total_interval: null
   limit_total_message: ''
   limit_user: null
+  limit_user_interval: null
   limit_user_message: ''
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
   purge: none
   purge_days: null
-  entity_limit_total: null
-  entity_limit_user: null
-  results_disabled: false
-  results_disabled_ignore: false
+  results_disabled: true
+  results_disabled_ignore: true
   token_update: false
 access:
   create:

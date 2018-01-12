@@ -105,6 +105,7 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
   last_name: Smith
   response_type: '200'");
     $this->assertRaw('Processed converted request.');
+    $this->assertNoRaw('Unable to process this submission. Please contact the site administrator.');
 
     // Check excluded data.
     $handler = $webform->getHandler('remote_post');
@@ -118,16 +119,19 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->assertRaw('first_name: John');
     $this->assertNoRaw('last_name: Smith');
     $this->assertRaw("sid: '$sid'");
+    $this->assertNoRaw('Unable to process this submission. Please contact the site administrator.');
 
     // Check 500 Internal Server Error.
     $this->postSubmission($webform, ['response_type' => '500']);
     $this->assertRaw('Failed to process completed request.');
+    $this->assertRaw('Unable to process this submission. Please contact the site administrator.');
 
     // Check 404 Not Found.
     $this->postSubmission($webform, ['response_type' => '404']);
     $this->assertRaw('File not found');
+    $this->assertRaw('Unable to process this submission. Please contact the site administrator.');
 
-    // Disable saving of results
+    // Disable saving of results.
     $webform->setSetting('results_disabled', TRUE);
     $webform->save();
 

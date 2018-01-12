@@ -2,8 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Test for webform element managed public file handling (DRUPAL-PSA-2016-003).
  *
@@ -11,7 +9,7 @@ use Drupal\webform\Tests\WebformTestBase;
  *
  * @group Webform
  */
-class WebformElementManagedFilePublicTest extends WebformTestBase {
+class WebformElementManagedFilePublicTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.
@@ -62,8 +60,10 @@ class WebformElementManagedFilePublicTest extends WebformTestBase {
     $this->assertNoRaw('Public files upload destination is dangerous for webforms that are available to anonymous and/or untrusted users.');
     $this->assertNoFieldById('edit-properties-uri-scheme-public');
 
+    /**************************************************************************/
     // NOTE: Unable to test private file upload warning because SimpleTest
     // automatically enables private file uploads.
+    /**************************************************************************/
 
     // Check managed_file element is enabled.
     $this->drupalGet('admin/structure/webform/manage/test_element_managed_file/element/add');

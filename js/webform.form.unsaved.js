@@ -26,11 +26,11 @@
         unsaved = true;
       }
       else {
-        $('.js-webform-unsaved :input:not(input[type="submit"])', context).once('webform-unsaved').on('change keypress', function (event, param1) {
+        $('.js-webform-unsaved :input:not(:button, :submit, :reset)', context).once('webform-unsaved').on('change keypress', function (event, param1) {
           // Ignore events triggered when #states API is changed,
           // which passes 'webform.states' as param1.
           // @see webform.states.js ::triggerEventHandlers().
-          if (param1 != 'webform.states') {
+          if (param1 !== 'webform.states') {
             unsaved = true;
           }
         });

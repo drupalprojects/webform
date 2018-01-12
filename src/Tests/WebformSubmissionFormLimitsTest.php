@@ -52,9 +52,9 @@ class WebformSubmissionFormLimitsTest extends WebformTestBase {
 
     // Check submission limit blocks.
     $this->assertRaw('0 user submission(s)');
-    $this->assertRaw('1 user limit');
+    $this->assertRaw('1 user limit (every minute)');
     $this->assertRaw('0 webform submission(s)');
-    $this->assertRaw('4 webform limit');
+    $this->assertRaw('4 webform limit (every minute)');
 
     $this->drupalLogin($this->ownWebformSubmissionUser);
 
@@ -153,6 +153,15 @@ class WebformSubmissionFormLimitsTest extends WebformTestBase {
     // Check submission limit blocks.
     $this->assertRaw('2 user submission(s)');
     $this->assertRaw('4 webform submission(s)');
+
+    // Change submission completed to 1 hour ago.
+    \Drupal::database()->query('UPDATE {webform_submission} SET completed = :completed', [':completed' => strtotime('-1 minute')]);
+
+    // Check submission limit blocks are removed because the submission
+    // intervals have passed.
+    $this->drupalGet('webform/test_form_limit');
+    $this->assertRaw('0 user submission(s)');
+    $this->assertRaw('0 webform submission(s)');
   }
 
 }

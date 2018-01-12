@@ -7,4 +7,4 @@ dependencies:
   - 'drupal:node'
   - 'drupal:user'
   - 'drupal:views'
-  - 'drupal:webform'
+  - 'webform:webform'

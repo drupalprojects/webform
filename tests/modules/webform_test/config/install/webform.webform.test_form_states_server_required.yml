@@ -72,6 +72,36 @@ elements: |
           - xor
           - ':input[name="trigger_select"]':
               value: option
+  required_hidden_trigger_details:
+    '#type': details
+    '#title': required_hidden_trigger
+    '#open': true
+    required_hidden_trigger:
+      '#type': checkbox
+      '#title': required_hidden_trigger
+    required_hidden_dependent_required:
+      '#type': textfield
+      '#title': required_hidden_dependent_required
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="required_hidden_trigger"]':
+            checked: true
+  minlength_hidden_trigger_details:
+    '#type': details
+    '#title': minlength_hidden_trigger
+    '#open': true
+    minlength_hidden_trigger:
+      '#type': checkbox
+      '#title': minlength_hidden_trigger
+    minlength_hidden_dependent:
+      '#type': textfield
+      '#title': minlength_hidden_dependent
+      '#minlength': 1
+      '#states':
+        visible:
+          ':input[name="minlength_hidden_trigger"]':
+            checked: true
   checkboxes_trigger_details:
     '#type': details
     '#title': checkboxes_trigger
@@ -155,6 +185,26 @@ elements: |
           - or
           - ':input[name="select_other_multiple_trigger[other]"]':
               filled: true
+  select_values_trigger_details:
+    '#type': details
+    '#title': select_values_trigger
+    '#open': true
+    select_values_trigger:
+      '#type': select
+      '#title': select_values_trigger
+      '#options':
+        one: One
+        two: Two
+        three: Three
+    select_values_trigger_dependent_required:
+      '#type': textfield
+      '#title': select_values_trigger_dependent_required
+      '#description': '<b>Required:</b> select_values_trigger:value=one OR select_values_trigger=two'
+      '#states':
+        required:
+          ':input[name="select_values_trigger"]':
+            - value: one
+            - value: two
   email_confirm_trigger_details:
     '#type': details
     '#title': email_confirm_trigger
@@ -360,6 +410,7 @@ css: ''
 javascript: ''
 settings:
   ajax: false
+  ajax_scroll_top: form
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -380,17 +431,25 @@ settings:
   form_novalidate: true
   form_unsaved: false
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
+  form_login: false
+  form_login_message: ''
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_login: false
+  submission_login_message: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_start_label: ''
-  wizard_complete: true
-  wizard_complete_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
   preview: 0
   preview_label: ''
   preview_title: ''
@@ -412,13 +471,17 @@ settings:
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
   limit_total: null
+  limit_total_interval: null
   limit_total_message: ''
   limit_user: null
+  limit_user_interval: null
   limit_user_message: ''
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
   purge: none
   purge_days: null
-  entity_limit_total: null
-  entity_limit_user: null
   results_disabled: true
   results_disabled_ignore: true
   token_update: false

@@ -41,7 +41,7 @@ interface WebformLibrariesManagerInterface {
    * Get excluded libraries.
    *
    * @return array
-   *   A keyey array of excluded libraries.
+   *   A keyed array of excluded libraries.
    */
   public function getExcludedLibraries();
 

@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for iCheck element.
  *
  * @group Webform
  */
-class WebformElementIcheckTest extends WebformTestBase {
+class WebformElementIcheckTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.
@@ -17,6 +15,16 @@ class WebformElementIcheckTest extends WebformTestBase {
    * @var array
    */
   protected static $testWebforms = ['test_element_icheck'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+    $this->config('webform.settings')
+      ->set('libraries.excluded_libraries', [])
+      ->save();
+  }
 
   /**
    * Test iCheck element.

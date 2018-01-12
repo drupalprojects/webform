@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Render\Element;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class WebformHandlerBase extends PluginBase implements WebformHandlerInterface {
 
   /**
-   * The webform .
+   * The webform.
    *
    * @var \Drupal\webform\WebformInterface
    */
@@ -411,7 +412,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   protected function applyFormStateToConfiguration(FormStateInterface $form_state) {
     $values = $form_state->getValues();
     foreach ($values as $key => $value) {
-      if (isset($this->configuration[$key])) {
+      if (array_key_exists($key, $this->configuration)) {
         $this->configuration[$key] = $value;
       }
     }
@@ -425,6 +426,15 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * {@inheritdoc}
    */
   public function alterElements(array &$elements, WebformInterface $webform) {}
+
+  /****************************************************************************/
+  // Webform submission methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function overrideSettings(array &$settings, WebformSubmissionInterface $webform_submission) {}
 
   /****************************************************************************/
   // Submission form methods.
@@ -490,6 +500,15 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {}
 
   /****************************************************************************/
+  // Preprocessing methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preprocessConfirmation(array &$variables) {}
+
+  /****************************************************************************/
   // Handler methods.
   /****************************************************************************/
 
@@ -528,7 +547,48 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   public function deleteElement($key, array $element) {}
 
   /****************************************************************************/
-  // Loggin methods.
+  // Form helper methods.
+  /****************************************************************************/
+
+  /**
+   * Set configuration settings parents.
+   *
+   * This helper method looks looks for the handler default configuration keys
+   * within a form and set a matching element's #parents property to
+   * ['settings', '{element_kye}']
+   *
+   * @param array $elements
+   *   An array of form elements.
+   *
+   * @return array
+   *   Form element with #parents set.
+   */
+  protected function setSettingsParentsRecursively(array &$elements) {
+    $default_configuration = $this->defaultConfiguration();
+    foreach ($elements as $element_key => &$element) {
+      // Only a form element can have #parents.
+      if (Element::property($element_key) || !is_array($element)) {
+        continue;
+      }
+
+      // If the element has #parents property assume that it has also been
+      // defined for all sub-elements.
+      if (isset($element['#parents'])) {
+        continue;
+      }
+
+      if (array_key_exists($element_key, $default_configuration) && isset($element['#type'])) {
+        $element['#parents'] = ['settings', $element_key];
+      }
+      else {
+        $this->setSettingsParentsRecursively($element);
+      }
+    }
+    return $elements;
+  }
+
+  /****************************************************************************/
+  // Logging methods.
   /****************************************************************************/
 
   /**

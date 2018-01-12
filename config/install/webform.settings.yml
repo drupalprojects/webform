@@ -7,7 +7,9 @@ settings:
   default_reset_button_label: Reset
   default_form_submit_once: false
   default_form_confidential_message: 'This form is confidential. You must <a href="[site:login-url]/logout?destination=[current-page:url:relative]">Log out</a> to submit it.'
+  default_form_login_message: 'Please login to access this form.'
   default_form_disable_back: false
+  default_form_submit_back: false
   default_form_unsaved: false
   default_form_novalidate: false
   default_form_details_toggle: true
@@ -21,7 +23,7 @@ settings:
   default_wizard_prev_button_label: '< Previous Page'
   default_wizard_next_button_label: 'Next Page >'
   default_wizard_start_label: Start
-  default_wizard_complete_label: Complete
+  default_wizard_confirmation_label: Complete
   default_preview_next_button_label: Preview
   default_preview_prev_button_label: '< Previous'
   default_preview_label: Preview
@@ -33,6 +35,9 @@ settings:
   default_confirmation_message: 'New submission added to [webform:title].'
   default_confirmation_back_label: 'Back to form'
   default_submission_label: '[webform_submission:submitted-to]: Submission #[webform_submission:serial]'
+  default_submission_login_message: 'Please login to access this submission.'
+  default_submission_exception_message: 'Unable to process this submission. Please contact the site administrator.'
+  default_submission_locked_message: 'This submission has been locked.'
   default_submission_log: false
   preview_classes: |
     messages messages--error
@@ -53,10 +58,7 @@ handler:
   excluded_handlers: {  }
 export:
   exporter: delimited
-  delimiter: ','
   multiple_delimiter: ;
-  excel: false
-  file_name: 'submission-[webform_submission:serial]'
   header_format: label
   header_prefix: true
   header_prefix_label_delimiter: ': '
@@ -71,11 +73,14 @@ export:
     - url
   likert_answers_format: label
   signature_format: status
+  delimiter: ','
+  excel: false
   excluded_exporters: {  }
 batch:
   default_batch_export_size: 500
   default_batch_update_size: 500
   default_batch_delete_size: 500
+  default_batch_email_size: 500
 purge:
   cron_size: 100
 element:
@@ -93,6 +98,16 @@ element:
     messages messages--error
     messages messages--warning
     messages messages--status
+  horizontal_rule_classes: |
+    webform-horizontal-rule--solid
+    webform-horizontal-rule--dashed
+    webform-horizontal-rule--dotted
+    webform-horizontal-rule--gradient
+    webform-horizontal-rule--thin
+    webform-horizontal-rule--medium
+    webform-horizontal-rule--thick
+    webform-horizontal-rule--flaired
+    webform-horizontal-rule--glyph
   default_description_display: ''
   default_more_title: More
   default_section_title_tag: h2
@@ -109,6 +124,7 @@ html_editor:
 file:
   file_public: false
   file_private_redirect: true
+  file_private_redirect_message: 'Please login to access the uploaded file.'
   default_max_filesize: ''
   default_managed_file_extensions: 'gif jpg png bmp eps tif pict psd txt rtf html odf pdf doc docx ppt pptx xls xlsx xml avi mov mp3 ogg wav bz2 dmg gz jar rar sit svg tar zip'
   default_audio_file_extensions: 'mp3 ogg wav'
@@ -245,6 +261,7 @@ ui:
 libraries:
   excluded_libraries:
     - jquery.chosen
+    - jquery.icheck
 requirements:
   cdn: true
   bootstrap: true

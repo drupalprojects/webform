@@ -12,7 +12,6 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class WebformSubmissionAccess {
 
-
   /**
    * Check whether a webform submissions' webform has wizard pages.
    *
@@ -28,7 +27,7 @@ class WebformSubmissionAccess {
   }
 
   /**
-   * Check that webform submission has email and the user can update any webform submission.
+   * Check that webform submission has (email) messages and the user can update any webform submission.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
@@ -38,7 +37,7 @@ class WebformSubmissionAccess {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public static function checkEmailAccess(WebformSubmissionInterface $webform_submission, AccountInterface $account) {
+  public static function checkResendAccess(WebformSubmissionInterface $webform_submission, AccountInterface $account) {
     $webform = $webform_submission->getWebform();
     if ($webform->access('submission_update_any', $account)) {
       $handlers = $webform->getHandlers();
@@ -50,5 +49,6 @@ class WebformSubmissionAccess {
     }
     return AccessResult::forbidden();
   }
+
 }
 

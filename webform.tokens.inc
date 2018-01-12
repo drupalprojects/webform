@@ -89,9 +89,17 @@ function webform_token_info() {
     'name' => t('In draft'),
     'description' => t('Is the webform submission in draft.'),
   ];
+  $webform['label'] = [
+    'name' => t('Label'),
+    'description' => t('The label of the webform submission.'),
+  ];
   $webform_submission['limit:webform'] = [
     'name' => t('Total submissions limit'),
     'description' => t('The total number of submissions allowed for the webform.'),
+  ];
+  $webform_submission['interval:webform'] = [
+    'name' => t('Total submissions limit interval'),
+    'description' => t('The total submissions interval for the webform.'),
   ];
   $webform_submission['total:webform'] = [
     'name' => t('Total submissions'),
@@ -101,6 +109,10 @@ function webform_token_info() {
     'name' => t('Per user submission limit'),
     'description' => t('The total number of submissions allowed per user for the webform.'),
   ];
+  $webform_submission['interval:user'] = [
+    'name' => t('Per user submission limit interval'),
+    'description' => t('The total submissions interval per user for the webform.'),
+  ];
   $webform_submission['total:user'] = [
     'name' => t('Per user total submissions'),
     'description' => t('The current number of submissions for the user for the webform.'),
@@ -109,6 +121,10 @@ function webform_token_info() {
     'name' => t('Total submissions limit per source entity'),
     'description' => t('The total number of submissions allowed for the webform source entity.'),
   ];
+  $webform_submission['interval:webform:source_entity'] = [
+    'name' => t('Total submissions limit interval per source entity'),
+    'description' => t('The total submissions interval for the webform source entity.'),
+  ];
   $webform_submission['total:webform:source_entity'] = [
     'name' => t('Total submissions for source entity'),
     'description' => t('The current number of submissions for the webform source entity.'),
@@ -116,6 +132,10 @@ function webform_token_info() {
   $webform_submission['limit:user:source_entity'] = [
     'name' => t('Per user submission limit per source entity'),
     'description' => t('The total number of submissions allowed per user for the webform source entity.'),
+  ];
+  $webform_submission['interval:user:source_entity'] = [
+    'name' => t('Per user submission limit interval per source entity'),
+    'description' => t('The total submissions interval per user for the webform source entity.'),
   ];
   $webform_submission['total:user:source_entity'] = [
     'name' => t('Per user total submissions for source entity'),
@@ -143,8 +163,11 @@ function webform_token_info() {
       '<li>element_key:delta:format</li>' .
       '<li>element_key:delta:format:html</li>' .
       '<li>element_key:entity:*</li>' .
+      '<li>element_key:entity:*</li>' .
       '<li>element_key:delta:entity:*</li>' .
+      '<li>element_key:delta:entity:field_name:*</li>' .
       '<li>element_key:sub_element_key:entity:*</li>' .
+      '<li>element_key:sub_element_key:entity:fiel_name:*</li>' .
       '<li>element_key:delta:sub_element_key:entity:*</li>' .
       '</ul>' .
       t("All items after the 'element_key' are optional.") . '<br />' .
@@ -308,9 +331,9 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
       $bubbleable_metadata->addCacheableDependency($account);
       $replacements += $token_service->generate('user', $tokens, ['user' => $account], $options, $bubbleable_metadata);
     }
-    else {
-      // For anonymous user we are going to always return empty string.
-      foreach ($tokens as $name => $original) {
+    // Make sure to clear all tokens.
+    foreach ($tokens as $name => $original) {
+      if (!isset($replacements[$original])) {
         $replacements[$original] = '';
       }
     }
@@ -413,6 +436,10 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform_submission->getToken();
           break;
 
+        case 'label':
+          $replacements[$original] = $webform_submission->label();
+          break;
+
         /* Default values for the dynamic tokens handled below. */
 
         case 'url':
@@ -460,12 +487,20 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform->getSetting('limit_total') ?: t('None');
           break;
 
+        case 'interval:webform':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('limit_total_interval'));
+          break;
+
         case 'total:webform':
           $replacements[$original] = $submission_storage->getTotal($webform);
           break;
 
         case 'limit:user':
           $replacements[$original] = $webform->getSetting('limit_user') ?: t('None');
+          break;
+
+        case 'interval:user':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('limit_user_interval'));
           break;
 
         case 'total:user':
@@ -476,12 +511,20 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           $replacements[$original] = $webform->getSetting('entity_limit_total') ?: t('None');
           break;
 
+        case 'interval:webform:source_entity':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('entity_limit_total_interval'));
+          break;
+
         case 'total:webform:source_entity':
           $replacements[$original] = $source_entity ? $submission_storage->getTotal($webform, $source_entity) : '';
           break;
 
         case 'limit:user:source_entity':
           $replacements[$original] = $webform->getSetting('entity_limit_user') ?: t('None');
+          break;
+
+        case 'interval:user:source_entity':
+          $replacements[$original] = WebformDateHelper::getIntervalText($webform->getSetting('entity_limit_user_interval'));
           break;
 
         case 'total:user:source_entity':
@@ -582,7 +625,8 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
         $parents = explode(':', $key);
         $key_exists = NULL;
         $value = NestedArray::getValue($webform_handler, $parents, $key_exists);
-        $replacements[$original] = ($key_exists) ? $value : $original;
+        // A handler response is always considered safe markup.
+        $replacements[$original] = ($key_exists) ? Markup::create($value) : $original;
       }
     }
 
@@ -654,10 +698,10 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
     return NULL;
   }
 
-  $element_handler = $element_manager->getElementInstance($element);
+  $element_plugin = $element_manager->getElementInstance($element);
 
   // Exit if no submission data and form element is not a container.
-  if (!isset($submission_data[$element_key]) && !$element_handler->isContainer($element)) {
+  if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
     return NULL;
   }
 
@@ -669,7 +713,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // If multiple value element look for delta.
-  if ($keys && $element_handler->hasMultipleValues($element) && is_numeric($keys[0])) {
+  if ($keys && $element_plugin->hasMultipleValues($element) && is_numeric($keys[0])) {
     $delta = array_shift($keys);
     $options['delta'] = $delta;
   }
@@ -678,7 +722,7 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // If composite element look for sub-element key.
-  if ($keys && $element_handler->isComposite() && method_exists($element_handler, 'getInitializedCompositeElement') && $element_handler->getInitializedCompositeElement($element, $keys[0])) {
+  if ($keys && $element_plugin->isComposite() && method_exists($element_plugin, 'getInitializedCompositeElement') && $element_plugin->getInitializedCompositeElement($element, $keys[0])) {
     $composite_key = array_shift($keys);
     $options['composite_key'] = $composite_key;
   }
@@ -687,12 +731,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   // Set entity reference chaining.
-  if ($keys && $keys[0] == 'entity' && $element_handler instanceof WebformElementEntityReferenceInterface) {
+  if ($keys && $keys[0] == 'entity' && $element_plugin instanceof WebformElementEntityReferenceInterface) {
     // Remove entity from keys.
     array_shift($keys);
 
     // Get entity value, type, instance, and token.
-    if ($entity = $element_handler->getTargetEntity($element, $webform_submission, $options)) {
+    if ($entity = $element_plugin->getTargetEntity($element, $webform_submission, $options)) {
       $entity_type = $entity->getEntityTypeId();
       // Map entity type id to entity token name.
       $entity_token_names = [
@@ -703,12 +747,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
       ];
       $entity_token_name = (isset($entity_token_names[$entity_type])) ? $entity_token_names[$entity_type] : $entity_type;
       $entity_token = implode(':', $keys);
-      return \Drupal::token()->replace(
+      return Markup::create(\Drupal::token()->replace(
         "[$entity_token_name:$entity_token]",
         [$entity_token_name => $entity],
         $options,
         $bubbleable_metadata
-      );
+      ));
     }
     else {
       return '';
@@ -736,19 +780,19 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   if (is_array($token_value)) {
     // Note, tokens can't include CSS and JS libraries since they will
     // can be included in an email.
-    $markup = \Drupal::service('renderer')->renderPlain($token_value);
-    return $markup;
+    return \Drupal::service('renderer')->renderPlain($token_value);
+  }
+  elseif ($token_value instanceof MarkupInterface) {
+    return $token_value;
   }
   elseif (isset($element['#format']) && $element['#format'] === 'raw') {
-    // Raw needs return Markup.
-    if ($token_value instanceof MarkupInterface) {
-      return $token_value;
-    }
-    else {
-      return Markup::create((string) $token_value);
-    }
+    // Make sure raw tokens are always rendered AS-IS.
+    return Markup::create((string) $token_value);
   }
   else {
+    // All strings will be escaped as HtmlEscapedText.
+    // @see \Drupal\Core\Utility\Token::replace
+    // @see \Drupal\Component\Render\HtmlEscapedText
     return (string) $token_value;
   }
 }

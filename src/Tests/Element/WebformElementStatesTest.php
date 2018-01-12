@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for webform element #states.
  *
  * @group Webform
  */
-class WebformElementStatesTest extends WebformTestBase {
+class WebformElementStatesTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.
@@ -45,11 +43,22 @@ class WebformElementStatesTest extends WebformTestBase {
     - or
     - selector_02:
         checked: true
+states_values:
+  enabled:
+    selector_01:
+      value: '0'
+    selector_02:
+      value: 'false'
+    selector_03:
+      value: ''
+    selector_04:
+      checked: true
 states_custom_selector:
   required:
     custom_selector:
       value: 'Yes'
 states_empty: {  }
+states_no_selector_other: {  }
 states_single: {  }
 states_unsupported_operator:
   required:
@@ -68,7 +77,12 @@ states_unsupported_nesting:
     - selector_03:
         value: 'Yes'
       selector_04:
-        value: 'Yes'");
+        value: 'Yes'
+states_custom_condition:
+  required:
+    custom_selector:
+      value:
+        pattern: '[a-z0-9]+'");
 
     /**************************************************************************/
     // Rendering.
@@ -90,6 +104,11 @@ states_unsupported_nesting:
     // Check 'States single' (#multiple: FALSE)
     $this->assertFieldById('edit-states-empty-add');
     $this->assertNoFieldById('edit-states-single-add');
+
+    // Check 'States with no other selector' (#selector_other: FALSE)
+    $this->assertNoFieldById('edit-states-no-selector-other-states-1-selector-select');
+    $this->assertNoFieldById('edit-states-no-selector-other-states-1-selector-other');
+    $this->assertFieldById('edit-states-no-selector-other-states-1-selector');
 
     /**************************************************************************/
     // Processing.

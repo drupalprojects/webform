@@ -26,7 +26,7 @@
         var $details = $element.find('.webform-terms-of-service-details');
 
         // Initialize the modal.
-        if (type == 'modal') {
+        if (type === 'modal') {
           // Move details title to attribute.
           var $title = $element.find('.webform-terms-of-service-details--title');
           if ($title.length) {
@@ -44,7 +44,7 @@
         }
 
         $element.find('label a').click(function (event) {
-          if (type == 'modal') {
+          if (type === 'modal') {
             $details.dialog('open');
           }
           else {

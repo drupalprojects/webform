@@ -33,7 +33,7 @@ function webform_demo_event_registration_install() {
 }
 
 /**
- * Implements hook_install().
+ * Implements hook_uninstall().
  */
 function webform_demo_event_registration_uninstall() {
   // Delete all webform:demo_application nodes.

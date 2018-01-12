@@ -100,7 +100,7 @@ elements: |
         two: Two
         three: Three
     radios_icheck:
-      '#type': checkboxes
+      '#type': radios
       '#title': 'Radios (iCheck)'
       '#options_display': side_by_side
       '#options':
@@ -164,9 +164,9 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#range__output': true
-      '#range__output_prefix': $
-      '#range__output_suffix': '.00'
+      '#output': right
+      '#output__field_prefix': $
+      '#output__field_suffix': '.00'
     color:
       '#type': color
       '#title': Color
@@ -364,6 +364,31 @@ elements: |
       '#title': 'Link multiple'
       '#multiple': true
       '#multiple__header': true
+    webform_custom_composite:
+      '#type': webform_custom_composite
+      '#title': 'Custom composite'
+      '#element':
+        first_name:
+          '#type': textfield
+          '#title': 'First name'
+        last_name:
+          '#type': textfield
+          '#title': 'Last name'
+        gender:
+          '#type': select
+          '#options': gender
+          '#title': Gender
+        martial_status:
+          '#type': webform_select_other
+          '#options': marital_status
+          '#title': 'Martial status'
+        employment_status:
+          '#type': webform_select_other
+          '#options': employment_status
+          '#title': 'Employment status'
+        age:
+          '#type': number
+          '#title': 'Age'
   form_elements:
     '#type': details
     '#title': 'Form elements'
@@ -461,6 +486,16 @@ elements: |
       '#wrapper_attributes':
         class:
           - 'container-inline clearfix'
+  divider:
+    '#type': details
+    '#title': 'Divider'
+    '#open': true
+    horizontal_rule:
+      '#type': webform_horizontal_rule
+      '#attributes':
+        class:
+          - webform-horizontal-rule--dotted
+          - webform-horizontal-rule--thick
   messages:
     '#type': details
     '#title': Messages
@@ -507,6 +542,7 @@ css: ''
 javascript: ''
 settings:
   ajax: false
+  ajax_scroll_top: form
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -527,17 +563,24 @@ settings:
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
+  form_login: false
+  form_login_message: ''
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_login: false
+  submission_login_message: ''
+  submission_exception_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: true
   wizard_progress_percentage: true
   wizard_start_label: ''
-  wizard_complete: true
-  wizard_complete_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
   preview: 1
   preview_label: ''
   preview_title: ''
@@ -559,13 +602,17 @@ settings:
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
   limit_total: null
+  limit_total_interval: null
   limit_total_message: ''
   limit_user: null
+  limit_user_interval: null
   limit_user_message: ''
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
   purge: none
   purge_days: null
-  entity_limit_total: null
-  entity_limit_user: null
   results_disabled: false
   results_disabled_ignore: false
   token_update: false

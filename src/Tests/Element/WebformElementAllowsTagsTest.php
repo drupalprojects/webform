@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for element allowed tags.
  *
  * @group Webform
  */
-class WebformElementAllowsTagsTest extends WebformTestBase {
+class WebformElementAllowsTagsTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

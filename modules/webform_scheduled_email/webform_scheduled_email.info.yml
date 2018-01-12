@@ -4,4 +4,4 @@ description: 'Extends the Webform email handler to allow emails to be scheduled.
 package: Webform
 core: 8.x
 dependencies:
-  - 'drupal:webform'
+  - 'webform:webform'

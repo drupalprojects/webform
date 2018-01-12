@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -10,7 +9,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementDateTest extends WebformTestBase {
+class WebformElementDateTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.
@@ -24,6 +23,10 @@ class WebformElementDateTest extends WebformTestBase {
    */
   public function testDateElement() {
     $webform = Webform::load('test_element_date');
+
+    /**************************************************************************/
+    // Render date elements.
+    /**************************************************************************/
 
     $this->drupalGet('webform/test_element_date');
 
@@ -60,6 +63,21 @@ class WebformElementDateTest extends WebformTestBase {
     $max_year = date('Y', strtotime('+1 year'));
     $default_value = \Drupal::service('date.formatter')->format(strtotime('now'), 'html_date');
     $this->assertRaw('<input min="' . $min . '" data-min-year="' . $min_year . '" max="' . $max . '" data-max-year="' . $max_year . '" type="date" data-drupal-selector="edit-date-min-max-dynamic" aria-describedby="edit-date-min-max-dynamic--description" data-drupal-date-format="Y-m-d" id="edit-date-min-max-dynamic" name="date_min_max_dynamic" value="' . $default_value . '" class="form-date" />');
+
+    /**************************************************************************/
+    // Format date elements.
+    /**************************************************************************/
+
+    $this->drupalPostForm('webform/test_element_date', [], t('Preview'));
+
+    // Check date formats.
+    $this->assertElementPreview('date_default', '2009-08-18');
+    $this->assertElementPreview('date_custom', '18-Aug-2009');
+    $this->assertElementPreview('date_min_max', '2009-08-18');
+    $this->assertElementPreview('date_min_max_dynamic', date('Y-m-d', strtotime('now')));
+    $this->assertElementPreview('date_datepicker', 'Tue, 08/18/2009');
+    $this->assertElementPreview('date_datepicker_custom', 'Tuesday, August 18, 2009');
+    $this->assertElementPreview('date_datepicker_min_max_dynamic', date('D, m/d/Y', strtotime('now')));
   }
 
 }

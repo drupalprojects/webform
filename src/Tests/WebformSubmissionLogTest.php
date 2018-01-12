@@ -117,8 +117,10 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertEqual($log->sid, 2);
     $this->assertEqual($log->uid, $this->adminWebformUser->id());
     $this->assertEqual($log->handler_id, '');
+    /**************************************************************************/
     // $this->assertEqual($log->operation, 'submission completed');
     // $this->assertEqual($log->message, 'Test: Submission: Logging: Submission #2 completed using saved draft.');
+    /**************************************************************************/
     $this->assertEqual($log->webform_id, 'test_submission_log');
     $this->assertNull($log->entity_type);
     $this->assertNull($log->entity_id);
@@ -138,7 +140,7 @@ class WebformSubmissionLogTest extends WebformTestBase {
     $this->assertRaw('No log messages available.');
 
     $sid_3 = $this->postSubmission($webform);
-    $webform_submission = WebformSubmission::load($sid_3);
+    WebformSubmission::load($sid_3);
 
     // Check all results log table has record.
     $this->drupalGet('admin/structure/webform/submissions/log');

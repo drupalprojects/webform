@@ -79,7 +79,7 @@ class WebformOptionsHelper {
           return $text;
         }
       }
-      elseif ($value == $option_value) {
+      elseif ($value !== NULL && (string) $value === (string) $option_value) {
         if ($options_description && strpos($option_text, static::DESCRIPTION_DELIMITER) !== FALSE) {
           list($option_text) = explode(static::DESCRIPTION_DELIMITER, $option_text);
           return $option_text;

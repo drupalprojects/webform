@@ -240,7 +240,7 @@ class WebformWizardAdvancedTest extends WebformWizardTestBase {
     ] + $webform->getSettings());
     $webform->save();
     \Drupal::configFactory()->getEditable('webform.settings')
-      ->set('settings.default_wizard_complete_label', '{global complete}')
+      ->set('settings.default_wizard_confirmation_label', '{global complete}')
       ->save();
     $this->drupalGet('webform/test_form_wizard_advanced');
     $this->assertRaw('{global complete}');
@@ -248,7 +248,7 @@ class WebformWizardAdvancedTest extends WebformWizardTestBase {
     // Check webform complete label.
     $webform->setSettings([
       'wizard_progress_bar' => TRUE,
-      'wizard_complete_label' => '{webform complete}',
+      'wizard_confirmation_label' => '{webform complete}',
     ] + $webform->getSettings());
     $webform->save();
     $this->drupalGet('webform/test_form_wizard_advanced');
@@ -256,7 +256,7 @@ class WebformWizardAdvancedTest extends WebformWizardTestBase {
 
     // Check webform exclude complete.
     $webform->setSettings([
-      'wizard_complete' => FALSE,
+      'wizard_confirmation' => FALSE,
     ] + $webform->getSettings());
     $webform->save();
     $this->drupalGet('webform/test_form_wizard_advanced');

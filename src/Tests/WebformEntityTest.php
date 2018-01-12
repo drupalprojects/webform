@@ -67,7 +67,7 @@ class WebformEntityTest extends WebformTestBase {
     $this->assertEqual($webform->getElementsInitializedFlattenedAndHasValue(), []);
 
     // Check for 3 submissions..
-    $this->assertEqual($this->submissionStorage->getTotal($webform), 3);
+    $this->assertEqual($this->submissionStorage->getTotal($webform), 4);
 
     // Check delete.
     $webform->delete();

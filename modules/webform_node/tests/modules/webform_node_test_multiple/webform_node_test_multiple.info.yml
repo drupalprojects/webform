@@ -4,12 +4,11 @@ description: 'Support module for webform node that provides working examples mul
 package: Testing
 core: 8.x
 dependencies:
-  - 'drupal:webform'
-  - 'drupal:webform_node'
-  - field
-  - menu_ui
-  - node
-  - path
-  - text
-  - user
-  - webform
+  - 'drupal:field'
+  - 'drupal:menu_ui'
+  - 'drupal:node'
+  - 'drupal:path'
+  - 'drupal:text'
+  - 'drupal:user'
+  - 'webform:webform'
+  - 'webform:webform_node'

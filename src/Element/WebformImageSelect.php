@@ -70,7 +70,7 @@ class WebformImageSelect extends Select {
     }
 
     // Convert #images to #options and make sure images are keyed by value.
-    if (empty($element['#options'])) {
+    if (empty($element['#options']) && !empty($element['#images'])) {
       $options = [];
       foreach ($element['#images'] as $value => &$image) {
         // Apply XSS filter to image text.

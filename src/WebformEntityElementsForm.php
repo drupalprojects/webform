@@ -142,8 +142,18 @@ class WebformEntityElementsForm extends BundleEntityFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
+    if ($form_state->hasAnyErrors()) {
+      return;
+    }
+
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $this->getEntity();
+    $elements = $webform->getElementsDecoded();
+    $this->addWebformTypePrefixRecursive($elements);
+    $webform->setElements($elements);
+
     // Validate elements YAML.
-    if ($messages = $this->elementsValidator->validate($this->getEntity())) {
+    if ($messages = $this->elementsValidator->validate($webform)) {
       $form_state->setErrorByName('elements');
       foreach ($messages as $message) {
         drupal_set_message($message, 'error');

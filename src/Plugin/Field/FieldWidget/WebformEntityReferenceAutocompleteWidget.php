@@ -26,6 +26,38 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
   /**
    * {@inheritdoc}
    */
+  public static function defaultSettings() {
+    return [
+      'default_data' => TRUE,
+    ] + parent::defaultSettings();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $element = parent::settingsForm($form, $form_state);
+    $element['default_data'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable default submission data (YAML)'),
+      '#description' => t('If checked, site builders will be able to define default submission data (YAML)'),
+      '#default_value' => $this->getSetting('default_data'),
+    ];
+    return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary() {
+    $summary = parent::settingsSummary();
+    $summary[] = t('Default submission data: @default_data', ['@default_data' => $this->getSetting('default_data') ? $this->t('Yes') : $this->t('No')]);
+    return $summary;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     if (!isset($items[$delta]->status)) {
       $items[$delta]->status = WebformInterface::STATUS_OPEN;
@@ -104,17 +136,18 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       ],
     ];
 
-    $element['settings']['default_data'] = [
-      '#type' => 'webform_codemirror',
-      '#mode' => 'yaml',
-      '#title' => $this->t('Default submission data (YAML)'),
-      '#description' => $this->t('Enter submission data as name and value pairs which will be used to prepopulate the selected webform. You may use tokens.'),
-      '#default_value' => $items[$delta]->default_data,
-    ];
-
-    /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
-    $token_manager = \Drupal::service('webform.token_manager');
-    $element['settings']['token_tree_link'] = $token_manager->buildTreeLink();
+    if ($this->getSetting('default_data')) {
+      $element['settings']['default_data'] = [
+        '#type' => 'webform_codemirror',
+        '#mode' => 'yaml',
+        '#title' => $this->t('Default submission data (YAML)'),
+        '#description' => $this->t('Enter submission data as name and value pairs which will be used to prepopulate the selected webform. You may use tokens.'),
+        '#default_value' => $items[$delta]->default_data,
+      ];
+      /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
+      $token_manager = \Drupal::service('webform.token_manager');
+      $element['settings']['token_tree_link'] = $token_manager->buildTreeLink();
+    }
 
     return $element;
   }

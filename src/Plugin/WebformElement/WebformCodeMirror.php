@@ -24,22 +24,24 @@ class WebformCodeMirror extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
-      // Codemirror setings.
+    return [
+      // Codemirror settings.
+      'placeholder' => '',
       'mode' => 'text',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
 
     if (empty($value)) {
       return '';
     }
 
+    $element += ['#mode' => 'text'];
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'code':
@@ -106,8 +108,8 @@ class WebformCodeMirror extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $form['element']['default_value']['#type'] = 'webform_codemirror';
-    $form['element']['default_value']['#rows'] = 3;
+    $form['default']['default_value']['#type'] = 'webform_codemirror';
+    $form['default']['default_value']['#rows'] = 3;
 
     $form['codemirror'] = [
       '#type' => 'fieldset',

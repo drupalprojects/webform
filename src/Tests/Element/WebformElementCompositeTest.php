@@ -2,14 +2,14 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
+use Drupal\webform\Entity\Webform;
 
 /**
- * Tests for composite element.
+ * Tests for composite element (builder).
  *
  * @group Webform
  */
-class WebformElementCompositeTest extends WebformTestBase {
+class WebformElementCompositeTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.
@@ -19,70 +19,89 @@ class WebformElementCompositeTest extends WebformTestBase {
   protected static $testWebforms = ['test_element_composite'];
 
   /**
-   * Test composite element.
+   * Test composite (builder).
    */
   public function testComposite() {
+    $webform = Webform::load('test_element_composite');
 
-    /* Display */
+    // Check processing for user who can't edit source.
+    $this->postSubmission($webform);
+    $this->assertRaw("webform_element_composite_basic:
+  first_name:
+    '#type': textfield
+    '#title': 'First name'
+    '#required': true
+  last_name:
+    '#type': textfield
+    '#title': 'Last name'
+    '#required': true
+webform_element_composite_advanced:
+  first_name:
+    '#type': textfield
+    '#title': 'First name'
+  last_name:
+    '#type': textfield
+    '#title': 'Last name'
+  gender:
+    '#type': select
+    '#options':
+      Male: Male
+      Female: Female
+    '#title': Gender
+  martial_status:
+    '#type': webform_select_other
+    '#options': marital_status
+    '#title': 'Martial status'
+  employment_status:
+    '#type': webform_select_other
+    '#options': employment_status
+    '#title': 'Employment status'
+  age:
+    '#type': number
+    '#title': Age
+    '#field_suffix': ' yrs. old'
+    '#min': 1
+    '#max': 125");
 
-    $this->drupalGet('webform/test_element_composite');
-
-    // Check webform contact basic.
-    $this->assertRaw('<div id="edit-contact-basic--wrapper" class="form-composite js-form-item form-item js-form-type-webform-contact form-type-webform-contact js-form-item-contact-basic form-item-contact-basic form-no-label">');
-    $this->assertRaw('<label for="edit-contact-basic-name" class="js-form-required form-required">Name</label>');
-    $this->assertRaw('<input data-drupal-selector="edit-contact-basic-name" type="text" id="edit-contact-basic-name" name="contact_basic[name]" value="John Smith" size="60" maxlength="255" class="form-text required" required="required" aria-required="true" />');
-
-    // Check custom name title, description, and required.
-    $this->assertRaw('<label for="edit-contact-advanced-name" class="js-form-required form-required">Custom contact name</label>');
-    $this->assertRaw('<input data-drupal-selector="edit-contact-advanced-name" aria-describedby="edit-contact-advanced-name--description" type="text" id="edit-contact-advanced-name" name="contact_advanced[name]" value="John Smith" size="60" maxlength="255" class="form-text required" required="required" aria-required="true" />');
-    $this->assertRaw('Custom contact name description');
-
-    // Check custom state type and not required.
-    $this->assertRaw('<label for="edit-contact-advanced-state-province">State/Province</label>');
-    $this->assertRaw('<input data-drupal-selector="edit-contact-advanced-state-province" type="text" id="edit-contact-advanced-state-province" name="contact_advanced[state_province]" value="New Jersey" size="60" maxlength="255" class="form-text" />');
-
-    // Check custom country access.
-    $this->assertNoRaw('edit-contact-advanced-country');
-
-    // Check credit card.
-    $this->assertRaw('<div id="edit-creditcard-basic--wrapper" class="form-composite js-form-item form-item js-form-type-webform-creditcard form-type-webform-creditcard js-form-item-creditcard-basic form-item-creditcard-basic form-no-label">');
-    $this->assertRaw('<label for="edit-creditcard-basic" class="visually-hidden">Credit Card</label>');
-    $this->assertRaw('The credit card element is experimental and insecure because it stores submitted information as plain text.');
-    $this->assertRaw('<label for="edit-creditcard-basic-name">Name on Card</label>');
-    $this->assertRaw('<input data-drupal-selector="edit-creditcard-basic-name" type="text" id="edit-creditcard-basic-name" name="creditcard_basic[name]" value="John Smith" size="60" maxlength="255" class="form-text" />');
-
-    /* Processing */
-
-    // Check contact composite value.
-    $this->drupalPostForm('webform/test_element_composite', [], t('Submit'));
-    $this->assertRaw("contact_basic:
-  name: 'John Smith'
-  company: Acme
-  email: example@example.com
-  phone: 123-456-7890
-  address: '100 Main Street'
-  address_2: 'PO BOX 999'
-  city: 'Hill Valley'
-  state_province: 'New Jersey'
-  postal_code: 11111-1111
-  country: 'United States'");
-
-    // Check contact validate required composite elements.
-    $edit = [
-      'contact_basic[name]' => '',
-    ];
-    $this->drupalPostForm('webform/test_element_composite', $edit, t('Submit'));
-    $this->assertRaw('Name field is required.');
-
-    // Check creditcard composite value.
-    $this->drupalPostForm('webform/test_element_composite', [], t('Submit'));
-    $this->assertRaw("creditcard_basic:
-  name: 'John Smith'
-  type: VI
-  number: '4111111111111111'
-  civ: '111'
-  expiration_month: '1'
-  expiration_year: '2025'");
+    // Check processing for user who can edit source.
+    $this->drupalLogin($this->rootUser);
+    $this->postSubmission($webform);
+    $this->assertRaw("webform_element_composite_basic:
+  first_name:
+    '#type': textfield
+    '#title': 'First name'
+    '#required': true
+  last_name:
+    '#type': textfield
+    '#title': 'Last name'
+    '#required': true
+webform_element_composite_advanced:
+  first_name:
+    '#type': textfield
+    '#title': 'First name'
+  last_name:
+    '#type': textfield
+    '#title': 'Last name'
+  gender:
+    '#type': select
+    '#options':
+      Male: Male
+      Female: Female
+    '#title': Gender
+  martial_status:
+    '#type': webform_select_other
+    '#options': marital_status
+    '#title': 'Martial status'
+  employment_status:
+    '#type': webform_select_other
+    '#options': employment_status
+    '#title': 'Employment status'
+  age:
+    '#type': number
+    '#title': Age
+    '#field_suffix': ' yrs. old'
+    '#min': 1
+    '#max': 125");
   }
 
 }

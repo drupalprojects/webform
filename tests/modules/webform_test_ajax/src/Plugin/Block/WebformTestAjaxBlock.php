@@ -27,7 +27,6 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected $redirectDestination;
 
-
   /**
    * Creates a WebformBlock instance.
    *
@@ -37,8 +36,8 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
-   *   The webform token manager.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
+   *   The redirect destination service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, RedirectDestinationInterface $redirect_destination) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -70,7 +69,8 @@ class WebformTestAjaxBlock extends BlockBase implements ContainerFactoryPluginIn
       }
 
       if (!in_array($webform_id, ['test_ajax_confirmation_page', 'test_ajax_confirmation_url', 'test_ajax_confirmation_url_msg'])) {
-        // Add destination to Ajax webform that don't redirect to confirmation page or URL.
+        // Add destination to Ajax webform that don't redirect to confirmation
+        // page or URL.
         $route_options = ['query' => $this->redirectDestination->getAsArray()];
       }
       else {

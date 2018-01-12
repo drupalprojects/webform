@@ -42,6 +42,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
     $header['label'] = $this->t('Label');
     $header['id'] = $this->t('ID');
     $header['category'] = $this->t('Category');
+    $header['likert'] = $this->t('Likert');
     $header['options'] = [
       'data' => $this->t('Options'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
@@ -61,6 +62,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
     $row['label'] = $entity->toLink($entity->label(), 'edit-form');
     $row['id'] = $entity->id();
     $row['category'] = $entity->get('category');
+    $row['likert'] = $entity->isLikert() ? $this->t('Yes') : $this->t('No');
 
     $element = ['#options' => $entity->id()];
     $options = WebformOptions::getElementOptions($element);

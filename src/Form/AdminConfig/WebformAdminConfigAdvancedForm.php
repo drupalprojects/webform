@@ -52,13 +52,13 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
    *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $render_cache
    *   The render cache service.
-   * @param \Drupal\Core\Routing\RouteBuilderInterface $route_builder
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, CacheBackendInterface $render_cache, RouteBuilderInterface $router_builder) {
     parent::__construct($config_factory);
-    $this->moduleHandler = $module_handler;
     $this->renderCache = $render_cache;
+    $this->moduleHandler = $module_handler;
     $this->routerBuilder = $router_builder;
   }
 
@@ -118,24 +118,17 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
     $form['ui']['dialog_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable dialogs'),
-      '#description' => $this->t('If checked, all modal dialogs (i.e. popups) will be disabled.'),
+      '#description' => $this->t('If checked, all modal/off-canvas dialogs (i.e. popups) will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.dialog_disabled'),
-    ];
-    $form['ui']['about_disabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t("Disable the 'About' section"),
-      '#description' => $this->t("If checked, 'About' section/tab will be remove from the admin UI."),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('ui.about_disabled'),
     ];
     $form['ui']['offcanvas_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable off-canvas system tray'),
-      '#description' => $this->t('If checked, the off-canvas system tray will be disabled.'),
+      '#description' => $this->t('If checked, all off-canvas system trays will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.offcanvas_disabled'),
-      '#access' => $this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3),
+      '#access' => (floatval(\Drupal::VERSION) >= 8.5),
       '#states' => [
         'visible' => [
           ':input[name="ui[dialog_disabled]"]' => [
@@ -143,6 +136,13 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
           ],
         ],
       ],
+    ];
+    $form['ui']['about_disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t("Disable the 'About' section"),
+      '#description' => $this->t("If checked, 'About' section/tab will be remove from the admin UI."),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('ui.about_disabled'),
     ];
     $form['ui']['promotions_disabled'] = [
       '#type' => 'checkbox',
@@ -153,21 +153,6 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.promotions_disabled'),
     ];
-    if (!$this->moduleHandler->moduleExists('outside_in') && (floatval(\Drupal::VERSION) >= 8.3)) {
-      $form['ui']['offcanvas_message'] = [
-        '#type' => 'webform_message',
-        '#message_type' => 'info',
-        '#message_message' => $this->t('Enable the experimental <a href=":href">System tray module</a> to improve the Webform module\'s user experience.', [':href' => 'https://www.drupal.org/blog/drupal-82-now-with-more-outside-in']),
-        '#states' => [
-          'visible' => [
-            ':input[name="ui[dialog_disabled]"]' => [
-              'checked' => FALSE,
-            ],
-          ],
-        ],
-        '#weight' => -100,
-      ];
-    }
 
     // Requirements.
     $form['requirements'] = [
@@ -249,6 +234,14 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('batch.default_batch_delete_size'),
     ];
+    $form['batch']['default_batch_email_size'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Batch email size'),
+      '#description' => $this->t('Batch email size is used by any handler that sends out bulk emails. This include the scheduled email handler.'),
+      '#min' => 1,
+      '#required' => TRUE,
+      '#default_value' => $config->get('batch.default_batch_email_size'),
+    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -263,7 +256,7 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
     $config->set('test', $form_state->getValue('test'));
     $config->set('batch', $form_state->getValue('batch'));
     $config->save();
-    
+
     // Clear render cache so that local tasks can be updated.
     // @see webform_local_tasks_alter()
     $this->renderCache->deleteAll();

@@ -259,6 +259,21 @@ class WebformArrayHelper {
   }
 
   /**
+   * Get duplicate values in an array.
+   *
+   * @param array $array
+   *   An array.
+   *
+   * @return array
+   *   An array container duplicate values.
+   *
+   * @see https://magp.ie/2011/02/02/find-duplicates-in-an-array-with-php/
+   */
+  public static function getDuplicates(array $array) {
+    return array_unique(array_diff_assoc($array, array_unique($array)));
+  }
+
+  /**
    * Traverse an associative array and collect references to all key/value pairs in an associative array.
    *
    * @param array $build
@@ -315,6 +330,52 @@ class WebformArrayHelper {
         self::flattenAssocRecursive($item, $array, $duplicate_array_keys);
       }
     }
+  }
+
+  /**
+   * Inserts a new key/value before the key in the array.
+   *
+   * @param array &$array
+   *   An array to insert in to.
+   * @param string $target_key
+   *   The key to insert before.
+   * @param string $new_key
+   *   The key to insert.
+   * @param mixed $new_value
+   *   An value to insert.
+   */
+  public static function insertBefore(array &$array, $target_key, $new_key, $new_value) {
+    $new = [];
+    foreach ($array as $k => $value) {
+      if ($k === $target_key) {
+        $new[$new_key] = $new_value;
+      }
+      $new[$k] = $value;
+    }
+    $array = $new;
+  }
+
+  /**
+   * Inserts a new key/value after the key in the array.
+   *
+   * @param array &$array
+   *   An array to insert in to.
+   * @param string $target_key
+   *   The key to insert after.
+   * @param string $new_key
+   *   The key to insert.
+   * @param mixed $new_value
+   *   An value to insert.
+   */
+  public static function insertAfter(array &$array, $target_key, $new_key, $new_value) {
+    $new = [];
+    foreach ($array as $key => $value) {
+      $new[$key] = $value;
+      if ($key === $target_key) {
+        $new[$new_key] = $new_value;
+      }
+    }
+    $array = $new;
   }
 
 }

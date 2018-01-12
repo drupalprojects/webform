@@ -35,6 +35,15 @@ abstract class ContainerBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
+  protected function getDefaultBaseProperties() {
+    $properties = parent::getDefaultBaseProperties();
+    unset($properties['prepopulate']);
+    return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isInput(array $element) {
     return FALSE;
   }
@@ -188,7 +197,7 @@ abstract class ContainerBase extends WebformElementBase {
   /**
    * {@inheritdoc}
    */
-  function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
+  protected function formatCustomItem($type, array &$element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $name = strtolower($type);
 
     // Parse children from template and children to context.
@@ -236,7 +245,6 @@ abstract class ContainerBase extends WebformElementBase {
     // @see fieldset.html.twig
     // @see webform-section.html.twig
     $form['form']['display_container']['title_display']['#options'] = [
-      '' => '',
       'invisible' => $this->t('Invisible'),
     ];
 

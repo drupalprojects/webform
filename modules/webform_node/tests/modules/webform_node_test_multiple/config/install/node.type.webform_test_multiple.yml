@@ -1,7 +1,6 @@
 langcode: en
 status: true
-dependencies: { }
-third_party_settings: { }
+dependencies: {  }
 name: webform_test_multiple
 type: webform_test_multiple
 description: ''

@@ -29,21 +29,13 @@ class TableWebformExporter extends TabularBaseWebformExporter {
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    if (isset($form['excel'])) {
-      return $form;
-    }
-
+    $form = parent::buildConfigurationForm($form, $form_state);
     $form['excel'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Open HTML table in Excel'),
       '#description' => $this->t('If checked, the download file extension will be change from .html to .xls.'),
       '#return_value' => TRUE,
       '#default_value' => $this->configuration['excel'],
-      '#states' => [
-        'visible' => [
-          [':input.js-webform-exporter' => ['value' => 'table']],
-        ],
-      ],
     ];
     return $form;
   }

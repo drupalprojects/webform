@@ -3,14 +3,13 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for table elements.
  *
  * @group Webform
  */
-class WebformElementTableTest extends WebformTestBase {
+class WebformElementTableTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

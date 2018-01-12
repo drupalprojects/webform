@@ -1,0 +1,6 @@
+core: 8.x
+type: theme
+base theme: bartik
+name: 'Webform Test Bartik'
+description: 'Test Webform Bartik integration.'
+package: 'Webform Test'

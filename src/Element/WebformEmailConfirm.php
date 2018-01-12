@@ -106,6 +106,7 @@ class WebformEmailConfirm extends FormElement {
     // Remove properties that are being applied to the sub elements.
     unset($element['#maxlength']);
     unset($element['#attributes']);
+    unset($element['#description']);
     return $element;
   }
 

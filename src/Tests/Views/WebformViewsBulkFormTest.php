@@ -67,6 +67,25 @@ class WebformViewsBulkFormTest extends WebformTestBase {
     $webform_submission = $this->loadSubmission($webform_submission->id());
     $this->assertFalse($webform_submission->isSticky(), 'Webform submission is not sticky anymore');
 
+    // Check make lock action.
+    $this->assertFalse($webform_submission->isLocked(), 'Webform submission is not locked');
+    $edit = [
+      'webform_submission_bulk_form[0]' => TRUE,
+      'action' => 'webform_submission_make_lock_action',
+    ];
+    $this->drupalPostForm('admin/structure/webform/test/views_bulk_form', $edit, t('Apply to selected items'));
+    $webform_submission = $this->loadSubmission($webform_submission->id());
+    $this->assertTrue($webform_submission->isLocked(), 'Webform submission has been locked');
+
+    // Check make locked action.
+    $edit = [
+      'webform_submission_bulk_form[0]' => TRUE,
+      'action' => 'webform_submission_make_unlock_action',
+    ];
+    $this->drupalPostForm('admin/structure/webform/test/views_bulk_form', $edit, t('Apply to selected items'));
+    $webform_submission = $this->loadSubmission($webform_submission->id());
+    $this->assertFalse($webform_submission->isLocked(), 'Webform submission is not locked anymore');
+
     // Check delete action.
     $edit = [
       'webform_submission_bulk_form[0]' => TRUE,

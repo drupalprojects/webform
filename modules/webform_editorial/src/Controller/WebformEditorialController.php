@@ -4,7 +4,9 @@ namespace Drupal\webform_editorial\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
@@ -21,12 +23,26 @@ use Drupal\webform\WebformLibrariesManagerInterface;
 class WebformEditorialController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
+   * Active database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * The renderer.
    *
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
-  
+
+  /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
   /**
    * The webform help manager.
    *
@@ -51,8 +67,12 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
   /**
    * Constructs a WebformEditorialController object.
    *
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection to be used.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager.
    * @param \Drupal\webform\WebformHelpManagerInterface $help_manager
    *   The webform help manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
@@ -60,8 +80,10 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The webform libraries manager.
    */
-  public function __construct(RendererInterface $renderer, WebformHelpManagerInterface $help_manager, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
+  public function __construct(Connection $database, RendererInterface $renderer, EntityFieldManagerInterface $entity_field_manager, WebformHelpManagerInterface $help_manager, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
+    $this->database = $database;
     $this->renderer = $renderer;
+    $this->entityFieldManager = $entity_field_manager;
     $this->helpManager = $help_manager;
     $this->elementManager = $element_manager;
     $this->librariesManager = $libraries_manager;
@@ -72,13 +94,14 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('database'),
       $container->get('renderer'),
+      $container->get('entity_field.manager'),
       $container->get('webform.help_manager'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.libraries_manager')
     );
   }
-
 
   /****************************************************************************/
   // Help.
@@ -86,7 +109,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
 
   /**
    * Returns webform help editorial.
-   **
+   *
    * @return array
    *   A renderable array containing webform help editorial.
    */
@@ -108,6 +131,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       '#suffix' => '</h1>',
       '#markup' => $this->t('Webform: Help editorial'),
     ];
+    $group_index = 1;
     foreach ($groups as $group_name => $help) {
       // Header.
       $header = [
@@ -126,7 +150,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           $paths = array_merge($paths, $info['paths']);
         }
         if (!empty($info['routes'])) {
-          $paths = array_merge($paths, \Drupal::database()->query("SELECT path FROM {router} WHERE name IN (:name[])", [':name[]' => $info['routes']])->fetchCol() ?: []);
+          $paths = array_merge($paths, $this->database->query("SELECT path FROM {router} WHERE name IN (:name[])", [':name[]' => $info['routes']])->fetchCol() ?: []);
         }
         asort($paths);
         foreach ($paths as $index => $path) {
@@ -135,13 +159,16 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           $path = preg_replace('/\{[^}]+\}/', '*', $path);
           $paths[$index] = $path;
         }
-        $name = '<b>' . $name .'</b><br/><small><small><em>' . implode('<br />', $paths) .'</em></small></small>';
+        $name = '<b>' . $name .'</b><br/><small><small><em>' . implode('<br />', $paths) . '</em></small></small>';
 
-        // Links
+        // Links.
         $links = [];
         if (!empty($info['video_id'])) {
           $video = $this->helpManager->getVideo($info['video_id']);
           $links[] = Link::fromTextAndUrl('Video', Url::fromUri('https://www.youtube.com/watch', ['query' => ['v' => $video['youtube_id']]]))->toString();
+        }
+        if (is_array($info['content'])) {
+          $info['content'] = $this->renderer->renderPlain($info['content']);
         }
         $rows[] = [
           'data' => [
@@ -152,7 +179,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           ],
         ];
       }
-      $title = ($this->helpManager->getGroup($group_name) ?: $group_name) . ' [' . $group_name . ']';
+      $title = ($this->helpManager->getGroup($group_name) ?: $group_name) . ' [' . str_pad($group_index++, 2, '0', STR_PAD_LEFT) . ' - ' . $group_name . ']';
       $build[$group_name] = $this->buildTable($title, $header, $rows, 'h2');
     }
 
@@ -171,7 +198,6 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
       ];
     }
 
-
     return $this->response($build);
   }
 
@@ -181,7 +207,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
 
   /**
    * Returns webform videos editorial.
-   **
+   *
    * @return array
    *   A renderable array containing webform elements videos.
    */
@@ -199,7 +225,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     $videos = $this->helpManager->getVideo();
     foreach ($videos as $name => $info) {
       // @see https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
-      $image = Markup::create('<img width="180" src="https://img.youtube.com/vi/' . $info['youtube_id'] .'/0.jpg" />');
+      $image = Markup::create('<img width="180" src="https://img.youtube.com/vi/' . $info['youtube_id'] . '/0.jpg" />');
       $video = Link::fromTextAndUrl($image, Url::fromUri('https://www.youtube.com/watch', ['query' => ['v' => $info['youtube_id']]]))->toString();
       $rows[] = [
         'data' => [
@@ -221,7 +247,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
 
   /**
    * Returns webform elements editorial.
-   **
+   *
    * @return array
    *   A renderable array containing webform elements editorial.
    */
@@ -264,14 +290,13 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     return $this->response($build);
   }
 
-
   /****************************************************************************/
   // Libraries.
   /****************************************************************************/
 
   /**
    * Returns webform libraries.
-   **
+   *
    * @return array
    *   A renderable array containing webform libraries editorial.
    */
@@ -303,6 +328,110 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
   }
 
   /****************************************************************************/
+  // Schema.
+  /****************************************************************************/
+
+  /**
+   * Returns webform schema.
+   **
+   * @return array
+   *   A renderable array containing webform entity scheme.
+   */
+  public function schema() {
+    // Header.
+    $header = [
+      ['data' => $this->t('Name'), 'width' => '20%'],
+      ['data' => $this->t('Type'), 'width' => '20%'],
+      ['data' => $this->t('Description'), 'width' => '60%'],
+    ];
+
+    // Rows.
+    $rows = [];
+    /** @var \Drupal\Core\Field\BaseFieldDefinition[] $base_fields */
+    $base_fields = $this->entityFieldManager->getBaseFieldDefinitions('webform_submission');
+    foreach ($base_fields as $field_name => $base_field) {
+      $rows[] = [
+        'data' => [
+          ['data' => $field_name],
+          ['data' => $base_field->getType()],
+          ['data' => $base_field->getDescription()],
+        ],
+      ];
+    }
+    $build = $this->buildTable('Webform Submission', $header, $rows);
+    return $this->response($build);
+  }
+
+  /****************************************************************************/
+  // Drush.
+  /****************************************************************************/
+
+  /**
+   * Returns webform drush.
+   *
+   * @return array
+   *   A renderable array containing webform entity scheme.
+   */
+  public function drush() {
+    module_load_include('inc', 'webform', 'drush/webform.drush');
+
+    $build = [];
+    $build['title'] = [
+      '#prefix' => '<h1>',
+      '#suffix' => '</h1>',
+      '#markup' => $this->t('Webform: Drush editorial'),
+    ];
+    // Header.
+    $header = [
+      ['data' => $this->t('Name'), 'width' => '30%'],
+      ['data' => $this->t('Value'), 'width' => '70%'],
+    ];
+    $build = [];
+    $commands = webform_drush_command();
+    foreach ($commands as $command_name => $command) {
+      $build[$command_name] = [];
+      $build[$command_name]['title'] = [
+        '#prefix' => '<h2>',
+        '#suffix' => '</h2>',
+        '#markup' => $command_name,
+      ];
+      $build[$command_name]['description'] = [
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+        '#markup' => $command['description'],
+      ];
+      if ($help = webform_drush_help('drush:' . $command_name)) {
+        $build[$command_name]['help'] = [
+          '#prefix' => '<address>',
+          '#suffix' => '</address>',
+          '#markup' => $help,
+        ];
+      }
+
+      $properties = [
+        'arguments', 'options', 'examples'
+      ];
+      foreach ($properties as $property) {
+        if (isset($command[$property])) {
+          $rows = [];
+          foreach ($command[$property] as $name => $value) {
+            $rows[] = [
+              'data' => [
+                ['data' => $name],
+                ['data' => $value],
+              ],
+            ];
+          }
+          $build[$command_name][$property] = $this->buildTable($property, $header, $rows, 'h3', FALSE);
+        }
+      }
+      $build[$command_name]['hr'] = ['#markup' => '<br/><hr/>'];
+    }
+
+    return $this->response($build);
+  }
+
+  /****************************************************************************/
   // Helper methods.
   /****************************************************************************/
 
@@ -317,11 +446,13 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
    *   The table's rows.
    * @param string $title_tag
    *   The header tag for title.
+   * @param bool $hr
+   *   Append horizontal rule.
    *
    * @return array
    *   A renderable array representing a table with title.
    */
-  protected function buildTable($title, array $header, array $rows, $title_tag = 'h1') {
+  protected function buildTable($title, array $header, array $rows, $title_tag = 'h1', $hr = TRUE) {
     // Add style and alignment to header.
     foreach ($header as &$column) {
       $column['style'] = 'background-color: #ccc';
@@ -358,10 +489,9 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           'width' => '950',
         ],
       ],
-      '#suffix' => '<br/><hr/>',
+      '#suffix' => ($hr) ? '<br/><hr/>' : '',
     ];
   }
-
 
   /**
    * Build a custom response the returns raw HTML markup.

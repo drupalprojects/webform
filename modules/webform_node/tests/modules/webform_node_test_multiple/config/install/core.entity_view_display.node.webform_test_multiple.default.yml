@@ -13,16 +13,16 @@ targetEntityType: node
 bundle: webform_test_multiple
 mode: default
 content:
-  field_webform_test_multiple_b:
-    weight: 103
+  field_webform_test_multiple_a:
+    weight: 102
     label: above
     settings:
       source_entity: true
     third_party_settings: {  }
     type: webform_entity_reference_entity_view
     region: content
-  field_webform_test_multiple_a:
-    weight: 102
+  field_webform_test_multiple_b:
+    weight: 103
     label: above
     settings:
       source_entity: true
@@ -34,4 +34,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  langcode: true

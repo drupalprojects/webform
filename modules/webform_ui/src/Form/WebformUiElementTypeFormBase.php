@@ -229,7 +229,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       '#type' => 'link',
       '#title' => $plugin_definition['label'],
       '#url' => $url,
-      '#attributes' => WebformDialogHelper::getModalDialogAttributes(800),
+      '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
       '#prefix' => '<span class="webform-form-filter-text-source">',
       '#suffix' => '</span>',
     ];
@@ -243,21 +243,21 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       $row['preview'] = $this->buildElementPreview($webform_element);
     }
 
-    // Operation
+    // Operation.
     $row['operation'] = [
       '#type' => 'link',
       '#title' => $label,
       // Must clone the URL object to prevent the above 'label' link attributes
       // (i.e. webform-tooltip-link) from being copied to 'operation' link.
       '#url' => clone $url,
-      '#attributes' => WebformDialogHelper::getModalDialogAttributes(800, ['button', 'button--primary', 'button--small']),
+      '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, ['button', 'button--primary', 'button--small']),
     ];
 
     // Issue #2741877 Nested modals don't work: when using CKEditor in a
     // modal, then clicking the image button opens another modal,
     // which closes the original modal.
     // @todo Remove the below workaround once this issue is resolved.
-    if ($webform_element->getTypeName() == 'processed_text') {
+    if ($webform_element->getTypeName() == 'processed_text' && !WebformDialogHelper::useOffCanvas()) {
       unset($row['type']['#attributes']);
       unset($row['operation']['#attributes']);
       if (isset($row['operation'])) {
@@ -312,7 +312,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     // Placeholders.
     switch ($webform_element->getTypeName()) {
       case 'container':
-        $element = $this->buildElementPreviewPlaceholder($this->t('Displays an HTML container. (ex @div)', ['@div' => '<div>']));
+        $element = $this->buildElementPreviewPlaceholder($this->t('Displays an HTML container. (i.e. @div)', ['@div' => '<div>']));
         break;
 
       case 'hidden':
@@ -320,7 +320,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
         break;
 
       case 'label':
-        $element = $this->buildElementPreviewPlaceholder($this->t('Displays a form label without any associated element. (ex @label)', ['@label' => '<label>']));
+        $element = $this->buildElementPreviewPlaceholder($this->t('Displays a form label without any associated element. (i.e. @label)', ['@label' => '<label>']));
         break;
 
       case 'processed_text':
@@ -329,7 +329,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
 
       case 'table':
         $element = $this->buildElementPreviewPlaceholder(
-          $this->t('Displays a custom table. (ex @table).', ['@table' => '<table>']) .
+          $this->t('Displays a custom table. (i.e. @table).', ['@table' => '<table>']) .
           '<br/><em>' . $this->t('Requires understanding <a href=":href">how to build tables using render arrays</a>.', [':href' => $webform_element->getPluginApiUrl()->toString()]) . '</em>'
         );
         break;
@@ -350,6 +350,10 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
         $element = $this->buildElementPreviewPlaceholder($this->t('Basic HTML markup.'));
         break;
 
+      case 'webform_section':
+        $default_section_title_tag = $this->config('webform.settings')->get('element.default_section_title_tag');
+        $element = $this->buildElementPreviewPlaceholder($this->t('Displays a section container (i.e. @section) with a header (i.e. @header).', ['@section' => '<section>', '@header' => '<' . $default_section_title_tag . '>']));
+        break;
     }
 
     // Disable all file uploads.

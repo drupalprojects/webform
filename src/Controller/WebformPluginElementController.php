@@ -145,6 +145,7 @@ class WebformPluginElementController extends ControllerBase implements Container
               '#type' => 'link',
               '#title' => $element_plugin_id,
               '#url' => new Url('webform.element_plugins.test', ['type' => $element_plugin_id]),
+              '#attributes' => ['class' => ['webform-form-filter-text-source']],
             ],
           ];
         }
@@ -181,6 +182,7 @@ class WebformPluginElementController extends ControllerBase implements Container
           'hidden' => $webform_element->isHidden(),
           'multiple' => $webform_element->supportsMultipleValues(),
           'multiline' => $webform_element->isMultiline($element),
+          'default_key' => $webform_element_plugin_definition['default_key'],
           'states_wrapper' => $webform_element_plugin_definition['states_wrapper'],
         ];
         $webform_info = [];
@@ -290,7 +292,7 @@ class WebformPluginElementController extends ControllerBase implements Container
 
     // Display info.
     $build['info'] = [
-      '#markup' => $this->t('@total exporters', ['@total' => count($webform_form_element_rows)]),
+      '#markup' => $this->t('@total elements', ['@total' => count($webform_form_element_rows)]),
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];

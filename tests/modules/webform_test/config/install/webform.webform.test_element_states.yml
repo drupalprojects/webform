@@ -15,7 +15,7 @@ category: 'Test: Element'
 elements: |
   states_basic:
     '#type': webform_element_states
-    '#title': 'States basic'
+    '#title': states_basic
     '#selector_options':
       selector_01: 'Selector 01 (selector_01)'
       selector_02: 'Selector 02 (selector_02)'
@@ -35,9 +35,27 @@ elements: |
         - or
         - selector_02:
             checked: true
+  states_values:
+    '#type': webform_element_states
+    '#title': states_values
+    '#selector_options':
+      selector_01: 'Selector 01 (selector_01)'
+      selector_02: 'Selector 02 (selector_02)'
+      selector_03: 'Selector 03 (selector_03)'
+      selector_04: 'Selector 04 (selector_04)'
+    '#default_value':
+      enabled:
+        selector_01:
+          value: '0'
+        selector_02:
+          value: 'false'
+        selector_03:
+          value: ''
+        selector_04:
+          checked: true
   states_custom_selector:
     '#type': webform_element_states
-    '#title': 'States custom selector'
+    '#title': states_custom_selector
     '#selector_options':
       selector_01: 'Selector 01 (selector_01)'
       selector_02: 'Selector 02 (selector_02)'
@@ -48,14 +66,22 @@ elements: |
           value: 'Yes'
   states_empty:
     '#type': webform_element_states
-    '#title': 'States empty'
+    '#title': states_empty
+    '#selector_options':
+      selector_01: 'Selector 01 (selector_01)'
+      selector_02: 'Selector 02 (selector_02)'
+      selector_03: 'Selector 03 (selector_03)'
+  states_no_selector_other:
+    '#type': webform_element_states
+    '#title': 'states_no_selector_other'
+    '#selector_other': false
     '#selector_options':
       selector_01: 'Selector 01 (selector_01)'
       selector_02: 'Selector 02 (selector_02)'
       selector_03: 'Selector 03 (selector_03)'
   states_single:
     '#type': webform_element_states
-    '#title': 'States single'
+    '#title': states_single
     '#selector_options':
       selector_01: 'Selector 01 (selector_01)'
       selector_02: 'Selector 02 (selector_02)'
@@ -63,7 +89,7 @@ elements: |
     '#multiple': false
   states_unsupported_operator:
     '#type': webform_element_states
-    '#title': 'States unsupport operator'
+    '#title': states_unsupported_operator
     '#default_value':
       required:
         - custom_selector:
@@ -73,7 +99,7 @@ elements: |
             value: 'Yes'
   states_unsupported_nesting:
     '#type': webform_element_states
-    '#title': 'States unsupport nested multiple selectors'
+    '#title': states_unsupported_nesting
     '#default_value':
       required:
         - selector_01:
@@ -85,10 +111,19 @@ elements: |
             value: 'Yes'
           selector_04:
             value: 'Yes'
+  states_custom_condition:
+    '#type': webform_element_states
+    '#title': states_custom_condition
+    '#default_value':
+      required:
+        custom_selector:
+          value:
+            pattern: '[a-z0-9]+'
 css: ''
 javascript: ''
 settings:
   ajax: false
+  ajax_scroll_top: form
   page: true
   page_submit_path: ''
   page_confirm_path: ''
@@ -109,17 +144,25 @@ settings:
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
+  form_submit_back: false
   form_autofocus: false
   form_details_toggle: false
+  form_login: false
+  form_login_message: ''
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_login: false
+  submission_login_message: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_start_label: ''
-  wizard_complete: true
-  wizard_complete_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
   preview: 0
   preview_label: ''
   preview_title: ''
@@ -141,13 +184,17 @@ settings:
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
   limit_total: null
+  limit_total_interval: null
   limit_total_message: ''
   limit_user: null
+  limit_user_interval: null
   limit_user_message: ''
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
   purge: none
   purge_days: null
-  entity_limit_total: null
-  entity_limit_user: null
   results_disabled: true
   results_disabled_ignore: false
   token_update: false

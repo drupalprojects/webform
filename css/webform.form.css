@@ -19,23 +19,53 @@
 }
 
 /**
- * Element inline
+ * Element title inline.
  */
-.webform-element--title-inline label {
+.webform-element--title-inline > label {
   display: inline;
-}
-
-.webform-element--title-inline label {
   padding-right: 0.5em;
 }
 
-.webform-element--title-inline label::after {
-  content: ':';
+/**
+ * Fieldset title inline.
+ * Applies to radios, checkboxes, and buttons. (aka .form-composite)
+ * @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
+ * @see webform_preprocess_fieldset()
+ */
+.form-composite.webform-fieldset--title-inline legend {
+  float: left;
+  margin: 0.4em 0.5em 0.4em 0;
+}
+
+.form-composite.webform-fieldset--title-inline .fieldset-wrapper,
+.form-composite.webform-fieldset--title-inline .fieldset-wrapper > div {
+  display: inline;
 }
 
 /**
- * Readonly inputs.
+ * Checkboxes and radios title inline.
  */
-.webform-readonly {
-  background-color: #f0f0f0;
+.webform-element--title-inline .form-radios,
+.webform-element--title-inline .form-checkboxes {
+  display: inline;
+}
+
+/**
+ * Readonly inputs. (@see .form-disabled)
+ * @see https://www.wufoo.com/html5/attributes/21-readonly.html
+ */
+.webform-readonly input[type="date"],
+.webform-readonly input[type="datetime-local"],
+.webform-readonly input[type="email"],
+.webform-readonly input[type="number"],
+.webform-readonly input[type="password"],
+.webform-readonly input[type="search"],
+.webform-readonly input[type="tel"],
+.webform-readonly input[type="text"],
+.webform-readonly input[type="time"],
+.webform-readonly input[type="url"],
+.webform-readonly textarea {
+  background: #ededed;
+  border-color: #bbb;
+  color: #717171;
 }

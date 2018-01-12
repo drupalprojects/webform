@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Entity;
 
+use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -97,7 +98,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   protected $originalData = [];
 
   /**
-   * Flag to indicated is submission is being converted from anonymous to authenticated.
+   * Flag to indicated if submission is being converted from anonymous to authenticated.
    *
    * @var bool
    */
@@ -191,6 +192,11 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       ->setDescription(t('The ID of the entity of which this webform submission was submitted from.'))
       ->setSetting('max_length', 255);
 
+    $fields['locked'] = BaseFieldDefinition::create('boolean')
+        ->setLabel(t('Locked'))
+        ->setDescription(t('A flag that indicates a locked webform submission.'))
+        ->setDefaultValue(FALSE);
+
     $fields['sticky'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Sticky'))
       ->setDescription(t('A flag that indicate the status of the webform submission.'))
@@ -217,7 +223,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   public function label() {
     $submission_label = $this->getWebform()->getSetting('submission_label')
       ?: \Drupal::config('webform.settings')->get('settings.default_submission_label');
-    return \Drupal::service('webform.token_manager')->replace($submission_label, $this);
+    return PlainTextOutput::renderFromHtml(\Drupal::service('webform.token_manager')->replace($submission_label, $this));
   }
 
   /**
@@ -295,6 +301,14 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    */
   public function setSticky($sticky) {
     $this->set('sticky', $sticky);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLocked($locked) {
+    $this->set('locked', $locked);
     return $this;
   }
 
@@ -518,6 +532,13 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function isLocked() {
+    return $this->get('locked')->value ? TRUE: FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isSticky() {
     return (bool) $this->get('sticky')->value;
   }
@@ -541,6 +562,9 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     }
     elseif ($this->isDraft()) {
       return self::STATE_DRAFT;
+    }
+    elseif ($this->isLocked()) {
+      return self::STATE_LOCKED;
     }
     elseif ($this->completed->value == $this->changed->value) {
       return self::STATE_COMPLETED;
@@ -578,9 +602,10 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
     $duplicate->set('changed', NULL);
     $duplicate->set('completed', NULL);
 
-    // Clear admin notes and sticky.
+    // Clear admin notes, sticky, and locked.
     $duplicate->set('notes', '');
     $duplicate->set('sticky', FALSE);
+    $duplicate->set('locked', FALSE);
 
     return $duplicate;
   }
@@ -709,6 +734,13 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
+  public function resave() {
+    return $this->entityManager()->getStorage($this->entityTypeId)->resave($this);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function convert(UserInterface $account) {
     $this->converting = TRUE;
     $this->setOwner($account);
@@ -756,7 +788,6 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       return $values;
     }
   }
-
 
   /**
    * Default value callback for 'uid' base field definition.

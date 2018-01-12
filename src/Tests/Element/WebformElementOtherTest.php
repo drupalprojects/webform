@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -10,7 +9,7 @@ use Drupal\webform\Entity\Webform;
  *
  * @group Webform
  */
-class WebformElementOtherTest extends WebformTestBase {
+class WebformElementOtherTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

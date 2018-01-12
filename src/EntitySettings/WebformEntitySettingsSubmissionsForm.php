@@ -4,6 +4,7 @@ namespace Drupal\webform\EntitySettings;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionStorageInterface;
 use Drupal\webform\WebformTokenManagerInterface;
@@ -87,6 +88,18 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#title' => $this->t('Submission label'),
       '#default_value' => $settings['submission_label'],
     ];
+    $form['submission_settings']['submission_exception_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Submission exception message'),
+      '#description' => $this->t('A message to be displayed if submission handling breaks.'),
+      '#default_value' => $settings['submission_exception_message'],
+    ];
+    $form['submission_settings']['submission_locked_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Submission locked message'),
+      '#description' => $this->t('A message to be displayed if submission is lockec.'),
+      '#default_value' => $settings['submission_locked_message'],
+    ];
     $form['submission_settings']['next_serial'] = [
       '#type' => 'number',
       '#title' => $this->t('Next submission number'),
@@ -104,7 +117,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     // @see \Drupal\webform\Form\WebformResultsCustomForm::buildForm
     $available_columns = $webform_submission_storage->getColumns($webform);
     // Remove columns that should never be displayed to users.
-    $available_columns = array_diff_key($available_columns, array_flip(['uuid', 'in_draft', 'entity', 'sticky', 'notes', 'uid', 'operations']));
+    $available_columns = array_diff_key($available_columns, array_flip(['uuid', 'in_draft', 'entity', 'sticky', 'locked', 'notes', 'uid', 'operations']));
     $custom_columns = $webform_submission_storage->getUserColumns($webform);
     // Change sid's # to an actual label.
     $available_columns['sid']['title'] = $this->t('Submission ID');
@@ -131,6 +144,31 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#options' => $columns_options,
       '#default_value' => $columns_default_value,
     ];
+
+    // Submission access denied.
+    $form['submission_access_denied'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Access denied'),
+      '#open' => TRUE,
+    ];
+    $form['submission_access_denied']['submission_login'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Redirect to login when access denied to submission'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['submission_login'],
+    ];
+    $form['submission_access_denied']['submission_login_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Login message when access denied to submission'),
+      '#description' => $this->t('A message to be displayed on the login page.'),
+      '#default_value' => $settings['submission_login_message'],
+      '#states' => [
+        'visible' => [
+          ':input[name="submission_login"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['submission_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Submission behaviors.
     $form['submission_behaviors'] = [
@@ -180,7 +218,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       'token_update' => [
         'title' => $this->t('Allow users to update a submission using a secure token.'),
         'form_description' => $this->t("If checked users will be able to update a submission using the webform's URL appended with the submission's (secure) token.") . ' ' .
-          $this->t("The 'tokenized' URL to update a submission will be available when viewing a submission's information and can be inserted into an email using the [webform_submission:update-url] token.") . ' '  .
+          $this->t("The 'tokenized' URL to update a submission will be available when viewing a submission's information and can be inserted into an email using the [webform_submission:update-url] token.") . ' ' .
           $this->t('Only webforms that are open to new submissions can be updated using the secure token.'),
       ],
       // Global behaviors.
@@ -220,17 +258,42 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#min' => 1,
       '#default_value' => $settings['limit_total'],
     ];
+    $form['submission_limits']['total']['limit_total_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Total submissions limit interval'),
+      '#default_value' => $settings['limit_total_interval'],
+      '#states' => [
+        'visible' => [':input[name="limit_total"]' => ['!value' => '']],
+      ],
+    ];
     $form['submission_limits']['total']['entity_limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit per source entity'),
       '#min' => 1,
       '#default_value' => $settings['entity_limit_total'],
     ];
+    $form['submission_limits']['total']['entity_limit_total_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Total submissions limit interval per source entity'),
+      '#default_value' => $settings['entity_limit_total_interval'],
+      '#states' => [
+        'visible' => [':input[name="entity_limit_total"]' => ['!value' => '']],
+      ],
+    ];
     $form['submission_limits']['total']['limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Total submissions limit message'),
       '#min' => 1,
       '#default_value' => $settings['limit_total_message'],
+      '#states' => [
+        'visible' => [
+          [':input[name="limit_total"]' => ['!value' => '']],
+          'or',
+          [':input[name="entity_limit_total"]' => ['!value' => '']],
+        ],
+      ],
     ];
     $form['submission_limits']['user'] = [
       '#type' => 'details',
@@ -243,16 +306,41 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#min' => 1,
       '#default_value' => $settings['limit_user'],
     ];
+    $form['submission_limits']['user']['limit_user_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Per user submission limit interval'),
+      '#default_value' => $settings['limit_user_interval'],
+      '#states' => [
+        'visible' => [':input[name="limit_user"]' => ['!value' => '']],
+      ],
+    ];
     $form['submission_limits']['user']['entity_limit_user'] = [
       '#type' => 'number',
       '#min' => 1,
       '#title' => $this->t('Per user submission limit per source entity'),
       '#default_value' => $settings['entity_limit_user'],
     ];
+    $form['submission_limits']['user']['entity_limit_user_interval'] = [
+      '#type' => 'select',
+      '#options' => WebformDateHelper::getIntervalOptions(),
+      '#title' => $this->t('Per user submission limit interval per source entity'),
+      '#default_value' => $settings['entity_limit_user_interval'],
+      '#states' => [
+        'visible' => [':input[name="entity_limit_user"]' => ['!value' => '']],
+      ],
+    ];
     $form['submission_limits']['user']['limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Per user submission limit message'),
       '#default_value' => $settings['limit_user_message'],
+      '#states' => [
+        'visible' => [
+          [':input[name="limit_user"]' => ['!value' => '']],
+          'or',
+          [':input[name="entity_limit_user"]' => ['!value' => '']],
+        ],
+      ],
     ];
 
     // Purge settings.

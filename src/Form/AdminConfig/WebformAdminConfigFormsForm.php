@@ -92,8 +92,18 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['page_settings']['default_page_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default base path for webform URLs'),
-      '#required' => TRUE,
+      '#description' => $this->t('Leave blank to display the automatic generation of URL aliases for all webforms.'),
       '#default_value' => $settings['default_page_base_path'],
+    ];
+    $form['page_settings']['default_page_base_path_message'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t('All URL aliases for all webforms have to be manually created.'),
+      '#message_type' => 'warning',
+      '#states' => [
+        'visible' => [
+          ':input[name="page_settings[default_page_base_path]"]' => ['empty' => TRUE],
+        ],
+      ],
     ];
 
     // Form settings.
@@ -126,6 +136,12 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#title' => $this->t('Default confidential message'),
       '#required' => TRUE,
       '#default_value' => $settings['default_form_confidential_message'],
+    ];
+    $form['form_settings']['default_form_login_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Default login message when access denied to webform'),
+      '#required' => TRUE,
+      '#default_value' => $settings['default_form_login_message'],
     ];
     $form['form_settings']['default_submit_button_label'] = [
       '#type' => 'textfield',
@@ -170,6 +186,10 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       'default_form_disable_back' => [
         'title' => $this->t('Disable back button for all webforms'),
         'description' => $this->t("If checked, users will not be allowed to navigate back to the webform using the browser's back button."),
+      ],
+      'default_form_submit_back' => [
+        'title' => $this->t('Submit previous page when browser back button is clicked for all webforms'),
+        'description' => $this->t("If checked, the browser back button will submit the previous page and navigate back emulating the behaviour of user clicking a wizard or preview page's back button."),
       ],
       'default_form_unsaved' => [
         'title' => $this->t('Warn users about unsaved changes for all webforms'),
@@ -222,12 +242,12 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#size' => 20,
       '#default_value' => $settings['default_wizard_start_label'],
     ];
-    $form['wizard_settings']['default_wizard_complete_label'] = [
+    $form['wizard_settings']['default_wizard_confirmation_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default wizard end label'),
       '#required' => TRUE,
       '#size' => 20,
-      '#default_value' => $settings['default_wizard_complete_label'],
+      '#default_value' => $settings['default_wizard_confirmation_label'],
     ];
 
     // Preview settings.
@@ -266,7 +286,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['preview_settings']['default_preview_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default preview message'),
-      '#required' => TRUE,
+      '#description' => $this->t('Leave blank to not automatically include a preview message on all forms.'),
       '#default_value' => $settings['default_preview_message'],
     ];
     $form['preview_settings']['preview_classes'] = [
@@ -405,4 +425,5 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
 
     parent::submitForm($form, $form_state);
   }
+
 }

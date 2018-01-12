@@ -257,6 +257,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       'range_start' => '',
       'range_end' => '',
       'state' => 'all',
+      'locked' => '',
       'sticky' => '',
       'download' => TRUE,
       'files' => FALSE,
@@ -264,10 +265,10 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
 
     // Append element handler default options.
     $element_types = $this->getWebformElementTypes();
-    $element_handlers = $this->elementManager->getInstances();
-    foreach ($element_handlers as $element_type => $element_handler) {
+    $element_plugins = $this->elementManager->getInstances();
+    foreach ($element_plugins as $element_type => $element_plugin) {
       if (empty($element_types) || isset($element_types[$element_type])) {
-        $this->defaultOptions += $element_handler->getExportDefaultOptions();
+        $this->defaultOptions += $element_plugin->getExportDefaultOptions();
       }
     }
 
@@ -317,9 +318,23 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       // @see \Drupal\webform\Plugin\WebformExporterBase::buildConfigurationForm
       '#attributes' => ['class' => ['js-webform-exporter']],
     ];
+    // Exporter configuration forms.
+    $form['export']['format']['exporters'] = [
+      '#tree' => TRUE,
+    ];
     foreach ($exporter_plugins as $plugin_id => $exporter) {
       $subform_state = SubformState::createForSubform($form['export']['format'], $form, $form_state);
-      $form['export']['format'] = $exporter->buildConfigurationForm($form['export']['format'], $subform_state);
+      $exporter_form = $exporter->buildConfigurationForm([], $subform_state);
+      if ($exporter_form) {
+        $form['export']['format']['exporters'][$plugin_id] = [
+          '#type' => 'container',
+          '#states' => [
+            'visible' => [
+              ':input.js-webform-exporter' => ['value' => $plugin_id],
+            ],
+          ],
+        ] + $exporter_form;
+      }
     }
 
     // Element.
@@ -405,11 +420,11 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       '#states' => $states_options,
     ];
     $element_types = $this->getWebformElementTypes();
-    $element_handlers = $this->elementManager->getInstances();
-    foreach ($element_handlers as $element_type => $element_handler) {
+    $element_plugins = $this->elementManager->getInstances();
+    foreach ($element_plugins as $element_type => $element_plugin) {
       if (empty($element_types) || isset($element_types[$element_type])) {
         $subform_state = SubformState::createForSubform($form['export']['elements'], $form, $form_state);
-        $element_handler->buildExportOptionsForm($form['export']['elements'], $subform_state, $export_options);
+        $element_plugin->buildExportOptionsForm($form['export']['elements'], $subform_state, $export_options);
       }
     }
 
@@ -578,6 +593,14 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
    * {@inheritdoc}
    */
   public function getValuesFromInput(array $values) {
+    // Get selected exporter configuration.
+    if (isset($values['exporter']) && isset($values['exporters'])) {
+      if (isset($values['exporters'][$values['exporter']])) {
+        $values += $values['exporters'][$values['exporter']];
+      }
+      unset($values['exporters']);
+    }
+
     if (isset($values['range_type'])) {
       $range_type = $values['range_type'];
       $values['range_type'] = $range_type;

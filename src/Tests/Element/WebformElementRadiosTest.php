@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for webform element radioss.
  *
  * @group Webform
  */
-class WebformElementRadiosTest extends WebformTestBase {
+class WebformElementRadiosTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

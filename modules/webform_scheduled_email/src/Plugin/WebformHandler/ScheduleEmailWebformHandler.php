@@ -134,7 +134,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       $form['scheduled']['warning'] = [
         '#type' => 'webform_message',
         '#message_type' => 'error',
-        '#message_message' => $this->t('It is strongly recommended that <a href=":href">submission logging</a> is enable to track scheduled emails.', [':href' => $webform->toUrl('settings-form')->toString()]),
+        '#message_message' => $this->t('It is strongly recommended that <a href=":href">submission logging</a> is enable to track scheduled emails.', [':href' => $webform->toUrl('settings-submissions')->toString()]),
         '#message_close' => TRUE,
         '#message_id' => 'webform_scheduled_email-' . $webform->id(),
         '#message_storage' => WebformMessage::STORAGE_LOCAL,
@@ -144,7 +144,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     // Send date/time.
     $send_options = [
       '[date:html_date]' => $this->t('Current date'),
-      WebformOtherBase::OTHER_OPTION => $this->t('Custom date/time...'),
+      WebformOtherBase::OTHER_OPTION => $this->t('Custom date...'),
       (string) $this->t('Webform') => [
         '[webform:open:html_date]' => $this->t('Open date'),
         '[webform:close:html_date]' => $this->t('Close date'),
@@ -164,7 +164,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       '#title' => $this->t('Send email on'),
       '#options' => $send_options,
       '#other__placeholder' => $this->t('YYYY-MM-DD'),
-      '#other__description' => $this->t('Enter a valid ISO date/time (YYYY-MM-DD) or token which returns a valid ISO date.'),
+      '#other__description' => $this->t('Enter a valid ISO date (YYYY-MM-DD) or token which returns a valid ISO date.'),
       '#parents' => ['settings', 'send'],
       '#default_value' => $this->configuration['send'],
     ];
@@ -177,13 +177,13 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     }
     $days = array_reverse($days);
     foreach ($days as $day) {
-      $days_options["+$day"] = $this->t('+ @day days', ['@day' => $day]);
+      $days_options[$day] = $this->t('+ @day days', ['@day' => $day]);
     }
     $form['scheduled']['days'] = [
       '#type' => 'webform_select_other',
       '#title' => $this->t('Days'),
       '#title_display' => 'hidden',
-      '#empty_option' => '',
+      '#empty_option' => $this->t('- None -'),
       '#options' => $days_options,
       '#default_value' => $this->configuration['days'],
       '#other__option_label' => $this->t('Custom number of days...'),

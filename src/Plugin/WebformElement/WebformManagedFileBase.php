@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url as UrlGenerator;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
@@ -39,15 +40,19 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $max_filesize = Bytes::toInt($max_filesize);
     $max_filesize = ($max_filesize / 1024 / 1024);
     $file_extensions = $this->getFileExtensions();
-    return parent::getDefaultProperties() + [
+    $properties = parent::getDefaultProperties() + [
       'multiple' => FALSE,
       'max_filesize' => $max_filesize,
       'file_extensions' => $file_extensions,
       'uri_scheme' => 'private',
+      'sanitize' => FALSE,
       'button' => FALSE,
       'button__title' => '',
       'button__attributes' => [],
     ];
+    // File uploads can't be prepopulated.
+    unset($properties['prepopulate']);
+    return $properties;
   }
 
   /**
@@ -102,7 +107,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $scheme_options = static::getVisibleStreamWrappers();
       $uri_scheme = $this->getUriScheme($element);
       if (!isset($scheme_options[$uri_scheme]) && $this->currentUser->hasPermission('administer webform')) {
-        drupal_set_message($this->t('The \'File\' element is unavailable because a <a href="https://www.drupal.org/documentation/modules/file">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
+        drupal_set_message($this->t('The \'File\' element is unavailable because a <a href="https://www.ostraining.com/blog/drupal/creating-drupal-8-private-file-system/">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
         $context = [
           'link' => Link::fromTextAndUrl($this->t('Edit'), UrlGenerator::fromRoute('<current>'))->toString(),
         ];
@@ -175,8 +180,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function setDefaultValue(array &$element) {
-    if (!empty($element['#default_value']) && !is_array($element['#default_value'])) {
-      $element['#default_value'] = [$element['#default_value']];
+    if (!empty($element['#default_value'])) {
+      $element['#default_value'] = (array) $element['#default_value'];
     }
   }
 
@@ -335,18 +340,54 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       return;
     }
 
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+    /** @var \Drupal\Component\Transliteration\TransliterationInterface $transliteration */
+    $transliteration = \Drupal::service('transliteration');
+
+    /** @var \Drupal\file\FileInterface[] $files */
     $files = File::loadMultiple($fids);
     foreach ($files as $file) {
+      // Set source and destination URI and file name.
       $source_uri = $file->getFileUri();
+      $source_filename = $file->getFileName();
+
+      $destination_uri = $source_uri;
+      $destination_filename = $source_filename ;
 
       // Replace /_sid_/ token with the submission id.
       if (strpos($source_uri, '/_sid_/')) {
         $destination_uri = str_replace('/_sid_/', '/' . $webform_submission->id() . '/', $source_uri);
-        $destination_directory = \Drupal::service('file_system')->dirname($destination_uri);
+        $destination_directory = $file_system->dirname($destination_uri);
         file_prepare_directory($destination_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+      }
+
+      // Sanitize filename.
+      // @see http://stackoverflow.com/questions/2021624/string-sanitizer-for-filename
+      if (!empty($element['#sanitize'])) {
+        $destination_extension = pathinfo($destination_filename, PATHINFO_EXTENSION);
+        $destination_extension = Unicode::strtolower($destination_extension);
+
+        $destination_basename = rtrim(pathinfo($destination_filename, PATHINFO_BASENAME), ".$destination_extension");
+        $destination_basename = Unicode::strtolower($destination_basename);
+        $destination_basename = $transliteration->transliterate($destination_basename, \Drupal::languageManager()->getCurrentLanguage()->getId(), '-');
+        $destination_basename = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $destination_basename);
+        $destination_basename = preg_replace('/\s+/', '-', $destination_basename);
+        $destination_basename = trim($destination_basename, '-');
+        // If the basename if emepty use the element's key.
+        if (empty($destination_basename)) {
+          $destination_basename = $key;
+        }
+
+        $destination_filename = $destination_basename . '.' . $destination_extension;
+        $destination_uri = $file_system->dirname($destination_uri) . '/' . $destination_filename;
+      }
+
+      // Save file if there is a new destination URI.
+      if ($source_uri != $destination_uri) {
         $destination_uri = file_unmanaged_move($source_uri, $destination_uri);
-        // Update the file's uri and save.
         $file->setFileUri($destination_uri);
+        $file->setFileName($destination_filename);
         $file->save();
       }
 
@@ -363,23 +404,10 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function postDelete(array &$element, WebformSubmissionInterface $webform_submission) {
-    $webform = $webform_submission->getWebform();
-
-    $data = $webform_submission->getData();
-    $key = $element['#webform_key'];
-
-    $value = isset($data[$key]) ? $data[$key] : [];
-    $fids = (is_array($value)) ? $value : [$value];
-
     // Delete File record.
+    $fids = (array) ($webform_submission->getElementData($element['#webform_key']) ?: []);
     foreach ($fids as $fid) {
       file_delete($fid);
-    }
-
-    // Remove the empty directory for all stream wrappers.
-    $stream_wrappers = array_keys(\Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE));
-    foreach ($stream_wrappers as $stream_wrapper) {
-      file_unmanaged_delete_recursive($stream_wrapper . '://webform/' . $webform->id() . '/' . $webform_submission->id());
     }
   }
 
@@ -557,6 +585,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
+
     $form['file'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('File settings'),
@@ -605,8 +634,14 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $form['file']['file_extensions'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Allowed file extensions'),
-      '#description' => $this->t('Separate extensions with a space and do not include the leading dot. '),
+      '#description' => $this->t('Separate extensions with a space and do not include the leading dot.'),
       '#maxlength' => 255,
+    ];
+    $form['file']['sanitize'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Sanitize file name'),
+      '#description' => $this->t('If checked, file name will be transliterated, lower-cased and all special characters converted to dashes (-).'),
+      '#return_value' => TRUE,
     ];
     $form['file']['multiple'] = [
       '#type' => 'checkbox',
@@ -644,6 +679,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         ],
       ],
     ];
+
+    // Hide default value, which is not applicable for file uploads.
+    $form['default']['#access'] = FALSE;
 
     return $form;
   }

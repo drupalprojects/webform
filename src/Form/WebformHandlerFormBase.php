@@ -84,6 +84,12 @@ abstract class WebformHandlerFormBase extends FormBase {
       }
     }
 
+    // Add meta data to webform handler form.
+    // This information makes it a little easier to alter a handler's form.
+    $form['#webform_id'] = $this->webform->id();
+    $form['#webform_handler_id'] = $this->webformHandler->getHandlerId();
+    $form['#webform_handler_plugin_id'] = $this->webformHandler->getPluginId();
+
     $request = $this->getRequest();
 
     $form['description'] = [
@@ -171,6 +177,7 @@ abstract class WebformHandlerFormBase extends FormBase {
           'disabled' => $this->t('Disabled'),
         ],
         '#selector_options' => $webform->getElementsSelectorOptions(),
+        '#selector_other' => FALSE,
         '#multiple' => FALSE,
         '#default_value' => $this->webformHandler->getConditions(),
       ];

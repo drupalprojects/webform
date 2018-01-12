@@ -69,6 +69,11 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
       '#open' => TRUE,
       '#tree' => TRUE,
     ];
+    $form['assets']['description'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t('The below CSS and JavasScript will be loaded on all webform pages.'),
+      '#message_type' => 'info',
+    ];
     $form['assets']['css'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'css',
@@ -114,6 +119,11 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
           'data' => [
             'content' => ['#markup' => $library['description'], '#suffix' => '<br />'],
             'notes' => ['#markup' => '(' . $library['notes'] . ')', '#prefix' => '<em>', '#suffix' => '</em><br />'],
+            'status' => (!empty($library['deprecated'])) ? [
+              '#markup' => $library['deprecated'],
+              '#prefix' => '<div class="color-warning"><strong>',
+              '#suffix' => '</strong></div>',
+            ] : [],
           ],
         ],
       ];

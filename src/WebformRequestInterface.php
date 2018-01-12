@@ -37,6 +37,14 @@ interface WebformRequestInterface {
   public function getCurrentWebform();
 
   /**
+   * Get webform submission associated with the current request.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface|null
+   *   The current request's webform submission.
+   */
+  public function getCurrentWebformSubmission();
+
+  /**
    * Get the webform and source entity for the current request.
    *
    * @return array
@@ -77,7 +85,7 @@ interface WebformRequestInterface {
    * @return \Drupal\Core\Url
    *   The URL for a form/submission and source entity.
    */
-  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, $route_options = []);
+  public function getUrl(EntityInterface $webform_entity, EntityInterface $source_entity = NULL, $route_name, array $route_options = []);
 
   /**
    * Get the route name for a form/submission and source entity.

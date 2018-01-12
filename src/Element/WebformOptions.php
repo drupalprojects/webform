@@ -3,6 +3,7 @@
 namespace Drupal\webform\Element;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
@@ -26,6 +27,7 @@ class WebformOptions extends FormElement {
     $class = get_class($this);
     return [
       '#input' => TRUE,
+      '#yaml' => FALSE,
       '#label' => t('option'),
       '#labels' => t('options'),
       '#empty_items' => 5,
@@ -74,18 +76,20 @@ class WebformOptions extends FormElement {
     WebformElementHelper::fixStatesWrapper($element);
 
     // For options with optgroup display a CodeMirror YAML editor.
-    if (isset($element['#default_value']) && is_array($element['#default_value']) && static::hasOptGroup($element['#default_value'])) {
+    if (!empty($element['#yaml']) || (isset($element['#default_value']) && is_array($element['#default_value']) && static::hasOptGroup($element['#default_value']))) {
       // Build table.
       $element['options'] = [
         '#type' => 'webform_codemirror',
         '#mode' => 'yaml',
-        '#default_value' => Yaml::encode($element['#default_value']),
+        '#default_value' => trim(Yaml::encode($element['#default_value'])),
+        '#placeholder' => t('Enter custom options'),
         '#description' => t('Key-value pairs MUST be specified as "safe_key: \'Some readable options\'". Use of only alphanumeric characters and underscores is recommended in keys. One option per line.') . '<br /><br />' .
-        t('Option groups can be created by using just the group name followed by indented group options.'),
+          t('Option groups can be created by using just the group name followed by indented group options.'),
       ];
       return $element;
     }
     else {
+      $t_args = ['@label' => isset($element['#label']) ? Unicode::ucfirst($element['#label']) : t('Options')];
       $properties = ['#label', '#labels', '#empty_items', '#add_more'];
 
       $element['options'] = array_intersect_key($element, array_combine($properties, $properties)) + [
@@ -98,25 +102,26 @@ class WebformOptions extends FormElement {
         $element['options']['#element'] = [
           'value' => [
             '#type' => 'textfield',
-            '#title' => t('Option value'),
+            '#title' => t('@label value', $t_args),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
-            '#maxlength' => 255,
+            '#maxlength' => NULL,
+            '#attributes' => ['class' => ['js-webform-options-value']],
           ],
           'option' => [
             '#type' => 'container',
-            '#title' => t('Option text/description'),
+            '#title' => t('@label text/description', $t_args),
             '#title_display' => t('invisible'),
             'text' => [
               '#type' => 'textfield',
-              '#title' => t('Option text'),
+              '#title' => t('@label text', $t_args),
               '#title_display' => t('invisible'),
               '#placeholder' => t('Enter text'),
-              '#maxlength' => 255,
+              '#maxlength' => NULL,
             ],
             'description' => [
               '#type' => 'textarea',
-              '#title' => t('Option description'),
+              '#title' => t('@label description', $t_args),
               '#title_display' => t('invisible'),
               '#placeholder' => t('Enter description'),
               '#rows' => 2,
@@ -128,20 +133,23 @@ class WebformOptions extends FormElement {
         $element['options']['#element'] = [
           'value' => [
             '#type' => 'textfield',
-            '#title' => t('Option value'),
+            '#title' => t('@label value', $t_args),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter value'),
             '#maxlength' => 255,
+            '#attributes' => ['class' => ['js-webform-options-value']],
           ],
           'text' => [
             '#type' => 'textfield',
-            '#title' => t('Option text'),
+            '#title' => t('@label text', $t_args),
             '#title_display' => t('invisible'),
             '#placeholder' => t('Enter text'),
             '#maxlength' => 255,
           ],
         ];
       }
+
+      $element['#attached']['library'][] = 'webform/webform.element.options.admin';
       return $element;
     }
   }
@@ -191,24 +199,26 @@ class WebformOptions extends FormElement {
    * @return array
    *   An array of options.
    */
-  public static function convertValuesToOptions(array $values = [], $options_description = FALSE) {
+  public static function convertValuesToOptions(array $values = NULL, $options_description = FALSE) {
     $options = [];
-    foreach ($values as $value) {
-      $option_value = $value['value'];
-      $option_text = $value['text'];
-      if ($options_description && !empty($value['description'])) {
-        $option_text .= WebformOptionsHelper::DESCRIPTION_DELIMITER . $value['description'];
-      }
+    if ($values && is_array($values)) {
+      foreach ($values as $value) {
+        $option_value = $value['value'];
+        $option_text = $value['text'];
+        if ($options_description && !empty($value['description'])) {
+          $option_text .= WebformOptionsHelper::DESCRIPTION_DELIMITER . $value['description'];
+        }
 
-      // Populate empty option value or option text.
-      if ($option_value === '') {
-        $option_value = $option_text;
-      }
-      elseif ($option_text === '') {
-        $option_text = $option_value;
-      }
+        // Populate empty option value or option text.
+        if ($option_value === '') {
+          $option_value = $option_text;
+        }
+        elseif ($option_text === '') {
+          $option_text = $option_value;
+        }
 
-      $options[$option_value] = $option_text;
+        $options[$option_value] = $option_text;
+      }
     }
     return $options;
   }

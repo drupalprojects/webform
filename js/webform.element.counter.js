@@ -38,7 +38,7 @@
         options = $.extend(options, Drupal.webform.counter.options);
 
         // Set the target to a div that is appended to end of the input's parent container.
-        options.target = $('<div></div>');
+        options.target = $('<div class="webform-counter-message"></div>');
         $(this).parent().append(options.target);
 
         $(this).counter(options);

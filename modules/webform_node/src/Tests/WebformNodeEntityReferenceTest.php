@@ -76,7 +76,7 @@ class WebformNodeEntityReferenceTest extends WebformNodeTestBase {
 
     /**************************************************************************/
 
-    // Select webform A
+    // Select webform A.
     $this->drupalGet('node/1/webform/test');
     $this->clickLink('Test: Webform Node Multiple A');
 
@@ -99,8 +99,6 @@ class WebformNodeEntityReferenceTest extends WebformNodeTestBase {
     $this->assertNoRaw('textfield_b');
 
     /**************************************************************************/
-
-    // Check deleting node and user data.
 
     // Delete the node.
     Node::load(1)->delete();

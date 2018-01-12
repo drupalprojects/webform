@@ -62,7 +62,7 @@ class WebformDevelSchemaController extends ControllerBase implements ContainerIn
    *   A streamed response containing webform's schema as a CSV.
    */
   public function index(WebformInterface $webform) {
-    $multiple_delimiter = \Drupal::config('webform.settings')->get('export.multiple_delimiter') ?: ';';
+    $multiple_delimiter = $this->configFactory->get('webform.settings')->get('export.multiple_delimiter') ?: ';';
 
     // From: http://obtao.com/blog/2013/12/export-data-to-a-csv-file-with-symfony/
     $response = new StreamedResponse(function () use ($webform, $multiple_delimiter) {

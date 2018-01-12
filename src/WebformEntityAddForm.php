@@ -82,7 +82,7 @@ class WebformEntityAddForm extends BundleEntityFormBase {
       '#type' => 'webform_select_other',
       '#title' => $this->t('Category'),
       '#options' => $webform_storage->getCategories(),
-      '#empty_option' => '<' . $this->t('None') . '>',
+      '#empty_option' => $this->t('- None -'),
       '#default_value' => $webform->get('category'),
     ];
     $form = $this->protectBundleIdElement($form);
@@ -128,7 +128,7 @@ class WebformEntityAddForm extends BundleEntityFormBase {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'settings')->toString(),
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label created.', $context);

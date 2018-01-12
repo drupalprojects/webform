@@ -126,12 +126,19 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('element.classes'),
     ];
+    $form['element']['horizontal_rule_classes'] = [
+      '#type' => 'webform_codemirror',
+      '#title' => $this->t('Horizontal rule CSS classes'),
+      '#description' => $this->t('A list of classes that will be provided in the "Horizontal rule  CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('element.horizontal_rule_classes'),
+    ];
     // Element: Description/Help.
     $form['element']['default_description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Default description display'),
+      '#empty_option' => $this->t('- Default - '),
       '#options' => [
-        '' => '',
         'before' => $this->t('Before'),
         'after' => $this->t('After'),
         'invisible' => $this->t('Invisible'),
@@ -174,8 +181,8 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#type' => 'select',
       '#title' => $this->t('Enhance checkboxes/radio buttons using iCheck'),
       '#description' => $this->t('If set, all checkboxes/radio buttons with be enhanced using jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
+      '#empty_option' => $this->t('- Default - '),
       '#options' => [
-        '' => '',
         (string) $this->t('Minimal') => [
           'minimal' => $this->t('Minimal: Black'),
           'minimal-grey' => $this->t('Minimal: Grey'),
@@ -237,7 +244,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $config->get('html_editor.disabled'),
     ];
-    $format_options = ['' => ''];
+    $format_options = [];
     if ($this->moduleHandler->moduleExists('filter')) {
       $filters = filter_formats();
       foreach ($filters as $filter) {
@@ -248,6 +255,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#type' => 'select',
       '#title' => $this->t('Text format'),
       '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
+      '#empty_option' => $this->t('- None -'),
       '#options' => $format_options,
       '#default_value' => $config->get('html_editor.format'),
       '#states' => [
@@ -339,6 +347,18 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $config->get('file.file_private_redirect'),
     ];
+    $form['file']['file_private_redirect_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Login message when access denied to private file uploads.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('file.file_private_redirect_message'),
+      '#states' => [
+        'visible' => [
+          ':input[name="file[file_private_redirect]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     $form['file']['default_max_filesize'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default maximum upload size'),
@@ -419,7 +439,6 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
           $item_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
         }
       }
-      $item_formats = ['' => '<' . $this->t('Default') . '>'] + $item_formats;
       $item_default_format = $element_plugin->getItemDefaultFormat();
       $item_default_format_label = (isset($item_formats[$item_default_format])) ? $item_formats[$item_default_format] : $item_default_format;
       $row['item'] = [
@@ -430,6 +449,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
           '#type' => 'webform_help',
           '#help' => $this->t('Defaults to: %value', ['%value' => $item_default_format_label]),
         ],
+        '#empty_option' => $this->t('- Default -'),
         '#options' => $item_formats,
         '#default_value' => $config->get("format.$element_id"),
         '#parents' => ['format', $element_id, 'item'],
@@ -442,7 +462,6 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         foreach ($items_formats as $format_name => $format_label) {
           $items_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
         }
-        $items_formats = ['' => '<' . $this->t('Default') . '>'] + $items_formats;
         $items_default_format = $element_plugin->getItemsDefaultFormat();
         $items_default_format_label = (isset($item_formats[$items_default_format])) ? $items_formats[$items_default_format] : $items_default_format;
         $row['items'] = [
@@ -453,6 +472,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
             '#type' => 'webform_help',
             '#help' => $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
           ],
+          '#empty_option' => $this->t('- Default -'),
           '#options' => $items_formats,
           '#default_value' => $config->get("format.$element_id"),
           '#parents' => ['format', $element_id, 'items'],

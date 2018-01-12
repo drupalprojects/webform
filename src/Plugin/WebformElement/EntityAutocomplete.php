@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\Core\Entity\Element\EntityAutocomplete as EntityAutocompleteElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
@@ -27,47 +26,32 @@ class EntityAutocomplete extends WebformElementBase implements WebformElementEnt
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
-      'multiple' => FALSE,
-      'multiple__header_label' => '',
+    return [
       // Entity reference settings.
       'target_type' => '',
       'selection_handler' => 'default',
       'selection_settings' => [],
       'tags' => FALSE,
-    ];
+    ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
   }
 
   /**
    * {@inheritdoc}
    */
   public function setDefaultValue(array &$element) {
-    // To support #multiple and #tags needs manually set the #default_value to
-    // the entity label(s).
-    // @see \Drupal\Core\Entity\Element\EntityAutocomplete::valueCallback.
-    $element['#process_default_value'] = FALSE;
-    if (isset($element['#default_value']) && (!empty($element['#default_value']) || $element['#default_value'] === 0)) {
+    if (isset($element['#multiple'])) {
+      $element['#default_value'] = (isset($element['#default_value'])) ? (array) $element['#default_value'] : NULL;
+      return;
+    }
+
+    if (!empty($element['#default_value'])) {
       $target_type = $this->getTargetType($element);
       $entity_storage = $this->entityTypeManager->getStorage($target_type);
-      if ($this->hasMultipleValues($element)) {
-        $entities = $entity_storage->loadMultiple($element['#default_value']);
-        $element['#default_value'] = [];
-        if ($entities) {
-          if (!empty($element['#multiple'])) {
-            // #multiple requires an array.
-            foreach ($entities as $entity) {
-              $element['#default_value'][] = EntityAutocompleteElement::getEntityLabels([$entity]);
-            }
-          }
-          else {
-            // #tags requires comma delimited entity labels.
-            $element['#default_value'] = EntityAutocompleteElement::getEntityLabels($entities);
-          }
-        }
+      if ($entities = $entity_storage->loadMultiple((array) $element['#default_value'])) {
+        $element['#default_value'] = (empty($element['#tags'])) ? reset($entities) : $entities;
       }
       else {
-        $entities = $entity_storage->loadMultiple([$element['#default_value']]);
-        $element['#default_value'] = ($entities) ? EntityAutocompleteElement::getEntityLabels($entities) : NULL;
+        $element['#default_value'] = NULL;
       }
     }
     else {

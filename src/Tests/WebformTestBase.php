@@ -7,14 +7,12 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\filter\Entity\FilterFormat;
-use Drupal\node\NodeInterface;
 use Drupal\simpletest\WebTestBase;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\Role;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Entity\WebformSubmission;
 
 /**
  * Defines an abstract test base for webform tests.
@@ -308,6 +306,8 @@ abstract class WebformTestBase extends WebTestBase {
   /**
    * Create a webform.
    *
+   * @param array|null $values
+   *   (optional) Array of values.
    * @param array|null $elements
    *   (optional) Array of elements.
    * @param array $settings
@@ -316,10 +316,10 @@ abstract class WebformTestBase extends WebTestBase {
    * @return \Drupal\webform\WebformInterface
    *   A webform.
    */
-  protected function createWebform(array $elements = [], array $settings = []) {
+  protected function createWebform($values = [], array $elements = [], array $settings = []) {
     // Create new webform.
     $id = $this->randomMachineName(8);
-    $webform = Webform::create([
+    $webform = Webform::create($values + [
       'langcode' => 'en',
       'status' => WebformInterface::STATUS_OPEN,
       'id' => $id,

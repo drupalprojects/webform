@@ -77,15 +77,16 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     }
     try {
       $path = Url::fromRouteMatch($route_match)->toString();
-      $base_path = base_path();
     }
     catch (\Exception $exception) {
       $path = '';
-      $base_path = '/';
     }
 
     if ((count($args) > 2) && $args[0] == 'entity' && ($args[2] == 'webform' ||  $args[2] == 'webform_submission')) {
       $this->type = 'webform_source_entity';
+    }
+    elseif ($route_name === 'webform.element_plugins.test') {
+      $this->type = 'webform_element_plugins';
     }
     elseif (strpos($route_name, 'webform.about') === 0) {
       $this->type = 'webform_about';
@@ -174,6 +175,11 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           if (strpos($route_name, 'config_translation.item.') === 0 && $route_name != 'config_translation.item.overview.webform.config') {
             $breadcrumb->addLink(Link::createFromRoute($this->t('Translate'), 'config_translation.item.overview.webform.config'));
           }
+          break;
+
+        case 'webform_element_plugins':
+          $breadcrumb->addLink(Link::createFromRoute($this->t('Elements'), 'webform.element_plugins'));
+
           break;
 
         case 'webform_test':

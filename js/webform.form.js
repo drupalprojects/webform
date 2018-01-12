@@ -28,12 +28,13 @@
    *
    * @prop {Drupal~behaviorAttach} attach
    *   Attaches the behavior for disabling webform autosubmit.
+   *   Wizard pages need to be progressed with the Previous or Next buttons, not by pressing Enter.
    */
   Drupal.behaviors.webformDisableAutoSubmit = {
     attach: function (context) {
       // @see http://stackoverflow.com/questions/11235622/jquery-disable-form-submit-on-enter
       $(context).find('.webform-submission-form.js-webform-disable-autosubmit input')
-        .not(':button, :input[type="image"], :input[type="file"]')
+        .not(':button, :submit, :reset, :image, :file')
         .once('webform-disable-autosubmit')
         .on('keyup keypress', function (e) {
           var keyCode = e.keyCode || e.which;

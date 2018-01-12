@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for toggle element.
  *
  * @group Webform
  */
-class WebformElementToggleTest extends WebformTestBase {
+class WebformElementToggleTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

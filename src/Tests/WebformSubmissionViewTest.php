@@ -71,7 +71,7 @@ class WebformSubmissionViewTest extends WebformTestBase {
       'range' => '1',
       'tel' => '<a href="tel:999-999-9999">999-999-9999</a>',
       'url' => '<a href="http://example.com">http://example.com</a>',
-      'color' => '<span style="display:inline-block; height:1em; width:1em; border:1px solid #000; background-color:#ffffcc"></span> #ffffcc',
+      'color' => '<font color="#ffffcc">█</font> #ffffcc',
       'weight' => '0',
       'date' => 'Tuesday, August 18, 2009',
       'datetime' => 'Tuesday, August 18, 2009 - 4:00 PM',

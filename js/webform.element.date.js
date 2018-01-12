@@ -46,20 +46,21 @@
         // The date format is saved in PHP style, we need to convert to jQuery
         // datepicker.
         // @see http://stackoverflow.com/questions/16702398/convert-a-php-date-format-to-a-jqueryui-datepicker-date-format
+        // @see http://php.net/manual/en/function.date.php
         options.dateFormat = dateFormat
           // Year.
-          .replace('Y', 'yy')
-          .replace('y', 'y')
+          .replace('Y', 'yy') // A full numeric representation of a year, 4 digits (1999 or 2003)
+          .replace('y', 'y') // A two digit representation of a year (99 or 03)
           // Month.
-          .replace('F', 'MM')
-          .replace('m', 'mm')
-          .replace('M', 'M')
-          .replace('n', 'm')
-          // Date.
-          .replace('D', 'D')
-          .replace('j', 'd')
-          .replace('l', 'DD')
-          .replace('d', 'dd');
+          .replace('F', 'MM') // A full textual representation of a month, such as January or March	(January through December)
+          .replace('m', 'mm') // Numeric representation of a month, with leading zeros (01 through 12)
+          .replace('M', 'M') // A short textual representation of a month, three letters (Jan through Dec)
+          .replace('n', 'm') // Numeric representation of a month, without leading zeros (1 through 12)
+          // Day.
+          .replace('d', 'dd') // Day of the month, 2 digits with leading zeros (01 to 31)
+          .replace('D', 'D') // A textual representation of a day, three letters (Mon through Sun)
+          .replace('j', 'd') // Day of the month without leading zeros (1 to 31)
+          .replace('l', 'DD'); // A full textual representation of the day of the week (Sunday through Saturday)
 
         // Add min and max date if set on the input.
         if ($input.attr('min')) {

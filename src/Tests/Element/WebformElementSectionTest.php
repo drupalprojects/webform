@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for element section.
  *
  * @group Webform
  */
-class WebformElementSectionTest extends WebformTestBase {
+class WebformElementSectionTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.
@@ -52,5 +50,3 @@ class WebformElementSectionTest extends WebformTestBase {
   }
 
 }
-
-

@@ -50,13 +50,11 @@
  * @see /admin/structure/webform/manage/contact/results/submissions
  */
 .webform-results__table th,
-.webform-results__table td > div {
+.webform-results__table td {
   max-width: 400px;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 14em;
 }
 
 /* Make sure 'Operations' is never cut-off */
@@ -93,7 +91,7 @@ a.webform-results__custom + .ajax-progress-throbber {
 }
 
 /**
- * Results icons (sticky & notes)
+ * Results icons (notes, sticky, and locked)
  */
 .webform-icon {
   display: inline-block;
@@ -106,6 +104,8 @@ a.webform-results__custom + .ajax-progress-throbber {
   background-size: 100% auto;
   vertical-align: -2px;
 }
+
+/* Notes */
 
 .webform-icon-notes--on {
   background-image: url(../images/icons/notes-on.svg);
@@ -125,6 +125,8 @@ a:hover .webform-icon-notes--off,
 a:focus .webform-icon-notes--off {
   background-image: url(../images/icons/notes-link.svg);
 }
+
+/* Sticky */
 
 .webform-icon-sticky {
   background: transparent url(../images/icons/sticky.svg) no-repeat left top;
@@ -146,6 +148,30 @@ a:focus .webform-icon-notes--off {
 
 .webform-icon-sticky--link {
   background: transparent url(../images/icons/sticky-link.svg) no-repeat left top;
+}
+
+/* Locked */
+
+.webform-icon-locked--on {
+  background-image: url(../images/icons/locked-on.svg);
+}
+
+.webform-icon-locked--off {
+  background-image: url(../images/icons/locked-off.svg);
+}
+
+.webform-icon-locked--link {
+  background-image: url(../images/icons/locked-on-link.svg);
+}
+
+a:hover .webform-icon-locked--on,
+a:focus .webform-icon-locked--on {
+  background-image: url(../images/icons/locked-off-link.svg);
+}
+
+a:hover .webform-icon-locked--off,
+a:focus .webform-icon-locked--off {
+  background-image: url(../images/icons/locked-on-link.svg);
 }
 
 /**

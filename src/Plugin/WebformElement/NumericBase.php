@@ -16,14 +16,14 @@ abstract class NumericBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
       // Form validation.
       'size' => '',
       'minlength' => '',
       'maxlength' => '',
       'placeholder' => '',
       'autocomplete' => 'on',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**
@@ -32,7 +32,7 @@ abstract class NumericBase extends WebformElementBase {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
     if ($this->hasProperty('step') && !isset($element['#step'])) {
-      $element['#step'] = 'any';
+      $element['#step'] = $this->getDefaultProperty('step') ?: 'any';
     }
   }
 

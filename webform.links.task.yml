@@ -148,9 +148,9 @@ entity.webform.canonical:
 
 # Webform test.
 
-entity.webform.test:
+entity.webform.test_form:
   title: 'Test'
-  route_name: entity.webform.test
+  route_name: entity.webform.test_form
   base_route: entity.webform.canonical
   weight: 10
 

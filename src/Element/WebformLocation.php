@@ -27,7 +27,7 @@ class WebformLocation extends WebformCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements() {
+  public static function getCompositeElements(array $element) {
     // @see https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingAddressTypes
     $attributes = [];
     $attributes['lat'] = [
@@ -96,7 +96,7 @@ class WebformLocation extends WebformCompositeBase {
 
     // Hide location element webform display only if #geolocation is also set.
     if (!empty($element['#hidden']) && !empty($element['#geolocation'])) {
-      $element['#attributes']['style'] = 'display: none';
+      $element['#wrapper_attributes']['style'] = 'display: none';
     }
 
     return $element;
@@ -111,7 +111,7 @@ class WebformLocation extends WebformCompositeBase {
     // Composite elements should always be displayed and rendered so that
     // location data can be populated, so #access is really just converting the
     // readonly elements to hidden elements.
-    $composite_elements = static::getCompositeElements();
+    $composite_elements = static::getCompositeElements($element);
     foreach ($composite_elements as $composite_key => $composite_element) {
       if ($composite_key != 'value') {
         if (isset($element[$composite_key]['#access']) && $element[$composite_key]['#access'] === FALSE) {
@@ -122,7 +122,7 @@ class WebformLocation extends WebformCompositeBase {
           $element[$composite_key]['#type'] = 'hidden';
         }
         else {
-          $element[$composite_key]['#attributes']['class'][] = 'webform-readonly';
+          $element[$composite_key]['#wrapper_attributes']['class'][] = 'webform-readonly';
           $element[$composite_key]['#readonly'] = 'readonly';
         }
       }

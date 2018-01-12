@@ -18,6 +18,11 @@
   title: 'Administer webform element access'
   description: 'Restrict webform element access to certain roles and users.'
 
+'edit webform twig':
+  title: 'Edit webform Twig templates'
+  description: 'Editing inline Twig template allows users access any data exposed by Twig functions.'
+  restrict access: true
+
 'edit webform assets':
   title: 'Edit CSS/JS webform assets'
   description: 'Allows administrators to attach custom CSS and JavaScript to a webform.'

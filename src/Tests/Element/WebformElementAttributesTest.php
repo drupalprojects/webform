@@ -2,14 +2,12 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\webform\Tests\WebformTestBase;
-
 /**
  * Tests for webform element attributes.
  *
  * @group Webform
  */
-class WebformElementAttributesTest extends WebformTestBase {
+class WebformElementAttributesTest extends WebformElementTestBase {
 
   /**
    * Webforms to load.

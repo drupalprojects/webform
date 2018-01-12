@@ -4,14 +4,13 @@ namespace Drupal\webform\Tests\Element;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for the webform element plugin.
  *
  * @group Webform
  */
-class WebformElementPluginTest extends WebformTestBase {
+class WebformElementPluginTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.

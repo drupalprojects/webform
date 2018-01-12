@@ -4,14 +4,13 @@ namespace Drupal\webform\Tests\Element;
 
 use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform submission webform element custom #format support.
  *
  * @group Webform
  */
-class WebformElementFormatCustomTest extends WebformTestBase {
+class WebformElementFormatCustomTest extends WebformElementTestBase {
 
   /**
    * Modules to enable.
@@ -76,7 +75,7 @@ class WebformElementFormatCustomTest extends WebformTestBase {
     $this->assertRaw("item['value']: $file_url<br/>");
     $this->assertRaw("item['raw']: $file_url<br/>");
     $this->assertRaw("item['link']:");
-    $this->assertRaw('<span class="file file--mime-image-png file--image"> <a href="' . $file_url . '" type="image/png; length='. $file_size . '">' . $file_name .'</a></span>');
+    $this->assertRaw('<span class="file file--mime-image-png file--image"> <a href="' . $file_url . '" type="image/png; length=' . $file_size . '">' . $file_name . '</a></span>');
     $this->assertRaw('item[\'id\']: 1<br/>');
     $this->assertRaw("item['url']: $file_url<br/>");
     $this->assertRaw('<img class="webform-image-file" alt="' . $file_name . '" src="' . $file_url . '" />');
@@ -95,7 +94,7 @@ class WebformElementFormatCustomTest extends WebformTestBase {
     $this->assertRaw('<summary role="button" aria-controls="test_element_format_custom--fieldset_custom" aria-expanded="true" aria-pressed="true">fieldset_custom</summary>');
 
     // Check container custom HTML format.
-    $this->assertRaw('<h3>fieldset_custom_children</h3>' . PHP_EOL .'<hr />');
+    $this->assertRaw('<h3>fieldset_custom_children</h3>' . PHP_EOL . '<hr />');
 
     /**************************************************************************/
     // Custom Text.

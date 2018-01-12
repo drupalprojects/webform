@@ -40,7 +40,7 @@ class DateTime extends DateBase {
       }
     }
 
-    return parent::getDefaultProperties() + [
+    return [
       // Date settings.
       'date_date_format' => $date_format,
       'date_date_element' => 'date',
@@ -52,7 +52,7 @@ class DateTime extends DateBase {
       'date_time_min' => '',
       'date_time_max' => '',
       'date_time_step' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**
@@ -96,7 +96,7 @@ class DateTime extends DateBase {
     // Prepare element after date/time formats have been updated.
     parent::prepare($element, $webform_submission);
 
-    $element['#after_build'][] = [get_class($this), 'afterBuild'];
+    $element['#after_build'][] = [get_class($this), 'afterBuildDateTime'];
   }
 
   /**
@@ -223,6 +223,7 @@ class DateTime extends DateBase {
       '#title' => $this->t('Date increment'),
       '#description' => $this->t("The increment to use for minutes and seconds, i.e. '15' would show only :00, :15, :30 and :45. Used for HTML5 step values and jQueryUI (fallback) datepicker settings. Defaults to 1 to show every minute."),
       '#min' => 1,
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#states' => [
         'invisible' => [
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime']],
@@ -379,7 +380,7 @@ class DateTime extends DateBase {
   /**
    * After build handler for Datetime elements.
    */
-  public static function afterBuild(array $element, FormStateInterface $form_state) {
+  public static function afterBuildDateTime(array $element, FormStateInterface $form_state) {
     if (isset($element['time'])) {
       if (!empty($element['#date_time_min'])) {
         $element['time']['#min'] = $element['#date_time_min'];

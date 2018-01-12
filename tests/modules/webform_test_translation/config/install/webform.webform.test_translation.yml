@@ -33,6 +33,22 @@ elements: |
     '#title': Details
     markup:
       '#markup': 'This is some HTML markup.'
+  composite:
+    '#type': webform_custom_composite
+    '#title': Composite
+    '#element':
+      first_name:
+        '#type': textfield
+        '#title': 'First name'
+      last_name:
+        '#type': textfield
+        '#title': 'Last name'
+      age:
+        '#type': number
+        '#title': 'Age'
+        '#field_suffix': ' yrs. old'
+        '#max': 1
+        '#max': 125
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
@@ -70,8 +86,8 @@ settings:
   wizard_progress_pages: false
   wizard_progress_percentage: false
   wizard_start_label: ''
-  wizard_complete: true
-  wizard_complete_label: ''
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
   preview: 0
   preview_label: ''
   preview_title: ''
@@ -147,26 +163,27 @@ handlers:
     conditions: {  }
     weight: 1
     settings:
+      states:
+        - completed
       to_mail: default
+      to_options: {  }
       cc_mail: ''
+      cc_options: {  }
       bcc_mail: ''
+      bcc_options: {  }
       from_mail: default
+      from_options: {  }
       from_name: default
       subject: default
       body: default
       excluded_elements: {  }
-      html: true
-      attachments: false
-      debug: false
-      states:
-        - completed
-      to_options: {  }
-      cc_options: {  }
-      bcc_options: {  }
-      from_options: {  }
-      reply_to: ''
-      return_path: ''
       ignore_access: false
       exclude_empty: true
+      html: true
+      attachments: false
+      twig: false
+      debug: false
+      reply_to: ''
+      return_path: ''
       sender_mail: ''
       sender_name: ''

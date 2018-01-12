@@ -7,6 +7,47 @@
 
   'use strict';
 
+  /**
+   * Check if an element has a specified data attribute.
+   *
+   * @param {string} data
+   *   The data attribute name.
+   *
+   * @returns {boolean}
+   *   TRUE if an element has a specified data attribute.
+   */
+  $.fn.hasData = function (data) {
+    return (typeof this.data(data) !== 'undefined');
+  };
+
+  // The change event is triggered by cut-n-paste and select menus.
+  // Issue #2445271: #states element empty check not triggered on mouse
+  // based paste.
+  // @see https://www.drupal.org/node/2445271
+  Drupal.states.Trigger.states.empty.change = function change() {
+    return this.val() === '';
+  };
+
+  // Adds pattern, less than, and greater than support to #state API.
+  // @see http://drupalsun.com/julia-evans/2012/03/09/extending-form-api-states-regular-expressions
+  Drupal.states.Dependent.comparisons.Object = function (reference, value) {
+    if ('pattern' in reference) {
+      return (new RegExp(reference.pattern)).test(value);
+    }
+    else if ('!pattern' in reference) {
+      return !((new RegExp(reference['!pattern'])).test(value));
+    }
+    else if ('less' in reference) {
+      return (value !== '' && reference.less > value);
+    }
+    else if ('greater' in reference) {
+      return (value !== '' && reference.greater < value);
+    }
+    else {
+      return reference.indexOf(value) !== false;
+    }
+  };
+
   var $document = $(document);
 
   // Issue #2860529: Conditional required File upload field don't work.
@@ -18,6 +59,12 @@
       else {
         $(e.target).find('input[type="file"]').removeAttr('required aria-required');
       }
+    }
+  });
+
+  $document.on('state:readonly', function (e) {
+    if (e.trigger) {
+      $(e.target).prop('readonly', e.value).closest('.js-form-item, .js-form-wrapper').toggleClass('webform-readonly', e.value).find('input, textarea').prop('readonly', e.value);
     }
   });
 
@@ -100,23 +147,25 @@
     var tag = input.tagName.toLowerCase(); // Normalize case.
 
     // Backup required.
-    if ($input.prop('required')) {
-      $input.data('webform-require', true);
+    if ($input.prop('required') && !$input.hasData('webform-required')) {
+      $input.data('webform-required', true);
     }
 
     // Backup value.
-    if (type === 'checkbox' || type === 'radio') {
-      $input.data('webform-value', $input.prop('checked'));
-    }
-    else if (tag === 'select') {
-      var values = [];
-      $input.find('option:selected').each(function (i, option) {
-        values[i] = option.value;
-      });
-      $input.data('webform-value', values);
-    }
-    else if (type != 'submit' && type != 'button') {
-      $input.data('webform-value', input.value);
+    if (!$input.hasData('webform-value')) {
+      if (type === 'checkbox' || type === 'radio') {
+        $input.data('webform-value', $input.prop('checked'));
+      }
+      else if (tag === 'select') {
+        var values = [];
+        $input.find('option:selected').each(function (i, option) {
+          values[i] = option.value;
+        });
+        $input.data('webform-value', values);
+      }
+      else if (type !== 'submit' && type !== 'button') {
+        $input.data('webform-value', input.value);
+      }
     }
   }
 
@@ -146,11 +195,16 @@
       else if (type !== 'submit' && type !== 'button') {
         input.value = value;
       }
+      $input.removeData('webform-value');
     }
 
     // Restore required.
-    if ($input.data('webform-required')) {
-      $input.prop('required', true);
+    var required = $input.data('webform-required');
+    if (typeof required !== 'undefined') {
+      if (required) {
+        $input.prop('required', true);
+      }
+      $input.removeData('webform-required');
     }
   }
 
@@ -165,7 +219,7 @@
 
     // Check for #states no clear attribute.
     // @see https://css-tricks.com/snippets/jquery/make-an-jquery-hasattr/
-    if ($input[0].hasAttribute('data-webform-states-no-clear')) {
+    if ($input.closest('[data-webform-states-no-clear]').length) {
       return;
     }
 
@@ -183,7 +237,7 @@
         input.selectedIndex = -1;
       }
     }
-    else if (type !== 'submit' && type != 'button') {
+    else if (type !== 'submit' && type !== 'button') {
       input.value = (type === 'color') ? '#000000' : '';
     }
 
