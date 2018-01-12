@@ -677,7 +677,7 @@ class WebformCliService implements WebformCliServiceInterface {
       $this->drush_print("Downloading $download_url");
 
       $temp_filepath = $temp_dir . '/' . basename(current(explode('?', $download_url, 2)));
-      file_put_contents($temp_filepath, fopen($download_url, 'r'));
+      $this->drush_download_file($download_url, $temp_filepath);
 
       // Extract ZIP archive.
       $download_location = DRUPAL_ROOT . "/libraries/$library_name";
@@ -698,7 +698,7 @@ class WebformCliService implements WebformCliServiceInterface {
       if ((count($files) == 1) && is_dir($temp_location . '/' . current($files))) {
         $temp_location .= '/' . current($files);
       }
-      file_unmanaged_move($temp_location, $download_location);
+      $this->drush_move_dir($temp_location, $download_location);
 
       // Remove the tarball.
       if (file_exists($temp_filepath)) {
