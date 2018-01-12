@@ -30,23 +30,12 @@ class WebformTermsOfService extends Checkbox {
    * {@inheritdoc}
    */
   public function getInfo() {
-    return parent::getInfo() + [
+    return [
+      '#return_value' => TRUE,
       '#terms_type' => static::TERMS_MODAL,
       '#terms_title' => '',
       '#terms_content' => '',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
-    if ($input === FALSE) {
-      return isset($element['#default_value']) ? $element['#default_value'] : FALSE;
-    }
-    else {
-      return isset($input) ? TRUE : FALSE;
-    }
+    ] + parent::getInfo();
   }
 
   /**
@@ -99,7 +88,17 @@ class WebformTermsOfService extends Checkbox {
     $element['#wrapper_attributes']['class'][] = 'form-type-webform-terms-of-service';
     $element['#wrapper_attributes']['class'][] = 'js-form-type-webform-terms-of-service';
 
+    $element['#element_validate'][] = [get_called_class(), 'validateWebformTermsOfService'];
+
     return $element;
+  }
+
+  /**
+   * Webform element validation handler for webform terms of service element.
+   */
+  public static function validateWebformTermsOfService(&$element, FormStateInterface $form_state, &$complete_form) {
+    $value = $form_state->getValue($element['#parents'], []);
+    $form_state->setValueForElement($element, (bool) $value);
   }
 
 }

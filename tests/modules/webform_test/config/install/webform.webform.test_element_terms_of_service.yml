@@ -18,6 +18,7 @@ elements: |
     '#title': I agree to the {terms of service}. (default)
     '#terms_title': terms_of_service_default
     '#terms_content': 'These are the terms of service.'
+    '#required': true
   terms_of_service_modal:
     '#type': webform_terms_of_service
     '#title': I agree to the {terms of service}. (modal)
@@ -52,7 +53,7 @@ settings:
   form_prepopulate_source_entity_type: ''
   form_reset: false
   form_disable_autocomplete: false
-  form_novalidate: false
+  form_novalidate: true
   form_unsaved: false
   form_disable_back: false
   form_submit_back: false
