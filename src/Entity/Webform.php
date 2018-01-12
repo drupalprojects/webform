@@ -1226,9 +1226,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->elementsTranslations = [];
 
     try {
+      // If current webform is translated, load the base (default) webform and apply
+      // the translation to the elements.
       if ($this->isConfigTranslation()) {
         /** @var \Drupal\webform\WebformTranslationManagerInterface $translation_manager */
         $translation_manager = \Drupal::service('webform.translation_manager');
+        /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+        $language_manager = \Drupal::service('language_manager');
         $elements = $translation_manager->getElements($this);
         $this->elementsTranslations = $translation_manager->getElements($this, $language_manager->getCurrentLanguage()->getId());
       }
@@ -1238,7 +1242,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
       // Since YAML supports simple values.
       $elements = (is_array($elements)) ? $elements : [];
-
       $this->elementsDecoded = $elements;
     }
     catch (\Exception $exception) {
