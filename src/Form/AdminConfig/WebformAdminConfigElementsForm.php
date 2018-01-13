@@ -176,6 +176,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#title' => $this->t('Checkbox/radio settings'),
       '#open' => TRUE,
       '#tree' => TRUE,
+      '#access' => $this->librariesManager->isIncluded('jquery.icheck'),
     ];
     $form['checkbox']['default_icheck'] = [
       '#type' => 'select',
