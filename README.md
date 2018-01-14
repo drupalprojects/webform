@@ -29,30 +29,6 @@ The primary use case for this module is to:
 > Evaluate this project online using [simplytest.me](https://simplytest.me/project/webform).
 
 
-### Blog Posts, Articles, & Presentations
-
-Blog Posts & Articles
-
-- [https://dev.acquia.com/blog/drupal-8-module-of-the-week--webform-formerly-known-as-yaml-form/07/03/2017/17741](https://dev.acquia.com/blog/drupal-8-module-of-the-week--webform-formerly-known-as-yaml-form/07/03/2017/17741)
-- [Drupal 8 Module Webform picks up speed](https://internetdevels.com/blog/drupal-8-module-webform)
-- [Check Out: The Benefits of Drupal 8 Webform](http://www.capitalnumbers.com/blog/check-out-the-benefits-of-drupal-8-webform/)
-- [How to Make a Complex Webform in Drupal 8](https://www.ostraining.com/blog/drupal/how-to-make-a-complex-webform-in-drupal-8/)
-- [3 Reasons We Love the Webform Module in Drupal 8](https://www.unleashed-technologies.com/blog/2017/04/07/3-reasons-we-love-webform-module-drupal-8)
-- [Getting NYU onto Webform](https://www.fourkitchens.com/blog/article/getting-nyu-yaml-form)
-- [Webforms for Drupal 8](https://www.gaiaresources.com.au/yaml-forms-drupal-8/)
-- [Creating Webform Handlers in Drupal 8](http://fivemilemedia.co.uk/blog/creating-yaml-form-handlers-drupal-8)
-- [Les formulaires en Drupal 8](https://makina-corpus.com/blog/metier/2016/les-formulaires-en-drupal-8)
-
-Videos
-- [3 Reasons We Love the Webform Module in Drupal 8</a></li>](https://www.unleashed-technologies.com/blog/2017/04/07/3-reasons-we-love-webform-module-drupal-8)
-
-Presentations
-
-- [Webform and Drupal 8 @ DrupalCamp London 2016](https://www.youtube.com/watch?v=xrWEizVqAR4&t=1333s) \[Video\]
-- [Webform and Drupal 8 @ DrupalCamp London 2016](https://www.slideshare.net/philipnorton42/webform-and-drupal-8) \[Slides\]
-- [Drupal 8 Webform: When Contact Form Isn't Enough](http://pnwdrupalsummit.org/sites/default/files/slides/PNWDS%202017%20Catherine%20Winters%20webforms.pdf)  \[Slides\]
-- [Webform 8.x-5.x @ NJ DrupalCamp](https://www.drupalcampnj.org/program/sessions/building-webforms-drupal-8) \[Video\]
-
 ### Installing the Webform Module
 
 1. Copy/upload the webform module to the modules directory of your Drupal
