@@ -592,10 +592,19 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         WebformSubmissionInterface::STATE_UPDATED => $this->t('...when submission is <b>updated</b>.'),
         WebformSubmissionInterface::STATE_DELETED => $this->t('...when submission is <b>deleted</b>.'),
       ],
-      '#required' => TRUE,
       '#access' => $results_disabled ? FALSE : TRUE,
       '#parents' => ['settings', 'states'],
       '#default_value' => $results_disabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $this->configuration['states'],
+    ];
+    $form['additional']['states_message'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t("Because no submission state is checked, this email can only be sent using the 'Resend' form and/or custom code."),
+      '#message_type' => 'warning',
+      '#states' => [
+        'visible' => [
+          ':input[name^="settings[states]"]' => ['checked' => FALSE],
+        ]
+      ]
     ];
     // Settings: Reply-to.
     $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
@@ -705,7 +714,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    */
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
     $state = $webform_submission->getWebform()->getSetting('results_disabled') ? WebformSubmissionInterface::STATE_COMPLETED : $webform_submission->getState();
-    if (in_array($state, $this->configuration['states'])) {
+    if ($this->configuration['states'] && in_array($state, $this->configuration['states'])) {
       $message = $this->getMessage($webform_submission);
       $this->sendMessage($webform_submission, $message);
     }

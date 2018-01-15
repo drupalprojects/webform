@@ -47,13 +47,22 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
     // $this->assertRaw('Debug: Email: Submission updated');
     /**************************************************************************/
 
+    // Check that custom (aka no states) is only visible on the 'Resend' tab.
+    $this->drupalGet("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/resend");
+    $this->assertRaw('<b>Subject:</b> Draft saved<br />');
+    $this->assertRaw('<b>Subject:</b> Submission converted<br />');
+    $this->assertRaw('<b>Subject:</b> Submission completed<br />');
+    $this->assertRaw('<b>Subject:</b> Submission updated<br />');
+    $this->assertRaw('<b>Subject:</b> Submission deleted<br />');
+    $this->assertRaw('<b>Subject:</b> Submission custom<br />');
+
     // Check deleted email.
     $this->drupalPostForm("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/delete", [], t('Delete'));
     $this->assertRaw('Debug: Email: Submission deleted');
 
     // Check that 'Send when...' is visible.
     $this->drupalGet('admin/structure/webform/manage/test_handler_email_states/handlers/email_draft/edit');
-    $this->assertRaw('<span class="fieldset-legend js-form-required form-required">Send email</span>');
+    $this->assertRaw('<span class="fieldset-legend">Send email</span>');
 
     // Check states hidden when results are disabled.
     $webform->setSetting('results_disabled', TRUE)->save();
@@ -66,6 +75,7 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
     $this->assertRaw('Debug: Email: Submission completed');
     $this->assertNoRaw('Debug: Email: Submission updated');
     $this->assertNoRaw('Debug: Email: Submission deleted');
+    $this->assertNoRaw('Debug: Email: Submission custom');
 
     // Check that resave draft handler automatically switches
     // states to completed.
@@ -75,7 +85,7 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
     $this->assertRaw('Debug: Email: Submission completed');
     $this->assertNoRaw('Debug: Email: Submission updated');
     $this->assertNoRaw('Debug: Email: Submission deleted');
-
+    $this->assertNoRaw('Debug: Email: Submission custom');
   }
 
 }
