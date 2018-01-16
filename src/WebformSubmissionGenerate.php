@@ -2,6 +2,7 @@
 
 namespace Drupal\webform;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -112,6 +113,13 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
     // Make sure value is an array.
     if (!is_array($values)) {
       $values = [$values];
+    }
+
+    // Apply #maxlength to values.
+    if (!empty($element['#maxlength'])) {
+      foreach ($values as $index => $value) {
+        $values[$index] = Unicode::substr($value, 0, $element['#maxlength']);
+      }
     }
 
     // $values = $this->tokenManager->replace($values, $webform);.
