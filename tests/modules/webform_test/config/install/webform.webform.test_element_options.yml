@@ -22,14 +22,23 @@ elements: |
       '#title': webform_options
     webform_options_default_value:
       '#type': webform_options
-      '#title': 'webform_options (default_value)'
+      '#title': 'webform_options_default_value'
+      '#default_value':
+        one: One
+        two: Two
+        three: Three
+    webform_options_maxlength:
+      '#type': webform_options
+      '#title': 'webform_options_maxlength'
+      '#options_text_maxlength': 20
+      '#options_value_maxlength': 20
       '#default_value':
         one: One
         two: Two
         three: Three
     webform_options_optgroup:
       '#type': webform_options
-      '#title': 'webform_options (optgroup)'
+      '#title': 'webform_options_optgroup'
       '#required': true
       '#default_value':
         'Group One':
@@ -44,12 +53,12 @@ elements: |
     '#open': true
     webform_element_options_entity:
       '#type': webform_element_options
-      '#title': 'webform_element_options (entity)'
+      '#title': 'webform_element_options_entity'
       '#required': true
       '#default_value': yes_no
     webform_element_options_custom:
       '#type': webform_element_options
-      '#title': 'webform_element_options (custom)'
+      '#title': 'webform_element_options_custom'
       '#required': true
       '#default_value':
         one: One

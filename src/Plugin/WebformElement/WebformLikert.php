@@ -394,6 +394,7 @@ class WebformLikert extends WebformElementBase {
       '#title' => $this->t('Questions'),
       '#label' => $this->t('question'),
       '#labels' => $this->t('questions'),
+      '#options_value_maxlength' => 128,
       '#options_description' => TRUE,
       '#required' => TRUE,
     ];
