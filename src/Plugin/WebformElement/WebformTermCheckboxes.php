@@ -13,6 +13,9 @@ use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
  *   label = @Translation("Term checkboxes"),
  *   description = @Translation("Provides a form element to select a single or multiple terms displayed as hierarchical tree or as breadcrumbs using checkboxes."),
  *   category = @Translation("Entity reference elements"),
+ *   dependencies = {
+ *     "taxonomy",
+ *   },
  * )
  */
 class WebformTermCheckboxes extends Checkboxes implements WebformElementEntityReferenceInterface {
