@@ -458,8 +458,18 @@ class WebformElementHelper {
    *
    * @return array
    *   The element with validate callback.
+   *
+   * @see \Drupal\webform\Plugin\WebformElementBase::hiddenElementAfterBuild
+   * @see \Drupal\webform\WebformSubmissionConditionsValidator::elementAfterBuild
    */
   public static function setElementValidate(array $element, array $element_validate = [WebformElementHelper::class, 'suppressElementValidate']) {
+    // Element validation can only overridden once so we need to reset
+    // the #eleemnt_validate callback.
+    if (isset($element['#_element_validate'])) {
+      $element['#element_validate'] = $element['#_element_validate'];
+      unset($element['#_element_validate']);
+    }
+
     // Wrap #element_validate so that we suppress validation error messages.
     // This only applies visible elements (#access: TRUE) with
     // #element_validate callbacks which are also conditionally hidden.
@@ -502,6 +512,10 @@ class WebformElementHelper {
 
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {
+      if ($callback[1] === 'suppressElementValidate') {
+        dpr($element);
+        exit;
+      }
       $complete_form = &$form_state->getCompleteForm();
       call_user_func_array($form_state->prepareCallback($callback), [&$element, &$temp_form_state, &$complete_form]);
     }
