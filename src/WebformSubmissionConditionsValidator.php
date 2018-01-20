@@ -558,7 +558,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       }
 
       // If element has #states and is #required there may be a conflict where
-      // visiblly hidden elements are required. The solution is to convert
+      // visibly hidden elements are required. The solution is to convert
       // #required into corresponding 'required/optional' states based on
       // 'visible/invisible' states.
       if (isset($element['#states']) && !empty($element['#required'])) {
