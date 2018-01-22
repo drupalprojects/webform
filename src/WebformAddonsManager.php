@@ -230,6 +230,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: Webform Simplenews Handler.
+    $projects['webform_simplenews_handler'] = [
+      'title' => $this->t('Webform Simplenews Handler'),
+      'description' => $this->t('Provides a Webform Handler called "Submission Newsletter" that allows to link webform submission to one or more Simplenews newsletter subscriptions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_simplenews_handler'),
+      'category' => 'integration',
+    ];
+
     // Integrations: Webform Slack integration.
     $projects['webform_slack'] = [
       'title' => $this->t('Webform Slack'),
