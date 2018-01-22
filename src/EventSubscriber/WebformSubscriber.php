@@ -142,7 +142,7 @@ class WebformSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $route_parameters = $url->getRouteParameters();
+    $route_parameters = $url->isRouted() ? $url->getRouteParameters() : [];
     if (empty($route_parameters['webform']) && empty($route_parameters['webform_submission'])) {
       return;
     }
