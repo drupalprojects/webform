@@ -63,7 +63,7 @@ Tidy YAML files
 
     # Run single tests
     cd /var/www/sites/d8_webform
-    php core/scripts/run-tests.sh --verbose --class "Drupal\webform\Tests\WebformSubmissionStorageTest"
+    php core/scripts/run-tests.sh --url http://localhost/wf --verbose --class "Drupal\Tests\webform\Functional\WebformListBuilderTest"
 
 [PHPUnit](https://www.drupal.org/node/2116263)
      
@@ -83,6 +83,7 @@ References
 
     # Execute individual PHPUnit tests.
     export SIMPLETEST_DB=mysql://drupal_d8_webform:drupal.@dm1n@localhost/drupal_d8_webform;
+    export SIMPLETEST_BASE_URL='http://localhost/wf';
 
     # Functional test.    
     php ../vendor/phpunit/phpunit/phpunit --printer="\Drupal\Tests\Listeners\HtmlOutputPrinter" ../modules/sandbox/webform/tests/src/Functional/WebformExampleFunctionalTest.php

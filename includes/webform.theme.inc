@@ -305,6 +305,13 @@ function webform_preprocess_fieldset(&$variables) {
   if (isset($variables['legend']['title'])) {
     _webform_preprocess_help_title($variables['legend']['title'], $element);
   }
+
+  // Add .js-webform-form-composite class to be used #states API.
+  // @see js/webform.states.js
+  if (isset($element['#type']) && in_array($element['#type'], ['checkboxes', 'radios'])) {
+    $variables['attributes']['class'][] = 'js-webform-type-' . $element['#type'];
+    $variables['attributes']['class'][] = 'webform-type-' . $element['#type'];
+  }
 }
 
 /**

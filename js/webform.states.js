@@ -50,16 +50,65 @@
 
   var $document = $(document);
 
-  // Issue #2860529: Conditional required File upload field don't work.
   $document.on('state:required', function (e) {
     if (e.trigger) {
+      var $target = $(e.target);
+      // Fix #required file upload.
+      // @see Issue #2860529: Conditional required File upload field don't work.
       if (e.value) {
-        $(e.target).find('input[type="file"]').attr({'required': 'required', 'aria-required': 'aria-required'});
+        $target.find('input[type="file"]').attr({'required': 'required', 'aria-required': 'aria-required'});
       }
       else {
-        $(e.target).find('input[type="file"]').removeAttr('required aria-required');
+        $target.find('input[type="file"]').removeAttr('required aria-required');
+      }
+
+      // Fix required label for checkboxes and radios.
+      // @see Issue #2938414: Checkboxes don't support #states required
+      // @see Issue #2731991: Setting required on radios marks all options required.
+      // @see Issue #2856315: Conditional Logic - Requiring Radios in a Fieldset.
+      if ($target.is('.js-webform-type-radios, .js-webform-type-checkboxes')) {
+        if (e.value) {
+          $target.find('legend span').addClass('js-form-required form-required');
+        }
+        else {
+          $target.find('legend span').removeClass('js-form-required form-required');
+        }
+      }
+
+      // Fix #required for radios.
+      // @see Issue #2856795: If radio buttons are required but not filled form is nevertheless submitted.
+      if ($target.is('.js-webform-type-radios, .js-form-type-webform-radios-other')) {
+        if (e.value) {
+          $target.find('input[type="radio"]').attr({'required': 'required', 'aria-required': 'aria-required'});
+        }
+        else {
+          $target.find('input[type="radio"]').removeAttr('required aria-required');
+        }
+      }
+
+      // Fix #required for checkboxes.
+      // @see Issue #2938414: Checkboxes don't support #states required.
+      // @see checkboxRequiredhandler
+      if ($target.is('.js-webform-type-checkboxes, .js-form-type-webform-checkboxes-other')) {
+        var $checkboxes = $target.find('input[type="checkbox"]');
+        if (e.value) {
+          // Bind the event handler and add custom HTML5 required validation
+          // to all checkboxes.
+          $checkboxes.bind('click', checkboxRequiredhandler);
+          if (!$checkboxes.is(':checked')) {
+            $checkboxes.attr({'required': 'required', 'aria-required': 'aria-required'});
+          }
+        }
+        else {
+          // Remove custom HTML5 required validation from all checkboxes
+          // and unbind the event handler.
+          $checkboxes
+            .removeAttr('required aria-required')
+            .unbind('click', checkboxRequiredhandler);
+        }
       }
     }
+
   });
 
   $document.on('state:readonly', function (e) {
@@ -101,6 +150,21 @@
         .find('select, input, textarea').trigger('webform:disabled');
     }
   });
+
+  /**
+   * Trigger custom HTML5 multiple checkboxes validation.
+   *
+   * @see https://stackoverflow.com/a/37825072/145846
+   */
+  function checkboxRequiredhandler() {
+    var $checkboxes = $(this).closest('.js-webform-type-checkboxes, .js-form-type-webform-checkboxes-other').find('input[type="checkbox"]');
+    if ($checkboxes.is(':checked')) {
+      $checkboxes.removeAttr('required aria-required');
+    }
+    else {
+      $checkboxes.attr({'required': 'required', 'aria-required': 'aria-required'});
+    }
+  }
 
   /**
    * Trigger an input's event handlers.

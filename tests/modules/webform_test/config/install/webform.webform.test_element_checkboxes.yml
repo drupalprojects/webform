@@ -49,6 +49,30 @@ elements: |
       '#title_display': inline
       '#options': yes_no
       '#options_display': side_by_side
+  checkboxes_required_conditional_example:
+    '#type': details
+    '#title': 'Checkboxes required conditional'
+    '#open': true
+    checkboxes_required_conditional_trigger:
+      '#type': checkbox
+      '#title': 'Require the below checkboxes'
+      '#default_value': true
+    checkboxes_required_conditions:
+      '#type': checkboxes
+      '#title': checkboxes_required
+      '#options': yes_no
+      '#states':
+        required:
+          ':input[name="checkboxes_required_conditional_trigger"]':
+            checked: true
+    checkboxes_other_required_conditions:
+      '#type': webform_checkboxes_other
+      '#title': checkboxes_other_required
+      '#options': yes_no
+      '#states':
+        required:
+          ':input[name="checkboxes_required_conditional_trigger"]':
+            checked: true
 css: ''
 javascript: ''
 settings:

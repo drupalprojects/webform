@@ -28,11 +28,19 @@ elements: |
     '#open': true
     radios_required_conditional_trigger:
       '#type': checkbox
-      '#title': 'Required the below radio button'
+      '#title': 'Require the below radio button'
       '#default_value': true
     radios_required_conditions:
       '#type': radios
       '#title': radios_required
+      '#options': yes_no
+      '#states':
+        required:
+          ':input[name="radios_required_conditional_trigger"]':
+            checked: true
+    radios_other_required_conditions:
+      '#type': webform_radios_other
+      '#title': radios_other_required
       '#options': yes_no
       '#states':
         required:
