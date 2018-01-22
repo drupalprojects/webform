@@ -512,10 +512,6 @@ class WebformElementHelper {
 
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {
-      if ($callback[1] === 'suppressElementValidate') {
-        dpr($element);
-        exit;
-      }
       $complete_form = &$form_state->getCompleteForm();
       call_user_func_array($form_state->prepareCallback($callback), [&$element, &$temp_form_state, &$complete_form]);
     }
