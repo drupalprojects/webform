@@ -78,7 +78,8 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
       '#type' => 'webform_codemirror',
       '#mode' => 'css',
       '#title' => $this->t('CSS'),
-      '#description' => $this->t('Enter custom CSS to be attached to all webforms.'),
+      '#description' => $this->t('Enter custom CSS to be attached to the all webforms.') . '<br/>' .
+        $this->t("To customize only webform specific elements, you should use the '.webform-submission-form' selector"),
       '#default_value' => $config->get('assets.css'),
     ];
     $form['assets']['javascript'] = [
