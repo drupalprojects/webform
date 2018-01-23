@@ -62,7 +62,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
   /**
    * Webform element validator.
    *
-   * @var \Drupal\webform\WebformEntityElementsValidator
+   * @var \Drupal\webform\WebformEntityElementsValidatorInterface
    */
   protected $elementsValidator;
 

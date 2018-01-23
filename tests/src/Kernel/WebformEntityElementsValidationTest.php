@@ -23,7 +23,7 @@ class WebformEntityElementsValidationTest extends KernelTestBase {
   /**
    * The webform elements validator.
    *
-   * @var \Drupal\webform\WebformEntityElementsValidator
+   * @var \Drupal\webform\WebformEntityElementsValidatorInterface
    */
   protected $validator;
 

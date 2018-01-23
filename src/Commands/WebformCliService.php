@@ -773,9 +773,21 @@ class WebformCliService implements WebformCliServiceInterface {
     $this->drush_print('Repairing webform submission storage schema...');
     _webform_update_webform_submission_storage_schema();
 
-    // Copied from: outside_in_install().
-    $this->drush_print('Repairing quick links...');
-    // @todo Remove in https://www.drupal.org/node/2783791.
+    // Validate all webform elements.
+    $this->drush_print('Validating webform elements...');
+    /** @var \Drupal\webform\WebformEntityElementsValidatorInterface $elements_validator */
+    $elements_validator = \Drupal::service('webform.elements_validator');
+
+    /** @var \Drupal\webform\WebformInterface[] $webforms */
+    $webforms = Webform::loadMultiple();
+    foreach ($webforms as $webform) {
+      if ($messages = $elements_validator->validate($webform)) {
+        $this->drush_print('  ' . t('@title (@id): Found element validation errors.', ['@title' => $webform->label(), '@id' => $webform->id()]));
+        foreach ($messages as $message) {
+          $this->drush_print('  - ' . strip_tags($message));
+        }
+      }
+    }
 
     Cache::invalidateTags(['rendered']);
     // @todo Remove when that is fixed in https://www.drupal.org/node/2773591.

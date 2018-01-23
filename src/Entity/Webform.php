@@ -1296,7 +1296,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       $element['#webform_composite'] = FALSE;
 
       if (!empty($parent)) {
-        $parent_element = $this->elementsInitializedAndFlattened[$parent];
+        $parent_element =& $this->elementsInitializedAndFlattened[$parent];
         // Add element to the parent element's children.
         $parent_element['#webform_children'][$key] = $key;
         // Set #parent_flexbox to TRUE is the parent element is a

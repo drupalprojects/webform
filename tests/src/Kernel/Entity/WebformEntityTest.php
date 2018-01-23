@@ -236,7 +236,7 @@ class WebformEntityTest extends KernelTestBase {
         '#webform_parent_key' => '',
         '#webform_parent_flexbox' => FALSE,
         '#webform_depth' => 0,
-        '#webform_children' => [],
+        '#webform_children' => ['child' => 'child'],
         '#webform_multiple' => FALSE,
         '#webform_composite' => FALSE,
         '#webform_parents' => ['container'],
