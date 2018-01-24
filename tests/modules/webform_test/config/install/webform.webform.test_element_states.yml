@@ -71,14 +71,6 @@ elements: |
       selector_01: 'Selector 01 (selector_01)'
       selector_02: 'Selector 02 (selector_02)'
       selector_03: 'Selector 03 (selector_03)'
-  states_no_selector_other:
-    '#type': webform_element_states
-    '#title': 'states_no_selector_other'
-    '#selector_other': false
-    '#selector_options':
-      selector_01: 'Selector 01 (selector_01)'
-      selector_02: 'Selector 02 (selector_02)'
-      selector_03: 'Selector 03 (selector_03)'
   states_single:
     '#type': webform_element_states
     '#title': states_single

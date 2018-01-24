@@ -25,7 +25,6 @@ class WebformElementStates extends FormElement {
     return [
       '#input' => TRUE,
       '#selector_options' => [],
-      '#selector_other' => TRUE,
       '#empty_states' => 3,
       '#process' => [
         [$class, 'processWebformStates'],
@@ -266,10 +265,8 @@ class WebformElementStates extends FormElement {
       '#default_value' => $condition['selector'],
       '#empty_option' => t('- Select -'),
     ];
-    if ($element['#selector_other']) {
-      $row['selector']['#type'] = 'webform_select_other';
-      $row['selector']['#other__option_label'] = t('Custom selector...');
-      $row['selector']['#other__placeholder'] = t('Enter custom selector...');
+    if (!isset($element['#selector_options'][$condition['selector']])) {
+      $row['selector']['#options'][$condition['selector']] = $condition['selector'];
     }
     $row['condition'] = [
       '#wrapper_attributes' => ['class' => ['webform-states-table--condition']],
@@ -386,7 +383,7 @@ class WebformElementStates extends FormElement {
       'operator' => 'and',
     ];
     $values[] = [
-      'selector' => ($element['#selector_other']) ? ['select' => '', 'other' => ''] : '',
+      'selector' => '',
       'trigger' => '',
       'value' => '',
     ];
@@ -602,6 +599,8 @@ class WebformElementStates extends FormElement {
         continue;
       }
 
+      $selector = NULL;
+      $trigger = NULL;
       $operator = $state_array['operator'];
       $conditions = $state_array['conditions'];
       if (count($conditions) === 1) {
@@ -692,19 +691,6 @@ class WebformElementStates extends FormElement {
         ];
       }
       else {
-        // ISSUE:
-        // Select other #element_validate callback is not being triggered
-        // for conditions added add and remove callbacks.
-        //
-        // WORKAROUND:
-        // Manually process select other values.
-        if (isset($value['selector']['select'])) {
-          $selector = $value['selector']['select'];
-          if ($selector == WebformSelectOther::OTHER_OPTION) {
-            $selector = $value['selector']['other'];
-          }
-          $value['selector'] = $selector;
-        }
         $states[$index]['conditions'][] = $value;
       }
     }

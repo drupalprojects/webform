@@ -58,7 +58,6 @@ states_custom_selector:
     custom_selector:
       value: 'Yes'
 states_empty: {  }
-states_no_selector_other: {  }
 states_single: {  }
 states_unsupported_operator:
   required:
@@ -91,7 +90,7 @@ states_custom_condition:
     $this->drupalGet('webform/test_element_states');
 
     // Check 'States custom selector'.
-    $this->assertRaw('<input data-drupal-selector="edit-states-custom-selector-states-1-selector-other" type="text" id="edit-states-custom-selector-states-1-selector-other" name="states_custom_selector[states][1][selector][other]" value="custom_selector" size="60" maxlength="128" placeholder="Enter custom selector..." class="form-text" />');
+    $this->assertRaw('<option value="custom_selector" selected="selected">custom_selector</option>');
 
     // Check 'States unsupport operator'.
     $this->assertRaw('Conditional logic (Form API #states) is using the <em class="placeholder">XXX</em> operator. Form API #states must be manually entered.');
@@ -105,11 +104,6 @@ states_custom_condition:
     $this->assertFieldById('edit-states-empty-add');
     $this->assertNoFieldById('edit-states-single-add');
 
-    // Check 'States with no other selector' (#selector_other: FALSE)
-    $this->assertNoFieldById('edit-states-no-selector-other-states-1-selector-select');
-    $this->assertNoFieldById('edit-states-no-selector-other-states-1-selector-other');
-    $this->assertFieldById('edit-states-no-selector-other-states-1-selector');
-
     /**************************************************************************/
     // Processing.
     /**************************************************************************/
@@ -117,8 +111,7 @@ states_custom_condition:
     // Check setting first state and adding new state.
     $edit = [
       'states_empty[states][0][state]' => 'required',
-      'states_empty[states][1][selector][select]' => 'selector_01',
-      'states_empty[states][1][selector][other]' => '',
+      'states_empty[states][1][selector]' => 'selector_01',
       'states_empty[states][1][trigger]' => 'value',
       'states_empty[states][1][value]' => '{value_01}',
     ];
@@ -126,33 +119,32 @@ states_custom_condition:
 
     // Check the first state/condition is required and value = {value_01}.
     $this->assertFieldByName('states_empty[states][0][state]', 'required');
-    $this->assertFieldByName('states_empty[states][1][selector][select]', 'selector_01');
+    $this->assertFieldByName('states_empty[states][1][selector]', 'selector_01');
     $this->assertFieldByName('states_empty[states][1][trigger]', 'value');
     $this->assertFieldByName('states_empty[states][1][value]', '{value_01}');
 
     // Check empty second state/condition.
     $this->assertFieldByName('states_empty[states][2][state]', '');
-    $this->assertFieldByName('states_empty[states][3][selector][select]', '');
+    $this->assertFieldByName('states_empty[states][3][selector]', '');
     $this->assertFieldByName('states_empty[states][3][trigger]', '');
     $this->assertFieldByName('states_empty[states][3][value]', '');
 
     $edit = [
       'states_empty[states][2][state]' => 'disabled',
-      'states_empty[states][3][selector][select]' => 'selector_02',
-      'states_empty[states][3][selector][other]' => '',
+      'states_empty[states][3][selector]' => 'selector_02',
       'states_empty[states][3][trigger]' => 'value',
       'states_empty[states][3][value]' => '{value_02}',
     ];
     $this->drupalPostAjaxForm(NULL, $edit, 'states_empty_table_remove_1');
 
     // Check the first condition is removed.
-    $this->assertNoFieldByName('states_empty[states][1][selector][select]', 'selector_01');
+    $this->assertNoFieldByName('states_empty[states][1][selector]', 'selector_01');
     $this->assertNoFieldByName('states_empty[states][1][trigger]', 'value');
     $this->assertNoFieldByName('states_empty[states][1][value]', '{value_01}');
 
     // Check the second state/condition is required and value = {value_01}.
     $this->assertFieldByName('states_empty[states][1][state]', 'disabled');
-    $this->assertFieldByName('states_empty[states][2][selector][select]', 'selector_02');
+    $this->assertFieldByName('states_empty[states][2][selector]', 'selector_02');
     $this->assertFieldByName('states_empty[states][2][trigger]', 'value');
     $this->assertFieldByName('states_empty[states][2][value]', '{value_02}');
 
@@ -161,7 +153,7 @@ states_custom_condition:
 
     // Check the second state/condition is removed.
     $this->assertNoFieldByName('states_empty[states][1][state]', 'disabled');
-    $this->assertNoFieldByName('states_empty[states][2][selector][select]', 'selector_02');
+    $this->assertNoFieldByName('states_empty[states][2][selector]', 'selector_02');
     $this->assertNoFieldByName('states_empty[states][2][trigger]', 'value');
     $this->assertNoFieldByName('states_empty[states][2][value]', '{value_02}');
   }
