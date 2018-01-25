@@ -231,33 +231,81 @@ class WebformMultiple extends FormElement {
   protected static function initializeElement(array &$element) {
     // Track element child keys.
     $element['#child_keys'] = Element::children($element['#element']);
+
     if (!$element['#child_keys']) {
+      // Apply multiple element's required/optional #states to the
+      // individual element.
+      if (isset($element['#_webform_states'])) {
+        $element['#element'] += ['#states' => []];
+        $element['#element']['#states'] = array_intersect_key(
+          WebformElementHelper::getStates($element),
+          ['required' => 'required', 'optional' => 'optional']
+        );
+      }
+    }
+    else {
+      // Initialize, prepare, and finalize composite sub-elements.
+      // Get composite element required/options states from visible/hidden states.
+      $required_states = WebformElementHelper::getRequiredFromVisibleStates($element);
+      static::initializeElementRecursive($element, $element['#element'], $required_states);
+    }
+  }
+
+  /**
+   *  Initialize, prepare, and finalize composite sub-elements recusively.
+   *
+   * @param array $element
+   *   The main element.
+   * @param array $sub_elements
+   *   The sub element.
+   * @param array $required_states
+   *   An associative array of required states froim the main element's
+   *   visible/hidden states.
+   */
+  protected static function initializeElementRecursive(array $element, array &$sub_elements, array $required_states) {
+    $child_keys = Element::children($sub_elements);
+
+    // Exit immediate if the sub elements has no children.
+    if (!$child_keys) {
       return;
     }
 
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
+    foreach ($child_keys as $child_key) {
+      $sub_element =& $sub_elements[$child_key];
 
-    // Initialize, prepare, and finalize composite sub-elements.
-    foreach ($element['#child_keys'] as $composite_key) {
-      $composite_element = $element['#element'][$composite_key];
       // If the element's #access is FALSE, apply it to all sub elements.
       if (isset($element['#access']) && $element['#access'] === FALSE) {
-        $composite_element['#access'] = FALSE;
+        $sub_element['#access'] = FALSE;
+      }
+
+      // If #header then hide the sub element's #title.
+      if ($element['#header'] && !isset($sub_element['#title_display'])) {
+        $sub_element['#title_display'] = 'invisible';
       }
 
       // Initialize, prepare, and populate composite sub-element.
-      $element_plugin = $element_manager->getElementInstance($composite_element);
-      $element_plugin->initialize($composite_element);
-      $element_plugin->prepare($composite_element);
-      $element_plugin->finalize($composite_element);
+      $element_plugin = $element_manager->getElementInstance($sub_element);
+      $element_plugin->initialize($sub_element);
+      $element_plugin->prepare($sub_element);
+      $element_plugin->finalize($sub_element);
 
-      // If #header then hide the element's #title.
-      if ($element['#header'] && !isset($composite_element['#title_display'])) {
-        $composite_element['#title_display'] = 'invisible';
+      // Custom validate required sub-element because they can be hidden
+      // via #access or #states.
+      // @see \Drupal\webform\Element\WebformCompositeBase::validateWebformComposite
+      if ($required_states && !empty($sub_element['#required'])) {
+        unset($sub_element['#required']);
+        $sub_element['#_required'] = TRUE;
+        if (!isset($sub_element['#states'])) {
+          $sub_element['#states'] = [];
+        }
+        $sub_element['#states'] += $required_states;
       }
 
-      $element['#element'][$composite_key] = $composite_element;
+      if (is_array($sub_element)) {
+        static::initializeElementRecursive($element, $sub_element, $required_states);
+      }
     }
   }
 
@@ -323,10 +371,17 @@ class WebformMultiple extends FormElement {
             continue;
           }
 
+
           $title = [];
           $title['title'] = [
             '#markup' => (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '',
           ];
+          if (!empty($element['#element'][$child_key]['#required']) || !empty($element['#element'][$child_key]['#_required'])) {
+            $title['title'] += [
+              '#prefix' => '<span class="form-required">',
+              '#suffix' => '</span>',
+            ];
+          }
           if (!empty($element['#element'][$child_key]['#help'])) {
             $title['help'] = [
               '#type' => 'webform_help',
@@ -717,15 +772,7 @@ class WebformMultiple extends FormElement {
 
     // Validate required items.
     if (!empty($element['#required']) && empty($items)) {
-      if (isset($element['#required_error'])) {
-        $form_state->setError($element, $element['#required_error']);
-      }
-      elseif (isset($element['#title'])) {
-        $form_state->setError($element, t('@name field is required.', ['@name' => $element['#title']]));
-      }
-      else {
-        $form_state->setError($element);
-      }
+      WebformElementHelper::setRequiredError($element, $form_state);
     }
 
     $form_state->setValueForElement($element, $items);

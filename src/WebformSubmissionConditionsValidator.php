@@ -86,7 +86,9 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         // Process state/negate.
         list($state, $negate) = $this->processState($original_state);
 
-        // Is hide/state when need to make sure validation is not triggered.
+        // @todo Track an element's states.
+
+        // If hide/show we need to make sure that validation is not triggered.
         if ($state === 'visible') {
           $element['#after_build'][] = [get_class($this), 'elementAfterBuild'];
         }
@@ -288,7 +290,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
       // If required and empty then set required error.
       if ($is_required && $is_empty) {
-        $this->setRequiredError($element, $form_state);
+        WebformElementHelper::setRequiredError($element, $form_state);
       }
     }
   }
@@ -498,30 +500,6 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     }
 
     return [$state, $negate];
-  }
-
-  /****************************************************************************/
-  // Validation methods.
-  /****************************************************************************/
-
-  /**
-   * Set required validation message for an element.
-   *
-   * @param array $element
-   *   An element.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   */
-  protected function setRequiredError(array $element, FormStateInterface $form_state) {
-    if (isset($element['#required_error'])) {
-      $form_state->setError($element, $element['#required_error']);
-    }
-    elseif (isset($element['#title'])) {
-      $form_state->setError($element, $this->t('@name field is required.', ['@name' => $element['#title']]));
-    }
-    else {
-      $form_state->setError($element);
-    }
   }
 
   /****************************************************************************/

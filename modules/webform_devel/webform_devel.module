@@ -6,8 +6,8 @@
  */
 
 use Drupal\Core\Serialization\Yaml;
-use Drupal\webform\Utility\WebformYaml;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Utility\WebformYaml;
 
 /**
  * Implements hook_entity_type_alter().

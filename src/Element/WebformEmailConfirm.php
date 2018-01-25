@@ -6,6 +6,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\CompositeFormElementTrait;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a webform element requiring users to double-element and confirm an email address.
@@ -126,15 +127,8 @@ class WebformEmailConfirm extends FormElement {
         // NOTE: Only mail_1 needs to be validated since mail_2 is the same value.
         // Verify the required value.
         if ($element['mail_1']['#required'] && empty($mail_1)) {
-          if (isset($element['#required_error'])) {
-            $form_state->setError($element, $element['#required_error']);
-          }
-          elseif (isset($element['mail_1']['#title'])) {
-            $form_state->setError($element, t('@name field is required.', ['@name' => $element['mail_1']['#title']]));
-          }
-          else {
-            $form_state->setError($element);
-          }
+          $required_error_title = (isset($element['mail_1']['#title'])) ? $element['mail_1']['#title'] : NULL;
+          WebformElementHelper::setRequiredError($element, $form_state, $required_error_title);
         }
         // Verify that the value is not longer than #maxlength.
         if (isset($element['mail_1']['#maxlength']) && Unicode::strlen($mail_1) > $element['mail_1']['#maxlength']) {

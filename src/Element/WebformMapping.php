@@ -5,6 +5,7 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a mapping element.
@@ -138,19 +139,11 @@ class WebformMapping extends FormElement {
     $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
     $value = array_filter($value);
 
-    $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
     // Note: Not validating REQUIRED_ALL because each destination element is
     // already required.
+    $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
     if ($element['#required'] && $element['#required'] !== self::REQUIRED_ALL && empty($value) && $has_access) {
-      if (isset($element['#required_error'])) {
-        $form_state->setError($element, $element['#required_error']);
-      }
-      elseif (isset($element['#title'])) {
-        $form_state->setError($element, t('@name field is required.', ['@name' => $element['#title']]));
-      }
-      else {
-        $form_state->setError($element);
-      }
+      WebformElementHelper::setRequiredError($element, $form_state);
     }
 
     $form_state->setValueForElement($element, $value);

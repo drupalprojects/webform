@@ -173,15 +173,7 @@ class WebformOptions extends FormElement {
 
     // Validate required options.
     if (!empty($element['#required']) && empty($options)) {
-      if (isset($element['#required_error'])) {
-        $form_state->setError($element, $element['#required_error']);
-      }
-      elseif (isset($element['#title'])) {
-        $form_state->setError($element, t('@name field is required.', ['@name' => $element['#title']]));
-      }
-      else {
-        $form_state->setError($element);
-      }
+      WebformElementHelper::setRequiredError($element, $form_state);
       return;
     }
 

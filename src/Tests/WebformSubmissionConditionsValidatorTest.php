@@ -24,7 +24,13 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_form_states_server_required', 'test_form_states_server_wizard', 'test_form_states_server_custom'];
+  protected static $testWebforms = [
+    'test_form_states_server_required',
+    'test_form_states_server_wizard',
+    'test_form_states_server_custom',
+    'test_form_states_server_comp',
+    'test_form_states_server_multiple',
+  ];
 
   /**
    * {@inheritdoc}
@@ -310,6 +316,45 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('dependent_not_pattern field is required.');
     $this->assertRaw('dependent_less field is required.');
     $this->assertRaw('dependent_greater field is required.');
+
+    /**************************************************************************/
+    // multiple element.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_multiple');
+
+    $edit = [
+      'trigger_required' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+
+    // Check multiple error.
+    $this->assertRaw('textfield_multiple field is required.');
+
+    /**************************************************************************/
+    // composite element.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_comp');
+
+    $edit = [
+      'webform_name_trigger' => TRUE,
+      'webform_name_multiple_trigger' => TRUE,
+      'webform_name_multiple_header_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+
+    // Check basic composite.
+    $this->assertRaw('First field is required.');
+    $this->assertRaw('<input data-drupal-selector="edit-webform-name-first" type="text" id="edit-webform-name-first" name="webform_name[first]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+
+    // Check multiple composite with custom error.
+    $this->assertRaw("Custom error message for &#039;last&#039; element.");
+    $this->assertRaw('<input data-drupal-selector="edit-webform-name-multiple-items-0-item-last" type="text" id="edit-webform-name-multiple-items-0-item-last" name="webform_name_multiple[items][0][_item_][last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_multiple_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+
+    // Check multiple table composite.
+    $this->assertRaw('Last field is required.');
+    $this->assertRaw('<input data-drupal-selector="edit-webform-name-multiple-header-items-0-last" type="text" id="edit-webform-name-multiple-header-items-0-last" name="webform_name_multiple_header[items][0][last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_multiple_header_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
   }
 
   /**

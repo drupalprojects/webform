@@ -5,9 +5,52 @@
  * Support module for webform related testing.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformElementHelper;
+
+/**
+ * Implements hook_webform_submission_form_alter().
+ *
+ * Adds button to disable/enable HTML client-side validation without have
+ * to change any webform settings.
+ *
+ * The link is only applicable to webform ids that are prefix with test_*.
+ */
+function webform_test_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (!\Drupal::currentUser()->hasPermission('access devel information')) {
+    return;
+  }
+
+  if (strpos($form['#webform_id'], 'test_') !== 0) {
+    return;
+  }
+
+  if (\Drupal::request()->query->get('novalidate') == '1') {
+    $form['#attributes']['novalidate'] = TRUE;
+  }
+  elseif (\Drupal::request()->query->get('novalidate') == '0') {
+    unset($form['#attributes']['novalidate']);
+  }
+
+  if (!empty($form['#attributes']['novalidate'])) {
+    $form['webform_test_novalidate'] = [
+      '#type' => 'link',
+      '#title' => t('Enable client-side validation'),
+      '#url' => Url::fromRoute('<current>', [], ['query' => ['novalidate' => '0']]),
+      '#weight' => 1000,
+    ];
+  }
+  else {
+    $form['webform_test_novalidate'] = [
+      '#type' => 'link',
+      '#title' => t('Disable client-side validation'),
+      '#url' => Url::fromRoute('<current>', [], ['query' => ['novalidate' => '1']]),
+      '#weight' => 1000,
+    ];
+  }
+}
 
 /******************************************************************************/
 // Generate elements.

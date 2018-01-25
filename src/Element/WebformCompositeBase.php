@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase as WebformManagedFileBasePlugin;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides an base composite webform element.
@@ -82,6 +83,9 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
     }
     $element['#initialize'] = TRUE;
 
+    // Get composite element required/options states from visible/hidden states.
+    $composite_required_states = WebformElementHelper::getRequiredFromVisibleStates($element);
+
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
     $element['#tree'] = TRUE;
@@ -102,6 +106,18 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
       $element_plugin->prepare($composite_element);
       $element_plugin->finalize($composite_element);
       $element_plugin->setDefaultValue($composite_element);
+
+      // Custom validate required sub-element because they can be hidden
+      // via #access or #states.
+      // @see \Drupal\webform\Element\WebformCompositeBase::validateWebformComposite
+      if ($composite_required_states && !empty($composite_element['#required'])) {
+        unset($composite_element['#required']);
+        $composite_element['#_required'] = TRUE;
+        if (!isset($composite_element['#states'])) {
+          $composite_element['#states'] = [];
+        }
+        $composite_element['#states'] += $composite_required_states;
+      }
     }
 
     $element += $composite_elements;
@@ -127,20 +143,16 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $value = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
-    /************************************************************************/
-    // @todo Remove below code once WebformElement integration is completed.
-    /************************************************************************/
-
     // Only validate composite elements that are visible.
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
     if ($has_access) {
       // Validate required composite elements.
       $composite_elements = static::getCompositeElements($element);
       foreach ($composite_elements as $composite_key => $composite_element) {
-        if (!empty($element[$composite_key]['#required']) && $value[$composite_key] == '') {
-          if (isset($element[$composite_key]['#title'])) {
-            $form_state->setError($element[$composite_key], t('@name field is required.', ['@name' => $element[$composite_key]['#title']]));
-          }
+        $is_required = !empty($element[$composite_key]['#required']);
+        $is_empty = (isset($value[$composite_key]) && $value[$composite_key] === '');
+        if ($is_required && $is_empty) {
+          WebformElementHelper::setRequiredError($element[$composite_key], $form_state);
         }
       }
     }
