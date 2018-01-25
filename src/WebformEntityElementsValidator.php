@@ -164,8 +164,8 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
         ];
         $messages[] = $this->formatPlural(
           count($line_numbers),
-          'Elements contain a duplicate element name %name found on line @line_numbers.',
-          'Elements contain a duplicate element name %name found on lines @line_numbers.',
+          'Elements contain a duplicate element key %name found on line @line_numbers.',
+          'Elements contain a duplicate element key %name found on lines @line_numbers.',
           $t_args
         );
       }
@@ -283,12 +283,12 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
   }
 
   /**
-   * Recurse through elements and collect an associative array of deleted element names.
+   * Recurse through elements and collect an associative array of deleted element keys.
    *
    * @param array $elements
    *   An array of elements.
    * @param array $names
-   *   An array tracking deleted element names.
+   *   An array tracking deleted element keys.
    */
   protected function getElementKeysRecursive(array $elements, array &$names) {
     foreach ($elements as $key => &$element) {

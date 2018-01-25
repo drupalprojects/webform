@@ -572,7 +572,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *
    * @return array
    *   Webform raw elements decoded and flattened into an associative array
-   *   keyed by element name. Returns FALSE is elements YAML is invalid.
+   *   keyed by element key. Returns FALSE is elements YAML is invalid.
    */
   public function getElementsDecodedAndFlattened($operation = NULL);
 
@@ -583,7 +583,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   (optional) The operation that is to be performed on the element.
    *
    * @return array
-   *   Webform elements flattened into an associative array keyed by element name.
+   *   Webform elements flattened into an associative array keyed by element key.
    *   Returns FALSE is elements YAML is invalid.
    */
   public function getElementsInitializedAndFlattened($operation = NULL);
@@ -595,7 +595,7 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   (optional) The operation that is to be performed on the element.
    *
    * @return array
-   *   Webform elements flattened into an associative array keyed by element name.
+   *   Webform elements flattened into an associative array keyed by element key.
    */
   public function getElementsInitializedFlattenedAndHasValue($operation = NULL);
 

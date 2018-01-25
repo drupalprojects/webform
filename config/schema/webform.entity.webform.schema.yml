@@ -193,7 +193,7 @@ webform.webform.*:
           label: 'Preview excluded elements'
           sequence:
             type: string
-            label: 'Element name'
+            label: 'Element key'
         preview_exclude_empty:
           type: boolean
           label: 'Preview exclude empty elements'

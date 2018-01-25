@@ -73,7 +73,7 @@ duplicate:
   name:
     '#type': textfield",
         'messages' => [
-          'Elements contain a duplicate element name <em class="placeholder">name</em> found on lines 1 and 4.',
+          'Elements contain a duplicate element key <em class="placeholder">name</em> found on lines 1 and 4.',
         ],
       ],
 
@@ -85,7 +85,7 @@ duplicate:
   name:
     '#type': textfield",
         'messages' => [
-          'Elements contain a duplicate element name <em class="placeholder">name</em> found on lines 1 and 4.',
+          'Elements contain a duplicate element key <em class="placeholder">name</em> found on lines 1 and 4.',
         ],
       ],
 

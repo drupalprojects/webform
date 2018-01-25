@@ -201,8 +201,8 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
     $form['test']['names'] = [
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
-      '#title' => $this->t('Test data by element name'),
-      '#description' => $this->t("Above test data is keyed by full or partial element names. For example, using 'zip' will populate fields that are named 'zip' and 'zip_code' but not 'zipcode' or 'zipline'."),
+      '#title' => $this->t('Test data by element key'),
+      '#description' => $this->t("Above test data is keyed by full or partial element keys. For example, using 'zip' will populate element keys that are 'zip' and 'zip_code' but not 'zipcode' or 'zipline'."),
       '#default_value' => $config->get('test.names'),
     ];
 

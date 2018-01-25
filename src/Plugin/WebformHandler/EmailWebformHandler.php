@@ -366,7 +366,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink(
       $token_types,
-      $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')
+      $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.')
     );
 
     if (empty($roles_element_options) && $this->currentUser->hasPermission('administer webform')) {
@@ -390,7 +390,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $name_element_options);
     $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink(
         ['webform', 'webform_submission'],
-        $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values.')
+        $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.')
     );
 
     // Message.
@@ -528,7 +528,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Tokens.
     $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink(
       ['webform', 'webform_submission'],
-      $this->t('Use [webform_submission:values:ELEMENT_NAME:raw] to get plain text values and use [webform_submission:values:ELEMENT_NAME:value] to get HTML values.')
+      $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values and use [webform_submission:values:ELEMENT_KEY:value] to get HTML values.')
     );
 
     // Elements.
@@ -830,7 +830,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $emails = [];
 
     // Get element from token and make sure the element has #options.
-    $element_name = $this->getElementNameFromToken($configuration_value);
+    $element_name = $this->getElementKeyFromToken($configuration_value);
     $element = ($element_name) ? $this->webform->getElement($element_name) : NULL;
     $element_has_options = ($element && isset($element['#options'])) ? TRUE : FALSE;
 
@@ -1384,7 +1384,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Get options name.
     $options_name = $element_name . '_options';
 
-    if (isset($options_options[$this->configuration[$name]]) && ($token_element_name = $this->getElementNameFromToken($this->configuration[$name]))) {
+    if (isset($options_options[$this->configuration[$name]]) && ($token_element_name = $this->getElementKeyFromToken($this->configuration[$name]))) {
       // Get options name and element.
       $options_element = $this->webform->getElement($token_element_name);
 
@@ -1466,7 +1466,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   }
 
   /**
-   * Get element name from webform token.
+   * Get element key from webform token.
    *
    * @param string $token
    *   The token.
@@ -1474,9 +1474,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   The element format.
    *
    * @return string|null
-   *   The element name or NULL if token can not be parsed.
+   *   The element key or NULL if token can not be parsed.
    */
-  protected function getElementNameFromToken($token, $format = 'raw') {
+  protected function getElementKeyFromToken($token, $format = 'raw') {
     if (preg_match('/^\[webform_submission:values:([^:]+):' . $format . '\]$/', $token, $match)) {
       return $match[1];
     }
