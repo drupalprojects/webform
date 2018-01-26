@@ -695,6 +695,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function deletePaths();
 
   /**
+   * Determine if the webform has any message handlers.
+   *
+   * @return bool
+   *   TRUE if the webform has any message handlers.
+   */
+  public function hasMessageHandler();
+
+  /**
    * Returns a specific webform handler.
    *
    * @param string $handler_id
