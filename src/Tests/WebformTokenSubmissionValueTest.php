@@ -113,6 +113,10 @@ john@example.com',
       'webform_submission:total:webform:source_entity' => '',
       'webform_submission:limit:user:source_entity' => '5',
       'webform_submission:total:user:source_entity' => '',
+
+      // clear
+      'webform_submission:values:missing' => '[webform_submission:values:missing]',
+      'webform_submission:values:missing:clear' => '',
     ];
     foreach ($tokens as $token => $value) {
       $this->assertRaw("<tr><th width=\"50%\">$token</th><td width=\"50%\">$value</td></tr>");

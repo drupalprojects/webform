@@ -167,7 +167,7 @@ function webform_token_info() {
       '<li>element_key:delta:entity:*</li>' .
       '<li>element_key:delta:entity:field_name:*</li>' .
       '<li>element_key:sub_element_key:entity:*</li>' .
-      '<li>element_key:sub_element_key:entity:fiel_name:*</li>' .
+      '<li>element_key:sub_element_key:entity:field_name:*</li>' .
       '<li>element_key:delta:sub_element_key:entity:*</li>' .
       '</ul>' .
       t("All items after the 'element_key' are optional.") . '<br />' .
@@ -177,6 +177,7 @@ function webform_token_info() {
       t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . '<br />' .
       t("The 'entity:*' applies to the referenced entity") . '<br />' .
       t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br />' .
+      t("Add 'clear' at the end of the token to return an empty value if element is missing.") . '<br />' .
       t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token.")
     ),
     'dynamic' => TRUE,
@@ -695,14 +696,14 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   // Exit if form element does not exist.
   if (!$element) {
-    return NULL;
+    return (in_array('clear', $keys)) ? '' :NULL;
   }
 
   $element_plugin = $element_manager->getElementInstance($element);
 
   // Exit if no submission data and form element is not a container.
   if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
-    return NULL;
+    return (in_array('clear', $keys)) ? '' :NULL;
   }
 
   // Look for :html which indicates the tokens should be formatted as HTML
