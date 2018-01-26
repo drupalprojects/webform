@@ -145,6 +145,9 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
         continue;
       }
 
+      // Replace tokens before building the element.
+      $webform_element->replaceTokens($element, $webform_submission);
+
       if ($build_element = $webform_element->$build_method($element, $webform_submission, $options)) {
         $build[$key] = $build_element;
       }
@@ -170,6 +173,9 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
       if (!$webform_element->checkAccessRules('view', $element)) {
         continue;
       }
+
+      // Replace tokens before building the element.
+      $webform_element->replaceTokens($element, $webform_submission);
 
       $title = $element['#admin_title'] ?: $element['#title'] ?: '(' . $key . ')';
       $html = $webform_element->formatHtml($element, $webform_submission, $options);

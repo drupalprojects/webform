@@ -68,11 +68,13 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return $text;
     }
 
-    // Replace @deprecated [webform-submission] with [webform_submission].
-    $text = str_replace('[webform-submission:', '[webform_submission:', $text);
+    if ($entity) {
+      // Replace @deprecated [webform-submission] with [webform_submission].
+      $text = str_replace('[webform-submission:', '[webform_submission:', $text);
 
-    // Set token data based on entity type.
-    $this->setTokenData($data, $entity);
+      // Set token data based on entity type.
+      $this->setTokenData($data, $entity);
+    }
 
     return $this->token->replace($text, $data, $options);
   }
