@@ -697,8 +697,8 @@ function webform_process_options(&$element, FormStateInterface $form_state, &$co
       }
 
       list($title, $description) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $title);
-      $element[$key]['#title'] = Markup::create($title);
-      $element[$key][$description_property_name] = Markup::create($description);
+      $element[$key]['#title'] = $title;
+      $element[$key][$description_property_name] = $description;
     }
   }
   return $element;
