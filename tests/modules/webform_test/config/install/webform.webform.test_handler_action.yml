@@ -68,6 +68,7 @@ settings:
   form_reset: false
   form_disable_autocomplete: false
   form_novalidate: false
+  form_required: false
   form_unsaved: false
   form_disable_back: false
   form_submit_back: false
@@ -206,6 +207,7 @@ handlers:
       message: 'Submission has been flagged.'
       message_type: status
       debug: true
+      locked: null
   unflag:
     id: action
     label: Unflag
@@ -228,6 +230,7 @@ handlers:
       message: 'Submission has been unflagged.'
       message_type: status
       debug: true
+      locked: null
   locked:
     id: action
     label: Locked

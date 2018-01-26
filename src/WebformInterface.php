@@ -128,9 +128,17 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * Determine if the webform has conditional logic (i.e. #states).
    *
    * @return bool
-   *   TRUE if the webform has conditional logic
+   *   TRUE if the webform has conditional logic.
    */
   public function hasConditions();
+
+  /**
+   * Determine if the webform has required elements.
+   *
+   * @return bool
+   *   TRUE if the webform has required elements.
+   */
+  public function hasRequired();
 
   /**
    * Determine if the webform has any custom actions (aka submit buttons).

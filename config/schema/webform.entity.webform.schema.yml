@@ -110,6 +110,9 @@ webform.webform.*:
         form_novalidate:
           type: boolean
           label: 'Disable client-side validation'
+        form_required:
+          type: boolean
+          label: 'Display required indicator'
         form_autofocus:
           type: boolean
           label: 'Autofocus'

@@ -348,6 +348,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   protected $hasConditions = FALSE;
 
   /**
+   * Track if the webform has required elements.
+   *
+   * @var bool
+   */
+  protected $hasRequired = FALSE;
+
+  /**
    * Track if the webform has translations.
    *
    * @var bool
@@ -592,6 +599,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasRequired() {
+    $this->initElements();
+    return $this->hasRequired;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasActions() {
     return $this->getNumberOfActions() ? TRUE : FALSE;
   }
@@ -813,6 +828,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_reset' => FALSE,
       'form_disable_autocomplete' => FALSE,
       'form_novalidate' => FALSE,
+      'form_required' => FALSE,
       'form_unsaved' => FALSE,
       'form_disable_back' => FALSE,
       'form_submit_back' => FALSE,
@@ -1187,6 +1203,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasFlexboxLayout = FALSE;
     $this->hasContainer = FALSE;
     $this->hasConditions = FALSE;
+    $this->hasRequired = FALSE;
     $this->elementsPrepopulate = [];
     $this->elementsActions = [];
     $this->elementsWizardPages = [];
@@ -1244,6 +1261,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     $this->hasFlexboxLayout = NULL;
     $this->hasContainer = NULL;
     $this->hasConditions = NULL;
+    $this->hasRequired = NULL;
     $this->elementsPrepopulate = [];
     $this->elementsActions = [];
     $this->elementsWizardPages = [];
@@ -1357,6 +1375,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         // Track conditional.
         if (!empty($element['#states'])) {
           $this->hasConditions = TRUE;
+        }
+
+        // Track required.
+        if (!empty($element['#required']) || (!empty($element['#states']) && (!empty($element['#states']['required']) || !empty($element['#states']['optional'])))) {
+          $this->hasRequired = TRUE;
         }
 
         // Track prepopulated.

@@ -143,6 +143,13 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $settings['default_form_login_message'],
     ];
+    $form['form_settings']['default_form_required_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Default required indicator label'),
+      '#required' => TRUE,
+      '#size' => 20,
+      '#default_value' => $settings['default_form_required_label'],
+    ];
     $form['form_settings']['default_submit_button_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default submit button label'),
@@ -198,6 +205,10 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       'default_form_novalidate' => [
         'title' => $this->t('Disable client-side validation for all webforms'),
         'description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to all webforms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
+      ],
+      'default_form_required' => [
+        'title' => $this->t('Display required indicator on all webforms'),
+        'description' => $this->t('If checked, a required elements indicator will be added to all webforms.'),
       ],
       'default_form_details_toggle' => [
         'title' => $this->t('Display collapse/expand all details link on all webforms'),

@@ -1912,3 +1912,11 @@ function webform_update_8101() {
   \Drupal::service('cache.discovery')->deleteAll();
   Cache::invalidateTags(['rendered']);
 }
+
+/**
+ * Issue #2939828: Allow site builder to display required indicator on all webforms or a specified webform.
+ */
+function webform_update_8102() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

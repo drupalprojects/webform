@@ -8,61 +8,15 @@ open: null
 close: null
 uid: null
 template: false
-id: test_element_likert
-title: 'Test: Element: Likert'
-description: 'Test the likert element.'
-category: 'Test: Element'
+id: test_form_required
+title: 'Test: Webform: Required indicator'
+description: 'Test required element indicator.'
+category: 'Test: Webform'
 elements: |
-  likert_default:
-    '#type': webform_likert
-    '#title': likert_default
-    '#questions':
-      q1: 'Question 1'
-      q2: 'Question 2'
-      q3: 'Question 3'
-    '#answers':
-      1: 'Option 1'
-      2: 'Option 2'
-      3: 'Option 3'
-  likert_advanced:
-    '#type': webform_likert
-    '#title': likert_advanced
+  textfield:
+    '#type': textfield
+    '#title': textfield
     '#required': true
-    '#na_answer': true
-    '#na_answer_value': N/A
-    '#na_answer_text': 'Not applicable'
-    '#questions':
-      q1: 'Question 1'
-      q2: 'Question 2'
-      q3: 'Question 3'
-    '#answers':
-      1: 'Option 1'
-      2: 'Option 2'
-      3: 'Option 3'
-  likert_description:
-    '#type': webform_likert
-    '#title': likert_description
-    '#questions':
-      q1: 'Question 1 -- This is a description'
-      q2: 'Question 2 -- This is a description'
-      q3: 'Question 3 -- This is a description'
-    '#answers':
-      1: 'Option 1 -- This is a description'
-      2: 'Option 2 -- This is a description'
-      3: 'Option 3 -- This is a description'
-  likert_help:
-    '#type': webform_likert
-    '#title': likert_help
-    '#questions_description_display': help
-    '#questions':
-      q1: 'Question 1 -- This is a help text'
-      q2: 'Question 2 -- This is a help text'
-      q3: 'Question 3 -- This is a help text'
-    '#answers_description_display': help
-    '#answers':
-      1: 'Option 1 -- This is a help text'
-      2: 'Option 2 -- This is a help text'
-      3: 'Option 3 -- This is a help text'
 css: ''
 javascript: ''
 settings:
@@ -86,7 +40,7 @@ settings:
   form_reset: false
   form_disable_autocomplete: false
   form_novalidate: false
-  form_required: false
+  form_required: true
   form_unsaved: false
   form_disable_back: false
   form_submit_back: false
@@ -120,7 +74,7 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: message
+  confirmation_type: page
   confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''
@@ -140,8 +94,8 @@ settings:
   entity_limit_user_interval: null
   purge: none
   purge_days: null
-  results_disabled: false
-  results_disabled_ignore: false
+  results_disabled: true
+  results_disabled_ignore: true
   token_update: false
 access:
   create:
@@ -178,12 +132,4 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers:
-  debug:
-    id: debug
-    label: Debug
-    handler_id: debug
-    status: true
-    conditions: {  }
-    weight: 1
-    settings: {  }
+handlers: {  }

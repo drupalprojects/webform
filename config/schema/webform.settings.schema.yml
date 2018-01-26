@@ -36,6 +36,12 @@ webform.settings:
         default_form_novalidate:
           type: boolean
           label: 'Disable client-side validation'
+        default_form_required:
+          type: boolean
+          label: 'Display required indicator'
+        default_form_required_label:
+          type: label
+          label: 'Display required indicator label'
         default_form_unsaved:
           type: boolean
           label: 'Warn users about unsaved changes'

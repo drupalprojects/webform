@@ -198,6 +198,11 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'all_description' => $this->t('Client-side validation is disabled for all forms.'),
         'form_description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to this form.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
       ],
+      'form_required' => [
+        'title' => $this->t('Display required indicator'),
+        'all_description' => $this->t('Required indicator is displayed on all forms.'),
+        'form_description' => $this->t('If checked, a required elements indicator will be added to this webform.'),
+      ],
       'form_details_toggle' => [
         'title' => $this->t('Display collapse/expand all details link'),
         'all_description' => $this->t('Expand/collapse all (details) link is automatically added to all forms.'),

@@ -479,6 +479,16 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
 
+
+    // Required indicator
+    $current_page = $this->getCurrentPage($form, $form_state);
+    if ($current_page != 'webform_preview' && $this->getWebformSetting('form_required') && $webform->hasRequired()) {
+      $form['required'] = [
+        '#theme' => 'webform_required',
+        '#label' => $this->getWebformSetting('form_required_label'),
+      ];
+    }
+
     // Append elements to the webform.
     $form['elements'] = $elements;
 

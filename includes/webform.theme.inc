@@ -51,6 +51,10 @@ function webform_theme() {
       'variables' => ['webform' => NULL, 'source_entity' => NULL, 'webform_submission' => NULL],
     ],
 
+    'webform_required' => [
+      'variables' => ['label' => NULL],
+    ],
+
     'webform_submission' => [
       'render element' => 'elements',
     ],
