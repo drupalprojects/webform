@@ -71,8 +71,17 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
     $form['confirmation_type']['ajax_confirmation'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t("Only 'Inline' and 'Message' confirmation types are fully supported by Ajax."),
+      '#message_message' => $this->t("Only 'Inline', 'Message', and 'Modal' confirmation types are fully supported by Ajax."),
       '#access' => $settings['ajax'],
+      '#states' => [
+        'invisible' => [
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_INLINE]],
+          'or',
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_MESSAGE]],
+          'or',
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_MODAL]],
+        ]
+      ],
     ];
     $form['confirmation_type']['confirmation_type'] = [
       '#title' => $this->t('Confirmation type'),
