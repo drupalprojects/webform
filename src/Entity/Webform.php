@@ -956,8 +956,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function checkAccessRules($operation, AccountInterface $account, WebformSubmissionInterface $webform_submission = NULL) {
-    // Always grant access to user that can administer webforms and submissions.
-    if ($account->hasPermission('administer webform') || $account->hasPermission('administer webform submission')) {
+    // Always grant access to user that can administer webforms.
+    if ($account->hasPermission('administer webform')) {
+      return TRUE;
+    }
+
+    // Grant user with administer webform submission access to view all webform submissions.
+    if ($account->hasPermission('administer webform submission') && $operation != 'administer') {
       return TRUE;
     }
 

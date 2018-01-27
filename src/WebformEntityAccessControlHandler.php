@@ -65,8 +65,14 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler {
 
     // Check submission_* operation.
     if (strpos($operation, 'submission_') === 0) {
-      // Allow users with 'view any webform submission' to view all submissions.
-      if ($operation == 'submission_view_any' && $account->hasPermission('view any webform submission') || ($account->hasPermission('view own webform submission') && $is_owner)) {
+      // Allow users with 'view any webform submission' or
+      // 'administer webform submission' to view all submissions.
+      if ($operation == 'submission_view_any' && ($account->hasPermission('view any webform submission') || $account->hasPermission('administer webform submission'))) {
+        return AccessResult::allowed();
+      }
+
+      // Allow users with 'view own webform submission' to view own submissions.
+      if ($account->hasPermission('view own webform submission') && $is_owner) {
         return AccessResult::allowed();
       }
 
