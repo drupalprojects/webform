@@ -751,9 +751,8 @@ class WebformSubmissionForm extends ContentEntityForm {
         $query['destination'] = $this->requestHandler->getUrl($webform, $source_entity, 'webform.results_submissions')->toString();
         $build = [
           '#type' => 'link',
-          '#title' => $this->t('Generate webform submissions'),
+          '#title' => $this->t('Generate %title submissions', ['%title' => $webform->label()]),
           '#url' => Url::fromRoute('devel_generate.webform_submission', [], ['query' => $query]),
-          '#attributes' => ['class' => ['button', 'button--small']],
         ];
         drupal_set_message($this->renderer->renderPlain($build), 'warning');
       }
