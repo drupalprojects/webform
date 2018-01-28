@@ -9,6 +9,7 @@ use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformInterface;
 
 /**
  * Provides a base 'date' class.
@@ -404,6 +405,16 @@ abstract class DateBase extends WebformElementBase {
         ]));
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    $format = DateFormat::load('html_datetime')->getPattern();
+    $min = !empty($element['#min']) ? strtotime($element['#min']) : strtotime('-10 years');
+    $max = !empty($element['#max']) ? strtotime($element['#max']) : max($min, strtotime('+20 years') ?: PHP_INT_MAX);
+    return date($format, rand($min, $max));
   }
 
 }

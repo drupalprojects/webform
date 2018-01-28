@@ -1920,3 +1920,22 @@ function webform_update_8102() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2939948: Date fields should respect #min and #max in test-mode. Remove hard-coded test date values.
+ */
+function webform_update_8103() {
+  $test_date_elements = ['date', 'datetime', 'datelist'];
+  $test_date_values = ['1942-06-18', '1940-07-07', '1943-02-25', '1940-10-09'];
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $data = $config->getRawData();
+  $types = Yaml::decode($data['test']['types']);
+  foreach ($test_date_elements as $test_date_element) {
+    if (isset($types[$test_date_element]) && $types[$test_date_element] === $test_date_values) {
+      unset($types[$test_date_element]);
+    }
+  }
+  $data['test']['types'] = Yaml::encode($types);
+  $config->setData($data);
+  $config->save();
+}
