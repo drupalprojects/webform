@@ -528,28 +528,57 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *   Visible elements with #states property.
    * @param array $form
    *   An associative array containing the structure of the form.
+   * @param array $parent_states
+   *   An associative array containing 'required'/'optional' states from parent
+   *   container to be set on the element.
    */
-  protected function getBuildElementsRecusive(array &$elements, array &$form) {
+  protected function getBuildElementsRecusive(array &$elements, array &$form, $parent_states = []) {
     foreach ($form as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;
       }
 
-      // If element has #states and is #required there may be a conflict where
-      // visibly hidden elements are required. The solution is to convert
-      // #required into corresponding 'required/optional' states based on
-      // 'visible/invisible' states.
-      if (isset($element['#states']) && !empty($element['#required'])) {
-        if (isset($element['#states']['visible']) && !isset($element['#states']['required'])) {
-          $element['#states']['required'] = $element['#states']['visible'];
-          unset($element['#required']);
+      // Pass parent states to sub-element states.
+      $subelement_states = $parent_states;
+
+      if (!empty($element['#states']) || !empty($parent_states)) {
+        if (!empty($element['#required'])) {
+          // If element has #states and is #required there may be a conflict where
+          // visibly hidden elements are required. The solution is to convert
+          // #required into corresponding 'required/optional' states based on
+          // 'visible/invisible' states.
+          if (!isset($element['#states']['required']) && !isset($element['#states']['optional'])) {
+            if (isset($element['#states']['visible'])) {
+              $element['#states']['required'] = $element['#states']['visible'];
+            }
+            elseif (isset($element['#states']['invisible'])) {
+              $element['#states']['optional'] = $element['#states']['invisible'];
+            }
+            elseif ($parent_states) {
+              $element += ['#states' => []];
+              $element['#states'] += $parent_states;
+            }
+          }
+
+          if (isset($element['#states']['optional']) || isset($element['#states']['required'])) {
+            unset($element['#required']);
+          }
+
+          // Store a reference to the original #required value so that
+          // form alter hooks know if the element's required/optional #states
+          // are based the 'visible/invisible' states or the parent states.
+          if (!isset($element['#required'])) {
+            $element['#_required'] = TRUE;
+          }
         }
-        if (isset($element['#states']['invisible']) && !isset($element['#states']['optional'])) {
-          $element['#states']['optional'] = $element['#states']['invisible'];
-          unset($element['#required']);
+
+        // If this container element has a visibility state, make its
+        // sub-elements required/optional based on this state.
+        if (isset($element['#states']['visible'])) {
+          $subelement_states = ['required' => $element['#states']['visible']];
         }
-        if (!isset($element['#required'])) {
-          $element['#_required'] = TRUE;
+        elseif (isset($element['#states']['invisible'])) {
+          $subelement_states = ['optional' => $element['#states']['invisible']];
         }
       }
 
@@ -559,7 +588,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
       $elements[$key] = &$element;
 
-      $this->getBuildElementsRecusive($elements, $element);
+      $this->getBuildElementsRecusive($elements, $element, $subelement_states);
     }
   }
 

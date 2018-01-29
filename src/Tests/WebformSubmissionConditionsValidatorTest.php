@@ -30,6 +30,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     'test_form_states_server_custom',
     'test_form_states_server_comp',
     'test_form_states_server_multiple',
+    'test_form_states_server_nested',
   ];
 
   /**
@@ -355,6 +356,39 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     // Check multiple table composite.
     $this->assertRaw('Last field is required.');
     $this->assertRaw('<input data-drupal-selector="edit-webform-name-multiple-header-items-0-last" type="text" id="edit-webform-name-multiple-header-items-0-last" name="webform_name_multiple_header[items][0][last]" value="" size="60" maxlength="255" class="form-text error" aria-invalid="true" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022webform_name_multiple_header_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+
+    /**************************************************************************/
+    // nested.
+    /**************************************************************************/
+
+    $webform = Webform::load('test_form_states_server_nested');
+
+    // Check sub elements.
+    $this->drupalGet('webform/test_form_states_server_nested');
+    $this->assertRaw('<input data-drupal-selector="edit-visible-textfield" type="text" id="edit-visible-textfield" name="visible_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+    $this->assertRaw('<input data-drupal-selector="edit-visible-custom-textfield" type="text" id="edit-visible-custom-textfield" name="visible_custom_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true},&quot;:input[name=\u0022visible_textfield\u0022]&quot;:{&quot;filled&quot;:true}}}" />');
+
+    // Check nested element is required.
+    $edit = [
+      'visible_trigger' => TRUE,
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('visible_textfield field is required.');
+    $this->assertNoRaw('visible_custom_textfield field is required.');
+
+    // Check nested element is not required.
+    $edit = [];
+    $this->postSubmission($webform, $edit);
+    $this->assertNoRaw('visible_textfield field is required.');
+    $this->assertNoRaw('visible_custom_textfield field is required.');
+
+    // Check custom states element validation.
+    $edit = [
+      'visible_trigger' => TRUE,
+      'visible_textfield' => '{value}'
+    ];
+    $this->postSubmission($webform, $edit);
+    $this->assertRaw('visible_custom_textfield field is required.');
   }
 
   /**
