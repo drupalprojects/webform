@@ -80,7 +80,7 @@ class WebformHandlerActionTest extends WebformTestBase {
 
     // Check messages.
     $this->assertRaw('Submission has been unflagged.');
-    //$this->assertRaw('Submission has been unlocked.');
+    // $this->assertRaw('Submission has been unlocked.');
     $this->assertRaw('Submission notes have been updated.');
 
     // Reload the webform submission.
@@ -119,7 +119,7 @@ class WebformHandlerActionTest extends WebformTestBase {
     // Check that submission is locked.
     $this->drupalGet("admin/structure/webform/manage/test_handler_action/submission/$sid/edit");
     $this->assertRaw('This is submission was automatically locked.');
-    
+
     // Programmatically unlock the submission.
     $webform_submission->setElementData('lock', 'unlocked');
     $webform_submission->save();

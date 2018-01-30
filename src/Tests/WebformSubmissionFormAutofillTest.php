@@ -55,7 +55,7 @@ class WebformSubmissionFormAutofillTest extends WebformTestBase {
       ->set('settings.default_autofill_message', '')
       ->save();
 
-    // Check no autofill message is displayed
+    // Check no autofill message is displayed.
     $this->drupalGet('webform/test_form_autofill');
     $this->assertFieldByName('textfield_autofill', '{textfield_autofill}');
     $this->assertNoRaw('This submission has been autofilled with your previous submission.');
@@ -65,11 +65,10 @@ class WebformSubmissionFormAutofillTest extends WebformTestBase {
       ->setSetting('autofill_message', '{autofill_message}')
       ->save();
 
-    // Check custom autofill message is displayed
+    // Check custom autofill message is displayed.
     $this->drupalGet('webform/test_form_autofill');
     $this->assertFieldByName('textfield_autofill', '{textfield_autofill}');
     $this->assertRaw('{autofill_message}');
   }
-
 
 }

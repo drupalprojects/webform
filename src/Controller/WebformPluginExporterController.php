@@ -79,7 +79,7 @@ class WebformPluginExporterController extends ControllerBase implements Containe
 
     $build = [];
 
-    // Settings
+    // Settings.
     $build['settings'] = [
       '#type' => 'link',
       '#title' => $this->t('Edit configuration'),

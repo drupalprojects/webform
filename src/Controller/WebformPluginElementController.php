@@ -282,7 +282,7 @@ class WebformPluginElementController extends ControllerBase implements Container
       ],
     ];
 
-    // Settings
+    // Settings.
     $build['settings'] = [
       '#type' => 'link',
       '#title' => $this->t('Edit configuration'),
@@ -296,7 +296,7 @@ class WebformPluginElementController extends ControllerBase implements Container
       '#prefix' => '<p>',
       '#suffix' => '</p>',
     ];
-    
+
     ksort($webform_form_element_rows);
     $build['webform_elements'] = [
       '#type' => 'table',

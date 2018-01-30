@@ -370,7 +370,7 @@ SUGGESTIONS
   /**
    * Build a link.
    *
-   * @param $title
+   * @param string $title
    *   Link title.
    * @param string $url
    *   Link URL.

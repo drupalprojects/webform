@@ -482,6 +482,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * Process state by mapping aliases and negation.
    *
    * @param string $state
+   *   A state.
    *
    * @return array
    *   An array containing state and negate
@@ -532,7 +533,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *   An associative array containing 'required'/'optional' states from parent
    *   container to be set on the element.
    */
-  protected function getBuildElementsRecusive(array &$elements, array &$form, $parent_states = []) {
+  protected function getBuildElementsRecusive(array &$elements, array &$form, array $parent_states = []) {
     foreach ($form as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;

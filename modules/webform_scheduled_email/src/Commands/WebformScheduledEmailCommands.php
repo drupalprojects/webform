@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Webform scheduled email commands.
- */
 namespace Drupal\webform_scheduled_email\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
@@ -50,10 +47,14 @@ class WebformScheduledEmailCommands extends DrushCommands {
    * Executes cron task for webform scheduled emails.
    *
    * @command webform:scheduled-email:cron
-   * @param $webform_id (optional) The webform ID you want the cron task to be executed for
-   * @param $handler_id (optional) The handler ID you want the cron task to be executed for
-   * @option schedule_limit The maximum number of emails to be scheduled. If set to 0 no emails will be scheduled. (Default 1000)
-   * @option send_limit The maximum number of emails to be sent. If set to 0 no emails will be sent. (Default 500)
+   * @param $webform_id (optional)
+   *   The webform ID you want the cron task to be executed for
+   * @param $handler_id (optional)
+   *   The handler ID you want the cron task to be executed for
+   * @option schedule_limit
+   *   The maximum number of emails to be scheduled. If set to 0 no emails will be scheduled. (Default 1000)
+   * @option send_limit
+   *   The maximum number of emails to be sent. If set to 0 no emails will be sent. (Default 500)
    * @aliases wfsec
    */
   public function drush_webform_scheduled_email_cron($webform_id = NULL, $handler_id = NULL, array $options = ['schedule_limit' => 1000, 'send_limit' => 500]) {

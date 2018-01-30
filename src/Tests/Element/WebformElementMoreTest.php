@@ -63,5 +63,3 @@ class WebformElementMoreTest extends WebformElementTestBase {
   }
 
 }
-
-

@@ -252,7 +252,7 @@ class WebformMultiple extends FormElement {
   }
 
   /**
-   *  Initialize, prepare, and finalize composite sub-elements recusively.
+   * Initialize, prepare, and finalize composite sub-elements recusively.
    *
    * @param array $element
    *   The main element.
@@ -370,7 +370,6 @@ class WebformMultiple extends FormElement {
           if (static::isHidden($element['#element'][$child_key])) {
             continue;
           }
-
 
           $title = [];
           $title['title'] = [

@@ -15,6 +15,9 @@ use Drupal\webform\Utility\WebformYaml;
 use Drush\Commands\DrushCommands;
 use Psr\Log\LogLevel;
 
+/**
+ * Drush version agnostic commands.
+ */
 class WebformCliService implements WebformCliServiceInterface {
 
   /**
@@ -46,7 +49,6 @@ class WebformCliService implements WebformCliServiceInterface {
    *
    * @param $name
    *   Function name.
-   *
    * @param array $arguments
    *   Function arguments.
    *
@@ -60,7 +62,7 @@ class WebformCliService implements WebformCliServiceInterface {
     if ($this->command && method_exists($this->command, $name)) {
       return call_user_func_array([$this->command, $name], $arguments);
     }
-    elseif (function_exists($name)){
+    elseif (function_exists($name)) {
       return call_user_func_array($name, $arguments);
     }
     else {
@@ -536,7 +538,7 @@ class WebformCliService implements WebformCliServiceInterface {
       'entity-id' => $this->drush_get_option('entity-id'),
     ];
     /** @var \Drupal\webform\Plugin\DevelGenerate\WebformSubmissionDevelGenerate $instance */
-    $instance = \Drupal::service('plugin.manager.develgenerate')->createInstance('webform_submission', array());
+    $instance = \Drupal::service('plugin.manager.develgenerate')->createInstance('webform_submission', []);
     $instance->generate($values);
   }
 
@@ -1319,9 +1321,11 @@ if (!function_exists('dt')) {
    * @param string
    *   String to process, possibly with replacement item.
    *
-   * @return
+   * @return string
    *   The processed string.
    */
-  function dt($string) {return $string;}
+  function dt($string) {
+    return $string;
+  }
 }
 

@@ -112,7 +112,7 @@ abstract class WebformCommandsBase extends DrushCommands {
     $this->drush_mkdir($destination);
     $return = drush_shell_cd_and_exec(dirname($path), "unzip %s -d %s", $path, $destination);
     if (!$return) {
-      throw new \Exception(dt('Unable to unzip !filename.', array('!filename' => $path)));
+      throw new \Exception(dt('Unable to unzip !filename.', ['!filename' => $path]));
     }
     return $return;
   }

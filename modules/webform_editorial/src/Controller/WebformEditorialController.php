@@ -159,7 +159,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
           $path = preg_replace('/\{[^}]+\}/', '*', $path);
           $paths[$index] = $path;
         }
-        $name = '<b>' . $name .'</b><br/><small><small><em>' . implode('<br />', $paths) . '</em></small></small>';
+        $name = '<b>' . $name . '</b><br/><small><small><em>' . implode('<br />', $paths) . '</em></small></small>';
 
         // Links.
         $links = [];
@@ -333,7 +333,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
 
   /**
    * Returns webform schema.
-   **
+   *
    * @return array
    *   A renderable array containing webform entity scheme.
    */
@@ -408,9 +408,7 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
         ];
       }
 
-      $properties = [
-        'arguments', 'options', 'examples'
-      ];
+      $properties = ['arguments', 'options', 'examples'];
       foreach ($properties as $property) {
         if (isset($command[$property])) {
           $rows = [];

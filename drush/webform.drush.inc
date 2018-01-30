@@ -13,17 +13,17 @@
  * Implements hook_drush_command().
  */
 function webform_drush_command() {
-  return array(
-    'webform-export' => array(
+  return [
+    'webform-export' => [
       'description' => 'Exports webform submissions to a file.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 2,
-      'arguments' => array(
+      'arguments' => [
         'webform' => 'The webform ID you want to export (required unless --entity-type and --entity-id are specified)',
-      ),
-      'options' => array(
+      ],
+      'options' => [
         'delimiter' => 'Delimiter between columns (defaults to site-wide setting). This option may need to be wrapped in quotes. i.e. --delimiter="\t".',
         'multiple-delimiter' => 'Delimiter between an element with multiple values (defaults to site-wide setting).',
         'file-name' => 'File name used to export submission and uploaded filed. You may use tokens.',
@@ -43,188 +43,188 @@ function webform_drush_command() {
         'sticky' => 'Flagged/starred submission status.',
         'files' => 'Download files: "1" or "0" (default). If set to 1, the exported CSV file and any submission file uploads will be download in a gzipped tar file.',
         'destination' => 'The full path and filename in which the CSV or archive should be stored. If omitted the CSV file or archive will be outputted to the commandline.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfx',
-      ),
-    ),
-    'webform-purge' => array(
+      ],
+    ],
+    'webform-purge' => [
       'description' => 'Purge webform submissions from the databases',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 2,
-      'arguments' => array(
+      'arguments' => [
         'webform_id' => 'A webform machine name. If not provided, user may choose from a list of names.',
-      ),
-      'options' => array(
+      ],
+      'options' => [
         'all' => 'Flush all submissions',
         'entity-type' => 'The entity type for webform submissions to be purged',
         'entity-id' => 'The ID of the entity for webform submissions to be purged',
-      ),
-      'examples' => array(
+      ],
+      'examples' => [
         'drush webform-purge' => 'Pick a webform and then purge its submissions.',
         'drush webform-purge contact' => "Delete 'Contact' webform submissions.",
         'drush webform-purge --all' => 'Purge all webform submissions.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfp',
-      ),
-    ),
-    'webform-tidy' => array(
+      ],
+    ],
+    'webform-tidy' => [
       'description' => 'Tidy export webform configuration files',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'options' => array(
+      'options' => [
         'dependencies' => 'Add module dependencies to installed webform and options configuration entities.',
         'prefix' => 'Prefix for file names to be tidied. (Defaults to webform)',
-      ),
-      'arguments' => array(
+      ],
+      'arguments' => [
         'target' => 'The module (config/install), config directory (sync), or path (/some/path) that needs its YAML configuration files tidied. (Defaults to webform)',
-      ),
-      'examples' => array(
+      ],
+      'examples' => [
         'drush webform-tidy webform' => "Tidies YAML configuration files in 'webform/config' for the Webform module",
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wft',
-      ),
-    ),
-    'webform-libraries-status' => array(
+      ],
+    ],
+    'webform-libraries-status' => [
       'description' => 'Displays the status of third party libraries required by the Webform module.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-libraries-status' => 'Displays the status of third party libraries required by the Webform module.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfls',
-      ),
-    ),
-    'webform-libraries-make' => array(
+      ],
+    ],
+    'webform-libraries-make' => [
       'description' => 'Generates libraries YAML to be included in a drush.make.yml files.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-libraries-make' => 'Generates libraries YAML to be included in a drush.make.yml file.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wflm',
-      ),
-    ),
-    'webform-libraries-composer' => array(
+      ],
+    ],
+    'webform-libraries-composer' => [
       'description' => "Generates the Webform module's composer.json with libraries as repositories.",
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-libraries-composer' => "Generates the Webform module's composer.json with libraries as repositories.",
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wflc',
-      ),
-    ),
-    'webform-libraries-download' => array(
+      ],
+    ],
+    'webform-libraries-download' => [
       'description' => 'Download third party libraries required by the Webform module.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-libraries-download' => 'Download third party libraries required by the Webform module.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfld',
-      ),
-    ),
-    'webform-libraries-remove' => array(
+      ],
+    ],
+    'webform-libraries-remove' => [
       'description' => 'Removes all downloaded third party libraries required by the Webform module.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-libraries-remove' => 'Removes all downloaded third party libraries required by the Webform module.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wflr',
-      ),
-    ),
-    'webform-generate' => array(
+      ],
+    ],
+    'webform-generate' => [
       'description' => 'Create submissions in specified webform.',
-      'arguments' => array(
+      'arguments' => [
         'webform_id' => 'Webform id into which new submissions will be inserted.',
         'num' => 'Number of submissions to insert. Defaults to 50.',
-      ),
-      'options' => array(
+      ],
+      'options' => [
         'kill' => 'Delete all submissions in specified webform before generating.',
         'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
         'entity-type' => 'The entity type to which this submission was submitted from.',
         'entity-id' => 'The ID of the entity of which this webform submission was submitted from.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfg',
-      ),
-    ),
-    'webform-repair' => array(
+      ],
+    ],
+    'webform-repair' => [
       'description' => 'Makes sure all Webform admin settings and webforms are up-to-date.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-repair' => 'Repairs admin settings and webforms are up-to-date.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfr',
-      ),
-    ),
-    'webform-docs' => array(
+      ],
+    ],
+    'webform-docs' => [
       'description' => 'Generates HTML documentation.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-repair' => "Generates HTML documentation used by the Webform module's documentation pages.",
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfd',
-      ),
-    ),
-    'webform-composer-update' => array(
+      ],
+    ],
+    'webform-composer-update' => [
       'description' => "Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.",
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 1,
-      'examples' => array(
+      'examples' => [
         'webform-composer-update' => "Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.",
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfcu',
-      ),
-    ),
-    'webform-generate-commands' => array(
+      ],
+    ],
+    'webform-generate-commands' => [
       'description' => 'Generate Drush commands from webform.drush.inc for Drush 8.x to WebformCommands for Drush 9.x.',
-      'core' => array(
+      'core' => [
         '8+',
-      ),
+      ],
       'bootstrap' => 2,
-      'examples' => array(
+      'examples' => [
         'drush webform-generate-commands' => 'Generate Drush commands from webform.drush.inc for Drush 8.x to WebformCommands for Drush 9.x.',
-      ),
-      'aliases' => array(
+      ],
+      'aliases' => [
         'wfgc',
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }
 
 /******************************************************************************/

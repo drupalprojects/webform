@@ -353,7 +353,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $source_filename = $file->getFileName();
 
       $destination_uri = $source_uri;
-      $destination_filename = $source_filename ;
+      $destination_filename = $source_filename;
 
       // Replace /_sid_/ token with the submission id.
       if (strpos($source_uri, '/_sid_/')) {

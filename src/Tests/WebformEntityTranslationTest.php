@@ -116,7 +116,7 @@ class WebformEntityTranslationTest extends WebformTestBase {
     $this->assertRaw('>Select (custom)<');
     $this->assertRaw('>Composite<');
 
-    // Check Spanish table headers are translated
+    // Check Spanish table headers are translated.
     $this->drupalGet('es/admin/structure/webform/manage/test_translation/results/submissions');
     $this->assertRaw('>Campo de texto<');
     $this->assertRaw('>Seleccione (opciones)<');

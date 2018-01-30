@@ -102,13 +102,13 @@ class WebformElementComputedTest extends WebformElementTestBase {
     $this->assertRaw('<b class="webform_computed_twig_html">complex string:</b> This is a &lt;strong&gt;complex&lt;/strong&gt; string, which contains &quot;double&quot; and &#039;single&#039; quotes with special characters like &gt;, &lt;, &gt;&lt;, and &lt;&gt;.<br />');
     $this->assertRaw('<b class="webform_computed_twig_html">xss:</b> &lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;<br />');
 
-    // Check Twig plain text rendering
+    // Check Twig plain text rendering.
     $this->assertRaw('number: 2 * 2 = 4<br />');
     $this->assertRaw('simple string: This is a string<br />');
     $this->assertRaw('complex string: This is a &lt;strong&gt;complex&lt;/strong&gt; string, which contains &quot;double&quot; and &#039;single&#039; quotes with special characters like &gt;, &lt;, &gt;&lt;, and &lt;&gt;.<br />');
     $this->assertRaw('text_format: This is a *text format* string.<br />');
 
-    // Check Twig data rendering
+    // Check Twig data rendering.
     $this->assertRaw('<b class="webform_computed_twig_data">number:</b> 2 * 2 = 4<br />');
     $this->assertRaw('<b class="webform_computed_twig_data">simple string:</b> This is a string<br />');
     $this->assertRaw('<b class="webform_computed_twig_data">complex string:</b> This is a &lt;strong&gt;complex&lt;/strong&gt; string, which contains &quot;double&quot; and &#039;single&#039; quotes with special characters like &gt;, &lt;, &gt;&lt;, and &lt;&gt;.<br />');

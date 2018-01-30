@@ -40,7 +40,7 @@ class WebformElementPrepopulateTest extends WebformElementTestBase {
     $this->assertFieldByName('textfield_prepopulate', '');
     $this->assertFieldByName('files[managed_file_prepopulate]', '');
 
-    // Check 'textfield' can not be prepopulated
+    // Check 'textfield' can not be prepopulated.
     $this->drupalGet('webform/test_element_prepopulate', ['query' => ['textfield' => 'value']]);
     $this->assertNoFieldByName('textfield', 'value');
 

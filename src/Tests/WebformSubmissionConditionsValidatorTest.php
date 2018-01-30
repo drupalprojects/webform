@@ -385,7 +385,7 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     // Check custom states element validation.
     $edit = [
       'visible_trigger' => TRUE,
-      'visible_textfield' => '{value}'
+      'visible_textfield' => '{value}',
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('visible_custom_textfield field is required.');

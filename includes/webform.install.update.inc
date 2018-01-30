@@ -1842,7 +1842,6 @@ function webform_update_8098() {
   }
 }
 
-
 /**
  * Issue #2888862: Provide a mechanism to lock a webform submission.
  */
@@ -1939,7 +1938,6 @@ function webform_update_8103() {
   $config->setData($data);
   $config->save();
 }
-
 
 /**
  * Issue #2940490: Autofill webform with previous submission data.

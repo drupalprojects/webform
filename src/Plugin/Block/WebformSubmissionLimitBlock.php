@@ -364,7 +364,6 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
     return WebformDateHelper::getIntervalText($this->getInterval());
   }
 
-
   /**
    * Get total number of submissions for selected limit type.
    *

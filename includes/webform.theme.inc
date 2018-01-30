@@ -205,12 +205,10 @@ function webform_theme_registry_alter(&$theme_registry) {
  * Applies custom link attributes to local actions.
  * Custom attributes are used to open Webform UI modals.
  *
- * Issue #2897396: Add a Reference Tab to track Webform nodes.
- * @see https://www.drupal.org/node/2897396
- *
  * @see template_preprocess_menu_local_action();
  * @see \Drupal\webform\WebformEntityHandlersForm
  * @see \Drupal\webform_ui\WebformUiEntityEditForm
+ * @see https://www.drupal.org/node/2897396
  */
 function webform_preprocess_menu_local_action(&$variables) {
   $link = $variables['element']['#link'];
@@ -642,7 +640,7 @@ function _webform_theme_suggestions(array $variables, $hook) {
       $webform = $webform_submission->getWebform();
     }
     elseif (isset($variables['webform'])) {
-        /** @var \Drupal\webform\WebformInterface $webform */
+      /** @var \Drupal\webform\WebformInterface $webform */
       $webform = $variables['webform'];
     }
 

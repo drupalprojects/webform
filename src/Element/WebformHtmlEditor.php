@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;

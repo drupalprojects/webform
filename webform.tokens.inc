@@ -696,14 +696,14 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   // Exit if form element does not exist.
   if (!$element) {
-    return (in_array('clear', $keys)) ? '' :NULL;
+    return (in_array('clear', $keys)) ? '' : NULL;
   }
 
   $element_plugin = $element_manager->getElementInstance($element);
 
   // Exit if no submission data and form element is not a container.
   if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
-    return (in_array('clear', $keys)) ? '' :NULL;
+    return (in_array('clear', $keys)) ? '' : NULL;
   }
 
   // Look for :html which indicates the tokens should be formatted as HTML

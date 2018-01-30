@@ -2,8 +2,6 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
-use Drupal\webform\WebformSubmissionInterface;
-
 /**
  * Provides a 'radios' element.
  *

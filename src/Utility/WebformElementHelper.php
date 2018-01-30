@@ -569,7 +569,6 @@ class WebformElementHelper {
     }
   }
 
-
   /**
    * Get required #states from an element's visible #states.
    *
@@ -580,8 +579,8 @@ class WebformElementHelper {
    *   An element.
    *
    * @return array
-   *  An associative array containing 'visible' and 'invisible' selectors
-   *  and triggers.
+   *   An associative array containing 'visible' and 'invisible' selectors
+   *   and triggers.
    */
   public static function getRequiredFromVisibleStates(array $element) {
     $states = WebformElementHelper::getStates($element);

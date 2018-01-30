@@ -44,7 +44,7 @@ class WebformTokenSubmissionValueTest extends WebformTestBase {
 
     $tokens = [
 
-      // emails.
+      // Emails.
       'webform_submission:values:email' => 'example@example.com',
       'webform_submission:values:emails' => '- one@example.com
 - two@example.com
@@ -59,21 +59,21 @@ class WebformTokenSubmissionValueTest extends WebformTestBase {
       'webform_submission:values:emails:2:html' => '<a href="mailto:three@example.com">three@example.com</a>',
       'webform_submission:values:emails:99:html' => '',
 
-      // users.
+      // Users.
       'webform_submission:values:user' => 'admin (1)',
       'webform_submission:values:users' => 'admin (1)',
       'webform_submission:values:user:entity:mail' => 'admin@example.com',
       'webform_submission:values:users:0:entity:account-name' => 'admin',
       'webform_submission:values:users:99:entity:account-name' => '',
 
-      // terms.
+      // Terms.
       'webform_submission:values:term' => 'Parent 1 (1)',
       'webform_submission:values:terms' => 'Parent 1 (1), Parent 1: Child 1 (2)',
       'webform_submission:values:term:entity:name' => 'Parent 1',
       'webform_submission:values:terms:entity:name' => 'Parent 1',
       'webform_submission:values:terms:1:entity:name' => 'Parent 1: Child 1',
 
-      // names.
+      // Names.
       'webform_submission:values:name' => 'John Smith',
       'webform_submission:values:names' => '- John Smith
 - Jane Doe',
@@ -81,7 +81,7 @@ class WebformTokenSubmissionValueTest extends WebformTestBase {
       'webform_submission:values:names:1' => 'Jane Doe',
       'webform_submission:values:names:99' => '',
 
-      // contacts
+      // Contacts.
       'webform_submission:values:contact' => 'John Smith
 10 Main Street
 Springfield, Alabama. 12345
@@ -104,7 +104,7 @@ john@example.com',
       'webform_submission:values:contacts:0:email:html' => '<a href="mailto:john@example.com">john@example.com</a>',
       'webform_submission:values:contacts:1:email:raw:html' => 'jane@example.com',
 
-      // submission limits.
+      // Submission limits.
       'webform_submission:limit:webform' => '100',
       'webform_submission:total:webform' => '1',
       'webform_submission:limit:user' => '10',
@@ -114,7 +114,7 @@ john@example.com',
       'webform_submission:limit:user:source_entity' => '5',
       'webform_submission:total:user:source_entity' => '',
 
-      // clear
+      // Clear.
       'webform_submission:values:missing' => '[webform_submission:values:missing]',
       'webform_submission:values:missing:clear' => '',
     ];
@@ -122,7 +122,7 @@ john@example.com',
       $this->assertRaw("<tr><th width=\"50%\">$token</th><td width=\"50%\">$value</td></tr>");
     }
 
-    // containers.
+    // Containers.
     $this->assertRaw('<tr><th width="50%">webform_submission:values:fieldset</th><td width="50%"><pre>fieldset');
     $this->assertRaw('<tr><th width="50%">webform_submission:values:fieldset:html</th><td width="50%"><fieldset class="webform-container webform-container-type-fieldset js-form-item form-item js-form-wrapper form-wrapper" id="test_token_submission_value--fieldset">');
     $this->assertRaw('<tr><th width="50%">webform_submission:values:fieldset:header:html</th><td width="50%"><section id="test_token_submission_value--fieldset" class="js-form-item form-item js-form-wrapper form-wrapper webform-section">');

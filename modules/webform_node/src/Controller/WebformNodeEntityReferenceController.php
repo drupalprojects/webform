@@ -43,7 +43,7 @@ class WebformNodeEntityReferenceController extends ControllerBase implements Con
   }
 
   /**
-   * Set the current webform for a node with with multiple webform attached.
+   * Set the current webform for a node with multiple webform attached.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
@@ -53,6 +53,7 @@ class WebformNodeEntityReferenceController extends ControllerBase implements Con
    *   A webform.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   A redirect to a selected destination or the node's URL.
    */
   public function change(Request $request, NodeInterface $node, WebformInterface $webform) {
     $this->webformEntityReferenceManager->setUserWebformId($node, $webform->id());

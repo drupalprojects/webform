@@ -117,7 +117,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         'title' => $this->t('Add element'),
         'url' => new Url('entity.webform_ui.element', ['webform' => $webform->id()]),
         'attributes' => WebformDialogHelper::getModalDialogAttributes(),
-      ]
+      ],
     ];
     if ($this->elementManager->createInstance('webform_wizard_page')->isEnabled()) {
       $local_actions['add_page'] = [
@@ -126,7 +126,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           'title' => $this->t('Add page'),
           'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
           'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ]
+        ],
       ];
     }
     if ($webform->hasFlexboxLayout()) {
@@ -136,7 +136,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           'title' => $this->t('Add layout'),
           'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
           'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ]
+        ],
       ];
     }
     $form['local_actions'] = [
@@ -254,7 +254,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     $context = [
       '@label' => $webform->label(),
-      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString()
+      'link' => $webform->toLink($this->t('Edit'), 'edit-form')->toString(),
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label elements saved.', $context);
@@ -459,9 +459,9 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       '#type' => 'link',
       '#title' => $element['#admin_title'] ?: $element['#title'],
       '#url' => new Url('entity.webform_ui.element.edit_form', [
-          'webform' => $webform->id(),
-          'key' => $key,
-        ]),
+        'webform' => $webform->id(),
+        'key' => $key,
+      ]),
       '#attributes' => $element_dialog_attributes,
       '#prefix' => !empty($indentation) ? $this->renderer->renderPlain($indentation) : '',
     ];

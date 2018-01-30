@@ -59,7 +59,6 @@ class WebformSettingsAdminTest extends WebformTestBase {
       // Check the updating 'Settings' via the UI did not lose or change any data.
       $this->assertEqual($updated_data, $original_data, 'Updated admin settings via the UI did not lose or change any data');
 
-
       // DEBUG:
       $original_yaml = WebformYaml::tidy(Yaml::encode($original_data));
       $updated_yaml = WebformYaml::tidy(Yaml::encode($updated_data));
@@ -107,6 +106,12 @@ class WebformSettingsAdminTest extends WebformTestBase {
     $this->assertNoRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help">?</a>');
   }
 
+  /**
+   * Sort a nested associative array by key.
+   *
+   * @param array $array
+   *   A nested associative array
+   */
   protected function ksort(array &$array) {
     ksort($array);
     foreach ($array as &$value) {
@@ -115,4 +120,5 @@ class WebformSettingsAdminTest extends WebformTestBase {
       }
     }
   }
+
 }

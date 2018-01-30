@@ -454,7 +454,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#type' => 'container',
       '#states' => [
         'visible' => [
-          ':input[name="autofill"]' => ['checked' => true],
+          ':input[name="autofill"]' => ['checked' => TRUE],
         ],
       ],
     ];

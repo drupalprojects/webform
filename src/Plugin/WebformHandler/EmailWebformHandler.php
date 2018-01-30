@@ -403,7 +403,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
     $has_edit_twig_access = (TwigExtension::hasEditTwigAccess() || $this->configuration['twig']);
 
-      // Message: Body.
+    // Message: Body.
     // Building a custom select other element that toggles between
     // HTML (CKEditor), Plain text (CodeMirror), and Twig (CodeMirror)
     // custom body elements.
@@ -603,8 +603,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#states' => [
         'visible' => [
           ':input[name^="settings[states]"]' => ['checked' => FALSE],
-        ]
-      ]
+        ],
+      ],
     ];
     // Settings: Reply-to.
     $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);

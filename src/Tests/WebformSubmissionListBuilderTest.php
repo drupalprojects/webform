@@ -201,7 +201,7 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
     $webform->setSetting('submission_user_columns', ['element__first_name', 'element__last_name'])
       ->save();
 
-    // Check view own submissions only include first name and last name,
+    // Check view own submissions only include first name and last name.
     $this->drupalget('/webform/' . $webform->id() . '/submissions');
     $this->assertNoRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
     $this->assertNoRaw('<th specifier="created" class="priority-medium">');

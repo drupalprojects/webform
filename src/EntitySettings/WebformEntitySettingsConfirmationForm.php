@@ -80,7 +80,7 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_MESSAGE]],
           'or',
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_MODAL]],
-        ]
+        ],
       ],
     ];
     $form['confirmation_type']['confirmation_type'] = [

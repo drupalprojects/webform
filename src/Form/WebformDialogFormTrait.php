@@ -93,7 +93,6 @@ trait WebformDialogFormTrait {
     // Do nothing.
   }
 
-
   /**
    * Close dialog.
    *

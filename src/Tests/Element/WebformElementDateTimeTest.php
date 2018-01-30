@@ -35,7 +35,7 @@ class WebformElementDateTimeTest extends WebformElementTestBase {
     $now_date = date('D, m/d/Y', strtotime('now'));
     $this->assertRaw('<input data-drupal-selector="edit-datetime-datepicker-timepicker-date" title="Date (e.g. ' . $now_date . ')" type="text" min="Mon, 01/01/1900" max="Sat, 12/31/2050" data-drupal-date-format="D, m/d/Y" id="edit-datetime-datepicker-timepicker-date" name="datetime_datepicker_timepicker[date]" value="Tue, 08/18/2009" size="15" maxlength="128" class="form-text" />');
     $this->assertRaw('<input data-drupal-selector="edit-datetime-datepicker-timepicker-time"');
-    // Skip time which can change during the tests
+    // Skip time which can change during the tests.
     $this->assertRaw('type="text" step="1" data-webform-time-format="g:i A" id="edit-datetime-datepicker-timepicker-time" name="datetime_datepicker_timepicker[time]" value="4:00 PM" size="12" maxlength="128" class="form-text" />');
 
     // Check time with custom min/max/step attributes.

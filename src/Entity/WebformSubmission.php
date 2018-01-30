@@ -193,9 +193,9 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
       ->setSetting('max_length', 255);
 
     $fields['locked'] = BaseFieldDefinition::create('boolean')
-        ->setLabel(t('Locked'))
-        ->setDescription(t('A flag that indicates a locked webform submission.'))
-        ->setDefaultValue(FALSE);
+      ->setLabel(t('Locked'))
+      ->setDescription(t('A flag that indicates a locked webform submission.'))
+      ->setDefaultValue(FALSE);
 
     $fields['sticky'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Sticky'))
@@ -533,7 +533,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
    * {@inheritdoc}
    */
   public function isLocked() {
-    return $this->get('locked')->value ? TRUE: FALSE;
+    return $this->get('locked')->value ? TRUE : FALSE;
   }
 
   /**

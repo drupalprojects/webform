@@ -38,7 +38,7 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
     $definitions = $this->getDefinitions();
 
     $form = parent::buildForm($form, $form_state, $webform);
-    
+
     $form['elements'] = [
       '#type' => 'table',
       '#header' => $this->getHeader(),

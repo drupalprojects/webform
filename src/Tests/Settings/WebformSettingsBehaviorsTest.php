@@ -116,7 +116,6 @@ class WebformSettingsBehaviorsTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_disable_back');
     $this->assertRaw('webform.form.disable_back.js');
 
-
     /**************************************************************************/
     /* Test webform submit back button (test_form_submit_back) */
     /**************************************************************************/
