@@ -63,7 +63,7 @@ webform.help.video:
   defaults:
     _form: '\Drupal\webform\Form\WebformHelpVideoForm'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'access content'
 
 # Add-ons
 
