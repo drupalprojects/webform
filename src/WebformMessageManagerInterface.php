@@ -154,6 +154,11 @@ interface WebformMessageManagerInterface {
   const PREPOPULATE_SOURCE_ENTITY_TYPE = 'prepopulate_source_entity_type';
 
   /**
+   * Autofill.
+   */
+  const AUTOFILL = 'autofill_message';
+
+  /**
    * Set the webform submission used for token replacement.
    *
    * Webform and source entity will also be set using the webform submission.

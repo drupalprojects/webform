@@ -13,29 +13,29 @@ title: 'Test: Form API #states nested elements in a conditional hidden container
 description: 'Test Drupal''s #states for nested elements in a conditional hidden container.'
 category: 'Test: Form API #states'
 elements: |
- visible_trigger:
-  '#type': checkbox
-  '#title': visible_trigger
- visible_fieldset:
-  '#type': fieldset
-  '#title': visible_fieldset
-  '#states':
-    visible:
-      ':input[name="visible_trigger"]':
-        checked: true
-  visible_textfield:
-    '#type': textfield
-    '#title': visible_textfield
-    '#required': true
-  visible_custom_textfield:
-    '#type': textfield
-    '#title': visible_custom_textfield
-    '#states':
-      required:
-        ':input[name="visible_trigger"]':
-          checked: true
-        ':input[name="visible_textfield"]':
-          filled: true
+  visible_trigger:
+   '#type': checkbox
+   '#title': visible_trigger
+  visible_fieldset:
+   '#type': fieldset
+   '#title': visible_fieldset
+   '#states':
+     visible:
+       ':input[name="visible_trigger"]':
+         checked: true
+   visible_textfield:
+     '#type': textfield
+     '#title': visible_textfield
+     '#required': true
+   visible_custom_textfield:
+     '#type': textfield
+     '#title': visible_custom_textfield
+     '#states':
+       required:
+         ':input[name="visible_trigger"]':
+           checked: true
+         ':input[name="visible_textfield"]':
+           filled: true
 css: ''
 javascript: ''
 settings:
@@ -74,6 +74,9 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false

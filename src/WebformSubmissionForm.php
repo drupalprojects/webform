@@ -188,7 +188,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('webform.token_manager'),
       $container->get('webform_submission.conditions_validator'),
       $container->get('webform.entity_reference_manager')
-
     );
   }
 
@@ -230,7 +229,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Get the source entity and allow webform submission to be used as a source
     // entity.
     $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform']);
-    if ($this->sourceEntity == $entity) {
+    if ($this->sourceEntity === $entity) {
       $this->sourceEntity = $this->requestHandler->getCurrentSourceEntity(['webform', 'webform_submission']);
     }
 
@@ -259,6 +258,18 @@ class WebformSubmissionForm extends ContentEntityForm {
           // Else load the most recent draft.
           $entity = $webform_submission_draft;
         }
+      }
+    }
+
+    // Autofill with previous submission.
+    if ($this->operation === 'add' && $entity->isNew() && $webform->getSetting('autofill')) {
+      $account = $entity->getOwner();
+      $options = ['in_draft' => FALSE];
+      $last_submission = $this->storage->getLastSubmission($webform, $source_entity, $account, $options);
+      if ($last_submission) {
+        $excluded_elements = $webform->getSetting('autofill_excluded_elements') ?: [];
+        $last_submission_data = array_diff_key($last_submission->getData(), $excluded_elements);
+        $entity->setData($last_submission_data + $entity->getData());
       }
     }
 
@@ -722,7 +733,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   }
 
   /**
-   * Display draft and previous submission status messages for this webform submission.
+   * Display draft, previous submission, and autofill status messages for this webform submission.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -807,6 +818,11 @@ class WebformSubmissionForm extends ContentEntityForm {
       elseif ($webform_submission->id() != $this->storage->getLastSubmission($webform, $this->sourceEntity, $this->currentUser())->id()) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_PREVIOUS);
       }
+    }
+
+    // Display autofill message.
+    if ($this->operation === 'add' && $webform_submission->isNew() && $webform->getSetting('autofill')) {
+      $this->getMessageManager()->display(WebformMessageManagerInterface::AUTOFILL);
     }
   }
 

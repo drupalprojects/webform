@@ -41,6 +41,7 @@ settings:
   default_submission_exception_message: 'Unable to process this submission. Please contact the site administrator.'
   default_submission_locked_message: 'This submission has been locked.'
   default_submission_log: false
+  default_autofill_message: 'This submission has been autofilled with your previous submission.'
   preview_classes: |
     messages messages--error
     messages messages--warning

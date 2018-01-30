@@ -438,6 +438,43 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     ];
     $form['draft_settings']['draft_container']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
+    // Autofill settings.
+    $form['autofill_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Autofill settings'),
+      '#open' => TRUE,
+    ];
+    $form['autofill_settings']['autofill'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Autofill with previous submission data'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['autofill'],
+    ];
+    $form['autofill_settings']['autofill_container'] = [
+      '#type' => 'container',
+      '#states' => [
+        'visible' => [
+          ':input[name="autofill"]' => ['checked' => true],
+        ],
+      ],
+    ];
+    $form['autofill_settings']['autofill_container']['autofill_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Autofill message'),
+      '#description' => $this->t('A message to be displayed when form is autofilled with previous submission data.'),
+      '#default_value' => $settings['autofill_message'],
+    ];
+    $form['autofill_settings']['autofill_container']['elements'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Autofill elements'),
+      '#open' => $settings['autofill_excluded_elements'] ? TRUE : FALSE,
+    ];
+    $form['autofill_settings']['autofill_container']['elements']['autofill_excluded_elements'] = [
+      '#type' => 'webform_excluded_elements',
+      '#webform_id' => $this->getEntity()->id(),
+      '#default_value' => $settings['autofill_excluded_elements'],
+    ];
+
     return parent::form($form, $form_state);
   }
 

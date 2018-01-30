@@ -152,6 +152,18 @@ webform.webform.*:
         submission_login_message:
           type: text
           label: 'Login message when access denied to submission'
+        autofill:
+          type: boolean
+          label: 'Autofill with previous submission'
+        autofill_message:
+          type: text
+          label: 'Autofill with previous submission message'
+        autofill_excluded_elements:
+          type: sequence
+          label: 'Autofill excluded elements'
+          sequence:
+            type: string
+            label: 'Element key'
         wizard_progress_bar:
           type: boolean
           label: 'Show wizard progress bar'

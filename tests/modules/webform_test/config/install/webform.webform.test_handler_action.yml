@@ -83,6 +83,9 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: 'This is submission was automatically locked.'
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -203,11 +206,11 @@ handlers:
         - updated
       notes: ''
       sticky: true
+      locked: null
       data: ''
       message: 'Submission has been flagged.'
       message_type: status
       debug: true
-      locked: null
   unflag:
     id: action
     label: Unflag
@@ -226,11 +229,11 @@ handlers:
         - updated
       notes: ''
       sticky: false
+      locked: null
       data: ''
       message: 'Submission has been unflagged.'
       message_type: status
       debug: true
-      locked: null
   locked:
     id: action
     label: Locked

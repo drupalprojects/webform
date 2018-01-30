@@ -1939,3 +1939,12 @@ function webform_update_8103() {
   $config->setData($data);
   $config->save();
 }
+
+
+/**
+ * Issue #2940490: Autofill webform with previous submission data.
+ */
+function webform_update_8104() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

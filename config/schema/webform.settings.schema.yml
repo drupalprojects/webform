@@ -117,6 +117,9 @@ webform.settings:
         default_submission_locked_message:
           type: text
           label: 'Default submission locked message'
+        default_autofill_message:
+          type: text
+          label: 'Default submission autofill message'
         form_classes:
           type: string
           label: 'Form CSS classes '
