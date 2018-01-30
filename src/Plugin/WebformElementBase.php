@@ -566,9 +566,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if (!empty($element['#title']) && empty($element['#admin_title'])) {
       $element['#admin_title'] = strip_tags($element['#title']);
     }
-
-    // Replace global tokens which could include the [site:name]
-    $this->replaceTokens($element);
   }
 
   /**
@@ -823,9 +820,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Replace tokens for all element properties.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission) {
     foreach ($element as $key => $value) {
       if (!Element::child($key)) {
         $element[$key] = $this->tokenManager->replace($value, $webform_submission);

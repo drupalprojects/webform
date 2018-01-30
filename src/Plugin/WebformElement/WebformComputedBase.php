@@ -73,9 +73,9 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   /**
    * {@inheritdoc}
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  protected function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission) {
     foreach ($element as $key => $value) {
-      if (!Element::child($key) && !in_array($key, ['#value'])) {
+      if (!Element::child($key) && !in_array($key, ['#markup'])) {
         $element[$key] = $this->tokenManager->replace($value, $webform_submission);
       }
     }
