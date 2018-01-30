@@ -184,9 +184,6 @@ elements: |
       '#type': managed_file
       '#title': 'File upload button'
       '#button': true
-    text_format:
-      '#type': text_format
-      '#title': 'Text format'
     tableselect:
       '#type': tableselect
       '#title': 'Table select'
