@@ -821,7 +821,10 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Display autofill message.
-    if ($this->operation === 'add' && $webform_submission->isNew() && $webform->getSetting('autofill')) {
+    if ($this->isGet()
+      && $this->operation === 'add'
+      && $webform_submission->isNew()
+      && $webform->getSetting('autofill')) {
       $this->getMessageManager()->display(WebformMessageManagerInterface::AUTOFILL);
     }
   }
