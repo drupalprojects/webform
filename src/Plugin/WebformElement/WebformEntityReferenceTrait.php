@@ -583,13 +583,17 @@ trait WebformEntityReferenceTrait {
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::validateConfigurationForm($form, $form_state);
     $values = $form_state->getValues();
+
     if (isset($values['selection_settings']['target_bundles']) && empty($values['selection_settings']['target_bundles'])) {
       unset($values['selection_settings']['target_bundles']);
     }
     if (isset($values['selection_settings']['sort']['field']) && $values['selection_settings']['sort']['field'] == '_none') {
       unset($values['selection_settings']['sort']);
     }
-    // Convert include_anonymous into boolean.
+    // Convert auto_create and include_anonymous into boolean.
+    if (isset($values['selection_settings']['auto_create'])) {
+      $values['selection_settings']['auto_create'] = (bool) $values['selection_settings']['auto_create'];
+    }
     if (isset($values['selection_settings']['include_anonymous'])) {
       $values['selection_settings']['include_anonymous'] = (bool) $values['selection_settings']['include_anonymous'];
     }
