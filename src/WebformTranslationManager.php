@@ -169,7 +169,7 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
         // Unset options and answers that are webform option ids.
         unset($element[$property_key]);
       }
-      elseif ($translatable_property_key === '#element' && $element_type === 'webform_composite') {
+      elseif ($translatable_property_key === '#element' && $element_type === 'webform_custom_composite') {
         foreach ($element[$property_key] as &$composite_element_value) {
           $this->removeUnTranslatablePropertiesFromElement($composite_element_value);
         }
