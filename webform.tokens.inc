@@ -85,6 +85,10 @@ function webform_token_info() {
     'name' => t('Current page'),
     'description' => t('The current (wizard) page of the webform submission.'),
   ];
+  $webform_submission['current-page:title'] = [
+    'name' => t('Current page title'),
+    'description' => t('The current (wizard) page title of the webform submission.'),
+  ];
   $webform_submission['in-draft'] = [
     'name' => t('In draft'),
     'description' => t('Is the webform submission in draft.'),
@@ -413,12 +417,14 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
           break;
 
         case 'current-page':
+        case 'current-page:title':
           $current_page = $webform_submission->current_page->value;
-          if (empty($current_page) && $pages = $webform->getPages()) {
+          $pages = $webform->getPages();
+          if (empty($current_page)) {
             $page_keys = array_keys($pages);
             $current_page = reset($page_keys);
           }
-          $replacements[$original] = $current_page;
+          $replacements[$original] = ($name === 'current-page:title' && isset($pages[$current_page])) ? $pages[$current_page]['#title'] : $current_page;
           break;
 
         case 'language':
