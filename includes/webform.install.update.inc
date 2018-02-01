@@ -1946,3 +1946,11 @@ function webform_update_8104() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2941174 Notice: Undefined index: administer in WebformEntitySettingsAccessForm.
+ */
+function webform_update_8105() {
+  // Re-execute update hook to make sure RC2 installs have the correct config.
+  webform_update_8095();
+}
