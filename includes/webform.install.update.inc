@@ -1954,3 +1954,13 @@ function webform_update_8105() {
   // Re-execute update hook to make sure RC2 installs have the correct config.
   webform_update_8095();
 }
+
+
+/**
+ * Issue #2941297: Contribute dependency not auto enabled.
+ */
+function webform_update_8106() {
+  if (!\Drupal::moduleHandler()->moduleExists('contribute')) {
+    \Drupal::service('module_installer')->install(['contribute']);
+  }
+}
