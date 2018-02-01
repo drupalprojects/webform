@@ -122,6 +122,9 @@ function _webform_update_webform_settings() {
     // Set settings.
     $data['settings'] = $settings;
 
+    // Set access.
+    $data['access'] += Webform::getDefaultAccessRules();
+
     // Save data.
     $webform_config->setData($data)->save();
   }
