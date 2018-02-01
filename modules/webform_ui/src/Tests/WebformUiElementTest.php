@@ -164,15 +164,15 @@ class WebformUiElementTest extends WebformTestBase {
     // Check change element types.
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/change');
     $this->assertRaw(t('Hidden'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=hidden" class="button button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-elements-hidden-operation" id="edit-elements-hidden-operation">Change</a>');
+    $this->assertCssSelect('a[href$="admin/structure/webform/manage/contact/element/test/edit?type=hidden"][data-dialog-type][data-dialog-options][data-drupal-selector="edit-elements-hidden-operation"]');
     $this->assertRaw(t('value'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=value" class="button button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-elements-value-operation" id="edit-elements-value-operation">Change</a>');
+    $this->assertCssSelect('a[href$="admin/structure/webform/manage/contact/element/test/edit?type=value"][data-dialog-type][data-dialog-options][data-drupal-selector="edit-elements-value-operation"]');
     $this->assertRaw(t('Search'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=search" class="button button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-elements-search-operation" id="edit-elements-search-operation">Change</a>');
+    $this->assertCssSelect('a[href$="admin/structure/webform/manage/contact/element/test/edit?type=search"][data-dialog-type][data-dialog-options][data-drupal-selector="edit-elements-search-operation"]');
     $this->assertRaw(t('Telephone'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=tel" class="button button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-elements-tel-operation" id="edit-elements-tel-operation">Change</a>');
+    $this->assertCssSelect('a[href$="admin/structure/webform/manage/contact/element/test/edit?type=tel"][data-dialog-type][data-dialog-options][data-drupal-selector="edit-elements-tel-operation"]');
     $this->assertRaw(t('URL'));
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit?type=url" class="button button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-elements-url-operation" id="edit-elements-url-operation">Change</a>');
+    $this->assertCssSelect('a[href$="admin/structure/webform/manage/contact/element/test/edit?type=url"][data-dialog-type][data-dialog-options][data-drupal-selector="edit-elements-url-operation"]');
 
     // Check change element type.
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/edit', ['query' => ['type' => 'value']]);

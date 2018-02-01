@@ -40,7 +40,7 @@ elements: |
     '#title': webform_computed_twig_auto
     '#display_on': view
     '#value': |
-      <b class="webform_computed_twig_auto">number:</b> {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}<br />
+      <b class="webform_computed_twig_auto">number:</b> {{ (webform_token('[webform_submission:values:number:clear]', webform_submission) ?: 0) }} * 2 = {{ (webform_token('[webform_submission:values:number:clear]', webform_submission) ?: 0) * 2 }}<br />
       <b class="webform_computed_twig_auto">simple string:</b> {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}<br />
       <b class="webform_computed_twig_auto">complex string:</b> {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}<br />
       <b class="webform_computed_twig_auto">text_format:</b> {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}<br />
@@ -51,7 +51,7 @@ elements: |
     '#mode': html
     '#display_on': view
     '#value': |
-      <b class="webform_computed_twig_html">number:</b> {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}<br />
+      <b class="webform_computed_twig_html">number:</b> {{ (webform_token('[webform_submission:values:number:clear]', webform_submission) ?: 0) }} * 2 = {{ (webform_token('[webform_submission:values:number:clear]', webform_submission) ?: 0) * 2 }}<br />
       <b class="webform_computed_twig_html">simple string:</b> {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}<br />
       <b class="webform_computed_twig_html">complex string:</b> {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}<br />
       <b class="webform_computed_twig_html">text_format:</b> {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}<br />
@@ -62,7 +62,7 @@ elements: |
     '#mode': text
     '#display_on': view
     '#value': |
-      number: {{ webform_token('[webform_submission:values:number]', webform_submission) }} * 2 = {{ webform_token('[webform_submission:values:number]', webform_submission) * 2 }}
+      number: {{ (webform_token('[webform_submission:values:number:clear]', webform_submission) ?: 0) }} * 2 = {{ (webform_token('[webform_submission:values:number:clear]', webform_submission) ?: 0) * 2 }}
       simple string: {{ webform_token('[webform_submission:values:simple_string]', webform_submission) }}
       complex string: {{ webform_token('[webform_submission:values:complex_string]', webform_submission) }}
       text_format: {{ webform_token('[webform_submission:values:text_format]', webform_submission) }}

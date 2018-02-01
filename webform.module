@@ -743,7 +743,7 @@ function _webform_entity_element_validate_rendering_error_handler($error_level, 
     throw new ErrorException($message, $error_level, 0, $filename, $line);
   }
   else {
-    _drupal_error_handler($message, $message, $filename, $line, $context);
+    _drupal_error_handler($error_level, $message, $filename, $line, $context);
   }
 }
 

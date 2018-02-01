@@ -5,6 +5,10 @@ namespace Drupal\webform\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\file\Element\ManagedFile;
 
+// As we do not force dependency on the core file module, we do this If
+// statement. So if File module is enabled, we use it, otherwise we fallback on
+// useless dummy implementation just to keep PHP interpreter happy about
+// inheriting an existing class.
 if (class_exists('\Drupal\file\Element\ManagedFile')) {
 
   /**
