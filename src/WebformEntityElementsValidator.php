@@ -2,11 +2,15 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Url;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
@@ -51,6 +55,41 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
    * @var array
    */
   protected $originalElements;
+
+  /**
+   * The 'renderer' service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * The 'plugin.manager.webform.element' service.
+   *
+   * @var \Drupal\webform\Plugin\WebformElementManagerInterface
+   */
+  protected $elementManager;
+
+  /**
+   * The 'entity_type.manager' service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The 'form_builder' service.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  public function __construct(RendererInterface $renderer, WebformElementManagerInterface $webform_element_manager, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder) {
+    $this->renderer = $renderer;
+    $this->elementManager = $webform_element_manager;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->formBuilder = $form_builder;
+  }
 
   /**
    * {@inheritdoc}
@@ -274,7 +313,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
             '#items' => $items,
           ],
         ];
-        $messages[] = \Drupal::service('renderer')->renderPlain($build);
+        $messages[] = $this->renderer->renderPlain($build);
       }
       return $messages;
     }
@@ -312,11 +351,9 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     $elements = $this->webform->getElementsInitializedAndFlattened();
     $messages = [];
     foreach ($elements as $key => $element) {
-      /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
-      $element_manager = \Drupal::service('plugin.manager.webform.element');
-      $plugin_id = $element_manager->getElementPluginId($element);
+      $plugin_id = $this->elementManager->getElementPluginId($element);
       /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
-      $webform_element = $element_manager->createInstance($plugin_id, $element);
+      $webform_element = $this->elementManager->createInstance($plugin_id, $element);
 
       $t_args = [
         '%title' => (!empty($element['#title'])) ? $element['#title'] : $key,
@@ -350,20 +387,15 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     set_error_handler('_webform_entity_element_validate_rendering_error_handler');
     set_exception_handler('_webform_entity_element_validate_rendering_exception_handler');
     try {
-      /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
-      $entity_type_manager = \Drupal::service('entity_type.manager');
-      /** @var \Drupal\Core\Form\FormBuilderInterface $form_builder */
-      $form_builder = \Drupal::service('form_builder');
-
       /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-      $webform_submission = $entity_type_manager
+      $webform_submission = $this->entityTypeManager
         ->getStorage('webform_submission')
         ->create(['webform' => $this->webform]);
 
-      $form_object = $entity_type_manager->getFormObject('webform_submission', 'add');
+      $form_object = $this->entityTypeManager->getFormObject('webform_submission', 'add');
       $form_object->setEntity($webform_submission);
       $form_state = (new FormState())->setFormState([]);
-      $form_builder->buildForm($form_object, $form_state);
+      $this->formBuilder->buildForm($form_object, $form_state);
       $message = NULL;
     }
     // PHP 7 introduces Throwable, which covers both Error and
@@ -389,7 +421,7 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
           '#items' => [$message],
         ],
       ];
-      return \Drupal::service('renderer')->renderPlain($build);
+      return $this->renderer->renderPlain($build);
     }
 
     return $message;

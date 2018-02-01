@@ -32,7 +32,7 @@ class WebformEntityElementsValidationTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->validator = new WebformEntityElementsValidator();
+    $this->validator = \Drupal::service('webform.elements_validator');
   }
 
   /**
