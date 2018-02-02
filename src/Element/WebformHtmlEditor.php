@@ -41,10 +41,8 @@ class WebformHtmlEditor extends FormElement {
    * {@inheritdoc}
    */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
+    $element += ['#default_value' => ''];
     if ($input === FALSE) {
-      if (!isset($element['#default_value'])) {
-        $element['#default_value'] = '';
-      }
       return [
         'value' => $element['#default_value'],
       ];
@@ -71,11 +69,20 @@ class WebformHtmlEditor extends FormElement {
   public static function preRenderWebformHtmlEditor(array $element) {
     $element['#tree'] = TRUE;
 
+    // Define value element.
+    $element += ['value' => []];
+
+    // Set value element title and hide it.
     $element['value']['#title'] = $element['#title'];
     $element['value']['#title_display'] = 'invisible';
+
+    // Set value element required.
     if (isset($element['#required'])) {
       $element['value']['#required'] = $element['#required'];
     }
+
+    // Set value element default value.
+    $element['value']['#default_value'] = $element['#default_value'];
 
     // If HTML disabled and no #format is specified return simple CodeMirror
     // HTML editor.
@@ -84,7 +91,6 @@ class WebformHtmlEditor extends FormElement {
       $element['value'] += [
         '#type' => 'webform_codemirror',
         '#mode' => 'html',
-        '#value' => empty($element['#value']) ? NULL : $element['#value']['value'],
       ];
       return $element;
     }
@@ -97,7 +103,6 @@ class WebformHtmlEditor extends FormElement {
         '#type' => 'text_format',
         '#format' => $format,
         '#allowed_formats' => [$format],
-        '#value' => empty($element['#value']) ? NULL : $element['#value']['value'],
       ];
       WebformElementHelper::fixStatesWrapper($element);
       return $element;
@@ -107,7 +112,6 @@ class WebformHtmlEditor extends FormElement {
     $element['value'] += [
       '#type' => 'textarea',
       '#attributes' => ['class' => ['js-html-editor']],
-      '#value' => empty($element['#value']) ? NULL : $element['#value']['value'],
     ];
 
     $element['#attached']['library'][] = 'webform/webform.element.html_editor';

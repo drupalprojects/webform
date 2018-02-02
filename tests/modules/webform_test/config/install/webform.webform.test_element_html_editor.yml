@@ -16,20 +16,24 @@ elements: |
   webform_html_editor:
     '#type': webform_html_editor
     '#title': 'webform_html_editor (default)'
+    '#required': true
     '#default_value': 'Hello <b>World!!!</b>'
   webform_html_editor_disable:
     '#type': webform_html_editor
     '#title': 'webform_html_editor (disable)'
     '#default_value': 'Hello <b>World!!!</b>'
+    '#required': true
     '#disable': true
   webform_html_editor_format:
     '#type': webform_html_editor
     '#title': 'webform_html_editor (format)'
+    '#required': true
     '#default_value': 'Hello <b>World!!!</b>'
     '#format': 'basic_html'
   webform_html_editor_codemirror:
     '#type': webform_html_editor
     '#title': 'webform_html_editor_codemirror (none)'
+    '#required': true
     '#default_value': 'Hello <b>World!!!</b>'
     '#format': false
 css: ''
