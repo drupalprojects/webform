@@ -36,13 +36,10 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    $max_filesize = \Drupal::config('webform.settings')->get('file.default_max_filesize') ?: file_upload_max_size();
-    $max_filesize = Bytes::toInt($max_filesize);
-    $max_filesize = ($max_filesize / 1024 / 1024);
     $file_extensions = $this->getFileExtensions();
     $properties = parent::getDefaultProperties() + [
       'multiple' => FALSE,
-      'max_filesize' => $max_filesize,
+      'max_filesize' => '',
       'file_extensions' => $file_extensions,
       'uri_scheme' => 'private',
       'sanitize' => FALSE,
@@ -624,12 +621,17 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       ];
     }
 
+    $max_filesize = \Drupal::config('webform.settings')->get('file.default_max_filesize') ?: file_upload_max_size();
+    $max_filesize = Bytes::toInt($max_filesize);
+    $max_filesize = ($max_filesize / 1024 / 1024);
     $form['file']['max_filesize'] = [
       '#type' => 'number',
       '#title' => $this->t('Maximum file size'),
-      '#field_suffix' => $this->t('MB'),
+      '#field_suffix' => $this->t('MB (Max: @filesize MB)', ['@filesize' => $max_filesize]),
+      '#placeholder' => $max_filesize,
       '#description' => $this->t('Enter the max file size a user may upload.'),
       '#min' => 1,
+      '#max' => $max_filesize,
     ];
     $form['file']['file_extensions'] = [
       '#type' => 'textfield',
