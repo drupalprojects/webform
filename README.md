@@ -75,29 +75,12 @@ notes and assume that _things will be changing_.
 ### Project Status
 
 - [Webform Project Board](https://contribkanban.com/board/webform/8.x-5.x)
-- [Webform 4.x features currently missing from the Webform module](https://www.drupal.org/node/2807571)
 
 
 ### Similar Modules
-
 
 - **[Comparison of Webform Building Modules](https://www.drupal.org/node/2083353)**  
   Drupal has a lot of modules aimed at helping site builders and users add webforms 
   to their sites. The [Comparison of Webform Building Modules](https://www.drupal.org/node/2083353) 
   page includes rough comparisons of three of them for Drupal 8 and five of them
   for Drupal 7. 
-
----
-
-- **[Contact](https://www.drupal.org/documentation/modules/contact) + 
-  [Contact Storage](https://www.drupal.org/project/contact_storage)**    
-  The Contact module allows site visitors to send emails to other authenticated 
-  users and to the site administrator. The Contact Storage module provides 
-  storage for Contact messages which are fully-fledged entities in Drupal 8.
-  Many of its features are likely to be moved into Drupal Core.
-
-- **[Eform](https://www.drupal.org/project/eform)**  
-  The EForm module enables you to create front-end webforms (fieldable entities), 
-  which contain fields that you define! These webforms use the standard Drupal 
-  fields.  
-  [Is this module still needed?](https://www.drupal.org/node/2809179)
