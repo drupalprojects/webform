@@ -335,6 +335,12 @@ webform.element.buttons.checkboxradio:
   dependencies:
     - core/jquery.ui.checkboxradio
 
+webform.element.checkbox_value:
+  version: VERSION
+  css:
+    component:
+      css/webform.element.checkbox_value.css: {}
+
 webform.element.chosen:
   version: VERSION
   js:

@@ -116,9 +116,10 @@ abstract class TextBase extends WebformElementBase {
 
     // Pattern.
     $form['validation']['pattern'] = [
-      '#type' => 'textfield',
+      '#type' => 'webform_checkbox_value',
       '#title' => $this->t('Pattern'),
       '#description' => $this->t('A <a href=":href">regular expression</a> that the element\'s value is checked against.', [':href' => 'http://www.w3schools.com/js/js_regexp.asp']),
+      '#value__title' => $this->t('Pattern regular expression'),
     ];
 
     // Counter.
