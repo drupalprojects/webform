@@ -1955,7 +1955,6 @@ function webform_update_8105() {
   webform_update_8095();
 }
 
-
 /**
  * Issue #2941297: Contribute dependency not auto enabled.
  */
