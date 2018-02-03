@@ -64,7 +64,10 @@ abstract class ContainerBase extends WebformElementBase {
     // Containers can only hide (aka invisible) the title by removing the
     // #title attribute.
     // @see core/modules/system/templates/fieldset.html.twig
-    if (isset($element['#title_display']) && $element['#title_display'] === 'invisible') {
+    // @see core/modules/system/templates/details.html.twig
+    if (isset($element['#title_display'])
+      && $element['#title_display'] === 'invisible'
+      && ($this instanceof Fieldset || $this instanceof Details)) {
       unset($element['#title']);
     }
   }
