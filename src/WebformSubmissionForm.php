@@ -562,6 +562,11 @@ class WebformSubmissionForm extends ContentEntityForm {
       $form['#attributes']['novalidate'] = 'novalidate';
     }
 
+    // Inline form errors: Add  #disable_inline_form_errors property to form.
+    if ($this->getWebformSetting('form_disable_inline_errors')) {
+      $form['#disable_inline_form_errors'] = TRUE;
+    }
+
     // Details toggle: Display collapse/expand all details link.
     if ($this->getWebformSetting('form_details_toggle')) {
       $form['#attributes']['class'][] = 'js-webform-details-toggle';

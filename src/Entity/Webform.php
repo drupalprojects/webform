@@ -836,6 +836,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'form_reset' => FALSE,
       'form_disable_autocomplete' => FALSE,
       'form_novalidate' => FALSE,
+      'form_disable_inline_errors' => FALSE,
       'form_required' => FALSE,
       'form_unsaved' => FALSE,
       'form_disable_back' => FALSE,

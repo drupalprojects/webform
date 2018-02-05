@@ -57,6 +57,8 @@ settings:
   form_reset: false
   form_disable_autocomplete: false
   form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
   form_unsaved: false
   form_disable_back: false
   form_submit_back: false
@@ -70,6 +72,10 @@ settings:
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
+  submission_locked_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
@@ -147,6 +153,10 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
 handlers:
   tomorrow:
     id: scheduled_email
@@ -184,6 +194,7 @@ handlers:
       send: '[webform_submission:completed:html_date]'
       days: 1
       unschedule: false
+      twig: false
   yesterday:
     id: scheduled_email
     label: Yesterday
@@ -220,6 +231,7 @@ handlers:
       send: '[webform_submission:completed:html_date]'
       days: -1
       unschedule: false
+      twig: false
   last_year:
     id: scheduled_email
     label: 'Last year'
@@ -256,6 +268,7 @@ handlers:
       send: '2016-01-01'
       days: 0
       unschedule: false
+      twig: false
   broken:
     id: scheduled_email
     label: Broken
@@ -292,6 +305,7 @@ handlers:
       send: '[broken]'
       days: 0
       unschedule: false
+      twig: false
   other:
     id: scheduled_email
     label: Other
@@ -330,6 +344,7 @@ handlers:
       send: '[webform_submission:values:date:html_date]'
       days: 14
       unschedule: false
+      twig: false
   draft_reminder:
     id: scheduled_email
     label: 'Draft reminder'
@@ -366,3 +381,4 @@ handlers:
       send: '[date:html_date]'
       days: 14
       unschedule: true
+      twig: false

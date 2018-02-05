@@ -24,6 +24,7 @@ class WebformSettingsBehaviorsTest extends WebformTestBase {
     'test_form_unsaved',
     'test_form_disable_autocomplete',
     'test_form_novalidate',
+    'test_form_disable_inline_errors',
     'test_form_required',
     'test_form_autofocus',
     'test_form_details_toggle',
@@ -320,6 +321,71 @@ class WebformSettingsBehaviorsTest extends WebformTestBase {
     // Check webform does not hav .webform-details-toggle class.
     $this->drupalGet('webform/test_form_details_toggle');
     $this->assertNoCssSelect('webform.webform-details-toggle', t('Webform does not have the .webform-details-toggle class.'));
+
+    /**************************************************************************/
+    /* Test webform disable inline form errors  (test_form_disable_inline_errors) */
+    /**************************************************************************/
+
+    $webform_form_inline_errors = Webform::load('test_form_disable_inline_errors');
+    if (floatval(\Drupal::VERSION) >= 8.5) {
+      // Check that error message is displayed at the top of the page.
+      $this->postSubmission($webform_form_inline_errors);
+      $this->assertPattern('#<h2 class="visually-hidden">Error message</h2>\s+textfield field is required.#m');
+
+      // Enable the inline form errors module.
+      \Drupal::service('module_installer')->install(['inline_form_errors']);
+
+      // Check that error message is still displayed at the top of the page.
+      $this->postSubmission($webform_form_inline_errors);
+      $this->assertPattern('#<h2 class="visually-hidden">Error message</h2>\s+textfield field is required.#m');
+
+      // Allow inline error message for this form.
+      $webform_form_inline_errors->setSetting('form_disable_inline_errors', FALSE);
+      $webform_form_inline_errors->save();
+
+      // Check that error message is not displayed at the top of the page.
+      $this->postSubmission($webform_form_inline_errors);
+      $this->assertNoPattern('#<h2 class="visually-hidden">Error message</h2>\s+textfield field is required.#m');
+
+      // Check that error message is displayed inline.
+      $this->assertRaw('1 error has been found: <div class="item-list--comma-list item-list"><ul class="item-list__comma-list"><li><a href="#edit-textfield">textfield</a></li></ul>');
+      $this->assertRaw('<strong>textfield field is required.</strong>');
+
+      // Check disable inline errors checkbox is enabled.
+      $this->drupalGet('admin/structure/webform/manage/test_form_disable_inline_errors/settings/form');
+      $this->assertRaw('<input data-drupal-selector="edit-form-disable-inline-errors" aria-describedby="edit-form-disable-inline-errors--description" type="checkbox" id="edit-form-disable-inline-errors" name="form_disable_inline_errors" value class="form-checkbox" />');
+      $this->assertRaw('If checked, <a href="https://www.drupal.org/docs/8/core/modules/inline-form-errors/inline-form-errors-module-overview">inline form errors</a> will be disabled for this form.');
+
+      // Enable default (global) disable inline form errors on all webforms.
+      \Drupal::configFactory()->getEditable('webform.settings')
+        ->set('settings.default_form_disable_inline_errors', TRUE)
+        ->save();
+
+      // Check novalidate checkbox is disabled.
+      $this->drupalGet('admin/structure/webform/manage/test_form_disable_inline_errors/settings/form');
+      $this->assertRaw('<input data-drupal-selector="edit-form-disable-inline-errors-disabled" aria-describedby="edit-form-disable-inline-errors-disabled--description" disabled="disabled" type="checkbox" id="edit-form-disable-inline-errors-disabled" name="form_disable_inline_errors_disabled" value="1" checked="checked" class="form-checkbox" />');
+      $this->assertRaw('Inline form errors is disabled for all forms.');
+
+      // Check that error message is not displayed inline.
+      $this->assertNoRaw('1 error has been found: <div class="item-list--comma-list item-list"><ul class="item-list__comma-list"><li><a href="#edit-textfield">textfield</a></li></ul>');
+      $this->assertNoRaw('<strong>textfield field is required.</strong>');
+    }
+    else {
+      // Check that error message is displayed at the top of the page.
+      $this->postSubmission($webform_form_inline_errors);
+      $this->assertPattern('#<h2 class="visually-hidden">Error message</h2>\s+textfield field is required.#m');
+
+      // Enable the inline form errors module.
+      \Drupal::service('module_installer')->install(['inline_form_errors']);
+
+      // Check that error message is NOT displayed at the top of the page.
+      $this->postSubmission($webform_form_inline_errors);
+      $this->assertNoPattern('#<h2 class="visually-hidden">Error message</h2>\s+textfield field is required.#m');
+
+      // Check that disable inline form errors is not visible in < 8.4.x.
+      $this->drupalGet('admin/structure/webform/config');
+      $this->assertNoRaw('Disable inline form errors for all webforms');
+    }
   }
 
 }

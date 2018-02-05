@@ -1,11 +1,11 @@
 langcode: en
 status: true
 dependencies:
-  module:
-    - menu_ui
   enforced:
     module:
       - webform_demo_event_registration
+  module:
+    - menu_ui
 third_party_settings:
   menu_ui:
     available_menus:

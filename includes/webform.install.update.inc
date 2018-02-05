@@ -1963,3 +1963,11 @@ function webform_update_8106() {
     \Drupal::service('module_installer')->install(['contribute']);
   }
 }
+
+/**
+ * Issue #2934970: Fully support for inline error form.
+ */
+function webform_update_8107() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}

@@ -12,6 +12,7 @@ settings:
   default_form_submit_back: false
   default_form_unsaved: false
   default_form_novalidate: false
+  default_form_disable_inline_errors: false
   default_form_required: false
   default_form_required_label: 'Indicates required field'
   default_form_details_toggle: true

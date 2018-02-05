@@ -109,6 +109,9 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
           '#type' => 'value',
           '#value' => $settings[$behavior_key],
         ];
+        if (isset($behavior_element['access'])) {
+          $element[$behavior_key . '_disabled']['#access'] = $behavior_element['access'];
+        }
       }
       else {
         $element[$behavior_key] = [
@@ -119,6 +122,9 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
           '#default_value' => $settings[$behavior_key],
           '#weight' => $weight,
         ];
+        if (isset($behavior_element['access'])) {
+          $element[$behavior_key]['#access'] = $behavior_element['access'];
+        }
       }
       $weight += 10;
     }

@@ -170,76 +170,13 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
     // Form behaviors.
-    $behavior_elements = [
-      // Global behaviors.
-      // @see \Drupal\webform\Form\WebformAdminSettingsForm
-      'form_submit_once' => [
-        'title' => $this->t('Prevent duplicate submissions'),
-        'all_description' => $this->t('Submit button is disabled immediately after it is clicked for all forms.'),
-        'form_description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
-      ],
-      'form_disable_back' => [
-        'title' => $this->t('Disable back button'),
-        'all_description' => $this->t('Back button is disabled for all forms.'),
-        'form_description' => $this->t("If checked, users will not be allowed to navigate back to the form using the browser's back button."),
-      ],
-      'form_submit_back' => [
-        'title' => $this->t('Submit previous page when browser back button is clicked'),
-        'all_description' => $this->t('Browser back button submits the previous page for all forms.'),
-        'form_description' => $this->t("If checked, the browser back button will submit the previous page and navigate back emulating the behaviour of user clicking a wizard or preview page's back button."),
-      ],
-      'form_unsaved' => [
-        'title' => $this->t('Warn users about unsaved changes'),
-        'all_description' => $this->t('Unsaved warning is enabled for all forms.'),
-        'form_description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a form with unsaved changes.'),
-      ],
-      'form_novalidate' => [
-        'title' => $this->t('Disable client-side validation'),
-        'all_description' => $this->t('Client-side validation is disabled for all forms.'),
-        'form_description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to this form.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
-      ],
-      'form_required' => [
-        'title' => $this->t('Display required indicator'),
-        'all_description' => $this->t('Required indicator is displayed on all forms.'),
-        'form_description' => $this->t('If checked, a required elements indicator will be added to this webform.'),
-      ],
-      'form_details_toggle' => [
-        'title' => $this->t('Display collapse/expand all details link'),
-        'all_description' => $this->t('Expand/collapse all (details) link is automatically added to all forms.'),
-        'form_description' => $this->t('If checked, an expand/collapse all (details) link will be added to this webform when there are two or more details elements available on the webform.'),
-      ],
-      // Form specific behaviors.
-      'form_reset' => [
-        'title' => $this->t('Display reset button'),
-        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards."),
-      ],
-      'form_disable_autocomplete' => [
-        'title' => $this->t('Disable autocompletion'),
-        'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),
-      ],
-      'form_autofocus' => [
-        'title' => $this->t('Autofocus the first element'),
-        'form_description' => $this->t('If checked, the first visible and enabled form element will be focused when adding a new submission.'),
-      ],
-      'form_prepopulate' => [
-        'title' => $this->t('Allow all elements to be populated using query string parameters'),
-        'form_description' => $this->t("If checked, all elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would set the 'name' element's default value to 'John Smith'. Please note that individual elements can also have prepopulation enabled."),
-      ],
-      'form_prepopulate_source_entity' => [
-        'title' => $this->t('Allow source entity to be populated using query string parameters'),
-        'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=node&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to 'node:1'."),
-      ],
-      'form_prepopulate_source_entity_required' => [
-        'title' => $this->t('Require source entity to be populated using query string parameters'),
-        'form_description' => $this->t("If checked, source entity must be populated using query string parameters."),
-      ],
-    ];
     $form['form_behaviors'] = [
       '#type' => 'details',
       '#title' => $this->t('Form behaviors'),
       '#open' => TRUE,
     ];
-    $this->appendBehaviors($form['form_behaviors'], $behavior_elements, $settings, $default_settings);
+    $form_behaviors = $this->getFormBehaviors();
+    $this->appendBehaviors($form['form_behaviors'], $form_behaviors, $settings, $default_settings);
     $form['form_behaviors']['form_prepopulate_source_entity_required']['#states'] = [
       'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
     ];
@@ -548,12 +485,13 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       $values['close']
     );
 
-    // Remove disabled properties.
-    unset(
-      $values['form_novalidate_disabled'],
-      $values['form_unsaved_disabled'],
-      $values['form_details_toggle_disabled']
-    );
+    // Remove *_disabled form behavior properties.
+    $form_behaviors = $this->getFormBehaviors();
+    foreach ($form_behaviors as $form_behavior_key => $form_behavior_element) {
+      if (isset($form_behavior_element['all_description'])) {
+        unset($values[$form_behavior_key . '_disabled']);
+      }
+    }
 
     // Set settings.
     $webform->setSettings($values);
@@ -561,4 +499,82 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     parent::save($form, $form_state);
   }
 
+  /**
+   * Get form behaviors.
+   *
+   * @return array
+   *   An associative array containing form behaviors.
+   */
+  protected function getFormBehaviors() {
+    return [
+      // Global behaviors.
+      // @see \Drupal\webform\Form\WebformAdminSettingsForm
+      'form_submit_once' => [
+        'title' => $this->t('Prevent duplicate submissions'),
+        'all_description' => $this->t('Submit button is disabled immediately after it is clicked for all forms.'),
+        'form_description' => $this->t('If checked, the submit button will be disabled immediately after it is clicked.'),
+      ],
+      'form_disable_back' => [
+        'title' => $this->t('Disable back button'),
+        'all_description' => $this->t('Back button is disabled for all forms.'),
+        'form_description' => $this->t("If checked, users will not be allowed to navigate back to the form using the browser's back button."),
+      ],
+      'form_submit_back' => [
+        'title' => $this->t('Submit previous page when browser back button is clicked'),
+        'all_description' => $this->t('Browser back button submits the previous page for all forms.'),
+        'form_description' => $this->t("If checked, the browser back button will submit the previous page and navigate back emulating the behaviour of user clicking a wizard or preview page's back button."),
+      ],
+      'form_unsaved' => [
+        'title' => $this->t('Warn users about unsaved changes'),
+        'all_description' => $this->t('Unsaved warning is enabled for all forms.'),
+        'form_description' => $this->t('If checked, users will be displayed a warning message when they navigate away from a form with unsaved changes.'),
+      ],
+      'form_novalidate' => [
+        'title' => $this->t('Disable client-side validation'),
+        'all_description' => $this->t('Client-side validation is disabled for all forms.'),
+        'form_description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to this form.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
+      ],
+      'form_disable_inline_errors' => [
+        'title' => $this->t('Disable inline form errors'),
+        'all_description' => $this->t('Inline form errors is disabled for all forms.'),
+        'form_description' => $this->t('If checked, <a href=":href">inline form errors</a> will be disabled for this form.', [':href' => 'https://www.drupal.org/docs/8/core/modules/inline-form-errors/inline-form-errors-module-overview']),
+        'access' => (\Drupal::moduleHandler()->moduleExists('inline_form_errors') && floatval(\Drupal::VERSION) >= 8.5),
+      ],
+      'form_required' => [
+        'title' => $this->t('Display required indicator'),
+        'all_description' => $this->t('Required indicator is displayed on all forms.'),
+        'form_description' => $this->t('If checked, a required elements indicator will be added to this webform.'),
+      ],
+      'form_details_toggle' => [
+        'title' => $this->t('Display collapse/expand all details link'),
+        'all_description' => $this->t('Expand/collapse all (details) link is automatically added to all forms.'),
+        'form_description' => $this->t('If checked, an expand/collapse all (details) link will be added to this webform when there are two or more details elements available on the webform.'),
+      ],
+      // Form specific behaviors.
+      'form_reset' => [
+        'title' => $this->t('Display reset button'),
+        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards."),
+      ],
+      'form_disable_autocomplete' => [
+        'title' => $this->t('Disable autocompletion'),
+        'form_description' => $this->t('If checked, the <a href=":href">autocomplete</a> attribute will be set to off, which disables autocompletion for all form elements.', [':href' => 'http://www.w3schools.com/tags/att_form_autocomplete.asp']),
+      ],
+      'form_autofocus' => [
+        'title' => $this->t('Autofocus the first element'),
+        'form_description' => $this->t('If checked, the first visible and enabled form element will be focused when adding a new submission.'),
+      ],
+      'form_prepopulate' => [
+        'title' => $this->t('Allow all elements to be populated using query string parameters'),
+        'form_description' => $this->t("If checked, all elements can be populated using query string parameters. For example, appending ?name=John+Smith to a webform's URL would set the 'name' element's default value to 'John Smith'. Please note that individual elements can also have prepopulation enabled."),
+      ],
+      'form_prepopulate_source_entity' => [
+        'title' => $this->t('Allow source entity to be populated using query string parameters'),
+        'form_description' => $this->t("If checked, source entity can be populated using query string parameters. For example, appending ?source_entity_type=node&source_entity_id=1 to a webform's URL would set a submission's 'Submitted to' value to 'node:1'."),
+      ],
+      'form_prepopulate_source_entity_required' => [
+        'title' => $this->t('Require source entity to be populated using query string parameters'),
+        'form_description' => $this->t("If checked, source entity must be populated using query string parameters."),
+      ],
+    ];
+  }
 }

@@ -122,6 +122,7 @@ settings:
   form_reset: false
   form_disable_autocomplete: false
   form_novalidate: false
+  form_disable_inline_errors: false
   form_required: false
   form_unsaved: false
   form_disable_back: false
@@ -214,10 +215,6 @@ access:
     users: {  }
     permissions: {  }
   delete_own:
-    roles: {  }
-    users: {  }
-    permissions: {  }
-  administer:
     roles: {  }
     users: {  }
     permissions: {  }

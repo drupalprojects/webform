@@ -36,6 +36,9 @@ webform.settings:
         default_form_novalidate:
           type: boolean
           label: 'Disable client-side validation'
+        default_form_disable_inline_errors:
+          type: boolean
+          label: 'Disable inline form errors'
         default_form_required:
           type: boolean
           label: 'Display required indicator'

@@ -110,6 +110,9 @@ webform.webform.*:
         form_novalidate:
           type: boolean
           label: 'Disable client-side validation'
+        form_disable_inline_errors:
+          type: boolean
+          label: 'Disable inline form errors'
         form_required:
           type: boolean
           label: 'Display required indicator'
