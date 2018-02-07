@@ -332,7 +332,6 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['draft_settings']['default_draft_saved_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default draft save message'),
-      '#required' => TRUE,
       '#default_value' => $settings['default_draft_saved_message'],
     ];
     $form['draft_settings']['default_draft_loaded_message'] = [
