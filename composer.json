@@ -10,6 +10,11 @@
       "name": "Jacob Rockowitz (jrockowitz)",
       "homepage": "https://www.drupal.org/u/jrockowitz",
       "role": "Maintainer"
+    },
+    {
+      "name": "Alexander Trotsenko (bucefal91)",
+      "homepage": "https://www.drupal.org/u/bucefal91",
+      "role": "Co-maintainer"
     }
   ],
   "support": {
