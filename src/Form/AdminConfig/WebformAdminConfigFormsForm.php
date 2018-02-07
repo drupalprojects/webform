@@ -338,7 +338,6 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['draft_settings']['default_draft_loaded_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default draft load message'),
-      '#required' => TRUE,
       '#default_value' => $settings['default_draft_loaded_message'],
     ];
     $form['draft_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
