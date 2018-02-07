@@ -7,13 +7,13 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url as UrlGenerator;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\Link;
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\Component\Utility\Bytes;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class webform 'managed_file' elements.
@@ -33,6 +33,101 @@ abstract class WebformManagedFileBase extends WebformElementBase {
   ];
 
   /**
+   * The 'file_system' service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * The 'file.usage' service.
+   *
+   * @var \Drupal\file\FileUsage\FileUsageInterface
+   */
+  protected $fileUsage;
+
+  /**
+   * The 'transliteration' service.
+   *
+   * @var \Drupal\Component\Transliteration\TransliterationInterface
+   */
+  protected $transliteration;
+
+  /**
+   * The 'language_manager' service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * WebformManagedFileBase constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
+   *   The element info manager.
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
+   *   The webform element manager.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The webform token manager.
+   * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
+   *   The webform libraries manager.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service
+   * @param \Drupal\file\FileUsage\FileUsageInterface|NULL $file_usage
+   *   The file usage service
+   * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
+   *   The transliteration service
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, \Psr\Log\LoggerInterface $logger, \Drupal\Core\Config\ConfigFactoryInterface $config_factory, \Drupal\Core\Session\AccountInterface $current_user, \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager, \Drupal\Core\Render\ElementInfoManagerInterface $element_info, \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager, \Drupal\webform\WebformTokenManagerInterface $token_manager, \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager, \Drupal\Core\File\FileSystemInterface $file_system, $file_usage, \Drupal\Component\Transliteration\TransliterationInterface $transliteration, \Drupal\Core\Language\LanguageManagerInterface $language_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $config_factory, $current_user, $entity_type_manager, $element_info, $element_manager, $token_manager, $libraries_manager);
+
+    $this->fileSystem = $file_system;
+    $this->fileUsage = $file_usage;
+    $this->transliteration = $transliteration;
+    $this->languageManager = $language_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('logger.factory')->get('webform'),
+      $container->get('config.factory'),
+      $container->get('current_user'),
+      $container->get('entity_type.manager'),
+      $container->get('plugin.manager.element_info'),
+      $container->get('plugin.manager.webform.element'),
+      $container->get('webform.token_manager'),
+      $container->get('webform.libraries_manager'),
+      $container->get('file_system'),
+      // We soft depend on "file" module so this service might not be available.
+      $container->has('file.usage') ? $container->get('file.usage') : NULL,
+      $container->get('transliteration'),
+      $container->get('language_manager')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
@@ -41,6 +136,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       'multiple' => FALSE,
       'max_filesize' => '',
       'file_extensions' => $file_extensions,
+      'file_name' => '',
       'uri_scheme' => 'private',
       'sanitize' => FALSE,
       'button' => FALSE,
@@ -337,63 +433,24 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       return;
     }
 
-    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-    $file_system = \Drupal::service('file_system');
-    /** @var \Drupal\Component\Transliteration\TransliterationInterface $transliteration */
-    $transliteration = \Drupal::service('transliteration');
-
     /** @var \Drupal\file\FileInterface[] $files */
-    $files = File::loadMultiple($fids);
+    $files = $this->entityTypeManager->getStorage('file')->loadMultiple($fids);
     foreach ($files as $file) {
-      // Set source and destination URI and file name.
       $source_uri = $file->getFileUri();
-      $source_filename = $file->getFileName();
-
-      $destination_uri = $source_uri;
-      $destination_filename = $source_filename;
-
-      // Replace /_sid_/ token with the submission id.
-      if (strpos($source_uri, '/_sid_/')) {
-        $destination_uri = str_replace('/_sid_/', '/' . $webform_submission->id() . '/', $source_uri);
-        $destination_directory = $file_system->dirname($destination_uri);
-        file_prepare_directory($destination_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-      }
-
-      // Sanitize filename.
-      // @see http://stackoverflow.com/questions/2021624/string-sanitizer-for-filename
-      if (!empty($element['#sanitize'])) {
-        $destination_extension = pathinfo($destination_filename, PATHINFO_EXTENSION);
-        $destination_extension = Unicode::strtolower($destination_extension);
-
-        $destination_basename = rtrim(pathinfo($destination_filename, PATHINFO_BASENAME), ".$destination_extension");
-        $destination_basename = Unicode::strtolower($destination_basename);
-        $destination_basename = $transliteration->transliterate($destination_basename, \Drupal::languageManager()->getCurrentLanguage()->getId(), '-');
-        $destination_basename = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $destination_basename);
-        $destination_basename = preg_replace('/\s+/', '-', $destination_basename);
-        $destination_basename = trim($destination_basename, '-');
-        // If the basename if emepty use the element's key.
-        if (empty($destination_basename)) {
-          $destination_basename = $key;
-        }
-
-        $destination_filename = $destination_basename . '.' . $destination_extension;
-        $destination_uri = $file_system->dirname($destination_uri) . '/' . $destination_filename;
-      }
+      $destination_uri = $this->getFileDestinationUri($element, $file, $webform_submission);
 
       // Save file if there is a new destination URI.
       if ($source_uri != $destination_uri) {
         $destination_uri = file_unmanaged_move($source_uri, $destination_uri);
         $file->setFileUri($destination_uri);
-        $file->setFileName($destination_filename);
+        $file->setFileName($this->fileSystem->basename($destination_uri));
         $file->save();
       }
 
       // Update file usage table.
       // Set file usage which will also make the file's status permanent.
-      /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
-      $file_usage = \Drupal::service('file.usage');
-      $file_usage->delete($file, 'webform', 'webform_submission', $webform_submission->id(), 0);
-      $file_usage->add($file, 'webform', 'webform_submission', $webform_submission->id());
+      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id(), 0);
+      $this->fileUsage->add($file, 'webform', 'webform_submission', $webform_submission->id());
     }
   }
 
@@ -422,9 +479,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $file_destination = $upload_location . '/' . $element['#webform_key'] . '.' . $file_extension;
 
     // Look for an existing temp files that have not been uploaded.
-    $fids = \Drupal::entityQuery('file')
+    $fids = $this->entityTypeManager->getStorage('file')->getQuery()
       ->condition('status', FALSE)
-      ->condition('uid', \Drupal::currentUser()->id())
+      ->condition('uid', $this->currentUser->id())
       ->condition('uri', $upload_location . '/' . $element['#webform_key'] . '.%', 'LIKE')
       ->execute();
     if ($fids) {
@@ -440,9 +497,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $file_uri = file_unmanaged_save_data('{empty}', $file_destination);
     }
 
-    $file = File::create([
-      'uri' => $file_uri ,
-      'uid' => \Drupal::currentUser()->id(),
+    $file = $this->entityTypeManager->getStorage('file')->create([
+      'uri' => $file_uri,
+      'uid' => $this->currentUser->id(),
     ]);
     $file->save();
 
@@ -461,7 +518,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    */
   protected function getMaxFileSize(array $element) {
     // Set max file size.
-    $max_filesize = \Drupal::config('webform.settings')->get('file.default_max_filesize') ?: file_upload_max_size();
+    $max_filesize = $this->configFactory->get('webform.settings')->get('file.default_max_filesize') ?: file_upload_max_size();
     $max_filesize = Bytes::toInt($max_filesize);
     if (!empty($element['#max_filesize'])) {
       $max_filesize = min($max_filesize, Bytes::toInt($element['#max_filesize']) * 1024 * 1024);
@@ -482,7 +539,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $file_type = str_replace('webform_', '', $this->getPluginId());
 
     // Set valid file extensions.
-    $file_extensions = \Drupal::config('webform.settings')->get("file.default_{$file_type}_extensions");
+    $file_extensions = $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
     if (!empty($element['#file_extensions'])) {
       $file_extensions = $element['#file_extensions'];
     }
@@ -639,11 +696,34 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#description' => $this->t('Separate extensions with a space and do not include the leading dot.'),
       '#maxlength' => 255,
     ];
+    $form['file']['file_name'] = [
+      '#type' => 'webform_checkbox_value',
+      '#title' => $this->t('Rename files'),
+      '#description' => $this->t('Rename uploaded files to this tokenized pattern. Do not include the extension here. The actual file extension will be automatically appended to this pattern.'),
+      '#element' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('File name pattern'),
+        '#maxlength' => NULL,
+      ]
+    ];
     $form['file']['sanitize'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Sanitize file name'),
       '#description' => $this->t('If checked, file name will be transliterated, lower-cased and all special characters converted to dashes (-).'),
       '#return_value' => TRUE,
+    ];
+    $form['file']['file_name_warning'] = [
+      '#type' => 'webform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('For security reasons we advise to use %file_rename together with the %sanitization option.', [
+        '%file_rename' => $form['file']['file_name']['#title'],
+        '%sanitization' => $form['file']['sanitize']['#title'],
+      ]),
+      '#access' => TRUE,
+      '#states' => ['visible' => [
+        ':input[name="properties[file_name][checkbox]"]' => ['checked' => TRUE],
+        ':input[name="properties[sanitize]"]' => ['checked' => FALSE],
+      ]],
     ];
     $form['file']['multiple'] = [
       '#type' => 'checkbox',
@@ -686,6 +766,58 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $form['default']['#access'] = FALSE;
 
     return $form;
+  }
+
+  /**
+   * Determine the destination URI where to save an uploaded file.
+   *
+   * @param array $element
+   *   Element whose destination URI is requested
+   * @param \Drupal\file\FileInterface $file
+   *   File whose destination URI is requested
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   Webform submission that contains the file whose destination URI is
+   *   requested
+   *
+   * @return string
+   *   Destination URI under which the file should be saved
+   */
+  protected function getFileDestinationUri(array $element, FileInterface $file, WebformSubmissionInterface $webform_submission) {
+    $destination_folder = $this->fileSystem->dirname($file->getFileUri());
+    $destination_filename = $file->getFilename();
+    $destination_extension = pathinfo($destination_filename, PATHINFO_EXTENSION);
+
+    // Replace /_sid_/ token with the submission id.
+    if (strpos($destination_folder, '/_sid_')) {
+      $destination_folder = str_replace('/_sid_', '/' . $webform_submission->id(), $destination_folder);
+      file_prepare_directory($destination_folder, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+    }
+
+    // Replace tokens in filename if we are instructed so.
+    if (isset($element['#file_name']) && $element['#file_name']) {
+      $destination_filename = $this->tokenManager->replace($element['#file_name'], $webform_submission) . '.' . $destination_extension;
+    }
+
+    // Sanitize filename.
+    // @see http://stackoverflow.com/questions/2021624/string-sanitizer-for-filename
+    if (!empty($element['#sanitize'])) {
+      $destination_extension = Unicode::strtolower($destination_extension);
+
+      $destination_basename = rtrim(pathinfo($destination_filename, PATHINFO_BASENAME), ".$destination_extension");
+      $destination_basename = Unicode::strtolower($destination_basename);
+      $destination_basename = $this->transliteration->transliterate($destination_basename, $this->languageManager->getCurrentLanguage()->getId(), '-');
+      $destination_basename = preg_replace('([^\w\s\d\-_~,;:\[\]\(\].]|[\.]{2,})', '', $destination_basename);
+      $destination_basename = preg_replace('/\s+/', '-', $destination_basename);
+      $destination_basename = trim($destination_basename, '-');
+      // If the basename if empty use the element's key.
+      if (empty($destination_basename)) {
+        $destination_basename = $element['#webform_key'];
+      }
+
+      $destination_filename = $destination_basename . '.' . $destination_extension;
+    }
+
+    return $destination_folder . '/' . $destination_filename;
   }
 
   /**
