@@ -54,6 +54,11 @@ class WebformActions extends Container {
    *   The processed element.
    */
   public static function processWebformActions(&$element, FormStateInterface $form_state, &$complete_form) {
+    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+    $form_object = $form_state->getFormObject();
+    /** @var \Drupal\webform\webform_submission $webform_submission */
+    $webform_submission = $form_object->getEntity();
+
     $prefix = ($element['#webform_key']) ? 'edit-' . $element['#webform_key'] . '-' : '';
 
     // Add class names only if form['actions']['#type'] is set to 'actions'.
@@ -83,9 +88,12 @@ class WebformActions extends Container {
         $element[$button_name]['#access'] = FALSE;
       }
 
-      // Apply custom label.
+      // Apply custom label except to update button (aka Save).
       if (!empty($element['#' . $button_name . '__label']) && empty($element[$button_name]['#webform_actions_button_custom'])) {
-        $element[$button_name]['#value'] = $element['#' . $button_name . '__label'];
+        $is_update_button = ($button_name === 'submit' && !($webform_submission->isNew() || $webform_submission->isDraft()));
+        if (!$is_update_button) {
+          $element[$button_name]['#value'] = $element['#' . $button_name . '__label'];
+        }
       }
 
       // Apply attributes (class, style, properties).
