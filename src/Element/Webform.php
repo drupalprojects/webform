@@ -38,7 +38,8 @@ class Webform extends RenderElement {
     }
 
     $values = ['data' => $element['#default_data']];
-    return $element + $webform->getSubmissionForm($values);
+    $element['form'] = $webform->getSubmissionForm($values);
+    return $element;
   }
 
 }
