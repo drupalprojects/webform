@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Response subscriber to redirect to login when access is denied to a file, webform, or submission.
+ * Event subscriber to redirect to login form when webform settings instruct to.
  */
 class WebformSubscriber implements EventSubscriberInterface {
 
@@ -49,18 +49,18 @@ class WebformSubscriber implements EventSubscriberInterface {
   protected $renderer;
 
   /**
-   * The webform token manager.
-   *
-   * @var \Drupal\webform\WebformTokenManagerInterface
-   */
-  protected $tokenManager;
-
-  /**
    * The redirect.destination service.
    *
    * @var \Drupal\Core\Routing\RedirectDestinationInterface
    */
   protected $redirectDestination;
+
+  /**
+   * The webform token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
 
   /**
    * Constructs a new WebformSubscriber.
@@ -71,22 +71,22 @@ class WebformSubscriber implements EventSubscriberInterface {
    *   The configuration object factory.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
+   *   The redirect.destination service.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
-   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
-   *   The redirect.destination service
    */
-  public function __construct(AccountInterface $account, ConfigFactoryInterface $config_factory, RendererInterface $renderer, WebformTokenManagerInterface $token_manager, RedirectDestinationInterface $redirect_destination) {
+  public function __construct(AccountInterface $account, ConfigFactoryInterface $config_factory, RendererInterface $renderer, RedirectDestinationInterface $redirect_destination, WebformTokenManagerInterface $token_manager) {
     $this->account = $account;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
+    $this->redirectDestination = $redirect_destination;
 
     $this->tokenManager = $token_manager;
-    $this->redirectDestination = $redirect_destination;
   }
 
   /**
-   * Redirect to user login when access is denied to private webform file uploads.
+   * Redirect to user login when access is denied to private webform file.
    *
    * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
    *   The event to process.
