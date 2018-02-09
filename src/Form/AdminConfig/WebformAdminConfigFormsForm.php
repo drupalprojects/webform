@@ -116,13 +116,11 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['form_settings']['default_form_open_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default open message'),
-      '#required' => TRUE,
       '#default_value' => $settings['default_form_open_message'],
     ];
     $form['form_settings']['default_form_close_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default closed message'),
-      '#required' => TRUE,
       '#default_value' => $settings['default_form_close_message'],
     ];
     $form['form_settings']['default_form_exception_message'] = [
@@ -140,7 +138,6 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['form_settings']['default_form_login_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default login message when access denied to webform'),
-      '#required' => TRUE,
       '#default_value' => $settings['default_form_login_message'],
     ];
     $form['form_settings']['default_form_required_label'] = [
@@ -351,7 +348,6 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     $form['confirmation_settings']['default_confirmation_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default confirmation message'),
-      '#required' => TRUE,
       '#default_value' => $settings['default_confirmation_message'],
     ];
     $form['confirmation_settings']['default_confirmation_back_label'] = [

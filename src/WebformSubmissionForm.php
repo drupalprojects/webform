@@ -1701,11 +1701,14 @@ class WebformSubmissionForm extends ContentEntityForm {
         return;
 
       case WebformInterface::CONFIRMATION_MODAL:
-        // Set webform confirmation modal in $form_state.
-        $form_state->set('webform_confirmation_modal', [
-          'title' => $this->getWebformSetting('confirmation_title', ''),
-          'content' => $this->getMessageManager()->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION),
-        ]);
+        $message = $this->getMessageManager()->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        if ($message) {
+          // Set webform confirmation modal in $form_state.
+          $form_state->set('webform_confirmation_modal', [
+            'title' => $this->getWebformSetting('confirmation_title', ''),
+            'content' => $message,
+          ]);
+        }
         return;
 
       case WebformInterface::CONFIRMATION_DEFAULT:

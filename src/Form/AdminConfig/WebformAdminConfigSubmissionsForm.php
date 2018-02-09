@@ -128,13 +128,11 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
     $form['submission_limits']['default_limit_total_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default total submissions limit message'),
-      '#required' => TRUE,
       '#default_value' => $config->get('settings.default_limit_total_message'),
     ];
     $form['submission_limits']['default_limit_user_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Default per user submission limit message'),
-      '#required' => TRUE,
       '#default_value' => $config->get('settings.default_limit_user_message'),
     ];
     $form['submission_limits']['token_tree_link'] = $this->tokenManager->buildTreeLink();
