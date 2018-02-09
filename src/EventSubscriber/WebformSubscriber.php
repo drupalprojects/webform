@@ -4,6 +4,7 @@ namespace Drupal\webform\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -55,6 +56,13 @@ class WebformSubscriber implements EventSubscriberInterface {
   protected $tokenManager;
 
   /**
+   * The redirect.destination service.
+   *
+   * @var \Drupal\Core\Routing\RedirectDestinationInterface
+   */
+  protected $redirectDestination;
+
+  /**
    * Constructs a new WebformSubscriber.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -65,13 +73,16 @@ class WebformSubscriber implements EventSubscriberInterface {
    *   The renderer.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
+   * @param \Drupal\Core\Routing\RedirectDestinationInterface $redirect_destination
+   *   The redirect.destination service
    */
-  public function __construct(AccountInterface $account, ConfigFactoryInterface $config_factory, RendererInterface $renderer, WebformTokenManagerInterface $token_manager) {
+  public function __construct(AccountInterface $account, ConfigFactoryInterface $config_factory, RendererInterface $renderer, WebformTokenManagerInterface $token_manager, RedirectDestinationInterface $redirect_destination) {
     $this->account = $account;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
 
     $this->tokenManager = $token_manager;
+    $this->redirectDestination = $redirect_destination;
   }
 
   /**
@@ -181,8 +192,6 @@ class WebformSubscriber implements EventSubscriberInterface {
    *   (Optional) Entity to be used when replacing tokens.
    */
   protected function redirectToLogin(FilterResponseEvent $event, $message = NULL, EntityInterface $entity = NULL) {
-    $path = $event->getRequest()->getPathInfo();
-
     // Display message.
     if ($message) {
       $message = $this->tokenManager->replace($message, $entity);
@@ -193,7 +202,7 @@ class WebformSubscriber implements EventSubscriberInterface {
     $redirect_url = Url::fromRoute(
       'user.login',
       [],
-      ['absolute' => TRUE, 'query' => ['destination' => ltrim($path, '/')]]
+      ['absolute' => TRUE, 'query' => $this->redirectDestination->getAsArray()]
     );
     $event->setResponse(new RedirectResponse($redirect_url->toString()));
   }

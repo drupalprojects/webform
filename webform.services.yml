@@ -97,7 +97,7 @@ services:
 
   webform.event_subscriber:
     class: Drupal\webform\EventSubscriber\WebformSubscriber
-    arguments: ['@current_user', '@config.factory', '@renderer', '@webform.token_manager']
+    arguments: ['@current_user', '@config.factory', '@renderer', '@webform.token_manager', '@redirect.destination']
     tags:
       - { name: event_subscriber }
 
