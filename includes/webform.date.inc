@@ -29,9 +29,6 @@ function _webform_datetime_datepicker(array &$element, FormStateInterface $form_
     // @see \Drupal\Core\Render\Element\Date::processDate
     $element['date']['#attributes']['data-drupal-date-format'] = [$element['date']['#date_date_format']];
   }
-
-  // Attached custom datepicker library.
-  $element['date']['#attached']['library'][] = 'webform/webform.element.date';
 }
 
 /**

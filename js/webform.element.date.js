@@ -76,9 +76,7 @@
         }
 
         // First day of the week.
-        if ($input.attr('firstday')) {
-          options.firstDay = $input.attr('firstday');
-        }
+        options.firstDay = settings.webform.dateFirstDate;
 
         $input.datepicker(options);
       });

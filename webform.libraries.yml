@@ -470,6 +470,7 @@ webform.element.date:
     js/webform.element.date.js: {}
   dependencies:
     - core/drupal.date
+    - core/drupalSettings
 
 webform.element.details.save:
   version: VERSION

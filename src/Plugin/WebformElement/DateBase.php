@@ -4,6 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Form\FormStateInterface;
@@ -67,6 +68,15 @@ abstract class DateBase extends WebformElementBase {
 
     $element['#element_validate'] = array_merge([[get_class($this), 'preValidateDate']], $element['#element_validate']);
     $element['#element_validate'][] = [get_class($this), 'validateDate'];
+
+    // Set first day according to admin/config/regional/settings.
+    $config = $this->configFactory->get('system.date');
+    $element['#attached']['drupalSettings']['webform']['dateFirstDate'] = $config->get('first_day');
+
+    $cacheability = CacheableMetadata::createFromObject($config);
+    $cacheability->applyTo($element);
+
+    $element['#attached']['library'][] = 'webform/webform.element.date';
   }
 
   /**
