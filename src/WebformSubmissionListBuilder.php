@@ -332,11 +332,10 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   protected function buildCustomizeButton() {
     $route_name = $this->requestHandler->getRouteName($this->webform, $this->sourceEntity, 'webform.results_submissions.custom');
     $route_parameters = $this->requestHandler->getRouteParameters($this->webform, $this->sourceEntity) + ['webform' => $this->webform->id()];
-    $route_options = ['query' => \Drupal::destination()->getAsArray()];
     return [
       '#type' => 'link',
       '#title' => $this->t('Customize'),
-      '#url' => Url::fromRoute($route_name, $route_parameters, $route_options),
+      '#url' => $this->ensureDestination(Url::fromRoute($route_name, $route_parameters)),
       '#attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, ['button', 'button-action', 'button--small', 'button-webform-table-setting']),
     ];
   }
@@ -480,7 +479,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return ($is_raw) ? $entity->langcode->value : \Drupal::languageManager()->getLanguage($entity->langcode->value)->getName();
 
       case 'notes':
-        $notes_url = $this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form', ['query' => \Drupal::destination()->getAsArray()]);
+        $notes_url = $this->ensureDestination($this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form'));
         $state = $entity->get('notes')->value ? 'on' : 'off';
         return [
           'data' => [
@@ -606,7 +605,6 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   public function getDefaultOperations(EntityInterface $entity) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $entity->getWebform();
-    $route_options = ['query' => \Drupal::destination()->getAsArray()];
 
     $operations = [];
 
@@ -614,7 +612,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['edit'] = [
         'title' => $this->t('Edit'),
         'weight' => 10,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form'),
       ];
     }
 
@@ -622,7 +620,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['view'] = [
         'title' => $this->t('View'),
         'weight' => 20,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical'),
       ];
     }
 
@@ -630,7 +628,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['notes'] = [
         'title' => $this->t('Notes'),
         'weight' => 21,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form'),
       ];
     }
 
@@ -638,14 +636,14 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['resend'] = [
         'title' => $this->t('Resend'),
         'weight' => 22,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form'),
       ];
     }
     if ($webform->access('submission_update_any')) {
       $operations['duplicate'] = [
         'title' => $this->t('Duplicate'),
         'weight' => 23,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form'),
       ];
     }
 
@@ -653,7 +651,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['delete'] = [
         'title' => $this->t('Delete'),
         'weight' => 100,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form'),
       ];
     }
 
@@ -661,8 +659,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $operations['log'] = [
         'title' => $this->t('Log'),
         'weight' => 100,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log', $route_options),
+        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log'),
       ];
+    }
+
+    // Add destination to all operation links.
+    foreach ($operations as &$operation) {
+      $this->ensureDestination($operation['url']);
     }
 
     return $operations;
@@ -834,6 +837,24 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     }
 
     return $query;
+  }
+
+  /****************************************************************************/
+  // Backport of Drupal 8.5.x+ methods.
+  // @todo Remove once only Drupal 8.5.x+ is supported.
+  /****************************************************************************/
+
+  /**
+   * Ensures that a destination is present on the given URL.
+   *
+   * @param \Drupal\Core\Url $url
+   *   The URL object to which the destination should be added.
+   *
+   * @return \Drupal\Core\Url
+   *   The updated URL object.
+   */
+  protected function ensureDestination(Url $url) {
+    return $url->mergeOptions(['query' => \Drupal::destination()->getAsArray()]);
   }
 
 }

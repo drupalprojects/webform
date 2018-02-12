@@ -158,7 +158,7 @@ class WebformOptions extends ConfigEntityBase implements WebformOptionsInterface
     $temp_element = [];
     \Drupal::moduleHandler()->alter('webform_options_' . $this->id(), $altered_options, $temp_element);
     $altered_options = WebformOptionsHelper::convertOptionsToString($altered_options);
-    if ($altered_options == $this->getOptions()) {
+    if ($altered_options === $this->getOptions()) {
       $this->options = '';
     }
   }

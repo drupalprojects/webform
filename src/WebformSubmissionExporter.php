@@ -256,6 +256,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       'range_latest' => '',
       'range_start' => '',
       'range_end' => '',
+      'order' => 'asc',
       'state' => 'all',
       'locked' => '',
       'sticky' => '',
@@ -565,7 +566,21 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
           '#default_value' => $export_options['range_end'],
         ];
     }
-
+    $form['export']['download']['order'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Order'),
+      '#description' => $this->t('Order submissions by ascending (oldest first) or descending (newest first).'),
+      '#options' => [
+        'asc' => $this->t('Sort ascending'),
+        'desc' => $this->t('Sort descending'),
+      ],
+      '#default_value' => $export_options['order'],
+      '#states' => [
+        'visible' => [
+          ':input[name="range_type"]' => ['!value' => 'latest'],
+        ],
+      ],
+    ];
     $form['export']['download']['sticky'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Starred/flagged submissions'),
@@ -715,6 +730,7 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
 
     $query = $this->entityStorage->getQuery()->condition('webform_id', $webform->id());
 
+
     // Filter by source entity or submitted to.
     if ($source_entity) {
       $query->condition('entity_type', $source_entity->getEntityTypeId());
@@ -784,9 +800,11 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
         $query->condition('sid', end($latest_query_entity_ids), '>=');
       }
     }
+    else {
+      // Sort by sid in ASC or DESC order.
+      $query->sort('sid', isset($export_options['order']) ? $export_options['order'] : 'ASC');
+    }
 
-    // Sort by sid with the oldest one first.
-    $query->sort('sid', 'ASC');
 
     return $query;
   }

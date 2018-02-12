@@ -109,6 +109,7 @@ class WebformCliService implements WebformCliServiceInterface {
         'range-latest' => 'Integer specifying the latest X submissions will be downloaded. Used if "range-type" is "latest" or no other range options are provided.',
         'range-start' => 'The submission ID or start date at which to start exporting.',
         'range-end' => 'The submission ID or end date at which to end exporting.',
+        'order' => 'The submission order "asc" (default) or "desc".',
         'state' => 'Submission state to be included: "completed", "draft" or "all" (default).',
         'sticky' => 'Flagged/starred submission status.',
         'files' => 'Download files: "1" or "0" (default). If set to 1, the exported CSV file and any submission file uploads will be download in a gzipped tar file.',

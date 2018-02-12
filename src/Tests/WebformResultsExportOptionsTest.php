@@ -143,6 +143,14 @@ class WebformResultsExportOptionsTest extends WebformTestBase {
     $this->assertNoRaw('George,Washington');
     $this->assertNoRaw('Abraham,Lincoln');
 
+    // Check sort ASC.
+    $this->getExport($webform, ['order' => 'asc']);
+    $this->assertPattern('/George.*Abraham.*Hillary/ms');
+
+    // Check sort DESC.
+    $this->getExport($webform, ['order' => 'desc']);
+    $this->assertPattern('/Hillary.*Abraham.*George/ms');
+
     // Check sid start.
     $this->getExport($webform, ['range_type' => 'sid', 'range_start' => $submissions[1]->id()]);
     $this->assertNoRaw('George,Washington');

@@ -1645,29 +1645,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /**************************************************************************/
     // Messages.
     /**************************************************************************/
-
-    // Release.
-    $t_args = [
-      '@version' => $this->getVersion(),
-      ':href' => 'https://www.drupal.org/project/webform/releases/' . $this->getVersion(),
-    ];
-    $help['message_release'] = [
-      'group' => 'messages',
-      'title' => $this->t('Message: Release'),
-      'content' => $this->t('You have successfully updated to the @version release of the Webform module. <a href=":href">Learn more</a>', $t_args),
-      'message_type' => 'status',
-      'message_close' => TRUE,
-      'message_storage' => WebformMessage::STORAGE_STATE,
-      'access' => $this->currentUser->hasPermission('administer webform'),
-      'reset_version' => TRUE,
-      'routes' => [
-        // @see /admin/modules
-        'system.modules_list',
-        // @see /admin/reports/updates
-        'update.status',
-      ],
-    ];
-
+    
     // Webform: Elements -- Warning.
     $help['message_webform_ui'] = [
       'group' => 'messages',
