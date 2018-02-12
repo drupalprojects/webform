@@ -87,6 +87,11 @@ class Date extends DateBase {
           $element['#default_value'] = date($element['#date_date_format'], strtotime($element['#default_value']));
         }
       }
+
+      // Set first day according to admin/config/regional/settings.
+      if (!isset($element['#attributes']['firstday'])) {
+        $element['#attributes']['firstday'] = $this->configFactory->get('system.date')->get('first_day');
+      }
     }
   }
 
