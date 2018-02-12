@@ -39,7 +39,7 @@ class WebformElementDateTest extends WebformElementTestBase {
     $max = date('D, m/d/Y', strtotime('+1 year'));
     $max_year = date('Y', strtotime('+1 year'));
     $default_value = date('D, m/d/Y', strtotime('now'));
-    $this->assertRaw('<input min="' . $min . '" data-min-year="' . $min_year . '" max="' . $max . '" data-max-year="' . $max_year . '" type="text" data-drupal-date-format="D, m/d/Y" data-drupal-selector="edit-date-datepicker-min-max-dynamic" aria-describedby="edit-date-datepicker-min-max-dynamic--description" id="edit-date-datepicker-min-max-dynamic" name="date_datepicker_min_max_dynamic" value="' . $default_value . '" class="form-text" />');
+    $this->assertCssSelect('input[min="' . $min . '"][data-min-year="' . $min_year . '"][max="' . $max . '"][data-max-year="' . $max_year . '"][type="text"][data-drupal-date-format="D, m/d/Y"][firstday="0"][data-drupal-selector="edit-date-datepicker-min-max-dynamic"][aria-describedby="edit-date-datepicker-min-max-dynamic--description"][id="edit-date-datepicker-min-max-dynamic"][name="date_datepicker_min_max_dynamic"][value="' . $default_value . '"][class="form-text"]');
 
     // Check 'datelist' and 'datetime' #default_value.
     $form = $webform->getSubmissionForm();
