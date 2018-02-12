@@ -17,12 +17,6 @@ function webform_library_info_alter(&$libraries, $extension) {
   /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
   $libraries_manager = \Drupal::service('webform.libraries_manager');
 
-  // Add off-canvas system tray to dialog dependencies.
-  if (isset($libraries['webform.admin.dialog']) && (floatval(\Drupal::VERSION) >= 8.3) && \Drupal::moduleHandler()->moduleExists('outside_in')) {
-    $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.off_canvas';
-    $libraries['webform.admin.dialog']['dependencies'][] = 'outside_in/drupal.outside_in';
-  }
-
   // Map /library/* paths to CDN.
   // @see webform.libraries.yml.
   foreach ($libraries as $library_name => &$library) {
