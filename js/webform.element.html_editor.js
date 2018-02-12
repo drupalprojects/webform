@@ -32,6 +32,18 @@
         // @see \Drupal\webform\Element\WebformHtmlEditor::preRenderWebformHtmlEditor
         // @see \Drupal\webform\WebformLibrariesManager::initLibraries
         var plugins = drupalSettings['webform']['html_editor']['plugins'];
+
+        // If requirejs is present don't use the codemirror plugin.
+        // @see Issue #2936147: ckeditor.codemirror plugin breaks admin textarea.
+        // @todo Remove the below code once this issue is resolved.
+        if (plugins.codemirror
+          && drupalSettings.yamlEditor
+          && drupalSettings.yamlEditor.source
+          && drupalSettings.yamlEditor.source.indexOf('noconflict') !== -1) {
+          delete plugins.codemirror;
+          ('console' in window) && window.console.log('YAML Editor module is not compatible with the ckeditor.codemirror plugin. @see Issue #2936147: ckeditor.codemirror plugin breaks admin textarea.');
+        }
+
         for (var plugin_name in plugins) {
           if(plugins.hasOwnProperty(plugin_name)) {
             CKEDITOR.plugins.addExternal(plugin_name, plugins[plugin_name]);
