@@ -12,7 +12,7 @@ use Drupal\webform\Plugin\views\field\WebformSubmissionBulkForm;
  * @see \Drupal\Tests\node\Unit\Plugin\views\field\NodeBulkFormTest
  * @see \Drupal\Tests\user\Unit\Plugin\views\field\UserBulkFormTest
  * @coversDefaultClass \Drupal\webform\Plugin\views\field\WebformSubmissionBulkForm
- * @group user
+ * @group webform
  */
 class WebformSubmissionBulkFormTest extends UnitTestCase {
 
