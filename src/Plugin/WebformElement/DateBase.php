@@ -71,7 +71,7 @@ abstract class DateBase extends WebformElementBase {
 
     // Set first day according to admin/config/regional/settings.
     $config = $this->configFactory->get('system.date');
-    $element['#attached']['drupalSettings']['webform']['dateFirstDate'] = $config->get('first_day');
+    $element['#attached']['drupalSettings']['webform']['dateFirstDay'] = $config->get('first_day');
 
     $cacheability = CacheableMetadata::createFromObject($config);
     $cacheability->applyTo($element);
