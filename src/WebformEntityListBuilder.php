@@ -145,22 +145,33 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     $header['title'] = [
       'data' => $this->t('Title'),
+      'specifier' => 'title',
+      'field' => 'title',
+      'sort' => 'asc',
     ];
     $header['description'] = [
       'data' => $this->t('Description'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
+      'specifier' => 'description',
+      'field' => 'description',
     ];
     $header['category'] = [
       'data' => $this->t('Category'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
+      'specifier' => 'category',
+      'field' => 'category',
     ];
     $header['status'] = [
       'data' => $this->t('Status'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
+      'specifier' => 'status',
+      'field' => 'status',
     ];
     $header['author'] = [
       'data' => $this->t('Author'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
+      'specifier' => 'uid',
+      'field' => 'uid',
     ];
     $header['results_total'] = [
       'data' => $this->t('Total Results'),
@@ -170,9 +181,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       'data' => $this->t('Operations'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
     ];
-    $header['operations'] = [
-      'data' => '',
-    ];
+    $header['operations'] = '';
+
     return $header;
   }
 
@@ -298,8 +308,9 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   protected function getEntityIds() {
+    $header = $this->buildHeader();
     return $this->getQuery($this->keys, $this->category, $this->state)
-      ->sort('title')
+      ->tableSort($header)
       ->pager($this->getLimit())
       ->execute();
   }
