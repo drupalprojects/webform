@@ -1971,3 +1971,22 @@ function webform_update_8107() {
   _webform_update_admin_settings();
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2944515: Report proper dependencies of a webform block.
+ */
+function webform_update_8108() {
+  /** @var \Drupal\block\Entity\Block $block */
+  foreach (\Drupal::entityTypeManager()->getStorage('block')->loadMultiple() as $block) {
+    if ($block->getPluginId() == 'webform_block') {
+      $webform_id = $block->getPlugin()->getConfiguration()['webform_id'];
+      if (\Drupal::entityTypeManager()->getStorage('webform')->load($webform_id)) {
+        $block->save();
+      }
+      else {
+        // The webform does not exist. There is no point to keep this block.
+        $block->delete();
+      }
+    }
+  }
+}
