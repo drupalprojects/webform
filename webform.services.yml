@@ -79,7 +79,7 @@ services:
 
   webform.token_manager:
     class: Drupal\webform\WebformTokenManager
-    arguments: ['@config.factory', '@module_handler', '@token']
+    arguments: ['@config.factory', '@module_handler', '@theme.manager', '@token']
 
   webform.theme_manager:
     class: Drupal\webform\WebformThemeManager
