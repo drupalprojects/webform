@@ -14,6 +14,10 @@ services:
     class: Drupal\webform\Plugin\WebformExporterManager
     arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@config.factory']
 
+  plugin.manager.webform.source_entity:
+    class: Drupal\webform\Plugin\WebformSourceEntityManager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@config.factory']
+
   # Logger.
 
   logger.channel.webform:
@@ -59,7 +63,7 @@ services:
 
   webform.request:
     class: Drupal\webform\WebformRequest
-    arguments: ['@router.route_provider', '@request_stack', '@router.admin_context', '@current_route_match', '@entity_type.manager', '@entity_type.repository', '@webform.entity_reference_manager']
+    arguments: ['@router.route_provider', '@request_stack', '@router.admin_context', '@current_route_match', '@entity_type.manager', '@entity_type.repository', '@webform.entity_reference_manager', '@plugin.manager.webform.source_entity']
 
   webform_submission.generate:
     class: Drupal\webform\WebformSubmissionGenerate

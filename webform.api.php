@@ -31,6 +31,18 @@ function hook_webform_handler_info_alter(array &$handlers) {
 }
 
 /**
+ * Alter definition of WebformSourceEntity plugins.
+ *
+ * @param array $definitions
+ *   The array of plugin definitions.
+ */
+function hook_webform_source_entity_info_alter(array &$definitions) {
+  if (isset($definitions['some_plugin_whose_weight_i_wanna_change'])) {
+    $definitions['some_plugin_whose_weight_i_wanna_change']['weight'] = -1000;
+  }
+}
+
+/**
  * Alter webform elements.
  *
  * @param array $element

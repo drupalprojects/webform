@@ -10,6 +10,7 @@ use Drupal\Core\Routing\AdminContext;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Plugin\WebformSourceEntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -67,6 +68,13 @@ class WebformRequest implements WebformRequestInterface {
   protected $webformEntityReferenceManager;
 
   /**
+   * Webform source entity plugin manager.
+   *
+   * @var \Drupal\webform\Plugin\WebformSourceEntityManagerInterface
+   */
+  protected $webformSourceEntityManager;
+
+  /**
    * Track if the current page is a webform admin route.
    *
    * @var bool
@@ -90,8 +98,10 @@ class WebformRequest implements WebformRequestInterface {
    *   The entity type repository.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
+   * @param \Drupal\webform\Plugin\WebformSourceEntityManagerInterface $webform_source_entity_RouteParametersWebformSourceEntitymanager
+   *   The webform source entity plugin manager.
    */
-  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, AdminContext $admin_context, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, AdminContext $admin_context, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, WebformEntityReferenceManagerInterface $webform_entity_reference_manager, WebformSourceEntityManagerInterface $webform_source_entity_manager) {
     $this->routeProvider = $route_provider;
     $this->request = $request_stack->getCurrentRequest();
     $this->adminContext = $admin_context;
@@ -99,6 +109,7 @@ class WebformRequest implements WebformRequestInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityTypeRepository = $entity_type_repository;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
+    $this->webformSourceEntityManager = $webform_source_entity_manager;
   }
 
   /**
@@ -129,31 +140,9 @@ class WebformRequest implements WebformRequestInterface {
    * {@inheritdoc}
    */
   public function getCurrentSourceEntity($ignored_types = NULL) {
-    // See if source entity is being set via query string parameters.
-    if ($source_entity = $this->getCurrentSourceEntityFromQuery()) {
-      return $source_entity;
-    }
-
-    // Get the most specific source entity available in the current route's
-    // parameters.
-    $parameters = $this->routeMatch->getParameters()->all();
-    $parameters = array_reverse($parameters);
-
-    if ($ignored_types) {
-      if (is_array($ignored_types)) {
-        $parameters = array_diff_key($parameters, array_flip($ignored_types));
-      }
-      else {
-        unset($parameters[$ignored_types]);
-      }
-    }
-
-    foreach ($parameters as $value) {
-      if ($value instanceof EntityInterface) {
-        return $value;
-      }
-    }
-    return NULL;
+    // TODO: Can we refactor this method away altogether and let all its callers
+    // work directly with webform source entity manager?
+    return $this->webformSourceEntityManager->getSourceEntity(is_null($ignored_types) ? [] : $ignored_types);
   }
 
   /**
@@ -327,60 +316,6 @@ class WebformRequest implements WebformRequestInterface {
     else {
       return FALSE;
     }
-  }
-
-  /**
-   * Get webform submission source entity from query string.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|null
-   *   A source entity.
-   */
-  protected function getCurrentSourceEntityFromQuery() {
-    // Get and check for webform.
-    $webform = $this->routeMatch->getParameter('webform');
-    if (!$webform) {
-      return NULL;
-    }
-
-    // Get and check source entity type.
-    $source_entity_type = $this->request->query->get('source_entity_type');
-    if (!$source_entity_type || !$this->entityTypeManager->hasDefinition($source_entity_type)) {
-      return NULL;
-    }
-
-    // Get and check source entity id.
-    $source_entity_id = $this->request->query->get('source_entity_id');
-    if (!$source_entity_id) {
-      return NULL;
-    }
-
-    // Get and check source entity.
-    $source_entity = $this->entityTypeManager->getStorage($source_entity_type)->load($source_entity_id);
-    if (!$source_entity) {
-      return NULL;
-    }
-
-    // Check source entity access.
-    if (!$source_entity->access('view')) {
-      return NULL;
-    }
-
-    // Check that the webform is referenced by the source entity.
-    if (!$webform->getSetting('form_prepopulate_source_entity')) {
-      // Get source entity's webform field.
-      $webform_field_name = $this->webformEntityReferenceManager->getFieldName($source_entity);
-      if (!$webform_field_name) {
-        return NULL;
-      }
-
-      // Check that source entity's reference webform is the current YAML
-      // webform.
-      if ($source_entity->$webform_field_name->target_id != $webform->id()) {
-        return NULL;
-      }
-    }
-
-    return $source_entity;
   }
 
   /**
