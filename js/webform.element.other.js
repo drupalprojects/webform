@@ -139,7 +139,7 @@
 
         var $buttons = $element.find('input[type="radio"]');
         var $input = $element.find('.js-webform-buttons-other-input');
-        var $container = $(this).find('.form-radios');
+        var $container = $(this).find('.js-webform-webform-buttons');
 
         // Create set onchange handler.
         $container.change(function () {
