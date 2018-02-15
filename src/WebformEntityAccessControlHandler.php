@@ -4,15 +4,74 @@ namespace Drupal\webform;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityAccessControlHandler;
+use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\webform\Plugin\WebformSourceEntityManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Defines the access control handler for the webform entity type.
  *
  * @see \Drupal\webform\Entity\Webform.
  */
-class WebformEntityAccessControlHandler extends EntityAccessControlHandler {
+class WebformEntityAccessControlHandler extends EntityAccessControlHandler implements EntityHandlerInterface {
+
+  /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Webform source entity plugin manager.
+   *
+   * @var \Drupal\webform\Plugin\WebformSourceEntityManagerInterface
+   */
+  protected $webformSourceEntityManager;
+
+  /**
+   * WebformEntityAccessControlHandler constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type definition.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\webform\Plugin\WebformSourceEntityManagerInterface $webform_source_entity_manager
+   *   Webform source entity plugin manager.
+   */
+  public function __construct(EntityTypeInterface $entity_type, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, WebformSourceEntityManagerInterface $webform_source_entity_manager) {
+    parent::__construct($entity_type);
+
+    $this->requestStack = $request_stack;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->webformSourceEntityManager = $webform_source_entity_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
+    return new static(
+      $entity_type,
+      $container->get('request_stack'),
+      $container->get('entity_type.manager'),
+      $container->get('plugin.manager.webform.source_entity')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -83,14 +142,12 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler {
 
       // Allow (secure) token to bypass submission page and create access controls.
       if (in_array($operation, ['submission_page', 'submission_create'])) {
-        $token = \Drupal::request()->query->get('token');
+        $token = $this->requestStack->getCurrentRequest()->query->get('token');
         if ($token && $entity->isOpen()) {
-          /** @var \Drupal\webform\WebformRequestInterface $request_handler */
-          $request_handler = \Drupal::service('webform.request');
           /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
-          $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+          $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
 
-          $source_entity = $request_handler->getCurrentSourceEntity('webform');
+          $source_entity = $this->webformSourceEntityManager->getSourceEntity(['webform']);
           if ($submission_storage->loadFromToken($token, $entity, $source_entity)) {
             return AccessResult::allowed();
           }
