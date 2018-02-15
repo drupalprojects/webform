@@ -83,7 +83,7 @@ abstract class DateBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function setDefaultValue(array &$element) {
-    if (isset($element['#multiple'])) {
+    if (!empty($element['#multiple'])) {
       $element['#default_value'] = (isset($element['#default_value'])) ? (array) $element['#default_value'] : NULL;
       return;
     }
