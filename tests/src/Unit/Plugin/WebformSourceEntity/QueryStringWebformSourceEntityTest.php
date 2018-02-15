@@ -198,6 +198,7 @@ class QueryStringWebformSourceEntityTest extends UnitTestCase {
     $tests[] = [TRUE, 'node', TRUE, TRUE, TRUE, FALSE, [], TRUE, 'Prepopulating of webform source entity is allowed'];
     $tests[] = [TRUE, 'node', TRUE, TRUE, TRUE, FALSE, ['node'], TRUE, '$ignored_types is not considered'];
     $tests[] = [TRUE, 'node', TRUE, FALSE, TRUE, FALSE, [], TRUE, 'Source entity references webform'];
+    $tests[] = [TRUE, 'node', TRUE, FALSE, TRUE, TRUE, [], TRUE, 'Translation of source entity references webform'];
     $tests[] = [TRUE, 'node', TRUE, FALSE, FALSE, FALSE, [], FALSE, 'Source entity does not reference webform'];
     $tests[] = [TRUE, 'node', TRUE, FALSE, FALSE, TRUE, [], FALSE, 'Translation of source entity does not reference webform'];
     return $tests;

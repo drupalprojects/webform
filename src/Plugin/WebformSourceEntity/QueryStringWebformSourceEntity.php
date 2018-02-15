@@ -7,6 +7,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\webform\Plugin\WebformSourceEntityInterface;
 use Drupal\webform\WebformEntityReferenceManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -131,6 +132,10 @@ class QueryStringWebformSourceEntity extends PluginBase implements WebformSource
     $source_entity = $this->entityTypeManager->getStorage($source_entity_type)->load($source_entity_id);
     if (!$source_entity) {
       return NULL;
+    }
+
+    if (is_subclass_of($source_entity, TranslatableInterface::class) && $source_entity->hasTranslation($this->languageManager->getCurrentLanguage()->getId())) {
+      $source_entity = $source_entity->getTranslation($this->languageManager->getCurrentLanguage()->getId());
     }
 
     // Check source entity access.
