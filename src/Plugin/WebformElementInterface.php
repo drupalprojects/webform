@@ -317,6 +317,16 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function checkAccessRules($operation, array $element, AccountInterface $account = NULL);
 
   /**
+   * Replace tokens for all element properties.
+   *
+   * @param array $element
+   *   An element.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL);
+
+  /**
    * Display element disabled warning.
    *
    * @param array $element

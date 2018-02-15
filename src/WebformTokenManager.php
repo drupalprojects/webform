@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Utility\Token;
 
 /**
@@ -27,6 +28,13 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   protected $moduleHandler;
 
   /**
+   * The theme manager.
+   *
+   * @var \Drupal\Core\Theme\ThemeManagerInterface
+   */
+  protected $themeManager;
+
+  /**
    * The token service.
    *
    * @var \Drupal\Core\Utility\Token
@@ -40,12 +48,15 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
+   *   The theme manager.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, Token $token) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ThemeManagerInterface $theme_manager, Token $token) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
+    $this->themeManager = $theme_manager;
     $this->token = $token;
 
     $this->config = $this->configFactory->get('webform.settings');
@@ -68,13 +79,29 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return $text;
     }
 
-    // Replace @deprecated [webform-submission] with [webform_submission].
-    $text = str_replace('[webform-submission:', '[webform_submission:', $text);
+    if ($entity) {
+      // Replace @deprecated [webform-submission] with [webform_submission].
+      $text = str_replace('[webform-submission:', '[webform_submission:', $text);
 
-    // Set token data based on entity type.
-    $this->setTokenData($data, $entity);
+      // Set token data based on entity type.
+      $this->setTokenData($data, $entity);
+    }
 
-    return $this->token->replace($text, $data, $options);
+    // Track the active theme, if there is no active theme it mean tokens
+    // are being replaced during the initial page request.
+    $has_active_theme = $this->themeManager->hasActiveTheme();
+
+    // Replace the tokens.
+    $result = $this->token->replace($text, $data, $options);
+
+    // If there was no active theme and now there is one.
+    // Reset the active theme, so that theme negotiators can determine the
+    // correct active theme.
+    if (!$has_active_theme && $this->themeManager->hasActiveTheme()) {
+      $this->themeManager->resetActiveTheme();
+    }
+
+    return $result;
   }
 
   /**
