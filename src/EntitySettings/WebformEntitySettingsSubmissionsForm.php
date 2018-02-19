@@ -226,7 +226,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       'submission_log' => [
         'title' => $this->t('Log submission events'),
         'all_description' => $this->t('All submission event are being logged for all webforms'),
-        'form_description' => $this->t('If checked, events will be logged for submissions to this webforms.'),
+        'form_description' => $this->t('If checked, events will be logged for submissions to this webform.'),
       ],
     ];
     $this->appendBehaviors($form['submission_behaviors'], $behavior_elements, $settings, $default_settings);
