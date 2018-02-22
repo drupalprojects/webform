@@ -189,5 +189,76 @@ function hook_webform_third_party_settings_form_alter(array &$form, \Drupal\Core
 }
 
 /**
+ * Collect extra webform help from modules.
+ *
+ * To help on-boarding new users, there is a robust help system developed. If
+ * you would like to add extra webform help, you are free to implement this
+ * hook.
+ *
+ * @return array
+ *   Extra webform help your module is providing to the users. The return array
+ *   should be keyed by help ID (a unique machine-name) and each sub array
+ *   should have the following structure:
+ *   - access: (bool) Whether the current user is granted access to this help.
+ *     Defaults to TRUE.
+ *   - routes: (array) Array of route names where your help should be displayed.
+ *   - paths: (array) Array of paths where your help should be displayed. You
+ *     can use any syntax supported by the "path.matcher" service.
+ *   - video_id: (string) Optional video to include in the help message. Allowed
+ *     values are the keys of WebformHelpManager::videos array.
+ *   - attached: (array) Optional #attached array to attach to your help
+ *     renderable array.
+ *   - group: (string) Group where your help belongs. Allowed values are the
+ *     keys of WebformHelpManager::groups array.
+ *   - title: (string) Title of your help
+ *   - content: (array) Renderable array of your help
+ *   - message_id: (string) Optional message ID that will be supplied into
+ *     'webform_message' element. You are free to use 'message_*' keys if you
+ *     want to additionally display a message when your help is displayed. These
+ *     keyes will be supplied into 'webform_message' element. Refer to the docs
+ *     of this element for their meaning.
+ *   - message_type: (string) Will be supplied into 'webform_message' element.
+ *   - message_close: (bool) Will be supplied into 'webform_message' element.
+ *   - message_storage: (string) Will be supplied into 'webform_message'
+ *     element.
+ */
+function hook_webform_help() {
+  $help = [];
+
+  $help['my_custom_help'] = [
+    'access' => $this->currentUser->hasPermission('my cool permission'),
+    'routes' => [
+      'my_module.route_where_i_show_this_help',
+    ],
+    'paths' => [
+      '/path/where/*/i-wanna/show-help',
+    ],
+    'video_id' => 'blocks',
+    'attached' => [],
+    'group' => 'messages',
+    'title' => $this->t('Message: Webform UI Disabled'),
+    'content' => $this->t('Please enable the <strong>Webform UI</strong> module if you would like to add easily add and manage elements using a drag-n-drop user interface.'),
+    'message_id' => '',
+    'message_type' => 'warning',
+    'message_close' => TRUE,
+    'message_storage' => \Drupal\webform\Element\WebformMessage::STORAGE_STATE,
+  ];
+
+  return $help;
+}
+
+/**
+ * Alter the webform help.
+ *
+ * @param array $help
+ *   Webform help data as collected from hook_webform_help().
+ */
+function hook_webform_help_alter(&$help) {
+  if (isset($help['some_help_i_wanna_change'])) {
+    $help['title'] = t('This is a really cool help message. Do read it thorough!');
+  }
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
