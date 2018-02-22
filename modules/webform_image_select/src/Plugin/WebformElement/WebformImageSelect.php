@@ -1,12 +1,13 @@
 <?php
 
-namespace Drupal\webform\Plugin\WebformElement;
+namespace Drupal\webform_image_select\Plugin\WebformElement;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Element\WebformImageSelect as WebformImageSelectElement;
-use Drupal\webform\Element\WebformMessage as WebformMessageElement;
+use Drupal\webform\Plugin\WebformElement\Select;
+use Drupal\webform_image_select\Element\WebformImageSelect as WebformImageSelectElement;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform_image_select\Entity\WebformImageSelectImages;
 
 /**
  * Provides a 'image_select' element.
@@ -51,7 +52,14 @@ class WebformImageSelect extends Select {
    * {@inheritdoc}
    */
   public function initialize(array &$element) {
+    // Set element images.
+    if (isset($element['#images'])) {
+      $element['#images'] = WebformImageSelectImages::getElementImages($element);
+    }
+
     WebformImageSelectElement::setOptions($element);
+
+    parent::initialize($element);
   }
 
   /**
@@ -90,12 +98,20 @@ class WebformImageSelect extends Select {
           // a root-relative paths.
           '#attributes' => ['src' => $src],
           '#title' => $element['#images'][$value]['text'],
+          '#alt' => $element['#images'][$value]['text'],
         ];
 
         // Suppress all image size errors.
         if ($image_size = @getimagesize($element['#images'][$value]['src'])) {
           $image['#width'] = $image_size[0];
           $image['#height'] = $image_size[1];
+        }
+
+        // For the Results table always just return the image with tooltip.
+        if (strpos(\Drupal::routeMatch()->getRouteName(), 'webform.results_submissions') !== FALSE) {
+          $image['#attached']['library'][] = 'webform/webform.tooltip';
+          $image['#attributes']['class'] = ['js-webform-tooltip-link'];
+          return $image;
         }
 
         $build = [
@@ -196,33 +212,8 @@ class WebformImageSelect extends Select {
     $form = parent::form($form, $form_state);
     $form['options']['#title'] = $this->t('Image options');
     $form['options']['images'] = [
-      '#type' => 'webform_multiple',
-      '#key' => 'value',
-      '#header' => [
-        ['data' => t('Option value'), 'width' => '25%'],
-        ['data' => t('Option text'), 'width' => '25%'],
-        ['data' => t('Option src'), 'width' => '50%'],
-      ],
-      '#element' => [
-        'value' => [
-          '#type' => 'textfield',
-          '#title' => t('Option value'),
-          '#title_display' => t('invisible'),
-          '#placeholder' => t('Enter value'),
-        ],
-        'text' => [
-          '#type' => 'textfield',
-          '#title' => t('Option text'),
-          '#title_display' => t('invisible'),
-          '#placeholder' => t('Enter text'),
-        ],
-        'src' => [
-          '#type' => 'textfield',
-          '#title' => t('Option image'),
-          '#title_display' => t('invisible'),
-          '#placeholder' => t('Enter image src'),
-        ],
-      ],
+      '#title' => $this->t('Images'),
+      '#type' => 'webform_image_select_element_images',
       '#weight' => -10,
     ];
     $form['options']['images_randomize'] = [
@@ -234,28 +225,9 @@ class WebformImageSelect extends Select {
     $form['options']['show_label'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show labels'),
-      '#description' => $this->t('If checked, the text of each option will be added as a paragraph below each image.'),
+      '#description' => $this->t('If checked, the image text will be displayed below each image.'),
       '#return_value' => TRUE,
     ];
-
-    if (function_exists('imce_process_url_element')) {
-      $src_element = &$form['options']['images']['#element']['src'];
-      imce_process_url_element($src_element, 'link');
-      $form['#attached']['library'][] = 'webform/imce.input';
-    }
-    elseif ($this->currentUser->hasPermission('administer modules')) {
-      $form['options']['imce_message'] = [
-        '#type' => 'webform_message',
-        '#message_type' => 'warning',
-        '#message_message' => $this->t('Install the <a href=":href">IMCE module</a> to manage and uploaded image files.', [':href' => 'https://www.drupal.org/project/imce']),
-        '#message_close' => TRUE,
-        '#message_id' => 'webform_imce_message',
-        '#message_storage' => WebformMessageElement::STORAGE_LOCAL,
-        '#weight' => -100,
-        '#access' => TRUE,
-      ];
-    }
-
     return $form;
   }
 

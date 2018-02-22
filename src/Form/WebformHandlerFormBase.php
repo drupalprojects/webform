@@ -52,7 +52,7 @@ abstract class WebformHandlerFormBase extends FormBase {
    *   The webform handler ID.
    *
    * @return array
-   *   The webform structure.
+   *   The form structure.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   Throws not found exception if the number of handler instances for this

@@ -33,10 +33,15 @@ class WebformOptionsForm extends EntityForm {
     /** @var \Drupal\webform\WebformOptionsInterface $webform */
     $webform_options = $this->getEntity();
 
-    // Customize title for duplicate webform options.
-    if ($this->operation == 'duplicate') {
-      // Display custom title.
-      $form['#title'] = $this->t("Duplicate '@label' options", ['@label' => $webform_options->label()]);
+    // Customize title for duplicate and edit operation.
+    switch ($this->operation) {
+      case 'duplicate':
+        $form['#title'] = $this->t("Duplicate '@label' options", ['@label' => $webform_options->label()]);
+        break;
+
+      case 'edit':
+        $form['#title'] = $webform_options->label();
+        break;
     }
 
     return parent::buildForm($form, $form_state);
@@ -156,7 +161,7 @@ class WebformOptionsForm extends EntityForm {
   }
 
   /**
-   * Edit webform options source code webform.
+   * Edit webform options source code form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -164,7 +169,7 @@ class WebformOptionsForm extends EntityForm {
    *   The current state of the form.
    *
    * @return array
-   *   The webform structure.
+   *   The form structure.
    */
   protected function editForm(array $form, FormStateInterface $form_state) {
     $form['options'] = [
@@ -175,7 +180,6 @@ class WebformOptionsForm extends EntityForm {
         $this->t("Descriptions, which are only applicable to radios and checkboxes, can be delimited using ' -- '."),
       '#default_value' => Yaml::encode($this->getOptions()),
     ];
-    $form['#attached']['library'][] = 'webform/webform.codemirror.yaml';
     return $form;
   }
 

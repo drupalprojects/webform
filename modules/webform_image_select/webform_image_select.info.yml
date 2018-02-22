@@ -1,0 +1,7 @@
+name: 'Webform Image Select'
+type: module
+description: 'Provides a webform element for a selecting an image.'
+package: Webform
+core: 8.x
+dependencies:
+  - 'webform:webform'

@@ -79,17 +79,4 @@ class WebformOptionsController extends ControllerBase {
     }
   }
 
-  /**
-   * Route title callback.
-   *
-   * @param \Drupal\webform\WebformOptionsInterface $webform_options
-   *   The webform options.
-   *
-   * @return string
-   *   The webform options label as a render array.
-   */
-  public function title(WebformOptionsInterface $webform_options) {
-    return $webform_options->label();
-  }
-
 }

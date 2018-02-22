@@ -78,7 +78,7 @@ class WebformElementFormatCustomTest extends WebformElementTestBase {
     $this->assertRaw('<span class="file file--mime-image-png file--image"> <a href="' . $file_url . '" type="image/png; length=' . $file_size . '">' . $file_name . '</a></span>');
     $this->assertRaw('item[\'id\']: 1<br/>');
     $this->assertRaw("item['url']: $file_url<br/>");
-    $this->assertRaw('<img class="webform-image-file" alt="' . $file_name . '" src="' . $file_url . '" />');
+    $this->assertRaw('<img class="webform-image-file" alt="' . $file_name . '" title="' . $file_name . '" src="' . $file_url . '" />');
 
     // Check composite custom HTML format.
     $this->assertRaw('<label>address_custom</label>');

@@ -299,7 +299,6 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       if (isset($operations['delete'])) {
         $operations['delete']['attributes'] = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW);
       }
-
     }
     return $operations;
   }

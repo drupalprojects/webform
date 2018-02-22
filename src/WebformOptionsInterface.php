@@ -31,7 +31,7 @@ interface WebformOptionsInterface extends ConfigEntityInterface {
    * Get options (YAML) as an associative array.
    *
    * @return array|bool
-   *   Options as an associative array. Returns FALSE is options YAML is invalid.
+   *   Options as an associative array. Returns FALSE if options YAML is invalid.
    */
   public function getOptions();
 

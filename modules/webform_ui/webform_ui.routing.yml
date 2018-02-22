@@ -13,7 +13,6 @@ entity.webform.source_form:
 entity.webform_options.source_form:
   path: '/admin/structure/webform/config/options/manage/{webform_options}/source'
   defaults:
-    _title_callback: '\Drupal\webform\Controller\WebformOptionsController::title'
     _entity_form: 'webform_options.source'
   requirements:
     _custom_access: '\Drupal\webform_ui\Access\WebformUiAccess::checkWebformOptionSourceAccess'

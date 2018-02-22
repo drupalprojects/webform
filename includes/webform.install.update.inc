@@ -2010,3 +2010,23 @@ function webform_update_8108() {
     }
   }
 }
+
+/**
+ * Issue #2933909: Webform Image Select Element Improvements.
+ */
+function webform_update_8109() {
+  $config_factory = \Drupal::configFactory();
+  $install_webform_image_select = FALSE;
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->get($webform_config_name);
+    $elements = $webform_config->get('elements');
+    if (strpos($elements, 'webform_image_select') !== FALSE) {
+      $install_webform_image_select = TRUE;
+      break;
+    }
+  }
+
+  if ($install_webform_image_select && !\Drupal::moduleHandler()->moduleExists('webform_image_select')) {
+    \Drupal::service('module_installer')->install(['webform_image_select']);
+  }
+}

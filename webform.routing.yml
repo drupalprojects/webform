@@ -400,7 +400,7 @@ entity.webform_options.edit_form:
   path: '/admin/structure/webform/config/options/manage/{webform_options}/edit'
   defaults:
     _entity_form: 'webform_options.edit'
-    _title_callback: '\Drupal\webform\Controller\WebformOptionsController::title'
+    _title: 'Edit webform options'
   requirements:
     _entity_access: 'webform_options.update'
 

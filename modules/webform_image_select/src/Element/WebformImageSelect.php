@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform\Element;
+namespace Drupal\webform_image_select\Element;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Xss;
@@ -52,7 +52,7 @@ class WebformImageSelect extends Select {
     $element['#attributes']['class'][] = 'js-webform-image-select';
 
     // Attach library.
-    $element['#attached']['library'][] = 'webform/webform.element.image_select';
+    $element['#attached']['library'][] = 'webform_image_select/webform_image_select.element';
 
     return parent::processSelect($element, $form_state, $complete_form);
   }

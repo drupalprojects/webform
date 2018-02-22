@@ -87,7 +87,7 @@
    */
   Drupal.behaviors.webformTooltipLink = {
     attach: function (context) {
-      $(context).find('a.js-webform-tooltip-link').once('webform-tooltip-link').each(function () {
+      $(context).find('.js-webform-tooltip-link').once('webform-tooltip-link').each(function () {
         var $link = $(this);
 
         var options = $.extend({}, Drupal.webform.tooltipLink.options);

@@ -9,8 +9,12 @@
  * Implements hook_library_info_alter().
  */
 function webform_library_info_alter(&$libraries, $extension) {
-  // Only alter webform libraries.
-  if ($extension != 'webform') {
+  $webform_libraries_modules = \Drupal::moduleHandler()->getImplementations('webform_libraries_info');
+  $webform_libraries_modules[] = 'webform';
+
+  // Only alter modules that declare webform libraries.
+  // @see hook_webform_libraries_info()
+  if (!in_array($extension, $webform_libraries_modules)) {
     return;
   }
 

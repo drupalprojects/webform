@@ -338,15 +338,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'optional' => TRUE,
       'deprecated' => $this->t('The iCheck library is not being maintained and has been <a href=":href">deprecated</a>. It wil be removed before Webform 8.x-5.0.', [':href' => 'https://www.drupal.org/project/webform/issues/2931154']),
     ];
-    $libraries['jquery.image-picker'] = [
-      'title' => $this->t('jQuery: Image Picker'),
-      'description' => $this->t('A simple jQuery plugin that transforms a select element into a more user friendly graphical interface.'),
-      'notes' => $this->t('Image Picker is used by the Image select element.'),
-      'homepage_url' => Url::fromUri('https://rvera.github.io/image-picker/'),
-      'download_url' => Url::fromUri('https://github.com/rvera/image-picker/archive/0.3.0.zip'),
-      'version' => '0.3.0',
-      'elements' => ['webform_image_select'],
-    ];
     $libraries['jquery.inputmask'] = [
       'title' => $this->t('jQuery: Input Mask'),
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
@@ -437,6 +428,20 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'version' => '2.3.0',
       'elements' => ['webform_signature'],
     ];
+
+    // Allow other modules to define webform libraries.
+    foreach ($this->moduleHandler->getImplementations('webform_libraries_info') as $module) {
+      foreach ($this->moduleHandler->invoke($module, 'webform_libraries_info') as $library_name => $library) {
+        $libraries[$library_name] = $library;
+      }
+    }
+
+    // Allow other modules to alter webform libraries.
+    $this->moduleHandler->alter('webform_libraries_info', $libraries);
+
+    // Sort libraries by key.
+    ksort($libraries);
+
     return $libraries;
   }
 

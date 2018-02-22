@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Url;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
  * Defines a class to build a listing of webform options entities.
@@ -31,6 +32,8 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
     }
 
     $build += parent::render();
+
+    $build['#attached']['library'][] = 'webform/webform.admin.dialog';
 
     return $build;
   }
@@ -89,6 +92,9 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
         'weight' => 23,
         'url' => Url::fromRoute('entity.webform_options.duplicate_form', ['webform_options' => $entity->id()]),
       ];
+    }
+    if (isset($operations['delete'])) {
+      $operations['delete']['attributes'] = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW);
     }
     return $operations;
   }

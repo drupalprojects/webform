@@ -568,19 +568,6 @@ webform.element.image_file.modal:
     - core/jquery.once
     - core/jquery.ui.dialog
 
-webform.element.image_select:
-  version: VERSION
-  css:
-    component:
-      css/webform.element.image_select.css: {}
-  js:
-    js/webform.element.image_select.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
-    - webform/libraries.jquery.image-picker
-
 webform.element.inputmask:
   version: VERSION
   js:
@@ -991,23 +978,6 @@ libraries.jquery.icheck.square:
       /libraries/jquery.icheck/skins/square/_all.css: {}
   dependencies:
     - webform/libraries.jquery.icheck
-
-libraries.jquery.image-picker:
-  remote: https://rvera.github.io/image-picker/
-  version: '0.3.0'
-  license:
-    name: MIT
-    url: https://github.com/rvera/image-picker/blob/master/LICENSE
-    gpl-compatible: true
-  cdn:
-    /libraries/jquery.image-picker/image-picker/: https://cdnjs.cloudflare.com/ajax/libs/image-picker/0.3.0/
-  css:
-    component:
-      /libraries/jquery.image-picker/image-picker/image-picker.css: {}
-  js:
-    /libraries/jquery.image-picker/image-picker/image-picker.js: {}
-  dependencies:
-    - core/jquery
 
 libraries.jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask

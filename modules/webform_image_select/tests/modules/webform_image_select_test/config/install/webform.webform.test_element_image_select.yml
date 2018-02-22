@@ -3,7 +3,7 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_test
+      - webform_image_select_test
 open: null
 close: null
 uid: null
@@ -123,6 +123,10 @@ elements: |
       visible:
         ':input[name="image_select_states_trigger"]':
           value: kitten_1
+  image_select_animals:
+    '#type': webform_image_select
+    '#title': image_select_animals
+    '#images': animals
 css: ''
 javascript: ''
 settings:
@@ -172,7 +176,7 @@ settings:
   wizard_confirmation: true
   wizard_confirmation_label: ''
   wizard_track: ''
-  preview: 0
+  preview: 1
   preview_label: ''
   preview_title: ''
   preview_message: ''

@@ -96,21 +96,21 @@ function hook_webform_element_ELEMENT_TYPE_alter(array &$element, \Drupal\Core\F
 }
 
 /**
- * Alter form options by id.
+ * Alter webform options by id.
  *
  * @param array $options
  *   An associative array of options.
  * @param array $element
- *   The form element that the options is for.
+ *   The webform element that the options is for.
  * @param string $options_id
- *   The form options id. Set to NULL if the options are custom.
+ *   The webform options id. Set to NULL if the options are custom.
  */
 function hook_webform_options_alter(array &$options, array &$element, $options_id = NULL) {
 
 }
 
 /**
- * Alter the webform options by id.
+ * Alter webform options by id.
  *
  * @param array $options
  *   An associative array of options.
@@ -185,6 +185,34 @@ function hook_webform_admin_third_party_settings_form_alter(array &$form, \Drupa
  * @ingroup form_api
  */
 function hook_webform_third_party_settings_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+
+}
+
+/**
+ * Return information about external webform libraries.
+ *
+ * @internal
+ * This hook will most likely be removed once there is a
+ * stable release of Libraries API for Drupal 8.
+ *
+ * @see https://www.drupal.org/project/libraries
+ * @see \Drupal\webform\WebformLibrariesManager::initLibraries
+ */
+function hook_webform_libraries_info() {
+
+}
+
+/**
+ * Alter the webform module's libraries information.
+ *
+ * @internal
+ * This hook will most likely be removed once there is a
+ * stable release of Libraries API for Drupal 8.
+ *
+ * @see https://www.drupal.org/project/libraries
+ * @see \Drupal\webform\WebformLibrariesManager::initLibraries
+ */
+function hook_webform_libraries_info_alter(&$libraries) {
 
 }
 
