@@ -604,7 +604,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    * Initialize group.
    *
    * @return array
-   *   An associative array containing videos.
+   *   An associative array containing groups.
    */
   protected function initGroups() {
     return [
@@ -973,20 +973,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'entity.webform.collection',
       ],
     ];
-
-    // Templates.
-    if ($this->moduleHandler->moduleExists('webform_templates')) {
-      $help['webform_templates'] = [
-        'group' => 'forms',
-        'title' => $this->t('Templates'),
-        'content' => $this->t('The <strong>Templates</strong> page lists reusable templates that can be duplicated and customized to create new webforms.'),
-        'video_id' => 'forms',
-        'routes' => [
-          // @see /admin/structure/webform/templates
-          'entity.webform.templates',
-        ],
-      ];
-    }
 
     /**************************************************************************/
     // Addons.
@@ -1645,7 +1631,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     /**************************************************************************/
     // Messages.
     /**************************************************************************/
-    
+
     // Webform: Elements -- Warning.
     $help['message_webform_ui'] = [
       'group' => 'messages',
@@ -1663,6 +1649,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'entity.webform.edit_form',
       ],
     ];
+
+    // Let other modules provide any extra help.
+    $help += $this->moduleHandler->invokeAll('webform_help');
+    $this->moduleHandler->alter('webform_help', $help);
 
     /**************************************************************************/
 
