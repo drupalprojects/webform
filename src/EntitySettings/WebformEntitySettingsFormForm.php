@@ -184,6 +184,8 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       $entity_type_options[$entity_type_id] = $entity_type->getLabel();
     }
+    uasort($entity_type_options, 'strnatcasecmp');
+
     $form['form_behaviors']['form_prepopulate_source_entity_type'] = [
       '#type' => 'select',
       '#title' => 'Type of source entity to be populated using query string parameters',
