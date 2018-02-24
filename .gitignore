@@ -6,3 +6,6 @@ html
 
 # Ignore all *.features.yml files.
 *.features.yml
+
+# Ignore IDE
+.idea
