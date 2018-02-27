@@ -22,6 +22,8 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
    */
   public function getDefaultProperties() {
     return [
+      // Element settings.
+      'title' => '',
       // Markup settings.
       'display_on' => static::DISPLAY_ON_BOTH,
       // Description/Help.

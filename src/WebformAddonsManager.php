@@ -422,6 +422,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'utility',
     ];
 
+    // Utility: Webform Ip Track.
+    $projects['webform_ip_track'] = [
+      'title' => $this->t('Webform Ip Track'),
+      'description' => $this->t('Ip Location details as custom tokens to use in webform submission values.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_ip_track'),
+      'category' => 'utility',
+    ];
+
     // Utility: IMCE.
     $projects['imce'] = [
       'title' => $this->t('IMCE'),
