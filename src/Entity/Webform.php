@@ -3,6 +3,8 @@
 namespace Drupal\webform\Entity;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
@@ -368,7 +370,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * @var bool
    */
   protected $hasMessagehandler;
-  
+
   /**
    * {@inheritdoc}
    */
@@ -962,12 +964,12 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   public function checkAccessRules($operation, AccountInterface $account, WebformSubmissionInterface $webform_submission = NULL) {
     // Always grant access to user that can administer webforms.
     if ($account->hasPermission('administer webform')) {
-      return TRUE;
+      return AccessResult::allowed()->cachePerPermissions();
     }
 
     // Grant user with administer webform submission access to view all webform submissions.
     if ($account->hasPermission('administer webform submission') && $operation != 'administer') {
-      return TRUE;
+      return AccessResult::allowed()->cachePerPermissions();
     }
 
     // The "page" operation is the same as "create" but requires that the
@@ -975,7 +977,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     // Used by the 'entity.webform.canonical' route.
     if ($operation == 'page') {
       if (empty($this->settings['page'])) {
-        return FALSE;
+        return AccessResult::forbidden()->addCacheableDependency($this);
       }
       else {
         $operation = 'create';
@@ -984,19 +986,30 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
     $access_rules = $this->getAccessRules() + static::getDefaultAccessRules();
 
+    $cacheability = new CacheableMetadata();
+    $cacheability->addCacheableDependency($this);
+    $cacheability->addCacheContexts(['user.permissions']);
+    foreach ($access_rules as $access_rule) {
+      // If there is some per-user access logic, our response must be cacheable
+      // accordingly.
+      if (!empty($access_rule['users'])) {
+        $cacheability->addCacheContexts(['user']);
+      }
+    }
+
     // Check administer access rule and grant full access to user.
     if ($this->checkAccessRule($access_rules['administer'], $account)) {
-      return TRUE;
+      return AccessResult::allowed()->addCacheableDependency($cacheability);
     }
 
     // Check operation specific access rules.
     if (in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any', 'administer'])
       && $this->checkAccessRule($access_rules[$operation], $account)) {
-      return TRUE;
+      return AccessResult::allowed()->addCacheableDependency($cacheability);
     }
     if (isset($access_rules[$operation . '_any'])
       && $this->checkAccessRule($access_rules[$operation . '_any'], $account)) {
-      return TRUE;
+      return AccessResult::allowed()->addCacheableDependency($cacheability);
     }
 
     // If webform submission is not set then check 'view own'.
@@ -1004,7 +1017,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     if (empty($webform_submission)
       && $operation === 'view_own'
       && $this->checkAccessRule($access_rules[$operation], $account)) {
-      return TRUE;
+      return AccessResult::allowed()->addCacheableDependency($cacheability);
     }
 
     // If webform submission is set then check the webform submission owner.
@@ -1015,12 +1028,12 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       if ($is_owner) {
         if (isset($access_rules[$operation . '_own'])
           && $this->checkAccessRule($access_rules[$operation . '_own'], $account)) {
-          return TRUE;
+          return AccessResult::allowed()->cachePerUser()->addCacheableDependency($cacheability);
         }
       }
     }
 
-    return FALSE;
+    return AccessResult::forbidden()->addCacheableDependency($cacheability);
   }
 
   /**

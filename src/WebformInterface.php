@@ -489,8 +489,8 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    * @param \Drupal\webform\WebformSubmissionInterface|null $webform_submission
    *   (optional) A webform submission.
    *
-   * @return bool
-   *   The access result. Returns a TRUE if access is allowed.
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
    */
   public function checkAccessRules($operation, AccountInterface $account, WebformSubmissionInterface $webform_submission = NULL);
 

@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Plugin\Block;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -124,13 +123,7 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
-    $webform = $this->getWebform();
-    if (!$webform->access('submission_create', $account)) {
-      return AccessResult::forbidden();
-    }
-    else {
-      return parent::blockAccess($account);
-    }
+    return $this->getWebform()->access('submission_create', $account, TRUE);
   }
 
   /**

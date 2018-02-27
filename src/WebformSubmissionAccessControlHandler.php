@@ -59,9 +59,9 @@ class WebformSubmissionAccessControlHandler extends EntityAccessControlHandler {
     }
 
     // Check webform update access.
-    $webform = $entity->getWebform();
-    if ($webform->checkAccessRules($operation, $account, $entity)) {
-      return AccessResult::allowed();
+    $webform_access = $entity->getWebform()->checkAccessRules($operation, $account, $entity);
+    if ($webform_access->isAllowed()) {
+      return $webform_access;
     }
 
     return parent::checkAccess($entity, $operation, $account);

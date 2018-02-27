@@ -103,20 +103,20 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
       $has_administer = $entity->checkAccessRules('administer', $account);
       switch ($operation) {
         case 'update':
-          if ($has_administer || $account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)) {
-            return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
+          if ($has_administer->isAllowed() || $account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)) {
+            return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity)->addCacheableDependency($has_administer);
           }
           break;
 
         case 'duplicate':
-          if ($has_administer || $account->hasPermission('create webform') && ($entity->isTemplate() || ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)))) {
-            return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
+          if ($has_administer->isAllowed() || $account->hasPermission('create webform') && ($entity->isTemplate() || ($account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)))) {
+            return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity)->addCacheableDependency($has_administer);
           }
           break;
 
         case 'delete':
-          if ($has_administer || $account->hasPermission('delete any webform') || ($account->hasPermission('delete own webform') && $is_owner)) {
-            return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
+          if ($has_administer->isAllowed() || $account->hasPermission('delete any webform') || ($account->hasPermission('delete own webform') && $is_owner)) {
+            return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity)->addCacheableDependency($has_administer);
           }
           break;
       }
@@ -127,17 +127,17 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
       // Allow users with 'view any webform submission' or
       // 'administer webform submission' to view all submissions.
       if ($operation == 'submission_view_any' && ($account->hasPermission('view any webform submission') || $account->hasPermission('administer webform submission'))) {
-        return AccessResult::allowed();
+        return AccessResult::allowed()->cachePerPermissions();
       }
 
       // Allow users with 'view own webform submission' to view own submissions.
       if ($account->hasPermission('view own webform submission') && $is_owner) {
-        return AccessResult::allowed();
+        return AccessResult::allowed()->cachePerUser()->addCacheableDependency($entity);
       }
 
       // Allow users with 'view own webform submission' to view own submissions.
       if ($operation == 'submission_view_own' && $account->hasPermission('view own webform submission')) {
-        return AccessResult::allowed();
+        return AccessResult::allowed()->cachePerPermissions();
       }
 
       // Allow (secure) token to bypass submission page and create access controls.
@@ -148,21 +148,26 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
           $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
 
           $source_entity = $this->webformSourceEntityManager->getSourceEntity(['webform']);
-          if ($submission_storage->loadFromToken($token, $entity, $source_entity)) {
-            return AccessResult::allowed();
+          if ($submission = $submission_storage->loadFromToken($token, $entity, $source_entity)) {
+            return AccessResult::allowed()->addCacheableDependency($submission)->addCacheableDependency($entity)->addCacheContexts(['url']);
           }
         }
       }
 
       // Completely block access to a template if the user can't create new
       // Webforms.
-      if ($operation == 'submission_page' && $entity->isTemplate() && !$entity->access('create')) {
-        return AccessResult::forbidden()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
+      if ($operation == 'submission_page' && $entity->isTemplate()) {
+        $create_access = $entity->access('create', $account, TRUE);
+        if (!$create_access->isAllowed()) {
+          return AccessResult::forbidden()->addCacheableDependency($entity)->addCacheableDependency($create_access);
+        }
       }
 
       // Check custom webform submission access rules.
-      if ($this->checkAccess($entity, 'update', $account)->isAllowed() || $entity->checkAccessRules(str_replace('submission_', '', $operation), $account)) {
-        return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity);
+      $update_access = $this->checkAccess($entity, 'update', $account);
+      $access_rules = $entity->checkAccessRules(str_replace('submission_', '', $operation), $account);
+      if ($update_access->isAllowed() || $access_rules->isAllowed()) {
+        return AccessResult::allowed()->addCacheableDependency($update_access)->addCacheableDependency($access_rules);
       }
     }
 

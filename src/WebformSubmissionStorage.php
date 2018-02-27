@@ -1279,7 +1279,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     if ($this->currentUser->hasPermission('view own webform submission')) {
       return TRUE;
     }
-    elseif ($webform->checkAccessRules('view_own', $this->currentUser)) {
+    elseif ($webform->checkAccessRules('view_own', $this->currentUser)->isAllowed()) {
       return TRUE;
     }
     elseif ($webform->getSetting('form_convert_anonymous')) {
