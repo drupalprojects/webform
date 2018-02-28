@@ -827,7 +827,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   The URI of the file.
    *
    * @return mixed
-   *   Returns NULL is the file is not attached to a webform submission.
+   *   Returns NULL if the file is not attached to a webform submission.
    *   Returns -1 if the user does not have permission to access a webform.
    *   Returns an associative array of headers.
    *

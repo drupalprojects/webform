@@ -48,10 +48,24 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *   An element's property name.
    *
    * @return mixed
-   *   An element's default property value or NULL is default property does not
+   *   An element's default property value or NULL if default property does not
    *   exist.
    */
   public function getDefaultProperty($property_name);
+
+  /**
+   * Get an element's property value.
+   *
+   * @param array $element
+   *   An element.
+   * @param string $property_name
+   *   An element's property name.
+   *
+   * @return mixed
+   *   An element's property value, default value, or NULL if
+   *   property does not exist.
+   */
+  public function getElementProperty(array $element, $property_name);
 
   /**
    * Determine if the element supports a specified property.

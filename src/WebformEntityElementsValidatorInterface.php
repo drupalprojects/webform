@@ -14,7 +14,7 @@ interface WebformEntityElementsValidatorInterface {
    *   A webform.
    *
    * @return array|null
-   *   An array of error messages or NULL is the elements are valid.
+   *   An array of error messages or NULL if the elements are valid.
    */
   public function validate(WebformInterface $webform);
 
