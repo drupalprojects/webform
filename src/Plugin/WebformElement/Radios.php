@@ -2,6 +2,8 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\webform\WebformSubmissionInterface;
+
 /**
  * Provides a 'radios' element.
  *
@@ -26,6 +28,18 @@ class Radios extends OptionsBase {
       // iCheck settings.
       'icheck' => '',
     ] + parent::getDefaultProperties();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+    parent::prepare($element, $webform_submission);
+
+    // Issue #2856795: If radio buttons are required but not filled form is
+    // nevertheless submitted.
+    // Issue #2856315: Conditional Logic - Requiring Radios in a Fieldset.
+    $element['#attached']['library'][] = 'webform/webform.element.radios';
   }
 
 }
