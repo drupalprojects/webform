@@ -400,6 +400,29 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     $form['types']['excluded_elements']['#header']['title']['width'] = '25%';
     $form['types']['excluded_elements']['#header']['id']['width'] = '25%';
     $form['types']['excluded_elements']['#header']['description']['width'] = '50%';
+    // Add warning to all password elements.
+    foreach ($form['types']['excluded_elements']['#options'] as $element_type => &$excluded_element_option) {
+      if (strpos($element_type,'password') !== FALSE) {
+        $excluded_element_option['description'] = [
+          'data' => [
+            'description' => ['#markup' => $excluded_element_option['description']],
+            'message' => [
+              '#type' => 'webform_message',
+              '#message_type' => 'warning',
+              '#message_message' => $this->t('Webform submissions store passwords as plain text.') . ' ' .
+                $this->t('Any webform that includes this element should enable <a href=":href">encryption</a>.', [':href' => 'https://www.drupal.org/project/webform_encrypt']),
+              '#attributes' => ['class' => ['js-form-wrapper']],
+              '#states' => [
+                'visible' => [
+                  ':input[name="excluded_elements[' . $element_type . ']"]' => ['checked' => TRUE],
+                ],
+              ],
+            ],
+          ],
+        ];
+
+      }
+    }
 
     // Element: Format.
     $form['format'] = [

@@ -2030,3 +2030,30 @@ function webform_update_8109() {
     \Drupal::service('module_installer')->install(['webform_image_select']);
   }
 }
+
+/**
+ * Issue #2947991: Disable the password field.
+ */
+function webform_update_8110() {
+  $config_factory = \Drupal::configFactory();
+  $has_password_element = FALSE;
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->get($webform_config_name);
+    $elements = $webform_config->get('elements');
+    // Check for password and password_confirm element #type.
+    if (strpos($elements, "'#type': password") !== FALSE) {
+      $has_password_element = TRUE;
+      break;
+    }
+  }
+
+  // If password element is not being used in any webform display both the
+  // password and password_confirm element.
+  if (!$has_password_element) {
+    $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+    $excluded_elements = $admin_config->get('element.excluded_elements') ?: [];
+    $excluded_elements['password'] = 'password';
+    $excluded_elements['password_confirm'] = 'password_confirm';
+  }
+}
+

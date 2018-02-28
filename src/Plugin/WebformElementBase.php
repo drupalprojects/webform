@@ -18,6 +18,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\webform\Element\WebformHtmlEditor;
+use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Plugin\WebformElement\Checkbox;
 use Drupal\webform\Plugin\WebformElement\Checkboxes;
@@ -2690,6 +2691,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         $form['element']['multiple']['#disabled'] = TRUE;
         $form['element']['multiple']['#description'] = '<em>' . $this->t('There is data for this element in the database. This setting can no longer be changed.') . '</em>';
       }
+    }
+
+    // Add warning to all password elements that are stored in the database.
+    if (strpos($this->pluginId, 'password') !== FALSE && !$webform->getSetting('results_disabled')) {
+      $form['element']['password_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Webform submissions store passwords as plain text.') . ' ' .
+          $this->t('<a href=":href">Encryption</a> should be enabled for this element.', [':href' => 'https://www.drupal.org/project/webform_encrypt']),
+        '#access' => TRUE,
+        '#weight' => -100,
+        '#message_close' => TRUE,
+        '#message_storage' => WebformMessage::STORAGE_SESSION,
+      ];
     }
 
     return $form;

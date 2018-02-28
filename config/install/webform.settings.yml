@@ -120,7 +120,9 @@ element:
   default_empty_option_optional: ''
   default_icheck: ''
   default_google_maps_api_key: ''
-  excluded_elements: {  }
+  excluded_elements:
+    password: password
+    password_confirm: password_confirm
 html_editor:
   disabled: false
   format: ''

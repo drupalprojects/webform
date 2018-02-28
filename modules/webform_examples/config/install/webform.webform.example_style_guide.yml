@@ -108,12 +108,6 @@ elements: |
         two: Two
         three: Three
       '#icheck': minimal
-    password:
-      '#type': password
-      '#title': Password
-    password_confirm:
-      '#type': password_confirm
-      '#title': 'Password confirm'
   date_elements:
     '#type': details
     '#title': 'Date elements'

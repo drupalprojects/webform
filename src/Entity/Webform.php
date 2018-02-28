@@ -1899,7 +1899,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function updatePaths() {
-    // Path module must be enable for URL aliases to be updated.
+    // Path module must be enabled for URL aliases to be updated.
     if (!\Drupal::moduleHandler()->moduleExists('path')) {
       return;
     }
