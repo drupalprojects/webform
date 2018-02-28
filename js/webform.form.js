@@ -109,6 +109,13 @@
     }
   };
 
+  // When #state:required is triggered we need to reset the target elements
+  // custom validity.
+  $(document).on('state:required', function (e) {
+    $(e.target).filter('[data-webform-required-error]')
+      .each(function() {this.setCustomValidity('');});
+  });
+
   /**
    * Filters the webform element list by a text input search string.
    *
