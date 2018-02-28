@@ -61,6 +61,13 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
   protected $roleStorage;
 
   /**
+   * Associative array container total results for all webforms.
+   *
+   * @var array
+   */
+  protected $resultsTotals;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage) {
@@ -176,6 +183,8 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     $header['results_total'] = [
       'data' => $this->t('Total Results'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
+      'specifier' => 'results_total',
+      'field' => 'results_total',
     ];
     $header['results_operations'] = [
       'data' => $this->t('Operations'),
@@ -217,7 +226,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         break;
     }
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
-    $row['results_total'] = $this->submissionStorage->getTotal($entity) . (!empty($settings['results_disabled']) ? ' ' . $this->t('(Disabled)') : '');
+    $row['results_total'] = $this->getResultsTotal($entity->id()) . (!empty($settings['results_disabled']) ? ' ' . $this->t('(Disabled)') : '');
     $row['results_operations']['data'] = [
       '#type' => 'operations',
       '#links' => $this->getDefaultOperations($entity, 'results'),
@@ -308,10 +317,73 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    */
   protected function getEntityIds() {
     $header = $this->buildHeader();
-    return $this->getQuery($this->keys, $this->category, $this->state)
-      ->tableSort($header)
-      ->pager($this->getLimit())
-      ->execute();
+    if (\Drupal::request()->query->get('order') === (string) $header['results_total']['data']) {
+      // Get results totals for all returned entity ids.
+      $results_totals = $this->getQuery($this->keys, $this->category, $this->state)
+        ->execute();
+      foreach ($results_totals as $entity_id) {
+        $results_totals[$entity_id] = $this->getResultsTotal($entity_id);
+      }
+
+      // Sort results totals.
+      asort($results_totals, SORT_NUMERIC);
+      if (\Drupal::request()->query->get('sort') === 'desc') {
+        $results_totals = array_reverse($results_totals, TRUE);
+      }
+
+      // Build an associative array of entity ids.
+      $entity_ids = array_keys($results_totals);
+      $entity_ids = array_combine($entity_ids, $entity_ids);
+
+      // Manually initialize and apply paging to the entity ids.
+      $page = \Drupal::request()->query->get('page') ?: 0;
+      $total = count($entity_ids);
+      $limit = $this->getLimit();
+      $start = ($page * $limit);
+      pager_default_initialize($total, $limit);
+      return array_slice($entity_ids, $start, $limit, TRUE);
+    }
+    else {
+      $query = $this->getQuery($this->keys, $this->category, $this->state);
+      $query->tableSort($header);
+      $query->pager($this->getLimit());
+      return $query->execute();
+    }
+  }
+
+  /**
+   * Get total number of results for a webform.
+   *
+   * @param string $webform_id
+   *   A webform id.
+   *
+   * @return int
+   *   Total number of results for a webform.
+   */
+  protected function getResultsTotal($webform_id) {
+    $results_totals = $this->getResultsTotals();
+    return (isset($results_totals[$webform_id])) ? $results_totals[$webform_id] : 0;
+  }
+
+  /**
+   * Get total results for all webforms.
+   *
+   * @return array
+   *   An associative array keyed by webform id contains total results for
+   *   all webforms.
+   */
+  protected function getResultsTotals() {
+    if (isset($this->resultsTotals)) {
+      return $this->resultsTotals;
+    }
+
+    $query = \Drupal::database()->select('webform_submission', 'ws');
+    $query->fields('ws', ['webform_id']);
+    $query->addExpression('COUNT(sid)', 'results_total');
+    $query->groupBy('webform_id');
+
+    $this->resultsTotals = array_map('intval', $query->execute()->fetchAllKeyed());
+    return $this->resultsTotals;
   }
 
   /**
