@@ -314,7 +314,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function getElementProperty(array $element, $property_name) {
-    return (isset($element[$property_name])) ? $element[$property_name] : $this->getDefaultProperty($property_name);
+    return (isset($element["#$property_name"])) ? $element["#$property_name"] : $this->getDefaultProperty($property_name);
   }
 
   /****************************************************************************/
