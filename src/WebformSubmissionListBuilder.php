@@ -492,7 +492,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         ];
 
       case 'operations':
-        return ['data' => $this->buildOperations($entity)];
+        return ['data' => $this->buildOperations($entity), 'class' => ['webform-dropbutton-wrapper']];
 
       case 'remote_addr':
         return $entity->getRemoteAddr();
