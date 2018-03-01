@@ -121,9 +121,9 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
     }
 
     $element += $composite_elements;
-    if (!isset($element['#element_validate'])) {
-      $element['#element_validate'] = [];
-    }
+
+    // Add validate callback.
+    $element += ['#element_validate' => []];
     array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformComposite']);
 
     if (!empty($element['#flexbox'])) {

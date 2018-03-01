@@ -475,6 +475,8 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#default_value' => $settings['autofill_excluded_elements'],
     ];
 
+    $this->tokenManager->elementValidate($form);
+
     return parent::form($form, $form_state);
   }
 

@@ -5,8 +5,10 @@ namespace Drupal\webform;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Utility\Token;
+use Drupal\webform\Utility\WebformFormHelper;
 
 /**
  * Defines a class to manage token replacement.
@@ -142,6 +144,34 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     }
     else {
       return $build;
+    }
+  }
+
+  public function elementValidate(array &$form, array $token_types = ['webform', 'webform_submission', 'webform_handler']) {
+    if (!function_exists('token_element_validate')) {
+      return;
+    }
+
+    $text_element_types = [
+      'email' => 'email',
+      'textfield' => 'textfield',
+      'textarea' => 'textarea',
+      'url' => 'url',
+      'webform_codemirror' => 'webform_codemirror',
+      'webform_email_multiple' => 'webform_email_multiple',
+      'webform_html_editor' => 'webform_html_editor',
+      'webform_checkboxes_other' => 'webform_checkboxes_other',
+      'webform_select_other' => 'webform_select_other',
+      'webform_radios_other' => 'webform_radios_other',
+    ];
+    $elements =& WebformFormHelper::flattenElements($form);
+    foreach ($elements as &$element) {
+      if (!isset($element['#type']) || !isset($text_element_types[$element['#type']])) {
+        continue;
+      }
+
+      $element['#element_validate'][] = 'token_element_validate';
+      $element['#token_types'] = $token_types;
     }
   }
 

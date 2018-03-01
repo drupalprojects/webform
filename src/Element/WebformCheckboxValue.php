@@ -105,13 +105,9 @@ class WebformCheckboxValue extends FormElement {
     // Attach libraries.
     $element['#attached']['library'][] = 'webform/webform.element.checkbox_value';
 
-    // Set validation.
-    if (isset($element['#element_validate'])) {
-      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformCheckboxValue']], $element['#element_validate']);
-    }
-    else {
-      $element['#element_validate'] = [[get_called_class(), 'validateWebformCheckboxValue']];
-    }
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformCheckboxValue']);
 
     // Remove properties from the element.
     $element = array_diff_key($element, $properties);

@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Defines an interface for token manager classes.
@@ -44,5 +45,17 @@ interface WebformTokenManagerInterface {
    *   (optional) Description to appear after the token tree link.
    */
   public function buildTreeLink(array $token_types = ['webform', 'webform_submission'], $description = NULL);
+
+  /**
+   * Validate form that should have tokens in it.
+   *
+   * @param array $form
+   *   A form.
+   * @param array $token_types
+   *   An array containing token types that should be validated.
+   *
+   * @see token_element_validate()
+   */
+  public function elementValidate(array &$form, array $token_types = ['webform', 'webform_submission', 'webform_handler']);
 
 }

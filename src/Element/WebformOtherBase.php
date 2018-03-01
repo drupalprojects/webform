@@ -145,13 +145,9 @@ abstract class WebformOtherBase extends FormElement {
     // Remove options.
     unset($element['#options']);
 
-    // Set validation.
-    if (isset($element['#element_validate'])) {
-      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformOther']], $element['#element_validate']);
-    }
-    else {
-      $element['#element_validate'] = [[get_called_class(), 'validateWebformOther']];
-    }
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformOther']);
 
     // Attach library.
     $element['#attached']['library'][] = 'webform/webform.element.other';

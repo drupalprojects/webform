@@ -140,7 +140,9 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
       '#default_value' => $this->configuration['content'],
       '#description' => self::buildTokens($this->configuration['type'], $this->configuration['source_entity']),
     ];
+
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
     $form['progress_bar'] = [
       '#title' => $this->t('Show progress bar'),
       '#type' => 'checkbox',
@@ -209,6 +211,9 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
         ],
       ],
     ];
+
+    $this->tokenManager->elementValidate($form);
+
     return $form;
   }
 

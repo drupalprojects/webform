@@ -300,6 +300,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
+    $this->tokenManager->elementValidate($form);
+
     return $form;
   }
 

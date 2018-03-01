@@ -2799,6 +2799,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
+    $this->tokenManager->elementValidate($form);
+
     // Set custom properties.
     // Note: Storing this information in the webform's state allows modules to
     // view and alter this information using webform alteration hooks.

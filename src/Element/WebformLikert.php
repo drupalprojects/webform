@@ -193,7 +193,11 @@ class WebformLikert extends FormElement {
     $element['table'] += array_intersect_key($element, array_combine($properties, $properties));
 
     $element['#tree'] = TRUE;
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformLikert']];
+
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformLikert']);
+
     $element['#attached']['library'][] = 'webform/webform.element.likert';
 
     return $element;

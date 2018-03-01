@@ -652,6 +652,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // WORKAROUND: Convert all Render/Markup to strings.
     WebformElementHelper::convertRenderMarkupToStrings($form);
 
+    $this->tokenManager->elementValidate($form, $token_types);
+
     return $form;
   }
 

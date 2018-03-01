@@ -96,13 +96,9 @@ class WebformElementMultiple extends FormElement {
       $element['container']['cardinality_number']['#disabled'] = TRUE;
     }
 
-    // Set validation.
-    if (isset($element['#element_validate'])) {
-      $element['#element_validate'] = array_merge([[get_called_class(), 'validateWebformElementMultiple']], $element['#element_validate']);
-    }
-    else {
-      $element['#element_validate'] = [[get_called_class(), 'validateWebformElementMultiple']];
-    }
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformElementMultiple']);
 
     // Set #type to item to apply #states.
     // @see drupal_process_states

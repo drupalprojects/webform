@@ -150,12 +150,8 @@ class WebformTableSort extends Table {
     $value = is_array($element['#value']) ? $element['#value'] : [];
 
     // Add validate callback that extracts the associative array of options.
-    if (isset($element['#element_validate'])) {
-      array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformTableSelectOrder']);
-    }
-    else {
-      $element['#element_validate'][] = [get_called_class(), 'validateWebformTableSelectOrder'];
-    }
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformTableSelectOrder']);
 
     $element['#tree'] = TRUE;
 

@@ -36,7 +36,7 @@ class WebformTokenSubmissionValueTest extends WebformTestBase {
   }
 
   /**
-   * Test webform webform token submission value.
+   * Test webform token submission value.
    */
   public function testWebformTokenSubmissionValue() {
     $webform = Webform::load('test_token_submission_value');

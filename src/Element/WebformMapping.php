@@ -123,7 +123,9 @@ class WebformMapping extends FormElement {
     ];
     $element['table'] += array_intersect_key($element, array_combine($properties, $properties));
 
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformMapping']];
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformMapping']);
 
     if (isset($element['#states'])) {
       webform_process_states($element, '#wrapper_attributes');

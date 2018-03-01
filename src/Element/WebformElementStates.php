@@ -74,7 +74,8 @@ class WebformElementStates extends FormElement {
     $element['#tree'] = TRUE;
 
     // Add validate callback that extracts the associative array of states.
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformElementStates']];
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformElementStates']);
 
     // For customized #states display a CodeMirror YAML editor.
     if ($warning_message = static::isDefaultValueCustomizedFormApiStates($element)) {

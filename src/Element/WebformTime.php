@@ -32,7 +32,6 @@ class WebformTime extends FormElement {
       '#theme' => 'input__webform_time',
       '#process' => [[$class, 'processWebformTime']],
       '#pre_render' => [[$class, 'preRenderWebformTime']],
-      '#element_validate' => [[$class, 'validateWebformTime']],
       '#theme_wrappers' => ['form_element'],
       '#timepicker' => FALSE,
       '#time_format' => 'H:i',
@@ -72,6 +71,10 @@ class WebformTime extends FormElement {
    *   The processed element.
    */
   public static function processWebformTime(&$element, FormStateInterface $form_state, &$complete_form) {
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformTime']);
+
     $element['#attached']['library'][] = 'webform/webform.element.time';
     $element['#attributes']['data-webform-time-format'] = !empty($element['#time_format']) ? $element['#time_format'] : DateFormat::load('html_time')->getPattern();
     return $element;

@@ -134,7 +134,9 @@ class WebformElementOptions extends FormElement {
       ];
     }
 
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformElementOptions']];
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformElementOptions']);
 
     if (isset($element['#states'])) {
       webform_process_states($element, '#wrapper_attributes');

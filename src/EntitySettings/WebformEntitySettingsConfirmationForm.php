@@ -226,6 +226,8 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
     ];
     $form['back']['back_container']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
+    $this->tokenManager->elementValidate($form);
+
     return parent::form($form, $form_state);
   }
 

@@ -152,6 +152,8 @@ class WebformAdminConfigSubmissionsForm extends WebformAdminConfigBaseForm {
       '#description' => $this->t('Enter the amount of submissions to be purged during single cron run. You may want to lower this number if you are facing memory or timeout issues when purging via cron.'),
     ];
 
+    $this->tokenManager->elementValidate($form);
+
     return parent::buildForm($form, $form_state);
   }
 

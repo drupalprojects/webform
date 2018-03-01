@@ -73,7 +73,8 @@ class WebformOptions extends FormElement {
     $element['#tree'] = TRUE;
 
     // Add validate callback that extracts the associative array of options.
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformOptions']];
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformOptions']);
 
     // Wrap this $element in a <div> that handle #states.
     WebformElementHelper::fixStatesWrapper($element);

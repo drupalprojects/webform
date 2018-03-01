@@ -151,7 +151,8 @@ class WebformLocation extends WebformCompositeBase {
 
     $element['#attached']['library'][] = 'webform/webform.element.location';
 
-    $element['#element_validate'] = [[get_called_class(), 'validateWebformLocation']];
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformLocation']);
 
     return $element;
   }

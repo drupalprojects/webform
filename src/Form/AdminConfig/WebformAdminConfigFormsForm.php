@@ -402,6 +402,8 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       ksort($form['third_party_settings']);
     }
 
+    $this->tokenManager->elementValidate($form);
+
     return parent::buildForm($form, $form_state);
   }
 

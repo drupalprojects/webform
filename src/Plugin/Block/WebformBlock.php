@@ -96,7 +96,11 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
       '#mode' => 'yaml',
       '#default_value' => $this->configuration['default_data'],
     ];
+
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+
+    $this->tokenManager->elementValidate($form);
+
     return $form;
   }
 

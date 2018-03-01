@@ -182,21 +182,6 @@ webform.handler.settings:
     debug:
       type: boolean
       label: 'Enable debugging'
-    preview_title:
-      type: text
-      label: 'Preview page title'
-    preview_message:
-      type: text
-      label: 'Preview message'
-    confirmation_url:
-      type: string
-      label: 'Confirmation URL'
-    confirmation_title:
-      type: text
-      label: 'Confirmation title'
-    confirmation_message:
-      type: text
-      label: 'Confirmation message'
     # Below mapping is copied from: webform.webform.*
     # @see webform.entity.webform.schema.yml
     ajax:

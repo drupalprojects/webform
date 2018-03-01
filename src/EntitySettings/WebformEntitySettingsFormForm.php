@@ -409,6 +409,8 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#default_value' => WebformArrayHelper::removePrefix($properties),
     ];
 
+    $this->tokenManager->elementValidate($form);
+
     return parent::form($form, $form_state);
   }
 

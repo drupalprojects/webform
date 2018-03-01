@@ -223,6 +223,8 @@ class ActionWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['debug'],
     ];
 
+    $this->tokenManager->elementValidate($form);
+
     return $this->setSettingsParentsRecursively($form);
   }
 
