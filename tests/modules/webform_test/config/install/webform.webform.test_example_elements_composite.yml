@@ -10,7 +10,7 @@ uid: null
 template: false
 id: test_example_elements_composite
 title: 'Test: Example: Elements: Composite'
-description: 'Examples of composite elements, includes address, contact, and credit card.'
+description: 'Examples of composite elements, includes address, and contact.'
 category: 'Test: Example'
 elements: |
   webform_address_example:
@@ -71,13 +71,6 @@ elements: |
       '#type': webform_contact
       '#title': 'Contact multiple'
       '#multiple': true
-  webform_creditcard_example:
-    '#type': details
-    '#title': 'Credit card'
-    '#open': true
-    webform_creditcard:
-      '#type': webform_creditcard
-      '#title': 'Credit card'
   webform_likert_example:
     '#type': details
     '#title': Likert

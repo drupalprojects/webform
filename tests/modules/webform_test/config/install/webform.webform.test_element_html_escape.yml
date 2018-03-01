@@ -62,9 +62,6 @@ elements: |
     color:
       '#type': color
       '#title': 'Color | <script>alert(''This markup is not escaped properly!!!'') </script>'
-    webform_creditcard_number:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number | <script>alert(''This markup is not escaped properly!!!'') </script>'
     email:
       '#type': email
       '#title': 'Email | <script>alert(''This markup is not escaped properly!!!'') </script>'

@@ -68,10 +68,10 @@ Form elements include:
 - **Drupal specific** File uploads, Entity References, Table select, Date list, 
   and more...
 - **Custom:** [Likert scale](https://en.wikipedia.org/wiki/Likert_scale), 
-  Star rating, Toggle, Buttons, Credit card number, Geolocation, 
+  Star rating, Toggle, Buttons, Geolocation, 
   Select/Checkboxes/Radios with other, and more...
 - **Markups** Inline dismissable messages, HTML Markup, Details, and Fieldsets.   
-- **Composite elements:** Name, Address, Contact, and Credit Card 
+- **Composite elements:** Name, Address, and Contact 
 
 
 ## Element Settings
@@ -278,7 +278,6 @@ and more.
 Reusable options include:
 
 - Country codes & names	
-- Credit card codes
 - Days, Months, Time zones
 - Education, Employment status, Ethnicity, Industry, Languages, Marital status, Relationship, Size, and Titles
 - Likert agreement, comparison, importance, quality, satisfaction, ten scale, and

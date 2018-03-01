@@ -127,9 +127,6 @@ function webform_theme() {
     'webform_composite_contact' => [
       'render element' => 'element',
     ],
-    'webform_composite_creditcard' => [
-      'render element' => 'element',
-    ],
     'webform_composite_location' => [
       'render element' => 'element',
     ],

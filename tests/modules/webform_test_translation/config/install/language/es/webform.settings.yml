@@ -67,8 +67,6 @@ test:
     url:
       - 'http://example.com'
       - 'http://test.com'
-    webform_creditcard_number:
-      - '4111111111111111'
     webform_email_confirm:
       - 'example@example.com'
       - 'test@test.com'

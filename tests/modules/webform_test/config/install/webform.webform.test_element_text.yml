@@ -38,13 +38,6 @@ elements: |
       '#counter_type': word
       '#counter_maximum': 3
       '#counter_message': 'word(s) left. This is a custom message'
-  creditcard_number_elements:
-    '#type': details
-    '#title': 'Credit card number (creditcard_number)'
-    '#open': true
-    creditcard_number_basic:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number basic'
 css: ''
 javascript: ''
 settings:

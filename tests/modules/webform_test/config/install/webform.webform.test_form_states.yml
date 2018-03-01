@@ -358,36 +358,6 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
-    visible_webform_creditcard:
-      '#type': webform_creditcard
-      '#title': 'Credit card'
-      '#default_value':
-        warning: null
-        name: Loremipsum
-        type: VI
-        number: '4111111111111111'
-        civ: 111
-        expiration: null
-        expiration_month: 1
-        expiration_year: 2017
-      '#states':
-        visible:
-          ':input[name="visible_trigger"]':
-            checked: true
-        required:
-          ':input[name="visible_trigger"]':
-            checked: true
-    visible_webform_creditcard_number:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number'
-      '#default_value': '4111111111111111'
-      '#states':
-        visible:
-          ':input[name="visible_trigger"]':
-            checked: true
-        required:
-          ':input[name="visible_trigger"]':
-            checked: true
     visible_date:
       '#type': date
       '#title': Date
@@ -1342,30 +1312,6 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
-    invisible_webform_creditcard:
-      '#type': webform_creditcard
-      '#title': 'Credit card'
-      '#default_value':
-        warning: null
-        name: Loremipsum
-        type: VI
-        number: '4111111111111111'
-        civ: 111
-        expiration: null
-        expiration_month: 1
-        expiration_year: 2017
-      '#states':
-        invisible:
-          ':input[name="invisible_trigger"]':
-            checked: true
-    invisible_webform_creditcard_number:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number'
-      '#default_value': '4111111111111111'
-      '#states':
-        invisible:
-          ':input[name="invisible_trigger"]':
-            checked: true
     invisible_date:
       '#type': date
       '#title': Date
@@ -2090,30 +2036,6 @@ elements: |
         state_province: Alabama
         postal_code: Loremipsum
         country: Afghanistan
-      '#states':
-        disabled:
-          ':input[name="disabled_trigger"]':
-            checked: true
-    disabled_webform_creditcard:
-      '#type': webform_creditcard
-      '#title': 'Credit card'
-      '#default_value':
-        warning: null
-        name: Loremipsum
-        type: VI
-        number: '4111111111111111'
-        civ: 111
-        expiration: null
-        expiration_month: 1
-        expiration_year: 2017
-      '#states':
-        disabled:
-          ':input[name="disabled_trigger"]':
-            checked: true
-    disabled_webform_creditcard_number:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number'
-      '#default_value': '4111111111111111'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

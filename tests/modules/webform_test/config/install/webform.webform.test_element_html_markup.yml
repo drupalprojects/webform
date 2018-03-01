@@ -62,9 +62,6 @@ elements: |
     color:
       '#type': color
       '#title': '<u>Color</u>'
-    webform_creditcard_number:
-      '#type': webform_creditcard_number
-      '#title': '<u>Credit card number</u>'
     email:
       '#type': email
       '#title': '<u>Email</u>'

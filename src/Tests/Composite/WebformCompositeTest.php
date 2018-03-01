@@ -44,13 +44,6 @@ class WebformCompositeTest extends WebformTestBase {
     // Check custom country access.
     $this->assertNoRaw('edit-contact-advanced-country');
 
-    // Check credit card.
-    $this->assertRaw('<div id="edit-creditcard-basic--wrapper" class="form-composite js-form-item form-item js-form-type-webform-creditcard form-type-webform-creditcard js-form-item-creditcard-basic form-item-creditcard-basic form-no-label">');
-    $this->assertRaw('<label for="edit-creditcard-basic" class="visually-hidden">Credit Card</label>');
-    $this->assertRaw('The credit card element is experimental and insecure because it stores submitted information as plain text.');
-    $this->assertRaw('<label for="edit-creditcard-basic-name">Name on Card</label>');
-    $this->assertRaw('<input data-drupal-selector="edit-creditcard-basic-name" type="text" id="edit-creditcard-basic-name" name="creditcard_basic[name]" value="John Smith" size="60" maxlength="255" class="form-text" />');
-
     // Check link multiple in table.
     $this->assertRaw('<label for="edit-link-multiple">Link multiple</label>');
     $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<a href="#help" title="This is link title help" data-webform-help="This is link title help" class="webform-element-help">?</a>');
@@ -78,16 +71,6 @@ class WebformCompositeTest extends WebformTestBase {
     ];
     $this->drupalPostForm('webform/test_composite', $edit, t('Submit'));
     $this->assertRaw('Name field is required.');
-
-    // Check creditcard composite value.
-    $this->drupalPostForm('webform/test_composite', [], t('Submit'));
-    $this->assertRaw("creditcard_basic:
-  name: 'John Smith'
-  type: VI
-  number: '4111111111111111'
-  civ: '111'
-  expiration_month: '1'
-  expiration_year: '2025'");
   }
 
 }

@@ -199,48 +199,6 @@ elements: |
           postal_code: Loremipsum
           country: Afghanistan
         '#format': list
-    webform_creditcard:
-      '#type': details
-      '#title': 'Credit card'
-      webform_creditcard_value:
-        '#type': webform_creditcard
-        '#title': 'Credit card (Value)'
-        '#default_value':
-          warning: null
-          name: Loremipsum
-          type: VI
-          number: '4111111111111111'
-          civ: 111
-          expiration: null
-          expiration_month: 1
-          expiration_year: 2017
-        '#format': value
-      webform_creditcard_raw:
-        '#type': webform_creditcard
-        '#title': 'Credit card (Raw value)'
-        '#default_value':
-          warning: null
-          name: Loremipsum
-          type: VI
-          number: '4111111111111111'
-          civ: 111
-          expiration: null
-          expiration_month: 1
-          expiration_year: 2017
-        '#format': raw
-      webform_creditcard_list:
-        '#type': webform_creditcard
-        '#title': 'Credit card (List)'
-        '#default_value':
-          warning: null
-          name: Loremipsum
-          type: VI
-          number: '4111111111111111'
-          civ: 111
-          expiration: null
-          expiration_month: 1
-          expiration_year: 2017
-        '#format': list
     webform_link:
       '#type': details
       '#title': Link

@@ -17,10 +17,6 @@ elements: |
     '#type': details
     '#title': 'General options'
     '#open': true
-    creditcard_codes:
-      '#type': select
-      '#title': 'Credit card codes (creditcard_codes)'
-      '#options': creditcard_codes
     size:
       '#type': select
       '#title': 'Size (size)'

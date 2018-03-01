@@ -63,36 +63,6 @@ class WebformElementTextTest extends WebformElementTestBase {
     $this->drupalPostForm('webform/test_element_text', $edit, t('Submit'));
     $this->assertNoRaw('Character counter cannot be longer than <em class="placeholder">10</em> characters but is currently <em class="placeholder">11</em> characters long.</li>');
     $this->assertNoRaw('Word counter cannot be longer than <em class="placeholder">3</em> words but is currently <em class="placeholder">4</em> words long.');
-
-    /**************************************************************************/
-    // creditcard_number
-    /**************************************************************************/
-
-    // Check basic creditcard_number.
-    $this->drupalGet('webform/test_element_text');
-    $this->assertRaw('<label for="edit-creditcard-number-basic">Credit card number basic</label>');
-    $this->assertRaw('<input data-drupal-selector="edit-creditcard-number-basic" type="text" id="edit-creditcard-number-basic" name="creditcard_number_basic" value="" size="16" maxlength="16" class="form-text webform-creditcard-number" />');
-
-    // Check invalid credit card number.
-    $edit = [
-      'creditcard_number_basic' => 'not value',
-    ];
-    $this->drupalPostForm('webform/test_element_text', $edit, t('Submit'));
-    $this->assertRaw('The credit card number is not valid.');
-
-    // Check valid credit card number.
-    $edit = [
-      'creditcard_number_basic' => '4111111111111111',
-    ];
-    $this->drupalPostForm('webform/test_element_text', $edit, t('Submit'));
-    $this->assertNoRaw('The credit card number is not valid.');
-
-    // Check valid AmEx (15 digit).
-    $edit = [
-      'creditcard_number_basic' => '378282246310005',
-    ];
-    $this->drupalPostForm('webform/test_element_text', $edit, t('Submit'));
-    $this->assertNoRaw('The credit card number is not valid.');
   }
 
 }

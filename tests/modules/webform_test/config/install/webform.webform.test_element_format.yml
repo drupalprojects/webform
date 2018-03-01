@@ -132,19 +132,6 @@ elements: |
         '#title': 'Color (Color swatch)'
         '#default_value': '#ffffcc'
         '#format': swatch
-    webform_creditcard_number:
-      '#type': details
-      '#title': 'Credit card number'
-      webform_creditcard_number_value:
-        '#type': webform_creditcard_number
-        '#title': 'Credit card number (Value)'
-        '#default_value': '4111111111111111'
-        '#format': value
-      webform_creditcard_number_raw:
-        '#type': webform_creditcard_number
-        '#title': 'Credit card number (Raw value)'
-        '#default_value': '4111111111111111'
-        '#format': raw
     email:
       '#type': details
       '#title': Email

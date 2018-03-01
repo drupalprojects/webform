@@ -721,19 +721,6 @@ function template_preprocess_webform_composite_contact(array &$variables) {
 }
 
 /**
- * Prepares variables for creditcard composite element templates.
- *
- * Default template: webform-element-creditcard.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - element: An associative array containing the properties of the element.
- */
-function template_preprocess_webform_composite_creditcard(array &$variables) {
-  _template_preprocess_webform_composite($variables);
-}
-
-/**
  * Prepares variables for link composite element templates.
  *
  * Default template: webform-element-link.html.twig.

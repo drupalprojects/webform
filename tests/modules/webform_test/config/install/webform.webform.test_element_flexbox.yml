@@ -303,22 +303,6 @@ elements: |
     flex_webform_contact_right:
       '#type': webform_contact
       '#title': 'Contact 02'
-  flexbox_webform_creditcard:
-    '#type': webform_flexbox
-    flex_webform_creditcard_left:
-      '#type': webform_creditcard
-      '#title': 'Credit card 01'
-    flex_webform_creditcard_right:
-      '#type': webform_creditcard
-      '#title': 'Credit card 02'
-  flexbox_webform_creditcard_number:
-    '#type': webform_flexbox
-    flex_webform_creditcard_number_left:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number 01'
-    flex_webform_creditcard_number_right:
-      '#type': webform_creditcard_number
-      '#title': 'Credit card number 02'
   flexbox_date:
     '#type': webform_flexbox
     flex_date_left:
