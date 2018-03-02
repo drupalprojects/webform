@@ -69,7 +69,10 @@ class WebformOptionsForm extends EntityForm {
       '#type' => 'machine_name',
       '#machine_name' => [
         'exists' => '\Drupal\webform\Entity\WebformOptions::load',
+        'label' => '<br/>' . $this->t('Machine name'),
       ],
+      '#maxlength' => 32,
+      '#field_suffix' => ' (' . $this->t('Maximum @max characters', ['@max' => 32]) . ')',
       '#required' => TRUE,
       '#disabled' => !$webform_options->isNew(),
       '#default_value' => $webform_options->id(),
