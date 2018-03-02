@@ -111,7 +111,7 @@ class WebformImageSelectElementImages extends FormElement {
 
     $element['#element_validate'] = [[get_called_class(), 'validateWebformImageSelectElementImages']];
 
-    if (isset($element['#states'])) {
+    if (!empty($element['#states'])) {
       webform_process_states($element, '#wrapper_attributes');
     }
 

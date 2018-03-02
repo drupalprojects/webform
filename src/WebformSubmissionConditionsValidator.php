@@ -77,7 +77,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
     // Loop through visible elements with #states.
     foreach ($elements as &$element) {
-      $states = static::getElementStates($element);
+      $states = WebformElementHelper::getStates($element);
       foreach ($states as $original_state => $conditions) {
         if (!is_array($conditions)) {
           continue;
@@ -181,7 +181,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * {@inheritdoc}
    */
   public function isElementVisible(array $element, WebformSubmissionInterface $webform_submission) {
-    $states = static::getElementStates($element);
+    $states = WebformElementHelper::getStates($element);
 
     $visible = TRUE;
     foreach ($states as $state => $conditions) {
@@ -256,7 +256,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    *   The current state of the form.
    */
   protected function validateFormElement(array $element, FormStateInterface $form_state) {
-    $states = static::getElementStates($element);
+    $states = WebformElementHelper::getStates($element);
     if (empty($states)) {
       return;
     }
@@ -631,27 +631,6 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   // Static input and selector methods.
   // @see \Drupal\webform\Plugin\WebformElementBase::getElementSelectorInputValue
   /****************************************************************************/
-
-  /**
-   * Get an element's states API array.
-   *
-   * @param array $element
-   *   An element.
-   *
-   * @return array
-   *   an element's states API array or an empty array.
-   */
-  public static function getElementStates(array $element) {
-    if (isset($element['#states'])) {
-      return $element['#states'];
-    }
-    // @see \Drupal\webform\Utility\WebformElementHelper::fixStatesWrapper
-    if (isset($element['#_webform_states'])) {
-      return $element['#_webform_states'];
-    }
-
-    return [];
-  }
 
   /**
    * Get input name from CSS :input[name="*"] selector.

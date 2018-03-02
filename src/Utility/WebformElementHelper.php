@@ -558,10 +558,10 @@ class WebformElementHelper {
     // Composite and multiple elements use use a custom states wrapper
     // which will changes '#states' to '#_webform_states'.
     // @see \Drupal\webform\Utility\WebformElementHelper::fixStatesWrapper
-    if (isset($element['#_webform_states'])) {
+    if (!empty($element['#_webform_states'])) {
       return $element['#_webform_states'];
     }
-    elseif (isset($element['#states'])) {
+    elseif (!empty($element['#states'])) {
       return $element['#states'];
     }
     else {

@@ -476,7 +476,13 @@ class WebformMultiple extends FormElement {
           // Convert element to rendered hidden element.
           if (!isset($element['#access']) || $element['#access'] !== FALSE) {
             $hidden_elements[$child_key]['#type'] = 'hidden';
-            unset($hidden_elements[$child_key]['#access']);
+            // Unset #access, #element_validate, and #pre_render.
+            // @see \Drupal\webform\Plugin\WebformElementBase::prepare().
+            unset(
+              $hidden_elements[$child_key]['#access'],
+              $hidden_elements[$child_key]['#element_validate'],
+              $hidden_elements[$child_key]['#pre_render']
+            );
           }
           static::setElementRowParentsRecursive($hidden_elements[$child_key], $child_key, $hidden_parents);
         }

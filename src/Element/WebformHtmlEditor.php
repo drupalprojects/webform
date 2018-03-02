@@ -146,7 +146,7 @@ class WebformHtmlEditor extends FormElement {
       $element['#attached']['drupalSettings']['webform']['html_editor']['ImceImageIcon'] = file_create_url(drupal_get_path('module', 'imce') . '/js/plugins/ckeditor/icons/imceimage.png');
     }
 
-    if (isset($element['#states'])) {
+    if (!empty($element['#states'])) {
       webform_process_states($element, '#wrapper_attributes');
     }
 
