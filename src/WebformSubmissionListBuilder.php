@@ -137,6 +137,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
   protected $direction;
 
   /**
+   * Total number of submissions.
+   *
+   * @var int
+   */
+  protected $total;
+
+  /**
    * Search state.
    *
    * @var string
@@ -236,6 +243,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $this->limit = 50;
       $this->customize = FALSE;
     }
+
+    $this->total = $this->getTotal($this->keys, $this->state);
   }
 
   /**
@@ -288,12 +297,12 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
     }
 
     // Display info.
-    if ($total = $this->getTotal($this->keys, $this->state)) {
+    if ($this->total) {
       if ($this->account && $this->state == self::STATE_DRAFT) {
-        $info = $this->formatPlural($total, '@total draft', '@total drafts', ['@total' => $total]);
+        $info = $this->formatPlural($this->total, '@total draft', '@total drafts', ['@total' => $this->total]);
       }
       else {
-        $info = $this->formatPlural($total, '@total submission', '@total submissions', ['@total' => $total]);
+        $info = $this->formatPlural($this->total, '@total submission', '@total submissions', ['@total' => $this->total]);
       }
       $build['info'] = [
         '#markup' => $info,
@@ -737,6 +746,12 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $query->addMetaData('webform_submission_element_name', $column['key']);
       $query->addMetaData('webform_submission_element_property_name', $column['property_name']);
       $query->addMetaData('webform_submission_element_direction', $direction);
+      $result = $query->execute();
+      // Must manually initialize the pager because the DISTINCT clause in the
+      // query is breaking the row counting
+      // @see webform_query_alter()
+      pager_default_initialize($this->total, $this->limit);
+      return $result;
     }
     else {
       $order = \Drupal::request()->query->get('order', '');
@@ -756,9 +771,8 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
           $query->sort('sid', 'DESC');
         }
       }
+      return $query->execute();
     }
-
-    return $query->execute();
   }
 
   /**
