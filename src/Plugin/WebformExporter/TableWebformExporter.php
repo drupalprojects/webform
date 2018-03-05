@@ -66,6 +66,9 @@ class TableWebformExporter extends TabularBaseWebformExporter {
     fwrite($file_handle, '<!doctype html>');
     fwrite($file_handle, '<html>');
     fwrite($file_handle, '<head>');
+    // Force Excel to keep field values containing p- or br-tags within the same
+    // cell.
+    fwrite($file_handle, '<style>p, br {mso-data-placement:same-cell;}</style>');
     fwrite($file_handle, '<meta charset="utf-8">');
     if ($title) {
       fwrite($file_handle, '<title>' . $title . '</title>');
