@@ -133,6 +133,8 @@ class WebformCheckboxValue extends FormElement {
 
     $form_state->setValueForElement($element['checkbox'], NULL);
     $form_state->setValueForElement($element['value'], NULL);
+
+    $element['#value'] = $value['value'];
     $form_state->setValueForElement($element, $value['value']);
   }
 

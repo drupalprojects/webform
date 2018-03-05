@@ -500,6 +500,8 @@ class WebformElementStates extends FormElement {
       $states = static::convertFormValuesToFormApiStates($element['states']['#value']);
     }
     $form_state->setValueForElement($element, NULL);
+
+    $element['#value'] = $states;
     $form_state->setValueForElement($element, $states);
   }
 

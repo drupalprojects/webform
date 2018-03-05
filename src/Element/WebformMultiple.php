@@ -776,6 +776,7 @@ class WebformMultiple extends FormElement {
       WebformElementHelper::setRequiredError($element, $form_state);
     }
 
+    $element['#value'] = $items;
     $form_state->setValueForElement($element, $items);
   }
 

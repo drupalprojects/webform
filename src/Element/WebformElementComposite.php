@@ -314,6 +314,8 @@ class WebformElementComposite extends FormElement {
     }
 
     $form_state->setValueForElement($element['elements'], NULL);
+
+    $element['#value'] = $elements;
     $form_state->setValueForElement($element, $elements);
   }
 

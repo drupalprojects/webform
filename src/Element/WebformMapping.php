@@ -148,6 +148,7 @@ class WebformMapping extends FormElement {
       WebformElementHelper::setRequiredError($element, $form_state);
     }
 
+    $element['#value'] = $value;
     $form_state->setValueForElement($element, $value);
   }
 

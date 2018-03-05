@@ -190,6 +190,8 @@ class WebformElementAttributes extends FormElement {
     $form_state->setValueForElement($element['class'], NULL);
     $form_state->setValueForElement($element['style'], NULL);
     $form_state->setValueForElement($element['attributes'], NULL);
+
+    $element['#value'] = $attributes;
     $form_state->setValueForElement($element, $attributes);
   }
 

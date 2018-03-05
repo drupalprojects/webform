@@ -170,6 +170,8 @@ class WebformElementOptions extends FormElement {
 
     $form_state->setValueForElement($element['options'], NULL);
     $form_state->setValueForElement($element['custom'], NULL);
+
+    $element['#value'] = $value;
     $form_state->setValueForElement($element, $value);
   }
 

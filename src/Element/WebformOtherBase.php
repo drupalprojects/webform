@@ -218,6 +218,8 @@ abstract class WebformOtherBase extends FormElement {
 
     $form_state->setValueForElement($element[$type], NULL);
     $form_state->setValueForElement($element['other'], NULL);
+
+    $element['#value'] = $return_value;
     $form_state->setValueForElement($element, $return_value);
   }
 

@@ -131,6 +131,8 @@ class WebformElementMultiple extends FormElement {
 
     $form_state->setValueForElement($element['container']['cardinality'], NULL);
     $form_state->setValueForElement($element['container']['cardinality_number'], NULL);
+
+    $element['#value'] = $multiple;
     $form_state->setValueForElement($element, $multiple);
   }
 

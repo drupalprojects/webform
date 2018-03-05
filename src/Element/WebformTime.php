@@ -131,7 +131,9 @@ class WebformTime extends FormElement {
       }
     }
 
-    $form_state->setValueForElement($element, date('H:i:s', $time));
+    $value = date('H:i:s', $time);
+    $element['#value'] = $value;
+    $form_state->setValueForElement($element, $value);
   }
 
   /**

@@ -159,6 +159,7 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
 
     // Clear empty composites value.
     if (empty(array_filter($value))) {
+      $element['#value'] = NULL;
       $form_state->setValueForElement($element, NULL);
     }
   }

@@ -150,6 +150,7 @@ class WebformCodeMirror extends Textarea {
       $form_state->setError($element, \Drupal::service('renderer')->render($build));
     }
 
+    // If editing YAML and #default_value is an array, decode #value.
     if ($element['#mode'] == 'yaml' && (isset($element['#default_value']) && is_array($element['#default_value']))) {
       // Handle rare case where single array value is not parsed correctly.
       if (preg_match('/^- (.*?)\s*$/', $element['#value'], $match)) {

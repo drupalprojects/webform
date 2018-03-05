@@ -257,6 +257,7 @@ class WebformLikert extends FormElement {
       }
     }
 
+    $element['#value'] = $value;
     $form_state->setValueForElement($element, $value);
   }
 

@@ -97,8 +97,9 @@ class WebformTermsOfService extends Checkbox {
    * Webform element validation handler for webform terms of service element.
    */
   public static function validateWebformTermsOfService(&$element, FormStateInterface $form_state, &$complete_form) {
-    $value = $form_state->getValue($element['#parents'], []);
-    $form_state->setValueForElement($element, (bool) $value);
+    $value = (bool) $form_state->getValue($element['#parents'], []);
+    $element['#value'] = $value;
+    $form_state->setValueForElement($element, $value);
   }
 
 }

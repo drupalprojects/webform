@@ -156,6 +156,8 @@ class WebformEmailConfirm extends FormElement {
     // string regardless of validation results.
     $form_state->setValueForElement($element['mail_1'], NULL);
     $form_state->setValueForElement($element['mail_2'], NULL);
+
+    $element['#value'] = $mail_1;
     $form_state->setValueForElement($element, $mail_1);
   }
 

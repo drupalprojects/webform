@@ -80,7 +80,10 @@ abstract class WebformExcludedBase extends FormElement {
 
     // Unset tableselect and set the element's value to excluded.
     $form_state->setValueForElement($element['tableselect'], NULL);
-    $form_state->setValueForElement($element, array_combine($excluded, $excluded));
+
+    $value = array_combine($excluded, $excluded);
+    $element['#value'] = $value;
+    $form_state->setValueForElement($element, $value);
   }
 
   /**

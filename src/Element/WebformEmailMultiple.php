@@ -53,6 +53,8 @@ class WebformEmailMultiple extends FormElement {
    */
   public static function validateWebformEmailMultiple(&$element, FormStateInterface $form_state, &$complete_form) {
     $value = trim($element['#value']);
+
+    $element['#value'] = $value;
     $form_state->setValueForElement($element, $value);
 
     if ($value) {
