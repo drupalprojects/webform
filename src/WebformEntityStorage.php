@@ -222,9 +222,9 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
     // Use a transaction with SELECT ... FOR UPDATE to lock the row between
     // the SELECT and the UPDATE, ensuring that multiple Webform submissions
     // at the same time do not have duplicate numbers. FOR UPDATE must be inside
-    // a transaction. The return value of db_transaction() must be assigned or the
-    // transaction will commit immediately. The transaction will commit when $txn
-    // goes out-of-scope.
+    // a transaction. The return value of db_transaction() must be assigned or
+    // the transaction will commit immediately. The transaction will commit when
+    // $transaction goes out-of-scope.
     // @see \Drupal\Core\Database\Transaction
     $transaction = $this->database->startTransaction();
 

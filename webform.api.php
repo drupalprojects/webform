@@ -254,7 +254,7 @@ function hook_webform_help() {
   $help = [];
 
   $help['my_custom_help'] = [
-    'access' => $this->currentUser->hasPermission('my cool permission'),
+    'access' => \Drupal::currentUser()->hasPermission('my cool permission'),
     'routes' => [
       'my_module.route_where_i_show_this_help',
     ],
@@ -264,8 +264,8 @@ function hook_webform_help() {
     'video_id' => 'blocks',
     'attached' => [],
     'group' => 'messages',
-    'title' => $this->t('Message: Webform UI Disabled'),
-    'content' => $this->t('Please enable the <strong>Webform UI</strong> module if you would like to add easily add and manage elements using a drag-n-drop user interface.'),
+    'title' => t('Message: Webform UI Disabled'),
+    'content' => t('Please enable the <strong>Webform UI</strong> module if you would like to add easily add and manage elements using a drag-n-drop user interface.'),
     'message_id' => '',
     'message_type' => 'warning',
     'message_close' => TRUE,
@@ -281,7 +281,7 @@ function hook_webform_help() {
  * @param array $help
  *   Webform help data as collected from hook_webform_help().
  */
-function hook_webform_help_alter(&$help) {
+function hook_webform_help_alter(array &$help) {
   if (isset($help['some_help_i_wanna_change'])) {
     $help['title'] = t('This is a really cool help message. Do read it thorough!');
   }

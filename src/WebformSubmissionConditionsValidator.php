@@ -87,7 +87,6 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         list($state, $negate) = $this->processState($original_state);
 
         // @todo Track an element's states.
-
         // If hide/show we need to make sure that validation is not triggered.
         if ($state === 'visible') {
           $element['#after_build'][] = [get_class($this), 'elementAfterBuild'];
