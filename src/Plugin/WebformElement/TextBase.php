@@ -96,6 +96,7 @@ abstract class TextBase extends WebformElementBase {
         'Basic' => [
           "'alias': 'currency'" => $this->t('Currency - @format', ['@format' => '$ 9.99']),
           "'alias': 'mm/dd/yyyy'" => $this->t('Date - @format', ['@format' => 'mm/dd/yyyy']),
+          "'alias': 'decimal'" => $this->t('Decimal - @format', ['@format' => '1.234']),
           "'alias': 'email'" => $this->t('Email - @format', ['@format' => 'example@example.com']),
           "'alias': 'percentage'" => $this->t('Percentage - @format', ['@format' => '99%']),
           '(999) 999-9999' => $this->t('Phone - @format', ['@format' => '(999) 999-9999']),
