@@ -244,17 +244,11 @@ function webform_form_webform_submission_form_alter(&$form, FormStateInterface $
   /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $form_object->getEntity();
   $webform = $webform_submission->getWebform();
-  $source_entity = $webform_submission->getSourceEntity();
 
-  $hooks = [];
-  $hooks[] = 'form_webform_submission_' . $webform->id() . '_form';
-  if ($source_entity) {
-    $hooks[] = 'form_webform_submission_' . $webform->id() . '_' . $source_entity->getEntityTypeId() . '_' . $source_entity->id() . '_form';
-  }
-
+  $hook = 'form_webform_submission_' . $webform->id() . '_form';
   $form_id = $form_object->getFormId();
-  \Drupal::service('module_handler')->alter($hooks, $form, $form_state, $form_id);
-  \Drupal::service('theme.manager')->alter($hooks, $form, $form_state, $form_id);
+  \Drupal::service('module_handler')->alter($hook, $form, $form_state, $form_id);
+  \Drupal::service('theme.manager')->alter($hook, $form, $form_state, $form_id);
 
   // After build.
   $form['#after_build'][] = '_webform_form_webform_submission_form_after_build';

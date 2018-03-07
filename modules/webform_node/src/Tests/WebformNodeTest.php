@@ -62,7 +62,7 @@ class WebformNodeTest extends WebformNodeTestBase {
 
     // Check contact webform.
     $this->drupalGet('node/' . $node->id());
-    $this->assertRaw('id="webform-submission-contact-node-' . $node->id() . '-add-form"');
+    $this->assertRaw('id="webform-submission-contact-add-form"');
     $this->assertNoFieldByName('name', 'John Smith');
 
     // Check contact webform with default data.

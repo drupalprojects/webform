@@ -96,7 +96,7 @@ function hook_webform_element_ELEMENT_TYPE_alter(array &$element, \Drupal\Core\F
 }
 
 /**
- * Alter webform options by id.
+ * Alter webform options.
  *
  * @param array $options
  *   An associative array of options.
@@ -147,6 +147,16 @@ function hook_webform_options_WEBFORM_OPTIONS_ID_alter(array &$options, array &$
 function hook_webform_submission_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
 
 }
+
+/**
+ * Perform alterations by FORM_ID before a webform submission form is rendered.
+ *
+ * @ingroup form_api
+ */
+function hook_webform_submission_form_FORM_ID_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+}
+
 
 /**
  * Perform alterations on webform admin third party settings form.

@@ -193,34 +193,6 @@ class WebformSubmissionForm extends ContentEntityForm {
 
   /**
    * {@inheritdoc}
-   *
-   * The WebformSubmissionForm trigger the below hooks...
-   * - hook_form_alter()
-   * - hook_form_{BASE_FORM_ID}_alter() => hook_form_webform_submission_alter()
-   * - hook_form_{BASE_FORM_ID}_{WEBFORM_ID}_alter() => hook_form_webform_submission_contact_alter()
-   * - hook_form_{BASE_FORM_ID}_{WEBFORM_ID}_{ENTITY_TYPE}_{ENTITY_ID}_form_alter() => hook_form_webform_submission_contact_node_1_form_alter()
-   * - hook_form_{BASE_FORM_ID}_{WEBFORM_ID}_{ENTITY_TYPE}_{ENTITY_ID}_{OPERATION}_form_alter() => hook_form_webform_submission_contact_node_1_add_form_alter()
-   *
-   * @see hook_form_alter()
-   * @see \Drupal\Core\Entity\EntityForm::getBaseFormId
-   * @see webform_form_webform_submission_form_alter()
-   */
-  public function getFormId() {
-    $form_id = $this->entity->getEntityTypeId();
-    if ($this->entity->getEntityType()->hasKey('bundle')) {
-      $form_id .= '_' . $this->entity->bundle();
-    }
-    if ($source_entity = $this->entity->getSourceEntity()) {
-      $form_id .= '_' . $source_entity->getEntityTypeId() . '_' . $source_entity->id();
-    }
-    if ($this->operation != 'default') {
-      $form_id .= '_' . $this->operation;
-    }
-    return $form_id . '_form';
-  }
-
-  /**
-   * {@inheritdoc}
    */
   public function setEntity(EntityInterface $entity) {
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
