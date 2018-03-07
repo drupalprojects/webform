@@ -552,7 +552,7 @@ entity.webform_submission.locked_toggle:
   defaults:
     _controller: '\Drupal\webform\Controller\WebformSubmissionController::locked'
   requirements:
-    _entity_access: 'webform_submission.notes'
+    _entity_access: 'webform_submission.update'
     _csrf_token: 'TRUE'
 
 entity.webform_submission.sticky_toggle:
@@ -560,7 +560,7 @@ entity.webform_submission.sticky_toggle:
   defaults:
     _controller: '\Drupal\webform\Controller\WebformSubmissionController::sticky'
   requirements:
-    _entity_access: 'webform_submission.notes'
+    _entity_access: 'webform_submission.update'
     _csrf_token: 'TRUE'
 
 webform_submission.multiple_delete_confirm:
