@@ -602,8 +602,12 @@ class WebformElementStates extends FormElement {
         continue;
       }
 
+      // Define values extracted from
+      // WebformElementStates::getFormApiStatesCondition().
       $selector = NULL;
       $trigger = NULL;
+      $value = NULL;
+
       $operator = $state_array['operator'];
       $conditions = $state_array['conditions'];
       if (count($conditions) === 1) {
