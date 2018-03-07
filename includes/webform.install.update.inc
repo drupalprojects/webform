@@ -2054,6 +2054,15 @@ function webform_update_8110() {
     $excluded_elements = $admin_config->get('element.excluded_elements') ?: [];
     $excluded_elements['password'] = 'password';
     $excluded_elements['password_confirm'] = 'password_confirm';
+    $admin_config->set('element.excluded_elements', $excluded_elements);
+    $admin_config->save();
+
   }
 }
 
+/**
+ * Issue #2947991: Disable the password field. Fix webform_update_8110().
+ */
+function webform_update_8111() {
+  webform_update_8110();
+}
