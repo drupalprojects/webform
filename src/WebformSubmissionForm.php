@@ -233,12 +233,12 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
+    // Set entity before calling get last submission.
+    $this->entity = $entity;
+
     // Autofill with previous submission.
     if ($this->operation === 'add' && $entity->isNew() && $webform->getSetting('autofill')) {
-      $account = $entity->getOwner();
-      $options = ['in_draft' => FALSE];
-      $last_submission = $this->storage->getLastSubmission($webform, $source_entity, $account, $options);
-      if ($last_submission) {
+      if ($last_submission = $this->getLastSubmission()) {
         $excluded_elements = $webform->getSetting('autofill_excluded_elements') ?: [];
         $last_submission_data = array_diff_key($last_submission->getData(), $excluded_elements);
         $entity->setData($last_submission_data + $entity->getData());
@@ -791,7 +791,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       if ($previous_submission_total > 1) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSIONS_PREVIOUS);
       }
-      elseif ($webform_submission->id() != $this->storage->getLastSubmission($webform, $this->sourceEntity, $this->currentUser())->id()) {
+      elseif ($webform_submission->id() != $this->getLastSubmission(FALSE)->id()) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_PREVIOUS);
       }
     }
@@ -800,7 +800,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($this->isGet()
       && $this->operation === 'add'
       && $webform_submission->isNew()
-      && $webform->getSetting('autofill')) {
+      && $webform->getSetting('autofill')
+      && $this->getLastSubmission()) {
       $this->getMessageManager()->display(WebformMessageManagerInterface::AUTOFILL);
     }
   }
@@ -2070,6 +2071,23 @@ class WebformSubmissionForm extends ContentEntityForm {
       return $source_entity;
     }
     return NULL;
+  }
+
+  /**
+   * Get last completed webform submission for the current user.
+   *
+   * @param bool $completed
+   *   Flag to get last completed or draft submission.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface|NULL
+   *   The last completed webform submission for the current user.
+   */
+  protected function getLastSubmission($completed = TRUE) {
+    $webform = $this->getWebform();
+    $source_entity = $this->getSourceEntity();
+    $account = $this->getEntity()->getOwner();
+    $options = ($completed) ? ['in_draft' => FALSE] : [];
+    return $this->storage->getLastSubmission($webform, $source_entity, $account, $options);
   }
 
   /**

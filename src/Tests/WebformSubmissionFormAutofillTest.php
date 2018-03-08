@@ -28,6 +28,7 @@ class WebformSubmissionFormAutofillTest extends WebformTestBase {
 
     // Check that elements are both blank.
     $this->drupalGet('webform/test_form_autofill');
+    $this->assertNoRaw('This submission has been autofilled with your previous submission.');
     $this->assertFieldByName('textfield_autofill', '');
     $this->assertFieldByName('textfield_excluded', '');
 
