@@ -39,7 +39,7 @@ abstract class WebformCommandsBase extends DrushCommands {
     return $this->io()->confirm($question);
   }
 
-  public function drush_choice($msg, $choices, $default) {
+  public function drush_choice($choices, $msg, $default = NULL) {
     return $this->io()->choice($msg, $choices, $default);
   }
 

@@ -286,7 +286,7 @@ class WebformCliService implements WebformCliServiceInterface {
    * {@inheritdoc}
    */
   public function drush_webform_export_validate($webform_id = NULL) {
-    return $this->_drush_webform_validate($webform_id);
+    return ($webform_id) ? $this->_drush_webform_validate($webform_id) : NULL;
   }
 
   /**
