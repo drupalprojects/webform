@@ -48,6 +48,9 @@ class WebformLocation extends WebformCompositeBase {
     $attributes['street_number'] = [
       '#title' => t('Street Number'),
     ];
+    $attributes['subpremise'] = [
+      '#title' => t('Unit'),
+    ];
     $attributes['postal_code'] = [
       '#title' => t('Postal Code'),
     ];
@@ -107,7 +110,6 @@ class WebformLocation extends WebformCompositeBase {
    */
   public static function processWebformComposite(&$element, FormStateInterface $form_state, &$complete_form) {
     $element = parent::processWebformComposite($element, $form_state, $complete_form);
-
     // Composite elements should always be displayed and rendered so that
     // location data can be populated, so #access is really just converting the
     // readonly elements to hidden elements.
@@ -116,9 +118,11 @@ class WebformLocation extends WebformCompositeBase {
       if ($composite_key != 'value') {
         if (isset($element[$composite_key]['#access']) && $element[$composite_key]['#access'] === FALSE) {
           unset($element[$composite_key]['#access']);
+          unset($element[$composite_key]['#pre_render']);
           $element[$composite_key]['#type'] = 'hidden';
         }
         elseif (!empty($element['#hidden']) && !empty($element['#geolocation'])) {
+          unset($element[$composite_key]['#pre_render']);
           $element[$composite_key]['#type'] = 'hidden';
         }
         else {

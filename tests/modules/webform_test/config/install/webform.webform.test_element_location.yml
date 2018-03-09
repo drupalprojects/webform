@@ -41,6 +41,7 @@ elements: |
       '#postal_code__access': true
       '#locality__access': true
       '#sublocality__access': true
+      '#subpremise__access': true
       '#administrative_area_level_1__access': true
       '#country__access': true
       '#country_short__access': true
@@ -63,6 +64,7 @@ elements: |
       '#postal_code__access': true
       '#locality__access': true
       '#sublocality__access': true
+      '#subpremise__access': true
       '#administrative_area_level_1__access': true
       '#country__access': true
       '#country_short__access': true
@@ -81,6 +83,7 @@ elements: |
       '#postal_code__access': true
       '#locality__access': true
       '#sublocality__access': true
+      '#subpremise__access': true
       '#administrative_area_level_1__access': true
       '#country__access': true
       '#country_short__access': true
