@@ -114,6 +114,22 @@ class WebformEntityAccessTest extends WebformTestBase {
     $uid = $account->id();
     $rid = $account->getRoles()[1];
 
+    // Check 'test' access rule.
+    $this->drupalGet("webform/$webform_id/test");
+    $this->assertResponse(403, 'Webform setting access denied for test rule.');
+    $access_rules = [
+      'test' => [
+        'roles' => [],
+        'users' => [$uid],
+        'permissions' => [],
+      ],
+    ] + Webform::getDefaultAccessRules();
+    $webform->setAccessRules($access_rules)->save();
+    $this->drupalLogin($account);
+    $this->drupalGet("webform/$webform_id/test");
+    $this->assertResponse(200, 'Webform setting access for test rule.');
+    $this->drupalLogout($account);
+
     // Check 'administer' access rule.
     $access_rules = [
       'administer' => [

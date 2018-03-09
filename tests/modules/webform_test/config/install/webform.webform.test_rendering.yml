@@ -170,6 +170,10 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
 handlers:
   email_html:
     id: email

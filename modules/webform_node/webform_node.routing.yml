@@ -97,7 +97,7 @@ entity.node.webform.test_form:
     _controller: '\Drupal\webform\Controller\WebformTestController::testForm'
     _title_callback: '\Drupal\Core\Entity\Controller\EntityController::title'
     operation: webform_submission_view
-    entity_access: 'webform.update'
+    entity_access: 'webform.test'
   options:
     parameters:
       node:

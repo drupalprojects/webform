@@ -102,6 +102,7 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
     if ($account->isAuthenticated()) {
       $has_administer = $entity->checkAccessRules('administer', $account);
       switch ($operation) {
+        case 'test':
         case 'update':
           if ($has_administer->isAllowed() || $account->hasPermission('edit any webform') || ($account->hasPermission('edit own webform') && $is_owner)) {
             return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity)->addCacheableDependency($has_administer);
@@ -119,6 +120,14 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
             return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($entity)->addCacheableDependency($has_administer);
           }
           break;
+      }
+    }
+
+    // Check test operation.
+    if ($operation == 'test') {
+      $access_rules = $entity->checkAccessRules($operation, $account);
+      if ($access_rules->isAllowed()) {
+        return AccessResult::allowed()->cachePerPermissions()->cachePerUser()->addCacheableDependency($access_rules);
       }
     }
 

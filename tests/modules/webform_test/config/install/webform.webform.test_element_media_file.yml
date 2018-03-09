@@ -192,4 +192,8 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
 handlers: {  }

@@ -2066,3 +2066,22 @@ function webform_update_8110() {
 function webform_update_8111() {
   webform_update_8110();
 }
+
+/**
+ * Provide dedicated 'test' webform operation and access rule.
+ */
+function webform_update_8112() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    if (!isset($data['access']['test'])) {
+      $data['access']['test'] = [
+        'roles' => [],
+        'users' => [],
+        'permissions' => [],
+      ];
+      $webform_config->setData($data)->save();
+    }
+  }
+}

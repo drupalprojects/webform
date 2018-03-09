@@ -955,6 +955,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
         'users' => [],
         'permissions' => [],
       ],
+      'test' => [
+        'roles' => [],
+        'users' => [],
+        'permissions' => [],
+      ],
     ];
   }
 
@@ -1003,7 +1008,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     }
 
     // Check operation specific access rules.
-    if (in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any', 'administer'])
+    if (in_array($operation, ['create', 'view_any', 'update_any', 'delete_any', 'purge_any', 'administer', 'test'])
       && $this->checkAccessRule($access_rules[$operation], $account)) {
       return AccessResult::allowed()->addCacheableDependency($cacheability);
     }

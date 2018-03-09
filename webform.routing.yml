@@ -199,7 +199,7 @@ entity.webform.test_form:
       webform:
         type: 'entity:webform'
   requirements:
-    _entity_access: 'webform.update'
+    _entity_access: 'webform.test'
 
 entity.webform.add_form:
   path: '/admin/structure/webform/add'
