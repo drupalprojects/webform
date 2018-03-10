@@ -886,7 +886,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
 
     // Installation.
     $t_args = [
-      ':about_href' => Url::fromRoute('webform.about')->toString(),
+      ':about_href' => 'https://www.drupal.org/docs/8/modules/webform',
       ':addons_href' => Url::fromRoute('webform.addons')->toString(),
       ':submodules_href' => Url::fromRoute('system.modules_list', [], ['fragment' => 'edit-modules-webform'])->toString(),
       ':libraries_href' => Url::fromRoute('webform.config.libraries')->toString(),
@@ -927,34 +927,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'routes' => [
         // @see /admin/structure/webform
         'entity.webform.collection',
-      ],
-    ];
-
-    /**************************************************************************/
-    // About.
-    /**************************************************************************/
-
-    // About: Webform.
-    $help['about_webform'] = [
-      'group' => 'about',
-      'title' => $this->t('About: Webform'),
-      'content' => $this->t('The <strong>About Webform</strong> page helps familiarize users with Webform project, issue queue & maintainer.'),
-      'video_id' => 'introduction_short',
-      'routes' => [
-        // @see /admin/structure/webform/about
-        'webform.about',
-      ],
-    ];
-
-    // About: Drupal.
-    $help['about_drupal'] = [
-      'group' => 'about',
-      'title' => $this->t('About: Webform'),
-      'content' => $this->t('The <strong>About Drupal</strong> page helps familiarize users with the Drupal community and the Drupal Association.'),
-      'video_id' => 'association',
-      'routes' => [
-        // @see /admin/structure/webform/about/drupal
-        'webform.about.drupal',
       ],
     ];
 

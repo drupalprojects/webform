@@ -33,6 +33,10 @@ services:
   webform.cli_service:
     class: Drupal\webform\Commands\WebformCliService
 
+  webform.contribute_manager:
+    class: Drupal\webform\WebformContributeManager
+    arguments: ['@cache.default', '@http_client', '@date.formatter', '@config.factory']
+
   webform.elements_validator:
     class: Drupal\webform\WebformEntityElementsValidator
     arguments: ['@renderer', '@plugin.manager.webform.element', '@entity_type.manager', '@form_builder']

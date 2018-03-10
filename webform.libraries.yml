@@ -69,16 +69,6 @@ webform.addons:
     - webform/webform.element.details.save
     - webform/webform.promotions
 
-# About.
-
-webform.about:
-  version: VERSION
-  css:
-    theme:
-      css/webform.about.css: {}
-  dependencies:
-    - webform/webform.help
-
 # Ajax.
 
 webform.ajax:
@@ -129,6 +119,14 @@ webform.confirmation.modal:
     - core/drupal.dialog.position
     - core/jquery.once
     - webform/webform.confirmation
+
+# Contribute.
+
+webform.contribute:
+  version: VERSION
+  css:
+    theme:
+      css/webform.contribute.css: {}
 
 # Contextual
 

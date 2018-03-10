@@ -120,23 +120,11 @@ webform.addons:
   base_route: entity.webform.collection
   weight: 50
 
-webform.about:
-  title: 'About'
-  route_name: webform.about
+webform.contribute:
+  title: 'Contribute'
+  route_name: webform.contribute
   base_route: entity.webform.collection
   weight: 50
-
-webform.about.webform:
-  title: 'Webform'
-  route_name: webform.about
-  parent_id: webform.about
-  weight: 0
-
-webform.about.drupal:
-  title: 'Drupal'
-  route_name: webform.about.drupal
-  parent_id: webform.about
-  weight: 10
 
 # Form
 

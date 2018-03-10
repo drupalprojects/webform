@@ -23,9 +23,6 @@
     "docs": "https://www.drupal.org/docs/8/modules/webform",
     "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
   },
-  "require": {
-    "drupal/contribute": "^1.0"
-  },
   "extra": {
     "drush": {
       "services": {

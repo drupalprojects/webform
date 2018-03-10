@@ -1589,10 +1589,10 @@ function webform_update_8078() {
  * Issue #2911329: Create 'About' tab.
  */
 function webform_update_8079() {
-  // Convert ui.help_menu_disabled to ui.about_disabled.
+  // Convert ui.help_menu_disabled to ui.contribute_disabled.
   $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
   $help_menu_disabled = $admin_config->get('ui.help_menu_disabled') ?: FALSE;
-  $admin_config->set('ui.about_disabled', $help_menu_disabled);
+  $admin_config->set('ui.contribute_disabled', $help_menu_disabled);
   $admin_config->clear('ui.help_menu_disabled');
   $admin_config->save();
 }
@@ -2084,4 +2084,13 @@ function webform_update_8112() {
       $webform_config->setData($data)->save();
     }
   }
+}
+
+/**
+ * Issue #????: Convert About section into Contribute section.
+ */
+function webform_update_8113() {
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $config->set('ui.contribute_disabled', $config->get('ui.about_disabled') ?: FALSE);
+  $config->save();
 }

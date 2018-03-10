@@ -25,6 +25,14 @@ function webform_theme() {
       'variables' => ['youtube_id' => NULL, 'autoplay' => TRUE],
     ],
 
+    'webform_contribute' => [
+      'variables' => [
+        'account' => [],
+        'membership' => [],
+        'contribution' => [],
+      ],
+    ],
+
     'webform' => [
       'render element' => 'element',
     ],
@@ -388,10 +396,10 @@ function webform_preprocess_form_element(&$variables) {
  */
 function _webform_preprocess_description_help(&$variables) {
   $element = &$variables['element'];
-
   // Move #description to #help for webform admin routes.
   if (\Drupal::config('webform.settings')->get('ui.description_help')
     && \Drupal::service('webform.request')->isWebformAdminRoute()
+    && \Drupal::routeMatch()->getRouteName() != 'webform.contribute.settings'
     && isset($element['#description'])
     && !isset($element['#help'])
     && !empty($element['#title'])

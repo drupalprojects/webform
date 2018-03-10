@@ -130,13 +130,10 @@ function webform_local_tasks_alter(&$local_tasks) {
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.webform.config']['parent_id'] = 'webform.config';
   }
 
-  // Disable 'About' tab.
-  if (\Drupal::config('webform.settings')->get('ui.about_disabled')) {
-    unset(
-      $local_tasks['webform.about'],
-      $local_tasks['webform.about.webform'],
-      $local_tasks['webform.about.drupal']
-    );
+  // Disable 'Contribute' tab if explicitly disabled or the Contribute module
+  // is installed.
+  if (\Drupal::config('webform.settings')->get('ui.contribute_disabled') || \Drupal::moduleHandler()->moduleExists('contribute')) {
+    unset($local_tasks['webform.contribute']);
   }
 }
 
@@ -459,6 +456,20 @@ function webform_page_attachments(array &$attachments) {
   // library is loaded by the webform block is placed using Ajax.
   if (strpos($route_name, 'block.admin_display') === 0) {
     $attachments['#attached']['library'][] = 'webform/webform.block';
+  }
+
+  // Attach 'Contribute' section style.
+  if (\Drupal::routeMatch()->getRouteName() === 'webform.contribute') {
+    /** @var \Drupal\webform\WebformContributeManagerInterface $contribute_manager */
+    $contribute_manager = \Drupal::service('webform.contribute_manager');
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'style',
+        '#value' => $contribute_manager->getStyle(),
+      ],
+      'webform_contribute',
+    ];
   }
 }
 

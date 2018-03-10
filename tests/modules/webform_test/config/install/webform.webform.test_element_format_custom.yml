@@ -35,7 +35,7 @@ elements: |
     '#format_items_html': |
       <table>
       {% for item in items %}
-        <tr {% if loop.index is divisibleby(2) %}style="background-color: #ffc"{% endif %}><td>{{ item }}</td></tr>
+        <tr {% if loop.index is divisible by(2) %}style="background-color: #ffc"{% endif %}><td>{{ item }}</td></tr>
       {% endfor %}
       </table>
     '#format_items_text': |

@@ -8,6 +8,5 @@ dependencies:
   - 'drupal:field'
   - 'drupal:system (>= 8.3)'
   - 'drupal:user'
-  - 'contribute:contribute'
 test_dependencies:
   - 'token:token'

@@ -137,13 +137,6 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
         ],
       ],
     ];
-    $form['ui']['about_disabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t("Disable the 'About' section"),
-      '#description' => $this->t("If checked, 'About' section/tab will be remove from the admin UI."),
-      '#return_value' => TRUE,
-      '#default_value' => $config->get('ui.about_disabled'),
-    ];
     $form['ui']['promotions_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable promotions'),
@@ -152,6 +145,13 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
         $this->t('Note: Promotions are only visible to users who can <em>administer modules</em>.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.promotions_disabled'),
+    ];
+    $form['ui']['contribute_disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t("Disable 'Contribute' section"),
+      '#description' => $this->t("If checked, 'Contribute' section/tab will be removed from the admin UI."),
+      '#return_value' => TRUE,
+      '#default_value' => $config->get('ui.contribute_disabled'),
     ];
 
     // Requirements.
@@ -260,7 +260,7 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
     // Clear render cache so that local tasks can be updated.
     // @see webform_local_tasks_alter()
     $this->renderCache->deleteAll();
-    \Drupal::service('router.builder')->rebuild();
+    $this->routerBuilder->rebuild();
 
     parent::submitForm($form, $form_state);
   }

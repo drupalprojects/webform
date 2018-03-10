@@ -244,7 +244,7 @@ ui:
   details_save: true
   dialog_disabled: false
   offcanvas_disabled: false
-  about_disabled: false
+  contribute_disabled: false
   promotions_disabled: false
   description_help: true
 libraries:
@@ -255,5 +255,8 @@ requirements:
   cdn: true
   bootstrap: true
   spam: true
+contribute:
+  account_type: user
+  account_id: null
 langcode: en
 third_party_settings: {  }
