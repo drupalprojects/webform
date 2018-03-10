@@ -149,6 +149,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/webform_composite'),
       'category' => 'element',
     ];
+    
+    // Element: Webform Checkboxes Table.
+    $projects['webform_checkboxes_table'] = [
+      'title' => $this->t('Webform Checkboxes Table'),
+      'description' => $this->t('Displays checkboxes element in a table grid.'),
+      'url' => Url::fromUri('https://github.com/minnur/webform_checkboxes_table'),
+      'category' => 'element',
+    ];
 
     // Element: Webform Crafty Clicks.
     $projects['webform_craftyclicks'] = [
