@@ -3,7 +3,6 @@
 namespace Drupal\webform\Tests\Element;
 
 use Drupal\file\Entity\File;
-use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 
@@ -75,11 +74,11 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     /** @var \Drupal\webform\WebformSubmissionInterface $submission */
     $submission = WebformSubmission::load($sid);
 
-    /** @var FileInterface $single_file */
+    /** @var \Drupal\file\FileInterface $single_file */
     $single_file = File::load($submission->getElementData('file_single'));
     $this->assertEqual('file_single_' . $source_for_filename . '.txt', $single_file->getFilename());
 
-    /** @var FileInterface[] $multiple_file */
+    /** @var \Drupal\file\FileInterface[] $multiple_file */
     $multiple_file = File::loadMultiple($submission->getElementData('file_multiple'));
     $this->assertEqual(count($multiple_file), 2, 'Two files found in the multiple element.');
 
@@ -117,7 +116,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     /** @var \Drupal\webform\WebformSubmissionInterface $submission */
     $submission = WebformSubmission::load($sid);
 
-    /** @var \Drupal\file\Entity\File $file */
+    /** @var \Drupal\file\FileInterface $file */
     $fid = $this->getLastFileId();
     $file = File::load($fid);
 
@@ -165,7 +164,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     // Submit the new file.
     $this->drupalPostForm(NULL, [], t('Save'));
 
-    /** @var \Drupal\file\Entity\File $test_file_0 */
+    /** @var \Drupal\file\FileInterface $test_file_0 */
     $new_fid = $this->getLastFileId();
     $new_file = File::load($new_fid);
 

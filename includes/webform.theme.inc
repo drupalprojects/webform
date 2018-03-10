@@ -265,10 +265,10 @@ function webform_preprocess_radios(&$variables) {
 function _webform_preprocess_options(&$variables) {
   $element = $variables['element'];
 
-  $variables['attributes']['class'][] =  Html::getClass('js-webform-' . $element['#type']);
+  $variables['attributes']['class'][] = Html::getClass('js-webform-' . $element['#type']);
 
   if (!empty($element['#options_display'])) {
-    $variables['attributes']['class'][] =  Html::getClass('webform-options-display-' . $element['#options_display']);
+    $variables['attributes']['class'][] = Html::getClass('webform-options-display-' . $element['#options_display']);
     $variables['#attached']['library'][] = 'webform/webform.element.options';
   }
 }

@@ -673,12 +673,12 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   /**
    * Handle error by logging and display debugging and/or exception message.
    *
-   * @param string $message
-   *   Message to be displayed.
    * @param string $state
    *   The state of the webform submission.
    *   Either STATE_NEW, STATE_DRAFT, STATE_COMPLETED, STATE_UPDATED, or
    *   STATE_CONVERTED depending on the last save operation performed.
+   * @param string $message
+   *   Message to be displayed.
    * @param string $request_url
    *   The remote URL the request is being posted to.
    * @param string $request_method
@@ -689,8 +689,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    *   The requests options including the submission data..
    * @param \Psr\Http\Message\ResponseInterface|null $response
    *   The response returned by the remote server.
-   * @param string $type
-   *   The type of message to be displayed to the end use.
    */
   protected function handleError($state, $message, $request_url, $request_method, $request_type, $request_options, $response) {
     // If debugging is enabled, display the error message on screen.

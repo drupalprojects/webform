@@ -26,7 +26,7 @@ class RouteParametersWebformSourceEntityTest extends UnitTestCase {
    *     entity
    *   - another_entity: to denote that this parameter should contain some other
    *     entity.
-   * @param string[] $ignored_types
+   * @param array $ignored_types
    *   Array of entity types that may not be source.
    * @param bool $expect_source_entity
    *   Whether we expect the tested method to return the source entity.
@@ -37,7 +37,7 @@ class RouteParametersWebformSourceEntityTest extends UnitTestCase {
    *
    * @dataProvider providerGetCurrentSourceEntity
    */
-  public function testGetCurrentSourceEntity($route_parameters, $ignored_types, $expect_source_entity, $assert_message = '') {
+  public function testGetCurrentSourceEntity(array $route_parameters, array $ignored_types, $expect_source_entity, $assert_message = '') {
     $route_match = $this->getMockBuilder(RouteMatchInterface::class)
       ->disableOriginalConstructor()
       ->getMock();

@@ -183,8 +183,6 @@ class WebformBreadcrumbBuilder implements BreadcrumbBuilderInterface {
             // @see webform_image_select.module.
             $breadcrumb->addLink(Link::createFromRoute($this->t('Images'), 'entity.webform_image_select_images.collection'));
           }
-
-
           break;
 
         case 'webform_element_plugins':

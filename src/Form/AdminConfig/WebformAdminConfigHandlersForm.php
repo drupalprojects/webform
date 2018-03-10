@@ -14,18 +14,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
 
   /**
-   * The webform handler manager.
-   *
-   * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
-   */
-  protected $handlerManager;
-
-  /**
    * The webform token manager.
    *
    * @var \Drupal\webform\WebformTokenManagerInterface
    */
   protected $tokenManager;
+
+  /**
+   * The webform handler manager.
+   *
+   * @var \Drupal\webform\Plugin\WebformHandlerManagerInterface
+   */
+  protected $handlerManager;
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\webform\WebformTokenManagerInterface $'token_manager
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    * @param \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager
    *   The webform handler manager.

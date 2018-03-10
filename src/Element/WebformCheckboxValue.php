@@ -30,7 +30,6 @@ class WebformCheckboxValue extends FormElement {
     ];
   }
 
-
   /**
    * {@inheritdoc}
    */

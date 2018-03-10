@@ -575,7 +575,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element['#admin_title'] = strip_tags($element['#title']);
     }
 
-    // Replace global tokens which could include the [site:name]
+    // Replace global tokens which could include the [site:name].
     $this->replaceTokens($element);
   }
 
@@ -867,7 +867,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    *   wrapper that renders the #states in a #prefix and #suffix div tag.
    * - Composite elements tend not to properly handle #states.
    * - Composite elements need propagate a visible/hidden #states to
-   *   sub-element required #state
+   *   sub-element required #state.
    *
    * @param array $element
    *   An element.
@@ -2542,7 +2542,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     ];
     $format = isset($element_properties['format']) ? $element_properties['format'] : NULL;
     $format_custom = ($has_edit_twig_access || $format === 'custom');
-    if ($format_custom ) {
+    if ($format_custom) {
       $form['display']['item']['format']['#options'] += ['custom' => $this->t('Custom...')];
     }
     $custom_states = [

@@ -47,7 +47,7 @@ class WebformCliService implements WebformCliServiceInterface {
   /**
    * Call WebformCommand method or drush function.
    *
-   * @param $name
+   * @param string $name
    *   Function name.
    * @param array $arguments
    *   Function arguments.

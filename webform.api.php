@@ -157,7 +157,6 @@ function hook_webform_submission_form_FORM_ID_alter(array &$form, \Drupal\Core\F
 
 }
 
-
 /**
  * Perform alterations on webform admin third party settings form.
  *

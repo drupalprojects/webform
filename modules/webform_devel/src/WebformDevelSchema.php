@@ -99,7 +99,7 @@ class WebformDevelSchema implements WebformDevelSchemaInterface {
   /**
    * Get webform element schema.
    *
-   * @param $element_key
+   * @param string $element_key
    *   The webform element key.
    * @param array $element
    *   The webform element.

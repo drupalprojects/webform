@@ -462,7 +462,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       ];
     }
 
-    // Required indicator
+    // Required indicator.
     $current_page = $this->getCurrentPage($form, $form_state);
     if ($current_page != 'webform_preview' && $this->getWebformSetting('form_required') && $webform->hasRequired()) {
       $form['required'] = [
@@ -2079,7 +2079,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @param bool $completed
    *   Flag to get last completed or draft submission.
    *
-   * @return \Drupal\webform\WebformSubmissionInterface|NULL
+   * @return \Drupal\webform\WebformSubmissionInterface|null
    *   The last completed webform submission for the current user.
    */
   protected function getLastSubmission($completed = TRUE) {

@@ -56,7 +56,7 @@ class WebformResultsExportOptionsTest extends WebformTestBase {
     $this->assertRaw('Hillary,Clinton');
 
     // Check special characters.
-    $this->assertRaw("quotes' \"\"","html <markup>");
+    $this->assertRaw("quotes' \"\"", "html <markup>");
 
     // Check delimiter.
     $this->getExport($webform, ['delimiter' => '|']);

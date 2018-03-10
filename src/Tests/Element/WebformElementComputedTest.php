@@ -63,7 +63,7 @@ class WebformElementComputedTest extends WebformElementTestBase {
     $this->assertRaw('<p>It contains "double" and \'single\' quotes with special characters like &lt;, &gt;, &lt;&gt;, and &gt;&lt;.</p><br />');
     $this->assertRaw('<b class="webform_computed_token_html">xss:</b> &lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;<br />');
 
-    // Check token plain text rendering
+    // Check token plain text rendering.
     $this->assertRaw('<div id="test_element_computed_token--webform_computed_token_text" class="webform-element webform-element-type-webform-computed-token js-form-item form-item js-form-type-item form-type-item js-form-item-webform-computed-token-text form-item-webform-computed-token-text">');
     $this->assertRaw('<label>webform_computed_token_text</label>');
     $this->assertRaw('simple string: This is a string<br />');

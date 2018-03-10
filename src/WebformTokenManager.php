@@ -5,7 +5,6 @@ namespace Drupal\webform;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\Utility\WebformFormHelper;
@@ -147,6 +146,9 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function elementValidate(array &$form, array $token_types = ['webform', 'webform_submission', 'webform_handler']) {
     if (!function_exists('token_element_validate')) {
       return;

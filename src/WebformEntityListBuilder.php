@@ -113,7 +113,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
       $state_options = [
         '' => $this->t('All [@total]', ['@total' => $this->getTotal(NULL, NULL)]),
         WebformInterface::STATUS_OPEN => $this->t('Open [@total]', ['@total' => $this->getTotal(NULL, NULL, WebformInterface::STATUS_OPEN)]),
-        WebformInterface::STATUS_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, NULL,WebformInterface::STATUS_CLOSED)]),
+        WebformInterface::STATUS_CLOSED => $this->t('Closed [@total]', ['@total' => $this->getTotal(NULL, NULL, WebformInterface::STATUS_CLOSED)]),
         WebformInterface::STATUS_SCHEDULED => $this->t('Scheduled [@total]', ['@total' => $this->getTotal(NULL, NULL, WebformInterface::STATUS_SCHEDULED)]),
       ];
     }

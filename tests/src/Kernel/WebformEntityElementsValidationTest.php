@@ -3,7 +3,6 @@
 namespace Drupal\Tests\webform\Kernel;
 
 use Drupal\Core\Url;
-use Drupal\webform\WebformEntityElementsValidator;
 use Drupal\KernelTests\KernelTestBase;
 
 /**

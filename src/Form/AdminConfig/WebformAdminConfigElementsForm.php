@@ -137,7 +137,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     $form['element']['default_description_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Default description display'),
-      '#empty_option' => $this->t('- Default - '),
+      '#empty_option' => $this->t('- Default -'),
       '#options' => [
         'before' => $this->t('Before'),
         'after' => $this->t('After'),
@@ -182,7 +182,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       '#type' => 'select',
       '#title' => $this->t('Enhance checkboxes/radio buttons using iCheck'),
       '#description' => $this->t('If set, all checkboxes/radio buttons with be enhanced using jQuery <a href=":href">iCheck</a> boxes.', [':href' => 'http://icheck.fronteed.com/']),
-      '#empty_option' => $this->t('- Default - '),
+      '#empty_option' => $this->t('- Default -'),
       '#options' => [
         (string) $this->t('Minimal') => [
           'minimal' => $this->t('Minimal: Black'),

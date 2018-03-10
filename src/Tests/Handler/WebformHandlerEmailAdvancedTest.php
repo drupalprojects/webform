@@ -102,7 +102,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $this->assertEqual($sent_email['headers']['Sender'], 'default_return_path@example.com');
     $this->assertEqual($sent_email['headers']['Reply-to'], 'default_reply_to@example.com');
 
-    // Check site wide reply to and return path using tokens
+    // Check site wide reply to and return path using tokens.
     \Drupal::configFactory()->getEditable('system.site')
       ->set('mail', 'system_site@example.com')
       ->save();
@@ -112,9 +112,9 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
       ->save();
     $this->postSubmissionTest($webform);
     $sent_email = $this->getLastEmail();
-    $this->assertEqual($sent_email['headers']['Return-Path'],  'system_site@example.com');
-    $this->assertEqual($sent_email['headers']['Sender'],  'system_site@example.com');
-    $this->assertEqual($sent_email['headers']['Reply-to'],  'system_site@example.com');
+    $this->assertEqual($sent_email['headers']['Return-Path'], 'system_site@example.com');
+    $this->assertEqual($sent_email['headers']['Sender'], 'system_site@example.com');
+    $this->assertEqual($sent_email['headers']['Reply-to'], 'system_site@example.com');
 
     // Check site wide sender mail and name.
     \Drupal::configFactory()->getEditable('webform.settings')

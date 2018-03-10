@@ -84,9 +84,21 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
    */
   protected $formBuilder;
 
-  public function __construct(RendererInterface $renderer, WebformElementManagerInterface $webform_element_manager, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder) {
+  /**
+   * Constructs a WebformEntityElementsValidator object.
+   *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The 'renderer' service.
+   * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
+   *   The 'plugin.manager.webform.element' service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The 'entity_type.manager' service.
+   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
+   *   The 'form_builder' service.
+   */
+  public function __construct(RendererInterface $renderer, WebformElementManagerInterface $element_manager, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder) {
     $this->renderer = $renderer;
-    $this->elementManager = $webform_element_manager;
+    $this->elementManager = $element_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->formBuilder = $form_builder;
   }

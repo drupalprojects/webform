@@ -98,7 +98,7 @@ class WebformRequest implements WebformRequestInterface {
    *   The entity type repository.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
-   * @param \Drupal\webform\Plugin\WebformSourceEntityManagerInterface $webform_source_entity_RouteParametersWebformSourceEntitymanager
+   * @param \Drupal\webform\Plugin\WebformSourceEntityManagerInterface $webform_source_entity_manager
    *   The webform source entity plugin manager.
    */
   public function __construct(RouteProviderInterface $route_provider, RequestStack $request_stack, AdminContext $admin_context, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager, EntityTypeRepositoryInterface $entity_type_repository, WebformEntityReferenceManagerInterface $webform_entity_reference_manager, WebformSourceEntityManagerInterface $webform_source_entity_manager) {

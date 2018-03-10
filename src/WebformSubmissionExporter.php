@@ -730,7 +730,6 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
 
     $query = $this->entityStorage->getQuery()->condition('webform_id', $webform->id());
 
-
     // Filter by source entity or submitted to.
     if ($source_entity) {
       $query->condition('entity_type', $source_entity->getEntityTypeId());
@@ -804,7 +803,6 @@ class WebformSubmissionExporter implements WebformSubmissionExporterInterface {
       // Sort by sid in ASC or DESC order.
       $query->sort('sid', isset($export_options['order']) ? $export_options['order'] : 'ASC');
     }
-
 
     return $query;
   }

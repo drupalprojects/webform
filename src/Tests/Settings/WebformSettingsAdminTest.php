@@ -110,7 +110,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
    * Sort a nested associative array by key.
    *
    * @param array $array
-   *   A nested associative array
+   *   A nested associative array.
    */
   protected function ksort(array &$array) {
     ksort($array);

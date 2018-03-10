@@ -3,17 +3,28 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url as UrlGenerator;
-use Drupal\Core\StreamWrapper\StreamWrapperInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url as UrlGenerator;
+use Drupal\Core\Render\ElementInfoManagerInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
+use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\Component\Utility\Bytes;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\WebformLibrariesManagerInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 
 /**
  * Provides a base class webform 'managed_file' elements.
@@ -86,15 +97,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The webform libraries manager.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
-   *   The file system service
+   *   The file system service.
    * @param \Drupal\file\FileUsage\FileUsageInterface|NULL $file_usage
-   *   The file usage service
+   *   The file usage service.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
-   *   The transliteration service
+   *   The transliteration service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager
+   *   The language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, \Psr\Log\LoggerInterface $logger, \Drupal\Core\Config\ConfigFactoryInterface $config_factory, \Drupal\Core\Session\AccountInterface $current_user, \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager, \Drupal\Core\Render\ElementInfoManagerInterface $element_info, \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager, \Drupal\webform\WebformTokenManagerInterface $token_manager, \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager, \Drupal\Core\File\FileSystemInterface $file_system, $file_usage, \Drupal\Component\Transliteration\TransliterationInterface $transliteration, \Drupal\Core\Language\LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition,LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, FileSystemInterface $file_system, $file_usage, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $config_factory, $current_user, $entity_type_manager, $element_info, $element_manager, $token_manager, $libraries_manager);
 
     $this->fileSystem = $file_system;
@@ -704,7 +715,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         '#type' => 'textfield',
         '#title' => $this->t('File name pattern'),
         '#maxlength' => NULL,
-      ]
+      ],
     ];
     $form['file']['sanitize'] = [
       '#type' => 'checkbox',
@@ -712,13 +723,14 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#description' => $this->t('If checked, file name will be transliterated, lower-cased and all special characters converted to dashes (-).'),
       '#return_value' => TRUE,
     ];
+    $t_args = [
+      '%file_rename' => $form['file']['file_name']['#title'],
+      '%sanitization' => $form['file']['sanitize']['#title'],
+    ];
     $form['file']['file_name_warning'] = [
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('For security reasons we advise to use %file_rename together with the %sanitization option.', [
-        '%file_rename' => $form['file']['file_name']['#title'],
-        '%sanitization' => $form['file']['sanitize']['#title'],
-      ]),
+      '#message_message' => $this->t('For security reasons we advise to use %file_rename together with the %sanitization option.', $t_args),
       '#access' => TRUE,
       '#states' => ['visible' => [
         ':input[name="properties[file_name][checkbox]"]' => ['checked' => TRUE],
@@ -772,15 +784,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * Determine the destination URI where to save an uploaded file.
    *
    * @param array $element
-   *   Element whose destination URI is requested
+   *   Element whose destination URI is requested.
    * @param \Drupal\file\FileInterface $file
-   *   File whose destination URI is requested
+   *   File whose destination URI is requested.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   Webform submission that contains the file whose destination URI is
-   *   requested
+   *   requested.
    *
    * @return string
-   *   Destination URI under which the file should be saved
+   *   Destination URI under which the file should be saved.
    */
   protected function getFileDestinationUri(array $element, FileInterface $file, WebformSubmissionInterface $webform_submission) {
     $destination_folder = $this->fileSystem->dirname($file->getFileUri());

@@ -21,6 +21,8 @@ class WebformBlockCacheTest extends BrowserTestBase {
   public static $modules = ['block', 'webform', 'page_cache', 'dynamic_page_cache', 'node'];
 
   /**
+   * Authenticated user.
+   * 
    * @var \Drupal\user\Entity\User
    */
   private $authenticatedUser;

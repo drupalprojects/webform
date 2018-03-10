@@ -748,7 +748,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $query->addMetaData('webform_submission_element_direction', $direction);
       $result = $query->execute();
       // Must manually initialize the pager because the DISTINCT clause in the
-      // query is breaking the row counting
+      // query is breaking the row counting.
       // @see webform_query_alter()
       pager_default_initialize($this->total, $this->limit);
       return $result;

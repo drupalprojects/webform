@@ -3,7 +3,6 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Defines an interface for token manager classes.

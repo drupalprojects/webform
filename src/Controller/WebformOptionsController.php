@@ -5,7 +5,6 @@ namespace Drupal\webform\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformOptionsInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
