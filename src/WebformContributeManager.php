@@ -456,7 +456,7 @@ class WebformContributeManager implements WebformContributeManagerInterface {
 
     $contribution = $this->getContribution();
     if ($contribution && !empty($contribution['status'])) {
-      $url = base_path() . drupal_get_path('module', 'contribute') . '/images/icons/drupal.svg';
+      $url = base_path() . drupal_get_path('module', 'webform') . '/contribute/images/icons/drupal.svg';
       $style .= '#contribute-info-contribution:before {background-image: url(' . $url . ')}';
     }
 
