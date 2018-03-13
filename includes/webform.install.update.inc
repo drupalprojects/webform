@@ -2087,10 +2087,45 @@ function webform_update_8112() {
 }
 
 /**
- * Issue #????: Convert About section into Contribute section.
+ * Issue #2951001: Convert About section into Contribute section.
  */
 function webform_update_8113() {
   $config = \Drupal::configFactory()->getEditable('webform.settings');
   $config->set('ui.contribute_disabled', $config->get('ui.about_disabled') ?: FALSE);
   $config->save();
+}
+
+
+/**
+ * Issue #2951921: The contribute module is missing from the file system.
+ */
+function webform_update_8114() {
+  // Skip if the Contribute module still exists.
+  if (file_exists(drupal_get_path('module', 'contribute') . '/contribute.info.yml')) {
+    return;
+  }
+
+  $contribute_config = \Drupal::configFactory()->getEditable('contribute.settings');
+
+  // Migrate Contribute account info to Webform Contribute account info.
+  \Drupal::configFactory()->getEditable('webform.settings')
+    ->set('contribute.account_type', $contribute_config->get('account_type') ?: 'user')
+    ->set('contribute.account_id', $contribute_config->get('account_id') ?: NULL)
+    ->save();
+
+  // Manually delete the Contribute module's configuration.
+  $contribute_config->delete();
+
+  // Manually remove the contribute module from core.extension configuration.
+  $extension_config = \Drupal::configFactory()->getEditable('core.extension');
+  $module = $extension_config->get('module');
+  unset($module['contribute']);
+  $extension_config->set('module', $module);
+  $extension_config->save();
+
+  // Remove schema definitions.
+  \Drupal::database()->delete('key_value')
+    ->condition('collection', 'system.schema')
+    ->condition('name', 'contribute')
+    ->execute();
 }
