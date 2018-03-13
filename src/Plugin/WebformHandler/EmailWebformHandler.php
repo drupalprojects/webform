@@ -1330,8 +1330,14 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration[$name],
     ];
 
+    // Set empty option.
     if (in_array($name, ['reply_to', 'return_path', 'sender_mail', 'sender_name'])) {
       $element[$name]['#empty_option'] = $this->t('- Default -');
+    }
+
+    // Remove maxlength.
+    if (in_array($name, ['subject'])) {
+      $element[$name]['#other__maxlength'] = NULL;
     }
 
     // Use multiple email for reply_to, return_path, and sender_mail because

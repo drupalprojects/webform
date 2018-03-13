@@ -131,6 +131,7 @@ class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
       '#type' => 'textfield',
       '#title' => $this->t('Default email subject'),
       '#required' => TRUE,
+      '#maxlength' => NULL,
       '#default_value' => $config->get('mail.default_subject'),
     ];
     $form['mail']['default_body_text'] = [
