@@ -96,7 +96,7 @@ abstract class WebformOtherBase extends FormElement {
 
     if (!empty($element['#required'])) {
       $element['#wrapper_attributes']['required'] = 'required';
-      $element['#wrapper_attributes']['aria-required'] = 'aria-required';
+      $element['#wrapper_attributes']['aria-required'] = 'true';
     }
 
     $element[$type]['#type'] = static::$type;

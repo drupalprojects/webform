@@ -56,7 +56,7 @@
       // Fix #required file upload.
       // @see Issue #2860529: Conditional required File upload field don't work.
       if (e.value) {
-        $target.find('input[type="file"]').attr({'required': 'required', 'aria-required': 'aria-required'});
+        $target.find('input[type="file"]').attr({'required': 'required', 'aria-required': 'true'});
       }
       else {
         $target.find('input[type="file"]').removeAttr('required aria-required');
@@ -79,7 +79,7 @@
       // @see Issue #2856795: If radio buttons are required but not filled form is nevertheless submitted.
       if ($target.is('.js-webform-type-radios, .js-form-type-webform-radios-other')) {
         if (e.value) {
-          $target.find('input[type="radio"]').attr({'required': 'required', 'aria-required': 'aria-required'});
+          $target.find('input[type="radio"]').attr({'required': 'required', 'aria-required': 'true'});
         }
         else {
           $target.find('input[type="radio"]').removeAttr('required aria-required');
@@ -96,7 +96,7 @@
           // to all checkboxes.
           $checkboxes.bind('click', checkboxRequiredhandler);
           if (!$checkboxes.is(':checked')) {
-            $checkboxes.attr({'required': 'required', 'aria-required': 'aria-required'});
+            $checkboxes.attr({'required': 'required', 'aria-required': 'true'});
           }
         }
         else {
@@ -162,7 +162,7 @@
       $checkboxes.removeAttr('required aria-required');
     }
     else {
-      $checkboxes.attr({'required': 'required', 'aria-required': 'aria-required'});
+      $checkboxes.attr({'required': 'required', 'aria-required': 'true'});
     }
   }
 

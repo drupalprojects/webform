@@ -31,7 +31,7 @@
           else {
             $element.show();
             if (required) {
-              $element.attr({ 'required': 'required', 'aria-required': 'aria-required' })
+              $element.attr({ 'required': 'required', 'aria-required': 'true' })
             }
           }
         }).change();
