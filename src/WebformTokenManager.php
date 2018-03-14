@@ -154,6 +154,10 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return;
     }
 
+    // Always add system tokens.
+    // @see system_token_info()
+    $token_types = array_merge($token_types, ['site', 'date']);
+
     $text_element_types = [
       'email' => 'email',
       'textfield' => 'textfield',
