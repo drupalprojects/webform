@@ -684,6 +684,23 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element[$attributes_property]['class'][] = 'webform-has-field-suffix';
     }
 
+    // Get and set the element's default callbacks property so that
+    // it is not skipped when custom callbacks are added.
+    if (isset($element['#type'])) {
+      $type = $element['#type'];
+      $callbacks = ['#pre_render', '#element_validate'];
+      foreach ($callbacks as $callback) {
+        $callback_property = $this->elementInfo->getInfoProperty($type, $callback, [])
+          ?: $this->elementInfo->getInfoProperty("webform_$type", $callback, []);
+        if (!empty($element[$callback])) {
+          $element[$callback] = array_merge($callback_property, $element[$callback]);
+        }
+        else {
+          $element[$callback] = $callback_property;
+        }
+      }
+    }
+
     if ($this->isInput($element)) {
       // Handle #readonly support.
       // @see \Drupal\Core\Form\FormBuilder::handleInputElement
@@ -699,22 +716,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       // @see webform.form.js
       if (!empty($element['#required_error'])) {
         $element['#attributes']['data-webform-required-error'] = $element['#required_error'];
-      }
-
-      $type = $element['#type'];
-
-      // Get and set the element's default callbacks property so that
-      // it is not skipped when custom callbacks are added.
-      $callbacks = ['#pre_render', '#element_validate'];
-      foreach ($callbacks as $callback) {
-        $callback_property = $this->elementInfo->getInfoProperty($type, $callback, [])
-          ?: $this->elementInfo->getInfoProperty("webform_$type", $callback, []);
-        if (!empty($element[$callback])) {
-          $element[$callback] = array_merge($callback_property, $element[$callback]);
-        }
-        else {
-          $element[$callback] = $callback_property;
-        }
       }
 
       // Add webform element #minlength, #unique, and/or #multiple
