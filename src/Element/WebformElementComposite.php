@@ -44,6 +44,9 @@ class WebformElementComposite extends FormElement {
         [$class, 'processAjaxForm'],
       ],
       '#theme_wrappers' => ['form_element'],
+      // Add '#markup' property to add an 'id' attribute to the form element.
+      // @see template_preprocess_form_element()
+      '#markup' => '',
     ];
   }
 
@@ -125,6 +128,7 @@ class WebformElementComposite extends FormElement {
       '#empty_items' => 0,
       '#header' => TRUE,
       '#default_value' => (isset($element['#default_value'])) ? $element['#default_value'] : NULL,
+      '#error_no_message' => TRUE,
       '#element' => [
         'key_type_options' => [
           '#type' => 'container',
@@ -143,6 +147,7 @@ class WebformElementComposite extends FormElement {
               'title' => t('Enter a unique machine-readable name. Can only contain lowercase letters, numbers, and underscores.'),
             ],
             '#required' => TRUE,
+            '#error_no_message' => TRUE,
           ],
           'type' => [
             '#type' => 'select',
@@ -152,6 +157,7 @@ class WebformElementComposite extends FormElement {
             '#empty_option' => t('- Select type -'),
             '#required' => TRUE,
             '#attributes' => ['class' => ['js-webform-composite-type']],
+            '#error_no_message' => TRUE,
           ],
           'options' => [
             '#type' => 'webform_element_options',
@@ -162,6 +168,7 @@ class WebformElementComposite extends FormElement {
               'data-composite-types' => implode(',', $options_elements),
               'data-composite-required' => 'data-composite-required',
             ],
+            '#error_no_message' => TRUE,
           ],
           // ISSUE:
           // Set #access: FALSE is losing the custom properties.
@@ -175,6 +182,7 @@ class WebformElementComposite extends FormElement {
             '#title' => t('Custom properties'),
             '#title_display' => 'invisible',
             '#placeholder' => t('Enter custom properties'),
+            '#error_no_message' => TRUE,
           ] : [
             '#type' => 'hidden',
           ],
@@ -193,6 +201,7 @@ class WebformElementComposite extends FormElement {
             '#title_display' => 'invisible',
             '#placeholder' => t('Enter title'),
             '#required' => TRUE,
+            '#error_no_message' => TRUE,
           ],
           'placeholder' => [
             '#type' => 'textfield',
@@ -200,6 +209,7 @@ class WebformElementComposite extends FormElement {
             '#title_display' => 'invisible',
             '#placeholder' => t('Enter placeholder'),
             '#attributes' => ['data-composite-types' => implode(',', $placeholder_elements)],
+            '#error_no_message' => TRUE,
           ],
           'description' => [
             '#type' => 'textarea',
@@ -207,6 +217,7 @@ class WebformElementComposite extends FormElement {
             '#title_display' => 'invisible',
             '#placeholder' => t('Enter description'),
             '#rows' => 2,
+            '#error_no_message' => TRUE,
           ],
           'help' => [
             '#type' => 'textarea',
@@ -214,6 +225,7 @@ class WebformElementComposite extends FormElement {
             '#title_display' => 'invisible',
             '#placeholder' => t('Enter help text'),
             '#rows' => 2,
+            '#error_no_message' => TRUE,
           ],
         ],
         // Note: Setting #return_value: TRUE is not returning any value.
@@ -222,6 +234,7 @@ class WebformElementComposite extends FormElement {
           '#title' => t('Req.'),
           '#title_display' => 'invisible',
           '#help' => '<b>' . t('Required') . ':</b> ' . t('Check this option if the user must enter a value.'),
+          '#error_no_message' => TRUE,
         ],
       ],
     ];
@@ -301,15 +314,27 @@ class WebformElementComposite extends FormElement {
       $elements[$key] = WebformArrayHelper::addPrefix($element_value);
     }
 
-    // Make sure #options is set for composite element's that require #options.
     foreach ($elements as $composite_element) {
-      if (isset($composite_element['type'])) {
-        /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
-        $element_plugin = $element_manager->getElementInstance($composite_element);
-        if ($element_plugin->hasProperty('options') && empty($composite_element['#options'])) {
-          $t_args = ['%title' => $composite_element['#title']];
-          $form_state->setErrorByName($element, t('Options for %title is required.', $t_args));
-        }
+      if (!isset($composite_element['#type'])) {
+        continue;
+      }
+
+      /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
+      $element_plugin = $element_manager->getElementInstance($composite_element);
+
+      $t_args = [
+        '%title' => $composite_element['#title'],
+        '@type' => $composite_element['#type'],
+      ];
+
+      // Make sure #options is set for composite element's that require #options.
+      if ($element_plugin->hasProperty('options') && empty($composite_element['#options'])) {
+        $form_state->setError($element, t('Options for %title is required.', $t_args));
+      }
+
+      // Make sure element is not storing multiple values.
+      if ($element_plugin->hasMultipleValues($composite_element)) {
+        $form_state->setError($element, t('Multiple value is not supported for %title (@type).', $t_args));
       }
     }
 
