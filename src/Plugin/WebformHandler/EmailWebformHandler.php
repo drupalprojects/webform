@@ -487,7 +487,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $form['message']['body_default_' . $format] = [
         '#type' => 'webform_codemirror',
         '#mode' => $format,
-        '#title' => $this->t('Body default value (@format)', ['@label' => $format]),
+        '#title' => $this->t('Body default value (@format)', ['@format' => $format]),
         '#title_display' => 'hidden',
         '#default_value' => $body_default_values[$format],
         '#attributes' => ['readonly' => 'readonly', 'disabled' => 'disabled'],
