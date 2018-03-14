@@ -1971,15 +1971,6 @@ function webform_update_8105() {
   webform_update_8095();
 }
 
-/**
- * Issue #2941297: Contribute dependency not auto enabled.
- */
-function webform_update_8106() {
-  if (!\Drupal::moduleHandler()->moduleExists('contribute')) {
-    \Drupal::service('module_installer')->install(['contribute']);
-  }
-}
-
 /******************************************************************************/
 // Webform-8.x-5.0-rc4
 /******************************************************************************/
