@@ -28,6 +28,9 @@ class WebformSignature extends FormElement {
       ],
       '#theme' => 'input__webform_signature',
       '#theme_wrappers' => ['form_element'],
+      // Add '#markup' property to add an 'id' attribute to the form element.
+      // @see template_preprocess_form_element()
+      '#markup' => '',
     ];
   }
 

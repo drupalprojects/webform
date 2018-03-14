@@ -70,6 +70,14 @@ elements: |
       '#type': webform_email_confirm
       '#title': webform_email_confirm
       '#required': true
+    webform_signature:
+      '#type': webform_signature
+      '#title': webform_signature
+      '#required': true
+    webform_html_editor:
+      '#type': webform_html_editor
+      '#title': webform_html_editor
+      '#required': true
   options_webform:
     '#type': fieldset
     '#title': options_webform
