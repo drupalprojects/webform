@@ -17,7 +17,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   api = "https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!Element!Table.php/class/Table",
  *   label = @Translation("Table"),
  *   description = @Translation("Provides an element to render a table."),
- *   category = @Translation("Markup elements"),
+ *   hidden = TRUE,
  * )
  */
 class Table extends WebformElementBase {
