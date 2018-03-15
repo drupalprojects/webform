@@ -11,6 +11,7 @@ use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Markup;
 use Drupal\user\Entity\User;
+use Drupal\webform\Plugin\WebformElement\WebformComputedBase;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
@@ -20,7 +21,6 @@ use Drupal\webform\WebformSubmissionInterface;
  * Implements hook_token_info().
  */
 function webform_token_info() {
-
   $types = [];
   $tokens = [];
 
@@ -706,6 +706,11 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
   }
 
   $element_plugin = $element_manager->getElementInstance($element);
+
+  // Get value for a computed element.
+  if ($element_plugin instanceof WebformComputedBase) {
+    return $element_plugin->getValue($element, $webform_submission);
+  }
 
   // Exit if no submission data and form element is not a container.
   if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
