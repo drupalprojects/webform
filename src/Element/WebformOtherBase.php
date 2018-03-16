@@ -5,6 +5,7 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
+use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
@@ -13,6 +14,8 @@ use Drupal\webform\Utility\WebformOptionsHelper;
  * Base class for webform other element.
  */
 abstract class WebformOtherBase extends FormElement {
+
+  use CompositeFormElementTrait;
 
   /**
    * Other option value.
@@ -50,7 +53,9 @@ abstract class WebformOtherBase extends FormElement {
         [$class, 'processWebformOther'],
         [$class, 'processAjaxForm'],
       ],
-      '#theme_wrappers' => ['form_element'],
+      '#pre_render' => [
+        [$class, 'preRenderCompositeFormElement'],
+      ],
       '#options' => [],
       '#other__option_delimiter' => ', ',
       '#states' => [],
@@ -94,14 +99,6 @@ abstract class WebformOtherBase extends FormElement {
 
     $element['#tree'] = TRUE;
 
-    $element['#wrapper_attributes']['class'][] = "js-webform-$type-other";
-    $element['#wrapper_attributes']['class'][] = "webform-$type-other";
-
-    if (!empty($element['#required'])) {
-      $element['#wrapper_attributes']['required'] = 'required';
-      $element['#wrapper_attributes']['aria-required'] = 'true';
-    }
-
     $element[$type]['#type'] = static::$type;
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {
@@ -144,6 +141,10 @@ abstract class WebformOtherBase extends FormElement {
       $element[$type]['#parents'] = array_merge($element['#parents'], [$type]);
       $element['other']['#parents'] = array_merge($element['#parents'], ['other']);
     }
+
+    // Add js trigger to fieldset.
+    $element['#attributes']['class'][] = "js-webform-$type-other";
+    $element['#attributes']['class'][] = "webform-$type-other";
 
     // Remove options.
     unset($element['#options']);

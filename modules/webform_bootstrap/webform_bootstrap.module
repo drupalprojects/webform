@@ -65,9 +65,13 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
   // Tweak element types.
   if (isset($element['#type'])) {
     switch ($element['#type']) {
+      case 'webform_checkboxes_other':
       case 'webform_buttons':
+      case 'webform_buttons_other':
       case 'webform_entity_checkboxes':
       case 'webform_entity_radios':
+      case 'webform_radios_other':
+      case 'webform_select_other':
       case 'webform_term_checkboxes':
       case 'webform_toggles':
         // Prevent elements that extend radios and checkboxes from being wrapped
