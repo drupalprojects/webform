@@ -153,8 +153,17 @@ function antibot_webform_submission_form_alter(&$form, FormStateInterface $form_
   $antibot = $third_party_settings_manager->getThirdPartySetting('antibot', 'antibot') ?:
     $webform->getThirdPartySetting('antibot', 'antibot');
   if ($antibot) {
-    // @see antibot_form_alter().
-    $form['#pre_render'][] = 'antibot_form_pre_render';
+    if (function_exists('antibot_protect_form')) {
+      // Applies to antibot-8.x-1.2+
+      // Set #form_id which is needed by antibot_protect_form().
+      $form['#form_id'] = $form_id;
+      antibot_protect_form($form);
+    }
+    else {
+      // Applies to antibot-8.x-1.1 and below.
+      // @todo Remove backward compatibility for antibot-8.x-1.1.
+      $form['#pre_render'][] = 'antibot_form_pre_render';
+    }
   }
 
 }
