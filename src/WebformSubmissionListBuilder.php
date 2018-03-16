@@ -811,16 +811,22 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     // Filter by key(word).
     if ($keys) {
+      // Search values.
       $sub_query = Database::getConnection()->select('webform_submission_data', 'sd')
         ->fields('sd', ['sid'])
         ->condition('value', '%' . $keys . '%', 'LIKE');
       $submission_storage->addQueryConditions($sub_query, $this->webform);
 
-      $or = $query->orConditionGroup()
-        ->condition('sid', $sub_query, 'IN')
-        ->condition('notes', '%' . $keys . '%', 'LIKE');
-
-      $query->condition($or);
+      // Search UUID and Notes.
+      $query->condition(
+        $query->orConditionGroup()
+          ->condition('sid', $sub_query, 'IN')
+          ->condition(
+            $query->orConditionGroup()
+              ->condition('uuid', $keys)
+              ->condition('notes', '%' . $keys . '%', 'LIKE')
+          )
+      );
     }
 
     // Filter by (submission) state.
