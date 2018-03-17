@@ -234,6 +234,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [
       'multiple' => FALSE,
       'multiple__header_label' => '',
+      'multiple__label' => $this->t('item'),
+      'multiple__labels' => $this->t('items'),
       'multiple__min_items' => 1,
       'multiple__empty_items' => 1,
       'multiple__add_more' => 1,
@@ -2456,6 +2458,16 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'textfield',
       '#title' => $this->t('Table header label'),
       '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Item label'),
+      '#description' => $this->t('This is used as the item label for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__labels'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Item labels'),
+      '#description' => $this->t('This is used as the items label for this webform element when displaying multiple values.'),
     ];
     $form['multiple']['multiple__min_items'] = [
       '#type' => 'number',

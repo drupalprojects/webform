@@ -33,6 +33,8 @@ elements: |
       '#counter_type': character
       '#counter_maximum': 10
       '#multiple': true
+      '#multiple__label': '{custom item}'
+      '#multiple__labels': '{custom items}'
   email:
     '#type': details
     '#title': email
