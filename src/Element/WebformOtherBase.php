@@ -35,6 +35,7 @@ abstract class WebformOtherBase extends FormElement {
    * @var array
    */
   protected static $properties = [
+    '#title',
     '#required',
     '#options',
     '#options_display',
@@ -101,6 +102,7 @@ abstract class WebformOtherBase extends FormElement {
 
     $element[$type]['#type'] = static::$type;
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
+    $element[$type]['#title_display'] = 'invisible';
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {
       $element[$type]['#options'][static::OTHER_OPTION] = (!empty($element['#other__option_label'])) ? $element['#other__option_label'] : t('Other...');
     }
@@ -126,6 +128,12 @@ abstract class WebformOtherBase extends FormElement {
       '#type' => 'textfield',
       '#placeholder' => t('Enter other...'),
     ];
+    if (!isset($element['other']['#title'])) {
+      $element['other'] += [
+        '#title' => $element['other']['#placeholder'] ,
+        '#title_display' => 'invisible',
+      ];
+    }
 
     $element['other']['#wrapper_attributes']['class'][] = "js-webform-$type-other-input";
     $element['other']['#wrapper_attributes']['class'][] = "webform-$type-other-input";
