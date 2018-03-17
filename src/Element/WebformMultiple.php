@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -174,8 +175,12 @@ class WebformMultiple extends FormElement {
     }
 
     // Build table.
+    $attributes = ['id' => $table_id, 'class' => ['webform-multiple-table']];
+    if (count($element['#element']) > 1) {
+      $attributes['class'][] = 'webform-multiple-table-responsive';
+    }
     $element['items'] = [
-      '#prefix' => '<div id="' . $table_id . '" class="webform-multiple-table">',
+      '#prefix' => '<div' . new Attribute($attributes) . '>',
       '#suffix' => '</div>',
       '#type' => 'table',
       '#header' => $header,
