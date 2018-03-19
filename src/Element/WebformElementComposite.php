@@ -314,7 +314,7 @@ class WebformElementComposite extends FormElement {
       $elements[$key] = WebformArrayHelper::addPrefix($element_value);
     }
 
-    foreach ($elements as $composite_element) {
+    foreach ($elements as $composite_element_key => $composite_element) {
       if (!isset($composite_element['#type'])) {
         continue;
       }
@@ -323,7 +323,7 @@ class WebformElementComposite extends FormElement {
       $element_plugin = $element_manager->getElementInstance($composite_element);
 
       $t_args = [
-        '%title' => $composite_element['#title'],
+        '%title' => (isset($composite_element['#title'])) ? $composite_element['#title'] : $composite_element_key,
         '@type' => $composite_element['#type'],
       ];
 

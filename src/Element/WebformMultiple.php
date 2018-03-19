@@ -140,7 +140,7 @@ class WebformMultiple extends FormElement {
     ];
 
     // Initialize, prepare, and finalize sub-elements.
-    static::initializeElement($element);
+    static::initializeElement($element, $form_state, $complete_form);
 
     // Build (single) element header.
     $header = static::buildElementHeader($element);
@@ -231,8 +231,12 @@ class WebformMultiple extends FormElement {
    *
    * @param array $element
    *   The element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *    An associative array containing the structure of the form.
    */
-  protected static function initializeElement(array &$element) {
+  protected static function initializeElement(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Track element child keys.
     $element['#child_keys'] = Element::children($element['#element']);
 
@@ -251,22 +255,26 @@ class WebformMultiple extends FormElement {
       // Initialize, prepare, and finalize composite sub-elements.
       // Get composite element required/options states from visible/hidden states.
       $required_states = WebformElementHelper::getRequiredFromVisibleStates($element);
-      static::initializeElementRecursive($element, $element['#element'], $required_states);
+      static::initializeElementRecursive($element, $form_state, $complete_form, $element['#element'], $required_states);
     }
   }
 
   /**
-   * Initialize, prepare, and finalize composite sub-elements recusively.
+   * Initialize, prepare, and finalize composite sub-elements recursively.
    *
    * @param array $element
    *   The main element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *    An associative array containing the structure of the form.
    * @param array $sub_elements
    *   The sub element.
    * @param array $required_states
    *   An associative array of required states froim the main element's
    *   visible/hidden states.
    */
-  protected static function initializeElementRecursive(array $element, array &$sub_elements, array $required_states) {
+  protected static function initializeElementRecursive(array $element, FormStateInterface $form_state, array &$complete_form, array &$sub_elements, array $required_states) {
     $child_keys = Element::children($sub_elements);
 
     // Exit immediate if the sub elements has no children.
@@ -289,11 +297,11 @@ class WebformMultiple extends FormElement {
         $sub_element['#title_display'] = 'invisible';
       }
 
-      // Initialize, prepare, and populate composite sub-element.
-      $element_plugin = $element_manager->getElementInstance($sub_element);
-      $element_plugin->initialize($sub_element);
-      $element_plugin->prepare($sub_element);
-      $element_plugin->finalize($sub_element);
+      // Initialize the composite sub-element.
+      $element_manager->initializeElement($sub_element);
+
+      // Build the composite sub-element.
+      $element_manager->buildElement($sub_element, $complete_form, $form_state);
 
       // Custom validate required sub-element because they can be hidden
       // via #access or #states.
@@ -308,7 +316,7 @@ class WebformMultiple extends FormElement {
       }
 
       if (is_array($sub_element)) {
-        static::initializeElementRecursive($element, $sub_element, $required_states);
+        static::initializeElementRecursive($element, $form_state, $complete_form, $sub_element, $required_states);
       }
     }
   }

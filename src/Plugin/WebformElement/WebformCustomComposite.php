@@ -169,8 +169,7 @@ class WebformCustomComposite extends WebformCompositeBase {
 
     // Initialize, prepare, and populate composite sub-element.
     foreach ($composite_elements as $composite_key => $composite_element) {
-      $element_plugin = $this->elementManager->getElementInstance($composite_element);
-      $element_plugin->initialize($composite_element);
+      $this->elementManager->initializeElement($composite_element);
       $composite_elements[$composite_key] = $composite_element;
     }
 
@@ -197,9 +196,8 @@ class WebformCustomComposite extends WebformCompositeBase {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
     foreach ($element['#element'] as $composite_key => $composite_element) {
-      // Initialize, prepare, and populate composite sub-element.
-      $element_plugin = $element_manager->getElementInstance($composite_element);
-      $element_plugin->initialize($composite_element);
+      // Initialize composite sub-element.
+      $this->elementManager->initializeElement($composite_element);
       $element['#webform_composite_elements'][$composite_key] = $composite_element;
     }
   }

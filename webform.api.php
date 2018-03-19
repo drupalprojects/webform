@@ -51,7 +51,7 @@ function hook_webform_source_entity_info_alter(array &$definitions) {
  *   The current state of the form.
  * @param array $context
  *   An associative array containing the following key-value pairs:
- *   - webform: The webform structure to which elements is being attached.
+ *   - form: The form structure to which elements is being attached.
  *
  * @see \Drupal\webform\WebformSubmissionForm::prepareElements()
  * @see hook_webform_element_ELEMENT_TYPE_alter()

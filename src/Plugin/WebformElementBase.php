@@ -586,7 +586,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     $attributes_property = ($this->hasWrapper($element)) ? '#wrapper_attributes' : '#attributes';
-
     if ($webform_submission) {
       // Add webform and webform_submission IDs to every element.
       $element['#webform'] = $webform_submission->getWebform()->id();

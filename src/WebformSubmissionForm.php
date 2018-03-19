@@ -1731,23 +1731,8 @@ class WebformSubmissionForm extends ContentEntityForm {
         continue;
       }
 
-      // Invoke WebformElement::prepare.
-      $this->elementManager->invokeMethod('prepare', $element, $this->entity);
-
-      // Invoke WebformElement::setDefaultValue.
-      $this->elementManager->invokeMethod('setDefaultValue', $element);
-
-      // Invoke WebformElement::finalize.
-      $this->elementManager->invokeMethod('finalize', $element, $this->entity);
-
-      // Allow modules to alter the webform element.
-      // @see \Drupal\Core\Field\WidgetBase::formSingleElement()
-      $hooks = ['webform_element'];
-      if (!empty($element['#type'])) {
-        $hooks[] = 'webform_element_' . $element['#type'];
-      }
-      $context = ['webform' => $form];
-      $this->moduleHandler->alter($hooks, $element, $form_state, $context);
+      // Build the webform element.
+      $this->elementManager->buildElement($element, $form, $form_state);
 
       // Recurse and prepare nested elements.
       $this->prepareElements($element, $form, $form_state);

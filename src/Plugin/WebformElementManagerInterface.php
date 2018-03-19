@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\CategorizingPluginManagerInterface;
 use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Component\Plugin\Discovery\CachedDiscoveryInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Collects available webform elements.
@@ -21,7 +22,31 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
   public function getInstances();
 
   /**
-   * Invoke a method for specific FAPI element.
+   * Build a Webform element.
+   *
+   * @param array $element
+   *   An associative array containing an element with a #type property.
+   */
+  public function initializeElement(array &$element);
+
+  /**
+   * Build a Webform element.
+   *
+   * @param array $element
+   *   An associative array containing an element with a #type property.
+   * @param array $form
+   *    An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @see hook_webform_element_alter()
+   * @see hook_webform_element_ELEMENT_TYPE_alter()
+   * @see \Drupal\webform\WebformSubmissionForm::prepareElements
+   */
+  public function buildElement(array &$element, array $form, FormStateInterface $form_state);
+
+  /**
+   * Invoke a method for a Webform element.
    *
    * @param string $method
    *   The method name.
@@ -37,6 +62,8 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
    * @return mixed|null
    *   Return result of the invoked method.  NULL will be returned if the
    *   element and/or method name does not exist.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::prepareElements
    */
   public function invokeMethod($method, array &$element, &$context1 = NULL, &$context2 = NULL);
 

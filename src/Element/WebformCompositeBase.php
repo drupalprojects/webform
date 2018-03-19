@@ -101,11 +101,8 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
         $composite_element['#access'] = FALSE;
       }
 
-      // Initialize, prepare, and populate composite sub-element.
-      $element_plugin = $element_manager->getElementInstance($composite_element);
-      $element_plugin->prepare($composite_element);
-      $element_plugin->finalize($composite_element);
-      $element_plugin->setDefaultValue($composite_element);
+      // Build the webform element.
+      $element_manager->buildElement($composite_element, $complete_form, $form_state);
 
       // Custom validate required sub-element because they can be hidden
       // via #access or #states.

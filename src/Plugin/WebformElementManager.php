@@ -7,9 +7,12 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\Form\FormState;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Render\ElementInfoManagerInterface;
+use Drupal\webform\WebformSubmissionForm;
 
 /**
  * Provides a plugin manager for webform element plugins.
@@ -145,6 +148,37 @@ class WebformElementManager extends DefaultPluginManager implements FallbackPlug
     }
 
     return $this->instances;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function initializeElement(array &$element) {
+    $element_plugin = $this->getElementInstance($element);
+    $element_plugin->initialize($element);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildElement(array &$element, array $form, FormStateInterface $form_state) {
+    // Get the webform submission.
+    $form_object = $form_state->getFormObject();
+    $webform_submission = ($form_object instanceof WebformSubmissionForm) ? $form_object->getEntity() : NULL;
+
+    $element_plugin = $this->getElementInstance($element);
+    $element_plugin->prepare($element, $webform_submission);
+    $element_plugin->finalize($element, $webform_submission);
+    $element_plugin->setDefaultValue($element);
+
+    // Allow modules to alter the webform element.
+    // @see \Drupal\Core\Field\WidgetBase::formSingleElement()
+    $hooks = ['webform_element'];
+    if (!empty($element['#type'])) {
+      $hooks[] = 'webform_element_' . $element['#type'];
+    }
+    $context = ['form' => $form];
+    $this->moduleHandler->alter($hooks, $element, $form_state, $context);
   }
 
   /**

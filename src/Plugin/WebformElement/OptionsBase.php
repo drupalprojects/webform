@@ -202,9 +202,11 @@ abstract class OptionsBase extends WebformElementBase {
 
     // Make sure submitted value is not lost if the element's #options were
     // altered after the submission was completed.
+    // This only applies to the main webforom element with a #webform_key
+    // and not a webform composite's sub elements.
     $is_completed = $webform_submission && $webform_submission->isCompleted();
     $has_default_value = (isset($element['#default_value']) && $element['#default_value'] !== '' && $element['#default_value'] !== NULL);
-    if ($is_completed && $has_default_value && !$this->isOptionsOther()) {
+    if ($is_completed && $has_default_value && !$this->isOptionsOther() && isset($element['#webform_key'])) {
       if ($element['#default_value'] === $webform_submission->getElementData($element['#webform_key'])) {
         $options = OptGroup::flattenOptions($element['#options']);
         $default_values = (array) $element['#default_value'];

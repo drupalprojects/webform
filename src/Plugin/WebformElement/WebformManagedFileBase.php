@@ -260,7 +260,6 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     // Add file upload help to the element.
     $element['help'] = [
       '#theme' => 'file_upload_help',
-      '#description' => '',
       '#upload_validators' => $element['#upload_validators'],
       '#cardinality' => (empty($element['#multiple'])) ? 1 : $element['#multiple'],
       '#prefix' => '<div class="description">',
