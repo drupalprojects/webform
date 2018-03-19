@@ -191,7 +191,22 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
         $uncategorized_options[$id] = $webform->label();
       }
     }
-    return $uncategorized_options + $categorized_options;
+
+    // Merge uncategorized options with categorized options.
+    $options = $uncategorized_options;
+    foreach ($categorized_options as $optgroup => $optgroup_options) {
+      // If webform id and optgroup conflict move the webform into the optgroup.
+      if (isset($options[$optgroup])) {
+        $options[$optgroup] = [$optgroup => $options[$optgroup]]
+          + $optgroup_options;
+        asort($options[$optgroup]);
+      }
+      else {
+        $options[$optgroup] = $optgroup_options;
+      }
+    }
+
+    return $options;
   }
 
   /**
