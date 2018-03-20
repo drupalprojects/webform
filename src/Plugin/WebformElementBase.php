@@ -319,6 +319,50 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return (isset($element["#$property_name"])) ? $element["#$property_name"] : $this->getDefaultProperty($property_name);
   }
 
+  /**
+   * Set element's default callback.
+   *
+   * This makes sure that an element's default callback is not clobbered by
+   * any additional callbacks.
+   *
+   * @param array $element
+   *   A render element.
+   * @param string $callback_name
+   *   A render element's callback.
+   */
+  protected function setElementDefaultCallback(array &$element, $callback_name) {
+    $callback_name = ($callback_name[0] !== '#') ? '#' . $callback_name : $callback_name;
+    $callback_value = $this->getElementInfoDefaultProperty($element, $callback_name) ?: [];
+    if (!empty($element[$callback_name])) {
+      $element[$callback_name] = array_merge($callback_value, $element[$callback_name]);
+    }
+    else {
+      $element[$callback_name] = $callback_value;
+    }
+  }
+
+  /**
+   * Get a render element's default property.
+   *
+   * @param array $element
+   *   A render element.
+   * @param string $property_name
+   *   An element's property name.
+   *
+   * @return mixed
+   *   A render element's default value, or NULL if
+   *   property does not exist.
+   */
+  protected function getElementInfoDefaultProperty(array $element, $property_name) {
+    if (!isset($element['#type'])) {
+      return NULL;
+    }
+    $property_name = ($property_name[0] !== '#') ? '#' . $property_name : $property_name;
+    $type = $element['#type'];
+    return $property_value = $this->elementInfo->getInfoProperty($type, $property_name, NULL)
+      ?: $this->elementInfo->getInfoProperty("webform_$type", $property_name, NULL);
+  }
+
   /****************************************************************************/
   // Definition and meta data methods.
   /****************************************************************************/
@@ -685,22 +729,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element[$attributes_property]['class'][] = 'webform-has-field-suffix';
     }
 
-    // Get and set the element's default callbacks property so that
-    // it is not skipped when custom callbacks are added.
-    if (isset($element['#type'])) {
-      $type = $element['#type'];
-      $callbacks = ['#pre_render', '#element_validate'];
-      foreach ($callbacks as $callback) {
-        $callback_property = $this->elementInfo->getInfoProperty($type, $callback, [])
-          ?: $this->elementInfo->getInfoProperty("webform_$type", $callback, []);
-        if (!empty($element[$callback])) {
-          $element[$callback] = array_merge($callback_property, $element[$callback]);
-        }
-        else {
-          $element[$callback] = $callback_property;
-        }
-      }
-    }
+    // Set element's #element_validate callback so that is not replaced by
+    // additional #element_validate callbacks.
+    $this->setElementDefaultCallback($element, 'element_validate');
 
     if ($this->isInput($element)) {
       // Handle #readonly support.
@@ -732,9 +763,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       }
     }
 
-    // Prepare Flexbox and #states wrapper.
-    $this->prepareWrapper($element);
-
     // Replace tokens for all properties.
     if ($webform_submission) {
       $this->replaceTokens($element, $webform_submission);
@@ -747,6 +775,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   public function finalize(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     // Prepare multiple element.
     $this->prepareMultipleWrapper($element);
+
+    // Prepare #states and flexbox wrapper.
+    $this->prepareWrapper($element);
 
     // Set hidden element #after_build handler.
     $element['#after_build'][] = [get_class($this), 'hiddenElementAfterBuild'];
@@ -842,21 +873,31 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   }
 
   /**
-   * Set an elements Flexbox and #states wrapper.
+   * Set an elements #states and flexbox wrapper.
    *
    * @param array $element
    *   An element.
    */
   protected function prepareWrapper(array &$element) {
+    $has_states_wrapper = $this->pluginDefinition['states_wrapper'];
+    $has_flexbox_wrapper = !empty($element['#webform_parent_flexbox']);
+    if (!$has_states_wrapper && !$has_flexbox_wrapper) {
+      return;
+    }
+
     $class = get_class($this);
 
+    // Set element's #pre_render callback so that is not replaced by
+    // additional element #pre_render callbacks.
+    $this->setElementDefaultCallback($element, 'pre_render');
+
     // Fix #states wrapper.
-    if ($this->pluginDefinition['states_wrapper']) {
+    if ($has_states_wrapper) {
       $element['#pre_render'][] = [$class, 'preRenderFixStatesWrapper'];
     }
 
     // Add flex(box) wrapper.
-    if (!empty($element['#webform_parent_flexbox'])) {
+    if ($has_flexbox_wrapper) {
       $element['#pre_render'][] = [$class, 'preRenderFixFlexboxWrapper'];
     }
   }
@@ -946,7 +987,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     // Remove properties that should only be applied to the child element.
-    $element = array_diff_key($element, array_flip(['#attributes', '#field_prefix', '#field_suffix', '#pattern', '#placeholder', '#maxlength', '#element_validate']));
+    $element = array_diff_key($element, array_flip(['#attributes', '#field_prefix', '#field_suffix', '#pattern', '#placeholder', '#maxlength', '#element_validate', '#pre_render']));
 
     // Apply #unique multiple validation.
     if (isset($element['#unique'])) {
