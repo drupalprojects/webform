@@ -34,4 +34,26 @@ interface WebformOptionsStorageInterface extends ConfigEntityStorageInterface, I
    */
   public function getLikerts();
 
+  /**
+   * Get list of composite elements that use the specified webform options.
+   *
+   * @param \Drupal\webform\WebformOptionsInterface $webform_options
+   *   A webform options entity.
+   *
+   * @return array
+   *   A list of composite elements that use the specified webform options.
+   */
+  public function getUsedByCompositeElements(WebformOptionsInterface $webform_options);
+
+  /**
+   * Get list of webform that use the specified webform options.
+   *
+   * @param \Drupal\webform\WebformOptionsInterface $webform_options
+   *   A webform options entity.
+   *
+   * @return array
+   *   A list of webform that use the specified webform options.
+   */
+  public function getUsedByWebforms(WebformOptionsInterface $webform_options);
+
 }

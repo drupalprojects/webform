@@ -26,4 +26,14 @@ interface WebformImageSelectImagesStorageInterface extends ConfigEntityStorageIn
    */
   public function getImages();
 
+  /**
+   * Get list of webform that use the specified webform images.
+   *
+   * @param \Drupal\webform_image_select\WebformImageSelectImagesInterface $webform_images
+   *   A webform image select images entity.
+   *
+   * @return array
+   *   A list of webform that use the specified webform images.
+   */
+  public function getUsedByWebforms(WebformImageSelectImagesInterface $webform_images);
 }

@@ -24,7 +24,7 @@ use Drupal\webform\WebformOptionsInterface;
  *       "add" = "Drupal\webform\WebformOptionsForm",
  *       "edit" = "Drupal\webform\WebformOptionsForm",
  *       "duplicate" = "Drupal\webform\WebformOptionsForm",
- *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
+ *       "delete" = "Drupal\webform\WebformOptionsDeleteForm",
  *     }
  *   },
  *   admin_permission = "administer webform",

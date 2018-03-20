@@ -43,10 +43,13 @@ class WebformImageSelectImagesListBuilder extends ConfigEntityListBuilder {
    */
   public function buildHeader() {
     $header['label'] = $this->t('Label');
-    $header['id'] = $this->t('ID');
     $header['category'] = $this->t('Category');
     $header['images'] = [
       'data' => $this->t('Images'),
+      'class' => [RESPONSIVE_PRIORITY_LOW],
+    ];
+    $header['used_by'] = [
+      'data' => $this->t('Used by'),
       'class' => [RESPONSIVE_PRIORITY_LOW],
     ];
     return $header + parent::buildHeader();
@@ -58,33 +61,9 @@ class WebformImageSelectImagesListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /** @var \Drupal\webform_image_select\WebformImageSelectImagesInterface $entity */
     $row['label'] = $entity->toLink($entity->label(), 'edit-form');
-    $row['id'] = $entity->id();
     $row['category'] = $entity->get('category');
-
-    $element = ['#images' => $entity->id()];
-    $images = WebformImageSelectImages::getElementImages($element);
-    if ($images) {
-      $build = [];
-      foreach ($images as $key => $image) {
-        $title = $image['text'] . ($key != $image ? ' (' . $key . ')' : '');
-        $build[] = [
-          '#type' => 'html_tag',
-          '#tag' => 'img',
-          '#attributes' => [
-            'src' => $image['src'],
-            'alt' => $title,
-            'title' => $title,
-            'class' => ['js-webform-tooltip-link'],
-            'style' => 'max-height:60px',
-          ],
-        ];
-      }
-      $row['images'] = ['data' => $build];
-    }
-    else {
-      $row['images'] = '';
-    }
-
+    $row['images'] = $this->buildImages($entity);
+    $row['used_by'] = $this->buildUsedBy($entity);
     return $row + parent::buildRow($entity);
   }
 
@@ -104,6 +83,67 @@ class WebformImageSelectImagesListBuilder extends ConfigEntityListBuilder {
       $operations['delete']['attributes'] = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW);
     }
     return $operations;
+  }
+
+  /**
+   * Build images for a webform image select images entity.
+   *
+   * @param \Drupal\webform_image_select\WebformImageSelectImagesInterface $webform_images
+   *   A webform image select images entity.
+   *
+   * @return array
+   *   Images for a webform image select images entity.
+   */
+  protected function buildImages(EntityInterface $entity) {
+    $element = ['#images' => $entity->id()];
+    $images = WebformImageSelectImages::getElementImages($element);
+    if (!$images) {
+      return [];
+    }
+
+    $build = [];
+    foreach ($images as $key => $image) {
+      $title = $image['text'] . ($key != $image ? ' (' . $key . ')' : '');
+      $build[] = [
+        '#type' => 'html_tag',
+        '#tag' => 'img',
+        '#attributes' => [
+          'src' => $image['src'],
+          'alt' => $title,
+          'title' => $title,
+          'class' => ['js-webform-tooltip-link'],
+          'style' => 'max-height:60px',
+        ],
+      ];
+    }
+
+    return ['data' => $build];
+  }
+
+  /**
+   * Build list of webforms that the webform images is used by.
+   *
+   * @param \Drupal\webform_image_select\WebformImageSelectImagesInterface $webform_images
+   *   A webform image select images entity.
+   *
+   * @return array
+   *   Table data containing list of webforms that the webform images is used by.
+   */
+  protected function buildUsedBy(WebformImageSelectImagesInterface $webform_images) {
+    $links = [];
+    $webforms = $this->getStorage()->getUsedByWebforms($webform_images);
+    foreach ($webforms as $id => $title) {
+      $links[] = [
+        '#type' => 'link',
+        '#title' => $title,
+        '#url' => Url::fromRoute('entity.webform.canonical', ['webform' => $id]),
+        '#suffix' => '</br>'
+      ];
+    }
+    return [
+      'nowrap' => TRUE,
+      'data' => $links,
+    ];
   }
 
 }

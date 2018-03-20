@@ -24,7 +24,7 @@ use Drupal\webform_image_select\WebformImageSelectImagesInterface;
  *       "edit" = "Drupal\webform_image_select\WebformImageSelectImagesForm",
  *       "source" = "Drupal\webform_image_select\WebformImageSelectImagesForm",
  *       "duplicate" = "Drupal\webform_image_select\WebformImageSelectImagesForm",
- *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
+ *       "delete" = "Drupal\webform_image_select\WebformImageSelectImagesDeleteForm",
  *     }
  *   },
  *   admin_permission = "administer webform",
