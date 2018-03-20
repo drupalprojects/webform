@@ -34,6 +34,25 @@ class WebformSubmissionStorageTest extends KernelTestBase {
   }
 
   /**
+   * Test webform submission storage.
+   */
+  public function testStorage() {
+    $webform = Webform::create([
+      'id' => $this->randomMachineName(),
+    ]);
+    $webform->save();
+    $webform_submission = WebformSubmission::create([
+      'webform_id' => $webform->id(),
+    ]);
+    $webform_submission->save();
+
+    // Check load by entities.
+    $webform_submissions = \Drupal::entityTypeManager()->getStorage('webform_submission')->loadByEntities($webform);
+    $this->assertEquals($webform_submission->id(), key($webform_submissions));
+  }
+
+
+  /**
    * Test purging of the webform submissions.
    *
    * @dataProvider providerPurge

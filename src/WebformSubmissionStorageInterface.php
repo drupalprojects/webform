@@ -77,6 +77,21 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   public function checkFieldDefinitionAccess(WebformInterface $webform, array $definitions);
 
   /**
+   * Load webform submissions by their related entity references.
+   *
+   * @param \Drupal\webform\WebformInterface|null $webform
+   *   (optional) The webform that the submission token is associated with.
+   * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
+   *   (optional) A webform submission source entity.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   (optional) A user account.
+   *
+   * @return \Drupal\webform\WebformSubmissionInterface[]
+   *   An array of webform submission objects indexed by their ids.
+   */
+  public function loadByEntities(WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL);
+
+  /**
    * Load submission using webform (secure) token.
    *
    * @param string $token

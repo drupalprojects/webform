@@ -127,6 +127,24 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
+  public function loadByEntities(WebformInterface $webform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
+    $properties = [];
+    if ($webform) {
+      $properties['webform_id'] = $webform->id();
+    }
+    if ($source_entity) {
+      $properties['entity_type'] = $source_entity->getEntityTypeId();
+      $properties['entity_id'] = $source_entity->id();
+    }
+    if ($account) {
+      $properties['uid'] = $account->id();
+    }
+    return $this->loadByProperties($properties);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function loadFromToken($token, WebformInterface $webform, EntityInterface $source_entity = NULL, AccountInterface $account = NULL) {
     // Check token.
     if (!$token) {
