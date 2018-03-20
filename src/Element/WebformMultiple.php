@@ -154,7 +154,11 @@ class WebformMultiple extends FormElement {
       $default_values = $element['#default_value'];
     }
     elseif ($form_state->isProcessingInput() && isset($element['#value']) && is_array($element['#value'])) {
-      $default_values = $element['#value'];
+      // Only set the default values if the form is being processed but the
+      // multiple element is not being displayed via #access: FALSE.
+      // This happens during a multistep wizard form with a multiple element.
+      $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
+      $default_values = (!$has_access) ? $element['#value'] : [];
     }
     else {
       $default_values = [];
@@ -708,7 +712,7 @@ class WebformMultiple extends FormElement {
     foreach ($element['items']['#value'] as $row_index => $value) {
       $values[] = $value;
       if ($row_index == $button['#row_index']) {
-        $values[] = ['item' => '', 'text' => ''];
+        $values[] = [];
       }
     }
 
