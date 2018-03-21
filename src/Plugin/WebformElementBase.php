@@ -1101,7 +1101,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Convert string to renderable #markup.
     if (is_string($value)) {
-      $value = ['#markup' => $value];
+      $value = ['#' . ($format === 'text' ? 'plain_text' : 'markup') => $value];
     }
 
     return [

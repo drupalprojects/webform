@@ -788,8 +788,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         // Get replace token values.
         $token_value = $this->tokenManager->replace($configuration_value, $webform_submission, $token_data, $token_options);
 
-        // Decode entities for all message values except the message body.
-        if (!empty($token_value) && is_string($token_value) && $configuration_key != 'body') {
+        // Decode entities for all message values except the HTML message body.
+        if (!empty($token_value) && is_string($token_value) && !($token_options['html'] && $configuration_key === 'body')) {
           $token_value = Html::decodeEntities($token_value);
         }
 
