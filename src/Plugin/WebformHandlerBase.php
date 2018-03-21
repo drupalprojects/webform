@@ -563,7 +563,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    * @return array
    *   Form element with #parents set.
    */
-  protected function setSettingsParentsRecursively(array &$elements) {
+  protected function setSettingsParentsRecursive(array &$elements) {
     $default_configuration = $this->defaultConfiguration();
     foreach ($elements as $element_key => &$element) {
       // Only a form element can have #parents.
@@ -581,7 +581,7 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
         $element['#parents'] = ['settings', $element_key];
       }
       else {
-        $this->setSettingsParentsRecursively($element);
+        $this->setSettingsParentsRecursive($element);
       }
     }
     return $elements;
