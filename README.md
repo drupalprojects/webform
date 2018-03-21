@@ -26,7 +26,7 @@ The primary use case for this module is to:
 
 > [Watch a demo](http://youtu.be/sQGsfQ_LZJ4) of the Webform module.
 
-> Evaluate this project online using [simplytest.me](https://simplytest.me/project/webform/8.x-5.x?add[]=contribute).
+> Evaluate this project online using [simplytest.me](https://simplytest.me/project/webform/8.x-5.x).
 
 
 ### Installing the Webform Module
