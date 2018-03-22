@@ -225,7 +225,7 @@ class ActionWebformHandler extends WebformHandlerBase {
 
     $this->tokenManager->elementValidate($form);
 
-    return $this->setSettingsParentsRecursive($form);
+    return $this->setSettingsParentsRecursively($form);
   }
 
   /**

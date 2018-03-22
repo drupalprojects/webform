@@ -20,7 +20,7 @@ interface WebformCompositeInterface {
   public static function getCompositeElements(array $element);
 
   /**
-   * Initialize a composite elements.
+   * Initialize a composite's elements.
    *
    * @param array $element
    *   A render array for the current element.

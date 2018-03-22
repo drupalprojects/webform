@@ -286,18 +286,25 @@ class WebformMultiple extends FormElement {
       return;
     }
 
+    // Determine if the sub elements are the main element for each table cell.
+    $is_root = ($element['#element'] === $sub_elements) ? TRUE : FALSE;
+
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
     foreach ($child_keys as $child_key) {
       $sub_element =& $sub_elements[$child_key];
+
+      $element_plugin = $element_manager->getElementInstance($sub_element);
 
       // If the element's #access is FALSE, apply it to all sub elements.
       if (isset($element['#access']) && $element['#access'] === FALSE) {
         $sub_element['#access'] = FALSE;
       }
 
-      // If #header then hide the sub element's #title.
-      if ($element['#header'] && !isset($sub_element['#title_display'])) {
+      // If #header and root input then hide the sub element's #title.
+      if ($element['#header']
+        && ($is_root && $element_plugin->isInput($sub_element))
+        && !isset($sub_element['#title_display'])) {
         $sub_element['#title_display'] = 'invisible';
       }
 

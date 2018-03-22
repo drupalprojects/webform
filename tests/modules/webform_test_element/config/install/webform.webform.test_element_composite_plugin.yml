@@ -20,6 +20,11 @@ elements: |
     '#type': webform_test_composite
     '#title': webform_test_composite_multiple
     '#multiple': true
+  webform_test_composite_multiple_header:
+    '#type': webform_test_composite
+    '#title': webform_test_composite_multiple_header
+    '#multiple': true
+    '#multiple__header': true
 css: ''
 javascript: ''
 settings:
@@ -147,4 +152,12 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers: {  }
+handlers:
+  debug:
+    id: debug
+    label: Debug
+    handler_id: debug
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }

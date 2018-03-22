@@ -115,27 +115,35 @@ wizard_2_datelist:
 wizard_1_test_composite:
   textfield: '{wizard_1_test_composite_textfield}'
   datelist: '2001-01-01T01:10:00+1100'
+  nested_tel: ''
+  nested_select: ''
   email: ''
   webform_email_confirm: ''
   tel: ''
   select: ''
+  radios: ''
   date: ''
   webform_entity_select: ''
   webform_toggle: ''
   entity_autocomplete: null
   datetime: ''
+  nested_radios: ''
 wizard_1_test_composite_multiple:
   - textfield: '{wizard_1_test_composite_multiple_textfield}'
     datelist: '2001-01-01T01:10:00+1100'
+    nested_tel: ''
+    nested_select: ''
     email: ''
     webform_email_confirm: ''
     tel: ''
     select: ''
+    radios: ''
     date: ''
     webform_entity_select: ''
     webform_toggle: ''
     entity_autocomplete: null
     datetime: ''
+    nested_radios: ''
 wizard_2_custom_composite: {  }
 wizard_2_test_composite: null
 wizard_2_test_composite_multiple: {  }");
@@ -168,54 +176,70 @@ wizard_2_test_composite_multiple: {  }");
 wizard_1_test_composite:
   textfield: '{wizard_1_test_composite_textfield}'
   datelist: '2001-01-01T01:10:00+1100'
+  nested_tel: ''
+  nested_select: ''
   email: ''
   webform_email_confirm: ''
   tel: ''
   select: ''
+  radios: ''
   date: ''
   webform_entity_select: ''
   webform_toggle: ''
   entity_autocomplete: null
   datetime: ''
+  nested_radios: ''
 wizard_1_test_composite_multiple:
   - textfield: '{wizard_1_test_composite_multiple_textfield}'
     datelist: '2001-01-01T01:10:00+1100'
+    nested_tel: ''
+    nested_select: ''
     email: ''
     webform_email_confirm: ''
     tel: ''
     select: ''
+    radios: ''
     date: ''
     webform_entity_select: ''
     webform_toggle: ''
     entity_autocomplete: null
     datetime: ''
+    nested_radios: ''
 wizard_2_custom_composite:
   - datelist: '2002-02-02T02:20:00+1100'
     textfield: '{wizard_2_custom_composite_textfield}'
 wizard_2_test_composite:
   textfield: '{wizard_2_test_composite_textfield}'
   datelist: '2002-02-02T02:20:00+1100'
+  nested_tel: ''
+  nested_select: ''
   email: ''
   webform_email_confirm: ''
   tel: ''
   select: ''
+  radios: ''
   date: ''
   webform_entity_select: ''
   webform_toggle: ''
   entity_autocomplete: null
   datetime: ''
+  nested_radios: ''
 wizard_2_test_composite_multiple:
   - textfield: '{wizard_2_test_composite_multiple_textfield}'
     datelist: '2002-02-02T02:20:00+1100'
+    nested_tel: ''
+    nested_select: ''
     email: ''
     webform_email_confirm: ''
     tel: ''
     select: ''
+    radios: ''
     date: ''
     webform_entity_select: ''
     webform_toggle: ''
     entity_autocomplete: null
-    datetime: ''");
+    datetime: ''
+    nested_radios: ''");
   }
 
 }

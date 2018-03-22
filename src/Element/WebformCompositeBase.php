@@ -4,6 +4,7 @@ namespace Drupal\webform\Element;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Plugin\WebformElement\WebformManagedFileBase as WebformManagedFileBasePlugin;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -38,11 +39,16 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
    * {@inheritdoc}
    */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
-    $default_value = [];
-
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
     $composite_elements = static::getCompositeElements($element);
+    $composite_elements = WebformElementHelper::getFlattened($composite_elements);
+
+    // Get default value for inputs.
+    $default_value = [];
     foreach ($composite_elements as $composite_key => $composite_element) {
-      if (isset($composite_element['#type']) && $composite_element['#type'] != 'label') {
+      $element_plugin = $element_manager->getElementInstance($composite_element);
+      if ($element_plugin->isInput($composite_element)) {
         $default_value[$composite_key] = '';
       }
     }
@@ -83,22 +89,52 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
     }
     $element['#initialize'] = TRUE;
 
+    $element['#tree'] = TRUE;
+    $composite_elements = static::initializeCompositeElements($element);
+    static::processWebformCompositeElementsRecursive($element, $composite_elements, $form_state, $complete_form);
+    $element += $composite_elements;
+
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformComposite']);
+
+    if (!empty($element['#flexbox'])) {
+      $element['#attached']['library'][] = 'webform/webform.element.flexbox';
+    }
+
+    return $element;
+  }
+
+  /**
+   * Recursively processes a composite's elements.
+   */
+  public static function processWebformCompositeElementsRecursive(&$element, array &$composite_elements, FormStateInterface $form_state, &$complete_form) {
+    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
+    $element_manager = \Drupal::service('plugin.manager.webform.element');
+
     // Get composite element required/options states from visible/hidden states.
     $composite_required_states = WebformElementHelper::getRequiredFromVisibleStates($element);
 
-    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
-    $element_manager = \Drupal::service('plugin.manager.webform.element');
-    $element['#tree'] = TRUE;
-    $composite_elements = static::initializeCompositeElements($element);
     foreach ($composite_elements as $composite_key => &$composite_element) {
-      // Set #default_value for sub elements.
-      if (isset($element['#value'][$composite_key])) {
-        $composite_element['#default_value'] = $element['#value'][$composite_key];
+      if (!Element::child($composite_key) || !is_array($composite_element)) {
+        continue;
       }
+
+      // Set parents.
+      $composite_element['#parents'] = array_merge($element['#parents'], [$composite_key]);
 
       // If the element's #access is FALSE, apply it to all sub elements.
       if ($element['#access'] === FALSE) {
         $composite_element['#access'] = FALSE;
+      }
+
+      // Get element plugin and set inputs #default_value.
+      $element_plugin = $element_manager->getElementInstance($composite_element);
+      if ($element_plugin->isInput($composite_element)) {
+        // Set #default_value for sub elements.
+        if (isset($element['#value'][$composite_key])) {
+          $composite_element['#default_value'] = $element['#value'][$composite_key];
+        }
       }
 
       // Build the webform element.
@@ -115,19 +151,9 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
         }
         $composite_element['#states'] += $composite_required_states;
       }
+
+      static::processWebformCompositeElementsRecursive($element, $composite_element, $form_state, $complete_form);
     }
-
-    $element += $composite_elements;
-
-    // Add validate callback.
-    $element += ['#element_validate' => []];
-    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformComposite']);
-
-    if (!empty($element['#flexbox'])) {
-      $element['#attached']['library'][] = 'webform/webform.element.flexbox';
-    }
-
-    return $element;
   }
 
   /**
@@ -145,6 +171,7 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
     if ($has_access) {
       // Validate required composite elements.
       $composite_elements = static::getCompositeElements($element);
+      $composite_elements = WebformElementHelper::getFlattened($composite_elements);
       foreach ($composite_elements as $composite_key => $composite_element) {
         $is_required = !empty($element[$composite_key]['#required']);
         $is_empty = (isset($value[$composite_key]) && $value[$composite_key] === '');
@@ -176,11 +203,36 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
    * {@inheritdoc}
    */
   public static function initializeCompositeElements(array &$element) {
+    $composite_elements = static::getCompositeElements($element);
+    static::initializeCompositeElementsRecursive($element, $composite_elements);
+    return $composite_elements;
+  }
+
+  /**
+   * Initialize a composite's elements recursively.
+   *
+   * @param array $element
+   *   A render array for the current element.
+   * @param array $element
+   *   A render array containing a composite's elements.
+   *
+   * @return array
+   *   A renderable array of webform elements, containing the base properties
+   *   for the composite's webform elements.
+   *
+   * @throws \Exception
+   *   Throws exception when unsupported element type is used with a composite
+   *   element.
+   */
+  protected static function initializeCompositeElementsRecursive(array &$element, array &$composite_elements) {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
 
-    $composite_elements = static::getCompositeElements($element);
     foreach ($composite_elements as $composite_key => &$composite_element) {
+      if (Element::property($composite_key)) {
+        continue;
+      }
+
       // Transfer '#{composite_key}_{property}' from main element to composite
       // element.
       foreach ($element as $property_key => $property_value) {
@@ -215,9 +267,9 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
       }
 
       $element_plugin->initialize($composite_element);
-    }
 
-    return $composite_elements;
+      static::initializeCompositeElementsRecursive($element, $composite_element);
+    }
   }
 
 }

@@ -142,7 +142,7 @@
     width: 100%;
   }
 
-  .webform-multiple-table-responsive td label.visually-hidden {
+  .webform-multiple-table-responsive td > div > label.visually-hidden {
     display: block;
     position: inherit !important;
     clip: inherit;
@@ -151,4 +151,5 @@
     width: inherit;
     margin: .2em 0;
   }
+
 }
