@@ -144,10 +144,6 @@ webform.help:
       css/webform.help.css: {}
   js:
     js/webform.help.js:  {}
-  dependencies:
-    - core/drupal
-    - core/jquery.once
-    - core/jquery.ui.accordion
 
 # More.
 

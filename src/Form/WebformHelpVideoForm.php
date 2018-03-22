@@ -5,6 +5,7 @@ namespace Drupal\webform\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Url;
 use Drupal\webform\WebformHelpManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -66,6 +67,7 @@ class WebformHelpVideoForm extends FormBase {
     }
 
     $form['#title'] = $video['title'];
+
     // Content.
     if (is_array($video['content'])) {
       $form['content'] = $video['content'];
@@ -84,6 +86,19 @@ class WebformHelpVideoForm extends FormBase {
       ];
     }
 
+    // Slides.
+    if ($video['presentation_id']) {
+      $form['presentation'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['webform-help-slides']],
+      ];
+      $form['presentation']['link'] = [
+        '#type' => 'link',
+        '#title' => $this->t('View slides'),
+        '#url' => Url::fromUri('https://docs.google.com/presentation/d/' . $video['presentation_id']),
+      ];
+    }
+
     // Actions.
     if (isset($video['submit_label'])) {
       $form['actions'] = ['#type' => 'actions'];
@@ -93,6 +108,8 @@ class WebformHelpVideoForm extends FormBase {
         '#button_type' => 'primary',
       ];
     }
+
+    $form['#attached']['library'][] = 'webform/webform.help';
 
     return $form;
   }
