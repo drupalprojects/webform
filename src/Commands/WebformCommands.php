@@ -89,7 +89,7 @@ class WebformCommands extends WebformCommandsBase {
    *   Purge all webform submissions.
    * @aliases wfp
    */
-  public function drush_webform_purge($webform_id = NULL, array $options = ['all' => NULL, 'entity-type' => NULL, 'entity-id' => NULL]) {
+  public function drush_webform_purge($webform_id = NULL, array $options = ['all' => FALSE, 'entity-type' => NULL, 'entity-id' => NULL]) {
     $this->cliService->drush_webform_purge($webform_id);
   }
 
@@ -117,7 +117,7 @@ class WebformCommands extends WebformCommandsBase {
    *   Tidies YAML configuration files in 'webform/config' for the Webform module
    * @aliases wft
    */
-  public function drush_webform_tidy($target = NULL, array $options = ['dependencies' => NULL, 'prefix' => NULL]) {
+  public function drush_webform_tidy($target = NULL, array $options = ['dependencies' => FALSE, 'prefix' => NULL]) {
     $this->cliService->drush_webform_tidy($target);
   }
 
@@ -226,7 +226,7 @@ class WebformCommands extends WebformCommandsBase {
    * @option entity-id The ID of the entity of which this webform submission was submitted from.
    * @aliases wfg
    */
-  public function drush_webform_generate($webform_id = NULL, $num = NULL, array $options = ['kill' => NULL, 'feedback' => NULL, 'entity-type' => NULL, 'entity-id' => NULL]) {
+  public function drush_webform_generate($webform_id = NULL, $num = NULL, array $options = ['kill' => FALSE, 'feedback' => NULL, 'entity-type' => NULL, 'entity-id' => NULL]) {
     $this->cliService->drush_webform_generate($webform_id, $num);
   }
 

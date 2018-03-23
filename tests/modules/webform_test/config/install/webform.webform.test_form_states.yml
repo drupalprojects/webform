@@ -297,14 +297,11 @@ elements: |
             Male: Male
             Female: Female
       '#default_value':
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
       '#states':
         visible:
@@ -1263,14 +1260,11 @@ elements: |
             Male: Male
             Female: Female
       '#default_value':
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
       '#states':
         invisible:
@@ -1991,14 +1985,11 @@ elements: |
             Male: Male
             Female: Female
       '#default_value':
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
-        -
-          name: Loremipsum
+        - name: Loremipsum
           gender: Male
       '#states':
         disabled:

@@ -156,29 +156,29 @@ drush features-export -y webform_scheduled_email_test
 git checkout -- *.info.yml
 
 # Tidy webform configuration from your site.          
-drush webform-tidy -y --dependencies webform
-drush webform-tidy -y --dependencies webform_demo_application_evaluation
-drush webform-tidy -y --dependencies webform_demo_event_registration
-drush webform-tidy -y --dependencies webform_examples
-drush webform-tidy -y --dependencies webform_example_element
-drush webform-tidy -y --dependencies webform_example_composite
-drush webform-tidy -y --dependencies webform_example_remote_post
-drush webform-tidy -y --dependencies webform_image_select
-drush webform-tidy -y --dependencies webform_node
-drush webform-tidy -y --dependencies webform_templates
-drush webform-tidy -y --dependencies webform_test
-drush webform-tidy -y --dependencies webform_test_block_submission_limit
-drush webform-tidy -y --dependencies webform_test_element
-drush webform-tidy -y --dependencies webform_test_handler
-drush webform-tidy -y --dependencies webform_test_handler_remote_post
-drush webform-tidy -y --dependencies webform_test_options
-drush webform-tidy -y --dependencies webform_test_views
-drush webform-tidy -y --dependencies webform_test_submissions
-drush webform-tidy -y --dependencies webform_test_translation
-drush webform-tidy -y --dependencies webform_test_paragraphs
-drush webform-tidy -y --dependencies webform_image_select_test
-drush webform-tidy -y --dependencies webform_node_test_multiple
-drush webform-tidy -y --dependencies webform_scheduled_email_test
+drush webform:tidy -y --dependencies webform
+drush webform:tidy -y --dependencies webform_demo_application_evaluation
+drush webform:tidy -y --dependencies webform_demo_event_registration
+drush webform:tidy -y --dependencies webform_examples
+drush webform:tidy -y --dependencies webform_example_element
+drush webform:tidy -y --dependencies webform_example_composite
+drush webform:tidy -y --dependencies webform_example_remote_post
+drush webform:tidy -y --dependencies webform_image_select
+drush webform:tidy -y --dependencies webform_node
+drush webform:tidy -y --dependencies webform_templates
+drush webform:tidy -y --dependencies webform_test
+drush webform:tidy -y --dependencies webform_test_block_submission_limit
+drush webform:tidy -y --dependencies webform_test_element
+drush webform:tidy -y --dependencies webform_test_handler
+drush webform:tidy -y --dependencies webform_test_handler_remote_post
+drush webform:tidy -y --dependencies webform_test_options
+drush webform:tidy -y --dependencies webform_test_views
+drush webform:tidy -y --dependencies webform_test_submissions
+drush webform:tidy -y --dependencies webform_test_translation
+drush webform:tidy -y --dependencies webform_test_paragraphs
+drush webform:tidy -y --dependencies webform_image_select_test
+drush webform:tidy -y --dependencies webform_node_test_multiple
+drush webform:tidy -y --dependencies webform_scheduled_email_test
 
 # Re-import all webform configuration into your site.      
 drush features-import -y webform
