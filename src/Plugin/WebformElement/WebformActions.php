@@ -147,13 +147,13 @@ class WebformActions extends ContainerBase {
       'preview_prev' => [
         'title' => $this->t('Preview previous'),
         'label' => $this->t('preview previous'),
-        'description' => $this->t('The text for the button that will proceed to the preview page.'),
+        'description' => $this->t('The text for the button to go backwards from the preview page.'),
         'access' => $preview_enabled,
       ],
       'preview_next' => [
         'title' => $this->t('Preview next'),
         'label' => $this->t('preview next'),
-        'description' => $this->t('The text for the button to go backwards from the preview page.'),
+        'description' => $this->t('The text for the button that will proceed to the preview page.'),
         'access' => $preview_enabled,
       ],
     ];
