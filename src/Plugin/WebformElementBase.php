@@ -1902,22 +1902,35 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function getElementStateOptions() {
+    $visibility_optgroup = (string) $this->t('Visibility');
+    $state_optgroup = (string) $this->t('State');
+    $validation_optgroup = (string) $this->t('Validation');
+    $value_optgroup = (string) $this->t('Value');
+
     $states = [];
 
     // Set default states that apply to the element/container and sub elements.
     $states += [
-      'visible' => $this->t('Visible'),
-      'invisible' => $this->t('Hidden'),
-      'enabled' => $this->t('Enabled'),
-      'disabled' => $this->t('Disabled'),
-      'required' => $this->t('Required'),
-      'optional' => $this->t('Optional'),
+      $visibility_optgroup => [
+        'visible' => $this->t('Visible'),
+        'invisible' => $this->t('Hidden'),
+        'visible-slide' => $this->t('Visible (Slide)'),
+        'invisible-slide' => $this->t('Hidden (Slide)'),
+      ],
+      $state_optgroup => [
+        'enabled' => $this->t('Enabled'),
+        'disabled' => $this->t('Disabled'),
+      ],
+      $validation_optgroup => [
+        'required' => $this->t('Required'),
+        'optional' => $this->t('Optional'),
+      ]
     ];
 
     // Set readwrite/readonly states for any element that supports it
     // and containers.
     if ($this->hasProperty('readonly') || $this->isContainer(['#type' => $this->getPluginId()])) {
-      $states += [
+      $states[$state_optgroup] += [
         'readwrite' => $this->t('Read/write'),
         'readonly' => $this->t('Read-only'),
       ];
@@ -1925,7 +1938,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Set checked/unchecked states for any element that contains checkboxes.
     if ($this instanceof Checkbox || $this instanceof Checkboxes) {
-      $states += [
+      $states[$value_optgroup] = [
         'checked' => $this->t('Checked'),
         'unchecked' => $this->t('Unchecked'),
       ];
@@ -1933,7 +1946,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
     // Set expanded/collapsed states for any details element.
     if ($this instanceof Details) {
-      $states += [
+      $states[$state_optgroup] += [
         'expanded' => $this->t('Expanded'),
         'collapsed' => $this->t('Collapsed'),
       ];

@@ -77,6 +77,16 @@ elements: |
         ':input[name="trigger_greater"]':
           value:
             greater: 10
+  trigger_visible_slide:
+    '#type': checkbox
+    '#title': trigger_visible_slide
+  dependent_visible_slide:
+    '#type': textfield
+    '#title': dependent_visible_slide
+    '#states':
+      visible-slide:
+        ':input[name="trigger_visible_slide"]':
+          checked: true
 css: ''
 javascript: ''
 settings:

@@ -121,7 +121,7 @@
   });
 
   // On state:visible refresh CodeMirror elements.
-  $(document).on('state:visible', function (event) {
+  $(document).on('state:visible state:visible-slide', function (event) {
     var $element = $(event.target).parent().find('.js-webform-codemirror');
     $element.parent().find('.CodeMirror').each(function (index, element) {
       setTimeout(function () {

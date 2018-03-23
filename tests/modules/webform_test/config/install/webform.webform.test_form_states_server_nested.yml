@@ -36,6 +36,26 @@ elements: |
            checked: true
          ':input[name="visible_textfield"]':
            filled: true
+  visible_slide_fieldset:
+   '#type': fieldset
+   '#title': visible_slide_fieldset
+   '#states':
+     'visible-slide':
+       ':input[name="visible_trigger"]':
+         checked: true
+   visible_slide_textfield:
+     '#type': textfield
+     '#title': visible_slide_textfield
+     '#required': true
+   visible_slide_custom_textfield:
+     '#type': textfield
+     '#title': visible_slide_custom_textfield
+     '#states':
+       required:
+         ':input[name="visible_trigger"]':
+           checked: true
+         ':input[name="visible_slide_textfield"]':
+           filled: true           
 css: ''
 javascript: ''
 settings:

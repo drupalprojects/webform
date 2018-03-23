@@ -48,7 +48,7 @@
        * @see https://github.com/select2/select2/issues/3303
        */
       $(function () {
-        $(document).on('state:visible', function (e) {
+        $(document).on('state:visible state:visible-slide', function (e) {
           $('select.select2-hidden-accessible').select2('close');
         });
       });

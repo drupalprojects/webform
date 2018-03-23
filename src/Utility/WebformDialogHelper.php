@@ -120,7 +120,7 @@ class WebformDialogHelper {
     $dialog_widths = [
       static::DIALOG_WIDE => 800,
       static::DIALOG_NORMAL => 600,
-      static::DIALOG_NARROW => 500,
+      static::DIALOG_NARROW => 550,
     ];
     $width = (isset($dialog_widths[$width])) ? $dialog_widths[$width] : $width;
 

@@ -29,6 +29,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   protected $aliases = [
     'enabled' => '!disabled',
     'invisible' => '!visible',
+    'invisible-slide' => '!visible-slide',
     'invalid' => '!valid',
     'optional' => '!required',
     'filled' => '!empty',
@@ -88,7 +89,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
 
         // @todo Track an element's states.
         // If hide/show we need to make sure that validation is not triggered.
-        if ($state === 'visible') {
+        if (strpos($state, 'visible') === 0) {
           $element['#after_build'][] = [get_class($this), 'elementAfterBuild'];
         }
 
@@ -117,6 +118,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
             break;
 
           case 'visible':
+          case 'visible-slide':
             $element['#access'] = $result;
             break;
 
@@ -201,7 +203,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       $result = ($negate) ? !$result : $result;
 
       // Apply result to element state.
-      if ($state === 'visible' && $result === FALSE) {
+      if (strpos($state, 'visible') === 0 && $result === FALSE) {
         $visible = FALSE;
       }
     }
@@ -551,8 +553,14 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
             if (isset($element['#states']['visible'])) {
               $element['#states']['required'] = $element['#states']['visible'];
             }
+            elseif (isset($element['#states']['visible-slide'])) {
+              $element['#states']['required'] = $element['#states']['visible-slide'];
+            }
             elseif (isset($element['#states']['invisible'])) {
               $element['#states']['optional'] = $element['#states']['invisible'];
+            }
+            elseif (isset($element['#states']['invisible-slide'])) {
+              $element['#states']['optional'] = $element['#states']['invisible-slide'];
             }
             elseif ($parent_states) {
               $element += ['#states' => []];
@@ -577,8 +585,14 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         if (isset($element['#states']['visible'])) {
           $subelement_states = ['required' => $element['#states']['visible']];
         }
+        elseif (isset($element['#states']['visible-slide'])) {
+          $subelement_states = ['required' => $element['#states']['visible-slide']];
+        }
         elseif (isset($element['#states']['invisible'])) {
           $subelement_states = ['optional' => $element['#states']['invisible']];
+        }
+        elseif (isset($element['#states']['invisible-slide'])) {
+          $subelement_states = ['optional' => $element['#states']['invisible-slide']];
         }
       }
 

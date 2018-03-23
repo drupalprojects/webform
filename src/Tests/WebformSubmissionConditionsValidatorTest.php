@@ -367,6 +367,8 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_states_server_nested');
     $this->assertRaw('<input data-drupal-selector="edit-visible-textfield" type="text" id="edit-visible-textfield" name="visible_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
     $this->assertRaw('<input data-drupal-selector="edit-visible-custom-textfield" type="text" id="edit-visible-custom-textfield" name="visible_custom_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true},&quot;:input[name=\u0022visible_textfield\u0022]&quot;:{&quot;filled&quot;:true}}}" />');
+    $this->assertRaw('<input data-drupal-selector="edit-visible-slide-textfield" type="text" id="edit-visible-slide-textfield" name="visible_slide_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true}}}" />');
+    $this->assertRaw('<input data-drupal-selector="edit-visible-slide-custom-textfield" type="text" id="edit-visible-slide-custom-textfield" name="visible_slide_custom_textfield" value="" size="60" maxlength="255" class="form-text" data-drupal-states="{&quot;required&quot;:{&quot;:input[name=\u0022visible_trigger\u0022]&quot;:{&quot;checked&quot;:true},&quot;:input[name=\u0022visible_slide_textfield\u0022]&quot;:{&quot;filled&quot;:true}}}" />');
 
     // Check nested element is required.
     $edit = [
@@ -375,20 +377,26 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->postSubmission($webform, $edit);
     $this->assertRaw('visible_textfield field is required.');
     $this->assertNoRaw('visible_custom_textfield field is required.');
+    $this->assertRaw('visible_slide_textfield field is required.');
+    $this->assertNoRaw('visible_slide_custom_textfield field is required.');
 
     // Check nested element is not required.
     $edit = [];
     $this->postSubmission($webform, $edit);
     $this->assertNoRaw('visible_textfield field is required.');
     $this->assertNoRaw('visible_custom_textfield field is required.');
+    $this->assertNoRaw('visible_slide_textfield field is required.');
+    $this->assertNoRaw('visible_slide_custom_textfield field is required.');
 
     // Check custom states element validation.
     $edit = [
       'visible_trigger' => TRUE,
       'visible_textfield' => '{value}',
+      'visible_slide_textfield' => '{value}',
     ];
     $this->postSubmission($webform, $edit);
     $this->assertRaw('visible_custom_textfield field is required.');
+    $this->assertRaw('visible_slide_custom_textfield field is required.');
   }
 
   /**
@@ -420,8 +428,14 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     // Check page_02_textfield_visible is not visible.
     $this->assertNoFieldByName('page_02_textfield_visible');
 
+    // Check page_02_textfield_visible_slide is not visible.
+    $this->assertNoFieldByName('page_02_textfield_visible_slide');
+
     // Check page_02_textfield_invisible is visible.
     $this->assertFieldByName('page_02_textfield_invisible');
+
+    // Check page_02_textfield_invisible_slide is visible.
+    $this->assertFieldByName('page_02_textfield_invisible_slide');
 
     // Check page_02_checkbox_checked is not checked.
     $this->assertRaw('<input data-drupal-selector="edit-page-02-checkbox-checked" aria-describedby="edit-page-02-checkbox-checked--description" type="checkbox" id="edit-page-02-checkbox-checked" name="page_02_checkbox_checked" value="1" class="form-checkbox" />');
@@ -458,8 +472,14 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     // Check page_02_textfield_visible is visible.
     $this->assertFieldByName('page_02_textfield_visible');
 
+    // Check page_02_textfield_visible_slide is visible.
+    $this->assertFieldByName('page_02_textfield_visible_slide');
+
     // Check page_02_textfield_invisible is not visible.
     $this->assertNoFieldByName('page_02_textfield_invisible');
+
+    // Check page_02_textfield_invisible_slide is not visible.
+    $this->assertNoFieldByName('page_02_textfield_invisible_slide');
 
     // Check page_02_checkbox_checked is checked.
     $this->assertRaw('<input data-drupal-selector="edit-page-02-checkbox-checked" aria-describedby="edit-page-02-checkbox-checked--description" type="checkbox" id="edit-page-02-checkbox-checked" name="page_02_checkbox_checked" value="1" checked="checked" class="form-checkbox" />');

@@ -7,6 +7,13 @@
 
   'use strict';
 
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.states = Drupal.webform.states || {};
+  Drupal.webform.states.slideDown = Drupal.webform.states.slideDown || {};
+  Drupal.webform.states.slideDown.duration = 'slow';
+  Drupal.webform.states.slideUp = Drupal.webform.states.slideUp || {};
+  Drupal.webform.states.slideUp.duration = 'fast';
+
   /**
    * Check if an element has a specified data attribute.
    *
@@ -117,7 +124,7 @@
     }
   });
 
-  $document.on('state:visible', function (e) {
+  $document.on('state:visible state:visible-slide', function (e) {
     if (e.trigger) {
       if (e.value) {
         $(':input', e.target).addBack().each(function () {
@@ -135,6 +142,15 @@
       }
     }
   });
+
+  $document.bind('state:visible-slide', function(e) {
+    if (e.trigger) {
+      var effect = e.value ? 'slideDown' : 'slideUp';
+      var duration = Drupal.webform.states[effect].duration;
+      $(e.target).closest('.js-form-item, .js-form-submit, .js-form-wrapper')[effect ](duration);
+    }
+  });
+  Drupal.states.State.aliases['invisible-slide'] = '!visible-slide';
 
   $document.on('state:disabled', function (e) {
     if (e.trigger) {

@@ -3,6 +3,7 @@
 namespace Drupal\webform_ui;
 
 use Drupal\Core\Entity\BundleEntityFormBase;
+use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
@@ -407,6 +408,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     $row = [];
 
+    $element_state_options = OptGroup::flattenOptions(WebformElementStates::getStateOptions());
     $element_dialog_attributes = WebformDialogHelper::getOffCanvasDialogAttributes();
     $key = $element['#webform_key'];
 
@@ -500,7 +502,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     if ($webform->hasConditions()) {
       $states = [];
       if (!empty($element['#states'])) {
-        $states = array_intersect_key(WebformElementStates::getStateOptions(), $element['#states']);
+        $states = array_intersect_key($element_state_options, $element['#states']);
       }
       $row['conditional'] = [
         '#type' => 'link',
