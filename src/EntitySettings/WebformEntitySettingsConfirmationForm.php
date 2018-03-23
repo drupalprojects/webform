@@ -104,6 +104,8 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
       '#open' => TRUE,
       '#states' => [
         'visible' => [
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_PAGE]],
+          'or',
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL]],
           'or',
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL_MESSAGE]],
@@ -117,12 +119,30 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
       '#default_value' => $settings['confirmation_url'],
       '#maxlength' => NULL,
       '#states' => [
+        'visible' => [
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL]],
+          'or',
+          [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL_MESSAGE]],
+        ],
         'required' => [
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL]],
           'or',
           [':input[name="confirmation_type"]' => ['value' => WebformInterface::CONFIRMATION_URL_MESSAGE]],
         ],
       ],
+    ];
+    $form['confirmation_url']['confirmation_exclude_query'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude query string from Confirmation URL'),
+      '#description' => $this->t('If checked, all query string parameters will be removed from the Confirmation URL.'),
+      '#default_value' => $settings['confirmation_exclude_query'],
+    ];
+    $form['confirmation_url']['confirmation_exclude_token'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude token from Confirmation URL'),
+      '#description' => $this->t('If checked, to submissions token will be removed from the Confirmation URL and the [webform-submission] tokens will not be available within the confirmation message.'),
+      '#default_value' => $settings['confirmation_exclude_token'],
+      '#access' => !$webform->isResultsDisabled(),
     ];
 
     // Confirmation settings.

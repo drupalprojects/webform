@@ -48,12 +48,8 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->entity;
 
-    $elements = $webform->getElementsDecoded();
-    $settings = $webform->getSettings();
-
     // Display warning and disable the submission form.
-    $results_enabled = empty($settings['results_disabled']) && empty($elements['#method']);
-    if (!$results_enabled) {
+    if ($webform->isResultsDisabled()) {
       drupal_set_message($this->t('Saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts is disabled. Submissions must be sent via an email or handled using a <a href=":href">custom webform handler</a>.', [':href' => $webform->toUrl('handlers')->toString()]), 'warning');
       return $form;
     }

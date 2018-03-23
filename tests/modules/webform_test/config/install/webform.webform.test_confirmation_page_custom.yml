@@ -90,6 +90,8 @@ settings:
   confirmation_back_attributes:
     class:
       - button
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
   limit_total: null
   limit_total_interval: null
   limit_total_message: ''
@@ -102,8 +104,8 @@ settings:
   entity_limit_user_interval: null
   purge: none
   purge_days: null
-  results_disabled: true
-  results_disabled_ignore: true
+  results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

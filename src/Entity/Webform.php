@@ -525,6 +525,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
   /**
    * {@inheritdoc}
    */
+  public function isResultsDisabled() {
+    $elements = $this->getElementsDecoded();
+    $settings = $this->getSettings();
+    return (!empty($settings['results_disabled']) || !empty($elements['#method'])) ? TRUE : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function hasSubmissions() {
     /** @var \Drupal\webform\WebformSubmissionStorageInterface $submission_storage */
     $submission_storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
@@ -884,6 +893,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'confirmation_back' => TRUE,
       'confirmation_back_label' => '',
       'confirmation_back_attributes' => [],
+      'confirmation_exclude_query' => FALSE,
+      'confirmation_exclude_token' => FALSE,
       'limit_total' => NULL,
       'limit_total_interval' => NULL,
       'limit_total_message' => '',

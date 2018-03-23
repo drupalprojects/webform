@@ -254,6 +254,12 @@ webform.webform.*:
         confirmation_back_attributes:
           type: ignore
           label: 'Confirmation back link attributes'
+        confirmation_exclude_query:
+          type: boolean
+          label: 'Exclude query string from confirmation URL'
+        confirmation_exclude_token:
+          type: boolean
+          label: 'Exclude token from confirmation URL'
         limit_total:
           type: integer
           label: 'Limit total submissions'

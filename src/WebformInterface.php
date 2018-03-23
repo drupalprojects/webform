@@ -267,6 +267,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function isConfidential();
 
   /**
+   * Determine if the saving of submissions is disabled.
+   *
+   * @return bool
+   *   TRUE if the saving of submissions is disabled.
+   */
+  public function isResultsDisabled();
+
+  /**
    * Checks if a webform has submissions.
    *
    * @return bool

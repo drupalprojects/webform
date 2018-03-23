@@ -103,6 +103,8 @@ settings:
   confirmation_back: true
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
   limit_total: null
   limit_total_interval: null
   limit_total_message: ''
@@ -190,6 +192,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -198,7 +201,6 @@ handlers:
       send: '[webform_submission:completed:html_date]'
       days: 1
       unschedule: false
-      twig: false
   yesterday:
     id: scheduled_email
     label: Yesterday
@@ -227,6 +229,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -235,7 +238,6 @@ handlers:
       send: '[webform_submission:completed:html_date]'
       days: -1
       unschedule: false
-      twig: false
   last_year:
     id: scheduled_email
     label: 'Last year'
@@ -264,6 +266,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -272,7 +275,6 @@ handlers:
       send: '2016-01-01'
       days: 0
       unschedule: false
-      twig: false
   broken:
     id: scheduled_email
     label: Broken
@@ -301,6 +303,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -309,7 +312,6 @@ handlers:
       send: '[broken]'
       days: 0
       unschedule: false
-      twig: false
   other:
     id: scheduled_email
     label: Other
@@ -340,6 +342,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -348,7 +351,6 @@ handlers:
       send: '[webform_submission:values:date:html_date]'
       days: 14
       unschedule: false
-      twig: false
   draft_reminder:
     id: scheduled_email
     label: 'Draft reminder'
@@ -377,6 +379,7 @@ handlers:
       exclude_empty: true
       html: true
       attachments: false
+      twig: false
       debug: true
       reply_to: ''
       return_path: ''
@@ -385,4 +388,3 @@ handlers:
       send: '[date:html_date]'
       days: 14
       unschedule: true
-      twig: false

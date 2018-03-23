@@ -226,7 +226,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         break;
     }
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
-    $row['results_total'] = $this->getResultsTotal($entity->id()) . (!empty($settings['results_disabled']) ? ' ' . $this->t('(Disabled)') : '');
+    $row['results_total'] = $this->getResultsTotal($entity->id()) . ($entity->isResultsDisabled() ? ' ' . $this->t('(Disabled)') : '');
     $row['results_operations']['data'] = [
       '#type' => 'operations',
       '#links' => $this->getDefaultOperations($entity, 'results'),

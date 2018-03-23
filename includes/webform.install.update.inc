@@ -2120,3 +2120,10 @@ function webform_update_8114() {
     ->condition('name', 'contribute')
     ->execute();
 }
+
+/**
+ * Issue #2955218: Allow query and token to be removed from confirmation URL.
+ */
+function webform_update_8115() {
+  _webform_update_webform_settings();
+}
