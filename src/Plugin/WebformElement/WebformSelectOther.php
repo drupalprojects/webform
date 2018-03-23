@@ -12,4 +12,4 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   category = @Translation("Options elements"),
  * )
  */
-class WebformSelectOther extends Select {}
+class WebformSelectOther extends Select implements WebformOtherInterface {}

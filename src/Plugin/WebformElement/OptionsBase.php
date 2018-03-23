@@ -431,6 +431,10 @@ abstract class OptionsBase extends WebformElementBase {
         $title = ($options['options_item_format'] == 'key' || is_array($option_text)) ? $option_value : $option_text;
         $header[] = $title;
       }
+      // Add 'Other' option to header.
+      if ($this instanceof WebformOtherInterface) {
+        $header[] = ($options['options_item_format'] == 'key') ? 'other' : $this->t('Other');
+      }
       return $this->prefixExportHeader($header, $element, $options);
     }
     else {
@@ -457,12 +461,21 @@ abstract class OptionsBase extends WebformElementBase {
       }
       // Separate multiple values (i.e. options).
       foreach ($element_options as $option_value => $option_text) {
-        if ((is_array($value) && isset($value[$option_value])) || ($value == $option_value)) {
+        if (is_array($value) && isset($value[$option_value])) {
+          unset($value[$option_value]);
+          $record[] = ($deltas) ? ($deltas[$option_value] + 1) : 'X';
+        }
+        elseif ($value == $option_value) {
+          $value = '';
           $record[] = ($deltas) ? ($deltas[$option_value] + 1) : 'X';
         }
         else {
           $record[] = '';
         }
+      }
+      // Add 'Other' option to record.
+      if ($this instanceof WebformOtherInterface) {
+        $record[] = (is_array($value)) ? implode($export_options['multiple_delimiter'], $value) : $value;
       }
       return $record;
     }

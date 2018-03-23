@@ -12,4 +12,4 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   category = @Translation("Options elements"),
  * )
  */
-class WebformButtonsOther extends OptionsBase {}
+class WebformButtonsOther extends OptionsBase implements WebformOtherInterface {}

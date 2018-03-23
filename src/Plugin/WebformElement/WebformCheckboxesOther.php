@@ -14,7 +14,7 @@ use Drupal\webform\WebformSubmissionInterface;
  *   category = @Translation("Options elements"),
  * )
  */
-class WebformCheckboxesOther extends Checkboxes {
+class WebformCheckboxesOther extends Checkboxes implements WebformOtherInterface {
 
   /**
    * {@inheritdoc}

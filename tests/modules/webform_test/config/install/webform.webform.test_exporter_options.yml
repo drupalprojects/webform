@@ -33,6 +33,14 @@ elements: |
       one: One
       two: Two
       three: Three
+  select_other:
+    '#type': webform_select_other
+    '#title': 'Select other'
+    '#default_value': Four
+    '#options':
+      one: One
+      two: Two
+      three: Three
 css: ''
 javascript: ''
 settings:

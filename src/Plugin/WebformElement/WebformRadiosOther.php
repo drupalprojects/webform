@@ -12,4 +12,4 @@ namespace Drupal\webform\Plugin\WebformElement;
  *   category = @Translation("Options elements"),
  * )
  */
-class WebformRadiosOther extends Radios {}
+class WebformRadiosOther extends Radios implements WebformOtherInterface {}
