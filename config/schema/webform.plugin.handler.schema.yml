@@ -180,18 +180,20 @@ webform.handler.settings:
   label: 'Settings'
   mapping:
     debug:
-      type: boolean
+      type: string
       label: 'Enable debugging'
     # Below mapping is copied from: webform.webform.*
     # @see webform.entity.webform.schema.yml
+    # NOTE: 'type: string' is changed to 'type: string
+    # NOTE: 'type: string' is changed to 'type: string
     ajax:
-      type: boolean
+      type: string
       label: 'Use Ajax'
     ajax_scroll_top:
       type: string
       label: 'Ajax scroll top'
     page:
-      type: boolean
+      type: string
       label: 'Enable page'
     page_submit_path:
       type: string
@@ -200,7 +202,7 @@ webform.handler.settings:
       type: string
       label: 'Page confirm URL alias'
     form_submit_once:
-      type: boolean
+      type: string
       label: 'Prevent duplicate submissions'
     form_open_message:
       type: text
@@ -212,55 +214,61 @@ webform.handler.settings:
       type: text
       label: 'Form exception message'
     form_previous_submissions:
-      type: boolean
+      type: string
       label: 'Form previous submissions notification'
     form_confidential:
-      type: boolean
+      type: string
       label: 'Form confidential'
     form_confidential_message:
       type: text
       label: 'Form confidential message'
     form_convert_anonymous:
-      type: boolean
+      type: string
       label: 'Convert anonymous drafts and submissions to authenticated'
     form_prepopulate:
-      type: boolean
+      type: string
       label: 'Form prepopulate elements'
     form_prepopulate_source_entity:
-      type: boolean
+      type: string
       label: 'Form prepopulate source entity'
     form_prepopulate_source_entity_required:
-      type: boolean
+      type: string
       label: 'Form prepopulate source entity required'
     form_prepopulate_source_entity_type:
       type: string
       label: 'Form prepopulate source entity type'
     form_unsaved:
-      type: boolean
+      type: string
       label: 'Warn users about unsaved changes'
     form_disable_back:
-      type: boolean
+      type: string
       label: 'Disable back button'
     form_submit_back:
-      type: boolean
+      type: string
       label: 'Submit previous wizard page when browser back button is clicked'
     form_disable_autocomplete:
-      type: boolean
+      type: string
       label: 'Disable autocompletion'
     form_novalidate:
-      type: boolean
+      type: string
       label: 'Disable client-side validation'
+    form_disable_inline_errors:
+      type: string
+      label: 'Disable inline form errors'
+    form_required:
+      type: string
+      label: 'Display required indicator'
     form_autofocus:
-      type: boolean
+      type: string
       label: 'Autofocus'
     form_details_toggle:
-      type: boolean
+      type: string
       label: 'Display collapse/expand all details link'
     form_reset:
-      type: boolean
+      type: string
       label: 'Display reset button'
     form_login:
-      type: boolean
+      type: string
       label: 'Redirect to login when access denied to webform'
     form_login_message:
       type: text
@@ -271,8 +279,11 @@ webform.handler.settings:
     submission_exception_message:
       type: text
       label: 'Submission exception message'
+    submission_locked_message:
+      type: text
+      label: 'Submission locked message'
     submission_log:
-      type: boolean
+      type: string
       label: 'Submission logging'
     submission_user_columns:
       type: sequence
@@ -281,19 +292,31 @@ webform.handler.settings:
         type: string
         label: 'Column name'
     submission_login:
-      type: boolean
+      type: string
       label: 'Redirect to login when access denied to submission'
     submission_login_message:
       type: text
       label: 'Login message when access denied to submission'
+    autofill:
+      type: string
+      label: 'Autofill with previous submission'
+    autofill_message:
+      type: text
+      label: 'Autofill with previous submission message'
+    autofill_excluded_elements:
+      type: sequence
+      label: 'Autofill excluded elements'
+      sequence:
+        type: string
+        label: 'Element key'
     wizard_progress_bar:
-      type: boolean
+      type: string
       label: 'Show wizard progress bar'
     wizard_progress_pages:
-      type: boolean
+      type: string
       label: 'Show wizard progress pages'
     wizard_progress_percentage:
-      type: boolean
+      type: string
       label: 'Show wizard progress pages'
     wizard_start_label:
       type: label
@@ -302,7 +325,7 @@ webform.handler.settings:
       type: ignore
       label: 'Wizard start attributes'
     wizard_confirmation:
-      type: boolean
+      type: string
       label: 'Include confirmation page in progress'
     wizard_confirmation_label:
       type: label
@@ -311,7 +334,7 @@ webform.handler.settings:
       type: text
       label: 'Track wizard progress in the URL'
     preview:
-      type: integer
+      type: string
       label: 'Enable preview page'
     preview_label:
       type: text
@@ -332,16 +355,16 @@ webform.handler.settings:
         type: string
         label: 'Element key'
     preview_exclude_empty:
-      type: boolean
+      type: string
       label: 'Preview exclude empty elements'
     draft:
       type: string
       label: 'Allow users to save and finish the webform later.'
     draft_multiple:
-      type: boolean
+      type: string
       label: 'Allow users to save multiple drafts'
     draft_auto_save:
-      type: boolean
+      type: string
       label: 'Automatically save as draft when previewing and when there are validation errors.'
     draft_saved_message:
       type: text
@@ -365,7 +388,7 @@ webform.handler.settings:
       type: ignore
       label: 'Confirmation attributes'
     confirmation_back:
-      type: boolean
+      type: string
       label: 'Display back to webform link.'
     confirmation_back_label:
       type: text
@@ -373,36 +396,54 @@ webform.handler.settings:
     confirmation_back_attributes:
       type: ignore
       label: 'Confirmation back link attributes'
+    confirmation_exclude_query:
+      type: string
+      label: 'Exclude query string from confirmation URL'
+    confirmation_exclude_token:
+      type: string
+      label: 'Exclude token from confirmation URL'
     limit_total:
-      type: integer
+      type: string
       label: 'Limit total submissions'
+    limit_total_interval:
+      type: string
+      label: 'Limit total interval'
     limit_total_message:
       type: text
       label: 'Limit total message'
     limit_user:
-      type: integer
+      type: string
       label: 'Limit user submissions'
+    limit_user_interval:
+      type: string
+      label: 'Limit user interval'
     limit_user_message:
       type: text
       label: 'Limit user message'
+    entity_limit_total:
+      type: string
+      label: 'Entity limit total submissions'
+    entity_limit_total_interval:
+      type: string
+      label: 'Entity limit total interval'
+    entity_limit_user:
+      type: string
+      label: 'Entity limit user submissions'
+    entity_limit_user_interval:
+      type: string
+      label: 'Entity limit user interval'
     purge:
       type: string
       label: 'Default purging'
     purge_days:
-      type: integer
+      type: string
       label: 'Default days to retain submissions'
-    entity_limit_total:
-      type: integer
-      label: 'Entity limit total submissions'
-    entity_limit_user:
-      type: integer
-      label: 'Entity limit user submissions'
     results_disabled:
-      type: boolean
+      type: string
       label: 'Results disabled'
     results_disabled_ignore:
-      type: boolean
+      type: string
       label: 'Ignore disabled results warning'
     token_update:
-      type: boolean
+      type: string
       label: 'Allow updates using token'

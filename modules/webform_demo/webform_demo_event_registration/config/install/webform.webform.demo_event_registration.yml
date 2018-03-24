@@ -173,7 +173,7 @@ handlers:
     handler_id: email_notification
     status: true
     conditions: {  }
-    weight: 1
+    weight: -49
     settings:
       states:
         - completed
@@ -205,7 +205,7 @@ handlers:
     handler_id: email_reminder
     status: true
     conditions: {  }
-    weight: 1
+    weight: -48
     settings:
       states:
         - completed
@@ -234,3 +234,18 @@ handlers:
       send: '[webform_submission:node:field_webform_demo_event_date:value]'
       days: -1
       unschedule: false
+  submission_limit:
+    id: settings
+    label: 'Submission limit'
+    handler_id: submission_limit
+    status: true
+    conditions: {  }
+    weight: -50
+    settings:
+      debug: ''
+      entity_limit_total: '[webform_submission:node:field_webform_entity_limit_total]'
+      preview_title: ''
+      preview_message: ''
+      confirmation_url: ''
+      confirmation_title: ''
+      confirmation_message: ''

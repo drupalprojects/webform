@@ -183,6 +183,7 @@ drush webform:tidy -y --dependencies webform_scheduled_email_test
 # Re-import all webform configuration into your site.      
 drush features-import -y webform
 drush features-import -y webform_demo_application_evaluation
+drush features-import -y webform_demo_event_registration
 drush features-import -y webform_examples
 drush features-import -y webform_example_element
 drush features-import -y webform_example_composite
