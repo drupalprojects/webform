@@ -2515,11 +2515,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['multiple']['multiple__label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Item label'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#description' => $this->t('This is used as the item label for this webform element when displaying multiple values.'),
     ];
     $form['multiple']['multiple__labels'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Item labels'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#description' => $this->t('This is used as the items label for this webform element when displaying multiple values.'),
     ];
     $form['multiple']['multiple__min_items'] = [
