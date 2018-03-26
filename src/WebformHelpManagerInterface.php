@@ -43,6 +43,17 @@ interface WebformHelpManagerInterface {
   public function getVideo($id = NULL);
 
   /**
+   * Get video. links
+   *
+   * @param string $id
+   *   Video id.
+   *
+   * @return array
+   *   An array of links.
+   */
+  public function getVideoLinks($id);
+
+  /**
    * Build help for specific route.
    *
    * @param string $route_name

@@ -47,7 +47,7 @@
  * Help video.
  */
 .webform-help-video-youtube {
-  margin: 1.5em 0 .2em 0;
+  margin: 1em 0 .2em 0;
   max-width: 1024px;
   border: 1px solid #000;
 }
@@ -69,8 +69,8 @@
 }
 
 /**
- * Help slides.
+ * Help links.
  */
-.webform-help-slides {
-  max-width: 1024px;
+.webform-help-links {
+  margin-left: 0;
 }

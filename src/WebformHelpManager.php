@@ -181,6 +181,31 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   /**
    * {@inheritdoc}
    */
+  public function getVideoLinks($id) {
+    $video = $this->getVideo($id);
+
+    // Presentation.
+    $links = [];
+    if (!empty($video['presentation_id'])) {
+      $links[] = [
+        'title' => $video['title'] . ' | ' . $this->t('Slides'),
+        'url' => Url::fromUri('https://docs.google.com/presentation/d/' . $video['presentation_id']),
+      ];
+    }
+
+    // Related resources.
+    if (!empty($video['links'])) {
+      foreach ($video['links'] as $link) {
+        $link['url'] = Url::fromUri($link['url']);
+        $links[] = $link;
+      }
+    }
+    return $links;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildHelp($route_name, RouteMatchInterface $route_match) {
     // Get path from route match.
     $path = preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', Url::fromRouteMatch($route_match)->setAbsolute(FALSE)->toString());
@@ -277,8 +302,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       switch ($video_display) {
         case 'dialog':
           $video_url = Url::fromRoute('webform.help.video', ['id' => str_replace('_', '-', $video['id'])]);
-          $image_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE);
-          $link_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_WIDE, $classes);
+          $image_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL);
+          $link_attributes = WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NORMAL, $classes);
           break;
 
         case 'link':
@@ -293,8 +318,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           $link_attributes = [];
           break;
       }
-
-      $slides_url = Url::fromUri('https://docs.google.com/presentation/d/' . $video['presentation_id']);
 
       $row = [];
 
@@ -311,13 +334,6 @@ class WebformHelpManager implements WebformHelpManagerInterface {
             '#url' => $video_url,
             '#attributes' => $image_attributes,
           ],
-          'slides' => [
-            '#type' => 'link',
-            '#title' => $this->t('View slides'),
-            '#url' => $slides_url,
-            '#prefix' => '<br />'
-          ],
-
         ],
         'width' => '200',
       ];
@@ -343,7 +359,18 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         '#prefix' => '<p>',
         '#suffix' => '</p>',
       ];
-
+      $row['content']['data']['resources'] = [
+        'title' => [
+          '#markup' => $this->t('Additional resources'),
+          '#prefix' => '<div><strong>',
+          '#suffix' => '</strong></div>',
+        ],
+        'links' => [
+          '#theme' => 'links',
+          '#links' => $this->getVideoLinks($id),
+          '#attributes' => ['class' => ['webform-help-links']],
+        ],
+      ];
       $rows[$id] = ['data' => $row, 'no_striping' => TRUE];
     }
 
@@ -658,99 +685,291 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     $videos = [
       'introduction' => [
         'title' => $this->t('Introduction to Webform for Drupal 8'),
-        'content' => $this->t('This presentation provides a general introduction to the Webform module.'),
+        'content' => $this->t('This screencast provides a general introduction to the Webform module.'),
         'youtube_id' => 'VncMRSwjVto',
         'presentation_id' => '1UmIdNe6ZOvddCVVzFgZ7RVAS5fa88gSumIfQLqd0gJo',
+        'links' => [
+          [
+            'title' => $this->t('Getting Started with Webform in Drupal 8: Part I |  WebWash'),
+            'url' => 'https://www.webwash.net/getting-started-webform-drupal-8/',
+          ],
+          [
+            'title' => $this->t('Moving Forward with Webform in Drupal 8: Part II | WebWash'),
+            'url' => 'https://www.webwash.net/moving-forward-webform-drupal-8/ ',
+          ],
+          [
+            'title' => $this->t('How to Make an Advanced Webform in Drupal 8 | OSTrainging'),
+            'url' => 'https://www.ostraining.com/blog/drupal/how-to-make-a-complex-webform-in-drupal-8/',
+          ],
+        ],
       ],
       'about' => [
         'title' => $this->t('About Webform & the Drupal community'),
-        'content' => $this->t('This presentation introduces you to the maintainer and community behind the Webform module.'),
+        'content' => $this->t('This screencast introduces you to the maintainer and community behind the Webform module.'),
         'youtube_id' => 'DhNY4A-KRLY',
         'presentation_id' => '1uwQMoythumBWkWZgAsaWKoypl7KWWvztfCc6F6v2Vqk',
+        'links' => [
+          [
+            'title' => $this->t('Where is the Drupal Community? | Drupal.org'),
+            'url' => 'https://www.drupal.org/community',
+          ],
+          [
+            'title' => $this->t('Getting Involved Guide | Drupal.org'),
+            'url' => 'https://www.drupal.org/getting-involved-guide',
+          ],
+          [
+            'title' => $this->t('Contributing to Drupal | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/contributing-drupal',
+          ],
+          [
+            'title' => $this->t('Connecting with the Community | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/user-guide/thoughts-connecting',
+          ],
+          [
+            'title' => $this->t('Concept: The Drupal Project | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/user-guide/understanding-project',
+          ],
+          [
+            'title' => $this->t('Concept: Drupal Licensing | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/user-guide/understanding-gpl',
+          ],
+        ],
       ],
       'installation' => [
         'title' => $this->t('Installing the Webform module'),
-        'content' => $this->t('This presentation walks through how to install the Webform and external libraries.'),
+        'content' => $this->t('This screencast walks through how to install the Webform and external libraries.'),
         'youtube_id' => '4QtVmKiak-c',
         'presentation_id' => '1S5wsXDOjU7mkvtTrUVqwZQeGSLi4c03GsoVcVrNTuUE',
+        'links' => [
+          [
+            'title' => $this->t('Extending Drupal 8 | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/extending-drupal-8',
+          ],
+          [
+            'title' => $this->t('Installing a Module | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/user-guide/config-install',
+          ],
+        ],
       ],
       'forms' => [
         'title' => $this->t('Building forms & templates'),
-        'content' => $this->t('This presentation provides an overview of how to create, build, edit and test forms and templates.'),
+        'content' => $this->t('This screencast provides an overview of how to create, build, edit and test forms and templates.'),
         'youtube_id' => 'c7Vf0GUEhNs',
         'presentation_id' => '1Ka76boa2PYLBr6wUpIlNOJrzJZpK2QZTLdmfKDwLKic',
+        'links' => [
+          [
+            'title' => $this->t('Form API | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/api/form-api',
+          ],
+          [
+            'title' => $this->t('Forms (Form API) | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/forms-form-api',
+          ],
+          [
+            'title' => $this->t('Form API Life Cycle | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/form-api-life-cycle',
+          ],
+          [
+            'title' => $this->t('Fun with Forms in Drupal 8 | DrupalCon Austin'),
+            'url' => 'https://www.youtube.com/watch?v=WRW8qNiPTHk',
+          ],
+        ],
       ],
       'elements' => [
         'title' => $this->t('Adding elements to a webform'),
-        'content' => $this->t('This presentation provides an overview of how to create, configure and manage form elements, layouts and multi-step wizards.'),
+        'content' => $this->t('This screencast provides an overview of how to create, configure and manage form elements, layouts and multi-step wizards.'),
         'youtube_id' => 'u5EN3wjCZ2M',
         'presentation_id' => '1wy0uxKx9kHSTEGPBIPY6TXU1FVY05Z4iP35LXYYOeW8',
+        'links' => [
+          [
+            'title' => $this->t('Render API | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/api/render-api',
+          ],
+          [
+            'title' => $this->t('Render arrays | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/api/render-api/render-arrays',
+          ],
+          [
+            'title' => $this->t('Render API Overview | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/render-api-overview',
+          ],
+          [
+            'title' => $this->t('Form Element Reference | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/form-element-reference',
+          ],
+          [
+            'title' => $this->t('What Are Render Elements? | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/render-elements',
+          ],
+        ],
       ],
       'handlers' => [
         'title' => $this->t('Emailing & handling submissions'),
-        'content' => $this->t('This presentation shows how to route submissions to external applications and send notifications & confirmations.'),
+        'content' => $this->t('This screencast shows how to route submissions to external applications and send notifications & confirmations.'),
         'youtube_id' => 'oMCqqBJfWnk',
         'presentation_id' => '1SosCtHtEDHNriKF-y7Hji-5wPOa4XvWWvP13dFXG1AE',
+        'links' => [
+          [
+            'title' => $this->t('Create a Webform Handler in Drupal 8 | Matt Arnold'),
+            'url' => 'https://blog.mattarnster.co.uk/tutorials/create-a-webform-handler-in-drupal-8/',
+          ],
+          [
+            'title' => $this->t('The Drupal mail system | Pronovix'),
+            'url' => 'https://pronovix.com/blog/drupal-mail-system',
+          ],
+        ],
       ],
       'settings' => [
         'title' => $this->t('Configuring webform settings'),
-        'content' => $this->t("This presentation shows how to configure a form's general settings, submission handling, confirmation message/page, custom CSS/JS and access controls."),
+        'content' => $this->t("This screencast shows how to configure a form's general settings, submission handling, confirmation message/page, custom CSS/JS and access controls."),
         'youtube_id' => 'Dm8EX-9VM3U',
         'presentation_id' => '1MYEKEbJYhyLRIPUCYMqixsR2X_Ss_zPT7oxvXMOfLbU',
       ],
       'submissions' => [
         'title' => $this->t('Collecting webform submissions'),
-        'content' => $this->t("This presentation shows how to manage, review and export a form's submissions."),
+        'content' => $this->t("This screencast shows how to manage, review and export a form's submissions."),
         'youtube_id' => 'DUO54Suz-3A',
         'presentation_id' => '11N4UHJo7ohxGg1WqKQsXkHDNMehajKttdUf8o8PB22o',
       ],
       'submission' => [
         'title' => $this->t('Understanding a webform submission'),
-        'content' => $this->t("This presentation shows how to review, edit, resend and administer a  submission."),
+        'content' => $this->t("This screencast shows how to review, edit, resend and administer a  submission."),
         'youtube_id' => '2odyu1Muwy0',
         'presentation_id' => '1ItsdeMHKzQICoMH4GPV7cEj5CidDjn-uQP9nWTDrWGM',
+        'links' => [
+          [
+            'title' => $this->t('Entity–attribute–value model | Wikipedia'),
+            'url' => 'https://en.wikipedia.org/wiki/Entity–attribute–value_model',
+          ],
+        ],
       ],
       'configuration' => [
         'title' => $this->t("Configuring the Webform module"),
-        'content' => $this->t('This presentation walks through all the configuration settings available to manage forms, submissions, options, handlers, exporters, libraries and assets.'),
+        'content' => $this->t('This screencast walks through all the configuration settings available to manage forms, submissions, options, handlers, exporters, libraries and assets.'),
         'youtube_id' => '0buvEx8xHgg',
         'presentation_id' => '1Wr2W47eYDIEP6DOzhBXciLPZjltOIruUIC_FKgGDnwI',
+        'links' => [
+          [
+            'title' => $this->t('How to Use Webform Predefined Options in Drupal 8 | WebWash'),
+            'url' => 'https://www.webwash.net/use-webform-predefined-options-drupal-8/',
+          ],
+          [
+            'title' => $this->t('Understanding Hooks | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/creating-custom-modules/understanding-hooks',
+          ],
+          [
+            'title' => $this->t('What Are Hooks? | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/what-are-hooks',
+          ],
+        ],
       ],
       'webform_nodes' => [
         'title' => $this->t('Attaching webforms to nodes'),
-        'content' => $this->t('This presentation walks through how to attach a webform to node.'),
+        'content' => $this->t('This screencast walks through how to attach a webform to node.'),
         'youtube_id' => 'B_ZyCOVKPqA',
+        'links' => [
+          [
+            'title' => $this->t('Working with content types and fields | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/administering-drupal-8-site/managing-content-0/working-with-content-types-and-fields',
+          ],
+          [
+            'title' => $this->t('What Are Drupal Entities? | Drupalize.me'),
+            'url' => 'https://drupalize.me/videos/what-are-drupal-entities',
+          ],
+          [
+            'title' => $this->t('Concept: Content Entities and Fields | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/user-guide/planning-data-types',
+          ],
+        ],
         'presentation_id' => '1XoIUSgQ0bb_xCfWx8VZe1WHTr0QoCfnE8DzSAsc2WQM',
       ],
       'webform_blocks' => [
         'title' => $this->t('Placing webforms as blocks'),
-        'content' => $this->t('This presentation walks through how to place a webform on a website as a block.'),
+        'content' => $this->t('This screencast walks through how to place a webform on a website as a block.'),
         'youtube_id' => 'twsawm5pbjI',
         'presentation_id' => '12H1ecphNlulggehltnaS6FWN2hJlwbILULge1WRxYWY',
+        'links' => [
+          [
+            'title' => $this->t('Working with blocks | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/core/modules/block/overview',
+          ],
+          [
+            'title' => $this->t('Blocks | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/blocks',
+          ],
+        ],
       ],
       'addons' => [
         'title' => $this->t('Extending Webform using add-ons'),
-        'content' => $this->t("This presentation suggests and recommends additional Drupal projects that can be installed to enhance, improve and alter the Webform module's functionality."),
+        'content' => $this->t("This screencast suggests and recommends additional Drupal projects that can be installed to enhance, improve and alter the Webform module's functionality."),
         'youtube_id' => '2sthMx6adl4',
         'presentation_id' => '1azK1xkHH4-tiQ9TV8GDqVKk4FXgxarM6MPrBWCLljiQ',
+        'links' => [
+          [
+            'title' => $this->t('Extend Drupal with Modules | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/extend-drupal-modules',
+          ],
+          [
+            'title' => $this->t('Download & Extend | Drupal.org'),
+            'url' => 'https://www.drupal.org/project/project_module',
+          ],
+        ],
       ],
       'plugins' => [
         'title' => $this->t("Understanding webform plugins"),
-        'content' => $this->t("This presentation offers an overview of the Webform module's element, handler and exporter plugins."),
+        'content' => $this->t("This screencast offers an overview of the Webform module's element, handler and exporter plugins."),
         'youtube_id' => 'nCSr71mfBR4',
         'presentation_id' => '1SrcG1vJpWlarLW-cJQDsP4QsAzeyrox7HXBcYMFUsQE',
+        'links' => [
+          [
+            'title' => $this->t('Why Plugins? | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/api/plugin-api/why-plugins',
+          ],
+          [
+            'title' => $this->t('Plugins | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/plugins',
+          ],
+          [
+            'title' => $this->t('Unraveling the Drupal 8 Plugin System | Drupalize.me'),
+            'url' => 'https://drupalize.me/blog/201409/unravelling-drupal-8-plugin-system',
+          ],
+        ],
       ],
       'translations' => [
         'title' => $this->t('Translating webforms'),
-        'content' => $this->t("This presentation shows how to translate a webform's title, descriptions, label and messages."),
+        'content' => $this->t("This screencast shows how to translate a webform's title, descriptions, label and messages."),
         'youtube_id' => 'dfG37uW5Qu8',
         'presentation_id' => '1TjQJMtNTSyQ4i881B_kMalqqVR3QEFoNgNJIotGNXyY',
+        'links' => [
+          [
+            'title' => $this->t('Translating configuration | Drupal.org'),
+            'url' => 'https://www.drupal.org/docs/8/multilingual/translating-configuration',
+          ],
+          [
+            'title' => $this->t('Translating Configuration | Drupalize.me'),
+            'url' => 'https://drupalize.me/tutorial/user-guide/language-config-translate',
+          ],
+        ],
       ],
       'development' => [
         'title' => $this->t('Webform development tools'),
-        'content' => $this->t('This presentation gives developers an overview of the tools available to help build, debug and export forms.'),
+        'content' => $this->t('This screencast gives developers an overview of the tools available to help build, debug and export forms.'),
         'youtube_id' => '4xI-T1OuHn4',
         'presentation_id' => '1vMt2mXhkswjOqfh7AvBQm6jN9dFrfFv5Fd1It-EEHyo',
+        'links' => [
+          [
+            'title' => $this->t('Devel | Drupal.org'),
+            'url' => 'https://www.drupal.org/project/devel',
+          ],
+          [
+            'title' => $this->t('Devel | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/devel',
+          ],
+          [
+            'title' => $this->t('Configuration API for Developers | Drupalize.me'),
+            'url' => 'https://drupalize.me/topic/configuration-api-developers',
+          ],
+        ],
       ],
     ];
     foreach ($videos as $id => &$video_info) {
