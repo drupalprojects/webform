@@ -2127,3 +2127,13 @@ function webform_update_8114() {
 function webform_update_8115() {
   _webform_update_webform_settings();
 }
+
+/**
+ * #multiple__label and #multiple__labels are being saved with every element.
+ */
+function webform_update_8116() {
+  _webform_update_elements_clear_properties([
+    '#multiple__label' => '',
+    '#multiple__labels' => '',
+  ]);
+}

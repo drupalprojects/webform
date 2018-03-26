@@ -5,6 +5,7 @@
  * Webform install helper functions.
  */
 
+use Drupal\Core\Render\Element;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\system\Entity\Action;
 use Drupal\webform\Entity\Webform;
@@ -259,3 +260,52 @@ function _webform_update_webform_submission_storage_schema() {
   $manager = \Drupal::entityDefinitionUpdateManager();
   $manager->updateEntityType($manager->getEntityType('webform_submission'));
 }
+
+/**
+ * Clear/remove selected webform element properties.
+ *
+ * @param array $properties
+ *   An associative array of webform element properties.
+ */
+function _webform_update_elements_clear_properties(array $properties) {
+  $pattern = '/(?:' . implode('|', array_keys($properties)) . ')/';
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+
+    // Make sure elements contains the properties.
+    if (!preg_match($pattern, $data['elements'])) {
+      continue;
+    }
+
+    $elements = Yaml::decode($data['elements']);
+    _webform_update_elements_clear_properties_recursive($elements, $properties);
+    $data['elements'] = Yaml::encode($elements);
+
+    $webform_config->setData($data);
+    $webform_config->save();
+  }
+}
+
+/**
+ * Recursively clear/remove selected webform element properties.
+ *
+ * @param array $element
+ *   An element.
+ * @param array $properties
+ *   An associative array of webform element properties.
+ */
+function _webform_update_elements_clear_properties_recursive(array &$element, array $properties) {
+  foreach ($properties as $property_name => $property_value) {
+    if (isset($element[$property_name]) && $element[$property_name] === $property_value) {
+      unset($element[$property_name]);
+    }
+  }
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      _webform_update_elements_clear_properties_recursive($element[$key], $properties);
+    }
+  }
+}
+
