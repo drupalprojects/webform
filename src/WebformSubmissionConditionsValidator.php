@@ -5,6 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\webform\Plugin\WebformElement\WebformElement;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -469,6 +470,12 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     $trigger_value = $condition[$trigger_state];
 
     $element_plugin = $this->elementManager->getElementInstance($element);
+
+    // Ignored conditions for generic webform elements.
+    if ($element_plugin instanceof WebformElement) {
+      return TRUE;
+    }
+
     $element_value = $element_plugin->getElementSelectorInputValue($selector, $trigger_state, $element, $webform_submission);
 
     // Process trigger sub state used for custom #states API validation.
