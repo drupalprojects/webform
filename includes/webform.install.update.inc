@@ -2059,7 +2059,7 @@ function webform_update_8111() {
 }
 
 /**
- * Provide dedicated 'test' webform operation and access rule.
+ * Issue #2951368: Provide dedicated 'test' webform operation and access rule.
  */
 function webform_update_8112() {
   $config_factory = \Drupal::configFactory();
@@ -2099,7 +2099,7 @@ function webform_update_8114() {
   $contribute_config = \Drupal::configFactory()->getEditable('contribute.settings');
 
   // Migrate Contribute account info to Webform Contribute account info.
-  \Drupal::configFactory()->getEditable('webform.settings')
+  \Drupal::configFactory()->getEditable('webform.settingProvide dedicated \'test\' webform operation and access rule. s')
     ->set('contribute.account_type', $contribute_config->get('account_type') ?: 'user')
     ->set('contribute.account_id', $contribute_config->get('account_id') ?: NULL)
     ->save();
