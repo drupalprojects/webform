@@ -61,13 +61,11 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   }
 
   /****************************************************************************/
-  // Webform submission form methods.
+  // Build form methods.
   /****************************************************************************/
 
   /**
    * {@inheritdoc}
-   *
-   * @see \Drupal\webform\WebformSubmissionForm::buildForm
    */
   public function buildForm(array &$form, FormStateInterface $form_state) {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
@@ -143,76 +141,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   }
 
   /****************************************************************************/
-  // Element hide/show validation methods.
-  /****************************************************************************/
-
-  /**
-   * Webform element #after_build callback: Wrap #element_validate so that we suppress element validation errors.
-   */
-  public static function elementAfterBuild(array $element, FormStateInterface $form_state) {
-    return WebformElementHelper::setElementValidate($element, [get_called_class(), 'elementValidate']);
-  }
-
-  /**
-   * Webform conditional #element_validate callback: Execute #element_validate and suppress errors.
-   */
-  public static function elementValidate(array &$element, FormStateInterface $form_state) {
-    // Element validation is trigger sequentially.
-    // Triggers must be validated before dependants.
-    //
-    // Build webform submission with validated and processed data.
-    // Webform submission must be rebuilt every time since the
-    // $element and $form_state values can be changed by validation callbacks.
-    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
-    $form_object = $form_state->getFormObject();
-    $complete_form = &$form_state->getCompleteForm();
-    $webform_submission = $form_object->buildEntity($complete_form, $form_state);
-
-    /** @var \Drupal\webform\WebformSubmissionConditionsValidatorInterface $conditions_validator */
-    $conditions_validator = \Drupal::service('webform_submission.conditions_validator');
-    if ($conditions_validator->isElementVisible($element, $webform_submission)) {
-      WebformElementHelper::triggerElementValidate($element, $form_state);
-    }
-    else {
-      WebformElementHelper::suppressElementValidate($element, $form_state);
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isElementVisible(array $element, WebformSubmissionInterface $webform_submission) {
-    $states = WebformElementHelper::getStates($element);
-
-    $visible = TRUE;
-    foreach ($states as $state => $conditions) {
-      if (!is_array($conditions)) {
-        continue;
-      }
-
-      // Process state/negate.
-      list($state, $negate) = $this->processState($state);
-
-      $result = $this->validateConditions($conditions, $webform_submission);
-      // Skip invalid conditions.
-      if ($result === NULL) {
-        continue;
-      }
-
-      // Negate the result.
-      $result = ($negate) ? !$result : $result;
-
-      // Apply result to element state.
-      if (strpos($state, 'visible') === 0 && $result === FALSE) {
-        $visible = FALSE;
-      }
-    }
-
-    return $visible;
-  }
-
-  /****************************************************************************/
-  // Validation methods.
+  // Validate form methods.
   /****************************************************************************/
 
   /**
@@ -294,6 +223,126 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         WebformElementHelper::setRequiredError($element, $form_state);
       }
     }
+  }
+
+  /****************************************************************************/
+  // Submit form methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $form_state->getFormObject()->getEntity();
+    $data = $webform_submission->getData();
+    $this->submitFormRecursive($form, $webform_submission, $data);
+    $webform_submission->setData($data);
+  }
+
+  /**
+   * Recursively Handle hide/show conditions when a webform is submitted.
+   *
+   * @param array $form
+   *   An array of form elements.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param array $data
+   *   A webform submission's data.
+   * @param bool $visible
+   *   Flag that determine if the currrent form elements are visible.
+   */
+  protected function submitFormRecursive(array $form, WebformSubmissionInterface $webform_submission, array &$data, $visible = TRUE) {
+    // Loop through visible elements with #states.
+    foreach ($form as $key => &$element) {
+      $element_visible = $visible;
+      if (Element::property($key) || !is_array($element)) {
+        continue;
+      }
+
+      if ($element_visible && !$this->isElementVisible($element, $webform_submission)) {
+        $element_visible = FALSE;
+      }
+
+      if (!$element_visible) {
+        unset($data[$key]);
+      }
+
+      $this->submitFormRecursive($element, $webform_submission, $data, $element_visible);
+    }
+  }
+
+  /****************************************************************************/
+  // Element hide/show validation methods.
+  /****************************************************************************/
+
+  /**
+   * Webform element #after_build callback: Wrap #element_validate so that we suppress element validation errors.
+   */
+  public static function elementAfterBuild(array $element, FormStateInterface $form_state) {
+    return WebformElementHelper::setElementValidate($element, [get_called_class(), 'elementValidate']);
+  }
+
+  /**
+   * Webform conditional #element_validate callback: Execute #element_validate and suppress errors.
+   */
+  public static function elementValidate(array &$element, FormStateInterface $form_state) {
+    // Element validation is trigger sequentially.
+    // Triggers must be validated before dependants.
+    //
+    // Build webform submission with validated and processed data.
+    // Webform submission must be rebuilt every time since the
+    // $element and $form_state values can be changed by validation callbacks.
+    /** @var \Drupal\webform\WebformSubmissionForm $form_object */
+    $form_object = $form_state->getFormObject();
+    $complete_form = &$form_state->getCompleteForm();
+    $webform_submission = $form_object->buildEntity($complete_form, $form_state);
+
+    /** @var \Drupal\webform\WebformSubmissionConditionsValidatorInterface $conditions_validator */
+    $conditions_validator = \Drupal::service('webform_submission.conditions_validator');
+    if ($conditions_validator->isElementVisible($element, $webform_submission)) {
+      WebformElementHelper::triggerElementValidate($element, $form_state);
+    }
+    else {
+      WebformElementHelper::suppressElementValidate($element, $form_state);
+    }
+  }
+
+  /****************************************************************************/
+  // Element state methods.
+  /****************************************************************************/
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isElementVisible(array $element, WebformSubmissionInterface $webform_submission) {
+    $states = WebformElementHelper::getStates($element);
+
+    $visible = TRUE;
+    foreach ($states as $state => $conditions) {
+      if (!is_array($conditions)) {
+        continue;
+      }
+
+      // Process state/negate.
+      list($state, $negate) = $this->processState($state);
+
+      $result = $this->validateConditions($conditions, $webform_submission);
+      // Skip invalid conditions.
+      if ($result === NULL) {
+        continue;
+      }
+
+      // Negate the result.
+      $result = ($negate) ? !$result : $result;
+
+      // Apply result to element state.
+      if (strpos($state, 'visible') === 0 && $result === FALSE) {
+        $visible = FALSE;
+      }
+    }
+
+    return $visible;
   }
 
   /****************************************************************************/

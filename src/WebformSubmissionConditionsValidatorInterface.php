@@ -16,6 +16,8 @@ interface WebformSubmissionConditionsValidatorInterface {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::buildForm
    */
   public function buildForm(array &$form, FormStateInterface $form_state);
 
@@ -26,8 +28,22 @@ interface WebformSubmissionConditionsValidatorInterface {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::validateForm
    */
   public function validateForm(array &$form, FormStateInterface $form_state);
+
+  /**
+   *  Submit form #states for visible elements.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::submitForm
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state);
 
   /**
    * Validate state with conditions.

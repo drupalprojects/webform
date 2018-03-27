@@ -99,7 +99,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   /**
    * The webform submission conditions (#states) validator.
    *
-   * @var \Drupal\webform\WebformSubmissionConditionsValidator
+   * @var \Drupal\webform\WebformSubmissionConditionsValidatorInterface
    */
   protected $conditionsValidator;
 
@@ -1227,6 +1227,10 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
+
+    // Server side #states API submit.
+    $this->conditionsValidator->submitForm($form, $form_state);
+
     // Submit webform via webform handler.
     $this->getWebform()->invokeHandlers('submitForm', $form, $form_state, $this->entity);
   }
