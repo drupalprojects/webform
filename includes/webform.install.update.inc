@@ -2144,17 +2144,19 @@ function webform_update_8116() {
  */
 function webform_update_8117() {
   $build  = [
-    '#theme' => 'item_list',
-    '#title' => t('Elements, containers, and pages that are hidden using conditional logic will have their submission data cleared when a webform is submitted.'),
-    '#items' => [
-      t('Please make sure to test any Webform that contains conditionally hidden elements containers, or pages.'),
-      t('Any element that is conditionally hidden will have its submission data cleared.'),
-      t("Existing submissions that have conditionally hidden elements will have the element's submission data cleared when the submission is updated."),
-      [
-        '#type' => 'link',
-        '#title' => t('Learn more'),
-        '#url' => Url::fromUri('https://www.drupal.org/node/2956589'),
+    'list' => [
+      '#theme' => 'item_list',
+      '#title' => t('IMPORTANT! Elements, containers, and pages that are hidden using conditional logic will now have their submission data cleared when a webform is submitted.'),
+      '#items' => [
+        t('Please make sure to test any webform that contains conditionally hidden elements, containers, or pages.'),
+        t('Any element that is conditionally hidden will have its submission data cleared.'),
+        t("Existing submissions that have conditionally hidden elements will have the element's submission data cleared when the submission is updated."),
       ],
+    ],
+    'link' => [
+      '#type' => 'link',
+      '#title' => t('Learn more'),
+      '#url' => Url::fromUri('https://www.drupal.org/node/2956589'),
     ],
   ];
 
