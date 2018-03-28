@@ -2149,8 +2149,8 @@ function webform_update_8117() {
     '#theme' => 'item_list',
     '#title' => t('Elements, containers, and pages that are hidden using conditional logic will have their submission data unset when a webform is submitted.'),
     '#items' => [
-      t('Any element that is conditionally hidden will have its submission data unset.'),
       t('Please make sure to test any Webform that contains conditionally hidden elements containers, or pages.'),
+      t('Any element that is conditionally hidden will have its submission data unset.'),
       t("Existing submissions that have conditionally hidden elements will have the element's submission data unset when the submission is updated."),
       [
         '#type' => 'link',
