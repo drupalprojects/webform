@@ -24,6 +24,13 @@ elements: |
       visible:
         ':input[name="trigger_checkbox"]':
           checked: true
+  dependent_checkbox:
+    '#type': checkbox
+    '#title': dependent_checkbox
+    '#states':
+      visible:
+        ':input[name="trigger_checkbox"]':
+          checked: true
   dependent_value:
     '#type': value
     '#title': dependent_value
@@ -40,9 +47,19 @@ elements: |
       visible:
         ':input[name="trigger_checkbox"]':
           checked: true
+  dependent_textfield_multiple:
+    '#type': textfield
+    '#title': dependent_textfield
+    '#multiple': true
+    '#default_value':
+      - '{dependent_textfield}'
+    '#states':
+      visible:
+        ':input[name="trigger_checkbox"]':
+          checked: true
   dependent_details:
     '#type': details
-    '#title': 'dependent_details'
+    '#title': dependent_details
     '#states':
       visible:
         ':input[name="trigger_checkbox"]':

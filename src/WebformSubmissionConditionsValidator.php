@@ -270,7 +270,7 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       $element_visible = ($visible && $this->isElementVisible($element, $webform_submission)) ? TRUE : FALSE;
 
       // Set data to empty array or string for any element that is hidden.
-      if (!$element_visible) {
+      if (!$element_visible && isset($data[$key])) {
         $data[$key] = (is_array($data[$key])) ? [] : '';
       }
 

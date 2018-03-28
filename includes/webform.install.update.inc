@@ -2143,15 +2143,13 @@ function webform_update_8116() {
  * Issue #2918669: Elements separated by conditional inside multistep wizard are both saved to submission.
  */
 function webform_update_8117() {
-  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
-  $help_manager = \Drupal::service('webform.help_manager');
   $build  = [
     '#theme' => 'item_list',
-    '#title' => t('Elements, containers, and pages that are hidden using conditional logic will have their submission data unset when a webform is submitted.'),
+    '#title' => t('Elements, containers, and pages that are hidden using conditional logic will have their submission data cleared when a webform is submitted.'),
     '#items' => [
       t('Please make sure to test any Webform that contains conditionally hidden elements containers, or pages.'),
-      t('Any element that is conditionally hidden will have its submission data unset.'),
-      t("Existing submissions that have conditionally hidden elements will have the element's submission data unset when the submission is updated."),
+      t('Any element that is conditionally hidden will have its submission data cleared.'),
+      t("Existing submissions that have conditionally hidden elements will have the element's submission data cleared when the submission is updated."),
       [
         '#type' => 'link',
         '#title' => t('Learn more'),
@@ -2159,5 +2157,8 @@ function webform_update_8117() {
       ],
     ],
   ];
+
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
   $help_manager->addNotification('webform_update_8117', $build,'warning');
 }
