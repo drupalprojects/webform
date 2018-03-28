@@ -58,7 +58,7 @@ interface WebformHelpManagerInterface {
    *
    * @param string $id
    *   The notification id
-   * @param string|\Drupal\Component\Render\MarkupInterface $message
+   * @param string|\Drupal\Component\Render\MarkupInterface|array $message
    *   The notification to be displayed to webform administrators.
    * @param string $type
    *   (optional) The message's type. Defaults to 'status'. These values are
@@ -77,7 +77,7 @@ interface WebformHelpManagerInterface {
    * Get notifications.
    *
    * @param string $type
-   *   (optional) The message's type. Defaults to 'status'. These values are
+   *   (optional) The message's type. These values are
    *   supported:
    *   - 'info'
    *   - 'status'
@@ -85,7 +85,8 @@ interface WebformHelpManagerInterface {
    *   - 'error'
    *
    * @return array
-   *   An array of notifications.
+   *   An array of messages for specified message type or
+   *   all notifications grouped by type.
    *
    * @internal
    *   Currently being used to display notifications related to updates.
