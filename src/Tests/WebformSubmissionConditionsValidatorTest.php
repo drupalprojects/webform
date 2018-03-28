@@ -13,25 +13,26 @@ use Drupal\webform\Entity\Webform;
 class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['filter', 'webform'];
-
-  /**
    * Webforms to load.
    *
    * @var array
    */
   protected static $testWebforms = [
-    'test_form_states_server_required',
-    'test_form_states_server_wizard',
     'test_form_states_server_custom',
     'test_form_states_server_comp',
     'test_form_states_server_multiple',
     'test_form_states_server_nested',
+    'test_form_states_server_preview',
+    'test_form_states_server_required',
+    'test_form_states_server_wizard',
   ];
+
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  public static $modules = ['filter', 'webform'];
 
   /**
    * {@inheritdoc}
@@ -494,4 +495,30 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
     $this->assertRaw('<details data-webform-details-nosave data-webform-key="page_02_details_collapsed" data-drupal-selector="edit-page-02-details-collapsed" aria-describedby="edit-page-02-details-collapsed--description" id="edit-page-02-details-collapsed" class="js-form-wrapper form-wrapper">');
   }
 
+  /**
+   * Tests conditions (#states) validator for elements .
+   */
+  public function testStatesValidatorElementVisible() {
+    $webform = Webform::load('test_form_states_server_preview');
+
+    // Check trigger unchecked and elements are conditionally hidden.
+    $this->postSubmission($webform, [], t('Preview'));
+    $this->assertRaw('trigger_checkbox');
+    $this->assertNoRaw('dependent_checkbox');
+    $this->assertNoRaw('dependent_markup');
+    $this->assertNoRaw('dependent_message');
+    $this->assertNoRaw('dependent_fieldset');
+    $this->assertNoRaw('nested_textfield');
+
+    // Check trigger checked and elements are conditionally visible.
+    $this->postSubmission($webform, ['trigger_checkbox' => TRUE], t('Preview'));
+    $this->assertRaw('trigger_checkbox');
+    $this->assertRaw('dependent_checkbox');
+    $this->assertRaw('dependent_markup');
+    $this->assertRaw('dependent_message');
+    $this->assertRaw('dependent_fieldset');
+    $this->assertRaw('nested_textfield');
+  }
+
 }
+

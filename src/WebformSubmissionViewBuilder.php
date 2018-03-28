@@ -11,6 +11,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
+use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -33,6 +34,13 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
   protected $elementManager;
 
   /**
+   * The webform submission (server-side) conditions (#states) validator.
+   *
+   * @var \Drupal\webform\WebformSubmissionConditionsValidator
+   */
+  protected $conditionsValidator;
+
+  /**
    * Constructs a WebformSubmissionViewBuilder.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -45,11 +53,14 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
    *   The webform request handler.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager service.
+   * @param \Drupal\webform\WebformSubmissionConditionsValidatorInterface $conditions_validator
+   *   The webform submission conditions (#states) validator.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityManagerInterface $entity_manager, LanguageManagerInterface $language_manager, WebformRequestInterface $webform_request, WebformElementManagerInterface $element_manager) {
+  public function __construct(EntityTypeInterface $entity_type, EntityManagerInterface $entity_manager, LanguageManagerInterface $language_manager, WebformRequestInterface $webform_request, WebformElementManagerInterface $element_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator) {
     parent::__construct($entity_type, $entity_manager, $language_manager);
     $this->requestManager = $webform_request;
     $this->elementManager = $element_manager;
+    $this->conditionsValidator = $conditions_validator;
   }
 
   /**
@@ -61,7 +72,8 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
       $container->get('entity.manager'),
       $container->get('language_manager'),
       $container->get('webform.request'),
-      $container->get('plugin.manager.webform.element')
+      $container->get('plugin.manager.webform.element'),
+      $container->get('webform_submission.conditions_validator')
     );
   }
 
@@ -77,7 +89,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
     foreach ($entities as $id => $webform_submission) {
       $webform = $webform_submission->getWebform();
 
-      if ($view_mode == 'preview') {
+      if ($view_mode === 'preview') {
         $options = [
           'excluded_elements' => $webform->getSetting('preview_excluded_elements'),
           'exclude_empty' => $webform->getSetting('preview_exclude_empty'),
@@ -132,26 +144,25 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
     $build = [];
 
     foreach ($elements as $key => $element) {
-      if (!is_array($element) || Element::property($key) || !$this->isVisibleElement($element, $options) || isset($options['excluded_elements'][$key])) {
+      // Make sure this is an element.
+      if (!is_array($element) || Element::property($key)) {
         continue;
       }
 
-      $plugin_id = $this->elementManager->getElementPluginId($element);
       /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
-      $webform_element = $this->elementManager->createInstance($plugin_id);
-
-      // Check element view access.
-      if (empty($options['ignore_access']) && !$webform_element->checkAccessRules('view', $element)) {
-        continue;
-      }
+      $webform_element = $this->elementManager->getElementInstance($element);
 
       // Replace tokens before building the element.
       $webform_element->replaceTokens($element, $webform_submission);
 
       if ($build_element = $webform_element->$build_method($element, $webform_submission, $options)) {
         $build[$key] = $build_element;
+        if (!$this->isElementVisible($element, $webform_submission, $options)) {
+          $build[$key]['#access'] = FALSE;
+        };
       }
     }
+
     return $build;
   }
 
@@ -161,18 +172,12 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
   public function buildTable(array $elements, WebformSubmissionInterface $webform_submission, array $options = []) {
     $rows = [];
     foreach ($elements as $key => $element) {
-      if (isset($options['excluded_elements'][$key])) {
+      if (!$this->isElementVisible($element, $webform_submission, $options)) {
         continue;
       }
 
-      $plugin_id = $this->elementManager->getElementPluginId($element);
       /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
-      $webform_element = $this->elementManager->createInstance($plugin_id);
-
-      // Check element view access.
-      if (!$webform_element->checkAccessRules('view', $element)) {
-        continue;
-      }
+      $webform_element = $this->elementManager->getElementInstance($element);
 
       // Replace tokens before building the element.
       $webform_element->replaceTokens($element, $webform_submission);
@@ -197,11 +202,10 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
   /**
    * Determines if an element is visible.
    *
-   * Copied from: \Drupal\Core\Render\Element::isVisibleElement
-   * but does not hide hidden or value elements.
-   *
    * @param array $element
    *   The element to check for visibility.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
    * @param array $options
    *   - excluded_elements: An array of elements to be excluded.
    *   - ignore_access: Flag to ignore private and/or access controls and always
@@ -210,12 +214,37 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
    *
    * @return bool
    *   TRUE if the element is visible, otherwise FALSE.
+   *
+   * @see \Drupal\webform\WebformSubmissionConditionsValidatorInterface::isElementVisible
+   * @see \Drupal\Core\Render\Element::isVisibleElement
+   *
    */
-  protected function isVisibleElement(array $element, array $options) {
+  protected function isElementVisible(array $element, WebformSubmissionInterface $webform_submission, array $options) {
+    // Checked excluded elements.
+    if (isset($element['#webform_key']) && isset($options['excluded_elements'][$element['#webform_key']])) {
+      return FALSE;
+    }
+
+    // Check if the element is conditionally hidden.
+    if (!$this->conditionsValidator->isElementVisible($element, $webform_submission)) {
+      return FALSE;
+    }
+
+    // Check if ignore access is set.
+    // This is used email handlers to include administrative elements in emails.
     if (!empty($options['ignore_access'])) {
       return TRUE;
     }
-    return (!isset($element['#access']) || (($element['#access'] instanceof AccessResultInterface && $element['#access']->isAllowed()) || ($element['#access'] === TRUE)));
+
+    // Check check the element's #access.
+    if (isset($element['#access']) && (($element['#access'] instanceof AccessResultInterface && $element['#access']->isForbidden()) || ($element['#access'] === FALSE))) {
+      return FALSE;
+    }
+
+    // Finally, check the element's 'view' access.
+    /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
+    $webform_element = $this->elementManager->getElementInstance($element);
+    return $webform_element->checkAccessRules('view', $element) ? TRUE : FALSE;
   }
 
 }

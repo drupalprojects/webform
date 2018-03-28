@@ -1,0 +1,7 @@
+name: 'Webform module custom message tests'
+type: module
+description: 'Support module for Webform module custom message testing.'
+package: Testing
+core: 8.x
+dependencies:
+  - 'webform:webform'

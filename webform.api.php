@@ -297,5 +297,45 @@ function hook_webform_help_alter(array &$help) {
 }
 
 /**
+ * Act on a custom message being displayed, closed or reset.
+ *
+ * @param string $operation
+ *   closed: Returns TRUE if message id is closed.
+ *   close: Set message id state to closed.
+ *   reset: Reset message id's closed state.
+ *
+ * @param string $id
+ *   The message id.
+ *
+ * @return mixed|boolean
+ *   TRUE if message is closed, else NULL
+ *
+ * @internal
+ *   This is an experimental hook whose definition may change.
+ *
+ * @see \Drupal\webform\Element\WebformMessage::isClosed
+ * @see \Drupal\webform\Element\WebformMessage::setClosed
+ * @see \Drupal\webform\Element\WebformMessage::resetClosed
+ */
+function hook_webform_message_custom($operation, $id) {
+  // Handle 'webform_test_message_custom' defined in
+  // webform.webform.test_element_message.yml.
+  if ($id === 'webform_test_message_custom') {
+    switch ($operation) {
+      case 'closed':
+        return \Drupal::state()->get($id, FALSE);
+
+      case 'close':
+        \Drupal::state()->set($id, TRUE);
+        return NULL;
+
+      case 'reset':
+        \Drupal::state()->delete($id);
+        return NULL;
+    }
+  }
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

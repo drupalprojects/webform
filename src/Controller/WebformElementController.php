@@ -34,7 +34,7 @@ class WebformElementController extends ControllerBase {
    * @see \Drupal\webform\Element\WebformMessage::setClosed
    */
   public function close($storage, $id) {
-    if (!in_array($storage, ['user', 'state'])) {
+    if (!in_array($storage, [WebformMessage::STORAGE_USER, WebformMessage::STORAGE_STATE, WebformMessage::STORAGE_CUSTOM])) {
       throw new \Exception('Undefined storage mechanism for Webform close message.');
     }
     WebformMessage::setClosed($storage, $id);

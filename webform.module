@@ -65,6 +65,18 @@ function webform_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
+ * Implements hook_webform_message_custom().
+ */
+function webform_webform_message_custom($operation, $id) {
+  if (strpos($id, 'webform_help_notification__') === 0 && $operation === 'close') {
+    $id = str_replace('webform_help_notification__', '', $id);
+    /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+    $help_manager = \Drupal::service('webform.help_manager');
+    $help_manager->deleteNotification($id);
+  }
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function webform_modules_installed($modules) {

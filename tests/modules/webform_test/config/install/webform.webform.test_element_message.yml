@@ -82,6 +82,13 @@ elements: |
       '#message_message': 'This is message that can be <b>closed and saved in <a href="https://www.drupal.org/docs/8/api/state-api">State API</a></b>. (Authenticated users only)'
       '#message_close': true
       '#message_storage': state
+    message_close_storage_custom:
+      '#type': webform_message
+      '#message_type': info
+      '#message_message': 'This is message that can be <b>closed and saved in <a href="https://cgit.drupalcode.org/webform/tree/webform.api.php">custom storage</a></b>. (Authenticated users only)'
+      '#message_close': true
+      '#message_id': webform_test_message_custom
+      '#message_storage': custom
 css: ''
 javascript: ''
 settings:

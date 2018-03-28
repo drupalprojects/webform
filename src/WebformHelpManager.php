@@ -206,6 +206,40 @@ class WebformHelpManager implements WebformHelpManagerInterface {
   /**
    * {@inheritdoc}
    */
+  public function addNotification($id, $message, $type = 'status') {
+    $notifications = $this->state->get('webform_help_notifications', []);
+    $notifications[$type][$id] = $message;
+    $this->state->set('webform_help_notifications', $notifications);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNotifications($type = NULL) {
+    $notifications = $this->state->get('webform_help_notifications', []);
+    if ($type) {
+      return (isset($notifications[$type])) ? $notifications[$type] : [];
+    }
+    else {
+      return $notifications;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteNotification($id) {
+    $notifications = $this->state->get('webform_help_notifications', []);
+    foreach ($notifications as &$messages) {
+      unset($messages[$id]);
+    }
+    array_filter($notifications);
+    $this->state->set('webform_help_notifications', $notifications);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildHelp($route_name, RouteMatchInterface $route_match) {
     // Get path from route match.
     $path = preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', Url::fromRouteMatch($route_match)->setAbsolute(FALSE)->toString());
@@ -991,6 +1025,31 @@ class WebformHelpManager implements WebformHelpManagerInterface {
    */
   protected function initHelp() {
     $help = [];
+
+    /**************************************************************************/
+    // Notifications.
+    /**************************************************************************/
+
+    if ($this->currentUser->hasPermission('administer webform')) {
+      $notifications = $this->getNotifications();
+      foreach ($notifications as $type => $messages) {
+        foreach ($messages as $id => $message) {
+          $message_id = 'webform_help_notification__' . $id;
+          $help['webform_help_notification__' . $id] = [
+            'group' => 'notifications',
+            'content' => $message,
+            'message_id' => $message_id,
+            'message_type' => $type,
+            'message_close' => TRUE,
+            'message_storage' => WebformMessage::STORAGE_CUSTOM,
+            'routes' => [
+              // @see /admin/structure/webform
+              'entity.webform.collection',
+            ],
+          ];
+        }
+      }
+    }
 
     /**************************************************************************/
     // Promotions.

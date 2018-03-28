@@ -54,6 +54,56 @@ interface WebformHelpManagerInterface {
   public function getVideoLinks($id);
 
   /**
+   * Sets a notification to be displayed to webform administrators.
+   *
+   * @param string $id
+   *   The notification id
+   * @param string|\Drupal\Component\Render\MarkupInterface $message
+   *   The notification to be displayed to webform administrators.
+   * @param string $type
+   *   (optional) The message's type. Defaults to 'status'. These values are
+   *   supported:
+   *   - 'info'
+   *   - 'status'
+   *   - 'warning'
+   *   - 'error'
+   *
+   * @internal
+   *   Currently being used to display notifications related to updates.
+   */
+  public function addNotification($id, $message, $type = 'status');
+
+  /**
+   * Get notifications.
+   *
+   * @param string $type
+   *   (optional) The message's type. Defaults to 'status'. These values are
+   *   supported:
+   *   - 'info'
+   *   - 'status'
+   *   - 'warning'
+   *   - 'error'
+   *
+   * @return array
+   *   An array of notifications.
+   *
+   * @internal
+   *   Currently being used to display notifications related to updates.
+   */
+  public function getNotifications($type = NULL);
+
+  /**
+   * Delete a notification by id.
+   *
+   * @param string $id
+   *   The notification id
+   *
+   * @internal
+   *   Currently being used to display notifications related to updates.
+   */
+  public function deleteNotification($id);
+
+  /**
    * Build help for specific route.
    *
    * @param string $route_name
