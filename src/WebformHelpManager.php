@@ -1005,6 +1005,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           ],
         ],
       ],
+      'webform' => [
+        'title' => $this->t('Webform: There is this for that'),
+        'content' => $this->t('One of the key mantras in the Drupal is “there is a module for that, “ and Webform is the module for building forms for Drupal 8.'),
+        'youtube_id' => 'zl_ErUKymYo',
+        'presentation_id' => '14vpNvDhYKGhHspu9BurIneTL4C1spyfwsqI82MvTYUA',
+      ],
     ];
     foreach ($videos as $id => &$video_info) {
       $video_info['id'] = $id;
