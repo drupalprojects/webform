@@ -240,6 +240,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
     // Get submission data.
     $data = $webform_submission->getData();
 
+    // Recursive through the form and unset unset submission data for
+    // form elements that are hidden.
     $this->submitFormRecursive($form, $webform_submission, $data);
 
     // Set submission data.
@@ -247,9 +249,9 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
   }
 
   /**
-   * Recursively unset submission data form elements that are hidden.
+   * Recursively unset submission data for form elements that are hidden.
    *
-   * @param array $form
+   * @param array $elements
    *   An array of form elements.
    * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
    *   A webform submission.
@@ -258,8 +260,8 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
    * @param bool $visible
    *   Flag that determine if the currrent form elements are visible.
    */
-  protected function submitFormRecursive(array $form, WebformSubmissionInterface $webform_submission, array &$data, $visible = TRUE) {
-    foreach ($form as $key => &$element) {
+  protected function submitFormRecursive(array $elements, WebformSubmissionInterface $webform_submission, array &$data, $visible = TRUE) {
+    foreach ($elements as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;
       }
