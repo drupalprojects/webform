@@ -10,6 +10,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformOptions;
 use Drupal\webform\Plugin\WebformHandler\ActionWebformHandler;
@@ -2136,4 +2137,27 @@ function webform_update_8116() {
     '#multiple__label' => '',
     '#multiple__labels' => '',
   ]);
+}
+
+/**
+ * Issue #2918669: Elements separated by conditional inside multistep wizard are both saved to submission.
+ */
+function webform_update_8117() {
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+  $build  = [
+    '#theme' => 'item_list',
+    '#title' => t('Elements, containers, and pages that are hidden using conditional logic will have their submission data unset when a webform is submitted.'),
+    '#items' => [
+      t('Any element that is conditionally hidden will have its submission data unset.'),
+      t('Please make sure to test any Webform that contains conditionally hidden elements containers, or pages.'),
+      t("Existing submissions that have conditionally hidden elements will have the element's submission data unset when the submission is updated."),
+      [
+        '#type' => 'link',
+        '#title' => t('Learn more'),
+        '#url' => Url::fromUri('https://www.drupal.org/node/2956589'),
+      ],
+    ],
+  ];
+  $help_manager->addNotification('webform_update_8117', $build,'warning');
 }
