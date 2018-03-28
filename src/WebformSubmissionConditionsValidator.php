@@ -269,9 +269,9 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
       // Deterine if the element is visible.
       $element_visible = ($visible && $this->isElementVisible($element, $webform_submission)) ? TRUE : FALSE;
 
-      // Unset data for any element that is hidden.
+      // Set data to NULL for any element that is hidden.
       if (!$element_visible) {
-        unset($data[$key]);
+        $data[$key] = NULL;
       }
 
       $this->submitFormRecursive($element, $webform_submission, $data, $element_visible);
