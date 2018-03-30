@@ -170,7 +170,8 @@ wizard_2_test_composite_multiple: {  }");
       'wizard_2_test_composite_multiple[items][0][_item_][datelist][minute]' => '20',
     ];
     $this->drupalPostForm(NULL, $edit, t('Next Page >'));
-    $this->assertRaw("wizard_1_custom_composite:
+
+    $raw = "wizard_1_custom_composite:
   - datelist: '2001-01-01T01:10:00+1100'
     textfield: '{wizard_1_custom_composite_textfield}'
 wizard_1_test_composite:
@@ -239,7 +240,20 @@ wizard_2_test_composite_multiple:
     webform_toggle: ''
     entity_autocomplete: null
     datetime: ''
-    nested_radios: ''");
+    nested_radios: ''";
+    $this->assertRaw($raw);
+
+    // Make sure navigating back and next through the
+    // previous pages does not lose any data.
+    $this->drupalPostForm(NULL, [], t('< Previous Page'));
+    $this->assertRaw($raw);
+    $this->drupalPostForm(NULL, [], t('< Previous Page'));
+    $this->assertRaw($raw);
+    $this->drupalPostForm(NULL, [], t('Next Page >'));
+    $this->assertRaw($raw);
+    $this->drupalPostForm(NULL, [], t('Next Page >'));
+    $this->assertRaw($raw);
   }
+
 
 }

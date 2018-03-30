@@ -150,17 +150,21 @@ class WebformMultiple extends FormElement {
     $weight = 0;
     $rows = [];
 
+
     if (!$form_state->isProcessingInput() && isset($element['#default_value']) && is_array($element['#default_value'])) {
       $default_values = $element['#default_value'];
     }
     elseif ($form_state->isProcessingInput() && isset($element['#value']) && is_array($element['#value'])) {
-      // Only set the default values if the form is being processed but the
-      // multiple element is not being displayed via #access: FALSE.
-      // This happens during a multistep wizard form with a multiple element.
-      $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
-      $default_values = (!$has_access) ? $element['#value'] : [];
+      $default_values = $element['#value'];
     }
     else {
+      $default_values = [];
+    }
+
+    // When adding/removing elements we don't need to set any default values.
+    $action_key = static::getStorageKey($element, 'action');
+    if ($form_state->get($action_key)) {
+      $form_state->set($action_key, FALSE);
       $default_values = [];
     }
 
@@ -698,7 +702,10 @@ class WebformMultiple extends FormElement {
     $form_state->setValueForElement($element['items'], $element['items']['#value']);
     NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $element['items']['#value']);
 
-    // Rebuild the webform.
+    $action_key = static::getStorageKey($element, 'action');
+    $form_state->set($action_key, TRUE);
+
+      // Rebuild the webform.
     $form_state->setRebuild();
   }
 
@@ -732,6 +739,9 @@ class WebformMultiple extends FormElement {
     $form_state->setValueForElement($element['items'], $values);
     NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $values);
 
+    $action_key = static::getStorageKey($element, 'action');
+    $form_state->set($action_key, TRUE);
+
     // Rebuild the webform.
     $form_state->setRebuild();
   }
@@ -764,6 +774,9 @@ class WebformMultiple extends FormElement {
     // Reset values.
     $form_state->setValueForElement($element['items'], $values);
     NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $values);
+
+    $action_key = static::getStorageKey($element, 'action');
+    $form_state->set($action_key, TRUE);
 
     // Rebuild the webform.
     $form_state->setRebuild();
