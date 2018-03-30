@@ -293,10 +293,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Provides a basic link dialog for CKEditor.'),
       'notes' => $this->t('Allows CKEditor to use basic link dialog, which is not included in Drupal core.'),
       'homepage_url' => Url::fromUri('https://ckeditor.com/addon/link'),
-      'download_url' => Url::fromUri('https://download.ckeditor.com/link/releases/link_4.6.2.zip'),
+      'download_url' => Url::fromUri("https://download.ckeditor.com/link/releases/link_$ckeditor_version.zip"),
       'plugin_path' => 'libraries/ckeditor.link/',
       'plugin_url' => "https://cdn.rawgit.com/ckeditor/ckeditor-dev/$ckeditor_version/plugins/link/",
-      'version' => '4.6.2',
+      'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
     $libraries['ckeditor.codemirror'] = [
@@ -304,10 +304,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Provides syntax highlighting for the CKEditor with the CodeMirror Plugin.'),
       'notes' => $this->t('Makes it easier to edit the HTML source.'),
       'homepage_url' => Url::fromUri('https://github.com/w8tcha/CKEditor-CodeMirror-Plugin'),
-      'download_url' => Url::fromUri('https://github.com/w8tcha/CKEditor-CodeMirror-Plugin/releases/download/v1.17.3/CKEditor-CodeMirror-Plugin.zip'),
+      'download_url' => Url::fromUri('https://github.com/w8tcha/CKEditor-CodeMirror-Plugin/releases/download/v1.17.5/CKEditor-CodeMirror-Plugin.zip'),
       'plugin_path' => 'libraries/ckeditor.codemirror/codemirror/',
-      'plugin_url' => "https://cdn.rawgit.com/w8tcha/CKEditor-CodeMirror-Plugin/v1.17.3/codemirror/",
-      'version' => 'v1.17.3',
+      'plugin_url' => "https://cdn.rawgit.com/w8tcha/CKEditor-CodeMirror-Plugin/v1.17.5/codemirror/",
+      'version' => 'v1.17.5',
       'optional' => TRUE,
     ];
     $libraries['codemirror'] = [
@@ -315,8 +315,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
-      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.31.0.zip'),
-      'version' => '5.31.0',
+      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.36.0.zip'),
+      'version' => '5.36.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.geocomplete'] = [
@@ -343,8 +343,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
       'notes' => $this->t('Input masks are used to ensure predefined and custom formats for text fields.'),
       'homepage_url' => Url::fromUri('https://robinherbots.github.io/Inputmask/'),
-      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.10.zip'),
-      'version' => '3.3.10',
+      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.11.zip'),
+      'version' => '3.3.11',
       'optional' => TRUE,
     ];
     $libraries['jquery.intl-tel-input'] = [
@@ -352,8 +352,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user's country, displays a relevant placeholder and provides formatting/validation methods."),
       'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'homepage_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
-      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.1.0.zip'),
-      'version' => '12.1.0',
+      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.1.12.zip'),
+      'version' => '12.1.12',
       'optional' => TRUE,
     ];
     $libraries['jquery.rateit'] = [
@@ -379,8 +379,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A jQuery plugin that makes long, unwieldy select boxes much more user-friendly.'),
       'notes' => $this->t('Chosen is used to improve the user experience for select menus. Chosen is an alternative to Select2.'),
       'homepage_url' => Url::fromUri('https://harvesthq.github.io/chosen/'),
-      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.8.2/chosen_v1.8.2.zip'),
-      'version' => '1.8.2',
+      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.8.3/chosen_v1.8.3.zip'),
+      'version' => '1.8.3',
       'optional' => TRUE,
     ];
     $libraries['jquery.timepicker'] = [
@@ -388,8 +388,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A lightweight, customizable javascript timepicker plugin for jQuery, inspired by Google Calendar.'),
       'notes' => $this->t('Timepicker is used to provide a polyfill for HTML 5 time elements.'),
       'homepage_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker'),
-      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.12.zip'),
-      'version' => '1.11.12',
+      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.13.zip'),
+      'version' => '1.11.13',
       'optional' => TRUE,
     ];
     $libraries['jquery.toggles'] = [

@@ -787,14 +787,14 @@ imce.input:
 
 libraries.codemirror.text:
   remote: https://github.com/codemirror/codemirror
-  version: &webform_codemirror_version '5.31.0'
+  version: &webform_codemirror_version '5.36.0'
   license: &webform_codemirror_license
     name: MIT
     url: http://codemirror.net/LICENSE
     gpl-compatible: true
   cdn: &webform_codemirror_cdn
-    /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/
-    /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.31.0/
+    /libraries/codemirror/lib/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/
+    /libraries/codemirror/: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/
   css:
     component:
       /libraries/codemirror/lib/codemirror.css: {}
@@ -957,13 +957,13 @@ libraries.jquery.icheck.square:
 
 libraries.jquery.inputmask:
   remote: https://github.com/RobinHerbots/jquery.inputmask
-  version: '3.3.10'
+  version: '3.3.11'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/jquery.inputmask/: https://cdn.rawgit.com/RobinHerbots/Inputmask/3.3.10/
+    /libraries/jquery.inputmask/: https://cdn.rawgit.com/RobinHerbots/Inputmask/3.3.11/
   js:
     /libraries/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js: {}
   dependencies:
@@ -971,13 +971,13 @@ libraries.jquery.inputmask:
 
 libraries.jquery.intl-tel-input:
   remote: https://github.com/jackocnr/intl-tel-input
-  version: 'v12.1.0'
+  version: 'v12.1.12'
   license:
     name: MIT
     url: https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE
     gpl-compatible: true
   cdn:
-    /libraries/jquery.intl-tel-input/build/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.0/
+    /libraries/jquery.intl-tel-input/build/: https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.12/
   css:
     component:
       /libraries/jquery.intl-tel-input/build/css/intlTelInput.css: {}
@@ -1023,13 +1023,13 @@ libraries.jquery.select2:
 
 libraries.jquery.chosen:
   remote: https://harvesthq.github.io/chosen/
-  version: 'v1.8.2'
+  version: 'v1.8.3'
   license:
     name: MIT
     url: https://github.com/harvesthq/chosen/blob/master/LICENSE.md
     gpl-compatible: true
   cdn:
-    /libraries/jquery.chosen/: https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/
+    /libraries/jquery.chosen/: https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.3/
   css:
     component:
       /libraries/jquery.chosen/chosen.css: {}
@@ -1040,13 +1040,13 @@ libraries.jquery.chosen:
 
 libraries.jquery.timepicker:
   remote: https://github.com/jonthornton/jquery-timepicker
-  version: '1.11.12'
+  version: '1.11.13'
   license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
-    /libraries/jquery.timepicker/: https://cdn.rawgit.com/jonthornton/jquery-timepicker/1.11.12/
+    /libraries/jquery.timepicker/: https://cdn.rawgit.com/jonthornton/jquery-timepicker/1.11.13/
   css:
     component:
       /libraries/jquery.timepicker/jquery.timepicker.css: {}

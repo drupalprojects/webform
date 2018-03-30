@@ -596,10 +596,6 @@ class WebformCliService implements WebformCliServiceInterface {
    * {@inheritdoc}
    */
   public function drush_webform_libraries_composer() {
-    /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
-    $libraries_manager = \Drupal::service('webform.libraries_manager');
-    $libraries = $libraries_manager->getLibraries(TRUE);
-
     // Load existing composer.json file.
     $data = json_decode('{
   "name": "drupal/webform",
@@ -621,41 +617,10 @@ class WebformCliService implements WebformCliServiceInterface {
   }
 }', TRUE);
 
-    $repositories = [];
-    $require = [];
-    foreach ($libraries as $library_name => $library) {
-      $dist_url = $library['download_url']->toString();
-      $dist_type = (preg_match('/\.zip$/', $dist_url)) ? 'zip' : 'file';
-      $package_version = $library['version'];
-      $package_name = (strpos($library_name, '.') === FALSE) ? "$library_name/$library_name" : str_replace('.', '/', $library_name);
-
-      $repositories[$library_name] = [
-        'type' => 'package',
-        'package' => [
-          'name' => $package_name,
-          'version' => $package_version ,
-          'type' => 'drupal-library',
-          'extra' => [
-            'installer-name' => $library_name,
-          ],
-          'dist' => [
-            'url' => $dist_url,
-            'type' => $dist_type,
-          ],
-          'require' => [
-            'composer/installers' => '~1.0',
-          ],
-        ],
-      ];
-
-      $require[$package_name] = $package_version;
-    }
-    ksort($repositories);
-    ksort($require);
-    $data['repositories'] = $repositories;
-    // Drupal.org test bot is throwing...
-    // Your requirements could not be resolved to an installable set of packages.
-    $data['require'] = $require;
+    // Set libraries.
+    $data['repositories'] = [];
+    $data['require'] = [];
+    $this->drush_webform_composer_set_libraries($data['repositories'], $data['require']);
 
     $this->drush_print(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
   }
@@ -963,9 +928,9 @@ class WebformCliService implements WebformCliServiceInterface {
 
     $json = file_get_contents($composer_json);
     $data = Json::decode($json) + [
-        'repositories' => [],
-        'require' => [],
-      ];
+      'repositories' => [],
+      'require' => [],
+    ];
 
     // Add drupal-library to installer paths.
     if (strpos($json, 'type:drupal-library') === FALSE) {
@@ -984,12 +949,28 @@ class WebformCliService implements WebformCliServiceInterface {
       }
     }
 
+    // Set libraries.
+    $this->drush_webform_composer_set_libraries($repositories, $require);
+
+    $json_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
+    file_put_contents($composer_json, json_encode($data, $json_options));
+
+    $this->drush_print("$composer_json updated.");
+    $this->drush_print('Make sure to run `composer update`.');
+  }
+
+  /**
+   * Set composer libraries.
+   *
+   * @param array $repositories
+   *   Composer repositories.
+   * @param array $require
+   *   Composer require.
+   */
+  protected function drush_webform_composer_set_libraries(array &$repositories, array &$require) {
     /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
     $libraries_manager = \Drupal::service('webform.libraries_manager');
     $libraries = $libraries_manager->getLibraries(TRUE);
-    // Track if recommended secure_http: true can be used.
-    // @see Issue #2885338: Composer: CKeditor plugins are downloadable with http.
-    $secure_http = TRUE;
     foreach ($libraries as $library_name => $library) {
       // Never overwrite existing repositories.
       if (isset($repositories[$library_name])) {
@@ -1000,9 +981,6 @@ class WebformCliService implements WebformCliServiceInterface {
       $dist_type = (preg_match('/\.zip$/', $dist_url)) ? 'zip' : 'file';
       $package_version = $library['version'];
       $package_name = (strpos($library_name, '.') === FALSE) ? "$library_name/$library_name" : str_replace('.', '/', $library_name);
-      if (strpos($dist_url, 'http://') === 0) {
-        $secure_http = FALSE;
-      }
       $repositories[$library_name] = [
         '_webform' => TRUE,
         'type' => 'package',
@@ -1027,24 +1005,7 @@ class WebformCliService implements WebformCliServiceInterface {
     }
     ksort($repositories);
     ksort($require);
-
-    if ($secure_http) {
-      unset($data['config']['secure-http']);
-    }
-    else {
-      $this->drush_print('Secure HTTP had to be disabled to support CKEditor add-ons.');
-      $this->drush_print('@see http://dgo.to/2885338');
-      $this->drush_print('@see https://getcomposer.org/doc/06-config.md#secure-http');
-      $data['config']['secure-http'] = FALSE;
-    }
-
-    $json_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
-    file_put_contents($composer_json, json_encode($data, $json_options));
-
-    $this->drush_print("$composer_json updated.");
-    $this->drush_print('Make sure to run `composer update`.');
   }
-
   /******************************************************************************/
   // Generate commands.
   /******************************************************************************/
