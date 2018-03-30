@@ -2100,7 +2100,7 @@ function webform_update_8114() {
   $contribute_config = \Drupal::configFactory()->getEditable('contribute.settings');
 
   // Migrate Contribute account info to Webform Contribute account info.
-  \Drupal::configFactory()->getEditable('webform.settingProvide dedicated \'test\' webform operation and access rule. s')
+  \Drupal::configFactory()->getEditable('webform.settings')
     ->set('contribute.account_type', $contribute_config->get('account_type') ?: 'user')
     ->set('contribute.account_id', $contribute_config->get('account_id') ?: NULL)
     ->save();
