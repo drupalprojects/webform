@@ -74,16 +74,16 @@ References
 - [Issue #2870145: Set printerClass in phpunit.xml.dist](https://www.drupal.org/node/2870145) 
 - [Lesson 10.2 - Unit testing](https://docs.acquia.com/article/lesson-102-unit-testing)
 
-
-    # Execute all Webform PHPUnit tests.
-    cd /var/www/sites/d8_webform/core
-    php ../vendor/phpunit/phpunit/phpunit --printer="\Drupal\Tests\Listeners\HtmlOutputPrinter" --group webform
-
-    cd /var/www/sites/d8_webform/core
-
-    # Execute individual PHPUnit tests.
+    # Export database and base URL.
     export SIMPLETEST_DB=mysql://drupal_d8_webform:drupal.@dm1n@localhost/drupal_d8_webform;
     export SIMPLETEST_BASE_URL='http://localhost/wf';
+
+    # Execute all Webform PHPUnit tests.
+    cd /var/www/sites/d8_webform/web/core
+    php ../../vendor/phpunit/phpunit/phpunit --printer="\Drupal\Tests\Listeners\HtmlOutputPrinter" --group webform
+
+    # Execute individual PHPUnit tests.
+    cd /var/www/sites/d8_webform/web/core
 
     # Functional test.    
     php ../../vendor/phpunit/phpunit/phpunit --printer="\Drupal\Tests\Listeners\HtmlOutputPrinter" ../modules/sandbox/webform/tests/src/Functional/WebformExampleFunctionalTest.php

@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
@@ -134,6 +135,13 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
     if ($max_age) {
       $elements['#cache']['max-age'] = $max_age;
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkAccess(EntityInterface $entity) {
+    return $entity->access('submission_create', NULL, TRUE);
   }
 
 }

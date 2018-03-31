@@ -43,6 +43,17 @@
 'delete own webform':
   title: 'Delete own webform'
 
+'access own webform configuration':
+  title: 'Access own webform configuration'
+  description: 'Allows users and applications to access a webform''s configuration created by the user.'
+  restrict access: true
+  warning: 'Warning: Give to trusted roles only; this permission has security implications. Note: A webform''s configuration includes all settings and handlers which can contain sensitive information.'
+'access any webform configuration':
+  title: 'Access own webform configuration'
+  description: 'Allows users and applications to access any webform''s configuration.'
+  restrict access: true
+  warning: 'Warning: Give to trusted roles only; this permission has security implications. Note: A webform''s configuration includes all settings and handlers which can contain sensitive information.'
+
 'view any webform submission':
   title: 'View any webform submission'
   description: 'Allows viewing <em>all</em> submissions.'

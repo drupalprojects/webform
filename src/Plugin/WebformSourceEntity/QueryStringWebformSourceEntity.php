@@ -139,8 +139,17 @@ class QueryStringWebformSourceEntity extends PluginBase implements WebformSource
     }
 
     // Check source entity access.
-    if (!$source_entity->access('view')) {
-      return NULL;
+    // Webform view access is reserved for accessing webform configuration
+    // so we are going to check the webform.submission.create.
+    if ($source_entity->getEntityTypeId() == 'webform') {
+      if (!$source_entity->access('submission_create')) {
+        return NULL;
+      }
+    }
+    else {
+      if (!$source_entity->access('view')) {
+        return NULL;
+      }
     }
 
     // Check that the webform is referenced by the source entity.

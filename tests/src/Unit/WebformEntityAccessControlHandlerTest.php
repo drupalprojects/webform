@@ -183,7 +183,36 @@ class WebformEntityAccessControlHandlerTest extends UnitTestCase {
    * @see testCheckAccess()
    */
   public function providerCheckAccess() {
-    $tests[] = ['view', [], [], [], ['is_allowed' => TRUE], 'View operation'];
+    // The "view" operation.
+    $tests[] = ['view', [], [], [], [
+      'is_allowed' => FALSE,
+      'cache_tags' => ['webform_cache_tag'],
+      'cache_contexts' => ['webform_cache_context'],
+    ], 'View when nobody'];
+
+    $tests[] = ['view', [], ['administer'], [], [
+      'is_allowed' => TRUE,
+      'cache_tags' => ['check_access_rules_cache_tag', 'webform_cache_tag'],
+      'cache_contexts' => ['check_access_rules_cache_context', 'user', 'user.permissions', 'webform_cache_context'],
+    ], 'Access when admin of the webform'];
+
+    $tests[] = ['view', ['access any webform configuration'], [], [], [
+      'is_allowed' => TRUE,
+      'cache_tags' => ['check_access_rules_cache_tag', 'webform_cache_tag'],
+      'cache_contexts' => ['check_access_rules_cache_context', 'user', 'user.permissions', 'webform_cache_context'],
+    ], 'Access when has "access any webform configuration" permission'];
+
+    $tests[] = ['view', ['access own webform configuration'], [], [], [
+      'is_allowed' => FALSE,
+      'cache_tags' => ['webform_cache_tag'],
+      'cache_contexts' => ['webform_cache_context'],
+    ], 'Access when has "access own webform configuration" permission but is not owner'];
+
+    $tests[] = ['view', ['access own webform configuration'], [], ['is_owner' => TRUE], [
+      'is_allowed' => TRUE,
+      'cache_tags' => ['check_access_rules_cache_tag', 'webform_cache_tag'],
+      'cache_contexts' => ['check_access_rules_cache_context', 'user', 'user.permissions', 'webform_cache_context'],
+    ], 'View when has "access own webform configuration" permission and is owner'];
 
     // The "update" operation.
     $tests[] = ['update', [], [], [], [
