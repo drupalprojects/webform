@@ -375,9 +375,3 @@ class WebformEntityAccessControlHandlerTest extends UnitTestCase {
   }
 
 }
-
-if (!function_exists('t')) {
-  function t($string, array $args = []) {
-    return strtr($string, $args);
-  }
-}

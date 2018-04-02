@@ -190,7 +190,7 @@ class WebformEntityAccessControlHandler extends EntityAccessControlHandler imple
     // so that blocked REST API requests can better understand
     // why access was denied.
     if ($access_result->isNeutral() && $operation === 'view') {
-      $access_result = AccessResult::neutral((string)t("The 'administer webform' or 'access own or any webform configuration' permission is required."));
+      $access_result = AccessResult::neutral("The 'administer webform' or 'access own or any webform configuration' permission is required.");
     }
 
     // Make sure the webform is added as a cache dependency.
