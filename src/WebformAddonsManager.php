@@ -214,6 +214,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: Micro Webform.
+    $projects['micro_webform'] = [
+      'title' => $this->t('Micro Webform'),
+      'description' => $this->t('Integrate webform module with a micro site.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/micro_webform'),
+      'category' => 'integration',
+    ];
+
     // Integration: Webform iContact.
     $projects['webform_icontact'] = [
       'title' => $this->t('Webform iContact'),
