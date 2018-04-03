@@ -485,7 +485,17 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return ($is_raw) ? $source_entity->getEntityTypeId . ':' . $source_entity->id() : ($source_entity->hasLinkTemplate('canonical') ? $source_entity->toLink() : '');
 
       case 'langcode':
-        return ($is_raw) ? $entity->langcode->value : \Drupal::languageManager()->getLanguage($entity->langcode->value)->getName();
+        $langcode = $entity->langcode->value;
+        if (!$langcode) {
+          return '';
+        }
+        if ($is_raw) {
+          return $langcode;
+        }
+        else {
+          $language = \Drupal::languageManager()->getLanguage($langcode);
+          return ($language) ? $language->getName() : $langcode;
+        }
 
       case 'notes':
         $notes_url = $this->ensureDestination($this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form'));
