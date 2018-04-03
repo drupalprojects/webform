@@ -331,7 +331,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
       if (empty($element['#title'])) {
         if (!empty($element['#markup'])) {
-          $element['#title'] = Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE);
+          $element['#title'] = ['#markup' => Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE)];
         }
         else {
           $element['#title'] = '[' . $element_key . ']';
