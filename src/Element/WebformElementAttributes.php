@@ -82,20 +82,7 @@ class WebformElementAttributes extends FormElement {
         ],
         '#default_value' => $element['#default_value']['class'],
       ];
-
       WebformElementHelper::enhanceSelect($element['class'], TRUE);
-
-      // ISSUE:
-      // Nested element with #element_validate callback that alter an
-      // element's value can break the returned value.
-      //
-      // WORKAROUND:
-      // Manually process the 'webform_select_other' element.
-      WebformSelectOther::valueCallback($element['class'], FALSE, $form_state);
-      WebformSelectOther::processWebformOther($element['class'], $form_state, $complete_form);
-
-      $element['class']['#type'] = 'item';
-      unset($element['class']['#element_validate']);
     }
     else {
       $element['class'] = [
