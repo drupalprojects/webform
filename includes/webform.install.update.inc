@@ -2152,3 +2152,25 @@ function webform_update_8117() {
   $config->save();
 }
 
+/**
+ * Issue #2957074: Invalid Tokens in Email Handler.
+ */
+function webform_update_8118() {
+  $config_factory = \Drupal::configFactory();
+
+  // Update 'webform.settings' configuration.
+  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $yaml = Yaml::encode($settings_config->getRawData());
+  $yaml = str_replace('[webform-submission:', '[webform_submission:', $yaml);
+  $settings_config->setData(Yaml::decode($yaml));
+  $settings_config->save();
+
+  // Update 'webform.webform.*' configuration.
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $yaml = Yaml::encode($webform_config->getRawData());
+    $yaml = str_replace('[webform-submission:', '[webform_submission:', $yaml);
+    $webform_config->setData(Yaml::decode($yaml));
+    $webform_config->save();
+  }
+}
