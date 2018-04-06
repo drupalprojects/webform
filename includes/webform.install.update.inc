@@ -2174,3 +2174,17 @@ function webform_update_8118() {
     $webform_config->save();
   }
 }
+
+/**
+ * Issue #2957002: Same webform multiple times on the same page.
+ */
+function webform_update_8119() {
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+  $help_manager->addNotification('webform_update_8119',
+    t('<strong>ATTENTION DEVELOPERS!!!</strong> The webform submission form\'s  BASE_FORM_ID and FORM_ID have changed.') .
+    '<br/>' . t('Please make sure to update all webform related <code>hook_form_BASE_FORM_ID_alter()</code> and <code>hook_form_FORM_ID_alter()</code> hooks.') .
+    ' ' . t('<a href=":href">Learn more</a>', [':href' => 'https://www.drupal.org/node/2959264']),
+    'warning'
+  );
+}

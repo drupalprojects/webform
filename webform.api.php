@@ -149,15 +149,6 @@ function hook_webform_submission_form_alter(array &$form, \Drupal\Core\Form\Form
 }
 
 /**
- * Perform alterations by FORM_ID before a webform submission form is rendered.
- *
- * @ingroup form_api
- */
-function hook_webform_submission_form_FORM_ID_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-
-}
-
-/**
  * Perform alterations on webform admin third party settings form.
  *
  * This hook is identical to hook_form_alter() but allows contrib and custom
