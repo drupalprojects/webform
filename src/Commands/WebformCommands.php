@@ -161,11 +161,12 @@ class WebformCommands extends WebformCommandsBase {
    * Generates the Webform module's composer.json with libraries as repositories.
    *
    * @command webform:libraries:composer
+   * @option disable-tls If set to true all HTTPS URLs will be tried with HTTP instead and no network level encryption is performed.
    * @usage webform-libraries-composer
    *   Generates the Webform module's composer.json with libraries as repositories.
    * @aliases wflc
    */
-  public function drush_webform_libraries_composer() {
+  public function drush_webform_libraries_composer(array $options = ['disable-tls' => FALSE]) {
     $this->cliService->drush_webform_libraries_composer();
   }
 
@@ -288,11 +289,12 @@ class WebformCommands extends WebformCommandsBase {
    * Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.
    *
    * @command webform:composer:update
+   * @option disable-tls If set to true all HTTPS URLs will be tried with HTTP instead and no network level encryption is performed.
    * @usage webform-composer-update
    *   Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.
    * @aliases wfcu
    */
-  public function drush_webform_composer_update() {
+  public function drush_webform_composer_update(array $options = ['disable-tls' => FALSE]) {
     $this->cliService->drush_webform_composer_update();
   }
 

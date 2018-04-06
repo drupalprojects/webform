@@ -184,6 +184,9 @@ class WebformCliService implements WebformCliServiceInterface {
       'description' => "Generates the Webform module's composer.json with libraries as repositories.",
       'core' => ['8+'],
       'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
+      'options' => [
+        'disable-tls' => '[boolean] If set to true all HTTPS URLs will be tried with HTTP instead and no network level encryption is performed.',
+      ],
       'examples' => [
         'webform-libraries-composer' => "Generates the Webform module's composer.json with libraries as repositories.",
       ],
@@ -257,6 +260,9 @@ class WebformCliService implements WebformCliServiceInterface {
       'description' => "Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.",
       'core' => ['8+'],
       'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
+      'options' => [
+        'disable-tls' => '[boolean] If set to true all HTTPS URLs will be tried with HTTP instead and no network level encryption is performed.',
+      ],
       'examples' => [
         'webform-composer-update' => "Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.",
       ],
@@ -617,6 +623,9 @@ class WebformCliService implements WebformCliServiceInterface {
   }
 }', TRUE);
 
+    // Set disable tls.
+    $this->drush_webform_composer_set_disable_tls($data);
+
     // Set libraries.
     $data['repositories'] = [];
     $data['require'] = [];
@@ -949,6 +958,9 @@ class WebformCliService implements WebformCliServiceInterface {
       }
     }
 
+    // Set disable tls.
+    $this->drush_webform_composer_set_disable_tls($data);
+
     // Set libraries.
     $this->drush_webform_composer_set_libraries($repositories, $require);
 
@@ -957,6 +969,25 @@ class WebformCliService implements WebformCliServiceInterface {
 
     $this->drush_print("$composer_json updated.");
     $this->drush_print('Make sure to run `composer update`.');
+  }
+
+
+  /**
+   * Set composer disable tls.
+   *
+   * This is needed when CKEditor's HTTPS server's SSL is not working properly.
+   *
+   * @param array $data
+   *   Composer JSON data.
+   */
+  protected function drush_webform_composer_set_disable_tls(array &$data) {
+    // Remove disable-tls config.
+    if (isset($data['config']) && isset($data['config']['disable-tls'])) {
+      unset($data['config']['disable-tls']);
+    }
+    if ($this->drush_get_option('disable-tls')) {
+      $data['config']['disable-tls'] = TRUE;
+    }
   }
 
   /**
@@ -1006,6 +1037,7 @@ class WebformCliService implements WebformCliServiceInterface {
     ksort($repositories);
     ksort($require);
   }
+
   /******************************************************************************/
   // Generate commands.
   /******************************************************************************/
