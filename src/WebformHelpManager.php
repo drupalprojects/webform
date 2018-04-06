@@ -1870,8 +1870,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Let other modules provide any extra help.
-    $help += $this->moduleHandler->invokeAll('webform_help');
-    $this->moduleHandler->alter('webform_help', $help);
+    $help += $this->moduleHandler->invokeAll('webform_help_info');
+    $this->moduleHandler->alter('webform_help_info', $help);
 
     /**************************************************************************/
 

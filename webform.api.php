@@ -259,7 +259,7 @@ function hook_webform_libraries_info_alter(&$libraries) {
  *   - message_storage: (string) Will be supplied into 'webform_message'
  *     element.
  */
-function hook_webform_help() {
+function hook_webform_help_info() {
   $help = [];
 
   $help['my_custom_help'] = [
@@ -288,9 +288,9 @@ function hook_webform_help() {
  * Alter the webform help.
  *
  * @param array $help
- *   Webform help data as collected from hook_webform_help().
+ *   Webform help data as collected from hook_webform_help_info().
  */
-function hook_webform_help_alter(array &$help) {
+function hook_webform_help_info_alter(array &$help) {
   if (isset($help['some_help_i_wanna_change'])) {
     $help['title'] = t('This is a really cool help message. Do read it thorough!');
   }
