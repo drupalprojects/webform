@@ -7,6 +7,10 @@
 
   'use strict';
 
+  Drupal.webform = Drupal.webform || {};
+  Drupal.webform.detailsToggle = Drupal.webform.detailsToggle || {};
+  Drupal.webform.detailsToggle.options = Drupal.webform.detailsToggle.options || {};
+
   /**
    * Attach handler to toggle details open/close state.
    *
@@ -16,6 +20,10 @@
     attach: function (context) {
       $('.js-webform-details-toggle', context).once('webform-details-toggle').each(function () {
         var $form = $(this);
+
+        var options = $.extend({
+          'button': '<button type="button" class="link webform-details-toggle-state"></button>'
+        }, Drupal.webform.detailsToggle.options);
 
         // Get only the main details elements and ingnore all nested details.
         var $details = $form.find('details').filter(function() {
@@ -30,7 +38,7 @@
         }
 
         // Add toggle state link to first details element.
-        $details.first().before($('<button type="button" class="link webform-details-toggle-state"></button>')
+        $details.first().before($(options.button)
           .attr('title', Drupal.t('Toggle details widget state.'))
           .on('click', function (e) {
             var open;
