@@ -746,7 +746,10 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Display admin only message.
-    if ($this->isGet() && $this->isRoute('webform.canonical') && !$this->getWebform()->getSetting('page')) {
+    if ($this->isGet()
+      && $this->isRoute('webform.canonical')
+      && $this->getRouteMatch()->getRawParameter('webform') === $webform->id()
+      && !$this->getWebform()->getSetting('page')) {
       $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_PAGE, 'info');
     }
 
