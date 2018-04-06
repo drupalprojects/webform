@@ -11,6 +11,7 @@ use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
+use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformLibrariesManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -450,19 +451,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
       $row['id'] = ['#markup' => $element_id];
 
       // Item format.
-      $item_formats = $element_plugin->getItemFormats();
-      foreach ($item_formats as $format_name => $format_label) {
-        if (is_array($format_label)) {
-          // Support optgroup.
-          // @see \Drupal\webform\Plugin\WebformElement\WebformImageFile::getItemFormats.
-          foreach ($format_label as $format_label_value => $format_label_text) {
-            $item_formats[$format_name][$format_label_value] = new FormattableMarkup('@label (@name)', ['@label' => $format_label_text, '@name' => $format_label_value]);
-          }
-        }
-        else {
-          $item_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
-        }
-      }
+      $item_formats = WebformOptionsHelper::appendValueToText($element_plugin->getItemFormats());
       $item_default_format = $element_plugin->getItemDefaultFormat();
       $item_default_format_label = (isset($item_formats[$item_default_format])) ? $item_formats[$item_default_format] : $item_default_format;
       $row['item'] = [
@@ -482,10 +471,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
 
       // Items format.
       if ($element_plugin->supportsMultipleValues()) {
-        $items_formats = $element_plugin->getItemsFormats();
-        foreach ($items_formats as $format_name => $format_label) {
-          $items_formats[$format_name] = new FormattableMarkup('@label (@name)', ['@label' => $format_label, '@name' => $format_name]);
-        }
+        $items_formats = WebformOptionsHelper::appendValueToText($element_plugin->getItemsFormats());
         $items_default_format = $element_plugin->getItemsDefaultFormat();
         $items_default_format_label = (isset($item_formats[$items_default_format])) ? $items_formats[$items_default_format] : $items_default_format;
         $row['items'] = [
