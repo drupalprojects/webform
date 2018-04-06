@@ -218,3 +218,4 @@ handlers:
       converted_url: 'http://webform-test-handler-remote-post/converted'
       converted_custom_data: |
         custom_converted: true
+      messages: { }

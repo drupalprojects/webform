@@ -2175,6 +2175,7 @@ function webform_update_8118() {
   }
 }
 
+
 /**
  * Issue #2957002: Same webform multiple times on the same page.
  */
@@ -2187,4 +2188,11 @@ function webform_update_8119() {
     ' ' . t('<a href=":href">Learn more</a>', [':href' => 'https://www.drupal.org/node/2959264']),
     'warning'
   );
+}
+
+/**
+ * Issue #2953929: Remote handler does not display messages when HTTP status is different than 200.
+ */
+function webform_update_8120() {
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
 }

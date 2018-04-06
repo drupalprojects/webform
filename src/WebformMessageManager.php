@@ -178,6 +178,14 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   /**
    * {@inheritdoc}
    */
+  public function render($key) {
+    $build = $this->build($key);
+    return ($build) ? $this->renderer->renderPlain($build) : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build($key) {
     if ($message = $this->get($key)) {
       // Make sure $message is renderable array.

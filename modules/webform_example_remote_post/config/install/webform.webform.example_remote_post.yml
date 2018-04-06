@@ -215,3 +215,4 @@ handlers:
       draft_custom_data: ''
       converted_url: ''
       converted_custom_data: ''
+      messages: { }

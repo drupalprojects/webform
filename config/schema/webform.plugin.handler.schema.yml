@@ -174,7 +174,19 @@ webform.handler.remote_post:
     converted_custom_data:
       label: 'Converted custom data'
       type: string
-
+    messages:
+      label: 'Response messages'
+      type: sequence
+      sequence:
+        type: mapping
+        label: 'Message'
+        mapping:
+          code:
+            type: integer
+            label: 'Response status code'
+          message:
+            type: text
+            label: 'Response message'
 webform.handler.settings:
   type: mapping
   label: 'Settings'
