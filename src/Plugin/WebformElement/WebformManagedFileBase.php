@@ -297,6 +297,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'id':
+      case 'name':
       case 'url':
       case 'value':
       case 'raw':
@@ -334,6 +335,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       case 'id':
         return $file->id();
 
+      case 'name':
+        return $file->getFilename();
+
       case 'url':
       case 'value':
       case 'raw':
@@ -356,8 +360,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     return parent::getItemFormats() + [
       'file' => $this->t('File'),
       'link' => $this->t('Link'),
-      'id' => $this->t('File ID'),
       'url' => $this->t('URL'),
+      'name' => $this->t('File name'),
+      'id' => $this->t('File ID'),
     ];
   }
 
@@ -546,14 +551,12 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   File extension.
    */
   protected function getFileExtensions(array $element = NULL) {
-    $file_type = str_replace('webform_', '', $this->getPluginId());
-
-    // Set valid file extensions.
-    $file_extensions = $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
     if (!empty($element['#file_extensions'])) {
-      $file_extensions = $element['#file_extensions'];
+      return $element['#file_extensions'];
     }
-    return $file_extensions;
+
+    $file_type = str_replace('webform_', '', $this->getPluginId());
+    return $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
   }
 
   /**
