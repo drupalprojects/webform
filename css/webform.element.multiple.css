@@ -35,6 +35,9 @@
   padding: 0 2px;
   vertical-align: middle;
   text-align: center;
+  width: 30px;
+}
+.webform-multiple-table td.webform-multiple-table--operations-two {
   width: 60px;
 }
 

@@ -137,6 +137,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       'draft_custom_data' => '',
       'converted_url' => '',
       'converted_custom_data' => '',
+      // Custom response messages.
+      'message' => '',
       'messages' => [],
     ];
   }
@@ -269,13 +271,24 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'custom_options'],
       '#default_value' => $this->configuration['custom_options'],
     ];
-
+    $form['additional']['message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Custom error response message'),
+      '#description' => $this->t('This message is displayed when the response status code is not 2xx'),
+      '#parents' => ['settings', 'message'],
+      '#default_value' => $this->configuration['message'],
+    ];
+    $form['additional']['messages_token'] = [
+      '#type' => 'webform_message',
+      '#message_message' => $this->t('Response data can be passed to response message using [webform:handler:{machine_name}:{key}] tokens. (i.e. [webform:handler:remote_post:message])'),
+      '#message_type' => 'info',
+    ];
     $form['additional']['messages'] = [
       '#type' => 'webform_multiple',
-      '#title' => $this->t('Custom response messages'),
+      '#title' => $this->t('Custom error response messages'),
       '#description' => $this->t('Enter custom response messages for specific status codes.') . '<br/>' . $this->t('Defaults to: %value', ['%value' => $this->messageManager->render(WebformMessageManagerInterface::SUBMISSION_EXCEPTION)]),
       '#empty_items' => 0,
-      '#operations' => FALSE,
+      '#add' => FALSE,
       '#element' => [
         'code' => [
           '#type' => 'webform_select_other',
@@ -283,7 +296,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
           '#options' => [
             '400' => $this->t('400 Bad Request'),
             '401' => $this->t('401 Unauthorized'),
-            '403' => $this->t('403  Forbidden'),
+            '403' => $this->t('403 Forbidden'),
             '404' => $this->t('404 Not Found'),
             '500' => $this->t('500 Internal Server Error'),
             '502' => $this->t('502 Bad Gateway'),
@@ -291,7 +304,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
             '504' => $this->t('504 Gateway Timeout'),
           ],
           '#other__type' => 'number',
-          '#other__description' => t('<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes</a>'),
+          '#other__description' => t('<a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes</a>.'),
         ],
         'message' => [
           '#type' => 'webform_html_editor',
@@ -301,12 +314,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'messages'],
       '#default_value' => $this->configuration['messages'],
     ];
-    $form['additional']['messages_token'] = [
-      '#type' => 'webform_message',
-      '#message_message' => $this->t('Response data can be passed to response message using [webform:handler:{machine_name}:{key}] tokens. (i.e. [webform:handler:remote_post:message])'),
-      '#message_type' => 'info',
-    ];
-
 
     // Development.
     $form['development'] = [
@@ -747,22 +754,40 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $this->getLogger()
       ->error('@form webform remote @type post (@state) to @url failed. @message', $context);
 
-    // Display custom submission exception message.
+    // Display custom or default exception message.
+    if ($custom_response_message = $this->getCustomResponseMessage($response)) {
+      $token_data = [
+        'webform_handler' => [
+          $this->getHandlerId() => $this->getResponseData($response),
+        ],
+      ];
+      $build_message = [
+        '#markup' => $this->tokenManager->replace($custom_response_message, $this->getWebform(), $token_data)
+      ];
+      drupal_set_message(\Drupal::service('renderer')->renderPlain($build_message), 'error');
+    }
+    else {
+      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION, 'error');
+    }
+  }
+
+  /**
+   * Get custom custom response message.
+   *
+   * @param \Psr\Http\Message\ResponseInterface|null $response
+   *   The response returned by the remote server.
+   *
+   * @return string
+   *   A custom custom response message.
+   */
+  protected function getCustomResponseMessage($response) {
     $status_code = $response->getStatusCode();
     foreach ($this->configuration['messages'] as $message_item) {
       if ($message_item['code'] == $status_code) {
-        $response_data = $this->getResponseData($response);
-        $token_data = ['webform_handler' => [$this->getHandlerId() => $response_data]];
-        $build_message = [
-          '#markup' => $this->tokenManager->replace($message_item['message'], $this->getWebform(), $token_data)
-        ];
-        drupal_set_message(\Drupal::service('renderer')->renderPlain($build_message), 'error');
-        return;
+        return $message_item['message'];
       }
     }
-
-    // Display default submission exception message.
-    $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION, 'error');
+    return (!empty($this->configuration['message'])) ? $this->configuration['message'] : '';
   }
 
 }

@@ -2196,3 +2196,10 @@ function webform_update_8119() {
 function webform_update_8120() {
   _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
 }
+
+/**
+ * Issue #2953929: Remote handler does not display messages when HTTP status is different than 200.
+ */
+function webform_update_8121() {
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
+}

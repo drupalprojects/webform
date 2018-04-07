@@ -45,6 +45,8 @@ class WebformMultiple extends FormElement {
       '#add_more' => 1,
       '#sorting' => TRUE,
       '#operations' => TRUE,
+      '#add' => TRUE,
+      '#remove' => TRUE,
       '#process' => [
         [$class, 'processWebformMultiple'],
       ],
@@ -550,32 +552,39 @@ class WebformMultiple extends FormElement {
           'class' => ['webform-multiple-table--operations'],
         ],
       ];
-      $row['_operations_']['add'] = [
-        '#type' => 'image_button',
-        '#title' => t('Add'),
-        '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
-        '#limit_validation_errors' => [],
-        '#submit' => [[get_called_class(), 'addItemSubmit']],
-        '#ajax' => $ajax_settings,
-        // Issue #1342066 Document that buttons with the same #value need a unique
-        // #name for the Form API to distinguish them, or change the Form API to
-        // assign unique #names automatically.
-        '#row_index' => $row_index,
-        '#name' => $table_id . '_add_' . $row_index,
-      ];
-      $row['_operations_']['remove'] = [
-        '#type' => 'image_button',
-        '#title' => t('Remove'),
-        '#src' => drupal_get_path('module', 'webform') . '/images/icons/ex.svg',
-        '#limit_validation_errors' => [],
-        '#submit' => [[get_called_class(), 'removeItemSubmit']],
-        '#ajax' => $ajax_settings,
-        // Issue #1342066 Document that buttons with the same #value need a unique
-        // #name for the Form API to distinguish them, or change the Form API to
-        // assign unique #names automatically.
-        '#row_index' => $row_index,
-        '#name' => $table_id . '_remove_' . $row_index,
-      ];
+      if ($element['#add'] && $element['#remove']) {
+        $row['_operations_']['#wrapper_attributes']['class'][] = 'webform-multiple-table--operations-two';
+      }
+      if ($element['#add']) {
+        $row['_operations_']['add'] = [
+          '#type' => 'image_button',
+          '#title' => t('Add'),
+          '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
+          '#limit_validation_errors' => [],
+          '#submit' => [[get_called_class(), 'addItemSubmit']],
+          '#ajax' => $ajax_settings,
+          // Issue #1342066 Document that buttons with the same #value need a unique
+          // #name for the Form API to distinguish them, or change the Form API to
+          // assign unique #names automatically.
+          '#row_index' => $row_index,
+          '#name' => $table_id . '_add_' . $row_index,
+        ];
+      }
+      if ($element['#remove']) {
+        $row['_operations_']['remove'] = [
+          '#type' => 'image_button',
+          '#title' => t('Remove'),
+          '#src' => drupal_get_path('module', 'webform') . '/images/icons/ex.svg',
+          '#limit_validation_errors' => [],
+          '#submit' => [[get_called_class(), 'removeItemSubmit']],
+          '#ajax' => $ajax_settings,
+          // Issue #1342066 Document that buttons with the same #value need a unique
+          // #name for the Form API to distinguish them, or change the Form API to
+          // assign unique #names automatically.
+          '#row_index' => $row_index,
+          '#name' => $table_id . '_remove_' . $row_index,
+        ];
+      }
     }
 
     // Add hidden element as a hidden row.

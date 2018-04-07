@@ -174,8 +174,11 @@ webform.handler.remote_post:
     converted_custom_data:
       label: 'Converted custom data'
       type: string
+    message:
+      type: text
+      label: 'Error response message'
     messages:
-      label: 'Response messages'
+      label: 'Error response messages'
       type: sequence
       sequence:
         type: mapping
@@ -187,6 +190,7 @@ webform.handler.remote_post:
           message:
             type: text
             label: 'Response message'
+
 webform.handler.settings:
   type: mapping
   label: 'Settings'

@@ -126,6 +126,17 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->assertRaw('Failed to process completed request.');
     $this->assertRaw('Unable to process this submission. Please contact the site administrator.');
 
+    // Check default custom response message.
+    $handler = $webform->getHandler('remote_post');
+    $configuration = $handler->getConfiguration();
+    $configuration['settings']['message'] = 'This is a custom response message';
+    $handler->setConfiguration($configuration);
+    $webform->save();
+    $this->postSubmission($webform, ['response_type' => '500']);
+    $this->assertRaw('Failed to process completed request.');
+    $this->assertNoRaw('Unable to process this submission. Please contact the site administrator.');
+    $this->assertRaw('This is a custom response message');
+
     // Check 404 Not Found with custom message.
     $this->postSubmission($webform, ['response_type' => '404']);
     $this->assertRaw('File not found');
@@ -142,7 +153,7 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $webform->setSetting('results_disabled', TRUE);
     $webform->save();
 
-    // Check confiramtion number when results disabled.
+    // Check confirmation number when results disabled.
     $sid = $this->postSubmission($webform);
     $this->assertNull($sid);
 
