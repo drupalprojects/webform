@@ -224,7 +224,7 @@ function hook_webform_libraries_info_alter(&$libraries) {
  * hook.
  *
  * @return array
- *   Extra webform helps your module is providing to the users. The return array
+ *   Extra webform help your module is providing to the users. The return array
  *   should be keyed by help ID (a unique machine-name) and each sub array
  *   should have the following structure:
  *   - access: (bool) Whether the current user is granted access to this help.
@@ -291,9 +291,9 @@ function hook_webform_help_info_alter(array &$help) {
  * Act on a custom message being displayed, closed or reset.
  *
  * @param string $operation
- *   closed: Returns TRUE if message id is closed.
- *   close: Set message id's state to closed.
- *   reset: Reset message id's closed state.
+ *   closed: Returns TRUE if the message is closed.
+ *   close: Sets the message's state to closed.
+ *   reset: Resets the message's closed state.
  *
  * @param string $id
  *   The message id.
