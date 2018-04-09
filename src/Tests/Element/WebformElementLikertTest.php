@@ -60,12 +60,31 @@ class WebformElementLikertTest extends WebformElementTestBase {
       'likert_advanced[q1]' => '1',
       'likert_advanced[q2]' => '2',
       'likert_advanced[q3]' => 'N/A',
+      'likert_values[0]' => '0',
+      'likert_values[1]' => '1',
+      'likert_values[2]' => 'N/A',
     ];
     $this->drupalPostForm('webform/test_element_likert', $edit, t('Submit'));
-    $this->assertRaw("likert_advanced:
+    $this->assertRaw("likert_default:
+  q1: null
+  q2: null
+  q3: null
+likert_advanced:
   q1: '1'
   q2: '2'
-  q3: N/A");
+  q3: N/A
+likert_description:
+  q1: null
+  q2: null
+  q3: null
+likert_help:
+  q1: null
+  q2: null
+  q3: null
+likert_values:
+  - '0'
+  - '1'
+  - N/A");
   }
 
 }

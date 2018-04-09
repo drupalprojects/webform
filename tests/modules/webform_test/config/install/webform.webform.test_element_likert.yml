@@ -63,6 +63,20 @@ elements: |
       1: 'Option 1 -- This is a help text'
       2: 'Option 2 -- This is a help text'
       3: 'Option 3 -- This is a help text'
+  likert_values:
+    '#type': webform_likert
+    '#title': likert_values
+    '#na_answer': true
+    '#questions':
+      0: 'Question 0'
+      1: 'Question 1'
+      2: 'Question 2'
+    '#answers':
+      0: 'Option 0'
+      1: 'Option 1'
+      2: 'Option 2'
+      3: 'Option 3'
+
 css: ''
 javascript: ''
 settings:

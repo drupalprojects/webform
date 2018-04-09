@@ -131,14 +131,16 @@ class WebformLikert extends FormElement {
       }
 
       foreach ($answers as $answer_key => $answer) {
-
         $row[$answer_key] = [
           '#parents' => [$element['#name'], $question_key],
           '#type' => 'radio',
           // Must cast values as strings to prevent NULL and empty strings.
           // from being evaluated as 0.
           '#return_value' => (string) $answer_key,
-          '#value' => (string) $value,
+          // Set value to FALSE to prevent '0' or '' from being checked when
+          // value is NULL.
+          // @see \Drupal\Core\Render\Element\Radio::preRenderRadio
+          '#value' => ($value === NULL) ? FALSE : (string) $value,
         ];
 
         // Wrap title in span.webform-likert-label so that it can hidden when
