@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Form\AdminConfig;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;

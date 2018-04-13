@@ -11,7 +11,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
-use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
