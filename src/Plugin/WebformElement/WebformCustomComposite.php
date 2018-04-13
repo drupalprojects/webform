@@ -193,8 +193,6 @@ class WebformCustomComposite extends WebformCompositeBase {
    */
   public function initializeCompositeElements(array &$element) {
     $element['#webform_composite_elements'] = [];
-    /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
-    $element_manager = \Drupal::service('plugin.manager.webform.element');
     foreach ($element['#element'] as $composite_key => $composite_element) {
       // Initialize composite sub-element.
       $this->elementManager->initializeElement($composite_element);
