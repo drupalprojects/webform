@@ -242,15 +242,20 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
         }
       }
 
-      // Make sure to remove any #options references on text fields.
+      // Initialize composite sub-element.
+      $element_plugin = $element_manager->getElementInstance($composite_element);
+
+      // Make sure to remove any #options references from unsupported elements.
       // This prevents "An illegal choice has been detected." error.
       // @see FormValidator::performRequiredValidation()
-      if ($composite_element['#type'] == 'textfield') {
+      if (isset($composite_element['#options']) && !$element_plugin->hasProperty('options')) {
         unset($composite_element['#options']);
       }
 
-      // Initialize composite sub-element.
-      $element_plugin = $element_manager->getElementInstance($composite_element);
+      // Convert #placeholder to #empty_option for select elements.
+      if (isset($composite_element['#placeholder']) && $element_plugin->hasProperty('empty_option')) {
+        $composite_element['#empty_option'] = $composite_element['#placeholder'];
+      }
 
       // Note: File uploads are not supported because uploaded file
       // destination save and delete callbacks are not setup.

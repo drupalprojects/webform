@@ -14,17 +14,8 @@
   Drupal.webform.states.slideUp = Drupal.webform.states.slideUp || {};
   Drupal.webform.states.slideUp.duration = 'fast';
 
-  /**
-   * Check if an element has a specified data attribute.
-   *
-   * @param {string} data
-   *   The data attribute name.
-   *
-   * @returns {boolean}
-   *   TRUE if an element has a specified data attribute.
-   */
-  $.fn.hasData = function (data) {
-    return (typeof this.data(data) !== 'undefined');
+  $.fn.isWebform = function (target) {
+      return $(target).parents('.js-webform-submission-form').length ? true : false ;
   };
 
   // The change event is triggered by cut-n-paste and select menus.
