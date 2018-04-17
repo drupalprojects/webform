@@ -111,6 +111,13 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $webformEntityReferenceManager;
 
   /**
+   * The webform submission generation service.
+   *
+   * @var \Drupal\webform\WebformSubmissionGenerateInterface
+   */
+  protected $generate;
+
+  /**
    * The webform settings.
    *
    * @var array
@@ -156,8 +163,10 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The webform submission conditions (#states) validator.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
+   * @param \Drupal\webform\WebformSubmissionGenerateInterface $submission_generate
+   *   The webform submission generation service.
    */
-  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionConditionsValidator $conditions_validator, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionConditionsValidator $conditions_validator, WebformEntityReferenceManagerInterface $webform_entity_reference_manager, WebformSubmissionGenerateInterface $submission_generate) {
     parent::__construct($entity_manager);
     $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
@@ -170,6 +179,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->tokenManager = $token_manager;
     $this->conditionsValidator = $conditions_validator;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
+    $this->generate = $submission_generate;
+
   }
 
   /**
@@ -187,7 +198,9 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('webform.message_manager'),
       $container->get('webform.token_manager'),
       $container->get('webform_submission.conditions_validator'),
-      $container->get('webform.entity_reference_manager')
+      $container->get('webform.entity_reference_manager'),
+      $container->get('webform_submission.generate')
+
     );
   }
 
@@ -217,10 +230,25 @@ class WebformSubmissionForm extends ContentEntityForm {
 
   /**
    * {@inheritdoc}
+   *
+   * This is the best place to override an entity form's default settings
+   * because is is called immediately after the form object is initialized.
+   *
+   * @see \Drupal\Core\Entity\EntityFormBuilder::getForm
    */
   public function setEntity(EntityInterface $entity) {
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     $webform = $entity->getWebform();
+
+    // If ?_webform_test is defined for the current webform, override
+    // the 'add' operation with 'test' operation and generate test data.
+    if ($this->operation === 'add' &&
+      $this->getRequest()->query->get('_webform_test') === $webform->id() &&
+      $webform->access('test')
+    ) {
+      $this->operation = 'test';
+      $entity->setData($this->generate->getData($webform));
+    }
 
     // Get the source entity and allow webform submission to be used as a source
     // entity.

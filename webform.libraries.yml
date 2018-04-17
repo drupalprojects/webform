@@ -134,6 +134,8 @@ webform.contextual:
   version: VERSION
   js:
     js/webform.contextual.js:  {}
+  dependencies:
+    - core/jquery.once
 
 # Help.
 
