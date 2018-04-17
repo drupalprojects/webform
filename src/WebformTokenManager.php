@@ -88,7 +88,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $this->setTokenData($data, $entity);
     }
 
-    // Track the active theme, if there is no active theme it mean tokens
+    // Track the active theme, if there is no active theme it means tokens
     // are being replaced during the initial page request.
     $has_active_theme = $this->themeManager->hasActiveTheme();
 
