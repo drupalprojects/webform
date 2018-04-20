@@ -55,7 +55,7 @@ services:
 
   webform.libraries_manager:
     class: Drupal\webform\WebformLibrariesManager
-    arguments: ['@config.factory', '@module_handler', '@renderer']
+    arguments: ['@library.discovery', '@config.factory', '@module_handler', '@renderer']
 
   webform.message_manager:
     class: Drupal\webform\WebformMessageManager
