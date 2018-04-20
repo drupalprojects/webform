@@ -14,8 +14,18 @@
 
 .webform-details-toggle-state-wrapper {
   margin-top: 1em;
+
 }
 
 .webform-details-toggle-state-wrapper + details {
   margin-top: 0;
+}
+
+.webform-details-toggle-state {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-top: 0;
+  padding: 0;
+  font-size: 1em;
 }
