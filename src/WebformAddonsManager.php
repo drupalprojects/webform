@@ -241,6 +241,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: Webform MyEmma.
+    $projects['webform_myemma'] = [
+      'title' => $this->t('Webform MyEmma'),
+      'description' => $this->t('Provides MyEmma subscription field to webforms'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_myemma'),
+      'category' => 'integration',
+    ];
+
     // Integrations: Webform Product.
     $projects['webform_product'] = [
       'title' => $this->t('Webform Product'),
