@@ -362,7 +362,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/captcha'),
       'category' => 'spam',
       'recommended' => TRUE,
+    ];
 
+    // Spam: CleanTalk.
+    $projects['cleantalk'] = [
+      'title' => $this->t('CleanTalk'),
+      'description' => $this->t('Antispam service from CleanTalk to protect your site.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/cleantalk'),
+      'category' => 'spam',
     ];
 
     // Spam: Honeypot.
