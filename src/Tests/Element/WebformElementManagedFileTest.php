@@ -25,12 +25,16 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_managed_file', 'test_element_managed_file_name'];
+  protected static $testWebforms = [
+    'test_element_managed_file',
+    'test_element_managed_file_dis',
+    'test_element_managed_file_name',
+  ];
 
   /**
    * Test single and multiple file upload.
    */
-  public function testFileUpload() {
+  public function _testFileUpload() {
     /* Element rendering */
     $this->drupalGet('webform/test_element_managed_file');
 
@@ -155,6 +159,34 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
     $managed_file_single = $this->fileLoad($submission->getElementData('managed_file_single'));
     $this->assertNotNull($managed_file_single);
     $this->assertFalse($managed_file_single->isTemporary());
+  }
+
+  /**
+   * Test file upload with disabled results.
+   */
+  protected function testFileUploadWithDisabledResults() {
+    $this->drupalLogin($this->rootUser);
+
+    $webform = Webform::load('test_element_managed_file_dis');
+
+    // Upload new file.
+    $sid = $this->postSubmissionTest($webform);
+    $file = File::load($this->getLastFileId());
+
+    // Check that no submission was saved to the database.
+    $this->assertNull($sid);
+
+    // Check file URI.
+    $this->assertEqual($file->getFileUri(), 'private://webform/test_element_managed_file_dis/_sid_/managed_file.txt');
+
+    // Check file is temporary.
+    $this->assertTrue($file->isTemporary());
+
+    // Check file_managed table has 1 record.
+    $this->assertEqual(1, \Drupal::database()->query('SELECT COUNT(fid) AS total FROM {file_managed}')->fetchField());
+
+    // Check file_usage table has no records.
+    $this->assertEqual(0, \Drupal::database()->query('SELECT COUNT(fid) AS total FROM {file_usage}')->fetchField());
   }
 
   /****************************************************************************/

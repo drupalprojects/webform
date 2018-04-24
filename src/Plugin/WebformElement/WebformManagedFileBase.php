@@ -428,6 +428,11 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     // Get current value and original value for this element.
     $key = $element['#webform_key'];
 
+    $webform = $webform_submission->getWebform();
+    if ($webform->isResultsDisabled()) {
+      return;
+    }
+
     $original_data = $webform_submission->getOriginalData();
     $data = $webform_submission->getData();
 
@@ -652,8 +657,25 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#type' => 'fieldset',
       '#title' => $this->t('File settings'),
     ];
-    $scheme_options = static::getVisibleStreamWrappers();
 
+    // Warn people about temporary files when saving of results is disabled.
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $form_state->getFormObject()->getWebform();
+    if ($webform->isResultsDisabled()) {
+      $temporary_maximum_age = $this->configFactory->get('system.file')->get('temporary_maximum_age');
+      $temporary_interval = \Drupal::service('date.formatter')->formatInterval($temporary_maximum_age);
+      $form['file']['file_message'] = [
+        '#type' => 'webform_message',
+        '#message_message' => '<strong>' . $this->t('Saving of results is disabled.') . '</strong> ' .
+          $this->t('Uploaded files will be temporarily stored on the server and referenced in the database for %interval.', ['%interval' => $temporary_interval]) . ' ' .
+          $this->t('Uploaded files should be attached to an email and/or remote posted to an external server.')
+        ,
+        '#message_type' => 'warning',
+        '#access' => TRUE,
+      ];
+    }
+
+    $scheme_options = static::getVisibleStreamWrappers();
     $form['file']['uri_scheme'] = [
       '#type' => 'radios',
       '#title' => t('Upload destination'),

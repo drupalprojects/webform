@@ -169,7 +169,7 @@ class WebformSignature extends WebformElementBase {
     // Warn people about saving signatures when saving of results is disabled.
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $form_state->getFormObject()->getWebform();
-    if ($webform->getSetting('results_disabled')) {
+    if ($webform->isResultsDisabled()) {
       $image_directory = 'public://webform/' . $webform->id() . '/{element_key}';
       $form['signature'] = [
         '#type' => 'fieldset',

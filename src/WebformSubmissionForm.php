@@ -663,12 +663,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
-    // Handle webform with managed file upload but saving of submission is disabled.
-    if ($webform->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
-      $this->getMessageManager()->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
-      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
-    }
-
     // Display inline confirmation message with back to link.
     if ($form_state->get('current_page') === 'webform_confirmation') {
       $form['confirmation'] = [
