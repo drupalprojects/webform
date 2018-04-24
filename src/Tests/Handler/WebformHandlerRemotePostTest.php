@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Tests\Handler;
 
+use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;
@@ -18,14 +19,18 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test_handler_remote_post'];
+  public static $modules = ['file', 'webform', 'webform_test_handler_remote_post'];
 
   /**
    * Webforms to load.
    *
    * @var array
    */
-  protected static $testWebforms = ['test_handler_remote_post'];
+  protected static $testWebforms = [
+    'test_handler_remote_post',
+    'test_handler_remote_get',
+    'test_handler_remote_post_file',
+  ];
 
   /**
    * Test remote post handler.
@@ -179,6 +184,24 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     // Get confirmation number from JSON packet.
     preg_match('/&quot;confirmation_number&quot;:&quot;([a-zA-z0-9]+)&quot;/', $this->getRawContent(), $match);
     $this->assertRaw('Your confirmation number is ' . $match[1] . '.');
+
+    /**************************************************************************/
+    // POST File.
+    /**************************************************************************/
+
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_handler_remote_post_file');
+
+    $sid = $this->postSubmissionTest($webform);
+    $webform_submission = WebformSubmission::load($sid);
+    $fid = $webform_submission->getElementData('file');
+
+    // Check the file name, uri, and data is appended to form params.
+    $this->assertRaw("form_params:
+  file: $fid
+  file__name: file.txt
+  file__uri: 'private://webform/test_handler_remote_post_file/$sid/file.txt'
+  file__data: dGhpcyBpcyBhIHNhbXBsZSB0eHQgZmlsZQppdCBoYXMgdHdvIGxpbmVzCg==");
   }
 
 }

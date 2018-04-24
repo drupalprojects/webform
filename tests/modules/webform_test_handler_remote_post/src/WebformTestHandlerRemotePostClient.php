@@ -28,7 +28,7 @@ class WebformTestHandlerRemotePostClient extends Client {
       $params = (isset($options['json'])) ? $options['json'] : $options['form_params'];
     }
 
-    $response_type = $params['response_type'];
+    $response_type = (isset($params['response_type'])) ? $params['response_type'] : 200;
     $operation = str_replace('http://webform-test-handler-remote-post/', '', $uri);
     $random = new Random();
     // Handle 404 errors.
