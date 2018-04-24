@@ -238,6 +238,12 @@ webform.settings:
         default_document_file_extensions:
           type: string
           label: 'Default allowed document file extensions'
+        make_unused_managed_files_temporary:
+          type: boolean
+          label: 'Controls if unused files should be marked temporary'
+        delete_temporary_managed_files:
+          type: boolean
+          label: 'Immediately deleted temporary managed files'
     format:
       type: ignore
       label: 'Format default settings'

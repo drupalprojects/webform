@@ -188,6 +188,26 @@ class WebformSignature extends WebformElementBase {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function postDelete(array &$element, WebformSubmissionInterface $webform_submission) {
+    $webform = $webform_submission->getWebform();
+    $element_key = $element['#webform_key'];
+    $sid = $webform_submission->id();
+
+    // Delete signature image submission directory.
+    $image_base_directory = 'public://webform/' . $webform->id();
+    $image_directory = "$image_base_directory/$element_key/$sid";
+    if (file_exists($image_directory)) {
+      file_unmanaged_delete_recursive($image_directory);
+    }
+
+    // Please node, the signature image (no results) directory is deleted when
+    // the Webform is deleted.
+    // @see \Drupal\webform\WebformEntityStorage::delete
+  }
+
   /****************************************************************************/
   // Signature image helpers.
   /****************************************************************************/
@@ -206,29 +226,34 @@ class WebformSignature extends WebformElementBase {
    *   An array of options.
    *
    * @return string
-   *   A signature element's image URL.
+   *   A signature element's image URI.
    *
    * @see https://stackoverflow.com/questions/11511511/how-to-save-a-png-image-server-side-from-a-base64-data-string
    */
-  protected function getImageUrl(array $element, WebformSubmissionInterface $webform_submission, array $options) {
+  protected function getImageUrl(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
     $value = $this->getValue($element, $webform_submission, $options);
     if (!$value) {
       return '';
     }
 
     $webform = $webform_submission->getWebform();
-    $sid = $webform_submission->id();
     $element_key = $element['#webform_key'];
+    $sid = $webform_submission->id();
 
     $image_base_directory = 'public://webform/' . $webform->id();
 
+    // Create signature image (no results) directory.
     $image_signature_directory = "$image_base_directory/$element_key";
     file_prepare_directory($image_signature_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+    $image_directory = $image_signature_directory;
 
-    $image_submission_directory = "$image_base_directory/$sid/$element_key";
-    file_prepare_directory($image_submission_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+    // Create signature image submission directory.
+    if ($sid) {
+      $image_submission_directory = "$image_base_directory/$element_key/$sid";
+      file_prepare_directory($image_submission_directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+      $image_directory = $image_submission_directory;
+    }
 
-    $image_directory = ($sid) ? $image_submission_directory : $image_signature_directory;
     $image_hash = Crypt::hmacBase64($value, Settings::getHashSalt());
     $image_uri = "$image_directory/signature-$image_hash.png";
 

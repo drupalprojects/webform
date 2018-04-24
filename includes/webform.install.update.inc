@@ -2203,3 +2203,10 @@ function webform_update_8120() {
 function webform_update_8121() {
   _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
 }
+
+/**
+ * Issue #2952419: Attached files are deleted without usage checking
+ */
+function webform_update_8122() {
+  _webform_update_admin_settings();
+}

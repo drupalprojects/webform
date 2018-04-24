@@ -900,7 +900,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $this->invokeWebformHandlers('postDelete', $entity);
     }
 
-    // Remove the webform submission specific file directory for all stream wrappers.
+    // Remove empty webform submission specific file directory
+    // for all stream wrappers.
     // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase
     // @see \Drupal\webform\Plugin\WebformElement\WebformSignature
     foreach ($entities as $entity) {
@@ -909,7 +910,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         ->getNames(StreamWrapperInterface::WRITE_VISIBLE));
       foreach ($stream_wrappers as $stream_wrapper) {
         $file_directory = $stream_wrapper . '://webform/' . $webform->id() . '/' . $entity->id();
-        if (file_exists($file_directory)) {
+        // Clear empty webform submission directory.
+        if (empty(file_scan_directory($file_directory, '/.*/'))) {
           file_unmanaged_delete_recursive($file_directory);
         }
       }

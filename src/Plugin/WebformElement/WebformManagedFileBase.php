@@ -14,6 +14,7 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Component\Transliteration\TransliterationInterface;
+use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElementBase;
@@ -436,12 +437,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $original_value = isset($original_data[$key]) ? $original_data[$key] : [];
     $original_fids = (is_array($original_value)) ? $original_value : [$original_value];
 
-    // Check the original submission fids and delete the old file upload.
-    foreach ($original_fids as $original_fid) {
-      if (!in_array($original_fid, $fids)) {
-        file_delete($original_fid);
-      }
-    }
+    // Delete the old file uploads.
+    $delete_fids = array_diff($original_fids, $fids);
+    $this->deleteFiles($delete_fids, $webform_submission);
 
     // Exit if there is no fids.
     if (empty($fids)) {
@@ -463,8 +461,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       }
 
       // Update file usage table.
-      // Set file usage which will also make the file's status permanent.
-      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id(), 0);
+      // Setting file usage will also make the file's status permanent.
+      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id());
       $this->fileUsage->add($file, 'webform', 'webform_submission', $webform_submission->id());
     }
   }
@@ -473,11 +471,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function postDelete(array &$element, WebformSubmissionInterface $webform_submission) {
-    // Delete File record.
     $fids = (array) ($webform_submission->getElementData($element['#webform_key']) ?: []);
-    foreach ($fids as $fid) {
-      file_delete($fid);
-    }
+    $this->deleteFiles($fids, $webform_submission);
   }
 
   /**
@@ -780,6 +775,46 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $form['default']['#access'] = FALSE;
 
     return $form;
+  }
+
+  /**
+   * Delete a webform submission file's usage and mark it as temporary.
+   *
+   * Marks unused webform submission files as temporary.
+   * In Drupal 8.4.x+ unused webform managed files are no longer
+   * marked as temporary.
+   *
+   * @param array $fids
+   *   An array of file ids.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  protected function deleteFiles(array $fids, WebformSubmissionInterface $webform_submission) {
+    if (empty($fids)) {
+      return;
+    }
+
+    $make_unused_managed_files_temporary = \Drupal::config('webform.settings')->get('file.make_unused_managed_files_temporary');
+    $delete_temporary_managed_files = \Drupal::config('webform.settings')->get('file.delete_temporary_managed_files');
+
+    /** @var \Drupal\file\FileInterface[] $files */
+    $files = File::loadMultiple($fids);
+    foreach ($files as $file) {
+      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id());
+      // Make unused files temporary.
+      if ($make_unused_managed_files_temporary && empty($this->fileUsage->listUsage($file)) && !$file->isTemporary()) {
+        $file->setTemporary();
+        $file->save();
+      }
+
+      // Immediately delete temporary files.
+      // This makes sure that the webform submission uploaded directory is
+      // empty and can be deleted.
+      // @see \Drupal\webform\WebformSubmissionStorage::delete
+      if ($delete_temporary_managed_files && $file->isTemporary()) {
+        $file->delete();
+      }
+    }
   }
 
   /**
