@@ -238,6 +238,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @see \Drupal\Core\Entity\EntityFormBuilder::getForm
    */
   public function setEntity(EntityInterface $entity) {
+
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     $webform = $entity->getWebform();
 
