@@ -18,6 +18,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
+use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\WebformElement\Hidden;
@@ -1930,7 +1931,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Get the submission owner and not current user.
     // This takes into account when an API submission changes the owner id.
-    // @see \Drupal\webform\WebformSubmissionForm::submitValues
+    // @see \Drupal\webform\WebformSubmissionForm::submitFormValues
     $account = $this->entity->getOwner();
     $webform = $this->getWebform();
 
@@ -2233,24 +2234,24 @@ class WebformSubmissionForm extends ContentEntityForm {
   }
 
   /**
-   * Programmatically validate values and submit a webform submission.
+   * Programmatically validate form values and submit a webform submission.
    *
    * @param array $values
-   *   An array of submission values and data.
+   *   An array of submission form values and data.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface|null
    *   An array of error messages if validation fails or
    *   A webform submission is there are no validation errors.
    */
-  public static function validateValues(array $values) {
-    return static::submitValues($values, TRUE);
+  public static function validateFormValues(array $values) {
+    return static::submitFormValues($values, TRUE);
   }
 
   /**
-   * Programmatically validate values and submit a webform submission.
+   * Programmatically validate form values and submit a webform submission.
    *
    * @param array $values
-   *   An array of submission values and data.
+   *   An array of submission form values and data.
    * @param bool $validate_only
    *   Flag to trigger only webform validation.
    *
@@ -2258,9 +2259,38 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   An array of error messages if validation fails or
    *   A webform submission is there are no validation errors.
    */
-  public static function submitValues(array $values, $validate_only = FALSE) {
+  public static function submitFormValues(array $values, $validate_only = FALSE) {
     $webform_submission = WebformSubmission::create($values);
+    return static::submitWebformSubmission($webform_submission, $validate_only);
+  }
 
+  /**
+   * Programmatically validate and submit a webform submission.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   WebformSubmission with values and data.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface|null
+   *   An array of error messages if validation fails or
+   *   A webform submission is there are no validation errors.
+   */
+  public static function validateWebformSubmission(WebformSubmissionInterface $webform_submission) {
+    return static::submitWebformSubmission($webform_submission, TRUE);
+  }
+
+  /**
+   * Programmatically validate and submit a webform submission.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   WebformSubmission with values and data.
+   * @param bool $validate_only
+   *   Flag to trigger only webform validation.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface|null
+   *   An array of error messages if validation fails or
+   *   A webform submission is there are no validation errors.
+   */
+  public static function submitWebformSubmission(WebformSubmissionInterface $webform_submission, $validate_only = FALSE) {
     /** @var \Drupal\webform\WebformSubmissionForm $form_object */
     $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'api');
     $form_object->setEntity($webform_submission);

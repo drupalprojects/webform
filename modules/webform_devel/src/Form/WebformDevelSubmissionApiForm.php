@@ -136,11 +136,11 @@ $webform = \Drupal\webform\entity\Webform::load(\'' . $webform->id() . '\');
 $is_open = \Drupal\webform\WebformSubmissionForm::isOpen($webform);
 if ($is_open === TRUE) {
   // Validate webform submission values.
-  $errors = \Drupal\webform\WebformSubmissionForm::validateValues($values);
+  $errors = \Drupal\webform\WebformSubmissionForm::validateFormValues($values);
   
   // Submit webform submission values.
   if (empty($errors)) {
-    $webform_submission = \Drupal\webform\WebformSubmissionForm::submitValues($values);
+    $webform_submission = \Drupal\webform\WebformSubmissionForm::submitFormValues($values);
   }
 }',
     ];
@@ -172,7 +172,7 @@ if ($is_open === TRUE) {
     }
 
     // Validate values.
-    if ($errors = WebformSubmissionForm::validateValues($values)) {
+    if ($errors = WebformSubmissionForm::validateFormValues($values)) {
       foreach ($errors as $error) {
         $form_state->setErrorByName('values', $error);
       }
@@ -184,7 +184,7 @@ if ($is_open === TRUE) {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValue('values');
-    $webform_submission = WebformSubmissionForm::submitValues($values);
+    $webform_submission = WebformSubmissionForm::submitFormValues($values);
     drupal_set_message($this->t('New submission %title added.', ['%title' => $webform_submission->label()]));
   }
 
