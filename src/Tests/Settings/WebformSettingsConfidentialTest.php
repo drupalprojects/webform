@@ -37,10 +37,21 @@ class WebformSettingsConfidentialTest extends WebformTestBase {
 
     $webform_confidential = Webform::load('test_form_confidential');
 
-    // Check logout warning.
+    // Check logout warning when accessing webform.
     $this->drupalGet('webform/test_form_confidential');
     $this->assertNoFieldById('edit-name');
     $this->assertRaw('This form is confidential.');
+
+    // Check no logout warning when testing webform.
+    $this->drupalGet('webform/test_form_confidential/test');
+    $this->assertFieldById('edit-name');
+    $this->assertNoRaw('This form is confidential.');
+
+    // Check that test submission does not record the IP address
+    $sid = $this->postSubmissionTest($webform_confidential, ['name' => 'John']);
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual($webform_submission->getRemoteAddr(), t('(unknown)'));
+    $this->assertEqual($webform_submission->getOwnerId(), 0);
 
     // Check anonymous access to webform.
     $this->drupalLogout();

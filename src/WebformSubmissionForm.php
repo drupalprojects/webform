@@ -717,7 +717,10 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Disable this webform if confidential and user is logged in.
-    if ($this->isConfidential() && $this->currentUser()->isAuthenticated() && $this->entity->isNew()) {
+    if ($this->isConfidential()
+      && $this->currentUser()->isAuthenticated()
+      && $this->entity->isNew()
+      && $this->operation === 'add') {
       return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_CONFIDENTIAL_MESSAGE, 'warning');
     }
 
@@ -1343,9 +1346,14 @@ class WebformSubmissionForm extends ContentEntityForm {
         // Remove empty query string.
         $uri = preg_replace('/\?$/', '', $uri);
       }
-      $remote_addr = ($this->isConfidential()) ? '' : $this->getRequest()->getClientIp();
       $webform_submission->set('uri', $uri);
-      $webform_submission->set('remote_addr', $remote_addr);
+      if ($this->isConfidential()) {
+        $webform_submission->setOwnerId(0);
+        $webform_submission->set('remote_addr', '');
+      }
+      else {
+        $webform_submission->set('remote_addr', $this->getRequest()->getClientIp());
+      }
     }
 
     // Block users from submitting templates that they can't update.
