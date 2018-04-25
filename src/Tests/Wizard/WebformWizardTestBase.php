@@ -26,15 +26,12 @@ abstract class WebformWizardTestBase extends WebformTestBase {
    * Assert the current page using the progress bar's markup.
    *
    * @param string $title
-   *   The title of the current page.
-   * @param string $name
+   *   The title of the page.
+   * @param string $page
    *   The name (key) of the current page.
    */
-  protected function assertCurrentPage($title, $name = NULL) {
-    $this->assertPattern('|<li class="webform-progress-bar__page webform-progress-bar__page--current">\s+<b>' . $title . '</b>|');
-    if ($name !== NULL) {
-      $this->assertRaw('data-current-page="' . $name . '"');
-    }
+  protected function assertCurrentPage($title, $page) {
+    $this->assertPattern('|<li data-webform-page="' . $page . '" class="webform-progress-bar__page webform-progress-bar__page--current">\s+<b>' . $title . '</b>|');
   }
 
 }

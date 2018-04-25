@@ -558,8 +558,11 @@ function _template_preprocess_webform_progress(array &$variables) {
 
   // Reset the pages variable.
   $variables['progress'] = [];
-  foreach ($pages as $page) {
-    $variables['progress'][] = (isset($page['#title'])) ? $page['#title'] : '';
+  foreach ($pages as $key => $page) {
+    $variables['progress'][] = [
+      'name' => $key,
+      'title' => (isset($page['#title'])) ? $page['#title'] : '',
+    ];
   }
 }
 
