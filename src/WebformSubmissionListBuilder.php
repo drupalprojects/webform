@@ -208,7 +208,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
       $this->limit = $webform_submission_storage->getCustomSetting('limit', 50, $this->webform, $this->sourceEntity);
       $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
-      $this->customize = TRUE;
+      $this->customize = $this->webform->access('update');
       if ($this->format['element_format'] == 'raw') {
         foreach ($this->columns as &$column) {
           $column['format'] = 'raw';

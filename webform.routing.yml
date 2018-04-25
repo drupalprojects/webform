@@ -329,7 +329,7 @@ entity.webform.results_submissions.custom:
       webform:
         type: 'entity:webform'
   requirements:
-    _entity_access: 'webform.submission_view_any'
+    _entity_access: 'webform.update'
     _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_export:

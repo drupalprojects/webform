@@ -128,7 +128,16 @@ class WebformNodeResultsTest extends WebformNodeTestBase {
     $this->assertNoRaw('A partially-completed form was found. Please complete the remaining portions.');
 
     /* Table customization */
+
+    // Check that access is denied to custom results table.
     $this->drupalLogin($this->adminSubmissionUser);
+    $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions/custom');
+    $this->assertResponse(403);
+
+    // Check that access is allowed to custom results table.
+    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions/custom');
+    $this->assertResponse(200);
 
     // Check default node results table.
     $this->drupalGet('node/' . $node->id() . '/webform/results/submissions');
