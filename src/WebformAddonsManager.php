@@ -169,6 +169,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Element: Webform Handsontable.
+    $projects['handsontable_yml_webform'] = [
+      'title' => $this->t('Webform Handsontable'),
+      'description' => $this->t("Allows both the Drupal Form API and the Drupal 8 Webforms module to use the Excel-like Handsontable library."),
+      'url' => Url::fromUri('https://www.drupal.org/handsontable_yml_webform'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Layout Container.
     $projects['webform_layout_container'] = [
       'title' => $this->t('Webform Layout Container'),
