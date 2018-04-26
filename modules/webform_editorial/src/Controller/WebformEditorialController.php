@@ -184,9 +184,8 @@ class WebformEditorialController extends ControllerBase implements ContainerInje
     }
 
     // Add videos.
-    $presentations = $this->helpManager->initVideos();
+    $presentations = $this->helpManager->getVideo();
     foreach ($presentations as $presentation_name => $presentation) {
-
       $build[$presentation_name]['description']['title'] = [
         '#markup' => $presentation['title'],
         '#prefix' => '<strong>',
