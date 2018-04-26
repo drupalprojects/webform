@@ -6,7 +6,6 @@ use Drupal\Core\Asset\LibraryDiscoveryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -58,7 +57,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *
    * @var array
    */
-  protected $excludedLibraries = [];
+  protected $excludedLibraries;
 
   /**
    * Constructs a WebformLibrariesManager object.
@@ -77,9 +76,6 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->renderer = $renderer;
-
-    $this->libraries = $this->initLibraries();
-    $this->excludedLibraries = $this->initExcludedLibraries();
   }
 
   /**
@@ -195,13 +191,19 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function getLibrary($name) {
-    return $this->libraries[$name];
+    $libraries = $this->getLibraries();
+    return $libraries [$name];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLibraries($included = NULL) {
+    // Initialize libraries.
+    if (!isset($this->libraries)) {
+      $this->libraries = $this->initLibraries();
+    }
+
     $libraries = $this->libraries;
     if ($included !== NULL) {
       foreach ($libraries as $library_name => $library) {
@@ -217,6 +219,11 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function getExcludedLibraries() {
+    // Initialize excluded libraries.
+    if (!isset($this->excludedLibraries)) {
+      $this->excludedLibraries = $this->initExcludedLibraries();
+    }
+
     return $this->excludedLibraries;
   }
 
@@ -224,11 +231,12 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function isExcluded($name) {
-    if (empty($this->excludedLibraries)) {
+    $excluded_libraries = $this->getExcludedLibraries();
+    if (empty($excluded_libraries)) {
       return FALSE;
     }
 
-    if (isset($this->excludedLibraries[$name])) {
+    if (isset($excluded_libraries[$name])) {
       return TRUE;
     }
 
@@ -238,7 +246,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
 
     $parts = explode('.', preg_replace('#^(webform/)?libraries.#', '', $name));
     while ($parts) {
-      if (isset($this->excludedLibraries[implode('.', $parts)])) {
+      if (isset($excluded_libraries[implode('.', $parts)])) {
         return TRUE;
       }
       array_pop($parts);
@@ -470,7 +478,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     }
 
     // Get excluded libraries based on excluded (element) types.
-    foreach ($this->libraries as $library_name => $library) {
+    $libraries = $this->getLibraries();
+    foreach ($libraries as $library_name => $library) {
       if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
         $excluded_libraries[$library_name] = $library_name;
       }
