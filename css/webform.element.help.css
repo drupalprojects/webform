@@ -5,9 +5,11 @@
 
 .webform-element-help {
   display: inline-block;
+  box-sizing: content-box;
   border: 2px solid #bbb;
   background: #bbb;
   line-height: 14px;
+  height: 14px;
   width: 14px;
   font-size: 12px;
   border-radius: 50%;
