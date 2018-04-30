@@ -61,7 +61,7 @@ class WebformEntitySettingsAccessForm extends WebformEntitySettingsBaseForm {
       '#weight' => -10,
       '#type' => 'webform_message',
       '#message_type' => 'warning',
-      '#message_message' => $this->t('<strong>Warning</strong>: The below settings give the below users, permissions, and roles full access to this webform and its submissions.'),
+      '#message_message' => $this->t('<strong>Warning</strong>: The below settings give users, permissions, and roles full access to this webform and its submissions.'),
     ];
 
     return parent::form($form, $form_state);

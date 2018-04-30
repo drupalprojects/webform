@@ -88,37 +88,11 @@ webform.config.advanced:
   parent_id: webform.config
   weight: 80
 
-# Plugins.
-
-webform.plugins:
-  title: 'Plugins'
-  route_name: webform.element_plugins
-  base_route: entity.webform.collection
-  weight: 40
-
-webform.plugins.elements:
-  title: 'Elements'
-  route_name: webform.element_plugins
-  parent_id: webform.plugins
-  weight: 0
-
-webform.plugins.handlers:
-  title: 'Handlers'
-  route_name: webform.handler_plugins
-  parent_id: webform.plugins
-  weight: 10
-
-webform.plugins.exporters:
-  title: 'Exporters'
-  route_name: webform.exporter_plugins
-  parent_id: webform.plugins
-  weight: 20
-
 webform.addons:
   title: 'Add-ons'
   route_name: webform.addons
   base_route: entity.webform.collection
-  weight: 50
+  weight: 40
 
 webform.contribute:
   title: 'Contribute'
@@ -324,4 +298,24 @@ entity.webform.user.submission.delete:
   title: 'Delete'
   route_name: entity.webform.user.submission.delete
   base_route: entity.webform.user.submission
+  weight: 20
+
+# Webform Plugins.
+
+webform.reports_plugins.elements:
+  title: 'Elements'
+  route_name: webform.reports_plugins.elements
+  base_route: webform.reports_plugins.elements
+  weight: 0
+
+webform.reports_plugins.handlers:
+  title: 'Handlers'
+  route_name: webform.reports_plugins.handlers
+  base_route: webform.reports_plugins.elements
+  weight: 10
+
+webform.reports_plugins.exporters:
+  title: 'Exporters'
+  route_name: webform.reports_plugins.exporters
+  base_route: webform.reports_plugins.elements
   weight: 20

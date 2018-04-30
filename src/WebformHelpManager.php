@@ -1342,8 +1342,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('<strong>Webform Element</strong> plugins are used to enhance existing render/form elements. Webform element plugins provide default properties, data normalization, custom validation, element configuration form and customizable display formats.'),
       'video_id' => 'plugins',
       'routes' => [
-        // @see /admin/structure/webform/plugins/elements
-        'webform.element_plugins',
+        // @see /admin/reports/webform-plugins/elements
+        'webform.reports_plugins.elements',
       ],
     ];
 
@@ -1355,8 +1355,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('<strong>Handlers</strong> are used to route submitted data to external applications and send notifications & confirmations.'),
       'video_id' => 'plugins',
       'routes' => [
-        // @see /admin/structure/webform/plugins/handlers
-        'webform.handler_plugins',
+        // @see /admin/reports/webform-plugins/handlers
+        'webform.reports_plugins.handlers',
       ],
     ];
 
@@ -1368,8 +1368,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('<strong>Exporters</strong> are used to export results into a downloadable format that can be used by MS Excel, Google Sheets and other spreadsheet applications.'),
       'video_id' => 'plugins',
       'routes' => [
-        // @see /admin/structure/webform/plugins/exporters
-        'webform.exporter_plugins',
+        // @see /admin/reports/webform-plugins/exporters
+        'webform.reports_plugins.exporters',
       ],
     ];
 
