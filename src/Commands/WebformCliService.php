@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Commands;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Mail\MailFormatHelper;
@@ -11,6 +10,7 @@ use Drupal\webform\Controller\WebformResultsExportController;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Form\WebformResultsClearForm;
 use Drupal\webform\Form\WebformSubmissionsPurgeForm;
+use Drupal\webform\Utility\WebformObjectHelper;
 use Drupal\webform\Utility\WebformYaml;
 use Drush\Commands\DrushCommands;
 use Psr\Log\LogLevel;
@@ -621,17 +621,17 @@ class WebformCliService implements WebformCliServiceInterface {
     "issues": "https://drupal.org/project/issues/webform",
     "source": "http://cgit.drupalcode.org/webform"
   }
-}', TRUE);
+}', FALSE, $this->drush_webform_composer_get_json_encode_options());
 
     // Set disable tls.
     $this->drush_webform_composer_set_disable_tls($data);
 
     // Set libraries.
-    $data['repositories'] = [];
-    $data['require'] = [];
-    $this->drush_webform_composer_set_libraries($data['repositories'], $data['require']);
+    $data->repositories = (object) [];
+    $data->require = (object) [];
+    $this->drush_webform_composer_set_libraries($data->repositories, $data->require);
 
-    $this->drush_print(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    $this->drush_print(json_encode($data, $this->drush_webform_composer_get_json_encode_options()));
   }
 
   /**
@@ -936,25 +936,29 @@ class WebformCliService implements WebformCliServiceInterface {
     $composer_directory = $this->composer_directory;
 
     $json = file_get_contents($composer_json);
-    $data = Json::decode($json) + [
-      'repositories' => [],
-      'require' => [],
-    ];
+    $data = json_decode($json, FALSE, $this->drush_webform_composer_get_json_encode_options());
+    if (!isset($data->repositories)) {
+      $data->repositories = (object) [];
+    }
+    if (!isset($data->require)) {
+      $data->repositories = (object) [];
+    }
 
     // Add drupal-library to installer paths.
     if (strpos($json, 'type:drupal-library') === FALSE) {
-      $data['extra']['installer-paths'][$composer_directory . 'libraries/{$name}'][] = 'type:drupal-library';
+      $library_path = $composer_directory . 'libraries/{$name}';
+      $data->extra->{'installer-paths'}->{$library_path}[] = 'type:drupal-library';
     }
 
     // Get repositories and require.
-    $repositories = &$data['repositories'];
-    $require = &$data['require'];
+    $repositories = &$data->repositories;
+    $require = &$data->require;
 
     // Remove all existing _webform repositories.
     foreach ($repositories as $repository_name => $repository) {
-      if (!empty($repository['_webform'])) {
-        $package_name = $repositories[$repository_name]['package']['name'];
-        unset($repositories[$repository_name], $require[$package_name]);
+      if (!empty($repository->_webform)) {
+        $package_name = $repositories->{$repository_name}->package->name;
+        unset($repositories->{$repository_name}, $require->{$package_name});
       }
     }
 
@@ -964,47 +968,57 @@ class WebformCliService implements WebformCliServiceInterface {
     // Set libraries.
     $this->drush_webform_composer_set_libraries($repositories, $require);
 
-    $json_options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
-    file_put_contents($composer_json, json_encode($data, $json_options));
+    file_put_contents($composer_json, json_encode($data, $this->drush_webform_composer_get_json_encode_options()));
 
     $this->drush_print("$composer_json updated.");
     $this->drush_print('Make sure to run `composer update`.');
   }
 
+  /**
+   * Get Composer specific JSON encode options.
+   *
+   * @return int
+   *   Composer specific JSON encode options.
+   *
+   * @see https://getcomposer.org/apidoc/1.6.2/Composer/Json/JsonFile.html#method_encode
+   */
+  protected function drush_webform_composer_get_json_encode_options() {
+    return JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
+  }
 
   /**
    * Set composer disable tls.
    *
    * This is needed when CKEditor's HTTPS server's SSL is not working properly.
    *
-   * @param array $data
+   * @param object $data
    *   Composer JSON data.
    */
-  protected function drush_webform_composer_set_disable_tls(array &$data) {
+  protected function drush_webform_composer_set_disable_tls(&$data) {
     // Remove disable-tls config.
-    if (isset($data['config']) && isset($data['config']['disable-tls'])) {
-      unset($data['config']['disable-tls']);
+    if (isset($data->config) && isset($data->config->{'disable-tls'})) {
+      unset($data->config->{'disable-tls'});
     }
     if ($this->drush_get_option('disable-tls')) {
-      $data['config']['disable-tls'] = TRUE;
+      $data->config->{'disable-tls'} = TRUE;
     }
   }
 
   /**
    * Set composer libraries.
    *
-   * @param array $repositories
+   * @param object $repositories
    *   Composer repositories.
-   * @param array $require
+   * @param object $require
    *   Composer require.
    */
-  protected function drush_webform_composer_set_libraries(array &$repositories, array &$require) {
+  protected function drush_webform_composer_set_libraries(&$repositories, &$require) {
     /** @var \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager */
     $libraries_manager = \Drupal::service('webform.libraries_manager');
     $libraries = $libraries_manager->getLibraries(TRUE);
     foreach ($libraries as $library_name => $library) {
       // Never overwrite existing repositories.
-      if (isset($repositories[$library_name])) {
+      if (isset($repositories->{$library_name})) {
         continue;
       }
 
@@ -1012,7 +1026,7 @@ class WebformCliService implements WebformCliServiceInterface {
       $dist_type = (preg_match('/\.zip$/', $dist_url)) ? 'zip' : 'file';
       $package_version = $library['version'];
       $package_name = (strpos($library_name, '.') === FALSE) ? "$library_name/$library_name" : str_replace('.', '/', $library_name);
-      $repositories[$library_name] = [
+      $repositories->$library_name = [
         '_webform' => TRUE,
         'type' => 'package',
         'package' => [
@@ -1032,10 +1046,10 @@ class WebformCliService implements WebformCliServiceInterface {
         ],
       ];
 
-      $require[$package_name] = $package_version;
+      $require->$package_name = $package_version;
     }
-    ksort($repositories);
-    ksort($require);
+    $repositories = WebformObjectHelper::sortByProperty($repositories);
+    $require = WebformObjectHelper::sortByProperty($require);
   }
 
   /******************************************************************************/
