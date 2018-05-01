@@ -306,8 +306,17 @@ abstract class WebformHandlerFormBase extends FormBase {
    */
   public function exists($handler_id) {
     $instance_ids = $this->webform->getHandlers()->getInstanceIds();
-
     return (isset($instance_ids[$handler_id])) ? TRUE : FALSE;
+  }
+
+  /**
+   * Get the webform handler's webform.
+   *
+   * @return \Drupal\webform\WebformInterface
+   *   A webform.
+   */
+  public function getWebform() {
+    return $this->webform;
   }
 
   /**

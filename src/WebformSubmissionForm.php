@@ -2067,25 +2067,12 @@ class WebformSubmissionForm extends ContentEntityForm {
   /****************************************************************************/
 
   /**
-   * Get the message manager.
-   *
-   * We need to wrap the message manager service because the webform submission
-   * entity is being continuous cloned and updated during form processing.
-   *
-   * @see \Drupal\Core\Entity\EntityForm::buildEntity
-   */
-  protected function getMessageManager() {
-    $this->messageManager->setWebformSubmission($this->getEntity());
-    return $this->messageManager;
-  }
-
-  /**
    * Get the webform submission's webform.
    *
    * @return \Drupal\webform\WebformInterface
    *   A webform.
    */
-  protected function getWebform() {
+  public function getWebform() {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $this->getEntity();
     return $webform_submission->getWebform();
@@ -2099,6 +2086,19 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function getSourceEntity() {
     return $this->sourceEntity;
+  }
+
+  /**
+   * Get the message manager.
+   *
+   * We need to wrap the message manager service because the webform submission
+   * entity is being continuous cloned and updated during form processing.
+   *
+   * @see \Drupal\Core\Entity\EntityForm::buildEntity
+   */
+  protected function getMessageManager() {
+    $this->messageManager->setWebformSubmission($this->getEntity());
+    return $this->messageManager;
   }
 
   /**
