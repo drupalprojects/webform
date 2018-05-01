@@ -34,7 +34,7 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
   /**
    * Test single and multiple file upload.
    */
-  public function _testFileUpload() {
+  public function testFileUpload() {
     /* Element rendering */
     $this->drupalGet('webform/test_element_managed_file');
 
