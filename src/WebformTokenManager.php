@@ -78,6 +78,14 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    * {@inheritdoc}
    */
   public function replace($text, EntityInterface $entity = NULL, array $data = [], array $options = []) {
+    // Issue #2968554: Clear cache via the UI is throwing an exception.
+    // Workaround: Do not replace tokens when cache is cleared via the UI.
+    // (/admin/config/development/performance)
+    // @see https://www.drupal.org/project/webform/issues/2968554
+    if (\Drupal::routeMatch()->getRouteName() === 'system.performance_settings') {
+      return $text;
+    }
+
     // Replace tokens within an array.
     if (is_array($text)) {
       foreach ($text as $key => $value) {
