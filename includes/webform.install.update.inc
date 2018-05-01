@@ -62,23 +62,7 @@ function webform_update_8001() {
  * Issue #2834572: Refactor and improve token management.
  */
 function webform_update_8002() {
-  $config_factory = \Drupal::configFactory();
-
-  // Update 'webform.settings' configuration.
-  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
-  $yaml = Yaml::encode($settings_config->getRawData());
-  $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
-  $settings_config->setData(Yaml::decode($yaml));
-  $settings_config->save();
-
-  // Update 'webform.webform.*' configuration.
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
-    $yaml = Yaml::encode($webform_config->getRawData());
-    $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
-    $webform_config->setData(Yaml::decode($yaml));
-    $webform_config->save();
-  }
+  _webform_update_string_replace('[webform-submission:', '[webform_submission:');
 }
 
 /**
@@ -2156,23 +2140,7 @@ function webform_update_8117() {
  * Issue #2957074: Invalid Tokens in Email Handler.
  */
 function webform_update_8118() {
-  $config_factory = \Drupal::configFactory();
-
-  // Update 'webform.settings' configuration.
-  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
-  $yaml = Yaml::encode($settings_config->getRawData());
-  $yaml = str_replace('[webform-submission:', '[webform_submission:', $yaml);
-  $settings_config->setData(Yaml::decode($yaml));
-  $settings_config->save();
-
-  // Update 'webform.webform.*' configuration.
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
-    $yaml = Yaml::encode($webform_config->getRawData());
-    $yaml = str_replace('[webform-submission:', '[webform_submission:', $yaml);
-    $webform_config->setData(Yaml::decode($yaml));
-    $webform_config->save();
-  }
+  _webform_update_string_replace('[webform-submission:', '[webform_submission:');
 }
 
 
@@ -2209,4 +2177,11 @@ function webform_update_8121() {
  */
 function webform_update_8122() {
   _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2962442: Remove [webform-authenticated-user] token and use [current-user] token with clear value option.
+ */
+function webform_update_8123() {
+  _webform_update_string_replace('[webform-authenticated-user:', '[current-user:');
 }

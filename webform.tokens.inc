@@ -25,16 +25,6 @@ function webform_token_info() {
   $tokens = [];
 
   /****************************************************************************/
-  // Authenticated user.
-  /****************************************************************************/
-
-  $types['webform-authenticated-user'] = [
-    'name' => t('Webform authenticated user'),
-    'description' => t('Tokens related to the currently authenticated user.'),
-    'type' => 'user',
-  ];
-
-  /****************************************************************************/
   // Webform submission.
   /****************************************************************************/
 
@@ -330,20 +320,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
   }
 
   $replacements = [];
-  if ($type == 'webform-authenticated-user') {
-    if (\Drupal::currentUser()->isAuthenticated()) {
-      $account = User::load(\Drupal::currentUser()->id());
-      $bubbleable_metadata->addCacheableDependency($account);
-      $replacements += $token_service->generate('user', $tokens, ['user' => $account], $options, $bubbleable_metadata);
-    }
-    // Make sure to clear all tokens.
-    foreach ($tokens as $name => $original) {
-      if (!isset($replacements[$original])) {
-        $replacements[$original] = '';
-      }
-    }
-  }
-  elseif ($type == 'webform_role' && !empty($data['webform_role'])) {
+  if ($type == 'webform_role' && !empty($data['webform_role'])) {
     $roles = $data['webform_role'];
     $any_role = in_array('authenticated', $roles) ? TRUE : FALSE;
     foreach ($tokens as $role_name => $original) {
