@@ -1030,7 +1030,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function getLabel(array $element) {
-    return $element['#title'] ?: $element['#webform_key'];
+    return (!empty($element['#title'])) ? $element['#title'] : $element['#webform_key'];
   }
 
   /**
