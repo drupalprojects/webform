@@ -31,12 +31,6 @@ class WebformEntityElementsValidationTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-
-    $this->installSchema('webform', ['webform']);
-    $this->installConfig('webform');
-    $this->installEntitySchema('webform_submission');
-    $this->installEntitySchema('user');
-
     $this->validator = \Drupal::service('webform.elements_validator');
   }
 
@@ -67,18 +61,6 @@ class WebformEntityElementsValidationTest extends KernelTestBase {
         'getElementsRaw' => 'string',
         'messages' => [
           'Elements are not valid. YAML must contain an associative array of elements.',
-        ],
-      ],
-
-      // Check reserved names.
-      [
-        'getElementsRaw' => "langcode:
-  '#type': textfield",
-        'getElementsInitializedAndFlattened' => [
-          'langcode' => ['#type' => 'textfield'],
-        ],
-        'messages' => [
-          'Elements contain a reserved element key <em class="placeholder">langcode</em> found on line 1.',
         ],
       ],
 
@@ -202,7 +184,6 @@ duplicate:
         'getElementsInitializedAndFlattened' => [],
         'hasSubmissions' => TRUE,
         'label' => 'Test',
-        'id' => 'test',
         'toUrl' => Url::fromUri('http://example.com'),
         'messages' => [],
       ];
