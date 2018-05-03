@@ -39,7 +39,7 @@ services:
 
   webform.elements_validator:
     class: Drupal\webform\WebformEntityElementsValidator
-    arguments: ['@renderer', '@plugin.manager.webform.element', '@entity_type.manager', '@form_builder']
+    arguments: ['@renderer', '@entity_type.manager', '@entity_field.manager', '@form_builder', '@plugin.manager.webform.element']
 
   webform.email_provider:
     class: Drupal\webform\WebformEmailProvider

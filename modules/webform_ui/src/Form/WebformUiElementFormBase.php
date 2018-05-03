@@ -452,8 +452,16 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
    *   TRUE if the webform element key, FALSE otherwise.
    */
   public function exists($key) {
+    $field_definitions = $this->entityFieldManager->getFieldDefinitions('webform_submission', $this->webform->id());
+    if (isset($field_definitions[$key])) {
+      return TRUE;
+    }
+
     $elements = $this->webform->getElementsInitializedAndFlattened();
-    return (isset($elements[$key])) ? TRUE : FALSE;
+    if (isset($elements[$key])) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
   /**
