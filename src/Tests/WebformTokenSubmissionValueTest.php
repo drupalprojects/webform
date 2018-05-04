@@ -46,9 +46,7 @@ class WebformTokenSubmissionValueTest extends WebformTestBase {
     $tokens = [
       // Emails.
       'webform_submission:values:email' => 'example@example.com',
-      'webform_submission:values:emails' => '- one@example.com
-- two@example.com
-- three@example.com',
+      'webform_submission:values:email:urlencode' => 'example%40example.com',
       'webform_submission:values:emails:0' => 'one@example.com',
       'webform_submission:values:emails:1' => 'two@example.com',
       'webform_submission:values:emails:2' => 'three@example.com',
@@ -106,7 +104,16 @@ john@example.com',
       'webform_submission:values:contacts:0:name' => 'John Smith',
       'webform_submission:values:contacts:1:name' => 'Jane Doe',
       'webform_submission:values:contacts:0:email:html' => '<a href="mailto:john@example.com">john@example.com</a>',
+      'webform_submission:values:contacts:0:email:urlencode' => 'john%40example.com',
       'webform_submission:values:contacts:1:email:raw:html' => 'jane@example.com',
+
+      // Containers
+      'webform_submission:values:fieldset' => '<pre>fieldset
+--------
+first_name: John
+last_name: Smith
+</pre>',
+      'webform_submission:values:fieldset:urlencode' => 'fieldset%0A--------%0Afirst_name%3A+John%0Alast_name%3A+Smith%0A',
 
       // Submission limits.
       'webform_submission:limit:webform' => '100',

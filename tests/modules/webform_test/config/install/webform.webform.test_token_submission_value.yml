@@ -180,6 +180,7 @@ settings:
     <h3>emails</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:email</th><td width="50%">[webform_submission:values:email]</td></tr>
+    <tr><th width="50%">webform_submission:values:email:urlencode</th><td width="50%">[webform_submission:values:email:urlencode]</td></tr>
     <tr><th width="50%">webform_submission:values:emails</th><td width="50%">[webform_submission:values:emails]</td></tr>
     <tr><th width="50%">webform_submission:values:emails:0</th><td width="50%">[webform_submission:values:emails:0]</td></tr>
     <tr><th width="50%">webform_submission:values:emails:1</th><td width="50%">[webform_submission:values:emails:1]</td></tr>
@@ -234,6 +235,7 @@ settings:
     <tr><th width="50%">webform_submission:values:contacts:0:name</th><td width="50%">[webform_submission:values:contacts:0:name]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:name</th><td width="50%">[webform_submission:values:contacts:1:name]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:0:email:html</th><td width="50%">[webform_submission:values:contacts:0:email:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:0:email:urlencode</th><td width="50%">[webform_submission:values:contacts:0:email:urlencode]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:email:raw:html</th><td width="50%">[webform_submission:values:contacts:1:email:raw:html]</td></tr>
     </table>
     
@@ -241,6 +243,7 @@ settings:
     <table class="table">
     <tr><th width="50%">webform_submission:values:fieldset</th><td width="50%"><pre>[webform_submission:values:fieldset]</pre></td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:html</th><td width="50%">[webform_submission:values:fieldset:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:fieldset:urlencode</th><td width="50%">[webform_submission:values:fieldset:urlencode]</td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:header:html</th><td width="50%">[webform_submission:values:fieldset:header:html]</td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:details:html</th><td width="50%">[webform_submission:values:fieldset:details:html]</td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:fieldset:html</th><td width="50%">[webform_submission:values:fieldset:fieldset:html]</td></tr>
