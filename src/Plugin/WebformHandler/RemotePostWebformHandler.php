@@ -75,6 +75,17 @@ class RemotePostWebformHandler extends WebformHandlerBase {
   protected $elementManager;
 
   /**
+   * List of unsupported webforem submission properties.
+   *
+   * The below properties will not being included in a remote post.
+   *
+   * @var array
+   */
+  protected $unsupportedProperties = [
+    'metatag',
+  ];
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionConditionsValidatorInterface $conditions_validator, ModuleHandlerInterface $module_handler, ClientInterface $http_client, WebformTokenManagerInterface $token_manager, WebformMessageManagerInterface $message_manager, WebformElementManagerInterface $element_manager) {
@@ -494,10 +505,16 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     // Get submission and elements data.
     $data = $webform_submission->toArray(TRUE);
 
-    // Flatten data.
-    // Prioritizing elements before the submissions fields.
-    $data = $data['data'] + $data;
+    // Remove unsupported properties from data.
+    // These are typically added by other module's like metatag.
+    $unsupported_properties = array_combine($this->unsupportedProperties, $this->unsupportedProperties);
+    $data = array_diff_key($data, $unsupported_properties);
+
+    // Flatten data and prioritize the element data over the
+    // webform submission data.
+    $element_data = $data['data'];
     unset($data['data']);
+    $data = $element_data + $data;
 
     // Excluded selected submission data.
     $data = array_diff_key($data, $this->configuration['excluded_data']);
