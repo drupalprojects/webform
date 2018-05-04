@@ -18,7 +18,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Form\WebformDialogFormTrait;
 use Drupal\webform\Plugin\WebformElement\Hidden;
@@ -322,7 +321,8 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
-    parent::copyFormValuesToEntity($entity, $form, $form_state);
+    // NOTE: We are not copying form values to the entity because
+    // webform element keys can override webform submission properties.
 
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $entity;
@@ -340,6 +340,12 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Set current page.
     if ($current_page = $this->getCurrentPage($form, $form_state)) {
       $entity->setCurrentPage($current_page);
+    }
+
+    // Set in draft.
+    $in_draft = $form_state->get('in_draft');
+    if ($in_draft !== NULL) {
+      $entity->set('in_draft', $in_draft);
     }
   }
 
@@ -1135,7 +1141,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->confirmForm($form, $form_state);
     }
     elseif ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
-      $form_state->setValue('in_draft', TRUE);
+      $form_state->set('in_draft', TRUE);
 
       $this->submitForm($form, $form_state);
       $this->save($form, $form_state);
@@ -1158,7 +1164,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   public function autosave(array &$form, FormStateInterface $form_state) {
     if ($form_state->hasAnyErrors()) {
       if ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
-        $form_state->setValue('in_draft', TRUE);
+        $form_state->set('in_draft', TRUE);
 
         $this->submitForm($form, $form_state);
         $this->save($form, $form_state);
@@ -1177,7 +1183,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   public function draft(array &$form, FormStateInterface $form_state) {
     $form_state->clearErrors();
-    $form_state->setValue('in_draft', TRUE);
+    $form_state->set('in_draft', TRUE);
     $form_state->set('draft_saved', TRUE);
     $this->entity->validate();
   }
@@ -1191,7 +1197,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function complete(array &$form, FormStateInterface $form_state) {
-    $form_state->setValue('in_draft', FALSE);
+    $form_state->set('in_draft', FALSE);
   }
 
   /**
