@@ -17,6 +17,27 @@ class WebformOptionsHelper {
   const DESCRIPTION_DELIMITER = ' -- ';
 
   /**
+   * Append option value to option text
+   *
+   * @param array $options
+   *   An associative array of options.
+   *
+   * @return array
+   *   An associative array of options.
+   */
+  public static function appendValueToText(array $options) {
+    foreach ($options as $value => $text) {
+      if (is_array($text)) {
+        $options[$value] = self::appendValueToText($text);
+      }
+      else {
+        $options[$value] = $text . ' (' . $value . ')';
+      }
+    }
+    return $options;
+  }
+
+  /**
    * Determine if the options has a specified value..
    *
    * @param string $value

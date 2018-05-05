@@ -17,12 +17,12 @@ elements: |
     '#title': 'Your Name'
     '#type': textfield
     '#required': true
-    '#default_value': '[webform-authenticated-user:display-name]'
+    '#default_value': '[current-user:display-name]'
   email:
     '#title': 'Your Email'
     '#type': email
     '#required': true
-    '#default_value': '[webform-authenticated-user:mail]'
+    '#default_value': '[current-user:mail]'
   subject:
     '#title': Subject
     '#type': textfield

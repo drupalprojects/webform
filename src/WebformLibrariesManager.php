@@ -2,10 +2,10 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Asset\LibraryDiscoveryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -16,6 +16,13 @@ use Drupal\webform\Utility\WebformArrayHelper;
 class WebformLibrariesManager implements WebformLibrariesManagerInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The library discovery service.
+   *
+   * @var \Drupal\Core\Asset\LibraryDiscoveryInterface
+   */
+  protected $libraryDiscovery;
 
   /**
    * The configuration object factory.
@@ -50,11 +57,13 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *
    * @var array
    */
-  protected $excludedLibraries = [];
+  protected $excludedLibraries;
 
   /**
    * Constructs a WebformLibrariesManager object.
    *
+   * @param \Drupal\Core\Asset\LibraryDiscoveryInterface $library_discovery
+   *   The library discovery service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -62,13 +71,11 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, RendererInterface $renderer) {
+  public function __construct(LibraryDiscoveryInterface $library_discovery, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, RendererInterface $renderer) {
+    $this->libraryDiscovery = $library_discovery;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->renderer = $renderer;
-
-    $this->libraries = $this->initLibraries();
-    $this->excludedLibraries = $this->initExcludedLibraries();
   }
 
   /**
@@ -184,13 +191,19 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function getLibrary($name) {
-    return $this->libraries[$name];
+    $libraries = $this->getLibraries();
+    return $libraries [$name];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLibraries($included = NULL) {
+    // Initialize libraries.
+    if (!isset($this->libraries)) {
+      $this->libraries = $this->initLibraries();
+    }
+
     $libraries = $this->libraries;
     if ($included !== NULL) {
       foreach ($libraries as $library_name => $library) {
@@ -206,6 +219,11 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function getExcludedLibraries() {
+    // Initialize excluded libraries.
+    if (!isset($this->excludedLibraries)) {
+      $this->excludedLibraries = $this->initExcludedLibraries();
+    }
+
     return $this->excludedLibraries;
   }
 
@@ -213,11 +231,12 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function isExcluded($name) {
-    if (empty($this->excludedLibraries)) {
+    $excluded_libraries = $this->getExcludedLibraries();
+    if (empty($excluded_libraries)) {
       return FALSE;
     }
 
-    if (isset($this->excludedLibraries[$name])) {
+    if (isset($excluded_libraries[$name])) {
       return TRUE;
     }
 
@@ -227,7 +246,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
 
     $parts = explode('.', preg_replace('#^(webform/)?libraries.#', '', $name));
     while ($parts) {
-      if (isset($this->excludedLibraries[implode('.', $parts)])) {
+      if (isset($excluded_libraries[implode('.', $parts)])) {
         return TRUE;
       }
       array_pop($parts);
@@ -250,9 +269,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *   An associative array containing libraries.
    */
   protected function initLibraries() {
-    // Get Drupal core's CKEditor version number.
-    $core_libraries = Yaml::decode(file_get_contents('core/core.libraries.yml'));
-    $ckeditor_version = $core_libraries['ckeditor']['version'];
+    $ckeditor_version = $this->getCkeditorVersion();
 
     $libraries = [];
     $libraries['ckeditor.autogrow'] = [
@@ -293,10 +310,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Provides a basic link dialog for CKEditor.'),
       'notes' => $this->t('Allows CKEditor to use basic link dialog, which is not included in Drupal core.'),
       'homepage_url' => Url::fromUri('https://ckeditor.com/addon/link'),
-      'download_url' => Url::fromUri('https://download.ckeditor.com/link/releases/link_4.6.2.zip'),
+      'download_url' => Url::fromUri("https://download.ckeditor.com/link/releases/link_$ckeditor_version.zip"),
       'plugin_path' => 'libraries/ckeditor.link/',
       'plugin_url' => "https://cdn.rawgit.com/ckeditor/ckeditor-dev/$ckeditor_version/plugins/link/",
-      'version' => '4.6.2',
+      'version' => $ckeditor_version,
       'optional' => TRUE,
     ];
     $libraries['ckeditor.codemirror'] = [
@@ -304,10 +321,10 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Provides syntax highlighting for the CKEditor with the CodeMirror Plugin.'),
       'notes' => $this->t('Makes it easier to edit the HTML source.'),
       'homepage_url' => Url::fromUri('https://github.com/w8tcha/CKEditor-CodeMirror-Plugin'),
-      'download_url' => Url::fromUri('https://github.com/w8tcha/CKEditor-CodeMirror-Plugin/releases/download/v1.17.3/CKEditor-CodeMirror-Plugin.zip'),
+      'download_url' => Url::fromUri('https://github.com/w8tcha/CKEditor-CodeMirror-Plugin/releases/download/v1.17.5/CKEditor-CodeMirror-Plugin.zip'),
       'plugin_path' => 'libraries/ckeditor.codemirror/codemirror/',
-      'plugin_url' => "https://cdn.rawgit.com/w8tcha/CKEditor-CodeMirror-Plugin/v1.17.3/codemirror/",
-      'version' => 'v1.17.3',
+      'plugin_url' => "https://cdn.rawgit.com/w8tcha/CKEditor-CodeMirror-Plugin/v1.17.5/codemirror/",
+      'version' => 'v1.17.5',
       'optional' => TRUE,
     ];
     $libraries['codemirror'] = [
@@ -315,8 +332,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Code Mirror is a versatile text editor implemented in JavaScript for the browser.'),
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
-      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.31.0.zip'),
-      'version' => '5.31.0',
+      'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.36.0.zip'),
+      'version' => '5.36.0',
       'optional' => TRUE,
     ];
     $libraries['jquery.geocomplete'] = [
@@ -343,8 +360,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('Input masks ensures a predefined format is entered. This can be useful for dates, numerics, phone numbers, etc...'),
       'notes' => $this->t('Input masks are used to ensure predefined and custom formats for text fields.'),
       'homepage_url' => Url::fromUri('https://robinherbots.github.io/Inputmask/'),
-      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.10.zip'),
-      'version' => '3.3.10',
+      'download_url' => Url::fromUri('https://github.com/RobinHerbots/jquery.inputmask/archive/3.3.11.zip'),
+      'version' => '3.3.11',
       'optional' => TRUE,
     ];
     $libraries['jquery.intl-tel-input'] = [
@@ -352,8 +369,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t("A jQuery plugin for entering and validating international telephone numbers. It adds a flag dropdown to any input, detects the user's country, displays a relevant placeholder and provides formatting/validation methods."),
       'notes' => $this->t('International Telephone Input is used by the Telephone element.'),
       'homepage_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input'),
-      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.1.0.zip'),
-      'version' => '12.1.0',
+      'download_url' => Url::fromUri('https://github.com/jackocnr/intl-tel-input/archive/v12.1.12.zip'),
+      'version' => '12.1.12',
       'optional' => TRUE,
     ];
     $libraries['jquery.rateit'] = [
@@ -379,8 +396,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A jQuery plugin that makes long, unwieldy select boxes much more user-friendly.'),
       'notes' => $this->t('Chosen is used to improve the user experience for select menus. Chosen is an alternative to Select2.'),
       'homepage_url' => Url::fromUri('https://harvesthq.github.io/chosen/'),
-      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.8.2/chosen_v1.8.2.zip'),
-      'version' => '1.8.2',
+      'download_url' => Url::fromUri('https://github.com/harvesthq/chosen/releases/download/v1.8.3/chosen_v1.8.3.zip'),
+      'version' => '1.8.3',
       'optional' => TRUE,
     ];
     $libraries['jquery.timepicker'] = [
@@ -388,8 +405,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'description' => $this->t('A lightweight, customizable javascript timepicker plugin for jQuery, inspired by Google Calendar.'),
       'notes' => $this->t('Timepicker is used to provide a polyfill for HTML 5 time elements.'),
       'homepage_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker'),
-      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.12.zip'),
-      'version' => '1.11.12',
+      'download_url' => Url::fromUri('https://github.com/jonthornton/jquery-timepicker/archive/1.11.13.zip'),
+      'version' => '1.11.13',
       'optional' => TRUE,
     ];
     $libraries['jquery.toggles'] = [
@@ -461,7 +478,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     }
 
     // Get excluded libraries based on excluded (element) types.
-    foreach ($this->libraries as $library_name => $library) {
+    $libraries = $this->getLibraries();
+    foreach ($libraries as $library_name => $library) {
       if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
         $excluded_libraries[$library_name] = $library_name;
       }
@@ -485,6 +503,28 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       return FALSE;
     }
     return WebformArrayHelper::keysExist($excluded_elements, $elements);
+  }
+
+  /**
+   * Get Drupal core's CKEditor version number.
+   *
+   * @return string
+   *   Drupal core's CKEditor version number.
+   */
+  protected function getCkeditorVersion() {
+    // Get CKEditor semantic version number from the JS file.
+    // @see core/core.libraries.yml
+    $definition = $this->libraryDiscovery->getLibraryByName('core', 'ckeditor');
+    $ckeditor_version = $definition['js'][0]['version'];
+
+    // Parse CKEditor semantic version number from security patches
+    // (i.e. 4.8.0+2018-04-18-security-patch).
+    if (preg_match('/^\d+\.\d+\.\d+/', $ckeditor_version, $match)) {
+      return $match[0];
+    }
+    else {
+      return $ckeditor_version;
+    }
   }
 
 }

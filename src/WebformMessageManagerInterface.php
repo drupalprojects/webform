@@ -240,6 +240,14 @@ interface WebformMessageManagerInterface {
   public function display($key, $type = 'status');
 
   /**
+   * Render message.
+   *
+   * @return \Drupal\Core\Render\Markup|null
+   *   A rendered message.
+   */
+  public function render($key);
+
+  /**
    * Build message.
    *
    * @return array

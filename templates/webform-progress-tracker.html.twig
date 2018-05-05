@@ -19,7 +19,7 @@
 {{ attach_library('webform/webform.progress.tracker') }}
 
 <ul class="webform-progress-tracker progress-tracker progress-tracker--center">
-  {% for index, title in progress %}
+  {% for index, page in progress %}
   {%
     set classes = [
       'progress-step',
@@ -27,11 +27,11 @@
       index == current_index ? 'is-active',
     ]
   %}
-  <li{{ attributes.setAttribute('class', '').addClass(classes) }}>
+  <li{{ attributes.setAttribute('data-webform-page', page.name).setAttribute('class', '').addClass(classes) }}>
     <span class="progress-marker">{{ index + 1 }}</span>
     {% if progress|length < max_pages %}
       <span class="progress-text">
-        <div class="progress-title">{{ title }}</div>
+        <div class="progress-title">{{ page.title }}</div>
       </span>
     {% endif %}
   </li>

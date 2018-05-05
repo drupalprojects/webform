@@ -27,6 +27,16 @@
     return (typeof this.data(data) !== 'undefined');
   };
 
+  /**
+   * Check if element is within the webform or not.
+   *
+   * @returns {boolean}
+   *   TRUE if element is within the webform.
+   */
+  $.fn.isWebform = function () {
+    return $(this).closest('form[id^="webform"]').length ? true : false;
+  };
+
   // The change event is triggered by cut-n-paste and select menus.
   // Issue #2445271: #states element empty check not triggered on mouse
   // based paste.
@@ -58,7 +68,7 @@
   var $document = $(document);
 
   $document.on('state:required', function (e) {
-    if (e.trigger) {
+    if (e.trigger && $(e.target).isWebform()) {
       var $target = $(e.target);
       // Fix #required file upload.
       // @see Issue #2860529: Conditional required File upload field don't work.
@@ -119,13 +129,13 @@
   });
 
   $document.on('state:readonly', function (e) {
-    if (e.trigger) {
+    if (e.trigger && $(e.target).isWebform()) {
       $(e.target).prop('readonly', e.value).closest('.js-form-item, .js-form-wrapper').toggleClass('webform-readonly', e.value).find('input, textarea').prop('readonly', e.value);
     }
   });
 
   $document.on('state:visible state:visible-slide', function (e) {
-    if (e.trigger) {
+    if (e.trigger && $(e.target).isWebform()) {
       if (e.value) {
         $(':input', e.target).addBack().each(function () {
           restoreValueAndRequired(this);
@@ -144,7 +154,7 @@
   });
 
   $document.bind('state:visible-slide', function(e) {
-    if (e.trigger) {
+    if (e.trigger && $(e.target).isWebform()) {
       var effect = e.value ? 'slideDown' : 'slideUp';
       var duration = Drupal.webform.states[effect].duration;
       $(e.target).closest('.js-form-item, .js-form-submit, .js-form-wrapper')[effect ](duration);
@@ -153,7 +163,7 @@
   Drupal.states.State.aliases['invisible-slide'] = '!visible-slide';
 
   $document.on('state:disabled', function (e) {
-    if (e.trigger) {
+    if (e.trigger && $(e.target).isWebform()) {
       // Make sure disabled property is set before triggering webform:disabled.
       // Copied from: core/misc/states.js
       $(e.target)

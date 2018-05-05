@@ -196,6 +196,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
 
   // Set back_url.
   if ($source_entity && $source_entity->hasLinkTemplate('canonical')) {
+    $source_entity = \Drupal::service('entity.repository')->getTranslationFromContext($source_entity);
     $variables['back_url'] = $source_entity->toUrl('canonical', $options)->toString();
   }
   elseif ($webform_submission) {
@@ -557,8 +558,11 @@ function _template_preprocess_webform_progress(array &$variables) {
 
   // Reset the pages variable.
   $variables['progress'] = [];
-  foreach ($pages as $page) {
-    $variables['progress'][] = (isset($page['#title'])) ? $page['#title'] : '';
+  foreach ($pages as $key => $page) {
+    $variables['progress'][] = [
+      'name' => $key,
+      'title' => (isset($page['#title'])) ? $page['#title'] : '',
+    ];
   }
 }
 

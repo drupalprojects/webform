@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Tests\Element;
 
+use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
 
 /**
@@ -65,6 +66,19 @@ abstract class WebformElementManagedFileTestBase extends WebformElementTestBase 
    */
   protected function getLastFileId() {
     return (int) \Drupal::database()->query('SELECT MAX(fid) FROM {file_managed}')->fetchField();
+  }
+
+  /**
+   * Load an uncached file entity.
+   *
+   * @param $fid
+   *   A file id.
+   *
+   * @return \Drupal\file\FileInterface
+   */
+  protected function fileLoad($fid) {
+    \Drupal::entityTypeManager()->getStorage('file')->resetCache();
+    return File::load($fid);
   }
 
 }

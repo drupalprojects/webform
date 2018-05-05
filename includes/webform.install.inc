@@ -262,6 +262,38 @@ function _webform_update_webform_submission_storage_schema() {
 }
 
 /**
+ * Replace string in webform.settings.yml and webform.webform.*.yml
+ *
+ * @param string $search
+ *   String to be search for.
+ * @param $replace
+ *   String to be replace with.
+ */
+function _webform_update_string_replace($search, $replace) {
+  $config_factory = \Drupal::configFactory();
+
+  // Update 'webform.settings' configuration.
+  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $yaml = Yaml::encode($settings_config->getRawData());
+  if (strpos($yaml, $search) !== FALSE) {
+    $yaml = str_replace($search, $replace, $yaml);
+    $settings_config->setData(Yaml::decode($yaml));
+    $settings_config->save();
+  }
+
+  // Update 'webform.webform.*' configuration.
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $yaml = Yaml::encode($webform_config->getRawData());
+    if (strpos($yaml, $search) !== FALSE) {
+      $yaml = str_replace($search, $replace, $yaml);
+      $webform_config->setData(Yaml::decode($yaml));
+      $webform_config->save();
+    }
+  }
+}
+
+/**
  * Clear/remove selected webform element properties.
  *
  * @param array $properties

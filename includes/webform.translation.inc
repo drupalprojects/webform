@@ -7,10 +7,37 @@
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformYaml;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Utility\WebformElementHelper;
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function webform_form_locale_translate_edit_form_alter(&$form, FormStateInterface $form_state) {
+  // Don't allow YAML to be validated using locale string translation.
+  foreach (\Drupal\Core\Render\Element::children($form['strings']) as $key) {
+    $element =& $form['strings'][$key];
+    if ($element['original']
+      && !empty($element['original']['#plain_text'])
+      && preg_match("/'#[^']+':/", $element['original']['#plain_text'])
+      && WebformYaml::isValid($element['original']['#plain_text'])) {
+      $element['original'] = [
+        '#theme' => 'webform_codemirror',
+        '#code' => $element['original']['#plain_text'],
+        '#type' => 'yaml',
+      ];
+      $element['translations'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => t("Webforms can only be translated via the Webform's (Configuration) Translate tab."),
+      ];
+    }
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

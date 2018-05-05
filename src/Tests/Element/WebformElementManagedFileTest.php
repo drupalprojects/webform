@@ -25,7 +25,11 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_managed_file', 'test_element_managed_file_name'];
+  protected static $testWebforms = [
+    'test_element_managed_file',
+    'test_element_managed_file_dis',
+    'test_element_managed_file_name',
+  ];
 
   /**
    * Test single and multiple file upload.
@@ -88,6 +92,101 @@ class WebformElementManagedFileTest extends WebformElementManagedFileTestBase {
       $this->assertEqual('file_multiple_' . $source_for_filename . $suffix . '.txt', $file->getFilename());
       $i++;
     }
+  }
+
+  /**
+   * Test file management.
+   */
+  protected function testFileManagement() {
+    $this->drupalLogin($this->rootUser);
+
+    $webform = Webform::load('test_element_managed_file');
+
+    /**************************************************************************/
+    // Test immediately delete file.
+    /**************************************************************************/
+
+    // Upload files.
+    $sid = $this->postSubmissionTest($webform);
+    /** @var \Drupal\webform\WebformSubmissionInterface $submission */
+    $submission = WebformSubmission::load($sid);
+    $managed_file_single = $this->fileLoad($submission->getElementData('managed_file_single'));
+
+    // Check single file is not temporary.
+    $this->debug($submission->getData());
+    $this->assertNotNull($managed_file_single);
+    $this->assertFalse($managed_file_single->isTemporary());
+
+    // Check deleting file completely deletes the file record.
+    $submission->delete();
+    $managed_file_single = $this->fileLoad($submission->getElementData('managed_file_single'));
+    $this->assertNull($managed_file_single);
+
+    /**************************************************************************/
+    // Test disabling immediately deleted temporary managed files.
+    /**************************************************************************/
+
+    // Disable deleting of temporary files.
+    $config = \Drupal::configFactory()->getEditable('webform.settings');
+    $config->set('file.delete_temporary_managed_files', FALSE);
+    $config->save();
+
+    // Upload files.
+    $sid = $this->postSubmissionTest($webform);
+    $submission = WebformSubmission::load($sid);
+
+    // Check deleting file completely deletes the file record.
+    $submission->delete();
+    $managed_file_single = $this->fileLoad($submission->getElementData('managed_file_single'));
+    $this->assertNotNull($managed_file_single);
+    $this->assertTrue($managed_file_single->isTemporary());
+
+    /**************************************************************************/
+    // Test disabling unused files marked temporary.
+    /**************************************************************************/
+
+    // Disable deleting of temporary files.
+    $config = \Drupal::configFactory()->getEditable('webform.settings');
+    $config->set('file.make_unused_managed_files_temporary', FALSE);
+    $config->save();
+
+    // Upload files.
+    $sid = $this->postSubmissionTest($webform);
+    $submission = WebformSubmission::load($sid);
+
+    // Check deleting file completely deletes the file record.
+    $submission->delete();
+    $managed_file_single = $this->fileLoad($submission->getElementData('managed_file_single'));
+    $this->assertNotNull($managed_file_single);
+    $this->assertFalse($managed_file_single->isTemporary());
+  }
+
+  /**
+   * Test file upload with disabled results.
+   */
+  protected function testFileUploadWithDisabledResults() {
+    $this->drupalLogin($this->rootUser);
+
+    $webform = Webform::load('test_element_managed_file_dis');
+
+    // Upload new file.
+    $sid = $this->postSubmissionTest($webform);
+    $file = File::load($this->getLastFileId());
+
+    // Check that no submission was saved to the database.
+    $this->assertNull($sid);
+
+    // Check file URI.
+    $this->assertEqual($file->getFileUri(), 'private://webform/test_element_managed_file_dis/_sid_/managed_file.txt');
+
+    // Check file is temporary.
+    $this->assertTrue($file->isTemporary());
+
+    // Check file_managed table has 1 record.
+    $this->assertEqual(1, \Drupal::database()->query('SELECT COUNT(fid) AS total FROM {file_managed}')->fetchField());
+
+    // Check file_usage table has no records.
+    $this->assertEqual(0, \Drupal::database()->query('SELECT COUNT(fid) AS total FROM {file_usage}')->fetchField());
   }
 
   /****************************************************************************/

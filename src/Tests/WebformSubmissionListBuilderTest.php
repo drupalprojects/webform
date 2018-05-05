@@ -103,6 +103,16 @@ class WebformSubmissionListBuilderTest extends WebformTestBase {
     // Customize submission results.
     /**************************************************************************/
 
+    // Check that access is denied to custom results table.
+    $this->drupalLogin($this->adminSubmissionUser);
+    $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions/custom');
+    $this->assertResponse(403);
+
+    // Check that access is allowed to custom results table.
+    $this->drupalLogin($this->adminWebformUser);
+    $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions/custom');
+    $this->assertResponse(200);
+
     // Check that created is visible and changed is hidden.
     $this->drupalGet('admin/structure/webform/manage/' . $webform->id() . '/results/submissions');
     $this->assertRaw('sort by Created');

@@ -28,14 +28,36 @@ function webform_test_alter_hooks_form_webform_submission_form_alter(array $form
 }
 
 /**
- * Implements hook_form_webform_submission_WEBFORM_ID_form_alter().
+ * Implements hook_form_webform_submission_BASE_FORM_ID_form_alter().
+ *
+ * @see webform_form_alter()
+ * @see \Drupal\webform\WebformSubmissionForm::getBaseFormId
+ * @see \Drupal\Core\Form\FormBuilder::prepareForm
+ */
+function webform_test_alter_hooks_form_webform_submission_contact_form_alter(array $form, FormStateInterface $form_state, $form_id) {
+  drupal_set_message(t("@hook: '@form_id' executed.", ['@hook' => 'hook_form_webform_submission_BASE_FORM_ID_form_alter()', '@form_id' => $form_id]), 'status', TRUE);
+}
+
+/**
+ * Implements hook_form_webform_submission_FORM_ID_form_alter().
  *
  * @see webform_form_alter()
  * @see \Drupal\webform\WebformSubmissionForm::getFormId
  * @see \Drupal\Core\Form\FormBuilder::prepareForm
  */
-function webform_test_alter_hooks_form_webform_submission_contact_form_alter(array $form, FormStateInterface $form_state, $form_id) {
-  drupal_set_message(t("@hook: '@form_id' executed.", ['@hook' => 'hook_form_webform_submission_WEBFORM_ID_form_alter()', '@form_id' => $form_id]), 'status', TRUE);
+function webform_test_alter_hooks_form_webform_submission_contact_add_form_alter(array $form, FormStateInterface $form_state, $form_id) {
+  drupal_set_message(t("@hook: '@form_id' executed.", ['@hook' => 'hook_form_webform_submission_FORM_ID_form_alter()', '@form_id' => $form_id]), 'status', TRUE);
+}
+
+/**
+ * Implements hook_form_webform_submission_FORM_ID_form_alter().
+ *
+ * @see webform_form_alter()
+ * @see \Drupal\webform\WebformSubmissionForm::getFormId
+ * @see \Drupal\Core\Form\FormBuilder::prepareForm
+ */
+function webform_test_alter_hooks_form_webform_submission_contact_node_1_add_form_alter(array $form, FormStateInterface $form_state, $form_id) {
+  drupal_set_message(t("@hook: '@form_id' executed.", ['@hook' => 'hook_form_webform_submission_FORM_ID_form_alter()', '@form_id' => $form_id]), 'status', TRUE);
 }
 
 /**

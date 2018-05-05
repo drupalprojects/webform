@@ -60,7 +60,7 @@
         var has_visible_input = $element.find(':input:not([type=hidden])').length;
         var has_checkboxes_or_radios = $element.find(':checkbox, :radio').length;
         var is_composite = $element.hasClass('form-composite');
-        var is_custom = $element.is('.js-form-type-webform-signature, .js-form-type-webform-image-select, .js-form-type-webform-mapping, .js-form-type-webform-rating, .js-form-type-datelist, .js-form-type-datetime')
+        var is_custom = $element.is('.js-form-type-webform-signature, .js-form-type-webform-image-select, .js-form-type-webform-mapping, .js-form-type-webform-rating, .js-form-type-datelist, .js-form-type-datetime');
 
         var items;
         if (has_visible_input && !has_checkboxes_or_radios && !is_composite && !is_custom) {

@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\webform\Element\WebformCompositeBase;
-use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

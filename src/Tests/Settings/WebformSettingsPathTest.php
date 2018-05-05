@@ -47,6 +47,7 @@ class WebformSettingsPathTest extends WebformTestBase {
     $webform->setSettings(['page' => FALSE])->save();
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(403, 'Submit system path access denied');
+    $this->assertNoRaw('Only webform administrators are allowed to access this page and create new submissions.');
     $this->drupalGet('form/' . str_replace('_', '-', $webform->id()));
     $this->assertResponse(404, 'Submit URL alias does not exist');
 
@@ -54,6 +55,7 @@ class WebformSettingsPathTest extends WebformTestBase {
     $this->drupalLogin($this->rootUser);
     $this->drupalGet('webform/' . $webform->id());
     $this->assertResponse(200, 'Submit system path access permitted');
+    $this->assertRaw('Only webform administrators are allowed to access this page and create new submissions.');
     $this->drupalLogout();
 
     // Check custom submit and confirm path.

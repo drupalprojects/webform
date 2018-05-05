@@ -20,6 +20,7 @@ use Drupal\webform\Plugin\WebformHandler\RemotePostWebformHandler;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
+use Drupal\webform\Utility\WebformYaml;
 
 /******************************************************************************/
 // Webform-8.x-5.0-beta1 - December 7, 2016 (No update required).
@@ -62,23 +63,7 @@ function webform_update_8001() {
  * Issue #2834572: Refactor and improve token management.
  */
 function webform_update_8002() {
-  $config_factory = \Drupal::configFactory();
-
-  // Update 'webform.settings' configuration.
-  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
-  $yaml = Yaml::encode($settings_config->getRawData());
-  $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
-  $settings_config->setData(Yaml::decode($yaml));
-  $settings_config->save();
-
-  // Update 'webform.webform.*' configuration.
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
-    $yaml = Yaml::encode($webform_config->getRawData());
-    $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
-    $webform_config->setData(Yaml::decode($yaml));
-    $webform_config->save();
-  }
+  _webform_update_string_replace('[webform-submission:', '[webform_submission:');
 }
 
 /**
@@ -2100,7 +2085,7 @@ function webform_update_8114() {
   $contribute_config = \Drupal::configFactory()->getEditable('contribute.settings');
 
   // Migrate Contribute account info to Webform Contribute account info.
-  \Drupal::configFactory()->getEditable('webform.settingProvide dedicated \'test\' webform operation and access rule. s')
+  \Drupal::configFactory()->getEditable('webform.settings')
     ->set('contribute.account_type', $contribute_config->get('account_type') ?: 'user')
     ->set('contribute.account_id', $contribute_config->get('account_id') ?: NULL)
     ->save();
@@ -2140,9 +2125,72 @@ function webform_update_8116() {
 }
 
 /**
- * Issue #2918669: Elements separated by conditional inside multistep wizard are both saved to submission.
+ * Issue #2957192: Add postal_code to test data
  */
 function webform_update_8117() {
+  $config = \Drupal::configFactory()->getEditable('webform.settings');
+  $names = Yaml::decode($config->get('test.names'));
+  $names += [
+    'postal_code' => ['11111', '12345', '12345-6789']
+  ];
+  $config->set('test.names', WebformYaml::tidy(Yaml::encode($names)));
+  $config->save();
+}
+
+/**
+ * Issue #2957074: Invalid Tokens in Email Handler.
+ */
+function webform_update_8118() {
+  _webform_update_string_replace('[webform-submission:', '[webform_submission:');
+}
+
+
+/**
+ * Issue #2957002: Same webform multiple times on the same page.
+ */
+function webform_update_8119() {
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+  $help_manager->addNotification('webform_update_8119',
+    t('<strong>ATTENTION DEVELOPERS!!!</strong> The webform submission form\'s  BASE_FORM_ID and FORM_ID have changed.') .
+    '<br/>' . t('Please make sure to update all webform related <code>hook_form_BASE_FORM_ID_alter()</code> and <code>hook_form_FORM_ID_alter()</code> hooks.') .
+    ' ' . t('<a href=":href">Learn more</a>', [':href' => 'https://www.drupal.org/node/2959264']),
+    'warning'
+  );
+}
+
+/**
+ * Issue #2953929: Remote handler does not display messages when HTTP status is different than 200.
+ */
+function webform_update_8120() {
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
+}
+
+/**
+ * Issue #2953929: Remote handler does not display messages when HTTP status is different than 200.
+ */
+function webform_update_8121() {
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
+}
+
+/**
+ * Issue #2952419: Attached files are deleted without usage checking
+ */
+function webform_update_8122() {
+  _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2962442: Remove [webform-authenticated-user] token and use [current-user] token with clear value option.
+ */
+function webform_update_8123() {
+  _webform_update_string_replace('[webform-authenticated-user:', '[current-user:');
+}
+
+/**
+ * Issue #2918669: Elements separated by conditional inside multistep wizard are both saved to submission.
+ */
+function webform_update_8124() {
   $build  = [
     'list' => [
       '#theme' => 'item_list',

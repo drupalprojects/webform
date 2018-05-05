@@ -45,6 +45,8 @@ class WebformMultiple extends FormElement {
       '#add_more' => 1,
       '#sorting' => TRUE,
       '#operations' => TRUE,
+      '#add' => TRUE,
+      '#remove' => TRUE,
       '#process' => [
         [$class, 'processWebformMultiple'],
       ],
@@ -150,17 +152,21 @@ class WebformMultiple extends FormElement {
     $weight = 0;
     $rows = [];
 
+
     if (!$form_state->isProcessingInput() && isset($element['#default_value']) && is_array($element['#default_value'])) {
       $default_values = $element['#default_value'];
     }
     elseif ($form_state->isProcessingInput() && isset($element['#value']) && is_array($element['#value'])) {
-      // Only set the default values if the form is being processed but the
-      // multiple element is not being displayed via #access: FALSE.
-      // This happens during a multistep wizard form with a multiple element.
-      $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
-      $default_values = (!$has_access) ? $element['#value'] : [];
+      $default_values = $element['#value'];
     }
     else {
+      $default_values = [];
+    }
+
+    // When adding/removing elements we don't need to set any default values.
+    $action_key = static::getStorageKey($element, 'action');
+    if ($form_state->get($action_key)) {
+      $form_state->set($action_key, FALSE);
       $default_values = [];
     }
 
@@ -546,32 +552,39 @@ class WebformMultiple extends FormElement {
           'class' => ['webform-multiple-table--operations'],
         ],
       ];
-      $row['_operations_']['add'] = [
-        '#type' => 'image_button',
-        '#title' => t('Add'),
-        '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
-        '#limit_validation_errors' => [],
-        '#submit' => [[get_called_class(), 'addItemSubmit']],
-        '#ajax' => $ajax_settings,
-        // Issue #1342066 Document that buttons with the same #value need a unique
-        // #name for the Form API to distinguish them, or change the Form API to
-        // assign unique #names automatically.
-        '#row_index' => $row_index,
-        '#name' => $table_id . '_add_' . $row_index,
-      ];
-      $row['_operations_']['remove'] = [
-        '#type' => 'image_button',
-        '#title' => t('Remove'),
-        '#src' => drupal_get_path('module', 'webform') . '/images/icons/ex.svg',
-        '#limit_validation_errors' => [],
-        '#submit' => [[get_called_class(), 'removeItemSubmit']],
-        '#ajax' => $ajax_settings,
-        // Issue #1342066 Document that buttons with the same #value need a unique
-        // #name for the Form API to distinguish them, or change the Form API to
-        // assign unique #names automatically.
-        '#row_index' => $row_index,
-        '#name' => $table_id . '_remove_' . $row_index,
-      ];
+      if ($element['#add'] && $element['#remove']) {
+        $row['_operations_']['#wrapper_attributes']['class'][] = 'webform-multiple-table--operations-two';
+      }
+      if ($element['#add']) {
+        $row['_operations_']['add'] = [
+          '#type' => 'image_button',
+          '#title' => t('Add'),
+          '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
+          '#limit_validation_errors' => [],
+          '#submit' => [[get_called_class(), 'addItemSubmit']],
+          '#ajax' => $ajax_settings,
+          // Issue #1342066 Document that buttons with the same #value need a unique
+          // #name for the Form API to distinguish them, or change the Form API to
+          // assign unique #names automatically.
+          '#row_index' => $row_index,
+          '#name' => $table_id . '_add_' . $row_index,
+        ];
+      }
+      if ($element['#remove']) {
+        $row['_operations_']['remove'] = [
+          '#type' => 'image_button',
+          '#title' => t('Remove'),
+          '#src' => drupal_get_path('module', 'webform') . '/images/icons/ex.svg',
+          '#limit_validation_errors' => [],
+          '#submit' => [[get_called_class(), 'removeItemSubmit']],
+          '#ajax' => $ajax_settings,
+          // Issue #1342066 Document that buttons with the same #value need a unique
+          // #name for the Form API to distinguish them, or change the Form API to
+          // assign unique #names automatically.
+          '#row_index' => $row_index,
+          '#name' => $table_id . '_remove_' . $row_index,
+        ];
+      }
     }
 
     // Add hidden element as a hidden row.
@@ -698,7 +711,10 @@ class WebformMultiple extends FormElement {
     $form_state->setValueForElement($element['items'], $element['items']['#value']);
     NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $element['items']['#value']);
 
-    // Rebuild the webform.
+    $action_key = static::getStorageKey($element, 'action');
+    $form_state->set($action_key, TRUE);
+
+      // Rebuild the webform.
     $form_state->setRebuild();
   }
 
@@ -732,6 +748,9 @@ class WebformMultiple extends FormElement {
     $form_state->setValueForElement($element['items'], $values);
     NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $values);
 
+    $action_key = static::getStorageKey($element, 'action');
+    $form_state->set($action_key, TRUE);
+
     // Rebuild the webform.
     $form_state->setRebuild();
   }
@@ -764,6 +783,9 @@ class WebformMultiple extends FormElement {
     // Reset values.
     $form_state->setValueForElement($element['items'], $values);
     NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $values);
+
+    $action_key = static::getStorageKey($element, 'action');
+    $form_state->set($action_key, TRUE);
 
     // Rebuild the webform.
     $form_state->setRebuild();

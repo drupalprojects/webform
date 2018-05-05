@@ -329,7 +329,7 @@ entity.webform.results_submissions.custom:
       webform:
         type: 'entity:webform'
   requirements:
-    _entity_access: 'webform.submission_view_any'
+    _entity_access: 'webform.update'
     _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
 
 entity.webform.results_export:
@@ -629,27 +629,27 @@ entity.webform.handler.delete_form:
 
 # Plugins.
 
-webform.element_plugins:
-  path: '/admin/structure/webform/plugins/elements'
+webform.reports_plugins.elements:
+  path: '/admin/reports/webform-plugins/elements'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginElementController::index'
-    _title: 'Webforms: Element plugins'
+    _title: 'Webform plugins: Elements'
   requirements:
     _permission: 'administer webform'
 
-webform.handler_plugins:
-  path: '/admin/structure/webform/plugins/handlers'
+webform.reports_plugins.handlers:
+  path: '/admin/reports/webform-plugins/handlers'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginHandlerController::index'
-    _title: 'Webforms: Handler plugins'
+    _title: 'Webform plugins: Handlers'
   requirements:
     _permission: 'administer webform'
 
-webform.exporter_plugins:
-  path: '/admin/structure/webform/plugins/exporters'
+webform.reports_plugins.exporters:
+  path: '/admin/reports/webform-plugins/exporters'
   defaults:
     _controller: '\Drupal\webform\Controller\WebformPluginExporterController::index'
-    _title: 'Webforms: Export plugins'
+    _title: 'Webform plugins: Exporters'
   requirements:
     _permission: 'administer webform'
 

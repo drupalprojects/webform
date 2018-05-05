@@ -19,9 +19,9 @@ function webform_templates_entity_type_alter(array &$entity_types) {
 }
 
 /**
- * Implements hook_webform_help().
+ * Implements hook_webform_help_info().
  */
-function webform_templates_webform_help() {
+function webform_templates_webform_help_info() {
   $help['webform_templates'] = [
     'group' => 'forms',
     'title' => t('Templates'),

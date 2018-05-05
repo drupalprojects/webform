@@ -14,6 +14,7 @@ use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Component\Transliteration\TransliterationInterface;
+use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Plugin\WebformElementBase;
@@ -297,6 +298,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $format = $this->getItemFormat($element);
     switch ($format) {
       case 'id':
+      case 'name':
       case 'url':
       case 'value':
       case 'raw':
@@ -334,6 +336,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       case 'id':
         return $file->id();
 
+      case 'name':
+        return $file->getFilename();
+
       case 'url':
       case 'value':
       case 'raw':
@@ -356,8 +361,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     return parent::getItemFormats() + [
       'file' => $this->t('File'),
       'link' => $this->t('Link'),
-      'id' => $this->t('File ID'),
       'url' => $this->t('URL'),
+      'name' => $this->t('File name'),
+      'id' => $this->t('File ID'),
     ];
   }
 
@@ -422,6 +428,11 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     // Get current value and original value for this element.
     $key = $element['#webform_key'];
 
+    $webform = $webform_submission->getWebform();
+    if ($webform->isResultsDisabled()) {
+      return;
+    }
+
     $original_data = $webform_submission->getOriginalData();
     $data = $webform_submission->getData();
 
@@ -431,12 +442,9 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $original_value = isset($original_data[$key]) ? $original_data[$key] : [];
     $original_fids = (is_array($original_value)) ? $original_value : [$original_value];
 
-    // Check the original submission fids and delete the old file upload.
-    foreach ($original_fids as $original_fid) {
-      if (!in_array($original_fid, $fids)) {
-        file_delete($original_fid);
-      }
-    }
+    // Delete the old file uploads.
+    $delete_fids = array_diff($original_fids, $fids);
+    $this->deleteFiles($delete_fids, $webform_submission);
 
     // Exit if there is no fids.
     if (empty($fids)) {
@@ -458,8 +466,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       }
 
       // Update file usage table.
-      // Set file usage which will also make the file's status permanent.
-      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id(), 0);
+      // Setting file usage will also make the file's status permanent.
+      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id());
       $this->fileUsage->add($file, 'webform', 'webform_submission', $webform_submission->id());
     }
   }
@@ -468,11 +476,8 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function postDelete(array &$element, WebformSubmissionInterface $webform_submission) {
-    // Delete File record.
     $fids = (array) ($webform_submission->getElementData($element['#webform_key']) ?: []);
-    foreach ($fids as $fid) {
-      file_delete($fid);
-    }
+    $this->deleteFiles($fids, $webform_submission);
   }
 
   /**
@@ -546,14 +551,12 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   File extension.
    */
   protected function getFileExtensions(array $element = NULL) {
-    $file_type = str_replace('webform_', '', $this->getPluginId());
-
-    // Set valid file extensions.
-    $file_extensions = $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
     if (!empty($element['#file_extensions'])) {
-      $file_extensions = $element['#file_extensions'];
+      return $element['#file_extensions'];
     }
-    return $file_extensions;
+
+    $file_type = str_replace('webform_', '', $this->getPluginId());
+    return $this->configFactory->get('webform.settings')->get("file.default_{$file_type}_extensions");
   }
 
   /**
@@ -654,8 +657,25 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#type' => 'fieldset',
       '#title' => $this->t('File settings'),
     ];
-    $scheme_options = static::getVisibleStreamWrappers();
 
+    // Warn people about temporary files when saving of results is disabled.
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = $form_state->getFormObject()->getWebform();
+    if ($webform->isResultsDisabled()) {
+      $temporary_maximum_age = $this->configFactory->get('system.file')->get('temporary_maximum_age');
+      $temporary_interval = \Drupal::service('date.formatter')->formatInterval($temporary_maximum_age);
+      $form['file']['file_message'] = [
+        '#type' => 'webform_message',
+        '#message_message' => '<strong>' . $this->t('Saving of results is disabled.') . '</strong> ' .
+          $this->t('Uploaded files will be temporarily stored on the server and referenced in the database for %interval.', ['%interval' => $temporary_interval]) . ' ' .
+          $this->t('Uploaded files should be attached to an email and/or remote posted to an external server.')
+        ,
+        '#message_type' => 'warning',
+        '#access' => TRUE,
+      ];
+    }
+
+    $scheme_options = static::getVisibleStreamWrappers();
     $form['file']['uri_scheme'] = [
       '#type' => 'radios',
       '#title' => t('Upload destination'),
@@ -777,6 +797,46 @@ abstract class WebformManagedFileBase extends WebformElementBase {
     $form['default']['#access'] = FALSE;
 
     return $form;
+  }
+
+  /**
+   * Delete a webform submission file's usage and mark it as temporary.
+   *
+   * Marks unused webform submission files as temporary.
+   * In Drupal 8.4.x+ unused webform managed files are no longer
+   * marked as temporary.
+   *
+   * @param array $fids
+   *   An array of file ids.
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   */
+  protected function deleteFiles(array $fids, WebformSubmissionInterface $webform_submission) {
+    if (empty($fids)) {
+      return;
+    }
+
+    $make_unused_managed_files_temporary = \Drupal::config('webform.settings')->get('file.make_unused_managed_files_temporary');
+    $delete_temporary_managed_files = \Drupal::config('webform.settings')->get('file.delete_temporary_managed_files');
+
+    /** @var \Drupal\file\FileInterface[] $files */
+    $files = File::loadMultiple($fids);
+    foreach ($files as $file) {
+      $this->fileUsage->delete($file, 'webform', 'webform_submission', $webform_submission->id());
+      // Make unused files temporary.
+      if ($make_unused_managed_files_temporary && empty($this->fileUsage->listUsage($file)) && !$file->isTemporary()) {
+        $file->setTemporary();
+        $file->save();
+      }
+
+      // Immediately delete temporary files.
+      // This makes sure that the webform submission uploaded directory is
+      // empty and can be deleted.
+      // @see \Drupal\webform\WebformSubmissionStorage::delete
+      if ($delete_temporary_managed_files && $file->isTemporary()) {
+        $file->delete();
+      }
+    }
   }
 
   /**

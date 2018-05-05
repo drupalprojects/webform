@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Tests\Handler;
 
+use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;
@@ -18,14 +19,18 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['webform', 'webform_test_handler_remote_post'];
+  public static $modules = ['file', 'webform', 'webform_test_handler_remote_post'];
 
   /**
    * Webforms to load.
    *
    * @var array
    */
-  protected static $testWebforms = ['test_handler_remote_post'];
+  protected static $testWebforms = [
+    'test_handler_remote_post',
+    'test_handler_remote_get',
+    'test_handler_remote_post_file',
+  ];
 
   /**
    * Test remote post handler.
@@ -126,16 +131,34 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->assertRaw('Failed to process completed request.');
     $this->assertRaw('Unable to process this submission. Please contact the site administrator.');
 
-    // Check 404 Not Found.
+    // Check default custom response message.
+    $handler = $webform->getHandler('remote_post');
+    $configuration = $handler->getConfiguration();
+    $configuration['settings']['message'] = 'This is a custom response message';
+    $handler->setConfiguration($configuration);
+    $webform->save();
+    $this->postSubmission($webform, ['response_type' => '500']);
+    $this->assertRaw('Failed to process completed request.');
+    $this->assertNoRaw('Unable to process this submission. Please contact the site administrator.');
+    $this->assertRaw('This is a custom response message');
+
+    // Check 404 Not Found with custom message.
     $this->postSubmission($webform, ['response_type' => '404']);
     $this->assertRaw('File not found');
-    $this->assertRaw('Unable to process this submission. Please contact the site administrator.');
+    $this->assertNoRaw('Unable to process this submission. Please contact the site administrator.');
+    $this->assertRaw('This is a custom 404 not found message.');
+
+    // Check 401 Unauthorized with custom message and token.
+    $this->postSubmission($webform, ['response_type' => '401']);
+    $this->assertRaw('Unauthorized');
+    $this->assertNoRaw('Unable to process this submission. Please contact the site administrator.');
+    $this->assertRaw('This is a message token <strong>Unauthorized to process completed request.</strong>');
 
     // Disable saving of results.
     $webform->setSetting('results_disabled', TRUE);
     $webform->save();
 
-    // Check confiramtion number when results disabled.
+    // Check confirmation number when results disabled.
     $sid = $this->postSubmission($webform);
     $this->assertNull($sid);
 
@@ -161,6 +184,24 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     // Get confirmation number from JSON packet.
     preg_match('/&quot;confirmation_number&quot;:&quot;([a-zA-z0-9]+)&quot;/', $this->getRawContent(), $match);
     $this->assertRaw('Your confirmation number is ' . $match[1] . '.');
+
+    /**************************************************************************/
+    // POST File.
+    /**************************************************************************/
+
+    /** @var \Drupal\webform\WebformInterface $webform */
+    $webform = Webform::load('test_handler_remote_post_file');
+
+    $sid = $this->postSubmissionTest($webform);
+    $webform_submission = WebformSubmission::load($sid);
+    $fid = $webform_submission->getElementData('file');
+
+    // Check the file name, uri, and data is appended to form params.
+    $this->assertRaw("form_params:
+  file: $fid
+  file__name: file.txt
+  file__uri: 'private://webform/test_handler_remote_post_file/$sid/file.txt'
+  file__data: dGhpcyBpcyBhIHNhbXBsZSB0eHQgZmlsZQppdCBoYXMgdHdvIGxpbmVzCg==");
   }
 
 }

@@ -120,26 +120,22 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         'attributes' => WebformDialogHelper::getModalDialogAttributes(),
       ],
     ];
-    if ($this->elementManager->createInstance('webform_wizard_page')->isEnabled()) {
-      $local_actions['add_page'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add page'),
-          'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
-          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ],
-      ];
-    }
-    if ($webform->hasFlexboxLayout()) {
-      $local_actions['add_layout'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add layout'),
-          'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
-          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ],
-      ];
-    }
+    $local_actions['add_page'] = [
+      '#theme' => 'menu_local_action',
+      '#link' => [
+        'title' => $this->t('Add page'),
+        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
+        'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
+      ],
+    ];
+    $local_actions['add_layout'] = [
+      '#theme' => 'menu_local_action',
+      '#link' => [
+        'title' => $this->t('Add layout'),
+        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
+        'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
+      ],
+    ];
     $form['local_actions'] = [
       '#prefix' => '<ul class="action-links">',
       '#suffix' => '</ul>',
@@ -331,7 +327,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
       if (empty($element['#title'])) {
         if (!empty($element['#markup'])) {
-          $element['#title'] = Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE);
+          $element['#title'] = ['#markup' => Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE)];
         }
         else {
           $element['#title'] = '[' . $element_key . ']';

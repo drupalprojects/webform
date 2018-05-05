@@ -111,6 +111,13 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $webformEntityReferenceManager;
 
   /**
+   * The webform submission generation service.
+   *
+   * @var \Drupal\webform\WebformSubmissionGenerateInterface
+   */
+  protected $generate;
+
+  /**
    * The webform settings.
    *
    * @var array
@@ -156,8 +163,10 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The webform submission conditions (#states) validator.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
+   * @param \Drupal\webform\WebformSubmissionGenerateInterface $submission_generate
+   *   The webform submission generation service.
    */
-  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionConditionsValidator $conditions_validator, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(EntityManagerInterface $entity_manager, RendererInterface $renderer, AliasManagerInterface $alias_manager, PathValidatorInterface $path_validator, WebformRequestInterface $request_handler, WebformElementManagerInterface $element_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager, WebformSubmissionConditionsValidator $conditions_validator, WebformEntityReferenceManagerInterface $webform_entity_reference_manager, WebformSubmissionGenerateInterface $submission_generate) {
     parent::__construct($entity_manager);
     $this->renderer = $renderer;
     $this->requestHandler = $request_handler;
@@ -170,6 +179,8 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->tokenManager = $token_manager;
     $this->conditionsValidator = $conditions_validator;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
+    $this->generate = $submission_generate;
+
   }
 
   /**
@@ -187,16 +198,58 @@ class WebformSubmissionForm extends ContentEntityForm {
       $container->get('webform.message_manager'),
       $container->get('webform.token_manager'),
       $container->get('webform_submission.conditions_validator'),
-      $container->get('webform.entity_reference_manager')
+      $container->get('webform.entity_reference_manager'),
+      $container->get('webform_submission.generate')
+
     );
   }
 
   /**
    * {@inheritdoc}
    */
+  public function getBaseFormId() {
+    $base_form_id = $this->entity->getEntityTypeId();
+    $base_form_id .= '_' . $this->entity->bundle();
+    return $base_form_id . '_form';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    $form_id = $this->entity->getEntityTypeId();
+    $form_id .= '_' . $this->entity->bundle();
+    if ($source_entity = $this->entity->getSourceEntity()) {
+      $form_id .= '_' . $source_entity->getEntityTypeId() . '_' . $source_entity->id();
+    }
+    if ($this->operation != 'default') {
+      $form_id .= '_' . $this->operation;
+    }
+    return $form_id . '_form';
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * This is the best place to override an entity form's default settings
+   * because is is called immediately after the form object is initialized.
+   *
+   * @see \Drupal\Core\Entity\EntityFormBuilder::getForm
+   */
   public function setEntity(EntityInterface $entity) {
+
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     $webform = $entity->getWebform();
+
+    // If ?_webform_test is defined for the current webform, override
+    // the 'add' operation with 'test' operation and generate test data.
+    if ($this->operation === 'add' &&
+      $this->getRequest()->query->get('_webform_test') === $webform->id() &&
+      $webform->access('test')
+    ) {
+      $this->operation = 'test';
+      $entity->setData($this->generate->getData($webform));
+    }
 
     // Get the source entity and allow webform submission to be used as a source
     // entity.
@@ -209,7 +262,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Load entity from token or saved draft when not editing or testing
     // submission form.
-    if (!in_array($this->operation, ['edit', 'test'])) {
+    if (!in_array($this->operation, ['edit', 'edit_all', 'test'])) {
       $token = $this->getRequest()->query->get('token');
       $webform_submission_token = $this->storage->loadFromToken($token, $webform, $source_entity);
       if ($webform_submission_token) {
@@ -268,7 +321,8 @@ class WebformSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
-    parent::copyFormValuesToEntity($entity, $form, $form_state);
+    // NOTE: We are not copying form values to the entity because
+    // webform element keys can override webform submission properties.
 
     /* @var $webform_submission \Drupal\webform\WebformSubmissionInterface */
     $webform_submission = $entity;
@@ -286,6 +340,12 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Set current page.
     if ($current_page = $this->getCurrentPage($form, $form_state)) {
       $entity->setCurrentPage($current_page);
+    }
+
+    // Set in draft.
+    $in_draft = $form_state->get('in_draft');
+    if ($in_draft !== NULL) {
+      $entity->set('in_draft', $in_draft);
     }
   }
 
@@ -610,12 +670,6 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
-    // Handle webform with managed file upload but saving of submission is disabled.
-    if ($webform->hasManagedFile() && !empty($this->getWebformSetting('results_disabled'))) {
-      $this->getMessageManager()->log(WebformMessageManagerInterface::FORM_FILE_UPLOAD_EXCEPTION, 'notice');
-      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
-    }
-
     // Display inline confirmation message with back to link.
     if ($form_state->get('current_page') === 'webform_confirmation') {
       $form['confirmation'] = [
@@ -664,7 +718,10 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Disable this webform if confidential and user is logged in.
-    if ($this->isConfidential() && $this->currentUser()->isAuthenticated() && $this->entity->isNew()) {
+    if ($this->isConfidential()
+      && $this->currentUser()->isAuthenticated()
+      && $this->entity->isNew()
+      && $this->operation === 'add') {
       return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_CONFIDENTIAL_MESSAGE, 'warning');
     }
 
@@ -746,7 +803,10 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Display admin only message.
-    if ($this->isGet() && $this->isRoute('webform.canonical') && !$this->getWebform()->getSetting('page')) {
+    if ($this->isGet()
+      && $this->isRoute('webform.canonical')
+      && $this->getRouteMatch()->getRawParameter('webform') === $webform->id()
+      && !$this->getWebform()->getSetting('page')) {
       $this->getMessageManager()->display(WebformMessageManagerInterface::ADMIN_PAGE, 'info');
     }
 
@@ -1081,7 +1141,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->confirmForm($form, $form_state);
     }
     elseif ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
-      $form_state->setValue('in_draft', TRUE);
+      $form_state->set('in_draft', TRUE);
 
       $this->submitForm($form, $form_state);
       $this->save($form, $form_state);
@@ -1104,7 +1164,7 @@ class WebformSubmissionForm extends ContentEntityForm {
   public function autosave(array &$form, FormStateInterface $form_state) {
     if ($form_state->hasAnyErrors()) {
       if ($this->draftEnabled() && $this->getWebformSetting('draft_auto_save') && !$this->entity->isCompleted()) {
-        $form_state->setValue('in_draft', TRUE);
+        $form_state->set('in_draft', TRUE);
 
         $this->submitForm($form, $form_state);
         $this->save($form, $form_state);
@@ -1123,7 +1183,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   public function draft(array &$form, FormStateInterface $form_state) {
     $form_state->clearErrors();
-    $form_state->setValue('in_draft', TRUE);
+    $form_state->set('in_draft', TRUE);
     $form_state->set('draft_saved', TRUE);
     $this->entity->validate();
   }
@@ -1137,7 +1197,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function complete(array &$form, FormStateInterface $form_state) {
-    $form_state->setValue('in_draft', FALSE);
+    $form_state->set('in_draft', FALSE);
   }
 
   /**
@@ -1291,9 +1351,14 @@ class WebformSubmissionForm extends ContentEntityForm {
         // Remove empty query string.
         $uri = preg_replace('/\?$/', '', $uri);
       }
-      $remote_addr = ($this->isConfidential()) ? '' : $this->getRequest()->getClientIp();
       $webform_submission->set('uri', $uri);
-      $webform_submission->set('remote_addr', $remote_addr);
+      if ($this->isConfidential()) {
+        $webform_submission->setOwnerId(0);
+        $webform_submission->set('remote_addr', '');
+      }
+      else {
+        $webform_submission->set('remote_addr', $this->getRequest()->getClientIp());
+      }
     }
 
     // Block users from submitting templates that they can't update.
@@ -1879,7 +1944,7 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Get the submission owner and not current user.
     // This takes into account when an API submission changes the owner id.
-    // @see \Drupal\webform\WebformSubmissionForm::submitValues
+    // @see \Drupal\webform\WebformSubmissionForm::submitFormValues
     $account = $this->entity->getOwner();
     $webform = $this->getWebform();
 
@@ -2012,25 +2077,12 @@ class WebformSubmissionForm extends ContentEntityForm {
   /****************************************************************************/
 
   /**
-   * Get the message manager.
-   *
-   * We need to wrap the message manager service because the webform submission
-   * entity is being continuous cloned and updated during form processing.
-   *
-   * @see \Drupal\Core\Entity\EntityForm::buildEntity
-   */
-  protected function getMessageManager() {
-    $this->messageManager->setWebformSubmission($this->getEntity());
-    return $this->messageManager;
-  }
-
-  /**
    * Get the webform submission's webform.
    *
    * @return \Drupal\webform\WebformInterface
    *   A webform.
    */
-  protected function getWebform() {
+  public function getWebform() {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $this->getEntity();
     return $webform_submission->getWebform();
@@ -2044,6 +2096,19 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   protected function getSourceEntity() {
     return $this->sourceEntity;
+  }
+
+  /**
+   * Get the message manager.
+   *
+   * We need to wrap the message manager service because the webform submission
+   * entity is being continuous cloned and updated during form processing.
+   *
+   * @see \Drupal\Core\Entity\EntityForm::buildEntity
+   */
+  protected function getMessageManager() {
+    $this->messageManager->setWebformSubmission($this->getEntity());
+    return $this->messageManager;
   }
 
   /**
@@ -2182,24 +2247,24 @@ class WebformSubmissionForm extends ContentEntityForm {
   }
 
   /**
-   * Programmatically validate values and submit a webform submission.
+   * Programmatically validate form values and submit a webform submission.
    *
    * @param array $values
-   *   An array of submission values and data.
+   *   An array of submission form values and data.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface|null
    *   An array of error messages if validation fails or
    *   A webform submission is there are no validation errors.
    */
-  public static function validateValues(array $values) {
-    return static::submitValues($values, TRUE);
+  public static function validateFormValues(array $values) {
+    return static::submitFormValues($values, TRUE);
   }
 
   /**
-   * Programmatically validate values and submit a webform submission.
+   * Programmatically validate form values and submit a webform submission.
    *
    * @param array $values
-   *   An array of submission values and data.
+   *   An array of submission form values and data.
    * @param bool $validate_only
    *   Flag to trigger only webform validation.
    *
@@ -2207,9 +2272,38 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   An array of error messages if validation fails or
    *   A webform submission is there are no validation errors.
    */
-  public static function submitValues(array $values, $validate_only = FALSE) {
+  public static function submitFormValues(array $values, $validate_only = FALSE) {
     $webform_submission = WebformSubmission::create($values);
+    return static::submitWebformSubmission($webform_submission, $validate_only);
+  }
 
+  /**
+   * Programmatically validate and submit a webform submission.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   WebformSubmission with values and data.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface|null
+   *   An array of error messages if validation fails or
+   *   A webform submission is there are no validation errors.
+   */
+  public static function validateWebformSubmission(WebformSubmissionInterface $webform_submission) {
+    return static::submitWebformSubmission($webform_submission, TRUE);
+  }
+
+  /**
+   * Programmatically validate and submit a webform submission.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   WebformSubmission with values and data.
+   * @param bool $validate_only
+   *   Flag to trigger only webform validation.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface|null
+   *   An array of error messages if validation fails or
+   *   A webform submission is there are no validation errors.
+   */
+  public static function submitWebformSubmission(WebformSubmissionInterface $webform_submission, $validate_only = FALSE) {
     /** @var \Drupal\webform\WebformSubmissionForm $form_object */
     $form_object = \Drupal::entityTypeManager()->getFormObject('webform_submission', 'api');
     $form_object->setEntity($webform_submission);

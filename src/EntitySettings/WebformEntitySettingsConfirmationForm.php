@@ -144,6 +144,10 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
       '#default_value' => $settings['confirmation_exclude_token'],
       '#access' => !$webform->isResultsDisabled(),
     ];
+    $form['confirmation_url']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+      ['webform', 'webform_submission', 'webform_handler'],
+      $this->t('You may use tokens to pass query string parameters. Make sure all tokens include the urlencode suffix. (i.e. [webform-submission:values:email:urlencode])')
+    );
 
     // Confirmation settings.
     $form['confirmation_settings'] = [

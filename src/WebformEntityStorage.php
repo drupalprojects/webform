@@ -148,7 +148,19 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
       $stream_wrappers = array_keys(\Drupal::service('stream_wrapper_manager')
         ->getNames(StreamWrapperInterface::WRITE_VISIBLE));
       foreach ($stream_wrappers as $stream_wrapper) {
-        file_unmanaged_delete_recursive($stream_wrapper . '://webform/' . $entity->id());
+        $file_directory = $stream_wrapper . '://webform/' . $entity->id();
+
+        // Clear all signature files.
+        // @see \Drupal\webform\Plugin\WebformElement\WebformSignature::getImageUrl
+        $files = file_scan_directory($file_directory, '/^signature-.*/');
+        foreach (array_keys($files) as $uri) {
+          file_unmanaged_delete($uri);
+        }
+
+        // Clear empty webform directory.
+        if (empty(file_scan_directory($file_directory, '/.*/'))) {
+          file_unmanaged_delete_recursive($file_directory);
+        }
       }
     }
   }

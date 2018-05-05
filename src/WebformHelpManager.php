@@ -1005,6 +1005,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           ],
         ],
       ],
+      'webform' => [
+        'title' => $this->t('Webform: There is this for that'),
+        'content' => $this->t('One of the key mantras in the Drupal is “there is a module for that, “ and Webform is the module for building forms for Drupal 8.'),
+        'youtube_id' => 'zl_ErUKymYo',
+        'presentation_id' => '14vpNvDhYKGhHspu9BurIneTL4C1spyfwsqI82MvTYUA',
+      ],
     ];
     foreach ($videos as $id => &$video_info) {
       $video_info['id'] = $id;
@@ -1284,11 +1290,12 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('If these libraries are not installed, they will be automatically loaded from a CDN.') . ' ' .
         $this->t('All libraries are optional and can be excluded via the admin settings form.') .
         '</p>' .
-        '<p>' . $this->t('There are three ways to download the needed third-party libraries.') . '</p>' .
+        '<p>' . $this->t('There are several ways to download the needed third-party libraries.') . '</p>' .
         '<ul>' .
         '<li>' . $this->t('Generate a *.make.yml or composer.json file using <code>drush webform-libraries-make</code> or <code>drush webform-libraries-composer</code>.') . '</li>' .
         '<li>' . $this->t('Execute <code>drush webform-libraries-download</code>, which will download third-party libraries required by the Webform module.') . '</li>' .
         '<li>' . $this->t("Execute <code>drush webform-composer-update</code>, which will update your Drupal installation's composer.json to include the Webform module's selected libraries as repositories.") . '</li>' .
+        '<li>' . $this->t('Download and extract a <a href=":href">zipped archive containing all webform libraries</a> and extract the directories and files to /libraries', [':href' => 'https://cgit.drupalcode.org/sandbox-jrockowitz-2941983/plain/libraries.zip']) . '</li>' .
         '</ul>',
       'message_type' => 'info',
       'message_close' => TRUE,
@@ -1335,8 +1342,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('<strong>Webform Element</strong> plugins are used to enhance existing render/form elements. Webform element plugins provide default properties, data normalization, custom validation, element configuration form and customizable display formats.'),
       'video_id' => 'plugins',
       'routes' => [
-        // @see /admin/structure/webform/plugins/elements
-        'webform.element_plugins',
+        // @see /admin/reports/webform-plugins/elements
+        'webform.reports_plugins.elements',
       ],
     ];
 
@@ -1348,8 +1355,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('<strong>Handlers</strong> are used to route submitted data to external applications and send notifications & confirmations.'),
       'video_id' => 'plugins',
       'routes' => [
-        // @see /admin/structure/webform/plugins/handlers
-        'webform.handler_plugins',
+        // @see /admin/reports/webform-plugins/handlers
+        'webform.reports_plugins.handlers',
       ],
     ];
 
@@ -1361,8 +1368,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         $this->t('<strong>Exporters</strong> are used to export results into a downloadable format that can be used by MS Excel, Google Sheets and other spreadsheet applications.'),
       'video_id' => 'plugins',
       'routes' => [
-        // @see /admin/structure/webform/plugins/exporters
-        'webform.exporter_plugins',
+        // @see /admin/reports/webform-plugins/exporters
+        'webform.reports_plugins.exporters',
       ],
     ];
 
@@ -1863,8 +1870,8 @@ class WebformHelpManager implements WebformHelpManagerInterface {
     ];
 
     // Let other modules provide any extra help.
-    $help += $this->moduleHandler->invokeAll('webform_help');
-    $this->moduleHandler->alter('webform_help', $help);
+    $help += $this->moduleHandler->invokeAll('webform_help_info');
+    $this->moduleHandler->alter('webform_help_info', $help);
 
     /**************************************************************************/
 

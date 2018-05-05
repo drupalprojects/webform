@@ -11,6 +11,19 @@ use Symfony\Component\Yaml\Unescaper;
 class WebformYaml {
 
   /**
+   * Determine if string is valid YAML.
+   *
+   * @param string $yaml
+   *   A YAML string.
+   *
+   * @return boolean
+   *   TRUE if string is valid YAML.
+   */
+  public static function isValid($yaml) {
+    return self::validate($yaml) ? FALSE : TRUE;
+  }
+
+  /**
    * Validate YAML string.
    *
    * @param string $yaml

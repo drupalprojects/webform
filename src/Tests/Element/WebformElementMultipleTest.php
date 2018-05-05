@@ -107,7 +107,7 @@ webform_multiple_elements_flattened:
     $this->assertRaw('<td class="webform-multiple-table--weight"><div class="webform-multiple-table--weight js-form-item form-item js-form-type-number form-type-number js-form-item-webform-multiple-default-items-0-weight form-item-webform-multiple-default-items-0-weight form-no-label">');
     $this->assertRaw('<label for="edit-webform-multiple-default-items-0-weight" class="visually-hidden">Item weight</label>');
     $this->assertRaw('<input class="webform-multiple-sort-weight form-number" data-drupal-selector="edit-webform-multiple-default-items-0-weight" type="number" id="edit-webform-multiple-default-items-0-weight" name="webform_multiple_default[items][0][weight]" value="0" step="1" size="10" />');
-    $this->assertRaw('<td class="webform-multiple-table--operations"><input data-drupal-selector="edit-webform-multiple-default-items-0-operations-add" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-add" name="webform_multiple_default_table_add_0"');
+    $this->assertRaw('<td class="webform-multiple-table--operations webform-multiple-table--operations-two"><input data-drupal-selector="edit-webform-multiple-default-items-0-operations-add" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-add" name="webform_multiple_default_table_add_0"');
     $this->assertRaw('<input data-drupal-selector="edit-webform-multiple-default-items-0-operations-remove" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-remove" name="webform_multiple_default_table_remove_0"');
 
     // Check that sorting is disabled.
@@ -138,6 +138,20 @@ webform_multiple_elements_flattened:
     $this->assertFieldByName('webform_multiple_default[items][2][_item_]', 'Three');
     $this->assertFieldByName('webform_multiple_default[items][3][_item_]', '');
     $this->assertNoFieldByName('webform_multiple_default[items][4][_item_]', '');
+
+    // Check adding empty after one.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform_multiple_default_table_add_0');
+    $this->assertFieldByName('webform_multiple_default[items][0][_item_]', 'One');
+    $this->assertFieldByName('webform_multiple_default[items][1][_item_]', '');
+    $this->assertNoFieldByName('webform_multiple_default[items][1][_item_]', 'Two');
+    $this->assertFieldByName('webform_multiple_default[items][2][_item_]', 'Two');
+    $this->assertFieldByName('webform_multiple_default[items][3][_item_]', 'Three');
+
+    // Check removing empty after one.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform_multiple_default_table_remove_1');
+    $this->assertFieldByName('webform_multiple_default[items][0][_item_]', 'One');
+    $this->assertFieldByName('webform_multiple_default[items][1][_item_]', 'Two');
+    $this->assertFieldByName('webform_multiple_default[items][2][_item_]', 'Three');
 
     // Check adding 'four' and 1 more option.
     $edit = [

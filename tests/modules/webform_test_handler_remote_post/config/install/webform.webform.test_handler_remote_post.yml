@@ -18,8 +18,9 @@ elements: |
     '#type': select
     '#options':
       200: '200 OK'
-      500: '500 Internal Server Error'
+      401: '401 Unauthorized'
       404: '404 Not Found'
+      500: '500 Internal Server Error'
     '#default_value': 200
   first_name:
     '#title': 'First name'
@@ -218,3 +219,9 @@ handlers:
       converted_url: 'http://webform-test-handler-remote-post/converted'
       converted_custom_data: |
         custom_converted: true
+      message: ''
+      messages:
+        - code: 401
+          message: 'This is a message token <strong>[webform:handler:remote_post:message]</strong>'
+        - code: 404
+          message: 'This is a custom 404 not found message.'
