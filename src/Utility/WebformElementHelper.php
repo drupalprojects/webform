@@ -492,7 +492,8 @@ class WebformElementHelper {
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {
       $complete_form = &$form_state->getCompleteForm();
-      call_user_func_array($form_state->prepareCallback($callback), [&$element, &$form_state, &$complete_form]);
+      $arguments = [&$element, &$form_state, &$complete_form];
+      call_user_func_array($form_state->prepareCallback($callback), $arguments);
     }
   }
 
@@ -513,7 +514,8 @@ class WebformElementHelper {
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {
       $complete_form = &$form_state->getCompleteForm();
-      call_user_func_array($form_state->prepareCallback($callback), [&$element, &$temp_form_state, &$complete_form]);
+      $arguments = [&$element, &$temp_form_state, &$complete_form];
+      call_user_func_array($form_state->prepareCallback($callback), $arguments);
     }
 
     // Get the temp webform state's values.

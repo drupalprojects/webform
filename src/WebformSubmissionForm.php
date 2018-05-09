@@ -1269,7 +1269,8 @@ class WebformSubmissionForm extends ContentEntityForm {
       });
       // @see \Drupal\Core\Form\FormValidator::executeValidateHandlers
       foreach ($handlers as $callback) {
-        call_user_func_array($form_state->prepareCallback($callback), [&$form, &$form_state]);
+        $arguments = [&$form, &$form_state];
+        call_user_func_array($form_state->prepareCallback($callback), $arguments);
       }
     }
   }
