@@ -62,13 +62,6 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $elementManager;
 
   /**
-   * The webform submission storage.
-   *
-   * @var \Drupal\webform\WebformSubmissionStorageInterface
-   */
-  protected $storage;
-
-  /**
    * Webform request handler.
    *
    * @var \Drupal\webform\WebformRequestInterface
@@ -173,7 +166,6 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->aliasManager = $alias_manager;
     $this->pathValidator = $path_validator;
     $this->elementManager = $element_manager;
-    $this->storage = $this->entityManager->getStorage('webform_submission');
     $this->thirdPartySettingsManager = $third_party_settings_manager;
     $this->messageManager = $message_manager;
     $this->tokenManager = $token_manager;
@@ -264,7 +256,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // submission form.
     if (!in_array($this->operation, ['edit', 'edit_all', 'test'])) {
       $token = $this->getRequest()->query->get('token');
-      $webform_submission_token = $this->storage->loadFromToken($token, $webform, $source_entity);
+      $webform_submission_token = $this->getStorage()->loadFromToken($token, $webform, $source_entity);
       if ($webform_submission_token) {
         $entity = $webform_submission_token;
       }
@@ -274,12 +266,12 @@ class WebformSubmissionForm extends ContentEntityForm {
           // Allow multiple drafts to be restored using token.
           // This allows the webform's public facing URL to be used instead of
           // the admin URL of the webform.
-          $webform_submission_token = $this->storage->loadFromToken($token, $webform, $source_entity, $account);
+          $webform_submission_token = $this->getStorage()->loadFromToken($token, $webform, $source_entity, $account);
           if ($webform_submission_token && $webform_submission_token->isDraft()) {
             $entity = $webform_submission_token;
           }
         }
-        elseif ($webform_submission_draft = $this->storage->loadDraft($webform, $source_entity, $account)) {
+        elseif ($webform_submission_draft = $this->getStorage()->loadDraft($webform, $source_entity, $account)) {
           // Else load the most recent draft.
           $entity = $webform_submission_draft;
         }
@@ -827,13 +819,13 @@ class WebformSubmissionForm extends ContentEntityForm {
       && $this->getWebformSetting('draft') !== WebformInterface::DRAFT_NONE
       && $this->getWebformSetting('draft_multiple', FALSE)
       && ($this->isRoute('webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
-      && ($previous_draft_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser(), ['in_draft' => TRUE]))
+      && ($previous_draft_total = $this->getStorage()->getTotal($webform, $this->sourceEntity, $this->currentUser(), ['in_draft' => TRUE]))
     ) {
       if ($previous_draft_total > 1) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFTS_PREVIOUS);
       }
       else {
-        $draft_submission = $this->storage->loadDraft($webform, $this->sourceEntity, $this->currentUser());
+        $draft_submission = $this->getStorage()->loadDraft($webform, $this->sourceEntity, $this->currentUser());
         if (!$draft_submission || $webform_submission->id() != $draft_submission->id()) {
           $this->getMessageManager()->display(WebformMessageManagerInterface::DRAFT_PREVIOUS);
         }
@@ -846,7 +838,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       && $this->getWebformSetting('form_previous_submissions', FALSE)
       && ($this->isRoute('webform.canonical') || $this->isWebformEntityReferenceFromSourceEntity())
       && ($webform->access('submission_view_own') || $this->currentUser()->hasPermission('view own webform submission'))
-      && ($previous_submission_total = $this->storage->getTotal($webform, $this->sourceEntity, $this->currentUser()))
+      && ($previous_submission_total = $this->getStorage()->getTotal($webform, $this->sourceEntity, $this->currentUser()))
     ) {
       if ($previous_submission_total > 1) {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSIONS_PREVIOUS);
@@ -1900,7 +1892,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $entity_limit_total = $this->getWebformSetting('entity_limit_total');
     $entity_limit_total_interval = $this->getWebformSetting('entity_limit_total_interval');
     if ($entity_limit_total && ($source_entity = $this->getLimitSourceEntity())) {
-      if ($this->storage->getTotal($webform, $source_entity, NULL, ['interval' => $entity_limit_total_interval]) >= $entity_limit_total) {
+      if ($this->getStorage()->getTotal($webform, $source_entity, NULL, ['interval' => $entity_limit_total_interval]) >= $entity_limit_total) {
         return TRUE;
       }
     }
@@ -1908,7 +1900,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Check total limit.
     $limit_total = $this->getWebformSetting('limit_total');
     $limit_total_interval = $this->getWebformSetting('limit_total_interval');
-    if ($limit_total && $this->storage->getTotal($webform, NULL, NULL, ['interval' => $limit_total_interval]) >= $limit_total) {
+    if ($limit_total && $this->getStorage()->getTotal($webform, NULL, NULL, ['interval' => $limit_total_interval]) >= $limit_total) {
       return TRUE;
     }
 
@@ -1948,7 +1940,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $entity_limit_user = $this->getWebformSetting('entity_limit_user');
     $entity_limit_user_interval = $this->getWebformSetting('entity_limit_user_interval');
     if ($entity_limit_user && ($source_entity = $this->getLimitSourceEntity())) {
-      if ($this->storage->getTotal($webform, $source_entity, $account, ['interval' => $entity_limit_user_interval]) >= $entity_limit_user) {
+      if ($this->getStorage()->getTotal($webform, $source_entity, $account, ['interval' => $entity_limit_user_interval]) >= $entity_limit_user) {
         return TRUE;
       }
     }
@@ -1956,7 +1948,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Check user limit.
     $limit_user = $this->getWebformSetting('limit_user');
     $limit_user_interval = $this->getWebformSetting('limit_user_interval');
-    if ($limit_user && $this->storage->getTotal($webform, NULL, $account, ['interval' => $limit_user_interval]) >= $limit_user) {
+    if ($limit_user && $this->getStorage()->getTotal($webform, NULL, $account, ['interval' => $limit_user_interval]) >= $limit_user) {
       return TRUE;
     }
 
@@ -2095,6 +2087,16 @@ class WebformSubmissionForm extends ContentEntityForm {
   }
 
   /**
+   * Get the webform submission entity storage.
+   *
+   * @return \Drupal\Webform\WebformSubmissionStorageInterface
+   *   The webform submission entity storage.
+   */
+  protected function getStorage() {
+    return $this->entityManager->getStorage('webform_submission');
+  }
+
+  /**
    * Get the message manager.
    *
    * We need to wrap the message manager service because the webform submission
@@ -2138,7 +2140,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     $source_entity = $this->getSourceEntity();
     $account = $this->getEntity()->getOwner();
     $options = ($completed) ? ['in_draft' => FALSE] : [];
-    return $this->storage->getLastSubmission($webform, $source_entity, $account, $options);
+    return $this->getStorage()->getLastSubmission($webform, $source_entity, $account, $options);
   }
 
   /**
