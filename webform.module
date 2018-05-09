@@ -102,11 +102,18 @@ function webform_modules_uninstalled($modules) {
   // Remove uninstalled module's third party settings from admin settings.
   $config = \Drupal::configFactory()->getEditable('webform.settings');
   $third_party_settings = $config->get('third_party_settings');
+
+  $has_third_party_settings = FALSE;
   foreach ($modules as $module) {
-    unset($third_party_settings[$module]);
+    if (isset($third_party_settings[$module])) {
+      $has_third_party_settings = TRUE;
+      unset($third_party_settings[$module]);
+    }
   }
-  $config->set('third_party_settings', $third_party_settings);
-  $config->save();
+  if ($has_third_party_settings) {
+    $config->set('third_party_settings', $third_party_settings);
+    $config->save();
+  }
 
   // Check HTML email provider support as modules are ininstalled.
   /** @var \Drupal\webform\WebformEmailProviderInterface $email_provider */
