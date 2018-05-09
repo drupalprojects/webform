@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
 use Psr\Log\LoggerInterface;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 
 /**
  * Logs events in the watchdog database table.
@@ -13,6 +14,7 @@ use Psr\Log\LoggerInterface;
 class WebformDevelLog implements LoggerInterface {
 
   use RfcLoggerTrait;
+  use DependencySerializationTrait;
 
   /**
    * The configuration factory.
