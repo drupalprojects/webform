@@ -481,8 +481,9 @@ class WebformSubmissionForm extends ContentEntityForm {
         ],
         '#attributes' => ['class' => ['js-hide', 'webform-confirmation-modal', 'js-webform-confirmation-modal']],
         '#weight' => -1000,
+        '#attached' => ['library' => ['webform/webform.confirmation.modal']],
+        '#element_validate' => ['::removeConfirmationModal'],
       ];
-      $form['#attached']['library'][] = 'webform/webform.confirmation.modal';
     }
 
     /* Data */
@@ -1749,6 +1750,21 @@ class WebformSubmissionForm extends ContentEntityForm {
         $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DEFAULT_CONFIRMATION);
         return;
     }
+  }
+
+  /**
+   * Hide confirmation modal during form validation.
+   *
+   * This prevent duplicate modal dialog from appearing.
+   */
+  public static function removeConfirmationModal(&$element, FormStateInterface $form_state, &$complete_form) {
+    // Reset confirmation modal.
+    $storage = $form_state->getStorage();
+    unset($storage['webform_confirmation_modal']);
+    $form_state->setStorage($storage);
+
+    // Remove modal from form.
+    unset($complete_form['webform_confirmation_modal']);
   }
 
   /****************************************************************************/
