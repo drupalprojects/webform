@@ -8,6 +8,7 @@ use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformComputedBase as WebformComputedBaseElement;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementDisplayOnInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -255,6 +256,14 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   protected function processValue(array $element, WebformSubmissionInterface $webform_submission) {
     $class = $this->getFormElementClassDefinition();
     return $class::processValue($element, $webform_submission);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    // Computed elements should never get a test value.
+    return NULL;
   }
 
 }

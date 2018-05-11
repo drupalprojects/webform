@@ -170,11 +170,6 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
       return $element['#test'];
     }
 
-    // Never populate hidden and value elements.
-    if (in_array($element['#type'], ['hidden', 'value'])) {
-      return NULL;
-    }
-
     // Invoke WebformElement::test and get a test value.
     // If test value is NULL this element should never be populated with
     // test data.

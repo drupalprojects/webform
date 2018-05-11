@@ -2,6 +2,8 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\webform\WebformInterface;
+
 /**
  * Provides a 'hidden' element.
  *
@@ -32,6 +34,14 @@ class Hidden extends TextBase {
    */
   public function preview() {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    // Hidden elements should never get a test value.
+    return NULL;
   }
 
 }
