@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Utility\WebformHtmlHelper;
+use Drupal\webform\Utility\WebformXss;
 use Drupal\webform\WebformSubmissionForm;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -72,6 +73,7 @@ abstract class WebformComputedBase extends FormElement {
 
       // Display markup.
       $element['value']['#markup'] = $value;
+      $element['value']['#allowed_tags'] = WebformXss::getAdminTagList();
 
       // Include hidden element so that computed value will be available to
       // conditions (#states).

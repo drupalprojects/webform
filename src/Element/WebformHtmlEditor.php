@@ -6,6 +6,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\Utility\WebformXss;
 
 /**
  * Provides a webform element for entering HTML using CodeMirror, TextFormat, or custom CKEditor.
@@ -207,18 +208,10 @@ class WebformHtmlEditor extends FormElement {
     $allowed_tags = \Drupal::config('webform.settings')->get('element.allowed_tags');
     switch ($allowed_tags) {
       case 'admin':
-        $allowed_tags = Xss::getAdminTagList();
-        // <label>, <fieldset>, <legend>, <font> is missing from allowed tags.
-        $allowed_tags[] = 'label';
-        $allowed_tags[] = 'fieldset';
-        $allowed_tags[] = 'legend';
-        $allowed_tags[] = 'font';
-        return $allowed_tags;
+        return WebformXss::getAdminTagList();
 
       case 'html':
-        $allowed_tags = Xss::getHtmlTagList();
-        $allowed_tags[] = 'font';
-        return $allowed_tags;
+        return WebformXss::getHtmlTagList();
 
       default:
         return preg_split('/ +/', $allowed_tags);
