@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\Element;
@@ -76,10 +77,10 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   /**
    * {@inheritdoc}
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL) {
     foreach ($element as $key => $value) {
       if (!Element::child($key) && !in_array($key, ['#value'])) {
-        $element[$key] = $this->tokenManager->replace($value, $webform_submission);
+        $element[$key] = $this->tokenManager->replace($value, $entity);
       }
     }
   }

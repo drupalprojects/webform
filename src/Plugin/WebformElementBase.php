@@ -7,6 +7,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
@@ -621,9 +622,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if (!empty($element['#title']) && empty($element['#admin_title'])) {
       $element['#admin_title'] = strip_tags($element['#title']);
     }
-
-    // Replace global tokens which could include the [site:name].
-    $this->replaceTokens($element);
   }
 
   /**
@@ -865,10 +863,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL) {
     foreach ($element as $key => $value) {
       if (!Element::child($key)) {
-        $element[$key] = $this->tokenManager->replace($value, $webform_submission);
+        $element[$key] = $this->tokenManager->replace($value, $entity);
       }
     }
   }

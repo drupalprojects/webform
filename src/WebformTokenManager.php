@@ -5,7 +5,6 @@ namespace Drupal\webform;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\Utility\WebformFormHelper;
@@ -37,13 +36,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   protected $moduleHandler;
 
   /**
-   * The theme manager.
-   *
-   * @var \Drupal\Core\Theme\ThemeManagerInterface
-   */
-  protected $themeManager;
-
-  /**
    * The token service.
    *
    * @var \Drupal\Core\Utility\Token
@@ -59,16 +51,13 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
-   *   The theme manager.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ThemeManagerInterface $theme_manager, Token $token) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, Token $token) {
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
-    $this->themeManager = $theme_manager;
     $this->token = $token;
 
     $this->config = $this->configFactory->get('webform.settings');
@@ -78,14 +67,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    * {@inheritdoc}
    */
   public function replace($text, EntityInterface $entity = NULL, array $data = [], array $options = []) {
-    // Issue #2968554: Clear cache via the UI is throwing an exception.
-    // Workaround: Do not replace tokens when cache is cleared via the UI.
-    // (/admin/config/development/performance)
-    // @see https://www.drupal.org/project/webform/issues/2968554
-    if (\Drupal::routeMatch()->getRouteName() === 'system.performance_settings') {
-      return $text;
-    }
-
     // Replace tokens within an array.
     if (is_array($text)) {
       foreach ($text as $key => $value) {
@@ -107,10 +88,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $this->setTokenData($data, $entity);
     }
 
-    // Track the active theme, if there is no active theme it means tokens
-    // are being replaced during the initial page request.
-    $has_active_theme = $this->themeManager->hasActiveTheme();
-
     // For anonymous users remove all [current-user] tokens to prevent
     // anonymous user properties from being displayed.
     // For example, the [current-user:display-name] token will return
@@ -125,13 +102,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     // Clear current user tokens for undefined values.
     if (strpos($text, '[current-user:') !== FALSE) {
       $text = preg_replace('/\[current-user:[^\]]+\]/', '', $text);
-    }
-
-    // If there was no active theme and now there is one.
-    // Reset the active theme, so that theme negotiators can determine the
-    // correct active theme.
-    if (!$has_active_theme && $this->themeManager->hasActiveTheme()) {
-      $this->themeManager->resetActiveTheme();
     }
 
     return $text;

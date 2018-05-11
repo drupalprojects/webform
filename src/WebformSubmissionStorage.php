@@ -637,6 +637,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       foreach ($elements as $element) {
         /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
         $element_plugin = $element_manager->createInstance($element['#type']);
+        // Replace tokens which can be used in an element's #title.
+        $element_plugin->replaceTokens($element, $webform);
         $columns += $element_plugin->getTableColumn($element);
       }
     }
