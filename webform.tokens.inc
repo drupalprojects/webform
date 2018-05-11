@@ -846,12 +846,25 @@ function _webform_token_get_submission_value_encode($value, array $options) {
  *   Webform submission values.
  */
 function _webform_token_get_submission_values(array $options, WebformSubmissionInterface $webform_submission) {
+  static $rendering;
+  if ($rendering) {
+    $token = (!empty($options['html'])) ? '[webform_submission:values:html]' : '[webform_submission:values]';
+    throw new \LogicException("Recursive rendering of $token detected.");
+  }
+
+  $rendering = TRUE;
+
   $submission_format = (!empty($options['html'])) ? 'html' : 'text';
   /** @var \Drupal\webform\WebformSubmissionViewBuilderInterface $view_builder */
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('webform_submission');
   $form_elements = $webform_submission->getWebform()->getElementsInitialized();
   $token_value = $view_builder->buildElements($form_elements, $webform_submission, $options, $submission_format);
+
   // Note, tokens can't include CSS and JS libraries since they can be
   // included in an email.
-  return \Drupal::service('renderer')->renderPlain($token_value);
+  $value = \Drupal::service('renderer')->renderPlain($token_value);
+
+  $rendering = FALSE;
+
+  return $value;
 }
