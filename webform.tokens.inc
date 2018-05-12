@@ -171,7 +171,6 @@ function webform_token_info() {
       t("The 'items' can be 'comma', 'semicolon', 'and', 'ol', 'ul', or custom delimiter") . '<br />' .
       t("The 'entity:*' applies to the referenced entity") . '<br />' .
       t("Add 'html' at the end of the token to return HTML markup instead of plain text.") . '<br />' .
-      t("Add 'clear' at the end of the token to return an empty value if element is missing.") . '<br />' .
       t("Add 'urlencode' at the end of the token to return a URL encoded value.") . '<br />' .
       t("For example, to display the Contact webform's 'Subject' element's value you would use the [webform_submission:values:subject] token.")
     ),
@@ -207,11 +206,14 @@ function webform_token_info() {
     'name' => t('Source entity'),
     'description' => t('The source entity that the webform submission was submitted from.'),
     'type' => 'entity',
+    'dynamic' => TRUE,
+
   ];
   $webform_submission['submitted-to'] = [
     'name' => t('Submitted to'),
     'description' => t('The source entity or webform that the webform submission was submitted from.'),
     'type' => 'entity',
+    'dynamic' => TRUE,
   ];
 
   $tokens['webform_submission'] = $webform_submission;
@@ -680,15 +682,12 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   // Set default options.
   $options += [
-    'clear' => FALSE,
     'html' => FALSE,
     'urlencode' => FALSE,
   ];
 
   // Parse suffixes and set options.
   $suffixes = [
-    // Indicates the tokens should be urlencded.
-    'clear',
     // Indicates the tokens should be formatted as HTML instead of plain text.
     'html',
     // Indicates the tokens should be urlencoded.
@@ -705,14 +704,14 @@ function _webform_token_get_submission_value($value_token, array $options, Webfo
 
   // Exit if form element does not exist.
   if (!$element) {
-    return ($options['clear']) ? '' : NULL;
+    return NULL;
   }
 
   $element_plugin = $element_manager->getElementInstance($element);
 
   // Exit if no submission data and form element is not a container.
   if (!isset($submission_data[$element_key]) && !$element_plugin->isContainer($element)) {
-    return ($options['clear']) ? '' : NULL;
+    return NULL;
   }
 
   // If multiple value element look for delta.

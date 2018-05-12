@@ -96,8 +96,29 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $text = preg_replace('/\[current-user:[^]]+\]/', '', $text);
     }
 
+    // Collect all tokens that include the clear suffix.
+    $tokens_clear = [];
+    if (preg_match_all('/\[(webform[^]]+):clear\]/', $text, $matches)) {
+      foreach ($matches[0] as $index => $match) {
+        // Wrapping tokens in {webform-token-clear} so that only tokens with
+        // the :clear suffix are removed.
+        $token_base = '{webform-token-clear}[' . $matches[1][$index] .']{/webform-token-clear}';
+        $text = str_replace($match, $token_base, $text);
+        $tokens_clear[] = $token_base;
+      }
+    }
+
     // Replace the webform related tokens.
     $text = $this->token->replace($text, $data, $options);
+
+    // Collect tokens that include the clear suffix.
+    if ($tokens_clear) {
+      foreach ($tokens_clear as $clear_token) {
+        $text = str_replace($clear_token, '', $text);
+      }
+      // Replace {webform-token-clear} wrappers that are no longer needed.
+      $text = preg_replace('/{\/?webform-token-clear}/', '', $text);
+    }
 
     // Clear current user tokens for undefined values.
     if (strpos($text, '[current-user:') !== FALSE) {

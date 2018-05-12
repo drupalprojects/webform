@@ -265,6 +265,8 @@ settings:
     <table class="table">
     <tr><th width="50%">webform_submission:values:missing</th><td width="50%">[webform_submission:values:missing]</td></tr>
     <tr><th width="50%">webform_submission:values:missing:clear</th><td width="50%">[webform_submission:values:missing:clear]</td></tr>
+    <tr><th width="50%">webform:random:missing</th><td width="50%">[webform:random:missing]</td></tr>
+    <tr><th width="50%">webform:random:missing:clear</th><td width="50%">[webform:random:missing:clear]</td></tr>
     </table>
   confirmation_url: ''
   confirmation_attributes: {  }

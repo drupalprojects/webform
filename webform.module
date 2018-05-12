@@ -16,6 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\webform\Entity\Webform;
@@ -355,6 +356,17 @@ function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInte
     $links = $breadcrumb->getLinks();
     $link = end($links);
     $link->setText(t('Webforms'));
+  }
+}
+
+/**
+ * Implements hook_token_info_alter().
+ */
+function webform_token_info_alter(&$data) {
+  foreach ($data['types'] as $type => &$info) {
+    if (strpos($type, 'webform') === 0) {
+      $info['description'] .= ' ' . t("Add ':clear' to the end token to return an empty value when the token is missing.");
+    }
   }
 }
 

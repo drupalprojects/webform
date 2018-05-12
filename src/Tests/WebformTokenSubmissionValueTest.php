@@ -128,6 +128,8 @@ last_name: Smith
       // Clear.
       'webform_submission:values:missing' => '[webform_submission:values:missing]',
       'webform_submission:values:missing:clear' => '',
+      'webform:random:missing' => '[webform:random:missing]',
+      'webform:random:missing:clear' => '',
     ];
     foreach ($tokens as $token => $value) {
       $this->assertRaw("<tr><th width=\"50%\">$token</th><td width=\"50%\">$value</td></tr>");
