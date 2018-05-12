@@ -117,9 +117,9 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function loadMultiple(array $ids = NULL) {
+  protected function doLoadMultiple(array $ids = NULL) {
     /** @var \Drupal\webform\WebformSubmissionInterface[] $webform_submissions */
-    $webform_submissions = parent::loadMultiple($ids);
+    $webform_submissions = parent::doLoadMultiple($ids);
     $this->loadData($webform_submissions);
     return $webform_submissions;
   }
