@@ -55,6 +55,17 @@ settings:
     button
   default_limit_total_message: 'No more submissions are permitted.'
   default_limit_user_message: 'No more submissions are permitted.'
+  dialog: false
+  dialog_options:
+    narrow:
+      title: Narrow
+      width: 600
+    normal:
+      title: Normal
+      width: 800
+    wide:
+      title: Wide
+      width: 1000
 assets:
   css: ''
   javascript: ''

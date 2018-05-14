@@ -229,7 +229,6 @@ class WebformSubmissionForm extends ContentEntityForm {
    * @see \Drupal\Core\Entity\EntityFormBuilder::getForm
    */
   public function setEntity(EntityInterface $entity) {
-
     /** @var \Drupal\webform\WebformSubmissionInterface $entity */
     $webform = $entity->getWebform();
 
@@ -291,7 +290,15 @@ class WebformSubmissionForm extends ContentEntityForm {
     }
 
     // Alter webform settings before setting the entity.
-    $entity->getWebform()->invokeHandlers('overrideSettings', $entity);
+    $webform->invokeHandlers('overrideSettings', $entity);
+
+    // Always enable Ajax support when this form is opened in dialog.
+    // Must be called after WebformHandler::overrideSettings which resets all
+    // overridden settings.
+    // @see \Drupal\webform\Entity\Webform::invokeHandlers
+    if ($this->isDialog()) {
+      $webform->setSettingOverride('ajax',  TRUE);
+    }
 
     return parent::setEntity($entity);
   }

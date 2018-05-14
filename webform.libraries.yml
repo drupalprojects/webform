@@ -26,7 +26,7 @@ webform.admin.dialog:
       css/webform.admin.css: {}
   js:
     js/webform.admin.js:  {}
-    js/webform.dialog.js:  {}
+    js/webform.admin.dialog.js:  {}
   dependencies:
     - core/drupal.dialog.ajax
     - core/jquery.ui.dialog
@@ -136,6 +136,16 @@ webform.contextual:
     js/webform.contextual.js:  {}
   dependencies:
     - core/jquery.once
+
+# Dialog.
+
+webform.dialog:
+  version: VERSION
+  js:
+    js/webform.dialog.js:  {}
+  dependencies:
+    - core/drupal.dialog.ajax
+    - core/jquery.ui.dialog
 
 # Help.
 

@@ -500,6 +500,12 @@ function webform_page_attachments(array &$attachments) {
       'webform_contribute',
     ];
   }
+
+  // Attach webform dialog library and options to every page.
+  if (\Drupal::config('webform.settings')->get('settings.dialog')) {
+    $attachments['#attached']['library'][] = 'webform/webform.dialog';
+    $attachments['#attached']['drupalSettings']['webform']['dialog']['options'] = \Drupal::config('webform.settings')->get('settings.dialog_options');
+  }
 }
 
 /**

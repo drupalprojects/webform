@@ -2224,3 +2224,11 @@ function _webform_update_8124(array &$element) {
     }
   }
 }
+
+/**
+ * Issue #2966507: Start-to-finish documentation for showing Webforms in modals.
+ */
+function webform_update_8125() {
+  _webform_update_admin_settings();
+}
+
