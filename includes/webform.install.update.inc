@@ -2185,3 +2185,42 @@ function webform_update_8122() {
 function webform_update_8123() {
   _webform_update_string_replace('[webform-authenticated-user:', '[current-user:');
 }
+
+/**
+ * Issue #2971207: Hidden Field updated values not being captured on Submit.
+ */
+function webform_update_8124() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    if (strpos($data['elements'], "'#type': hidden") !== FALSE) {
+      $elements = Yaml::decode($data['elements']);
+      _webform_update_8124($elements);
+      $data['elements'] = Yaml::encode($elements);
+
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}
+
+/**
+ * Recursively convert hidden elements #value to #default_value.
+ *
+ * @param array $element
+ *   An element.
+ */
+function _webform_update_8124(array &$element) {
+  if (isset($element['#type']) && $element['#type'] === 'hidden') {
+    if (isset($element['#value']) && !isset($element['#default_value'])) {
+      $element['#default_value'] = $element['#value'];
+      unset($element['#value']);
+    }
+  }
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      _webform_update_8124($element[$key]);
+    }
+  }
+}

@@ -50,7 +50,7 @@ drush webform-libraries-composer > composer.json
 **Manually Execute an Update Hook**
 
 ```bash
-drush php-eval 'module_load_include('install', 'webform'); webform_update_8032()';
+drush php-eval 'module_load_include('install', 'webform'); webform_update_8124()';
 ```
 
 **Import and Export Configuration**
