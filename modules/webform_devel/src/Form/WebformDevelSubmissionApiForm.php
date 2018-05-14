@@ -105,7 +105,7 @@ class WebformDevelSubmissionApiForm extends FormBase {
     ];
     $form['submission']['message'] = [
       '#type' => 'webform_message',
-      '#message_message' => $this->t("Submitting the below values with trigger the %title webform's ::valdiateForm() and ::submitForm() callbacks.", ['%title' => $webform->label()]),
+      '#message_message' => $this->t("Submitting the below values will trigger the %title webform's ::validateFormValues() and ::submitFormValues() callbacks.", ['%title' => $webform->label()]),
       '#message_type' => 'warning',
     ];
     $form['submission']['values'] = [
