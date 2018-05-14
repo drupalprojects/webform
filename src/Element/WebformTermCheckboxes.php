@@ -41,9 +41,7 @@ class WebformTermCheckboxes extends Checkboxes {
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
     $entity_repository = \Drupal::service('entity.repository');
 
-    /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
-    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $tree = $taxonomy_storage->loadTree($element['#vocabulary'], 0, NULL, TRUE);
+    $tree = static::loadTree($element['#vocabulary']);
 
     if (empty($element['#breadcrumb'])) {
       foreach ($tree as $item) {
@@ -71,10 +69,8 @@ class WebformTermCheckboxes extends Checkboxes {
 
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
     $entity_repository = \Drupal::service('entity.repository');
-    /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
-    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-    $tree = $taxonomy_storage->loadTree($element['#vocabulary'], 0, NULL, TRUE);
+    $tree = static::loadTree($element['#vocabulary']);
 
     $options = [];
     foreach ($tree as $item) {
