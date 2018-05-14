@@ -236,11 +236,11 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [
       'multiple' => FALSE,
       'multiple__header_label' => '',
-      'multiple__label' => $this->t('item'),
-      'multiple__labels' => $this->t('items'),
       'multiple__min_items' => 1,
       'multiple__empty_items' => 1,
       'multiple__add_more' => 1,
+      'multiple__add_more_button_label' => $this->t('Add'),
+      'multiple__add_more_input_label' => $this->t('more items'),
       'multiple__sorting' => TRUE,
       'multiple__operations' => TRUE,
     ];
@@ -295,6 +295,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'markup',
       'test',
       'default_value',
+      'add_more_button_label',
+      'add_more_input_label',
     ];
   }
 
@@ -2511,17 +2513,17 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Table header label'),
       '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
     ];
-    $form['multiple']['multiple__label'] = [
+    $form['multiple']['multiple__add_more_button_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Item label'),
+      '#title' => $this->t('Add more button label'),
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#description' => $this->t('This is used as the item label for this webform element when displaying multiple values.'),
+      '#description' => $this->t('This is used as the add more items button label for this webform element when displaying multiple values.'),
     ];
-    $form['multiple']['multiple__labels'] = [
+    $form['multiple']['multiple__add_more_input_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Item labels'),
+      '#title' => $this->t('Add more input label'),
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#description' => $this->t('This is used as the items label for this webform element when displaying multiple values.'),
+      '#description' => $this->t('This is used as the add more items input label for this webform element when displaying multiple values.'),
     ];
     $form['multiple']['multiple__min_items'] = [
       '#type' => 'number',

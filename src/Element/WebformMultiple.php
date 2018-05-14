@@ -29,8 +29,6 @@ class WebformMultiple extends FormElement {
     return [
       '#input' => TRUE,
       '#access' => TRUE,
-      '#label' => t('item'),
-      '#labels' => t('items'),
       '#key' => NULL,
       '#header' => NULL,
       '#element' => [
@@ -43,6 +41,8 @@ class WebformMultiple extends FormElement {
       '#min_items' => 1,
       '#empty_items' => 1,
       '#add_more' => 1,
+      '#add_more_button_label' => $this->t('Add'),
+      '#add_more_input_label' => $this->t('more items'),
       '#sorting' => TRUE,
       '#operations' => TRUE,
       '#add' => TRUE,
@@ -215,7 +215,7 @@ class WebformMultiple extends FormElement {
       ];
       $element['add']['submit'] = [
         '#type' => 'submit',
-        '#value' => t('Add'),
+        '#value' => $element['#add_more_button_label'],
         '#limit_validation_errors' => [],
         '#submit' => [[get_called_class(), 'addItemsSubmit']],
         '#ajax' => $ajax_settings,
@@ -226,7 +226,7 @@ class WebformMultiple extends FormElement {
         '#min' => 1,
         '#max' => 100,
         '#default_value' => $element['#add_more'],
-        '#field_suffix' => t('more @labels', ['@labels' => $element['#labels']]),
+        '#field_suffix' => $element['#add_more_input_label'],
         '#error_no_message' => TRUE,
       ];
     }

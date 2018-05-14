@@ -39,6 +39,10 @@ webform_multiple_no_operations:
   - One
   - Two
   - Three
+webform_multiple_custom_label:
+  - One
+  - Two
+  - Three
 webform_multiple_email_five:
   - example@example.com
   - test@test.com
@@ -113,6 +117,10 @@ webform_multiple_elements_flattened:
     // Check that sorting is disabled.
     $this->assertNoRaw('<tr class="draggable odd" data-drupal-selector="edit-webform-multiple-no-sorting-items-0">');
     $this->assertRaw('<tr data-drupal-selector="edit-webform-multiple-no-sorting-items-0" class="odd">');
+
+    // Check custom labels.
+    $this->assertRaw('<input data-drupal-selector="edit-webform-multiple-custom-label-add-submit" formnovalidate="formnovalidate" type="submit" id="edit-webform-multiple-custom-label-add-submit" name="webform_multiple_custom_label_table_add" value="{add_more_button_label}" class="button js-form-submit form-submit" />');
+    $this->assertRaw('<span class="field-suffix">{add_more_input_label}</span>');
 
     // Check that operations is disabled.
     $this->assertNoRaw('data-drupal-selector="edit-webform-multiple-no-operations-items-0-operations-remove"');

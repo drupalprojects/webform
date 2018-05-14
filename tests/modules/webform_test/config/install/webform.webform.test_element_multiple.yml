@@ -36,6 +36,15 @@ elements: |
       - One
       - Two
       - Three
+  webform_multiple_custom_label:
+    '#type': webform_multiple
+    '#title': webform_multiple_custom_label
+    '#add_more_button_label': '{add_more_button_label}'
+    '#add_more_input_label': '{add_more_input_label}'
+    '#default_value':
+      - One
+      - Two
+      - Three
   webform_multiple_email_five:
     '#type': webform_multiple
     '#title': webform_multiple_email_five
