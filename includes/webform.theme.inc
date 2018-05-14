@@ -289,6 +289,14 @@ function webform_preprocess_details(&$variables) {
   if (isset($variables['title'])) {
     _webform_preprocess_help_title($variables['title'], $element);
   }
+
+  // Remove invalid 'required' and 'aria-required' attributes from details.
+  if (isset($element['#webform_key'])) {
+    unset(
+      $variables['attributes']['required'],
+      $variables['attributes']['aria-required']
+    );
+  }
 }
 
 /**
@@ -319,6 +327,14 @@ function webform_preprocess_fieldset(&$variables) {
   if (isset($element['#type']) && in_array($element['#type'], ['checkboxes', 'radios'])) {
     $variables['attributes']['class'][] = 'js-webform-type-' . $element['#type'];
     $variables['attributes']['class'][] = 'webform-type-' . $element['#type'];
+  }
+
+  // Remove invalid 'required' and 'aria-required' attributes from fieldset.
+  if (isset($element['#webform_key'])) {
+    unset(
+      $variables['attributes']['required'],
+      $variables['attributes']['aria-required']
+    );
   }
 }
 
