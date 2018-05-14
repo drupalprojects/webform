@@ -22,7 +22,7 @@
         var $form = $(this);
 
         var options = $.extend({
-          'button': '<button type="button" class="link webform-details-toggle-state"></button>'
+          'button': '<button type="button" class="webform-details-toggle-state"></button>'
         }, Drupal.webform.detailsToggle.options);
 
         // Get only the main details elements and ingnore all nested details.
