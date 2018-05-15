@@ -203,7 +203,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
 
     // Element: Webform select collection.
     $projects['webform_select_collection'] = [
-      'title' => $this->t('Webform select collection'),
+      'title' => $this->t('Webform Select Collection'),
       'description' => $this->t('Provides a webform element that groups multiple select elements into single collection.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_select_collection'),
       'category' => 'element',
