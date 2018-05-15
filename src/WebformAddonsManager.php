@@ -448,6 +448,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'submission',
     ];
 
+    // Submissions: Webform Submission Change History.
+    $projects['webform_submission_change_history'] = [
+      'title' => $this->t('Webform Submission Change History'),
+      'description' => $this->t('Allows administrators to track notes on webform submissions.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_submission_change_history'),
+      'category' => 'submission',
+    ];
+
     // Submissions: Webform Queue.
     $projects['webform_queue'] = [
       'title' => $this->t('Webform Queue'),
