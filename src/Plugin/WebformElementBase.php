@@ -2243,14 +2243,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['form']['disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disabled'),
-      '#description' => $this->t('Make this element non-editable with the value <strong>ignored</strong>. Useful for displaying default value. Changeable via JavaScript.'),
+      '#description' => $this->t('Make this element non-editable with the user entered (e.g. via developer tools) value <strong>ignored</strong>. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
       '#weight' => 50,
     ];
     $form['form']['readonly'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Readonly'),
-      '#description' => $this->t('Make this element non-editable with the value <strong>submitted</strong>. Useful for displaying default value. Changeable via JavaScript.'),
+      '#description' => $this->t('Make this element non-editable with the user entered (e.g. via developer tools) value <strong>submitted</strong>. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
       '#weight' => 50,
     ];
