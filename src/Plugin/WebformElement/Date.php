@@ -71,8 +71,17 @@ class Date extends DateBase {
       // Must manually set 'data-drupal-date-format' to trigger date picker.
       // @see \Drupal\Core\Render\Element\Date::processDate
       $element['#attributes']['data-drupal-date-format'] = [$element['#date_date_format']];
+    }
+  }
 
-      // Format default value.
+  /**
+   * {@inheritdoc}
+   */
+  public function setDefaultValue(array &$element) {
+    parent::setDefaultValue($element);
+
+    // Format date picker default value.
+    if (!empty($element['#datepicker'])) {
       if (isset($element['#default_value'])) {
         if ($this->hasMultipleValues($element)) {
           foreach ($element['#default_value'] as $index => $default_value) {
