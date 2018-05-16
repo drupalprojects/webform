@@ -27,7 +27,7 @@
       index == current_index ? 'is-active',
     ]
   %}
-  <li{{ attributes.setAttribute('data-webform-page', page.name).setAttribute('class', '').addClass(classes) }}>
+  <li{{ attributes.setAttribute('data-webform-page', page.name).setAttribute('title', page.title).setAttribute('class', '').addClass(classes) }}>
     <span class="progress-marker">{{ index + 1 }}</span>
     {% if progress|length < max_pages %}
       <span class="progress-text">
