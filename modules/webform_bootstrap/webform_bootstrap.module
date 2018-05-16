@@ -93,7 +93,10 @@ function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $asset
   }
 
   // Make sure jQuery tooltip is never loaded.
-  unset($javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js']);
+  unset(
+    $javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js'],
+    $javascript['core/assets/vendor/jquery.ui/ui/widgets/tooltip-min.js']
+  );
 }
 
 /**
