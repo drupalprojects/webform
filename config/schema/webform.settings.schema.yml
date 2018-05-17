@@ -120,6 +120,12 @@ webform.settings:
         default_submission_locked_message:
           type: text
           label: 'Default submission locked message'
+        default_previous_submission_message:
+          type: text
+          label: 'Default previous submission message'
+        default_previous_submissions_message:
+          type: text
+          label: 'Default previous submissions message'
         default_autofill_message:
           type: text
           label: 'Default submission autofill message'

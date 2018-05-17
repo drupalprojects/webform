@@ -152,6 +152,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -201,13 +203,13 @@ settings:
     <tr><th width="50%">webform_submission:values:users:0:entity:account-name</th><td width="50%">[webform_submission:values:users:0:entity:account-name]</td></tr>
     <tr><th width="50%">webform_submission:values:users:99:entity:account-name</th><td width="50%">[webform_submission:values:users:99:entity:account-name]</td></tr>
     </table>
-
+    
     <h3>current-user</h3>
     <table class="table">
     <tr><th width="50%">current-user:display-name</th><td width="50%">[current-user:display-name]</td></tr>
     <tr><th width="50%">current-user:missing</th><td width="50%">[current-user:missing]</td></tr>
     </table>
-
+    
     <h3>terms</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:term</th><td width="50%">[webform_submission:values:term]</td></tr>

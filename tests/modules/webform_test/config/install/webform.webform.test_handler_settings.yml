@@ -97,6 +97,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -204,7 +206,7 @@ handlers:
       confirmation_url: ''
       confirmation_title: ''
       confirmation_message: ''
-      debug: true
+      debug: '1'
   confirmation:
     id: settings
     label: 'Confirmation Settings'
@@ -221,7 +223,7 @@ handlers:
       confirmation_url: ''
       confirmation_title: '[webform_submission:values:confirmation_title]'
       confirmation_message: '[webform_submission:values:confirmation_message]'
-      debug: true
+      debug: '1'
   custom:
     id: settings
     label: 'Custom settings'
@@ -238,6 +240,6 @@ handlers:
       confirmation_url: ''
       confirmation_title: ''
       confirmation_message: ''
-      debug: true
+      debug: '1'
       draft_saved_message: '[webform_submission:values:draft_saved_message]'
       draft_loaded_message: '[webform_submission:values:draft_loaded_message]'

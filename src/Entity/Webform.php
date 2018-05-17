@@ -863,6 +863,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'submission_login_message' => '',
       'submission_exception_message' => '',
       'submission_locked_message' => '',
+      'previous_submission_message' => '',
+      'previous_submissions_message' => '',
       'autofill' => FALSE,
       'autofill_message' => '',
       'autofill_excluded_elements' => [],

@@ -155,6 +155,12 @@ webform.webform.*:
         submission_login_message:
           type: text
           label: 'Login message when access denied to submission'
+        previous_submission_message:
+          type: text
+          label: 'Previous submission message'
+        previous_submissions_message:
+          type: text
+          label: 'Previous submissions message'
         autofill:
           type: boolean
           label: 'Autofill with previous submission'

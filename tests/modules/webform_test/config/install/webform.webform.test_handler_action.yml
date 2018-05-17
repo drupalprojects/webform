@@ -84,6 +84,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: 'This is submission was automatically locked.'
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }

@@ -51,7 +51,7 @@ content:
     weight: 3
     label: hidden
     settings:
-      label: 'Register'
+      label: Register
       dialog: wide
       attributes:
         class:

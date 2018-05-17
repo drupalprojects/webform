@@ -84,6 +84,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -242,10 +244,10 @@ handlers:
     conditions: {  }
     weight: -50
     settings:
-      debug: ''
-      entity_limit_total: '[webform_submission:node:field_webform_entity_limit_total]'
       preview_title: ''
       preview_message: ''
       confirmation_url: ''
       confirmation_title: ''
       confirmation_message: ''
+      debug: ''
+      entity_limit_total: '[webform_submission:node:field_webform_entity_limit_total]'

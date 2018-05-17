@@ -93,8 +93,20 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     $form['submission_settings']['submission_locked_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Submission locked message'),
-      '#description' => $this->t('A message to be displayed if submission is lockec.'),
+      '#description' => $this->t('A message to be displayed if submission is locked.'),
       '#default_value' => $settings['submission_locked_message'],
+    ];
+    $form['submission_settings']['previous_submission_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Previous submission message'),
+      '#description' => $this->t('A message to be displayed when there is previous submission.'),
+      '#default_value' => $settings['previous_submission_message'],
+    ];
+    $form['submission_settings']['previous_submissions_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Previous submissions message'),
+      '#description' => $this->t('A message to be displayed when there are previous submissions.'),
+      '#default_value' => $settings['previous_submissions_message'],
     ];
     $form['submission_settings']['next_serial'] = [
       '#type' => 'number',

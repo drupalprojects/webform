@@ -55,6 +55,8 @@ settings:
   submission_login_message: 'Please login to access <b>[webform_submission:label]</b>.'
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }

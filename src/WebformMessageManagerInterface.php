@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 interface WebformMessageManagerInterface {
 
   /****************************************************************************/
-  // Hardcode message constants.
+  // Hardcode message or custom messages with arguments constants.
   /****************************************************************************/
 
   /**
@@ -31,12 +31,12 @@ interface WebformMessageManagerInterface {
   /**
    * Submission previous.
    */
-  const SUBMISSION_PREVIOUS = 4;
+  const PREVIOUS_SUBMISSION = 4;
 
   /**
    * Submissions previous.
    */
-  const SUBMISSIONS_PREVIOUS = 5;
+  const PREVIOUS_SUBMISSIONS = 5;
 
   /**
    * Submission updates.
@@ -74,7 +74,7 @@ interface WebformMessageManagerInterface {
   const DRAFTS_PREVIOUS = 12;
 
   /****************************************************************************/
-  // Configurable message constants.
+  // Configurable custom message constants.
   // Values corresponds to admin config and webform settings.
   /****************************************************************************/
 
@@ -183,17 +183,6 @@ interface WebformMessageManagerInterface {
    *   An entity.
    */
   public function setSourceEntity(EntityInterface $entity = NULL);
-
-  /**
-   * Get message from webform specific setting or global setting.
-   *
-   * @param string $key
-   *   The name of webform settings message to be displayed.
-   *
-   * @return string|bool
-   *   A message or FALSE if no message is found.
-   */
-  public function setting($key);
 
   /**
    * Get message.

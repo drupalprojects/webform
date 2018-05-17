@@ -2232,3 +2232,13 @@ function webform_update_8125() {
   _webform_update_admin_settings();
 }
 
+
+/**
+ * Issue #2973377: Make the previously saved messages customizable.
+ */
+function webform_update_8126() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
+
+
