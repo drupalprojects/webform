@@ -1309,17 +1309,26 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Confirm webform via webform handler.
     $this->getWebform()->invokeHandlers('confirmForm', $form, $form_state, $webform_submission);
 
-    // Reset the form if reloading the current form via AJAX, and just displaying a message.
+    // Get confirmation type.
     $confirmation_type = $this->getWebformSetting('confirmation_type');
+
+    // Rebuild or reset the form if reloading the current form via AJAX.
     if ($this->isAjax()) {
+      // On update, rebuild and display message unless ?destination= is set.
+      // @see \Drupal\webform\WebformSubmissionForm::setConfirmation
       $state = $webform_submission->getState();
-      if ($confirmation_type == WebformInterface::CONFIRMATION_MESSAGE || $state == WebformSubmissionInterface::STATE_UPDATED) {
+      if ($state === WebformSubmissionInterface::STATE_UPDATED) {
+        if (!$this->getRequest()->get('destination')) {
+          static::rebuild($form, $form_state);
+        }
+      }
+      elseif ($confirmation_type === WebformInterface::CONFIRMATION_MESSAGE) {
         static::reset($form, $form_state);
       }
     }
 
     // Always reset the form to trigger a modal dialog.
-    if ($confirmation_type == WebformInterface::CONFIRMATION_MODAL) {
+    if ($confirmation_type === WebformInterface::CONFIRMATION_MODAL) {
       static::reset($form, $form_state);
     }
   }
