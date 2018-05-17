@@ -398,6 +398,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Spam: Human Presence Form Protection.
+    $projects['hp'] = [
+      'title' => $this->t('Human Presence Form Protection'),
+      'description' => $this->t('Human Presence is a fraud prevention and form protection service that uses multiple overlapping strategies to fight form spam.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/hp'),
+      'category' => 'spam',
+    ];
+
     // Submissions: Webform Views Integration.
     $projects['webform_views'] = [
       'title' => $this->t('Webform Views'),
