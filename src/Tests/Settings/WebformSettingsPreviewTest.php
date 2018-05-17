@@ -1,15 +1,17 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
+
 
 /**
  * Tests for webform submission form preview.
  *
  * @group Webform
  */
-class WebformSubmissionFormPreviewTest extends WebformTestBase {
+class WebformSettingsPreviewTest extends WebformTestBase {
 
   /**
    * Webforms to load.

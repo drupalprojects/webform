@@ -1,16 +1,18 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Tests\WebformTestBase;
+
 
 /**
  * Tests for webform submission form draft.
  *
  * @group Webform
  */
-class WebformSubmissionFormDraftTest extends WebformTestBase {
+class WebformSettingsDraftTest extends WebformTestBase {
 
   /**
    * Webforms to load.

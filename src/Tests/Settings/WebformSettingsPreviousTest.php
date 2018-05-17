@@ -1,16 +1,17 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\webform\Entity\Webform;
-use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Tests\WebformTestBase;
+
 
 /**
  * Tests for webform submission form previous.
  *
  * @group Webform
  */
-class WebformSubmissionFormPreviousTest extends WebformTestBase {
+class WebformSettingsPreviousTest extends WebformTestBase {
 
 
   /**
