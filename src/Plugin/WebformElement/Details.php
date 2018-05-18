@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -21,10 +22,19 @@ class Details extends ContainerBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return [
+    $properties = [
       'help' => '',
       'open' => FALSE,
     ] + parent::getDefaultProperties();
+
+    // Issue #2971848: [8.6.x] Details elements allow specifying attributes
+    // for the <summary> element.
+    // @todo Remove the below if/then when only 8.6.x is supported.
+    if ($this->elementInfo->getInfoProperty('details', '#summary_attributes') !== NULL) {
+      $properties['summary_attributes'] = [];
+    }
+
+    return $properties;
   }
 
   /**

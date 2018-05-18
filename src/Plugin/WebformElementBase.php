@@ -2575,7 +2575,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Wrapper'),
       '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom...' to enter custom classes."),
       '#style__description' => $this->t("Apply custom styles to the element's wrapper around both the field and its label."),
-      '#attributes__description' => $this->t("Enter additional attributes to be added the element's wrapper."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added to the element's wrapper."),
       '#classes' => $this->configFactory->get('webform.settings')->get('element.wrapper_classes'),
     ];
 
@@ -2589,6 +2589,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Element'),
       '#classes' => $this->configFactory->get('webform.settings')->get('element.classes'),
+    ];
+
+    /* Summary attributes */
+
+    $form['summary_attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Summary attributes'),
+    ];
+    $form['summary_attributes']['summary_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Summary'),
+      '#class__description' => $this->t("Apply classes to the details' summary around both the field and its label."),
+      '#style__description' => $this->t("Apply custom styles to the details' summary."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added to the details' summary."),
     ];
 
     /* Submission display */
@@ -2960,6 +2974,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           'multiple',
           'wrapper_attributes',
           'element_attributes',
+          'summary_attributes',
           'display',
           'admin',
           'custom',
