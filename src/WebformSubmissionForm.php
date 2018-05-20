@@ -1391,6 +1391,13 @@ class WebformSubmissionForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function reset(array &$form, FormStateInterface $form_state) {
+    // Delete save draft.
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $this->getEntity();
+    if ($webform_submission->isDraft()) {
+      $webform_submission->delete();
+    }
+
     // Create new webform submission.
     /** @var \Drupal\webform\Entity\WebformSubmission $webform_submission */
     $webform_submission = $this->getEntity()->createDuplicate();

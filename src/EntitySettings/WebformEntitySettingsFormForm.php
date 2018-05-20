@@ -198,6 +198,22 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ],
     ];
 
+    if ($settings['draft'] !== WebformInterface::DRAFT_NONE) {
+      $form['form_behaviors']['form_reset_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Currently loaded drafts will be deleted when the form is reset.'),
+        '#weight' => $form['form_behaviors']['form_reset']['#weight'] + 1,
+        '#states' => [
+          'visible' => [
+            ':input[name="form_reset"]' => ['checked' => TRUE],
+          ],
+        ],
+
+      ];
+    }
+
+
     // Wizard settings.
     $form['wizard_settings'] = [
       '#type' => 'details',
@@ -515,7 +531,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       'form_reset' => [
         'group' => $this->t('Form'),
         'title' => $this->t('Display reset button'),
-        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards."),
+        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards. Current drafts will be deleted when the form is reset."),
       ],
       'form_submit_once' => [
         'group' => $this->t('Form'),

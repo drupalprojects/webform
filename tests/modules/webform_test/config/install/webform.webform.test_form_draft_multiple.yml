@@ -40,7 +40,7 @@ settings:
   form_prepopulate_source_entity: false
   form_prepopulate_source_entity_required: false
   form_prepopulate_source_entity_type: ''
-  form_reset: false
+  form_reset: true
   form_disable_autocomplete: false
   form_novalidate: false
   form_disable_inline_errors: false
