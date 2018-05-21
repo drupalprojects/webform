@@ -117,6 +117,14 @@ entity.webform.autocomplete:
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 
+entity.webform.autocomplete.archived:
+  path: '/admin/structure/webform/autocomplete/archived'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformEntityController::autocomplete'
+    archived: TRUE
+  requirements:
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
+
 entity.webform.canonical:
   path: '/webform/{webform}'
   defaults:

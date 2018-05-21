@@ -705,7 +705,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         }
       }
       elseif ($webform->access('submission_update_any')) {
-        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
+        $form = $this->getMessageManager()->append($form, $webform->isArchived() ? WebformMessageManagerInterface::ADMIN_ARCHIVED : WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
       }
       else {
         if ($webform->isOpening()) {
