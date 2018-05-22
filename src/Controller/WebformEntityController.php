@@ -187,7 +187,7 @@ class WebformEntityController extends ControllerBase implements ContainerInjecti
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   The JSON response.
    */
-  public function autocomplete(Request $request, $templates = FALSE, $archived = FALSE) {
+  public function autocomplete(Request $request, $templates = FALSE) {
     $q = $request->query->get('q');
 
     $webform_storage = $this->entityTypeManager()->getStorage('webform');
@@ -209,9 +209,6 @@ class WebformEntityController extends ControllerBase implements ContainerInjecti
       // Filter out templates if the webform_template.module is enabled.
       $query->condition('template', FALSE);
     }
-
-    // Limit query to archived.
-    $query->condition('archive', $archived);
 
     $entity_ids = $query->execute();
 

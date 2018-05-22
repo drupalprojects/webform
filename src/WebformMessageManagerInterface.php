@@ -24,11 +24,6 @@ interface WebformMessageManagerInterface {
   const ADMIN_PAGE = 2;
 
   /**
-   * Admin archived.
-   */
-  const ADMIN_ARCHIVED = 13;
-
-  /**
    * Default submission confirmation.
    */
   const SUBMISSION_DEFAULT_CONFIRMATION = 3;

@@ -87,7 +87,6 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "close",
  *     "uid",
  *     "template",
- *     "archive",
  *     "id",
  *     "uuid",
  *     "title",
@@ -161,13 +160,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * @var bool
    */
   protected $template = FALSE;
-
-  /**
-   * The webform archive indicator.
-   *
-   * @var bool
-   */
-  protected $archive = FALSE;
 
   /**
    * The webform title.
@@ -472,11 +464,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function isOpen() {
-    // Archived webforms are always closed.
-    if ($this->isArchived()) {
-      return FALSE;
-    }
-
     switch ($this->status) {
       case WebformInterface::STATUS_OPEN:
         return TRUE;
@@ -526,13 +513,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function isTemplate() {
     return $this->template ? TRUE : FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isArchived() {
-    return $this->archive ? TRUE : FALSE;
   }
 
   /**
@@ -1744,11 +1724,6 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       $duplicate->set('description', '');
       $duplicate->set('template', FALSE);
       $duplicate->setStatus(TRUE);
-    }
-
-    // If archived, remove archive flag.
-    if ($duplicate->isArchived()) {
-      $duplicate->set('archive', FALSE);
     }
 
     // Remove enforce module dependency when a sub-module's webform is

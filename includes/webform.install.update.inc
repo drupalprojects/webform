@@ -2232,6 +2232,7 @@ function webform_update_8125() {
   _webform_update_admin_settings();
 }
 
+
 /**
  * Issue #2973377: Make the previously saved messages customizable.
  */
@@ -2240,9 +2241,4 @@ function webform_update_8126() {
   _webform_update_webform_settings();
 }
 
-/**
- * Issue #2932893: Filter out closed forms in webform field.
- */
-function webform_update_8127() {
-  _webform_update_webform_settings();
-}
+

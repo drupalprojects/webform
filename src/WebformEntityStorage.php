@@ -187,22 +187,15 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
    * {@inheritdoc}
    */
   public function getOptions($template = NULL) {
-    /** @var \Drupal\webform\WebformInterface[] $webforms */
     $webforms = $this->loadMultiple();
     @uasort($webforms, [$this->entityType->getClass(), 'sort']);
 
     $uncategorized_options = [];
     $categorized_options = [];
     foreach ($webforms as $id => $webform) {
-      // Skip templates.
       if ($template !== NULL && $webform->get('template') != $template) {
         continue;
       }
-      // Skip archived.
-      if ($webform->isArchived()) {
-        continue;
-      }
-
       if ($category = $webform->get('category')) {
         $categorized_options[$category][$id] = $webform->label();
       }

@@ -17,9 +17,6 @@ webform.webform.*:
     template:
       type: boolean
       label: 'Template'
-    archive:
-      type: boolean
-      label: 'Archive'
     id:
       type: string
       label: 'Machine name'

@@ -108,13 +108,6 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#access' => $this->moduleHandler->moduleExists('webform_templates'),
       '#default_value' => $webform->isTemplate(),
     ];
-    $form['general_settings']['archive'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Archived this webform'),
-      '#description' => $this->t('If checked, this webform will be closed and unavailable to webform blocks and fields.'),
-      '#return_value' => TRUE,
-      '#default_value' => $webform->isArchived(),
-    ];
     $form['general_settings']['results_disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable saving of submissions'),
