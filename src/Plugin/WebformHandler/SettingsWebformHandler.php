@@ -248,10 +248,10 @@ class SettingsWebformHandler extends WebformHandlerBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     // Completely reset configuration so that custom configuration will always
     // be reset.
-    $this->configuration = [];
+    $this->configuration = $this->defaultConfiguration();
 
     parent::submitConfigurationForm($form, $form_state);
-    parent::applyFormStateToConfiguration($form_state);
+    $this->applyFormStateToConfiguration($form_state);
 
     // Remove all empty strings from preview and confirmation settings.
     $this->configuration = array_filter($this->configuration);
