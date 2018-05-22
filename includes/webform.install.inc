@@ -68,7 +68,7 @@ function _webform_update_admin_settings($reset = FALSE) {
 }
 
 /**
- * Update webform setting to reflect changes in the default settings.
+ * Update webform settings to reflect changes in the default settings.
  *
  * This function can be used to apply new webform settings to all existing
  * webforms.
@@ -76,6 +76,25 @@ function _webform_update_admin_settings($reset = FALSE) {
  * @see \Drupal\webform\Entity\Webform::setSettings
  */
 function _webform_update_webform_settings() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    $data = _webform_update_webform_setting($data);
+    $webform_config->setData($data)->save();
+  }
+}
+
+/**
+ * Update webform setting to reflect changes in the default settings.
+ *
+ * @param array $data
+ *   A webform's raw configuration data from webform.webform.*.yml
+ *
+ * @return array
+ *   Updated raw configuration data.
+ */
+function _webform_update_webform_setting(array $data) {
   $default_properties = [
     'langcode' => 'en',
     'status' => WebformInterface::STATUS_OPEN,
@@ -97,38 +116,29 @@ function _webform_update_webform_settings() {
   ];
 
   $default_settings = Webform::getDefaultSettings();
-  $config_factory = \Drupal::configFactory();
-  // Update 'webform.webform.*' configuration.
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
 
-    // Get data.
-    $data = $webform_config->getRawData();
-
-    // Always apply the default properties.
-    $properties = $default_properties;
-    // Now apply defined properties.
-    foreach ($data as $name => $value) {
-      $properties[$name] = $value;
-    }
-    // Set properties.
-    $data = $properties;
-
-    // Always apply the default settings.
-    $settings = $default_settings;
-    // Now apply custom settings.
-    foreach ($data['settings'] as $name => $value) {
-      $settings[$name] = $value;
-    }
-    // Set settings.
-    $data['settings'] = $settings;
-
-    // Set access.
-    $data['access'] += Webform::getDefaultAccessRules();
-
-    // Save data.
-    $webform_config->setData($data)->save();
+  // Always apply the default properties.
+  $properties = $default_properties;
+  // Now apply defined properties.
+  foreach ($data as $name => $value) {
+    $properties[$name] = $value;
   }
+  // Set properties.
+  $data = $properties;
+
+  // Always apply the default settings.
+  $settings = $default_settings;
+  // Now apply custom settings.
+  foreach ($data['settings'] as $name => $value) {
+    $settings[$name] = $value;
+  }
+  // Set settings.
+  $data['settings'] = $settings;
+
+  // Set access.
+  $data['access'] += Webform::getDefaultAccessRules();
+
+  return $data;
 }
 
 /**
