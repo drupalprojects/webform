@@ -14,7 +14,7 @@
 
   var tooltipDefaultOptions = {
     // @see https://stackoverflow.com/questions/18231315/jquery-ui-tooltip-html-with-links
-    show: null,
+    show: {delay: 100},
     close: function (event, ui) {
       ui.tooltip.hover(
         function () {
