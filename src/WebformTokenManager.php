@@ -136,11 +136,10 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return [];
     }
 
-    // @todo Issue #2235581: Make Token Dialog support inserting in WYSIWYGs.
     $build = [
       '#theme' => 'token_tree_link',
       '#token_types' => $token_types,
-      '#click_insert' => FALSE,
+      '#click_insert' => TRUE,
       '#dialog' => TRUE,
     ];
 
