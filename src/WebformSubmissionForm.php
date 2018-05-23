@@ -111,9 +111,14 @@ class WebformSubmissionForm extends ContentEntityForm {
   protected $generate;
 
   /**
-   * The webform settings.
+   * The (cached) webform settings.
+   *
+   * This include default site-wide webform configuration
+   * and overridden webform settings.
    *
    * @var array
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::getWebformSetting
    */
   protected $settings;
 
@@ -291,6 +296,9 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Alter webform settings before setting the entity.
     $webform->invokeHandlers('overrideSettings', $entity);
+    if ($webform->isOverridden()) {
+      $this->settings = [];
+    }
 
     // Always enable Ajax support when this form is opened in dialog.
     // Must be called after WebformHandler::overrideSettings which resets all
@@ -312,6 +320,9 @@ class WebformSubmissionForm extends ContentEntityForm {
 
     // Alter webform settings before setting the entity.
     $entity->getWebform()->invokeHandlers('overrideSettings', $entity);
+    if ($entity->getWebform()->isOverridden()) {
+      $this->settings = [];
+    }
 
     return $entity;
   }
