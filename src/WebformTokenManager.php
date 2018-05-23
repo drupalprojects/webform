@@ -146,6 +146,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     if ($description) {
       if ($this->config->get('ui.description_help')) {
         return [
+          '#type' => 'container',
           'token_tree_link' => $build,
           'help' => [
             '#type' => 'webform_help',
@@ -155,6 +156,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       }
       else {
         return [
+          '#type' => 'container',
           'token_tree_link' => $build,
           'description' => [
             '#prefix' => ' ',
@@ -164,7 +166,10 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       }
     }
     else {
-      return $build;
+      return [
+        '#type' => 'container',
+        'token_tree_link' => $build,
+      ];
     }
   }
 

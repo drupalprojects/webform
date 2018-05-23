@@ -168,6 +168,13 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ],
     ];
     $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    if ($form['form_access_denied']['token_tree_link']) {
+      $form['form_access_denied']['token_tree_link']['#states'] = [
+        'visible' => [
+          ':input[name="form_login"]' => ['checked' => TRUE],
+        ],
+      ];
+    }
 
     // Form behaviors.
     $form['form_behaviors'] = [

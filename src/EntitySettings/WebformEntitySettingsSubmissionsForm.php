@@ -177,6 +177,13 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       ],
     ];
     $form['submission_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    if ($form['submission_access_denied']['token_tree_link']) {
+      $form['submission_access_denied']['token_tree_link']['#states'] = [
+        'visible' => [
+          ':input[name="submission_login"]' => ['checked' => TRUE],
+        ]
+      ];
+    }
 
     // Submission behaviors.
     $form['submission_behaviors'] = [
