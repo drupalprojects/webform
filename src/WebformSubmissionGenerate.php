@@ -116,9 +116,19 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
     }
 
     // Apply #maxlength to values.
+    // @see \Drupal\webform\Plugin\WebformElement\TextBase
     if (!empty($element['#maxlength'])) {
+      $maxlength = $element['#maxlength'];
+    }
+    elseif (!empty($element['#counter_type']) && !empty($element['#counter_maximum']) && $element['#counter_type'] === 'character'){
+      $maxlength = $element['#counter_maximum'];
+    }
+    else {
+      $maxlength = NULL;
+    }
+    if ($maxlength) {
       foreach ($values as $index => $value) {
-        $values[$index] = Unicode::substr($value, 0, $element['#maxlength']);
+        $values[$index] = Unicode::substr($value, 0, $maxlength);
       }
     }
 
