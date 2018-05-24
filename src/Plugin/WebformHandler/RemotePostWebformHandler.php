@@ -310,7 +310,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $form['additional']['messages'] = [
       '#type' => 'webform_multiple',
       '#title' => $this->t('Custom error response messages'),
-      '#description' => $this->t('Enter custom response messages for specific status codes.') . '<br/>' . $this->t('Defaults to: %value', ['%value' => $this->messageManager->render(WebformMessageManagerInterface::SUBMISSION_EXCEPTION)]),
+      '#description' => $this->t('Enter custom response messages for specific status codes.') . '<br/>' . $this->t('Defaults to: %value', ['%value' => $this->messageManager->render(WebformMessageManagerInterface::SUBMISSION_EXCEPTION_MESSAGE)]),
       '#empty_items' => 0,
       '#add' => FALSE,
       '#element' => [
@@ -832,7 +832,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       drupal_set_message(\Drupal::service('renderer')->renderPlain($build_message), 'error');
     }
     else {
-      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION, 'error');
+      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION_MESSAGE, 'error');
     }
   }
 

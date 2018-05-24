@@ -660,12 +660,12 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Exit if elements are broken, usually occurs when elements YAML is edited
     // directly in the export config file.
     if (!$webform_submission->getWebform()->getElementsInitialized()) {
-      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
+      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION_MESSAGE, 'warning');
     }
 
     // Exit if submission is locked.
     if ($webform_submission->isLocked()) {
-      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::SUBMISSION_LOCKED, 'warning');
+      return $this->getMessageManager()->append($form, WebformMessageManagerInterface::SUBMISSION_LOCKED_MESSAGE, 'warning');
     }
 
     // Check prepopulate source entity required and type.
@@ -747,7 +747,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
       else {
         // Display exception message to users.
-        return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION, 'warning');
+        return $this->getMessageManager()->append($form, WebformMessageManagerInterface::FORM_EXCEPTION_MESSAGE, 'warning');
       }
     }
 
@@ -824,11 +824,11 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Display loaded or saved draft message.
     if ($webform_submission->isDraft()) {
       if ($form_state->get('draft_saved')) {
-        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_SAVED);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_SAVED_MESSAGE);
         $form_state->set('draft_saved', FALSE);
       }
       elseif ($this->isGet() && !$webform->getSetting('draft_multiple')) {
-        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_LOADED);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_DRAFT_LOADED_MESSAGE);
       }
     }
 
@@ -873,7 +873,7 @@ class WebformSubmissionForm extends ContentEntityForm {
       && $webform_submission->isNew()
       && $webform->getSetting('autofill')
       && $this->getLastSubmission()) {
-      $this->getMessageManager()->display(WebformMessageManagerInterface::AUTOFILL);
+      $this->getMessageManager()->display(WebformMessageManagerInterface::AUTOFILL_MESSAGE);
     }
   }
 
@@ -1735,7 +1735,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         $confirmation_url = $this->aliasManager->getPathByAlias($confirmation_url);
         if ($redirect_url = $this->pathValidator->getUrlIfValid($confirmation_url)) {
           if ($confirmation_type == WebformInterface::CONFIRMATION_URL_MESSAGE) {
-            $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+            $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION_MESSAGE);
           }
           $this->setTrustedRedirectUrl($form_state, $redirect_url);
           return;
@@ -1754,7 +1754,7 @@ class WebformSubmissionForm extends ContentEntityForm {
         }
 
         // If confirmation URL is invalid display message.
-        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION_MESSAGE);
         $route_options['query']['webform_id'] = $webform->id();
         $form_state->setRedirect($route_name, $route_parameters, $route_options);
         return;
@@ -1765,11 +1765,11 @@ class WebformSubmissionForm extends ContentEntityForm {
         return;
 
       case WebformInterface::CONFIRMATION_MESSAGE:
-        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        $this->getMessageManager()->display(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION_MESSAGE);
         return;
 
       case WebformInterface::CONFIRMATION_MODAL:
-        $message = $this->getMessageManager()->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+        $message = $this->getMessageManager()->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION_MESSAGE);
         if ($message) {
           // Set webform confirmation modal in $form_state.
           $form_state->set('webform_confirmation_modal', [
