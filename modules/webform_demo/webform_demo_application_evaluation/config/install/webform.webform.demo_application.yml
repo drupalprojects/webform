@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: demo_application
 title: 'Demo: Application'
 description: 'A demonstration of a very basic application form.'

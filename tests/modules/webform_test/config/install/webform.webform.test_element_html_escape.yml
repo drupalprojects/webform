@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_html_escape
 title: 'Test: Element: HTML escaping'
 description: 'Test element HTML escaping support'

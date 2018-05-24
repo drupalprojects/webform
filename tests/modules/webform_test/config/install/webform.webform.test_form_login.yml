@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_login
 title: 'Test: Webform: Login'
 description: 'Test login access denied to form or submission.'

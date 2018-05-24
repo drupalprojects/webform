@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_email_mapping
 title: 'Test: Handler: Email mapping'
 description: 'Test email mapping handler.'

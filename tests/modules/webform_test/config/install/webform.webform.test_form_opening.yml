@@ -8,6 +8,7 @@ open: '2020-01-01T00:00:00-05:00'
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_opening
 title: 'Test: Webform: Opening'
 description: 'Test message being displayed when a webform is scheduled to open.'

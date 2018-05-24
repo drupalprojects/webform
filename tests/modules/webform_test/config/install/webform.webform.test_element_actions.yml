@@ -8,6 +8,7 @@ open: null
 close: null
 uid: 1
 template: false
+archive: false
 id: test_element_actions
 title: 'Test: Element: Actions'
 description: 'Test Actions (aka Submit button(s)) element.'

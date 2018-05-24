@@ -6,92 +6,16 @@ dependencies:
       - webform_test
 open: null
 close: null
-uid: 1
+uid: null
 template: false
-archive: false
-id: test_libraries_optional
-title: 'Test: Libraries: Optional'
-description: 'Test optional libraries.'
-category: 'Test: Libraries'
+archive: true
+id: test_form_archived
+title: 'Test: Webform: Archive'
+description: 'Test archiving a webform.'
+category: 'Test: Webform'
 elements: |
-  libraries:
-    '#type': details
-    '#title': Libraries
-    '#open': true
-    codemirror:
-      '#type': webform_codemirror
-      '#title': Codemirror
-    icheck:
-      '#type': checkbox
-      '#title': iCheck
-      '#icheck': minimal
-    input_mask:
-      '#type': textfield
-      '#title': 'Input Mask'
-      '#input_mask': '(999) 999-9999'
-    international_telephone:
-      '#type': tel
-      '#title': 'International Telephone'
-      '#international': true
-    international_telephone_composite:
-      '#type': webform_telephone
-      '#title': 'International Telephone Composite'
-      '#multiple': true
-      '#multiple__header': true
-    word_counter:
-      '#type': textarea
-      '#title': 'Word counter'
-      '#counter_type': word
-      '#counter_maximum': '100'
-    select2:
-      '#type': select
-      '#title': Select2
-      '#options': industry
-      '#select2': true
-    chosen:
-      '#type': select
-      '#title': Chosen
-      '#options': industry
-      '#chosen': true
-    time:
-      '#type': webform_time
-      '#title': Time
-  elements:
-    '#type': details
-    '#title': Elements
-    '#open': true
-    image_select:
-      '#type': webform_image_select
-      '#title': 'Image select'
-      '#images':
-        kitten_1:
-          text: 'Cute Kitten 1'
-          src: 'http://placekitten.com/220/200'
-        kitten_2:
-          text: 'Cute Kitten 2'
-          src: 'http://placekitten.com/180/200'
-        kitten_3:
-          text: 'Cute Kitten 3'
-          src: 'http://placekitten.com/130/200'
-    location:
-      '#type': webform_location
-      '#title': Location
-    rating:
-      '#type': webform_rating
-      '#title': Rating
-    signature:
-      '#type': webform_signature
-      '#title': Signature
-    toggle:
-      '#type': webform_toggle
-      '#title': Toggle
-    toggles:
-      '#type': webform_toggles
-      '#title': Toggles
-      '#options':
-        one: One
-        two: Two
-        three: Three
+  description:
+    '#markup': 'This webform is archived.'
 css: ''
 javascript: ''
 settings:
@@ -178,7 +102,7 @@ settings:
   purge: none
   purge_days: null
   results_disabled: false
-  results_disabled_ignore: false
+  results_disabled_ignore: true
   token_update: false
 access:
   create:

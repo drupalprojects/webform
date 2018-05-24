@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_input_masks
 title: 'Example: Input Masks'
 description: 'Examples of elements with <a href="https://github.com/RobinHerbots/jquery.inputmask">input masks</a>.'

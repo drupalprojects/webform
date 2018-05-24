@@ -10,6 +10,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_scheduled_email
 title: 'Test: Handler: Test scheduled email'
 description: 'Test webform schedule email handler.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_example_elements
 title: 'Test: Example: Elements'
 description: 'Examples of every supported <a href="https://api.drupal.org/api/drupal/elements">webform element</a>.'

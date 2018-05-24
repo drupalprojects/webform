@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: true
+archive: false
 id: template_feedback
 title: Feedback
 description: 'A basic feedback template.'

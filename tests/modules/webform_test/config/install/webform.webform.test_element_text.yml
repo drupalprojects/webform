@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_text
 title: 'Test: Element: Text'
 description: 'Tests text field and text area based elements.'

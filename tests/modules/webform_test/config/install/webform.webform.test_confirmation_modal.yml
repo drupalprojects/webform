@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_confirmation_modal
 title: 'Test: Confirmation: Modal'
 description: 'Test confirmation modal.'

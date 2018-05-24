@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_computed_elements
 title: 'Example: Computed'
 description: 'Examples of a computed elements.'

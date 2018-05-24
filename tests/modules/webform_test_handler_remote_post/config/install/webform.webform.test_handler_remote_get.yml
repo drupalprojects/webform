@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_remote_get
 title: 'Test: Handler: Remote HTTP GET'
 description: 'Test remote post handler using HTTP GET method.'

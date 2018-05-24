@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_validate_minlength
 title: 'Test: Element: Validate Minlength'
 description: 'Test #minlength element validation support.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_more
 title: 'Test: Element: More'
 description: 'Test element #more and #more_title properties.'

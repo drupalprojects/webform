@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_composite_format_multiple
 title: 'Test: Composite: Format composite multiple values'
 description: 'Test composite element formatting with multiple value.'

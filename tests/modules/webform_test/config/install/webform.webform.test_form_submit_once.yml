@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_submit_once
 title: 'Test: Webform: Submit once'
 description: 'Test submit once.'

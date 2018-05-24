@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_html_editor
 title: 'Test: Element: HTML editor'
 description: 'Test HTML editor element.'

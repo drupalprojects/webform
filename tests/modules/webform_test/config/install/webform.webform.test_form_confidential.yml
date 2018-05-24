@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_confidential
 title: 'Test: Webform: Confidential'
 description: 'Test confidential webforms.'

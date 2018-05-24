@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_captcha
 title: 'Test: Element: CAPTCHA'
 description: 'Tests CAPTCHA element.'

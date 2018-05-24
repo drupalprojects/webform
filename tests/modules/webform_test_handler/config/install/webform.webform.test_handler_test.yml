@@ -10,6 +10,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_test
 title: 'Test: Handler: Test invoke methods'
 description: 'Test invoking of webform handler methods.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_html_markup
 title: 'Test: Element: HTML Markup'
 description: 'Test element HTML markup support by underlining all titles, descriptions, prefixes, and suffixes.'

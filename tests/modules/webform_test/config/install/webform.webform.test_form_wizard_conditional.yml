@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_wizard_conditional
 title: 'Test: Webform: Wizard conditional'
 description: 'Test a multiple step wizard with conditional pages'

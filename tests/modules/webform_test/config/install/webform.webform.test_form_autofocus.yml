@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_autofocus
 title: 'Test: Webform: Autofocus'
 description: 'Test autofocusing the first element.'

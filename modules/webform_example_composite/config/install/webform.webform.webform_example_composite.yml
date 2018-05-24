@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: webform_example_composite
 title: 'Example: Webform Composite'
 description: 'An example of a custom Webform composite.'

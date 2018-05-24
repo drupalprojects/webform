@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_entity_reference
 title: 'Test: Element: Entity reference'
 description: 'Test entity reference elements.'

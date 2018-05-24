@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_options
 title: 'Test: Element: Options'
 description: 'Test options element.'

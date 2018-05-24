@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_confirmation_url_message
 title: 'Test: Confirmation: URL with message'
 description: 'Test redirecting to an internal URL with a confirmation message.'

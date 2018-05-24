@@ -710,13 +710,13 @@ class WebformSubmissionForm extends ContentEntityForm {
     if ($webform_submission->isNew() && $webform->isClosed()) {
       // If the current user can update any submission just display the closed
       // message and still allow them to create new submissions.
-      if ($webform->isTemplate() && $webform->access('duplicate')) {
+      if ($webform->isTemplate() && $webform->access('duplicate') && !$webform->isArchived()) {
         if (!$this->isDialog()) {
           $this->getMessageManager()->display(WebformMessageManagerInterface::TEMPLATE_PREVIEW, 'warning');
         }
       }
       elseif ($webform->access('submission_update_any')) {
-        $form = $this->getMessageManager()->append($form, WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
+        $form = $this->getMessageManager()->append($form, $webform->isArchived() ? WebformMessageManagerInterface::ADMIN_ARCHIVED : WebformMessageManagerInterface::ADMIN_CLOSED, 'info');
       }
       else {
         if ($webform->isOpening()) {

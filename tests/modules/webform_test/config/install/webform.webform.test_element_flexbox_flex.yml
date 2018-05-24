@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_flexbox_flex
 title: 'Test: Element: Flexbox flex '
 description: 'Test flexbox flex containers.'

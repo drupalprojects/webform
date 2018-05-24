@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_confirmation_url
 title: 'Test: Confirmation: URL'
 description: 'Test redirecting to an internal URL.'

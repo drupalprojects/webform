@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_multiple_date
 title: 'Test: Element: Multiple: Date'
 description: 'Test multiple text Date elements.'

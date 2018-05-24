@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_computed_twig
 title: 'Test: Element: Computed twig'
 description: 'Test computed twig element.'

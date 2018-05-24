@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_ajax_confirmation_message
 title: 'Test: Ajax: Confirmation: Message'
 description: 'Test Ajax basic confirmation message.'

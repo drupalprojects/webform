@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_ajax_confirmation_page
 title: 'Test: Ajax: Confirmation: Page'
 description: 'Test Ajax redirecting to a confirmation page.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_format_custom
 title: 'Test: Element: Format custom'
 description: 'Test element custom formatting.'

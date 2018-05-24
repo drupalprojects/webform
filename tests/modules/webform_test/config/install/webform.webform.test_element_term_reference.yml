@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_term_reference
 title: 'Test: Element: Term reference'
 description: 'Test term reference element.'

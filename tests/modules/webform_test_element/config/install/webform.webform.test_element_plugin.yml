@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_plugin
 title: 'Test: Element: Test (plugin)'
 description: 'Test the webform element plugin integration and method invoking.'

@@ -183,6 +183,7 @@ class WebformTemplatesController extends ControllerBase implements ContainerInje
   protected function getTemplates($keys = '', $category = '') {
     $query = $this->webformStorage->getQuery();
     $query->condition('template', TRUE);
+    $query->condition('archive', FALSE);
     // Filter by key(word).
     if ($keys) {
       $or = $query->orConditionGroup()

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_reset
 title: 'Test: Webform: Reset'
 description: 'Test form reset button.'

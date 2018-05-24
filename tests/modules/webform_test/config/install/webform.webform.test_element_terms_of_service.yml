@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_terms_of_service
 title: 'Test: Element: Terms of Service'
 description: 'Test terms of service element.'

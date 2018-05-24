@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_wizard_validate_comp
 title: 'Test: Webform: Wizard composite element validation'
 description: 'Test a multiple step ''wizard'' webform composite element validation.'

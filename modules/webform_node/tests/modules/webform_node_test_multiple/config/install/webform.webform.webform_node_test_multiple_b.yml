@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: webform_node_test_multiple_b
 title: 'Test: Webform Node Multiple B'
 description: 'Test Webform Node Multiple B'

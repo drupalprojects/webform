@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_rendering
 title: 'Test: Rendering'
 description: 'Test Webform and Webform Submission rendering'

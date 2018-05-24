@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_media_file
 title: 'Test: Element: Media type file upload'
 description: 'Test file uploads using media accepts and capture file element.'

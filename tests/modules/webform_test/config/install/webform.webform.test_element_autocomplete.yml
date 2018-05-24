@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_autocomplete
 title: 'Test: Element: Autocomplete'
 description: 'Test element autocompletion.'

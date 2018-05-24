@@ -10,6 +10,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: demo_event_registration
 title: 'Demo: Event Registration'
 description: 'A demonstration of an event registration form.'

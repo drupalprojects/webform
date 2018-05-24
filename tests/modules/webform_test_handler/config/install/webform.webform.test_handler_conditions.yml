@@ -10,6 +10,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_conditions
 title: 'Test: Handler: Test conditions'
 description: 'Test handler conditions.'

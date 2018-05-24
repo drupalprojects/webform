@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_email_states
 title: 'Test: Handler: Email states'
 description: 'Test sending email during each submission state.'

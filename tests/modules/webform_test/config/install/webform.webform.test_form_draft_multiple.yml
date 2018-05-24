@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_draft_multiple
 title: 'Test: Webform: Draft multiple'
 description: 'Test saving multiple drafts.'

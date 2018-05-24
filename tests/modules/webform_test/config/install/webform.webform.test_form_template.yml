@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: true
+archive: false
 id: test_form_template
 title: 'Test: Webform: Template'
 description: 'Test using a webform as a template.'

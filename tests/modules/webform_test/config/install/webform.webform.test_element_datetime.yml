@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_datetime
 title: 'Test: Element: Date/time'
 description: 'Test date/time element'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_email_twig
 title: 'Test: Handler: Email Twig'
 description: 'Test Twig email handler.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_icheck_styles
 title: 'Test: Element: iCheck style'
 description: 'Test iCheck style.'

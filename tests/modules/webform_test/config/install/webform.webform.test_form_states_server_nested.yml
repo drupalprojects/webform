@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_states_server_nested
 title: 'Test: Form API #states nested elements in a conditional hidden container'
 description: 'Test Drupal''s #states for nested elements in a conditional hidden container.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_help
 title: 'Test: Element: Help'
 description: 'Test element #help property.'

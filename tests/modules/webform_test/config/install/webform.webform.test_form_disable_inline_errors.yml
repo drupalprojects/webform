@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_disable_inline_errors
 title: 'Test: Webform: Disable inline form errors'
 description: 'Test disabling inline form errors.'

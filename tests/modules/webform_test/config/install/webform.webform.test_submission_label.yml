@@ -8,6 +8,7 @@ open: null
 close: null
 uid: 1
 template: false
+archive: false
 id: test_submission_label
 title: 'Test: Submission: Label'
 description: 'Test custom submission label'

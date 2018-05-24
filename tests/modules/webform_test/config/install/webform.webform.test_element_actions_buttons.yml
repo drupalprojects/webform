@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_actions_buttons
 title: 'Test: Element: Actions buttons'
 description: 'Test element actions buttons.'

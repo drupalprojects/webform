@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_text_format
 title: 'Test: Element: Text format'
 description: 'Test text webform element support.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_token_submission_value
 title: 'Test: Token submission value'
 description: 'Test Webform submission values tokens'

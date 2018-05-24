@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_disable_autocomplete
 title: 'Test: Webform: Disable autocomplete'
 description: 'Test disabling autocompletion for all elements.'

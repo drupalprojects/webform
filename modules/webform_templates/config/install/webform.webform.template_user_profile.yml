@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: true
+archive: false
 id: template_user_profile
 title: 'User Profile'
 description: 'A user profile webform template.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_remote_post
 title: 'Example: Remote post'
 description: 'An example of a webform submission posted to a remote server.'

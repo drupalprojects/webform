@@ -103,6 +103,7 @@ function _webform_update_webform_setting(array $data) {
     'close' => NULL,
     'uid' => '',
     'template' => FALSE,
+    'archive' => FALSE,
     'id' => '',
     'title' => '',
     'description' => '',

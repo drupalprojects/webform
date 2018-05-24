@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: true
+archive: false
 id: template_issue
 title: Issue
 description: 'An issue webform template.'

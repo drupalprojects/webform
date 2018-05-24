@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_managed_file_name
 title: 'Test: File rename'
 description: 'Dummy form to test uploaded file renaming.'

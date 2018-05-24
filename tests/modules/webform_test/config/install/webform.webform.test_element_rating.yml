@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_rating
 title: 'Test: Element: Rating'
 description: 'Test the rating element.'

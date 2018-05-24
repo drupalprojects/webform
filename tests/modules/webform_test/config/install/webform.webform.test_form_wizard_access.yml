@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_wizard_access
 title: 'Test: Webform: Wizard access'
 description: 'Test wizard with page specific access rules.'

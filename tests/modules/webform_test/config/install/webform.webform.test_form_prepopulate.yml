@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_prepopulate
 title: 'Test: Webform: Prepopulate'
 description: 'Test prepopulating all form elements using query string parameters.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_properties
 title: 'Test: Webform: Properties'
 description: 'Test custom webform properties.'

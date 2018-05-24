@@ -2246,3 +2246,10 @@ function webform_update_8126() {
 function webform_update_8127() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2932893: Filter out closed forms in webform field.
+ */
+function webform_update_8128() {
+  _webform_update_webform_settings();
+}

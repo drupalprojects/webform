@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_exporter_options
 title: 'Test: Exporter: Options'
 description: 'Test exporting options element.'

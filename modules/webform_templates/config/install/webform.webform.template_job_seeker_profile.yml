@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: true
+archive: false
 id: template_job_seeker_profile
 title: 'Job Seeker Profile'
 description: 'A job seeker profile webform template.'

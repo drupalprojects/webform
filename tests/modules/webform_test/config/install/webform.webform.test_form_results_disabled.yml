@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_results_disabled
 title: 'Test: Form: Results Disabled'
 description: 'Test the disabling of saving of results to the database.'

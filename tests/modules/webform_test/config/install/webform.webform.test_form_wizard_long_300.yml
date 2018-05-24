@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_wizard_long_300
 title: 'Test: Wizard: Long - 300 elements'
 description: 'Test wizard with 300 elements'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_required
 title: 'Test: Webform: Required indicator'
 description: 'Test required element indicator.'

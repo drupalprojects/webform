@@ -8,6 +8,7 @@ open: '2000-01-01T00:00:00-05:00'
 close: '2020-01-01T00:00:00-05:00'
 uid: null
 template: false
+archive: false
 id: test_token
 title: 'Test: Token'
 description: 'Test Webform and Webform Submission tokens'

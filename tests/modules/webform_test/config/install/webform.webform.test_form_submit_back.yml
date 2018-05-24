@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_submit_back
 title: 'Test: Webform: Back Button submit'
 description: 'Browser Back Button to submit to previous page.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_image_file
 title: 'Test: Element: Image file upload'
 description: 'Tests image file upload element.'

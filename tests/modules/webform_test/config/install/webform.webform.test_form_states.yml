@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_states
 title: 'Test: Form API #states'
 description: 'Test Drupal''s #states API states (visible, required, disabled, checked, and expanded).'

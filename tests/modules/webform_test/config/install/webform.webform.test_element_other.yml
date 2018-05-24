@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_other
 title: 'Test: Element: Other'
 description: 'Test the webform other elements, includes select_other, checkboxes_other, radios_other, and buttons_other.'

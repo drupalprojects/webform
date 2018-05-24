@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_flexbox_layout
 title: 'Example: Flexbox layout'
 description: 'Examples of multiple column webform layout using <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Flexbox</a>.'

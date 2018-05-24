@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_disable_back
 title: 'Test: Webform: Disabled back button'
 description: 'Test disabling the ability to navigate back using the back button.'

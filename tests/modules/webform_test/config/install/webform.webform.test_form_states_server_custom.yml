@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_states_server_custom
 title: 'Test: Form API #states custom pattern, less, and greater condition validation'
 description: 'Test Drupal''s #states API custom pattern, less, and greater condition validation.'

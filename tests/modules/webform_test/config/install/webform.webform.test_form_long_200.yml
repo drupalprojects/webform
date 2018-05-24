@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_long_200
 title: 'Test: Webform: Long - 200 elements'
 description: 'Test webform with 200 elements'

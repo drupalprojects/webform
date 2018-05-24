@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_multiple_property
 title: 'Test: Element: Multiple property'
 description: 'Test #multiple element property.'

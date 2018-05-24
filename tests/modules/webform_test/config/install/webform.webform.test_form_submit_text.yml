@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_submit_text
 title: 'Test: Webform: Submit text'
 description: 'Test customizing the webform''s submit button label.'

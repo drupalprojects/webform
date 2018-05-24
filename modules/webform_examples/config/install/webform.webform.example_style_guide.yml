@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_style_guide
 title: 'Example: Style Guide'
 description: 'Style Guide containing examples of all elements and layouts.'

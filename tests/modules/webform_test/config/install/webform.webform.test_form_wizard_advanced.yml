@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_wizard_advanced
 title: 'Test: Webform: Wizard advanced'
 description: 'Test a multiple step ''wizard'' webform with save draft, auto save, and preview.'

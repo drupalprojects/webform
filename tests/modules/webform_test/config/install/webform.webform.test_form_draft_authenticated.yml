@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_draft_authenticated
 title: 'Test: Webform: Draft authenticated'
 description: 'Test saving a draft and previewing a submission for authenticated users.'

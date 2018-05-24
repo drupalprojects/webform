@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_composite_format
 title: 'Test: Composite: Format composite'
 description: 'Test composite element formatting.'

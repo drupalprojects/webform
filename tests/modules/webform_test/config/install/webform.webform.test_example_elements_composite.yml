@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_example_elements_composite
 title: 'Test: Example: Elements: Composite'
 description: 'Examples of composite elements, includes address, and contact.'

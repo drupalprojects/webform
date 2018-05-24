@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: webform_example_element
 title: 'Example: Webform Element'
 description: 'An example of a custom Webform element.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_submitted_value
 title: 'Test: Element: Submitted value'
 description: 'Test submitted value handling for options element.'

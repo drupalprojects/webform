@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: true
+archive: false
 id: template_session_evaluation
 title: 'Session Evaluation'
 description: 'A session evaluation webform template.'

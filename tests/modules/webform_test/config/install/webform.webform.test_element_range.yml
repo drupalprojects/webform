@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_range
 title: 'Test: Element: Range'
 description: 'Test the range element.'

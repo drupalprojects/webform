@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_ajax
 title: 'Test: Ajax'
 description: 'Test Ajax enabled form with preview'

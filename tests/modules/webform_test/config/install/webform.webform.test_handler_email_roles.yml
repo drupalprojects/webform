@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_handler_email_roles
 title: 'Test: Handler: Email roles'
 description: 'Test email roles.'

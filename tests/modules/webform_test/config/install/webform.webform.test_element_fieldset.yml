@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_fieldset
 title: 'Test: Element: Fieldset'
 description: 'Test the fieldset element.'

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_ajax_confirmation_url_msg
 title: 'Test: Ajax: Confirmation: URL with message'
 description: 'Test Ajax redirecting to an internal URL with a confirmation message.'

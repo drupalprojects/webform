@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_composite_custom
 title: 'Test: Composite: Custom composite'
 description: 'Test custom composite element.'

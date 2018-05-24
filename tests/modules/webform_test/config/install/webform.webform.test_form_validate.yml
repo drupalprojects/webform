@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_validate
 title: 'Test: Webform: Validate'
 description: 'Test executing $form["#validate"] handlers.'
