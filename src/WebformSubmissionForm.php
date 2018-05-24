@@ -434,6 +434,14 @@ class WebformSubmissionForm extends ContentEntityForm {
       }
     }
 
+    // Disable the default $form['#theme'] templates.
+    // If the webform's id begins with an underscore the #theme
+    // was automatically being set to 'webform_submission__WEBFORM_ID', this
+    // causes the form to be rendered using the 'webform_submission' template
+    // @see \Drupal\Core\Form\FormBuilder::prepareForm
+    // @see webform-submission-form.html.twig
+    $form['#theme'] = ['webform_submission_form'];
+
     // Define very specific webform classes, this override the form's
     // default classes.
     // @see \Drupal\Core\Form\FormBuilder::retrieveForm

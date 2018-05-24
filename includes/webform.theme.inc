@@ -67,6 +67,10 @@ function webform_theme() {
       'render element' => 'elements',
     ],
 
+    'webform_submission_form' => [
+      'render element' => 'form',
+    ],
+
     'webform_submission_navigation' => [
       'variables' => ['webform_submission' => NULL],
     ],
@@ -635,6 +639,9 @@ function _webform_theme_suggestions(array $variables, $hook) {
   if ($hook == 'webform' && isset($variables['element']) && isset($variables['element']['#webform_id'])) {
     $suggestions[] = $hook . '__' . $variables['element']['#webform_id'];
   }
+  elseif ($hook == 'webform_submission_form' && isset($variables['form']) && isset($variables['form']['#webform_id'])) {
+    $suggestions[] = $hook . '__' . $variables['form']['#webform_id'];
+  }
   elseif (strpos($hook, 'webform_element_base_') === 0 || strpos($hook, 'webform_container_base_') === 0) {
     $element = $variables['element'];
 
@@ -757,6 +764,13 @@ function webform_theme_suggestions_webform_submission_navigation(array $variable
  */
 function webform_theme_suggestions_webform_submission(array $variables) {
   return _webform_theme_suggestions($variables, 'webform_submission');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function webform_theme_suggestions_webform_submission_form(array $variables) {
+  return _webform_theme_suggestions($variables, 'webform_submission_form');
 }
 
 /**
