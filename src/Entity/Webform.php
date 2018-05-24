@@ -1723,8 +1723,10 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     if ($duplicate->isTemplate()) {
       $duplicate->set('description', '');
       $duplicate->set('template', FALSE);
-      $duplicate->setStatus(TRUE);
     }
+
+    // Set default status.
+    $duplicate->setStatus(\Drupal::config('webform.settings')->get('settings.default_status'));
 
     // Remove enforce module dependency when a sub-module's webform is
     // duplicated.
@@ -1747,7 +1749,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     $values += [
-      'status' => WebformInterface::STATUS_OPEN,
+      'status' => \Drupal::config('webform.settings')->get('settings.default_status'),
       'uid' => \Drupal::currentUser()->id(),
       'settings' => static::getDefaultSettings(),
       'access' => static::getDefaultAccessRules(),

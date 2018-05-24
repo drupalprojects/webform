@@ -2232,7 +2232,6 @@ function webform_update_8125() {
   _webform_update_admin_settings();
 }
 
-
 /**
  * Issue #2973377: Make the previously saved messages customizable.
  */
@@ -2241,4 +2240,9 @@ function webform_update_8126() {
   _webform_update_webform_settings();
 }
 
-
+/**
+ * Issue #2974597: Enable default publishing status of new webforms.
+ */
+function webform_update_8127() {
+  _webform_update_admin_settings();
+}

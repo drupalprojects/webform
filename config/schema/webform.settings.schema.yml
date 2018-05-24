@@ -6,6 +6,9 @@ webform.settings:
       type: mapping
       label: 'Webform default settings'
       mapping:
+        default_status:
+          type: string
+          label: 'Default status'
         default_page_base_path:
           type: string
           label: 'Default base path'

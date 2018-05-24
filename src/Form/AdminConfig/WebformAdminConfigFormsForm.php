@@ -12,6 +12,7 @@ use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformAddonsManagerInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform\WebformThirdPartySettingsManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -128,6 +129,16 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#title' => $this->t('Form settings'),
       '#open' => TRUE,
       '#tree' => TRUE,
+    ];
+    $form['form_settings']['default_status'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Default status'),
+      '#default_value' => $settings['default_status'],
+      '#options' => [
+        WebformInterface::STATUS_OPEN => $this->t('Open'),
+        WebformInterface::STATUS_CLOSED => $this->t('Closed'),
+      ],
+      '#options_display' => 'side_by_side',
     ];
     $form['form_settings']['default_form_open_message'] = [
       '#type' => 'webform_html_editor',

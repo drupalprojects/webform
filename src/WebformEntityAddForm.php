@@ -87,6 +87,17 @@ class WebformEntityAddForm extends BundleEntityFormBase {
       '#empty_option' => $this->t('- None -'),
       '#default_value' => $webform->get('category'),
     ];
+    $form['status'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Status'),
+      '#default_value' => $webform->get('status'),
+      '#options' => [
+        WebformInterface::STATUS_OPEN => $this->t('Open'),
+        WebformInterface::STATUS_CLOSED => $this->t('Closed'),
+      ],
+      '#options_display' => 'side_by_side',
+    ];
+
     $form = $this->protectBundleIdElement($form);
 
     return parent::form($form, $form_state);
