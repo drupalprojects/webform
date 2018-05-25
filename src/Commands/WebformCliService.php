@@ -971,7 +971,7 @@ class WebformCliService implements WebformCliServiceInterface {
     file_put_contents($composer_json, json_encode($data, $this->drush_webform_composer_get_json_encode_options()));
 
     $this->drush_print("$composer_json updated.");
-    $this->drush_print('Make sure to run `composer update`.');
+    $this->drush_print('Make sure to run `omposer update --lock`.');
   }
 
   /**
