@@ -127,7 +127,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': value
       webform_address_raw:
@@ -138,7 +138,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': raw
       webform_address_list:
@@ -149,7 +149,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': list
     webform_contact:
@@ -167,7 +167,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': value
       webform_contact_raw:
@@ -182,7 +182,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': raw
       webform_contact_list:
@@ -197,7 +197,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': list
     webform_link:

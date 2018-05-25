@@ -99,7 +99,7 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#output': right
+      '#output': below
       '#output__field_prefix': $
       '#output__field_suffix': '.00'
     webform_rating:
@@ -159,9 +159,6 @@ elements: |
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
-    table:
-      '#type': table
-      '#title': Table
   file_upload_elements:
     '#type': details
     '#title': 'File upload elements'
@@ -377,9 +374,6 @@ elements: |
       '#field_prefix': '{field_prefix}'
       '#field_suffix': '{field_suffix}'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
-    label:
-      '#type': label
-      '#title': Label
     webform_section:
       '#type': webform_section
       '#title': Section
@@ -503,6 +497,13 @@ elements: |
       '#vocabulary': tags
       '#multiple': true
       '#select2': true
+  markup:
+    '#type': details
+    '#title': Markup
+    '#open': true
+    label:
+      '#type': label
+      '#title': Label
   other_elements:
     '#type': details
     '#title': 'Other elements'
@@ -513,6 +514,9 @@ elements: |
     machine_name:
       '#type': machine_name
       '#title': 'Machine name'
+    table:
+      '#type': table
+      '#title': Table
 css: ''
 javascript: ''
 settings:

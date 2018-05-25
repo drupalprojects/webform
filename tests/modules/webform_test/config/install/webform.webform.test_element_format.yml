@@ -558,13 +558,11 @@ elements: |
         '#type': webform_computed_token
         '#title': 'Computed token (Value)'
         '#value': 'This is a Computed token value.'
-        '#default_value': Loremipsum
         '#format': value
       webform_computed_token_raw:
         '#type': webform_computed_token
         '#title': 'Computed token (Raw value)'
         '#value': 'This is a Computed token value.'
-        '#default_value': Loremipsum
         '#format': raw
     webform_computed_twig:
       '#type': details
@@ -573,13 +571,11 @@ elements: |
         '#type': webform_computed_twig
         '#title': 'Computed Twig (Value)'
         '#value': 'This is a Computed Twig value.'
-        '#default_value': Loremipsum
         '#format': value
       webform_computed_twig_raw:
         '#type': webform_computed_twig
         '#title': 'Computed Twig (Raw value)'
         '#value': 'This is a Computed Twig value.'
-        '#default_value': Loremipsum
         '#format': raw
   date_time_elements:
     '#type': details
@@ -598,16 +594,21 @@ elements: |
         '#title': 'Date (Raw value)'
         '#default_value': '1942-06-18'
         '#format': raw
-      date_fallback:
-        '#type': date
-        '#title': 'Date (Fallback date format)'
-        '#default_value': '1942-06-18'
-        '#format': fallback
       date_html_date:
         '#type': date
         '#title': 'Date (HTML Date)'
         '#default_value': '1942-06-18'
         '#format': html_date
+      date_html_time:
+        '#type': date
+        '#title': 'Date (HTML Time)'
+        '#default_value': '1942-06-18'
+        '#format': html_time
+      date_fallback:
+        '#type': date
+        '#title': 'Date (Fallback date format)'
+        '#default_value': '1942-06-18'
+        '#format': fallback
       date_html_datetime:
         '#type': date
         '#title': 'Date (HTML Datetime)'
@@ -618,11 +619,6 @@ elements: |
         '#title': 'Date (HTML Month)'
         '#default_value': '1942-06-18'
         '#format': html_month
-      date_html_time:
-        '#type': date
-        '#title': 'Date (HTML Time)'
-        '#default_value': '1942-06-18'
-        '#format': html_time
       date_html_week:
         '#type': date
         '#title': 'Date (HTML Week)'
@@ -816,7 +812,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': value
       entity_autocomplete_raw:
         '#type': entity_autocomplete
@@ -825,7 +821,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': raw
       entity_autocomplete_link:
         '#type': entity_autocomplete
@@ -834,7 +830,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': link
       entity_autocomplete_id:
         '#type': entity_autocomplete
@@ -843,7 +839,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': id
       entity_autocomplete_label:
         '#type': entity_autocomplete
@@ -852,7 +848,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': label
       entity_autocomplete_text:
         '#type': entity_autocomplete
@@ -861,7 +857,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': text
       entity_autocomplete_teaser:
         '#type': entity_autocomplete
@@ -870,7 +866,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': teaser
       entity_autocomplete_default:
         '#type': entity_autocomplete
@@ -879,7 +875,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': default
     webform_entity_radios:
       '#type': details
@@ -1094,55 +1090,55 @@ elements: |
         '#type': webform_term_select
         '#title': 'Term select (Value)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': value
       webform_term_select_raw:
         '#type': webform_term_select
         '#title': 'Term select (Raw value)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': raw
       webform_term_select_link:
         '#type': webform_term_select
         '#title': 'Term select (Link)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': link
       webform_term_select_id:
         '#type': webform_term_select
         '#title': 'Term select (Entity ID)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': id
       webform_term_select_label:
         '#type': webform_term_select
         '#title': 'Term select (Label)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': label
       webform_term_select_text:
         '#type': webform_term_select
         '#title': 'Term select (Label (ID))'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': text
       webform_term_select_teaser:
         '#type': webform_term_select
         '#title': 'Term select (Teaser)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': teaser
       webform_term_select_default:
         '#type': webform_term_select
         '#title': 'Term select (Default)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': default
       webform_term_select_breadcrumb:
         '#type': webform_term_select
         '#title': 'Term select (Breadcrumb)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': breadcrumb
   file_upload_elements:
     '#type': details
@@ -1171,21 +1167,21 @@ elements: |
         '#title': 'File (Link)'
         '#file_extensions': txt
         '#format': link
-      managed_file_id:
-        '#type': managed_file
-        '#title': 'File (File ID)'
-        '#file_extensions': txt
-        '#format': id
-      managed_file_name:
-        '#type': managed_file
-        '#title': 'File (File name)'
-        '#file_extensions': txt
-        '#format': name
       managed_file_url:
         '#type': managed_file
         '#title': 'File (URL)'
         '#file_extensions': txt
         '#format': url
+      managed_file_name:
+        '#type': managed_file
+        '#title': 'File (File name)'
+        '#file_extensions': txt
+        '#format': name
+      managed_file_id:
+        '#type': managed_file
+        '#title': 'File (File ID)'
+        '#file_extensions': txt
+        '#format': id
   other_elements:
     '#type': details
     '#title': 'Other elements'

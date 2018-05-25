@@ -50,9 +50,9 @@ class WebformCompositeFormatTest extends WebformTestBase {
       'Likert (Value)' => '<div class="item-list"><ul><li><b>Please answer question 1?:</b> 1</li><li><b>How about now answering question 2?:</b> 1</li><li><b>Finally, here is question 3?:</b> 1</li></ul></div>',
       'Likert (Raw value)' => '<div class="item-list"><ul><li><b>q1:</b> 1</li><li><b>q2:</b> 1</li><li><b>q3:</b> 1</li></ul></div>',
       'Likert (List)' => '<div class="item-list"><ul><li><b>Please answer question 1?:</b> 1</li><li><b>How about now answering question 2?:</b> 1</li><li><b>Finally, here is question 3?:</b> 1</li></ul></div>',
-      'Address (Value)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<br />',
-      'Address (Raw value)' => '<div class="item-list"><ul><li><b>address:</b> 10 Main Street</li><li><b>address_2:</b> 10 Main Street</li><li><b>city:</b> Springfield</li><li><b>state_province:</b> Alabama</li><li><b>postal_code:</b> Loremipsum</li><li><b>country:</b> Afghanistan</li></ul></div><br /><br />',
-      'Address (List)' => '<div class="item-list"><ul><li><b>Address:</b> 10 Main Street</li><li><b>Address 2:</b> 10 Main Street</li><li><b>City/Town:</b> Springfield</li><li><b>State/Province:</b> Alabama</li><li><b>Zip/Postal Code:</b> Loremipsum</li><li><b>Country:</b> Afghanistan</li></ul></div><br /><br />',
+      'Address (Value)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan<br />',
+      'Address (Raw value)' => '<div class="item-list"><ul><li><b>address:</b> 10 Main Street</li><li><b>address_2:</b> 10 Main Street</li><li><b>city:</b> Springfield</li><li><b>state_province:</b> Alabama</li><li><b>postal_code:</b> 11111</li><li><b>country:</b> Afghanistan</li></ul></div><br /><br />',
+      'Address (List)' => '<div class="item-list"><ul><li><b>Address:</b> 10 Main Street</li><li><b>Address 2:</b> 10 Main Street</li><li><b>City/Town:</b> Springfield</li><li><b>State/Province:</b> Alabama</li><li><b>Zip/Postal Code:</b> 11111</li><li><b>Country:</b> Afghanistan</li></ul></div><br /><br />',
       'Link (Value)' => '<a href="http://example.com">Loremipsum</a>',
     ];
     foreach ($elements as $label => $value) {
@@ -66,21 +66,21 @@ class WebformCompositeFormatTest extends WebformTestBase {
       'Address (Value):
 10 Main Street
 10 Main Street
-Springfield, Alabama. Loremipsum
+Springfield, Alabama. 11111
 Afghanistan',
       'Address (Raw value):
 address: 10 Main Street
 address_2: 10 Main Street
 city: Springfield
 state_province: Alabama
-postal_code: Loremipsum
+postal_code: 11111
 country: Afghanistan',
       'Address (List):
 Address: 10 Main Street
 Address 2: 10 Main Street
 City/Town: Springfield
 State/Province: Alabama
-Zip/Postal Code: Loremipsum
+Zip/Postal Code: 11111
 Country: Afghanistan',
       'Likert (Value):
 Please answer question 1?: 1
@@ -121,10 +121,10 @@ Finally, here is question 3?: 1',
     $this->debug($body);
 
     $elements = [
-      'Address (Ordered list)' => '<div class="item-list"><ol><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan</li></ol></div>',
-      'Address (Unordered list)' => '<div class="item-list"><ul><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan</li></ul></div>',
-      'Address (Horizontal rule)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<hr class="webform-horizontal-rule" />10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan<hr class="webform-horizontal-rule" />10 Main Street<br />10 Main Street<br />Springfield, Alabama. Loremipsum<br />Afghanistan',
-      'Address (Table)' => '<table width="100%" cellspacing="0" cellpadding="5" border="1" class="responsive-enabled" data-striping="1"><thead><tr><th bgcolor="#eee">Address</th><th bgcolor="#eee">Address 2</th><th bgcolor="#eee">City/Town</th><th bgcolor="#eee">State/Province</th><th bgcolor="#eee">Zip/Postal Code</th><th bgcolor="#eee">Country</th></tr></thead><tbody><tr class="odd"><td>10 Main Street</td><td>10 Main Street</td><td>Springfield</td><td>Alabama</td><td>Loremipsum</td><td>Afghanistan</td></tr><tr class="even"><td>10 Main Street</td><td>10 Main Street</td><td>Springfield</td><td>Alabama</td><td>Loremipsum</td><td>Afghanistan</td></tr><tr class="odd"><td>10 Main Street</td><td>10 Main Street</td><td>Springfield</td><td>Alabama</td><td>Loremipsum</td><td>Afghanistan</td></tr></tbody></table>',
+      'Address (Ordered list)' => '<div class="item-list"><ol><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan</li></ol></div>',
+      'Address (Unordered list)' => '<div class="item-list"><ul><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan</li><li>10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan</li></ul></div>',
+      'Address (Horizontal rule)' => '10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan<hr class="webform-horizontal-rule" />10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan<hr class="webform-horizontal-rule" />10 Main Street<br />10 Main Street<br />Springfield, Alabama. 11111<br />Afghanistan',
+      'Address (Table)' => '<table width="100%" cellspacing="0" cellpadding="5" border="1" class="responsive-enabled" data-striping="1"><thead><tr><th bgcolor="#eee">Address</th><th bgcolor="#eee">Address 2</th><th bgcolor="#eee">City/Town</th><th bgcolor="#eee">State/Province</th><th bgcolor="#eee">Zip/Postal Code</th><th bgcolor="#eee">Country</th></tr></thead><tbody><tr class="odd"><td>10 Main Street</td><td>10 Main Street</td><td>Springfield</td><td>Alabama</td><td>11111</td><td>Afghanistan</td></tr><tr class="even"><td>10 Main Street</td><td>10 Main Street</td><td>Springfield</td><td>Alabama</td><td>11111</td><td>Afghanistan</td></tr><tr class="odd"><td>10 Main Street</td><td>10 Main Street</td><td>Springfield</td><td>Alabama</td><td>11111</td><td>Afghanistan</td></tr></tbody></table>',
     ];
     foreach ($elements as $label => $value) {
       $this->assertContains($body, '<b>' . $label . '</b><br />' . $value, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
@@ -136,43 +136,43 @@ Finally, here is question 3?: 1',
       'Address (Ordered list):
 1. 10 Main Street
    10 Main Street
-   Springfield, Alabama. Loremipsum
+   Springfield, Alabama. 11111
    Afghanistan
 2. 10 Main Street
    10 Main Street
-   Springfield, Alabama. Loremipsum
+   Springfield, Alabama. 11111
    Afghanistan
 3. 10 Main Street
    10 Main Street
-   Springfield, Alabama. Loremipsum
+   Springfield, Alabama. 11111
    Afghanistan',
       'Address (Unordered list):
 - 10 Main Street
   10 Main Street
-  Springfield, Alabama. Loremipsum
+  Springfield, Alabama. 11111
   Afghanistan
 - 10 Main Street
   10 Main Street
-  Springfield, Alabama. Loremipsum
+  Springfield, Alabama. 11111
   Afghanistan
 - 10 Main Street
   10 Main Street
-  Springfield, Alabama. Loremipsum
+  Springfield, Alabama. 11111
   Afghanistan',
       'Address (Horizontal rule):
 10 Main Street
 10 Main Street
-Springfield, Alabama. Loremipsum
+Springfield, Alabama. 11111
 Afghanistan
 ---
 10 Main Street
 10 Main Street
-Springfield, Alabama. Loremipsum
+Springfield, Alabama. 11111
 Afghanistan
 ---
 10 Main Street
 10 Main Street
-Springfield, Alabama. Loremipsum
+Springfield, Alabama. 11111
 Afghanistan',
     ];
     foreach ($elements as $value) {

@@ -106,7 +106,7 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#output': right
+      '#output': below
       '#output__field_prefix': $
       '#output__field_suffix': '.00'
       '#description': 'This is a description for the ''range'' element.'
@@ -151,9 +151,14 @@ elements: |
       '#title': Address
       '#description': 'This is a description for the ''webform_address'' element.'
       '#description_display': tooltip
+    webform_contact:
+      '#type': webform_contact
+      '#title': Contact
+      '#description': 'This is a description for the ''webform_contact'' element.'
+      '#description_display': tooltip
     webform_custom_composite:
       '#type': webform_custom_composite
-      '#title': 'Composite custom'
+      '#title': 'Custom composite'
       '#element':
         name:
           '#type': textfield
@@ -166,12 +171,7 @@ elements: |
           '#options':
             Male: Male
             Female: Female
-      '#description': 'This is a description for the ''webform_composite'' element.'
-      '#description_display': tooltip
-    webform_contact:
-      '#type': webform_contact
-      '#title': Contact
-      '#description': 'This is a description for the ''webform_contact'' element.'
+      '#description': 'This is a description for the ''webform_custom_composite'' element.'
       '#description_display': tooltip
     webform_link:
       '#type': webform_link
