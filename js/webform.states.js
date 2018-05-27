@@ -215,7 +215,7 @@
         .trigger('change', extraParameters)
         .trigger('blur', extraParameters);
     }
-    else if (type !== 'submit' && type !== 'button') {
+    else if (type !== 'submit' && type !== 'button' && type !== 'file') {
       $input
         .trigger('input', extraParameters)
         .trigger('change', extraParameters)
