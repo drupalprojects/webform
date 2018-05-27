@@ -42,6 +42,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       'store' => FALSE,
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
     ] + $this->getDefaultBaseProperties();
   }
 

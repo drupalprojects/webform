@@ -211,6 +211,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'unique_error' => '',
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
       'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
@@ -2591,6 +2592,20 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#classes' => $this->configFactory->get('webform.settings')->get('element.classes'),
     ];
 
+    /* Label attributes */
+
+    $form['label_attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Label attributes'),
+    ];
+    $form['label_attributes']['label_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Label'),
+      '#class__description' => $this->t("Apply classes to the element's label."),
+      '#style__description' => $this->t("Apply custom styles to the element's label."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added to the element's label."),
+    ];
+
     /* Summary attributes */
 
     $form['summary_attributes'] = [
@@ -2974,6 +2989,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           'multiple',
           'wrapper_attributes',
           'element_attributes',
+          'label_attributes',
           'summary_attributes',
           'display',
           'admin',

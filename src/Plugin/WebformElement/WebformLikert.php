@@ -59,6 +59,7 @@ class WebformLikert extends WebformElementBase {
       'na_answer_text' => $this->t('N/A'),
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
       // iCheck settings.
       'icheck' => '',
     ] + $this->getDefaultBaseProperties();

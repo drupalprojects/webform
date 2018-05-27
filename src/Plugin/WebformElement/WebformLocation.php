@@ -44,6 +44,7 @@ class WebformLocation extends WebformCompositeBase {
       'required_error' => '',
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
       // Location settings.
       'geolocation' => FALSE,
       'hidden' => FALSE,
