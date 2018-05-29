@@ -137,7 +137,7 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
 
     $dialog_options = $this->configFactory->get('webform.settings')->get('settings.dialog_options');
     if ($dialog_options) {
-      $options  = [];
+      $options = [];
       foreach ($dialog_options as $dialog_option_name => $dialog_option) {
         $options[$dialog_option_name] = (isset($dialog_option['title'])) ? $dialog_option['title'] : $dialog_option_name;
       }

@@ -13,13 +13,12 @@ use Drupal\webform\Utility\WebformYaml;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Utility\WebformElementHelper;
 
-
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function webform_form_locale_translate_edit_form_alter(&$form, FormStateInterface $form_state) {
   // Don't allow YAML to be validated using locale string translation.
-  foreach (\Drupal\Core\Render\Element::children($form['strings']) as $key) {
+  foreach (Element::children($form['strings']) as $key) {
     $element =& $form['strings'][$key];
     if ($element['original']
       && !empty($element['original']['#plain_text'])

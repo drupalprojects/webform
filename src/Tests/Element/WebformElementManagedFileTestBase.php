@@ -71,10 +71,11 @@ abstract class WebformElementManagedFileTestBase extends WebformElementTestBase 
   /**
    * Load an uncached file entity.
    *
-   * @param $fid
+   * @param string $fid
    *   A file id.
    *
    * @return \Drupal\file\FileInterface
+   *   An uncached file object
    */
   protected function fileLoad($fid) {
     \Drupal::entityTypeManager()->getStorage('file')->resetCache();

@@ -277,7 +277,7 @@ function _webform_update_webform_submission_storage_schema() {
  *
  * @param string $search
  *   String to be search for.
- * @param $replace
+ * @param string $replace
  *   String to be replace with.
  */
 function _webform_update_string_replace($search, $replace) {
@@ -351,4 +351,3 @@ function _webform_update_elements_clear_properties_recursive(array &$element, ar
     }
   }
 }
-

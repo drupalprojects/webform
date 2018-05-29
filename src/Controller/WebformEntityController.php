@@ -183,6 +183,8 @@ class WebformEntityController extends ControllerBase implements ContainerInjecti
    *   The current request.
    * @param bool $templates
    *   If TRUE, limit autocomplete matches to webform templates.
+   * @param bool $archived
+   *   If TRUE, limit autocomplete matches to archived webforms and templates.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   The JSON response.

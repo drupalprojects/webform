@@ -191,7 +191,7 @@ webform_multiple_no_items: {  }");
     $this->assertFieldByName('webform_multiple_default[items][1][_item_]', 'Three');
     $this->assertFieldByName('webform_multiple_default[items][2][_item_]', 'Four');
 
-    // Add one options to 'webform_multiple_no_items'
+    // Add one options to 'webform_multiple_no_items'.
     $this->drupalPostAjaxForm(NULL, $edit, 'webform_multiple_no_items_table_add');
     $this->assertNoRaw('No items entered. Please add items below.');
     $this->assertFieldByName('webform_multiple_no_items[items][0][_item_]');

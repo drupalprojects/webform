@@ -336,8 +336,8 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *
    * @param array $element
    *   An element.
-   * @param \Drupal\Core\Entity\EntityInterface|NULL $entity
-   *   A webform or webform submission entity
+   * @param \Drupal\Core\Entity\EntityInterface|null$entity
+   *   A webform or webform submission entity.
    */
   public function replaceTokens(array &$element, EntityInterface $entity = NULL);
 

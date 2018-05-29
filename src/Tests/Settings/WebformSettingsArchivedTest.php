@@ -74,9 +74,10 @@ class WebformSettingsArchivedTest extends WebformTestBase {
     $this->assertNoRaw('Contact');
     $this->assertRaw('<td><a href="' . $base_path . 'form/test-form-archived">Test: Webform: Archive</a> <b>(Template)</b></td>');
 
-    // Check that archived template displays archive message (not template message).
+    // Check that archived template displays archive message
+    // (not template message).
     $this->drupalGet('/form/test-form-archived');
-    $this->assertRaw('This webform is <a href="' . $base_path. 'admin/structure/webform/manage/test_form_archived/settings">archived</a>');
+    $this->assertRaw('This webform is <a href="' . $base_path . 'admin/structure/webform/manage/test_form_archived/settings">archived</a>');
   }
 
 }

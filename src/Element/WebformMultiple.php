@@ -155,7 +155,6 @@ class WebformMultiple extends FormElement {
     $weight = 0;
     $rows = [];
 
-
     if (!$form_state->isProcessingInput() && isset($element['#default_value']) && is_array($element['#default_value'])) {
       $default_values = $element['#default_value'];
     }
@@ -220,7 +219,7 @@ class WebformMultiple extends FormElement {
         '#type' => 'webform_message',
         '#message_message' => $element['#no_items_message'],
         '#message_type' => 'info',
-        '#attributes' => ['class' => ['webform-multiple-table--no-items-message']]
+        '#attributes' => ['class' => ['webform-multiple-table--no-items-message']],
       ];
     }
 
@@ -261,7 +260,7 @@ class WebformMultiple extends FormElement {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    * @param array $complete_form
-   *    An associative array containing the structure of the form.
+   *   An associative array containing the structure of the form.
    */
   protected static function initializeElement(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Track element child keys.
@@ -732,7 +731,7 @@ class WebformMultiple extends FormElement {
     $action_key = static::getStorageKey($element, 'action');
     $form_state->set($action_key, TRUE);
 
-      // Rebuild the webform.
+    // Rebuild the webform.
     $form_state->setRebuild();
   }
 

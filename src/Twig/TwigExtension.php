@@ -181,7 +181,6 @@ class TwigExtension extends \Twig_Extension {
     }
   }
 
-
   /**
    * Build a Twig template with a webform submission.
    *

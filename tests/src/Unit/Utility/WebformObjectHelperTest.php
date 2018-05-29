@@ -17,7 +17,7 @@ class WebformObjectHelperTest extends UnitTestCase {
   /**
    * Tests sorting object by properties.
    *
-   * @param object object
+   * @param object $object
    *   The object to run through WebformObjectHelper::sortByProperty().
    * @param array $array
    *   The expected result from calling the function.
@@ -60,4 +60,5 @@ class WebformObjectHelperTest extends UnitTestCase {
 
     return $tests;
   }
+
 }

@@ -145,7 +145,7 @@ class WebformElementFormatTest extends WebformElementTestBase {
       'File (Value): ' . $this->getSubmissionFileUrl($submission, 'managed_file_value'),
       'File (Raw value): ' . $this->getSubmissionFileUrl($submission, 'managed_file_raw'),
       'File (File): ' . $this->getSubmissionFileUrl($submission, 'managed_file_file'),
-      'File (Link): '  . $this->getSubmissionFileUrl($submission, 'managed_file_link'),
+      'File (Link): ' . $this->getSubmissionFileUrl($submission, 'managed_file_link'),
       'File (File ID): ' . $submission->getElementData('managed_file_id'),
       'File (File name): managed_file_name.txt',
       'File (URL): ' . $this->getSubmissionFileUrl($submission, 'managed_file_url'),

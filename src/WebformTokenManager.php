@@ -102,7 +102,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       foreach ($matches[0] as $index => $match) {
         // Wrapping tokens in {webform-token-clear} so that only tokens with
         // the :clear suffix are removed.
-        $token_base = '{webform-token-clear}[' . $matches[1][$index] .']{/webform-token-clear}';
+        $token_base = '{webform-token-clear}[' . $matches[1][$index] . ']{/webform-token-clear}';
         $text = str_replace($match, $token_base, $text);
         $tokens_clear[] = $token_base;
       }

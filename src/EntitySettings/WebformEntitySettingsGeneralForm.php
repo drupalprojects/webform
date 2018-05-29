@@ -355,7 +355,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
             ['data' => $this->t('Source'), 'width' => '70%'],
           ],
           '#rows' => $rows,
-        ]
+        ],
       ];
     }
 

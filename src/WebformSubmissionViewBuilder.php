@@ -216,7 +216,6 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
    *
    * @see \Drupal\webform\WebformSubmissionConditionsValidatorInterface::isElementVisible
    * @see \Drupal\Core\Render\Element::isVisibleElement
-   *
    */
   protected function isElementVisible(array $element, WebformSubmissionInterface $webform_submission, array $options) {
     // Checked excluded elements.

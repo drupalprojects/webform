@@ -45,7 +45,6 @@ class WebformImageFile extends WebformManagedFileBase {
     }
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -139,4 +138,5 @@ class WebformImageFile extends WebformManagedFileBase {
 
     return $form;
   }
+
 }

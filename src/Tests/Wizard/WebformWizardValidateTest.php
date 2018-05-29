@@ -255,5 +255,4 @@ wizard_2_test_composite_multiple:
     $this->assertRaw($raw);
   }
 
-
 }

@@ -309,7 +309,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // @see \Drupal\webform\Entity\Webform::invokeHandlers
     // Append _webform_dialog=1 to href to trigger Ajax support.
     if ($this->getRequest()->query->get('_webform_dialog') && !$webform->getSetting('ajax')) {
-      $webform->setSettingOverride('ajax',  TRUE);
+      $webform->setSettingOverride('ajax', TRUE);
     }
 
     return parent::setEntity($entity);
@@ -441,7 +441,7 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Disable the default $form['#theme'] templates.
     // If the webform's id begins with an underscore the #theme
     // was automatically being set to 'webform_submission__WEBFORM_ID', this
-    // causes the form to be rendered using the 'webform_submission' template
+    // causes the form to be rendered using the 'webform_submission' template.
     // @see \Drupal\Core\Form\FormBuilder::prepareForm
     // @see webform-submission-form.html.twig
     $form['#theme'] = ['webform_submission_form'];

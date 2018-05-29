@@ -66,6 +66,8 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
    *   The renderer.
    * @param array $third_party_settings
    *   Third party settings.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager

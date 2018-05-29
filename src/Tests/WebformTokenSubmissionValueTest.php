@@ -107,7 +107,7 @@ john@example.com',
       'webform_submission:values:contacts:0:email:urlencode' => 'john%40example.com',
       'webform_submission:values:contacts:1:email:raw:html' => 'jane@example.com',
 
-      // Containers
+      // Containers.
       'webform_submission:values:fieldset' => '<pre>fieldset
 --------
 first_name: John

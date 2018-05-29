@@ -120,7 +120,7 @@ class WebformSubmissionGenerate implements WebformSubmissionGenerateInterface {
     if (!empty($element['#maxlength'])) {
       $maxlength = $element['#maxlength'];
     }
-    elseif (!empty($element['#counter_type']) && !empty($element['#counter_maximum']) && $element['#counter_type'] === 'character'){
+    elseif (!empty($element['#counter_type']) && !empty($element['#counter_maximum']) && $element['#counter_type'] === 'character') {
       $maxlength = $element['#counter_maximum'];
     }
     else {

@@ -92,7 +92,7 @@
 }
 
 [dir="rtl"] .progress-tracker--center .progress-step::after {
-  right: -50%
+  right: -50%;
 }
 
 [dir="rtl"] .webform-progress-tracker .progress-step {

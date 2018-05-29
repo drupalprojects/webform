@@ -832,7 +832,6 @@ function _webform_token_get_submission_value_encode($value, array $options) {
   return $value;
 }
 
-
 /**
  * Get webform submission values.
  *

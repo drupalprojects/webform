@@ -119,7 +119,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         ],
         (string) $this->t('Inactive') => [
           WebformInterface::STATUS_ARCHIVED => $this->t('Archived [@total]', ['@total' => $this->getTotal(NULL, NULL, WebformInterface::STATUS_ARCHIVED)]),
-        ]
+        ],
       ];
     }
     else {
@@ -132,7 +132,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         ],
         (string) $this->t('Inactive') => [
           WebformInterface::STATUS_ARCHIVED => $this->t('Archived'),
-        ]
+        ],
       ];
     }
     $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\webform\Form\WebformEntityFilterForm', $this->keys, $this->category, $this->state, $state_options);
@@ -486,7 +486,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
     }
 
     // Filter by (form) state.
-    switch ($state)  {
+    switch ($state) {
       case WebformInterface::STATUS_OPEN;
       case WebformInterface::STATUS_CLOSED;
       case WebformInterface::STATUS_SCHEDULED;

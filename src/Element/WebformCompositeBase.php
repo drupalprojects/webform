@@ -213,12 +213,8 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
    *
    * @param array $element
    *   A render array for the current element.
-   * @param array $element
+   * @param array $composite_elements
    *   A render array containing a composite's elements.
-   *
-   * @return array
-   *   A renderable array of webform elements, containing the base properties
-   *   for the composite's webform elements.
    *
    * @throws \Exception
    *   Throws exception when unsupported element type is used with a composite

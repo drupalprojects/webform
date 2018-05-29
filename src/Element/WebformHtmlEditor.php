@@ -88,7 +88,7 @@ class WebformHtmlEditor extends FormElement {
     // Add validate callback.
     $element += ['#element_validate' => []];
     array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformHtmlEditor']);
-    
+
     // If HTML disabled and no #format is specified return simple CodeMirror
     // HTML editor.
     $disabled = \Drupal::config('webform.settings')->get('html_editor.disabled') ?: ($element['#format'] === FALSE);

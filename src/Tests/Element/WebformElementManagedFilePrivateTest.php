@@ -59,11 +59,13 @@ class WebformElementManagedFilePrivateTest extends WebformElementManagedFileTest
     $destination_url = Url::fromUri('base://system/files', [
       'query' => [
         'file' => 'webform/test_element_managed_file/' . $sid . '/' . $this->files[0]->filename,
-      ]
+      ],
     ]);
-    $this->assertUrl('user/login', ['query' => [
-      'destination' => $destination_url->toString(),
-    ]]);
+    $this->assertUrl('user/login', [
+      'query' => [
+        'destination' => $destination_url->toString(),
+      ],
+    ]);
 
     // Upload private file and preview as anonymous user.
     $edit = [

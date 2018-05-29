@@ -297,8 +297,7 @@ function hook_webform_help_info_alter(array &$help) {
  *
  * @param string $id
  *   The message id.
- *
- * @return mixed|boolean
+ * @return mixed|bool
  *   TRUE if message is closed, else NULL
  *
  * @internal

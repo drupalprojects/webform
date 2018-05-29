@@ -6,7 +6,6 @@ use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;
 
-
 /**
  * Tests for webform submission form confirmation.
  *

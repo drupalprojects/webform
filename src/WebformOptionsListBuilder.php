@@ -96,7 +96,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
    * Build list of webforms and composite elements that the webform options is used by.
    *
    * @param \Drupal\webform\WebformOptionsInterface $webform_options
-   *   A webform options entity
+   *   A webform options entity.
    *
    * @return array
    *   Table data containing list of webforms and composite elements that the
@@ -110,14 +110,14 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
         '#type' => 'link',
         '#title' => $title,
         '#url' => Url::fromRoute('entity.webform.canonical', ['webform' => $id]),
-        '#suffix' => '</br>'
+        '#suffix' => '</br>',
       ];
     }
     $elements = $this->getStorage()->getUsedByCompositeElements($webform_options);
     foreach ($elements as $id => $title) {
       $links[] = [
         '#markup' => $title,
-        '#suffix' => '</br>'
+        '#suffix' => '</br>',
       ];
     }
     return [
@@ -130,7 +130,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
    * Build list of webform options.
    *
    * @param \Drupal\webform\WebformOptionsInterface $webform_options
-   *   A webform options entity
+   *   A webform options entity.
    *
    * @return string
    *   Semi-colon delimited list of webform options.

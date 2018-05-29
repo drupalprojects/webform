@@ -7,6 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
+use Drupal\webform\WebformContributeManagerInterface;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,16 +33,25 @@ class WebformContributeController extends ControllerBase implements ContainerInj
   protected $httpClient;
 
   /**
+   * The Guzzle HTTP client.
+   *
+   * @var \Drupal\webform\WebformContributeManagerInterface
+   */
+  protected $contributeManager;
+  /**
    * Constructs a WebfomrContributeController object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The Guzzle HTTP client.
+   * @param \Drupal\webform\WebformContributeManagerInterface $contribute_manager
+   *   The webform contribute manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ClientInterface $http_client) {
+  public function __construct(ConfigFactoryInterface $config_factory, ClientInterface $http_client, WebformContributeManagerInterface $contribute_manager) {
     $this->configFactory = $config_factory;
     $this->httpClient = $http_client;
+    $this->contributeManager = $contribute_manager;
   }
 
   /**
@@ -50,7 +60,8 @@ class WebformContributeController extends ControllerBase implements ContainerInj
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('http_client')
+      $container->get('http_client'),
+      $container->get('webform.contribute_manager')
     );
   }
 
@@ -64,9 +75,6 @@ class WebformContributeController extends ControllerBase implements ContainerInj
    *   A renderable array containing a webform about page.
    */
   public function index(Request $request) {
-    /** @var \Drupal\webform\WebformContributeManagerInterface $contribute_manager */
-    $contribute_manager = \Drupal::service('webform.contribute_manager');
-
     // Message.
     $build['message'] = [];
     $build['message']['divide'] = $this->buildDivider();
@@ -79,9 +87,9 @@ class WebformContributeController extends ControllerBase implements ContainerInj
     // Community Information.
     $build['community_info'] = [
       '#theme' => 'webform_contribute',
-      '#account' => $contribute_manager->getAccount(),
-      '#membership' => $contribute_manager->getMembership(),
-      '#contribution' => $contribute_manager->getContribution(),
+      '#account' => $this->contributeManager->getAccount(),
+      '#membership' => $this->contributeManager->getMembership(),
+      '#contribution' => $this->contributeManager->getContribution(),
     ];
 
     // Drupal.
@@ -210,7 +218,6 @@ class WebformContributeController extends ControllerBase implements ContainerInj
         return new JsonResponse($matches);
     }
   }
-
 
   /****************************************************************************/
   // Build methods.

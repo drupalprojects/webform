@@ -192,7 +192,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    */
   public function getLibrary($name) {
     $libraries = $this->getLibraries();
-    return $libraries [$name];
+    return $libraries[$name];
   }
 
   /**

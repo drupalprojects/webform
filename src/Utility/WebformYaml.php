@@ -16,7 +16,7 @@ class WebformYaml {
    * @param string $yaml
    *   A YAML string.
    *
-   * @return boolean
+   * @return bool
    *   TRUE if string is valid YAML.
    */
   public static function isValid($yaml) {

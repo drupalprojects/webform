@@ -99,7 +99,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   The webform libraries manager.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
-   * @param \Drupal\file\FileUsage\FileUsageInterface|NULL $file_usage
+   * @param \Drupal\file\FileUsage\FileUsageInterface|null $file_usage
    *   The file usage service.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
    *   The transliteration service.
@@ -751,10 +751,12 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#message_type' => 'warning',
       '#message_message' => $this->t('For security reasons we advise to use %file_rename together with the %sanitization option.', $t_args),
       '#access' => TRUE,
-      '#states' => ['visible' => [
-        ':input[name="properties[file_name][checkbox]"]' => ['checked' => TRUE],
-        ':input[name="properties[sanitize]"]' => ['checked' => FALSE],
-      ]],
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[file_name][checkbox]"]' => ['checked' => TRUE],
+          ':input[name="properties[sanitize]"]' => ['checked' => FALSE],
+        ],
+      ],
     ];
     $form['file']['multiple'] = [
       '#type' => 'checkbox',

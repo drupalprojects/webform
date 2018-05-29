@@ -5,7 +5,6 @@ namespace Drupal\webform\Tests\Settings;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Tests\WebformTestBase;
 
-
 /**
  * Tests for webform submission form preview.
  *

@@ -538,9 +538,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         continue;
       }
 
-      $data[$element_key .'__name'] = $file->getFilename();
-      $data[$element_key .'__uri'] = $file->getFileUri();
-      $data[$element_key .'__data'] = base64_encode(file_get_contents($file->getFileUri()));
+      $data[$element_key . '__name'] = $file->getFilename();
+      $data[$element_key . '__uri'] = $file->getFileUri();
+      $data[$element_key . '__data'] = base64_encode(file_get_contents($file->getFileUri()));
     }
 
     // Append custom data.
@@ -827,7 +827,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         ],
       ];
       $build_message = [
-        '#markup' => $this->tokenManager->replace($custom_response_message, $this->getWebform(), $token_data)
+        '#markup' => $this->tokenManager->replace($custom_response_message, $this->getWebform(), $token_data),
       ];
       drupal_set_message(\Drupal::service('renderer')->renderPlain($build_message), 'error');
     }

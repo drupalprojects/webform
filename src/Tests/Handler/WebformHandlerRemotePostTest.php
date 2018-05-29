@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Handler;
 
-use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;

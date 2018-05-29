@@ -56,7 +56,7 @@ class WebformElementHtmlEditorTest extends WebformElementTestBase {
     $this->assertRaw('webform_html_editor (disable) field is required.');
     $this->assertRaw('webform_html_editor (format) field is required.');
     $this->assertRaw('webform_html_editor_codemirror (none) field is required.');
-    
+
     $this->drupalGet('webform/test_element_html_editor');
 
     // Check that HTML editor is enabled.
