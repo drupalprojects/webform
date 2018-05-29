@@ -300,11 +300,15 @@ class WebformSubmissionForm extends ContentEntityForm {
       $this->settings = [];
     }
 
-    // Always enable Ajax support when this form is opened in dialog.
+    // Look _webform_dialog which enables Ajax support when this form is
+    // opened in dialog.
+    // @see  webform.dialog.js
+    //
     // Must be called after WebformHandler::overrideSettings which resets all
     // overridden settings.
     // @see \Drupal\webform\Entity\Webform::invokeHandlers
-    if ($this->isDialog()) {
+    // Append _webform_dialog=1 to href to trigger Ajax support.
+    if ($this->getRequest()->query->get('_webform_dialog') && !$webform->getSetting('ajax')) {
       $webform->setSettingOverride('ajax',  TRUE);
     }
 

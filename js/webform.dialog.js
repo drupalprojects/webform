@@ -41,9 +41,14 @@
           $.extend(options, $(this).data('dialog-options'));
         }
 
+        var href = $a.attr('href');
+        // Append _webform_dialog=1 to href to trigger Ajax support.
+        // @see \Drupal\webform\WebformSubmissionForm::setEntity
+        href += (href.indexOf('?') === -1 ? '?' : '&') + '_webform_dialog=1';
+
         var element_settings = {};
         element_settings.progress = {type: 'fullscreen'};
-        element_settings.url = $a.attr('href');
+        element_settings.url = href;
         element_settings.event = 'click';
         element_settings.dialogType = $a.data('dialog-type') || 'modal';
         element_settings.dialog = options;

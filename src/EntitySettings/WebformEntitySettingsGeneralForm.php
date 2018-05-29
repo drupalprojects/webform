@@ -292,7 +292,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
         $dialog_link = [
           '#type' => 'link',
           '#url' => $webform->toUrl(),
-          '#title' => $webform->label(),
+          '#title' => $this->t('Test @title', ['@title' => $dialog_options['title']]),
           '#attributes' => [
             'class' => ['webform-dialog', 'webform-dialog-' . $dialog_name, 'button'],
           ],
@@ -316,7 +316,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       // Custom example.
       $dialog_link = [
         '#type' => 'link',
-        '#title' => $this->t('Custom'),
+        '#title' => $this->t('Test Custom'),
         '#url' => $webform->toUrl(),
         '#attributes' => [
           'class' => ['webform-dialog', 'button'],
@@ -394,6 +394,8 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     else {
       ksort($form['third_party_settings']);
     }
+
+    $form['#attached']['library'][] = 'webform/webform.admin.settings';
 
     return parent::form($form, $form_state);
   }

@@ -50,6 +50,12 @@ webform.admin.dropbutton:
   dependencies:
     - core/drupal.dropbutton
 
+webform.admin.settings:
+  version: VERSION
+  css:
+    theme:
+      css/webform.admin.settings.css: {}
+
 webform.admin.translation:
   version: VERSION
   css:
