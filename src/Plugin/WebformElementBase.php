@@ -237,11 +237,12 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [
       'multiple' => FALSE,
       'multiple__header_label' => '',
-      'multiple__min_items' => 1,
+      'multiple__min_items' => '',
       'multiple__empty_items' => 1,
       'multiple__add_more' => 1,
       'multiple__add_more_button_label' => $this->t('Add'),
       'multiple__add_more_input_label' => $this->t('more items'),
+      'multiple__no_items_message' => $this->t('No items entered. Please add items below.'),
       'multiple__sorting' => TRUE,
       'multiple__operations' => TRUE,
     ];
@@ -298,6 +299,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'default_value',
       'add_more_button_label',
       'add_more_input_label',
+      'no_items_message',
     ];
   }
 
@@ -2526,12 +2528,24 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#description' => $this->t('This is used as the add more items input label for this webform element when displaying multiple values.'),
     ];
+    $form['multiple']['multiple__add_more_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Add more button label'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#description' => $this->t('This is used as the add more items button label for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__no_items_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('No items message'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#description' => $this->t('This is used when there are no items entered.'),
+    ];
     $form['multiple']['multiple__min_items'] = [
       '#type' => 'number',
       '#title' => $this->t('Minimum amount of items'),
+      '#description' => $this->t('Minimum items defaults to 0 for optional elements and 1 for required elements.'),
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#required' => TRUE,
-      '#min' => 1,
+      '#min' => 0,
       '#max' => 20,
     ];
     $form['multiple']['multiple__empty_items'] = [

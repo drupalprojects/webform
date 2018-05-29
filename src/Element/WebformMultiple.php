@@ -38,7 +38,8 @@ class WebformMultiple extends FormElement {
         '#placeholder' => t('Enter value'),
       ],
       '#cardinality' => FALSE,
-      '#min_items' => 1,
+      '#min_items' => NULL,
+      '#no_items_message' => $this->t('No items entered. Please add items below.'),
       '#empty_items' => 1,
       '#add_more' => 1,
       '#add_more_button_label' => $this->t('Add'),
@@ -87,6 +88,11 @@ class WebformMultiple extends FormElement {
     // Set tree.
     $element['#tree'] = TRUE;
 
+    // Set min items based on when the element is required.
+    if (!isset($element['#min_items']) || $element['#min_items'] === '') {
+      $element['#min_items'] = (empty($element['#required'])) ? 0 : 1;
+    }
+
     // Disable operation when #cardinality is set.
     if (!empty($element['#cardinality'])) {
       $element['#operations'] = FALSE;
@@ -122,9 +128,6 @@ class WebformMultiple extends FormElement {
         $min_items = (int) $element['#min_items'];
         $number_of_items = ($number_of_items < $min_items) ? $min_items : $number_of_items;
 
-        if ($number_of_items < 1) {
-          $number_of_items = 1;
-        }
         $form_state->set($number_of_items_storage_key, $number_of_items);
       }
 
@@ -192,18 +195,32 @@ class WebformMultiple extends FormElement {
     $element['items'] = [
       '#prefix' => '<div' . new Attribute($attributes) . '>',
       '#suffix' => '</div>',
-      '#type' => 'table',
-      '#header' => $header,
     ] + $rows;
 
-    // Add sorting to table.
-    if ($element['#sorting']) {
-      $element['items']['#tabledrag'] = [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'webform-multiple-sort-weight',
-        ],
+    // Display table if there are any rows.
+    if ($rows) {
+      $element['items'] += [
+        '#type' => 'table',
+        '#header' => $header,
+      ] + $rows;
+
+      // Add sorting to table.
+      if ($element['#sorting']) {
+        $element['items']['#tabledrag'] = [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'webform-multiple-sort-weight',
+          ],
+        ];
+      }
+    }
+    elseif (!empty($element['#no_items_message'])) {
+      $element['items'] += [
+        '#type' => 'webform_message',
+        '#message_message' => $element['#no_items_message'],
+        '#message_type' => 'info',
+        '#attributes' => ['class' => ['webform-multiple-table--no-items-message']]
       ];
     }
 
@@ -707,9 +724,10 @@ class WebformMultiple extends FormElement {
     $form_state->set($number_of_items_storage_key, $number_of_items + $more_items);
 
     // Reset values.
-    $element['items']['#value'] = array_values($element['items']['#value']);
-    $form_state->setValueForElement($element['items'], $element['items']['#value']);
-    NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $element['items']['#value']);
+    $items = (!empty($element['items']['#value'])) ? array_values($element['items']['#value']) : [];
+    $element['items']['#value'] = $items;
+    $form_state->setValueForElement($element['items'], $items);
+    NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $items);
 
     $action_key = static::getStorageKey($element, 'action');
     $form_state->set($action_key, TRUE);
@@ -775,8 +793,8 @@ class WebformMultiple extends FormElement {
     // Remove one item from the 'number of items'.
     $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
     $number_of_items = $form_state->get($number_of_items_storage_key);
-    // Never allow the number of items to be less than 1.
-    if ($number_of_items != 1) {
+    // Never allow the number of items to be less than #min_items.
+    if ($number_of_items > $element['#min_items']) {
       $form_state->set($number_of_items_storage_key, $number_of_items - 1);
     }
 
@@ -811,18 +829,27 @@ class WebformMultiple extends FormElement {
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
-    // Validate unique keys.
-    if ($error_message = static::validateUniqueKeys($element, $values['items'])) {
-      $form_state->setError($element, $error_message);
-      return;
+    $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
+    $number_of_items = $form_state->get($number_of_items_storage_key);
+    if ($number_of_items || $element['#cardinality']) {
+      $items = $values['items'];
+
+      // Validate unique keys.
+      if ($error_message = static::validateUniqueKeys($element, $items)) {
+        $form_state->setError($element, $error_message);
+        return;
+      }
+
+      // Convert values to items and validate duplicate keys.
+      $items = static::convertValuesToItems($element, $items);
+
+      // Validate required items.
+      if (!empty($element['#required']) && empty($items)) {
+        WebformElementHelper::setRequiredError($element, $form_state);
+      }
     }
-
-    // Convert values to items and validate duplicate keys.
-    $items = static::convertValuesToItems($element, $values['items']);
-
-    // Validate required items.
-    if (!empty($element['#required']) && empty($items)) {
-      WebformElementHelper::setRequiredError($element, $form_state);
+    else {
+      $items = [];
     }
 
     $element['#value'] = $items;

@@ -219,6 +219,11 @@ elements: |
       - value: two
         text: Two
         description: This is the number 2.
+  webform_multiple_no_items:
+    '#type': webform_multiple
+    '#title': webform_multiple_no_items
+    '#min_items': 0
+    '#empty_items': 0
 css: ''
 javascript: ''
 settings:

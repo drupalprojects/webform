@@ -87,6 +87,13 @@
 }
 
 /**
+ * Remove margin from no messages.
+ */
+.webform-multiple-table--no-items-message .messages__wrapper {
+  padding: 0;
+}
+
+/**
  * Suppress table drag warnings.
  */
 .webform-multiple-table .tabledrag-changed-warning,
