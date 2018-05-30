@@ -173,11 +173,9 @@ class WebformHandlerTest extends WebformTestBase {
     $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:deleteHandler');
 
     // Check create handler.
-    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test/handlers/add/test_log', ['handler_id' => 'test'], t('Save'));
+    $this->drupalPostForm('admin/structure/webform/manage/test_handler_test/handlers/add/test', ['handler_id' => 'test'], t('Save'));
     $this->assertRaw('The webform handler was successfully added.');
-    // @todo Determine why create message is not being displayed.
-    // Ajax machine name callback could be causing the issue.
-    // $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createHandler');
+    $this->assertRaw('Invoked test: Drupal\webform_test_handler\Plugin\WebformHandler\TestWebformHandler:createHandler');
   }
 
   /**

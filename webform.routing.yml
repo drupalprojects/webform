@@ -602,6 +602,7 @@ entity.webform.handler:
     _title: 'Select a handler'
   requirements:
     _entity_access: 'webform.update'
+    _custom_access: '\Drupal\webform\Access\WebformHandlerAccess::checkHandlerAccess'
 
 entity.webform.handler.add_form:
   path: '/admin/structure/webform/manage/{webform}/handlers/add/{webform_handler}'
@@ -610,6 +611,17 @@ entity.webform.handler.add_form:
     _title: 'Add webform handler'
   requirements:
     _entity_access: 'webform.update'
+    _custom_access: '\Drupal\webform\Access\WebformHandlerAccess::checkHandlerAccess'
+
+entity.webform.handler.add_email:
+  path: '/admin/structure/webform/manage/{webform}/handlers/add/email'
+  defaults:
+    _form: '\Drupal\webform\Form\WebformHandlerAddForm'
+    _title: 'Add email'
+    webform_handler: email
+  requirements:
+    _entity_access: 'webform.update'
+    _custom_access: '\Drupal\webform\Access\WebformHandlerAccess::checkHandlerAccess'
 
 entity.webform.handler.edit_form:
   path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/edit'
