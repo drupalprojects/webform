@@ -534,15 +534,18 @@ class WebformSubmissionForm extends ContentEntityForm {
     $this->prepareElements($elements, $form, $form_state);
 
     // Add wizard progress tracker to the webform.
-    $current_page = $this->getCurrentPage($form, $form_state);
-    if ($current_page && $this->getWebformSetting('wizard_progress_bar') || $this->getWebformSetting('wizard_progress_pages') || $this->getWebformSetting('wizard_progress_percentage')) {
-      $form['progress'] = [
-        '#theme' => 'webform_progress',
-        '#webform' => $this->getWebform(),
-        '#current_page' => $current_page,
-        '#operation' => $this->operation,
-        '#weight' => -20,
-      ];
+    if ($webform->getPages($this->operation)) {
+      $current_page = $this->getCurrentPage($form, $form_state);
+      $display_wizard_progress = ($this->getWebformSetting('wizard_progress_bar') || $this->getWebformSetting('wizard_progress_pages') || $this->getWebformSetting('wizard_progress_percentage'));
+      if ($current_page && $display_wizard_progress) {
+        $form['progress'] = [
+          '#theme' => 'webform_progress',
+          '#webform' => $this->getWebform(),
+          '#current_page' => $current_page,
+          '#operation' => $this->operation,
+          '#weight' => -20,
+        ];
+      }
     }
 
     // Required indicator.
