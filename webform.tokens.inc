@@ -16,6 +16,7 @@ use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformElementEntityReferenceInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_token_info().
@@ -207,7 +208,6 @@ function webform_token_info() {
     'description' => t('The source entity that the webform submission was submitted from.'),
     'type' => 'entity',
     'dynamic' => TRUE,
-
   ];
   $webform_submission['submitted-to'] = [
     'name' => t('Submitted to'),
@@ -215,6 +215,14 @@ function webform_token_info() {
     'type' => 'entity',
     'dynamic' => TRUE,
   ];
+
+  // Append link to token help to source-entity and submitted-to description.
+  if (\Drupal::moduleHandler()->moduleExists('token') && \Drupal::moduleHandler()->moduleExists('help'))  {
+    $t_args = [':href' => Url::fromRoute('help.page', ['name' => 'token'])->toString()];
+    $token_help = t('For a list of the currently available source entity related tokens, please see <a href=":href">token help</a>.', $t_args);
+    $webform_submission['source-entity']['description'] = Markup::create($webform_submission['source-entity']['description'] . ' ' . $token_help);
+    $webform_submission['submitted-to']['description'] = Markup::create($webform_submission['submitted-to']['description'] . ' ' . $token_help);
+  }
 
   $tokens['webform_submission'] = $webform_submission;
 
