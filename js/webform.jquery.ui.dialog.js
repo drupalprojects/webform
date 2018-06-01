@@ -23,7 +23,7 @@
   /**
    * Never focus dialog on first link.
    */
-  $.ui.dialog.prototype.__focusTabbable = function() {
+  $.ui.dialog.prototype._focusTabbable = function() {
     var hasFocus = this.element.find("[autofocus]");
     if (!hasFocus.length) {
       hasFocus = this.element.find(":tabbable:not(a.webform-element-help)");
