@@ -26,10 +26,9 @@ webform.admin.dialog:
       css/webform.admin.css: {}
   js:
     js/webform.admin.js:  {}
-    js/webform.admin.dialog.js:  {}
   dependencies:
     - core/drupal.dialog.ajax
-    - core/jquery.ui.dialog
+    - webform/jquery.ui.dialog
     - webform/webform.ajax
     - webform/webform.form
     - webform/webform.form.tabs
@@ -151,7 +150,7 @@ webform.dialog:
     js/webform.dialog.js:  {}
   dependencies:
     - core/drupal.dialog.ajax
-    - core/jquery.ui.dialog
+    - webform/jquery.ui.dialog
 
 # Help.
 
@@ -792,6 +791,15 @@ webform.composite.telephone:
   dependencies:
     - webform/webform.composite
 
+# jQuery UI.
+
+jquery.ui.dialog:
+  version: VERSION
+  js:
+    js/webform.jquery.ui.dialog.js:  {}
+  dependencies:
+    - core/jquery.ui.dialog
+
 # Contrib Module.
 
 imce.input:
@@ -800,6 +808,7 @@ imce.input:
     js/webform.imce.js:  {}
   dependencies:
     - imce/drupal.imce.input
+
 
 # External libraries.
 
