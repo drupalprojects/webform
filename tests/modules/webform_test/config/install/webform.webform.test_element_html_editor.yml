@@ -25,6 +25,9 @@ elements: |
     '#default_value': 'Hello <b>World!!!</b>'
     '#required': true
     '#disable': true
+    '#attributes':
+      class:
+        - custom-disabled
   webform_html_editor_format:
     '#type': webform_html_editor
     '#title': 'webform_html_editor (format)'

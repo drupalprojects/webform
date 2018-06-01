@@ -70,20 +70,15 @@ class WebformHtmlEditor extends FormElement {
     // Define value element.
     $element += ['value' => []];
 
-    // Set value element title and hide it.
-    $element['value']['#title'] = $element['#title'];
-    $element['value']['#title_display'] = 'invisible';
+    // Copy properties to value element.
+    $properties = ['#title', '#required', '#attributes', '#default_value'];
+    $element['value'] += array_intersect_key($element, array_combine($properties, $properties));
 
-    // Set value element required.
-    if (isset($element['#required'])) {
-      $element['value']['#required'] = $element['#required'];
-    }
+    // Hide title.
+    $element['value']['#title_display'] = 'invisible';
 
     // Don't display inline form error messages.
     $element['#error_no_message'] = TRUE;
-
-    // Set value element default value.
-    $element['value']['#default_value'] = $element['#default_value'];
 
     // Add validate callback.
     $element += ['#element_validate' => []];
@@ -116,8 +111,8 @@ class WebformHtmlEditor extends FormElement {
     // Else use textarea with completely custom HTML Editor.
     $element['value'] += [
       '#type' => 'textarea',
-      '#attributes' => ['class' => ['js-html-editor']],
     ];
+    $element['value']['#attributes']['class'][] = 'js-html-editor';
 
     $element['#attached']['library'][] = 'webform/webform.element.html_editor';
     $element['#attached']['drupalSettings']['webform']['html_editor']['allowedContent'] = static::getAllowedContent();
