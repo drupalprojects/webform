@@ -279,9 +279,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * Get mail configuration values.
    *
    * @return array
-   *   An associative array containing email configuration values.
+   *   An associative array containing email configuration values,
+   *   along with the default configuration values.
    */
-  protected function getEmailConfiguration() {
+  public function getEmailConfiguration() {
     $configuration = $this->getConfiguration();
     $email = [];
     foreach ($configuration['settings'] as $key => $value) {
