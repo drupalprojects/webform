@@ -42,6 +42,9 @@ elements: |
   optional:
     '#title': Optional
     '#type': textfield
+  checkbox:
+    '#title': Checkbox
+    '#type': checkbox
   file:
     '#type': managed_file
     '#title': File
@@ -109,6 +112,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -213,6 +217,7 @@ handlers:
       excluded_elements: {  }
       ignore_access: true
       exclude_empty: true
+      exclude_empty_checkbox: true
       html: true
       attachments: true
       twig: false

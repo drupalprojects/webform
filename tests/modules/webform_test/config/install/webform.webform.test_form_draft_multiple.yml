@@ -79,6 +79,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: all
   draft_multiple: true
   draft_auto_save: true

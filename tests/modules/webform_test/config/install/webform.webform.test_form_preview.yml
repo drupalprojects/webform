@@ -20,6 +20,9 @@ elements: |
   email:
     '#type': email
     '#title': Email
+  checkbox:
+      '#type': checkbox
+      '#title': Checkbox
 css: ''
 javascript: ''
 settings:
@@ -78,6 +81,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: true
   draft: none
   draft_multiple: false
   draft_auto_save: false

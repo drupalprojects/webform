@@ -2251,3 +2251,12 @@ function webform_update_8127() {
 function webform_update_8128() {
   _webform_update_webform_settings();
 }
+
+/**
+ * Issue #2977378: Add 'exclude unselected checkboxes' from email notification and preview.
+ */
+function webform_update_8129() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+}

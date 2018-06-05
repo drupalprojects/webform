@@ -224,6 +224,9 @@ webform.webform.*:
         preview_exclude_empty:
           type: boolean
           label: 'Preview exclude empty elements'
+        preview_exclude_empty_checkbox:
+          type: boolean
+          label: 'Preview exclude unselected checkboxes'
         draft:
           type: string
           label: 'Allow users to save and finish the webform later.'

@@ -136,7 +136,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
       // @see http://cgit.drupalcode.org/drupal/tree/core/lib/Drupal/Core/Mail/MailManager.php#n285
       'subject' => 'This has <removed>"special" \'chararacters\'',
       'message[value]' => '<p><em>Please enter a message.</em> Test that double "quotes" are not encoded.</p>',
-      'optional' => '',
+      'checkbox' => FALSE,
     ];
     $this->postSubmissionTest($webform, $edit);
     $sid = $this->getLastSubmissionId($webform);
@@ -153,6 +153,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $this->assertContains($sent_email['params']['body'], '<b>Message</b><br /><p><em>Please enter a message.</em> Test that double "quotes" are not encoded.</p><br /><br />');
     $this->assertContains($sent_email['params']['body'], '<p style="color:yellow"><em>Custom styled HTML markup</em></p>');
     $this->assertNotContains($sent_email['params']['body'], '<b>Optional</b><br />{Empty}<br /><br />');
+    $this->assertNotContains($sent_email['params']['body'], '<b>Checkbox/b><br />Yes<br /><br />');
 
     // Check email has attachment.
     $this->assertEqual($sent_email['params']['attachments'][0]['filecontent'], "this is a sample txt file\nit has two lines\n");
@@ -196,6 +197,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     // Include empty.
     $configuration = $email_handler->getConfiguration();
     $configuration['settings']['exclude_empty'] = FALSE;
+    $configuration['settings']['exclude_empty_checkbox'] = FALSE;
     $email_handler->setConfiguration($configuration);
     $webform->save();
 
@@ -203,6 +205,7 @@ class WebformHandlerEmailAdvancedTest extends WebformTestBase {
     $this->postSubmission($webform);
     $sent_email = $this->getLastEmail();
     $this->assertContains($sent_email['params']['body'], '<b>Optional</b><br />{Empty}<br /><br />');
+    $this->assertContains($sent_email['params']['body'], '<b>Checkbox</b><br />No<br /><br />');
 
     // Logut and use anonymous user account.
     $this->drupalLogout();

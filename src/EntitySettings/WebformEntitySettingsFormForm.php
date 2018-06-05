@@ -351,6 +351,12 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['preview_exclude_empty'],
     ];
+    $form['preview_settings']['preview_container']['elements']['preview_exclude_empty_checkbox'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude unselected checkboxes'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['preview_exclude_empty_checkbox'],
+    ];
     $form['preview_settings']['preview_container']['preview_attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Preview attributes'),

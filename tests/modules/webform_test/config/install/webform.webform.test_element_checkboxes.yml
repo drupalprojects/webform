@@ -14,6 +14,17 @@ title: 'Test: Element: Checkboxes'
 description: 'Test the checkboxes.'
 category: 'Test: Element'
 elements: |
+  checkbox_example:
+    '#type': details
+    '#title': 'Checkbox'
+    '#open': true
+    checkbox:
+      '#type': checkbox
+      '#title': checkbox
+    checkbox_exclude_empty:
+      '#type': checkbox
+      '#title': checkbox_exclude_empty
+      '#exclude_empty': true
   checkboxes_descriptions_example:
     '#type': details
     '#title': 'Checkboxes descriptions'
@@ -132,6 +143,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
