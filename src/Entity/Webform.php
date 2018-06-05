@@ -55,6 +55,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *   },
  *   admin_permission = "administer webform",
  *   bundle_of = "webform_submission",
+ *   static_cache = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "title",

@@ -58,6 +58,8 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
 
     $language_manager = $this->getMock('Drupal\Core\Language\LanguageManagerInterface');
 
+    $messenger = $this->getMock('\Drupal\Core\Messenger\MessengerInterface');
+
     $views_data = $this->getMockBuilder('Drupal\views\ViewsData')
       ->disableOriginalConstructor()
       ->getMock();
@@ -88,7 +90,7 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
     $definition['title'] = '';
     $options = [];
 
-    $webform_submission_bulk_form = new WebformSubmissionBulkForm([], 'webform_submission_bulk_form', $definition, $entity_manager, $language_manager);
+    $webform_submission_bulk_form = new WebformSubmissionBulkForm([], 'webform_submission_bulk_form', $definition, $entity_manager, $language_manager, $messenger);
     $webform_submission_bulk_form->init($executable, $display, $options);
 
     $this->assertAttributeEquals(array_slice($actions, 0, -1, TRUE), 'actions', $webform_submission_bulk_form);
