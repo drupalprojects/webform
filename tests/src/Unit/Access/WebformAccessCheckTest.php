@@ -34,9 +34,9 @@ class WebformAccessCheckTest extends UnitTestCase {
    * @covers ::checkAdminAccess
    */
   public function testCheckAdminAccess() {
-    $account = $this->getMock('Drupal\Core\Session\AccountInterface');
+    $account = $this->createMock('Drupal\Core\Session\AccountInterface');
 
-    $admin_account = $this->getMock('Drupal\Core\Session\AccountInterface');
+    $admin_account = $this->createMock('Drupal\Core\Session\AccountInterface');
     $admin_account->expects($this->any())
       ->method('hasPermission')
       ->will($this->returnValueMap([
@@ -45,7 +45,7 @@ class WebformAccessCheckTest extends UnitTestCase {
       ]
       ));
 
-    $submission_manager_account = $this->getMock('Drupal\Core\Session\AccountInterface');
+    $submission_manager_account = $this->createMock('Drupal\Core\Session\AccountInterface');
     $submission_manager_account->expects($this->any())
       ->method('hasPermission')
       ->will($this->returnValueMap([
@@ -65,10 +65,10 @@ class WebformAccessCheckTest extends UnitTestCase {
       ->will($this->returnValue(TRUE));
     $webform_node->webform = (object) ['entity' => TRUE];
 
-    $webform = $this->getMock('Drupal\webform\WebformInterface');
+    $webform = $this->createMock('Drupal\webform\WebformInterface');
 
-    $email_webform = $this->getMock('Drupal\webform\WebformInterface');
-    $handler = $this->getMock('\Drupal\webform\Plugin\WebformHandlerMessageInterface');
+    $email_webform = $this->createMock('Drupal\webform\WebformInterface');
+    $handler = $this->createMock('\Drupal\webform\Plugin\WebformHandlerMessageInterface');
     $email_webform->expects($this->any())
       ->method('getHandlers')
       ->will($this->returnValue([$handler]));
@@ -80,11 +80,11 @@ class WebformAccessCheckTest extends UnitTestCase {
       ->method('hasMessageHandler')
       ->will($this->returnValue(TRUE));
 
-    $webform_submission = $this->getMock('Drupal\webform\WebformSubmissionInterface');
+    $webform_submission = $this->createMock('Drupal\webform\WebformSubmissionInterface');
     $webform_submission->expects($this->any())
       ->method('getWebform')
       ->will($this->returnValue($webform));
-    $email_webform_submission = $this->getMock('Drupal\webform\WebformSubmissionInterface');
+    $email_webform_submission = $this->createMock('Drupal\webform\WebformSubmissionInterface');
     $email_webform_submission->expects($this->any())
       ->method('getWebform')
       ->will($this->returnValue($email_webform));
