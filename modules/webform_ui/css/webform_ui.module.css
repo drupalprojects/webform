@@ -15,6 +15,25 @@ thead th .dropbutton {
 }
 
 /**
+ * Actions.
+ *
+ * Secondary buttons when .button--primary is removed.
+ * @see Drupal.behaviors.webformUiElementsActionsSecondary
+ */
+.action-links .button--secondary.button--primary {
+  display: none;
+}
+
+/**
+ * Hide secondary buttons for mobile.
+ */
+@media screen and (max-width: 600px) {
+  .action-links .button--secondary {
+    display: none;
+  }
+}
+
+/**
  * Elements (/admin/structure/webform/manage/{webform})
  */
 .webform-ui-elements-table .button {

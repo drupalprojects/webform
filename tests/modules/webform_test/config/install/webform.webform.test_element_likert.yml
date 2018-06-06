@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_likert
 title: 'Test: Element: Likert'
 description: 'Test the likert element.'
@@ -63,6 +64,19 @@ elements: |
       1: 'Option 1 -- This is a help text'
       2: 'Option 2 -- This is a help text'
       3: 'Option 3 -- This is a help text'
+  likert_values:
+    '#type': webform_likert
+    '#title': likert_values
+    '#na_answer': true
+    '#questions':
+      0: 'Question 0'
+      1: 'Question 1'
+      2: 'Question 2'
+    '#answers':
+      0: 'Option 0'
+      1: 'Option 1'
+      2: 'Option 2'
+      3: 'Option 3'
 css: ''
 javascript: ''
 settings:
@@ -102,6 +116,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -119,6 +135,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

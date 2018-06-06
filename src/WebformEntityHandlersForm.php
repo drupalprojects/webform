@@ -160,41 +160,6 @@ class WebformEntityHandlersForm extends EntityForm {
       $rows[$handler_id] = $row;
     }
 
-    // Filter add handler by excluded_handlers.
-    $handler_definitions = $this->handlerManager->getDefinitions();
-    $handler_definitions = $this->handlerManager->removeExcludeDefinitions($handler_definitions);
-    unset($handler_definitions['broken']);
-
-    // Must manually add local actions to the webform because we can't alter local
-    // actions and add the needed dialog attributes.
-    // @see https://www.drupal.org/node/2585169
-    $local_actions = [];
-    if (isset($handler_definitions['email'])) {
-      $local_actions['add_email'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add email'),
-          'url' => new Url('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => 'email']),
-          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ],
-      ];
-    }
-    unset($handler_definitions['email']);
-    if ($handler_definitions) {
-      $local_actions['add_handler'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add handler'),
-          'url' => new Url('entity.webform.handler', ['webform' => $webform->id()]),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(),
-        ],
-      ];
-    }
-    $form['local_actions'] = [
-      '#prefix' => '<ul class="action-links">',
-      '#suffix' => '</ul>',
-    ] + $local_actions;
-
     // Build the list of existing webform handlers for this webform.
     $form['handlers'] = [
       '#type' => 'table',

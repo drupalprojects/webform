@@ -160,7 +160,7 @@ class TwigExtension extends \Twig_Extension {
    * @param string $template
    *   A inline Twig template.
    * @param array $options
-   *   Template and token options.
+   *   (optional) Template and token options.
    *
    * @return string
    *   The fully rendered Twig template.
@@ -168,7 +168,33 @@ class TwigExtension extends \Twig_Extension {
    * @see \Drupal\webform\Element\WebformComputedTwig::processValue
    * @see \Drupal\webform\Plugin\WebformHandler\EmailWebformHandler::getMessage
    */
-  public static function renderTwigTemplate(WebformSubmissionInterface $webform_submission, $template, array $options) {
+  public static function renderTwigTemplate(WebformSubmissionInterface $webform_submission, $template, array $options = []) {
+    try {
+      $build = self::buildTwigTemplate($webform_submission, $template, $options);
+      return \Drupal::service('renderer')->renderPlain($build);
+    }
+    catch (\Exception $exception) {
+      if ($webform_submission->getWebform()->access('update')) {
+        drupal_set_message(t('Failed to render computed Twig value due to error "%error"', ['%error' => $exception->getMessage()]), 'error');
+      }
+      return '';
+    }
+  }
+
+  /**
+   * Build a Twig template with a webform submission.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
+   *   A webform submission.
+   * @param string $template
+   *   A inline Twig template.
+   * @param array $options
+   *   (optional) Template and token options.
+   *
+   * @return array
+   *  A renderable containing an inline twig  template.
+   */
+  public static function buildTwigTemplate(WebformSubmissionInterface $webform_submission, $template, array $options = []) {
     $options += [
       'html' => FALSE,
       'email' => FALSE,
@@ -189,21 +215,11 @@ class TwigExtension extends \Twig_Extension {
       'elements_flattened' => $webform_submission->getWebform()->getElementsDecodedAndFlattened(),
     ] + $webform_submission->toArray(TRUE);
 
-    $build = [
+    return [
       '#type' => 'inline_template',
       '#template' => $template,
       '#context' => $context,
     ];
-
-    try {
-      return \Drupal::service('renderer')->renderPlain($build);
-    }
-    catch (\Exception $exception) {
-      if ($webform_submission->getWebform()->access('update')) {
-        drupal_set_message(t('Failed to render computed Twig value due to error "%error"', ['%error' => $exception->getMessage()]), 'error');
-      }
-      return '';
-    }
   }
 
   /**

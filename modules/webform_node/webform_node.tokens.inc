@@ -21,6 +21,7 @@ function webform_node_token_info() {
     'name' => t('Node'),
     'description' => t("The node that the webform was submitted from."),
     'type' => 'node',
+    'dynamic' => TRUE,
   ];
 
   return [

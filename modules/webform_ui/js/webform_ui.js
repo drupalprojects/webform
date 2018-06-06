@@ -8,20 +8,20 @@
   'use strict';
 
   /**
-   * Lock the default actions element by moving it to the table footer (<tfoot>).
+   * Remove .button-primary class from .action-links .button-secondary.
+   *
+   * The seven.theme adds the .button-primary class to all actions.
    *
    * @type {Drupal~behavior}
    *
-   * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the behavior for locking the default actions element by moving
-   *   it to the table footer (<tfoot>).
+   * @see webform_ui_preprocess_menu_local_action()
+   * @see seven_preprocess_menu_local_action()
+   * @see webform_ui.module.css
    */
-  Drupal.behaviors.webformUiElementsActionsDefault = {
+  Drupal.behaviors.webformUiElementsActionsSecondary = {
     attach: function (context, settings) {
-      $(context).find('[data-drupal-selector="edit-webform-ui-elements-webform-actions-default"]').once('webform-ui-elements-webform-actions-default').each(function () {
-        var $tr = $(this);
-        var $table = $tr.parents('table');
-        $table.append($('<tfoot></tfoot>').append($tr));
+      $(context).find('.action-links .button--secondary').once('webform-ui-elements-webform-actions-secondary').each(function () {
+        $(this).removeClass('button--primary');
       });
     }
   };

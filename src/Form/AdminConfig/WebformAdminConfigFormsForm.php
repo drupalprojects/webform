@@ -3,10 +3,16 @@
 namespace Drupal\webform\Form\AdminConfig;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
+use Drupal\filter\Entity\FilterFormat;
+use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformAddonsManagerInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformTokenManagerInterface;
 use Drupal\webform\WebformThirdPartySettingsManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,6 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Configure webform admin settings for forms.
  */
 class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * The webform token manager.
@@ -49,6 +62,8 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
    * @param \Drupal\webform\WebformThirdPartySettingsManagerInterface $third_party_settings_manager
@@ -56,8 +71,9 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
    * @param \Drupal\webform\WebformAddonsManagerInterface $addons_manager
    *   The webform add-ons manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, WebformTokenManagerInterface $token_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformAddonsManagerInterface $addons_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, WebformTokenManagerInterface $token_manager, WebformThirdPartySettingsManagerInterface $third_party_settings_manager, WebformAddonsManagerInterface $addons_manager) {
     parent::__construct($config_factory);
+    $this->moduleHandler = $module_handler;
     $this->tokenManager = $token_manager;
     $this->thirdPartySettingsManager = $third_party_settings_manager;
     $this->addonsManager = $addons_manager;
@@ -69,6 +85,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('module_handler'),
       $container->get('webform.token_manager'),
       $container->get('webform.third_party_settings_manager'),
       $container->get('webform.addons_manager')
@@ -112,6 +129,16 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#title' => $this->t('Form settings'),
       '#open' => TRUE,
       '#tree' => TRUE,
+    ];
+    $form['form_settings']['default_status'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Default status'),
+      '#default_value' => $settings['default_status'],
+      '#options' => [
+        WebformInterface::STATUS_OPEN => $this->t('Open'),
+        WebformInterface::STATUS_CLOSED => $this->t('Closed'),
+      ],
+      '#options_display' => 'side_by_side',
     ];
     $form['form_settings']['default_form_open_message'] = [
       '#type' => 'webform_html_editor',
@@ -394,6 +421,123 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
     ];
     $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
 
+    // Dialog settings.
+    $form['dialog_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Dialog settings'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+    ];
+    $form['dialog_settings']['dialog_options'] = [
+      '#title' => $this->t('Dialog options'),
+      '#description' => [
+        '#markup' => $this->t('Enter preset dialog options available to all webforms.'),
+        'options' => [
+          '#theme' => 'item_list',
+          '#items' => [
+            $this->t('Name must be lower-case and contain only letters, numbers, and underscores.'),
+            $this->t('Width and height are optional.'),
+          ],
+        ],
+      ],
+      '#type' => 'webform_multiple',
+      '#key' => 'name',
+      '#header' => [
+        ['data' => $this->t('Machine name'), 'width' => '40%'],
+        ['data' => $this->t('Title'), 'width' => '40%'],
+        ['data' => $this->t('Width'), 'width' => '10%'],
+        ['data' => $this->t('Height'), 'width' => '10%'],
+      ],
+      '#element' => [
+        'name' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Dialog machine name'),
+          '#title_display' => $this->t('invisible'),
+          '#placeholder' => $this->t('Enter machine name'),
+          '#pattern' => '^[a-z0-9_]*$',
+          '#error_no_message' => TRUE,
+        ],
+        'title' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Dialog title'),
+          '#placeholder' => $this->t('Enter title'),
+          '#title_display' => $this->t('invisible'),
+          '#error_no_message' => TRUE,
+        ],
+        'width' => [
+          '#type' => 'number',
+          '#title' => $this->t('Dialog width'),
+          '#title_display' => $this->t('invisible'),
+          '#field_suffix' => 'px',
+          '#error_no_message' => TRUE,
+        ],
+        'height' => [
+          '#type' => 'number',
+          '#title' => $this->t('Dialog height'),
+          '#title_display' => $this->t('invisible'),
+          '#field_suffix' => 'px',
+          '#error_no_message' => TRUE,
+        ],
+      ],
+      '#error_no_message' => TRUE,
+      '#default_value' => $settings['dialog_options'],
+      '#parents' => ['dialog_settings', 'dialog_options'],
+    ];
+    $form['dialog_settings']['dialog'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable site-wide dialog support'),
+      '#description' => $this->t('If checked, the webform dialog library will be added to every page on your website, this allows any webform to be opened in a modal dialog. Webform specific dialog links will be included on all webform settings form.'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['dialog'],
+    ];
+    $form['dialog_settings']['dialog_messages'] = [
+      '#type' => 'container',
+      '#states' => [
+        'visible' => [
+          ':input[name="dialog_settings[dialog]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    // Display warning when text formats do not support adding the class
+    // attribute to links.
+    if ($this->moduleHandler->moduleExists('filter')) {
+      /** @var \Drupal\filter\FilterFormatInterface[] $filter_formats */
+      $filter_formats = FilterFormat::loadMultiple();
+      $dialog_not_allowed = [];
+      foreach ($filter_formats as $filter_format) {
+        $html_restrictions = $filter_format->getHtmlRestrictions();
+        if ($html_restrictions && isset($html_restrictions['allowed']) && isset($html_restrictions['allowed']['a']) && !isset($html_restrictions['allowed']['a']['class'])) {
+          $dialog_not_allowed[] = $filter_format->label();
+        }
+      }
+      if ($dialog_not_allowed) {
+        $t_args = [
+          '@labels' => WebformArrayHelper::toString($dialog_not_allowed),
+          '@tag' => '<a href hreflang class>',
+          ':href' => Url::fromRoute('filter.admin_overview')->toString(),
+        ];
+        $form['dialog_settings']['dialog_messages']['filter_formats_message'] = [
+          '#type' => 'webform_message',
+          '#message_message' => $this->t('<strong>IMPORTANT:</strong> To insert dialog links using the @labels <a href=":href">text formats</a> the @tag must be added to the allowed HTML tags.', $t_args),
+          '#message_type' => 'warning',
+        ];
+      }
+    }
+    // Display install link module message.
+    if (!$this->moduleHandler->moduleExists('editor_advanced_link') && !$this->moduleHandler->moduleExists('menu_link_attributes')) {
+      $t_args = [
+        ':editor_advanced_link_href' => 'https://www.drupal.org/project/editor_advanced_link',
+        ':menu_link_attributes_href' => 'https://www.drupal.org/project/menu_link_attributes',
+      ];
+      $form['dialog_settings']['dialog_messages']['module_message'] = [
+        '#type' => 'webform_message',
+        '#message_message' => $this->t('To add the .webform-dialog class to a link\'s attributes, please use the <a href=":editor_advanced_link_href">D8 Editor Advanced link</a> or <a href=":menu_link_attributes_href">Menu Link Attributes</a> module.', $t_args),
+        '#message_type' => 'info',
+        '#message_close' => TRUE,
+        '#message_storage' => WebformMessage::STORAGE_SESSION,
+      ];
+    }
+
     // Third party settings.
     $form['third_party_settings'] = [
       '#type' => 'details',
@@ -441,11 +585,17 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       + $form_state->getValue('wizard_settings')
       + $form_state->getValue('preview_settings')
       + $form_state->getValue('draft_settings')
-      + $form_state->getValue('confirmation_settings');
+      + $form_state->getValue('confirmation_settings')
+      + $form_state->getValue('dialog_settings');
 
     // Track if we need to trigger an update of all webform paths
     // because the 'default_page_base_path' changed.
     $update_paths = ($settings['default_page_base_path'] != $this->config('webform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
+
+    // Filter empty dialog options.
+    foreach ($settings['dialog_options'] as $dialog_name => $dialog_options) {
+      $settings['dialog_options'][$dialog_name] = array_filter($dialog_options);
+    }
 
     $config = $this->config('webform.settings');
     $config->set('settings', $settings + $config->get('settings'));

@@ -93,8 +93,20 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     $form['submission_settings']['submission_locked_message'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Submission locked message'),
-      '#description' => $this->t('A message to be displayed if submission is lockec.'),
+      '#description' => $this->t('A message to be displayed if submission is locked.'),
       '#default_value' => $settings['submission_locked_message'],
+    ];
+    $form['submission_settings']['previous_submission_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Previous submission message'),
+      '#description' => $this->t('A message to be displayed when there is previous submission.'),
+      '#default_value' => $settings['previous_submission_message'],
+    ];
+    $form['submission_settings']['previous_submissions_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Previous submissions message'),
+      '#description' => $this->t('A message to be displayed when there are previous submissions.'),
+      '#default_value' => $settings['previous_submissions_message'],
     ];
     $form['submission_settings']['next_serial'] = [
       '#type' => 'number',
@@ -165,6 +177,13 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       ],
     ];
     $form['submission_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    if ($form['submission_access_denied']['token_tree_link']) {
+      $form['submission_access_denied']['token_tree_link']['#states'] = [
+        'visible' => [
+          ':input[name="submission_login"]' => ['checked' => TRUE],
+        ]
+      ];
+    }
 
     // Submission behaviors.
     $form['submission_behaviors'] = [

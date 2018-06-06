@@ -7,6 +7,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
@@ -28,6 +29,7 @@ use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\Utility\WebformHtmlHelper;
+use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
@@ -209,6 +211,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'unique_error' => '',
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
       'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),
@@ -234,11 +237,12 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     return [
       'multiple' => FALSE,
       'multiple__header_label' => '',
-      'multiple__label' => $this->t('item'),
-      'multiple__labels' => $this->t('items'),
-      'multiple__min_items' => 1,
+      'multiple__min_items' => '',
       'multiple__empty_items' => 1,
       'multiple__add_more' => 1,
+      'multiple__add_more_button_label' => $this->t('Add'),
+      'multiple__add_more_input_label' => $this->t('more items'),
+      'multiple__no_items_message' => $this->t('No items entered. Please add items below.'),
       'multiple__sorting' => TRUE,
       'multiple__operations' => TRUE,
     ];
@@ -293,6 +297,9 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'markup',
       'test',
       'default_value',
+      'add_more_button_label',
+      'add_more_input_label',
+      'no_items_message',
     ];
   }
 
@@ -620,9 +627,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     if (!empty($element['#title']) && empty($element['#admin_title'])) {
       $element['#admin_title'] = strip_tags($element['#title']);
     }
-
-    // Replace global tokens which could include the [site:name].
-    $this->replaceTokens($element);
   }
 
   /**
@@ -864,10 +868,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
   /**
    * {@inheritdoc}
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL) {
     foreach ($element as $key => $value) {
       if (!Element::child($key)) {
-        $element[$key] = $this->tokenManager->replace($value, $webform_submission);
+        $element[$key] = $this->tokenManager->replace($value, $entity);
       }
     }
   }
@@ -1029,7 +1033,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function getLabel(array $element) {
-    return $element['#title'] ?: $element['#webform_key'];
+    return (!empty($element['#title'])) ? $element['#title'] : $element['#webform_key'];
   }
 
   /**
@@ -2242,14 +2246,14 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['form']['disabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disabled'),
-      '#description' => $this->t('Make this element non-editable with the value <strong>ignored</strong>. Useful for displaying default value. Changeable via JavaScript.'),
+      '#description' => $this->t('Make this element non-editable with the user entered (e.g. via developer tools) value <strong>ignored</strong>. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
       '#weight' => 50,
     ];
     $form['form']['readonly'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Readonly'),
-      '#description' => $this->t('Make this element non-editable with the value <strong>submitted</strong>. Useful for displaying default value. Changeable via JavaScript.'),
+      '#description' => $this->t('Make this element non-editable with the user entered (e.g. via developer tools) value <strong>submitted</strong>. Useful for displaying default value. Changeable via JavaScript.'),
       '#return_value' => TRUE,
       '#weight' => 50,
     ];
@@ -2512,24 +2516,36 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Table header label'),
       '#description' => $this->t('This is used as the table header for this webform element when displaying multiple values.'),
     ];
-    $form['multiple']['multiple__label'] = [
+    $form['multiple']['multiple__add_more_button_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Item label'),
+      '#title' => $this->t('Add more button label'),
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#description' => $this->t('This is used as the item label for this webform element when displaying multiple values.'),
+      '#description' => $this->t('This is used as the add more items button label for this webform element when displaying multiple values.'),
     ];
-    $form['multiple']['multiple__labels'] = [
+    $form['multiple']['multiple__add_more_input_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Item labels'),
+      '#title' => $this->t('Add more input label'),
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#description' => $this->t('This is used as the items label for this webform element when displaying multiple values.'),
+      '#description' => $this->t('This is used as the add more items input label for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__add_more_button_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Add more button label'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#description' => $this->t('This is used as the add more items button label for this webform element when displaying multiple values.'),
+    ];
+    $form['multiple']['multiple__no_items_message'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('No items message'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
+      '#description' => $this->t('This is used when there are no items entered.'),
     ];
     $form['multiple']['multiple__min_items'] = [
       '#type' => 'number',
       '#title' => $this->t('Minimum amount of items'),
+      '#description' => $this->t('Minimum items defaults to 0 for optional elements and 1 for required elements.'),
       '#attributes' => ['data-webform-states-no-clear' => TRUE],
-      '#required' => TRUE,
-      '#min' => 1,
+      '#min' => 0,
       '#max' => 20,
     ];
     $form['multiple']['multiple__empty_items'] = [
@@ -2574,7 +2590,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#title' => $this->t('Wrapper'),
       '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom...' to enter custom classes."),
       '#style__description' => $this->t("Apply custom styles to the element's wrapper around both the field and its label."),
-      '#attributes__description' => $this->t("Enter additional attributes to be added the element's wrapper."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added to the element's wrapper."),
       '#classes' => $this->configFactory->get('webform.settings')->get('element.wrapper_classes'),
     ];
 
@@ -2588,6 +2604,34 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Element'),
       '#classes' => $this->configFactory->get('webform.settings')->get('element.classes'),
+    ];
+
+    /* Label attributes */
+
+    $form['label_attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Label attributes'),
+    ];
+    $form['label_attributes']['label_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Label'),
+      '#class__description' => $this->t("Apply classes to the element's label."),
+      '#style__description' => $this->t("Apply custom styles to the element's label."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added to the element's label."),
+    ];
+
+    /* Summary attributes */
+
+    $form['summary_attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Summary attributes'),
+    ];
+    $form['summary_attributes']['summary_attributes'] = [
+      '#type' => 'webform_element_attributes',
+      '#title' => $this->t('Summary'),
+      '#class__description' => $this->t("Apply classes to the details' summary around both the field and its label."),
+      '#style__description' => $this->t("Apply custom styles to the details' summary."),
+      '#attributes__description' => $this->t("Enter additional attributes to be added to the details' summary."),
     ];
 
     /* Submission display */
@@ -2606,7 +2650,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'select',
       '#title' => $this->t('Item format'),
       '#description' => $this->t('Select how a single value is displayed.'),
-      '#options' => $this->getItemFormats(),
+      '#options' => WebformOptionsHelper::appendValueToText($this->getItemFormats()),
     ];
     $format = isset($element_properties['format']) ? $element_properties['format'] : NULL;
     $format_custom = ($has_edit_twig_access || $format === 'custom');
@@ -2679,7 +2723,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'select',
       '#title' => $this->t('Items format'),
       '#description' => $this->t('Select how multiple values are displayed.'),
-      '#options' => $this->getItemsFormats(),
+      '#options' => WebformOptionsHelper::appendValueToText($this->getItemsFormats()),
     ];
     $format_items = isset($element_properties['format_items']) ? $element_properties['format_items'] : NULL;
     $format_items_custom = ($has_edit_twig_access || $format_items === 'custom');
@@ -2959,6 +3003,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
           'multiple',
           'wrapper_attributes',
           'element_attributes',
+          'label_attributes',
+          'summary_attributes',
           'display',
           'admin',
           'custom',

@@ -35,6 +35,9 @@
   padding: 0 2px;
   vertical-align: middle;
   text-align: center;
+  width: 30px;
+}
+.webform-multiple-table td.webform-multiple-table--operations-two {
   width: 60px;
 }
 
@@ -81,6 +84,13 @@
 
 .webform-multiple-table .container-inline input[type="submit"] {
   width: inherit;
+}
+
+/**
+ * Remove margin from no messages.
+ */
+.webform-multiple-table--no-items-message .messages__wrapper {
+  padding: 0;
 }
 
 /**

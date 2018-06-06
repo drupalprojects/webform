@@ -2,11 +2,13 @@
 
 namespace Drupal\webform\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Utility\Token;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\webform\WebformMessageManagerInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,6 +26,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatterBase {
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * The webform message manager.
    *
    * @var \Drupal\webform\WebformMessageManagerInterface
@@ -31,11 +40,11 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
   protected $messageManager;
 
   /**
-   * The token service.
+   * The webform token manager.
    *
-   * @var \Drupal\Core\Utility\Token
+   * @var \Drupal\webform\WebformTokenManagerInterface
    */
-  protected $token;
+  protected $tokenManager;
 
   /**
    * WebformEntityReferenceLinkFormatter constructor.
@@ -54,15 +63,21 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
    *   The view mode.
    * @param array $third_party_settings
    *   Third party settings.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
    *   The webform message manager.
-   * @param \Drupal\Core\Utility\Token $token
-   *   The token service.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The webform token manager.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, WebformMessageManagerInterface $message_manager, Token $token) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $message_manager);
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, RendererInterface $renderer, ConfigFactoryInterface $config_factory, WebformMessageManagerInterface $message_manager, WebformTokenManagerInterface $token_manager) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $renderer);
 
-    $this->token = $token;
+    $this->configFactory = $config_factory;
+    $this->messageManager = $message_manager;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -77,8 +92,10 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
+      $container->get('renderer'),
+      $container->get('config.factory'),
       $container->get('webform.message_manager'),
-      $container->get('token')
+      $container->get('webform.token_manager')
     );
   }
 
@@ -88,6 +105,8 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
   public static function defaultSettings() {
     return [
       'label' => 'Go to [webform:title] webform',
+      'dialog' => '',
+      'attributes' => [],
     ] + parent::defaultSettings();
   }
 
@@ -97,6 +116,10 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
   public function settingsSummary() {
     $summary = parent::settingsSummary();
     $summary[] = $this->t('Label: @label', ['@label' => $this->getSetting('label')]);
+    $dialog_option_name = $this->getSetting('dialog');
+    if ($dialog_option = $this->configFactory->get('webform.settings')->get('settings.dialog_options.' . $dialog_option_name)) {
+      $summary[] = $this->t('Dialog: @dialog', ['@dialog' => (isset($dialog_option['title']) ? $dialog_option['title'] : $dialog_option_name)]);
+    }
     return $summary;
   }
 
@@ -111,6 +134,26 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
       '#default_value' => $this->getSetting('label'),
       '#required' => TRUE,
     ];
+
+    $dialog_options = $this->configFactory->get('webform.settings')->get('settings.dialog_options');
+    if ($dialog_options) {
+      $options = [];
+      foreach ($dialog_options as $dialog_option_name => $dialog_option) {
+        $options[$dialog_option_name] = (isset($dialog_option['title'])) ? $dialog_option['title'] : $dialog_option_name;
+      }
+      $form['dialog'] = [
+        '#title' => $this->t('Dialog'),
+        '#type' => 'select',
+        '#empty_option' => t('- Select dialog -'),
+        '#default_value' => $this->getSetting('dialog'),
+        '#options' => $options,
+      ];
+      $form['attributes'] = [
+        '#type' => 'webform_element_attributes',
+        '#title' => $this->t('Link'),
+        '#default_value' => $this->getSetting('attributes'),
+      ];
+    }
     return $form;
   }
 
@@ -138,13 +181,18 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
             'source_entity_id' => $source_entity->id(),
           ],
         ];
-        $elements[$delta] = [
+        $link = [
           '#type' => 'link',
-          '#title' => $this->t($this->token->replace($this->getSetting('label'), [
-            'webform' => $entity,
-          ])),
+          '#title' => $this->tokenManager->replace($this->getSetting('label'), $entity),
           '#url' => $entity->toUrl('canonical', $link_options),
+          '#attributes' => $this->getSetting('attributes') ?: [],
         ];
+        if ($dialog = $this->getSetting('dialog')) {
+          $link['#attributes']['class'][] = 'webform-dialog';
+          $link['#attributes']['class'][] = 'webform-dialog-' . $dialog;
+          $link['#attached']['library'][] = 'webform/webform.dialog';
+        }
+        $elements[$delta] = $link;
       }
       else {
         $this->messageManager->setWebform($entity);

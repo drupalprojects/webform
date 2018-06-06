@@ -117,9 +117,9 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function loadMultiple(array $ids = NULL) {
+  protected function doLoadMultiple(array $ids = NULL) {
     /** @var \Drupal\webform\WebformSubmissionInterface[] $webform_submissions */
-    $webform_submissions = parent::loadMultiple($ids);
+    $webform_submissions = parent::doLoadMultiple($ids);
     $this->loadData($webform_submissions);
     return $webform_submissions;
   }
@@ -637,6 +637,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       foreach ($elements as $element) {
         /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
         $element_plugin = $element_manager->createInstance($element['#type']);
+        // Replace tokens which can be used in an element's #title.
+        $element_plugin->replaceTokens($element, $webform);
         $columns += $element_plugin->getTableColumn($element);
       }
     }
@@ -900,7 +902,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       $this->invokeWebformHandlers('postDelete', $entity);
     }
 
-    // Remove the webform submission specific file directory for all stream wrappers.
+    // Remove empty webform submission specific file directory
+    // for all stream wrappers.
     // @see \Drupal\webform\Plugin\WebformElement\WebformManagedFileBase
     // @see \Drupal\webform\Plugin\WebformElement\WebformSignature
     foreach ($entities as $entity) {
@@ -909,7 +912,8 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
         ->getNames(StreamWrapperInterface::WRITE_VISIBLE));
       foreach ($stream_wrappers as $stream_wrapper) {
         $file_directory = $stream_wrapper . '://webform/' . $webform->id() . '/' . $entity->id();
-        if (file_exists($file_directory)) {
+        // Clear empty webform submission directory.
+        if (empty(file_scan_directory($file_directory, '/.*/'))) {
           file_unmanaged_delete_recursive($file_directory);
         }
       }

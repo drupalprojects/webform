@@ -61,7 +61,7 @@ class WebformCompositePluginTest extends WebformTestBase {
       'webform_test_composite[datetime][time]' => '23:19:25',
       'webform_test_composite[nested_tel]' => '123-456-7890',
       'webform_test_composite[nested_select]' => 'Monday',
-      'webform_test_composite[nested_radios]' => 'Monday'
+      'webform_test_composite[nested_radios]' => 'Monday',
     ];
     $this->drupalPostForm('webform/test_element_composite_plugin', $edit, t('Submit'));
     $this->assertRaw("webform_test_composite:

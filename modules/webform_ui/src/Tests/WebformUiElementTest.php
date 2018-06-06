@@ -157,7 +157,7 @@ class WebformUiElementTest extends WebformTestBase {
     // Check element type.
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/edit');
     // Check change element type link.
-    $this->assertRaw('Text field<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/change" class="button button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-change-type" id="edit-change-type">Change</a>');
+    $this->assertRaw('Text field<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/change" class="button button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-ui-dialog&quot;}" data-drupal-selector="edit-change-type" id="edit-change-type">Change</a>');
     // Check text field has description.
     $this->assertRaw(t('A short description of the element used as help for the user when he/she uses the webform.'));
 
@@ -178,7 +178,7 @@ class WebformUiElementTest extends WebformTestBase {
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/edit', ['query' => ['type' => 'value']]);
     // Check value has no description.
     $this->assertNoRaw(t('A short description of the element used as help for the user when he/she uses the webform.'));
-    $this->assertRaw('Value<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit" class="button button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-cancel" id="edit-cancel">Cancel</a>');
+    $this->assertRaw('Value<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/edit" class="button button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-ui-dialog&quot;}" data-drupal-selector="edit-cancel" id="edit-cancel">Cancel</a>');
     $this->assertRaw('(Changing from <em class="placeholder">Text field</em>)');
 
     // Change the element type.
@@ -188,7 +188,7 @@ class WebformUiElementTest extends WebformTestBase {
     $this->drupalGet('admin/structure/webform/manage/contact/element/test/edit');
 
     // Check change element type link.
-    $this->assertRaw('Value<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/change" class="button button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-modal&quot;}" data-drupal-selector="edit-change-type" id="edit-change-type">Change</a>');
+    $this->assertRaw('Value<a href="' . $base_path . 'admin/structure/webform/manage/contact/element/test/change" class="button button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800,&quot;dialogClass&quot;:&quot;webform-ui-dialog&quot;}" data-drupal-selector="edit-change-type" id="edit-change-type">Change</a>');
 
     // Check color element that does not have related type and return 404.
     $this->drupalPostForm('admin/structure/webform/manage/contact/element/add/color', ['key' => 'test_color', 'properties[title]' => 'Test color'], t('Save'));

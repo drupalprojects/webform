@@ -2,12 +2,14 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Element\WebformComputedBase as WebformComputedBaseElement;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementDisplayOnInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -40,6 +42,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       'store' => FALSE,
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
     ] + $this->getDefaultBaseProperties();
   }
 
@@ -75,10 +78,10 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   /**
    * {@inheritdoc}
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL) {
     foreach ($element as $key => $value) {
       if (!Element::child($key) && !in_array($key, ['#value'])) {
-        $element[$key] = $this->tokenManager->replace($value, $webform_submission);
+        $element[$key] = $this->tokenManager->replace($value, $entity);
       }
     }
   }
@@ -255,6 +258,14 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   protected function processValue(array $element, WebformSubmissionInterface $webform_submission) {
     $class = $this->getFormElementClassDefinition();
     return $class::processValue($element, $webform_submission);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    // Computed elements should never get a test value.
+    return NULL;
   }
 
 }

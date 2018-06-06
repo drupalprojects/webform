@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -335,10 +336,10 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *
    * @param array $element
    *   An element.
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
+   * @param \Drupal\Core\Entity\EntityInterface|null$entity
+   *   A webform or webform submission entity.
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL);
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL);
 
   /**
    * Display element disabled warning.

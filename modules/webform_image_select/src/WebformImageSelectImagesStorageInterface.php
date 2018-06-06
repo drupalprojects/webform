@@ -36,4 +36,5 @@ interface WebformImageSelectImagesStorageInterface extends ConfigEntityStorageIn
    *   A list of webform that use the specified webform images.
    */
   public function getUsedByWebforms(WebformImageSelectImagesInterface $webform_images);
+
 }

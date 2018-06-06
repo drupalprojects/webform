@@ -102,11 +102,18 @@ function webform_modules_uninstalled($modules) {
   // Remove uninstalled module's third party settings from admin settings.
   $config = \Drupal::configFactory()->getEditable('webform.settings');
   $third_party_settings = $config->get('third_party_settings');
+
+  $has_third_party_settings = FALSE;
   foreach ($modules as $module) {
-    unset($third_party_settings[$module]);
+    if (isset($third_party_settings[$module])) {
+      $has_third_party_settings = TRUE;
+      unset($third_party_settings[$module]);
+    }
   }
-  $config->set('third_party_settings', $third_party_settings);
-  $config->save();
+  if ($has_third_party_settings) {
+    $config->set('third_party_settings', $third_party_settings);
+    $config->save();
+  }
 
   // Check HTML email provider support as modules are ininstalled.
   /** @var \Drupal\webform\WebformEmailProviderInterface $email_provider */
@@ -204,6 +211,31 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     return;
   }
 
+  // Get form object.
+  $form_object = $form_state->getFormObject();
+
+  // Alter the webform submission form.
+  if (strpos($form_id, 'webform_submission') === 0
+    && $form_object instanceof WebformSubmissionForm) {
+    // Make sure webform libraries are always attached to submission form.
+    _webform_page_attachments($form);
+
+    // Execute hook_form_BASE_FORM_ID_alter for the webform & source entity
+    // without the operation. (i.e. 'add', 'edit', 'notes', etc...)
+    // @see \Drupal\webform\WebformSubmissionForm::getFormId
+    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
+    $webform_submission = $form_object->getEntity();
+    $webform = $webform_submission->getWebform();
+
+    $hook = 'form_webform_submission_' . $webform->id() . '_form';
+    $form_id = $form_object->getFormId();
+    \Drupal::service('module_handler')->alter($hook, $form, $form_state, $form_id);
+    \Drupal::service('theme.manager')->alter($hook, $form, $form_state, $form_id);
+
+    // After build.
+    $form['#after_build'][] = '_webform_form_webform_submission_form_after_build';
+  }
+
   // Display editing original language warning.
   if (\Drupal::moduleHandler()->moduleExists('config_translation') && preg_match('/^entity.webform.(?:edit|settings|assets|access|handlers|third_party_settings)_form$/', \Drupal::routeMatch()->getRouteName())) {
     /** @var \Drupal\webform\WebformInterface $webform */
@@ -227,8 +259,6 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     }
   }
 
-  $form_object = $form_state->getFormObject();
-
   // Add details 'toggle all' to all webforms (except submission forms).
   if (!($form_object instanceof WebformSubmissionForm)) {
     $form['#attributes']['class'][] = 'js-webform-details-toggle';
@@ -236,31 +266,6 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     $form['#attached']['library'][] = 'webform/webform.element.details.toggle';
     return;
   }
-}
-
-/**
- * Implements hook_form_BASE_ID_alter().
- */
-function webform_form_webform_submission_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Make sure webform libraries are always attached to submission form.
-  _webform_page_attachments($form);
-
-  // Execute hook_form_BASE_FORM_ID_alter for the webform & source entity
-  // without the operation. (i.e. 'add', 'edit', 'notes', etc...)
-  // @see \Drupal\webform\WebformSubmissionForm::getFormId
-  $form_object = $form_state->getFormObject();
-
-  /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-  $webform_submission = $form_object->getEntity();
-  $webform = $webform_submission->getWebform();
-
-  $hook = 'form_webform_submission_' . $webform->id() . '_form';
-  $form_id = $form_object->getFormId();
-  \Drupal::service('module_handler')->alter($hook, $form, $form_state, $form_id);
-  \Drupal::service('theme.manager')->alter($hook, $form, $form_state, $form_id);
-
-  // After build.
-  $form['#after_build'][] = '_webform_form_webform_submission_form_after_build';
 }
 
 /**
@@ -350,6 +355,17 @@ function webform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInte
     $links = $breadcrumb->getLinks();
     $link = end($links);
     $link->setText(t('Webforms'));
+  }
+}
+
+/**
+ * Implements hook_token_info_alter().
+ */
+function webform_token_info_alter(&$data) {
+  foreach ($data['types'] as $type => &$info) {
+    if (strpos($type, 'webform') === 0) {
+      $info['description'] .= ' ' . t("Add ':clear' to the end token to return an empty value when the token is missing.");
+    }
   }
 }
 
@@ -482,6 +498,12 @@ function webform_page_attachments(array &$attachments) {
       ],
       'webform_contribute',
     ];
+  }
+
+  // Attach webform dialog library and options to every page.
+  if (\Drupal::config('webform.settings')->get('settings.dialog')) {
+    $attachments['#attached']['library'][] = 'webform/webform.dialog';
+    $attachments['#attached']['drupalSettings']['webform']['dialog']['options'] = \Drupal::config('webform.settings')->get('settings.dialog_options');
   }
 }
 
@@ -643,9 +665,15 @@ function webform_file_download($uri) {
 
 /**
  * Implements hook_contextual_links_view_alter().
+ *
+ * Add .webform-contextual class to all webform context links.
+ *
+ * @see webform.links.contextual.yml
+ * @see js/webform.contextual.js
  */
 function webform_contextual_links_view_alter(&$element, $items) {
   $links = [
+    'entitywebformtest-form',
     'entitywebformresults-submissions',
     'entitywebformedit-form',
     'entitywebformsettings',

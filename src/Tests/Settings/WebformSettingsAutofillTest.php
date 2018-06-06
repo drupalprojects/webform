@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform submission form autofill.
  *
  * @group Webform
  */
-class WebformSubmissionFormAutofillTest extends WebformTestBase {
+class WebformSettingsAutofillTest extends WebformTestBase {
 
   /**
    * Webforms to load.

@@ -36,7 +36,7 @@ class WebformElementCustomPropertiesTest extends WebformElementTestBase {
     $name_element = [
       '#type' => 'textfield',
       '#title' => 'Your Name',
-      '#default_value' => '[webform-authenticated-user:display-name]',
+      '#default_value' => '[current-user:display-name]',
       '#required' => TRUE,
     ];
 

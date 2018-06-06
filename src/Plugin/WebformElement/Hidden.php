@@ -2,6 +2,10 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\webform\WebformInterface;
+
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Provides a 'hidden' element.
  *
@@ -22,7 +26,7 @@ class Hidden extends TextBase {
     return [
       // Element settings.
       'title' => '',
-      'value' => '',
+      'default_value' => '',
       'prepopulate' => FALSE,
     ];
   }
@@ -32,6 +36,34 @@ class Hidden extends TextBase {
    */
   public function preview() {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    // Hidden elements should never get a test value.
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+
+    // Remove the default section under the advanced tab.
+    unset($form['default']);
+
+    // Add the default value textarea to the element's main settings.
+    $form['element']['default_value'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Default value'),
+      '#description' => $this->t('The default value of the webform element.'),
+      '#maxlength' => NULL,
+    ];
+
+    return $form;
   }
 
 }

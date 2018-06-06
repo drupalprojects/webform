@@ -121,7 +121,7 @@ class WebformElementStates extends FormElement {
     // Build header.
     $header = [
       ['data' => t('State'), 'width' => '25%'],
-      ['data' => t('Element/Selector'), 'width' => '50%'],
+      ['data' => t('Element'), 'width' => '50%'],
       ['data' => t('Trigger/Value'), 'width' => '25%'],
       ['data' => ''],
     ];

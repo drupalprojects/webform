@@ -211,6 +211,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'excluded_elements' => [],
       'ignore_access' => FALSE,
       'exclude_empty' => TRUE,
+      'exclude_empty_checkbox' => FALSE,
       'html' => TRUE,
       'attachments' => FALSE,
       'twig' => FALSE,
@@ -279,9 +280,10 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    * Get mail configuration values.
    *
    * @return array
-   *   An associative array containing email configuration values.
+   *   An associative array containing email configuration values,
+   *   along with the default configuration values.
    */
-  protected function getEmailConfiguration() {
+  public function getEmailConfiguration() {
     $configuration = $this->getConfiguration();
     $email = [];
     foreach ($configuration['settings'] as $key => $value) {
@@ -344,6 +346,23 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       }
     }
 
+    // Get email and name other.
+    $other_element_email_options = [
+      '[site:mail]' => 'Site email address',
+      '[current-user:mail]' => 'Current user email address [Authenticated only]',
+      '[webform:author:mail]' => 'Webform author email address',
+      '[webform_submission:user:mail]' => 'Webform submission owner email address [Authenticated only]',
+    ];
+    $other_element_name_options = [
+      '[site:name]' => 'Site name',
+      '[current-user:display-name]' => 'Current user display name',
+      '[current-user:account-name]' => 'Current user account name',
+      '[webform:author:display-name]' => 'Webform author display name',
+      '[webform:author:account-name]' => 'Webform author account name',
+      '[webform_submission:author:display-name]' => 'Webform submission author display name',
+      '[webform_submission:author:account-name]' => 'Webform submission author account name',
+    ];
+
     // Disable client-side HTML5 validation which is having issues with hidden
     // element validation.
     // @see http://stackoverflow.com/questions/22148080/an-invalid-form-control-with-name-is-not-focusable
@@ -355,9 +374,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send to'),
       '#open' => TRUE,
     ];
-    $form['to']['to_mail'] = $this->buildElement('to_mail', $this->t('To email'), $this->t('To email address'), $mail_element_options, $options_element_options, $roles_element_options, TRUE);
-    $form['to']['cc_mail'] = $this->buildElement('cc_mail', $this->t('CC email'), $this->t('CC email address'), $mail_element_options, $options_element_options, $roles_element_options, FALSE);
-    $form['to']['bcc_mail'] = $this->buildElement('bcc_mail', $this->t('BCC email'), $this->t('BCC email address'), $mail_element_options, $options_element_options, $roles_element_options, FALSE);
+    $form['to']['to_mail'] = $this->buildElement('to_mail', $this->t('To email'), $this->t('To email address'), TRUE, $mail_element_options, $options_element_options, $roles_element_options, $other_element_email_options);
+    $form['to']['cc_mail'] = $this->buildElement('cc_mail', $this->t('CC email'), $this->t('CC email address'), FALSE, $mail_element_options, $options_element_options, $roles_element_options, $other_element_email_options);
+    $form['to']['bcc_mail'] = $this->buildElement('bcc_mail', $this->t('BCC email'), $this->t('BCC email address'), FALSE, $mail_element_options, $options_element_options, $roles_element_options, $other_element_email_options);
     $token_types = ['webform', 'webform_submission'];
     // Show webform role tokens if they have been specified.
     if (!empty($roles_element_options)) {
@@ -386,8 +405,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Send from'),
       '#open' => TRUE,
     ];
-    $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), $mail_element_options, $options_element_options, NULL, TRUE);
-    $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), $name_element_options);
+    $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), TRUE, $mail_element_options, $options_element_options, NULL, $other_element_email_options);
+    $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), FALSE, $name_element_options, NULL, NULL, $other_element_name_options);
     $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink(
         ['webform', 'webform_submission'],
         $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.')
@@ -399,7 +418,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#title' => $this->t('Message'),
       '#open' => TRUE,
     ];
-    $form['message'] += $this->buildElement('subject', $this->t('Subject'), $this->t('subject'), $text_element_options_raw);
+    $form['message'] += $this->buildElement('subject', $this->t('Subject'), $this->t('subject'), FALSE, $text_element_options_raw);
 
     $has_edit_twig_access = (TwigExtension::hasEditTwigAccess() || $this->configuration['twig']);
 
@@ -559,7 +578,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#default_value' => $this->configuration['exclude_empty'],
       '#parents' => ['settings', 'exclude_empty'],
     ];
-
+    $form['elements']['exclude_empty_checkbox'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Exclude unselected checkboxes'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->configuration['exclude_empty_checkbox'],
+      '#parents' => ['settings', 'exclude_empty_checkbox'],
+    ];
     $elements = $this->webform->getElementsInitializedFlattenedAndHasValue();
     foreach ($elements as $key => $element) {
       if (!empty($element['#access_view_roles']) || !empty($element['#private'])) {
@@ -607,13 +632,13 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       ],
     ];
     // Settings: Reply-to.
-    $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['additional']['reply_to'] = $this->buildElement('reply_to', $this->t('Reply-to email'), $this->t('Reply-to email address'), FALSE, $mail_element_options, NULL, NULL, $other_element_email_options);
     // Settings: Return path.
-    $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path'), $this->t('Return path email address'), $mail_element_options, NULL, NULL, FALSE);
+    $form['additional']['return_path'] = $this->buildElement('return_path', $this->t('Return path'), $this->t('Return path email address'), FALSE, $mail_element_options, NULL, NULL, $other_element_email_options);
     // Settings: Sender mail.
-    $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), $mail_element_options, $options_element_options);
+    $form['additional']['sender_mail'] = $this->buildElement('sender_mail', $this->t('Sender email'), $this->t('Sender email address'), FALSE, $mail_element_options, $options_element_options, NULL, $other_element_email_options);
     // Settings: Sender name.
-    $form['additional']['sender_name'] = $this->buildElement('sender_name', $this->t('Sender name'), $this->t('Sender name'), $name_element_options);
+    $form['additional']['sender_name'] = $this->buildElement('sender_name', $this->t('Sender name'), $this->t('Sender name'), FALSE, $name_element_options, NULL, NULL, $other_element_name_options);
 
     // Settings: HTML.
     $form['additional']['html'] = [
@@ -744,6 +769,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       'excluded_elements' => $this->configuration['excluded_elements'],
       'ignore_access' => $this->configuration['ignore_access'],
       'exclude_empty' => $this->configuration['exclude_empty'],
+      'exclude_empty_checkbox' => $this->configuration['exclude_empty_checkbox'],
       'html' => ($this->configuration['html'] && $this->supportsHtml()),
     ];
 
@@ -1278,24 +1304,28 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
    *   The element's title.
    * @param string $label
    *   The element's label.
+   * @param bool $required
+   *   TRUE if the element is required.
    * @param array $element_options
    *   The element options.
    * @param array $options_options
    *   The options options.
    * @param array $role_options
    *   The (user) role options.
-   * @param bool $required
-   *   TRUE if the element is required.
+   * @param array $other_options
+   *   The other options.
    *
    * @return array
    *   A select other element.
    */
-  protected function buildElement($name, $title, $label, array $element_options, array $options_options = NULL, array $role_options = NULL, $required = FALSE) {
+  protected function buildElement($name, $title, $label, $required = FALSE, array $element_options, array $options_options = NULL, array $role_options = NULL,  array $other_options = NULL) {
     list($element_name, $element_type) = (strpos($name, '_') !== FALSE) ? explode('_', $name) : [$name, 'text'];
+
+    $default_option = $this->getDefaultConfigurationValue($name);
 
     $options = [];
     $options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom @label...', ['@label' => $label]);
-    if ($default_option = $this->getDefaultConfigurationValue($name)) {
+    if ($default_option) {
       $options[(string) $this->t('Default')] = ['default' => $default_option];
     }
     if ($element_options) {
@@ -1306,6 +1336,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     }
     if ($role_options) {
       $options[(string) $this->t('Roles')] = $role_options;
+    }
+    if ($other_options) {
+      $options[(string) $this->t('Other')] = $other_options;
     }
 
     $ajax_wrapper = Html::getUniqueId('ajax-wrapper');

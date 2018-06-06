@@ -168,6 +168,13 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ],
     ];
     $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    if ($form['form_access_denied']['token_tree_link']) {
+      $form['form_access_denied']['token_tree_link']['#states'] = [
+        'visible' => [
+          ':input[name="form_login"]' => ['checked' => TRUE],
+        ],
+      ];
+    }
 
     // Form behaviors.
     $form['form_behaviors'] = [
@@ -197,6 +204,22 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
       ],
     ];
+
+    if ($settings['draft'] !== WebformInterface::DRAFT_NONE) {
+      $form['form_behaviors']['form_reset_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Currently loaded drafts will be deleted when the form is reset.'),
+        '#weight' => $form['form_behaviors']['form_reset']['#weight'] + 1,
+        '#states' => [
+          'visible' => [
+            ':input[name="form_reset"]' => ['checked' => TRUE],
+          ],
+        ],
+
+      ];
+    }
+
 
     // Wizard settings.
     $form['wizard_settings'] = [
@@ -328,6 +351,12 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['preview_exclude_empty'],
     ];
+    $form['preview_settings']['preview_container']['elements']['preview_exclude_empty_checkbox'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude unselected checkboxes'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['preview_exclude_empty_checkbox'],
+    ];
     $form['preview_settings']['preview_container']['preview_attributes'] = [
       '#type' => 'details',
       '#title' => $this->t('Preview attributes'),
@@ -358,7 +387,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#type' => 'select',
       '#title' => $this->t('Method'),
       '#description' => $this->t('The HTTP method with which the form will be submitted.') . '<br /><br />' .
-        '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, and confirmations.') . '</em>',
+        '<em>' . $this->t('Selecting a custom POST or GET method will automatically disable wizards, previews, drafts, submissions, limits, purging, confirmations, emails, and handlers.') . '</em>',
       '#options' => [
         '' => $this->t('POST (Default)'),
         'post' => $this->t('POST (Custom)'),
@@ -515,7 +544,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       'form_reset' => [
         'group' => $this->t('Form'),
         'title' => $this->t('Display reset button'),
-        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards."),
+        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards. Current drafts will be deleted when the form is reset."),
       ],
       'form_submit_once' => [
         'group' => $this->t('Form'),

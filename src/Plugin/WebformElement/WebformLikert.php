@@ -59,6 +59,7 @@ class WebformLikert extends WebformElementBase {
       'na_answer_text' => $this->t('N/A'),
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
       // iCheck settings.
       'icheck' => '',
     ] + $this->getDefaultBaseProperties();
@@ -162,7 +163,7 @@ class WebformLikert extends WebformElementBase {
         foreach ($element['#questions'] as $question_key => $question_text) {
           list($question_title) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $question_text);
           $answer_value = (isset($value[$question_key])) ? $value[$question_key] : NULL;
-          $answer_text = ($answer_value) ? WebformOptionsHelper::getOptionText($answer_value, $element['#answers'], TRUE) : $this->t('[blank]');
+          $answer_text = ($answer_value !== NULL) ? WebformOptionsHelper::getOptionText($answer_value, $element['#answers'], TRUE) : $this->t('[blank]');
           $items[$question_key] = [
             'question' => [
               '#markup' => $question_title,

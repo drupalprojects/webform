@@ -5,7 +5,7 @@ namespace Drupal\webform;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\Utility\WebformFormHelper;
 
@@ -13,6 +13,13 @@ use Drupal\webform\Utility\WebformFormHelper;
  * Defines a class to manage token replacement.
  */
 class WebformTokenManager implements WebformTokenManagerInterface {
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
 
   /**
    * The configuration object factory.
@@ -29,13 +36,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   protected $moduleHandler;
 
   /**
-   * The theme manager.
-   *
-   * @var \Drupal\Core\Theme\ThemeManagerInterface
-   */
-  protected $themeManager;
-
-  /**
    * The token service.
    *
    * @var \Drupal\Core\Utility\Token
@@ -45,19 +45,19 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   /**
    * Constructs a WebformTokenManager object.
    *
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
-   *   The theme manager.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ThemeManagerInterface $theme_manager, Token $token) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, Token $token) {
+    $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
-    $this->themeManager = $theme_manager;
     $this->token = $token;
 
     $this->config = $this->configFactory->get('webform.settings');
@@ -88,21 +88,44 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $this->setTokenData($data, $entity);
     }
 
-    // Track the active theme, if there is no active theme it mean tokens
-    // are being replaced during the initial page request.
-    $has_active_theme = $this->themeManager->hasActiveTheme();
-
-    // Replace the tokens.
-    $result = $this->token->replace($text, $data, $options);
-
-    // If there was no active theme and now there is one.
-    // Reset the active theme, so that theme negotiators can determine the
-    // correct active theme.
-    if (!$has_active_theme && $this->themeManager->hasActiveTheme()) {
-      $this->themeManager->resetActiveTheme();
+    // For anonymous users remove all [current-user] tokens to prevent
+    // anonymous user properties from being displayed.
+    // For example, the [current-user:display-name] token will return
+    // 'Anonymous', which is not an expected behavior.
+    if ($this->currentUser->isAnonymous() && strpos($text, '[current-user:') !== FALSE) {
+      $text = preg_replace('/\[current-user:[^]]+\]/', '', $text);
     }
 
-    return $result;
+    // Collect all tokens that include the clear suffix.
+    $tokens_clear = [];
+    if (preg_match_all('/\[(webform[^]]+):clear\]/', $text, $matches)) {
+      foreach ($matches[0] as $index => $match) {
+        // Wrapping tokens in {webform-token-clear} so that only tokens with
+        // the :clear suffix are removed.
+        $token_base = '{webform-token-clear}[' . $matches[1][$index] . ']{/webform-token-clear}';
+        $text = str_replace($match, $token_base, $text);
+        $tokens_clear[] = $token_base;
+      }
+    }
+
+    // Replace the webform related tokens.
+    $text = $this->token->replace($text, $data, $options);
+
+    // Collect tokens that include the clear suffix.
+    if ($tokens_clear) {
+      foreach ($tokens_clear as $clear_token) {
+        $text = str_replace($clear_token, '', $text);
+      }
+      // Replace {webform-token-clear} wrappers that are no longer needed.
+      $text = preg_replace('/{\/?webform-token-clear}/', '', $text);
+    }
+
+    // Clear current user tokens for undefined values.
+    if (strpos($text, '[current-user:') !== FALSE) {
+      $text = preg_replace('/\[current-user:[^\]]+\]/', '', $text);
+    }
+
+    return $text;
   }
 
   /**
@@ -113,17 +136,17 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return [];
     }
 
-    // @todo Issue #2235581: Make Token Dialog support inserting in WYSIWYGs.
     $build = [
       '#theme' => 'token_tree_link',
       '#token_types' => $token_types,
-      '#click_insert' => FALSE,
+      '#click_insert' => TRUE,
       '#dialog' => TRUE,
     ];
 
     if ($description) {
       if ($this->config->get('ui.description_help')) {
         return [
+          '#type' => 'container',
           'token_tree_link' => $build,
           'help' => [
             '#type' => 'webform_help',
@@ -133,6 +156,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       }
       else {
         return [
+          '#type' => 'container',
           'token_tree_link' => $build,
           'description' => [
             '#prefix' => ' ',
@@ -142,7 +166,10 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       }
     }
     else {
-      return $build;
+      return [
+        '#type' => 'container',
+        'token_tree_link' => $build,
+      ];
     }
   }
 

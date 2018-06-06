@@ -144,7 +144,7 @@ class WebformPluginElementController extends ControllerBase implements Container
             'data' => [
               '#type' => 'link',
               '#title' => $element_plugin_id,
-              '#url' => new Url('webform.element_plugins.test', ['type' => $element_plugin_id]),
+              '#url' => new Url('webform.reports_plugins.elements.test', ['type' => $element_plugin_id]),
               '#attributes' => ['class' => ['webform-form-filter-text-source']],
             ],
           ];
@@ -223,7 +223,7 @@ class WebformPluginElementController extends ControllerBase implements Container
         if ($test_element_enabled) {
           $operations['test'] = [
             'title' => $this->t('Test'),
-            'url' => new Url('webform.element_plugins.test', ['type' => $element_plugin_id]),
+            'url' => new Url('webform.reports_plugins.elements.test', ['type' => $element_plugin_id]),
           ];
         }
         if ($api_url = $webform_element->getPluginApiUrl()) {

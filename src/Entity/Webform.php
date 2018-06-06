@@ -55,6 +55,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *   },
  *   admin_permission = "administer webform",
  *   bundle_of = "webform_submission",
+ *   static_cache = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "title",
@@ -87,6 +88,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "close",
  *     "uid",
  *     "template",
+ *     "archive",
  *     "id",
  *     "uuid",
  *     "title",
@@ -160,6 +162,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * @var bool
    */
   protected $template = FALSE;
+
+  /**
+   * The webform archive indicator.
+   *
+   * @var bool
+   */
+  protected $archive = FALSE;
 
   /**
    * The webform title.
@@ -464,6 +473,11 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * {@inheritdoc}
    */
   public function isOpen() {
+    // Archived webforms are always closed.
+    if ($this->isArchived()) {
+      return FALSE;
+    }
+
     switch ($this->status) {
       case WebformInterface::STATUS_OPEN:
         return TRUE;
@@ -513,6 +527,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function isTemplate() {
     return $this->template ? TRUE : FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isArchived() {
+    return $this->archive ? TRUE : FALSE;
   }
 
   /**
@@ -863,6 +884,8 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'submission_login_message' => '',
       'submission_exception_message' => '',
       'submission_locked_message' => '',
+      'previous_submission_message' => '',
+      'previous_submissions_message' => '',
       'autofill' => FALSE,
       'autofill_message' => '',
       'autofill_excluded_elements' => [],
@@ -880,6 +903,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
       'preview_attributes' => [],
       'preview_excluded_elements' => [],
       'preview_exclude_empty' => TRUE,
+      'preview_exclude_empty_checkbox' => FALSE,
       'draft' => self::DRAFT_NONE,
       'draft_multiple' => FALSE,
       'draft_auto_save' => FALSE,
@@ -1721,8 +1745,15 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
     if ($duplicate->isTemplate()) {
       $duplicate->set('description', '');
       $duplicate->set('template', FALSE);
-      $duplicate->setStatus(TRUE);
     }
+
+    // If archived, remove archive flag.
+    if ($duplicate->isArchived()) {
+      $duplicate->set('archive', FALSE);
+    }
+
+    // Set default status.
+    $duplicate->setStatus(\Drupal::config('webform.settings')->get('settings.default_status'));
 
     // Remove enforce module dependency when a sub-module's webform is
     // duplicated.
@@ -1745,7 +1776,7 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     $values += [
-      'status' => WebformInterface::STATUS_OPEN,
+      'status' => \Drupal::config('webform.settings')->get('settings.default_status'),
       'uid' => \Drupal::currentUser()->id(),
       'settings' => static::getDefaultSettings(),
       'access' => static::getDefaultAccessRules(),

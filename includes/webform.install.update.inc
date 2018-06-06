@@ -62,23 +62,7 @@ function webform_update_8001() {
  * Issue #2834572: Refactor and improve token management.
  */
 function webform_update_8002() {
-  $config_factory = \Drupal::configFactory();
-
-  // Update 'webform.settings' configuration.
-  $settings_config = \Drupal::configFactory()->getEditable('webform.settings');
-  $yaml = Yaml::encode($settings_config->getRawData());
-  $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
-  $settings_config->setData(Yaml::decode($yaml));
-  $settings_config->save();
-
-  // Update 'webform.webform.*' configuration.
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
-    $webform_config = $config_factory->getEditable($webform_config_name);
-    $yaml = Yaml::encode($webform_config->getRawData());
-    $yaml = str_replace('[webform_submission:', '[webform_submission:', $yaml);
-    $webform_config->setData(Yaml::decode($yaml));
-    $webform_config->save();
-  }
+  _webform_update_string_replace('[webform-submission:', '[webform_submission:');
 }
 
 /**
@@ -2087,7 +2071,6 @@ function webform_update_8113() {
   $config->save();
 }
 
-
 /**
  * Issue #2951921: The contribute module is missing from the file system.
  */
@@ -2130,7 +2113,7 @@ function webform_update_8115() {
 }
 
 /**
- * #multiple__label and #multiple__labels are being saved with every element.
+ * Stop #multiple__label and #multiple__labels from being saved with every element.
  */
 function webform_update_8116() {
   _webform_update_elements_clear_properties([
@@ -2140,7 +2123,7 @@ function webform_update_8116() {
 }
 
 /**
- * Issue #2957192: Add postal_code to test data
+ * Issue #2957192: Add postal_code to test data.
  */
 function webform_update_8117() {
   $config = \Drupal::configFactory()->getEditable('webform.settings');
@@ -2152,3 +2135,128 @@ function webform_update_8117() {
   $config->save();
 }
 
+/**
+ * Issue #2957074: Invalid Tokens in Email Handler.
+ */
+function webform_update_8118() {
+  _webform_update_string_replace('[webform-submission:', '[webform_submission:');
+}
+
+/**
+ * Issue #2957002: Same webform multiple times on the same page.
+ */
+function webform_update_8119() {
+  /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
+  $help_manager = \Drupal::service('webform.help_manager');
+  $help_manager->addNotification('webform_update_8119',
+    t("<strong>ATTENTION DEVELOPERS!!!</strong> The webform submission form's  BASE_FORM_ID and FORM_ID have changed.") .
+    '<br/>' . t('Please make sure to update all webform related <code>hook_form_BASE_FORM_ID_alter()</code> and <code>hook_form_FORM_ID_alter()</code> hooks.') .
+    ' ' . t('<a href=":href">Learn more</a>', [':href' => 'https://www.drupal.org/node/2959264']),
+    'warning'
+  );
+}
+
+/**
+ * Issue #2953929: Remote handler does not display messages when HTTP status is different than 200.
+ */
+function webform_update_8120() {
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
+}
+
+/**
+ * Issue #2953929: Remote handler does not display messages when HTTP status is different than 200.
+ */
+function webform_update_8121() {
+  _webform_update_webform_handler_configuration(RemotePostWebformHandler::class);
+}
+
+/**
+ * Issue #2952419: Attached files are deleted without usage checking
+ */
+function webform_update_8122() {
+  _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2962442: Remove [webform-authenticated-user] token and use [current-user] token with clear value option.
+ */
+function webform_update_8123() {
+  _webform_update_string_replace('[webform-authenticated-user:', '[current-user:');
+}
+
+/**
+ * Issue #2971207: Hidden Field updated values not being captured on Submit.
+ */
+function webform_update_8124() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    if (strpos($data['elements'], "'#type': hidden") !== FALSE) {
+      $elements = Yaml::decode($data['elements']);
+      _webform_update_8124($elements);
+      $data['elements'] = Yaml::encode($elements);
+
+      $webform_config->setData($data);
+      $webform_config->save();
+    }
+  }
+}
+
+/**
+ * Recursively convert hidden elements #value to #default_value.
+ *
+ * @param array $element
+ *   An element.
+ */
+function _webform_update_8124(array &$element) {
+  if (isset($element['#type']) && $element['#type'] === 'hidden') {
+    if (isset($element['#value']) && !isset($element['#default_value'])) {
+      $element['#default_value'] = $element['#value'];
+      unset($element['#value']);
+    }
+  }
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      _webform_update_8124($element[$key]);
+    }
+  }
+}
+
+/**
+ * Issue #2966507: Start-to-finish documentation for showing Webforms in modals.
+ */
+function webform_update_8125() {
+  _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2973377: Make the previously saved messages customizable.
+ */
+function webform_update_8126() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2974597: Enable default publishing status of new webforms.
+ */
+function webform_update_8127() {
+  _webform_update_admin_settings();
+}
+
+/**
+ * Issue #2932893: Filter out closed forms in webform field.
+ */
+function webform_update_8128() {
+  _webform_update_webform_settings();
+}
+
+/**
+ * Issue #2977378: Add 'exclude unselected checkboxes' from email notification and preview.
+ */
+function webform_update_8129() {
+  _webform_update_admin_settings();
+  _webform_update_webform_settings();
+  _webform_update_webform_handler_configuration(EmailWebformHandler::class);
+}

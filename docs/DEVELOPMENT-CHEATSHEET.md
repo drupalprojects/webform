@@ -35,9 +35,12 @@ git merge --squash [issue-number]-[issue-description]
 git commit -m 'Issue #[issue-number]: [issue-description]'
 git push
 
-# Delete branch
+# Delete local and remote branch
 git branch -D [issue-number]-[issue-description]
 git push origin :[issue-number]-[issue-description]
+
+# Delete remove branch
+git push origin --delete [issue-number]-[issue-description]
 ```
 
 **Generate Drush Make and Composer Files**
@@ -50,7 +53,7 @@ drush webform-libraries-composer > composer.json
 **Manually Execute an Update Hook**
 
 ```bash
-drush php-eval 'module_load_include('install', 'webform'); webform_update_8032()';
+drush php-eval 'module_load_include('install', 'webform'); webform_update_8124()';
 ```
 
 **Import and Export Configuration**

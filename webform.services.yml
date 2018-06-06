@@ -55,7 +55,7 @@ services:
 
   webform.libraries_manager:
     class: Drupal\webform\WebformLibrariesManager
-    arguments: ['@config.factory', '@module_handler', '@renderer']
+    arguments: ['@library.discovery', '@config.factory', '@module_handler', '@renderer']
 
   webform.message_manager:
     class: Drupal\webform\WebformMessageManager
@@ -83,7 +83,7 @@ services:
 
   webform.token_manager:
     class: Drupal\webform\WebformTokenManager
-    arguments: ['@config.factory', '@module_handler', '@theme.manager', '@token']
+    arguments: ['@current_user', '@config.factory', '@module_handler', '@token']
 
   webform.theme_manager:
     class: Drupal\webform\WebformThemeManager

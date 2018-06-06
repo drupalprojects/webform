@@ -7,9 +7,9 @@ use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformMessageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,14 +18,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormatterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The webform message manager.
+   * The renderer.
    *
-   * @var \Drupal\webform\WebformMessageManagerInterface
+   * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $messageManager;
+  protected $renderer;
 
   /**
-   * WebformEntityReferenceEntityFormatter constructor.
+   * WebformEntityReferenceLinkFormatter constructor.
    *
    * @param string $plugin_id
    *   The plugin_id for the formatter.
@@ -41,13 +41,13 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
    *   The view mode.
    * @param array $third_party_settings
    *   Third party settings.
-   * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
-   *   The webform message manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, WebformMessageManagerInterface $message_manager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, RendererInterface $renderer) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
 
-    $this->messageManager = $message_manager;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -62,7 +62,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('webform.message_manager')
+      $container->get('renderer')
     );
   }
 

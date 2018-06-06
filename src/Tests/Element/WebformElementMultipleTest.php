@@ -2,6 +2,8 @@
 
 namespace Drupal\webform\Tests\Element;
 
+use Drupal\webform\Entity\Webform;
+
 /**
  * Tests for webform element multiple.
  *
@@ -25,6 +27,8 @@ class WebformElementMultipleTest extends WebformElementTestBase {
     // Processing.
     /**************************************************************************/
 
+    $webform = Webform::load('test_element_multiple');
+
     // Check processing for all elements.
     $this->drupalPostForm('webform/test_element_multiple', [], t('Submit'));
     $this->assertRaw("webform_multiple_default:
@@ -36,6 +40,10 @@ webform_multiple_no_sorting:
   - Two
   - Three
 webform_multiple_no_operations:
+  - One
+  - Two
+  - Three
+webform_multiple_custom_label:
   - One
   - Two
   - Three
@@ -91,7 +99,8 @@ webform_multiple_elements_flattened:
     description: 'This is the number 1.'
   - value: two
     text: Two
-    description: 'This is the number 2.'");
+    description: 'This is the number 2.'
+webform_multiple_no_items: {  }");
 
     /**************************************************************************/
     // Rendering.
@@ -107,15 +116,22 @@ webform_multiple_elements_flattened:
     $this->assertRaw('<td class="webform-multiple-table--weight"><div class="webform-multiple-table--weight js-form-item form-item js-form-type-number form-type-number js-form-item-webform-multiple-default-items-0-weight form-item-webform-multiple-default-items-0-weight form-no-label">');
     $this->assertRaw('<label for="edit-webform-multiple-default-items-0-weight" class="visually-hidden">Item weight</label>');
     $this->assertRaw('<input class="webform-multiple-sort-weight form-number" data-drupal-selector="edit-webform-multiple-default-items-0-weight" type="number" id="edit-webform-multiple-default-items-0-weight" name="webform_multiple_default[items][0][weight]" value="0" step="1" size="10" />');
-    $this->assertRaw('<td class="webform-multiple-table--operations"><input data-drupal-selector="edit-webform-multiple-default-items-0-operations-add" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-add" name="webform_multiple_default_table_add_0"');
+    $this->assertRaw('<td class="webform-multiple-table--operations webform-multiple-table--operations-two"><input data-drupal-selector="edit-webform-multiple-default-items-0-operations-add" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-add" name="webform_multiple_default_table_add_0"');
     $this->assertRaw('<input data-drupal-selector="edit-webform-multiple-default-items-0-operations-remove" formnovalidate="formnovalidate" type="image" id="edit-webform-multiple-default-items-0-operations-remove" name="webform_multiple_default_table_remove_0"');
 
     // Check that sorting is disabled.
     $this->assertNoRaw('<tr class="draggable odd" data-drupal-selector="edit-webform-multiple-no-sorting-items-0">');
     $this->assertRaw('<tr data-drupal-selector="edit-webform-multiple-no-sorting-items-0" class="odd">');
 
+    // Check custom labels.
+    $this->assertRaw('<input data-drupal-selector="edit-webform-multiple-custom-label-add-submit" formnovalidate="formnovalidate" type="submit" id="edit-webform-multiple-custom-label-add-submit" name="webform_multiple_custom_label_table_add" value="{add_more_button_label}" class="button js-form-submit form-submit" />');
+    $this->assertRaw('<span class="field-suffix">{add_more_input_label}</span>');
+
     // Check that operations is disabled.
     $this->assertNoRaw('data-drupal-selector="edit-webform-multiple-no-operations-items-0-operations-remove"');
+
+    // Check no items message.
+    $this->assertRaw('No items entered. Please add items below.');
 
     /**************************************************************************/
     // Validation.
@@ -174,6 +190,19 @@ webform_multiple_elements_flattened:
     $this->assertFieldByName('webform_multiple_default[items][0][_item_]', 'Two');
     $this->assertFieldByName('webform_multiple_default[items][1][_item_]', 'Three');
     $this->assertFieldByName('webform_multiple_default[items][2][_item_]', 'Four');
+
+    // Add one options to 'webform_multiple_no_items'.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform_multiple_no_items_table_add');
+    $this->assertNoRaw('No items entered. Please add items below.');
+    $this->assertFieldByName('webform_multiple_no_items[items][0][_item_]');
+
+    // Check no items message is never displayed when #required.
+    $webform->setElementProperties('webform_multiple_no_items', ['#type' => 'webform_multiple', '#title' => 'webform_multiple_no_items', '#required' => TRUE]);
+    $webform->save();
+    $this->drupalGet('webform/test_element_multiple');
+    $this->assertNoRaw('No items entered. Please add items below.');
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform_multiple_default_table_remove_0');
+    $this->assertNoRaw('No items entered. Please add items below.');
 
     /**************************************************************************/
     // Property (#multiple).

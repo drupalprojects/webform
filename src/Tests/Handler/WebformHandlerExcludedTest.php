@@ -12,6 +12,21 @@ use Drupal\webform\Tests\WebformTestBase;
 class WebformHandlerExcludedTest extends WebformTestBase {
 
   /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  public static $modules = ['block', 'webform'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+    $this->drupalPlaceBlock('local_actions_block');
+  }
+
+  /**
    * Test excluded handlers.
    */
   public function testExcludeHandlers() {

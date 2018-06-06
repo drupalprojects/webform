@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: contact
 title: Contact
 description: 'Basic email contact webform.'
@@ -17,12 +18,12 @@ elements: |
     '#title': 'Your Name'
     '#type': textfield
     '#required': true
-    '#default_value': '[webform-authenticated-user:display-name]'
+    '#default_value': '[current-user:display-name]'
   email:
     '#title': 'Your Email'
     '#type': email
     '#required': true
-    '#default_value': '[webform-authenticated-user:mail]'
+    '#default_value': '[current-user:mail]'
   subject:
     '#title': Subject
     '#type': textfield
@@ -76,6 +77,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -93,6 +96,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -191,6 +195,7 @@ handlers:
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
+      exclude_empty_checkbox: false
       html: true
       attachments: false
       twig: false
@@ -223,6 +228,7 @@ handlers:
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
+      exclude_empty_checkbox: false
       html: true
       attachments: false
       twig: false

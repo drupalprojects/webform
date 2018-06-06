@@ -5,7 +5,6 @@
  * Install, update and uninstall functions for the Webform Test Message Custom module.
  */
 
-
 /**
  * Implements hook_uninstall().
  */

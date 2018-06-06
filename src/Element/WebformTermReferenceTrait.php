@@ -48,10 +48,8 @@ trait WebformTermReferenceTrait {
 
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
     $entity_repository = \Drupal::service('entity.repository');
-    /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
-    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-    $tree = $taxonomy_storage->loadTree($element['#vocabulary'], 0, NULL, TRUE);
+    $tree = static::loadTree($element['#vocabulary']);
 
     $options = [];
     $breadcrumb = [];
@@ -81,10 +79,8 @@ trait WebformTermReferenceTrait {
 
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
     $entity_repository = \Drupal::service('entity.repository');
-    /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
-    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-    $tree = $taxonomy_storage->loadTree($element['#vocabulary'], 0, NULL, TRUE);
+    $tree = static::loadTree($element['#vocabulary']);
 
     $options = [];
     foreach ($tree as $item) {
@@ -93,6 +89,21 @@ trait WebformTermReferenceTrait {
       $options[$item->id()] = str_repeat($element['#tree_delimiter'], $item->depth) . $item->getName();
     }
     return $options;
+  }
+
+  /**
+   * Finds all terms in a given vocabulary ID.
+   *
+   * @param string $vid
+   *   Vocabulary ID to retrieve terms for.
+   *
+   * @return object[]|\Drupal\taxonomy\TermInterface[]
+   *   An array of term objects that are the children of the vocabulary $vid.
+   */
+  protected static function loadTree($vid) {
+    /** @var \Drupal\taxonomy\TermStorageInterface $taxonomy_storage */
+    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    return $taxonomy_storage->loadTree($vid, 0, NULL, TRUE);
   }
 
 }

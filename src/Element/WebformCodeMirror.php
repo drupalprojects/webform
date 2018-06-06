@@ -5,6 +5,7 @@ namespace Drupal\webform\Element;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Render\Element\Textarea;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Twig\TwigExtension;
 use Drupal\webform\Utility\WebformYaml;
 
@@ -175,51 +176,13 @@ class WebformCodeMirror extends Textarea {
 
     switch ($element['#mode']) {
       case 'html':
-        // @see: http://stackoverflow.com/questions/3167074/which-function-in-php-validate-if-the-string-is-valid-html
-        // @see: http://stackoverflow.com/questions/5030392/x-html-validator-in-php
-        libxml_use_internal_errors(TRUE);
-        if (simplexml_load_string('<fragment>' . $element['#value'] . '</fragment>')) {
-          return NULL;
-        }
-
-        $errors = libxml_get_errors();
-        libxml_clear_errors();
-        if (!$errors) {
-          return NULL;
-        }
-
-        $messages = [];
-        foreach ($errors as $error) {
-          $messages[] = $error->message;
-        }
-        return $messages;
+        return static::validateHtml($element, $form_state, $complete_form);
 
       case 'yaml':
-        try {
-          $value = $element['#value'];
-          $data = Yaml::decode($value);
-          if (!is_array($data) && $value) {
-            throw new \Exception(t('YAML must contain an associative array of elements.'));
-          }
-          return NULL;
-        }
-        catch (\Exception $exception) {
-          return [$exception->getMessage()];
-        }
+        return static::validateYaml($element, $form_state, $complete_form);
 
       case 'twig':
-        try {
-          $build = [
-            '#type' => 'inline_template',
-            '#template' => $element['#value'],
-            '#context' => [],
-          ];
-          \Drupal::service('renderer')->renderPlain($build);
-          return NULL;
-        }
-        catch (\Exception $exception) {
-          return [$exception->getMessage()];
-        }
+        return static::validateTwig($element, $form_state, $complete_form);
 
       default:
         return NULL;
@@ -237,6 +200,118 @@ class WebformCodeMirror extends Textarea {
    */
   public static function getMode($mode) {
     return (isset(static::$modes[$mode])) ? static::$modes[$mode] : static::$modes['text'];
+  }
+
+  /****************************************************************************/
+  // Language/markup validation callback.
+  /****************************************************************************/
+
+  /**
+   * Validate HTML.
+   *
+   * @param array $element
+   *   The form element whose value is being validated.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
+   *
+   * @return array|null
+   *   An array of error messages.
+   */
+
+  protected static function validateHtml($element, FormStateInterface $form_state, $complete_form) {
+    // @see: http://stackoverflow.com/questions/3167074/which-function-in-php-validate-if-the-string-is-valid-html
+    // @see: http://stackoverflow.com/questions/5030392/x-html-validator-in-php
+    libxml_use_internal_errors(TRUE);
+    if (simplexml_load_string('<fragment>' . $element['#value'] . '</fragment>')) {
+      return NULL;
+    }
+
+    $errors = libxml_get_errors();
+    libxml_clear_errors();
+    if (!$errors) {
+      return NULL;
+    }
+
+    $messages = [];
+    foreach ($errors as $error) {
+      $messages[] = $error->message;
+    }
+    return $messages;
+  }
+
+  /**
+   * Validate Twig.
+   *
+   * @param array $element
+   *   The form element whose value is being validated.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
+   *
+   * @return array|null
+   *   An array of error messages.
+   */
+  protected static function validateTwig($element, FormStateInterface $form_state, $complete_form) {
+    $template = $element['#value'];
+    $form_object = $form_state->getFormObject();
+    try {
+      // If form object has getWebform mehthod. validate Twig template
+      // using a temporary webform submission context.
+      if (method_exists($form_object, 'getWebform')) {
+        /** @var \Drupal\webform\WebformInterface $webform */
+        $webform = $form_object->getWebform();
+
+        // Get a temporary webform submission.
+        /** @var \Drupal\webform\WebformSubmissionGenerateInterface $webform_submission_generate */
+        $webform_submission_generate = \Drupal::service('webform_submission.generate');
+        $values = ['webform_id' => $webform->id()] +
+          $webform_submission_generate->getData($webform);
+        $webform_submission = WebformSubmission::create($values);
+        $build = TwigExtension::buildTwigTemplate($webform_submission, $template, []);
+      }
+      else {
+        $build = [
+          '#type' => 'inline_template',
+          '#template' => $element['#value'],
+          '#context' => [],
+        ];
+      }
+      \Drupal::service('renderer')->renderPlain($build);
+      return NULL;
+    }
+    catch (\Exception $exception) {
+      return [$exception->getMessage()];
+    }
+  }
+
+  /**
+   * Validate YAML.
+   *
+   * @param array $element
+   *   The form element whose value is being validated.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
+   *
+   * @return array|null
+   *   An array of error messages.
+   */
+  protected static function validateYaml($element, FormStateInterface $form_state, $complete_form) {
+    try {
+      $value = $element['#value'];
+      $data = Yaml::decode($value);
+      if (!is_array($data) && $value) {
+        throw new \Exception(t('YAML must contain an associative array of elements.'));
+      }
+      return NULL;
+    }
+    catch (\Exception $exception) {
+      return [$exception->getMessage()];
+    }
   }
 
 }

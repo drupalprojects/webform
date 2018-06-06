@@ -1,16 +1,17 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\user\Entity\Role;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform submission form limits.
  *
  * @group Webform
  */
-class WebformSubmissionFormLimitsTest extends WebformTestBase {
+class WebformSettingsLimitsTest extends WebformTestBase {
 
   /**
    * Modules to enable.

@@ -32,11 +32,11 @@ class WebformWizardConditionalTest extends WebformWizardTestBase {
       'trigger_pages[page_5]' => FALSE,
     ];
     $this->drupalPostForm('webform/test_form_wizard_conditional', $edit, 'Next Page >');
-    $this->assertCurrentPage('Page 2');
+    $this->assertCurrentPage('Page 2', 'page_2');
     $this->drupalPostForm(NULL, [], t('Next Page >'));
-    $this->assertCurrentPage('Page 4');
+    $this->assertCurrentPage('Page 4', 'page_4');
     $this->drupalPostForm(NULL, [], t('Submit'));
-    $this->assertCurrentPage('Complete');
+    $this->assertCurrentPage('Complete', 'webform_confirmation');
     $sid = $this->getLastSubmissionId($webform);
     $this->assert(!empty($sid));
 
@@ -45,7 +45,7 @@ class WebformWizardConditionalTest extends WebformWizardTestBase {
       'trigger_none' => TRUE,
     ];
     $this->drupalPostForm('webform/test_form_wizard_conditional', $edit, 'Next Page >');
-    $this->assertCurrentPage('Complete');
+    $this->assertCurrentPage('Complete', 'webform_confirmation');
     $sid = $this->getLastSubmissionId($webform);
     $this->assert(!empty($sid));
 
@@ -58,7 +58,7 @@ class WebformWizardConditionalTest extends WebformWizardTestBase {
       'trigger_none' => TRUE,
     ];
     $this->drupalPostForm('webform/test_form_wizard_conditional', $edit, 'Next Page >');
-    $this->assertCurrentPage('Preview');
+    $this->assertCurrentPage('Preview', 'webform_preview');
   }
 
 }

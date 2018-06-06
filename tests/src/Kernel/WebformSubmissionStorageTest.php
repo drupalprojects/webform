@@ -51,7 +51,6 @@ class WebformSubmissionStorageTest extends KernelTestBase {
     $this->assertEquals($webform_submission->id(), key($webform_submissions));
   }
 
-
   /**
    * Test purging of the webform submissions.
    *

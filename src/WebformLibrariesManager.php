@@ -2,10 +2,10 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Asset\LibraryDiscoveryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\webform\Utility\WebformArrayHelper;
@@ -16,6 +16,13 @@ use Drupal\webform\Utility\WebformArrayHelper;
 class WebformLibrariesManager implements WebformLibrariesManagerInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The library discovery service.
+   *
+   * @var \Drupal\Core\Asset\LibraryDiscoveryInterface
+   */
+  protected $libraryDiscovery;
 
   /**
    * The configuration object factory.
@@ -50,11 +57,13 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *
    * @var array
    */
-  protected $excludedLibraries = [];
+  protected $excludedLibraries;
 
   /**
    * Constructs a WebformLibrariesManager object.
    *
+   * @param \Drupal\Core\Asset\LibraryDiscoveryInterface $library_discovery
+   *   The library discovery service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -62,13 +71,11 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, RendererInterface $renderer) {
+  public function __construct(LibraryDiscoveryInterface $library_discovery, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, RendererInterface $renderer) {
+    $this->libraryDiscovery = $library_discovery;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->renderer = $renderer;
-
-    $this->libraries = $this->initLibraries();
-    $this->excludedLibraries = $this->initExcludedLibraries();
   }
 
   /**
@@ -184,13 +191,19 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function getLibrary($name) {
-    return $this->libraries[$name];
+    $libraries = $this->getLibraries();
+    return $libraries[$name];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLibraries($included = NULL) {
+    // Initialize libraries.
+    if (!isset($this->libraries)) {
+      $this->libraries = $this->initLibraries();
+    }
+
     $libraries = $this->libraries;
     if ($included !== NULL) {
       foreach ($libraries as $library_name => $library) {
@@ -206,6 +219,11 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function getExcludedLibraries() {
+    // Initialize excluded libraries.
+    if (!isset($this->excludedLibraries)) {
+      $this->excludedLibraries = $this->initExcludedLibraries();
+    }
+
     return $this->excludedLibraries;
   }
 
@@ -213,11 +231,12 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    * {@inheritdoc}
    */
   public function isExcluded($name) {
-    if (empty($this->excludedLibraries)) {
+    $excluded_libraries = $this->getExcludedLibraries();
+    if (empty($excluded_libraries)) {
       return FALSE;
     }
 
-    if (isset($this->excludedLibraries[$name])) {
+    if (isset($excluded_libraries[$name])) {
       return TRUE;
     }
 
@@ -227,7 +246,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
 
     $parts = explode('.', preg_replace('#^(webform/)?libraries.#', '', $name));
     while ($parts) {
-      if (isset($this->excludedLibraries[implode('.', $parts)])) {
+      if (isset($excluded_libraries[implode('.', $parts)])) {
         return TRUE;
       }
       array_pop($parts);
@@ -250,9 +269,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    *   An associative array containing libraries.
    */
   protected function initLibraries() {
-    // Get Drupal core's CKEditor version number.
-    $core_libraries = Yaml::decode(file_get_contents('core/core.libraries.yml'));
-    $ckeditor_version = $core_libraries['ckeditor']['version'];
+    $ckeditor_version = $this->getCkeditorVersion();
 
     $libraries = [];
     $libraries['ckeditor.autogrow'] = [
@@ -461,7 +478,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     }
 
     // Get excluded libraries based on excluded (element) types.
-    foreach ($this->libraries as $library_name => $library) {
+    $libraries = $this->getLibraries();
+    foreach ($libraries as $library_name => $library) {
       if (!empty($library['elements']) && $this->areElementsExcluded($library['elements'])) {
         $excluded_libraries[$library_name] = $library_name;
       }
@@ -485,6 +503,28 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       return FALSE;
     }
     return WebformArrayHelper::keysExist($excluded_elements, $elements);
+  }
+
+  /**
+   * Get Drupal core's CKEditor version number.
+   *
+   * @return string
+   *   Drupal core's CKEditor version number.
+   */
+  protected function getCkeditorVersion() {
+    // Get CKEditor semantic version number from the JS file.
+    // @see core/core.libraries.yml
+    $definition = $this->libraryDiscovery->getLibraryByName('core', 'ckeditor');
+    $ckeditor_version = $definition['js'][0]['version'];
+
+    // Parse CKEditor semantic version number from security patches
+    // (i.e. 4.8.0+2018-04-18-security-patch).
+    if (preg_match('/^\d+\.\d+\.\d+/', $ckeditor_version, $match)) {
+      return $match[0];
+    }
+    else {
+      return $ckeditor_version;
+    }
   }
 
 }

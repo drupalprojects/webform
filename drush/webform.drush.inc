@@ -124,6 +124,9 @@ function webform_drush_command() {
         '8+',
       ),
       'bootstrap' => 1,
+      'options' => array(
+        'disable-tls' => 'If set to true all HTTPS URLs will be tried with HTTP instead and no network level encryption is performed.',
+      ),
       'examples' => array(
         'webform-libraries-composer' => "Generates the Webform module's composer.json with libraries as repositories.",
       ),
@@ -205,6 +208,9 @@ function webform_drush_command() {
         '8+',
       ),
       'bootstrap' => 1,
+      'options' => array(
+        'disable-tls' => 'If set to true all HTTPS URLs will be tried with HTTP instead and no network level encryption is performed.',
+      ),
       'examples' => array(
         'webform-composer-update' => "Updates the Drupal installation's composer.json to include the Webform module's selected libraries as repositories.",
       ),

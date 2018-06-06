@@ -251,7 +251,7 @@ class ActionWebformHandler extends WebformHandlerBase {
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
-    parent::applyFormStateToConfiguration($form_state);
+    $this->applyFormStateToConfiguration($form_state);
 
     // Cleanup states.
     $this->configuration['states'] = array_values(array_filter($this->configuration['states']));

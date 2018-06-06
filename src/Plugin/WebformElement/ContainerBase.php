@@ -193,7 +193,7 @@ abstract class ContainerBase extends WebformElementBase {
         '#suffix' => PHP_EOL,
       ];
     }
-    $build += $children;
+    $build['children'] = $children;
     return $build;
   }
 

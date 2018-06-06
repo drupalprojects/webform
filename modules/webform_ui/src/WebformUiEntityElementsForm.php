@@ -108,66 +108,29 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       $rows[$element['#webform_key']] = $this->getElementRow($element, $delta);
     }
 
-    // Must manually add local actions to the webform because we can't alter local
-    // actions and add the needed dialog attributes.
-    // @see https://www.drupal.org/node/2585169
-    $local_actions = [];
-    $local_actions['add_element'] = [
-      '#theme' => 'menu_local_action',
-      '#link' => [
-        'title' => $this->t('Add element'),
-        'url' => new Url('entity.webform_ui.element', ['webform' => $webform->id()]),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(),
-      ],
-    ];
-    if ($this->elementManager->createInstance('webform_wizard_page')->isEnabled()) {
-      $local_actions['add_page'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add page'),
-          'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
-          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ],
-      ];
-    }
-    if ($webform->hasFlexboxLayout()) {
-      $local_actions['add_layout'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add layout'),
-          'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
-          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ],
-      ];
-    }
-    $form['local_actions'] = [
-      '#prefix' => '<ul class="action-links">',
-      '#suffix' => '</ul>',
-    ] + $local_actions;
-
     $form['webform_ui_elements'] = [
-      '#type' => 'table',
-      '#header' => $header,
-      '#empty' => $this->t('Please add elements to this webform.'),
-      '#attributes' => [
-        'class' => ['webform-ui-elements-table'],
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'match',
-          'relationship' => 'parent',
-          'group' => 'row-parent-key',
-          'source' => 'row-key',
-          'hidden' => TRUE, /* hides the WEIGHT & PARENT tree columns below */
-          'limit' => FALSE,
+        '#type' => 'table',
+        '#header' => $header,
+        '#empty' => $this->t('Please add elements to this webform.'),
+        '#attributes' => [
+          'class' => ['webform-ui-elements-table'],
         ],
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'row-weight',
+        '#tabledrag' => [
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'row-parent-key',
+            'source' => 'row-key',
+            'hidden' => TRUE, /* hides the WEIGHT & PARENT tree columns below */
+            'limit' => FALSE,
+          ],
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'row-weight',
+          ],
         ],
-      ],
-    ] + $rows;
+      ] + $rows;
 
     if ($rows && !$webform->hasActions()) {
       $form['webform_ui_elements'] += ['webform_actions_default' => $this->getCustomizeActionsRow()];
@@ -331,7 +294,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
       if (empty($element['#title'])) {
         if (!empty($element['#markup'])) {
-          $element['#title'] = Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE);
+          $element['#title'] = ['#markup' => Unicode::truncate(strip_tags($element['#markup']), 100, TRUE, TRUE)];
         }
         else {
           $element['#title'] = '[' . $element_key . ']';
@@ -512,10 +475,10 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           ['webform' => $webform->id(), 'key' => $key]
         ),
         '#attributes' => $element_dialog_attributes + [
-          // Add custom hash to current page's location.
-          // @see Drupal.behaviors.webformAjaxLink
-          'data-hash' => 'webform-tab--conditions',
-        ],
+            // Add custom hash to current page's location.
+            // @see Drupal.behaviors.webformAjaxLink
+            'data-hash' => 'webform-tab--conditions',
+          ],
       ];
     }
 

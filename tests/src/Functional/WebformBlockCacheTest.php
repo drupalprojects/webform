@@ -22,7 +22,7 @@ class WebformBlockCacheTest extends BrowserTestBase {
 
   /**
    * Authenticated user.
-   * 
+   *
    * @var \Drupal\user\Entity\User
    */
   private $authenticatedUser;

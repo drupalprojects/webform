@@ -66,6 +66,9 @@ webform.handler.scheduled_email:
     exclude_empty:
       type: boolean
       label: 'Preview exclude empty elements'
+    exclude_empty_checkbox:
+      type: boolean
+      label: 'Exclude unselected checkboxes'
     html:
       type: boolean
       label: 'HTML'

@@ -4,7 +4,6 @@ namespace Drupal\webform\Tests;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\webform\Entity\WebformOptions;
-use Drupal\webform\WebformInterface;
 
 /**
  * Tests for webform option entity.

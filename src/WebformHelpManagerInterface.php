@@ -43,7 +43,7 @@ interface WebformHelpManagerInterface {
   public function getVideo($id = NULL);
 
   /**
-   * Get video. links
+   * Get video links.
    *
    * @param string $id
    *   Video id.
@@ -57,7 +57,7 @@ interface WebformHelpManagerInterface {
    * Sets a notification to be displayed to webform administrators.
    *
    * @param string $id
-   *   The notification id
+   *   The notification id.
    * @param string|\Drupal\Component\Render\MarkupInterface|array $message
    *   The notification to be displayed to webform administrators.
    * @param string $type
@@ -97,7 +97,7 @@ interface WebformHelpManagerInterface {
    * Delete a notification by id.
    *
    * @param string $id
-   *   The notification id
+   *   The notification id.
    *
    * @internal
    *   Currently being used to display notifications related to updates.

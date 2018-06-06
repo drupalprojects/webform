@@ -105,7 +105,10 @@ webform.handler.email:
       label: 'Always include private and restricted access elements.'
     exclude_empty:
       type: boolean
-      label: 'Preview exclude empty elements'
+      label: 'Exclude empty elements'
+    exclude_empty_checkbox:
+      type: boolean
+      label: 'Exclude unselected checkboxes'
     html:
       type: boolean
       label: 'HTML'
@@ -174,6 +177,22 @@ webform.handler.remote_post:
     converted_custom_data:
       label: 'Converted custom data'
       type: string
+    message:
+      type: text
+      label: 'Error response message'
+    messages:
+      label: 'Error response messages'
+      type: sequence
+      sequence:
+        type: mapping
+        label: 'Message'
+        mapping:
+          code:
+            type: integer
+            label: 'Response status code'
+          message:
+            type: text
+            label: 'Response message'
 
 webform.handler.settings:
   type: mapping

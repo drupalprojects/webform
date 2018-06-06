@@ -56,11 +56,14 @@ class WebformElementHtmlEditorTest extends WebformElementTestBase {
     $this->assertRaw('webform_html_editor (disable) field is required.');
     $this->assertRaw('webform_html_editor (format) field is required.');
     $this->assertRaw('webform_html_editor_codemirror (none) field is required.');
-    
+
     $this->drupalGet('webform/test_element_html_editor');
 
     // Check that HTML editor is enabled.
-    $this->assertRaw('<textarea class="js-html-editor form-textarea required resize-vertical" data-drupal-selector="edit-webform-html-editor-value" id="edit-webform-html-editor-value" name="webform_html_editor[value]" rows="5" cols="60" required="required" aria-required="true">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
+    $this->assertRaw('<textarea data-drupal-selector="edit-webform-html-editor-value" class="js-html-editor form-textarea required resize-vertical" id="edit-webform-html-editor-value" name="webform_html_editor[value]" rows="5" cols="60" required="required" aria-required="true">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
+
+    // Check that HTML editor is disabled.
+    $this->assertRaw('<textarea class="custom-disabled js-html-editor form-textarea required resize-vertical" data-drupal-selector="edit-webform-html-editor-disable-value" id="edit-webform-html-editor-disable-value" name="webform_html_editor_disable[value]" rows="5" cols="60" required="required" aria-required="true">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
 
     // Check that CodeMirror is displayed when #format: FALSE.
     $this->assertRaw('<textarea data-drupal-selector="edit-webform-html-editor-codemirror-value" class="js-webform-codemirror webform-codemirror html required form-textarea resize-vertical" required="required" aria-required="true" data-webform-codemirror-mode="text/html" id="edit-webform-html-editor-codemirror-value" name="webform_html_editor_codemirror[value]" rows="5" cols="60">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');

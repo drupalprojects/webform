@@ -55,7 +55,11 @@ trait WebformEntityTrait {
       $options += $bundle_options;
     }
 
-    $options = self::translateOptions($options, $element);
+    // If the selection handler is not using views, then translate
+    // the entity reference's options.
+    if ($element['#selection_handler'] != 'views') {
+      $options = self::translateOptions($options, $element);
+    }
 
     // Only select menu can support optgroups.
     if ($element['#type'] !== 'webform_entity_select') {

@@ -18,3 +18,4 @@
 {% if settings.converted_url %}<b>{{ 'Converted URL:'|t }}</b> {{ settings.converted_url }}<br />{% endif %}
 <b>{{ 'Method:'|t }}</b> {{ settings.method }}<br />
 {% if settings.method == 'POST' %}<b>{{ 'Type:'|t }}</b> {{ settings.type }}<br />{% endif %}
+{% if settings.message or settings.messages %}<b>{{ 'Response message:'|t }}</b> {{ 'Yes'|t }}<br/>{% endif %}

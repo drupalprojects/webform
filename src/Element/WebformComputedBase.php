@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Utility\WebformHtmlHelper;
+use Drupal\webform\Utility\WebformXss;
 use Drupal\webform\WebformSubmissionForm;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -72,6 +73,7 @@ abstract class WebformComputedBase extends FormElement {
 
       // Display markup.
       $element['value']['#markup'] = $value;
+      $element['value']['#allowed_tags'] = WebformXss::getAdminTagList();
 
       // Include hidden element so that computed value will be available to
       // conditions (#states).
@@ -91,6 +93,10 @@ abstract class WebformComputedBase extends FormElement {
       webform_process_states($element, '#wrapper_attributes');
     }
 
+    // Add validate callback.
+    $element += ['#element_validate' => []];
+    array_unshift($element['#element_validate'], [get_called_class(), 'validateWebformComputed']);
+
     return $element;
   }
 
@@ -107,6 +113,22 @@ abstract class WebformComputedBase extends FormElement {
    */
   public static function processValue(array $element, WebformSubmissionInterface $webform_submission) {
     return $element['#value'];
+  }
+
+  /**
+   * Validates an computed element.
+   */
+  public static function validateWebformComputed(&$element, FormStateInterface $form_state, &$complete_form) {
+    // Make sure the form's state value uses the computed value and not the
+    // raw #value. This ensures conditional handlers are trigger using
+    // the accurate computed value.
+    $webform_submission = static::getWebformSubmission($element, $form_state);
+    if ($webform_submission) {
+      $value = static::processValue($element, $webform_submission);;
+      $form_state->setValueForElement($element['value'], NULL);
+      $form_state->setValueForElement($element['hidden'], NULL);
+      $form_state->setValueForElement($element, $value);
+    }
   }
 
   /**

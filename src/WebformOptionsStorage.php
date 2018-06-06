@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\webform\Element\WebformCompositeBase;
-use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -192,8 +191,8 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
         $config = $this->configFactory->get($webform_config_name);
         $element_data = Yaml::encode($config->get('elements'));
         if (preg_match_all('/(?:options|answers)\'\: ([a-z_]+)/', $element_data, $matches)) {
-          $webform_id  = $config->get('id');
-          $webform_title  = $config->get('title');
+          $webform_id = $config->get('id');
+          $webform_title = $config->get('title');
           foreach ($matches[1] as $options_id) {
             $this->usedByWebforms[$options_id][$webform_id] = $webform_title;
           }

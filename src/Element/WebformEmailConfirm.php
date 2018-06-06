@@ -98,7 +98,6 @@ class WebformEmailConfirm extends FormElement {
     $element['mail_2']['#value'] = empty($element['#value']) ? NULL : $element['#value']['mail_2'];
     $element['mail_2']['#error_no_message'] = TRUE;
 
-
     // Don't require the main element.
     $element['#required'] = FALSE;
 

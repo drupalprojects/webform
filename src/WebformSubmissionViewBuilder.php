@@ -11,7 +11,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformYaml;
-use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -93,13 +92,11 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
         $options = [
           'excluded_elements' => $webform->getSetting('preview_excluded_elements'),
           'exclude_empty' => $webform->getSetting('preview_exclude_empty'),
+          'exclude_empty_checkbox' => $webform->getSetting('preview_exclude_empty_checkbox'),
         ];
       }
       else {
-        $options = [
-          'excluded_elements' => $webform->getSetting('excluded_elements'),
-          'exclude_empty' => $webform->getSetting('exclude_empty'),
-        ];
+        $options = [];
       }
 
       switch ($view_mode) {
@@ -217,7 +214,6 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
    *
    * @see \Drupal\webform\WebformSubmissionConditionsValidatorInterface::isElementVisible
    * @see \Drupal\Core\Render\Element::isVisibleElement
-   *
    */
   protected function isElementVisible(array $element, WebformSubmissionInterface $webform_submission, array $options) {
     // Checked excluded elements.

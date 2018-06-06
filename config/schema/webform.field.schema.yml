@@ -73,3 +73,9 @@ field.formatter.settings.webform_entity_reference_link:
     label:
       type: label
       label: 'Link label to the referenced webform'
+    dialog:
+      type: string
+      label: 'Open referenced webform in modal dialog'
+    attributes:
+      type: ignore
+      label: 'Link attributes'

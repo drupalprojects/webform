@@ -48,7 +48,7 @@ class WebformUiElementEditForm extends WebformUiElementFormBase {
     // ISSUE:
     // The below delete link with .use-ajax is throwing errors because the modal
     // dialog code is creating a <button> without any parent form.
-    // Issue #2879304: Editing Select Other elements produces JavaScript errors
+    // Issue #2879304: Editing Select Other elements produces JavaScript errors.
     // @see Drupal.Ajax
     /*
     if ($this->isModalDialog()) {

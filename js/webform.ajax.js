@@ -58,7 +58,7 @@
         // Close all open modal dialogs when opening off-canvas dialog.
         if (element_settings.dialogRenderer === 'off_canvas') {
           $(this).on('click', function() {
-            $(".ui-dialog.webform-modal:visible").find('.ui-dialog-content').dialog('close');
+            $(".ui-dialog.webform-ui-dialog:visible").find('.ui-dialog-content').dialog('close');
           });
         }
       });

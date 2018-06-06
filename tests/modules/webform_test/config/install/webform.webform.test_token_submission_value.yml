@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_token_submission_value
 title: 'Test: Token submission value'
 description: 'Test Webform submission values tokens'
@@ -152,6 +153,8 @@ settings:
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -169,6 +172,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -180,6 +184,7 @@ settings:
     <h3>emails</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:email</th><td width="50%">[webform_submission:values:email]</td></tr>
+    <tr><th width="50%">webform_submission:values:email:urlencode</th><td width="50%">[webform_submission:values:email:urlencode]</td></tr>
     <tr><th width="50%">webform_submission:values:emails</th><td width="50%">[webform_submission:values:emails]</td></tr>
     <tr><th width="50%">webform_submission:values:emails:0</th><td width="50%">[webform_submission:values:emails:0]</td></tr>
     <tr><th width="50%">webform_submission:values:emails:1</th><td width="50%">[webform_submission:values:emails:1]</td></tr>
@@ -199,6 +204,12 @@ settings:
     <tr><th width="50%">webform_submission:values:user:entity:mail</th><td width="50%">[webform_submission:values:user:entity:mail]</td></tr>
     <tr><th width="50%">webform_submission:values:users:0:entity:account-name</th><td width="50%">[webform_submission:values:users:0:entity:account-name]</td></tr>
     <tr><th width="50%">webform_submission:values:users:99:entity:account-name</th><td width="50%">[webform_submission:values:users:99:entity:account-name]</td></tr>
+    </table>
+    
+    <h3>current-user</h3>
+    <table class="table">
+    <tr><th width="50%">current-user:display-name</th><td width="50%">[current-user:display-name]</td></tr>
+    <tr><th width="50%">current-user:missing</th><td width="50%">[current-user:missing]</td></tr>
     </table>
     
     <h3>terms</h3>
@@ -228,6 +239,7 @@ settings:
     <tr><th width="50%">webform_submission:values:contacts:0:name</th><td width="50%">[webform_submission:values:contacts:0:name]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:name</th><td width="50%">[webform_submission:values:contacts:1:name]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:0:email:html</th><td width="50%">[webform_submission:values:contacts:0:email:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:contacts:0:email:urlencode</th><td width="50%">[webform_submission:values:contacts:0:email:urlencode]</td></tr>
     <tr><th width="50%">webform_submission:values:contacts:1:email:raw:html</th><td width="50%">[webform_submission:values:contacts:1:email:raw:html]</td></tr>
     </table>
     
@@ -235,6 +247,7 @@ settings:
     <table class="table">
     <tr><th width="50%">webform_submission:values:fieldset</th><td width="50%"><pre>[webform_submission:values:fieldset]</pre></td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:html</th><td width="50%">[webform_submission:values:fieldset:html]</td></tr>
+    <tr><th width="50%">webform_submission:values:fieldset:urlencode</th><td width="50%">[webform_submission:values:fieldset:urlencode]</td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:header:html</th><td width="50%">[webform_submission:values:fieldset:header:html]</td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:details:html</th><td width="50%">[webform_submission:values:fieldset:details:html]</td></tr>
     <tr><th width="50%">webform_submission:values:fieldset:fieldset:html</th><td width="50%">[webform_submission:values:fieldset:fieldset:html]</td></tr>
@@ -256,6 +269,8 @@ settings:
     <table class="table">
     <tr><th width="50%">webform_submission:values:missing</th><td width="50%">[webform_submission:values:missing]</td></tr>
     <tr><th width="50%">webform_submission:values:missing:clear</th><td width="50%">[webform_submission:values:missing:clear]</td></tr>
+    <tr><th width="50%">webform:random:missing</th><td width="50%">[webform:random:missing]</td></tr>
+    <tr><th width="50%">webform:random:missing:clear</th><td width="50%">[webform:random:missing:clear]</td></tr>
     </table>
   confirmation_url: ''
   confirmation_attributes: {  }
