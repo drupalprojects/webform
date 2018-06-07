@@ -83,12 +83,14 @@
       // @see Issue #2938414: Checkboxes don't support #states required
       // @see Issue #2731991: Setting required on radios marks all options required.
       // @see Issue #2856315: Conditional Logic - Requiring Radios in a Fieldset.
-      if ($target.is('.js-webform-type-radios, .js-webform-type-checkboxes')) {
+      // Fix #required for fieldsets.
+      // @see Issue #2977569: Hidden fieldsets that become visible with conditional logic cannot be made required.
+      if ($target.is('.js-webform-type-radios, .js-webform-type-checkboxes, fieldset')) {
         if (e.value) {
-          $target.find('legend span').addClass('js-form-required form-required');
+          $target.find('legend span:not(.visually-hidden)').addClass('js-form-required form-required');
         }
         else {
-          $target.find('legend span').removeClass('js-form-required form-required');
+          $target.find('legend span:not(.visually-hidden)').removeClass('js-form-required form-required');
         }
       }
 
@@ -124,6 +126,7 @@
             .unbind('click', checkboxRequiredhandler);
         }
       }
+
     }
 
   });
