@@ -657,7 +657,7 @@ function _webform_theme_suggestions(array $variables, $hook) {
     $webform = NULL;
     $webform_submission = NULL;
     $sanitized_view_mode = NULL;
-    if (isset($variables['elements']) || isset($variables['elements']['#webform_submission'])) {
+    if (isset($variables['elements']) && isset($variables['elements']['#webform_submission'])) {
       /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
       $webform_submission = $variables['elements']['#webform_submission'];
       $webform = $webform_submission->getWebform();
