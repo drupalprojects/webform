@@ -58,7 +58,6 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "table" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/table",
  *     "text" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/text",
  *     "yaml" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/yaml",
- *     "yaml" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/yaml",
  *     "edit-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit",
  *     "notes-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/notes",
  *     "resend-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/resend",
