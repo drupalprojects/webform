@@ -828,14 +828,17 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $submission_storage->addQueryConditions($sub_query, $this->webform);
 
       // Search UUID and Notes.
+      $or_condition = $query->orConditionGroup();
+      $or_condition->condition('notes', '%' . $keys . '%', 'LIKE');
+      // Only search UUID if keys is alphanumeric with dashes.
+      // @see Issue #2978420: Error SQL with accent mark submissions filter.
+      if (preg_match('/^[0-9a-z-]+$/', $keys)) {
+        $or_condition->condition('uuid', $keys);
+      }
       $query->condition(
         $query->orConditionGroup()
           ->condition('sid', $sub_query, 'IN')
-          ->condition(
-            $query->orConditionGroup()
-              ->condition('uuid', $keys)
-              ->condition('notes', '%' . $keys . '%', 'LIKE')
-          )
+          ->condition($or_condition)
       );
     }
 
