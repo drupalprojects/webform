@@ -160,6 +160,9 @@ function _webform_update_webform_setting(array $data) {
  * @see \Drupal\webform\Plugin\WebformHandlerInterface
  */
 function _webform_update_webform_handler_configuration($handler_class = NULL) {
+  // Issue #2863986: Allow updating modules with new service dependencies.
+  \Drupal::service('kernel')->rebuildContainer();
+
   /** @var \Drupal\webform\WebformInterface[] $webforms */
   $webforms = Webform::loadMultiple();
   foreach ($webforms as $webform) {

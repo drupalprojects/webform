@@ -228,6 +228,9 @@ function webform_update_8011() {
  *   A form element.
  */
 function _webform_update_8011(array &$element) {
+  // Issue #2863986: Allow updating modules with new service dependencies.
+  \Drupal::service('kernel')->rebuildContainer();
+
   if (isset($element['#format'])) {
     /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
     $element_manager = \Drupal::service('plugin.manager.webform.element');
@@ -297,6 +300,9 @@ function webform_update_8014() {
  *   A form element.
  */
 function _webform_update_8014(array &$element) {
+  // Issue #2863986: Allow updating modules with new service dependencies.
+  \Drupal::service('kernel')->rebuildContainer();
+
   /** @var \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager */
   $element_manager = \Drupal::service('plugin.manager.webform.element');
 
@@ -474,6 +480,9 @@ function webform_update_8024() {
  * Issue #2857417: Add support for open and close date/time to Webform nodes. Update database scheme.
  */
 function webform_update_8025() {
+  // Issue #2863986: Allow updating modules with new service dependencies.
+  \Drupal::service('kernel')->rebuildContainer();
+
   /** @var \Drupal\webform\WebformEntityReferenceManagerInterface $entity_reference_manager */
   $entity_reference_manager = \Drupal::service('webform.entity_reference_manager');
 
@@ -2146,6 +2155,9 @@ function webform_update_8118() {
  * Issue #2957002: Same webform multiple times on the same page.
  */
 function webform_update_8119() {
+  // Issue #2863986: Allow updating modules with new service dependencies.
+  \Drupal::service('kernel')->rebuildContainer();
+
   /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
   $help_manager = \Drupal::service('webform.help_manager');
   $help_manager->addNotification('webform_update_8119',
