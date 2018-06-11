@@ -42,7 +42,7 @@
     attach: function (context) {
       // Only attach the click event handler to the entire table and determine
       // which row triggers the event.
-      $('.webform-results__table', context).once('webform-results-table').click(function (event) {
+      $('.webform-results-table', context).once('webform-results-table').click(function (event) {
         if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON') {
           return true;
         }

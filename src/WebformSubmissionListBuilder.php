@@ -322,7 +322,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
 
-    $build['table']['#attributes']['class'][] = 'webform-results__table';
+    $build['table']['#attributes']['class'][] = 'webform-results-table';
 
     $build['#attached']['library'][] = 'webform/webform.admin';
 
@@ -414,7 +414,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case 'locked':
         return [
           'data' => new FormattableMarkup('<span class="webform-icon webform-icon-@name webform-icon-@name--link"></span>', ['@name' => $name]),
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
           'field' => $name,
           'specifier' => $name,
         ];
@@ -507,7 +507,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
             '#url' => $notes_url,
             '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
           ],
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
         ];
 
       case 'operations':
@@ -559,7 +559,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
               'class' => ['use-ajax'],
             ],
           ],
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
         ];
 
       case 'locked':
@@ -576,7 +576,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
               'class' => ['use-ajax'],
             ],
           ],
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
         ];
 
       case 'uid':

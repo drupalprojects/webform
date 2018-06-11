@@ -191,7 +191,7 @@ class WebformSubmissionViewBuilder extends EntityViewBuilder implements WebformS
       '#type' => 'table',
       '#rows' => $rows,
       '#attributes' => [
-        'class' => ['webform-submission__table'],
+        'class' => ['webform-submission-table'],
       ],
     ];
   }
