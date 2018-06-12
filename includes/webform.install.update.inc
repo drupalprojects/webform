@@ -2272,3 +2272,10 @@ function webform_update_8129() {
   _webform_update_webform_settings();
   _webform_update_webform_handler_settings();
 }
+
+/**
+ * Issue #2974153: Non admin duplicate form.
+ */
+function webform_update_8130() {
+  _webform_update_webform_settings();
+}

@@ -128,8 +128,14 @@ entity.node.webform.user.submission.edit:
   base_route: entity.node.webform.user.submission
   weight: 10
 
+entity.node.webform.user.submission.duplicate:
+  title: 'Duplicate'
+  route_name: entity.node.webform.user.submission.duplicate
+  base_route: entity.node.webform.user.submission
+  weight: 20
+
 entity.node.webform.user.submission.delete:
   title: 'Delete'
   route_name: entity.node.webform.user.submission.delete
   base_route: entity.node.webform.user.submission
-  weight: 20
+  weight: 30

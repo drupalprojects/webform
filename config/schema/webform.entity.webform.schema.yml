@@ -152,6 +152,9 @@ webform.webform.*:
           sequence:
             type: string
             label: 'Column name'
+        submission_user_duplicate:
+          type: boolean
+          label: 'Submission user duplicate'
         submission_login:
           type: boolean
           label: 'Redirect to login when access denied to submission'

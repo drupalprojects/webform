@@ -121,6 +121,12 @@ class WebformNodeAccess {
 
       case 'webform_submission_resend':
         return WebformSubmissionAccess::checkResendAccess($webform_submission, $account);
+
+      case 'webform_submission_duplicate':
+        /** @var \Drupal\webform\WebformEntityReferenceManagerInterface $entity_reference_manager */
+        $entity_reference_manager = \Drupal::service('webform.entity_reference_manager');
+        $webform = $entity_reference_manager->getWebform($node);
+        return WebformEntityAccess::checkWebformSettingValue($webform, 'submission_user_duplicate', TRUE);
     }
 
     return $access_result;

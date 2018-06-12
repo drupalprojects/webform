@@ -105,6 +105,7 @@ settings:
   submission_label: 'Application: [webform_submission:values:contact:name]'
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''

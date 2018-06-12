@@ -294,11 +294,17 @@ entity.webform.user.submission.edit:
   base_route: entity.webform.user.submission
   weight: 10
 
+entity.webform.user.submission.duplicate:
+  title: 'Duplicate'
+  route_name: entity.webform.user.submission.duplicate
+  base_route: entity.webform.user.submission
+  weight: 20
+
 entity.webform.user.submission.delete:
   title: 'Delete'
   route_name: entity.webform.user.submission.delete
   base_route: entity.webform.user.submission
-  weight: 20
+  weight: 30
 
 # Webform Plugins.
 

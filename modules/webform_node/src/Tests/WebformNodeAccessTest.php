@@ -37,6 +37,7 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
     global $base_path;
 
     // Create webform node that references the contact webform.
+    $webform = Webform::load('contact');
     $node = $this->createWebformNode('contact');
     $nid = $node->id();
 
@@ -79,6 +80,18 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
     $this->assertLinkByHref("{$base_path}node/{$nid}/webform/submissions/{$sid_1}");
     $this->assertLinkByHref("{$base_path}node/{$nid}/webform/submissions/{$sid_2}");
 
+    // Check submission user duplicate returns access denied.
+    $this->drupalGet("node/{$nid}/webform/submissions/{$sid_2}/duplicate");
+    $this->assertResponse(403);
+
+    // Enable submission user duplicate.
+    $webform->setSetting('submission_user_duplicate', TRUE);
+    $webform->save();
+
+    // Check submission user duplicate returns access allows.
+    $this->drupalGet("node/{$nid}/webform/submissions/{$sid_2}/duplicate");
+    $this->assertResponse(200);
+
     // Check webform results access denied.
     $this->drupalGet("node/{$nid}/webform/results/submissions");
     $this->assertResponse(403);
@@ -104,7 +117,7 @@ class WebformNodeAccessTest extends WebformNodeTestBase {
   /**
    * Tests webform node access rules.
    *
-   * @see \Drupal\webform\Tests\WebformEntityAccessTest::testAccessRules
+   * @see \Drupal\webform\Tests\WebformEntityAccessControlsTest::testAccessRules
    */
   public function testAccessRules() {
     $webform = Webform::load('contact');

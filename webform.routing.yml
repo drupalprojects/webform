@@ -204,6 +204,22 @@ entity.webform.user.submission.delete:
   requirements:
     _entity_access: 'webform_submission.delete'
 
+entity.webform.user.submission.duplicate:
+  path: '/webform/{webform}/submissions/{webform_submission}/duplicate'
+  defaults:
+    _entity_form: 'webform_submission.duplicate'
+    _title_callback: '\Drupal\webform\Controller\WebformSubmissionViewController::title'
+    duplicate: TRUE
+    setting: 'submission_user_duplicate'
+    value: TRUE
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _entity_access: 'webform_submission.update'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess::checkWebformSettingValue'
+
 entity.webform.test_form:
   path: '/webform/{webform}/test'
   defaults:

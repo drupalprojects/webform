@@ -71,4 +71,22 @@ class WebformEntityAccess {
     return $access_result->addCacheTags(['config:webform.settings']);
   }
 
+  /**
+   * Check whether a webform setting is set to specified value.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   A webform.
+   * @param string $setting
+   *   A webform setting.
+   * @param string $value
+   *   The setting value used to determine access.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public static function checkWebformSettingValue(WebformInterface $webform = NULL, $setting = NULL, $value = NULL) {
+    return AccessResult::allowedIf($webform->getSetting($setting) === $value)
+      ->addCacheableDependency($webform);
+  }
+
 }
