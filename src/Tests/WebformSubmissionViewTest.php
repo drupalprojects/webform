@@ -60,6 +60,7 @@ class WebformSubmissionViewTest extends WebformTestBase {
       'hidden' => '{hidden}',
       'value' => '{value}',
       'textarea' => "{textarea line 1}<br />\n{textarea line 2}",
+      'empty' => '{Empty}',
       'textfield' => '{textfield}',
       'select' => 'one',
       'select_multiple' => 'one, two',
