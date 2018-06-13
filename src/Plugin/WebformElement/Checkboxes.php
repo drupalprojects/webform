@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformSubmissionConditionsValidator;
 use Drupal\webform\WebformSubmissionInterface;
 
@@ -61,8 +62,12 @@ class Checkboxes extends OptionsBase {
    */
   protected function getElementSelectorInputsOptions(array $element) {
     $selectors = $element['#options'];
-    foreach ($selectors as &$text) {
+    foreach ($selectors as $index => $text) {
+      // Remove description from text.
+      list($text) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $text);
+      // Append element type to text.
       $text .= ' [' . $this->t('Checkbox') . ']';
+      $selectors[$index] = $text ;
     }
     return $selectors;
   }
