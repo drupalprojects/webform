@@ -173,6 +173,7 @@ class WebformEntityHandlersForm extends EntityForm {
       ],
       '#attributes' => [
         'id' => 'webform-handlers',
+        'class' => ['webform-handlers-table'],
       ],
       '#empty' => $this->t('There are currently no handlers setup for this webform.'),
     ] + $rows;

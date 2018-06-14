@@ -197,6 +197,7 @@ a:focus .webform-icon-locked--off {
   .js-off-canvas-dialog-open .webform-handlers-table td {
     display: none;
   }
+
   .js-off-canvas-dialog-open .webform-handlers-table th:first-child,
   .js-off-canvas-dialog-open .webform-handlers-table th:last-child,
   .js-off-canvas-dialog-open .webform-handlers-table td:first-child,
