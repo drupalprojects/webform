@@ -217,6 +217,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'element',
     ];
 
+    // Enhancement: Webform Extra Field.
+    $projects['webform_extra_field'] = [
+      'title' => $this->t('Webform Extra Field'),
+      'description' => $this->t("Provides an extra field for placing a webform in any entity display mode."),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_extra_field'),
+      'category' => 'enhancement',
+    ];
+
     // Enhancement: Webform Wizard Full Title.
     $projects['webform_wizard_full_title'] = [
       'title' => $this->t('Webform Wizard Full Title'),

@@ -865,7 +865,7 @@ class WebformCliService implements WebformCliServiceInterface {
     // Configuration.
     // - http://us3.php.net/manual/en/book.tidy.php
     // - http://tidy.sourceforge.net/docs/quickref.html#wrap
-    $config = ['show-body-only' => TRUE, 'wrap' => '0'];
+    $config = ['show-body-only' => TRUE, 'wrap' => '10000'];
 
     $tidy = new \tidy();
     $tidy->parseString($html, $config, 'utf8');
