@@ -108,6 +108,11 @@ abstract class WebformOtherBase extends FormElement {
     }
     $element[$type]['#error_no_message'] = TRUE;
 
+    // Prevent nested fieldset by removing fieldset theme wrapper around
+    // radios and checkboxes.
+    // @see \Drupal\Core\Render\Element\CompositeFormElementTrait
+    $element[$type]['#pre_render'] = [];
+
     // Disable label[for] which does not point to any specific element.
     // @see webform_preprocess_form_element_label()
     if (in_array($type, ['radios', 'checkboxes', 'buttons'])) {
