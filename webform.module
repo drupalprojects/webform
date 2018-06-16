@@ -472,7 +472,7 @@ function webform_mail_alter(&$message) {
  * Implements hook_page_attachments().
  */
 function webform_page_attachments(array &$attachments) {
-  $route_name = Drupal::routeMatch()->getRouteName();
+  $route_name = \Drupal::routeMatch()->getRouteName();
   $url = Url::fromRoute('<current>')->toString();
 
   // Attach global libraries only to webform specific pages.

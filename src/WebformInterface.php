@@ -170,10 +170,10 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function hasPreview();
 
   /**
-   * Determine if the webform has multistep form wizard pages.
+   * Determine if the webform has multi-step form wizard pages.
    *
    * @return bool
-   *   TRUE if the webform has multistep form wizard pages.
+   *   TRUE if the webform has multi-step form wizard pages.
    */
   public function hasWizardPages();
 

@@ -276,6 +276,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['wizard_settings']['wizard_track'] = [
       '#type' => 'select',
       '#title' => $this->t('Track wizard progress in the URL by'),
+      '#description' => $this->t("Progress tracking allows analytic software to capture a multi-step form's progress."),
       '#options' => [
         'name' => $this->t("Page name (?page=contact)"),
         'index' => $this->t("Page index (?page=2)"),
@@ -318,7 +319,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['preview_settings']['preview_container']['preview_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview label'),
-      '#description' => $this->t("The text displayed within a multistep wizard's progress bar"),
+      '#description' => $this->t("The text displayed within a multi-step wizard's progress bar"),
       '#default_value' => $settings['preview_label'],
     ];
     $form['preview_settings']['preview_container']['preview_title'] = [
@@ -544,7 +545,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       'form_reset' => [
         'group' => $this->t('Form'),
         'title' => $this->t('Display reset button'),
-        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards. Current drafts will be deleted when the form is reset."),
+        'form_description' => $this->t("If checked, users will be able to reset a form and restart multi-step wizards. Current drafts will be deleted when the form is reset."),
       ],
       'form_submit_once' => [
         'group' => $this->t('Form'),

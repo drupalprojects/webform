@@ -1484,10 +1484,10 @@ class WebformSubmissionForm extends ContentEntityForm {
   /****************************************************************************/
 
   /**
-   * Determine if this is a multistep wizard form.
+   * Determine if this is a multi-step wizard form.
    *
    * @return bool
-   *   TRUE if this multistep wizard form.
+   *   TRUE if this multi-step wizard form.
    */
   protected function hasPages() {
     return $this->getWebform()->getPages($this->operation);
