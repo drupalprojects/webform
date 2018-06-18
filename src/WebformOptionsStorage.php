@@ -144,7 +144,9 @@ class WebformOptionsStorage extends ConfigEntityStorage implements WebformOption
       foreach (array_keys($definitions) as $plugin_id) {
         /** @var \Drupal\Core\Render\Element\ElementInterface $element */
         $element = $this->elementInfo->createInstance($plugin_id);
-        if (!$element instanceof WebformCompositeBase) {
+        // Make sure element is composite and not provided by the
+        // webform_composite.module.
+        if (!$element instanceof WebformCompositeBase || in_array($plugin_id, ['webform_composite'])) {
           continue;
         }
 
