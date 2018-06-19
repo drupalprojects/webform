@@ -192,6 +192,10 @@ a:focus .webform-icon-locked--off {
  * Handlers table.
  * @see /admin/structure/webform/manage/{webform_id}/handlers
  */
+.webform-handlers-table .ajax-progress-throbber {
+  display: none;
+}
+
 @media screen and (max-width: 1280px) {
   .js-off-canvas-dialog-open .webform-handlers-table th,
   .js-off-canvas-dialog-open .webform-handlers-table td {

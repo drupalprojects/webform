@@ -277,6 +277,20 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
+  public function enable() {
+    return $this->setStatus(TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function disable() {
+    return $this->setStatus(FALSE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isExcluded() {
     return $this->configFactory->get('webform.settings')->get('handler.excluded_handlers.' . $this->pluginDefinition['id']) ? TRUE : FALSE;
   }

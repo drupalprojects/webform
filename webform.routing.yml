@@ -663,6 +663,24 @@ entity.webform.handler.delete_form:
   requirements:
     _entity_access: 'webform.update'
 
+entity.webform.handler.enable:
+  path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/enable'
+  defaults:
+    _controller: '\Drupal\webform\WebformEntityHandlersForm::ajaxOperation'
+    op: enable
+  requirements:
+    _entity_access: 'webform.update'
+    _csrf_token: 'TRUE'
+
+entity.webform.handler.disable:
+  path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/disable'
+  defaults:
+    _controller: '\Drupal\webform\WebformEntityHandlersForm::ajaxOperation'
+    op: disable
+  requirements:
+    _entity_access: 'webform.update'
+    _csrf_token: 'TRUE'
+
 # Plugins.
 
 webform.reports_plugins.elements:
