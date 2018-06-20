@@ -122,6 +122,28 @@ elements: |
         required:
           ':input[name="checkboxes_trigger[one]"]':
             checked: true
+  checkboxes_other_trigger_details:
+    '#type': details
+    '#title': checkboxes_other_trigger
+    '#open': true
+    checkboxes_other_trigger:
+      '#type': webform_checkboxes_other
+      '#title': checkboxes_other_trigger
+      '#options':
+        one: One
+        two: Two
+        three: Three
+    checkboxes_other_dependent_required:
+      '#type': textfield
+      '#title': checkboxes_other_dependent_required
+      '#description': '<b>Required:</b> checkboxes_other[one]:checked=true OR checkboxes_other[other]:filled=true'
+      '#states':
+        required:
+          - ':input[name="checkboxes_other_trigger[checkboxes][one]"]':
+              checked: true
+          - or
+          - ':input[name="checkboxes_other_trigger[other]"]':
+              filled: true
   text_format_trigger_details:
     '#type': details
     '#title': text_format_trigger
