@@ -66,7 +66,8 @@ class WebformImageSelect extends Select {
   public static function setOptions(array &$element) {
     // Randomize images.
     if (!empty($element['#images_randomize'])) {
-      $element['#images'] = array_values(WebformArrayHelper::shuffle($element['#images']));
+
+      $element['#images'] = WebformArrayHelper::shuffle($element['#images']);
     }
 
     // Convert #images to #options and make sure images are keyed by value.
