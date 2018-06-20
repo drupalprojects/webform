@@ -115,7 +115,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
         $item_state = $item->$state;
         if ($item_state && strtotime($item_state) > time()) {
           $item_seconds = strtotime($item_state) - time();
-          if (!$max_age || $item_seconds > $max_age) {
+          if (!$max_age && $item_seconds > $max_age) {
             $max_age = $item_seconds;
           }
         }
@@ -124,7 +124,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
         $webform_state = $webform->get($state);
         if ($webform_state && strtotime($webform_state) > time()) {
           $webform_seconds = strtotime($webform_state) - time();
-          if (!$max_age || $webform_seconds > $max_age) {
+          if (!$max_age && $webform_seconds > $max_age) {
             $max_age = $webform_seconds;
           }
         }
