@@ -121,7 +121,6 @@ class WebformEmailConfirm extends FormElement {
    * Validates an email confirm element.
    */
   public static function validateWebformEmailConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
-
     $mail_1 = trim($element['mail_1']['#value']);
     $mail_2 = trim($element['mail_2']['#value']);
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);

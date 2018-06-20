@@ -124,6 +124,15 @@ class WebformRating extends Range {
       '#description' => $this->t('If checked, a reset button will be placed before the rating element.'),
       '#return_value' => TRUE,
     ];
+
+    // Only allow a rating element to be required if the min value can be
+    // set to 0.
+    $form['validation']['required_container']['#states'] = [
+      'visible' => [
+        ':input[name="properties[min]"]' => ['value' => '0'],
+      ],
+    ];
+
     return $form;
   }
 

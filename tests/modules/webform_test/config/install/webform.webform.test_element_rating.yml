@@ -20,14 +20,18 @@ elements: |
     '#open': true
     rating_basic:
       '#type': webform_rating
-      '#title': 'Rating basic'
+      '#title': rating_basic
     rating_advanced:
       '#type': webform_rating
-      '#title': 'Rating advanced'
+      '#title': rating_advanced
       '#star_size': large
       '#reset': true
       '#max': '10'
       '#step': '0.1'
+    rating_required:
+      '#type': webform_rating
+      '#title': rating_required
+      '#required': true
 css: ''
 javascript: ''
 settings:
