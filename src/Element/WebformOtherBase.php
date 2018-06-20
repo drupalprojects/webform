@@ -37,6 +37,7 @@ abstract class WebformOtherBase extends FormElement {
   protected static $properties = [
     '#title',
     '#required',
+    '#required_error',
     '#options',
     '#options_display',
     '#default_value',
