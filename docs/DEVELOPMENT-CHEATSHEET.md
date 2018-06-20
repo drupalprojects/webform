@@ -23,6 +23,7 @@ interdiff \
   [issue-number]-[old-comment-number].patch \
   [issue-number]-[new-comment-number].patch \
   > interdiff-[issue-number]-[old-comment-number]-[new-comment-number].txt
+cat interdiff-[issue-number]-[old-comment-number]-[new-comment-number].txt
 
 # Merge branch with all commits
 git checkout 8.x-5.x
