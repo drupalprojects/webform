@@ -644,12 +644,10 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
     }
 
     // Operations.
-    if (empty($account)) {
-      $columns['operations'] = [
-        'title' => $this->t('Operations'),
-        'sort' => FALSE,
-      ];
-    }
+    $columns['operations'] = [
+      'title' => $this->t('Operations'),
+      'sort' => FALSE,
+    ];
 
     // Add name and format to all columns.
     foreach ($columns as $name => &$column) {

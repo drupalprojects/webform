@@ -138,7 +138,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     // @see \Drupal\webform\Form\WebformResultsCustomForm::buildForm
     $available_columns = $webform_submission_storage->getColumns($webform);
     // Remove columns that should never be displayed to users.
-    $available_columns = array_diff_key($available_columns, array_flip(['uuid', 'in_draft', 'entity', 'sticky', 'locked', 'notes', 'uid', 'operations']));
+    $available_columns = array_diff_key($available_columns, array_flip(['uuid', 'in_draft', 'entity', 'sticky', 'locked', 'notes', 'uid']));
     $custom_columns = $webform_submission_storage->getUserColumns($webform);
     // Change sid's # to an actual label.
     $available_columns['sid']['title'] = $this->t('Submission ID');
