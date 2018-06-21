@@ -952,9 +952,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         // Return file content headers.
         $headers = file_get_content_headers($file);
 
-        // Force blacklisted files to be downloaded.
+        /** @var \Drupal\Core\File\FileSystemInterface  $file_system */
+        $file_system = \Drupal::service('file_system');
+        $filename = $file_system->basename($uri);
+        // Force blacklisted files to be downloaded instead of opening in the browser.
         if (in_array($headers['Content-Type'], static::$blacklistedMimeTypes)) {
-          $headers['Content-Disposition'] = 'attachment';
+          $headers['Content-Disposition'] = 'attachment; filename="' . Unicode::mimeHeaderEncode($filename) . '"';
+        }
+        else {
+          $headers['Content-Disposition'] = 'inline; filename="' . Unicode::mimeHeaderEncode($filename) . '"';
         }
 
         return $headers;
