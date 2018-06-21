@@ -627,59 +627,94 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     $operations = [];
 
-    if ($entity->access('update')) {
-      $operations['edit'] = [
-        'title' => $this->t('Edit'),
-        'weight' => 10,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form'),
-      ];
-    }
+    if ($this->account) {
+      if ($entity->access('update')) {
+        $operations['edit'] = [
+          'title' => $this->t('Edit'),
+          'weight' => 10,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission.edit'),
+        ];
+      }
 
-    if ($entity->access('view')) {
-      $operations['view'] = [
-        'title' => $this->t('View'),
-        'weight' => 20,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical'),
-      ];
-    }
+      if ($entity->access('view')) {
+        $operations['view'] = [
+          'title' => $this->t('View'),
+          'weight' => 20,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission'),
+        ];
+      }
 
-    if ($entity->access('notes')) {
-      $operations['notes'] = [
-        'title' => $this->t('Notes'),
-        'weight' => 21,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form'),
-      ];
-    }
+      if ($entity->access('create') && $webform->getSetting('submission_user_duplicate')) {
+        $operations['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'weight' => 23,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission.duplicate'),
+        ];
+      }
 
-    if ($webform->access('submission_update_any') && $webform->hasMessageHandler()) {
-      $operations['resend'] = [
-        'title' => $this->t('Resend'),
-        'weight' => 22,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form'),
-      ];
+      if ($entity->access('delete')) {
+        $operations['delete'] = [
+          'title' => $this->t('Delete'),
+          'weight' => 100,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission.delete'),
+        ];
+      }
     }
-    if ($webform->access('submission_update_any')) {
-      $operations['duplicate'] = [
-        'title' => $this->t('Duplicate'),
-        'weight' => 23,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form'),
-      ];
-    }
+    else {
+      if ($entity->access('update')) {
+        $operations['edit'] = [
+          'title' => $this->t('Edit'),
+          'weight' => 10,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form'),
+        ];
+      }
 
-    if ($entity->access('delete')) {
-      $operations['delete'] = [
-        'title' => $this->t('Delete'),
-        'weight' => 100,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form'),
-      ];
-    }
+      if ($entity->access('view')) {
+        $operations['view'] = [
+          'title' => $this->t('View'),
+          'weight' => 20,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical'),
+        ];
+      }
 
-    if ($entity->access('view_any') && \Drupal::currentUser()->hasPermission('access webform submission log')) {
-      $operations['log'] = [
-        'title' => $this->t('Log'),
-        'weight' => 100,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log'),
-      ];
+      if ($entity->access('notes')) {
+        $operations['notes'] = [
+          'title' => $this->t('Notes'),
+          'weight' => 21,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form'),
+        ];
+      }
+
+      if ($webform->access('submission_update_any') && $webform->hasMessageHandler()) {
+        $operations['resend'] = [
+          'title' => $this->t('Resend'),
+          'weight' => 22,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form'),
+        ];
+      }
+      if ($webform->access('submission_update_any')) {
+        $operations['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'weight' => 23,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form'),
+        ];
+      }
+
+      if ($entity->access('delete')) {
+        $operations['delete'] = [
+          'title' => $this->t('Delete'),
+          'weight' => 100,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form'),
+        ];
+      }
+
+      if ($entity->access('view_any') && \Drupal::currentUser()->hasPermission('access webform submission log')) {
+        $operations['log'] = [
+          'title' => $this->t('Log'),
+          'weight' => 100,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log'),
+        ];
+      }
     }
 
     // Add destination to all operation links.
