@@ -209,8 +209,6 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
   /**
    * Build element type row.
    *
-   * @param array $plugin_definition
-   *   Webform element plugin definition.
    * @param \Drupal\webform\Plugin\WebformElementInterface $webform_element
    *   Webform element plugin.
    * @param \Drupal\Core\Url $url
@@ -221,13 +219,13 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
    * @return array
    *   A renderable array containing the element type row.
    */
-  protected function buildRow(array $plugin_definition, WebformElementInterface $webform_element, Url $url, $label) {
+  protected function buildRow(WebformElementInterface $webform_element, Url $url, $label) {
     $row = [];
 
     // Type.
     $row['type']['link'] = [
       '#type' => 'link',
-      '#title' => $plugin_definition['label'],
+      '#title' => $webform_element->getPluginLabel(),
       '#url' => $url,
       '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
       '#prefix' => '<span class="webform-form-filter-text-source">',
@@ -235,7 +233,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     ];
     $row['type']['help'] = [
       '#type' => 'webform_help',
-      '#help' => $plugin_definition['description'],
+      '#help' => $webform_element->getPluginDescription(),
     ];
 
     // Preview.
@@ -265,7 +263,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       }
       $row['type']['#attributes']['class'][] = 'js-webform-tooltip-link';
       $row['type']['#attributes']['class'][] = 'webform-tooltip-link';
-      $row['type']['#attributes']['title'] = $plugin_definition['description'];
+      $row['type']['#attributes']['title'] = $webform_element->getPluginDescription();
     }
 
     return $row;

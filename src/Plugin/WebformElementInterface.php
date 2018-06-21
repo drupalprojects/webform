@@ -116,6 +116,14 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
   public function getPluginDescription();
 
   /**
+   * Gets the category of the plugin instance.
+   *
+   * @return string
+   *   The category of the plugin instance.
+   */
+  public function getPluginCategory();
+
+  /**
    * Gets the type name (aka id) of the plugin instance with the 'webform_' prefix.
    *
    * @return string

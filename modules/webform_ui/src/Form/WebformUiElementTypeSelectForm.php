@@ -31,9 +31,7 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
 
     $form = parent::buildForm($form, $form_state, $webform);
 
-    foreach ($definitions as $plugin_id => $plugin_definition) {
-      $element_type = $plugin_id;
-
+    foreach (array_keys($definitions) as $element_type) {
       /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
       $webform_element = $elements[$element_type];
 
@@ -43,17 +41,17 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
       }
 
       // Skip wizard page which has a dedicated URL.
-      if ($element_type == 'webform_wizard_page') {
+      if ($element_type === 'webform_wizard_page') {
         continue;
       }
 
-      $category_name = (string) $plugin_definition['category'];
+      $category_name = (string) $webform_element->getPluginCategory();
       if (!isset($categories[$category_name])) {
         $categories[$category_name] = $category_index++;
         $category_id = $categories[$category_name];
         $form[$category_id] = [
           '#type' => 'details',
-          '#title' => $plugin_definition['category'],
+          '#title' => $webform_element->getPluginCategory(),
           '#open' => TRUE,
           '#attributes' => ['data-webform-element-id' => 'webform-ui-element-type-' . $category_id],
         ];
@@ -76,7 +74,7 @@ class WebformUiElementTypeSelectForm extends WebformUiElementTypeFormBase {
         ['webform' => $webform->id(), 'type' => $element_type],
         ($parent) ? ['query' => ['parent' => $parent]] : []
       );
-      $form[$category_id]['elements'][$element_type] = $this->buildRow($plugin_definition, $webform_element, $url, $this->t('Add element'));
+      $form[$category_id]['elements'][$element_type] = $this->buildRow($webform_element, $url, $this->t('Add element'));
     }
 
     return $form;
