@@ -56,14 +56,14 @@ elements: |
     flex_table_right:
       '#type': table
       '#title': 'Table 02'
-  flexbox_webform_address:
+  flexbox_address:
     '#type': webform_flexbox
-    flex_webform_address_left:
-      '#type': webform_address
-      '#title': 'Address 01'
-    flex_webform_address_right:
-      '#type': webform_address
-      '#title': 'Address 02'
+    flex_address_left:
+      '#type': address
+      '#title': 'Advanced address 01'
+    flex_address_right:
+      '#type': address
+      '#title': 'Advanced address 02'
   flexbox_processed_text:
     '#type': webform_flexbox
     flex_processed_text_left:
@@ -88,6 +88,14 @@ elements: |
     flex_webform_autocomplete_right:
       '#type': webform_autocomplete
       '#title': 'Autocomplete 02'
+  flexbox_webform_address:
+    '#type': webform_flexbox
+    flex_webform_address_left:
+      '#type': webform_address
+      '#title': 'Basic address 01'
+    flex_webform_address_right:
+      '#type': webform_address
+      '#title': 'Basic address 02'
   flexbox_webform_markup:
     '#type': webform_flexbox
     flex_webform_markup_left:

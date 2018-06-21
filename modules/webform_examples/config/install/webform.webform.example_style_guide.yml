@@ -552,6 +552,14 @@ elements: |
         '#type': textfield
         '#title': 'Element (Flex: 3)'
         '#flex': 3
+  contrib:
+    '#type': details
+    '#title': 'Contrib modules'
+    '#open': true
+    address:
+      '#type': address
+      '#title': Address
+      '#description': '@see <a href="https://www.drupal.org/project/address">https://www.drupal.org/project/address</a>'
 css: ''
 javascript: ''
 settings:

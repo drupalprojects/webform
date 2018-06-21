@@ -145,6 +145,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
+    // Element: Address.
+    $projects['address'] = [
+      'title' => $this->t('Address'),
+      'description' => $this->t("Provides functionality for storing, validating and displaying international postal addresses."),
+      'url' => Url::fromUri('https://www.drupal.org/project/address'),
+      'category' => 'element',
+    ];
+
     // Element: Webform Composite Tools.
     $projects['webform_composite'] = [
       'title' => $this->t('Webform Composite Tools'),

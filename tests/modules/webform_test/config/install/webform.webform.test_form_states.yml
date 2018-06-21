@@ -71,16 +71,19 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
-    visible_webform_address:
-      '#type': webform_address
-      '#title': Address
+    visible_address:
+      '#type': address
+      '#title': 'Advanced address'
       '#default_value':
-        address: '10 Main Street'
-        address_2: '10 Main Street'
-        city: Springfield
-        state_province: Alabama
-        postal_code: '11111'
-        country: Afghanistan
+        given_name: John
+        family_name: Smith
+        organization: 'Google Inc.'
+        address_line1: '1098 Alta Ave'
+        postal_code: '94043'
+        locality: 'Mountain View'
+        administrative_area: CA
+        country_code: US
+        langcode: en
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -112,6 +115,23 @@ elements: |
       '#type': webform_autocomplete
       '#title': Autocomplete
       '#default_value': Loremipsum
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_webform_address:
+      '#type': webform_address
+      '#title': 'Basic address'
+      '#default_value':
+        address: '10 Main Street'
+        address_2: '10 Main Street'
+        city: Springfield
+        state_province: Alabama
+        postal_code: '11111'
+        country: Afghanistan
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -323,7 +343,7 @@ elements: |
     visible_date:
       '#type': date
       '#title': Date
-      '#default_value': '2026-06-22T01:12:56-0400'
+      '#default_value': '2025-12-07T23:03:39-0500'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -335,7 +355,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '2010-09-02T11:55:59-0400'
+      '#default_value': '2031-05-08T00:29:17-0400'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -346,7 +366,7 @@ elements: |
     visible_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '2013-06-05T17:39:18-0400'
+      '#default_value': '2036-12-05T02:05:53-0500'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -1082,16 +1102,19 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
-    invisible_webform_address:
-      '#type': webform_address
-      '#title': Address
+    invisible_address:
+      '#type': address
+      '#title': 'Advanced address'
       '#default_value':
-        address: '10 Main Street'
-        address_2: '10 Main Street'
-        city: Springfield
-        state_province: Alabama
-        postal_code: '11111'
-        country: Afghanistan
+        given_name: John
+        family_name: Smith
+        organization: 'Google Inc.'
+        address_line1: '1098 Alta Ave'
+        postal_code: '94043'
+        locality: 'Mountain View'
+        administrative_area: CA
+        country_code: US
+        langcode: en
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1114,6 +1137,20 @@ elements: |
       '#type': webform_autocomplete
       '#title': Autocomplete
       '#default_value': Loremipsum
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_webform_address:
+      '#type': webform_address
+      '#title': 'Basic address'
+      '#default_value':
+        address: '10 Main Street'
+        address_2: '10 Main Street'
+        city: Springfield
+        state_province: Alabama
+        postal_code: '11111'
+        country: Afghanistan
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1283,7 +1320,7 @@ elements: |
     invisible_date:
       '#type': date
       '#title': Date
-      '#default_value': '2012-09-09T14:24:41-0400'
+      '#default_value': '2029-09-22T22:31:32-0400'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1292,7 +1329,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '2018-12-28T05:58:05-0500'
+      '#default_value': '2012-11-08T22:22:22-0500'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1300,7 +1337,7 @@ elements: |
     invisible_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '2034-07-13T18:52:51-0400'
+      '#default_value': '2030-03-15T14:17:44-0400'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1850,16 +1887,19 @@ elements: |
     disabled_trigger:
       '#type': checkbox
       '#title': 'Disable elements'
-    disabled_webform_address:
-      '#type': webform_address
-      '#title': Address
+    disabled_address:
+      '#type': address
+      '#title': 'Advanced address'
       '#default_value':
-        address: '10 Main Street'
-        address_2: '10 Main Street'
-        city: Springfield
-        state_province: Alabama
-        postal_code: '11111'
-        country: Afghanistan
+        given_name: John
+        family_name: Smith
+        organization: 'Google Inc.'
+        address_line1: '1098 Alta Ave'
+        postal_code: '94043'
+        locality: 'Mountain View'
+        administrative_area: CA
+        country_code: US
+        langcode: en
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1882,6 +1922,20 @@ elements: |
       '#type': webform_autocomplete
       '#title': Autocomplete
       '#default_value': Loremipsum
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_webform_address:
+      '#type': webform_address
+      '#title': 'Basic address'
+      '#default_value':
+        address: '10 Main Street'
+        address_2: '10 Main Street'
+        city: Springfield
+        state_province: Alabama
+        postal_code: '11111'
+        country: Afghanistan
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2051,7 +2105,7 @@ elements: |
     disabled_date:
       '#type': date
       '#title': Date
-      '#default_value': '2023-03-04T06:00:33-0500'
+      '#default_value': '2015-04-28T17:21:41-0400'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2060,7 +2114,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '2011-07-16T08:52:39-0400'
+      '#default_value': '2009-06-05T06:32:08-0400'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -2068,7 +2122,7 @@ elements: |
     disabled_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '2023-07-20T18:43:53-0400'
+      '#default_value': '2012-04-05T08:52:12-0400'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':

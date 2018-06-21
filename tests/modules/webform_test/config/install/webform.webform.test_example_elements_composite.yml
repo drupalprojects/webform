@@ -14,16 +14,27 @@ title: 'Test: Example: Elements: Composite'
 description: 'Examples of composite elements, includes address, and contact.'
 category: 'Test: Example'
 elements: |
+  address_example:
+    '#type': details
+    '#title': 'Advanced address'
+    '#open': true
+    address:
+      '#type': address
+      '#title': 'Advanced address'
+    address_multiple:
+      '#type': address
+      '#title': 'Advanced address multiple'
+      '#multiple': true
   webform_address_example:
     '#type': details
-    '#title': Address
+    '#title': 'Basic address'
     '#open': true
     webform_address:
       '#type': webform_address
-      '#title': Address
+      '#title': 'Basic address'
     webform_address_multiple:
       '#type': webform_address
-      '#title': 'Address multiple'
+      '#title': 'Basic address multiple'
       '#multiple': true
       '#multiple__header': true
   webform_contact_example:

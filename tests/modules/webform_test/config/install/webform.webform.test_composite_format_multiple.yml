@@ -18,12 +18,79 @@ elements: |
     '#type': details
     '#title': 'Composite elements'
     '#open': true
+    address:
+      '#type': details
+      '#title': 'Advanced address'
+      address_ol:
+        '#type': address
+        '#title': 'Advanced address (Ordered list)'
+        '#multiple': true
+        '#default_value':
+          -
+            given_name: John
+            family_name: Smith
+            organization: 'Google Inc.'
+            address_line1: '1098 Alta Ave'
+            postal_code: '94043'
+            locality: 'Mountain View'
+            administrative_area: CA
+            country_code: US
+            langcode: en
+        '#format_items': ol
+      address_ul:
+        '#type': address
+        '#title': 'Advanced address (Unordered list)'
+        '#multiple': true
+        '#default_value':
+          -
+            given_name: John
+            family_name: Smith
+            organization: 'Google Inc.'
+            address_line1: '1098 Alta Ave'
+            postal_code: '94043'
+            locality: 'Mountain View'
+            administrative_area: CA
+            country_code: US
+            langcode: en
+        '#format_items': ul
+      address_hr:
+        '#type': address
+        '#title': 'Advanced address (Horizontal rule)'
+        '#multiple': true
+        '#default_value':
+          -
+            given_name: John
+            family_name: Smith
+            organization: 'Google Inc.'
+            address_line1: '1098 Alta Ave'
+            postal_code: '94043'
+            locality: 'Mountain View'
+            administrative_area: CA
+            country_code: US
+            langcode: en
+        '#format_items': hr
+      address_table:
+        '#type': address
+        '#title': 'Advanced address (Table)'
+        '#multiple': true
+        '#default_value':
+          -
+            given_name: John
+            family_name: Smith
+            organization: 'Google Inc.'
+            address_line1: '1098 Alta Ave'
+            postal_code: '94043'
+            locality: 'Mountain View'
+            administrative_area: CA
+            country_code: US
+            langcode: en
+        '#format_items': table
     webform_address:
       '#type': details
-      '#title': Address
+      '#title': 'Basic address'
       webform_address_ol:
         '#type': webform_address
-        '#title': 'Address (Ordered list)'
+        '#title': 'Basic address (Ordered list)'
         '#multiple': true
         '#default_value':
           -
@@ -50,7 +117,7 @@ elements: |
         '#format_items': ol
       webform_address_ul:
         '#type': webform_address
-        '#title': 'Address (Unordered list)'
+        '#title': 'Basic address (Unordered list)'
         '#multiple': true
         '#default_value':
           -
@@ -77,7 +144,7 @@ elements: |
         '#format_items': ul
       webform_address_hr:
         '#type': webform_address
-        '#title': 'Address (Horizontal rule)'
+        '#title': 'Basic address (Horizontal rule)'
         '#multiple': true
         '#default_value':
           -
@@ -104,7 +171,7 @@ elements: |
         '#format_items': hr
       webform_address_table:
         '#type': webform_address
-        '#title': 'Address (Table)'
+        '#title': 'Basic address (Table)'
         '#multiple': true
         '#default_value':
           -
