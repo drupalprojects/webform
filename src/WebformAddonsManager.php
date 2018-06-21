@@ -440,7 +440,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'recommended' => TRUE,
     ];
 
-    // Webform Invitation.
+    // Submissions: Webform Invitation.
     $projects['webform_invitation'] = [
       'title' => $this->t('Webform Invitation'),
       'description' => $this->t('Allows you to restrict submissions to a webform by generating codes (which may then be distributed e.g. by email to participants).'),
@@ -496,6 +496,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'rest',
     ];
 
+    // Utility: Googalytics Webform.
+    $projects['ga_webform'] = [
+      'title' => $this->t('Googalytics Webform'),
+      'description' => $this->t('Provides integration for Webform into Googalytics module.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/ga_webform'),
+      'category' => 'utility',
+    ];
+
     // Utility: Webform Encrypt.
     $projects['wf_encrypt'] = [
       'title' => $this->t('Webform Encrypt'),
@@ -503,6 +511,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/webform_encrypt'),
       'category' => 'utility',
     ];
+
 
     // Utility: Webform Ip Track.
     $projects['webform_ip_track'] = [
