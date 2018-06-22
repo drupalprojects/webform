@@ -65,6 +65,7 @@ drush php-eval 'module_load_include('install', 'webform'); webform_update_8124()
 echo 'true' > webform.features.yml
 
 echo 'true' > modules/webform_examples/webform_examples.features.yml
+echo 'true' > modules/webform_examples_accessibility/webform_examples_accessibility.features.yml
 echo 'true' > modules/webform_example_element/webform_example_element.features.yml
 echo 'true' > modules/webform_example_composite/webform_example_composite.features.yml
 echo 'true' > modules/webform_example_element/webform_example_remote_post.features.yml
@@ -109,7 +110,7 @@ drush en -y webform\
   webform_demo_application_evaluation\
   webform_demo_event_registration\
   webform_examples\
-  webform_examples\
+  webform_examples_accessibility\
   webform_example_element\
   webform_example_remote_post\
   webform_image_select\
@@ -136,6 +137,7 @@ drush features-export -y webform
 drush features-export -y webform_demo_application_evaluation
 drush features-export -y webform_demo_event_registration
 drush features-export -y webform_examples
+drush features-export -y webform_examples_accessibility
 drush features-export -y webform_example_element
 drush features-export -y webform_example_composite
 drush features-export -y webform_example_remote_post
@@ -164,6 +166,7 @@ drush webform:tidy -y --dependencies webform
 drush webform:tidy -y --dependencies webform_demo_application_evaluation
 drush webform:tidy -y --dependencies webform_demo_event_registration
 drush webform:tidy -y --dependencies webform_examples
+drush webform:tidy -y --dependencies webform_examples_accessibility
 drush webform:tidy -y --dependencies webform_example_element
 drush webform:tidy -y --dependencies webform_example_composite
 drush webform:tidy -y --dependencies webform_example_remote_post
@@ -189,6 +192,7 @@ drush features-import -y webform
 drush features-import -y webform_demo_application_evaluation
 drush features-import -y webform_demo_event_registration
 drush features-import -y webform_examples
+drush features-import -y webform_examples_accessibility
 drush features-import -y webform_example_element
 drush features-import -y webform_example_composite
 drush features-import -y webform_example_remote_post
