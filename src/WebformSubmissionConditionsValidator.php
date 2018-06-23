@@ -461,11 +461,11 @@ class WebformSubmissionConditionsValidator implements WebformSubmissionCondition
         break;
 
       case 'less':
-        $result = ($element_value !== '' && $trigger_value > $element_value);
+        $result = ($element_value !== '' && floatval($trigger_value) > floatval($element_value));
         break;
 
       case 'greater':
-        $result = ($element_value !== '' && $trigger_value < $element_value);
+        $result = ($element_value !== '' && floatval($trigger_value) < floatval($element_value));
         break;
 
       default:

@@ -55,10 +55,10 @@
       return !((new RegExp(reference['!pattern'])).test(value));
     }
     else if ('less' in reference) {
-      return (value !== '' && reference.less > value);
+      return (value !== '' && parseFloat(reference.less) > parseFloat(value));
     }
     else if ('greater' in reference) {
-      return (value !== '' && reference.greater < value);
+      return (value !== '' && parseFloat(reference.greater) < parseFloat(value));
     }
     else {
       return reference.indexOf(value) !== false;
