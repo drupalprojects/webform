@@ -78,6 +78,7 @@ echo 'true' > modules/webform_image_select/tests/modules/webform_image_select_te
 
 echo 'true' > modules/webform_node/webform_node.features.yml
 echo 'true' > modules/webform_node/tests/modules/webform_node_test_multiple/webform_node_test_multiple.features.yml
+echo 'true' > modules/webform_node/tests/modules/webform_node_test_translation/webform_node_test_translation.features.yml
 
 echo 'true' > modules/webform_scheduled_email/tests/modules/webform_scheduled_email_test/webform_scheduled_email_test.features.yml
 
@@ -126,6 +127,7 @@ drush en -y webform\
   webform_test_translation\
   webform_image_select_test\
   webform_node_test_multiple\
+  webform_node_test_translation\
   webform_scheduled_email_test;
 
 # Show the difference between the active config and the default config.
@@ -156,6 +158,7 @@ drush features-export -y webform_test_translation
 drush features-export -y webform_test_paragraphs
 drush features-export -y webform_image_select_test
 drush features-export -y webform_node_test_multiple
+drush features-export -y webform_node_test_translation
 drush features-export -y webform_scheduled_email_test
 
 # Revert all feature update to *.info.yml files.
@@ -185,6 +188,7 @@ drush webform:tidy -y --dependencies webform_test_translation
 drush webform:tidy -y --dependencies webform_test_paragraphs
 drush webform:tidy -y --dependencies webform_image_select_test
 drush webform:tidy -y --dependencies webform_node_test_multiple
+drush webform:tidy -y --dependencies webform_node_test_translation
 drush webform:tidy -y --dependencies webform_scheduled_email_test
 
 # Re-import all webform configuration into your site.      
@@ -211,5 +215,6 @@ drush features-import -y webform_test_translation
 drush features-import -y webform_test_paragraphs
 drush features-import -y webform_image_select_test
 drush features-import -y webform_node_test_multiple
+drush features-import -y webform_node_test_translation
 drush features-import -y webform_scheduled_email_test
 ```

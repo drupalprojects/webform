@@ -378,7 +378,7 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     $webform = $webform_submission->getWebform();
     $bubbleable_metadata->addCacheableDependency($webform);
 
-    $source_entity = $webform_submission->getSourceEntity();
+    $source_entity = $webform_submission->getSourceEntity(TRUE);
     if ($source_entity) {
       $bubbleable_metadata->addCacheableDependency($source_entity);
     }
@@ -564,10 +564,10 @@ function webform_tokens($type, $tokens, array $data, array $options, BubbleableM
     if (($webform_tokens = $token_service->findWithPrefix($tokens, 'webform')) && ($webform = $webform_submission->getWebform())) {
       $replacements += $token_service->generate('webform', $webform_tokens, ['webform' => $webform], $options, $bubbleable_metadata);
     }
-    if (($source_entity_tokens = $token_service->findWithPrefix($tokens, 'source-entity')) && ($source_entity = $webform_submission->getSourceEntity())) {
+    if (($source_entity_tokens = $token_service->findWithPrefix($tokens, 'source-entity')) && ($source_entity = $webform_submission->getSourceEntity(TRUE))) {
       $replacements += $token_service->generate($source_entity->getEntityTypeId(), $source_entity_tokens, [$source_entity->getEntityTypeId() => $source_entity], $options, $bubbleable_metadata);
     }
-    if (($submitted_to_tokens = $token_service->findWithPrefix($tokens, 'submitted-to')) && ($submitted_to = $webform_submission->getSourceEntity() ?: $webform_submission->getWebform())) {
+    if (($submitted_to_tokens = $token_service->findWithPrefix($tokens, 'submitted-to')) && ($submitted_to = $webform_submission->getSourceEntity(TRUE) ?: $webform_submission->getWebform())) {
       $replacements += $token_service->generate($submitted_to->getEntityTypeId(), $submitted_to_tokens, [$submitted_to->getEntityTypeId() => $submitted_to], $options, $bubbleable_metadata);
     }
 
