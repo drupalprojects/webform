@@ -2279,3 +2279,58 @@ function webform_update_8129() {
 function webform_update_8130() {
   _webform_update_webform_settings();
 }
+
+
+/**
+ * Issue #2980470: Convert email handler "default" settings to use "_default_" to prevent localization issues.
+ */
+function webform_update_8131() {
+  // Get all webform handlers that are instances of the email handler.
+  // This allows any custom handler that extends the EmailWebformHandler to be
+  // updated.
+  /** @var \Drupal\webform\Plugin\WebformHandlerManagerInterface $handler_manager */
+  $handler_manager = \Drupal::service('plugin.manager.webform.handler');
+  $definitions = $handler_manager->getDefinitions();
+  $email_handler_ids = [];
+  foreach ($definitions as $plugin_id => $definition) {
+    if ($handler_manager->createInstance($plugin_id) instanceof EmailWebformHandler) {
+      $email_handler_ids[$plugin_id] = $plugin_id;
+    }
+  }
+
+  $default_settings = [
+    'to_mail',
+    'from_mail',
+    'from_name',
+    'subject',
+    'body',
+  ];
+
+  $config_factory = \Drupal::configFactory();
+  // Update 'webform.webform.*' configuration.
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+
+    // Get data.
+    $data = $webform_config->getRawData();
+
+    // Change 'default' to '_default' is email handler settings.
+    $save_handler = FALSE;
+    foreach ($data['handlers'] as &$handler) {
+      if (!isset($email_handler_ids[$handler['id']])) {
+        continue;
+      }
+
+      foreach ($handler['settings'] as $settings_key => $setting_value) {
+        if ($setting_value === 'default' && in_array($settings_key, $default_settings)) {
+          $handler['settings'][$settings_key] = EmailWebformHandler::DEFAULT_VALUE;
+          $save_handler = TRUE;
+        }
+      }
+    }
+
+    if ($save_handler) {
+      $webform_config->setData($data)->save();
+    }
+  }
+}

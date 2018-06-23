@@ -193,7 +193,7 @@ handlers:
       from_options: {  }
       from_name: '[webform_submission:values:first_name:raw] [webform_submission:values:last_name:raw]'
       subject: '[webform_submission:values:subject:raw]'
-      body: default
+      body: _default
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true

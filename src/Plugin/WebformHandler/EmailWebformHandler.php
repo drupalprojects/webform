@@ -59,8 +59,15 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
 
   /**
    * Default option value.
+   *
+   * @see \Drupal\webform\Plugin\WebformHandler\EmailWebformHandler::getMessageEmails
    */
   const DEFAULT_OPTION = '_default_';
+
+  /**
+   * Default value. (This is used by the handler's settings.)
+   */
+  const DEFAULT_VALUE = '_default';
 
   /**
    * The current user.
@@ -194,20 +201,42 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
   /**
    * {@inheritdoc}
    */
+  public function setConfiguration(array $configuration) {
+    parent::setConfiguration($configuration);
+
+    // Make sure 'default' is converted to '_default'.
+    // @see https://www.drupal.org/project/webform/issues/2980470
+    // @see webform_update_8131()
+    // @todo Remove this code before stable release.
+    $default_configuration = $this->defaultConfiguration();
+    foreach ($this->configuration as $key => $value) {
+      if ($value === 'default'
+        && isset($default_configuration[$key])
+        && $default_configuration[$key] === static::DEFAULT_VALUE) {
+        $this->configuration[$key] = static::DEFAULT_VALUE;
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function defaultConfiguration() {
     return [
       'states' => [WebformSubmissionInterface::STATE_COMPLETED],
-      'to_mail' => 'default',
+      'to_mail' => static::DEFAULT_VALUE,
       'to_options' => [],
       'cc_mail' => '',
       'cc_options' => [],
       'bcc_mail' => '',
       'bcc_options' => [],
-      'from_mail' => 'default',
+      'from_mail' => static::DEFAULT_VALUE,
       'from_options' => [],
-      'from_name' => 'default',
-      'subject' => 'default',
-      'body' => 'default',
+      'from_name' => static::DEFAULT_VALUE,
+      'subject' => static::DEFAULT_VALUE,
+      'body' => static::DEFAULT_VALUE,
       'excluded_elements' => [],
       'ignore_access' => FALSE,
       'exclude_empty' => TRUE,
@@ -287,7 +316,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $configuration = $this->getConfiguration();
     $email = [];
     foreach ($configuration['settings'] as $key => $value) {
-      $email[$key] = ($value === 'default') ? $this->getDefaultConfigurationValue($key) : $value;
+      $email[$key] = ($value === static::DEFAULT_VALUE) ? $this->getDefaultConfigurationValue($key) : $value;
     }
     return $email;
   }
@@ -431,7 +460,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     if ($has_edit_twig_access) {
       $body_options['twig'] = $this->t('Twig template...');
     }
-    $body_options['default'] = $this->t('Default');
+    $body_options[static::DEFAULT_VALUE] = $this->t('Default');
     $body_options[(string) $this->t('Elements')] = $text_element_options_value;
 
     // Get default format.
@@ -512,7 +541,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         '#attributes' => ['readonly' => 'readonly', 'disabled' => 'disabled'],
         '#states' => [
           'visible' => [
-            ':input[name="settings[body]"]' => ['value' => 'default'],
+            ':input[name="settings[body]"]' => ['value' => static::DEFAULT_VALUE],
             ':input[name="settings[html]"]' => ['checked' => ($format == 'html') ? TRUE : FALSE],
           ],
         ],
@@ -789,8 +818,8 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
         continue;
       }
 
-      // Determine if configuration value set to 'default'.
-      $is_default_configuration = ($configuration_value === 'default');
+      // Determine if configuration value set to '_default'.
+      $is_default_configuration = ($configuration_value === static::DEFAULT_VALUE);
       // Determine if configuration value should use global configuration.
       $is_global_configuration = in_array($configuration_key, ['reply_to', 'return_path', 'sender_mail', 'sender_name']);
       if ($is_default_configuration || (!$configuration_value && $is_global_configuration)) {
@@ -1326,7 +1355,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $options = [];
     $options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom @label...', ['@label' => $label]);
     if ($default_option) {
-      $options[(string) $this->t('Default')] = ['default' => $default_option];
+      $options[(string) $this->t('Default')] = [static::DEFAULT_VALUE => $default_option];
     }
     if ($element_options) {
       $options[(string) $this->t('Elements')] = $element_options;
