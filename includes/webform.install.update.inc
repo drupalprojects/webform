@@ -2280,7 +2280,6 @@ function webform_update_8130() {
   _webform_update_webform_settings();
 }
 
-
 /**
  * Issue #2980470: Convert email handler "default" settings to use "_default_" to prevent localization issues.
  */
