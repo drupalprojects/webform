@@ -1,0 +1,10 @@
+name: 'Webform node module translation test'
+type: module
+description: 'Support module for webform node that enabled translations for webform content type.'
+package: Testing
+core: 8.x
+dependencies:
+  - 'webform:webform'
+  - 'webform:webform_node'
+  - 'webform:webform_test_translation'
+  - 'drupal:content_translation'
