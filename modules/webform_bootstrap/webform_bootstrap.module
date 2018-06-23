@@ -154,6 +154,76 @@ function webform_bootstrap_preprocess_input(&$variables) {
 }
 
 /**
+ * Implements template_preprocess_fieldset().
+ */
+function webform_bootstrap_preprocess_fieldset(&$variables) {
+  if (!_webform_bootstrap_is_active_theme()) {
+    return;
+  }
+
+  // Make sure that the core/modules/system/templates/fieldset.html.twig
+  // template is being used because this the template that we are fixing.
+  // Caching the info just-in-case there are a lot of fieldsets.
+  static $is_system_fieldset;
+  if (!isset($is_system_fieldset)) {
+    /** @var \Drupal\Core\Utility\ThemeRegistry $theme_registry */
+    $theme_registry = \Drupal::service('theme.registry')->getRuntime();
+    $info = $theme_registry->get('fieldset');
+    $is_system_fieldset = ($info['path'] === 'core/modules/system/templates') ? TRUE : FALSE;
+  }
+  if (!$is_system_fieldset) {
+    return;
+  }
+
+  // Style fieldset error messages to match form element error messages.
+  // @see form-element.html.twig
+  if (!empty($variables['errors'])) {
+    $variables['errors'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['form-item--error-message', 'alert', 'alert-danger', 'alert-sm'],
+      ],
+      'content' => ['#markup' => $variables['errors']],
+    ];
+  }
+}
+
+/**
+ * Implements template_preprocess_fieldset().
+ */
+function webform_bootstrap_preprocess_fieldset(&$variables) {
+  if (!_webform_bootstrap_is_active_theme()) {
+    return;
+  }
+
+  // Make sure that the core/modules/system/templates/fieldset.html.twig
+  // template is being used because this the template that we are fixing.
+  // Caching the info just-in-case there are a lot of fieldsets.
+  static $is_system_fieldset;
+  if (!isset($is_system_fieldset)) {
+    /** @var \Drupal\Core\Utility\ThemeRegistry $theme_registry */
+    $theme_registry = \Drupal::service('theme.registry')->getRuntime();
+    $info = $theme_registry->get('fieldset');
+    $is_system_fieldset = ($info['path'] === 'core/modules/system/templates') ? TRUE : FALSE;
+  }
+  if (!$is_system_fieldset) {
+    return;
+  }
+
+  // Style fieldset error messages to match form element error messages.
+  // @see form-element.html.twig
+  if (!empty($variables['errors'])) {
+    $variables['errors'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['form-item--error-message', 'alert', 'alert-danger', 'alert-sm'],
+      ],
+      'content' => ['#markup' => $variables['errors']],
+    ];
+  }
+}
+
+/**
  * Implements template_preprocess_file_managed_file().
  *
  * @see webform_preprocess_file_managed_file()

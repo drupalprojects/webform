@@ -2306,8 +2306,7 @@ function webform_update_8131() {
   ];
 
   $config_factory = \Drupal::configFactory();
-  // Update 'webform.webform.*' configuration.
-  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+c  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
     $webform_config = $config_factory->getEditable($webform_config_name);
 
     // Get data.
