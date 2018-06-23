@@ -130,7 +130,7 @@ class WebformEntityStorage extends ConfigEntityStorage implements WebformEntityS
         }
 
         // Clear empty webform directory.
-        if (empty(file_scan_directory($file_directory, '/.*/'))) {
+        if (file_exists($file_directory) && empty(file_scan_directory($file_directory, '/.*/'))) {
           file_unmanaged_delete_recursive($file_directory);
         }
       }
