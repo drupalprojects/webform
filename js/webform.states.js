@@ -49,16 +49,16 @@
   // @see http://drupalsun.com/julia-evans/2012/03/09/extending-form-api-states-regular-expressions
   Drupal.states.Dependent.comparisons.Object = function (reference, value) {
     if ('pattern' in reference) {
-      return (new RegExp(reference.pattern)).test(value);
+      return (new RegExp(reference['pattern'])).test(value);
     }
     else if ('!pattern' in reference) {
       return !((new RegExp(reference['!pattern'])).test(value));
     }
     else if ('less' in reference) {
-      return (value !== '' && parseFloat(reference.less) > parseFloat(value));
+      return (value !== '' && parseFloat(reference['less']) > parseFloat(value));
     }
     else if ('greater' in reference) {
-      return (value !== '' && parseFloat(reference.greater) < parseFloat(value));
+      return (value !== '' && parseFloat(reference['greater']) < parseFloat(value));
     }
     else {
       return reference.indexOf(value) !== false;
