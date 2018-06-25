@@ -190,7 +190,12 @@ class WebformEntityReferenceLinkFormatter extends WebformEntityReferenceFormatte
         if ($dialog = $this->getSetting('dialog')) {
           $link['#attributes']['class'][] = 'webform-dialog';
           $link['#attributes']['class'][] = 'webform-dialog-' . $dialog;
-          $link['#attached']['library'][] = 'webform/webform.dialog';
+          // Attach webform dialog library and options if they are not
+          // on every page.
+          if (!\Drupal::config('webform.settings')->get('settings.dialog')) {
+            $link['#attached']['library'][] = 'webform/webform.dialog';
+            $link['#attached']['drupalSettings']['webform']['dialog']['options'] = \Drupal::config('webform.settings')->get('settings.dialog_options');
+          }
         }
         $elements[$delta] = $link;
       }
