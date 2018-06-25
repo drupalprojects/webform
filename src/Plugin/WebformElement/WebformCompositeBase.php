@@ -46,33 +46,12 @@ abstract class WebformCompositeBase extends WebformElementBase {
    */
   public function getDefaultProperties() {
     $properties = [
-      'title' => '',
       'default_value' => [],
-      // Description/Help.
-      'help' => '',
-      'description' => '',
-      'more' => '',
-      'more_title' => '',
-      // Form display.
-      'description_display' => '',
       'title_display' => 'invisible',
       'disabled' => FALSE,
-      // Form validation.
-      'required' => FALSE,
-      'required_error' => '',
-      // Flex box.
       'flexbox' => '',
-      // Attributes.
-      'wrapper_attributes' => [],
-      'label_attributes' => [],
-      // Submission display.
-      'format' => $this->getItemDefaultFormat(),
-      'format_html' => '',
-      'format_text' => '',
-      'format_items' => $this->getItemsDefaultFormat(),
-      'format_items_html' => '',
-      'format_items_text' => '',
     ] + parent::getDefaultProperties() + $this->getDefaultMultipleProperties();
+    unset($properties['required_error']);
 
     $composite_elements = $this->getCompositeElements();
     foreach ($composite_elements as $composite_key => $composite_element) {
@@ -799,7 +778,9 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form['default']['default_value']['#description'] = $this->t("The default value of the composite webform element as YAML.");
 
     // Update #required label.
-    $form['validation']['required_container']['required']['#description'] .= '<br /><br />' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required.");
+    $form['validation']['required_container']['required']['#title'] .= ' <em>' . $this->t('(Display purposes only)') . '</em>';
+    $form['validation']['required_container']['required']['#description'] = $this->t('If checked, adds required indicator to the title, if visible. To enforce individual fields, also tick "Required" under the @name settings above.', ['@name' => $this->getPluginLabel()]);
+
 
     // Update '#multiple__header_label'.
     $form['element']['multiple__header_container']['multiple__header_label']['#states']['visible'][':input[name="properties[multiple__header]"]'] = ['checked' => FALSE];
