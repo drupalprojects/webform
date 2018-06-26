@@ -293,6 +293,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           '#info' => $help,
         ];
       }
+      // Add custom help weight.
+      if (isset($help['weight'])) {
+        $build[$id]['#weight'] = $help['weight'];
+      }
     }
 
     // Disable caching when Webform editorial module is enabled.
@@ -1880,6 +1884,7 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'message_close' => TRUE,
       'message_storage' => WebformMessage::STORAGE_USER,
       'access' => $this->currentUser->hasPermission('administer webform'),
+      'weight' => -10,
     ];
 
     /**************************************************************************/
