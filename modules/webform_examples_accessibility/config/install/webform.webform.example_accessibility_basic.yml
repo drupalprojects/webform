@@ -27,6 +27,11 @@ elements: |
       '#more': 'This is more text'
       '#field_prefix': 'prefix'
       '#field_suffix': 'suffix'
+    form_element_tooltip:
+      '#type': textfield
+      '#title': 'Form element tooltip'
+      '#description': 'This is a description.'
+      '#description_display': tooltip
   text_elements:
     '#type': details
     '#title': 'Text elements'

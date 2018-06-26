@@ -134,6 +134,15 @@ elements: |
     '#type': details
     '#title': 'Advanced elements'
     '#open': true
+    email:
+      '#type': email
+      '#title': Email
+    email_multiple:
+      '#type': webform_email_multiple
+      '#title': 'Email multiple'
+    email_confirm:
+      '#type': webform_email_confirm
+      '#title': Email
     tel:
       '#type': tel
       '#title': Telephone

@@ -14,6 +14,29 @@ title: 'Example: Accessibility Advanced'
 description: 'Advanced webform accessibility example.'
 category: 'Example: Accessibility'
 elements: |
+  email_elements:
+    '#type': details
+    '#title': 'Email elements'
+    '#open': true
+    email:
+      '#type': email
+      '#title': Email
+    email_multiple:
+      '#type': webform_email_multiple
+      '#title': 'Email multiple'
+    email_confirm:
+      '#type': webform_email_confirm
+      '#title': Email
+  password_elements:
+    '#type': details
+    '#title': 'Password elements'
+    '#open': true
+    password:
+      '#type': password
+      '#title': Password
+    password_confirm:
+      '#type': password_confirm
+      '#title': Password
   option_elements:
     '#type': details
     '#title': 'Option elements'
@@ -140,6 +163,24 @@ elements: |
     webform_toggles:
       '#type': webform_toggles
       '#title': Toggles
+      '#options':
+        one: One
+        two: Two
+        three: Three
+  table_elements:
+    '#type': details
+    '#title': 'Table elements'
+    '#open': true
+    tableselect:
+      '#type': tableselect
+      '#title': Tableselect
+      '#options':
+        one: One
+        two: Two
+        three: Three
+    webform_table_sort:
+      '#type': webform_table_sort
+      '#title': 'Table sort'
       '#options':
         one: One
         two: Two
