@@ -1228,7 +1228,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       return TRUE;
     }
 
-    return $this->moduleHandler->moduleExists('mailsystem');
+    return $this->moduleHandler->moduleExists('mailsystem') || $this->moduleHandler->moduleExists('smtp');
   }
 
   /**
