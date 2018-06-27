@@ -24,7 +24,11 @@ class WebformElementComputedTest extends WebformElementTestBase {
    *
    * @var array
    */
-  protected static $testWebforms = ['test_element_computed_token', 'test_element_computed_twig'];
+  protected static $testWebforms = [
+    'test_element_computed_token',
+    'test_element_computed_twig',
+    'test_element_computed_ajax',
+  ];
 
   /**
    * {@inheritdoc}
@@ -114,6 +118,54 @@ class WebformElementComputedTest extends WebformElementTestBase {
     $this->assertRaw('<b class="webform_computed_twig_data">complex string:</b> This is a &lt;strong&gt;complex&lt;/strong&gt; string, which contains &quot;double&quot; and &#039;single&#039; quotes with special characters like &gt;, &lt;, &gt;&lt;, and &lt;&gt;.<br />');
     $this->assertRaw('<b class="webform_computed_twig_data">text_format:</b> &lt;p&gt;This is a &lt;strong&gt;text format&lt;/strong&gt; string.&lt;/p&gt;');
     $this->assertRaw('<b class="webform_computed_twig_data">xss:</b> &lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;<br />');
+
+    /* Ajax */
+
+    // Get computed ajax form.
+    $this->drupalGet('webform/test_element_computed_ajax');
+
+    // Check that a and b are hidden via #hide_empty.
+    $this->assertRaw('<div style="display:none" class="js-form-item form-item js-form-type-item form-type-item js-form-item-webform-computed-token-a form-item-webform-computed-token-a">');
+    $this->assertRaw('<div style="display:none" class="js-form-item form-item js-form-type-item form-type-item js-form-item-webform-computed-token-b form-item-webform-computed-token-b">');
+
+    // Check a, b, computed default values.
+    $this->assertFieldByName('webform_computed_token_a', '');
+    $this->assertFieldByName('webform_computed_token_b', '');
+    $this->assertFieldByName('webform_computed_twig', 'Please enter a value for a and b.');
+    $this->assertFieldByName('webform_computed_twig_token', 'Please enter a value for a and b.');
+
+    // Calculate 2 + 4 = 6.
+    $edit = ['a' => 2, 'b' => 4];
+
+    // Check a is updated.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform-computed-webform_computed_token_a-button');
+    $this->assertNoRaw('<div style="display:none" class="js-form-item form-item js-form-type-item form-type-item js-form-item-webform-computed-token-a form-item-webform-computed-token-a">');
+    $this->assertFieldByName('webform_computed_token_a', '2');
+    $this->assertFieldByName('webform_computed_token_b', '');
+    $this->assertFieldByName('webform_computed_twig', 'Please enter a value for a and b.');
+    $this->assertFieldByName('webform_computed_twig_token', 'Please enter a value for a and b.');
+
+    // Check b is updated.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform-computed-webform_computed_token_b-button');
+    $this->assertNoRaw('<div style="display:none" class="js-form-item form-item js-form-type-item form-type-item js-form-item-webform-computed-token-b form-item-webform-computed-token-b">');
+    $this->assertFieldByName('webform_computed_token_a', '2');
+    $this->assertFieldByName('webform_computed_token_b', '4');
+    $this->assertFieldByName('webform_computed_twig', 'Please enter a value for a and b.');
+    $this->assertFieldByName('webform_computed_twig_token', 'Please enter a value for a and b.');
+
+    // Check twig is updated.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform-computed-webform_computed_twig-button');
+    $this->assertFieldByName('webform_computed_token_a', '2');
+    $this->assertFieldByName('webform_computed_token_b', '4');
+    $this->assertFieldByName('webform_computed_twig', '2 + 4 = 6');
+    $this->assertFieldByName('webform_computed_twig_token', 'Please enter a value for a and b.');
+
+    // Check twig with token is updated.
+    $this->drupalPostAjaxForm(NULL, $edit, 'webform-computed-webform_computed_twig_token-button');
+    $this->assertFieldByName('webform_computed_token_a', '2');
+    $this->assertFieldByName('webform_computed_token_b', '4');
+    $this->assertFieldByName('webform_computed_twig', '2 + 4 = 6');
+    $this->assertFieldByName('webform_computed_twig_token', '2 + 4 = 6');
   }
 
 }

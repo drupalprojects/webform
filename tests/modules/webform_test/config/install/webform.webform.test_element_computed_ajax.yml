@@ -3,97 +3,61 @@ status: open
 dependencies:
   enforced:
     module:
-      - webform_examples
+      - webform_test
 open: null
 close: null
 uid: null
 template: false
 archive: false
-id: example_computed_elements
-title: 'Example: Computed'
-description: 'Examples of a computed elements.'
-category: Example
+id: test_element_computed_ajax
+title: 'Test: Element: Computed ajax'
+description: 'Test computed element using Ajax.'
+category: 'Test: Element'
 elements: |
-  calculation:
-    '#title': Calculation
-    '#type': webform_wizard_page
-    '#open': true
-    calculation:
-      '#type': webform_section
-      '#title': 'Basic adding calculation using a ''computed twig'' element'
-      container:
-        '#type': container
-        '#attributes':
-          class:
-            - 'container-inline clearfix'
-        a:
-          '#type': number
-          '#title': a
-          '#title_display': invisible
-          '#placeholder': a
-        markup:
-          '#type': webform_markup
-          '#markup': ' + '
-        b:
-          '#type': number
-          '#title': b
-          '#title_display': invisible
-          '#placeholder': b
-        markup_01:
-          '#type': webform_markup
-          '#markup': ' = '
-        c:
-          '#type': webform_computed_twig
-          '#title': c
-          '#title_display': invisible
-          '#value': '{% if data.a|length and data.b|length %}{{ data.a + data.b }}{% else %}c{% endif %}'
-          '#ajax': true
-    message_warning:
-      '#type': webform_message
-      '#states':
-        visible:
-          ':input[name="c"]':
-            value: c
-      '#message_type': warning
-      '#message_message': 'Please enter <strong>a</strong> and <strong>b</strong> to perform a basic adding calculation.'
-    message_status:
-      '#type': webform_message
-      '#message_message': 'Thank you for entering <strong>a</strong> and <strong>b</strong> to perform basic adding calculation.'
-      '#states':
-        visible:
-          ':input[name="c"]':
-            '!value': c
-  information:
-    '#title': 'Your Information'
-    '#type': webform_wizard_page
-    '#next_button_label': 'Preview >'
-    '#open': true
-    first_name:
-      '#type': textfield
-      '#title': 'First Name'
-    last_name:
-      '#type': textfield
-      '#title': 'Last Name'
-    date_of_birth:
-      '#type': date
-      '#title': 'Date of Birth'
-    color:
-      '#type': color
-      '#title': 'Favorite Color'
-  preview:
-    '#title': Preview
-    '#type': webform_wizard_page
-    '#open': true
-    computed:
-      '#type': webform_computed_twig
-      '#title': 'Computed'
-      '#title_display': hidden
-      '#value': |
-        {% set attributes = create_attribute() %}
-        <h2{{ attributes.setAttribute('id', 'custom').setAttribute('style', 'color:' ~ data.color) }}>
-          Hello {{ data.first_name }} {{ data.last_name }}!!!
-        </h2>
-        <p>You are {{ ('now'|date('Y')) - (data.date_of_birth|date('Y'))  }} years old.</p>
+  a:
+    '#type': number
+    '#title': a
+  b:
+    '#type': number
+    '#title': b
+  webform_computed_token_a:
+    '#type': webform_computed_token
+    '#title': a
+    '#value': '[webform_submission:values:a:clear]'
+    '#ajax': TRUE
+    '#hide_empty': TRUE
+  webform_computed_token_b:
+    '#type': webform_computed_token
+    '#title': b
+    '#value': '[webform_submission:values:b:clear]'
+    '#ajax': TRUE
+    '#hide_empty': TRUE
+  webform_computed_twig:
+    '#type': webform_computed_twig
+    '#title': webform_computed_twig_data
+    '#value': |
+      {% spaceless %}
+      {% if data.a|length and data.b|length %}
+      {{ data.a }} + {{ data.b }} = {{ data.a + data.b }}
+      {% else %}
+      Please enter a value for a and b.
+      {% endif %}
+      {% endspaceless %}
+    '#ajax': TRUE
+  webform_computed_twig_token:
+    '#type': webform_computed_twig
+    '#title': webform_computed_twig_token
+    '#value': |
+      {% spaceless %}
+      {% set a = webform_token('[webform_submission:values:a:clear]', webform_submission) %}
+      {% set b = webform_token('[webform_submission:values:b:clear]', webform_submission) %}
+      {% if a|length and b|length %}
+      {{ a }} + {{ b }} = {{ a + b }}
+      {% else %}
+      Please enter a value for a and b.
+      {% endif %}
+      {% endspaceless %}
+    '#ajax': TRUE
 css: ''
 javascript: ''
 settings:
@@ -146,7 +110,7 @@ settings:
   wizard_confirmation: true
   wizard_confirmation_label: ''
   wizard_track: ''
-  preview: 0
+  preview: 1
   preview_label: ''
   preview_title: ''
   preview_message: ''
@@ -159,7 +123,7 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: page
+  confirmation_type: message
   confirmation_title: ''
   confirmation_message: ''
   confirmation_url: ''

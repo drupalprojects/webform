@@ -39,7 +39,9 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       // Computed values.
       'value' => '',
       'mode' => WebformComputedBaseElement::MODE_AUTO,
+      'hide_empty' => FALSE,
       'store' => FALSE,
+      'ajax' => FALSE,
       // Attributes.
       'wrapper_attributes' => [],
       'label_attributes' => [],
@@ -193,11 +195,23 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       '#mode' => 'text',
       '#title' => $this->t('Computed value/markup'),
     ];
+    $form['computed']['hide_empty'] = [
+      '#type' => 'checkbox',
+      '#return_value' => TRUE,
+      '#title' => $this->t('Hide empty'),
+      '#description' => $this->t('If checked the computed elements will be hidden from display when the value is an empty string.'),
+    ];
     $form['computed']['store'] = [
       '#type' => 'checkbox',
       '#return_value' => TRUE,
       '#title' => $this->t('Store value in the database'),
       '#description' => $this->t('The value will be stored in the database. As a result, it will only be recalculated when the submission is updated. This option is required when accessing the computed element through Views.'),
+    ];
+    $form['computed']['ajax'] = [
+      '#type' => 'checkbox',
+      '#return_value' => TRUE,
+      '#title' => $this->t('Automatically update the computed value using Ajax'),
+      '#description' => $this->t('If checked, any element used within the computed value/markup will trigger any automatic update.'),
     ];
     $form['computed']['tokens'] = ['#access' => TRUE, '#weight' => 10] + $this->tokenManager->buildTreeLink();
     return $form;

@@ -454,6 +454,14 @@ webform.element.composite:
     - core/drupal
     - core/jquery.once
 
+webform.element.computed:
+  version: VERSION
+  js:
+    js/webform.element.computed.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+
 webform.element.counter:
   version: VERSION
   js:

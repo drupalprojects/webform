@@ -9,92 +9,109 @@ close: null
 uid: null
 template: false
 archive: false
-id: example_computed_elements
-title: 'Example: Computed'
-description: 'Examples of a computed elements.'
+id: example_computed_elements_ajax
+title: 'Example: Computed Ajax'
+description: 'Example of a computed element using Ajax.'
 category: Example
 elements: |
+  message_warning:
+    '#type': webform_message
+    '#states':
+      visible:
+        ':input[name="c"]':
+          value: c
+    '#message_type': warning
+    '#message_message': 'Please enter <strong>a</strong> and <strong>b</strong> to perform a basic adding calculation.'
+  message_status:
+    '#type': webform_message
+    '#message_message': 'Thank you for entering <strong>a</strong> and <strong>b</strong> to perform a basic adding calculation.'
+    '#states':
+      visible:
+        ':input[name="c"]':
+          '!value': c
   calculation:
-    '#title': Calculation
-    '#type': webform_wizard_page
-    '#open': true
-    calculation:
-      '#type': webform_section
-      '#title': 'Basic adding calculation using a ''computed twig'' element'
-      container:
-        '#type': container
-        '#attributes':
-          class:
-            - 'container-inline clearfix'
-        a:
-          '#type': number
-          '#title': a
-          '#title_display': invisible
-          '#placeholder': a
-        markup:
-          '#type': webform_markup
-          '#markup': ' + '
-        b:
-          '#type': number
-          '#title': b
-          '#title_display': invisible
-          '#placeholder': b
-        markup_01:
-          '#type': webform_markup
-          '#markup': ' = '
-        c:
-          '#type': webform_computed_twig
-          '#title': c
-          '#title_display': invisible
-          '#value': '{% if data.a|length and data.b|length %}{{ data.a + data.b }}{% else %}c{% endif %}'
-          '#ajax': true
-    message_warning:
-      '#type': webform_message
-      '#states':
-        visible:
-          ':input[name="c"]':
-            value: c
-      '#message_type': warning
-      '#message_message': 'Please enter <strong>a</strong> and <strong>b</strong> to perform a basic adding calculation.'
-    message_status:
-      '#type': webform_message
-      '#message_message': 'Thank you for entering <strong>a</strong> and <strong>b</strong> to perform basic adding calculation.'
-      '#states':
-        visible:
-          ':input[name="c"]':
-            '!value': c
-  information:
-    '#title': 'Your Information'
-    '#type': webform_wizard_page
-    '#next_button_label': 'Preview >'
-    '#open': true
-    first_name:
-      '#type': textfield
-      '#title': 'First Name'
-    last_name:
-      '#type': textfield
-      '#title': 'Last Name'
-    date_of_birth:
-      '#type': date
-      '#title': 'Date of Birth'
-    color:
-      '#type': color
-      '#title': 'Favorite Color'
-  preview:
-    '#title': Preview
-    '#type': webform_wizard_page
-    '#open': true
-    computed:
-      '#type': webform_computed_twig
-      '#title': 'Computed'
-      '#title_display': hidden
-      '#value': |
-        {% set attributes = create_attribute() %}
-        <h2{{ attributes.setAttribute('id', 'custom').setAttribute('style', 'color:' ~ data.color) }}>
-          Hello {{ data.first_name }} {{ data.last_name }}!!!
-        </h2>
-        <p>You are {{ ('now'|date('Y')) - (data.date_of_birth|date('Y'))  }} years old.</p>
-css: ''
+    '#type': fieldset
+    '#title': 'Basic adding calculation'
+    container:
+      '#type': container
+      '#attributes':
+        class:
+          - 'container-inline'
+          - 'calculation'
+      a:
+        '#type': number
+        '#title': a
+        '#title_display': invisible
+        '#placeholder': a
+        '#required': true
+      markup_add:
+        '#type': webform_markup
+        '#markup': ' + '
+      b:
+        '#type': number
+        '#title': b
+        '#title_display': invisible
+        '#placeholder': b
+        '#required': true
+      markup_equals:
+        '#type': webform_markup
+        '#markup': ' = '
+      c:
+        '#type': webform_computed_twig
+        '#title': c
+        '#title_display': invisible
+        '#value': '{% if data.a|length and data.b|length %}{{ data.a + data.b }}{% else %}c{% endif %}'
+        '#ajax': true
+  user_information:
+    '#type': fieldset
+    '#title': 'User information'
+    user:
+      '#type': webform_entity_select
+      '#title': User
+      '#target_type': user
+      '#selection_handler': 'default:user'
+      '#selection_settings':
+        include_anonymous: false
+        filter:
+          type: _none
+    user_ud:
+      '#type': webform_computed_token
+      '#title': 'User: ID'
+      '#value': '[webform_submission:values:user:entity:uid:clear]'
+      '#ajax': true
+      '#hide_empty': true
+    user_display_name:
+      '#type': webform_computed_token
+      '#title': 'User: Display name'
+      '#value': '[webform_submission:values:user:entity:display-name:clear]'
+      '#ajax': true
+      '#hide_empty': true
+    user_mail:
+      '#type': webform_computed_token
+      '#title': 'User: Email'
+      '#value': '[webform_submission:values:user:entity:mail:clear]'
+      '#ajax': true
+      '#hide_empty': true
+    user_url:
+      '#type': webform_computed_token
+      '#title': 'User: URL'
+      '#value': '[webform_submission:values:user:entity:url:clear]'
+      '#ajax': true
+      '#hide_empty': true
+    user_created:
+      '#type': webform_computed_token
+      '#title': 'User: Created'
+      '#value': '[webform_submission:values:user:entity:created:clear]'
+      '#ajax': true
+      '#hide_empty': true
+css: |
+  .calculation {
+    font-size: 2em;
+  }
+  .calculation input {
+    width: 4em;
+    text-align: right;
+  }
 javascript: ''
 settings:
   ajax: false
@@ -114,7 +131,7 @@ settings:
   form_prepopulate_source_entity: false
   form_prepopulate_source_entity_required: false
   form_prepopulate_source_entity_type: ''
-  form_reset: false
+  form_reset: true
   form_disable_autocomplete: false
   form_novalidate: false
   form_disable_inline_errors: false
