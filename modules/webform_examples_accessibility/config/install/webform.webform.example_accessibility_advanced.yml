@@ -27,16 +27,6 @@ elements: |
     email_confirm:
       '#type': webform_email_confirm
       '#title': Email
-  password_elements:
-    '#type': details
-    '#title': 'Password elements'
-    '#open': true
-    password:
-      '#type': password
-      '#title': Password
-    password_confirm:
-      '#type': password_confirm
-      '#title': Password
   option_elements:
     '#type': details
     '#title': 'Option elements'
