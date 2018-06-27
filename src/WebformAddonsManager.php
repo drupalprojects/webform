@@ -512,6 +512,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'utility',
     ];
 
+    // Utility: EU Cookie Compliance.
+    $projects['eu_cookie_compliance'] = [
+      'title' => $this->t('EU Cookie Compliance'),
+      'description' => $this->t('This module aims at making the website compliant with the new EU cookie regulation.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/eu_cookie_compliance'),
+      'category' => 'utility',
+    ];
+
     // Utility: General Data Protection Regulation Compliance.
     $projects['gdpr_compliance'] = [
       'title' => $this->t('General Data Protection Regulation Compliance'),
@@ -519,6 +527,8 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/gdpr_compliance'),
       'category' => 'utility',
     ];
+
+
 
     // Utility: Webform Encrypt.
     $projects['wf_encrypt'] = [
