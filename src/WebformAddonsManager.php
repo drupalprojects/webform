@@ -528,8 +528,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'utility',
     ];
 
-
-
     // Utility: Webform Encrypt.
     $projects['wf_encrypt'] = [
       'title' => $this->t('Webform Encrypt'),
