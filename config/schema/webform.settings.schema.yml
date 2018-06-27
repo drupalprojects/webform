@@ -322,6 +322,9 @@ webform.settings:
       type: mapping
       label: 'Export default settings'
       mapping:
+        temp_directory:
+          type: string
+          label: 'Export temporary directory'
         exporter:
           type: string
           label: 'Results exporter'

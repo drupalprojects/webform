@@ -2333,3 +2333,10 @@ function webform_update_8131() {
     }
   }
 }
+
+/**
+ * Issue #2980276: Webform assumes the /tmp directory is always the same, but if there are multiple servers, each may have its own /tmp directory.
+ */
+function webform_update_8132() {
+  _webform_update_admin_settings();
+}
