@@ -280,7 +280,7 @@ trait WebformAjaxFormTrait {
     // Re-enable redirect, grab the URL, and then disable again.
     $no_redirect = $form_state->isRedirectDisabled();
     $form_state->disableRedirect(FALSE);
-    $redirect = $form_state->getRedirect() ?: $form_state->getResponse();
+    $redirect = $form_state->getResponse() ?: $form_state->getRedirect();
     $form_state->disableRedirect($no_redirect);
 
     if ($redirect instanceof RedirectResponse) {
