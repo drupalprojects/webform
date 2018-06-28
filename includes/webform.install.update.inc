@@ -2158,6 +2158,9 @@ function webform_update_8119() {
   // Issue #2863986: Allow updating modules with new service dependencies.
   \Drupal::service('kernel')->rebuildContainer();
 
+  // Issue #2982273: Route "webform.config.libraries" does not exist.
+  \Drupal::service('router.builder')->rebuild();
+
   /** @var \Drupal\webform\WebformHelpManagerInterface $help_manager */
   $help_manager = \Drupal::service('webform.help_manager');
   $help_manager->addNotification('webform_update_8119',
