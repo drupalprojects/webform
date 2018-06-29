@@ -36,6 +36,21 @@ class WebformElementAddressTest extends WebformElementTestBase {
     $webform = Webform::load('test_element_address');
 
     /**************************************************************************/
+    // Rendering.
+    /**************************************************************************/
+
+    $this->drupalGet('webform/test_element_address');
+
+    // Check basic fieldset wrapper.
+    $this->assertRaw('<fieldset data-drupal-selector="edit-address" id="edit-address--wrapper" class="fieldgroup form-composite js-form-item form-item js-form-wrapper form-wrapper">');
+    $this->assertRaw('<span class="visually-hidden fieldset-legend">address_basic</span>');
+
+    // Check advanced fieldset, legend, help, and description.
+    $this->assertRaw('<fieldset data-drupal-selector="edit-address-advanced" aria-describedby="edit-address-advanced--wrapper--description" id="edit-address-advanced--wrapper" class="fieldgroup form-composite js-form-item form-item js-form-wrapper form-wrapper">');
+    $this->assertRaw('<span class="fieldset-legend">address_advanced<a href="#help" title="This is help text" data-webform-help="This is help text" class="webform-element-help">?</a>');
+    $this->assertRaw('<div id="edit-address-advanced--wrapper--description" class="description">');
+
+    /**************************************************************************/
     // Processing.
     /**************************************************************************/
 

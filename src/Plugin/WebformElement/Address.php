@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Mail\MailFormatHelper;
+use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -34,6 +35,8 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class Address extends WebformCompositeBase {
 
+  use CompositeFormElementTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -42,6 +45,14 @@ class Address extends WebformCompositeBase {
       // Element settings.
       'title' => '',
       'default_value' => '',
+      // Description/Help.
+      'help' => '',
+      'description' => '',
+      'more' => '',
+      'more_title' => '',
+      // Form display.
+      'title_display' => 'invisible',
+      'description_display' => '',
       // Form validation.
       'required' => FALSE,
       // Submission display.
@@ -65,6 +76,18 @@ class Address extends WebformCompositeBase {
    */
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
+
+    // Wrap the 'Address' element which contain multiple input in a fieldset.
+    // This accessibility improvements make sense for the Webform module
+    // but not the core Address module.
+    // @see https://www.w3.org/WAI/tutorials/forms/grouping/
+    $this->setElementDefaultCallback($element, 'pre_render');
+    $class = get_class($this);
+    $element['#pre_render'][] = [$class, 'preRenderCompositeFormElement'];
+    $element['#theme_wrappers'] = [];
+    $element += [
+      '#title_display' => 'invisible',
+    ];
 
     $element['#element_validate'][] = [get_class($this), 'validateAddress'];
   }

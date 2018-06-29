@@ -30,6 +30,11 @@ elements: |
   address_advanced:
     '#type': address
     '#title': address_advanced
+    '#help': 'This is help text'
+    '#description': 'This is a description'
+    '#more_title': 'This is more title'
+    '#more': 'This is more text'
+    '#title_display': 'before'
     '#default_value':
       organization: 'Google Inc.'
       address_line1: '1098 Alta Ave'
