@@ -2,9 +2,11 @@
 
 namespace Drupal\webform;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\Utility\WebformFormHelper;
@@ -203,7 +205,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
         continue;
       }
 
-      $element['#element_validate'][] = 'token_element_validate';
+      $element['#element_validate'][] = [get_called_class(), 'validateElement'];
       $element['#token_types'] = $token_types;
     }
   }
@@ -224,6 +226,25 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     elseif ($entity instanceof WebformInterface) {
       $token_data['webform'] = $entity;
     }
+  }
+
+  /**
+   * Validates an element's tokens.
+   *
+   * Note:
+   * Element is not being based by reference since the #value is being altered.
+   */
+  public static function validateElement($element, FormStateInterface $form_state, &$complete_form) {
+    $value = isset($element['#value']) ? $element['#value'] : $element['#default_value'];
+
+    if (!Unicode::strlen($value)) {
+      return $element;
+    }
+
+    // Remove clear suffix which is not valid.
+    $element['#value'] = preg_replace('/\[(webform[^]]+):clear\]/', '[\1]', $value);
+
+    token_element_validate($element, $form_state);
   }
 
 }
