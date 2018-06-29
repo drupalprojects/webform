@@ -226,7 +226,7 @@ class WebformMultiple extends FormElement {
     // Build add items actions.
     if (empty($element['#cardinality'])) {
       $element['add'] = [
-        '#prefix' => '<div class="container-inline">',
+        '#prefix' => '<div class="webform-multiple-add js-webform-multiple-add container-inline">',
         '#suffix' => '</div>',
       ];
       $element['add']['submit'] = [
