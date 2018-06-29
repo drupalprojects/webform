@@ -55,7 +55,7 @@ abstract class WebformNodeTestBase extends WebformTestBase {
    * @return \Drupal\node\NodeInterface
    *   A webform node.
    */
-  protected function createWebformNode($webform_id, $settings = []) {
+  protected function createWebformNode($webform_id, array $settings = []) {
     $settings += ['type' => 'webform'];
     $node = $this->drupalCreateNode($settings);
     $node->webform->target_id = $webform_id;

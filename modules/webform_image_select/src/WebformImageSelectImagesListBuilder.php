@@ -88,7 +88,7 @@ class WebformImageSelectImagesListBuilder extends ConfigEntityListBuilder {
   /**
    * Build images for a webform image select images entity.
    *
-   * @param \Drupal\webform_image_select\WebformImageSelectImagesInterface $webform_images
+   * @param \Drupal\webform_image_select\WebformImageSelectImagesInterface $entity
    *   A webform image select images entity.
    *
    * @return array

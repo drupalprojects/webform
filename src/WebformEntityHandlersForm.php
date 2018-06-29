@@ -3,7 +3,6 @@
 namespace Drupal\webform;
 
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -293,7 +292,7 @@ class WebformEntityHandlersForm extends EntityForm {
       $response->addCommand(new WebformRefreshCommand($url));
       return $response;
     }
-    
+
     // Otherwise, redirect back to the webform handlers form.
     return new RedirectResponse($url);
   }

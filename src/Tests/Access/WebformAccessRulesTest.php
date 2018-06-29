@@ -254,7 +254,7 @@ class WebformAccessRulesTest extends WebformTestBase {
     $webform->save();
 
     // Check enable user submission duplicate.
-    $this->drupalGet( "webform/$webform_id/submissions/$sid/duplicate");
+    $this->drupalGet("webform/$webform_id/submissions/$sid/duplicate");
     $this->assertResponse(200);
 
     // Check disabled previous submissions messages.

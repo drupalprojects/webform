@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Element;
 
-use Drupal\address\LabelHelper;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\webform\Entity\Webform;
 
@@ -142,7 +141,7 @@ address_multiple:
     $element_plugin->initializeCompositeElements($element);;
 
     // Check composite elements against address schema.
-    $composite_elements = $element['#webform_composite_elements'] ;
+    $composite_elements = $element['#webform_composite_elements'];
     $diff_composite_elements = array_diff_key($composite_elements, $schema['columns']);
     $this->debug($diff_composite_elements);
     $this->assert(empty($diff_composite_elements));

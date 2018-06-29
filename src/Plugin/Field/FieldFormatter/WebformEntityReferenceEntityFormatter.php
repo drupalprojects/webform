@@ -62,8 +62,6 @@ class WebformEntityReferenceEntityFormatter extends WebformEntityReferenceFormat
    *   The formatter label display setting.
    * @param string $view_mode
    *   The view mode.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer.
    * @param array $third_party_settings
    *   Third party settings.
    * @param \Drupal\Core\Render\RendererInterface $renderer

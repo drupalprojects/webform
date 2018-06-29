@@ -3,7 +3,6 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use CommerceGuys\Addressing\AddressFormat\FieldOverride;
-use CommerceGuys\Addressing\AddressFormat\AddressField;
 use Drupal\address\FieldHelper;
 use Drupal\address\LabelHelper;
 use Drupal\Component\Utility\Html;
@@ -91,6 +90,7 @@ class Address extends WebformCompositeBase {
 
     $element['#element_validate'][] = [get_class($this), 'validateAddress'];
   }
+
   /**
    * {@inheritdoc}
    */
@@ -220,7 +220,7 @@ class Address extends WebformCompositeBase {
    * @see \Drupal\address\Plugin\Field\FieldFormatter\AddressDefaultFormatter::viewElements
    * @see \Drupal\address\Plugin\Field\FieldFormatter\AddressDefaultFormatter::viewElement
    */
-  protected function buildAddress(array $element, WebformSubmissionInterface $webform_submission, $options) {
+  protected function buildAddress(array $element, WebformSubmissionInterface $webform_submission, array $options) {
     /** @var \CommerceGuys\Addressing\AddressFormat\AddressFormatRepositoryInterface $address_format_repository */
     $address_format_repository = \Drupal::service('address.address_format_repository');
     /** @var \CommerceGuys\Addressing\Country\CountryRepositoryInterface $country_repository */
@@ -356,7 +356,7 @@ class Address extends WebformCompositeBase {
             FieldOverride::REQUIRED => t('Required'),
           ],
           '#empty_option' => $this->t('- No override -'),
-          '#parents' => ['properties', 'field_overrides', $field_name]
+          '#parents' => ['properties', 'field_overrides', $field_name],
         ],
       ];
     }

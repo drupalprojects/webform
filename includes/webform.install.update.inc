@@ -2138,7 +2138,7 @@ function webform_update_8117() {
   $config = \Drupal::configFactory()->getEditable('webform.settings');
   $names = Yaml::decode($config->get('test.names'));
   $names += [
-    'postal_code' => ['11111', '12345', '12345-6789']
+    'postal_code' => ['11111', '12345', '12345-6789'],
   ];
   $config->set('test.names', WebformYaml::tidy(Yaml::encode($names)));
   $config->save();
@@ -2186,7 +2186,7 @@ function webform_update_8121() {
 }
 
 /**
- * Issue #2952419: Attached files are deleted without usage checking
+ * Issue #2952419: Attached files are deleted without usage checking.
  */
 function webform_update_8122() {
   _webform_update_admin_settings();

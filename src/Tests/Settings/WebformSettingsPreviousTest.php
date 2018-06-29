@@ -12,7 +12,6 @@ use Drupal\webform\Tests\WebformTestBase;
  */
 class WebformSettingsPreviousTest extends WebformTestBase {
 
-
   /**
    * Test webform submission form previous submission(s).
    */

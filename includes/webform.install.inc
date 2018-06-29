@@ -89,7 +89,7 @@ function _webform_update_webform_settings() {
  * Update webform setting to reflect changes in the default settings.
  *
  * @param array $data
- *   A webform's raw configuration data from webform.webform.*.yml
+ *   A webform's raw configuration data from webform.webform.*.yml.
  *
  * @return array
  *   Updated raw configuration data.
@@ -280,7 +280,7 @@ function _webform_update_webform_submission_storage_schema() {
 }
 
 /**
- * Replace string in webform.settings.yml and webform.webform.*.yml
+ * Replace string in webform.settings.yml and webform.webform.*.yml.
  *
  * @param string $search
  *   String to be search for.

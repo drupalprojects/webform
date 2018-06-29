@@ -106,7 +106,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition,LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, FileSystemInterface $file_system, $file_usage, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, FileSystemInterface $file_system, $file_usage, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $config_factory, $current_user, $entity_type_manager, $element_info, $element_manager, $token_manager, $libraries_manager);
 
     $this->fileSystem = $file_system;
@@ -952,7 +952,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         // Return file content headers.
         $headers = file_get_content_headers($file);
 
-        /** @var \Drupal\Core\File\FileSystemInterface  $file_system */
+        /** @var \Drupal\Core\File\FileSystemInterface $file_system */
         $file_system = \Drupal::service('file_system');
         $filename = $file_system->basename($uri);
         // Force blacklisted files to be downloaded instead of opening in the browser.

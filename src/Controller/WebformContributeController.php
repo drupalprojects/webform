@@ -38,6 +38,7 @@ class WebformContributeController extends ControllerBase implements ContainerInj
    * @var \Drupal\webform\WebformContributeManagerInterface
    */
   protected $contributeManager;
+
   /**
    * Constructs a WebfomrContributeController object.
    *

@@ -370,7 +370,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    * @return array|bool
    *   Renderable array or FALSE if custom message does not exist.
    */
-  protected function getCustomMessage($key, $arguments = []) {
+  protected function getCustomMessage($key, array $arguments = []) {
     $setting = $this->getSetting($key);
     if (!$setting) {
       return FALSE;

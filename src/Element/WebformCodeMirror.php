@@ -219,7 +219,6 @@ class WebformCodeMirror extends Textarea {
    * @return array|null
    *   An array of error messages.
    */
-
   protected static function validateHtml($element, FormStateInterface $form_state, $complete_form) {
     // @see: http://stackoverflow.com/questions/3167074/which-function-in-php-validate-if-the-string-is-valid-html
     // @see: http://stackoverflow.com/questions/5030392/x-html-validator-in-php

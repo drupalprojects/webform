@@ -27,6 +27,3 @@ entity.webform.handler:
   class: '\Drupal\webform\Plugin\Menu\LocalAction\WebformDialogLocalAction'
   appears_on:
     - entity.webform.handlers
-
-
-

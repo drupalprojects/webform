@@ -48,7 +48,7 @@ class WebformSettingsArchivedTest extends WebformTestBase {
 
     // Check that archived webform displays archive message.
     $this->drupalGet('/form/test-form-archived');
-    $this->assertRaw('This webform is <a href="' . $base_path. 'admin/structure/webform/manage/test_form_archived/settings">archived</a>');
+    $this->assertRaw('This webform is <a href="' . $base_path . 'admin/structure/webform/manage/test_form_archived/settings">archived</a>');
 
     // Check that archived webform is remove webform select menu.
     $this->drupalGet('/node/add/webform');

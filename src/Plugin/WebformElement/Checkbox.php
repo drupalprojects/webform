@@ -76,4 +76,5 @@ class Checkbox extends BooleanBase {
 
     return $form;
   }
+
 }

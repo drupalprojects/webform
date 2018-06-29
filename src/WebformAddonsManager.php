@@ -160,7 +160,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/webform_composite'),
       'category' => 'element',
     ];
-    
+
     // Element: Webform Checkboxes Table.
     $projects['webform_checkboxes_table'] = [
       'title' => $this->t('Webform Checkboxes Table'),
@@ -535,7 +535,6 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/webform_encrypt'),
       'category' => 'utility',
     ];
-
 
     // Utility: Webform Ip Track.
     $projects['webform_ip_track'] = [

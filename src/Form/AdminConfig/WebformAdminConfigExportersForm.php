@@ -92,7 +92,7 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('export.temp_directory') ?: file_directory_temp(),
     ];
-    
+
     // Export.
     $form['export_default_settings'] = [
       '#type' => 'details',
@@ -119,7 +119,6 @@ class WebformAdminConfigExportersForm extends WebformAdminConfigBaseForm {
 
     return parent::buildForm($form, $form_state);
   }
-
 
   /**
    * {@inheritdoc}

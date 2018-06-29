@@ -192,7 +192,7 @@ class TwigExtension extends \Twig_Extension {
    *   (optional) Template and token options.
    *
    * @return array
-   *  A renderable containing an inline twig  template.
+   *   A renderable containing an inline twig template.
    */
   public static function buildTwigTemplate(WebformSubmissionInterface $webform_submission, $template, array $options = []) {
     $options += [

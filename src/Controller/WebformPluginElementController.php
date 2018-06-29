@@ -246,12 +246,14 @@ class WebformPluginElementController extends ControllerBase implements Container
             $dependencies ? ['data' => ['#markup' => '• ' . implode('<br />• ', $dependencies)], 'nowrap' => 'nowrap'] : '',
             $element_plugin_definition['provider'],
             $webform_element_plugin_definition['provider'],
-            $operations ? ['data' => [
-              '#type' => 'operations',
-              '#links' => $operations,
-              '#prefix' => '<div class="webform-dropbutton">',
-              '#suffix' => '</div>',
-            ]] : '',
+            $operations ? [
+              'data' => [
+                '#type' => 'operations',
+                '#links' => $operations,
+                '#prefix' => '<div class="webform-dropbutton">',
+                '#suffix' => '</div>',
+              ],
+            ] : '',
           ],
         ];
         if (isset($excluded_elements[$element_plugin_id])) {

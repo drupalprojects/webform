@@ -35,7 +35,6 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
     }
 
     $elements = $this->elementManager->getInstances();
-    $definitions = $this->getDefinitions();
 
     $form = parent::buildForm($form, $form_state, $webform);
 

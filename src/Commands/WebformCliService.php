@@ -1093,8 +1093,8 @@ class WebformCliService implements WebformCliServiceInterface {
 /******************************************************************************/";
 
       // Validate.
-      $validate_method = 'drush_' . str_replace('-','_', $command_key) . '_validate';
-      $validate_hook = 'drush_' . str_replace('-','_', $command_key) . '_validate';
+      $validate_method = 'drush_' . str_replace('-', '_', $command_key) . '_validate';
+      $validate_hook = 'drush_' . str_replace('-', '_', $command_key) . '_validate';
       if (method_exists($this, $validate_method)) {
         $functions[] = "
 /**
@@ -1106,8 +1106,8 @@ function $validate_hook() {
       }
 
       // Commands.
-      $command_method = 'drush_' . str_replace('-','_', $command_key);
-      $command_hook = 'drush_' . str_replace('-','_', $command_key);
+      $command_method = 'drush_' . str_replace('-', '_', $command_key);
+      $command_hook = 'drush_' . str_replace('-', '_', $command_key);
       if (method_exists($this, $command_method)) {
         $functions[] = "
 /**
@@ -1119,7 +1119,7 @@ function $command_hook() {
       }
     }
 
-    // Build commands
+    // Build commands.
     $commands = Variable::export($this->webform_drush_command());
     // Remove [datatypes] which are only needed for Drush 9.x.
     $commands = preg_replace('/\[(boolean)\]\s+/', '', $commands);
@@ -1162,7 +1162,7 @@ $functions
 
     $methods = [];
     foreach ($items as $command_key => $command_item) {
-      $command_name = str_replace('-',':', $command_key);
+      $command_name = str_replace('-', ':', $command_key);
 
       // Set defaults.
       $command_item += [
@@ -1179,7 +1179,7 @@ $functions
   /****************************************************************************/";
 
       // Validate.
-      $validate_method = 'drush_' . str_replace('-','_', $command_key) . '_validate';
+      $validate_method = 'drush_' . str_replace('-', '_', $command_key) . '_validate';
       if (method_exists($this, $validate_method)) {
         $methods[] = "
   /**
@@ -1193,7 +1193,7 @@ $functions
       }
 
       // Command.
-      $command_method = 'drush_' . str_replace('-','_', $command_key);
+      $command_method = 'drush_' . str_replace('-', '_', $command_key);
       if (method_exists($this, $command_method)) {
         $command_params = [];
         $command_arguments = [];
@@ -1222,7 +1222,7 @@ $functions
           }
 
           $command_annotations[] = "@option $option_name $option_description";
-          $command_options[$option_name] = $option_default ;
+          $command_options[$option_name] = $option_default;
         }
         if ($command_options) {
           $command_options = Variable::export($command_options);
@@ -1338,10 +1338,11 @@ $methods
 // editorial.
 // @see \Drupal\webform_editorial\Controller\WebformEditorialController::drush
 if (!function_exists('dt')) {
+
   /**
    * Rudimentary replacement for Drupal API t() function.
    *
-   * @param string
+   * @param string $string
    *   String to process, possibly with replacement item.
    *
    * @return string
@@ -1350,5 +1351,5 @@ if (!function_exists('dt')) {
   function dt($string) {
     return $string;
   }
-}
 
+}
