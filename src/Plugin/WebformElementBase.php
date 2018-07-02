@@ -2151,8 +2151,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#states' => [
         'invisible' => [
           [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
-          'or',
-          [':input[name="properties[title_display]"]' => ['value' => 'attribute']],
         ],
       ],
     ];
@@ -2199,7 +2197,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         'after' => $this->t('After'),
         'inline' => $this->t('Inline'),
         'invisible' => $this->t('Invisible'),
-        'attribute' => $this->t('Attribute'),
       ],
       '#description' => $this->t('Determines the placement of the title.'),
     ];
