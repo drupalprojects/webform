@@ -459,7 +459,7 @@ webform.element.computed:
   js:
     js/webform.element.computed.js: {}
   dependencies:
-    - core/drupal
+    - core/drupal.debounce
     - core/jquery.once
 
 webform.element.counter:

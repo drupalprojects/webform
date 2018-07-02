@@ -3,7 +3,7 @@
  * JavaScript behaviors for computed elements.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, debounce) {
 
   'use strict';
 
@@ -33,21 +33,13 @@
         // Add event handler to elements that are used by the computed element.
         $.each(elementKeys, function( i, key) {
           $form.find(':input[name^="' + key + '"]')
-            .on('keyup change', setUpdate);
+            .on('keyup change', debounce(triggerUpdate, Drupal.webform.computed.delay));
         });
 
         // Initialize computed element update which refreshes the displayed
         // value and accounts for any changes to the #default_value for a
         // computed element.
         triggerUpdate();
-
-        // Update timer
-        var timer;
-
-        function setUpdate() {
-          window.clearTimeout(timer);
-          timer = window.setTimeout(triggerUpdate, Drupal.webform.computed.delay);
-        }
 
         function triggerUpdate() {
           $element.find('.js-form-submit').mousedown();
@@ -56,4 +48,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, Drupal.debounce);
