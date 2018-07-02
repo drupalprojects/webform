@@ -10,11 +10,19 @@ use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformYaml;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Defines a class to translate webform elements.
  */
 class WebformTranslationManager implements WebformTranslationManagerInterface {
+
+  /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
 
   /**
    * The language manager.
@@ -54,6 +62,8 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
   /**
    * Constructs a WebformTranslationManager object.
    *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -63,12 +73,32 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
-  public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MessengerInterface $messenger, WebformElementManagerInterface $element_manager) {
+  public function __construct(RouteMatchInterface $route_match, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MessengerInterface $messenger, WebformElementManagerInterface $element_manager) {
+    $this->routeMatch = $route_match;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->messenger = $messenger;
     $this->elementManager = $element_manager;
   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function isAdminRoute() {
+     $route_name = $this->routeMatch->getRouteName();
+
+     // Don't initialize translation on webform CRUD routes.
+     if (preg_match ('/^entity\.webform\.(?:edit_form|duplicate_form|delete_form)$/', $route_name)) {
+       return TRUE;
+     }
+
+     // Don't initialize translation on webform UI routes.
+     if (strpos($route_name, 'entity.webform_ui.') === 0) {
+       return TRUE;
+     }
+
+     return FALSE;
+   }
 
   /**
    * {@inheritdoc}

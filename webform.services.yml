@@ -63,7 +63,7 @@ services:
 
   webform.translation_manager:
     class: Drupal\webform\WebformTranslationManager
-    arguments: ['@language_manager', '@config.factory', '@messenger', '@plugin.manager.webform.element']
+    arguments: ['@current_route_match', '@language_manager', '@config.factory', '@messenger', '@plugin.manager.webform.element']
 
   webform.request:
     class: Drupal\webform\WebformRequest

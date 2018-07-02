@@ -8,6 +8,16 @@ namespace Drupal\webform;
 interface WebformTranslationManagerInterface {
 
   /**
+   * Determine if the translated webform should be displayed.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *
+   * @return bool
+   *   TRUE if the translated webform should be displaye.
+   */
+  public function isAdminRoute();
+
+  /**
    * Get webform elements for specific language.
    *
    * @param \Drupal\webform\WebformInterface $webform

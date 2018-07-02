@@ -1292,9 +1292,14 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
 
       // If current webform is translated, load the base (default) webform and apply
       // the translation to the elements.
-      if ($config_translation && $this->langcode != $language_manager->getCurrentLanguage()->getId()) {
+      if ($config_translation
+        && ($this->langcode != $language_manager->getCurrentLanguage()->getId())) {
+        // Always get the elements in the original language.
         $elements = $translation_manager->getElements($this);
-        $this->elementsTranslations = $translation_manager->getElements($this, $language_manager->getCurrentLanguage()->getId());
+        // For none admin routes get the element (label) translations.
+        if (!$translation_manager->isAdminRoute()) {
+          $this->elementsTranslations = $translation_manager->getElements($this, $language_manager->getCurrentLanguage()->getId());
+        }
       }
       else {
         $elements = Yaml::decode($this->elements);
