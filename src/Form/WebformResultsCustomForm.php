@@ -123,12 +123,16 @@ class WebformResultsCustomForm extends FormBase {
     $form['sort'] = [
       '#prefix' => '<div class="container-inline">',
       '#type' => 'select',
+      '#title' => $this->t('Sort by'),
+      '#title_display' => 'invisible',
       '#field_prefix' => $this->t('Sort by'),
       '#options' => $sort_options,
       '#default_value' => $sort,
     ];
     $form['direction'] = [
       '#type' => 'select',
+      '#title' => $this->t('Direction'),
+      '#title_display' => 'invisible',
       '#field_prefix' => ' ' . $this->t('in', [], ['context' => 'Sort by {sort} in {direction} order']) . ' ',
       '#field_suffix' => ' ' . $this->t('order', [], ['context' => 'Sort by {sort} in {direction} order']),
       '#options' => [
@@ -143,6 +147,8 @@ class WebformResultsCustomForm extends FormBase {
     $limit = $this->webform->getState($this->getStateKey('limit'), NULL);
     $form['limit'] = [
       '#type' => 'select',
+      '#title' => $this->t('Results per page'),
+      '#title_display' => 'invisible',
       '#field_prefix' => $this->t('Show', [], ['context' => 'Show {limit} results per page']),
       '#field_suffix' => $this->t('results per page'),
       '#options' => [

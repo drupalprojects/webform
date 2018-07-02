@@ -137,6 +137,10 @@ class WebformAdminConfigLibrariesForm extends WebformAdminConfigBaseForm {
       '#js_select' => FALSE,
       '#options' => $libraries_options,
       '#default_value' => array_diff($this->libraries, array_combine($config->get('libraries.excluded_libraries'), $config->get('libraries.excluded_libraries'))),
+      '#process' => [
+        ['\Drupal\Core\Render\Element\Tableselect', 'processTableselect'],
+        ['\Drupal\webform\Plugin\WebformElement\TableSelect', 'processTableSelectOptions'],
+      ],
     ];
     $t_args = [
       ':select2_href' => $libraries['jquery.select2']['homepage_url']->toString(),

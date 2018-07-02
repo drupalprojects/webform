@@ -115,6 +115,9 @@ elements: |
     '#type': details
     '#title': 'Advanced elements'
     '#open': true
+    color:
+      '#type': color
+      '#title': Color
     tel:
       '#type': tel
       '#title': Telephone

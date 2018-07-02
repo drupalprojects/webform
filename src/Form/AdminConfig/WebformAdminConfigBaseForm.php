@@ -59,6 +59,10 @@ abstract class WebformAdminConfigBaseForm extends ConfigFormBase {
       '#options' => $options,
       '#required' => TRUE,
       '#default_value' => array_diff($ids, $excluded_ids),
+      '#process' => [
+        ['\Drupal\Core\Render\Element\Tableselect', 'processTableselect'],
+        ['\Drupal\webform\Plugin\WebformElement\TableSelect', 'processTableSelectOptions'],
+      ],
     ];
   }
 

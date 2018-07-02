@@ -7,6 +7,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -239,6 +240,8 @@ class WebformMultiple extends FormElement {
       ];
       $element['add']['more_items'] = [
         '#type' => 'number',
+        '#title' => $element['#add_more_button_label'] . ' ' . $element['#add_more_input_label'],
+        '#title_display' => 'invisible',
         '#min' => 1,
         '#max' => 100,
         '#default_value' => $element['#add_more'],
@@ -376,24 +379,36 @@ class WebformMultiple extends FormElement {
 
     if (empty($element['#header'])) {
       return [
-        ['data' => '', 'colspan' => ($colspan + 1)],
+        [
+          'data' => (!empty($element['#title'])) ? WebformAccessibilityHelper::buildVisuallyHidden($element['#title']) : [],
+          'colspan' => ($colspan + 1),
+        ],
       ];
     }
     elseif (is_array($element['#header'])) {
       $header = [];
 
       if ($element['#sorting']) {
-        $header[] = ['class' => ["$table_id--handle", "webform-multiple-table--handle"]];
+        $header[] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Re-order')),
+          'class' => ["$table_id--handle", "webform-multiple-table--handle"],
+        ];
       }
 
       $header = array_merge($header, $element['#header']);
 
       if ($element['#sorting']) {
-        $header[] = ['class' => ["$table_id--weight", "webform-multiple-table--weight"]];
+        $header[] = [
+          'data' => ['#markup' => t('Weight')],
+          'class' => ["$table_id--weight", "webform-multiple-table--weight"]
+        ];
       }
 
       if ($element['#operations']) {
-        $header[] = ['class' => ["$table_id--handle", "webform-multiple-table--operations"]];
+        $header[] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Operations')),
+          'class' => ["$table_id--handle", "webform-multiple-table--operations"],
+        ];
       }
 
       return $header;
@@ -407,7 +422,10 @@ class WebformMultiple extends FormElement {
       $header = [];
 
       if ($element['#sorting']) {
-        $header['_handle_'] = ['class' => ["$table_id--handle", "webform-multiple-table--handle"]];
+        $header['_handle_'] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Re-order')),
+          'class' => ["$table_id--handle", "webform-multiple-table--handle"],
+        ];
       }
 
       if ($element['#child_keys']) {
@@ -454,6 +472,7 @@ class WebformMultiple extends FormElement {
 
       if ($element['#operations']) {
         $header['_operations_'] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Operations')),
           'class' => ["$table_id--operations", "webform-multiple-table--operations"],
         ];
       }

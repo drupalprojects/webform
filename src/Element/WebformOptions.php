@@ -107,7 +107,7 @@ class WebformOptions extends FormElement {
           'value' => [
             '#type' => 'textfield',
             '#title' => t('@label value', $t_args),
-            '#title_display' => t('invisible'),
+            '#title_display' => 'invisible',
             '#placeholder' => t('Enter value'),
             '#attributes' => ['class' => ['js-webform-options-value']],
             '#maxlength' => $element['#options_value_maxlength'],
@@ -115,18 +115,18 @@ class WebformOptions extends FormElement {
           'option' => [
             '#type' => 'container',
             '#title' => t('@label text/description', $t_args),
-            '#title_display' => t('invisible'),
+            '#title_display' => 'invisible',
             'text' => [
               '#type' => 'textfield',
               '#title' => t('@label text', $t_args),
-              '#title_display' => t('invisible'),
+              '#title_display' => 'invisible',
               '#placeholder' => t('Enter text'),
               '#maxlength' => $element['#options_text_maxlength'],
             ],
             'description' => [
               '#type' => 'textarea',
               '#title' => t('@label description', $t_args),
-              '#title_display' => t('invisible'),
+              '#title_display' => 'invisible',
               '#placeholder' => t('Enter description'),
               '#rows' => 2,
               '#maxlength' => $element['#options_description_maxlength'],
@@ -139,7 +139,7 @@ class WebformOptions extends FormElement {
           'value' => [
             '#type' => 'textfield',
             '#title' => t('@label value', $t_args),
-            '#title_display' => t('invisible'),
+            '#title_display' => 'invisible',
             '#placeholder' => t('Enter value'),
             '#attributes' => ['class' => ['js-webform-options-value']],
             '#maxlength' => $element['#options_value_maxlength'],
@@ -147,7 +147,7 @@ class WebformOptions extends FormElement {
           'text' => [
             '#type' => 'textfield',
             '#title' => t('@label text', $t_args),
-            '#title_display' => t('invisible'),
+            '#title_display' => 'invisible',
             '#placeholder' => t('Enter text'),
             '#maxlength' => $element['#options_text_maxlength'],
           ],

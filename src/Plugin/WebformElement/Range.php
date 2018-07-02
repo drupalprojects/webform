@@ -83,6 +83,9 @@ class Range extends NumericBase {
       // Create output (number) element.
       $output = [
         '#type' => 'number',
+        '#title' => $element['#title'],
+        '#title_display' => 'invisible',
+        '#id' => $webform_key . '__output',
         '#name' => $webform_key . '__output',
       ];
 

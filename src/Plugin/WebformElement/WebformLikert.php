@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Element\WebformLikert as WebformLikertElement;
 use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Plugin\WebformElementBase;
@@ -111,7 +112,7 @@ class WebformLikert extends WebformElementBase {
         // HTML emails.
         $header = [];
         $header['likert_question'] = [
-          'data' => '',
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Questions')),
           'align' => 'left',
           'width' => '40%',
         ];
@@ -448,6 +449,7 @@ class WebformLikert extends WebformElementBase {
       '#type' => 'textfield',
       '#title' => $this->t('N/A answer text'),
       '#description' => $this->t('Text display display on webform.'),
+      '#attributes' => ['data-webform-states-no-clear' => TRUE],
       '#states' => [
         'visible' => [
           ':input[name="properties[na_answer]"]' => ['checked' => TRUE],
