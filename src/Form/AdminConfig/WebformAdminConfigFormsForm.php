@@ -242,7 +242,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
         'group' => $this->t('Validation'),
         'title' => $this->t('Disable inline form errors for all webforms'),
         'description' => $this->t('If checked, <a href=":href">inline form errors</a>  will be disabled for all webforms.', [':href' => 'https://www.drupal.org/docs/8/core/modules/inline-form-errors/inline-form-errors-module-overview']),
-        'access' => (\Drupal::moduleHandler()->moduleExists('inline_form_errors') && floatval(\Drupal::VERSION) >= 8.5),
+        'access' => \Drupal::moduleHandler()->moduleExists('inline_form_errors'),
       ],
       'default_form_required' => [
         'group' => $this->t('Validation'),

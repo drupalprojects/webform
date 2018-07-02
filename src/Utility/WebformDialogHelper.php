@@ -43,7 +43,7 @@ class WebformDialogHelper {
    *   TRUE if outside_in.module is enabled and system trays are not disabled.
    */
   public static function useOffCanvas() {
-    return ((floatval(\Drupal::VERSION) >= 8.5) && !\Drupal::config('webform.settings')->get('ui.offcanvas_disabled')) ? TRUE : FALSE;
+    return (!\Drupal::config('webform.settings')->get('ui.offcanvas_disabled')) ? TRUE : FALSE;
   }
 
   /**

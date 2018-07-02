@@ -586,7 +586,6 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'title' => $this->t('Disable inline form errors'),
         'all_description' => $this->t('Inline form errors is disabled for all forms.'),
         'form_description' => $this->t('If checked, <a href=":href">inline form errors</a> will be disabled for this form.', [':href' => 'https://www.drupal.org/docs/8/core/modules/inline-form-errors/inline-form-errors-module-overview']),
-        'access' => (\Drupal::moduleHandler()->moduleExists('inline_form_errors') && floatval(\Drupal::VERSION) >= 8.5),
       ],
       'form_required' => [
         'group' => $this->t('Validation'),
