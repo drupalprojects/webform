@@ -206,7 +206,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
       $this->sort = $webform_submission_storage->getCustomSetting('sort', 'serial', $this->webform, $this->sourceEntity);
       $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
-      $this->limit = $webform_submission_storage->getCustomSetting('limit', 50, $this->webform, $this->sourceEntity);
+      $this->limit = $webform_submission_storage->getCustomSetting('limit', 20, $this->webform, $this->sourceEntity);
       $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
       $this->customize = $this->webform->access('update');
       if ($this->format['element_format'] == 'raw') {
@@ -240,7 +240,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         $this->sort = 'serial';
       }
       $this->direction = 'desc';
-      $this->limit = 50;
+      $this->limit = 20;
       $this->customize = FALSE;
     }
 
