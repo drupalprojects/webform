@@ -280,6 +280,8 @@ class WebformPluginElementController extends ControllerBase implements Container
       '#attributes' => [
         'class' => ['webform-form-filter-text'],
         'data-element' => '.webform-element-plugin',
+        'data-item-single' => $this->t('element'),
+        'data-item-plural' => $this->t('elements'),
         'title' => $this->t('Enter a part of the element type to filter by.'),
         'autofocus' => 'autofocus',
       ],

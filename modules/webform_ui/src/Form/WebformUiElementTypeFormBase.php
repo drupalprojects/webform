@@ -98,6 +98,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     $form['#prefix'] = '<div id="webform-ui-element-type-ajax-wrapper">';
     $form['#suffix'] = '</div>';
 
+    $form['#attached']['library'][] = 'webform/webform.admin';
     $form['#attached']['library'][] = 'webform/webform.form';
     $form['#attached']['library'][] = 'webform/webform.tooltip';
     $form['#attached']['library'][] = 'webform_ui/webform_ui';
@@ -131,6 +132,8 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
       '#attributes' => [
         'class' => ['webform-form-filter-text'],
         'data-element' => '.webform-ui-element-type-table',
+        'data-item-single' => $this->t('element'),
+        'data-item-plural' => $this->t('elements'),
         'title' => $this->t('Enter a part of the element name to filter by.'),
         'autofocus' => 'autofocus',
       ],

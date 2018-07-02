@@ -8,6 +8,10 @@ webform.admin:
   js:
     js/webform.admin.js:  {}
   dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.announce
+    - core/drupal.debounce
     - webform/webform.form
     - webform/webform.admin.dropbutton
 
