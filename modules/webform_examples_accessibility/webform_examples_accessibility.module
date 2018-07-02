@@ -29,6 +29,7 @@ function webform_examples_accessibility_page_attachments(array &$attachments) {
  */
 function webform_examples_accessibility_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (strpos($form['#webform_id'], 'example_accessibility_') !== 0
+    && !preg_match('/^issue_\d+$/', $form['#webform_id'])
     && strpos($form['#webform_id'], 'test_') !== 0) {
     return;
   }

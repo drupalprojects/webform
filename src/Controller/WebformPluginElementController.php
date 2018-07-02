@@ -180,6 +180,7 @@ class WebformPluginElementController extends ControllerBase implements Container
           'container' => $webform_element->isContainer($element),
           'root' => $webform_element->isRoot(),
           'hidden' => $webform_element->isHidden(),
+          'composite' => $webform_element->isComposite(),
           'multiple' => $webform_element->supportsMultipleValues(),
           'multiline' => $webform_element->isMultiline($element),
           'default_key' => $webform_element_plugin_definition['default_key'],
@@ -190,7 +191,7 @@ class WebformPluginElementController extends ControllerBase implements Container
           $webform_info[] = '<b>' . $key . '</b>: ' . ($value ? $this->t('Yes') : $this->t('No'));
         }
 
-        // Wlement info.
+        // Element info.
         $element_info_definitions = [
           'input' => (empty($webform_element_info['#input'])) ? $this->t('No') : $this->t('Yes'),
           'theme' => (isset($webform_element_info['#theme'])) ? $webform_element_info['#theme'] : 'N/A',

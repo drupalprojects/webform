@@ -5,7 +5,6 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -18,7 +17,7 @@ use Drupal\webform\Utility\WebformElementHelper;
  */
 class WebformEmailConfirm extends FormElement {
 
-  use CompositeFormElementTrait;
+  use WebformCompositeFormElementTrait;
 
   /**
    * {@inheritdoc}
@@ -31,11 +30,10 @@ class WebformEmailConfirm extends FormElement {
       '#process' => [
         [$class, 'processWebformEmailConfirm'],
       ],
-      '#theme_wrappers' => ['form_element'],
+      '#pre_render' => [
+        [$class, 'preRenderWebformCompositeFormElement'],
+      ],
       '#required' => FALSE,
-      // Add '#markup' property to add an 'id' attribute to the form element.
-      // @see template_preprocess_form_element()
-      '#markup' => '',
     ];
   }
 

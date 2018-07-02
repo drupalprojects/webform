@@ -9,7 +9,6 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Mail\MailFormatHelper;
-use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
@@ -34,7 +33,6 @@ use Drupal\webform\WebformSubmissionInterface;
  */
 class Address extends WebformCompositeBase {
 
-  use CompositeFormElementTrait;
 
   /**
    * {@inheritdoc}
@@ -81,9 +79,12 @@ class Address extends WebformCompositeBase {
     // but not the core Address module.
     // @see https://www.w3.org/WAI/tutorials/forms/grouping/
     $this->setElementDefaultCallback($element, 'pre_render');
-    $class = get_class($this);
-    $element['#pre_render'][] = [$class, 'preRenderCompositeFormElement'];
+    // Replace 'form_element' theme wrapper with composite form element.
+    // @see \Drupal\Core\Render\Element\PasswordConfirm
+    $element['#pre_render'] = [[get_called_class(), 'preRenderWebformCompositeFormElement']];
     $element['#theme_wrappers'] = [];
+
+    // #title display defaults to invisible.
     $element += [
       '#title_display' => 'invisible',
     ];

@@ -19,6 +19,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\webform\Element\WebformCompositeFormElementTrait;
 use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Entity\WebformOptions;
@@ -52,6 +53,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
 
   use StringTranslationTrait;
   use MessengerTrait;
+  use WebformCompositeFormElementTrait;
 
   /**
    * A logger instance.
@@ -786,6 +788,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
    * {@inheritdoc}
    */
   public function finalize(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+    // Set element's #pre_render callback so that is not replaced by
+    // additional element #pre_render callbacks.
+    $this->setElementDefaultCallback($element, 'pre_render');
+
+    // Prepare composite element.
+    $this->prepareCompositeFormElement($element);
+
     // Prepare multiple element.
     $this->prepareMultipleWrapper($element);
 
@@ -884,6 +893,28 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       }
     }
   }
+  /**
+   * Replace Core's composite #pre_render with Webform's composite #pre_render.
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @see \Drupal\Core\Render\Element\CompositeFormElementTrait
+   * @see \Drupal\webform\Element\WebformCompositeFormElementTrait
+   */
+  protected function prepareCompositeFormElement(array &$element) {
+    if (empty($element['#pre_render'])) {
+      return;
+    }
+
+    // Replace preRenderCompositeFormElement with
+    // preRenderWebformCompositeFormElement.
+    foreach ($element['#pre_render'] as $index => $pre_render) {
+      if (is_array($pre_render) && $pre_render[1] === 'preRenderCompositeFormElement') {
+        $element['#pre_render'][$index] = [get_called_class(), 'preRenderWebformCompositeFormElement'];
+      }
+    }
+  }
 
   /**
    * Set an elements #states and flexbox wrapper.
@@ -899,10 +930,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     }
 
     $class = get_class($this);
-
-    // Set element's #pre_render callback so that is not replaced by
-    // additional element #pre_render callbacks.
-    $this->setElementDefaultCallback($element, 'pre_render');
 
     // Fix #states wrapper.
     if ($has_states_wrapper) {
@@ -2188,6 +2215,13 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
       '#description' => $this->t('Determines the placement of the description.'),
     ];
+
+    // Remove unsupported title and description display from composite elements.
+    if ($this->isComposite()) {
+      unset($form['form']['display_container']['title_display']['#options']['inline']);
+      unset($form['form']['display_container']['description_display']['#options']['tooltip']);
+    }
+
     $form['form']['field_container'] = $this->getFormInlineContainer();
     $form['form']['field_container']['field_prefix'] = [
       '#type' => 'textfield',

@@ -14,6 +14,8 @@ use Drupal\webform\Utility\WebformElementHelper;
  */
 abstract class WebformCompositeBase extends FormElement implements WebformCompositeInterface {
 
+  use WebformCompositeFormElementTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -27,7 +29,7 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
         [$class, 'processAjaxForm'],
       ],
       '#pre_render' => [
-        [$class, 'preRenderCompositeFormElement'],
+        [$class, 'preRenderWebformCompositeFormElement'],
       ],
       '#title_display' => 'invisible',
       '#required' => FALSE,
