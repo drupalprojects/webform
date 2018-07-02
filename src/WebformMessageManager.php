@@ -3,6 +3,7 @@
 namespace Drupal\webform;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -98,6 +99,13 @@ class WebformMessageManager implements WebformMessageManagerInterface {
   protected $webformSubmission;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a WebformMessageManager object.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
@@ -110,17 +118,23 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    *   A logger instance.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    * @param \Drupal\webform\WebformRequestInterface $request_handler
    *   The webform request handler.
    * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
    *   The webform token manager.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, RendererInterface $renderer, WebformRequestInterface $request_handler, WebformTokenManagerInterface $token_manager) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, RendererInterface $renderer, MessengerInterface $messenger, WebformRequestInterface $request_handler, WebformTokenManagerInterface $token_manager) {
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
     $this->entityStorage = $entity_type_manager->getStorage('webform_submission');
     $this->logger = $logger;
     $this->renderer = $renderer;
+    $this->messenger = $messenger;
     $this->requestHandler = $request_handler;
     $this->tokenManager = $token_manager;
   }
@@ -172,7 +186,7 @@ class WebformMessageManager implements WebformMessageManagerInterface {
    */
   public function display($key, $type = 'status') {
     if ($build = $this->build($key)) {
-      drupal_set_message($this->renderer->renderPlain($build), $type);
+      $this->messenger->addMessage($this->renderer->renderPlain($build), $type);
     }
   }
 

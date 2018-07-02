@@ -121,7 +121,7 @@ class WebformResultsExportForm extends FormBase {
     // Save the export options to the webform's state.
     $export_options = $this->submissionExporter->getValuesFromInput($form_state->getValues());
     $this->submissionExporter->setWebformOptions($export_options);
-    drupal_set_message($this->t('The download settings have been saved.'));
+    $this->messenger()->addStatus($this->t('The download settings have been saved.'));
   }
 
   /**
@@ -134,7 +134,7 @@ class WebformResultsExportForm extends FormBase {
    */
   public function delete(array &$form, FormStateInterface $form_state) {
     $this->submissionExporter->deleteWebformOptions();
-    drupal_set_message($this->t('The download settings have been reset.'));
+    $this->messenger()->addStatus($this->t('The download settings have been reset.'));
   }
 
 }

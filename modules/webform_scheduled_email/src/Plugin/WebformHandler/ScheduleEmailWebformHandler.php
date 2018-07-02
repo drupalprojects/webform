@@ -349,7 +349,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     // Don't send the message if empty (aka To, CC, and BCC is empty).
     if (!$this->hasRecipient($webform_submission, $message)) {
       if ($this->configuration['debug']) {
-        drupal_set_message($this->t('%submission: Email <b>not sent</b> for %handler handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args), 'warning');
+        $this->messenger()->addWarning($this->t('%submission: Email <b>not sent</b> for %handler handler because a <em>To</em>, <em>CC</em>, or <em>BCC</em> email was not provided.', $t_args));
       }
       return FALSE;
     }
@@ -362,7 +362,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     // date.
     if (!$send_iso_date) {
       if ($this->configuration['debug']) {
-        drupal_set_message($this->t('%submission: Email <b>not scheduled</b> for %handler handler because %send is not a valid date/token.', $t_args), 'warning', TRUE);
+        $this->messenger()->addWarning($this->t('%submission: Email <b>not scheduled</b> for %handler handler because %send is not a valid date/token.', $t_args), TRUE);
       }
       $context = $t_args + [
         'link' => $this->getWebform()->toLink($this->t('Edit'), 'handlers')->toString(),
@@ -384,7 +384,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       ];
 
       $t_args['@action'] = Unicode::strtolower($statuses[$status]);
-      drupal_set_message($this->t('%submission: Email <b>@action</b> by %handler handler to be sent on %date.', $t_args), 'warning', TRUE);
+      $this->messenger()->addWarning($this->t('%submission: Email <b>@action</b> by %handler handler to be sent on %date.', $t_args), TRUE);
 
       $debug_message = $this->buildDebugMessage($webform_submission, $message);
       $debug_message['status'] = [
@@ -401,7 +401,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
         '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
         '#weight' => -10,
       ];
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($debug_message), 'warning', TRUE);
+      $this->messenger()->addWarning(\Drupal::service('renderer')->renderPlain($debug_message), TRUE);
     }
 
     return $status;
@@ -423,7 +423,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
           '%submission' => $webform_submission->label(),
           '%handler' => $this->label(),
         ];
-        drupal_set_message($this->t('%submission: Email <b>unscheduled</b> for %handler handler.', $t_args), 'warning', TRUE);
+        $this->messenger()->addWarning($this->t('%submission: Email <b>unscheduled</b> for %handler handler.', $t_args), TRUE);
       }
     }
   }

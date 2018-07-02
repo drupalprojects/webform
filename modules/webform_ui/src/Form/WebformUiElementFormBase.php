@@ -320,7 +320,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       $t_args = [':href' => Url::fromRoute('entity.webform.source_form', ['webform' => $webform->id()])->toString()];
       $form_state->setErrorByName('elements', $this->t('There has been error validating the elements. You may need to edit the <a href=":href">YAML source</a> to resolve the issue.', $t_args));
       foreach ($messages as $message) {
-        drupal_set_message($message, 'error');
+        $this->messenger()->addError($message);
       }
     }
   }
@@ -354,7 +354,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
       '%title' => (!empty($properties['title'])) ? $properties['title'] : $key,
       '@action' => $this->action,
     ];
-    drupal_set_message($this->t('%title has been @action.', $t_args));
+    $this->messenger()->addStatus($this->t('%title has been @action.', $t_args));
 
     // Append ?update= to (redirect) destination.
     if ($this->requestStack->getCurrentRequest()->query->get('destination')) {

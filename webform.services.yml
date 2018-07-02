@@ -59,11 +59,11 @@ services:
 
   webform.message_manager:
     class: Drupal\webform\WebformMessageManager
-    arguments: ['@current_user', '@config.factory', '@entity_type.manager', '@logger.channel.webform', '@renderer', '@webform.request', '@webform.token_manager']
+    arguments: ['@current_user', '@config.factory', '@entity_type.manager', '@logger.channel.webform', '@renderer', '@messenger', '@webform.request', '@webform.token_manager']
 
   webform.translation_manager:
     class: Drupal\webform\WebformTranslationManager
-    arguments: ['@language_manager', '@config.factory', '@plugin.manager.webform.element']
+    arguments: ['@language_manager', '@config.factory', '@messenger', '@plugin.manager.webform.element']
 
   webform.request:
     class: Drupal\webform\WebformRequest
@@ -105,7 +105,7 @@ services:
 
   webform.event_subscriber:
     class: Drupal\webform\EventSubscriber\WebformSubscriber
-    arguments: ['@current_user', '@config.factory', '@renderer', '@redirect.destination', '@webform.token_manager']
+    arguments: ['@current_user', '@config.factory', '@renderer', '@messenger', '@redirect.destination', '@webform.token_manager']
     tags:
       - { name: event_subscriber }
 

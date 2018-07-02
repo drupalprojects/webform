@@ -53,7 +53,7 @@ class WebformScheduledEmailController extends ControllerBase implements Containe
    */
   public function cron(WebformInterface $webform, $handler_id) {
     $stats = $this->manager->cron($webform, $handler_id);
-    drupal_set_message($this->t($stats['_message'], $stats['_context']));
+    $this->messenger()->addStatus($this->t($stats['_message'], $stats['_context']));
     return new RedirectResponse($webform->toUrl('handlers')->toString());
   }
 

@@ -824,7 +824,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           '#title' => $this->t('Generate %title submissions', ['%title' => $webform->label()]),
           '#url' => Url::fromRoute('devel_generate.webform_submission', [], ['query' => $query]),
         ];
-        drupal_set_message($this->renderer->renderPlain($build), 'warning');
+        $this->messenger()->addWarning($this->renderer->renderPlain($build));
       }
     }
 
@@ -1762,7 +1762,7 @@ class WebformSubmissionForm extends ContentEntityForm {
           ];
           // Display warning to use who can update the webform.
           if ($webform->access('update')) {
-            drupal_set_message($this->t('Confirmation URL %url is not valid.', $t_args), 'warning');
+            $this->messenger()->addWarning($this->t('Confirmation URL %url is not valid.', $t_args));
           }
           // Log warning.
           $this->getLogger('webform')->warning('@webform: Confirmation URL %url is not valid.', $t_args);

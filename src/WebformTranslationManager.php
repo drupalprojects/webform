@@ -2,6 +2,7 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -44,18 +45,28 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
   protected $translatableProperties;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a WebformTranslationManager object.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    */
-  public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, WebformElementManagerInterface $element_manager) {
+  public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MessengerInterface $messenger, WebformElementManagerInterface $element_manager) {
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
+    $this->messenger = $messenger;
     $this->elementManager = $element_manager;
   }
 
@@ -86,7 +97,7 @@ class WebformTranslationManager implements WebformTranslationManagerInterface {
       return [];
     }
     elseif ($error = WebformYaml::validate($elements)) {
-      drupal_set_message($error, 'error');
+      $this->messenger->addError($error);
       return [];
     }
     else {

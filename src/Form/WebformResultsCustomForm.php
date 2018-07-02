@@ -292,7 +292,7 @@ class WebformResultsCustomForm extends FormBase {
     }
 
     // Display message.
-    drupal_set_message($this->t('The customized table has been saved.'));
+    $this->messenger()->addStatus($this->t('The customized table has been saved.'));
 
     // Set redirect.
     $redirect_url = $this->requestHandler->getUrl($this->webform, $this->sourceEntity, 'webform.results_submissions');
@@ -314,7 +314,7 @@ class WebformResultsCustomForm extends FormBase {
     $this->webform->deleteState($this->getStateKey('limit'));
     $this->webform->deleteState($this->getStateKey('default'));
     $this->webform->deleteState($this->getStateKey('format'));
-    drupal_set_message($this->t('The customized table has been reset.'));
+    $this->messenger()->addStatus($this->t('The customized table has been reset.'));
   }
 
   /**

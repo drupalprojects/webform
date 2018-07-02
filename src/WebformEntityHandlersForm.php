@@ -235,7 +235,7 @@ class WebformEntityHandlersForm extends EntityForm {
     ];
     $this->logger('webform')->notice('Webform @label handler saved.', $context);
 
-    drupal_set_message($this->t('Webform %label handler saved.', ['%label' => $webform->label()]));
+    $this->messenger()->addStatus($this->t('Webform %label handler saved.', ['%label' => $webform->label()]));
   }
 
   /**

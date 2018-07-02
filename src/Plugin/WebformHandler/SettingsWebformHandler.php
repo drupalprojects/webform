@@ -331,7 +331,7 @@ class SettingsWebformHandler extends WebformHandlerBase {
       '#header' => $header,
       '#rows' => $rows,
     ];
-    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), 'warning', FALSE);
+    $this->messenger()->addWarning(\Drupal::service('renderer')->renderPlain($build));
   }
 
   /****************************************************************************/

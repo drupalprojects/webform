@@ -175,7 +175,7 @@ class TwigExtension extends \Twig_Extension {
     }
     catch (\Exception $exception) {
       if ($webform_submission->getWebform()->access('update')) {
-        drupal_set_message(t('Failed to render computed Twig value due to error "%error"', ['%error' => $exception->getMessage()]), 'error');
+        \Drupal::messenger()->addError(t('Failed to render computed Twig value due to error "%error"', ['%error' => $exception->getMessage()]));
       }
       return '';
     }

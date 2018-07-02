@@ -159,7 +159,7 @@ class WebformEntityElementsForm extends BundleEntityFormBase {
     if ($messages = $this->elementsValidator->validate($webform)) {
       $form_state->setErrorByName('elements');
       foreach ($messages as $message) {
-        drupal_set_message($message, 'error');
+        $this->messenger()->addError($message);
       }
     }
   }
@@ -179,7 +179,7 @@ class WebformEntityElementsForm extends BundleEntityFormBase {
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label elements saved.', $context);
-    drupal_set_message($this->t('Webform %label elements saved.', $t_args));
+    $this->messenger()->addStatus($this->t('Webform %label elements saved.', $t_args));
   }
 
   /****************************************************************************/

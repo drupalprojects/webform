@@ -185,7 +185,9 @@ if ($is_open === TRUE) {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValue('values');
     $webform_submission = WebformSubmissionForm::submitFormValues($values);
-    drupal_set_message($this->t('New submission %title added.', ['%title' => $webform_submission->label()]));
+    $this->messenger()->addStatus($this->t('New submission %title added.', [
+      '%title' => $webform_submission->label(),
+    ]));
   }
 
 }

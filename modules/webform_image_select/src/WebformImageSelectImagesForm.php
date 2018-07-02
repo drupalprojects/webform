@@ -120,7 +120,7 @@ class WebformImageSelectImagesForm extends EntityForm {
           '%module_names' => WebformArrayHelper::toString($module_names),
           '@module' => new PluralTranslatableMarkup(count($module_names), $this->t('module'), $this->t('modules')),
         ];
-        drupal_set_message($this->t('The %title images are being altered by the %module_names @module.', $t_args), 'warning');
+        $this->messenger()->addWarning($this->t('The %title images are being altered by the %module_names @module.', $t_args));
       }
     }
 
@@ -154,7 +154,9 @@ class WebformImageSelectImagesForm extends EntityForm {
     ];
     $this->logger('webform_image_select')->notice('Images @label saved.', $context);
 
-    drupal_set_message($this->t('Images %label saved.', ['%label' => $images->label()]));
+    $this->messenger()->addStatus($this->t('Images %label saved.', [
+      '%label' => $images->label(),
+    ]));
 
     $form_state->setRedirect('entity.webform_image_select_images.collection');
   }

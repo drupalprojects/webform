@@ -778,7 +778,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#markup' => $message,
     ];
 
-    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), $type);
+    $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($build), $type);
   }
 
   /**
@@ -829,7 +829,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       $build_message = [
         '#markup' => $this->tokenManager->replace($custom_response_message, $this->getWebform(), $token_data),
       ];
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($build_message), 'error');
+      $this->messenger()->addError(\Drupal::service('renderer')->renderPlain($build_message));
     }
     else {
       $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION_MESSAGE, 'error');

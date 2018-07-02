@@ -47,7 +47,7 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
 
     $elements = $webform->getElementsDecoded();
     if (!empty($elements['#method'])) {
-      drupal_set_message($this->t('Form is being posted using a custom method. Confirmation page must be handled by the <a href=":href">custom form action</a>.', [':href' => $webform->toUrl('settings-form')->toString()]), 'warning');
+      $this->messenger()->addWarning($this->t('Form is being posted using a custom method. Confirmation page must be handled by the <a href=":href">custom form action</a>.', [':href' => $webform->toUrl('settings-form')->toString()]));
       return $form;
     }
 

@@ -145,7 +145,7 @@ class WebformEntityAddForm extends BundleEntityFormBase {
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label created.', $context);
-    drupal_set_message($this->t('Webform %label created.', $t_args));
+    $this->messenger()->addStatus($this->t('Webform %label created.', $t_args));
   }
 
 }

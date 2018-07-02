@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
 use Drupal\Core\Link;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Render\Markup;
@@ -50,6 +51,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class WebformElementBase extends PluginBase implements WebformElementInterface {
 
   use StringTranslationTrait;
+  use MessengerTrait;
 
   /**
    * A logger instance.
@@ -1021,7 +1023,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     else {
       $message = $this->t('%title is a %type element, which has been disabled and will not be rendered. Please contact a site administrator.', $t_args);
     }
-    drupal_set_message($message, 'warning');
+    $this->messenger()->addWarning($message);
 
     $context = [
       '@title' => $this->getLabel($element),

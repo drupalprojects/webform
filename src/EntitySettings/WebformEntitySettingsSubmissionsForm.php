@@ -50,7 +50,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
 
     // Display warning and disable the submission form.
     if ($webform->isResultsDisabled()) {
-      drupal_set_message($this->t('Saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts is disabled. Submissions must be sent via an email or handled using a <a href=":href">custom webform handler</a>.', [':href' => $webform->toUrl('handlers')->toString()]), 'warning');
+      $this->messenger()->addWarning($this->t('Saving of submissions is disabled, submission settings, submission limits, purging and the saving of drafts is disabled. Submissions must be sent via an email or handled using a <a href=":href">custom webform handler</a>.', [':href' => $webform->toUrl('handlers')->toString()]));
       return $form;
     }
 
@@ -533,7 +533,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
     $next_serial = (int) $values['next_serial'];
     $max_serial = $webform_storage->getMaxSerial($webform);
     if ($next_serial < $max_serial) {
-      drupal_set_message($this->t('The next submission number was increased to @min to make it higher than existing submissions.', ['@min' => $max_serial]));
+      $this->messenger()->addStatus($this->t('The next submission number was increased to @min to make it higher than existing submissions.', ['@min' => $max_serial]));
       $next_serial = $max_serial;
     }
     $webform_storage->setNextSerial($webform, $next_serial);
