@@ -5,6 +5,7 @@
  * Preprocessors and helper functions to make theming easier.
  */
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
@@ -833,6 +834,11 @@ function template_preprocess_webform_element_more(array &$variables) {
   }
 
   $variables['attributes'] = new Attribute($variables['attributes']);
+
+  // Make sure there is a unique id.
+  if (empty($variables['id'])) {
+    $variables['id'] = Html::getUniqueId('webform-element-more');
+  }
 }
 
 /**
