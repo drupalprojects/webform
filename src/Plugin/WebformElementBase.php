@@ -592,8 +592,8 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         continue;
       }
 
-      // Skip disable or hidden.
-      if (!$element_instance->isEnabled() || $element_instance->isHidden()) {
+      // Skip disabled or hidden.
+      if ($element_instance->isDisabled() || $element_instance->isHidden()) {
         continue;
       }
 

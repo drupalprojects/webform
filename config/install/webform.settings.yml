@@ -272,6 +272,7 @@ libraries:
   excluded_libraries:
     - jquery.chosen
     - jquery.icheck
+    - jquery.toggles
 requirements:
   cdn: true
   bootstrap: true

@@ -17,6 +17,16 @@ class WebformElementToggleTest extends WebformElementTestBase {
   protected static $testWebforms = ['test_element_toggle'];
 
   /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+    $this->config('webform.settings')
+      ->set('libraries.excluded_libraries', [])
+      ->save();
+  }
+
+  /**
    * Test toggle element.
    */
   public function testToggleElement() {

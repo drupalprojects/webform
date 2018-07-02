@@ -2343,3 +2343,24 @@ function webform_update_8131() {
 function webform_update_8132() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2890861: Webform toggle element is not accessible.
+ */
+function webform_update_8133() {
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('webform.webform.') as $webform_config_name) {
+    $webform_config = $config_factory->getEditable($webform_config_name);
+    $data = $webform_config->getRawData();
+    $yaml = Yaml::encode($data);
+    if (strpos($yaml, 'webform_toggle')) {
+      return;
+    }
+  }
+
+  $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $settings = $admin_config->getRawData();
+  $settings['libraries']['excluded_libraries'][] = 'jquery.toggles';
+  $admin_config->setData($settings)->save();
+}
+
