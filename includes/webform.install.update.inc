@@ -21,6 +21,18 @@ use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\Utility\WebformReflectionHelper;
 use Drupal\webform\Utility\WebformYaml;
 
+/**
+ * Implements hook_update_dependencies().
+ */
+function webform_update_dependencies() {
+  // Ensure that system_update_8501() runs before the webform update, so that
+  // the new revision_default field is installed in the correct table.
+  // @see https://www.drupal.org/project/webform/issues/2958102
+  $dependencies['webform'][8099]['system'] = 8501;
+
+  return $dependencies;
+}
+
 /******************************************************************************/
 // Webform-8.x-5.0-beta1 - December 7, 2016 (No update required).
 /******************************************************************************/

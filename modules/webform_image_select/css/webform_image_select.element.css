@@ -17,3 +17,7 @@ html.js .js-webform-image-select {
 .thumbnails.image_picker_selector p {
   margin: 0;
 }
+
+.thumbnails.image_picker_selector .thumbnail.focused {
+  border: 1px solid #0088cc;
+}
