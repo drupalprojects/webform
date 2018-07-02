@@ -233,6 +233,11 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
 
   /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $variables['webform_submission'];
+  $webform = $webform_submission->getWebform();
+
+  // Webform id and title for context.
+  $variables['webform_id'] = $webform->id();
+  $variables['webform_title'] = $webform->label();
 
   // Get the route name, parameters, and source entity for the current page.
   // This ensures that the user stays within their current context as they are
