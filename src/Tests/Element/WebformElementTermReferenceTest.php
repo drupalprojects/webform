@@ -48,13 +48,13 @@ class WebformElementTermReferenceTest extends WebformElementTestBase {
     $this->drupalGet('webform/test_element_term_reference');
 
     // Check term checkboxes tree default.
-    $this->assertRaw('<fieldset id="edit-webform-term-checkboxes-tree-default--wrapper" class="webform-term-checkboxes--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-webform-term-checkboxes-tree-default" class="js-webform-term-checkboxes webform-term-checkboxes webform-term-checkboxes-scroll webform-term-checkboxes--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper" id="edit-webform-term-checkboxes-tree-default--wrapper">');
     $this->assertRaw('<span class="field-prefix">&nbsp;&nbsp;&nbsp;</span>');
     $this->assertRaw('<input data-drupal-selector="edit-webform-term-checkboxes-tree-default-2" type="checkbox" id="edit-webform-term-checkboxes-tree-default-2" name="webform_term_checkboxes_tree_default[2]" value="2" class="form-checkbox" />');
     $this->assertRaw('<label for="edit-webform-term-checkboxes-tree-default-2" class="option">Parent 1: Child 1</label>');
 
     // Check term checkboxes tree advanced.
-    $this->assertRaw('<fieldset id="edit-webform-term-checkboxes-tree-advanced--wrapper" class="webform-term-checkboxes--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-webform-term-checkboxes-tree-advanced" class="js-webform-term-checkboxes webform-term-checkboxes webform-term-checkboxes--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper" id="edit-webform-term-checkboxes-tree-advanced--wrapper">');
     $this->assertRaw('<span class="field-prefix">..</span>');
     $this->assertRaw('<input data-drupal-selector="edit-webform-term-checkboxes-tree-advanced-2" type="checkbox" id="edit-webform-term-checkboxes-tree-advanced-2" name="webform_term_checkboxes_tree_advanced[2]" value="2" class="form-checkbox" />');
     $this->assertRaw('<label for="edit-webform-term-checkboxes-tree-advanced-2" class="option">Parent 1: Child 1</label>');

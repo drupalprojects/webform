@@ -5,7 +5,6 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
-use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
@@ -15,7 +14,7 @@ use Drupal\webform\Utility\WebformOptionsHelper;
  */
 abstract class WebformOtherBase extends FormElement {
 
-  use CompositeFormElementTrait;
+  use WebformCompositeFormElementTrait;
 
   /**
    * Other option value.
@@ -56,7 +55,7 @@ abstract class WebformOtherBase extends FormElement {
         [$class, 'processAjaxForm'],
       ],
       '#pre_render' => [
-        [$class, 'preRenderCompositeFormElement'],
+        [$class, 'preRenderWebformCompositeFormElement'],
       ],
       '#options' => [],
       '#other__option_delimiter' => ', ',

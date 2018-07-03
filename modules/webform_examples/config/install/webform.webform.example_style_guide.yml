@@ -246,16 +246,6 @@ elements: |
     webform_terms_of_service:
       '#type': webform_terms_of_service
       '#terms_content': 'These are the terms of service.'
-    webform_toggle:
-      '#type': webform_toggle
-      '#title': Toggle
-    webform_toggles:
-      '#type': webform_toggles
-      '#title': Toggles
-      '#options':
-        one: One
-        two: Two
-        three: Three
     webform_likert:
       '#type': webform_likert
       '#title': Likert

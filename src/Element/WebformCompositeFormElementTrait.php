@@ -3,6 +3,7 @@
 namespace Drupal\webform\Element;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\NestedArray;
 
 /**
  * Provides a trait for webform composite form elements.
@@ -25,8 +26,15 @@ trait WebformCompositeFormElementTrait {
    * This is used as a pre render function for checkboxes and radios.
    */
   public static function preRenderWebformCompositeFormElement($element) {
+    // Set attributes.
+    if (!isset($element['#attributes'])) {
+      $element['#attributes'] = [];
+    }
+
     // Apply wrapper attributes to fieldset.
-    $element['#attributes'] = (isset($element['#wrapper_attributes'])) ? $element['#wrapper_attributes'] : [];
+    if (isset($element['#wrapper_attributes'])) {
+      $element['#attributes'] = NestedArray::mergeDeep($element['#attributes'], $element['#wrapper_attributes']);
+    }
 
     // Set the element's title attribute to show #title as a tooltip, if needed.
     if (isset($element['#title']) && $element['#title_display'] == 'attribute') {
