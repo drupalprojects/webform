@@ -206,6 +206,14 @@ entity.webform.settings_access:
   parent_id: entity.webform.settings
   weight: 60
 
+# Export
+
+entity.webform.export_form:
+  title: 'Export'
+  route_name: entity.webform.export_form
+  base_route: entity.webform.canonical
+  weight: 60
+
 # Submission
 
 entity.webform_submission.canonical:

@@ -251,23 +251,22 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
    */
   public function getDefaultOperations(EntityInterface $entity, $type = 'edit') {
     /* @var $entity \Drupal\webform\WebformInterface */
-    $route_parameters = ['webform' => $entity->id()];
     if ($type == 'results') {
       $operations = [];
       if ($entity->access('submission_view_any')) {
         $operations['submissions'] = [
           'title' => $this->t('Submissions'),
-          'url' => Url::fromRoute('entity.webform.results_submissions', $route_parameters),
+          'url' => $entity->toUrl('results-submissions'),
         ];
         $operations['export'] = [
           'title' => $this->t('Download'),
-          'url' => Url::fromRoute('entity.webform.results_export', $route_parameters),
+          'url' => $entity->toUrl('results-export'),
         ];
       }
       if ($entity->access('submission_delete_any')) {
         $operations['clear'] = [
           'title' => $this->t('Clear'),
-          'url' => Url::fromRoute('entity.webform.results_clear', $route_parameters),
+          'url' => $entity->toUrl('results-clear'),
         ];
       }
     }
@@ -280,29 +279,43 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
         $operations['settings'] = [
           'title' => $this->t('Settings'),
           'weight' => 22,
-          'url' => Url::fromRoute('entity.webform.settings', $route_parameters),
+          'url' => $entity->toUrl('settings'),
         ];
       }
       if ($entity->access('submission_page')) {
         $operations['view'] = [
           'title' => $this->t('View'),
           'weight' => 24,
-          'url' => Url::fromRoute('entity.webform.canonical', $route_parameters),
+          'url' => $entity->toUrl(),
         ];
       }
       if ($entity->access('submission_update_any')) {
         $operations['test'] = [
           'title' => $this->t('Test'),
           'weight' => 25,
-          'url' => Url::fromRoute('entity.webform.test_form', $route_parameters),
+          'url' => $entity->toUrl('test-form'),
         ];
       }
       if ($entity->access('duplicate')) {
         $operations['duplicate'] = [
           'title' => $this->t('Duplicate'),
           'weight' => 26,
-          'url' => Url::fromRoute('entity.webform.duplicate_form', $route_parameters),
+          'url' => $entity->toUrl('duplicate-form'),
           'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
+        ];
+      }
+      if ($entity->access('update') && $this->moduleHandler()->moduleExists('webform_node')) {
+        $operations['References'] = [
+          'title' => $this->t('References'),
+          'weight' => 27,
+          'url' => $entity->toUrl('references'),
+        ];
+      }
+      if (\Drupal::currentUser()->hasPermission('export configuration')) {
+        $operations['export'] = [
+          'title' => $this->t('Export'),
+          'weight' => 28,
+          'url' => $entity->toUrl('export-form'),
         ];
       }
       if (isset($operations['delete'])) {

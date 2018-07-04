@@ -232,6 +232,14 @@ entity.webform.test_form:
   requirements:
     _entity_access: 'webform.test'
 
+entity.webform.export_form:
+  path: '/admin/structure/webform/manage/{webform}/export'
+  defaults:
+    _entity_form: 'webform.export'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
+  requirements:
+    _permission: 'export configuration'
+
 entity.webform.add_form:
   path: '/admin/structure/webform/add'
   defaults:
