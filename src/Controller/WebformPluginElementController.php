@@ -180,6 +180,7 @@ class WebformPluginElementController extends ControllerBase implements Container
           'container' => $webform_element->isContainer($element),
           'root' => $webform_element->isRoot(),
           'hidden' => $webform_element->isHidden(),
+          'composite' => $webform_element->isComposite(),
           'multiple' => $webform_element->supportsMultipleValues(),
           'multiline' => $webform_element->isMultiline($element),
           'default_key' => $webform_element_plugin_definition['default_key'],
@@ -190,7 +191,7 @@ class WebformPluginElementController extends ControllerBase implements Container
           $webform_info[] = '<b>' . $key . '</b>: ' . ($value ? $this->t('Yes') : $this->t('No'));
         }
 
-        // Wlement info.
+        // Element info.
         $element_info_definitions = [
           'input' => (empty($webform_element_info['#input'])) ? $this->t('No') : $this->t('Yes'),
           'theme' => (isset($webform_element_info['#theme'])) ? $webform_element_info['#theme'] : 'N/A',
@@ -246,12 +247,14 @@ class WebformPluginElementController extends ControllerBase implements Container
             $dependencies ? ['data' => ['#markup' => '• ' . implode('<br />• ', $dependencies)], 'nowrap' => 'nowrap'] : '',
             $element_plugin_definition['provider'],
             $webform_element_plugin_definition['provider'],
-            $operations ? ['data' => [
-              '#type' => 'operations',
-              '#links' => $operations,
-              '#prefix' => '<div class="webform-dropbutton">',
-              '#suffix' => '</div>',
-            ]] : '',
+            $operations ? [
+              'data' => [
+                '#type' => 'operations',
+                '#links' => $operations,
+                '#prefix' => '<div class="webform-dropbutton">',
+                '#suffix' => '</div>',
+              ],
+            ] : '',
           ],
         ];
         if (isset($excluded_elements[$element_plugin_id])) {
@@ -277,6 +280,8 @@ class WebformPluginElementController extends ControllerBase implements Container
       '#attributes' => [
         'class' => ['webform-form-filter-text'],
         'data-element' => '.webform-element-plugin',
+        'data-item-single' => $this->t('element'),
+        'data-item-plural' => $this->t('elements'),
         'title' => $this->t('Enter a part of the element type to filter by.'),
         'autofocus' => 'autofocus',
       ],

@@ -72,6 +72,27 @@ class WebformElementHelper {
   protected static $ignoredSubPropertiesRegExp;
 
   /**
+   * Determine if an element is a webform element and should be enhanced.
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @return bool
+   *   TRUE if an element is a webform element.
+   */
+  public static function isWebformElement(array $element) {
+    if (isset($element['#webform_key']) || isset($element['#webform_element'])) {
+      return TRUE;
+    }
+    elseif (\Drupal::service('webform.request')->isWebformAdminRoute()) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
    * Determine if a webform element's title is displayed.
    *
    * @param array $element
@@ -492,7 +513,8 @@ class WebformElementHelper {
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {
       $complete_form = &$form_state->getCompleteForm();
-      call_user_func_array($form_state->prepareCallback($callback), [&$element, &$form_state, &$complete_form]);
+      $arguments = [&$element, &$form_state, &$complete_form];
+      call_user_func_array($form_state->prepareCallback($callback), $arguments);
     }
   }
 
@@ -513,7 +535,8 @@ class WebformElementHelper {
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
     foreach ($element['#_element_validate'] as $callback) {
       $complete_form = &$form_state->getCompleteForm();
-      call_user_func_array($form_state->prepareCallback($callback), [&$element, &$temp_form_state, &$complete_form]);
+      $arguments = [&$element, &$temp_form_state, &$complete_form];
+      call_user_func_array($form_state->prepareCallback($callback), $arguments);
     }
 
     // Get the temp webform state's values.
@@ -595,3 +618,4 @@ class WebformElementHelper {
   }
 
 }
+

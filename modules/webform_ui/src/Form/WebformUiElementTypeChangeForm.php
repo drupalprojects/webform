@@ -35,7 +35,6 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
     }
 
     $elements = $this->elementManager->getInstances();
-    $definitions = $this->getDefinitions();
 
     $form = parent::buildForm($form, $form_state, $webform);
 
@@ -58,14 +57,13 @@ class WebformUiElementTypeChangeForm extends WebformUiElementTypeFormBase {
     foreach ($related_types as $element_type => $element_type_label) {
       /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
       $webform_element = $elements[$element_type];
-      $plugin_definition = $definitions[$element_type];
 
       $url = Url::fromRoute(
         'entity.webform_ui.element.edit_form',
         ['webform' => $webform->id(), 'key' => $key],
         ['query' => ['type' => $element_type]]
       );
-      $form['elements'][$element_type] = $this->buildRow($plugin_definition, $webform_element, $url, $this->t('Change'));
+      $form['elements'][$element_type] = $this->buildRow($webform_element, $url, $this->t('Change'));
     }
 
     return $form;

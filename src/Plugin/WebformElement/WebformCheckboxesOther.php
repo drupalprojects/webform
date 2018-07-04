@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\WebformSubmissionConditionsValidator;
 
 /**
  * Provides a 'checkboxes_other' element.
@@ -37,6 +38,22 @@ class WebformCheckboxesOther extends Checkboxes implements WebformOtherInterface
     }
     $selectors[":input[name=\"{$name}[other]\"]"] = $title . ' [' . $this->t('Textfield') . ']';
     return [$title => $selectors];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementSelectorInputValue($selector, $trigger, array $element, WebformSubmissionInterface $webform_submission) {
+    $input_name = WebformSubmissionConditionsValidator::getSelectorInputName($selector);
+    $other_type = WebformSubmissionConditionsValidator::getInputNameAsArray($input_name, 1);
+    $value = $this->getRawValue($element, $webform_submission);
+    if ($other_type === 'other') {
+      $other_value = array_diff($value, array_keys($element['#options']));
+      return ($other_value) ? implode(', ', $other_value) : NULL;
+    }
+    else {
+      return array_intersect($value, array_keys($element['#options']));
+    }
   }
 
 }

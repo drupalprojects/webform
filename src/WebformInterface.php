@@ -50,6 +50,11 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   const STATUS_SCHEDULED = 'scheduled';
 
   /**
+   * Webform status archived.
+   */
+  const STATUS_ARCHIVED = 'archived';
+
+  /**
    * Webform confirmation page.
    */
   const CONFIRMATION_PAGE = 'page';
@@ -165,10 +170,10 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function hasPreview();
 
   /**
-   * Determine if the webform has multistep form wizard pages.
+   * Determine if the webform has multi-step form wizard pages.
    *
    * @return bool
-   *   TRUE if the webform has multistep form wizard pages.
+   *   TRUE if the webform has multi-step form wizard pages.
    */
   public function hasWizardPages();
 
@@ -257,6 +262,14 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
    *   TRUE if the webform is a template and available for duplication.
    */
   public function isTemplate();
+
+  /**
+   * Returns the webform archive indicator.
+   *
+   * @return bool
+   *   TRUE if the webform is archived.
+   */
+  public function isArchived();
 
   /**
    * Returns the webform confidential indicator.

@@ -99,14 +99,14 @@ abstract class WebformManagedFileBase extends WebformElementBase {
    *   The webform libraries manager.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
-   * @param \Drupal\file\FileUsage\FileUsageInterface|NULL $file_usage
+   * @param \Drupal\file\FileUsage\FileUsageInterface|null $file_usage
    *   The file usage service.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
    *   The transliteration service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition,LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, FileSystemInterface $file_system, $file_usage, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, EntityTypeManagerInterface $entity_type_manager, ElementInfoManagerInterface $element_info, WebformElementManagerInterface $element_manager, WebformTokenManagerInterface $token_manager, WebformLibrariesManagerInterface $libraries_manager, FileSystemInterface $file_system, $file_usage, TransliterationInterface $transliteration, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $config_factory, $current_user, $entity_type_manager, $element_info, $element_manager, $token_manager, $libraries_manager);
 
     $this->fileSystem = $file_system;
@@ -212,7 +212,7 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       $scheme_options = static::getVisibleStreamWrappers();
       $uri_scheme = $this->getUriScheme($element);
       if (!isset($scheme_options[$uri_scheme]) && $this->currentUser->hasPermission('administer webform')) {
-        drupal_set_message($this->t('The \'File\' element is unavailable because a <a href="https://www.ostraining.com/blog/drupal/creating-drupal-8-private-file-system/">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'), 'warning');
+        $this->messenger()->addWarning($this->t('The \'File\' element is unavailable because a <a href="https://www.ostraining.com/blog/drupal/creating-drupal-8-private-file-system/">private files directory</a> has not been configured and public file uploads have not been enabled. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'));
         $context = [
           'link' => Link::fromTextAndUrl($this->t('Edit'), UrlGenerator::fromRoute('<current>'))->toString(),
         ];
@@ -751,10 +751,12 @@ abstract class WebformManagedFileBase extends WebformElementBase {
       '#message_type' => 'warning',
       '#message_message' => $this->t('For security reasons we advise to use %file_rename together with the %sanitization option.', $t_args),
       '#access' => TRUE,
-      '#states' => ['visible' => [
-        ':input[name="properties[file_name][checkbox]"]' => ['checked' => TRUE],
-        ':input[name="properties[sanitize]"]' => ['checked' => FALSE],
-      ]],
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[file_name][checkbox]"]' => ['checked' => TRUE],
+          ':input[name="properties[sanitize]"]' => ['checked' => FALSE],
+        ],
+      ],
     ];
     $form['file']['multiple'] = [
       '#type' => 'checkbox',
@@ -950,9 +952,15 @@ abstract class WebformManagedFileBase extends WebformElementBase {
         // Return file content headers.
         $headers = file_get_content_headers($file);
 
-        // Force blacklisted files to be downloaded.
+        /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+        $file_system = \Drupal::service('file_system');
+        $filename = $file_system->basename($uri);
+        // Force blacklisted files to be downloaded instead of opening in the browser.
         if (in_array($headers['Content-Type'], static::$blacklistedMimeTypes)) {
-          $headers['Content-Disposition'] = 'attachment';
+          $headers['Content-Disposition'] = 'attachment; filename="' . Unicode::mimeHeaderEncode($filename) . '"';
+        }
+        else {
+          $headers['Content-Disposition'] = 'inline; filename="' . Unicode::mimeHeaderEncode($filename) . '"';
         }
 
         return $headers;

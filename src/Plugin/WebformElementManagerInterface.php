@@ -35,7 +35,7 @@ interface WebformElementManagerInterface extends PluginManagerInterface, CachedD
    * @param array $element
    *   An associative array containing an element with a #type property.
    * @param array $form
-   *    An associative array containing the structure of the form.
+   *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    *

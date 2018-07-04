@@ -19,8 +19,6 @@ abstract class ContainerBase extends WebformElementBase {
   public function getDefaultProperties() {
     return [
       'title' => '',
-      // General settings.
-      'description' => '',
       // Form validation.
       'required' => FALSE,
       // Attributes.
@@ -67,8 +65,8 @@ abstract class ContainerBase extends WebformElementBase {
     // @see core/modules/system/templates/details.html.twig
     if (isset($element['#title_display'])
       && $element['#title_display'] === 'invisible'
-      && ($this instanceof Fieldset || $this instanceof Details)) {
-      unset($element['#title']);
+      && $this instanceof Details) {
+      // unset($element['#title']);
     }
   }
 
@@ -193,7 +191,7 @@ abstract class ContainerBase extends WebformElementBase {
         '#suffix' => PHP_EOL,
       ];
     }
-    $build += $children;
+    $build['children'] = $children;
     return $build;
   }
 

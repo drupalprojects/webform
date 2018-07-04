@@ -128,7 +128,6 @@ class WebformAdminConfigAdvancedForm extends WebformAdminConfigBaseForm {
       '#description' => $this->t('If checked, all off-canvas system trays will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.offcanvas_disabled'),
-      '#access' => (floatval(\Drupal::VERSION) >= 8.5),
       '#states' => [
         'visible' => [
           ':input[name="ui[dialog_disabled]"]' => [

@@ -8,6 +8,10 @@ webform.admin:
   js:
     js/webform.admin.js:  {}
   dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.announce
+    - core/drupal.debounce
     - webform/webform.form
     - webform/webform.admin.dropbutton
 
@@ -26,10 +30,9 @@ webform.admin.dialog:
       css/webform.admin.css: {}
   js:
     js/webform.admin.js:  {}
-    js/webform.dialog.js:  {}
   dependencies:
     - core/drupal.dialog.ajax
-    - core/jquery.ui.dialog
+    - webform/jquery.ui.dialog
     - webform/webform.ajax
     - webform/webform.form
     - webform/webform.form.tabs
@@ -49,6 +52,12 @@ webform.admin.dropbutton:
     js/webform.admin.dropbutton.js:  {}
   dependencies:
     - core/drupal.dropbutton
+
+webform.admin.settings:
+  version: VERSION
+  css:
+    theme:
+      css/webform.admin.settings.css: {}
 
 webform.admin.translation:
   version: VERSION
@@ -136,6 +145,16 @@ webform.contextual:
     js/webform.contextual.js:  {}
   dependencies:
     - core/jquery.once
+
+# Dialog.
+
+webform.dialog:
+  version: VERSION
+  js:
+    js/webform.dialog.js:  {}
+  dependencies:
+    - core/drupal.dialog.ajax
+    - webform/jquery.ui.dialog
 
 # Help.
 
@@ -437,6 +456,14 @@ webform.element.composite:
     js/webform.element.composite.js: {}
   dependencies:
     - core/drupal
+    - core/jquery.once
+
+webform.element.computed:
+  version: VERSION
+  js:
+    js/webform.element.computed.js: {}
+  dependencies:
+    - core/drupal.debounce
     - core/jquery.once
 
 webform.element.counter:
@@ -776,6 +803,15 @@ webform.composite.telephone:
   dependencies:
     - webform/webform.composite
 
+# jQuery UI.
+
+jquery.ui.dialog:
+  version: VERSION
+  js:
+    js/webform.jquery.ui.dialog.js:  {}
+  dependencies:
+    - core/jquery.ui.dialog
+
 # Contrib Module.
 
 imce.input:
@@ -784,6 +820,7 @@ imce.input:
     js/webform.imce.js:  {}
   dependencies:
     - imce/drupal.imce.input
+
 
 # External libraries.
 

@@ -310,7 +310,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $form['additional']['messages'] = [
       '#type' => 'webform_multiple',
       '#title' => $this->t('Custom error response messages'),
-      '#description' => $this->t('Enter custom response messages for specific status codes.') . '<br/>' . $this->t('Defaults to: %value', ['%value' => $this->messageManager->render(WebformMessageManagerInterface::SUBMISSION_EXCEPTION)]),
+      '#description' => $this->t('Enter custom response messages for specific status codes.') . '<br/>' . $this->t('Defaults to: %value', ['%value' => $this->messageManager->render(WebformMessageManagerInterface::SUBMISSION_EXCEPTION_MESSAGE)]),
       '#empty_items' => 0,
       '#add' => FALSE,
       '#element' => [
@@ -538,9 +538,9 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         continue;
       }
 
-      $data[$element_key .'__name'] = $file->getFilename();
-      $data[$element_key .'__uri'] = $file->getFileUri();
-      $data[$element_key .'__data'] = base64_encode(file_get_contents($file->getFileUri()));
+      $data[$element_key . '__name'] = $file->getFilename();
+      $data[$element_key . '__uri'] = $file->getFileUri();
+      $data[$element_key . '__data'] = base64_encode(file_get_contents($file->getFileUri()));
     }
 
     // Append custom data.
@@ -778,7 +778,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#markup' => $message,
     ];
 
-    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), $type);
+    $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($build), $type);
   }
 
   /**
@@ -827,12 +827,12 @@ class RemotePostWebformHandler extends WebformHandlerBase {
         ],
       ];
       $build_message = [
-        '#markup' => $this->tokenManager->replace($custom_response_message, $this->getWebform(), $token_data)
+        '#markup' => $this->tokenManager->replace($custom_response_message, $this->getWebform(), $token_data),
       ];
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($build_message), 'error');
+      $this->messenger()->addError(\Drupal::service('renderer')->renderPlain($build_message));
     }
     else {
-      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION, 'error');
+      $this->messageManager->display(WebformMessageManagerInterface::SUBMISSION_EXCEPTION_MESSAGE, 'error');
     }
   }
 
@@ -846,10 +846,12 @@ class RemotePostWebformHandler extends WebformHandlerBase {
    *   A custom custom response message.
    */
   protected function getCustomResponseMessage($response) {
-    $status_code = $response->getStatusCode();
-    foreach ($this->configuration['messages'] as $message_item) {
-      if ($message_item['code'] == $status_code) {
-        return $message_item['message'];
+    if ($response instanceof ResponseInterface) {
+      $status_code = $response->getStatusCode();
+      foreach ($this->configuration['messages'] as $message_item) {
+        if ($message_item['code'] == $status_code) {
+          return $message_item['message'];
+        }
       }
     }
     return (!empty($this->configuration['message'])) ? $this->configuration['message'] : '';

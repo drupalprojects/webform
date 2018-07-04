@@ -251,7 +251,7 @@ class ActionWebformHandler extends WebformHandlerBase {
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
-    parent::applyFormStateToConfiguration($form_state);
+    $this->applyFormStateToConfiguration($form_state);
 
     // Cleanup states.
     $this->configuration['states'] = array_values(array_filter($this->configuration['states']));
@@ -319,7 +319,7 @@ class ActionWebformHandler extends WebformHandlerBase {
         $this->tokenManager->replace($this->configuration['message'], $webform_submission)
       );
       $message_type = $this->configuration['message_type'];
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($message), $message_type);
+      $this->messenger()->addMessage(\Drupal::service('renderer')->renderPlain($message), $message_type);
     }
 
     // Resave the webform submission without trigger any hooks or handlers.
@@ -396,7 +396,7 @@ class ActionWebformHandler extends WebformHandlerBase {
       '#wrapper_attributes' => ['class' => ['container-inline'], 'style' => 'margin: 0'],
     ];
 
-    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), 'warning', TRUE);
+    $this->messenger()->addWarning(\Drupal::service('renderer')->renderPlain($build), TRUE);
   }
 
 }

@@ -17,16 +17,16 @@ class WebformObjectHelperTest extends UnitTestCase {
   /**
    * Tests sorting object by properties.
    *
-   * @param object object
+   * @param object $object
    *   The object to run through WebformObjectHelper::sortByProperty().
-   * @param array $array
+   * @param array $expected
    *   The expected result from calling the function.
    *
    * @see WebformObjectHelper::sortByProperty()
    *
    * @dataProvider providerSortByProperty
    */
-  public function testSortByProperty($object, $expected) {
+  public function testSortByProperty($object, array $expected) {
     $result = (array) WebformObjectHelper::sortByProperty($object);
     $this->assertEquals(
       implode('|', array_keys($expected)),
@@ -60,4 +60,5 @@ class WebformObjectHelperTest extends UnitTestCase {
 
     return $tests;
   }
+
 }

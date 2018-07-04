@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_multiple
 title: 'Test: Element: Multiple'
 description: 'Test multiple element.'
@@ -32,6 +33,15 @@ elements: |
     '#type': webform_multiple
     '#title': webform_multiple_no_operations
     '#operations': false
+    '#default_value':
+      - One
+      - Two
+      - Three
+  webform_multiple_custom_label:
+    '#type': webform_multiple
+    '#title': webform_multiple_custom_label
+    '#add_more_button_label': '{add_more_button_label}'
+    '#add_more_input_label': '{add_more_input_label}'
     '#default_value':
       - One
       - Two
@@ -209,6 +219,11 @@ elements: |
       - value: two
         text: Two
         description: This is the number 2.
+  webform_multiple_no_items:
+    '#type': webform_multiple
+    '#title': webform_multiple_no_items
+    '#min_items': 0
+    '#empty_items': 0
 css: ''
 javascript: ''
 settings:
@@ -244,10 +259,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -265,6 +283,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

@@ -18,7 +18,7 @@ class WebformSettingsAdminTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'webform', 'webform_ui'];
+  public static $modules = ['block', 'node', 'webform', 'webform_ui'];
 
   /**
    * Webforms to load.
@@ -26,6 +26,14 @@ class WebformSettingsAdminTest extends WebformTestBase {
    * @var array
    */
   protected static $testWebforms = ['test_element'];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+    $this->drupalPlaceBlock('local_actions_block');
+  }
 
   /**
    * Tests webform admin settings.
@@ -85,25 +93,25 @@ class WebformSettingsAdminTest extends WebformTestBase {
 
     // Check that dialogs are enabled.
     $this->drupalGet('admin/structure/webform');
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;webform-modal&quot;}">Add webform</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="webform-ajax-link button button-action" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;webform-ui-dialog&quot;}" data-drupal-link-system-path="admin/structure/webform/add">Add webform</a>');
 
     // Disable dialogs.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[dialog_disabled]' => TRUE], t('Save configuration'));
 
     // Check that dialogs are disabled. (i.e. use-ajax is not included)
     $this->drupalGet('admin/structure/webform');
-    $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small webform-ajax-link" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;webform-modal&quot;}">Add webform</a>');
-    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action button--primary button--small">Add webform</a>');
+    $this->assertNoRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="webform-ajax-link button button-action" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700,&quot;dialogClass&quot;:&quot;webform-ui-dialog&quot;}" data-drupal-link-system-path="admin/structure/webform/add">Add webform</a>');
+    $this->assertRaw('<a href="' . $base_path . 'admin/structure/webform/add" class="button button-action" data-drupal-link-system-path="admin/structure/webform/add">Add webform</a>');
 
     /* UI description help */
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[description_help]' => TRUE], t('Save configuration'));
-    $this->assertRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help">?</a>');
+    $this->assertRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help" data-webform-help="If checked, all element descriptions will be moved to help text (tooltip).">?</a>');
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[description_help]' => FALSE], t('Save configuration'));
-    $this->assertNoRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help">?</a>');
+    $this->assertNoRaw('<a href="#help" title="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help" data-webform-help="If checked, all element descriptions will be moved to help text (tooltip).">?</a>');
   }
 
   /**

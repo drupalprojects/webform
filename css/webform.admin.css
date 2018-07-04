@@ -49,8 +49,8 @@
  * @see /admin/structure/webform/submissions/manage
  * @see /admin/structure/webform/manage/contact/results/submissions
  */
-.webform-results__table th,
-.webform-results__table td {
+.webform-results-table th,
+.webform-results-table td {
   max-width: 400px;
   overflow: hidden;
   white-space: nowrap;
@@ -58,42 +58,33 @@
 }
 
 /* Make sure 'Operations' is never cut-off. */
-.webform-results__table td.webform-dropbutton-wrapper {
+.webform-results-table td.webform-dropbutton-wrapper {
   overflow: visible;
   max-width: inherit;
   white-space: normal;
 }
 
-th.webform-results__icon,
-td.webform-results__icon {
+th.webform-results-table__icon,
+td.webform-results-table__icon {
   padding-left: 0;
   padding-right: 0;
 }
 
 /* Hide throbber, which breaks icon alignment */
-.webform-results__icon .ajax-progress-throbber,
-a.webform-results__custom + .ajax-progress-throbber {
+.webform-results-table__icon .ajax-progress-throbber {
   display: none;
 }
 
 /* Entire row is clickable. @see Drupal.behaviors.webformTableRowHref */
-.webform-results__table tbody tr {
+.webform-results-table tbody tr {
   cursor: pointer;
   cursor: hand;
 }
 
 /* Limit image height to 60px */
-.webform-results__table td img {
+.webform-results-table td img {
   max-height: 60px;
   width: auto;
-}
-
-/**
- * Results custom(ize) dialog.
- */
-.webform-results__custom .tabledrag-changed-warning,
-.webform-results__custom .tabledrag-changed /* Hide table drag warnings. */ {
-  display: none !important; /* Must use !important because .tabledrag-changed 'display' is set via JavaScript */
 }
 
 /**
@@ -184,15 +175,37 @@ a:focus .webform-icon-locked--off {
  * Submission view table.
  * @see /admin/structure/webform/manage/{webform_id}/submission/{webform_submission_id}/table
  */
-.webform-submission__table th {
+.webform-submission-table th {
   width: 33%;
   min-width: 100px;
 }
 
-.webform-submission__table td {
+.webform-submission-table td {
   width: 66%;
 }
 
 .webform-horizontal-rule {
   margin: .5em 0;
+}
+
+/**
+ * Handlers table.
+ * @see /admin/structure/webform/manage/{webform_id}/handlers
+ */
+.webform-handlers-table .ajax-progress-throbber {
+  display: none;
+}
+
+@media screen and (max-width: 1280px) {
+  .js-off-canvas-dialog-open .webform-handlers-table th,
+  .js-off-canvas-dialog-open .webform-handlers-table td {
+    display: none;
+  }
+
+  .js-off-canvas-dialog-open .webform-handlers-table th:first-child,
+  .js-off-canvas-dialog-open .webform-handlers-table th:last-child,
+  .js-off-canvas-dialog-open .webform-handlers-table td:first-child,
+  .js-off-canvas-dialog-open .webform-handlers-table td:last-child {
+    display: table-cell;
+  }
 }

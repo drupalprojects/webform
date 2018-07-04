@@ -6,6 +6,20 @@
 /**
  * Remove extra margin are composite element which already contain form elements with margins
  */
-.form-composite {
-  margin: 0;
+
+.webform-composite-hidden-title {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.webform-composite-hidden-title .fieldset-wrapper > .form-item:first-child,
+.webform-composite-hidden-title .fieldset-wrapper > .form-wrapper > .form-item:first-child,
+.webform-composite-hidden-title .fieldset-wrapper > .webform-flexbox:first-child {
+  margin-top: 0;
+}
+
+.webform-composite-hidden-title .fieldset-wrapper > .form-item:last-child,
+.webform-composite-hidden-title .fieldset-wrapper > .form-wrapper > .form-item:last-child,
+.webform-composite-hidden-title .fieldset-wrapper > .webform-flexbox:last-child {
+  margin-bottom: 0;
 }

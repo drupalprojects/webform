@@ -5,7 +5,6 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\OptGroup;
-use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
@@ -15,7 +14,7 @@ use Drupal\webform\Utility\WebformOptionsHelper;
  */
 abstract class WebformOtherBase extends FormElement {
 
-  use CompositeFormElementTrait;
+  use WebformCompositeFormElementTrait;
 
   /**
    * Other option value.
@@ -37,6 +36,7 @@ abstract class WebformOtherBase extends FormElement {
   protected static $properties = [
     '#title',
     '#required',
+    '#required_error',
     '#options',
     '#options_display',
     '#default_value',
@@ -55,7 +55,7 @@ abstract class WebformOtherBase extends FormElement {
         [$class, 'processAjaxForm'],
       ],
       '#pre_render' => [
-        [$class, 'preRenderCompositeFormElement'],
+        [$class, 'preRenderWebformCompositeFormElement'],
       ],
       '#options' => [],
       '#other__option_delimiter' => ', ',
@@ -101,6 +101,7 @@ abstract class WebformOtherBase extends FormElement {
     $element['#tree'] = TRUE;
 
     $element[$type]['#type'] = static::$type;
+    $element[$type]['#webform_element'] = TRUE;
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
     $element[$type]['#title_display'] = 'invisible';
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {
@@ -108,11 +109,10 @@ abstract class WebformOtherBase extends FormElement {
     }
     $element[$type]['#error_no_message'] = TRUE;
 
-    // Disable label[for] which does not point to any specific element.
-    // @see webform_preprocess_form_element_label()
-    if (in_array($type, ['radios', 'checkboxes', 'buttons'])) {
-      $element['#label_attributes']['for'] = FALSE;
-    }
+    // Prevent nested fieldset by removing fieldset theme wrapper around
+    // radios and checkboxes.
+    // @see \Drupal\Core\Render\Element\CompositeFormElementTrait
+    $element[$type]['#pre_render'] = [];
 
     // Build other textfield.
     $element['other']['#error_no_message'] = TRUE;
@@ -126,6 +126,7 @@ abstract class WebformOtherBase extends FormElement {
     }
     $element['other'] += [
       '#type' => 'textfield',
+      '#webform_element' => TRUE,
       '#placeholder' => t('Enter other...'),
     ];
     if (!isset($element['other']['#title'])) {

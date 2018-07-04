@@ -535,7 +535,7 @@ trait WebformEntityReferenceTrait {
       '#submit' => [[get_called_class(), 'submitEntityReferenceCallback']],
       // Refresh the entity reference details container.
       '#ajax' => [
-        'callback' => [get_called_class(), 'entityReferenceAjaxCallback'],
+        'callback' => [get_called_class(), 'ajaxEntityReferenceCallback'],
         'wrapper' => 'webform-entity-reference-selection-wrapper',
         'progress' => ['type' => 'fullscreen'],
       ],
@@ -657,7 +657,7 @@ trait WebformEntityReferenceTrait {
    * @return array
    *   The properties element.
    */
-  public static function entityReferenceAjaxCallback(array $form, FormStateInterface $form_state) {
+  public static function ajaxEntityReferenceCallback(array $form, FormStateInterface $form_state) {
     $button = $form_state->getTriggeringElement();
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
     return $element;

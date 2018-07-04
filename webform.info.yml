@@ -6,7 +6,8 @@ core: 8.x
 configure: entity.webform.collection
 dependencies:
   - 'drupal:field'
-  - 'drupal:system (>= 8.3)'
+  - 'drupal:system (>= 8.5)'
   - 'drupal:user'
 test_dependencies:
+  - 'address:address'
   - 'token:token'

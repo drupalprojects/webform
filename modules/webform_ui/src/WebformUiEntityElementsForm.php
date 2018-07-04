@@ -108,62 +108,29 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       $rows[$element['#webform_key']] = $this->getElementRow($element, $delta);
     }
 
-    // Must manually add local actions to the webform because we can't alter local
-    // actions and add the needed dialog attributes.
-    // @see https://www.drupal.org/node/2585169
-    $local_actions = [];
-    $local_actions['add_element'] = [
-      '#theme' => 'menu_local_action',
-      '#link' => [
-        'title' => $this->t('Add element'),
-        'url' => new Url('entity.webform_ui.element', ['webform' => $webform->id()]),
-        'attributes' => WebformDialogHelper::getModalDialogAttributes(),
-      ],
-    ];
-    $local_actions['add_page'] = [
-      '#theme' => 'menu_local_action',
-      '#link' => [
-        'title' => $this->t('Add page'),
-        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_wizard_page']),
-        'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-      ],
-    ];
-    $local_actions['add_layout'] = [
-      '#theme' => 'menu_local_action',
-      '#link' => [
-        'title' => $this->t('Add layout'),
-        'url' => new Url('entity.webform_ui.element.add_form', ['webform' => $webform->id(), 'type' => 'webform_flexbox']),
-        'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-      ],
-    ];
-    $form['local_actions'] = [
-      '#prefix' => '<ul class="action-links">',
-      '#suffix' => '</ul>',
-    ] + $local_actions;
-
     $form['webform_ui_elements'] = [
-      '#type' => 'table',
-      '#header' => $header,
-      '#empty' => $this->t('Please add elements to this webform.'),
-      '#attributes' => [
-        'class' => ['webform-ui-elements-table'],
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'match',
-          'relationship' => 'parent',
-          'group' => 'row-parent-key',
-          'source' => 'row-key',
-          'hidden' => TRUE, /* hides the WEIGHT & PARENT tree columns below */
-          'limit' => FALSE,
+        '#type' => 'table',
+        '#header' => $header,
+        '#empty' => $this->t('Please add elements to this webform.'),
+        '#attributes' => [
+          'class' => ['webform-ui-elements-table'],
         ],
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'row-weight',
+        '#tabledrag' => [
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'row-parent-key',
+            'source' => 'row-key',
+            'hidden' => TRUE, /* hides the WEIGHT & PARENT tree columns below */
+            'limit' => FALSE,
+          ],
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'row-weight',
+          ],
         ],
-      ],
-    ] + $rows;
+      ] + $rows;
 
     if ($rows && !$webform->hasActions()) {
       $form['webform_ui_elements'] += ['webform_actions_default' => $this->getCustomizeActionsRow()];
@@ -255,7 +222,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     ];
     $t_args = ['%label' => $webform->label()];
     $this->logger('webform')->notice('Webform @label elements saved.', $context);
-    drupal_set_message($this->t('Webform %label elements saved.', $t_args));
+    $this->messenger()->addStatus($this->t('Webform %label elements saved.', $t_args));
   }
 
   /**
@@ -508,10 +475,10 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
           ['webform' => $webform->id(), 'key' => $key]
         ),
         '#attributes' => $element_dialog_attributes + [
-          // Add custom hash to current page's location.
-          // @see Drupal.behaviors.webformAjaxLink
-          'data-hash' => 'webform-tab--conditions',
-        ],
+            // Add custom hash to current page's location.
+            // @see Drupal.behaviors.webformAjaxLink
+            'data-hash' => 'webform-tab--conditions',
+          ],
       ];
     }
 

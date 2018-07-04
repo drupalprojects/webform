@@ -2,8 +2,10 @@
 
 namespace Drupal\webform\Element;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Range;
 use Drupal\Core\Render\Element;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a webform element for entering a rating.
@@ -23,11 +25,23 @@ class WebformRating extends Range {
       '#step' => 1,
       '#star_size' => 'medium',
       '#reset' => FALSE,
+      '#process' => [
+        [$class, 'processWebformRating'],
+      ],
       '#pre_render' => [
         [$class, 'preRenderWebformRating'],
       ],
       '#theme' => 'input__webform_rating',
     ] + parent::getInfo();
+  }
+
+  /**
+   * Expand rating elements.
+   */
+  public static function processWebformRating(&$element, FormStateInterface $form_state, &$complete_form) {
+    // Add validate callback.
+    $element['#element_validate'] = [[get_called_class(), 'validateWebformRating']];
+    return $element;
   }
 
   /**
@@ -120,7 +134,17 @@ class WebformRating extends Range {
         'library' => ['webform/webform.element.rating'],
       ],
     ];
+  }
 
+  /**
+   * Validates a rating element.
+   */
+  public static function validateWebformRating(&$element, FormStateInterface $form_state, &$complete_form) {
+    $value = $element['#value'];
+    $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);
+    if ($has_access && !empty($element['#required']) && ($value === '0' || $value === '')) {
+      WebformElementHelper::setRequiredError($element, $form_state);
+    }
   }
 
 }

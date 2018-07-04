@@ -48,7 +48,7 @@
         // @see http://stackoverflow.com/questions/16702398/convert-a-php-date-format-to-a-jqueryui-datepicker-date-format
         // @see http://php.net/manual/en/function.date.php
         options.dateFormat = dateFormat
-          // Year.
+        // Year.
           .replace('Y', 'yy') // A full numeric representation of a year, 4 digits (1999 or 2003)
           .replace('y', 'y') // A two digit representation of a year (99 or 03)
           // Month.
@@ -80,12 +80,17 @@
 
         $input.datepicker(options);
       });
+    }
+    // Issue #2983363: Datepicker is being detached when multiple files are
+    // uploaded.
+    /*
     },
     detach: function (context, settings, trigger) {
       if (trigger === 'unload') {
         $(context).find('input[data-drupal-date-format]').findOnce('datePicker').datepicker('destroy');
       }
     }
+    */
   };
 
 })(jQuery, Modernizr, Drupal);

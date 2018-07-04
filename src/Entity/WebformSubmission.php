@@ -3,6 +3,7 @@
 namespace Drupal\webform\Entity;
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -57,7 +58,6 @@ use Drupal\webform\WebformSubmissionInterface;
  *     "canonical" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}",
  *     "table" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/table",
  *     "text" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/text",
- *     "yaml" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/yaml",
  *     "yaml" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/yaml",
  *     "edit-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/edit",
  *     "notes-form" = "/admin/structure/webform/manage/{webform}/submission/{webform_submission}/notes",
@@ -421,11 +421,20 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
   /**
    * {@inheritdoc}
    */
-  public function getSourceEntity() {
+  public function getSourceEntity($translate = FALSE) {
     if ($this->entity_type->value && $this->entity_id->value) {
       $entity_type = $this->entity_type->value;
       $entity_id = $this->entity_id->value;
-      return $this->entityTypeManager()->getStorage($entity_type)->load($entity_id);
+      $source_entity = $this->entityTypeManager()->getStorage($entity_type)->load($entity_id);
+
+      // If translated is set, get the translated source entity.
+      if ($translate && $source_entity instanceof ContentEntityInterface) {
+        $langcode = $this->language()->getId();
+        if ($source_entity->hasTranslation($langcode)) {
+          $source_entity = $source_entity->getTranslation($langcode);
+        }
+      }
+      return $source_entity;
     }
     else {
       return NULL;

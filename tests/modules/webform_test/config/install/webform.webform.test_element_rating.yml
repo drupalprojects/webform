@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_rating
 title: 'Test: Element: Rating'
 description: 'Test the rating element.'
@@ -19,14 +20,18 @@ elements: |
     '#open': true
     rating_basic:
       '#type': webform_rating
-      '#title': 'Rating basic'
+      '#title': rating_basic
     rating_advanced:
       '#type': webform_rating
-      '#title': 'Rating advanced'
+      '#title': rating_advanced
       '#star_size': large
       '#reset': true
       '#max': '10'
       '#step': '0.1'
+    rating_required:
+      '#type': webform_rating
+      '#title': rating_required
+      '#required': true
 css: ''
 javascript: ''
 settings:
@@ -62,10 +67,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -83,6 +91,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

@@ -68,6 +68,13 @@ class WebformEmailConfirm extends Email {
       '#type' => 'textfield',
       '#title' => $this->t('Email confirm placeholder'),
     ];
+
+    // Remove unsupported title and description display from composite elements.
+    if ($this->isComposite()) {
+      unset($form['form']['display_container']['title_display']['#options']['inline']);
+      unset($form['form']['display_container']['description_display']['#options']['tooltip']);
+    }
+
     return $form;
   }
 

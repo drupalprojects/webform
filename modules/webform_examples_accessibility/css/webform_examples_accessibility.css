@@ -1,0 +1,26 @@
+/**
+ * @file
+ * Webform examples accessibility styles.
+ */
+
+/**
+ * Show fieldsets.
+ */
+.webform-examples-accessibility fieldset {
+  border: 2px dashed red !important;
+  padding: 4px !important;
+}
+
+/**
+ * Show visually hidden (labels).
+ */
+.webform-examples-accessibility .visually-hidden {
+  border: 2px dashed blue !important;
+  color: blue !important;
+  padding: 4px !important;
+  position: relative !important;
+  clip: auto !important;
+  overflow: visible !important;
+  height: auto !important;
+  width: auto !important;
+}

@@ -268,7 +268,7 @@ trait WebformAjaxFormTrait {
    */
   protected function getFormStateRedirectUrl(FormStateInterface $form_state) {
     // Always check the ?destination which is used by the off-canvas/system tray.
-    if (\Drupal::request()->get('destination')) {
+    if ($this->getRequest()->get('destination')) {
       $destination = $this->getRedirectDestination()->get();
       return (strpos($destination, $destination) === 0) ? $destination : base_path() . $destination;
     }
@@ -280,7 +280,7 @@ trait WebformAjaxFormTrait {
     // Re-enable redirect, grab the URL, and then disable again.
     $no_redirect = $form_state->isRedirectDisabled();
     $form_state->disableRedirect(FALSE);
-    $redirect = $form_state->getRedirect() ?: $form_state->getResponse();
+    $redirect = $form_state->getResponse() ?: $form_state->getRedirect();
     $form_state->disableRedirect($no_redirect);
 
     if ($redirect instanceof RedirectResponse) {

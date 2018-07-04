@@ -334,10 +334,13 @@ interface WebformSubmissionInterface extends ContentEntityInterface, EntityOwner
   /**
    * Gets the webform submission's source entity.
    *
+   * @param boolean $translate
+   *   (optional) If TRUE the source entity will be translated.
+   *
    * @return \Drupal\Core\Entity\EntityInterface|null
    *   The entity that this webform submission was created from.
    */
-  public function getSourceEntity();
+  public function getSourceEntity($translate = FALSE);
 
   /**
    * Gets the webform submission's source URL.

@@ -213,12 +213,12 @@ class WebformContributeForm extends ConfigFormBase {
     if ((string) $form_state->getValue('op') === (string) $this->t('Clear')) {
       $account_type = NULL;
       $account_id = NULL;
-      drupal_set_message($this->t('Community information has been cleared.'));
+      $this->messenger()->addStatus($this->t('Community information has been cleared.'));
     }
     else {
       $account_type = $form_state->getValue('account_type');
       $account_id = $form_state->getValue($account_type . '_id');
-      drupal_set_message($this->t('Your community information has been saved.'));
+      $this->messenger()->addStatus($this->t('Your community information has been saved.'));
     }
 
     // Always clear cached information.

@@ -51,8 +51,13 @@ content:
     weight: 3
     label: hidden
     settings:
-      source_entity: true
+      label: Register
+      dialog: wide
+      attributes:
+        class:
+          - button
+        style: 'margin: 1em 0'
     third_party_settings: {  }
-    type: webform_entity_reference_entity_view
+    type: webform_entity_reference_link
     region: content
 hidden: {  }

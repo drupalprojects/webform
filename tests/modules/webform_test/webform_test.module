@@ -65,7 +65,7 @@ function webform_test_preprocess_page(&$variables) {
     && _webform_test_load_include(\Drupal::routeMatch()->getRawParameter('webform'))
   ) {
     $t_args = [':href' => Url::fromRouteMatch(\Drupal::routeMatch())->toString() . '?generate'];
-    drupal_set_message(t('The below webform\'s elements are automatically generated and exported. You can regenerate the below elements by appending <a href=":href">?generate</a> to this page\'s URL.', $t_args), 'warning');
+    \Drupal::messenger()->addWarning(t('The below webform\'s elements are automatically generated and exported. You can regenerate the below elements by appending <a href=":href">?generate</a> to this page\'s URL.', $t_args));
   }
 }
 
@@ -94,7 +94,7 @@ function webform_test_webform_load(array $entities) {
         ->save();
 
       // Display message.
-      drupal_set_message(t('Generated elements for %title webform', ['%title' => $entity->label()]));
+      \Drupal::messenger()->addStatus(t('Generated elements for %title webform', ['%title' => $entity->label()]));
     }
   }
 }

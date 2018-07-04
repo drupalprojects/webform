@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_token_submission_value
 title: 'Test: Token submission value'
 description: 'Test Webform submission values tokens'
@@ -148,10 +149,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -169,6 +173,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -201,13 +206,13 @@ settings:
     <tr><th width="50%">webform_submission:values:users:0:entity:account-name</th><td width="50%">[webform_submission:values:users:0:entity:account-name]</td></tr>
     <tr><th width="50%">webform_submission:values:users:99:entity:account-name</th><td width="50%">[webform_submission:values:users:99:entity:account-name]</td></tr>
     </table>
-
+    
     <h3>current-user</h3>
     <table class="table">
     <tr><th width="50%">current-user:display-name</th><td width="50%">[current-user:display-name]</td></tr>
     <tr><th width="50%">current-user:missing</th><td width="50%">[current-user:missing]</td></tr>
     </table>
-
+    
     <h3>terms</h3>
     <table class="table">
     <tr><th width="50%">webform_submission:values:term</th><td width="50%">[webform_submission:values:term]</td></tr>
@@ -265,6 +270,8 @@ settings:
     <table class="table">
     <tr><th width="50%">webform_submission:values:missing</th><td width="50%">[webform_submission:values:missing]</td></tr>
     <tr><th width="50%">webform_submission:values:missing:clear</th><td width="50%">[webform_submission:values:missing:clear]</td></tr>
+    <tr><th width="50%">webform:random:missing</th><td width="50%">[webform:random:missing]</td></tr>
+    <tr><th width="50%">webform:random:missing:clear</th><td width="50%">[webform:random:missing:clear]</td></tr>
     </table>
   confirmation_url: ''
   confirmation_attributes: {  }

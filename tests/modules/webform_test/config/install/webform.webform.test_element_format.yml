@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_format
 title: 'Test: Element: Format'
 description: 'Test element formatting.'
@@ -557,13 +558,11 @@ elements: |
         '#type': webform_computed_token
         '#title': 'Computed token (Value)'
         '#value': 'This is a Computed token value.'
-        '#default_value': Loremipsum
         '#format': value
       webform_computed_token_raw:
         '#type': webform_computed_token
         '#title': 'Computed token (Raw value)'
         '#value': 'This is a Computed token value.'
-        '#default_value': Loremipsum
         '#format': raw
     webform_computed_twig:
       '#type': details
@@ -572,13 +571,11 @@ elements: |
         '#type': webform_computed_twig
         '#title': 'Computed Twig (Value)'
         '#value': 'This is a Computed Twig value.'
-        '#default_value': Loremipsum
         '#format': value
       webform_computed_twig_raw:
         '#type': webform_computed_twig
         '#title': 'Computed Twig (Raw value)'
         '#value': 'This is a Computed Twig value.'
-        '#default_value': Loremipsum
         '#format': raw
   date_time_elements:
     '#type': details
@@ -597,16 +594,21 @@ elements: |
         '#title': 'Date (Raw value)'
         '#default_value': '1942-06-18'
         '#format': raw
-      date_fallback:
-        '#type': date
-        '#title': 'Date (Fallback date format)'
-        '#default_value': '1942-06-18'
-        '#format': fallback
       date_html_date:
         '#type': date
         '#title': 'Date (HTML Date)'
         '#default_value': '1942-06-18'
         '#format': html_date
+      date_html_time:
+        '#type': date
+        '#title': 'Date (HTML Time)'
+        '#default_value': '1942-06-18'
+        '#format': html_time
+      date_fallback:
+        '#type': date
+        '#title': 'Date (Fallback date format)'
+        '#default_value': '1942-06-18'
+        '#format': fallback
       date_html_datetime:
         '#type': date
         '#title': 'Date (HTML Datetime)'
@@ -617,11 +619,6 @@ elements: |
         '#title': 'Date (HTML Month)'
         '#default_value': '1942-06-18'
         '#format': html_month
-      date_html_time:
-        '#type': date
-        '#title': 'Date (HTML Time)'
-        '#default_value': '1942-06-18'
-        '#format': html_time
       date_html_week:
         '#type': date
         '#title': 'Date (HTML Week)'
@@ -815,7 +812,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': value
       entity_autocomplete_raw:
         '#type': entity_autocomplete
@@ -824,7 +821,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': raw
       entity_autocomplete_link:
         '#type': entity_autocomplete
@@ -833,7 +830,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': link
       entity_autocomplete_id:
         '#type': entity_autocomplete
@@ -842,7 +839,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': id
       entity_autocomplete_label:
         '#type': entity_autocomplete
@@ -851,7 +848,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': label
       entity_autocomplete_text:
         '#type': entity_autocomplete
@@ -860,7 +857,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': text
       entity_autocomplete_teaser:
         '#type': entity_autocomplete
@@ -869,7 +866,7 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
+        '#default_value': 1
         '#format': teaser
       entity_autocomplete_default:
         '#type': entity_autocomplete
@@ -878,8 +875,8 @@ elements: |
         '#selection_handler': 'default:user'
         '#selection_settings':
           include_anonymous: true
-        '#default_value': 5
-        '#format': default
+        '#default_value': 1
+        '#format': _default
     webform_entity_radios:
       '#type': details
       '#title': 'Entity radios'
@@ -986,7 +983,7 @@ elements: |
           1: Administrator
           0: Anonymous
         '#default_value': 1
-        '#format': default
+        '#format': _default
     webform_entity_select:
       '#type': details
       '#title': 'Entity select'
@@ -1085,7 +1082,7 @@ elements: |
           1: Administrator
           0: Anonymous
         '#default_value': 1
-        '#format': default
+        '#format': _default
     webform_term_select:
       '#type': details
       '#title': 'Term select'
@@ -1093,55 +1090,55 @@ elements: |
         '#type': webform_term_select
         '#title': 'Term select (Value)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': value
       webform_term_select_raw:
         '#type': webform_term_select
         '#title': 'Term select (Raw value)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': raw
       webform_term_select_link:
         '#type': webform_term_select
         '#title': 'Term select (Link)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': link
       webform_term_select_id:
         '#type': webform_term_select
         '#title': 'Term select (Entity ID)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': id
       webform_term_select_label:
         '#type': webform_term_select
         '#title': 'Term select (Label)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': label
       webform_term_select_text:
         '#type': webform_term_select
         '#title': 'Term select (Label (ID))'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': text
       webform_term_select_teaser:
         '#type': webform_term_select
         '#title': 'Term select (Teaser)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': teaser
       webform_term_select_default:
         '#type': webform_term_select
         '#title': 'Term select (Default)'
         '#vocabulary': tags
-        '#default_value': 3
-        '#format': default
+        '#default_value': Loremipsum
+        '#format': _default
       webform_term_select_breadcrumb:
         '#type': webform_term_select
         '#title': 'Term select (Breadcrumb)'
         '#vocabulary': tags
-        '#default_value': 3
+        '#default_value': Loremipsum
         '#format': breadcrumb
   file_upload_elements:
     '#type': details
@@ -1170,21 +1167,21 @@ elements: |
         '#title': 'File (Link)'
         '#file_extensions': txt
         '#format': link
-      managed_file_id:
-        '#type': managed_file
-        '#title': 'File (File ID)'
-        '#file_extensions': txt
-        '#format': id
-      managed_file_name:
-        '#type': managed_file
-        '#title': 'File (File name)'
-        '#file_extensions': txt
-        '#format': name
       managed_file_url:
         '#type': managed_file
         '#title': 'File (URL)'
         '#file_extensions': txt
         '#format': url
+      managed_file_name:
+        '#type': managed_file
+        '#title': 'File (File name)'
+        '#file_extensions': txt
+        '#format': name
+      managed_file_id:
+        '#type': managed_file
+        '#title': 'File (File ID)'
+        '#file_extensions': txt
+        '#format': id
   other_elements:
     '#type': details
     '#title': 'Other elements'
@@ -1237,10 +1234,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -1258,6 +1258,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -1342,20 +1343,21 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: default
+      to_mail: _default
       to_options: {  }
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      from_mail: default
+      from_mail: _default
       from_options: {  }
-      from_name: default
-      subject: default
-      body: default
+      from_name: _default
+      subject: _default
+      body: _default
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
+      exclude_empty_checkbox: false
       html: false
       attachments: false
       twig: false
@@ -1374,20 +1376,21 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: default
+      to_mail: _default
       to_options: {  }
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      from_mail: default
+      from_mail: _default
       from_options: {  }
-      from_name: default
-      subject: default
-      body: default
+      from_name: _default
+      subject: _default
+      body: _default
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
+      exclude_empty_checkbox: false
       html: true
       attachments: false
       twig: false

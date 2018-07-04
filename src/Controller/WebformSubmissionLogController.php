@@ -206,7 +206,11 @@ class WebformSubmissionLogController extends ControllerBase {
       }
       $row['handler_id'] = $log->handler_id;
       $row['operation'] = $log->operation;
-      $row['message'] = $log->message;
+      $row['message'] = [
+        'data' => [
+          '#markup' => $log->message,
+        ],
+      ];
       $row['uid'] = [
         'data' => [
           '#theme' => 'username',

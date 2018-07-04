@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Render\Element;
 use Drupal\webform\WebformInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see plugin_api
  */
 abstract class WebformHandlerBase extends PluginBase implements WebformHandlerInterface {
+
+  use MessengerTrait;
 
   /**
    * The webform.
@@ -272,6 +275,20 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
    */
   public function getWeight() {
     return $this->weight;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function enable() {
+    return $this->setStatus(TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function disable() {
+    return $this->setStatus(FALSE);
   }
 
   /**

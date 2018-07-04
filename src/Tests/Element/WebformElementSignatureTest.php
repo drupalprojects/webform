@@ -36,8 +36,7 @@ class WebformElementSignatureTest extends WebformElementTestBase {
     $this->assertRaw('<input type="submit" name="op" value="Reset" class="button js-form-submit form-submit" />');
     $this->assertRaw('<canvas></canvas>');
     $this->assertRaw('</div>');
-    $this->assertRaw('<div id="edit-signature--description" class="description">');
-    $this->assertRaw('Sign above');
+    $this->assertRaw('<div id="edit-signature--description" class="webform-element-description">Sign above</div>');
 
     // Check signature preview image.
     $this->postSubmissionTest($webform, [], t('Preview'));

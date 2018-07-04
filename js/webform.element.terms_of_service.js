@@ -48,7 +48,15 @@
             $details.dialog('open');
           }
           else {
-            $details.slideToggle();
+            var $a = $(this)
+            var expanded = ($a.attr('aria-expanded') === 'true');
+
+            // Toggle `aria-expanded` attributes on link.
+            $a.attr('aria-expanded', !expanded);
+
+            // Toggle `aria-hidden` on content and more .is-open state.
+            $details.attr('aria-hidden', expanded);
+            (expanded) ? $details.slideUp() : $details.slideDown();
           }
           event.preventDefault();
         });

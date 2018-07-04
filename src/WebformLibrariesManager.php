@@ -192,7 +192,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
    */
   public function getLibrary($name) {
     $libraries = $this->getLibraries();
-    return $libraries [$name];
+    return $libraries[$name];
   }
 
   /**
@@ -333,6 +333,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'notes' => $this->t('Code Mirror is used to provide a text editor for YAML, HTML, CSS, and JavaScript configuration settings and messages.'),
       'homepage_url' => Url::fromUri('http://codemirror.net/'),
       'download_url' => Url::fromUri('https://github.com/components/codemirror/archive/5.36.0.zip'),
+      'issues_url' => Url::fromUri('https://github.com/codemirror/codemirror/issues'),
       'version' => '5.36.0',
       'optional' => TRUE,
     ];
@@ -353,7 +354,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'download_url' => Url::fromUri('https://github.com/fronteed/icheck/archive/1.0.2.zip'),
       'version' => '1.0.2 ',
       'optional' => TRUE,
-      'deprecated' => $this->t('The iCheck library is not being maintained and has been <a href=":href">deprecated</a>. It wil be removed before Webform 8.x-5.0.', [':href' => 'https://www.drupal.org/project/webform/issues/2931154']),
+      'deprecated' => $this->t('The iCheck library is not being maintained. It has been <a href=":href">deprecated</a> and will be removed before Webform 8.x-5.0.', [':href' => 'https://www.drupal.org/project/webform/issues/2931154']),
     ];
     $libraries['jquery.inputmask'] = [
       'title' => $this->t('jQuery: Input Mask'),
@@ -417,6 +418,8 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
       'download_url' => Url::fromUri('https://github.com/simontabor/jquery-toggles/archive/v4.0.0.zip'),
       'version' => '4.0.0',
       'elements' => ['webform_toggle', 'webform_toggles'],
+      'deprecated' => $this->t('The Toogles library is not being maintained and has major accessibility issues. It has been <a href=":href">deprecated</a> amd will be removed before Webform 8.x-5.0.', [':href' => 'https://www.drupal.org/project/webform/issues/2890861']),
+      'optional' => TRUE,
     ];
     $libraries['jquery.word-and-character-counter'] = [
       'title' => $this->t('jQuery: Word and character counter plug-in!'),
@@ -429,7 +432,7 @@ class WebformLibrariesManager implements WebformLibrariesManagerInterface {
     ];
     $libraries['progress-tracker'] = [
       'title' => $this->t('Progress Tracker'),
-      'description' => $this->t("A flexible SASS component to illustrate the steps in a multi step process e.g. a multi step form, a timeline or a quiz."),
+      'description' => $this->t("A flexible SASS component to illustrate the steps in a multi-step process e.g. a multi-step form, a timeline or a quiz."),
       'notes' => $this->t('Progress Tracker is used by multi-step wizard forms.'),
       'homepage_url' => Url::fromUri('http://nigelotoole.github.io/progress-tracker/'),
       'download_url' => Url::fromUri('https://github.com/NigelOToole/progress-tracker/archive/v1.4.0.zip'),

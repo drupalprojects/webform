@@ -28,7 +28,8 @@ class WebformCompositeTest extends WebformTestBase {
     $this->drupalGet('webform/test_composite');
 
     // Check webform contact basic.
-    $this->assertRaw('<div id="edit-contact-basic--wrapper" class="form-composite js-form-item form-item js-form-type-webform-contact form-type-webform-contact js-form-item-contact-basic form-item-contact-basic form-no-label">');
+    $this->assertRaw('<fieldset data-drupal-selector="edit-contact-basic" id="edit-contact-basic--wrapper" class="webform-contact--wrapper fieldgroup form-composite webform-composite-hidden-title required js-form-item form-item js-form-wrapper form-wrapper">');
+    $this->assertRaw('<span class="visually-hidden fieldset-legend js-form-required form-required">Contact basic</span>');
     $this->assertRaw('<label for="edit-contact-basic-name" class="js-form-required form-required">Name</label>');
     $this->assertRaw('<input data-drupal-selector="edit-contact-basic-name" type="text" id="edit-contact-basic-name" name="contact_basic[name]" value="John Smith" size="60" maxlength="255" class="form-text required" required="required" aria-required="true" />');
 
@@ -46,8 +47,8 @@ class WebformCompositeTest extends WebformTestBase {
 
     // Check link multiple in table.
     $this->assertRaw('<label for="edit-link-multiple">Link multiple</label>');
-    $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<a href="#help" title="This is link title help" data-webform-help="This is link title help" class="webform-element-help">?</a>');
-    $this->assertRaw('<th class="link_multiple-table--url webform-multiple-table--url">Link URL<a href="#help" title="This is link url help" data-webform-help="This is link url help" class="webform-element-help">?</a>');
+    $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<a href="#help" title="This is link title help" class="webform-element-help" data-webform-help="This is link title help">?</a>');
+    $this->assertRaw('<th class="link_multiple-table--url webform-multiple-table--url">Link URL<a href="#help" title="This is link url help" class="webform-element-help" data-webform-help="This is link url help">?</a>');
 
     /* Processing */
 

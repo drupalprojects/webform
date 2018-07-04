@@ -8,15 +8,12 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_disabled
 title: 'Test: Element disabled'
 description: 'Test disabling element.'
 category: 'Test: Element'
 elements: |
-  webform_address:
-    '#type': webform_address
-    '#title': Address
-    '#disabled': true
   webform_audio_file:
     '#type': webform_audio_file
     '#title': 'Audio file'
@@ -24,6 +21,10 @@ elements: |
   webform_autocomplete:
     '#type': webform_autocomplete
     '#title': Autocomplete
+    '#disabled': true
+  webform_address:
+    '#type': webform_address
+    '#title': 'Basic address'
     '#disabled': true
   webform_buttons:
     '#type': webform_buttons
@@ -73,9 +74,13 @@ elements: |
     '#type': color
     '#title': Color
     '#disabled': true
+  webform_contact:
+    '#type': webform_contact
+    '#title': Contact
+    '#disabled': true
   webform_custom_composite:
     '#type': webform_custom_composite
-    '#title': 'Composite custom'
+    '#title': 'Custom composite'
     '#element':
       name:
         '#type': textfield
@@ -88,10 +93,6 @@ elements: |
         '#options':
           Male: Male
           Female: Female
-    '#disabled': true
-  webform_contact:
-    '#type': webform_contact
-    '#title': Contact
     '#disabled': true
   date:
     '#type': date
@@ -263,7 +264,7 @@ elements: |
     '#min': 0
     '#max': 100
     '#step': 1
-    '#output': right
+    '#output': below
     '#output__field_prefix': $
     '#output__field_suffix': '.00'
     '#disabled': true
@@ -411,10 +412,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -432,6 +436,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

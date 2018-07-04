@@ -10,78 +10,83 @@ use Drupal\Core\Entity\EntityInterface;
 interface WebformMessageManagerInterface {
 
   /****************************************************************************/
-  // Hardcode message constants.
+  // Hardcode message or custom messages with arguments constants.
   /****************************************************************************/
 
   /**
    * Admin closed.
    */
-  const ADMIN_CLOSED = 1;
+  const ADMIN_CLOSED = 'admin_closed';
 
   /**
    * Admin page.
    */
-  const ADMIN_PAGE = 2;
+  const ADMIN_PAGE = 'admin_page';
+
+  /**
+   * Admin archived.
+   */
+  const ADMIN_ARCHIVED = 'admin_archived';
 
   /**
    * Default submission confirmation.
    */
-  const SUBMISSION_DEFAULT_CONFIRMATION = 3;
+  const SUBMISSION_DEFAULT_CONFIRMATION = 'submission_default_confirmation';
 
   /**
    * Submission previous.
    */
-  const SUBMISSION_PREVIOUS = 4;
+  const PREVIOUS_SUBMISSION = 'previous_submission';
 
   /**
    * Submissions previous.
    */
-  const SUBMISSIONS_PREVIOUS = 5;
+  const PREVIOUS_SUBMISSIONS = 'previous_submissions';
 
   /**
    * Submission updates.
    */
-  const SUBMISSION_UPDATED = 6;
+  const SUBMISSION_UPDATED = 'submission_updated';
 
   /**
    * Submission test.
    */
-  const SUBMISSION_TEST = 7;
+  const SUBMISSION_TEST = 'submission_test';
 
   /**
    * Webform not saving or sending any data.
    */
-  const FORM_SAVE_EXCEPTION = 8;
+  const FORM_SAVE_EXCEPTION = 'form_save_exception';
 
   /**
    * Webform not able to handle file uploads.
    */
-  const FORM_FILE_UPLOAD_EXCEPTION = 9;
+  const FORM_FILE_UPLOAD_EXCEPTION = 'form_file_upload_exception';
 
   /**
    * Handler submission test.
    */
-  const HANDLER_SUBMISSION_REQUIRED = 10;
+  const HANDLER_SUBMISSION_REQUIRED = 'handler_submission_required';
 
   /**
    * Draft previous.
    */
-  const DRAFT_PREVIOUS = 11;
+  const DRAFT_PREVIOUS = 'draft_previous';
 
   /**
    * Drafts previous.
    */
-  const DRAFTS_PREVIOUS = 12;
+  const DRAFTS_PREVIOUS = 'drafts_previous';
 
   /****************************************************************************/
-  // Configurable message constants.
+  // Configurable custom message constants.
   // Values corresponds to admin config and webform settings.
   /****************************************************************************/
 
   /**
    * Webform exception.
    */
-  const FORM_EXCEPTION = 'form_exception_message';
+  const FORM_EXCEPTION_MESSAGE = 'form_exception_message';
 
   /**
    * Webform preview.
@@ -116,32 +121,37 @@ interface WebformMessageManagerInterface {
   /**
    * Submission draft saved.
    */
-  const SUBMISSION_DRAFT_SAVED = 'draft_saved_message';
+  const SUBMISSION_DRAFT_SAVED_MESSAGE = 'draft_saved_message';
 
   /**
    * Submission draft loaded.
    */
-  const SUBMISSION_DRAFT_LOADED = 'draft_loaded_message';
+  const SUBMISSION_DRAFT_LOADED_MESSAGE = 'draft_loaded_message';
 
   /**
    * Submission confirmation.
    */
-  const SUBMISSION_CONFIRMATION = 'confirmation_message';
+  const SUBMISSION_CONFIRMATION_MESSAGE = 'confirmation_message';
 
   /**
    * Submission exception.
    */
-  const SUBMISSION_EXCEPTION = 'submission_exception_message';
+  const SUBMISSION_EXCEPTION_MESSAGE = 'submission_exception_message';
 
   /**
    * Submission exception.
    */
-  const SUBMISSION_LOCKED = 'submission_locked_message';
+  const SUBMISSION_LOCKED_MESSAGE = 'submission_locked_message';
 
   /**
    * Template preview.
    */
   const TEMPLATE_PREVIEW = 'template_preview';
+
+  /**
+   * Autofill.
+   */
+  const AUTOFILL_MESSAGE = 'autofill_message';
 
   /**
    * Prepopulate source entity required.
@@ -152,11 +162,6 @@ interface WebformMessageManagerInterface {
    * Prepopulate source entity type.
    */
   const PREPOPULATE_SOURCE_ENTITY_TYPE = 'prepopulate_source_entity_type';
-
-  /**
-   * Autofill.
-   */
-  const AUTOFILL = 'autofill_message';
 
   /**
    * Set the webform submission used for token replacement.
@@ -183,17 +188,6 @@ interface WebformMessageManagerInterface {
    *   An entity.
    */
   public function setSourceEntity(EntityInterface $entity = NULL);
-
-  /**
-   * Get message from webform specific setting or global setting.
-   *
-   * @param string $key
-   *   The name of webform settings message to be displayed.
-   *
-   * @return string|bool
-   *   A message or FALSE if no message is found.
-   */
-  public function setting($key);
 
   /**
    * Get message.

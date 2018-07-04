@@ -2,14 +2,18 @@
 
 namespace Drupal\webform;
 
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\webform\Ajax\WebformRefreshCommand;
 use Drupal\webform\Form\WebformEntityAjaxFormTrait;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Plugin\WebformHandlerManagerInterface;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides a webform to manage submission handlers.
@@ -55,10 +59,10 @@ class WebformEntityHandlersForm extends EntityForm {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\webform\WebformInterface $webform */
-    $webform = $this->getEntity();
-
     $user_input = $form_state->getUserInput();
+
+    // Hard code the form id.
+    $form['#id'] = 'webform-handlers-form';
 
     // Build table header.
     $header = [
@@ -142,6 +146,17 @@ class WebformEntityHandlersForm extends EntityForm {
           'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
         ];
       }
+
+      // Add AJAX functionality to enable/disable operations.
+      $operations['status'] = [
+        'title' => $handler->isEnabled() ? $this->t('Disable') : $this->t('Enable'),
+        'url' => Url::fromRoute('entity.webform.handler.' . ($handler->isEnabled() ? 'disable' : 'enable'), [
+          'webform' => $this->entity->id(),
+          'webform_handler' => $handler_id,
+        ]),
+        'attributes' => WebformDialogHelper::getModalDialogAttributes(WebformDialogHelper::DIALOG_NARROW, ['use-ajax']),
+      ];
+
       $operations['delete'] = [
         'title' => $this->t('Delete'),
         'url' => Url::fromRoute('entity.webform.handler.delete_form', [
@@ -160,41 +175,6 @@ class WebformEntityHandlersForm extends EntityForm {
       $rows[$handler_id] = $row;
     }
 
-    // Filter add handler by excluded_handlers.
-    $handler_definitions = $this->handlerManager->getDefinitions();
-    $handler_definitions = $this->handlerManager->removeExcludeDefinitions($handler_definitions);
-    unset($handler_definitions['broken']);
-
-    // Must manually add local actions to the webform because we can't alter local
-    // actions and add the needed dialog attributes.
-    // @see https://www.drupal.org/node/2585169
-    $local_actions = [];
-    if (isset($handler_definitions['email'])) {
-      $local_actions['add_email'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add email'),
-          'url' => new Url('entity.webform.handler.add_form', ['webform' => $webform->id(), 'webform_handler' => 'email']),
-          'attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(),
-        ],
-      ];
-    }
-    unset($handler_definitions['email']);
-    if ($handler_definitions) {
-      $local_actions['add_handler'] = [
-        '#theme' => 'menu_local_action',
-        '#link' => [
-          'title' => $this->t('Add handler'),
-          'url' => new Url('entity.webform.handler', ['webform' => $webform->id()]),
-          'attributes' => WebformDialogHelper::getModalDialogAttributes(),
-        ],
-      ];
-    }
-    $form['local_actions'] = [
-      '#prefix' => '<ul class="action-links">',
-      '#suffix' => '</ul>',
-    ] + $local_actions;
-
     // Build the list of existing webform handlers for this webform.
     $form['handlers'] = [
       '#type' => 'table',
@@ -208,6 +188,7 @@ class WebformEntityHandlersForm extends EntityForm {
       ],
       '#attributes' => [
         'id' => 'webform-handlers',
+        'class' => ['webform-handlers-table'],
       ],
       '#empty' => $this->t('There are currently no handlers setup for this webform.'),
     ] + $rows;
@@ -254,7 +235,7 @@ class WebformEntityHandlersForm extends EntityForm {
     ];
     $this->logger('webform')->notice('Webform @label handler saved.', $context);
 
-    drupal_set_message($this->t('Webform %label handler saved.', ['%label' => $webform->label()]));
+    $this->messenger()->addStatus($this->t('Webform %label handler saved.', ['%label' => $webform->label()]));
   }
 
   /**
@@ -270,6 +251,50 @@ class WebformEntityHandlersForm extends EntityForm {
         $this->entity->getHandler($handler_id)->setWeight($handler_data['weight']);
       }
     }
+  }
+
+  /**
+   * Calls a method on a webform handler and reloads the webform handlers form.
+   *
+   * @param \Drupal\webform\WebformInterface $webform
+   *   The webform being acted upon.
+   * @param string $webform_handler
+   *   THe webform handler id.
+   * @param string $op
+   *   The operation to perform, e.g., 'enable' or 'disable'.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+   *   Either returns an AJAX response that refreshes the webform's handlers
+   *   page, or redirects back to the webform's handlers page.
+   */
+  public static function ajaxOperation(WebformInterface $webform, $webform_handler, $op, Request $request) {
+    // Perform the handler disable/enable operation.
+    $handler = $webform->getHandler($webform_handler);
+    $handler->$op();
+    // Save the webform.
+    $webform->save();
+
+    // Display message.
+    $t_args = [
+      '@label' => $handler->label(),
+      '@op' => ($op === 'enable') ? t('enabled') : t('disabled'),
+    ];
+    \Drupal::messenger()->addStatus(t('This @label handler was @op.', $t_args));
+
+    // Get the webform's handlers form URL.
+    $url = $webform->toUrl('handlers', ['query' => ['update' => $webform_handler]])->toString();
+
+    // If the request is via AJAX, return the webform handlers form.
+    if ($request->request->get('js')) {
+      $response = new AjaxResponse();
+      $response->addCommand(new WebformRefreshCommand($url));
+      return $response;
+    }
+
+    // Otherwise, redirect back to the webform handlers form.
+    return new RedirectResponse($url);
   }
 
 }

@@ -21,6 +21,7 @@ function webform_node_token_info() {
     'name' => t('Node'),
     'description' => t("The node that the webform was submitted from."),
     'type' => 'node',
+    'dynamic' => TRUE,
   ];
 
   return [
@@ -42,7 +43,7 @@ function webform_node_tokens($type, $tokens, array $data, array $options, Bubble
   if ($type == 'webform_submission' && !empty($data['webform_submission'])) {
     /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
     $webform_submission = $data['webform_submission'];
-    $source_entity = $webform_submission->getSourceEntity();
+    $source_entity = $webform_submission->getSourceEntity(TRUE);
     if (!$source_entity || (!$source_entity instanceof NodeInterface)) {
       return $replacements;
     }

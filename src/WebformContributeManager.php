@@ -333,7 +333,6 @@ class WebformContributeManager implements WebformContributeManagerInterface {
     return $membership;
   }
 
-
   /**
    * {@inheritdoc}
    */

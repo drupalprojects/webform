@@ -5,6 +5,7 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 
@@ -69,7 +70,11 @@ class WebformLikert extends FormElement {
 
     // Build header.
     $header = [
-      'likert_question' => ['question' => FALSE],
+      'likert_question' => [
+        'data' => [
+          'title' => WebformAccessibilityHelper::buildVisuallyHidden(t('Questions')),
+        ],
+      ],
     ];
     foreach ($answers as $answer_key => $answer) {
       $header[$answer_key] = [
@@ -124,6 +129,7 @@ class WebformLikert extends FormElement {
         // Must include an empty <span> so that the item's value is
         // not required.
         '#value' => '<span></span>',
+        '#webform_element' => TRUE,
         '#required' => $element['#required'],
       ];
       if ($question_description_property_name) {
@@ -143,8 +149,12 @@ class WebformLikert extends FormElement {
           '#value' => ($value === NULL) ? FALSE : (string) $value,
         ];
 
-        // Wrap title in span.webform-likert-label so that it can hidden when
-        // Likert is displayed in grid on desktop.
+        // Wrap title in span.webform-likert-label.visually-hidden
+        // so that it can hidden but accessible to screen readers
+        // when Likert is displayed in grid on desktop.
+        // Wrap help and description in
+        // span.webform-likert-(help|description).hidden to block screeen
+        // readers except on mobile.
         // @see webform.element.likert.css
         $row[$answer_key]['#title_display'] = 'after';
 
@@ -155,8 +165,10 @@ class WebformLikert extends FormElement {
               'help' => [
                 '#type' => 'webform_help',
                 '#help' => $answer['description'],
+                '#prefix' => '<span class="webform-likert-help hidden">',
+                '#suffix' => '</span>',
               ],
-              '#prefix' => '<span class="webform-likert-label">',
+              '#prefix' => '<span class="webform-likert-label visually-hidden">',
               '#suffix' => '</span>',
             ];
             $row[$answer_key]['#title'] = \Drupal::service('renderer')->render($build);
@@ -164,14 +176,14 @@ class WebformLikert extends FormElement {
 
           case 'description':
             $row[$answer_key] += [
-              '#title' => new FormattableMarkup('<span class="webform-likert-label">@title</span>', ['@title' => $answer['title']]),
-              '#description' => new FormattableMarkup('<span class="webform-likert-description">@description</span>', ['@description' => $answer['description']]),
+              '#title' => new FormattableMarkup('<span class="webform-likert-label visually-hidden">@title</span>', ['@title' => $answer['title']]),
+              '#description' => new FormattableMarkup('<span class="webform-likert-description hidden">@description</span>', ['@description' => $answer['description']]),
             ];
             break;
 
           default:
             $row[$answer_key] += [
-              '#title' => new FormattableMarkup('<span class="webform-likert-label">@title</span>', ['@title' => $answer['title']]),
+              '#title' => new FormattableMarkup('<span class="webform-likert-label visually-hidden">@title</span>', ['@title' => $answer['title']]),
             ];
         }
       }

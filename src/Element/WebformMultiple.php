@@ -7,6 +7,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -29,8 +30,6 @@ class WebformMultiple extends FormElement {
     return [
       '#input' => TRUE,
       '#access' => TRUE,
-      '#label' => t('item'),
-      '#labels' => t('items'),
       '#key' => NULL,
       '#header' => NULL,
       '#element' => [
@@ -40,9 +39,12 @@ class WebformMultiple extends FormElement {
         '#placeholder' => t('Enter value'),
       ],
       '#cardinality' => FALSE,
-      '#min_items' => 1,
+      '#min_items' => NULL,
+      '#no_items_message' => $this->t('No items entered. Please add items below.'),
       '#empty_items' => 1,
       '#add_more' => 1,
+      '#add_more_button_label' => $this->t('Add'),
+      '#add_more_input_label' => $this->t('more items'),
       '#sorting' => TRUE,
       '#operations' => TRUE,
       '#add' => TRUE,
@@ -87,6 +89,11 @@ class WebformMultiple extends FormElement {
     // Set tree.
     $element['#tree'] = TRUE;
 
+    // Set min items based on when the element is required.
+    if (!isset($element['#min_items']) || $element['#min_items'] === '') {
+      $element['#min_items'] = (empty($element['#required'])) ? 0 : 1;
+    }
+
     // Disable operation when #cardinality is set.
     if (!empty($element['#cardinality'])) {
       $element['#operations'] = FALSE;
@@ -122,9 +129,6 @@ class WebformMultiple extends FormElement {
         $min_items = (int) $element['#min_items'];
         $number_of_items = ($number_of_items < $min_items) ? $min_items : $number_of_items;
 
-        if ($number_of_items < 1) {
-          $number_of_items = 1;
-        }
         $form_state->set($number_of_items_storage_key, $number_of_items);
       }
 
@@ -151,7 +155,6 @@ class WebformMultiple extends FormElement {
     $row_index = 0;
     $weight = 0;
     $rows = [];
-
 
     if (!$form_state->isProcessingInput() && isset($element['#default_value']) && is_array($element['#default_value'])) {
       $default_values = $element['#default_value'];
@@ -192,30 +195,44 @@ class WebformMultiple extends FormElement {
     $element['items'] = [
       '#prefix' => '<div' . new Attribute($attributes) . '>',
       '#suffix' => '</div>',
-      '#type' => 'table',
-      '#header' => $header,
     ] + $rows;
 
-    // Add sorting to table.
-    if ($element['#sorting']) {
-      $element['items']['#tabledrag'] = [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'webform-multiple-sort-weight',
-        ],
+    // Display table if there are any rows.
+    if ($rows) {
+      $element['items'] += [
+        '#type' => 'table',
+        '#header' => $header,
+      ] + $rows;
+
+      // Add sorting to table.
+      if ($element['#sorting']) {
+        $element['items']['#tabledrag'] = [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'webform-multiple-sort-weight',
+          ],
+        ];
+      }
+    }
+    elseif (!empty($element['#no_items_message'])) {
+      $element['items'] += [
+        '#type' => 'webform_message',
+        '#message_message' => $element['#no_items_message'],
+        '#message_type' => 'info',
+        '#attributes' => ['class' => ['webform-multiple-table--no-items-message']],
       ];
     }
 
     // Build add items actions.
     if (empty($element['#cardinality'])) {
       $element['add'] = [
-        '#prefix' => '<div class="container-inline">',
+        '#prefix' => '<div class="webform-multiple-add js-webform-multiple-add container-inline">',
         '#suffix' => '</div>',
       ];
       $element['add']['submit'] = [
         '#type' => 'submit',
-        '#value' => t('Add'),
+        '#value' => $element['#add_more_button_label'],
         '#limit_validation_errors' => [],
         '#submit' => [[get_called_class(), 'addItemsSubmit']],
         '#ajax' => $ajax_settings,
@@ -223,10 +240,12 @@ class WebformMultiple extends FormElement {
       ];
       $element['add']['more_items'] = [
         '#type' => 'number',
+        '#title' => $element['#add_more_button_label'] . ' ' . $element['#add_more_input_label'],
+        '#title_display' => 'invisible',
         '#min' => 1,
         '#max' => 100,
         '#default_value' => $element['#add_more'],
-        '#field_suffix' => t('more @labels', ['@labels' => $element['#labels']]),
+        '#field_suffix' => $element['#add_more_input_label'],
         '#error_no_message' => TRUE,
       ];
     }
@@ -244,7 +263,7 @@ class WebformMultiple extends FormElement {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    * @param array $complete_form
-   *    An associative array containing the structure of the form.
+   *   An associative array containing the structure of the form.
    */
   protected static function initializeElement(array &$element, FormStateInterface $form_state, array &$complete_form) {
     // Track element child keys.
@@ -360,24 +379,36 @@ class WebformMultiple extends FormElement {
 
     if (empty($element['#header'])) {
       return [
-        ['data' => '', 'colspan' => ($colspan + 1)],
+        [
+          'data' => (!empty($element['#title'])) ? WebformAccessibilityHelper::buildVisuallyHidden($element['#title']) : [],
+          'colspan' => ($colspan + 1),
+        ],
       ];
     }
     elseif (is_array($element['#header'])) {
       $header = [];
 
       if ($element['#sorting']) {
-        $header[] = ['class' => ["$table_id--handle", "webform-multiple-table--handle"]];
+        $header[] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Re-order')),
+          'class' => ["$table_id--handle", "webform-multiple-table--handle"],
+        ];
       }
 
       $header = array_merge($header, $element['#header']);
 
       if ($element['#sorting']) {
-        $header[] = ['class' => ["$table_id--weight", "webform-multiple-table--weight"]];
+        $header[] = [
+          'data' => ['#markup' => t('Weight')],
+          'class' => ["$table_id--weight", "webform-multiple-table--weight"]
+        ];
       }
 
       if ($element['#operations']) {
-        $header[] = ['class' => ["$table_id--handle", "webform-multiple-table--operations"]];
+        $header[] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Operations')),
+          'class' => ["$table_id--handle", "webform-multiple-table--operations"],
+        ];
       }
 
       return $header;
@@ -391,7 +422,10 @@ class WebformMultiple extends FormElement {
       $header = [];
 
       if ($element['#sorting']) {
-        $header['_handle_'] = ['class' => ["$table_id--handle", "webform-multiple-table--handle"]];
+        $header['_handle_'] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Re-order')),
+          'class' => ["$table_id--handle", "webform-multiple-table--handle"],
+        ];
       }
 
       if ($element['#child_keys']) {
@@ -438,6 +472,7 @@ class WebformMultiple extends FormElement {
 
       if ($element['#operations']) {
         $header['_operations_'] = [
+          'data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Operations')),
           'class' => ["$table_id--operations", "webform-multiple-table--operations"],
         ];
       }
@@ -707,14 +742,15 @@ class WebformMultiple extends FormElement {
     $form_state->set($number_of_items_storage_key, $number_of_items + $more_items);
 
     // Reset values.
-    $element['items']['#value'] = array_values($element['items']['#value']);
-    $form_state->setValueForElement($element['items'], $element['items']['#value']);
-    NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $element['items']['#value']);
+    $items = (!empty($element['items']['#value'])) ? array_values($element['items']['#value']) : [];
+    $element['items']['#value'] = $items;
+    $form_state->setValueForElement($element['items'], $items);
+    NestedArray::setValue($form_state->getUserInput(), $element['items']['#parents'], $items);
 
     $action_key = static::getStorageKey($element, 'action');
     $form_state->set($action_key, TRUE);
 
-      // Rebuild the webform.
+    // Rebuild the webform.
     $form_state->setRebuild();
   }
 
@@ -775,8 +811,8 @@ class WebformMultiple extends FormElement {
     // Remove one item from the 'number of items'.
     $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
     $number_of_items = $form_state->get($number_of_items_storage_key);
-    // Never allow the number of items to be less than 1.
-    if ($number_of_items != 1) {
+    // Never allow the number of items to be less than #min_items.
+    if ($number_of_items > $element['#min_items']) {
       $form_state->set($number_of_items_storage_key, $number_of_items - 1);
     }
 
@@ -811,18 +847,27 @@ class WebformMultiple extends FormElement {
     // @see \Drupal\webform\Element\WebformOtherBase::validateWebformOther
     $values = NestedArray::getValue($form_state->getValues(), $element['#parents']);
 
-    // Validate unique keys.
-    if ($error_message = static::validateUniqueKeys($element, $values['items'])) {
-      $form_state->setError($element, $error_message);
-      return;
+    $number_of_items_storage_key = static::getStorageKey($element, 'number_of_items');
+    $number_of_items = $form_state->get($number_of_items_storage_key);
+    if ($number_of_items || $element['#cardinality']) {
+      $items = $values['items'];
+
+      // Validate unique keys.
+      if ($error_message = static::validateUniqueKeys($element, $items)) {
+        $form_state->setError($element, $error_message);
+        return;
+      }
+
+      // Convert values to items and validate duplicate keys.
+      $items = static::convertValuesToItems($element, $items);
+
+      // Validate required items.
+      if (!empty($element['#required']) && empty($items)) {
+        WebformElementHelper::setRequiredError($element, $form_state);
+      }
     }
-
-    // Convert values to items and validate duplicate keys.
-    $items = static::convertValuesToItems($element, $values['items']);
-
-    // Validate required items.
-    if (!empty($element['#required']) && empty($items)) {
-      WebformElementHelper::setRequiredError($element, $form_state);
+    else {
+      $items = [];
     }
 
     $element['#value'] = $items;

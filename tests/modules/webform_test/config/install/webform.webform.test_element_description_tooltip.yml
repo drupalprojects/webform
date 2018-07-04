@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_description_tooltip
 title: 'Test: Element: Description tooltip'
 description: 'Test element eescription tooltip.'
@@ -105,7 +106,7 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#output': right
+      '#output': below
       '#output__field_prefix': $
       '#output__field_suffix': '.00'
       '#description': 'This is a description for the ''range'' element.'
@@ -141,60 +142,6 @@ elements: |
       '#title': URL
       '#description': 'This is a description for the ''url'' element.'
       '#description_display': tooltip
-  composite_elements:
-    '#type': details
-    '#title': 'Composite elements'
-    '#open': true
-    webform_address:
-      '#type': webform_address
-      '#title': Address
-      '#description': 'This is a description for the ''webform_address'' element.'
-      '#description_display': tooltip
-    webform_custom_composite:
-      '#type': webform_custom_composite
-      '#title': 'Composite custom'
-      '#element':
-        name:
-          '#type': textfield
-          '#title': Name
-          '#title_display': invisible
-        gender:
-          '#type': select
-          '#title': Gender
-          '#title_display': invisible
-          '#options':
-            Male: Male
-            Female: Female
-      '#description': 'This is a description for the ''webform_composite'' element.'
-      '#description_display': tooltip
-    webform_contact:
-      '#type': webform_contact
-      '#title': Contact
-      '#description': 'This is a description for the ''webform_contact'' element.'
-      '#description_display': tooltip
-    webform_link:
-      '#type': webform_link
-      '#title': Link
-      '#description': 'This is a description for the ''webform_link'' element.'
-      '#description_display': tooltip
-    webform_location:
-      '#type': webform_location
-      '#title': Location
-      '#map': true
-      '#geolocation': true
-      '#format': map
-      '#description': 'This is a description for the ''webform_location'' element.'
-      '#description_display': tooltip
-    webform_name:
-      '#type': webform_name
-      '#title': Name
-      '#description': 'This is a description for the ''webform_name'' element.'
-      '#description_display': tooltip
-    webform_telephone:
-      '#type': webform_telephone
-      '#title': 'Telephone advanced'
-      '#description': 'This is a description for the ''webform_telephone'' element.'
-      '#description_display': tooltip
   file_upload_elements:
     '#type': details
     '#title': 'File upload elements'
@@ -223,6 +170,60 @@ elements: |
       '#type': webform_video_file
       '#title': 'Video file'
       '#description': 'This is a description for the ''webform_video_file'' element.'
+      '#description_display': tooltip
+  composite_elements:
+    '#type': details
+    '#title': 'Composite elements'
+    '#open': true
+    webform_address:
+      '#type': webform_address
+      '#title': 'Basic address'
+      '#description': 'This is a description for the ''webform_address'' element.'
+      '#description_display': tooltip
+    webform_contact:
+      '#type': webform_contact
+      '#title': Contact
+      '#description': 'This is a description for the ''webform_contact'' element.'
+      '#description_display': tooltip
+    webform_custom_composite:
+      '#type': webform_custom_composite
+      '#title': 'Custom composite'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+          '#options':
+            Male: Male
+            Female: Female
+      '#description': 'This is a description for the ''webform_custom_composite'' element.'
+      '#description_display': tooltip
+    webform_link:
+      '#type': webform_link
+      '#title': Link
+      '#description': 'This is a description for the ''webform_link'' element.'
+      '#description_display': tooltip
+    webform_location:
+      '#type': webform_location
+      '#title': Location
+      '#map': true
+      '#geolocation': true
+      '#format': map
+      '#description': 'This is a description for the ''webform_location'' element.'
+      '#description_display': tooltip
+    webform_name:
+      '#type': webform_name
+      '#title': Name
+      '#description': 'This is a description for the ''webform_name'' element.'
+      '#description_display': tooltip
+    webform_telephone:
+      '#type': webform_telephone
+      '#title': 'Telephone advanced'
+      '#description': 'This is a description for the ''webform_telephone'' element.'
       '#description_display': tooltip
   options_elements:
     '#type': details
@@ -506,10 +507,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -527,6 +531,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

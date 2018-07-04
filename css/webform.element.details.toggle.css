@@ -19,3 +19,23 @@
 .webform-details-toggle-state-wrapper + details {
   margin-top: 0;
 }
+
+.webform-details-toggle-state {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-top: 0;
+  padding: 0;
+  font-size: 1em;
+}
+
+/* Tweak details toggle state. */
+.webform-details-toggle-state {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+.webform-details-toggle-state:hover,
+.webform-details-toggle-statelink:focus {
+  text-decoration: underline;
+}

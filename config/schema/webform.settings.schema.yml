@@ -6,6 +6,9 @@ webform.settings:
       type: mapping
       label: 'Webform default settings'
       mapping:
+        default_status:
+          type: string
+          label: 'Default status'
         default_page_base_path:
           type: string
           label: 'Default base path'
@@ -120,6 +123,12 @@ webform.settings:
         default_submission_locked_message:
           type: text
           label: 'Default submission locked message'
+        default_previous_submission_message:
+          type: text
+          label: 'Default previous submission message'
+        default_previous_submissions_message:
+          type: text
+          label: 'Default previous submissions message'
         default_autofill_message:
           type: text
           label: 'Default submission autofill message'
@@ -138,6 +147,28 @@ webform.settings:
         confirmation_back_classes:
           type: string
           label: 'Confirmation back link CSS classes'
+        dialog:
+          type: boolean
+          label: 'Enable webform dialog support'
+        dialog_options:
+          type: sequence
+          label: 'Preset dialog options'
+          sequence:
+            type: mapping
+            label: 'Dialog options'
+            mapping:
+              name:
+                type: string
+                label: 'Dialog name'
+              title:
+                type: label
+                label: 'Dialog title'
+              width:
+                type: integer
+                label: 'Dialog width'
+              height:
+                type: integer
+                label: 'Dialog height'
     assets:
       type: mapping
       label: 'Global Assets (CSS/JavaScript)'
@@ -291,6 +322,9 @@ webform.settings:
       type: mapping
       label: 'Export default settings'
       mapping:
+        temp_directory:
+          type: string
+          label: 'Export temporary directory'
         exporter:
           type: string
           label: 'Results exporter'

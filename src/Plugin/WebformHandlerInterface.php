@@ -182,6 +182,20 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function setConditions(array $conditions);
 
   /**
+   * Enables the webform handler.
+   *
+   * @return $this
+   */
+  public function enable();
+
+  /**
+   * Disables the webform handler.
+   *
+   * @return $this
+   */
+  public function disable();
+
+  /**
    * Checks if the handler is excluded via webform.settings.
    *
    * @return bool

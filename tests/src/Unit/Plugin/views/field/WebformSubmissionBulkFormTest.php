@@ -32,31 +32,33 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
     $actions = [];
 
     for ($i = 1; $i <= 2; $i++) {
-      $action = $this->getMock('\Drupal\system\ActionConfigEntityInterface');
+      $action = $this->createMock('\Drupal\system\ActionConfigEntityInterface');
       $action->expects($this->any())
         ->method('getType')
         ->will($this->returnValue('webform_submission'));
       $actions[$i] = $action;
     }
 
-    $action = $this->getMock('\Drupal\system\ActionConfigEntityInterface');
+    $action = $this->createMock('\Drupal\system\ActionConfigEntityInterface');
     $action->expects($this->any())
       ->method('getType')
       ->will($this->returnValue('user'));
     $actions[] = $action;
 
-    $entity_storage = $this->getMock('Drupal\Core\Entity\EntityStorageInterface');
+    $entity_storage = $this->createMock('Drupal\Core\Entity\EntityStorageInterface');
     $entity_storage->expects($this->any())
       ->method('loadMultiple')
       ->will($this->returnValue($actions));
 
-    $entity_manager = $this->getMock('Drupal\Core\Entity\EntityManagerInterface');
+    $entity_manager = $this->createMock('Drupal\Core\Entity\EntityManagerInterface');
     $entity_manager->expects($this->once())
       ->method('getStorage')
       ->with('action')
       ->will($this->returnValue($entity_storage));
 
-    $language_manager = $this->getMock('Drupal\Core\Language\LanguageManagerInterface');
+    $language_manager = $this->createMock('Drupal\Core\Language\LanguageManagerInterface');
+
+    $messenger = $this->createMock('\Drupal\Core\Messenger\MessengerInterface');
 
     $views_data = $this->getMockBuilder('Drupal\views\ViewsData')
       ->disableOriginalConstructor()
@@ -70,7 +72,7 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
     $container->set('string_translation', $this->getStringTranslationStub());
     \Drupal::setContainer($container);
 
-    $storage = $this->getMock('Drupal\views\ViewEntityInterface');
+    $storage = $this->createMock('Drupal\views\ViewEntityInterface');
     $storage->expects($this->any())
       ->method('get')
       ->with('base_table')
@@ -88,7 +90,7 @@ class WebformSubmissionBulkFormTest extends UnitTestCase {
     $definition['title'] = '';
     $options = [];
 
-    $webform_submission_bulk_form = new WebformSubmissionBulkForm([], 'webform_submission_bulk_form', $definition, $entity_manager, $language_manager);
+    $webform_submission_bulk_form = new WebformSubmissionBulkForm([], 'webform_submission_bulk_form', $definition, $entity_manager, $language_manager, $messenger);
     $webform_submission_bulk_form->init($executable, $display, $options);
 
     $this->assertAttributeEquals(array_slice($actions, 0, -1, TRUE), 'actions', $webform_submission_bulk_form);

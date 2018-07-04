@@ -88,7 +88,7 @@ class WebformPluginHandlerController extends ControllerBase implements Container
 
     $build = [];
 
-    // Settings
+    // Settings.
     $build['settings'] = [
       '#type' => 'link',
       '#title' => $this->t('Edit configuration'),
@@ -231,6 +231,8 @@ class WebformPluginHandlerController extends ControllerBase implements Container
       '#attributes' => [
         'class' => ['webform-form-filter-text'],
         'data-element' => '.webform-handler-add-table',
+        'data-item-single' => $this->t('handler'),
+        'data-item-plural' => $this->t('handlers'),
         'title' => $this->t('Enter a part of the handler name to filter by.'),
         'autofocus' => 'autofocus',
       ],

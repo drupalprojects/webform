@@ -47,7 +47,7 @@ class WebformSettingsConfidentialTest extends WebformTestBase {
     $this->assertFieldById('edit-name');
     $this->assertNoRaw('This form is confidential.');
 
-    // Check that test submission does not record the IP address
+    // Check that test submission does not record the IP address.
     $sid = $this->postSubmissionTest($webform_confidential, ['name' => 'John']);
     $webform_submission = WebformSubmission::load($sid);
     $this->assertEqual($webform_submission->getRemoteAddr(), t('(unknown)'));

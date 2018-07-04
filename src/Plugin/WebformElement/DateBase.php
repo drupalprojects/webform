@@ -83,7 +83,7 @@ abstract class DateBase extends WebformElementBase {
    * {@inheritdoc}
    */
   public function setDefaultValue(array &$element) {
-    if (!empty($element['#multiple'])) {
+    if ($this->hasMultipleValues($element)) {
       $element['#default_value'] = (isset($element['#default_value'])) ? (array) $element['#default_value'] : NULL;
       return;
     }
@@ -441,7 +441,7 @@ abstract class DateBase extends WebformElementBase {
   /**
    * Specifies the start and end year to use as a date range.
    *
-   * Copied from: \Drupal\Core\Datetime\Element\DateElementBase::datetimeRangeYears
+   * Copied from: DateElementBase::datetimeRangeYears.
    *
    * @param string $string
    *   A min and max year string like '-3:+1' or '2000:2010' or '2000:+3'.
@@ -451,6 +451,8 @@ abstract class DateBase extends WebformElementBase {
    * @return array
    *   A numerically indexed array, containing the minimum and maximum year
    *   described by this pattern.
+   *
+   * @see \Drupal\Core\Datetime\Element\DateElementBase::datetimeRangeYears
    */
   protected static function datetimeRangeYears($string, $date = NULL) {
     $datetime = new DrupalDateTime();

@@ -13,8 +13,8 @@ class WebformObjectHelper {
    * @param object $object
    *   An object.
    *
-   * @return object $object
-   *   An object.
+   * @return object
+   *   Object sorted by properties.
    */
   public static function sortByProperty($object) {
     $array = (array) $object;

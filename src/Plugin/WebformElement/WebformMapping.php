@@ -61,6 +61,7 @@ class WebformMapping extends WebformElementBase {
       'destination__description' => '',
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
     ] + $this->getDefaultBaseProperties();
   }
 

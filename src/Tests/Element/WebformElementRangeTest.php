@@ -39,9 +39,13 @@ class WebformElementRangeTest extends WebformElementTestBase {
 
     // Check output left range element.
     $this->assertRaw('<span class="field-prefix"><div class="js-form-item form-item js-form-type-number form-type-number js-form-item-range-output-left__output form-item-range-output-left__output form-no-label">');
+    $this->assertRaw('<label for="range_output_left__output" class="visually-hidden">range_output_left</label>');
+    $this->assertRaw('<input style="background-color: yellow;width:6em" type="number" id="range_output_left__output" step="100" min="0" max="10000" class="form-number" />');
 
     // Check output right range element.
     $this->assertRaw('<span class="field-suffix"><span class="webform-range-output-delimiter"></span><div class="js-form-item form-item js-form-type-number form-type-number js-form-item-range-output-disabled__output form-item-range-output-disabled__output form-no-label form-disabled">');
+    $this->assertRaw('<label for="range_output_right__output" class="visually-hidden">range_output_right</label>');
+    $this->assertRaw('<input style="width:4em" type="number" id="range_output_right__output" step="1" min="0" max="100" class="form-number" />');
 
     // Check processing.
     $this->drupalPostForm('webform/test_element_range', [], t('Submit'));

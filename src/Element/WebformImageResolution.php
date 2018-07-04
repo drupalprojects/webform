@@ -2,11 +2,9 @@
 
 namespace Drupal\webform\Element;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\CompositeFormElementTrait;
-use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a webform image resolution element .
@@ -63,7 +61,6 @@ class WebformImageResolution extends FormElement {
    */
   public static function processWebformImageResolution(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
-
 
     $element['#type'] = 'item';
     $element += [

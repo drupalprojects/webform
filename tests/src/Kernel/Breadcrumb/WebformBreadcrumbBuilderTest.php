@@ -106,9 +106,9 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
     $this->setUpMockEntities();
 
     // Make some test doubles.
-    $this->moduleHandler = $this->getMock('Drupal\Core\Extension\ModuleHandlerInterface');
-    $this->requestHandler = $this->getMock('Drupal\webform\WebformRequestInterface');
-    $this->translationManager = $this->getMock('Drupal\Core\StringTranslation\TranslationInterface');
+    $this->moduleHandler = $this->createMock('Drupal\Core\Extension\ModuleHandlerInterface');
+    $this->requestHandler = $this->createMock('Drupal\webform\WebformRequestInterface');
+    $this->translationManager = $this->createMock('Drupal\Core\StringTranslation\TranslationInterface');
 
     // Make an object to test.
     $this->breadcrumbBuilder = $this->getMockBuilder('Drupal\webform\Breadcrumb\WebformBreadcrumbBuilder')
@@ -492,7 +492,7 @@ class WebformBreadcrumbBuilderTest extends UnitTestCase {
    *   A mocked route match.
    */
   protected function getMockRouteMatch($route_name = NULL, array $parameter_map = []) {
-    $route_match = $this->getMock('Drupal\Core\Routing\RouteMatchInterface');
+    $route_match = $this->createMock('Drupal\Core\Routing\RouteMatchInterface');
     $route_match->expects($this->any())
       ->method('getRouteName')
       ->will($this->returnValue($route_name));

@@ -293,6 +293,10 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           '#info' => $help,
         ];
       }
+      // Add custom help weight.
+      if (isset($help['weight'])) {
+        $build[$id]['#weight'] = $help['weight'];
+      }
     }
 
     // Disable caching when Webform editorial module is enabled.
@@ -1010,6 +1014,26 @@ class WebformHelpManager implements WebformHelpManagerInterface {
         'content' => $this->t('One of the key mantras in the Drupal is “there is a module for that, “ and Webform is the module for building forms for Drupal 8.'),
         'youtube_id' => 'zl_ErUKymYo',
         'presentation_id' => '14vpNvDhYKGhHspu9BurIneTL4C1spyfwsqI82MvTYUA',
+      ],
+      'accessibility' => [
+        'title' => $this->t('Webform Accessibility'),
+        'content' => $this->t('This presentation is about approaching accessibility using the Webform module for Drupal 8.'),
+        'youtube_id' => 'JR0wnd6Orfk',
+        'presentation_id' => '1ni2a9id7VT67uO3f0i1UMt9_dswfcSHW1gZcXGCSEcM',
+        'links' => [
+          [
+            'title' => $this->t('Accessibility | Drupal.org'),
+            'url' => 'https://www.drupal.org/about/features/accessibility',
+          ],
+          [
+            'title' => $this->t('Drupal 8 Accessibility'),
+            'url' => 'https://www.drupal.org/docs/8/accessibility',
+          ],
+          [
+            'title' => $this->t('Webform Accessibility'),
+            'url' => 'https://www.drupal.org/docs/8/modules/webform/webform-accessibility',
+          ],
+        ],
       ],
     ];
     foreach ($videos as $id => &$video_info) {
@@ -1845,6 +1869,22 @@ class WebformHelpManager implements WebformHelpManagerInterface {
       'paths' => [
         '/admin/structure/block/add/webform_block/*',
       ],
+    ];
+
+    // Webform Accessibility.
+    $help['webform_accessibility'] = [
+      'group' => 'webform_accessibility',
+      'title' => $this->t('Webform Node'),
+      'content' => $this->t("The Webform module aims to be accessible to all users."),
+      'video_id' => 'accessibility',
+      'paths' => [
+        '/admin/structure/webform/manage/example_accessibility_*',
+      ],
+      'message_type' => 'info',
+      'message_close' => TRUE,
+      'message_storage' => WebformMessage::STORAGE_USER,
+      'access' => $this->currentUser->hasPermission('administer webform'),
+      'weight' => -10,
     ];
 
     /**************************************************************************/

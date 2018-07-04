@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_form_states_server_required
 title: 'Test: Form API #states server-side required validation'
 description: 'Test Drupal''s #states API via server-side required validation.'
@@ -121,6 +122,28 @@ elements: |
         required:
           ':input[name="checkboxes_trigger[one]"]':
             checked: true
+  checkboxes_other_trigger_details:
+    '#type': details
+    '#title': checkboxes_other_trigger
+    '#open': true
+    checkboxes_other_trigger:
+      '#type': webform_checkboxes_other
+      '#title': checkboxes_other_trigger
+      '#options':
+        one: One
+        two: Two
+        three: Three
+    checkboxes_other_dependent_required:
+      '#type': textfield
+      '#title': checkboxes_other_dependent_required
+      '#description': '<b>Required:</b> checkboxes_other[one]:checked=true OR checkboxes_other[other]:filled=true'
+      '#states':
+        required:
+          - ':input[name="checkboxes_other_trigger[checkboxes][one]"]':
+              checked: true
+          - or
+          - ':input[name="checkboxes_other_trigger[other]"]':
+              filled: true
   text_format_trigger_details:
     '#type': details
     '#title': text_format_trigger
@@ -441,10 +464,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -462,6 +488,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

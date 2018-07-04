@@ -117,6 +117,14 @@ entity.webform.autocomplete:
   requirements:
     _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
 
+entity.webform.autocomplete.archived:
+  path: '/admin/structure/webform/autocomplete/archived'
+  defaults:
+    _controller: '\Drupal\webform\Controller\WebformEntityController::autocomplete'
+    archived: TRUE
+  requirements:
+    _custom_access: '\Drupal\webform\Access\WebformAccountAccess::checkOverviewAccess'
+
 entity.webform.canonical:
   path: '/webform/{webform}'
   defaults:
@@ -196,6 +204,22 @@ entity.webform.user.submission.delete:
   requirements:
     _entity_access: 'webform_submission.delete'
 
+entity.webform.user.submission.duplicate:
+  path: '/webform/{webform}/submissions/{webform_submission}/duplicate'
+  defaults:
+    _entity_form: 'webform_submission.duplicate'
+    _title_callback: '\Drupal\webform\Controller\WebformSubmissionViewController::title'
+    duplicate: TRUE
+    setting: 'submission_user_duplicate'
+    value: TRUE
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _entity_access: 'webform_submission.update'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess::checkWebformSettingValue'
+
 entity.webform.test_form:
   path: '/webform/{webform}/test'
   defaults:
@@ -207,6 +231,14 @@ entity.webform.test_form:
         type: 'entity:webform'
   requirements:
     _entity_access: 'webform.test'
+
+entity.webform.export_form:
+  path: '/admin/structure/webform/manage/{webform}/export'
+  defaults:
+    _entity_form: 'webform.export'
+    _title_callback: '\Drupal\webform\Controller\WebformEntityController::title'
+  requirements:
+    _permission: 'export configuration'
 
 entity.webform.add_form:
   path: '/admin/structure/webform/add'
@@ -594,6 +626,7 @@ entity.webform.handler:
     _title: 'Select a handler'
   requirements:
     _entity_access: 'webform.update'
+    _custom_access: '\Drupal\webform\Access\WebformHandlerAccess::checkHandlerAccess'
 
 entity.webform.handler.add_form:
   path: '/admin/structure/webform/manage/{webform}/handlers/add/{webform_handler}'
@@ -602,6 +635,17 @@ entity.webform.handler.add_form:
     _title: 'Add webform handler'
   requirements:
     _entity_access: 'webform.update'
+    _custom_access: '\Drupal\webform\Access\WebformHandlerAccess::checkHandlerAccess'
+
+entity.webform.handler.add_email:
+  path: '/admin/structure/webform/manage/{webform}/handlers/add/email'
+  defaults:
+    _form: '\Drupal\webform\Form\WebformHandlerAddForm'
+    _title: 'Add email'
+    webform_handler: email
+  requirements:
+    _entity_access: 'webform.update'
+    _custom_access: '\Drupal\webform\Access\WebformHandlerAccess::checkHandlerAccess'
 
 entity.webform.handler.edit_form:
   path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/edit'
@@ -626,6 +670,24 @@ entity.webform.handler.delete_form:
     _title: 'Delete webform handler'
   requirements:
     _entity_access: 'webform.update'
+
+entity.webform.handler.enable:
+  path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/enable'
+  defaults:
+    _controller: '\Drupal\webform\WebformEntityHandlersForm::ajaxOperation'
+    op: enable
+  requirements:
+    _entity_access: 'webform.update'
+    _csrf_token: 'TRUE'
+
+entity.webform.handler.disable:
+  path: '/admin/structure/webform/manage/{webform}/handlers/{webform_handler}/disable'
+  defaults:
+    _controller: '\Drupal\webform\WebformEntityHandlersForm::ajaxOperation'
+    op: disable
+  requirements:
+    _entity_access: 'webform.update'
+    _csrf_token: 'TRUE'
 
 # Plugins.
 

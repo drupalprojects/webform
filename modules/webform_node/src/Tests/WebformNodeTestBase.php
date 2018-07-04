@@ -48,12 +48,16 @@ abstract class WebformNodeTestBase extends WebformTestBase {
    *
    * @param string $webform_id
    *   A webform id.
+   * @param array $settings
+   *   (optional) An associative array of settings for the node, as used in
+   *   entity_create().
    *
    * @return \Drupal\node\NodeInterface
    *   A webform node.
    */
-  protected function createWebformNode($webform_id) {
-    $node = $this->drupalCreateNode(['type' => 'webform']);
+  protected function createWebformNode($webform_id, array $settings = []) {
+    $settings += ['type' => 'webform'];
+    $node = $this->drupalCreateNode($settings);
     $node->webform->target_id = $webform_id;
     $node->webform->status = WebformInterface::STATUS_OPEN;
     $node->webform->open = '';

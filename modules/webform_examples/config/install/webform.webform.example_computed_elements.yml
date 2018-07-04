@@ -8,11 +8,61 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_computed_elements
 title: 'Example: Computed'
 description: 'Examples of a computed elements.'
 category: Example
 elements: |
+  calculation:
+    '#title': Calculation
+    '#type': webform_wizard_page
+    '#open': true
+    calculation:
+      '#type': webform_section
+      '#title': 'Basic adding calculation using a ''computed twig'' element'
+      container:
+        '#type': container
+        '#attributes':
+          class:
+            - 'container-inline clearfix'
+        a:
+          '#type': number
+          '#title': a
+          '#title_display': invisible
+          '#placeholder': a
+        markup:
+          '#type': webform_markup
+          '#markup': ' + '
+        b:
+          '#type': number
+          '#title': b
+          '#title_display': invisible
+          '#placeholder': b
+        markup_01:
+          '#type': webform_markup
+          '#markup': ' = '
+        c:
+          '#type': webform_computed_twig
+          '#title': c
+          '#title_display': invisible
+          '#value': '{% if data.a|length and data.b|length %}{{ data.a + data.b }}{% else %}c{% endif %}'
+          '#ajax': true
+    message_warning:
+      '#type': webform_message
+      '#states':
+        visible:
+          ':input[name="c"]':
+            value: c
+      '#message_type': warning
+      '#message_message': 'Please enter <strong>a</strong> and <strong>b</strong> to perform a basic adding calculation.'
+    message_status:
+      '#type': webform_message
+      '#message_message': 'Thank you for entering <strong>a</strong> and <strong>b</strong> to perform basic adding calculation.'
+      '#states':
+        visible:
+          ':input[name="c"]':
+            '!value': c
   information:
     '#title': 'Your Information'
     '#type': webform_wizard_page
@@ -79,10 +129,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -100,6 +153,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

@@ -5,7 +5,6 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\CompositeFormElementTrait;
 use Drupal\webform\Utility\WebformElementHelper;
 
 /**
@@ -18,7 +17,7 @@ use Drupal\webform\Utility\WebformElementHelper;
  */
 class WebformEmailConfirm extends FormElement {
 
-  use CompositeFormElementTrait;
+  use WebformCompositeFormElementTrait;
 
   /**
    * {@inheritdoc}
@@ -31,11 +30,10 @@ class WebformEmailConfirm extends FormElement {
       '#process' => [
         [$class, 'processWebformEmailConfirm'],
       ],
-      '#theme_wrappers' => ['form_element'],
+      '#pre_render' => [
+        [$class, 'preRenderWebformCompositeFormElement'],
+      ],
       '#required' => FALSE,
-      // Add '#markup' property to add an 'id' attribute to the form element.
-      // @see template_preprocess_form_element()
-      '#markup' => '',
     ];
   }
 
@@ -98,7 +96,6 @@ class WebformEmailConfirm extends FormElement {
     $element['mail_2']['#value'] = empty($element['#value']) ? NULL : $element['#value']['mail_2'];
     $element['mail_2']['#error_no_message'] = TRUE;
 
-
     // Don't require the main element.
     $element['#required'] = FALSE;
 
@@ -122,7 +119,6 @@ class WebformEmailConfirm extends FormElement {
    * Validates an email confirm element.
    */
   public static function validateWebformEmailConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
-
     $mail_1 = trim($element['mail_1']['#value']);
     $mail_2 = trim($element['mail_2']['#value']);
     $has_access = (!isset($element['#access']) || $element['#access'] === TRUE);

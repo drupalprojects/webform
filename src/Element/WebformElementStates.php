@@ -8,6 +8,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\Utility\WebformYaml;
 
@@ -88,6 +89,8 @@ class WebformElementStates extends FormElement {
       ];
       $element['states'] = [
         '#type' => 'webform_codemirror',
+        '#title' => t('Conditional Logic (YAML)'),
+        '#title_display' => 'invisible',
         '#mode' => 'yaml',
         '#default_value' => WebformYaml::tidy(Yaml::encode($element['#default_value'])),
         '#description' => t('Learn more about Drupal\'s <a href=":href">Form API #states</a>.', [':href' => 'https://www.lullabot.com/articles/form-api-states']),
@@ -123,7 +126,7 @@ class WebformElementStates extends FormElement {
       ['data' => t('State'), 'width' => '25%'],
       ['data' => t('Element'), 'width' => '50%'],
       ['data' => t('Trigger/Value'), 'width' => '25%'],
-      ['data' => ''],
+      ['data' => WebformAccessibilityHelper::buildVisuallyHidden(t('Operations'))],
     ];
 
     // Get states and number of rows.
@@ -207,6 +210,8 @@ class WebformElementStates extends FormElement {
     ];
     $row['state'] = [
       '#type' => 'select',
+      '#title' => t('State'),
+      '#title_display' => 'invisible',
       '#options' => $element['#state_options'],
       '#default_value' => $state['state'],
       '#empty_option' => t('- Select -'),
@@ -214,6 +219,8 @@ class WebformElementStates extends FormElement {
     ];
     $row['operator'] = [
       '#type' => 'select',
+      '#title' => t('Operator'),
+      '#title_display' => 'invisible',
       '#options' => [
         'and' => t('All'),
         'or' => t('Any'),
@@ -262,6 +269,8 @@ class WebformElementStates extends FormElement {
     $row['state'] = [];
     $row['selector'] = [
       '#type' => 'select',
+      '#title' => t('Selector'),
+      '#title_display' => 'invisible',
       '#options' => $element['#selector_options'],
       '#wrapper_attributes' => ['class' => ['webform-states-table--selector']],
       '#default_value' => $condition['selector'],
@@ -275,6 +284,8 @@ class WebformElementStates extends FormElement {
     ];
     $row['condition']['trigger'] = [
       '#type' => 'select',
+      '#title' => t('Trigger'),
+      '#title_display' => 'invisible',
       '#options' => $element['#trigger_options'],
       '#default_value' => $condition['trigger'],
       '#empty_option' => t('- Select -'),
@@ -341,6 +352,7 @@ class WebformElementStates extends FormElement {
     ];
     $operations['add'] = [
       '#type' => 'image_button',
+      '#title' => t('Add'),
       '#src' => drupal_get_path('module', 'webform') . '/images/icons/plus.svg',
       '#limit_validation_errors' => [],
       '#submit' => [[get_called_class(), 'addConditionSubmit']],
@@ -350,6 +362,7 @@ class WebformElementStates extends FormElement {
     ];
     $operations['remove'] = [
       '#type' => 'image_button',
+      '#title' => t('Remove'),
       '#src' => drupal_get_path('module', 'webform') . '/images/icons/ex.svg',
       '#limit_validation_errors' => [],
       '#submit' => [[get_called_class(), 'removeRowSubmit']],

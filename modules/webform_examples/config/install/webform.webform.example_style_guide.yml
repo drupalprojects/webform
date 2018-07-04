@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: example_style_guide
 title: 'Example: Style Guide'
 description: 'Style Guide containing examples of all elements and layouts.'
@@ -133,6 +134,15 @@ elements: |
     '#type': details
     '#title': 'Advanced elements'
     '#open': true
+    email:
+      '#type': email
+      '#title': Email
+    email_multiple:
+      '#type': webform_email_multiple
+      '#title': 'Email multiple'
+    email_confirm:
+      '#type': webform_email_confirm
+      '#title': Email
     tel:
       '#type': tel
       '#title': Telephone
@@ -236,16 +246,6 @@ elements: |
     webform_terms_of_service:
       '#type': webform_terms_of_service
       '#terms_content': 'These are the terms of service.'
-    webform_toggle:
-      '#type': webform_toggle
-      '#title': Toggle
-    webform_toggles:
-      '#type': webform_toggles
-      '#title': Toggles
-      '#options':
-        one: One
-        two: Two
-        three: Three
     webform_likert:
       '#type': webform_likert
       '#title': Likert
@@ -551,6 +551,14 @@ elements: |
         '#type': textfield
         '#title': 'Element (Flex: 3)'
         '#flex': 3
+  contrib:
+    '#type': details
+    '#title': 'Contrib modules'
+    '#open': true
+    address:
+      '#type': address
+      '#title': Address
+      '#description': '@see <a href="https://www.drupal.org/project/address">https://www.drupal.org/project/address</a>'
 css: ''
 javascript: ''
 settings:
@@ -586,10 +594,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -607,6 +618,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

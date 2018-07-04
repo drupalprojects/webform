@@ -105,7 +105,7 @@ class WebformDevelSubmissionApiForm extends FormBase {
     ];
     $form['submission']['message'] = [
       '#type' => 'webform_message',
-      '#message_message' => $this->t("Submitting the below values with trigger the %title webform's ::valdiateForm() and ::submitForm() callbacks.", ['%title' => $webform->label()]),
+      '#message_message' => $this->t("Submitting the below values will trigger the %title webform's ::validateFormValues() and ::submitFormValues() callbacks.", ['%title' => $webform->label()]),
       '#message_type' => 'warning',
     ];
     $form['submission']['values'] = [
@@ -185,7 +185,9 @@ if ($is_open === TRUE) {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValue('values');
     $webform_submission = WebformSubmissionForm::submitFormValues($values);
-    drupal_set_message($this->t('New submission %title added.', ['%title' => $webform_submission->label()]));
+    $this->messenger()->addStatus($this->t('New submission %title added.', [
+      '%title' => $webform_submission->label(),
+    ]));
   }
 
 }

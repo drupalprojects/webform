@@ -8,11 +8,23 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_checkboxes
 title: 'Test: Element: Checkboxes'
 description: 'Test the checkboxes.'
 category: 'Test: Element'
 elements: |
+  checkbox_example:
+    '#type': details
+    '#title': 'Checkbox'
+    '#open': true
+    checkbox:
+      '#type': checkbox
+      '#title': checkbox
+    checkbox_exclude_empty:
+      '#type': checkbox
+      '#title': checkbox_exclude_empty
+      '#exclude_empty': true
   checkboxes_descriptions_example:
     '#type': details
     '#title': 'Checkboxes descriptions'
@@ -108,10 +120,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -129,6 +144,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

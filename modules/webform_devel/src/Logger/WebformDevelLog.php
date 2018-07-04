@@ -3,8 +3,11 @@
 namespace Drupal\webform_devel\Logger;
 
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -13,6 +16,8 @@ use Psr\Log\LoggerInterface;
 class WebformDevelLog implements LoggerInterface {
 
   use RfcLoggerTrait;
+  use DependencySerializationTrait;
+  use MessengerTrait;
 
   /**
    * The configuration factory.
@@ -69,7 +74,10 @@ class WebformDevelLog implements LoggerInterface {
       // "LogicException: The database connection is not serializable." errors
       // for all Ajax callbacks.
       // @see \Drupal\Core\Render\Renderer
-      drupal_set_message(\Drupal::service('renderer')->renderPlain($build), ($level <= 3) ? 'error' : 'warning');
+      $this->messenger()->addMessage(
+        \Drupal::service('renderer')->renderPlain($build),
+        ($level <= 3) ? MessengerInterface::TYPE_ERROR : MessengerInterface::TYPE_WARNING
+      );
     }
   }
 

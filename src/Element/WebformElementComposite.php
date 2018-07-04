@@ -126,6 +126,7 @@ class WebformElementComposite extends FormElement {
       '#label' => t('element'),
       '#labels' => t('elements'),
       '#empty_items' => 0,
+      '#min_items' => 1,
       '#header' => TRUE,
       '#default_value' => (isset($element['#default_value'])) ? $element['#default_value'] : NULL,
       '#error_no_message' => TRUE,

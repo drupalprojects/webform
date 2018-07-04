@@ -64,8 +64,8 @@ class WebformImageSelectImagesStorage extends ConfigEntityStorage implements Web
         $config = $this->configFactory->get($webform_config_name);
         $element_data = Yaml::encode($config->get('elements'));
         if (preg_match_all('/images\'\: ([a-z_]+)/', $element_data, $matches)) {
-          $webform_id  = $config->get('id');
-          $webform_title  = $config->get('title');
+          $webform_id = $config->get('id');
+          $webform_title = $config->get('title');
           foreach ($matches[1] as $options_id) {
             $this->usedByWebforms[$options_id][$webform_id] = $webform_title;
           }

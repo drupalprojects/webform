@@ -12,6 +12,17 @@ trait WebformToggleTrait {
   /**
    * {@inheritdoc}
    */
+  public function isExcluded() {
+    if (\Drupal::service('webform.libraries_manager')->isExcluded('jquery.toggles')) {
+      return TRUE;
+    }
+
+    return parent::isExcluded();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getTranslatableProperties() {
     return array_merge(parent::getTranslatableProperties(), ['on_text', 'off_text']);
   }

@@ -69,6 +69,6 @@ function maillog_webform_submission_form_alter(array &$form, FormStateInterface 
   $build[] = ['#markup' => t('No emails will be sent.'), '#prefix' => ' <b>', '#suffix' => '</b>'];
 
   if ($build) {
-    drupal_set_message(\Drupal::service('renderer')->renderPlain($build), 'warning');
+    \Drupal::messenger()->addWarning(\Drupal::service('renderer')->renderPlain($build));
   }
 }

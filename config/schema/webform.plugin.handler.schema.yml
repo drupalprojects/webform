@@ -105,7 +105,10 @@ webform.handler.email:
       label: 'Always include private and restricted access elements.'
     exclude_empty:
       type: boolean
-      label: 'Preview exclude empty elements'
+      label: 'Exclude empty elements'
+    exclude_empty_checkbox:
+      type: boolean
+      label: 'Exclude unselected checkboxes'
     html:
       type: boolean
       label: 'HTML'

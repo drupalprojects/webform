@@ -44,16 +44,6 @@
   text-align: center;
 }
 
-/**
- * Hide radio title and description when Likert is displayed within a
- * grid on desktop.
- * @see \Drupal\webform\Element\WebformLikert::processWebformLikert
- */
-.webform-likert-label,
-.webform-likert-description {
-  display: none;
-}
-
 .webform-likert-table th:first-child,
 .webform-likert-table td:first-child {
   text-align: inherit;
@@ -100,15 +90,29 @@
   }
 
   /**
-   * Show radio title and description when Likert is displayed inline on mobile.
+   * Show visually hidden radio title and description
+   * when Likert is displayed inline on mobile.
    * @see \Drupal\webform\Element\WebformLikert::processWebformLikert
+   * @see core/modules/system/css/components/hidden.module.css
    */
-  .webform-likert-label {
+  .webform-likert-table .visually-hidden {
+    position: inherit !important;
+    clip: inherit;
+    overflow: inherit;
+    height: inherit;
+    width: inherit;
+  }
+
+  .webform-likert-label.visually-hidden {
     display: inline;
   }
 
-  .webform-likert-description {
+  .webform-likert-description.hidden {
     display: block;
+  }
+
+  .webform-likert-help.hidden {
+    display: inline;
   }
 
   .form-type-webform-likert td:last-child {

@@ -2,12 +2,15 @@
 
 namespace Drupal\webform\Plugin\WebformElement;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\Element;
+use Drupal\webform\Element\WebformComputedTwig as WebformComputedTwigElement;
 use Drupal\webform\Element\WebformComputedBase as WebformComputedBaseElement;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementDisplayOnInterface;
+use Drupal\webform\WebformInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -37,9 +40,12 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       // Computed values.
       'value' => '',
       'mode' => WebformComputedBaseElement::MODE_AUTO,
+      'hide_empty' => FALSE,
       'store' => FALSE,
+      'ajax' => FALSE,
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
     ] + $this->getDefaultBaseProperties();
   }
 
@@ -75,10 +81,10 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   /**
    * {@inheritdoc}
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL) {
     foreach ($element as $key => $value) {
       if (!Element::child($key) && !in_array($key, ['#value'])) {
-        $element[$key] = $this->tokenManager->replace($value, $webform_submission);
+        $element[$key] = $this->tokenManager->replace($value, $entity);
       }
     }
   }
@@ -190,11 +196,32 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       '#mode' => 'text',
       '#title' => $this->t('Computed value/markup'),
     ];
+    $form['computed']['whitespace'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Remove whitespace around the'),
+      '#empty_option' => $this->t('- None -'),
+      '#options' => [
+        WebformComputedTwigElement::WHITESPACE_TRIM => $this->t('computed value'),
+        WebformComputedTwigElement::WHITESPACE_SPACELESS => $this->t('computed value and between HTML tags'),
+      ],
+    ];
+    $form['computed']['hide_empty'] = [
+      '#type' => 'checkbox',
+      '#return_value' => TRUE,
+      '#title' => $this->t('Hide empty'),
+      '#description' => $this->t('If checked the computed elements will be hidden from display when the value is an empty string.'),
+    ];
     $form['computed']['store'] = [
       '#type' => 'checkbox',
       '#return_value' => TRUE,
       '#title' => $this->t('Store value in the database'),
       '#description' => $this->t('The value will be stored in the database. As a result, it will only be recalculated when the submission is updated. This option is required when accessing the computed element through Views.'),
+    ];
+    $form['computed']['ajax'] = [
+      '#type' => 'checkbox',
+      '#return_value' => TRUE,
+      '#title' => $this->t('Automatically update the computed value using Ajax'),
+      '#description' => $this->t('If checked, any element used within the computed value/markup will trigger any automatic update.'),
     ];
     $form['computed']['tokens'] = ['#access' => TRUE, '#weight' => 10] + $this->tokenManager->buildTreeLink();
     return $form;
@@ -255,6 +282,14 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
   protected function processValue(array $element, WebformSubmissionInterface $webform_submission) {
     $class = $this->getFormElementClassDefinition();
     return $class::processValue($element, $webform_submission);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTestValues(array $element, WebformInterface $webform, array $options = []) {
+    // Computed elements should never get a test value.
+    return NULL;
   }
 
 }

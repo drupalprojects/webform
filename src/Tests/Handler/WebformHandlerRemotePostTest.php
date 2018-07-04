@@ -2,7 +2,6 @@
 
 namespace Drupal\webform\Tests\Handler;
 
-use Drupal\file\Entity\File;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Tests\WebformTestBase;
@@ -176,10 +175,10 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->postSubmission($webform);
 
     // Check request URL contains query string.
-    $this->assertRaw("http://webform-test-handler-remote-post/completed?custom_completed=1&amp;custom_data=1&amp;response_type=200&amp;first_name=John&amp;last_name=Smith");
+    $this->assertRaw("http://webform-test-handler-remote-post/completed?custom_completed=1&amp;custom_data=1&amp;first_name=John&amp;last_name=Smith&amp;response_type=200");
 
     // Check response data.
-    $this->assertRaw("message: 'Processed completed?custom_completed=1&amp;custom_data=1&amp;response_type=200&amp;first_name=John&amp;last_name=Smith request.'");
+    $this->assertRaw("message: 'Processed completed?custom_completed=1&amp;custom_data=1&amp;first_name=John&amp;last_name=Smith&amp;response_type=200 request.'");
 
     // Get confirmation number from JSON packet.
     preg_match('/&quot;confirmation_number&quot;:&quot;([a-zA-z0-9]+)&quot;/', $this->getRawContent(), $match);

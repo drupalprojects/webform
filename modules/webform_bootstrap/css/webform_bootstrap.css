@@ -39,3 +39,10 @@
   border: none;
   margin: 10px 0.5em 10px 0;
 }
+
+/**
+ * Image select.
+ */
+html.js .form-type-webform-image-select .select-wrapper:after {
+  display: none;
+}

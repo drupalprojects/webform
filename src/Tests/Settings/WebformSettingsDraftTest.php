@@ -1,16 +1,17 @@
 <?php
 
-namespace Drupal\webform\Tests;
+namespace Drupal\webform\Tests\Settings;
 
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\Tests\WebformTestBase;
 
 /**
  * Tests for webform submission form draft.
  *
  * @group Webform
  */
-class WebformSubmissionFormDraftTest extends WebformTestBase {
+class WebformSettingsDraftTest extends WebformTestBase {
 
   /**
    * Webforms to load.
@@ -269,6 +270,42 @@ class WebformSubmissionFormDraftTest extends WebformTestBase {
     $this->drupalGet('webform/test_form_draft_multiple');
     $this->clickLink('Load your pending draft');
     $this->assertFieldByName('name', 'Jane Doe');
+  }
+
+  /**
+   * Test webform submission form reset draft.
+   */
+  public function testResetDraft() {
+    $this->drupalLogin($this->rootUser);
+
+    $webform = Webform::load('test_form_draft_authenticated');
+
+    // Check saved draft.
+    $sid = $this->postSubmission($webform, ['name' => 'John Smith'], t('Save Draft'));
+    $this->assertNotNull($sid);
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual($sid, $webform_submission->id());
+
+    // Check reset delete's the draft.
+    $this->postSubmission($webform, [], t('Reset'));
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertNull($webform_submission);
+
+    // Check submission with comment.
+    $sid = $this->postSubmission($webform, ['name' => 'John Smith', 'comment' => 'This is a comment'], t('Save Draft'));
+    $this->postSubmission($webform);
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual('This is a comment', $webform_submission->getElementData('comment'));
+
+    // Check submitted draft is not delete on reset.
+    $this->drupalPostForm('/admin/structure/webform/manage/test_form_draft_authenticated/submission/' . $sid . '/edit', ['comment' => 'This is ignored'], t('Reset'));
+    \Drupal::entityTypeManager()->getStorage('webform_submission')->resetCache();
+    $webform_submission = WebformSubmission::load($sid);
+    $this->assertEqual($sid, $webform_submission->id());
+    $this->assertEqual('This is a comment', $webform_submission->getElementData('comment'));
+    $this->assertNotEqual('This is ignored', $webform_submission->getElementData('comment'));
   }
 
 }

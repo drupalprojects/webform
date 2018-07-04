@@ -6,9 +6,9 @@ use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\webform\Plugin\Field\FieldType\WebformEntityReferenceItem;
 use Drupal\webform\WebformInterface;
-use Drupal\webform\WebformMessageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,14 +17,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormatterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The webform message manager.
+   * The renderer.
    *
-   * @var \Drupal\webform\WebformMessageManagerInterface
+   * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $messageManager;
+  protected $renderer;
 
   /**
-   * WebformEntityReferenceEntityFormatter constructor.
+   * WebformEntityReferenceLinkFormatter constructor.
    *
    * @param string $plugin_id
    *   The plugin_id for the formatter.
@@ -40,13 +40,13 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
    *   The view mode.
    * @param array $third_party_settings
    *   Third party settings.
-   * @param \Drupal\webform\WebformMessageManagerInterface $message_manager
-   *   The webform message manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, WebformMessageManagerInterface $message_manager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, RendererInterface $renderer) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
 
-    $this->messageManager = $message_manager;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -61,7 +61,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('webform.message_manager')
+      $container->get('renderer')
     );
   }
 
@@ -115,7 +115,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
         $item_state = $item->$state;
         if ($item_state && strtotime($item_state) > time()) {
           $item_seconds = strtotime($item_state) - time();
-          if (!$max_age || $item_seconds > $max_age) {
+          if (!$max_age && $item_seconds > $max_age) {
             $max_age = $item_seconds;
           }
         }
@@ -124,7 +124,7 @@ abstract class WebformEntityReferenceFormatterBase extends EntityReferenceFormat
         $webform_state = $webform->get($state);
         if ($webform_state && strtotime($webform_state) > time()) {
           $webform_seconds = strtotime($webform_state) - time();
-          if (!$max_age || $webform_seconds > $max_age) {
+          if (!$max_age && $webform_seconds > $max_age) {
             $max_age = $webform_seconds;
           }
         }

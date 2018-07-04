@@ -95,7 +95,7 @@ abstract class WebformSubmissionsDeleteFormBase extends ConfirmFormBase {
     $form_state->setRedirectUrl($this->getCancelUrl());
     if ($this->submissionStorage->getTotal($this->webform, $this->sourceEntity) < $this->getBatchLimit()) {
       $this->submissionStorage->deleteAll($this->webform, $this->sourceEntity);
-      drupal_set_message($this->getFinishedMessage());
+      $this->messenger()->addStatus($this->getFinishedMessage());
     }
     else {
       $this->batchSet($this->webform, $this->sourceEntity);
@@ -200,10 +200,10 @@ abstract class WebformSubmissionsDeleteFormBase extends ConfirmFormBase {
    */
   public function batchFinish($success = FALSE, array $results, array $operations) {
     if (!$success) {
-      drupal_set_message($this->t('Finished with an error.'));
+      $this->messenger()->addStatus($this->t('Finished with an error.'));
     }
     else {
-      drupal_set_message($this->getFinishedMessage());
+      $this->messenger()->addStatus($this->getFinishedMessage());
     }
   }
 

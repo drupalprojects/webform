@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Utility\WebformArrayHelper;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
@@ -42,6 +43,16 @@ trait WebformTableTrait {
     }
 
     $element['#attached']['library'][] = 'webform/webform.element.' . $element['#type'];
+
+    // Set table select element's #processr callback so that we can
+    // add visually hidden #title to the checkboxes/radios.
+    // Note: The Table select sort (webform_table_select_sort) element
+    // adds visually hidden #title to all checkboxes.
+    // @see \Drupal\webform\Element\WebformTableSelectSort::processWebformTableSelectSort
+    if ($this->getPluginId() === 'tableselect') {
+      $this->setElementDefaultCallback($element, 'process');
+      $element['#process'][] = [get_class($this), 'processTableSelectOptions'];
+    }
   }
 
   /**
@@ -85,6 +96,62 @@ trait WebformTableTrait {
       $selectors[":input[name=\"{$name}[{$value}]$input_selector\"]"] = $text . ' [' . $type . ']';
     }
     return [$title => $selectors];
+  }
+
+  /**
+   * Process table options and tdd #title to the table options.
+   *
+   * @param array $element
+   *   An associative array containing the properties and children of
+   *   the tableselect element
+   * @return array
+   *   The processed element.
+   *
+   * @see \Drupal\Core\Render\Element\Tableselect::processTableselect
+   */
+  public static function processTableSelectOptions($element) {
+    foreach ($element['#options'] as $key => $choice) {
+      if (isset($element[$key]) && empty($element[$key]['#title'])) {
+        if ($title = static::getTableSelectOptionTitle($choice)) {
+          $element[$key]['#title'] = $title;
+          $element[$key]['#title_display'] = 'invisible';
+        }
+      }
+    }
+    return $element;
+  }
+
+  /**
+   * Get table selection option title/text.
+   *
+   * Issue #2719453: Tableselect single radio button missing #title attribute
+   * and is not accessible
+   *
+   * @param array $option
+   *   A table select option.
+   *
+   * @return string|\Drupal\Component\Render\MarkupInterface|NULL
+   *   Table selection option title/text.
+   *
+   * @see https://www.drupal.org/project/drupal/issues/2719453
+   */
+  public static function getTableSelectOptionTitle(array $option) {
+    if (is_array($option) && WebformArrayHelper::isAssociative($option)) {
+      // Get first value from custom options.
+      $title = reset($option);
+      if (is_array($title)) {
+        $title = \Drupal::service('renderer')->render($title);
+      }
+      return $title;
+    }
+    elseif (is_array($option) && !empty($option[0]['value'])) {
+      // Get value from default options.
+      // @see \Drupal\webform\Plugin\WebformElement\WebformTableTrait::prepare
+      return $option[0]['value'];
+    }
+    else {
+      return NULL;
+    }
   }
 
 }

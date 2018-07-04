@@ -168,6 +168,13 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       ],
     ];
     $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    if ($form['form_access_denied']['token_tree_link']) {
+      $form['form_access_denied']['token_tree_link']['#states'] = [
+        'visible' => [
+          ':input[name="form_login"]' => ['checked' => TRUE],
+        ],
+      ];
+    }
 
     // Form behaviors.
     $form['form_behaviors'] = [
@@ -197,6 +204,22 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'visible' => [':input[name="form_prepopulate_source_entity"]' => ['checked' => TRUE]],
       ],
     ];
+
+    if ($settings['draft'] !== WebformInterface::DRAFT_NONE) {
+      $form['form_behaviors']['form_reset_message'] = [
+        '#type' => 'webform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Currently loaded drafts will be deleted when the form is reset.'),
+        '#weight' => $form['form_behaviors']['form_reset']['#weight'] + 1,
+        '#states' => [
+          'visible' => [
+            ':input[name="form_reset"]' => ['checked' => TRUE],
+          ],
+        ],
+
+      ];
+    }
+
 
     // Wizard settings.
     $form['wizard_settings'] = [
@@ -253,6 +276,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['wizard_settings']['wizard_track'] = [
       '#type' => 'select',
       '#title' => $this->t('Track wizard progress in the URL by'),
+      '#description' => $this->t("Progress tracking allows analytic software to capture a multi-step form's progress."),
       '#options' => [
         'name' => $this->t("Page name (?page=contact)"),
         'index' => $this->t("Page index (?page=2)"),
@@ -295,7 +319,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['preview_settings']['preview_container']['preview_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Preview label'),
-      '#description' => $this->t("The text displayed within a multistep wizard's progress bar"),
+      '#description' => $this->t("The text displayed within a multi-step wizard's progress bar"),
       '#default_value' => $settings['preview_label'],
     ];
     $form['preview_settings']['preview_container']['preview_title'] = [
@@ -327,6 +351,12 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#title' => $this->t('Exclude empty elements'),
       '#return_value' => TRUE,
       '#default_value' => $settings['preview_exclude_empty'],
+    ];
+    $form['preview_settings']['preview_container']['elements']['preview_exclude_empty_checkbox'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude unselected checkboxes'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['preview_exclude_empty_checkbox'],
     ];
     $form['preview_settings']['preview_container']['preview_attributes'] = [
       '#type' => 'details',
@@ -515,7 +545,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       'form_reset' => [
         'group' => $this->t('Form'),
         'title' => $this->t('Display reset button'),
-        'form_description' => $this->t("If checked, users will be able to reset a form and restart multistep wizards."),
+        'form_description' => $this->t("If checked, users will be able to reset a form and restart multi-step wizards. Current drafts will be deleted when the form is reset."),
       ],
       'form_submit_once' => [
         'group' => $this->t('Form'),
@@ -556,7 +586,6 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         'title' => $this->t('Disable inline form errors'),
         'all_description' => $this->t('Inline form errors is disabled for all forms.'),
         'form_description' => $this->t('If checked, <a href=":href">inline form errors</a> will be disabled for this form.', [':href' => 'https://www.drupal.org/docs/8/core/modules/inline-form-errors/inline-form-errors-module-overview']),
-        'access' => (\Drupal::moduleHandler()->moduleExists('inline_form_errors') && floatval(\Drupal::VERSION) >= 8.5),
       ],
       'form_required' => [
         'group' => $this->t('Validation'),

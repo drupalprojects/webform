@@ -2,6 +2,7 @@
 
 namespace Drupal\webform\EntitySettings;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
@@ -106,6 +107,13 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#return_value' => TRUE,
       '#access' => $this->moduleHandler->moduleExists('webform_templates'),
       '#default_value' => $webform->isTemplate(),
+    ];
+    $form['general_settings']['archive'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Archived this webform'),
+      '#description' => $this->t('If checked, this webform will be closed and unavailable to webform blocks and fields.'),
+      '#return_value' => TRUE,
+      '#default_value' => $webform->isArchived(),
     ];
     $form['general_settings']['results_disabled'] = [
       '#type' => 'checkbox',
@@ -272,6 +280,85 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       '#default_value' => $settings['ajax_scroll_top'],
     ];
 
+    // Dialog settings.
+    if ($default_settings['dialog']) {
+      $rows = [];
+      // Preset examples.
+      foreach ($default_settings['dialog_options'] as $dialog_name => $dialog_options) {
+        $dialog_options += [
+          'width' => $this->t('auto'),
+          'height' => $this->t('auto'),
+        ];
+        $dialog_link = [
+          '#type' => 'link',
+          '#url' => $webform->toUrl(),
+          '#title' => $this->t('Test @title', ['@title' => $dialog_options['title']]),
+          '#attributes' => [
+            'class' => ['webform-dialog', 'webform-dialog-' . $dialog_name, 'button'],
+          ],
+        ];
+        $dialog_source = $dialog_link;
+        $row = [];
+        $row['title'] = $dialog_options['title'];
+        $row['dimensions'] = $dialog_options['width'] . ' x ' . $dialog_options['height'];
+        $row['link'] = ['data' => $dialog_link, 'nowrap' => 'nowrap'];
+        $row['source'] = [
+          'data' => [
+            '#theme' => 'webform_codemirror',
+            '#type' => 'html',
+            '#code' => (string) \Drupal::service('renderer')->renderPlain($dialog_source),
+            '#suffix' => '<br/>',
+          ],
+        ];
+        $rows[$dialog_name] = $row;
+      }
+
+      // Custom example.
+      $dialog_link = [
+        '#type' => 'link',
+        '#title' => $this->t('Test Custom'),
+        '#url' => $webform->toUrl(),
+        '#attributes' => [
+          'class' => ['webform-dialog', 'button'],
+          'data-dialog-options' => Json::encode([
+            'width' => 400,
+            'height' => 400,
+          ])
+        ],
+      ];
+      $dialog_source = $dialog_link;
+      $row = [];
+      $row['title'] = $this->t('Custom');
+      $row['dimensions'] = '400 x 400';
+      $row['link'] = ['data' => $dialog_link];
+      $row['source'] = [
+        'data' => [
+          '#theme' => 'webform_codemirror',
+          '#type' => 'html',
+          '#code' => (string) \Drupal::service('renderer')->renderPlain($dialog_source),
+          '#suffix' => '<br/>',
+        ],
+      ];
+      $rows['custom'] = $row;
+
+      $form['dialog_settings'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Dialog settings'),
+        '#description' => $this->t('Below are links and code snippets that can be inserted into your website to open this form in a modal dialog.'),
+        '#open' => TRUE,
+        'table' => [
+          '#type' => 'table',
+          '#header' => [
+            ['data' => $this->t('Title'), 'width' => '10%', 'class' => [RESPONSIVE_PRIORITY_LOW]],
+            ['data' => $this->t('Dimensions'), 'width' => '10%', 'class' => [RESPONSIVE_PRIORITY_LOW]],
+            ['data' => $this->t('Example'), 'width' => '10%', 'class' => [RESPONSIVE_PRIORITY_LOW]],
+            ['data' => $this->t('Source'), 'width' => '70%'],
+          ],
+          '#rows' => $rows,
+        ],
+      ];
+    }
+
     if ($this->currentUser()->hasPermission('administer webform')) {
       // Author information.
       $form['author_information'] = [
@@ -307,6 +394,8 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
     else {
       ksort($form['third_party_settings']);
     }
+
+    $form['#attached']['library'][] = 'webform/webform.admin.settings';
 
     return parent::form($form, $form_state);
   }

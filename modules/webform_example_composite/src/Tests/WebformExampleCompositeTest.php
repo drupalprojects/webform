@@ -32,13 +32,13 @@ class WebformExampleCompositeTest extends WebformTestBase {
     // This is a very lazy but easy way to check that the element is rendering
     // as expected.
     $this->assertRaw('<label for="edit-webform-example-composite-first-name">First name</label>');
-    $this->assertRaw('<input data-webform-composite-id="webform-example-composite--14--first_name" data-drupal-selector="edit-webform-example-composite-first-name" type="text" id="edit-webform-example-composite-first-name" name="webform_example_composite[first_name]" value="" size="60" maxlength="255" class="form-text" />');
+    $this->assertFieldById('edit-webform-example-composite-first-name');
     $this->assertRaw('<label for="edit-webform-example-composite-last-name">Last name</label>');
-    $this->assertRaw('<input data-webform-composite-id="webform-example-composite--14--last_name" data-drupal-selector="edit-webform-example-composite-last-name" type="text" id="edit-webform-example-composite-last-name" name="webform_example_composite[last_name]" value="" size="60" maxlength="255" class="form-text" />');
+    $this->assertFieldById('edit-webform-example-composite-last-name');
     $this->assertRaw('<label for="edit-webform-example-composite-date-of-birth">Date of birth</label>');
-    $this->assertRaw('<input type="date" data-drupal-selector="edit-webform-example-composite-date-of-birth" data-drupal-date-format="Y-m-d" id="edit-webform-example-composite-date-of-birth" name="webform_example_composite[date_of_birth]" value="" class="form-date" data-drupal-states="{&quot;enabled&quot;:{&quot;[data-webform-composite-id=\u0022webform-example-composite--14--first_name\u0022]&quot;:{&quot;filled&quot;:true},&quot;[data-webform-composite-id=\u0022webform-example-composite--14--last_name\u0022]&quot;:{&quot;filled&quot;:true}}}" />');
+    $this->assertFieldById('edit-webform-example-composite-date-of-birth');
     $this->assertRaw('<label for="edit-webform-example-composite-gender">Gender</label>');
-    $this->assertRaw('<select data-drupal-selector="edit-webform-example-composite-gender" id="edit-webform-example-composite-gender" name="webform_example_composite[gender]" class="form-select" data-drupal-states="{&quot;enabled&quot;:{&quot;[data-webform-composite-id=\u0022webform-example-composite--14--first_name\u0022]&quot;:{&quot;filled&quot;:true},&quot;[data-webform-composite-id=\u0022webform-example-composite--14--last_name\u0022]&quot;:{&quot;filled&quot;:true}}}"><option value="" selected="selected">- None -</option><option value="Male">Male</option><option value="Female">Female</option><option value="Transgender">Transgender</option></select>');
+    $this->assertFieldById('edit-webform-example-composite-gender');
 
     // Check webform element submission.
     $edit = [

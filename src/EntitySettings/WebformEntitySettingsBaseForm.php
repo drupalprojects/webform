@@ -49,7 +49,7 @@ abstract class WebformEntitySettingsBaseForm extends EntityForm {
     ];
     $this->logger('webform')->notice('Webform settings @label has been saved.', $context);
 
-    drupal_set_message($this->t('Webform settings %label has been saved.', ['%label' => $webform->label()]));
+    $this->messenger()->addStatus($this->t('Webform settings %label has been saved.', ['%label' => $webform->label()]));
   }
 
   /**

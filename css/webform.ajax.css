@@ -46,10 +46,10 @@
  * @see core/misc/dialog/dialog.position.js
  * @see \Drupal\webform\Utility\WebformDialogHelper::getModalDialogAttributes
  */
-.webform-modal {
+.webform-ui-dialog {
   top: 50px !important;
 }
 
-.toolbar-tray-open.toolbar-horizontal .webform-modal {
+.toolbar-tray-open.toolbar-horizontal .webform-ui-dialog {
   top: 90px !important;
 }

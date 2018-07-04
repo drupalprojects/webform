@@ -8,29 +8,12 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_flexbox
 title: 'Test: Element: Flexbox'
 description: 'Test flexbox layout.'
 category: 'Test: Element'
 elements: |
-  flexbox_processed_text:
-    '#type': webform_flexbox
-    flex_processed_text_left:
-      '#type': processed_text
-      '#title': 'Advanced HTML/Text 01'
-    flex_processed_text_right:
-      '#type': processed_text
-      '#title': 'Advanced HTML/Text 02'
-  flexbox_webform_markup:
-    '#type': webform_flexbox
-    flex_webform_markup_left:
-      '#type': webform_markup
-      '#title': 'Basic HTML 01'
-      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
-    flex_webform_markup_right:
-      '#type': webform_markup
-      '#title': 'Basic HTML 02'
-      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
   flexbox_container:
     '#type': webform_flexbox
     flex_container_left:
@@ -57,44 +40,6 @@ elements: |
     flex_fieldset_right:
       '#type': fieldset
       '#title': 'Fieldset 02'
-  flexbox_item:
-    '#type': webform_flexbox
-    flex_item_left:
-      '#type': item
-      '#title': 'Item 01'
-      '#markup': '{markup}'
-      '#field_prefix': '{field_prefix}'
-      '#field_suffix': '{field_suffix}'
-      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
-    flex_item_right:
-      '#type': item
-      '#title': 'Item 02'
-      '#markup': '{markup}'
-      '#field_prefix': '{field_prefix}'
-      '#field_suffix': '{field_suffix}'
-      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
-  flexbox_label:
-    '#type': webform_flexbox
-    flex_label_left:
-      '#type': label
-      '#title': 'Label 01'
-    flex_label_right:
-      '#type': label
-      '#title': 'Label 02'
-  flexbox_webform_message:
-    '#type': webform_flexbox
-    flex_webform_message_left:
-      '#type': webform_message
-      '#title': 'Message 01'
-      '#message_type': warning
-      '#message_message': 'This is a <strong>warning</strong> message.'
-      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
-    flex_webform_message_right:
-      '#type': webform_message
-      '#title': 'Message 02'
-      '#message_type': warning
-      '#message_message': 'This is a <strong>warning</strong> message.'
-      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
   flexbox_webform_section:
     '#type': webform_flexbox
     flex_webform_section_left:
@@ -111,14 +56,22 @@ elements: |
     flex_table_right:
       '#type': table
       '#title': 'Table 02'
-  flexbox_webform_address:
+  flexbox_address:
     '#type': webform_flexbox
-    flex_webform_address_left:
-      '#type': webform_address
-      '#title': 'Address 01'
-    flex_webform_address_right:
-      '#type': webform_address
-      '#title': 'Address 02'
+    flex_address_left:
+      '#type': address
+      '#title': 'Advanced address 01'
+    flex_address_right:
+      '#type': address
+      '#title': 'Advanced address 02'
+  flexbox_processed_text:
+    '#type': webform_flexbox
+    flex_processed_text_left:
+      '#type': processed_text
+      '#title': 'Advanced HTML/Text 01'
+    flex_processed_text_right:
+      '#type': processed_text
+      '#title': 'Advanced HTML/Text 02'
   flexbox_webform_audio_file:
     '#type': webform_flexbox
     flex_webform_audio_file_left:
@@ -135,6 +88,24 @@ elements: |
     flex_webform_autocomplete_right:
       '#type': webform_autocomplete
       '#title': 'Autocomplete 02'
+  flexbox_webform_address:
+    '#type': webform_flexbox
+    flex_webform_address_left:
+      '#type': webform_address
+      '#title': 'Basic address 01'
+    flex_webform_address_right:
+      '#type': webform_address
+      '#title': 'Basic address 02'
+  flexbox_webform_markup:
+    '#type': webform_flexbox
+    flex_webform_markup_left:
+      '#type': webform_markup
+      '#title': 'Basic HTML 01'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
+    flex_webform_markup_right:
+      '#type': webform_markup
+      '#title': 'Basic HTML 02'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
   flexbox_webform_buttons:
     '#type': webform_flexbox
     flex_webform_buttons_left:
@@ -243,38 +214,6 @@ elements: |
     flex_color_right:
       '#type': color
       '#title': 'Color 02'
-  flexbox_webform_composite:
-    '#type': webform_flexbox
-    flex_webform_composite_left:
-      '#type': webform_custom_composite
-      '#title': 'Composite custom 01'
-      '#element':
-        name:
-          '#type': textfield
-          '#title': Name
-          '#title_display': invisible
-        gender:
-          '#type': select
-          '#title': Gender
-          '#title_display': invisible
-          '#options':
-            Male: Male
-            Female: Female
-    flex_webform_composite_right:
-      '#type': webform_custom_composite
-      '#title': 'Composite custom 02'
-      '#element':
-        name:
-          '#type': textfield
-          '#title': Name
-          '#title_display': invisible
-        gender:
-          '#type': select
-          '#title': Gender
-          '#title_display': invisible
-          '#options':
-            Male: Male
-            Female: Female
   flexbox_webform_computed_token:
     '#type': webform_flexbox
     flex_webform_computed_token_left:
@@ -303,6 +242,38 @@ elements: |
     flex_webform_contact_right:
       '#type': webform_contact
       '#title': 'Contact 02'
+  flexbox_webform_custom_composite:
+    '#type': webform_flexbox
+    flex_webform_custom_composite_left:
+      '#type': webform_custom_composite
+      '#title': 'Custom composite 01'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+          '#options':
+            Male: Male
+            Female: Female
+    flex_webform_custom_composite_right:
+      '#type': webform_custom_composite
+      '#title': 'Custom composite 02'
+      '#element':
+        name:
+          '#type': textfield
+          '#title': Name
+          '#title_display': invisible
+        gender:
+          '#type': select
+          '#title': Gender
+          '#title_display': invisible
+          '#options':
+            Male: Male
+            Female: Female
   flexbox_date:
     '#type': webform_flexbox
     flex_date_left:
@@ -467,14 +438,12 @@ elements: |
         class:
           - webform-horizontal-rule--dotted
           - webform-horizontal-rule--thick
-      '#title': 'webform_horizontal_rule 01'
     flex_webform_horizontal_rule_right:
       '#type': webform_horizontal_rule
       '#attributes':
         class:
           - webform-horizontal-rule--dotted
           - webform-horizontal-rule--thick
-      '#title': 'webform_horizontal_rule 02'
   flexbox_webform_image_file:
     '#type': webform_flexbox
     flex_webform_image_file_left:
@@ -513,6 +482,30 @@ elements: |
         bear_3:
           text: 'Bear 3'
           src: 'https://www.placebear.com/120/100'
+  flexbox_item:
+    '#type': webform_flexbox
+    flex_item_left:
+      '#type': item
+      '#title': 'Item 01'
+      '#markup': '{markup}'
+      '#field_prefix': '{field_prefix}'
+      '#field_suffix': '{field_suffix}'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
+    flex_item_right:
+      '#type': item
+      '#title': 'Item 02'
+      '#markup': '{markup}'
+      '#field_prefix': '{field_prefix}'
+      '#field_suffix': '{field_suffix}'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
+  flexbox_label:
+    '#type': webform_flexbox
+    flex_label_left:
+      '#type': label
+      '#title': 'Label 01'
+    flex_label_right:
+      '#type': label
+      '#title': 'Label 02'
   flexbox_language_select:
     '#type': webform_flexbox
     flex_language_select_left:
@@ -599,6 +592,20 @@ elements: |
         four: Four
         five: Five
         six: Six
+  flexbox_webform_message:
+    '#type': webform_flexbox
+    flex_webform_message_left:
+      '#type': webform_message
+      '#title': 'Message 01'
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
+    flex_webform_message_right:
+      '#type': webform_message
+      '#title': 'Message 02'
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+      '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
   flexbox_webform_name:
     '#type': webform_flexbox
     flex_webform_name_left:
@@ -685,7 +692,7 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#output': right
+      '#output': below
       '#output__field_prefix': $
       '#output__field_suffix': '.00'
     flex_range_right:
@@ -694,7 +701,7 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#output': right
+      '#output': below
       '#output__field_prefix': $
       '#output__field_suffix': '.00'
   flexbox_webform_rating:
@@ -993,10 +1000,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -1014,6 +1024,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_element_html_markup
 title: 'Test: Element: HTML Markup'
 description: 'Test element HTML markup support by underlining all titles, descriptions, prefixes, and suffixes.'
@@ -98,7 +99,7 @@ elements: |
       '#min': 0
       '#max': 100
       '#step': 1
-      '#output': right
+      '#output': below
       '#output__field_prefix': $
       '#output__field_suffix': '.00'
     webform_rating:
@@ -158,9 +159,6 @@ elements: |
       '#message_type': warning
       '#message_message': 'This is a <strong>warning</strong> message.'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/77245">Issue #77245: A place for JavaScript status messages</a>'
-    table:
-      '#type': table
-      '#title': '<u>Table</u>'
   file_upload_elements:
     '#type': details
     '#title': '<u>File upload elements</u>'
@@ -376,9 +374,6 @@ elements: |
       '#field_prefix': '<u>{field_prefix}</u>'
       '#field_suffix': '<u>{field_suffix}</u>'
       '#description': '<b>Known Issues:</b><br /><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
-    label:
-      '#type': label
-      '#title': '<u>Label</u>'
     webform_section:
       '#type': webform_section
       '#title': '<u>Section</u>'
@@ -502,6 +497,13 @@ elements: |
       '#vocabulary': tags
       '#multiple': true
       '#select2': true
+  markup:
+    '#type': details
+    '#title': '<u>Markup</u>'
+    '#open': true
+    label:
+      '#type': label
+      '#title': '<u>Label</u>'
   other_elements:
     '#type': details
     '#title': '<u>Other elements</u>'
@@ -512,6 +514,9 @@ elements: |
     machine_name:
       '#type': machine_name
       '#title': '<u>Machine name</u>'
+    table:
+      '#type': table
+      '#title': '<u>Table</u>'
 css: ''
 javascript: ''
 settings:
@@ -547,10 +552,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -568,6 +576,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false

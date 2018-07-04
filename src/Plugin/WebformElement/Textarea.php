@@ -54,6 +54,7 @@ class Textarea extends TextBase {
       'counter_message' => '',
       // Attributes.
       'wrapper_attributes' => [],
+      'label_attributes' => [],
       'attributes' => [],
       // Submission display.
       'format' => $this->getItemDefaultFormat(),

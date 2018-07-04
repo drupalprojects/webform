@@ -5,6 +5,7 @@
  * Preprocessors and helper functions to make theming easier.
  */
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
@@ -15,6 +16,7 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\WebformMessageManagerInterface;
+use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -169,7 +171,7 @@ function template_preprocess_webform_confirmation(array &$variables) {
   }
 
   // Set message.
-  $variables['message'] = $message_manager->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION);
+  $variables['message'] = $message_manager->build(WebformMessageManagerInterface::SUBMISSION_CONFIRMATION_MESSAGE);
 
   // Set attributes.
   $variables['attributes'] = new Attribute($settings['confirmation_attributes']);
@@ -232,6 +234,11 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
 
   /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
   $webform_submission = $variables['webform_submission'];
+  $webform = $webform_submission->getWebform();
+
+  // Webform id and title for context.
+  $variables['webform_id'] = $webform->id();
+  $variables['webform_title'] = $webform->label();
 
   // Get the route name, parameters, and source entity for the current page.
   // This ensures that the user stays within their current context as they are
@@ -277,8 +284,9 @@ function template_preprocess_webform_submission_navigation(array &$variables) {
 function template_preprocess_webform_submission(array &$variables) {
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   $variables['webform_submission'] = $variables['elements']['#webform_submission'];
-  $variables['webform'] = $variables['elements']['#webform_submission']->getWebform();
-
+  if ($variables['webform_submission'] instanceof WebformSubmissionInterface) {
+    $variables['webform'] = $variables['webform_submission']->getWebform();
+  }
 }
 
 /**
@@ -789,18 +797,19 @@ function template_preprocess_webform_composite_telephone(array &$variables) {
  *   An associative array containing the following key:
  *   - element: The webform element.
  *   - help: The help content.
+ *   - attributes: The help attributes.
  */
 function template_preprocess_webform_element_help(array &$variables) {
+  $attributes = (isset($variables['attributes'])) ? $variables['attributes'] : [];
+  $attributes['title'] = $variables['help'];
+  $attributes['class'][] = 'webform-element-help';
+  $attributes['data-webform-help'] = WebformHtmlEditor::stripTags($variables['help']);
+
   $variables['help_icon'] = [
     '#type' => 'link',
     '#title' => '?',
     '#url' => Url::fromRoute('<none>', [], ['fragment' => 'help']),
-    '#attributes' => [
-      'title' => $variables['help'],
-      // Add 'data-webform-help' attribute which support HTML markup.
-      'data-webform-help' => WebformHtmlEditor::stripTags($variables['help']),
-      'class' => ['webform-element-help'],
-    ],
+    '#attributes' => $attributes,
   ];
 }
 
@@ -826,6 +835,11 @@ function template_preprocess_webform_element_more(array &$variables) {
   }
 
   $variables['attributes'] = new Attribute($variables['attributes']);
+
+  // Make sure there is a unique id.
+  if (empty($variables['id'])) {
+    $variables['id'] = Html::getUniqueId('webform-element-more');
+  }
 }
 
 /**

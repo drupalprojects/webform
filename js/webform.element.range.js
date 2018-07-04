@@ -66,7 +66,6 @@
           return;
         }
 
-
         $element.css('position', 'relative');
 
         $input.on('input', function () {

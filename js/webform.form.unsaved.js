@@ -36,7 +36,15 @@
         });
       }
 
-      $('.js-webform-unsaved button, .js-webform-unsaved input[type="submit"]', context).once('webform-unsaved').on('click', function () {
+      $('.js-webform-unsaved button, .js-webform-unsaved input[type="submit"]', context).once('webform-unsaved').on('click', function (event) {
+        // For reset button we must confirm unsaved changes before the
+        // before unload event handler.
+        if ($(this).hasClass('webform-button--reset') && unsaved) {
+          if (!window.confirm(Drupal.t('Changes you made may not be saved.') + '\n\n' + Drupal.t('Press OK to leave this page or Cancel to stay.'))) {
+            return false;
+          }
+        }
+
         unsaved = false;
       });
     }
@@ -67,7 +75,7 @@
       var href = $(evt.target).closest('a').attr('href');
       if (href !== undefined && !(href.match(/^#/) || href.trim() === '')) {
         if ($(window).triggerHandler('beforeunload')) {
-          if (!confirm(Drupal.t('Changes you made may not be saved.') + '\n\n' + Drupal.t('Press OK to leave this page or Cancel to stay.'))) {
+          if (!window.confirm(Drupal.t('Changes you made may not be saved.') + '\n\n' + Drupal.t('Press OK to leave this page or Cancel to stay.'))) {
             return false;
           }
         }

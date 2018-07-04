@@ -15,6 +15,25 @@ thead th .dropbutton {
 }
 
 /**
+ * Actions.
+ *
+ * Secondary buttons when .button--primary is removed.
+ * @see Drupal.behaviors.webformUiElementsActionsSecondary
+ */
+.action-links .button--secondary.button--primary {
+  display: none;
+}
+
+/**
+ * Hide secondary buttons for mobile.
+ */
+@media screen and (max-width: 600px) {
+  .action-links .button--secondary {
+    display: none;
+  }
+}
+
+/**
  * Elements (/admin/structure/webform/manage/{webform})
  */
 .webform-ui-elements-table .button {
@@ -68,6 +87,19 @@ thead th .dropbutton {
   border-bottom: 1px solid #a6a6a6;
   background-color: #f5f5f2;
   font-weight: bold;
+}
+
+@media screen and (max-width: 1280px) {
+  .js-off-canvas-dialog-open .webform-ui-elements-table th,
+  .js-off-canvas-dialog-open .webform-ui-elements-table td {
+    display: none;
+  }
+  .js-off-canvas-dialog-open .webform-ui-elements-table th:first-child,
+  .js-off-canvas-dialog-open .webform-ui-elements-table th:last-child,
+  .js-off-canvas-dialog-open .webform-ui-elements-table td:first-child,
+  .js-off-canvas-dialog-open .webform-ui-elements-table td:last-child {
+    display: table-cell;
+  }
 }
 
 /**

@@ -3,6 +3,7 @@
 namespace Drupal\webform\Plugin;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -113,6 +114,14 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *   The description of the plugin instance.
    */
   public function getPluginDescription();
+
+  /**
+   * Gets the category of the plugin instance.
+   *
+   * @return string
+   *   The category of the plugin instance.
+   */
+  public function getPluginCategory();
 
   /**
    * Gets the type name (aka id) of the plugin instance with the 'webform_' prefix.
@@ -335,10 +344,10 @@ interface WebformElementInterface extends PluginInspectionInterface, PluginFormI
    *
    * @param array $element
    *   An element.
-   * @param \Drupal\webform\WebformSubmissionInterface $webform_submission
-   *   A webform submission.
+   * @param \Drupal\Core\Entity\EntityInterface|null $entity
+   *   A webform or webform submission entity.
    */
-  public function replaceTokens(array &$element, WebformSubmissionInterface $webform_submission = NULL);
+  public function replaceTokens(array &$element, EntityInterface $entity = NULL);
 
   /**
    * Display element disabled warning.

@@ -23,21 +23,17 @@ class WebformElementSectionTest extends WebformElementTestBase {
     $this->drupalGet('webform/test_element_section');
 
     // Check section element.
-    $this->assertRaw('<section data-drupal-selector="edit-webform-section" aria-describedby="edit-webform-section--description" id="edit-webform-section" class="js-form-item form-item js-form-wrapper form-wrapper webform-section">');
-
-    // Check section help.
-    $this->assertRaw('<h2 class="webform-section-title">webform_section<a href="#help" title="{This is help text}" data-webform-help="{This is help text}" class="webform-element-help">?</a>');
-
-    // Check section description.
-    $this->assertRaw('<div id="edit-webform-section--description" class="description">{This is a description}</div>');
-
-    // Check section required.
-    $this->assertRaw('<section data-drupal-selector="edit-webform-section-required" id="edit-webform-section-required" class="required js-form-item form-item js-form-wrapper form-wrapper webform-section" required="required" aria-required="true">');
-    $this->assertRaw('<h2 class="webform-section-title js-form-required form-required">webform_section_required</h2>');
+    $this->assertRaw('<section data-drupal-selector="edit-webform-section" aria-describedby="edit-webform-section--description" id="edit-webform-section" class="required js-form-item form-item js-form-wrapper form-wrapper webform-section" required="required" aria-required="true">');
+    $this->assertRaw('<h2 class="webform-section-title js-form-required form-required">webform_section<a href="#help" title="This is help text." class="webform-element-help" data-webform-help="This is help text.">?</a>');
+    $this->assertRaw('<div class="description"><div id="edit-webform-section--description" class="webform-element-description">This is a description.</div>');
+    $this->assertRaw('<div id="edit-webform-section--more" class="js-webform-element-more webform-element-more">');
 
     // Check custom h5 title tag.
     $this->assertRaw('<section data-drupal-selector="edit-webform-section-title-custom" id="edit-webform-section-title-custom" class="js-form-item form-item js-form-wrapper form-wrapper webform-section">');
     $this->assertRaw('<h5 style="color: red" class="webform-section-title">webform_section_title_custom</h5>');
+
+    // Check section title_display: invisible.
+    $this->assertRaw('<h2 class="visually-hidden webform-section-title">webform_section_title_invisible</h2>');
 
     // Check change default title tag.
     \Drupal::configFactory()->getEditable('webform.settings')
@@ -45,8 +41,8 @@ class WebformElementSectionTest extends WebformElementTestBase {
       ->save();
 
     $this->drupalGet('webform/test_element_section');
-    $this->assertNoRaw('<h2 class="webform-section-title">');
-    $this->assertRaw('<address class="webform-section-title">');
+    $this->assertNoRaw('<h2 class="webform-section-title js-form-required form-required">');
+    $this->assertRaw('<address class="webform-section-title js-form-required form-required">');
   }
 
 }

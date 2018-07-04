@@ -51,6 +51,18 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
     $theme = \Drupal\bootstrap\Bootstrap::getTheme();
     $smart_description_enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
   }
+
+  // We need to set $element['#smart_description'] to false if the element's
+  // description_display is set to 'before' or 'after' otherwise Bootstrap will
+  // display as a tooltip regardless of the setting.
+  if ($smart_description_enabled
+    && isset($element['#description'])
+    && isset($element['#description_display'])
+    && empty($element['#smart_description'])
+    && ($element['#description_display'] === 'after' || $element['#description_display'] === 'before')) {
+    $element['#smart_description'] = FALSE;
+  }
+
   if ($smart_description_enabled && isset($element['#description']) && is_array($element['#description']) && (empty($element['#smart_description']) || $element['#smart_description'] === TRUE)) {
     $element['#description'] = \Drupal::service('renderer')->renderPlain($element['#description']);
   }
@@ -64,22 +76,17 @@ function webform_bootstrap_webform_element_alter(array &$element, FormStateInter
 
   // Tweak element types.
   if (isset($element['#type'])) {
-    switch ($element['#type']) {
-      case 'webform_checkboxes_other':
-      case 'webform_buttons':
-      case 'webform_buttons_other':
-      case 'webform_entity_checkboxes':
-      case 'webform_entity_radios':
-      case 'webform_radios_other':
-      case 'webform_select_other':
-      case 'webform_term_checkboxes':
-      case 'webform_toggles':
-        // Prevent elements that extend radios and checkboxes from being wrapped
-        // in a fieldset.
-        // @see \Drupal\bootstrap\Plugin\Alter\ElementInfo::alter
-        $element['#bootstrap_panel'] = FALSE;
-        break;
-
+    $element_info = \Drupal::service('element_info')->getInfo($element['#type']);
+    if (isset($element_info['#pre_render'])) {
+      foreach ($element_info['#pre_render'] as $pre_render) {
+        if (is_array($pre_render) && in_array($pre_render[1], ['preRenderCompositeFormElement', 'preRenderWebformCompositeFormElement'])) {
+          // Prevent elements that extend radios and checkboxes from being wrapped
+          // in a fieldset.
+          // @see \Drupal\bootstrap\Plugin\Alter\ElementInfo::alter
+          $element['#bootstrap_panel'] = FALSE;
+          break;
+        }
+      }
     }
   }
 }
@@ -93,7 +100,10 @@ function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $asset
   }
 
   // Make sure jQuery tooltip is never loaded.
-  unset($javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js']);
+  unset(
+    $javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js'],
+    $javascript['core/assets/vendor/jquery.ui/ui/widgets/tooltip-min.js']
+  );
 }
 
 /**
@@ -135,6 +145,41 @@ function webform_bootstrap_preprocess_input(&$variables) {
       $element['#title'] = t('Remove');
       $element['#icon'] = \Drupal\bootstrap\Bootstrap::glyphicon('minus-sign');
     }
+  }
+}
+
+/**
+ * Implements template_preprocess_fieldset().
+ */
+function webform_bootstrap_preprocess_fieldset(&$variables) {
+  if (!_webform_bootstrap_is_active_theme()) {
+    return;
+  }
+
+  // Make sure that the core/modules/system/templates/fieldset.html.twig
+  // template is being used because this the template that we are fixing.
+  // Caching the info just-in-case there are a lot of fieldsets.
+  static $is_system_fieldset;
+  if (!isset($is_system_fieldset)) {
+    /** @var \Drupal\Core\Utility\ThemeRegistry $theme_registry */
+    $theme_registry = \Drupal::service('theme.registry')->getRuntime();
+    $info = $theme_registry->get('fieldset');
+    $is_system_fieldset = ($info['path'] === 'core/modules/system/templates') ? TRUE : FALSE;
+  }
+  if (!$is_system_fieldset) {
+    return;
+  }
+
+  // Style fieldset error messages to match form element error messages.
+  // @see form-element.html.twig
+  if (!empty($variables['errors'])) {
+    $variables['errors'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['form-item--error-message', 'alert', 'alert-danger', 'alert-sm'],
+      ],
+      'content' => ['#markup' => $variables['errors']],
+    ];
   }
 }
 

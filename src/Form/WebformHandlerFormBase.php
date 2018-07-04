@@ -264,11 +264,11 @@ abstract class WebformHandlerFormBase extends FormBase {
 
     if ($this instanceof WebformHandlerAddForm) {
       $this->webform->addWebformHandler($this->webformHandler);
-      drupal_set_message($this->t('The webform handler was successfully added.'));
+      $this->messenger()->addStatus($this->t('The webform handler was successfully added.'));
     }
     else {
       $this->webform->updateWebformHandler($this->webformHandler);
-      drupal_set_message($this->t('The webform handler was successfully updated.'));
+      $this->messenger()->addStatus($this->t('The webform handler was successfully updated.'));
     }
 
     $form_state->setRedirectUrl($this->webform->toUrl('handlers', ['query' => ['update' => $this->webformHandler->getHandlerId()]]));

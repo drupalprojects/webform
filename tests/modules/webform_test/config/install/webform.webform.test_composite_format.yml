@@ -8,6 +8,7 @@ open: null
 close: null
 uid: null
 template: false
+archive: false
 id: test_composite_format
 title: 'Test: Composite: Format composite'
 description: 'Test composite element formatting.'
@@ -115,40 +116,85 @@ elements: |
     '#type': details
     '#title': 'Composite elements'
     '#open': true
+    address:
+      '#type': details
+      '#title': 'Advanced address'
+      address_value:
+        '#type': address
+        '#title': 'Advanced address (Value)'
+        '#default_value':
+          given_name: John
+          family_name: Smith
+          organization: 'Google Inc.'
+          address_line1: '1098 Alta Ave'
+          postal_code: '94043'
+          locality: 'Mountain View'
+          administrative_area: CA
+          country_code: US
+          langcode: en
+        '#format': value
+      address_raw:
+        '#type': address
+        '#title': 'Advanced address (Raw value)'
+        '#default_value':
+          given_name: John
+          family_name: Smith
+          organization: 'Google Inc.'
+          address_line1: '1098 Alta Ave'
+          postal_code: '94043'
+          locality: 'Mountain View'
+          administrative_area: CA
+          country_code: US
+          langcode: en
+        '#format': raw
+      address_list:
+        '#type': address
+        '#title': 'Advanced address (List)'
+        '#default_value':
+          given_name: John
+          family_name: Smith
+          organization: 'Google Inc.'
+          address_line1: '1098 Alta Ave'
+          postal_code: '94043'
+          locality: 'Mountain View'
+          administrative_area: CA
+          country_code: US
+          langcode: en
+        '#format': list
     webform_address:
       '#type': details
-      '#title': Address
+      '#title': 'Basic address'
       webform_address_value:
         '#type': webform_address
-        '#title': 'Address (Value)'
+        '#title': 'Basic address (Value)'
         '#default_value':
           address: '10 Main Street'
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': value
       webform_address_raw:
         '#type': webform_address
-        '#title': 'Address (Raw value)'
+        '#title': 'Basic address (Raw value)'
         '#default_value':
           address: '10 Main Street'
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': raw
       webform_address_list:
         '#type': webform_address
-        '#title': 'Address (List)'
+        '#title': 'Basic address (List)'
         '#default_value':
           address: '10 Main Street'
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': list
     webform_contact:
@@ -166,7 +212,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': value
       webform_contact_raw:
@@ -181,7 +227,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': raw
       webform_contact_list:
@@ -196,7 +242,7 @@ elements: |
           address_2: '10 Main Street'
           city: Springfield
           state_province: Alabama
-          postal_code: Loremipsum
+          postal_code: '11111'
           country: Afghanistan
         '#format': list
     webform_link:
@@ -427,10 +473,13 @@ settings:
   submission_label: ''
   submission_log: false
   submission_user_columns: {  }
+  submission_user_duplicate: false
   submission_login: false
   submission_login_message: ''
   submission_exception_message: ''
   submission_locked_message: ''
+  previous_submission_message: ''
+  previous_submissions_message: ''
   autofill: false
   autofill_message: ''
   autofill_excluded_elements: {  }
@@ -448,6 +497,7 @@ settings:
   preview_attributes: {  }
   preview_excluded_elements: {  }
   preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
   draft: none
   draft_multiple: false
   draft_auto_save: false
@@ -532,20 +582,21 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: default
+      to_mail: _default
       to_options: {  }
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      from_mail: default
+      from_mail: _default
       from_options: {  }
-      from_name: default
-      subject: default
-      body: default
+      from_name: _default
+      subject: _default
+      body: _default
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
+      exclude_empty_checkbox: false
       html: false
       attachments: false
       twig: false
@@ -564,20 +615,21 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: default
+      to_mail: _default
       to_options: {  }
       cc_mail: ''
       cc_options: {  }
       bcc_mail: ''
       bcc_options: {  }
-      from_mail: default
+      from_mail: _default
       from_options: {  }
-      from_name: default
-      subject: default
-      body: default
+      from_name: _default
+      subject: _default
+      body: _default
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
+      exclude_empty_checkbox: false
       html: true
       attachments: false
       twig: false

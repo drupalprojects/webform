@@ -44,7 +44,6 @@ class WebformElementHelperTest extends UnitTestCase {
     $tests[] = [['#title' => ''], FALSE];
     $tests[] = [['#title' => NULL], FALSE];
     $tests[] = [['#title' => 'Test', '#title_display' => 'invisible'], FALSE];
-    $tests[] = [['#title' => 'Test', '#title_display' => 'attribute'], FALSE];
     return $tests;
   }
 

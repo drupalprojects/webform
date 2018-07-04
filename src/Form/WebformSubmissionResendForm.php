@@ -179,7 +179,7 @@ class WebformSubmissionResendForm extends FormBase {
     $t_args = [
       '%label' => $message_handler->label(),
     ];
-    drupal_set_message($this->t('Successfully re-sent %label.', $t_args));
+    $this->messenger()->addStatus($this->t('Successfully re-sent %label.', $t_args));
   }
 
   /**

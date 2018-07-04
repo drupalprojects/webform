@@ -5,6 +5,7 @@ namespace Drupal\webform\Plugin\DevelGenerate;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\devel_generate\DevelGenerateBase;
@@ -90,6 +91,13 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
   protected $webformEntityReferenceManager;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a WebformSubmissionDevelGenerate object.
    *
    * @param array $configuration
@@ -104,20 +112,22 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    *   The database.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    * @param \Drupal\webform\WebformSubmissionGenerateInterface $webform_submission_generate
    *   The webform submission generator.
    * @param \Drupal\webform\WebformEntityReferenceManagerInterface $webform_entity_reference_manager
    *   The webform entity reference manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack, Connection $database, EntityTypeManagerInterface $entity_type_manager, WebformSubmissionGenerateInterface $webform_submission_generate, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack, Connection $database, EntityTypeManagerInterface $entity_type_manager, MessengerInterface $messenger, WebformSubmissionGenerateInterface $webform_submission_generate, WebformEntityReferenceManagerInterface $webform_entity_reference_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->request = $request_stack->getCurrentRequest();
     $this->database = $database;
     $this->entityTypeManager = $entity_type_manager;
+    $this->messenger = $messenger;
     $this->webformSubmissionGenerate = $webform_submission_generate;
     $this->webformEntityReferenceManager = $webform_entity_reference_manager;
-
     $this->webformStorage = $entity_type_manager->getStorage('webform');
     $this->webformSubmissionStorage = $entity_type_manager->getStorage('webform_submission');
   }
@@ -127,10 +137,13 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-      $configuration, $plugin_id, $plugin_definition,
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
       $container->get('request_stack'),
       $container->get('database'),
       $container->get('entity_type.manager'),
+      $container->get('messenger'),
       $container->get('webform_submission.generate'),
       $container->get('webform.entity_reference_manager')
     );
@@ -140,7 +153,7 @@ class WebformSubmissionDevelGenerate extends DevelGenerateBase implements Contai
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    drupal_set_message($this->t('Please note that no emails will be sent while generating webform submissions.'), 'warning');
+    $this->messenger->addWarning($this->t('Please note that no emails will be sent while generating webform submissions.'));
 
     $options = [];
     foreach ($this->webformStorage->loadMultiple() as $webform) {

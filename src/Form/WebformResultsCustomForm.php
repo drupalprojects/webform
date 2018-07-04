@@ -123,12 +123,16 @@ class WebformResultsCustomForm extends FormBase {
     $form['sort'] = [
       '#prefix' => '<div class="container-inline">',
       '#type' => 'select',
+      '#title' => $this->t('Sort by'),
+      '#title_display' => 'invisible',
       '#field_prefix' => $this->t('Sort by'),
       '#options' => $sort_options,
       '#default_value' => $sort,
     ];
     $form['direction'] = [
       '#type' => 'select',
+      '#title' => $this->t('Direction'),
+      '#title_display' => 'invisible',
       '#field_prefix' => ' ' . $this->t('in', [], ['context' => 'Sort by {sort} in {direction} order']) . ' ',
       '#field_suffix' => ' ' . $this->t('order', [], ['context' => 'Sort by {sort} in {direction} order']),
       '#options' => [
@@ -143,6 +147,8 @@ class WebformResultsCustomForm extends FormBase {
     $limit = $this->webform->getState($this->getStateKey('limit'), NULL);
     $form['limit'] = [
       '#type' => 'select',
+      '#title' => $this->t('Results per page'),
+      '#title_display' => 'invisible',
       '#field_prefix' => $this->t('Show', [], ['context' => 'Show {limit} results per page']),
       '#field_suffix' => $this->t('results per page'),
       '#options' => [
@@ -154,7 +160,7 @@ class WebformResultsCustomForm extends FormBase {
         '1000' => '1000',
         '0' => $this->t('All'),
       ],
-      '#default_value' => ($limit !== NULL) ? $limit : 50,
+      '#default_value' => ($limit !== NULL) ? $limit : 20,
     ];
 
     // Default configuration.
@@ -292,7 +298,7 @@ class WebformResultsCustomForm extends FormBase {
     }
 
     // Display message.
-    drupal_set_message($this->t('The customized table has been saved.'));
+    $this->messenger()->addStatus($this->t('The customized table has been saved.'));
 
     // Set redirect.
     $redirect_url = $this->requestHandler->getUrl($this->webform, $this->sourceEntity, 'webform.results_submissions');
@@ -314,7 +320,7 @@ class WebformResultsCustomForm extends FormBase {
     $this->webform->deleteState($this->getStateKey('limit'));
     $this->webform->deleteState($this->getStateKey('default'));
     $this->webform->deleteState($this->getStateKey('format'));
-    drupal_set_message($this->t('The customized table has been reset.'));
+    $this->messenger()->addStatus($this->t('The customized table has been reset.'));
   }
 
   /**

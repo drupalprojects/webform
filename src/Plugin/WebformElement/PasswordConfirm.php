@@ -25,6 +25,11 @@ class PasswordConfirm extends Password {
   public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
     parent::prepare($element, $webform_submission);
     $element['#element_validate'][] = [get_class($this), 'validatePasswordConfirm'];
+
+    // Replace 'form_element' theme wrapper with composite form element.
+    // @see \Drupal\Core\Render\Element\PasswordConfirm
+    $element['#pre_render'] = [[get_called_class(), 'preRenderWebformCompositeFormElement']];
+    $element['#theme_wrappers'] = [];
   }
 
   /**
@@ -63,6 +68,21 @@ class PasswordConfirm extends Password {
     $name = $element['#name'];
     $value = $form_state->getValue($name);
     $form_state->setValue($name, $value['pass1']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+
+    // Remove unsupported title and description display from composite elements.
+    if ($this->isComposite()) {
+      unset($form['form']['display_container']['title_display']['#options']['inline']);
+      unset($form['form']['display_container']['description_display']['#options']['tooltip']);
+    }
+
+    return $form;
   }
 
 }

@@ -117,9 +117,9 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
   /**
    * {@inheritdoc}
    */
-  public function loadMultiple(array $ids = NULL) {
+  protected function doLoadMultiple(array $ids = NULL) {
     /** @var \Drupal\webform\WebformSubmissionInterface[] $webform_submissions */
-    $webform_submissions = parent::loadMultiple($ids);
+    $webform_submissions = parent::doLoadMultiple($ids);
     $this->loadData($webform_submissions);
     return $webform_submissions;
   }
@@ -637,17 +637,17 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
       foreach ($elements as $element) {
         /** @var \Drupal\webform\Plugin\WebformElementInterface $element_plugin */
         $element_plugin = $element_manager->createInstance($element['#type']);
+        // Replace tokens which can be used in an element's #title.
+        $element_plugin->replaceTokens($element, $webform);
         $columns += $element_plugin->getTableColumn($element);
       }
     }
 
     // Operations.
-    if (empty($account)) {
-      $columns['operations'] = [
-        'title' => $this->t('Operations'),
-        'sort' => FALSE,
-      ];
-    }
+    $columns['operations'] = [
+      'title' => $this->t('Operations'),
+      'sort' => FALSE,
+    ];
 
     // Add name and format to all columns.
     foreach ($columns as $name => &$column) {

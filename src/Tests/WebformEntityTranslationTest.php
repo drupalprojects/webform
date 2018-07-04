@@ -17,7 +17,7 @@ class WebformEntityTranslationTest extends WebformTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'webform', 'webform_test_translation'];
+  public static $modules = ['block', 'webform', 'webform_ui', 'webform_test_translation'];
 
   /**
    * {@inheritdoc}
@@ -51,10 +51,25 @@ class WebformEntityTranslationTest extends WebformTestBase {
     $this->drupalGet('admin/structure/webform/manage/test_translation/translate');
     $this->assertRaw('<a href="' . base_path() . 'admin/structure/webform/manage/test_translation/translate/es/edit">Edit</a>');
 
-    // Check Spanish translations.
+    // Check Spanish translation.
     $this->drupalGet('admin/structure/webform/manage/test_translation/translate/es/edit');
     $this->assertFieldByName('translation[config_names][webform.webform.test_translation][title]', 'Prueba: Traducción');
     $this->assertField('translation[config_names][webform.webform.test_translation][elements]');
+
+    // Check form builder is not translated.
+    $this->drupalGet('es/admin/structure/webform/manage/test_translation');
+    $this->assertLink('Text field');
+    $this->assertNoLink('Campo de texto');
+
+    // Check form builder is not translated when reset
+    $this->drupalPostAjaxForm('es/admin/structure/webform/manage/test_translation', [], ['op' => t('Reset')]);
+    $this->assertLink('Text field');
+    $this->assertNoLink('Campo de texto');
+
+    // Check element edit form is not translated.
+    $this->drupalGet('es/admin/structure/webform/manage/test_translation/element/textfield/edit');
+    $this->assertFieldByName('properties[title]', 'Text field');
+    $this->assertNoFieldByName('properties[title]', 'Campo de texto');
 
     // Check translated webform options.
     $this->drupalGet('es/webform/test_translation');

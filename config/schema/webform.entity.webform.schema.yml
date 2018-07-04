@@ -17,6 +17,9 @@ webform.webform.*:
     template:
       type: boolean
       label: 'Template'
+    archive:
+      type: boolean
+      label: 'Archive'
     id:
       type: string
       label: 'Machine name'
@@ -149,12 +152,21 @@ webform.webform.*:
           sequence:
             type: string
             label: 'Column name'
+        submission_user_duplicate:
+          type: boolean
+          label: 'Submission user duplicate'
         submission_login:
           type: boolean
           label: 'Redirect to login when access denied to submission'
         submission_login_message:
           type: text
           label: 'Login message when access denied to submission'
+        previous_submission_message:
+          type: text
+          label: 'Previous submission message'
+        previous_submissions_message:
+          type: text
+          label: 'Previous submissions message'
         autofill:
           type: boolean
           label: 'Autofill with previous submission'
@@ -215,6 +227,9 @@ webform.webform.*:
         preview_exclude_empty:
           type: boolean
           label: 'Preview exclude empty elements'
+        preview_exclude_empty_checkbox:
+          type: boolean
+          label: 'Preview exclude unselected checkboxes'
         draft:
           type: string
           label: 'Allow users to save and finish the webform later.'

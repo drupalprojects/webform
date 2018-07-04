@@ -102,10 +102,10 @@ class WebformOptionsForm extends EntityForm {
         '@module' => new PluralTranslatableMarkup(count($module_names), $this->t('module'), $this->t('modules')),
       ];
       if (empty($webform_options->get('options'))) {
-        drupal_set_message($this->t('The %title options are being set by the %module_names @module. Altering any of the below options will override these dynamically populated options.', $t_args), 'warning');
+        $this->messenger()->addWarning($this->t('The %title options are being set by the %module_names @module. Altering any of the below options will override these dynamically populated options.', $t_args));
       }
       else {
-        drupal_set_message($this->t('The %title options have been customized. Resetting the below options will allow the %module_names @module to dynamically populate these options.', $t_args), 'warning');
+        $this->messenger()->addWarning($this->t('The %title options have been customized. Resetting the below options will allow the %module_names @module to dynamically populate these options.', $t_args));
       }
     }
 
@@ -225,7 +225,7 @@ class WebformOptionsForm extends EntityForm {
     ];
     $this->logger('webform')->notice('Options @label have been reset.', $context);
 
-    drupal_set_message($this->t('Options %label have been reset.', ['%label' => $webform_options->label()]));
+    $this->messenger()->addStatus($this->t('Options %label have been reset.', ['%label' => $webform_options->label()]));
 
     $form_state->setRedirect('entity.webform_options.collection');
   }
@@ -244,7 +244,7 @@ class WebformOptionsForm extends EntityForm {
     ];
     $this->logger('webform')->notice('Options @label saved.', $context);
 
-    drupal_set_message($this->t('Options %label saved.', ['%label' => $webform_options->label()]));
+    $this->messenger()->addStatus($this->t('Options %label saved.', ['%label' => $webform_options->label()]));
 
     $form_state->setRedirect('entity.webform_options.collection');
   }

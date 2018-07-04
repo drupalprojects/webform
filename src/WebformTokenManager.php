@@ -2,10 +2,11 @@
 
 namespace Drupal\webform;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\Utility\WebformFormHelper;
@@ -37,13 +38,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   protected $moduleHandler;
 
   /**
-   * The theme manager.
-   *
-   * @var \Drupal\Core\Theme\ThemeManagerInterface
-   */
-  protected $themeManager;
-
-  /**
    * The token service.
    *
    * @var \Drupal\Core\Utility\Token
@@ -59,16 +53,13 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    *   The configuration object factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
-   *   The theme manager.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, ThemeManagerInterface $theme_manager, Token $token) {
+  public function __construct(AccountInterface $current_user, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, Token $token) {
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
-    $this->themeManager = $theme_manager;
     $this->token = $token;
 
     $this->config = $this->configFactory->get('webform.settings');
@@ -78,14 +69,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
    * {@inheritdoc}
    */
   public function replace($text, EntityInterface $entity = NULL, array $data = [], array $options = []) {
-    // Issue #2968554: Clear cache via the UI is throwing an exception.
-    // Workaround: Do not replace tokens when cache is cleared via the UI.
-    // (/admin/config/development/performance)
-    // @see https://www.drupal.org/project/webform/issues/2968554
-    if (\Drupal::routeMatch()->getRouteName() === 'system.performance_settings') {
-      return $text;
-    }
-
     // Replace tokens within an array.
     if (is_array($text)) {
       foreach ($text as $key => $value) {
@@ -107,10 +90,6 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $this->setTokenData($data, $entity);
     }
 
-    // Track the active theme, if there is no active theme it means tokens
-    // are being replaced during the initial page request.
-    $has_active_theme = $this->themeManager->hasActiveTheme();
-
     // For anonymous users remove all [current-user] tokens to prevent
     // anonymous user properties from being displayed.
     // For example, the [current-user:display-name] token will return
@@ -119,19 +98,33 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       $text = preg_replace('/\[current-user:[^]]+\]/', '', $text);
     }
 
+    // Collect all tokens that include the clear suffix.
+    $tokens_clear = [];
+    if (preg_match_all('/\[(webform[^]]+):clear\]/', $text, $matches)) {
+      foreach ($matches[0] as $index => $match) {
+        // Wrapping tokens in {webform-token-clear} so that only tokens with
+        // the :clear suffix are removed.
+        $token_base = '{webform-token-clear}[' . $matches[1][$index] . ']{/webform-token-clear}';
+        $text = str_replace($match, $token_base, $text);
+        $tokens_clear[] = $token_base;
+      }
+    }
+
     // Replace the webform related tokens.
     $text = $this->token->replace($text, $data, $options);
+
+    // Collect tokens that include the clear suffix.
+    if ($tokens_clear) {
+      foreach ($tokens_clear as $clear_token) {
+        $text = str_replace($clear_token, '', $text);
+      }
+      // Replace {webform-token-clear} wrappers that are no longer needed.
+      $text = preg_replace('/{\/?webform-token-clear}/', '', $text);
+    }
 
     // Clear current user tokens for undefined values.
     if (strpos($text, '[current-user:') !== FALSE) {
       $text = preg_replace('/\[current-user:[^\]]+\]/', '', $text);
-    }
-
-    // If there was no active theme and now there is one.
-    // Reset the active theme, so that theme negotiators can determine the
-    // correct active theme.
-    if (!$has_active_theme && $this->themeManager->hasActiveTheme()) {
-      $this->themeManager->resetActiveTheme();
     }
 
     return $text;
@@ -145,17 +138,17 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       return [];
     }
 
-    // @todo Issue #2235581: Make Token Dialog support inserting in WYSIWYGs.
     $build = [
       '#theme' => 'token_tree_link',
       '#token_types' => $token_types,
-      '#click_insert' => FALSE,
+      '#click_insert' => TRUE,
       '#dialog' => TRUE,
     ];
 
     if ($description) {
       if ($this->config->get('ui.description_help')) {
         return [
+          '#type' => 'container',
           'token_tree_link' => $build,
           'help' => [
             '#type' => 'webform_help',
@@ -165,6 +158,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       }
       else {
         return [
+          '#type' => 'container',
           'token_tree_link' => $build,
           'description' => [
             '#prefix' => ' ',
@@ -174,7 +168,10 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       }
     }
     else {
-      return $build;
+      return [
+        '#type' => 'container',
+        'token_tree_link' => $build,
+      ];
     }
   }
 
@@ -208,7 +205,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
         continue;
       }
 
-      $element['#element_validate'][] = 'token_element_validate';
+      $element['#element_validate'][] = [get_called_class(), 'validateElement'];
       $element['#token_types'] = $token_types;
     }
   }
@@ -229,6 +226,25 @@ class WebformTokenManager implements WebformTokenManagerInterface {
     elseif ($entity instanceof WebformInterface) {
       $token_data['webform'] = $entity;
     }
+  }
+
+  /**
+   * Validates an element's tokens.
+   *
+   * Note:
+   * Element is not being based by reference since the #value is being altered.
+   */
+  public static function validateElement($element, FormStateInterface $form_state, &$complete_form) {
+    $value = isset($element['#value']) ? $element['#value'] : $element['#default_value'];
+
+    if (!Unicode::strlen($value)) {
+      return $element;
+    }
+
+    // Remove clear suffix which is not valid.
+    $element['#value'] = preg_replace('/\[(webform[^]]+):clear\]/', '[\1]', $value);
+
+    token_element_validate($element, $form_state);
   }
 
 }

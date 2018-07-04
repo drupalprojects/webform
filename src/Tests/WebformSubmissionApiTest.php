@@ -104,7 +104,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
 
     $test_form_wizard_advanced_webform = Webform::load('test_form_wizard_advanced');
 
-    // Check submitting a multistep form with required fields.
+    // Check submitting a multi-step form with required fields.
     $values = [
       'webform_id' => 'test_form_wizard_advanced',
       'data' => [
@@ -119,7 +119,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
     $webform_submission = WebformSubmissionForm::submitFormValues($values);
     $this->assertEqual($webform_submission->id(), $this->getLastSubmissionId($test_form_wizard_advanced_webform));
 
-    // Check validating a multistep form with required fields.
+    // Check validating a multi-step form with required fields.
     $values = [
       'webform_id' => 'test_form_wizard_advanced',
       'data' => [
@@ -133,7 +133,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
       'email' => 'The email address <em class="placeholder">invalid</em> is not valid.',
     ]);
 
-    // Check validating a multistep form with invalid #options.
+    // Check validating a multi-step form with invalid #options.
     $values = [
       'webform_id' => 'test_form_wizard_advanced',
       'data' => [

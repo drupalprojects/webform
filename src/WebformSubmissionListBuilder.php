@@ -206,7 +206,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $this->columns = $webform_submission_storage->getCustomColumns($this->webform, $this->sourceEntity, $this->account, TRUE);
       $this->sort = $webform_submission_storage->getCustomSetting('sort', 'serial', $this->webform, $this->sourceEntity);
       $this->direction = $webform_submission_storage->getCustomSetting('direction', 'desc', $this->webform, $this->sourceEntity);
-      $this->limit = $webform_submission_storage->getCustomSetting('limit', 50, $this->webform, $this->sourceEntity);
+      $this->limit = $webform_submission_storage->getCustomSetting('limit', 20, $this->webform, $this->sourceEntity);
       $this->format = $webform_submission_storage->getCustomSetting('format', $this->format, $this->webform, $this->sourceEntity);
       $this->customize = $this->webform->access('update');
       if ($this->format['element_format'] == 'raw') {
@@ -240,7 +240,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         $this->sort = 'serial';
       }
       $this->direction = 'desc';
-      $this->limit = 50;
+      $this->limit = 20;
       $this->customize = FALSE;
     }
 
@@ -322,7 +322,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       }
     }
 
-    $build['table']['#attributes']['class'][] = 'webform-results__table';
+    $build['table']['#attributes']['class'][] = 'webform-results-table';
 
     $build['#attached']['library'][] = 'webform/webform.admin';
 
@@ -414,7 +414,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case 'locked':
         return [
           'data' => new FormattableMarkup('<span class="webform-icon webform-icon-@name webform-icon-@name--link"></span>', ['@name' => $name]),
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
           'field' => $name,
           'specifier' => $name,
         ];
@@ -507,7 +507,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
             '#url' => $notes_url,
             '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
           ],
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
         ];
 
       case 'operations':
@@ -559,7 +559,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
               'class' => ['use-ajax'],
             ],
           ],
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
         ];
 
       case 'locked':
@@ -576,7 +576,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
               'class' => ['use-ajax'],
             ],
           ],
-          'class' => ['webform-results__icon'],
+          'class' => ['webform-results-table__icon'],
         ];
 
       case 'uid':
@@ -627,59 +627,94 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
 
     $operations = [];
 
-    if ($entity->access('update')) {
-      $operations['edit'] = [
-        'title' => $this->t('Edit'),
-        'weight' => 10,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form'),
-      ];
-    }
+    if ($this->account) {
+      if ($entity->access('update')) {
+        $operations['edit'] = [
+          'title' => $this->t('Edit'),
+          'weight' => 10,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission.edit'),
+        ];
+      }
 
-    if ($entity->access('view')) {
-      $operations['view'] = [
-        'title' => $this->t('View'),
-        'weight' => 20,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical'),
-      ];
-    }
+      if ($entity->access('view')) {
+        $operations['view'] = [
+          'title' => $this->t('View'),
+          'weight' => 20,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission'),
+        ];
+      }
 
-    if ($entity->access('notes')) {
-      $operations['notes'] = [
-        'title' => $this->t('Notes'),
-        'weight' => 21,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form'),
-      ];
-    }
+      if ($entity->access('create') && $webform->getSetting('submission_user_duplicate')) {
+        $operations['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'weight' => 23,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission.duplicate'),
+        ];
+      }
 
-    if ($webform->access('submission_update_any') && $webform->hasMessageHandler()) {
-      $operations['resend'] = [
-        'title' => $this->t('Resend'),
-        'weight' => 22,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form'),
-      ];
+      if ($entity->access('delete')) {
+        $operations['delete'] = [
+          'title' => $this->t('Delete'),
+          'weight' => 100,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform.user.submission.delete'),
+        ];
+      }
     }
-    if ($webform->access('submission_update_any')) {
-      $operations['duplicate'] = [
-        'title' => $this->t('Duplicate'),
-        'weight' => 23,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form'),
-      ];
-    }
+    else {
+      if ($entity->access('update')) {
+        $operations['edit'] = [
+          'title' => $this->t('Edit'),
+          'weight' => 10,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.edit_form'),
+        ];
+      }
 
-    if ($entity->access('delete')) {
-      $operations['delete'] = [
-        'title' => $this->t('Delete'),
-        'weight' => 100,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form'),
-      ];
-    }
+      if ($entity->access('view')) {
+        $operations['view'] = [
+          'title' => $this->t('View'),
+          'weight' => 20,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.canonical'),
+        ];
+      }
 
-    if ($entity->access('view_any') && \Drupal::currentUser()->hasPermission('access webform submission log')) {
-      $operations['log'] = [
-        'title' => $this->t('Log'),
-        'weight' => 100,
-        'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log'),
-      ];
+      if ($entity->access('notes')) {
+        $operations['notes'] = [
+          'title' => $this->t('Notes'),
+          'weight' => 21,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.notes_form'),
+        ];
+      }
+
+      if ($webform->access('submission_update_any') && $webform->hasMessageHandler()) {
+        $operations['resend'] = [
+          'title' => $this->t('Resend'),
+          'weight' => 22,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.resend_form'),
+        ];
+      }
+      if ($webform->access('submission_update_any')) {
+        $operations['duplicate'] = [
+          'title' => $this->t('Duplicate'),
+          'weight' => 23,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.duplicate_form'),
+        ];
+      }
+
+      if ($entity->access('delete')) {
+        $operations['delete'] = [
+          'title' => $this->t('Delete'),
+          'weight' => 100,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.delete_form'),
+        ];
+      }
+
+      if ($entity->access('view_any') && \Drupal::currentUser()->hasPermission('access webform submission log')) {
+        $operations['log'] = [
+          'title' => $this->t('Log'),
+          'weight' => 100,
+          'url' => $this->requestHandler->getUrl($entity, $this->sourceEntity, 'webform_submission.log'),
+        ];
+      }
     }
 
     // Add destination to all operation links.
@@ -828,14 +863,17 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       $submission_storage->addQueryConditions($sub_query, $this->webform);
 
       // Search UUID and Notes.
+      $or_condition = $query->orConditionGroup();
+      $or_condition->condition('notes', '%' . $keys . '%', 'LIKE');
+      // Only search UUID if keys is alphanumeric with dashes.
+      // @see Issue #2978420: Error SQL with accent mark submissions filter.
+      if (preg_match('/^[0-9a-z-]+$/', $keys)) {
+        $or_condition->condition('uuid', $keys);
+      }
       $query->condition(
         $query->orConditionGroup()
           ->condition('sid', $sub_query, 'IN')
-          ->condition(
-            $query->orConditionGroup()
-              ->condition('uuid', $keys)
-              ->condition('notes', '%' . $keys . '%', 'LIKE')
-          )
+          ->condition($or_condition)
       );
     }
 
