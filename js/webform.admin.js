@@ -82,7 +82,7 @@
             '@items': itemsLabel
           };
           Drupal.announce(Drupal.formatPlural(
-            (totalItems - 1),
+            totalItems,
             '1 @item is available in the modified list.',
             '@total @items are available in the modified list.',
             args
