@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\Element;
+use Drupal\webform\Element\WebformComputedTwig as WebformComputedTwigElement;
 use Drupal\webform\Element\WebformComputedBase as WebformComputedBaseElement;
 use Drupal\webform\Plugin\WebformElementBase;
 use Drupal\webform\Plugin\WebformElementDisplayOnInterface;
@@ -194,6 +195,15 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       '#type' => 'webform_codemirror',
       '#mode' => 'text',
       '#title' => $this->t('Computed value/markup'),
+    ];
+    $form['computed']['whitespace'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Remove whitespace around the'),
+      '#empty_option' => $this->t('- None -'),
+      '#options' => [
+        WebformComputedTwigElement::WHITESPACE_TRIM => $this->t('computed value'),
+        WebformComputedTwigElement::WHITESPACE_SPACELESS => $this->t('computed value and between HTML tags'),
+      ],
     ];
     $form['computed']['hide_empty'] = [
       '#type' => 'checkbox',

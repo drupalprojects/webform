@@ -13,13 +13,41 @@ use Drupal\webform\WebformSubmissionInterface;
 class WebformComputedTwig extends WebformComputedBase {
 
   /**
+   * Whitespace spaceless.
+   *
+   * Remove whitespace around the computed value and between HTML tags.
+   */
+  const WHITESPACE_SPACELESS = 'spaceless';
+
+  /**
+   * Whitespace trim.
+   *
+   * Remove whitespace around the computed value.
+   */
+  const WHITESPACE_TRIM = 'trim';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getInfo() {
+    return parent::getInfo() + [
+      '#whitespace' => '',
+    ];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function processValue(array $element, WebformSubmissionInterface $webform_submission) {
-    $template = $element['#value'];
+    $whitespace = (!empty($element['#whitespace'])) ? $element['#whitespace'] : '';
+
+    $template = ($whitespace === static::WHITESPACE_SPACELESS) ? '{% spaceless %}' . $element['#value'] . '{% endspaceless %}' : $element['#value'];
+
     $options = ['html' => (static::getMode($element) === static::MODE_HTML)];
 
-    return TwigExtension::renderTwigTemplate($webform_submission, $template, $options);
+    $value = TwigExtension::renderTwigTemplate($webform_submission, $template, $options);
+
+    return ($whitespace === static::WHITESPACE_TRIM) ? trim($value) : $value;
   }
 
 }
