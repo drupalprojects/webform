@@ -195,21 +195,6 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       '#mode' => 'text',
       '#title' => $this->t('Computed value/markup'),
     ];
-    $form['computed']['spaceless'] = [
-      '#type' => 'checkbox',
-      '#return_value' => TRUE,
-      '#title' => $this->t('Remove whitespace around the computed value and between HTML tags.'),
-      '#description' => $this->t('If checked the computed value will have all whitespace removed between HTML tags.'),
-    ];
-    $form['computed']['trim'] = [
-      '#type' => 'checkbox',
-      '#return_value' => TRUE,
-      '#title' => $this->t('Remove whitespace around the computed value.'),
-      '#description' => $this->t('If checked the computed value will have all whitespace stripped from the beginning and end of the computed value.'),
-      '#states' => [
-        'visible' => [':input[name="properties[spaceless]"]' => ['checked' => FALSE]],
-      ],
-    ];
     $form['computed']['hide_empty'] = [
       '#type' => 'checkbox',
       '#return_value' => TRUE,
