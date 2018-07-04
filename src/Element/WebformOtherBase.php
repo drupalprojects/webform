@@ -101,6 +101,7 @@ abstract class WebformOtherBase extends FormElement {
     $element['#tree'] = TRUE;
 
     $element[$type]['#type'] = static::$type;
+    $element[$type]['#webform_element'] = TRUE;
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
     $element[$type]['#title_display'] = 'invisible';
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {
@@ -112,12 +113,6 @@ abstract class WebformOtherBase extends FormElement {
     // radios and checkboxes.
     // @see \Drupal\Core\Render\Element\CompositeFormElementTrait
     $element[$type]['#pre_render'] = [];
-
-    // Disable label[for] which does not point to any specific element.
-    // @see webform_preprocess_form_element_label()
-    if (in_array($type, ['radios', 'checkboxes', 'buttons'])) {
-      $element['#label_attributes']['for'] = FALSE;
-    }
 
     // Build other textfield.
     $element['other']['#error_no_message'] = TRUE;
@@ -131,6 +126,7 @@ abstract class WebformOtherBase extends FormElement {
     }
     $element['other'] += [
       '#type' => 'textfield',
+      '#webform_element' => TRUE,
       '#placeholder' => t('Enter other...'),
     ];
     if (!isset($element['other']['#title'])) {

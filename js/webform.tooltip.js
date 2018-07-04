@@ -51,10 +51,10 @@
         // @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
         var $description;
         if ($element.is('fieldset')) {
-          $description = $element.find('> .fieldset-wrapper > .field-suffix .description.visually-hidden');
+          $description = $element.find('> .fieldset-wrapper > .description > .webform-element-description.visually-hidden');
         }
         else {
-          $description = $element.children('.description.visually-hidden');
+          $description = $element.find('> .description > .webform-element-description.visually-hidden');
         }
 
         var has_visible_input = $element.find(':input:not([type=hidden])').length;

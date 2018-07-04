@@ -17,27 +17,22 @@ elements: |
   webform_section:
     '#type': webform_section
     '#title': webform_section
-    '#help': '{This is help text}'
-    '#description': '{This is a description}'
-    webform_section_textfield:
-      '#type': textfield
-      '#title': webform_section_textfield
-  webform_section_required:
-    '#type': webform_section
-    '#title': webform_section_required
+    '#description': 'This is a description.'
+    '#help': 'This is help text.'
+    '#more': 'This is more text'
     '#required': true
-    webform_section_required_textfield:
-      '#type': textfield
-      '#title': webform_section_required_textfield
+    webform_section_markup:
+      '#markup': '<p>This is some markup</p>'
+  webform_section_title_invisible:
+    '#type': webform_section
+    '#title': webform_section_title_invisible
+    '#title_display': invisible
   webform_section_title_custom:
     '#type': webform_section
     '#title': webform_section_title_custom
     '#title_tag': h5
     '#title_attributes':
       'style': 'color: red'
-    webform_section_h5_textfield:
-      '#type': textfield
-      '#title': webform_section_h5_textfield
 css: ''
 javascript: ''
 settings:

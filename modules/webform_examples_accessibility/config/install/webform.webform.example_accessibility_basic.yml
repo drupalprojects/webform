@@ -14,24 +14,6 @@ title: 'Example: Accessibility Basic'
 description: 'Basic webform accessibility example.'
 category: 'Example: Accessibility'
 elements: |
-  general_elements:
-    '#type': details
-    '#title': 'General element'
-    '#open': true
-    form_element:
-      '#type': textfield
-      '#title': 'Form element'
-      '#placeholder': 'This is a placeholder'
-      '#description': 'This is a description.'
-      '#help': 'This is help text.'
-      '#more': 'This is more text'
-      '#field_prefix': 'prefix'
-      '#field_suffix': 'suffix'
-    form_element_tooltip:
-      '#type': textfield
-      '#title': 'Form element tooltip'
-      '#description': 'This is a description.'
-      '#description_display': tooltip
   text_elements:
     '#type': details
     '#title': 'Text elements'

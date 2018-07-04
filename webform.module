@@ -23,6 +23,7 @@ use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Element\WebformMessage;
 use Drupal\webform\Plugin\WebformElement\ManagedFile;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformOptionsHelper;
 use Drupal\webform\WebformInterface;
@@ -735,6 +736,10 @@ function webform_element_info_alter(array &$info) {
  *   The processed element.
  */
 function webform_process_options(&$element, FormStateInterface $form_state, &$complete_form) {
+  if (!WebformElementHelper::isWebformElement($element)) {
+    return $element;
+  }
+
   if (!empty($element['#options_description_display'])) {
     $description_property_name = ($element['#options_description_display'] == 'help') ? '#help' : '#description';
     foreach (Element::children($element) as $key) {
@@ -746,9 +751,22 @@ function webform_process_options(&$element, FormStateInterface $form_state, &$co
 
       list($title, $description) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $title);
       $element[$key]['#title'] = $title;
+      $element[$key]['#webform_element'] = TRUE;
       $element[$key][$description_property_name] = $description;
     }
   }
+
+  // Issue #2839344: Some aria-describedby refers to not existing element ID.
+  // @see https://www.drupal.org/project/drupal/issues/2839344
+  if (!empty($element['#attributes']['aria-describedby'])) {
+    foreach (Element::children($element) as $key) {
+      if (empty($element[$key]['#attributes']['aria-describedby'])
+        && $element['#attributes']['aria-describedby'] === $element[$key]['#attributes']['aria-describedby']) {
+        unset($element[$key]['#attributes']['aria-describedby']);
+      }
+    }
+  }
+
   return $element;
 }
 

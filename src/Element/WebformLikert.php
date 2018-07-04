@@ -129,6 +129,7 @@ class WebformLikert extends FormElement {
         // Must include an empty <span> so that the item's value is
         // not required.
         '#value' => '<span></span>',
+        '#webform_element' => TRUE,
         '#required' => $element['#required'],
       ];
       if ($question_description_property_name) {

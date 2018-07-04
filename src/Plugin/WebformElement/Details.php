@@ -22,7 +22,14 @@ class Details extends ContainerBase {
    */
   public function getDefaultProperties() {
     $properties = [
+      // Description/Help.
       'help' => '',
+      'description' => '',
+      'more' => '',
+      'more_title' => '',
+      // Title.
+      'title_display' => '',
+      // Details.
       'open' => FALSE,
     ] + parent::getDefaultProperties();
 

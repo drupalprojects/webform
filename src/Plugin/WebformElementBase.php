@@ -663,6 +663,10 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element['#access'] = $this->checkAccessRules($operation, $element);
     }
 
+    // Enable webform template preprocessiing enhancements.
+    // @see \Drupal\webform\Utility\WebformElementHelper::isWebformElement
+    $element['#webform_element'] = TRUE;
+
     // Add #allowed_tags.
     $allowed_tags = $this->configFactory->get('webform.settings')->get('element.allowed_tags');
     switch ($allowed_tags) {
@@ -711,8 +715,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       $element[$attributes_property]['class'][] = 'js-webform-tooltip-element';
       $element[$attributes_property]['class'][] = 'webform-tooltip-element';
       $element['#attached']['library'][] = 'webform/webform.tooltip';
-      // More is not supported with tooltip.
-      unset($element['#more']);
     }
 
     // Add iCheck support.
@@ -2174,11 +2176,6 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       '#type' => 'webform_html_editor',
       '#title' => $this->t('More text'),
       '#description' => $this->t('A long description of the element that provides form additional information which can opened and closed.'),
-      '#states' => [
-        'invisible' => [
-          ':input[name="properties[description_display]"]' => ['value' => 'tooltip'],
-        ],
-      ],
     ];
 
     /* Form display */

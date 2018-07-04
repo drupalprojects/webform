@@ -72,6 +72,27 @@ class WebformElementHelper {
   protected static $ignoredSubPropertiesRegExp;
 
   /**
+   * Determine if an element is a webform element and should be enhanced.
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @return bool
+   *   TRUE if an element is a webform element.
+   */
+  public static function isWebformElement(array $element) {
+    if (isset($element['#webform_key']) || isset($element['#webform_element'])) {
+      return TRUE;
+    }
+    elseif (\Drupal::service('webform.request')->isWebformAdminRoute()) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
    * Determine if a webform element's title is displayed.
    *
    * @param array $element

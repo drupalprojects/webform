@@ -14,28 +14,41 @@ title: 'Example: Accessibility Containers'
 description: 'Container webform accessibility example.'
 category: 'Example: Accessibility'
 elements: |
+  form_element:
+    '#type': textfield
+    '#title': 'Form element'
+    '#placeholder': 'This is a placeholder'
+    '#description': 'This is a description.'
+    '#help': 'This is help text.'
+    '#more': 'This is more text'
+    '#required': true
+    '#field_prefix': 'prefix'
+    '#field_suffix': 'suffix'
   fieldset:
     '#type': fieldset
     '#title': 'Fieldset'
-    fieldset_textfield:
-      '#title': 'Text field'
-      '#type': textfield
+    '#placeholder': 'This is a placeholder'
+    '#description': 'This is a description.'
+    '#help': 'This is help text.'
+    '#more': 'This is more text'
+    '#required': true
+    '#field_prefix': 'prefix'
+    '#field_suffix': 'suffix'
   details:
     '#type': details
-    '#title': 'Details'
-    details_textfield:
-      '#title': 'Text field'
-      '#type': textfield
-  webform_section:
+    '#title': 'details'
+    '#placeholder': 'This is a placeholder'
+    '#description': 'This is a description.'
+    '#help': 'This is help text.'
+    '#more': 'This is more text'
+    '#required': true
+    '#open': true
+  section:
     '#type': webform_section
-    '#title': 'Section'
-    details_textfield:
-      '#title': 'Text field'
-      '#type': textfield
-  webform_message:
-    '#type': webform_message
-    '#message_message': 'This is an <strong>info</strong> message.'
-    '#message_close': true
+    '#title': Section
+    '#help': 'This is help text'
+    '#required': true
+    '#description': 'This is a description'
 css: ''
 javascript: ''
 settings:

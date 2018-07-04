@@ -40,14 +40,14 @@ class WebformElementLikertTest extends WebformElementTestBase {
     // Check likert with description.
     $this->assertRaw('<th>Option 1<div class="description">This is a description</div>');
     $this->assertRaw('<label for="edit-likert-description-table-q1-likert-question">Question 1</label>');
-    $this->assertRaw('<div id="edit-likert-description-table-q1-likert-question--description" class="description">');
+    $this->assertRaw('<div id="edit-likert-description-table-q1-likert-question--description" class="webform-element-description">');
     $this->assertRaw('<label for="edit-likert-description-q1" class="option"><span class="webform-likert-label visually-hidden">Option 1</span></label>');
     $this->assertRaw('<span class="webform-likert-description hidden">This is a description</span>');
 
     // Check likert with help.
-    $this->assertRaw('<th>Option 1<a href="#help" title="This is a help text" data-webform-help="This is a help text" class="webform-element-help">?</a>');
-    $this->assertRaw('<label for="edit-likert-help-table-q1-likert-question">Question 1<a href="#help" title="This is a help text" data-webform-help="This is a help text" class="webform-element-help">?</a>');
-    $this->assertRaw('<label for="edit-likert-help-q1--2" class="option"><span class="webform-likert-label visually-hidden">Option 2<span class="webform-likert-help hidden"><a href="#help" title="This is a help text" data-webform-help="This is a help text" class="webform-element-help">?</a>
+    $this->assertRaw('<th>Option 1<a href="#help" title="This is a help text" class="webform-element-help" data-webform-help="This is a help text">?</a>');
+    $this->assertRaw('<label for="edit-likert-help-table-q1-likert-question">Question 1<a href="#help" title="This is a help text" class="webform-element-help" data-webform-help="This is a help text">?</a>');
+    $this->assertRaw('<label for="edit-likert-help-q1--2" class="option"><span class="webform-likert-label visually-hidden">Option 2<span class="webform-likert-help hidden"><a href="#help" title="This is a help text" class="webform-element-help" data-webform-help="This is a help text">?</a>
 </span></span></label>');
 
     // Check likert required.

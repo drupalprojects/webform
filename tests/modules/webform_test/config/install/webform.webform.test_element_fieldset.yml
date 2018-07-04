@@ -16,15 +16,20 @@ category: 'Test: Element'
 elements: |
   fieldset:
     '#type': fieldset
-    '#title': fieldset
+    '#title': 'Fieldset'
+    '#description': 'This is a description.'
+    '#help': 'This is help text.'
+    '#more': 'This is more text'
+    '#required': true
+    '#field_prefix': 'prefix'
+    '#field_suffix': 'suffix'
     fieldset_markup:
       '#markup': '<p>This is some markup</p>'
-  fieldset_required:
+  fieldset_title_invisible:
     '#type': fieldset
-    '#title': fieldset_required
-    '#required': true
-    fieldset_required_markup:
-      '#markup': '<p>This is some markup</p>'
+    '#title': 'Fieldset title invisible'
+    '#description': 'This is a description.'
+    '#title_display': invisible
 css: ''
 javascript: ''
 settings:

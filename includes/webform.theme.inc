@@ -7,7 +7,10 @@
 
 use Drupal\file\Entity\File;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Template\Attribute;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /******************************************************************************/
 // Theme hooks.
@@ -93,7 +96,7 @@ function webform_theme() {
     ],
 
     'webform_element_help' => [
-      'variables' => ['help' => NULL],
+      'variables' => ['help' => NULL, 'attributes' => []],
     ],
 
     'webform_element_more' => [
@@ -248,6 +251,10 @@ function webform_preprocess_menu_local_action(&$variables) {
  * @see \Drupal\webform\Plugin\WebformElement\OptionsBase
  */
 function webform_preprocess_checkboxes(&$variables) {
+  if (!WebformElementHelper::isWebformElement($variables['element'])) {
+    return;
+  }
+
   _webform_preprocess_options($variables);
 }
 
@@ -257,41 +264,33 @@ function webform_preprocess_checkboxes(&$variables) {
  * @see \Drupal\webform\Plugin\WebformElement\OptionsBase
  */
 function webform_preprocess_radios(&$variables) {
+  if (!WebformElementHelper::isWebformElement($variables['element'])) {
+    return;
+  }
+
   _webform_preprocess_options($variables);
 }
 
-/**
- * Prepares variables for checkboxes and radios options templates.
- *
- * Below code must be called by template_preprocess_(radios|checkboxes) which
- * reset the element's 'attributes';
- */
-function _webform_preprocess_options(&$variables) {
-  $element = $variables['element'];
-
-  $variables['attributes']['class'][] = Html::getClass('js-webform-' . $element['#type']);
-
-  if (!empty($element['#options_display'])) {
-    $variables['attributes']['class'][] = Html::getClass('webform-options-display-' . $element['#options_display']);
-    $variables['#attached']['library'][] = 'webform/webform.element.options';
-  }
-}
+/******************************************************************************/
+// Preprocess containers.
+/******************************************************************************/
 
 /**
  * Prepares variables for details element templates.
  */
 function webform_preprocess_details(&$variables) {
-  // Move #description to #help for webform admin routes.
-  _webform_preprocess_description_help($variables);
+  if (!WebformElementHelper::isWebformElement($variables['element'])) {
+    return;
+  }
 
-  // Add (read) more to #description.
-  _webform_preprocess_details_description_more($variables);
+  // Setup description, help, and more.
+  _webform_preprocess_element($variables);
 
   $element = &$variables['element'];
 
-  // Restructure the details's title to include #help.
-  if (isset($variables['title'])) {
-    _webform_preprocess_help_title($variables['title'], $element);
+  // Hide details title.
+  if (isset($element['#title_display']) && $element['#title_display'] === 'invisible') {
+    $variables['title'] = WebformAccessibilityHelper::buildVisuallyHidden($variables['title']);
   }
 
   // Remove invalid 'required' and 'aria-required' attributes from details.
@@ -307,11 +306,12 @@ function webform_preprocess_details(&$variables) {
  * Prepares variables for fieldset element templates.
  */
 function webform_preprocess_fieldset(&$variables) {
-  // Move #description to #help for webform admin routes.
-  _webform_preprocess_description_help($variables);
+  if (!WebformElementHelper::isWebformElement($variables['element'])) {
+    return;
+  }
 
-  // Add (read) more to #description.
-  _webform_preprocess_form_element_description_more($variables);
+  // Setup description, help, and more.
+  _webform_preprocess_element($variables, ['legend', 'title']);
 
   $element = &$variables['element'];
 
@@ -319,11 +319,6 @@ function webform_preprocess_fieldset(&$variables) {
   // @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
   if (isset($element['#_title_display'])) {
     $variables['attributes']['class'][] = 'webform-fieldset--title-inline';
-  }
-
-  // Restructure the fieldset's legend title to include #help.
-  if (isset($variables['legend']['title'])) {
-    _webform_preprocess_help_title($variables['legend']['title'], $element);
   }
 
   // Add .js-webform-form-composite class to be used #states API.
@@ -342,68 +337,22 @@ function webform_preprocess_fieldset(&$variables) {
   }
 }
 
-/**
- * Prepares variables for webform section element templates.
- */
-function webform_preprocess_webform_section(&$variables) {
-  // Move #description to #help for webform admin routes.
-  _webform_preprocess_description_help($variables);
-
-  $element = &$variables['element'];
-
-  // Restructure the section's title to include #help.
-  if (isset($variables['title'])) {
-    _webform_preprocess_help_title($variables['title'], $element);
-  }
-}
-
-/**
- * Prepares variables for datetime form wrapper templates.
- */
-function webform_preprocess_datetime_wrapper(&$variables) {
-  // Move #description to #help for webform admin routes.
-  _webform_preprocess_description_help($variables);
-
-  // Add (read) more to #description.
-  _webform_preprocess_form_element_description_more($variables);
-
-  $element = &$variables['element'];
-
-  // Restructure the title to include #help.
-  if (isset($variables['title'])) {
-    _webform_preprocess_help_title($variables['title'], $element);
-  }
-}
-
-/**
- * Prepares variables for form label templates.
- */
-function webform_preprocess_form_element_label(&$variables) {
-  $element = &$variables['element'];
-
-  // Unset 'for' attribute.
-  // @see \Drupal\webform\Element\WebformOtherBase::processWebformOther
-  if (isset($element['#attributes']['for']) && $element['#attributes']['for'] === FALSE) {
-    unset($variables['attributes']['for']);
-  }
-
-  // Restructure the label's title to include #help.
-  if (!empty($element['#help'])) {
-    _webform_preprocess_help_title($variables['title'], $element);
-  }
-}
+/******************************************************************************/
+// Preprocess form element.
+/******************************************************************************/
 
 /**
  * Prepares variables for form element templates.
  */
 function webform_preprocess_form_element(&$variables) {
+  if (!WebformElementHelper::isWebformElement($variables['element'])) {
+    return;
+  }
+
+  // Setup description, help, and more.
+  _webform_preprocess_element($variables);
+
   $element = &$variables['element'];
-
-  // Move #description to #help for webform admin routes.
-  _webform_preprocess_description_help($variables);
-
-  // Add (read) more to #description.
-  _webform_preprocess_form_element_description_more($variables);
 
   // Add #help and #_title_display to label.
   // Note: #_title_display is used to track inline titles.
@@ -412,130 +361,18 @@ function webform_preprocess_form_element(&$variables) {
 }
 
 /**
- * Prepares #description and #help properties for form element templates.
+ * Prepares variables for form label templates.
  */
-function _webform_preprocess_description_help(&$variables) {
+function webform_preprocess_form_element_label(&$variables) {
   $element = &$variables['element'];
-  // Move #description to #help for webform admin routes.
-  if (\Drupal::config('webform.settings')->get('ui.description_help')
-    && \Drupal::service('webform.request')->isWebformAdminRoute()
-    && \Drupal::routeMatch()->getRouteName() != 'webform.contribute.settings'
-    && isset($element['#description'])
-    && !isset($element['#help'])
-    && !empty($element['#title'])
-    && !(isset($element['#title_display']) && in_array($element['#title_display'], ['attribute', 'invisible']))
-  ) {
-    $element['#help'] = $element['#description'];
-    unset($variables['description']);
-    if (is_array($element['#help'])) {
-      $element['#help'] = \Drupal::service('renderer')->render($element['#help']);
-    }
-  }
+
+  // Restructure the label's title to include #help.
+  _webform_preprocess_help_title($variables['title'], $element);
 }
 
-/**
- * Append #help to title variable.
- */
-function _webform_preprocess_help_title(&$variables, array &$element) {
-  if (empty($element['#help'])) {
-    return;
-  }
-
-  $variables = [
-    'title' => (is_array($variables)) ? $variables : ['#markup' => $variables],
-    'help' => [
-      '#type' => 'webform_help',
-    ] + array_intersect_key($element, array_flip(['#help'])),
-  ];
-
-  // Get #title_display and move help before title for 'inline' titles.
-  if (isset($element['#_title_display'])) {
-    // #_title_display is set
-    // via \Drupal\webform\Plugin\WebformElementBase::prepare.
-    $title_display = $element['#_title_display'];
-  }
-  elseif (isset($element['#title_display'])) {
-    $title_display = $element['#title_display'];
-  }
-  else {
-    $title_display = NULL;
-  }
-
-  if ($title_display == 'inline') {
-    $variables['title']['#weight'] = 0;
-    $variables['help']['#weight'] = -1;
-  }
-}
-
-/**
- * Prepares #more property for form element template.
- *
- * @see template_preprocess_form_element()
- * @see form-element.html.twig
- * @see template_preprocess_datetime_wrapper()
- * @see datetime-wrapper.html.twig
- */
-function _webform_preprocess_form_element_description_more(&$variables) {
-  $element = &$variables['element'];
-  if (empty($element['#more'])) {
-    return;
-  }
-
-  // Make sure $variables['description']['content'] is a render array.
-  if (!isset($variables['description'])) {
-    $variables['description_display'] = $element['#description_display'];
-    $description_attributes = [];
-    if (!empty($element['#id'])) {
-      $description_attributes['id'] = $element['#id'] . '--description';
-    }
-    $variables['description']['attributes'] = new Attribute($description_attributes);
-    $variables['description']['content'] = [];
-  }
-
-  // Move content to content.description and convert description to
-  // render array.
-  $variables['description']['content'] = [
-    'description' => is_array($variables['description']['content']) ? $variables['description']['content'] : ['#markup' => $variables['description']['content']],
-  ];
-
-  // If description display is invisible hie the description.
-  if (isset($variables['description_display']) && $variables['description_display'] == 'invisible') {
-    $variables['description']['content']['description']['#prefix'] = '<div class="visually-hidden">';
-    $variables['description']['content']['description']['#suffix'] = '</div>';
-    $variables['description_display'] = 'after';
-  }
-
-  // Add more element.
-  $variables['description']['content']['more'] = [
-    '#type' => 'webform_more',
-    '#attributes' => (!empty($element['#id'])) ? ['id' => $element['#id'] . '--more'] : [],
-  ] + array_intersect_key($element, array_flip(['#more', '#more_title']));
-}
-
-/**
- * Prepares #more property for details template.
- *
- * @see template_preprocess_details()
- * @see details.html.twig
- */
-function _webform_preprocess_details_description_more(&$variables) {
-  $element = &$variables['element'];
-  if (empty($element['#more'])) {
-    return;
-  }
-
-  // Convert description to render array.
-  $variables['description'] = [
-    'description' => is_array($variables['description']) ? $variables['description'] : ['#markup' => $variables['description']],
-  ];
-
-  // Add more element.
-  $variables['description']['more'] = [
-    '#type' => 'webform_more',
-    '#attributes' => (!empty($element['#id'])) ? ['id' => $element['#id'] . '--more'] : [],
-  ] + array_intersect_key($element, array_flip(['#more', '#more_title']));
-
-}
+/******************************************************************************/
+// Preprocess file/image elements.
+/******************************************************************************/
 
 /**
  * Prepares variables for file managed file templates.
@@ -544,6 +381,10 @@ function _webform_preprocess_details_description_more(&$variables) {
  * @see template_preprocess_file_managed_file()
  */
 function webform_preprocess_file_managed_file(&$variables) {
+  if (!WebformElementHelper::isWebformElement($variables['element'])) {
+    return;
+  }
+
   $element = &$variables['element'];
   if (empty($element['#button'])) {
     return;
@@ -616,6 +457,194 @@ function webform_preprocess_image(&$variables) {
   if (isset($variables['attributes']['class']) && in_array('webform-image-file', (array) $variables['attributes']['class'])) {
     $variables['attributes']['src'] = $base_url . preg_replace('/^' . preg_quote(base_path(), '/') . '/', '/', $variables['attributes']['src']);
   }
+}
+
+/******************************************************************************/
+// Preprocess webform specific elements.
+/******************************************************************************/
+
+/**
+ * Prepares variables for webform section element templates.
+ */
+function webform_preprocess_webform_section(&$variables) {
+  // Setup description, help, and more.
+  _webform_preprocess_element($variables);
+}
+
+/******************************************************************************/
+// Preprocess helpers.
+/******************************************************************************/
+
+/**
+ * Prepares variables for checkboxes and radios options templates.
+ *
+ * Below code must be called by template_preprocess_(radios|checkboxes) which
+ * reset the element's 'attributes';
+ */
+function _webform_preprocess_options(array &$variables) {
+  $element =& $variables['element'];
+
+  $variables['attributes']['class'][] = Html::getClass('js-webform-' . $element['#type']);
+
+  if (!empty($element['#options_display'])) {
+    $variables['attributes']['class'][] = Html::getClass('webform-options-display-' . $element['#options_display']);
+    $variables['#attached']['library'][] = 'webform/webform.element.options';
+  }
+}
+
+/**
+ * Prepares webform element description, help, and more templates.
+ *
+ * @see template_preprocess_form_element()
+ * @see core/modules/system/templates/form-element.html.twig
+ * @see template_preprocess_details()
+ * @see /core/modules/system/templates/details.html.twig
+ * @see template_preprocess_fieldset()
+ * @see /core/modules/system/templates/fieldset.html.twig
+ * @see template_preprocess_webform_section()
+ * @see /webform/templates/webform-section.html.twig
+ */
+function _webform_preprocess_element(array &$variables, $title_parents = ['title']) {
+  $element =& $variables['element'];
+  $type = $element['#type'];
+
+  // Fix details 'description' property which does not have description.content.
+  // @see template_preprocess_details
+  // @see Issue #2896169: Details elements have incorrect aria-describedby attributes
+  if (!empty($element['#description'])) {
+    $description = (is_array($element['#description'])) ? $element['#description'] : ['#markup' => $element['#description']];
+    if ($type === 'details') {
+      $description_attributes = [];
+      if (!empty($element['#id'])) {
+        $description_attributes['id'] = $element['#id'] . '--description';
+      }
+      $variables['description'] = [];
+      $variables['description']['content'] = [
+        '#type' => 'container',
+        '#attributes' => new Attribute($description_attributes),
+      ] + $description;
+    }
+    else {
+      // Wrap description in a container.
+      $variables['description']['content'] = [
+        '#type' => 'container',
+        '#attributes' => $variables['description']['attributes'],
+      ] + $description;
+      $variables['description']['attributes'] = new Attribute();
+    }
+
+    $variables['description']['content']['#attributes']->addClass('webform-element-description');
+
+    // Handle invisible descriptions.
+    if (isset($element['#description_display']) && $element['#description_display'] === 'invisible') {
+      $variables['description']['content']['#attributes']->addClass('visually-hidden');
+      $variables['description_display'] = 'after';
+    }
+
+    // Nest description content so that we can a more link
+    // below the description.
+    $variables['description']['content'] = [
+      'description' => $variables['description']['content'],
+    ];
+  }
+  
+  $title =& NestedArray::getValue($variables, $title_parents);
+
+  // Move #description to #help for webform admin routes.
+  _webform_preprocess_description_help($variables);
+
+  // Add (read) more to #description.
+  _webform_preprocess_form_element_description_more($variables);
+
+  // Add help to title (aka label).
+  _webform_preprocess_help_title($title,$element);
+}
+
+/**
+ * Prepares #description and #help properties for form element templates.
+ */
+function _webform_preprocess_description_help(array &$variables) {
+  $element = &$variables['element'];
+  // Move #description to #help for webform admin routes.
+  if (\Drupal::config('webform.settings')->get('ui.description_help')
+    && \Drupal::service('webform.request')->isWebformAdminRoute()
+    && \Drupal::routeMatch()->getRouteName() != 'webform.contribute.settings'
+    && !empty($element['#description'])
+    && !isset($element['#help'])
+    && !empty($element['#title'])
+    && !(isset($element['#title_display']) && in_array($element['#title_display'], ['attribute', 'invisible']))
+  ) {
+    $element['#help'] = (is_array($element['#description'])) ? \Drupal::service('renderer')->render($element['#description']) : $element['#description'];
+    $element['#help_attributes']['aria-hidden'] = 'true';
+
+    $variables['description_display'] = 'after';
+    $variables['description']['content']['description']['#attributes']->addClass('visually-hidden');
+  }
+}
+
+/**
+ * Append #help to title variable.
+ */
+function _webform_preprocess_help_title(&$variables, array &$element) {
+  if (empty($variables) || empty($element['#help'])) {
+    return;
+  }
+
+  $variables = [
+    'title' => (is_array($variables)) ? $variables : ['#markup' => $variables],
+    'help' => [
+      '#type' => 'webform_help',
+    ] + array_intersect_key($element, array_flip(['#help'])),
+  ];
+
+  // Add help attributes.
+  if (isset($element['#help_attributes'])) {
+    $variables['help']['#attributes'] = $element['#help_attributes'];
+  }
+
+  // Get #title_display and move help before title for 'inline' titles.
+  if (isset($element['#_title_display'])) {
+    // #_title_display is set via WebformElementBase::prepare.
+    // @see \Drupal\webform\Plugin\WebformElementBase::prepare.
+    $title_display = $element['#_title_display'];
+  }
+  elseif (isset($element['#title_display'])) {
+    $title_display = $element['#title_display'];
+  }
+  else {
+    $title_display = NULL;
+  }
+
+  if ($title_display === 'inline') {
+    $variables['title']['#weight'] = 0;
+    $variables['help']['#weight'] = -1;
+  }
+}
+
+/**
+ * Prepares #more property for form element template.
+ *
+ * @see template_preprocess_form_element()
+ * @see form-element.html.twig
+ * @see template_preprocess_datetime_wrapper()
+ * @see datetime-wrapper.html.twig
+ */
+function _webform_preprocess_form_element_description_more(array &$variables) {
+  $element = &$variables['element'];
+  if (empty($element['#more'])) {
+    return;
+  }
+
+  // Make sure description is displayed.
+  if (!isset($variables['description_display'])) {
+    $variables['description_display'] = 'after';
+  }
+
+  // Add more element.
+  $variables['description']['content']['more'] = [
+    '#type' => 'webform_more',
+    '#attributes' => (!empty($element['#id'])) ? ['id' => $element['#id'] . '--more'] : [],
+  ] + array_intersect_key($element, array_flip(['#more', '#more_title']));
 }
 
 /******************************************************************************/

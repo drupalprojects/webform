@@ -46,8 +46,8 @@ class WebformElementAddressTest extends WebformElementTestBase {
 
     // Check advanced fieldset, legend, help, and description.
     $this->assertRaw('<fieldset data-drupal-selector="edit-address-advanced" aria-describedby="edit-address-advanced--wrapper--description" id="edit-address-advanced--wrapper" class="address--wrapper fieldgroup form-composite webform-composite-visible-title js-form-item form-item js-form-wrapper form-wrapper">');
-    $this->assertRaw('<span class="fieldset-legend">address_advanced<a href="#help" title="This is help text" data-webform-help="This is help text" class="webform-element-help">?</a>');
-    $this->assertRaw('<div id="edit-address-advanced--wrapper--description" class="description">');
+    $this->assertRaw('<span class="fieldset-legend">address_advanced<a href="#help" title="This is help text" class="webform-element-help" data-webform-help="This is help text">?</a>');
+    $this->assertRaw('<div class="description"><div id="edit-address-advanced--wrapper--description" class="webform-element-description">This is a description</div>');
 
     /**************************************************************************/
     // Processing.

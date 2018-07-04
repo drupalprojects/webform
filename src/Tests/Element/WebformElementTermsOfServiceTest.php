@@ -34,7 +34,7 @@ class WebformElementTermsOfServiceTest extends WebformElementTestBase {
     $this->assertRaw('<div data-webform-terms-of-service-type="modal" class="form-type-webform-terms-of-service js-form-type-webform-terms-of-service js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-terms-of-service-default form-item-terms-of-service-default">');
     $this->assertRaw('<input data-drupal-selector="edit-terms-of-service-default" type="checkbox" id="edit-terms-of-service-default" name="terms_of_service_default" value class="form-checkbox required" required="required" aria-required="true" />');
     $this->assertRaw('<label for="edit-terms-of-service-default" class="option js-form-required form-required">I agree to the <a role="button" href="#terms">terms of service</a>. (default)</label>');
-    $this->assertRaw('<div id="edit-terms-of-service-default--description" class="description">');
+    $this->assertRaw('<div id="edit-terms-of-service-default--description" class="webform-element-description">');
     $this->assertRaw('<div id="webform-terms-of-service-terms_of_service_default--description" class="webform-terms-of-service-details js-hide">');
     $this->assertRaw('<div class="webform-terms-of-service-details--title">terms_of_service_default</div>');
     $this->assertRaw('<div class="webform-terms-of-service-details--content">These are the terms of service.</div>');

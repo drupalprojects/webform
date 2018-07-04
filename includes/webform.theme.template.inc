@@ -797,18 +797,19 @@ function template_preprocess_webform_composite_telephone(array &$variables) {
  *   An associative array containing the following key:
  *   - element: The webform element.
  *   - help: The help content.
+ *   - attributes: The help attributes.
  */
 function template_preprocess_webform_element_help(array &$variables) {
+  $attributes = (isset($variables['attributes'])) ? $variables['attributes'] : [];
+  $attributes['title'] = $variables['help'];
+  $attributes['class'][] = 'webform-element-help';
+  $attributes['data-webform-help'] = WebformHtmlEditor::stripTags($variables['help']);
+
   $variables['help_icon'] = [
     '#type' => 'link',
     '#title' => '?',
     '#url' => Url::fromRoute('<none>', [], ['fragment' => 'help']),
-    '#attributes' => [
-      'title' => $variables['help'],
-      // Add 'data-webform-help' attribute which support HTML markup.
-      'data-webform-help' => WebformHtmlEditor::stripTags($variables['help']),
-      'class' => ['webform-element-help'],
-    ],
+    '#attributes' => $attributes,
   ];
 }
 

@@ -21,6 +21,7 @@ elements: |
     radios_required:
       '#type': radios
       '#title': radios_required
+      '#description': 'This is a description'
       '#required': true
       '#options': yes_no
   radios_required_conditional_example:
