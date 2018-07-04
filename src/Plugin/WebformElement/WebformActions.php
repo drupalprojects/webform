@@ -29,9 +29,7 @@ class WebformActions extends ContainerBase {
       'title' => '',
       // Attributes.
       'attributes' => [],
-      // Conditional logic.
-      'states' => [],
-    ];
+    ] + $this->getDefaultBaseProperties();
     foreach (WebformActionsElement::$buttons as $button) {
       $properties[$button . '_hide'] = FALSE;
       $properties[$button . '__label'] = '';
