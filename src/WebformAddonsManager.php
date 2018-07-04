@@ -353,6 +353,23 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'mail',
     ];
 
+
+    // Mail: Mail System: SendGrid Integration.
+    $projects['sendgrid_integration'] = [
+      'title' => $this->t('SendGrid Integration <em>(requires Mail System)</em>'),
+      'description' => $this->t('Provides SendGrid Integration for the Drupal Mail System.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/sendgrid_integration'),
+      'category' => 'mail',
+    ];
+
+    // Mail: Mail System: Swift Mailer.
+    $projects['swiftmailer'] = [
+      'title' => $this->t('Swift Mailer <em>(requires Mail System)</em>'),
+      'description' => $this->t('Installs Swift Mailer as a mail system.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/swiftmailer'),
+      'category' => 'mail',
+    ];
+
     // Mail: Webform Mass Email.
     $projects['webform_mass_email'] = [
       'title' => $this->t('Webform Mass Email'),

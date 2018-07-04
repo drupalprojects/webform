@@ -1014,6 +1014,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
           'filecontent' => file_get_contents($file->getFileUri()),
           'filename' => $file->getFilename(),
           'filemime' => $file->getMimeType(),
+          'filepath' => \Drupal::service('file_system')->realpath($file->getFileUri()),
           // Add URL to be used by resend webform.
           'file' => $file,
         ];
