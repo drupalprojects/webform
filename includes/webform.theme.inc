@@ -354,10 +354,10 @@ function webform_preprocess_form_element(&$variables) {
 
   $element = &$variables['element'];
 
-  // Add #help and #_title_display to label.
+  // Add #help, #help_attributes, and #_title_display to label.
   // Note: #_title_display is used to track inline titles.
   // @see \Drupal\webform\Plugin\WebformElementBase::prepare
-  $variables['label'] += array_intersect_key($element, array_flip(['#help', '#_title_display']));
+  $variables['label'] += array_intersect_key($element, array_flip(['#help', '#help_attributes', '#_title_display']));
 }
 
 /**
