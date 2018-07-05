@@ -107,11 +107,11 @@ class WebformSettingsAdminTest extends WebformTestBase {
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[description_help]' => TRUE], t('Save configuration'));
-    $this->assertRaw('<a href="#help" aria-hidden="true" title="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help" data-webform-help="If checked, all element descriptions will be moved to help text (tooltip).">?</a>');
+    $this->assertRaw('<span aria-hidden="true" class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)."><span aria-hidden="true">?</span></span>');
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[description_help]' => FALSE], t('Save configuration'));
-    $this->assertNoRaw('<a href="#help" aria-hidden="true" title="If checked, all element descriptions will be moved to help text (tooltip)." class="webform-element-help" data-webform-help="If checked, all element descriptions will be moved to help text (tooltip).">?</a>');
+    $this->assertNoRaw('<span aria-hidden="true" class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="If checked, all element descriptions will be moved to help text (tooltip)."><span aria-hidden="true">?</span></span>');
   }
 
   /**

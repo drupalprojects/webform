@@ -47,8 +47,8 @@ class WebformCompositeTest extends WebformTestBase {
 
     // Check link multiple in table.
     $this->assertRaw('<label for="edit-link-multiple">Link multiple</label>');
-    $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<a href="#help" title="This is link title help" class="webform-element-help" data-webform-help="This is link title help">?</a>');
-    $this->assertRaw('<th class="link_multiple-table--url webform-multiple-table--url">Link URL<a href="#help" title="This is link url help" class="webform-element-help" data-webform-help="This is link url help">?</a>');
+    $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is link title help"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<th class="link_multiple-table--url webform-multiple-table--url">Link URL<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is link url help"><span aria-hidden="true">?</span></span>');
 
     /* Processing */
 

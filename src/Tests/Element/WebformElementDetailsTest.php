@@ -25,7 +25,7 @@ class WebformElementDetailsTest extends WebformElementTestBase {
     // Check details with help, field prefix, field suffix, description,
     // and more. Also, check that invalid 'required' and 'aria-required'
     // attributes are removed.
-    $this->assertRaw('<details data-webform-key="details" data-drupal-selector="edit-details" aria-describedby="edit-details--description" id="edit-details" class="js-form-wrapper form-wrapper required" open="open">    <summary role="button" aria-controls="edit-details" aria-expanded="true" aria-pressed="true" class="js-form-required form-required">details<a href="#help" title="This is help text." class="webform-element-help" data-webform-help="This is help text.">?</a>');
+    $this->assertRaw('<details data-webform-key="details" data-drupal-selector="edit-details" aria-describedby="edit-details--description" id="edit-details" class="js-form-wrapper form-wrapper required" open="open">    <summary role="button" aria-controls="edit-details" aria-expanded="true" aria-pressed="true" class="js-form-required form-required">details<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is help text."><span aria-hidden="true">?</span></span>');
     $this->assertRaw('<div class="details-description"><div id="edit-details--description" class="webform-element-description">This is a description.</div>');
     $this->assertRaw('<div id="edit-details--more" class="js-webform-element-more webform-element-more">');
 

@@ -31,7 +31,7 @@ class WebformElementRadiosTest extends WebformElementTestBase {
 
     // Check radios with help text display.
     $this->assertRaw('<input data-drupal-selector="edit-radios-help-one" type="radio" id="edit-radios-help-one" name="radios_help" value="one" class="form-radio" />');
-    $this->assertRaw('<label for="edit-radios-help-one" class="option">One<a href="#help" title="This is a description" class="webform-element-help" data-webform-help="This is a description">?</a>');
+    $this->assertRaw('<label for="edit-radios-help-one" class="option">One<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a description"><span aria-hidden="true">?</span></span>');
 
     // Check radios results does not include description.
     $edit = [

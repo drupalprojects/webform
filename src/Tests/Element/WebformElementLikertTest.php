@@ -45,9 +45,9 @@ class WebformElementLikertTest extends WebformElementTestBase {
     $this->assertRaw('<span class="webform-likert-description hidden">This is a description</span>');
 
     // Check likert with help.
-    $this->assertRaw('<th>Option 1<a href="#help" title="This is a help text" class="webform-element-help" data-webform-help="This is a help text">?</a>');
-    $this->assertRaw('<label for="edit-likert-help-table-q1-likert-question">Question 1<a href="#help" title="This is a help text" class="webform-element-help" data-webform-help="This is a help text">?</a>');
-    $this->assertRaw('<label for="edit-likert-help-q1--2" class="option"><span class="webform-likert-label visually-hidden">Option 2<span class="webform-likert-help hidden"><a href="#help" title="This is a help text" class="webform-element-help" data-webform-help="This is a help text">?</a>
+    $this->assertRaw('<th>Option 1<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a help text"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<label for="edit-likert-help-table-q1-likert-question">Question 1<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a help text"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<label for="edit-likert-help-q1--2" class="option"><span class="webform-likert-label visually-hidden">Option 2<span class="webform-likert-help hidden"><span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a help text"><span aria-hidden="true">?</span></span>
 </span></span></label>');
 
     // Check likert required.

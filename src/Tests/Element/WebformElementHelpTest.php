@@ -23,29 +23,29 @@ class WebformElementHelpTest extends WebformElementTestBase {
     $this->drupalGet('webform/test_element_help');
 
     // Check basic help.
-    $this->assertRaw('<a href="#help" title="{This is an example of help}" class="webform-element-help" data-webform-help="{This is an example of help}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help}"><span aria-hidden="true">?</span></span>');
 
     // Check help with HTML markup.
-    $this->assertRaw('<a href="#help" title="{This is an example of help with HTML markup}" class="webform-element-help" data-webform-help="{This is an example of help with &lt;b&gt;HTML markup&lt;/b&gt;}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help with &lt;b&gt;HTML markup&lt;/b&gt;}"><span aria-hidden="true">?</span></span>');
 
     // Check help with XSS.
-    $this->assertRaw('<a href="#help" title="{This is an example of help with XSS alert(&quot;XSS&quot;)}" class="webform-element-help" data-webform-help="{This is an example of help with &lt;b&gt;XSS alert(&quot;XSS&quot;)&lt;/b&gt;}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help with &lt;b&gt;XSS alert(&quot;XSS&quot;)&lt;/b&gt;}"><span aria-hidden="true">?</span></span>');
 
     // Check help with inline title.
-    $this->assertRaw('<a href="#help" title="{This is an example of help with an inline title}" class="webform-element-help" data-webform-help="{This is an example of help with an inline title}">?</a>
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help with an inline title}"><span aria-hidden="true">?</span></span>
 help_inline</label>');
 
     // Check radios (fieldset).
-    $this->assertRaw('<a href="#help" title="{This is an example of help for radio buttons}" class="webform-element-help" data-webform-help="{This is an example of help for radio buttons}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help for radio buttons}"><span aria-hidden="true">?</span></span>');
 
     // Check fieldset.
-    $this->assertRaw('<a href="#help" title="{This is an example of help for a fieldset}" class="webform-element-help" data-webform-help="{This is an example of help for a fieldset}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help for a fieldset}"><span aria-hidden="true">?</span></span>');
 
     // Check details.
-    $this->assertRaw('<a href="#help" title="{This is an example of help for a details element}" class="webform-element-help" data-webform-help="{This is an example of help for a details element}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help for a details element}"><span aria-hidden="true">?</span></span>');
 
     // Check section.
-    $this->assertRaw('<a href="#help" title="{This is an example of help for a section element}" class="webform-element-help" data-webform-help="{This is an example of help for a section element}">?</a>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="{This is an example of help for a section element}"><span aria-hidden="true">?</span></span>');
   }
 
 }

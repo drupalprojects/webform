@@ -17,6 +17,7 @@ use Drupal\webform\Element\WebformCodeMirror;
 use Drupal\webform\Element\WebformHtmlEditor;
 use Drupal\webform\WebformMessageManagerInterface;
 use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Utility\WebformAccessibilityHelper;
 use Drupal\webform\Utility\WebformDateHelper;
 use Drupal\webform\Utility\WebformDialogHelper;
 use Drupal\webform\Utility\WebformElementHelper;
@@ -801,16 +802,12 @@ function template_preprocess_webform_composite_telephone(array &$variables) {
  */
 function template_preprocess_webform_element_help(array &$variables) {
   $attributes = (isset($variables['attributes'])) ? $variables['attributes'] : [];
-  $attributes['title'] = $variables['help'];
   $attributes['class'][] = 'webform-element-help';
+  $attributes['role'] = 'tooltip';
+  $attributes['tabindex'] = '0';
   $attributes['data-webform-help'] = WebformHtmlEditor::stripTags($variables['help']);
 
-  $variables['help_icon'] = [
-    '#type' => 'link',
-    '#title' => '?',
-    '#url' => Url::fromRoute('<none>', [], ['fragment' => 'help']),
-    '#attributes' => $attributes,
-  ];
+  $variables['attributes'] = new Attribute($attributes);
 }
 
 /**
