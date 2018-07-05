@@ -23,6 +23,6 @@ set classes = [
 ]
 %}
 <div{{ attributes.addClass(classes) }}>
-  <div class="webform-element-more--link"><a role="button" aria-expanded="false" aria-controls="{{ attributes.id }}--content" href="#more">{{ more_title }}</a></div>
+  <div class="webform-element-more--link"><a role="button" href="#more">{{ more_title }}</a></div>
   <div id="{{ attributes.id }}--content" class="webform-element-more--content">{{ more }}</div>
 </div>

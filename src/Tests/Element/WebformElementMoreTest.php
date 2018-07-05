@@ -24,11 +24,11 @@ class WebformElementMoreTest extends WebformElementTestBase {
 
     // Check default more.
     $this->assertRaw('<div id="edit-more--more" class="js-webform-element-more webform-element-more">');
-    $this->assertRaw('<div class="webform-element-more--link"><a role="button" aria-expanded="false" aria-controls="edit-more--more--content" href="#more">More</a></div>');
+    $this->assertRaw('<div class="webform-element-more--link"><a role="button" href="#more">More</a></div>');
 
     // Check more with custom title.
     $this->assertRaw('<div id="edit-more-title--more" class="js-webform-element-more webform-element-more">');
-    $this->assertRaw('<div class="webform-element-more--link"><a role="button" aria-expanded="false" aria-controls="edit-more-title--more--content" href="#more">{Custom more title}</a></div>');
+    $this->assertRaw('<div class="webform-element-more--link"><a role="button" href="#more">{Custom more title}</a></div>');
 
     // Check more with HTML markup.
     $this->assertRaw('<div id="edit-more-html--more" class="js-webform-element-more webform-element-more">');
@@ -51,7 +51,7 @@ class WebformElementMoreTest extends WebformElementTestBase {
 
     // Check details more.
     $this->assertRaw('<div id="edit-more-details--more" class="js-webform-element-more webform-element-more">');
-    $this->assertRaw('<div class="webform-element-more--link"><a role="button" aria-expanded="false" aria-controls="edit-more-details--more--content" href="#more">More</a></div>');
+    $this->assertRaw('<div class="webform-element-more--link"><a role="button" href="#more">More</a></div>');
 
     // Check tooltip ignored more.
     $this->assertRaw('<div id="edit-more-tooltip--description" class="webform-element-description visually-hidden">{This is a description}</div>');

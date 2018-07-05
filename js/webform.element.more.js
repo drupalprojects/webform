@@ -19,14 +19,28 @@
         var $a = $more.find('a');
         var $content = $more.find('.webform-element-more--content');
 
-        $a.on('click', function(event) {
+        // Add aria-* attributes.
+        $a.attr({
+          'aria-expanded': false,
+          'aria-controls': $content.attr('id')
+        });
+
+        // Add event handlers.
+        $a.on('click', toggle)
+          .on('keydown', function(event) {
+            // Space or Return.
+            if(event.which === 32 || event.which === 13) {
+              toggle(event);
+            }
+          });
+
+        function toggle(event) {
           var expanded = ($a.attr('aria-expanded') === 'true');
 
           // Toggle `aria-expanded` attributes on link.
           $a.attr('aria-expanded', !expanded);
 
-          // Toggle `aria-hidden` on content and more .is-open state.
-          $content.attr('aria-hidden', expanded);
+          // Toggle content and more .is-open state.
           if (expanded) {
             $more.removeClass('is-open');
             $content.slideUp();
@@ -37,7 +51,7 @@
           }
 
           event.preventDefault();
-        });
+        }
       });
     }
   };

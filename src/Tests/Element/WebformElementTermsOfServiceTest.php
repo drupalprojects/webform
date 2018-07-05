@@ -40,7 +40,7 @@ class WebformElementTermsOfServiceTest extends WebformElementTestBase {
     $this->assertRaw('<div class="webform-terms-of-service-details--content">These are the terms of service.</div>');
 
     // Check slideout.
-    $this->assertRaw('<label for="edit-terms-of-service-slideout" class="option">I agree to the <a role="button" aria-expanded="false" aria-controls="webform-terms-of-service-terms_of_service_slideout--description" href="#terms">terms of service</a>. (slideout)</label>');
+    $this->assertRaw('<label for="edit-terms-of-service-slideout" class="option">I agree to the <a role="button" href="#terms">terms of service</a>. (slideout)</label>');
 
     // Check validation.
     $this->drupalPostForm('webform/test_element_terms_of_service', [], t('Preview'));

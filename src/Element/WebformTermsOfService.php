@@ -49,12 +49,7 @@ class WebformTermsOfService extends Checkbox {
       $element['#title'] = (string) t('I agree to the {terms of service}.');
     }
 
-    if ($element['#terms_type'] ===static::TERMS_SLIDEOUT) {
-      $element['#title'] = str_replace('{', '<a role="button" aria-expanded="false" aria-controls="'. $id . '--description" href="#terms">', $element['#title']);
-    }
-    else {
-      $element['#title'] = str_replace('{', '<a role="button" href="#terms">', $element['#title']);
-    }
+    $element['#title'] = str_replace('{', '<a role="button" href="#terms">', $element['#title']);
     $element['#title'] = str_replace('}', '</a>', $element['#title']);
 
     // Change description to render array.
