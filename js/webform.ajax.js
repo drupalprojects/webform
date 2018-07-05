@@ -263,6 +263,25 @@
     }
   };
 
+  /**
+   * Triggers audio UAs to read the supplied text.
+   *
+   * @param {Drupal.Ajax} [ajax]
+   *   A {@link Drupal.ajax} object.
+   * @param {object} response
+   *   Ajax response.
+   * @param {string} response.text
+   *   A string to be read by the UA.
+   * @param {string} [response.priority='polite']
+   *   A string to indicate the priority of the message. Can be either
+   *   'polite' or 'assertive'.
+   *
+   * @see Drupal.announce
+   */
+  Drupal.AjaxCommands.prototype.webformAnnounce = function (ajax, response) {
+    Drupal.announce(response.text, response.priority);
+  };
+
   /****************************************************************************/
   // Helper functions.
   /****************************************************************************/

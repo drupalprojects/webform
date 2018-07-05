@@ -91,6 +91,7 @@ webform.ajax:
     - core/drupal
     - core/drupalSettings
     - core/drupal.ajax
+    - core/drupal.announce
     - core/jquery.once
     - core/jquery.form
 

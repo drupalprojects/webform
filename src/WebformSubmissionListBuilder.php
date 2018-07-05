@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\webform\Controller\WebformSubmissionController;
 use Drupal\webform\Utility\WebformDialogHelper;
 
 /**
@@ -413,7 +414,7 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case 'sticky':
       case 'locked':
         return [
-          'data' => new FormattableMarkup('<span class="webform-icon webform-icon-@name webform-icon-@name--link"></span>', ['@name' => $name]),
+          'data' => new FormattableMarkup('<span class="webform-icon webform-icon-@name webform-icon-@name--link"></span><span class="visually-hidden">@title</span> ', ['@name' => $name, '@title' => $title]),
           'class' => ['webform-results-table__icon'],
           'field' => $name,
           'specifier' => $name,
@@ -500,10 +501,12 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
       case 'notes':
         $notes_url = $this->ensureDestination($this->requestHandler->getUrl($entity, $entity->getSourceEntity(), 'webform_submission.notes_form'));
         $state = $entity->get('notes')->value ? 'on' : 'off';
+        $t_args = ['@label' => $entity->label()];
+        $label = $entity->get('notes')->value ? $this->t('Edit @label notes', $t_args) : $this->t('Add notes to @label', $t_args);
         return [
           'data' => [
             '#type' => 'link',
-            '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-notes webform-icon-notes--@state"></span>', ['@state' => $state]),
+            '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-notes webform-icon-notes--@state"></span><span class="visually-hidden">@label</span>', ['@state' => $state, '@label' => $label]),
             '#url' => $notes_url,
             '#attributes' => WebformDialogHelper::getOffCanvasDialogAttributes(WebformDialogHelper::DIALOG_NARROW),
           ],
@@ -546,13 +549,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         return ($entity->isDraft()) ? $this->t('Yes') : $this->t('No');
 
       case 'sticky':
+        // @see \Drupal\webform\Controller\WebformSubmissionController::sticky
         $route_name = 'entity.webform_submission.sticky_toggle';
         $route_parameters = ['webform' => $entity->getWebform()->id(), 'webform_submission' => $entity->id()];
-        $state = $entity->isSticky() ? 'on' : 'off';
         return [
           'data' => [
             '#type' => 'link',
-            '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-sticky webform-icon-sticky--@state"></span>', ['@state' => $state]),
+            '#title' => WebformSubmissionController::buildSticky($entity),
             '#url' => Url::fromRoute($route_name, $route_parameters),
             '#attributes' => [
               'id' => 'webform-submission-' . $entity->id() . '-sticky',
@@ -563,13 +566,13 @@ class WebformSubmissionListBuilder extends EntityListBuilder {
         ];
 
       case 'locked':
+        // @see \Drupal\webform\Controller\WebformSubmissionController::locked
         $route_name = 'entity.webform_submission.locked_toggle';
         $route_parameters = ['webform' => $entity->getWebform()->id(), 'webform_submission' => $entity->id()];
-        $state = $entity->isLocked() ? 'on' : 'off';
         return [
           'data' => [
             '#type' => 'link',
-            '#title' => new FormattableMarkup('<span class="webform-icon webform-icon-lock webform-icon-locked--@state"></span>', ['@state' => $state]),
+            '#title' => WebformSubmissionController::buildLocked($entity),
             '#url' => Url::fromRoute($route_name, $route_parameters),
             '#attributes' => [
               'id' => 'webform-submission-' . $entity->id() . '-locked',
