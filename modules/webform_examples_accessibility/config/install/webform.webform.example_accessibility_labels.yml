@@ -89,7 +89,7 @@ elements: |
     help:
       '#type': textfield
       '#title': 'Help'
-      '#help': 'This is a help.'
+      '#help': 'This is help.'
   element_more:
     '#type': details
     '#title': 'Element more'

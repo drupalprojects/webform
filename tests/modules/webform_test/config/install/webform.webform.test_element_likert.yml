@@ -56,14 +56,14 @@ elements: |
     '#title': likert_help
     '#questions_description_display': help
     '#questions':
-      q1: 'Question 1 -- This is a help text'
-      q2: 'Question 2 -- This is a help text'
-      q3: 'Question 3 -- This is a help text'
+      q1: 'Question 1 -- This is help text'
+      q2: 'Question 2 -- This is help text'
+      q3: 'Question 3 -- This is help text'
     '#answers_description_display': help
     '#answers':
-      1: 'Option 1 -- This is a help text'
-      2: 'Option 2 -- This is a help text'
-      3: 'Option 3 -- This is a help text'
+      1: 'Option 1 -- This is help text'
+      2: 'Option 2 -- This is help text'
+      3: 'Option 3 -- This is help text'
   likert_values:
     '#type': webform_likert
     '#title': likert_values
