@@ -8,13 +8,13 @@ namespace Drupal\webform\Utility;
 class WebformAccessibilityHelper {
 
   /**
-   * Visually hide text using .visually-hidden class.
+   * isually hide text using .visually-hidden class.
    *
    * The .visually-hidden class is used to render invisible content just for
    * screen reader users.
    *
-   * @param $title
-   *   Text that should be visually hidden.
+   * @param string|array $title
+   *   Text or #markup that should be visually hidden.
    *
    * @return array
    *   A renderable array with the text wrapped in
@@ -23,11 +23,19 @@ class WebformAccessibilityHelper {
    * @see https://webaim.org/techniques/css/invisiblecontent/
    */
   public static function buildVisuallyHidden($title) {
-    return [
-      '#markup' => $title,
-      '#prefix' => '<span class="visually-hidden">',
-      '#suffix' => '</span>',
-    ];
+    if (is_array($title)) {
+      return $title + [
+        '#prefix' => '<span class="visually-hidden">',
+        '#suffix' => '</span>',
+      ];
+    }
+    else {
+      return [
+        '#markup' => $title,
+        '#prefix' => '<span class="visually-hidden">',
+        '#suffix' => '</span>',
+      ];
+    }
   }
 
   /**
@@ -36,8 +44,8 @@ class WebformAccessibilityHelper {
    * The aria-hidden property tells screen-readers if they
    * should ignore the element.
    *
-   * @param $title
-   *   Text that should be aria-hidden.
+   * @param string|array $title
+   *   Text or #markup that should be aria-hidden.
    *
    * @return array
    *   A renderable array with the text wrapped in
@@ -46,11 +54,19 @@ class WebformAccessibilityHelper {
    * @see https://www.w3.org/TR/wai-aria-1.1/#aria-hidden
    */
   public static function buildAriaHidden($title) {
-    return [
-      '#markup' => $title,
-      '#prefix' => '<span aria-hidden="true">',
-      '#suffix' => '</span>',
-    ];
+    if (is_array($title)) {
+      return $title + [
+        '#prefix' => '<span aria-hidden="true">',
+        '#suffix' => '</span>',
+      ];
+    }
+    else {
+      return [
+        '#markup' => $title,
+        '#prefix' => '<span aria-hidden="true">',
+        '#suffix' => '</span>',
+      ];
+    }
   }
 }
 
