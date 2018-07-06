@@ -104,12 +104,13 @@ trait WebformTableTrait {
    * @param array $element
    *   An associative array containing the properties and children of
    *   the tableselect element
+   *
    * @return array
    *   The processed element.
    *
    * @see \Drupal\Core\Render\Element\Tableselect::processTableselect
    */
-  public static function processTableSelectOptions($element) {
+  public static function processTableSelectOptions(array $element) {
     foreach ($element['#options'] as $key => $choice) {
       if (isset($element[$key]) && empty($element[$key]['#title'])) {
         if ($title = static::getTableSelectOptionTitle($choice)) {
@@ -119,6 +120,26 @@ trait WebformTableTrait {
       }
     }
     return $element;
+  }
+
+  /**
+   * Set process table select element callbacks.
+   *
+   * @param array $element
+   *   An associative array containing the properties and children of
+   *   the table select element
+   *
+   * @return array
+   *   The table select element with #process callbacks.
+   *
+   * @see \Drupal\Core\Render\Element\Tableselect::processTableselect
+   */
+  public static function setProcessTableSelectCallback(array &$element) {
+    $class = get_called_class();
+    $element['#process'] = [
+      ['\Drupal\Core\Render\Element\Tableselect', 'processTableselect'],
+      [$class , 'processTableSelectOptions'],
+    ];
   }
 
   /**

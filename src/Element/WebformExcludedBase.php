@@ -4,6 +4,7 @@ namespace Drupal\webform\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
+use Drupal\webform\Plugin\WebformElement\TableSelect;
 
 /**
  * Provides a base webform element for webform excluded elements and columns.
@@ -51,6 +52,8 @@ abstract class WebformExcludedBase extends FormElement {
       '#empty' => t('No elements are available.'),
       '#default_value' => array_combine($default_value, $default_value),
     ];
+    TableSelect::setProcessTableSelectCallback($element['tableselect']);
+
     if (isset($element['#parents'])) {
       $element['tableselect']['#parents'] = array_merge($element['#parents'], ['tableselect']);
     }
