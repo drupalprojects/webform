@@ -62,7 +62,7 @@ class WebformLikert extends FormElement {
         list($answer_title, $answer_description) = explode(WebformOptionsHelper::DESCRIPTION_DELIMITER, $answer);
       }
       $answers[$answer_key] = [
-        'description_property_name' => $answer_description_property_name ,
+        'description_property_name' => $answer_description_property_name,
         'title' => $answer_title,
         'description' => $answer_description,
       ];
@@ -87,6 +87,7 @@ class WebformLikert extends FormElement {
           $header[$answer_key]['data']['help'] = [
             '#type' => 'webform_help',
             '#help' => $answer['description'],
+            '#help_title' => $answer['title'],
           ];
           break;
 
@@ -165,6 +166,7 @@ class WebformLikert extends FormElement {
               'help' => [
                 '#type' => 'webform_help',
                 '#help' => $answer['description'],
+                '#help_title' => $answer['title'],
                 '#prefix' => '<span class="webform-likert-help hidden">',
                 '#suffix' => '</span>',
               ],

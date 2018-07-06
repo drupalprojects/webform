@@ -121,6 +121,7 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       '#description' => [
         '#type' => 'webform_help',
         '#help' => $this->t('If the open date/time is left blank, this form will immediately be opened.'),
+        '#help_title' => $this->t('Open'),
       ],
     ];
     $element['settings']['scheduled']['close'] = [
@@ -133,6 +134,7 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
       '#description' => [
         '#type' => 'webform_help',
         '#help' => $this->t('If the close date/time is left blank, this webform will never be closed.'),
+        '#help_title' => $this->t('Close'),
       ],
     ];
 

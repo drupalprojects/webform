@@ -96,7 +96,7 @@ function webform_theme() {
     ],
 
     'webform_element_help' => [
-      'variables' => ['help' => NULL, 'attributes' => []],
+      'variables' => ['help' => NULL, 'help_title' => '', 'attributes' => []],
     ],
 
     'webform_element_more' => [
@@ -357,7 +357,7 @@ function webform_preprocess_form_element(&$variables) {
   // Add #help, #help_attributes, and #_title_display to label.
   // Note: #_title_display is used to track inline titles.
   // @see \Drupal\webform\Plugin\WebformElementBase::prepare
-  $variables['label'] += array_intersect_key($element, array_flip(['#help', '#help_attributes', '#_title_display']));
+  $variables['label'] += array_intersect_key($element, array_flip(['#help', '#help_title', '#help_attributes', '#_title_display']));
 }
 
 /**
@@ -592,11 +592,16 @@ function _webform_preprocess_help_title(&$variables, array &$element) {
     return;
   }
 
+  // Default #help_title to element's #title.
+  if (empty($element['#help_title']) && !empty($element['#title'])) {
+    $element['#help_title'] = $element['#title'];
+  }
+
   $variables = [
     'title' => (is_array($variables)) ? $variables : ['#markup' => $variables],
     'help' => [
       '#type' => 'webform_help',
-    ] + array_intersect_key($element, array_flip(['#help'])),
+    ] + array_intersect_key($element, array_flip(['#help', '#help_title'])),
   ];
 
   // Add help attributes.

@@ -31,6 +31,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       'display_on' => static::DISPLAY_ON_BOTH,
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',

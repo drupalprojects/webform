@@ -24,6 +24,7 @@ class Details extends ContainerBase {
     $properties = [
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',

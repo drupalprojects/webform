@@ -90,6 +90,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#description' => [
         '#type' => 'webform_help',
         '#help' => $this->t('If the open date/time is left blank, this form will immediately be opened.'),
+        '#help_title' => $this->t('Open'),
       ],
     ];
     $form['form_settings']['scheduled']['close'] = [
@@ -102,6 +103,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#description' => [
         '#type' => 'webform_help',
         '#help' => $this->t('If the close date/time is left blank, this webform will never be closed.'),
+        '#help_title' => $this->t('Close'),
       ],
       '#default_value' => $webform->get('close') ? DrupalDateTime::createFromTimestamp(strtotime($webform->get('close'))) : NULL,
     ];

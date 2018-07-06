@@ -32,6 +32,7 @@ class WebformLocation extends WebformCompositeBase {
       'multiple' => FALSE,
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',

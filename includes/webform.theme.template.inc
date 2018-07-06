@@ -805,7 +805,13 @@ function template_preprocess_webform_element_help(array &$variables) {
   $attributes['class'][] = 'webform-element-help';
   $attributes['role'] = 'tooltip';
   $attributes['tabindex'] = '0';
-  $attributes['data-webform-help'] = WebformHtmlEditor::stripTags($variables['help']);
+
+  $help = '';
+  if (!empty($variables['help_title'])) {
+    $help .= '<div class="webform-element-help--title">' . WebformHtmlEditor::stripTags($variables['help_title']) . '</div>';
+  }
+  $help .= '<div class="webform-element-help--content">' . WebformHtmlEditor::stripTags($variables['help']) . '</div>';
+  $attributes['data-webform-help'] = $help;
 
   $variables['attributes'] = new Attribute($attributes);
 }

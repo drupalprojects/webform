@@ -29,6 +29,7 @@ class Textarea extends TextBase {
       'default_value' => '',
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',

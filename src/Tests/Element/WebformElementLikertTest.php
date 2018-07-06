@@ -45,10 +45,9 @@ class WebformElementLikertTest extends WebformElementTestBase {
     $this->assertRaw('<span class="webform-likert-description hidden">This is a description</span>');
 
     // Check likert with help.
-    $this->assertRaw('<th>Option 1<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a help text"><span aria-hidden="true">?</span></span>');
-    $this->assertRaw('<label for="edit-likert-help-table-q1-likert-question">Question 1<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a help text"><span aria-hidden="true">?</span></span>');
-    $this->assertRaw('<label for="edit-likert-help-q1--2" class="option"><span class="webform-likert-label visually-hidden">Option 2<span class="webform-likert-help hidden"><span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is a help text"><span aria-hidden="true">?</span></span>
-</span></span></label>');
+    $this->assertRaw('<th>Option 1<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Option 1&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;This is a help text&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<label for="edit-likert-help-table-q1-likert-question">Question 1<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Question 1&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;This is a help text&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<label for="edit-likert-help-q1--2" class="option"><span class="webform-likert-label visually-hidden">Option 2<span class="webform-likert-help hidden"><span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Option 2&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;This is a help text&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
 
     // Check likert required.
     $this->drupalPostForm('webform/test_element_likert', [], t('Submit'));

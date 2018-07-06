@@ -197,6 +197,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'default_value' => '',
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',
@@ -289,6 +290,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       'title',
       'label',
       'help',
+      'help_title',
       'more',
       'more_title',
       'description',
@@ -2140,39 +2142,50 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       ],
     ];
 
-    /* Element description */
+    /* Element description/help/more */
 
     $form['element_description'] = [
       '#type' => 'details',
-      '#title' => $this->t('Element description/help'),
-    ];
-    $form['element_description']['help'] = [
-      '#type' => 'webform_html_editor',
-      '#title' => $this->t('Help text'),
-      '#description' => $this->t('A tooltip displayed after the title.'),
-      '#states' => [
-        'invisible' => [
-          [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
-        ],
-      ],
+      '#title' => $this->t('Element description/help/more'),
     ];
     $form['element_description']['description'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Description'),
       '#description' => $this->t('A short description of the element used as help for the user when he/she uses the webform.'),
     ];
-    $form['element_description']['more_title'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('More label'),
-      '#description' => $this->t('The click-able label used to open and close more text.') . '<br /><br />' .
-        $this->t('Defaults to: %value', ['%value' => $this->configFactory->get('webform.settings')->get('element.default_more_title')]),
+    $form['element_description']['help'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Help'),
+      '#description' => $this->t("Displays a help tooltip after the element's title"),
       '#states' => [
         'invisible' => [
-          ':input[name="properties[description_display]"]' => ['value' => 'tooltip'],
+          [':input[name="properties[title_display]"]' => ['value' => 'invisible']],
         ],
       ],
     ];
+    $form['element_description']['help']['help_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Help title'),
+      '#description' => $this->t("The text displayed in help tooltip after the element's title.") . '<br /><br />' .
+        $this->t("Defaults to the element's title"),
+    ];
+    $form['element_description']['help']['help'] = [
+      '#type' => 'webform_html_editor',
+      '#title' => $this->t('Help text'),
+      '#description' => $this->t("The text displayed in help tooltip after the element's title."),
+    ];
     $form['element_description']['more'] = [
+      '#type' => 'details',
+      '#title' => $this->t('More'),
+      '#description' => $this->t("Displays a read more hide/show widget below the element's description."),
+    ];
+    $form['element_description']['more']['more_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('More title'),
+      '#description' => $this->t('The click-able label used to open and close more text.') . '<br /><br />' .
+        $this->t('Defaults to: %value', ['%value' => $this->configFactory->get('webform.settings')->get('element.default_more_title')]),
+    ];
+    $form['element_description']['more']['more'] = [
       '#type' => 'webform_html_editor',
       '#title' => $this->t('More text'),
       '#description' => $this->t('A long description of the element that provides form additional information which can opened and closed.'),

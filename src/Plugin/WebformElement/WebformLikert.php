@@ -35,6 +35,7 @@ class WebformLikert extends WebformElementBase {
       'default_value' => [],
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',

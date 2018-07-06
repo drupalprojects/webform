@@ -492,7 +492,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
           '#title' => $this->t('Items format'),
           '#title_display' => 'invisible',
           '#field_suffix' => [
-            '#type' => 'webform_help',
+            '#help_title' => $element_plugin_label,
             '#help' => $this->t('Defaults to: %value', ['%value' => $items_default_format_label]),
           ],
           '#empty_option' => $this->t('- Default -'),

@@ -24,7 +24,7 @@ class WebformElementSectionTest extends WebformElementTestBase {
 
     // Check section element.
     $this->assertRaw('<section data-drupal-selector="edit-webform-section" aria-describedby="edit-webform-section--description" id="edit-webform-section" class="required js-form-item form-item js-form-wrapper form-wrapper webform-section" required="required" aria-required="true">');
-    $this->assertRaw('<h2 class="webform-section-title js-form-required form-required">webform_section<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is help text."><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<h2 class="webform-section-title js-form-required form-required">webform_section<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;webform_section&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;This is help text.&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
     $this->assertRaw('<div class="description"><div id="edit-webform-section--description" class="webform-element-description">This is a description.</div>');
     $this->assertRaw('<div id="edit-webform-section--more" class="js-webform-element-more webform-element-more">');
 

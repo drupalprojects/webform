@@ -47,8 +47,8 @@ class WebformCompositeTest extends WebformTestBase {
 
     // Check link multiple in table.
     $this->assertRaw('<label for="edit-link-multiple">Link multiple</label>');
-    $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is link title help"><span aria-hidden="true">?</span></span>');
-    $this->assertRaw('<th class="link_multiple-table--url webform-multiple-table--url">Link URL<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="This is link url help"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<th class="link_multiple-table--title webform-multiple-table--title">Link Title<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Link Title&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;This is link title help&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<th class="link_multiple-table--url webform-multiple-table--url">Link URL<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Link URL&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;This is link url help&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
 
     /* Processing */
 

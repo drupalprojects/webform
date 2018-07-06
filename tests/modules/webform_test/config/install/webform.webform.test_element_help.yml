@@ -23,6 +23,11 @@ elements: |
     '#title': help_required
     '#required': true
     '#help': '{This is an example of help for a required element}'
+  help_title:
+    '#type': textfield
+    '#title': help_title
+    '#help': '{This is an example of help with a custom help title}'
+    '#help_title': '{Help custom title}'
   help_html:
     '#type': textfield
     '#title': help_html

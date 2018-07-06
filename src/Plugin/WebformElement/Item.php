@@ -26,6 +26,7 @@ class Item extends WebformMarkup {
       'title' => '',
       // Description/Help.
       'help' => '',
+      'help_title' => '',
       'description' => '',
       'more' => '',
       'more_title' => '',

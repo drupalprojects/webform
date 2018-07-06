@@ -237,6 +237,7 @@ abstract class WebformUiElementTypeFormBase extends FormBase {
     $row['type']['help'] = [
       '#type' => 'webform_help',
       '#help' => $webform_element->getPluginDescription(),
+      '#help_title' => $webform_element->getPluginLabel(),
     ];
 
     // Preview.

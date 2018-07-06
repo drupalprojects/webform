@@ -434,9 +434,11 @@ class WebformMultiple extends FormElement {
             continue;
           }
 
+          $child_title = (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '';
+
           $title = [];
           $title['title'] = [
-            '#markup' => (!empty($element['#element'][$child_key]['#title'])) ? $element['#element'][$child_key]['#title'] : '',
+            '#markup' => $child_title,
           ];
           if (!empty($element['#element'][$child_key]['#required']) || !empty($element['#element'][$child_key]['#_required'])) {
             $title['title'] += [
@@ -448,6 +450,7 @@ class WebformMultiple extends FormElement {
             $title['help'] = [
               '#type' => 'webform_help',
               '#help' => $element['#element'][$child_key]['#help'],
+              '#help_title' => $child_title,
             ];
           }
           $header[$child_key] = [
