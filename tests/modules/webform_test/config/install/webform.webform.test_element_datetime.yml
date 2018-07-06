@@ -46,7 +46,7 @@ elements: |
   datetime_year_range:
     '#type': datetime
     '#title': datetime_year_range
-    '#descripion': '(-10:+1)'
+    '#description': '(-10:+1)'
     '#default_value': '2009-08-18T01:00:00-05:00'
     '#date_year_range': '-10:+1'
   datetime_min_max:

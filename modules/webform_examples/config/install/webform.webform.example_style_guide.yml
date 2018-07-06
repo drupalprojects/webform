@@ -80,9 +80,9 @@ elements: |
       '#title': 'Checkboxes with descriptions'
       '#options_description_display': description
       '#options':
-        one: 'One -- This is a descripion.'
-        two: 'Two -- This is a descripion.'
-        three: 'Three -- This is a descripion.'
+        one: 'One -- This is a description.'
+        two: 'Two -- This is a description.'
+        three: 'Three -- This is a description.'
     checkboxes_icheck:
       '#type': checkboxes
       '#title': 'Checkboxes (iCheck)'
