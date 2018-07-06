@@ -56,15 +56,26 @@
         // enabling tabbing and toggling via the spacebar.
         // @see https://github.com/rvera/image-picker/issues/108
 
+        // Block select menu from being tabbed.
+        $select.attr('tabindex', '-1');
+
         if (isMultiple) {
           $select.next('.image_picker_selector').attr('role', 'radiogroup');
         }
 
-        $select.next('.image_picker_selector').find('.thumbnail')
+        var $thumbnail = $select.next('.image_picker_selector').find('.thumbnail');
+        $thumbnail
+          // Allow thumbnail to be tabbed.
           .prop('tabindex', '0')
           .attr('role', isMultiple ? 'checkbox' : 'radio')
           .each(function() {
-            $(this).attr('title', $(this).find('img').attr('alt'));
+            // Cleanup alt, set title, and fix aria.
+            var alt = $(this).find('img').attr('alt').replace(/<\/?[^>]+(>|$)/g, '');
+            $(this).find('img').attr('alt', alt);
+            $(this).attr('title', alt);
+
+            // Aria hide caption since the 'title' attribute will be read aloud.
+            $(this).find('p').attr('aria-hidden', true);
           })
           .on('focus', function(event) {
             $(this).addClass('focused');
