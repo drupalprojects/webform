@@ -575,12 +575,15 @@ function _webform_preprocess_description_help(array &$variables) {
     && !(isset($element['#title_display']) && in_array($element['#title_display'], ['attribute', 'invisible']))
   ) {
     $element['#help'] = (is_array($element['#description'])) ? \Drupal::service('renderer')->render($element['#description']) : $element['#description'];
-    $element['#help_attributes']['aria-hidden'] = 'true';
 
     // We must still render the description as visually hidden because the input
     // has an 'aria-describedby' attribute pointing to the description's id.
     $variables['description_display'] = 'after';
     $variables['description']['content']['description']['#attributes']->addClass('visually-hidden');
+
+    // Remove all links from the #description since it will be .visually-hidden
+    // and unreachable via tabbing.
+    $variables['description']['content']['description']['#markup'] = strip_tags($variables['description']['content']['description']['#markup']);
   }
 }
 

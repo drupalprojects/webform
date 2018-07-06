@@ -107,11 +107,11 @@ class WebformSettingsAdminTest extends WebformTestBase {
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[description_help]' => TRUE], t('Save configuration'));
-    $this->assertRaw('<span aria-hidden="true" class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
 
     // Check moving #description to #help for webform admin routes.
     $this->drupalPostForm('admin/structure/webform/config/advanced', ['ui[description_help]' => FALSE], t('Save configuration'));
-    $this->assertNoRaw('<span aria-hidden="true" class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
+    $this->assertNoRaw('<span class="webform-element-help" role="tooltip" tabindex="0" data-webform-help="&lt;div class=&quot;webform-element-help--title&quot;&gt;Display element description as help text (tooltip)&lt;/div&gt;&lt;div class=&quot;webform-element-help--content&quot;&gt;If checked, all element descriptions will be moved to help text (tooltip).&lt;/div&gt;"><span aria-hidden="true">?</span></span>');
   }
 
   /**
