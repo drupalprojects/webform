@@ -374,7 +374,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     $element_state_options = OptGroup::flattenOptions(WebformElementStates::getStateOptions());
     $element_dialog_attributes = WebformDialogHelper::getOffCanvasDialogAttributes();
     $key = $element['#webform_key'];
-
+    $title = $element['#admin_title'] ?: $element['#title'];
+    $title = (is_array($title)) ? $this->renderer->render($title) :  $title;
     $plugin_id = $this->elementManager->getElementPluginId($element);
 
     /** @var \Drupal\webform\Plugin\WebformElementInterface $webform_element */
@@ -485,6 +486,8 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
     if ($webform_element->hasProperty('required')) {
       $row['required'] = [
         '#type' => 'checkbox',
+        '#title' => $this->t('Required for @title', ['@title' => $title]),
+        '#title_display' => 'invisible',
         '#default_value' => (empty($element['#required'])) ? FALSE : TRUE,
       ];
     }
@@ -494,7 +497,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     $row['weight'] = [
       '#type' => 'weight',
-      '#title' => $this->t('Weight for ID @id', ['@id' => $key]),
+      '#title' => $this->t('Weight for @title', ['@title' => $title]),
       '#title_display' => 'invisible',
       '#default_value' => $element['#weight'],
       '#attributes' => [
@@ -515,7 +518,7 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       '#parents' => ['webform_ui_elements', $key, 'parent_key'],
       '#type' => 'textfield',
       '#size' => 20,
-      '#title' => $this->t('Parent'),
+      '#title' => $this->t('Parent element (key)'),
       '#title_display' => 'invisible',
       '#default_value' => $element['#webform_parent_key'],
       '#attributes' => [
