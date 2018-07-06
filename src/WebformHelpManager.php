@@ -536,10 +536,32 @@ class WebformHelpManager implements WebformHelpManagerInterface {
           '#suffix' => '</dd>',
         ],
       ];
+
       if ($docs) {
         $build['content']['libraries'][$library_name]['title']['#suffix'] = '</dt>';
         unset($build['content']['libraries'][$library_name]['description']['download']);
+
+        if (isset($library['issues_url'])) {
+          $issues_url = $library['issues_url'];
+        }
+        elseif (preg_match('#https://github.com/[^/]+/[^/]+#', $library['download_url']->toString(),$match)) {
+          $issues_url = Url::fromUri($match[0] . '/issues');
+        }
+        else {
+          $issues_url = NULL;
+        }
+
+        if ($issues_url) {
+          $build['content']['libraries'][$library_name]['description']['accessibility'] = [
+            '#type' => 'link',
+            '#title' => $this->t('known accessibility issues'),
+            '#url' => $issues_url->setOption('query', ['q' => 'is:issue is:open accessibility ']),
+            '#prefix' => '<em>@see ',
+            '#suffix' => '</em>',
+          ];
+        }
       }
+
     }
     return $build;
   }
