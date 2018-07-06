@@ -45,12 +45,16 @@ function webform_examples_accessibility_webform_submission_form_alter(array &$fo
   // Accessibility.
   /****************************************************************************/
 
+  // Get query without ajax parameters.
+  $query = \Drupal::request()->query->all();
+  unset($query['ajax_form'], $query['_wrapper_format']);
+
   $accessibility = (\Drupal::request()->query->get('accessibility') == '1') ? TRUE : FALSE;
 
   $form['accessibility']['accessibility'] = [
     '#type' => 'link',
     '#title' => $accessibility ? t('Hide accessibility') : t('Show accessibility'),
-    '#url' => Url::fromRoute('<current>', [], ['query' => ['accessibility' => $accessibility ? 0 : 1] + \Drupal::request()->query->all()]),
+    '#url' => Url::fromRoute('<current>', [], ['query' => ['accessibility' => $accessibility ? 0 : 1] + $query]),
   ];
 
   /****************************************************************************/
@@ -72,7 +76,7 @@ function webform_examples_accessibility_webform_submission_form_alter(array &$fo
   $form['accessibility']['required'] = [
     '#type' => 'link',
     '#title' => $required ? t('Disabled required') : t('Enable required'),
-    '#url' => Url::fromRoute('<current>', [], ['query' => ['required' => $required ? 0 : 1] + \Drupal::request()->query->all()]),
+    '#url' => Url::fromRoute('<current>', [], ['query' => ['required' => $required ? 0 : 1] + $query]),
   ];
 
   if ($required !== NULL) {
@@ -102,7 +106,7 @@ function webform_examples_accessibility_webform_submission_form_alter(array &$fo
   $form['accessibility']['novalidate'] = [
     '#type' => 'link',
     '#title' => $novalidate ? t('Enable client-side validation') : t('Disable client-side validation'),
-    '#url' => Url::fromRoute('<current>', [], ['query' => ['novalidate' => $novalidate ? 0 : 1] + \Drupal::request()->query->all()]),
+    '#url' => Url::fromRoute('<current>', [], ['query' => ['novalidate' => $novalidate ? 0 : 1] + $query]),
   ];
 
   /****************************************************************************/
@@ -124,7 +128,7 @@ function webform_examples_accessibility_webform_submission_form_alter(array &$fo
     $form['accessibility']['disable_inline_form_errors'] = [
       '#type' => 'link',
       '#title' => $disable_inline_form_errors ? t('Enable inline form errors') : t('Disable inline form errors'),
-      '#url' => Url::fromRoute('<current>', [], ['query' => ['disable_inline_form_errors' => $disable_inline_form_errors ? 0 : 1] + \Drupal::request()->query->all()]),
+      '#url' => Url::fromRoute('<current>', [], ['query' => ['disable_inline_form_errors' => $disable_inline_form_errors ? 0 : 1] + $query]),
     ];
   }
 }
