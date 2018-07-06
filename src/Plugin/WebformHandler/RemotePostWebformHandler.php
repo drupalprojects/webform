@@ -522,6 +522,10 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     // Append uploaded file name, uri, and base64 data to data.
     $webform = $this->getWebform();
     foreach ($data as $element_key => $element_value) {
+      if (empty($element_value)) {
+        continue;
+      }
+
       $element = $webform->getElement($element_key);
       if (!$element) {
         continue;
