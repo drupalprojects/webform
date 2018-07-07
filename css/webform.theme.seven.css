@@ -42,6 +42,18 @@ details details details {
   text-decoration: underline;
 }
 
+/** Compress tabs for mobile */
+@media screen and (max-width: 600px) {
+  .webform-tabs.ui-tabs .ui-tabs-nav {
+    padding: 5px 0 4px 0;
+  }
+  .webform-tabs.ui-tabs .ui-tabs-nav li {
+    padding: 0;
+  }
+  .webform-tabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    padding: .5em .7em;
+  }
+}
 
 /* Accordion icon */
 .ui-accordion-icons .ui-icon {

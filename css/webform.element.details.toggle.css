@@ -44,3 +44,9 @@
 .webform-tabs .webform-details-toggle-state-wrapper {
   float: right
 }
+
+@media screen and (max-width: 600px) {
+  .webform-tabs .webform-details-toggle-state-wrapper {
+    float: none;
+  }
+}
