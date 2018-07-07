@@ -104,6 +104,7 @@ class WebformFormHelper {
         '#group' => 'tabs',
         '#attributes' => [
           'id' => 'webform-tab--' . $tab_name,
+          'class' => ['webform-tab'],
         ],
       ];
     }

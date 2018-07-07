@@ -39,3 +39,8 @@
 .webform-details-toggle-statelink:focus {
   text-decoration: underline;
 }
+
+/* Float toogle to the right of webform tabs */
+.webform-tabs .webform-details-toggle-state-wrapper {
+  float: right
+}

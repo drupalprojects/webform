@@ -501,6 +501,7 @@ webform.element.details.toggle:
     js/webform.element.details.toggle.js: {}
   dependencies:
     - core/drupal
+    - core/drupal.announce
     - core/jquery.once
 
 webform.element.file.button:
