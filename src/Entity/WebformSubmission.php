@@ -634,7 +634,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
 
     // Get temporary webform entity and store it in the static
     // WebformSubmission::$webform property.
-    // This could be reworked to use \Drupal\user\PrivateTempStoreFactory
+    // This could be reworked to use \Drupal\Core\TempStore\PrivateTempStoreFactory
     // but it might be overkill since we are just using this to validate
     // that a webform's elements can be rendered.
     // @see \Drupal\webform\WebformEntityElementsValidator::validateRendering()
