@@ -38,6 +38,11 @@ details details details {
   border: 1px solid #ed5;
 }
 
+.webform-tabs .ui-tabs-active.ui-state-active.ui-state-focus a {
+  text-decoration: underline;
+}
+
+
 /* Accordion icon */
 .ui-accordion-icons .ui-icon {
   display: inline-block;
