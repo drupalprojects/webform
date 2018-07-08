@@ -52,7 +52,7 @@ abstract class ContainerBase extends WebformElementBase {
   public function isContainer(array $element) {
     return TRUE;
   }
-``
+
   /**
    * {@inheritdoc}
    */
