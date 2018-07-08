@@ -106,8 +106,10 @@ function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $asset
     $javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js'],
     $javascript['core/assets/vendor/jquery.ui/ui/widgets/tooltip-min.js']
   );
-  $javascript['modules/sandbox/webform/js/webform.element.help.js']['data'] = $path . '/js/webform.element.help.js';
 
+  if (isset($javascript['modules/sandbox/webform/js/webform.element.help.js'])) {
+    $javascript['modules/sandbox/webform/js/webform.element.help.js']['data'] = $path . '/js/webform.element.help.js';
+  }
 }
 
 /**
