@@ -99,11 +99,15 @@ function webform_bootstrap_js_alter(&$javascript, AttachedAssetsInterface $asset
     return;
   }
 
-  // Make sure jQuery tooltip is never loaded.
+  $path = drupal_get_path('module', 'webform_bootstrap');
+  // Make sure jQuery tooltip is never loaded and use custom
+  // webform.element.help.js.
   unset(
     $javascript['core/assets/vendor/jquery.ui/ui/tooltip-min.js'],
     $javascript['core/assets/vendor/jquery.ui/ui/widgets/tooltip-min.js']
   );
+  $javascript['modules/sandbox/webform/js/webform.element.help.js']['data'] = $path . '/js/webform.element.help.js';
+
 }
 
 /**
