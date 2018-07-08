@@ -52,24 +52,7 @@ abstract class ContainerBase extends WebformElementBase {
   public function isContainer(array $element) {
     return TRUE;
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function prepare(array &$element, WebformSubmissionInterface $webform_submission = NULL) {
-    parent::prepare($element, $webform_submission);
-
-    // Containers can only hide (aka invisible) the title by removing the
-    // #title attribute.
-    // @see core/modules/system/templates/fieldset.html.twig
-    // @see core/modules/system/templates/details.html.twig
-    if (isset($element['#title_display'])
-      && $element['#title_display'] === 'invisible'
-      && $this instanceof Details) {
-      // unset($element['#title']);
-    }
-  }
-
+``
   /**
    * {@inheritdoc}
    */
