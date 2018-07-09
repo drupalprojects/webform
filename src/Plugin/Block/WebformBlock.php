@@ -91,10 +91,25 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
     ];
     $form['default_data'] = [
       '#title' => $this->t('Default webform submission data (YAML)'),
-      '#description' => $this->t('Enter webform submission data as name and value pairs which will be used to prepopulate the selected webform. You may use tokens.'),
       '#type' => 'webform_codemirror',
       '#mode' => 'yaml',
       '#default_value' => $this->configuration['default_data'],
+      '#webform_element' => TRUE,
+      '#description' => $this->t('Enter submission data as name and value pairs as <a href=":href">YAML</a> which will be used to prepopulate the selected webform. You may use tokens.', [':href' => 'https://en.wikipedia.org/wiki/YAML']),
+      '#more_title' => $this->t('Example'),
+      '#more' => [
+        '#theme' => 'webform_codemirror',
+        '#type' => 'yaml',
+        '#code' => " # This is an example of a comment.
+element_key: 'some value'
+
+# The below example uses a token to get the current node's title.
+# Add ':clear' to the end token to return an empty value when the token is missing.
+title: '[webform_submission:node:title:clear]'
+# The below example uses a token to get a field value from the current node.
+full_name: '[webform_submission:node:field_full_name:clear]"
+      ],
+
     ];
 
     $form['token_tree_link'] = $this->tokenManager->buildTreeLink();

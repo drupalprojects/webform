@@ -144,6 +144,8 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
         '#mode' => 'yaml',
         '#title' => $this->t('Default submission data (YAML)'),
         '#placeholder' => $this->t("Enter 'name': 'value' pairs..."),
+        '#default_value' => $items[$delta]->default_data,
+        '#webform_element' => TRUE,
         '#description' => $this->t('Enter submission data as name and value pairs as <a href=":href">YAML</a> which will be used to prepopulate the selected webform. You may use tokens.', [':href' => 'https://en.wikipedia.org/wiki/YAML']),
         '#more_title' => $this->t('Example'),
         '#more' => [
@@ -158,8 +160,6 @@ title: '[webform_submission:node:title:clear]'
 # The below example uses a token to get a field value from the current node.
 full_name: '[webform_submission:node:field_full_name:clear]"
         ],
-        '#webform_element' => TRUE,
-        '#default_value' => $items[$delta]->default_data,
       ];
       /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
       $token_manager = \Drupal::service('webform.token_manager');
