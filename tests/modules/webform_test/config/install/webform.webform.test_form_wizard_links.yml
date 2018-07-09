@@ -9,37 +9,25 @@ close: null
 uid: null
 template: false
 archive: false
-id: test_element_html_editor
-title: 'Test: Element: HTML editor'
-description: 'Test HTML editor element.'
-category: 'Test: Element'
+id: test_form_wizard_links
+title: 'Test: Webform: Wizard previous links'
+description: 'Test a multiple step ''wizard'' webform with previous page links.'
+category: 'Test: Webform'
 elements: |
-  webform_html_editor:
-    '#type': webform_html_editor
-    '#title': 'webform_html_editor (default)'
-    '#required': true
-    '#default_value': 'Hello <b>World!!!</b>'
-  webform_html_editor_disable:
-    '#type': webform_html_editor
-    '#title': 'webform_html_editor (disable)'
-    '#default_value': 'Hello <b>World!!!</b>'
-    '#required': true
-    '#disable': true
-    '#attributes':
-      class:
-        - custom-disabled
-  webform_html_editor_format:
-    '#type': webform_html_editor
-    '#title': 'webform_html_editor (format)'
-    '#required': true
-    '#default_value': 'Hello <b>World!!!</b>'
-    '#format': 'basic_html'
-  webform_html_editor_codemirror:
-    '#type': webform_html_editor
-    '#title': 'webform_html_editor_codemirror (none)'
-    '#required': true
-    '#default_value': 'Hello <b>World!!!</b>'
-    '#format': false
+  page_1:
+    '#title': 'Page 1'
+    '#type': webform_wizard_page
+    element_1:
+      '#title': 'Element 1'
+      '#type': textfield
+      '#default_value': '{element_1}'
+  page_2:
+    '#title': 'Page 2'
+    '#type': webform_wizard_page
+    element_2:
+      '#title': 'Element 2'
+      '#type': textfield
+      '#default_value': '{element_2}'
 css: ''
 javascript: ''
 settings:
@@ -88,13 +76,13 @@ settings:
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
-  wizard_progress_link: false
+  wizard_progress_link: true
   wizard_start_label: ''
-  wizard_preview_link: false
+  wizard_preview_link: true
   wizard_confirmation: true
   wizard_confirmation_label: ''
   wizard_track: ''
-  preview: 0
+  preview: 1
   preview_label: ''
   preview_title: ''
   preview_message: ''
@@ -102,9 +90,9 @@ settings:
   preview_excluded_elements: {  }
   preview_exclude_empty: true
   preview_exclude_empty_checkbox: false
-  draft: none
+  draft: all
   draft_multiple: false
-  draft_auto_save: false
+  draft_auto_save: true
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: page
@@ -129,7 +117,7 @@ settings:
   entity_limit_user_interval: null
   purge: none
   purge_days: null
-  results_disabled: true
+  results_disabled: false
   results_disabled_ignore: false
   token_update: false
 access:
@@ -175,12 +163,4 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers:
-  debug:
-    id: debug
-    label: Debug
-    handler_id: debug
-    status: true
-    conditions: {  }
-    weight: 0
-    settings: {  }
+handlers: {  }

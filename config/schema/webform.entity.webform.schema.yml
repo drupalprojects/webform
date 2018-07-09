@@ -188,12 +188,18 @@ webform.webform.*:
         wizard_progress_percentage:
           type: boolean
           label: 'Show wizard progress pages'
+        wizard_progress_link:
+          type: boolean
+          label: 'Link to previous pages in progress bar'
         wizard_start_label:
           type: label
           label: 'Wizard start label'
         wizard_start_attributes:
           type: ignore
           label: 'Wizard start attributes'
+        wizard_preview_link:
+          type: boolean
+          label: 'Link to previous pages in preview'
         wizard_confirmation:
           type: boolean
           label: 'Include confirmation page in progress'

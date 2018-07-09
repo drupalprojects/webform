@@ -12,6 +12,7 @@ use Drupal\webform\Ajax\WebformCloseDialogCommand;
 use Drupal\webform\Ajax\WebformRefreshCommand;
 use Drupal\webform\Ajax\WebformScrollTopCommand;
 use Drupal\webform\Ajax\WebformSubmissionAjaxResponse;
+use Drupal\webform\Utility\WebformElementHelper;
 use Drupal\webform\WebformSubmissionForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -122,19 +123,20 @@ trait WebformAjaxFormTrait {
     // Apply default settings.
     $settings += $this->getDefaultAjaxSettings();
 
-    // Make sure the form has (submit) actions.
-    if (!isset($form['actions'])) {
-      return $form;
-    }
-
     // Add Ajax callback to all submit buttons.
-    foreach (Element::children($form['actions']) as $key) {
-      $is_submit_button = (isset($form['actions'][$key]['#type']) && $form['actions'][$key]['#type'] == 'submit');
-      if ($is_submit_button) {
-        $form['actions'][$key]['#ajax'] = [
-          'callback' => '::submitAjaxForm',
-          'event' => 'click',
-        ] + $settings;
+    foreach (Element::children($form) as $element_key) {
+      if (!WebformElementHelper::isType($form[$element_key], 'actions')) {
+        continue;
+      }
+
+      $actions =& $form[$element_key];
+      foreach (Element::children($actions) as $action_key) {
+        if (WebformElementHelper::isType($actions[$action_key], 'submit')) {
+          $actions[$action_key]['#ajax'] = [
+              'callback' => '::submitAjaxForm',
+              'event' => 'click',
+            ] + $settings;
+        }
       }
     }
 

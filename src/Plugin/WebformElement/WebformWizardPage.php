@@ -4,6 +4,7 @@ namespace Drupal\webform\Plugin\WebformElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Provides a 'webform_wizard_page' element.
@@ -64,6 +65,27 @@ class WebformWizardPage extends Details {
    */
   public function preview() {
     return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function formatHtmlItem(array $element, WebformSubmissionInterface $webform_submission, array $options = []) {
+    $build = parent::formatHtmlItem($element, $webform_submission, $options);
+
+    // Add edit page link container to preview.
+    // @see Drupal.behaviors.webformWizardPagesLink
+    if (isset($options['view_mode']) && $options['view_mode'] === 'preview' && $webform_submission->getWebform()->getSetting('wizard_preview_link')) {
+      $build['#children']['wizard_page_link'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'data-webform-page' => $element['#webform_key'],
+          'class' => ['webform-wizard-page-edit'],
+        ],
+      ];
+    }
+
+    return $build;
   }
 
   /**

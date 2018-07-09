@@ -2376,3 +2376,9 @@ function webform_update_8133() {
   $admin_config->setData($settings)->save();
 }
 
+/**
+ * Issue #2984348: Link to relevant wizard page on preview.
+ */
+function webform_update_8134() {
+  _webform_update_admin_settings();
+}

@@ -237,36 +237,66 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
     $form['wizard_settings']['wizard_progress_bar'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show wizard progress bar'),
+      '#description' => $this->t('If checked, a progress bar will displayed about the form.'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_bar'],
+    ];
+    $form['wizard_settings']['wizard_progress_link'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Link to previous pages in progress bar'),
+      '#description' => $this->t('If checked, previous pages will be link in the progress bar.'),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['wizard_progress_link'],
+      '#states' => [
+        'visible' => [
+          ':input[name="wizard_progress_bar"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
     $form['wizard_settings']['wizard_progress_pages'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show wizard progress pages'),
+      '#description' => $this->t('If checked, the current page and total remaining pages will be displayed. (i.e. Page 1 of 10)'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_pages'],
     ];
     $form['wizard_settings']['wizard_progress_percentage'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show wizard progress percentage'),
+      '#description' => $this->t('If checked, the percentage of completed pages will be displayed. (i.e. 10%)'),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_progress_percentage'],
+    ];
+    $form['wizard_settings']['wizard_preview_link'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Link to previous pages in preview'),
+      '#description' => $this->t("If checked, the preview page will included 'Edit' buttons for each previous page."),
+      '#return_value' => TRUE,
+      '#default_value' => $settings['wizard_preview_link'],
+      '#states' => [
+        'visible' => [
+          ':input[name="preview"]' => ['!value' => DRUPAL_DISABLED],
+        ],
+      ],
     ];
     $form['wizard_settings']['wizard_confirmation'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Include confirmation page in progress'),
+      '#description' => $this->t("If checked, the confirmation page will be included in the progress bar."),
       '#return_value' => TRUE,
       '#default_value' => $settings['wizard_confirmation'],
     ];
     $form['wizard_settings']['wizard_start_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wizard start label'),
+      '#description' => $this->t('The first page label in the progress bar. Subseqent pages are titled by their wizard page title.'),
       '#size' => 20,
       '#default_value' => $settings['wizard_start_label'],
     ];
     $form['wizard_settings']['wizard_confirmation_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wizard end label'),
+      '#description' => $this->t("The confirmation page label's in the progress bar."),
       '#size' => 20,
       '#default_value' => $settings['wizard_confirmation_label'],
       '#states' => [

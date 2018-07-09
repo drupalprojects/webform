@@ -533,9 +533,15 @@ class WebformSubmissionForm extends ContentEntityForm {
     // Prepare webform elements.
     $this->prepareElements($elements, $form, $form_state);
 
-    // Add wizard progress tracker to the webform.
-    if ($webform->getPages($this->operation)) {
+    // Add wizard progress tracker and page links to the webform.
+    $pages = $webform->getPages($this->operation);
+    if ($pages) {
       $current_page = $this->getCurrentPage($form, $form_state);
+
+      // Add hidden pages submit actions.
+      $form['pages'] = $this->pagesElement($form, $form_state);
+
+      // Add progress tracker.
       $display_wizard_progress = ($this->getWebformSetting('wizard_progress_bar') || $this->getWebformSetting('wizard_progress_pages') || $this->getWebformSetting('wizard_progress_percentage'));
       if ($current_page && $display_wizard_progress) {
         $form['progress'] = [
@@ -917,6 +923,74 @@ class WebformSubmissionForm extends ContentEntityForm {
   }
 
   /**
+   * Returns the wizard page submit buttons for the current entity form.
+   */
+  protected function pagesElement(array $form, FormStateInterface $form_state) {
+    $pages = $this->getPages($form, $form_state);
+    if (!$pages) {
+      return NULL;
+    }
+
+    $current_page_name = $this->getCurrentPage($form, $form_state);
+    if (!$this->getWebformSetting('wizard_progress_link') && !($this->getWebformSetting('wizard_preview_link') && $current_page_name === 'webform_preview')) {
+      return NULL;
+    }
+
+    $page_indexes = array_flip(array_keys($pages));
+    $current_index = $page_indexes[$current_page_name] - 1;
+
+    // Build dedicated actions element for pages links.
+    $element = [
+      '#type' => 'actions',
+      '#weight' => -20,
+      '#attributes' => [
+        'class' => ['webform-wizard-pages-links', 'js-webform-wizard-pages-links'],
+      ],
+    ];
+    if ($this->getWebformSetting('wizard_progress_link')) {
+      $element ['#attributes']['data-wizard-progress-link'] = 'true';
+    }
+    if ($this->getWebformSetting('wizard_preview_link')) {
+      $element ['#attributes']['data-wizard-preview-link'] = 'true';
+    }
+
+    $index = 1;
+    $total = count($pages);
+    foreach ($pages as $page_name => $page) {
+      // Always include submit button for each page but only allows access
+      // to previous and visible pages.
+      //
+      // Developers who want to allow users to jump to any wizard page can
+      // expose these buttons via a form alter hook.  Beware that
+      // skipped pages will not be validated.
+      $access = ($page['#access'] && ($page_indexes[$page_name] <= $current_index)) ? TRUE : FALSE;
+      $t_args =  [
+        '@label' => $page['#title'],
+        '@start' => $index++,
+        '@end' => $total,
+      ];
+      $element[$page_name] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Edit'),
+        '#page' => $page_name,
+        '#validate' => ['::noValidate'],
+        '#submit' => ['::gotoPage'],
+        '#name' => 'webform_wizard_page-' . $page_name,
+        '#attributes' => [
+          'data-webform-page' => $page_name,
+          'class' => ['js-webform-novalidate', 'webform-wizard-pages-link', 'js-webform-wizard-pages-link'],
+          'title' => $this->t("Edit '@label' (Page @start of @end)", $t_args),
+        ],
+        '#access' => $access,
+      ];
+    }
+
+    $element['#attached']['library'][] = 'webform/webform.wizard.pages';
+
+    return $element;
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function actionsElement(array $form, FormStateInterface $form_state) {
@@ -1084,7 +1158,9 @@ class WebformSubmissionForm extends ContentEntityForm {
           }
         }
       }
-      $element['#attached']['library'][] = 'webform/webform.form.wizard';
+      if ($track) {
+        $element['#attached']['library'][] = 'webform/webform.wizard.track';
+      }
     }
 
     // Draft.
@@ -1114,6 +1190,20 @@ class WebformSubmissionForm extends ContentEntityForm {
     uasort($element, ['Drupal\Component\Utility\SortArray', 'sortByWeightProperty']);
 
     return $element;
+  }
+
+  /**
+   * Webform submission handler for the 'goto' action.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function gotoPage(array &$form, FormStateInterface $form_state) {
+    $element = $form_state->getTriggeringElement();
+    $form_state->set('current_page', $element['#page']);
+    $this->wizardSubmit($form, $form_state);
   }
 
   /**

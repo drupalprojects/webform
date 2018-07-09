@@ -5,6 +5,7 @@ namespace Drupal\webform\Element;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Container;
+use Drupal\webform\Utility\WebformElementHelper;
 
 /**
  * Provides a wrapper element to group one or more Webform buttons in a form.
@@ -62,7 +63,7 @@ class WebformActions extends Container {
     $prefix = ($element['#webform_key']) ? 'edit-' . $element['#webform_key'] . '-' : '';
 
     // Add class names only if form['actions']['#type'] is set to 'actions'.
-    if (isset($complete_form['actions']['#type']) && $complete_form['actions']['#type'] == 'actions') {
+    if (WebformElementHelper::isType($complete_form['actions'], 'actions')) {
       $element['#attributes']['class'][] = 'form-actions';
       $element['#attributes']['class'][] = 'webform-actions';
     }

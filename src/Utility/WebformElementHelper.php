@@ -93,6 +93,30 @@ class WebformElementHelper {
   }
 
   /**
+   * Determine if a webform element is a specified #type.
+   *
+   * @param array $element
+   *   A webform element.
+   * @param string|array $type
+   *   An element type.
+   *
+   * @return bool
+   *   TRUE if a webform element is a specified #type.
+   */
+  public static function isType(array $element, $type) {
+    if (!isset($element['#type'])) {
+      return FALSE;
+    }
+
+    if (is_array($type)) {
+      return in_array($element['#type'], $type);
+    }
+    else {
+      return ($element['#type'] === $type);
+    }
+  }
+
+  /**
    * Determine if a webform element's title is displayed.
    *
    * @param array $element

@@ -19,7 +19,7 @@ class WebformWizardBasicTest extends WebformWizardTestBase {
   protected static $testWebforms = ['test_form_wizard_basic'];
 
   /**
-   * Test webform advanced wizard.
+   * Test webform basic wizard.
    */
   public function testBasicWizard() {
     $this->drupalLogin($this->rootUser);

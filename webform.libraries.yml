@@ -306,10 +306,22 @@ webform.form.unsaved:
     - core/jquery.once
     - core/drupal
 
-webform.form.wizard:
+
+webform.wizard.pages:
+  version: VERSION
+  css:
+    component:
+      css/webform.wizard.pages.css: {}
+  js:
+    js/webform.wizard.pages.js:  {}
+  dependencies:
+    - core/jquery.once
+    - core/drupal
+
+webform.wizard.track:
   version: VERSION
   js:
-    js/webform.form.wizard.js:  {}
+    js/webform.wizard.track.js:  {}
   dependencies:
     - core/jquery.once
     - core/drupal

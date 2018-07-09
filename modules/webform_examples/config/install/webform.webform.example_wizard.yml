@@ -102,7 +102,9 @@ settings:
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
+  wizard_progress_link: true
   wizard_start_label: ''
+  wizard_preview_link: true
   wizard_confirmation: true
   wizard_confirmation_label: ''
   wizard_track: ''
