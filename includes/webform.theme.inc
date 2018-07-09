@@ -583,7 +583,9 @@ function _webform_preprocess_description_help(array &$variables) {
 
     // Remove all links from the #description since it will be .visually-hidden
     // and unreachable via tabbing.
-    $variables['description']['content']['description']['#markup'] = strip_tags($variables['description']['content']['description']['#markup']);
+    if (isset($variables['description']['content']['description']['#markup'])) {
+      $variables['description']['content']['description']['#markup'] = strip_tags($variables['description']['content']['description']['#markup']);
+    }
   }
 }
 

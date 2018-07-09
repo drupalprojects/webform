@@ -16,7 +16,7 @@ category: ''
 elements: |
   account_information:
     '#title': 'Your Account Information'
-    '#type': fieldset
+    '#type': webform_section
     user_name:
       '#type': textfield
       '#title': 'User Name'
@@ -28,7 +28,7 @@ elements: |
       '#file_extensions': 'gif jpg png svg'
   personal_information:
     '#title': 'Your Personal Information'
-    '#type': fieldset
+    '#type': webform_section
     first_name:
       '#title': 'First Name'
       '#type': textfield
@@ -80,7 +80,7 @@ elements: |
       '#description': 'Your GitHub user name.'
   work_information:
     '#title': 'Your Work Information'
-    '#type': fieldset
+    '#type': webform_section
     current_organization:
       '#type': textfield
       '#title': 'Current Organization'
@@ -99,7 +99,7 @@ elements: |
       '#select2': true
   email_settings:
     '#title': 'Email addresses'
-    '#type': fieldset
+    '#type': webform_section
     email:
       '#type': email
       '#title': 'Primary E-mall Address'
@@ -110,7 +110,7 @@ elements: |
       '#description': 'Enter multiple email addresses separated by commas.'
   regional_settings:
     '#title': 'Regional Settings'
-    '#type': fieldset
+    '#type': webform_section
     time_zone:
       '#type': select
       '#title': Timezone

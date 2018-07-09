@@ -24,7 +24,7 @@ elements: |
       </ul>
   information:
     '#title': 'Job Seeker Information'
-    '#type': fieldset
+    '#type': webform_section
     first_name:
       '#title': 'First Name'
       '#type': textfield

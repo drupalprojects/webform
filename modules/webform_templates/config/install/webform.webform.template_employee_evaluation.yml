@@ -16,7 +16,7 @@ category: ''
 elements: |
   evaluator_information:
     '#title': 'Your Information'
-    '#type': fieldset
+    '#type': webform_section
     evaluator_first_name:
       '#title': 'First Name'
       '#type': textfield
@@ -38,7 +38,7 @@ elements: |
       '#required': true
   employee_information:
     '#title': 'Employee Information'
-    '#type': fieldset
+    '#type': webform_section
     employee_first_name:
       '#title': 'First Name'
       '#type': textfield

@@ -16,7 +16,7 @@ category: ''
 elements: |
   personal_information:
     '#title': 'Your Personal Information'
-    '#type': fieldset
+    '#type': webform_section
     first_name:
       '#title': 'First Name'
       '#type': textfield
@@ -27,7 +27,7 @@ elements: |
       '#required': true
   contact_information:
     '#title': 'Your Contact Information'
-    '#type': fieldset
+    '#type': webform_section
     contact:
       '#type': webform_contact
       '#title': Contact
@@ -36,13 +36,13 @@ elements: |
       '#company__access': false
   mailinglist:
     '#title': 'Mailing List'
-    '#type': fieldset
+    '#type': webform_section
     subscribe:
       '#title': 'Please subscribe me to your mailing list.'
       '#type': checkbox
   additional_information:
     '#title': 'Additional Information'
-    '#type': fieldset
+    '#type': webform_section
     '#open': true
     notes:
       '#title': Comments

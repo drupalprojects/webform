@@ -16,7 +16,7 @@ category: ''
 elements: |
   information:
     '#title': 'Your Information'
-    '#type': fieldset
+    '#type': webform_section
     first_name:
       '#title': 'First Name'
       '#type': textfield
@@ -32,7 +32,7 @@ elements: |
       '#required': true
   contact_information:
     '#title': 'Contact Information'
-    '#type': fieldset
+    '#type': webform_section
     contact:
       '#type': webform_contact
       '#title': Contact
@@ -41,7 +41,7 @@ elements: |
       '#company__access': false
   resume:
     '#title': 'Your Resume'
-    '#type': fieldset
+    '#type': webform_section
     resume_method:
       '#type': radios
       '#options':
