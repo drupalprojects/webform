@@ -100,6 +100,7 @@ class WebformOptions extends FormElement {
         '#type' => 'webform_multiple',
         '#header' => TRUE,
         '#default_value' => (isset($element['#default_value'])) ? static::convertOptionsToValues($element['#default_value'], $element['#options_description']) : [],
+        '#error_no_message' => TRUE,
       ];
 
       if ($element['#options_description']) {
@@ -111,6 +112,7 @@ class WebformOptions extends FormElement {
             '#placeholder' => t('Enter value'),
             '#attributes' => ['class' => ['js-webform-options-value']],
             '#maxlength' => $element['#options_value_maxlength'],
+            '#error_no_message' => TRUE,
           ],
           'option' => [
             '#type' => 'container',
@@ -122,6 +124,7 @@ class WebformOptions extends FormElement {
               '#title_display' => 'invisible',
               '#placeholder' => t('Enter text'),
               '#maxlength' => $element['#options_text_maxlength'],
+              '#error_no_message' => TRUE,
             ],
             'description' => [
               '#type' => 'textarea',
@@ -130,6 +133,7 @@ class WebformOptions extends FormElement {
               '#placeholder' => t('Enter description'),
               '#rows' => 2,
               '#maxlength' => $element['#options_description_maxlength'],
+              '#error_no_message' => TRUE,
             ],
           ],
         ];
@@ -143,6 +147,7 @@ class WebformOptions extends FormElement {
             '#placeholder' => t('Enter value'),
             '#attributes' => ['class' => ['js-webform-options-value']],
             '#maxlength' => $element['#options_value_maxlength'],
+            '#error_no_message' => TRUE,
           ],
           'text' => [
             '#type' => 'textfield',
@@ -150,6 +155,7 @@ class WebformOptions extends FormElement {
             '#title_display' => 'invisible',
             '#placeholder' => t('Enter text'),
             '#maxlength' => $element['#options_text_maxlength'],
+            '#error_no_message' => TRUE,
           ],
         ];
       }
