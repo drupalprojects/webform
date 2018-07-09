@@ -49,6 +49,23 @@
             // Prevent click from toggling <label>s wrapped around help.
             event.preventDefault();
           });
+
+        // Help tooltips are generally placed with <label> tags.
+        // Screen readers are also reading the <label> and the
+        // 'aria-describedby' attribute.
+        // To prevent this issue we are removing the <label>'s 'for' attribute
+        // when the tooltip is focused.
+        var $label = $(this).parent('label');
+        var labelFor = $label.attr('for') || '';
+        if ($label.length && labelFor) {
+          $link
+            .on('focus', function () {
+              $label.removeAttr('for');
+            })
+            .on('blur', function () {
+              $label.attr('for', labelFor);
+            });
+        }
       });
     }
   };
