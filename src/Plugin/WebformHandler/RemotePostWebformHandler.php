@@ -241,7 +241,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       if ($state === WebformSubmissionInterface::STATE_COMPLETED) {
         $form[$state]['token'] = [
           '#type' => 'webform_message',
-          '#message_message' => $this->t('Response data can be passed to the submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (i.e. [webform:handler:remote_post:completed:confirmation_number])'),
+          '#message_message' => $this->t('Response data can be passed to the submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (i.e. [webform:handler:@machine_name:completed:confirmation_number])',
+            ['@machine_name' => $this->getHandlerId() ?: '{machine_name}']),
           '#message_type' => 'info',
         ];
       }
@@ -304,7 +305,8 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     ];
     $form['additional']['messages_token'] = [
       '#type' => 'webform_message',
-      '#message_message' => $this->t('Response data can be passed to response message using [webform:handler:{machine_name}:{key}] tokens. (i.e. [webform:handler:remote_post:message])'),
+      '#message_message' => $this->t('Response data can be passed to response message using [webform:handler:{machine_name}:{key}] tokens. (i.e. [webform:handler:@machine_name:message])',
+        ['@machine_name' => $this->getHandlerId() ?: '{machine_name}']),
       '#message_type' => 'info',
     ];
     $form['additional']['messages'] = [
