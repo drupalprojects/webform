@@ -320,6 +320,16 @@ abstract class WebformHandlerFormBase extends FormBase {
   }
 
   /**
+   * Get the webform handler.
+   *
+   * @return \Drupal\webform\Plugin\WebformHandlerInterface
+   *   A webform handler.
+   */
+  public function getWebformHandler() {
+    return $this->webformHandler;
+  }
+
+  /**
    * Process handler webform errors in webform.
    *
    * @param \Drupal\Core\Form\FormStateInterface $handler_state
