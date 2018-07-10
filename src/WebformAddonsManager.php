@@ -148,7 +148,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Config: Webform Config Ignore.
     $projects['webform_config_ignore'] = [
       'title' => $this->t('Webform Config Ignore'),
-      'description' => $this->t('Webform Config Ignore adds a filter to configuration import and export to skip webforms and webform options.'),
+      'description' => $this->t('Adds a filter to configuration import and export to skip webforms and webform options.'),
       'url' => Url::fromUri('https://www.drupal.org/project/webform_config_ignore'),
       'category' => 'config',
     ];
