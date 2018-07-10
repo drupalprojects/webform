@@ -70,7 +70,7 @@
 
         if ($tabs.length) {
           // Add toggle state before the tabs.
-          $tabs.find('.item-list').before($toggle);
+          $tabs.find('> .item-list').before($toggle);
         }
         else {
           // Add toggle state link to first details element.
