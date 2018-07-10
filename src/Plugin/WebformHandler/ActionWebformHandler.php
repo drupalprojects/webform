@@ -208,7 +208,7 @@ class ActionWebformHandler extends WebformHandlerBase {
         '#rows' => $elements_rows,
       ],
     ];
-    $form['actions']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['actions']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Development.
     $form['development'] = [

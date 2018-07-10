@@ -224,7 +224,7 @@ abstract class WebformComputedBase extends WebformElementBase implements Webform
       '#title' => $this->t('Automatically update the computed value using Ajax'),
       '#description' => $this->t('If checked, any element used within the computed value/markup will trigger any automatic update.'),
     ];
-    $form['computed']['tokens'] = ['#access' => TRUE, '#weight' => 10] + $this->tokenManager->buildTreeLink();
+    $form['computed']['tokens'] = ['#access' => TRUE, '#weight' => 10] + $this->tokenManager->buildTreeElement();
     return $form;
   }
 

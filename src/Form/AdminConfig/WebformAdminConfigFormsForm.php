@@ -200,7 +200,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#description' => $this->t('A list of classes that will be provided in "Button CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $settings['button_classes'],
     ];
-    $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Form Behaviors.
     $form['form_behaviors'] = [
@@ -387,7 +387,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#title' => $this->t('Default draft load message'),
       '#default_value' => $settings['default_draft_loaded_message'],
     ];
-    $form['draft_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['draft_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Confirmation settings.
     $form['confirmation_settings'] = [
@@ -419,7 +419,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#description' => $this->t('A list of classes that will be provided in the "Confirmation back link CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $settings['confirmation_back_classes'],
     ];
-    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Dialog settings.
     $form['dialog_settings'] = [

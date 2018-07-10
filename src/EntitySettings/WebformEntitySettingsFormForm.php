@@ -130,7 +130,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#description' => $this->t('A message to be displayed if the webform breaks.'),
       '#default_value' => $settings['form_exception_message'],
     ];
-    $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['form_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Form attributes.
     $form['form_attributes'] = [
@@ -169,7 +169,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
         ],
       ],
     ];
-    $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['form_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeElement();
     if ($form['form_access_denied']['token_tree_link']) {
       $form['form_access_denied']['token_tree_link']['#states'] = [
         'visible' => [
@@ -401,7 +401,7 @@ class WebformEntitySettingsFormForm extends WebformEntitySettingsBaseForm {
       '#classes' => $this->config('webform.settings')->get('settings.preview_classes'),
       '#default_value' => $settings['preview_attributes'],
     ];
-    $form['preview_settings']['preview_container']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['preview_settings']['preview_container']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Custom settings.
     $properties = WebformElementHelper::getProperties($webform->getElementsDecoded());

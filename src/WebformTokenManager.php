@@ -8,6 +8,8 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\Core\Utility\Token;
 use Drupal\webform\Utility\WebformFormHelper;
 
@@ -15,6 +17,8 @@ use Drupal\webform\Utility\WebformFormHelper;
  * Defines a class to manage token replacement.
  */
 class WebformTokenManager implements WebformTokenManagerInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The current user.
@@ -133,7 +137,29 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildTreeLink(array $token_types = ['webform', 'webform_submission', 'webform_handler'], $description = NULL) {
+  public function buildTreeLink(array $token_types = ['webform', 'webform_submission', 'webform_handler']) {
+    if (!$this->moduleHandler->moduleExists('token')) {
+      return [
+        '#type' => 'link',
+        '#title' => $this->t('You may use tokens.'),
+        '#url' => Url::fromUri('https://www.drupal.org/project/token'),
+      ];
+    }
+    else {
+      return [
+        '#theme' => 'token_tree_link',
+        '#text' => $this->t('You may use tokens.'),
+        '#token_types' => $token_types,
+        '#click_insert' => TRUE,
+        '#dialog' => TRUE,
+      ];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildTreeElement(array $token_types = ['webform', 'webform_submission', 'webform_handler']) {
     if (!$this->moduleHandler->moduleExists('token')) {
       return [];
     }
@@ -145,34 +171,10 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       '#dialog' => TRUE,
     ];
 
-    if ($description) {
-      if ($this->config->get('ui.description_help')) {
-        return [
-          '#type' => 'container',
-          'token_tree_link' => $build,
-          'help' => [
-            '#type' => 'webform_help',
-            '#help' => $description,
-          ],
-        ];
-      }
-      else {
-        return [
-          '#type' => 'container',
-          'token_tree_link' => $build,
-          'description' => [
-            '#prefix' => ' ',
-            '#markup' => $description,
-          ],
-        ];
-      }
-    }
-    else {
-      return [
-        '#type' => 'container',
-        'token_tree_link' => $build,
-      ];
-    }
+    return [
+      '#type' => 'container',
+      'token_tree_link' => $build,
+    ];
   }
 
   /**

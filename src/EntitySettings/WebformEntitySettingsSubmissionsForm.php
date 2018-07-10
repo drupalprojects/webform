@@ -115,7 +115,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#min' => 1,
       '#default_value' => $webform_storage->getNextSerial($webform),
     ];
-    $form['submission_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['submission_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // User settings.
     $form['submission_user_settings'] = [
@@ -189,7 +189,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
         ],
       ],
     ];
-    $form['submission_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['submission_access_denied']['token_tree_link'] = $this->tokenManager->buildTreeElement();
     if ($form['submission_access_denied']['token_tree_link']) {
       $form['submission_access_denied']['token_tree_link']['#states'] = [
         'visible' => [
@@ -464,7 +464,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#description' => $this->t('Message to be displayed when a draft is loaded.'),
       '#default_value' => $settings['draft_loaded_message'],
     ];
-    $form['draft_settings']['draft_container']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['draft_settings']['draft_container']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Autofill settings.
     $form['autofill_settings'] = [

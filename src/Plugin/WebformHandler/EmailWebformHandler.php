@@ -412,7 +412,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       $token_types[] = 'webform_role';
     }
 
-    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+    $form['to']['token_tree_link'] = $this->tokenManager->buildTreeElement(
       $token_types,
       $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.')
     );
@@ -436,7 +436,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     ];
     $form['from']['from_mail'] = $this->buildElement('from_mail', $this->t('From email'), $this->t('From email address'), TRUE, $mail_element_options, $options_element_options, NULL, $other_element_email_options);
     $form['from']['from_name'] = $this->buildElement('from_name', $this->t('From name'), $this->t('From name'), FALSE, $name_element_options, NULL, NULL, $other_element_name_options);
-    $form['from']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+    $form['from']['token_tree_link'] = $this->tokenManager->buildTreeElement(
         ['webform', 'webform_submission'],
         $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values.')
     );
@@ -574,7 +574,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       ],
     ];
     // Tokens.
-    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+    $form['message']['token_tree_link'] = $this->tokenManager->buildTreeElement(
       ['webform', 'webform_submission'],
       $this->t('Use [webform_submission:values:ELEMENT_KEY:raw] to get plain text values and use [webform_submission:values:ELEMENT_KEY:value] to get HTML values.')
     );

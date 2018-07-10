@@ -379,7 +379,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['excluded_data'],
     ];
 
-    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 
