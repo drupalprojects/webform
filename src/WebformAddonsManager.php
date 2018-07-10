@@ -131,7 +131,7 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
     // Config: Configuration Ignore.
     $projects['config_ignore'] = [
       'title' => $this->t('Config Ignore'),
-      'description' => $this->t('Ignore certain configuration during import'),
+      'description' => $this->t('Ignore certain configuration during import.'),
       'url' => Url::fromUri('https://www.drupal.org/project/config_ignore'),
       'category' => 'config',
     ];
@@ -143,6 +143,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'url' => Url::fromUri('https://www.drupal.org/project/config_split'),
       'category' => 'config',
       'recommended' => TRUE,
+    ];
+
+    // Config: Webform Config Ignore.
+    $projects['webform_config_ignore'] = [
+      'title' => $this->t('Webform Config Ignore'),
+      'description' => $this->t('Webform Config Ignore adds a filter to configuration import and export to skip webforms and webform options.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/webform_config_ignore'),
+      'category' => 'config',
     ];
 
     // Element: Address.
