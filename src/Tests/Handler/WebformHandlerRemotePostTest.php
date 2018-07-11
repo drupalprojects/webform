@@ -200,6 +200,7 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
   file: $fid
   file__name: file.txt
   file__uri: 'private://webform/test_handler_remote_post_file/$sid/file.txt'
+  file__mime: text/plain
   file__data: dGhpcyBpcyBhIHNhbXBsZSB0eHQgZmlsZQppdCBoYXMgdHdvIGxpbmVzCg==");
   }
 
