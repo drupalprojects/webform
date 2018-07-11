@@ -297,6 +297,14 @@ class WebformAddonsManager implements WebformAddonsManagerInterface {
       'category' => 'integration',
     ];
 
+    // Integrations: Commerce Webform Order.
+    $projects['commerce_webform_order'] = [
+      'title' => $this->t('Webform Product'),
+      'description' => $this->t('Integrates Webform with Drupal Commerce and it allows creating orders with the submission data of a Webform via a Webform handler.'),
+      'url' => Url::fromUri('https://www.drupal.org/project/commerce_webform_order'),
+      'category' => 'integration',
+    ];
+
     // Integrations: Webform to Salesforce Leads.
     $projects['webform_to_leads'] = [
       'title' => $this->t('Webform to Salesforce Leads'),
