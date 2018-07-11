@@ -323,15 +323,18 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
         ],
       ],
     ];
-    $form['submission_limits']['total']['token_tree_link'] = $this->tokenManager->buildTreeElement() + [
-      '#states' => [
-        'visible' => [
-          [':input[name="limit_total"]' => ['!value' => '']],
-          'or',
-          [':input[name="entity_limit_total"]' => ['!value' => '']],
+    $form['submission_limits']['total']['token_tree_link'] = $this->tokenManager->buildTreeElement();
+    if ($form['submission_limits']['total']['token_tree_link']) {
+      $form['submission_limits']['total']['token_tree_link'] += [
+        '#states' => [
+          'visible' => [
+            [':input[name="limit_total"]' => ['!value' => '']],
+            'or',
+            [':input[name="entity_limit_total"]' => ['!value' => '']],
+          ],
         ],
-      ],
-    ];
+      ];
+    }
 
     $form['submission_limits']['user'] = [
       '#type' => 'details',
@@ -380,15 +383,18 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
         ],
       ],
     ];
-    $form['submission_limits']['user']['token_tree_link'] = $this->tokenManager->buildTreeElement() + [
-      '#states' => [
-        'visible' => [
-          [':input[name="limit_user"]' => ['!value' => '']],
-          'or',
-          [':input[name="entity_limit_user"]' => ['!value' => '']],
+    $form['submission_limits']['user']['token_tree_link'] = $this->tokenManager->buildTreeElement();
+    if ($form['submission_limits']['user']['token_tree_link']) {
+      $form['submission_limits']['user']['token_tree_link'] += [
+        '#states' => [
+          'visible' => [
+            [':input[name="limit_user"]' => ['!value' => '']],
+            'or',
+            [':input[name="entity_limit_user"]' => ['!value' => '']],
+          ],
         ],
-      ],
-    ];
+      ];
+    }
 
     // Purge settings.
     $form['purge_settings'] = [
