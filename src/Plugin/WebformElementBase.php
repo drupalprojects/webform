@@ -2521,19 +2521,21 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
         '#type' => 'webform_codemirror',
         '#mode' => 'yaml',
         '#title' => $this->t('Default value'),
-        '#description' => $this->t('The default value of the webform element.'),
       ];
     }
     else {
       $form['default']['default_value'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Default value'),
-        '#description' => $this->t('The default value of the webform element.'),
         '#maxlength' => NULL,
       ];
     }
+    $form['default']['default_value']['#description'] = [
+      'content' => ['#markup' => $this->t('The default value of the webform element.'), '#suffix' => ' '],
+      'token' => $this->tokenManager->buildTreeLink(),
+    ];
     if ($this->hasProperty('multiple')) {
-      $form['default']['default_value']['#description'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
+      $form['default']['default_value']['#description']['content']['#markup'] .= ' ' . $this->t('For multiple options, use commas to separate multiple defaults.');
     }
 
     // Multiple.

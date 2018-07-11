@@ -362,6 +362,7 @@ class WebformAdminConfigFormsForm extends WebformAdminConfigBaseForm {
       '#description' => $this->t('A list of classes that will be provided in the "Preview CSS classes" dropdown. Enter one or more classes on each line. These styles should be available in your theme\'s CSS file.'),
       '#default_value' => $config->get('settings.preview_classes'),
     ];
+    $form['preview_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Draft settings.
     $form['draft_settings'] = [

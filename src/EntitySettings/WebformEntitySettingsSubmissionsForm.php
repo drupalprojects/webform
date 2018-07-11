@@ -323,6 +323,16 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
         ],
       ],
     ];
+    $form['submission_limits']['total']['token_tree_link'] = $this->tokenManager->buildTreeElement() + [
+      '#states' => [
+        'visible' => [
+          [':input[name="limit_total"]' => ['!value' => '']],
+          'or',
+          [':input[name="entity_limit_total"]' => ['!value' => '']],
+        ],
+      ],
+    ];
+
     $form['submission_limits']['user'] = [
       '#type' => 'details',
       '#title' => $this->t('Per user'),
@@ -362,6 +372,15 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#type' => 'webform_html_editor',
       '#title' => $this->t('Per user submission limit message'),
       '#default_value' => $settings['limit_user_message'],
+      '#states' => [
+        'visible' => [
+          [':input[name="limit_user"]' => ['!value' => '']],
+          'or',
+          [':input[name="entity_limit_user"]' => ['!value' => '']],
+        ],
+      ],
+    ];
+    $form['submission_limits']['user']['token_tree_link'] = $this->tokenManager->buildTreeElement() + [
       '#states' => [
         'visible' => [
           [':input[name="limit_user"]' => ['!value' => '']],
@@ -502,6 +521,7 @@ class WebformEntitySettingsSubmissionsForm extends WebformEntitySettingsBaseForm
       '#webform_id' => $this->getEntity()->id(),
       '#default_value' => $settings['autofill_excluded_elements'],
     ];
+    $form['autofill_settings']['autofill_container']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 
