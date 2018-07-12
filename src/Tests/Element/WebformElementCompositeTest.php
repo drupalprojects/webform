@@ -29,12 +29,12 @@ class WebformElementCompositeTest extends WebformElementTestBase {
     $this->assertRaw("webform_element_composite_basic:
   first_name:
     '#type': textfield
-    '#title': 'First name'
     '#required': true
+    '#title': 'First name'
   last_name:
     '#type': textfield
-    '#title': 'Last name'
     '#required': true
+    '#title': 'Last name'
 webform_element_composite_advanced:
   first_name:
     '#type': textfield
@@ -69,12 +69,12 @@ webform_element_composite_advanced:
     $this->assertRaw("webform_element_composite_basic:
   first_name:
     '#type': textfield
-    '#title': 'First name'
     '#required': true
+    '#title': 'First name'
   last_name:
     '#type': textfield
-    '#title': 'Last name'
     '#required': true
+    '#title': 'Last name'
 webform_element_composite_advanced:
   first_name:
     '#type': textfield

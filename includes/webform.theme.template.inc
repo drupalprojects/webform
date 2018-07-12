@@ -806,11 +806,13 @@ function template_preprocess_webform_element_help(array &$variables) {
   $attributes['role'] = 'tooltip';
   $attributes['tabindex'] = '0';
 
+  $content = (is_array($variables['help'])) ? \Drupal::service('renderer')->render($variables['help']) : $variables['help'];
+
   $help = '';
   if (!empty($variables['help_title'])) {
     $help .= '<div class="webform-element-help--title">' . WebformHtmlEditor::stripTags($variables['help_title']) . '</div>';
   }
-  $help .= '<div class="webform-element-help--content">' . WebformHtmlEditor::stripTags($variables['help']) . '</div>';
+  $help .= '<div class="webform-element-help--content">' . WebformHtmlEditor::stripTags($content) . '</div>';
   $attributes['data-webform-help'] = $help;
 
   $variables['attributes'] = new Attribute($attributes);

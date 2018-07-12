@@ -13,7 +13,7 @@
   width: 100%;
 }
 
-.form-type-webform-element-composite table .form-type-checkbox {
+.form-type-webform-element-composite table .form-type-checkbox.form-no-label {
   text-align: center;
 }
 

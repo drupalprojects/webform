@@ -68,6 +68,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         }
       }
       if (isset($properties[$composite_key . '__type'])) {
+        $properties[$composite_key . '__title_display'] = '';
         $properties[$composite_key . '__description'] = '';
         $properties[$composite_key . '__help'] = '';
         $properties[$composite_key . '__required'] = FALSE;
@@ -824,12 +825,42 @@ abstract class WebformCompositeBase extends WebformElementBase {
    *   A renderable array container the composite elements settings table.
    */
   protected function buildCompositeElementsTable() {
+    $labels_help = [
+      'help' => [
+        '#type' => 'webform_help',
+        '#help' => '<b>' . t('Key') . ':</b> ' . t('The machine-readable name.') .
+          '<b>' . t('Title') . ':</b> ' . t('This is used as a descriptive label when displaying this webform element.') . '<br/><br/>' .
+          '<b>' . t('Placeholder') . ':</b> ' . t('The placeholder will be shown in the element until the user starts entering a value.') . '<br/><br/>' .
+          '<b>' . t('Description') . ':</b> ' . t('A short description of the element used as help for the user when he/she uses the webform.') . '<br/><br/>' .
+          '<b>' . t('Help text') . ':</b> ' . t('A tooltip displayed after the title.') . '<br/><br/>' .
+          '<b>' . t('Title display') . ':</b> ' . t('A tooltip displayed after the title.'),
+        '#help_title' => $this->t('Labels'),
+      ],
+    ];
+    $settings_help = [
+      'help' => [
+        '#type' => 'webform_help',
+        '#help' => '<b>' . t('Required') . ':</b> ' . t('Check this option if the user must enter a value.') . '<br/><br/>' .
+          '<b>' . t('Type') . ':</b> ' . t('The type of element to be displayed.') . '<br/><br/>' .
+          '<b>' . t('Options') . ':</b> ' . t('Please select predefined options.'),
+        '#help_title' => $this->t('Settings'),
+      ],
+    ];
+
     $header = [
-      'key' => $this->t('Key'),
-      'title_placeholder_help_description' => $this->t('Title / Placeholder / Help / Description'),
-      'type_options' => $this->t('Type/Options'),
-      'required' => $this->t('Required'),
       'visible' => $this->t('Visible'),
+      'labels' => [
+        'data' => [
+          ['title' => ['#markup' => $this->t('Labels')]],
+          $labels_help,
+        ],
+      ],
+      'settings' => [
+        'data' => [
+          ['title' => ['#markup' => $this->t('Settings')]],
+          $settings_help,
+        ],
+      ],
     ];
 
     $rows = [];
@@ -848,27 +879,39 @@ abstract class WebformCompositeBase extends WebformElementBase {
 
       $row = [];
 
-      // Key.
-      $row[$composite_key . '__key'] = [
-        '#markup' => $composite_key,
-        '#access' => TRUE,
+      // Access.
+      $row[$composite_key . '__access'] = [
+        '#title' => $this->t('@title visible', $t_args),
+        '#title_display' => 'invisible',
+        '#type' => 'checkbox',
+        '#return_value' => TRUE,
       ];
 
-      // Title, placeholder, help, description.
+      // Key, title, placeholder, help, description, and title display.
       if ($type) {
-        $row['title_placeholder_help_description'] = [
+        $row['labels'] = [
           'data' => [
+            $composite_key . '__key' => [
+              '#markup' => $composite_key,
+              '#suffix' => '<hr/>',
+              '#access' => TRUE,
+            ],
             $composite_key . '__title' => [
               '#type' => 'textfield',
               '#title' => $this->t('@title title', $t_args),
               '#title_display' => 'invisible',
+              '#description' => t('This is used as a descriptive label when displaying this webform element.'),
+              '#description_display' => 'invisible',
               '#placeholder' => $this->t('Enter title...'),
+              '#required' => TRUE,
               '#states' => $state_disabled,
             ],
             $composite_key . '__placeholder' => [
               '#type' => 'textfield',
               '#title' => $this->t('@title placeholder', $t_args),
               '#title_display' => 'invisible',
+              '#description' => t('The placeholder will be shown in the element until the user starts entering a value.'),
+              '#description_display' => 'invisible',
               '#placeholder' => $this->t('Enter placeholder...'),
               '#states' => $state_disabled,
             ],
@@ -876,6 +919,8 @@ abstract class WebformCompositeBase extends WebformElementBase {
               '#type' => 'textarea',
               '#title' => $this->t('@title help text', $t_args),
               '#title_display' => 'invisible',
+              '#description' => t('A short description of the element used as help for the user when he/she uses the webform.'),
+              '#description_display' => 'invisible',
               '#rows' => 2,
               '#placeholder' => $this->t('Enter help text...'),
               '#states' => $state_disabled,
@@ -884,8 +929,25 @@ abstract class WebformCompositeBase extends WebformElementBase {
               '#type' => 'textarea',
               '#title' => $this->t('@title description', $t_args),
               '#title_display' => 'invisible',
+              '#description' => t('A tooltip displayed after the title.'),
+              '#description_display' => 'invisible',
               '#rows' => 2,
               '#placeholder' => $this->t('Enter description...'),
+              '#states' => $state_disabled,
+            ],
+            $composite_key . '__title_display' => [
+              '#type' => 'select',
+              '#title' => $this->t('@title title display', $t_args),
+              '#title_display' => 'invisible',
+              '#description' => t('A tooltip displayed after the title.'),
+              '#description_display' => 'invisible',
+              '#options' => [
+                'before' => $this->t('Before'),
+                'after' => $this->t('After'),
+                'inline' => $this->t('Inline'),
+                'invisible' => $this->t('Invisible'),
+              ],
+              '#empty_option' => $this->t('Select title display... '),
               '#states' => $state_disabled,
             ],
           ],
@@ -897,10 +959,29 @@ abstract class WebformCompositeBase extends WebformElementBase {
 
       // Type and options.
       // Using if/else instead of switch/case because of complex conditions.
-      $row['type_options'] = [];
+      $row['settings'] = [];
+
+      // Required.
+      if ($type) {
+        $row['settings']['data'][$composite_key . '__required'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Required'),
+          '#description' => t('Check this option if the user must enter a value.'),
+          '#description_display' => 'invisible',
+          '#return_value' => TRUE,
+          '#states' => $state_disabled,
+          '#wrapper_attributes' => ['style' => 'white-space: nowrap'],
+          '#suffix' => '<hr/>',
+        ];
+      }
+
       if ($type == 'tel') {
-        $row['type_options']['data'][$composite_key . '__type'] = [
+        $row['settings']['data'][$composite_key . '__type'] = [
           '#type' => 'select',
+          '#title' => $this->t('@title type', $t_args),
+          '#title_display' => 'invisible',
+          '#description' => t('The type of element to be displayed.'),
+          '#description_display' => 'invisible',
           '#required' => TRUE,
           '#options' => [
             'tel' => $this->t('Telephone'),
@@ -916,7 +997,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
         // Get type options.
         switch ($base_type) {
           case 'radios':
-            $type_options = [
+            $settings = [
               'radios' => $this->t('Radios'),
               'webform_radios_other' => $this->t('Radios other'),
               'textfield' => $this->t('Text field'),
@@ -925,7 +1006,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
 
           case 'select':
           default:
-            $type_options = [
+            $settings = [
               'select' => $this->t('Select'),
               'webform_select_other' => $this->t('Select other'),
               'textfield' => $this->t('Text field'),
@@ -933,15 +1014,23 @@ abstract class WebformCompositeBase extends WebformElementBase {
             break;
         }
 
-        $row['type_options']['data'][$composite_key . '__type'] = [
+        $row['settings']['data'][$composite_key . '__type'] = [
           '#type' => 'select',
+          '#title' => $this->t('@title type', $t_args),
+          '#title_display' => 'invisible',
+          '#description' => t('The type of element to be displayed.'),
+          '#description_display' => 'invisible',
           '#required' => TRUE,
-          '#options' => $type_options,
+          '#options' => $settings,
           '#states' => $state_disabled,
         ];
         if ($composite_options = $this->getCompositeElementOptions($composite_key)) {
-          $row['type_options']['data'][$composite_key . '__options'] = [
+          $row['settings']['data'][$composite_key . '__options'] = [
             '#type' => 'select',
+            '#title' => $this->t('@title options', $t_args),
+            '#title_display' => 'invisible',
+            '#description' => t('Please select predefined options.'),
+            '#description_display' => 'invisible',
             '#options' => $composite_options,
             '#required' => TRUE,
             '#attributes' => ['style' => 'width: 100%;'],
@@ -955,38 +1044,22 @@ abstract class WebformCompositeBase extends WebformElementBase {
           ];
         }
         else {
-          $row['type_options']['data'][$composite_key . '__options'] = [
+          $row['settings']['data'][$composite_key . '__options'] = [
             '#type' => 'value',
           ];
         }
       }
       else {
-        $row['type_options']['data'][$composite_key . '__type'] = [
+        $row['settings']['data'][$composite_key . '__type'] = [
           '#type' => 'textfield',
           '#access' => FALSE,
         ];
-        $row['type_options']['data']['markup'] = [
+        $row['settings']['data']['markup'] = [
+          '#type' => 'container',
           '#markup' => $this->elementManager->getElementInstance($composite_element)->getPluginLabel(),
           '#access' => TRUE,
         ];
       }
-
-      // Required.
-      if ($type) {
-        $row[$composite_key . '__required'] = [
-          '#type' => 'checkbox',
-          '#return_value' => TRUE,
-        ];
-      }
-      else {
-        $row[$composite_key . '__required'] = ['data' => ['']];
-      }
-
-      // Access.
-      $row[$composite_key . '__access'] = [
-        '#type' => 'checkbox',
-        '#return_value' => TRUE,
-      ];
 
       $rows[$composite_key] = $row;
     }
