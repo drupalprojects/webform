@@ -221,18 +221,6 @@ function webform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     // Make sure webform libraries are always attached to submission form.
     _webform_page_attachments($form);
 
-    // Execute hook_form_BASE_FORM_ID_alter for the webform & source entity
-    // without the operation. (i.e. 'add', 'edit', 'notes', etc...)
-    // @see \Drupal\webform\WebformSubmissionForm::getFormId
-    /** @var \Drupal\webform\WebformSubmissionInterface $webform_submission */
-    $webform_submission = $form_object->getEntity();
-    $webform = $webform_submission->getWebform();
-
-    $hook = 'form_webform_submission_' . $webform->id() . '_form';
-    $form_id = $form_object->getFormId();
-    \Drupal::service('module_handler')->alter($hook, $form, $form_state, $form_id);
-    \Drupal::service('theme.manager')->alter($hook, $form, $form_state, $form_id);
-
     // After build.
     $form['#after_build'][] = '_webform_form_webform_submission_form_after_build';
   }
