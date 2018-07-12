@@ -569,10 +569,9 @@ function _webform_preprocess_description_help(array &$variables) {
   if (\Drupal::config('webform.settings')->get('ui.description_help')
     && \Drupal::service('webform.request')->isWebformAdminRoute()
     && \Drupal::routeMatch()->getRouteName() != 'webform.contribute.settings'
-    && !empty($element['#description'])
     && !isset($element['#help'])
-    && !empty($element['#title'])
-    && !(isset($element['#title_display']) && in_array($element['#title_display'], ['attribute', 'invisible']))
+    && !empty($element['#title']) && (empty($element['#title_display']) || !in_array($element['#title_display'], ['attribute', 'invisible']))
+    && !empty($element['#description']) && (empty($element['#description_display']) || !in_array($element['#description_display'], ['invisible']))
   ) {
     $element['#help'] = (is_array($element['#description'])) ? \Drupal::service('renderer')->render($element['#description']) : $element['#description'];
 
