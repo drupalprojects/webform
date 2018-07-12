@@ -1780,7 +1780,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       return;
     }
 
-    if (Unicode::strlen($element['#value']) < $element['#minlength']) {
+    if (!empty($element['#value']) && Unicode::strlen($element['#value']) < $element['#minlength']) {
       $t_args = [
         '%name' => empty($element['#title']) ? $element['#parents'][0] : $element['#title'],
         '%min' => $element['#minlength'],

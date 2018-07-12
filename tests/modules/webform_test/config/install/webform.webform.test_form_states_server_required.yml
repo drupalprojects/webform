@@ -98,7 +98,7 @@ elements: |
     minlength_hidden_dependent:
       '#type': textfield
       '#title': minlength_hidden_dependent
-      '#minlength': 1
+      '#minlength': 5
       '#states':
         visible:
           ':input[name="minlength_hidden_trigger"]':

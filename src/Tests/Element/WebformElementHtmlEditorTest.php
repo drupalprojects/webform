@@ -42,6 +42,8 @@ class WebformElementHtmlEditorTest extends WebformElementTestBase {
   public function testHtmlEditor() {
     $this->drupalLogin($this->rootUser);
 
+    /* Element text format */
+
     $webform = Webform::load('test_element_html_editor');
 
     // Check required validation.
@@ -76,10 +78,10 @@ class WebformElementHtmlEditorTest extends WebformElementTestBase {
     $this->assertNoRaw('<textarea class="js-html-editor form-textarea required resize-vertical" data-drupal-selector="edit-webform-html-editor-value" id="edit-webform-html-editor-value" name="webform_html_editor[value]" rows="5" cols="60" required="required" aria-required="true">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
     $this->assertRaw('<textarea data-drupal-selector="edit-webform-html-editor-value" class="js-webform-codemirror webform-codemirror html required form-textarea resize-vertical" required="required" aria-required="true" data-webform-codemirror-mode="text/html" id="edit-webform-html-editor-value" name="webform_html_editor[value]" rows="5" cols="60">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
 
-    // Enable HTML editor and text format.
+    // Enable HTML editor and element text format.
     $edit = [
       'html_editor[disabled]' => FALSE,
-      'html_editor[format]' => 'basic_html',
+      'html_editor[element_format]' => 'basic_html',
     ];
     $this->drupalPostForm('admin/structure/webform/config/elements', $edit, t('Save configuration'));
 
@@ -90,8 +92,11 @@ class WebformElementHtmlEditorTest extends WebformElementTestBase {
     $this->assertRaw('<textarea data-drupal-selector="edit-webform-html-editor-value-value" id="edit-webform-html-editor-value-value" name="webform_html_editor[value][value]" rows="5" cols="60" class="form-textarea required resize-vertical" required="required" aria-required="true">Hello &lt;b&gt;World!!!&lt;/b&gt;</textarea>');
     $this->assertRaw('<h4 class="label">Basic HTML</h4>');
 
-    // Disable text format.
-    $this->drupalPostForm('admin/structure/webform/config/elements', ['html_editor[format]' => ''], t('Save configuration'));
+    // Disable element text format.
+    $edit = [
+      'html_editor[element_format]' => '',
+    ];
+    $this->drupalPostForm('admin/structure/webform/config/elements', $edit, t('Save configuration'));
 
     // Check that tidy removed <p> tags.
     $build = WebformHtmlEditor::checkMarkup('<p>Some text</p>');
@@ -109,6 +114,31 @@ class WebformElementHtmlEditorTest extends WebformElementTestBase {
     // Check that tidy is disabled.
     $build = WebformHtmlEditor::checkMarkup('<p>Some text</p>');
     $this->assertEqual(\Drupal::service('renderer')->renderPlain($build), '<p>Some text</p>');
+
+    /* Email text format */
+    // Disable HTML editor.
+    $edit = [
+      'html_editor[disabled]' => FALSE,
+      'html_editor[element_format]' => '',
+      'html_editor[mail_format]' => '',
+    ];
+    $this->drupalPostForm('admin/structure/webform/config/elements', $edit, t('Save configuration'));
+
+    // Check that HTML editor is used.
+    $this->drupalGet('/admin/structure/webform/manage/contact/handlers/email_confirmation/edit');
+    $this->assertRaw('<textarea data-drupal-selector="edit-settings-body-custom-html-value" class="js-html-editor form-textarea resize-vertical" id="edit-settings-body-custom-html-value" name="settings[body_custom_html][value]" rows="5" cols="60">');
+
+    // Enable mail text format.
+    $edit = [
+      'html_editor[mail_format]' => 'basic_html',
+    ];
+    $this->drupalPostForm('admin/structure/webform/config/elements', $edit, t('Save configuration'));
+
+    // Check mail text format is used.
+    $this->drupalGet('/admin/structure/webform/manage/contact/handlers/email_confirmation/edit');
+    $this->assertNoRaw('<textarea data-drupal-selector="edit-settings-body-custom-html-value" class="js-html-editor form-textarea resize-vertical" id="edit-settings-body-custom-html-value" name="settings[body_custom_html][value]" rows="5" cols="60">');
+    $this->assertRaw('<textarea data-drupal-selector="edit-settings-body-custom-html-value-value" id="edit-settings-body-custom-html-value-value" name="settings[body_custom_html][value][value]" rows="5" cols="60" class="form-textarea resize-vertical">');
+    $this->assertRaw('<div class="filter-wrapper js-form-wrapper form-wrapper" data-drupal-selector="edit-settings-body-custom-html-value-format" id="edit-settings-body-custom-html-value-format">');
   }
 
 }

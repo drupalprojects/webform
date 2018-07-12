@@ -506,6 +506,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       if ($format == 'html') {
         $form['message']['body_custom_' . $format] = [
           '#type' => 'webform_html_editor',
+          '#format' => $this->configFactory->get('webform.settings')->get('html_editor.mail_format')
         ];
       }
       else {
@@ -860,7 +861,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       // Apply optional global format to body.
       // NOTE: $message['body'] is not passed-thru Xss::filter() to allow
       // style tags to be supoported.
-      if ($format = $this->configFactory->get('webform.settings')->get('html_editor.format')) {
+      if ($format = $this->configFactory->get('webform.settings')->get('html_editor.mail_format')) {
         $build = [
           '#type' => 'processed_text',
           '#text' => $message['body'],

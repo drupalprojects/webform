@@ -19,6 +19,12 @@ elements: |
     '#title': minlength_textfield
     '#minlength': 5
     '#default_value': value
+  minlength_textfield_required:
+    '#type': textfield
+    '#title': minlength_textfield_required
+    '#minlength': 5
+    '#required': true
+    '#default_value': value
 css: ''
 javascript: ''
 settings:

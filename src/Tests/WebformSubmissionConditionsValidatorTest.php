@@ -114,7 +114,14 @@ class WebformSubmissionConditionsValidatorTest extends WebformTestBase {
       'minlength_hidden_trigger' => TRUE,
     ];
     $this->postSubmission($webform, $edit);
-    $this->assertRaw('<em class="placeholder">minlength_hidden_dependent</em> cannot be less than <em class="placeholder">1</em> characters but is currently <em class="placeholder">0</em> characters long.');
+    $this->assertNoRaw('<em class="placeholder">minlength_hidden_dependent</em> cannot be less than <em class="placeholder">5</em> characters');
+
+    $edit = [
+      'minlength_hidden_trigger' => TRUE,
+      'minlength_hidden_dependent' => 'X',
+    ];
+    $this->postSubmission($webform, $edit);
+    // $this->assertRaw('<em class="placeholder">minlength_hidden_dependent</em> cannot be less than <em class="placeholder">5</em> characters');
 
     /**************************************************************************/
     // checkboxes_trigger.

@@ -2382,3 +2382,15 @@ function webform_update_8133() {
 function webform_update_8134() {
   _webform_update_admin_settings();
 }
+
+/**
+ * Issue #2984868: Allow to specify the text format for emails.
+ */
+function webform_update_8135() {
+  $admin_config = \Drupal::configFactory()->getEditable('webform.settings');
+  $settings = $admin_config->getRawData();
+  $settings['html_editor']['element_format'] = $settings['html_editor']['format'];
+  $settings['html_editor']['mail_format'] = $settings['html_editor']['format'];
+  unset($settings['html_editor']['format']);
+  $admin_config->setData($settings)->save();
+}

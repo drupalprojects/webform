@@ -232,9 +232,12 @@ webform.settings:
         disabled:
           type: boolean
           label: 'Disable HTML editor'
-        format:
+        element_format:
           type: string
-          label: 'Text format'
+          label: 'Element text format'
+        mail_format:
+          type: string
+          label: 'Mail text format'
         tidy:
           type: boolean
           label: 'Tidy HTML markup'

@@ -140,7 +140,8 @@ element:
     password_confirm: password_confirm
 html_editor:
   disabled: false
-  format: ''
+  element_format: ''
+  mail_format: ''
   tidy: true
 file:
   file_public: false

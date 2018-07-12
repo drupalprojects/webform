@@ -252,13 +252,26 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         $format_options[$filter->id()] = $filter->label();
       }
     }
-    $form['html_editor']['format'] = [
+    $form['html_editor']['element_format'] = [
       '#type' => 'select',
-      '#title' => $this->t('Text format'),
+      '#title' => $this->t('Element text format'),
       '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
       '#empty_option' => $this->t('- None -'),
       '#options' => $format_options,
-      '#default_value' => $config->get('html_editor.format'),
+      '#default_value' => $config->get('html_editor.element_format'),
+      '#states' => [
+        'visible' => [
+          ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+    $form['html_editor']['mail_format'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Mail text format'),
+      '#description' => $this->t('Leave blank to use the custom and recommended Webform specific HTML editor.'),
+      '#empty_option' => $this->t('- None -'),
+      '#options' => $format_options,
+      '#default_value' => $config->get('html_editor.mail_format'),
       '#states' => [
         'visible' => [
           ':input[name="html_editor[disabled]"]' => ['checked' => FALSE],
