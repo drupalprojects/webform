@@ -38,6 +38,7 @@
         var options = $.extend({
           mode: $(this).attr('data-webform-codemirror-mode'),
           lineNumbers: true,
+          lineWrapping: true,
           viewportMargin: Infinity,
           readOnly: ($(this).prop('readonly') || $(this).prop('disabled')) ? true : false,
           extraKeys: {
