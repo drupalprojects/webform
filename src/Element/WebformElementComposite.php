@@ -47,7 +47,6 @@ class WebformElementComposite extends FormElement {
       // Add '#markup' property to add an 'id' attribute to the form element.
       // @see template_preprocess_form_element()
       '#markup' => '',
-      '#operations' => TRUE,
     ];
   }
 
@@ -129,7 +128,7 @@ class WebformElementComposite extends FormElement {
       '#empty_items' => 0,
       '#min_items' => 1,
       '#header' => TRUE,
-      '#operations' => $element['#operations'],
+      '#add' => FALSE,
       '#default_value' => (isset($element['#default_value'])) ? $element['#default_value'] : NULL,
       '#error_no_message' => TRUE,
       '#element' => [
