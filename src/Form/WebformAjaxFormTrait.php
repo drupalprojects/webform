@@ -8,6 +8,7 @@ use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
+use Drupal\webform\Ajax\WebformAnnounceCommand;
 use Drupal\webform\Ajax\WebformCloseDialogCommand;
 use Drupal\webform\Ajax\WebformRefreshCommand;
 use Drupal\webform\Ajax\WebformScrollTopCommand;
@@ -140,9 +141,11 @@ trait WebformAjaxFormTrait {
       }
     }
 
-    // Add Ajax wrapper around the form.
-    $form['#form_wrapper_id'] = $this->getWrapperId();
-    $form['#prefix'] = '<div id="' . $this->getWrapperId() . '">';
+    // Add Ajax wrapper with wrapper content bookmark around the form.
+    // @see Drupal.AjaxCommands.prototype.webformScrollTop
+    $wrapper_id = $this->getWrapperId();
+    $form['#form_wrapper_id'] = $wrapper_id;
+    $form['#prefix'] = '<a id="' . $wrapper_id  . '-content" tabindex="-1"></a><div id="' . $wrapper_id . '">';
     $form['#suffix'] = '</div>';
 
     // Add Ajax library which contains 'Scroll to top' Ajax command and
@@ -166,13 +169,16 @@ trait WebformAjaxFormTrait {
    */
   public function submitAjaxForm(array &$form, FormStateInterface $form_state) {
     $scroll_top_target = (isset($form['#webform_ajax_scroll_top'])) ? $form['#webform_ajax_scroll_top'] : 'form';
+
     if ($form_state->hasAnyErrors()) {
       // Display validation errors and scroll to the top of the page.
       $response = $this->replaceForm($form, $form_state);
       if ($scroll_top_target) {
         $response->addCommand(new WebformScrollTopCommand('#' . $this->getWrapperId(), $scroll_top_target));
       }
-      return $response;
+
+      // Announce validation errors.
+      $this->announce($this->t('Form validation errors have been found.'));
     }
     elseif ($form_state->isRebuilding()) {
       // Rebuild form.
@@ -180,18 +186,26 @@ trait WebformAjaxFormTrait {
       if ($scroll_top_target) {
         $response->addCommand(new WebformScrollTopCommand('#' . $this->getWrapperId(), $scroll_top_target));
       }
-      return $response;
     }
     elseif ($redirect_url = $this->getFormStateRedirectUrl($form_state)) {
       // Redirect to URL.
       $response = $this->createAjaxResponse($form, $form_state);
       $response->addCommand(new WebformCloseDialogCommand());
       $response->addCommand(new WebformRefreshCommand($redirect_url));
-      return $response;
     }
     else {
-      return $this->cancelAjaxForm($form, $form_state);
+      $response = $this->cancelAjaxForm($form, $form_state);
     }
+
+    // Add announcements to Ajax response and then reset the announcements.
+    // @see \Drupal\webform\Form\WebformAjaxFormTrait::announce
+    $announcements = $this->getAnnouncements();
+    foreach ($announcements as $announcement) {
+      $response->addCommand(new WebformAnnounceCommand($announcement['text'], $announcement['priority']));
+    }
+    $this->resetAnnouncements();
+
+    return $response;
   }
 
   /**
@@ -294,6 +308,68 @@ trait WebformAjaxFormTrait {
     else {
       return FALSE;
     }
+  }
+
+  /****************************************************************************/
+  // Drupal.announce handling.
+  //
+  // Announcements are stored in the user session because the $form_state
+  // is already serialized (and can't be altered) when announcements
+  // are added to Ajax response.
+  // @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
+  /****************************************************************************/
+
+  /**
+   * Queue announcement with Ajax response.
+   *
+   * @param string $text
+   *   A string to be read by the UA.
+   * @param string $priority
+   *   A string to indicate the priority of the message. Can be either
+   *   'polite' or 'assertive'.
+   *
+   * @see \Drupal\webform\Ajax\WebformAnnounceCommand
+   * @see \Drupal\webform\Form\WebformAjaxFormTrait::submitAjaxForm
+   */
+  protected function announce($text, $priority = 'polite') {
+    $announcements = $this->getAnnouncements();
+    $announcements[] = [
+      'text' => $text,
+      'priority' => $priority,
+    ];
+    $this->setAnnouncements($announcements);
+  }
+
+  /**
+   * Get announcements.
+   *
+   * @return array
+   *   An associative array of announcements.
+   */
+  protected function getAnnouncements() {
+    $session = $this->getRequest()->getSession();
+    return $session->get('announcements') ?: [];
+  }
+
+  /**
+   * Set announcements
+   *
+   * @param array $announcements
+   *   An associative array of announcements.
+   */
+  protected function setAnnouncements(array $announcements) {
+    $session = $this->getRequest()->getSession();
+    $session->set('announcements', $announcements);
+    $session->save();
+  }
+
+  /**
+   * Reset announcements.
+   */
+  protected function resetAnnouncements() {
+    $session = $this->getRequest()->getSession();
+    $session->remove('announcements');
+    $session->save();
   }
 
 }

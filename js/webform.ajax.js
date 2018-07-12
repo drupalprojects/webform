@@ -202,6 +202,14 @@
         $(scrollTarget).animate({scrollTop: (offset.top - Drupal.webform.ajax.scrollTopOffset)}, 500);
       }
     }
+
+    // Focus on the form wrapper content bookmark if
+    // .js-webform-autofocus is not enabled.
+    // @see \Drupal\webform\Form\WebformAjaxFormTrait::buildAjaxForm
+    var $form = $(response.selector + '-content').find('form');
+    if (!$form.hasClass('js-webform-autofocus')) {
+      $(response.selector + '-content').focus();
+    }
   };
 
   /**
@@ -279,7 +287,8 @@
    * @see Drupal.announce
    */
   Drupal.AjaxCommands.prototype.webformAnnounce = function (ajax, response) {
-    Drupal.announce(response.text, response.priority);
+    // Delay the announcement.
+    setTimeout(function() {Drupal.announce(response.text, response.priority);}, 200);
   };
 
   /****************************************************************************/

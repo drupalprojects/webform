@@ -1219,8 +1219,15 @@ class WebformSubmissionForm extends ContentEntityForm {
       return;
     }
     $pages = $this->getPages($form, $form_state);
+
+    // Get next page.
     $current_page = $this->getCurrentPage($form, $form_state);
-    $form_state->set('current_page', $this->getNextPage($pages, $current_page));
+    $next_page = $this->getNextPage($pages, $current_page);
+
+    // Set next page.
+    $form_state->set('current_page', $next_page);
+
+    // Submit next page.
     $this->wizardSubmit($form, $form_state);
   }
 
@@ -1234,8 +1241,15 @@ class WebformSubmissionForm extends ContentEntityForm {
    */
   public function previous(array &$form, FormStateInterface $form_state) {
     $pages = $this->getPages($form, $form_state);
+
+    // Get previous page.
     $current_page = $this->getCurrentPage($form, $form_state);
-    $form_state->set('current_page', $this->getPreviousPage($pages, $current_page));
+    $previous_page = $this->getPreviousPage($pages, $current_page);
+
+    // Set previous page.
+    $form_state->set('current_page', $previous_page);
+
+    // Submit previous page.
     $this->wizardSubmit($form, $form_state);
   }
 
@@ -1266,6 +1280,25 @@ class WebformSubmissionForm extends ContentEntityForm {
     else {
       $this->submitForm($form, $form_state);
       $this->rebuild($form, $form_state);
+    }
+
+    // Announce current page with progress.
+    // @see template_preprocess_webform_progress()
+    if ($this->isAjax()) {
+      $pages = $this->getPages($form, $form_state);
+      
+      $page_keys = array_keys($pages);
+      $page_indexes = array_flip($page_keys);
+      $current_index = $page_indexes[$current_page];
+      $total_pages = count($page_keys);
+      
+      $t_args = [
+        '@title' => $this->getWebform()->label(),
+        '@page' => $pages[$current_page]['#title'],
+        '@start' => ($current_index + 1),
+        '@end' => $total_pages,
+      ];
+      $this->announce($this->t('"@title: @page" loaded. (Page @start of @end)', $t_args));
     }
   }
 
