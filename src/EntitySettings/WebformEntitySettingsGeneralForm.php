@@ -380,6 +380,21 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       ];
     }
 
+    // Advanced settings.
+    $form['advanced_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Advanced settings'),
+      '#open' => TRUE,
+      '#access' => $this->moduleHandler->moduleExists('webform_node'),
+    ];
+    $form['advanced_settings']['weight'] = [
+      '#type' => 'weight',
+      '#title' => $this->t('Weight'),
+      '#description' => $this->t('Weight is used when multiple webforms are associated to the same webform node.'),
+      '#default_value' => $webform->get('weight'),
+      '#access' => $this->moduleHandler->moduleExists('webform_node'),
+    ];
+
     // Third party settings.
     $form['third_party_settings'] = [
       '#type' => 'details',
@@ -427,6 +442,7 @@ class WebformEntitySettingsGeneralForm extends WebformEntitySettingsBaseForm {
       $values['title'],
       $values['description'],
       $values['category'],
+      $values['weight'],
       $values['template'],
       $values['uid']
     );

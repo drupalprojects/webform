@@ -35,6 +35,7 @@ settings:
 handlers:
   email_confirmation:
     label: ' Confirmación de correo electrónico'
+weight: 0
 dependencies:
   enforced:
     module:

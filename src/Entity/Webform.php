@@ -86,6 +86,7 @@ use Drupal\webform\WebformSubmissionStorageInterface;
  *     "status",
  *     "open",
  *     "close",
+ *     "weight",
  *     "uid",
  *     "template",
  *     "archive",
@@ -155,6 +156,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    * @var bool
    */
   protected $close;
+
+  /**
+   * The webform weight.
+   *
+   * @var int
+   */
+  protected $weight = 0;
 
   /**
    * The webform template indicator.
@@ -385,6 +393,13 @@ class Webform extends ConfigEntityBundleBase implements WebformInterface {
    */
   public function getLangcode() {
     return $this->langcode;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWeight() {
+    return $this->weight;
   }
 
   /**

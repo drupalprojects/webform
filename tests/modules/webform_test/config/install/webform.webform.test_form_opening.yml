@@ -1,5 +1,6 @@
 langcode: en
 status: scheduled
+weight: 0
 dependencies:
   enforced:
     module:

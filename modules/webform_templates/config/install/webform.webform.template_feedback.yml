@@ -1,5 +1,6 @@
 langcode: en
 status: closed
+weight: 0
 dependencies:
   enforced:
     module:

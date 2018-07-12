@@ -5,6 +5,9 @@ webform.webform.*:
     status:
       type: string
       label: 'Status'
+    weight:
+      type: integer
+      label: 'Weight'
     open:
       type: string
       label: 'Open date/time'

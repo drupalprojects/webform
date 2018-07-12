@@ -98,6 +98,16 @@ interface WebformInterface extends ConfigEntityInterface, EntityWithPluginCollec
   public function getLangcode();
 
   /**
+   * Returns the webform's weight.
+   *
+   * Only applies to when multiple webforms are attached to a single node.
+   *
+   * @return int
+   *   The webform's weight.
+   */
+  public function getWeight();
+
+  /**
    * Determine if the webform has page or is attached to other entities.
    *
    * @return bool
