@@ -75,7 +75,7 @@ class WebformWizardPage extends Details {
 
     // Add edit page link container to preview.
     // @see Drupal.behaviors.webformWizardPagesLink
-    if (isset($options['view_mode']) && $options['view_mode'] === 'preview' && $webform_submission->getWebform()->getSetting('wizard_preview_link')) {
+    if ($build && isset($options['view_mode']) && $options['view_mode'] === 'preview' && $webform_submission->getWebform()->getSetting('wizard_preview_link')) {
       $build['#children']['wizard_page_link'] = [
         '#type' => 'container',
         '#attributes' => [
