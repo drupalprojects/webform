@@ -141,7 +141,7 @@ class WebformSubmissionLimitBlock extends BlockBase implements ContainerFactoryP
       '#description' => self::buildTokens($this->configuration['type'], $this->configuration['source_entity']),
     ];
 
-    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $form['progress_bar'] = [
       '#title' => $this->t('Show progress bar'),

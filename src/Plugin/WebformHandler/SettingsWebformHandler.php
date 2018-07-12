@@ -125,7 +125,7 @@ class SettingsWebformHandler extends WebformHandlerBase {
       '#description' => $this->t('A message to be displayed on the preview page.'),
       '#default_value' => $this->configuration['preview_message'],
     ];
-    $form['preview_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['preview_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Confirmation settings.
     $confirmation_type = $this->getWebform()->getSetting('confirmation_type');
@@ -159,7 +159,7 @@ class SettingsWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['confirmation_message'],
       '#access' => !empty($this->configuration['confirmation_message']) || $has_confirmation_message,
     ];
-    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Custom settings.
     $custom_settings = $this->configuration;

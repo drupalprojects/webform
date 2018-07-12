@@ -95,7 +95,10 @@ class WebformBlock extends BlockBase implements ContainerFactoryPluginInterface 
       '#mode' => 'yaml',
       '#default_value' => $this->configuration['default_data'],
       '#webform_element' => TRUE,
-      '#description' => $this->t('Enter submission data as name and value pairs as <a href=":href">YAML</a> which will be used to prepopulate the selected webform. You may use tokens.', [':href' => 'https://en.wikipedia.org/wiki/YAML']),
+      '#description' => [
+        'content' => ['#markup' => $this->t('Enter submission data as name and value pairs as <a href=":href">YAML</a> which will be used to prepopulate the selected webform.', [':href' => 'https://en.wikipedia.org/wiki/YAML']), '#suffix' => ' '],
+        'token' => $this->tokenManager->buildTreeLink(),
+      ],
       '#more_title' => $this->t('Example'),
       '#more' => [
         '#theme' => 'webform_codemirror',
@@ -109,10 +112,9 @@ title: '[webform_submission:node:title:clear]'
 # The below example uses a token to get a field value from the current node.
 full_name: '[webform_submission:node:field_full_name:clear]"
       ],
-
     ];
 
-    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 

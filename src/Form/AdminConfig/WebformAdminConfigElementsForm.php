@@ -9,9 +9,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\webform\Utility\WebformArrayHelper;
-use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Utility\WebformOptionsHelper;
+use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\WebformLibrariesManagerInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,6 +26,13 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
+
+  /**
+   * The webform token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
 
   /**
    * The webform element manager.
@@ -54,14 +62,17 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The webform token manager.
    * @param \Drupal\webform\Plugin\WebformElementManagerInterface $element_manager
    *   The webform element manager.
    * @param \Drupal\webform\WebformLibrariesManagerInterface $libraries_manager
    *   The webform libraries manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, WebformTokenManagerInterface $token_manager, WebformElementManagerInterface $element_manager, WebformLibrariesManagerInterface $libraries_manager) {
     parent::__construct($config_factory);
     $this->moduleHandler = $module_handler;
+    $this->tokenManager = $token_manager;
     $this->elementManager = $element_manager;
     $this->librariesManager = $libraries_manager;
   }
@@ -73,6 +84,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
     return new static(
       $container->get('config.factory'),
       $container->get('module_handler'),
+      $container->get('webform.token_manager'),
       $container->get('plugin.manager.webform.element'),
       $container->get('webform.libraries_manager')
     );
@@ -386,7 +398,6 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         ],
       ],
     ];
-
     $form['file']['default_max_filesize'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default maximum upload size'),
@@ -413,6 +424,7 @@ class WebformAdminConfigElementsForm extends WebformAdminConfigBaseForm {
         '#default_value' => $config->get("file.default_{$file_type_name}_extensions"),
       ];
     }
+    $form['file']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Element: (Excluded) Types.
     $form['types'] = [

@@ -139,6 +139,9 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
     ];
 
     if ($this->getSetting('default_data')) {
+      /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
+      $token_manager = \Drupal::service('webform.token_manager');
+
       $element['settings']['default_data'] = [
         '#type' => 'webform_codemirror',
         '#mode' => 'yaml',
@@ -146,7 +149,10 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
         '#placeholder' => $this->t("Enter 'name': 'value' pairs..."),
         '#default_value' => $items[$delta]->default_data,
         '#webform_element' => TRUE,
-        '#description' => $this->t('Enter submission data as name and value pairs as <a href=":href">YAML</a> which will be used to prepopulate the selected webform. You may use tokens.', [':href' => 'https://en.wikipedia.org/wiki/YAML']),
+        '#description' => [
+          'content' => ['#markup' => $this->t('Enter submission data as name and value pairs as <a href=":href">YAML</a> which will be used to prepopulate the selected webform.', [':href' => 'https://en.wikipedia.org/wiki/YAML']), '#suffix' => ' '],
+          'token' => $token_manager->buildTreeLink(),
+        ],
         '#more_title' => $this->t('Example'),
         '#more' => [
           '#theme' => 'webform_codemirror',
@@ -161,9 +167,7 @@ title: '[webform_submission:node:title:clear]'
 full_name: '[webform_submission:node:field_full_name:clear]"
         ],
       ];
-      /** @var \Drupal\webform\WebformTokenManagerInterface $token_manager */
-      $token_manager = \Drupal::service('webform.token_manager');
-      $element['settings']['token_tree_link'] = $token_manager->buildTreeLink();
+      $element['settings']['token_tree_link'] = $token_manager->buildTreeElement();
     }
 
     return $element;

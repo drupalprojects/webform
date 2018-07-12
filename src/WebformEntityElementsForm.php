@@ -110,7 +110,7 @@ class WebformEntityElementsForm extends BundleEntityFormBase {
       '#element_validate' => ['::validateElementsYaml'],
     ];
 
-    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 

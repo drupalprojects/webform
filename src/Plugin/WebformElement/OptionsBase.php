@@ -587,7 +587,7 @@ abstract class OptionsBase extends WebformElementBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $form['default']['default_value']['#description'] = $this->t('The default value of the field identified by its key.');
+    $form['default']['default_value']['#description']['content']['#markup'] .= ' ' . $this->t('The default value of the field identified by its key.');
 
     // Issue #2836374: Wrapper attributes are not supported by composite
     // elements, this includes radios, checkboxes, and buttons.

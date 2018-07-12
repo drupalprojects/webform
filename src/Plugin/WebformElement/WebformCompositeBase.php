@@ -775,7 +775,7 @@ abstract class WebformCompositeBase extends WebformElementBase {
     $form = parent::form($form, $form_state);
 
     // Update #default_value description.
-    $form['default']['default_value']['#description'] = $this->t("The default value of the composite webform element as YAML.");
+    $form['default']['default_value']['#description']['content']['#markup'] = $this->t("The default value of the composite webform element as YAML.");
 
     // Update #required label.
     $form['validation']['required_container']['required']['#title'] .= ' <em>' . $this->t('(Display purposes only)') . '</em>';

@@ -148,7 +148,7 @@ class WebformAdminConfigHandlersForm extends WebformAdminConfigBaseForm {
       '#required' => TRUE,
       '#default_value' => $config->get('mail.default_body_html'),
     ];
-    $form['mail']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['mail']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Email / Handler: Types.
     $form['handler_types'] = [

@@ -241,8 +241,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       if ($state === WebformSubmissionInterface::STATE_COMPLETED) {
         $form[$state]['token'] = [
           '#type' => 'webform_message',
-          '#message_message' => $this->t('Response data can be passed to the submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (i.e. [webform:handler:@machine_name:completed:confirmation_number])',
-            ['@machine_name' => $this->getHandlerId() ?: '{machine_name}']),
+          '#message_message' => $this->t('Response data can be passed to the submission data using [webform:handler:{machine_name}:{state}:{key}] tokens. (i.e. [webform:handler:remote_post:completed:confirmation_number])'),
           '#message_type' => 'info',
         ];
       }
@@ -305,8 +304,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     ];
     $form['additional']['messages_token'] = [
       '#type' => 'webform_message',
-      '#message_message' => $this->t('Response data can be passed to response message using [webform:handler:{machine_name}:{key}] tokens. (i.e. [webform:handler:@machine_name:message])',
-        ['@machine_name' => $this->getHandlerId() ?: '{machine_name}']),
+      '#message_message' => $this->t('Response data can be passed to response message using [webform:handler:{machine_name}:{key}] tokens. (i.e. [webform:handler:remote_post:message])'),
       '#message_type' => 'info',
     ];
     $form['additional']['messages'] = [
@@ -381,7 +379,7 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['excluded_data'],
     ];
 
-    $form['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 
@@ -546,7 +544,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
 
       $data[$element_key . '__name'] = $file->getFilename();
       $data[$element_key . '__uri'] = $file->getFileUri();
-      $data[$element_key . '__mime'] = $file->getMimeType();
       $data[$element_key . '__data'] = base64_encode(file_get_contents($file->getFileUri()));
     }
 

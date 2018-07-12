@@ -144,7 +144,7 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
       '#default_value' => $settings['confirmation_exclude_token'],
       '#access' => !$webform->isResultsDisabled(),
     ];
-    $form['confirmation_url']['token_tree_link'] = $this->tokenManager->buildTreeLink(
+    $form['confirmation_url']['token_tree_link'] = $this->tokenManager->buildTreeElement(
       ['webform', 'webform_submission', 'webform_handler'],
       $this->t('You may use tokens to pass query string parameters. Make sure all tokens include the urlencode suffix. (i.e. [webform-submission:values:email:urlencode])')
     );
@@ -184,7 +184,7 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
         ],
       ],
     ];
-    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['confirmation_settings']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     // Attributes.
     $form['confirmation_attributes_container'] = [
@@ -248,7 +248,7 @@ class WebformEntitySettingsConfirmationForm extends WebformEntitySettingsBaseFor
       '#classes' => $this->config('webform.settings')->get('settings.confirmation_back_classes'),
       '#default_value' => $settings['confirmation_back_attributes'],
     ];
-    $form['back']['back_container']['token_tree_link'] = $this->tokenManager->buildTreeLink();
+    $form['back']['back_container']['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 
