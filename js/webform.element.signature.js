@@ -67,7 +67,7 @@
         // Set reset handler.
         $button.on('click', function () {
           signaturePad.clear();
-          $input.val();
+          $input.val('');
           this.blur();
           return false;
         });
