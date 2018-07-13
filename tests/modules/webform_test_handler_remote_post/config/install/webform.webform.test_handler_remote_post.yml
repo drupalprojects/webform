@@ -210,6 +210,7 @@ handlers:
         custom_data: true
       custom_options: |
         headers:
+          'Accept-Language': '[webform_submission:langcode]'
           custom_header: 'true'
       debug: true
       completed_url: 'http://webform-test-handler-remote-post/completed'

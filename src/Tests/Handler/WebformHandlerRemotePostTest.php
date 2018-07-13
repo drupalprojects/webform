@@ -60,7 +60,7 @@ class WebformHandlerRemotePostTest extends WebformTestBase {
     $this->assertRaw('Your confirmation number is ' . $webform_submission->getElementData('confirmation_number') . '.');
 
     // Check custom header.
-    $this->assertRaw('{&quot;custom_header&quot;:&quot;true&quot;}');
+    $this->assertRaw('{&quot;headers&quot;:{&quot;Accept-Language&quot;:&quot;en&quot;,&quot;custom_header&quot;:&quot;true&quot;}');
 
     // Sleep for 1 second to make sure submission timestamp is updated.
     sleep(1);

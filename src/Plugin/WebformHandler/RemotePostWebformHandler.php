@@ -434,7 +434,10 @@ class RemotePostWebformHandler extends WebformHandlerBase {
     $request_url = $this->configuration[$state . '_url'];
     $request_method = (!empty($this->configuration['method'])) ? $this->configuration['method'] : 'POST';
     $request_type = ($request_method == 'POST') ? $this->configuration['type'] : NULL;
+
+    // Get request options with tokens replaced.
     $request_options = (!empty($this->configuration['custom_options'])) ? Yaml::decode($this->configuration['custom_options']) : [];
+    $request_options = $this->tokenManager->replace($request_options, $webform_submission);
 
     try {
       if ($request_method === 'GET') {
