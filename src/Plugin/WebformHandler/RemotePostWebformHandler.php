@@ -35,6 +35,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   cardinality = \Drupal\webform\Plugin\WebformHandlerInterface::CARDINALITY_UNLIMITED,
  *   results = \Drupal\webform\Plugin\WebformHandlerInterface::RESULTS_PROCESSED,
  *   submission = \Drupal\webform\Plugin\WebformHandlerInterface::SUBMISSION_OPTIONAL,
+ *   tokens = TRUE,
  * )
  */
 class RemotePostWebformHandler extends WebformHandlerBase {
@@ -378,8 +379,6 @@ class RemotePostWebformHandler extends WebformHandlerBase {
       '#parents' => ['settings', 'excluded_data'],
       '#default_value' => $this->configuration['excluded_data'],
     ];
-
-    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
 
     $this->tokenManager->elementValidate($form);
 

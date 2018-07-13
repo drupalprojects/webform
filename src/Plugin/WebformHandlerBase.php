@@ -205,6 +205,13 @@ abstract class WebformHandlerBase extends PluginBase implements WebformHandlerIn
   /**
    * {@inheritdoc}
    */
+  public function supportsTokens() {
+    return $this->pluginDefinition['tokens'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getHandlerId() {
     return $this->handler_id;
   }

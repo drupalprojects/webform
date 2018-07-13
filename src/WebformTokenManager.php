@@ -159,7 +159,7 @@ class WebformTokenManager implements WebformTokenManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildTreeElement(array $token_types = ['webform', 'webform_submission', 'webform_handler']) {
+  public function buildTreeElement(array $token_types = ['webform', 'webform_submission', 'webform_handler'], $description = NULL) {
     if (!$this->moduleHandler->moduleExists('token')) {
       return [];
     }
@@ -171,10 +171,34 @@ class WebformTokenManager implements WebformTokenManagerInterface {
       '#dialog' => TRUE,
     ];
 
-    return [
-      '#type' => 'container',
-      'token_tree_link' => $build,
-    ];
+    if ($description) {
+      if ($this->config->get('ui.description_help')) {
+        return [
+          '#type' => 'container',
+          'token_tree_link' => $build,
+          'help' => [
+            '#type' => 'webform_help',
+            '#help' => $description,
+          ],
+        ];
+      }
+      else {
+        return [
+          '#type' => 'container',
+          'token_tree_link' => $build,
+          'description' => [
+            '#prefix' => ' ',
+            '#markup' => $description,
+          ],
+        ];
+      }
+    }
+    else {
+      return [
+        '#type' => 'container',
+        'token_tree_link' => $build,
+      ];
+    }
   }
 
   /**

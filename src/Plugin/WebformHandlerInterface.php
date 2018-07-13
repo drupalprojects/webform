@@ -92,6 +92,14 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
   public function supportsConditions();
 
   /**
+   * Determine if webform handler supports tokens.
+   *
+   * @return bool
+   *   TRUE if the webform handler supports tokens.
+   */
+  public function supportsTokens();
+
+  /**
    * Returns the unique ID representing the webform handler.
    *
    * @return string

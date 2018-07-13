@@ -287,7 +287,7 @@ abstract class WebformUiElementFormBase extends FormBase implements WebformUiEle
     $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
     if ($form['token_tree_link']) {
       $form['token_tree_link'] += [
-        '#weight' => 100,
+        '#weight' => 101,
       ];
     }
 

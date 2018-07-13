@@ -59,7 +59,7 @@ interface WebformTokenManagerInterface {
    * @return array
    *   A render array containing a token tree link wrapped in a div.
    */
-  public function buildTreeElement(array $token_types = ['webform', 'webform_submission']);
+  public function buildTreeElement(array $token_types = ['webform', 'webform_submission'], $description = NULL);
 
   /**
    * Validate form that should have tokens in it.

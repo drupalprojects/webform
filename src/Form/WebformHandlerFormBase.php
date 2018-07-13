@@ -9,7 +9,9 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\webform\Plugin\WebformHandlerInterface;
 use Drupal\webform\Utility\WebformFormHelper;
 use Drupal\webform\WebformInterface;
+use Drupal\webform\WebformTokenManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base webform for webform handlers.
@@ -17,6 +19,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 abstract class WebformHandlerFormBase extends FormBase {
 
   use WebformDialogFormTrait;
+
+  /**
+   * The token manager.
+   *
+   * @var \Drupal\webform\WebformTokenManagerInterface
+   */
+  protected $tokenManager;
 
   /**
    * The webform.
@@ -37,6 +46,25 @@ abstract class WebformHandlerFormBase extends FormBase {
    */
   public function getFormId() {
     return 'webform_handler_form';
+  }
+
+  /**
+   * Constructs a WebformHandlerFormBase.
+   *
+   * @param \Drupal\webform\WebformTokenManagerInterface $token_manager
+   *   The webform token manager.
+   */
+  public function __construct(WebformTokenManagerInterface $token_manager) {
+    $this->tokenManager = $token_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('webform.token_manager')
+    );
   }
 
   /**
@@ -189,13 +217,6 @@ abstract class WebformHandlerFormBase extends FormBase {
       '#value' => $request->query->has('weight') ? (int) $request->query->get('weight') : $this->webformHandler->getWeight(),
     ];
 
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Save'),
-      '#button_type' => 'primary',
-    ];
-
     // Build tabs.
     $tabs = [
       'conditions' => [
@@ -217,6 +238,20 @@ abstract class WebformHandlerFormBase extends FormBase {
     ];
     $form = WebformFormHelper::buildTabs($form, $tabs);
 
+    $form['actions'] = ['#type' => 'actions'];
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Save'),
+      '#button_type' => 'primary',
+    ];
+
+    // Add token links below the form and on every tab.
+    $form['token_tree_link'] = $this->tokenManager->buildTreeElement();
+    if ($form['token_tree_link']) {
+      $form['token_tree_link'] += [
+        '#weight' => 101,
+      ];
+    }
     return $this->buildDialogForm($form, $form_state);
   }
 
