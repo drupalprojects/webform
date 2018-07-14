@@ -80,7 +80,7 @@ class WebformNodeTest extends WebformNodeTestBase {
     $node->save();
     $this->drupalGet('node/' . $node->id());
     $this->assertNoFieldByName('name', 'John Smith');
-    $this->assertRaw('Sorry...This form is closed to new submissions.');
+    $this->assertRaw('Sorry…This form is closed to new submissions.');
 
     /* Confirmation inline (test_confirmation_inline) */
 
@@ -125,7 +125,7 @@ class WebformNodeTest extends WebformNodeTestBase {
     $node->webform->close = date('Y-m-d\TH:i:s', strtotime('today -1 day'));
     $node->save();
     $this->drupalGet('node/' . $node->id());
-    $this->assertRaw('Sorry...This form is closed to new submissions.');
+    $this->assertRaw('Sorry…This form is closed to new submissions.');
     $this->assertNoFieldByName('name');
 
     // Check scheduled and is open because open or close data was not set.
@@ -135,7 +135,7 @@ class WebformNodeTest extends WebformNodeTestBase {
     $node->webform->close = '';
     $node->save();
     $this->drupalGet('node/' . $node->id());
-    $this->assertNoRaw('Sorry...This form is closed to new submissions.');
+    $this->assertNoRaw('Sorry…This form is closed to new submissions.');
     $this->assertFieldByName('name');
 
     // Check that changes to global message clear the cache.

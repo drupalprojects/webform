@@ -138,7 +138,7 @@ class WebformFormHelper {
    *
    * @return array
    *   The values without default keys like
-   *   'form_build_id', 'form_token', 'form_id', 'op', 'actions', etc...
+   *   'form_build_id', 'form_token', 'form_id', 'op', 'actions', etc…
    */
   public static function cleanupFormStateValues(array $values, array $keys = []) {
     // Remove default FAPI values.

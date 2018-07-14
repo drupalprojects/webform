@@ -18,7 +18,7 @@ elements: |
   item:
     '#type': item
     '#title': 'Below markup contains HTML tags'
-    '#markup': 'Hello <ignored></tag><b>...Goodbye</b>'
+    '#markup': 'Hello <ignored></tag><b>…Goodbye</b>'
 css: ''
 javascript: ''
 settings:

@@ -146,7 +146,7 @@ class WebformEntityReferenceAutocompleteWidget extends EntityReferenceAutocomple
         '#type' => 'webform_codemirror',
         '#mode' => 'yaml',
         '#title' => $this->t('Default submission data (YAML)'),
-        '#placeholder' => $this->t("Enter 'name': 'value' pairs..."),
+        '#placeholder' => $this->t("Enter 'name': 'value' pairs…"),
         '#default_value' => $items[$delta]->default_data,
         '#webform_element' => TRUE,
         '#description' => [

@@ -33,7 +33,7 @@ class WebformElementMappingTest extends WebformElementTestBase {
     $this->assertRaw('<select data-drupal-selector="edit-webform-mapping-one" id="edit-webform-mapping-one" name="webform_mapping[one]" class="form-select"><option value="" selected="selected">- Select -</option><option value="four">Four</option><option value="five">Five</option><option value="six">Six</option></select>');
 
     // Check custom select other element type.
-    $this->assertRaw('<input data-drupal-selector="edit-webform-mapping-select-other-one-other" type="text" id="edit-webform-mapping-select-other-one-other" name="webform_mapping_select_other[one][other]" value="" size="60" maxlength="128" placeholder="Enter other..." class="form-text" />');
+    $this->assertRaw('<input data-drupal-selector="edit-webform-mapping-select-other-one-other" type="text" id="edit-webform-mapping-select-other-one-other" name="webform_mapping_select_other[one][other]" value="" size="60" maxlength="128" placeholder="Enter other…" class="form-text" />');
 
     // Check custom textfield #size property.
     $this->assertRaw('<input data-drupal-selector="edit-webform-mapping-textfield-one" type="text" id="edit-webform-mapping-textfield-one" name="webform_mapping_textfield[one]" value="" size="10" maxlength="128" class="form-text" />');

@@ -144,7 +144,7 @@ class WebformOptionsListBuilder extends ConfigEntityListBuilder {
         $value .= ' (' . $key . ')';
       }
     }
-    return implode('; ', array_slice($options, 0, 12)) . (count($options) > 12 ? '; ...' : '');
+    return implode('; ', array_slice($options, 0, 12)) . (count($options) > 12 ? '; …' : '');
   }
 
 }

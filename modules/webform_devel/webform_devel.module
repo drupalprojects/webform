@@ -88,7 +88,7 @@ function _webform_form_config_single_export_form_update_export($form, FormStateI
   // Read the raw data for this config name, encode it, and display it.
   $value = Yaml::encode(\Drupal::service('config.storage')->read($name));
 
-  // Tidy all only MSK exported configuration...for now.
+  // Tidy all only MSK exported configuration…for now.
   if (strpos($name, 'webform') === 0) {
     $value = WebformYaml::tidy($value);
   }

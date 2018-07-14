@@ -184,8 +184,8 @@ class DateTime extends DateBase {
         'D, m/d/Y' => $this->t('Medium date - @format (@date)', ['@format' => 'D, m/d/Y', '@date' => date('D, m/d/Y')]),
         'm/d/Y' => $this->t('Short date - @format (@date)', ['@format' => 'm/d/Y', '@date' => date('m/d/Y')]),
       ],
-      '#other__option_label' => $this->t('Custom...'),
-      '#other__placeholder' => $this->t('Custom date format...'),
+      '#other__option_label' => $this->t('Custom…'),
+      '#other__placeholder' => $this->t('Custom date format…'),
       '#other__description' => $this->t('Enter date format using <a href="http://php.net/manual/en/function.date.php">Date Input Format</a>.'),
       '#states' => [
         'visible' => [
@@ -268,8 +268,8 @@ class DateTime extends DateBase {
         'g:i:s A' => $this->t('12 hour with seconds - @format (@time)', ['@format' => 'g:i:s A', '@time' => date('g:i:s A')]),
         'g:i A' => $this->t('12 hour - @format (@time)', ['@format' => 'g:i A', '@time' => date('g:i A')]),
       ],
-      '#other__option_label' => $this->t('Custom...'),
-      '#other__placeholder' => $this->t('Custom time format...'),
+      '#other__option_label' => $this->t('Custom…'),
+      '#other__placeholder' => $this->t('Custom time format…'),
       '#other__description' => $this->t('Enter time format using <a href="http://php.net/manual/en/function.date.php">Time Input Format</a>.'),
       '#states' => [
         'invisible'  => [

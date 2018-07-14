@@ -180,7 +180,7 @@ abstract class WebformSubmissionsDeleteFormBase extends ConfirmFormBase {
     // Track progress.
     $context['sandbox']['progress'] += $this->submissionStorage->deleteAll($webform, $entity, $this->getBatchLimit(), $max_sid);
 
-    $context['message'] = $this->t('Deleting @count of @total submissions...', ['@count' => $context['sandbox']['progress'], '@total' => $context['sandbox']['max']]);
+    $context['message'] = $this->t('Deleting @count of @total submissions…', ['@count' => $context['sandbox']['progress'], '@total' => $context['sandbox']['max']]);
 
     // Track finished.
     if ($context['sandbox']['progress'] != $context['sandbox']['max']) {

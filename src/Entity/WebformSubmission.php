@@ -185,7 +185,7 @@ class WebformSubmission extends ContentEntityBase implements WebformSubmissionIn
 
     // Can't use entity reference without a target type because it defaults to
     // an integer which limits reference to only content entities (and not
-    // config entities like Views, Panels, etc...).
+    // config entities like Views, Panels, etc…).
     // @see \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem::propertyDefinitions()
     $fields['entity_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Submitted to: Entity ID'))

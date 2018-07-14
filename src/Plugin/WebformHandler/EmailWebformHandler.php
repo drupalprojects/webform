@@ -457,9 +457,9 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // HTML (CKEditor), Plain text (CodeMirror), and Twig (CodeMirror)
     // custom body elements.
     $body_options = [];
-    $body_options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom body...');
+    $body_options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom body…');
     if ($has_edit_twig_access) {
-      $body_options['twig'] = $this->t('Twig template...');
+      $body_options['twig'] = $this->t('Twig template…');
     }
     $body_options[static::DEFAULT_VALUE] = $this->t('Default');
     $body_options[(string) $this->t('Elements')] = $text_element_options_value;
@@ -642,11 +642,11 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#type' => 'checkboxes',
       '#title' => $this->t('Send email'),
       '#options' => [
-        WebformSubmissionInterface::STATE_DRAFT => $this->t('...when <b>draft</b> is saved.'),
-        WebformSubmissionInterface::STATE_CONVERTED => $this->t('...when anonymous submission is <b>converted</b> to authenticated.'),
-        WebformSubmissionInterface::STATE_COMPLETED => $this->t('...when submission is <b>completed</b>.'),
-        WebformSubmissionInterface::STATE_UPDATED => $this->t('...when submission is <b>updated</b>.'),
-        WebformSubmissionInterface::STATE_DELETED => $this->t('...when submission is <b>deleted</b>.'),
+        WebformSubmissionInterface::STATE_DRAFT => $this->t('…when <b>draft</b> is saved.'),
+        WebformSubmissionInterface::STATE_CONVERTED => $this->t('…when anonymous submission is <b>converted</b> to authenticated.'),
+        WebformSubmissionInterface::STATE_COMPLETED => $this->t('…when submission is <b>completed</b>.'),
+        WebformSubmissionInterface::STATE_UPDATED => $this->t('…when submission is <b>updated</b>.'),
+        WebformSubmissionInterface::STATE_DELETED => $this->t('…when submission is <b>deleted</b>.'),
       ],
       '#access' => $results_disabled ? FALSE : TRUE,
       '#parents' => ['settings', 'states'],
@@ -955,7 +955,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     // Add user role email addresses to 'To', 'CC', and 'BCC'.
     // IMPORTANT: This is the only place where user email addresses can be
     // used as tokens.  This prevents the webform module from being used to
-    // spam users or worse...expose user email addresses to malicious users.
+    // spam users or worse…expose user email addresses to malicious users.
     if (in_array($configuration_name, ['to', 'cc', 'bcc'])) {
       $roles = $this->configFactory->get('webform.settings')->get('mail.roles');
       $emails = $this->tokenManager->replace($emails, $webform_submission, ['webform_role' => $roles]);
@@ -1356,7 +1356,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
     $default_option = $this->getDefaultConfigurationValue($name);
 
     $options = [];
-    $options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom @label...', ['@label' => $label]);
+    $options[WebformSelectOther::OTHER_OPTION] = $this->t('Custom @label…', ['@label' => $label]);
     if ($default_option) {
       $options[(string) $this->t('Default')] = [static::DEFAULT_VALUE => $default_option];
     }
@@ -1387,7 +1387,7 @@ class EmailWebformHandler extends WebformHandlerBase implements WebformHandlerMe
       '#empty_option' => (!$required) ? $this->t('- None -') : NULL,
       '#other__title' => $title,
       '#other__title_display' => 'hidden',
-      '#other__placeholder' => $this->t('Enter @label...', ['@label' => $label]),
+      '#other__placeholder' => $this->t('Enter @label…', ['@label' => $label]),
       '#other__type' => ($element_type == 'mail') ? 'webform_email_multiple' : 'textfield',
       '#other__allow_tokens' => TRUE,
       '#required' => $required,

@@ -41,7 +41,7 @@ class WebformDevelCommands extends DrushCommands {
         $tidied_yaml = WebformYaml::tidy(Yaml::encode($data)) . PHP_EOL;
 
         if ($tidied_yaml != $original_yaml) {
-           $this->output()->writeln(dt('Updating @file...', ['@file' => $file->filename]));
+           $this->output()->writeln(dt('Updating @file…', ['@file' => $file->filename]));
           file_put_contents($file->uri, $tidied_yaml);
           $total++;
         }
@@ -49,7 +49,7 @@ class WebformDevelCommands extends DrushCommands {
       catch (\Exception $exception) {
         $message = 'Error parsing: ' . $file->filename . PHP_EOL . $exception->getMessage();
         if (strlen($message) > 255) {
-          $message = substr($message, 0, 255) . '...';
+          $message = substr($message, 0, 255) . '…';
         }
         $this->logger()->log($message, LogLevel::ERROR);
          $this->output()->writeln($message);

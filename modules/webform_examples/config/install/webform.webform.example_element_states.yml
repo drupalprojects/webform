@@ -67,11 +67,11 @@ elements: |
         1: One
         2: Two
         3: Three
-        other: Other...
+        other: Other…
     select_other:
       '#type': textfield
       '#attributes':
-        placeholder: 'Enter other...'
+        placeholder: 'Enter other…'
       '#states':
         visible:
           ':input[name="select"]':
@@ -94,7 +94,7 @@ elements: |
     select_multiple_other:
       '#type': textfield
       '#attributes':
-        placeholder: 'Enter other...'
+        placeholder: 'Enter other…'
       '#states':
         visible:
           - ':input[name="select_multiple"]':
@@ -119,11 +119,11 @@ elements: |
         1: One
         2: Two
         3: Three
-        other: Other...
+        other: Other…
     radios_other:
       '#type': textfield
       '#attributes':
-        placeholder: 'Enter other...'
+        placeholder: 'Enter other…'
       '#states':
         visible:
           ':input[name="radios"]':

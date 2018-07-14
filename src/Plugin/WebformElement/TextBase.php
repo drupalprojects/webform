@@ -88,8 +88,8 @@ abstract class TextBase extends WebformElementBase {
       '#type' => 'webform_select_other',
       '#title' => $this->t('Input masks'),
       '#description' => $this->t('An <a href=":href">inputmask</a> helps the user with the element by ensuring a predefined format.', [':href' => 'https://github.com/RobinHerbots/jquery.inputmask']),
-      '#other__option_label' => $this->t('Custom...'),
-      '#other__placeholder' => $this->t('Enter input mask...'),
+      '#other__option_label' => $this->t('Custom…'),
+      '#other__placeholder' => $this->t('Enter input mask…'),
       '#other__description' => $this->t('(9 = numeric; a = alphabetical; * = alphanumeric)'),
       '#empty_option' => $this->t('- None -'),
       '#options' => [

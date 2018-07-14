@@ -54,7 +54,7 @@ elements: |
       '#required': true
     employee_ratings:
       '#type': webform_likert
-      '#title': 'How would you rate the employee''s...'
+      '#title': 'How would you rate the employee''s…'
       '#questions':
         attendance: Attendance
         attire: Attire

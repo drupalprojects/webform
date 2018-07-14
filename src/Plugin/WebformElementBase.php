@@ -2632,7 +2632,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $form['wrapper_attributes']['wrapper_attributes'] = [
       '#type' => 'webform_element_attributes',
       '#title' => $this->t('Wrapper'),
-      '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom...' to enter custom classes."),
+      '#class__description' => $this->t("Apply classes to the element's wrapper around both the field and its label. Select 'custom…' to enter custom classes."),
       '#style__description' => $this->t("Apply custom styles to the element's wrapper around both the field and its label."),
       '#attributes__description' => $this->t("Enter additional attributes to be added to the element's wrapper."),
       '#classes' => $this->configFactory->get('webform.settings')->get('element.wrapper_classes'),
@@ -2699,7 +2699,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $format = isset($element_properties['format']) ? $element_properties['format'] : NULL;
     $format_custom = ($has_edit_twig_access || $format === 'custom');
     if ($format_custom) {
-      $form['display']['item']['format']['#options'] += ['custom' => $this->t('Custom...')];
+      $form['display']['item']['format']['#options'] += ['custom' => $this->t('Custom…')];
     }
     $custom_states = [
       'visible' => [':input[name="properties[format]"]' => ['value' => 'custom']],
@@ -2772,7 +2772,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
     $format_items = isset($element_properties['format_items']) ? $element_properties['format_items'] : NULL;
     $format_items_custom = ($has_edit_twig_access || $format_items === 'custom');
     if ($format_items_custom) {
-      $form['display']['items']['format_items']['#options'] += ['custom' => $this->t('Custom...')];
+      $form['display']['items']['format_items']['#options'] += ['custom' => $this->t('Custom…')];
     }
     $custom_states = [
       'visible' => [':input[name="properties[format_items]"]' => ['value' => 'custom']],
@@ -3158,7 +3158,7 @@ class WebformElementBase extends PluginBase implements WebformElementInterface {
       case 'radios':
       case 'select':
         // Handle invalid default_value throwing
-        // "An illegal choice has been detected..." error.
+        // "An illegal choice has been detected…" error.
         if (!is_array($default_value) && isset($property_element['#options'])) {
           $flattened_options = OptGroup::flattenOptions($property_element['#options']);
           if (!isset($flattened_options[$default_value])) {

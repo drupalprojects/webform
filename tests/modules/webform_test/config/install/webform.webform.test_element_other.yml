@@ -37,7 +37,7 @@ elements: |
         'Option Group':
           Two: Two
         Three: Three
-      '#empty_option': Select...
+      '#empty_option': Select…
       '#other__option_label': 'Is there another option you wish to enter?'
       '#other__title': Other
       '#other__placeholder': 'What is this other option'

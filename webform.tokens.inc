@@ -146,7 +146,7 @@ function webform_token_info() {
   $webform_submission['values'] = [
     'name' => t('Submission values'),
     'description' => Markup::create((string) t('Webform tokens from submitted data.') .
-      t("Replace the '?' with...") . '<br />' .
+      t("Replace the '?' with…") . '<br />' .
       '<ul>' .
       '<li>element_key</li>' .
       '<li>element_key:format:items</li>' .
@@ -270,7 +270,7 @@ function webform_token_info() {
   $webform['handler'] = [
     'name' => t('Handler response'),
     'description' => Markup::create((string) t('Webform handler response tokens.') . '<br/>' .
-      t("Replace the '?' with...") . '<br />' .
+      t("Replace the '?' with…") . '<br />' .
       '<ul>' .
       '<li>handler_id:state:key</li>' .
       '<li>handler_id:state:key1:key2</li>' .

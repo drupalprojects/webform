@@ -23,7 +23,7 @@ elements: |
     '#required': true
   speaker:
     '#type': webform_likert
-    '#title': 'Please rate the speaker''s...'
+    '#title': 'Please rate the speaker''s…'
     '#questions':
       mastery: 'Mastery of this topic'
       presentation: 'Presentation skills'

@@ -21,7 +21,7 @@ class WebformDialogHelper {
   /**
    * Width for normal dialog. (modal: 800px; off-canvas: 600px)
    *
-   * Used by: Add and edit element/handler, etc...
+   * Used by: Add and edit element/handler, etc…
    *
    * @var string
    */
@@ -30,7 +30,7 @@ class WebformDialogHelper {
   /**
    * Width for narrow dialog. (modal: 700px; off-canvas: 500px)
    *
-   * Used by: Duplicate and delete entity, notes, etc...
+   * Used by: Duplicate and delete entity, notes, etc…
    *
    * @var string
    */

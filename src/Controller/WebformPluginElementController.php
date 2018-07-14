@@ -216,7 +216,7 @@ class WebformPluginElementController extends ControllerBase implements Container
         }
         $properties += $element_default_properties;
         if (count($properties) >= 20) {
-          $properties = array_slice($properties, 0, 20) + ['...' => '...'];
+          $properties = array_slice($properties, 0, 20) + ['…' => '…'];
         }
 
         // Operations.

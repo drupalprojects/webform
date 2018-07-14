@@ -21,7 +21,7 @@ function webform_node_test_translation_install() {
 
   // Initialize webform node content type title field translation.
   //
-  // Below $values are from...
+  // Below $values are from…
   //   $values = $form_state->getValues();
   //   var_export($values['settings']['node']['webform']); exit;
   //

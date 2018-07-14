@@ -2,7 +2,7 @@ settings:
   default_form_submit_label: Отправить
   default_preview_next_button_label: 'Предварительный просмотр'
   default_form_open_message: 'Эта форма еще не был открыт для представлений.'
-  default_form_close_message: 'Извините... Эта форма закрыта для новых представлений.'
+  default_form_close_message: 'Извините… Эта форма закрыта для новых представлений.'
   default_form_exception_message: 'Не удается отобразить эту веб-форму. Пожалуйста, свяжитесь с администратором сайта.'
   default_form_confidential_message: 'Эта форма является конфиденциальной. Вы должны <a href="[site:login-url]/logout?destination=[current-page:url:relative]">выйти из</a> представить его.'
   default_wizard_prev_button_label: '&lt; Предыдущая страница'

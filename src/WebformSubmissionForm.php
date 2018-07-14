@@ -1364,7 +1364,7 @@ class WebformSubmissionForm extends ContentEntityForm {
    * More complex (web)form elements user #validate callbacks
    * to process and alter an element's submitted value. Element's that rely on
    * #validate to alter the submitted value include 'Password Confirm',
-   * 'Email Confirm', 'Composite Elements', 'Other Elements', and more...
+   * 'Email Confirm', 'Composite Elements', 'Other Elements', and more…
    *
    * If the #limit_validation_errors property is used within a multi-step wizard
    * form, previously submitted values will be corrupted.

@@ -144,7 +144,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
     // Send date/time.
     $send_options = [
       '[date:html_date]' => $this->t('Current date'),
-      WebformOtherBase::OTHER_OPTION => $this->t('Custom date...'),
+      WebformOtherBase::OTHER_OPTION => $this->t('Custom date…'),
       (string) $this->t('Webform') => [
         '[webform:open:html_date]' => $this->t('Open date'),
         '[webform:close:html_date]' => $this->t('Close date'),
@@ -186,7 +186,7 @@ class ScheduleEmailWebformHandler extends EmailWebformHandler {
       '#empty_option' => $this->t('- None -'),
       '#options' => $days_options,
       '#default_value' => $this->configuration['days'],
-      '#other__option_label' => $this->t('Custom number of days...'),
+      '#other__option_label' => $this->t('Custom number of days…'),
       '#other__type' => 'number',
       '#other__field_suffix' => $this->t('days'),
       '#other__placeholder' => $this->t('Enter +/- days'),

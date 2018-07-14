@@ -2,7 +2,7 @@ settings:
   default_status: open
   default_page_base_path: form
   default_form_open_message: 'This form has not yet been opened to submissions.'
-  default_form_close_message: 'Sorry...This form is closed to new submissions.'
+  default_form_close_message: 'Sorry…This form is closed to new submissions.'
   default_form_exception_message: 'Unable to display this webform. Please contact the site administrator.'
   default_submit_button_label: Submit
   default_reset_button_label: Reset

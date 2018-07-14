@@ -85,7 +85,7 @@ class WebformImageSelectElementImages extends FormElement {
       '#type' => 'select',
       '#description' => t('Please select <a href=":href">predefined images</a> or enter custom image.', $t_args),
       '#options' => [
-        self::CUSTOM_OPTION => t('Custom images...'),
+        self::CUSTOM_OPTION => t('Custom images…'),
       ] + $webform_images,
       '#attributes' => [
         'class' => [$class_name],

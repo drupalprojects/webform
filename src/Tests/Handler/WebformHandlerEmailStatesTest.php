@@ -60,7 +60,7 @@ class WebformHandlerEmailStatesTest extends WebformTestBase {
     $this->drupalPostForm("/admin/structure/webform/manage/test_handler_email_states/submission/$sid/delete", [], t('Delete'));
     $this->assertRaw('Debug: Email: Submission deleted');
 
-    // Check that 'Send when...' is visible.
+    // Check that 'Send when…' is visible.
     $this->drupalGet('admin/structure/webform/manage/test_handler_email_states/handlers/email_draft/edit');
     $this->assertRaw('<span class="fieldset-legend">Send email</span>');
 

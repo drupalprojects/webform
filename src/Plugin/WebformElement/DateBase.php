@@ -178,7 +178,7 @@ abstract class DateBase extends WebformElementBase {
 
     // Allow custom date formats to be entered.
     $form['display']['format']['#type'] = 'webform_select_other';
-    $form['display']['format']['#other__option_label'] = $this->t('Custom date format...');
+    $form['display']['format']['#other__option_label'] = $this->t('Custom date format…');
     $form['display']['format']['#other__description'] = $this->t('A user-defined date format. See the <a href="http://php.net/manual/function.date.php">PHP manual</a> for available options.');
 
     $form['date'] = [

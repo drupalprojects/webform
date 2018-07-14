@@ -105,7 +105,7 @@ abstract class WebformOtherBase extends FormElement {
     $element[$type] += array_intersect_key($element, array_combine($properties, $properties));
     $element[$type]['#title_display'] = 'invisible';
     if (!isset($element[$type]['#options'][static::OTHER_OPTION])) {
-      $element[$type]['#options'][static::OTHER_OPTION] = (!empty($element['#other__option_label'])) ? $element['#other__option_label'] : t('Other...');
+      $element[$type]['#options'][static::OTHER_OPTION] = (!empty($element['#other__option_label'])) ? $element['#other__option_label'] : t('Other…');
     }
     $element[$type]['#error_no_message'] = TRUE;
 
@@ -127,7 +127,7 @@ abstract class WebformOtherBase extends FormElement {
     $element['other'] += [
       '#type' => 'textfield',
       '#webform_element' => TRUE,
-      '#placeholder' => t('Enter other...'),
+      '#placeholder' => t('Enter other…'),
     ];
     if (!isset($element['other']['#title'])) {
       $element['other'] += [

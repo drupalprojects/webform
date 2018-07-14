@@ -298,7 +298,7 @@ class WebformElementStates extends FormElement {
       '#title_display' => 'invisible',
       '#size' => 25,
       '#default_value' => $condition['value'],
-      '#placeholder' => t('Enter value...'),
+      '#placeholder' => t('Enter value…'),
       '#states' => [
         'visible' => [
           [$trigger_selector => ['value' => 'value']],

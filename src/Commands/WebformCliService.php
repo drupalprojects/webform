@@ -489,7 +489,7 @@ class WebformCliService implements WebformCliServiceInterface {
         try {
           $data = Yaml::decode($tidied_yaml);
           if (empty($data['dependencies']['enforced']['module']) || !in_array($target, $data['dependencies']['enforced']['module'])) {
-            $this->drush_print($this->dt('Adding module dependency to @file...', ['@file' => $file->filename]));
+            $this->drush_print($this->dt('Adding module dependency to @file…', ['@file' => $file->filename]));
             $data['dependencies']['enforced']['module'][] = $target;
             $tidied_yaml = Yaml::encode($data);
           }
@@ -497,7 +497,7 @@ class WebformCliService implements WebformCliServiceInterface {
         catch (\Exception $exception) {
           $message = 'Error parsing: ' . $file->filename . PHP_EOL . $exception->getMessage();
           if (strlen($message) > 255) {
-            $message = substr($message, 0, 255) . '...';
+            $message = substr($message, 0, 255) . '…';
           }
           $this->drush_log($message, LogLevel::ERROR);
           $this->drush_print($message);
@@ -507,7 +507,7 @@ class WebformCliService implements WebformCliServiceInterface {
       // Tidy and add new line to the end of the tidied file.
       $tidied_yaml = WebformYaml::tidy($tidied_yaml) . PHP_EOL;
       if ($tidied_yaml != $original_yaml) {
-        $this->drush_print($this->dt('Tidying @file...', ['@file' => $file->filename]));
+        $this->drush_print($this->dt('Tidying @file…', ['@file' => $file->filename]));
         file_put_contents($file->uri, $tidied_yaml);
         $total++;
       }
@@ -640,7 +640,7 @@ class WebformCliService implements WebformCliServiceInterface {
   public function drush_webform_libraries_download() {
     // Remove all existing libraries (including excluded).
     if ($this->drush_webform_libraries_remove(FALSE)) {
-      $this->drush_print($this->dt('Removing existing libraries...'));
+      $this->drush_print($this->dt('Removing existing libraries…'));
     }
 
     $temp_dir = $this->drush_tempdir();
@@ -692,7 +692,7 @@ class WebformCliService implements WebformCliServiceInterface {
   public function drush_webform_libraries_remove($status = NULL) {
     $status = ($status !== FALSE);
     if ($status) {
-      $this->drush_print($this->dt('Beginning to remove libraries...'));
+      $this->drush_print($this->dt('Beginning to remove libraries…'));
     }
     $removed = FALSE;
 
@@ -710,7 +710,7 @@ class WebformCliService implements WebformCliServiceInterface {
             '@name' => $library_name,
             '@path' => $library_path,
           ];
-          $this->drush_print($this->dt('@name removed from @path...', $t_args));
+          $this->drush_print($this->dt('@name removed from @path…', $t_args));
         }
       }
     }
@@ -735,23 +735,23 @@ class WebformCliService implements WebformCliServiceInterface {
 
     module_load_include('install', 'webform');
 
-    $this->drush_print('Repairing admin settings...');
+    $this->drush_print('Repairing admin settings…');
     _webform_update_admin_settings(TRUE);
 
-    $this->drush_print('Repairing webform settings...');
+    $this->drush_print('Repairing webform settings…');
     _webform_update_webform_settings();
 
-    $this->drush_print('Repairing webform handlers...');
+    $this->drush_print('Repairing webform handlers…');
     _webform_update_webform_handler_settings();
 
-    $this->drush_print('Repairing webform field storage definitions...');
+    $this->drush_print('Repairing webform field storage definitions…');
     _webform_update_field_storage_definitions();
 
-    $this->drush_print('Repairing webform submission storage schema...');
+    $this->drush_print('Repairing webform submission storage schema…');
     _webform_update_webform_submission_storage_schema();
 
     // Validate all webform elements.
-    $this->drush_print('Validating webform elements...');
+    $this->drush_print('Validating webform elements…');
     /** @var \Drupal\webform\WebformEntityElementsValidatorInterface $elements_validator */
     $elements_validator = \Drupal::service('webform.elements_validator');
 

@@ -270,7 +270,7 @@ interface WebformHandlerInterface extends PluginInspectionInterface, Configurabl
    * Note: Conditions are only applied to callbacks that require a
    * webform submissions.
    *
-   * Conditions are ignored by...
+   * Conditions are ignored by…
    * - \Drupal\webform\Plugin\WebformHandlerInterface::alterElements
    * - \Drupal\webform\Plugin\WebformHandlerInterface::preCreate
    *

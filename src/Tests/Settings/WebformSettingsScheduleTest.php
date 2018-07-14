@@ -87,7 +87,7 @@ class WebformSettingsScheduleTest extends WebformTestBase {
     $webform_closed->save();
     $this->drupalGet('webform/test_form_closed');
     $this->assertNoRaw('This form is closed.');
-    $this->assertRaw('Sorry...This form is closed to new submissions.');
+    $this->assertRaw('Sorry…This form is closed to new submissions.');
 
     $this->drupalLogin($this->rootUser);
 

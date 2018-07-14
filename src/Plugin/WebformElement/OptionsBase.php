@@ -60,10 +60,10 @@ abstract class OptionsBase extends WebformElementBase {
     // Add other properties to elements that include the other text field.
     if ($this->isOptionsOther()) {
       $properties += [
-        'other__option_label' => $this->t('Other...'),
+        'other__option_label' => $this->t('Other…'),
         'other__type' => 'textfield',
         'other__title' => '',
-        'other__placeholder' => $this->t('Enter other...'),
+        'other__placeholder' => $this->t('Enter other…'),
         'other__description' => '',
         // Text field or textarea.
         'other__size' => '',

@@ -1,7 +1,7 @@
 settings:
   default_form_submit_label: Enviar
   default_preview_next_button_label: 'Vista previa'
-  default_form_close_message: 'Lo siento... Este formulario está cerrado a nuevas presentaciones.'
+  default_form_close_message: 'Lo siento… Este formulario está cerrado a nuevas presentaciones.'
   default_form_exception_message: 'No se puede mostrar este formulario Web. Póngase en contacto con el administrador del sitio.'
   default_preview_prev_button_label: '&lt; Anterior'
   default_preview_message: 'Por favor revise su presentación. Su solicitud no está completa hasta que usted oprima el botón &quot;Enviar&quot;!'

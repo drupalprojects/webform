@@ -29,7 +29,7 @@ elements: |
       4: Four
       5: Five
       6: Six
-    '#other__option_label': 'Custom number...'
+    '#other__option_label': 'Custom number…'
   details:
     '#type': details
     '#title': Details

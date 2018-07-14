@@ -95,8 +95,8 @@ class WebformTime extends WebformElementBase {
         'g:i A' => $this->t('12 hour - @format (@time)', ['@format' => 'g:i A', '@time' => date('g:i A')]),
         'g:i:s A' => $this->t('12 hour with seconds - @format (@time)', ['@format' => 'g:i:s A', '@time' => date('g:i:s A')]),
       ],
-      '#other__option_label' => $this->t('Custom...'),
-      '#other__placeholder' => $this->t('Custom time format...'),
+      '#other__option_label' => $this->t('Custom…'),
+      '#other__placeholder' => $this->t('Custom time format…'),
       '#other__description' => $this->t('Enter time format using <a href="http://php.net/manual/en/function.date.php">Time Input Format</a>.'),
     ];
     $form['time']['time_container'] = $this->getFormInlineContainer();

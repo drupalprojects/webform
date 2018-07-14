@@ -63,7 +63,7 @@ interface WebformSubmissionStorageInterface extends ContentEntityStorageInterfac
   /**
    * Check field definition access.
    *
-   * Access checks include...
+   * Access checks include…
    * - Only allowing user who can update any access to the 'token' field.
    *
    * @param \Drupal\webform\WebformInterface $webform

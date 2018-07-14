@@ -70,7 +70,7 @@ class WebformDevelLog implements LoggerInterface {
       $message = empty($message_placeholders) ? $message : strtr($message, $message_placeholders);
       $build = ['#markup' => $message];
       // IMPORTANT: Do not inject the renderer into WebformDevelLog because
-      // it will cause...
+      // it will cause…
       // "LogicException: The database connection is not serializable." errors
       // for all Ajax callbacks.
       // @see \Drupal\Core\Render\Renderer

@@ -92,7 +92,7 @@ class WebformElementOptions extends FormElement {
       '#type' => 'select',
       '#description' => t('Please select <a href=":href">predefined @type</a> or enter custom @type.', $t_args),
       '#options' => [
-        self::CUSTOM_OPTION => t('Custom @type...', $t_args),
+        self::CUSTOM_OPTION => t('Custom @type…', $t_args),
       ] + $options,
 
       '#attributes' => [

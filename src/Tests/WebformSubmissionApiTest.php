@@ -190,7 +190,7 @@ class WebformSubmissionApiTest extends WebformTestBase {
     // Check form closed message.
     $test_form_limit_webform->setStatus(FALSE)->save();
     $result = WebformSubmissionForm::isOpen($test_form_limit_webform);
-    $this->assertEqual($result['#markup'], 'Sorry...This form is closed to new submissions.');
+    $this->assertEqual($result['#markup'], 'Sorry…This form is closed to new submissions.');
   }
 
 }

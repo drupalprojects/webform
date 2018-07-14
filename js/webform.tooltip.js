@@ -47,7 +47,7 @@
       $(context).find('.js-webform-tooltip-element').once('webform-tooltip-element').each(function () {
         var $element = $(this);
 
-        // Checkboxes, radios, buttons, toggles, etc... use fieldsets.
+        // Checkboxes, radios, buttons, toggles, etc… use fieldsets.
         // @see \Drupal\webform\Plugin\WebformElement\OptionsBase::prepare
         var $description;
         if ($element.is('fieldset')) {
