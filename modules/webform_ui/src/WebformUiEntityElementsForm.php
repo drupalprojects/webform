@@ -100,12 +100,16 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     $header = $this->getTableHeader();
 
+    $elements = $this->getOrderableElements();
+
+    // Get (weight) delta parent options.
+    $delta = count($elements);
+    $parent_options = $this->getParentOptions($elements);
+
     // Build table rows for elements.
     $rows = [];
-    $elements = $this->getOrderableElements();
-    $delta = count($elements);
     foreach ($elements as $element) {
-      $rows[$element['#webform_key']] = $this->getElementRow($element, $delta);
+      $rows[$element['#webform_key']] = $this->getElementRow($element, $delta, $parent_options);
     }
 
     $form['webform_ui_elements'] = [
@@ -169,12 +173,28 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     // Validate parent key and add children to ordered elements.
     foreach ($webform_ui_elements as $key => $table_element) {
-      $parent_key = $table_element['parent_key'];
 
-      // Validate the parent key.
-      if ($parent_key && !isset($elements_flattened[$parent_key])) {
-        $form_state->setError($form['webform_ui_elements'], $this->t('Parent %parent_key does not exist.', ['%parent_key' => $parent_key]));
-        return;
+      // Validate parent key.
+      if ($parent_key = $table_element['parent_key']) {
+        // Validate missing parent key.
+        if (!isset($elements_flattened[$parent_key])) {
+          $form_state->setError($form['webform_ui_elements'][$key]['parent']['parent_key'], $this->t('Parent %parent_key does not exist.', ['%parent_key' => $parent_key]));
+          continue;
+        }
+
+        // Validate the parent keys and make sure there
+        // are no recursive parents.
+        $parent_keys = [$key];
+        $current_parent_key = $parent_key;
+        while ($current_parent_key) {
+          if (in_array($current_parent_key, $parent_keys)) {
+            $form_state->setError($form['webform_ui_elements'][$key]['parent']['parent_key'], $this->t('Parent %parent_key key is not valid.', ['%parent_key' => $parent_key]));
+            break;
+          }
+
+          $parent_keys[] = $current_parent_key;
+          $current_parent_key = (isset($webform_ui_elements[$current_parent_key]['parent_key'])) ? $webform_ui_elements[$current_parent_key]['parent_key'] : NULL;
+        }
       }
 
       // Set #required or remove the property.
@@ -191,6 +211,10 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
       $webform_ui_elements[$parent_key]['children'][$key] = $key;
     }
 
+    if ($form_state->hasAnyErrors()) {
+      return;
+    }
+
     // Rebuild elements to reflect new hierarchy.
     $elements_updated = [];
     // Preserve the original elements root properties.
@@ -205,6 +229,21 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
 
     // Update the webform's elements.
     $webform->setElements($elements_updated);
+
+    // Validate only elements required, hierarchy, and rendering.
+    $validate_options = [
+      'required' => TRUE,
+      'yaml' => FALSE,
+      'array' => FALSE,
+      'names' => FALSE,
+      'properties' => FALSE,
+      'submissions' => FALSE,
+      'hierarchy' => TRUE,
+      'rendering' => TRUE,
+    ];
+    if ($messages = $this->elementsValidator->validate($webform, $validate_options)) {
+      $form_state->setErrorByName(NULL, $this->t('There has been error validating the elements.'));
+    }
   }
 
   /**
@@ -355,17 +394,40 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
   }
 
   /**
+   * Get parent (container) elements as options.
+   *
+   * @param array $elements
+   *   A flattened array of elements.
+   *
+   * @return array
+   *   Parent (container) elements as options.
+   */
+  protected function getParentOptions(array $elements) {
+    $options = [];
+    foreach ($elements as $key => $element) {
+      $plugin_id = $this->elementManager->getElementPluginId($element);
+      $webform_element = $this->elementManager->createInstance($plugin_id);
+      if ($webform_element->isContainer($element)) {
+        $options[$key] = $element['#admin_title'] ?: $element['#title'];
+      }
+    }
+    return $options;
+  }
+
+  /**
    * Gets an row for a single element.
    *
    * @param array $element
    *   Webform element.
    * @param int $delta
-   *   The number of elements. @todo is this correct?
+   *   The number of elements.
+   * @param array $parent_options
+   *   An associative array of parent (container) options.
    *
    * @return array
    *   The row for the element.
    */
-  protected function getElementRow(array $element, $delta) {
+  protected function getElementRow(array $element, $delta, array $parent_options) {
     /** @var \Drupal\webform\WebformInterface $webform */
     $webform = $this->getEntity();
 
@@ -514,18 +576,27 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         'class' => ['row-key'],
       ],
     ];
-    $row['parent']['parent_key'] = [
-      '#parents' => ['webform_ui_elements', $key, 'parent_key'],
-      '#type' => 'textfield',
-      '#size' => 20,
-      '#title' => $this->t('Parent element (key)'),
-      '#title_display' => 'invisible',
-      '#default_value' => $element['#webform_parent_key'],
-      '#attributes' => [
-        'class' => ['row-parent-key'],
-        'readonly' => 'readonly',
-      ],
-    ];
+    if ($parent_options) {
+      $row['parent']['parent_key'] = [
+        '#parents' => ['webform_ui_elements', $key, 'parent_key'],
+        '#type' => 'select',
+        '#options' => $parent_options,
+        '#empty_option' => '',
+        '#title' => $this->t('Parent element @title', ['@title' => $title]),
+        '#title_display' => 'invisible',
+        '#default_value' => $element['#webform_parent_key'],
+        '#attributes' => [
+          'class' => ['row-parent-key'],
+        ],
+      ];
+    }
+    else {
+      $row['parent']['parent_key'] = [
+        '#parents' => ['webform_ui_elements', $key, 'parent_key'],
+        '#type' => 'hidden',
+        '#default_value' => '',
+      ];
+    }
 
     $row['operations'] = [
       '#type' => 'operations',

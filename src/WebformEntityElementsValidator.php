@@ -106,18 +106,30 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
   /**
    * {@inheritdoc}
    */
-  public function validate(WebformInterface $webform) {
+  public function validate(WebformInterface $webform, array $options = []) {
+    $options += [
+      'required' => TRUE,
+      'yaml' => TRUE,
+      'array' => TRUE,
+      'names' => TRUE,
+      'properties' => TRUE,
+      'submissions' => TRUE,
+      'hierarchy' => TRUE,
+      'rendering' => TRUE,
+    ];
+
     $this->webform = $webform;
 
     $this->elementsRaw = $webform->getElementsRaw();
     $this->originalElementsRaw = $webform->getElementsOriginalRaw();
 
     // Validate required.
-    if ($message = $this->validateRequired()) {
+    if ($options['required'] && ($message = $this->validateRequired())) {
       return [$message];
     }
+
     // Validate contain valid YAML.
-    if ($message = $this->validateYaml()) {
+    if ($options['yaml'] && ($message = $this->validateYaml())) {
       return [$message];
     }
 
@@ -125,32 +137,32 @@ class WebformEntityElementsValidator implements WebformEntityElementsValidatorIn
     $this->originalElements = Yaml::decode($this->originalElementsRaw);
 
     // Validate elements are an array.
-    if ($message = $this->validateArray()) {
+    if ($options['array'] && ($message = $this->validateArray())) {
       return [$message];
     }
 
     // Validate duplicate element name.
-    if ($messages = $this->validateDuplicateNames()) {
+    if ($options['names'] && ($messages = $this->validateDuplicateNames())) {
       return $messages;
     }
 
     // Validate ignored properties.
-    if ($messages = $this->validateProperties()) {
+    if ($options['properties'] && ($messages = $this->validateProperties())) {
       return $messages;
     }
 
     // Validate submission data.
-    if ($messages = $this->validateSubmissions()) {
+    if ($options['submissions'] && ($messages = $this->validateSubmissions())) {
       return $messages;
     }
 
     // Validate hierarchy.
-    if ($messages = $this->validateHierarchy()) {
+    if ($options['hierarchy'] && ($messages = $this->validateHierarchy())) {
       return $messages;
     }
 
     // Validate rendering.
-    if ($message = $this->validateRendering()) {
+    if ($options['rendering'] && ($message = $this->validateRendering())) {
       return [$message];
     }
 

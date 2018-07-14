@@ -46,7 +46,7 @@ class WebformUiElementTest extends WebformTestBase {
     $webform_contact = Webform::load('contact');
 
     /**************************************************************************/
-    // Multiple
+    // Multiple.
     /**************************************************************************/
 
     // Check multiple enabled before submission.
@@ -62,7 +62,7 @@ class WebformUiElementTest extends WebformTestBase {
     $this->assertRaw('<em>There is data for this element in the database. This setting can no longer be changed.</em>');
 
     /**************************************************************************/
-    // Reordering
+    // Reordering.
     /**************************************************************************/
 
     // Check original contact element order.
@@ -82,6 +82,49 @@ class WebformUiElementTest extends WebformTestBase {
     \Drupal::entityTypeManager()->getStorage('webform')->resetCache();
     $webform_contact = Webform::load('contact');
     $this->assertEqual(['message', 'subject', 'email', 'name', 'actions'], array_keys($webform_contact->getElementsDecodedAndFlattened()));
+
+    /**************************************************************************/
+    // Hierarchy.
+    /**************************************************************************/
+
+    // Create a simple test form.
+    $values = ['id' => 'test'];
+    $elements = [
+      'details_01' => [
+        '#type' => 'details',
+        '#title' => 'details_01',
+        'text_field_01' => [
+          '#type' => 'textfield',
+          '#title' => 'textfield_01',
+        ],
+      ],
+      'details_02' => [
+        '#type' => 'details',
+        '#title' => 'details_02',
+        'text_field_02' => [
+          '#type' => 'textfield',
+          '#title' => 'textfield_02',
+        ],
+      ],
+    ];
+    $this->createWebform($values, $elements);
+    $this->drupalGet('admin/structure/webform/manage/test');
+
+    // Check setting container to itself displays an error.
+    $edit = [
+      'webform_ui_elements[details_01][parent_key]' => 'details_01',
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test', $edit, t('Save elements'));
+    $this->assertRaw('Parent <em class="placeholder">details_01</em> key is not valid.');
+
+    // Check setting containers to one another displays an error.
+    $edit = [
+      'webform_ui_elements[details_01][parent_key]' => 'details_02',
+      'webform_ui_elements[details_02][parent_key]' => 'details_01',
+    ];
+    $this->drupalPostForm('admin/structure/webform/manage/test', $edit, t('Save elements'));
+    $this->assertRaw('Parent <em class="placeholder">details_01</em> key is not valid.');
+    $this->assertRaw('Parent <em class="placeholder">details_02</em> key is not valid.');
 
     /**************************************************************************/
     // Required.
