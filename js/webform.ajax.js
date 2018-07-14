@@ -145,6 +145,11 @@
       // Focus first tabbable item for the updated elements and handlers.
       $element.find(':tabbable').first().focus();
     }
+    else {
+      // Focus main content.
+      $('#main-content').focus();
+    }
+
     updateKey = null; // Reset element update.
 
     // Display main page's status message in a floating container.
