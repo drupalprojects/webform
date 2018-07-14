@@ -141,6 +141,9 @@
       if (!isScrolledIntoView($element)) {
         $('html, body').animate({scrollTop: $element.offset().top - Drupal.webform.ajax.scrollTopOffset}, 500);
       }
+
+      // Focus first tabbable item for the updated elements and handlers.
+      $element.find(':tabbable').first().focus();
     }
     updateKey = null; // Reset element update.
 
