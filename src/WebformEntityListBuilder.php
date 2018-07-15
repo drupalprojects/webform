@@ -225,7 +225,7 @@ class WebformEntityListBuilder extends ConfigEntityListBuilder {
           break;
       }
 
-      $row['status']['data'] = ($entity->access('update')) ? $entity->toLink($status, 'settings-form') : $status;
+      $row['status']['data'] = ($entity->access('update')) ? $entity->toLink($status, 'settings-form', ['query' => $this->getDestinationArray()]) : $status;
     }
     $row['owner'] = ($owner = $entity->getOwner()) ? $owner->toLink() : '';
     $row['results_total'] = $this->getResultsTotal($entity->id()) . ($entity->isResultsDisabled() ? ' ' . $this->t('(Disabled)') : '');
