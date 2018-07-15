@@ -595,6 +595,9 @@ class WebformUiEntityElementsForm extends BundleEntityFormBase {
         '#parents' => ['webform_ui_elements', $key, 'parent_key'],
         '#type' => 'hidden',
         '#default_value' => '',
+        '#attributes' => [
+          'class' => ['row-parent-key'],
+        ],
       ];
     }
 
