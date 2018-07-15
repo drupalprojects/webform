@@ -137,13 +137,13 @@
       $element.addClass('color-success');
       setTimeout(function() {$element.removeClass('color-success')}, 3000);
 
+      // Focus first tabbable item for the updated elements and handlers.
+      $element.find(':tabbable').first().focus();
+
       // Scroll to elements that are not visible.
       if (!isScrolledIntoView($element)) {
         $('html, body').animate({scrollTop: $element.offset().top - Drupal.webform.ajax.scrollTopOffset}, 500);
       }
-
-      // Focus first tabbable item for the updated elements and handlers.
-      $element.find(':tabbable').first().focus();
     }
     else {
       // Focus main content.
